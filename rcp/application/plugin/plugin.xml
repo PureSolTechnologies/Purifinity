@@ -199,7 +199,7 @@
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="com.puresol.purifinity.client.application.handler.SwitchWorkspaceHandler"
-            id="com.puresol.coding.purifinity.application.handler.SwitchWorkspaceHandler"
+            id="com.puresol.purifinity.client.application.handler.SwitchWorkspaceHandler"
             name="Switch Workspace">
       </command>
       <command
@@ -212,11 +212,11 @@
          point="org.eclipse.ui.intro">
       <intro
             class="com.puresol.purifinity.client.application.PurifinityIntroPart"
-            id="com.puresol.purifinity.client.application.plugin.intro">
+            id="com.puresol.purifinity.client.application.PurifinityIntroPart">
       </intro>
       <introProductBinding
-            introId="com.puresol.purifinity.client.application.plugin.intro"
-            productId="com.puresol.purifinity.client.application.plugin.SourceCodeClient">
+            introId="com.puresol.purifinity.client.application.PurifinityIntroPart"
+            productId="com.puresol.purifinity.client.application.plugin.PurifinityFull">
       </introProductBinding>
    </extension>
    <extension
@@ -224,7 +224,7 @@
       <config
             content="introContent.xml"
             id="com.puresol.purifinity.client.application.plugin.introConfigId"
-            introId="com.puresol.purifinity.client.application.plugin.intro">
+            introId="com.puresol.purifinity.client.application.PurifinityIntroPart">
          <presentation
                home-page-id="root">
             <implementation
@@ -236,18 +236,15 @@
       </config>
    </extension>
    <extension
-         id="BasePurifinity"
+         id="PurifinityBase"
+         name="Purifinity"
          point="org.eclipse.core.runtime.products">
       <product
             application="com.puresol.purifinity.client.application.plugin.application"
             name="Purifinity">
          <property
-               name="appName"
-               value="Purifinity">
-         </property>
-         <property
                name="aboutImage"
-               value="icons/alt_about.gif">
+               value="/com.puresol.purifinity.client.common.branding.plugin/icons/alt_about.gif">
          </property>
          <property
                name="startupForegroundColor"
@@ -260,26 +257,19 @@
          <property
                name="startupMessageRect"
                value="28,252,445,20">
-         </property>
-         <property
-               name="preferenceCustomization"
-               value="plugin_customization.ini">
          </property>
       </product>
    </extension>
    <extension
-         id="FullPurifinity"
+         id="PurifinityFull"
+         name="Purifinity"
          point="org.eclipse.core.runtime.products">
       <product
             application="com.puresol.purifinity.client.application.plugin.application"
             name="Purifinity">
          <property
-               name="appName"
-               value="Purifinity">
-         </property>
-         <property
                name="aboutImage"
-               value="icons/alt_about.gif">
+               value="/com.puresol.purifinity.client.common.branding.plugin/icons/alt_about.gif">
          </property>
          <property
                name="startupForegroundColor"
@@ -292,42 +282,6 @@
          <property
                name="startupMessageRect"
                value="28,252,445,20">
-         </property>
-         <property
-               name="preferenceCustomization"
-               value="plugin_customization.ini">
-         </property>
-      </product>
-   </extension>
-   <extension
-         id="MinimalPurifinity"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="com.puresol.purifinity.client.application.plugin.application"
-            name="Purifinity">
-         <property
-               name="appName"
-               value="Purifinity">
-         </property>
-         <property
-               name="aboutImage"
-               value="icons/alt_about.gif">
-         </property>
-         <property
-               name="startupForegroundColor"
-               value="000000">
-         </property>
-         <property
-               name="startupProgressRect"
-               value="50,100,445,32">
-         </property>
-         <property
-               name="startupMessageRect"
-               value="28,252,445,20">
-         </property>
-         <property
-               name="preferenceCustomization"
-               value="plugin_customization.ini">
          </property>
       </product>
    </extension>

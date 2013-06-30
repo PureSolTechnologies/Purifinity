@@ -1,14 +1,14 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: com.puresol.coding.client.lang.java6.plugin
-Bundle-SymbolicName: com.puresol.purifinity.coding.client.lang.java6.plugin;singleton:=true
+Bundle-Name: com.puresol.purifinity.client.lang.java6.plugin
+Bundle-SymbolicName: com.puresol.purifinity.client.lang.java6.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Activator: com.puresol.purifinity.client.lang.java6.Activator
 Require-Bundle: com.puresol.purifinity.coding.analysis.api.bundle;bundle-version="0.1.0",
  com.puresol.purifinity.coding.lang.commons.bundle;bundle-version="0.1.0",
  com.puresol.purifinity.coding.lang.java.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.client.common.osgi.plugin;bundle-version="0.1.0",
- com.puresol.purifinity.coding.client.common.ui.plugin;bundle-version="0.1.0",
+ com.puresol.purifinity.client.common.osgi.plugin;bundle-version="0.1.0",
+ com.puresol.purifinity.client.common.ui.plugin;bundle-version="0.1.0",
  org.eclipse.core.runtime;bundle-version="3.8.0",
  org.eclipse.ui;bundle-version="3.103.0",
  org.slf4j.api;bundle-version="1.6.4"

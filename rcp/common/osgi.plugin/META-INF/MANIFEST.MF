@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: com.puresol.coding.client.common.osgi.plugin
-Bundle-SymbolicName: com.puresol.purifinity.coding.client.common.osgi.plugin
+Bundle-Name: com.puresol.purifinity.client.common.osgi.plugin
+Bundle-SymbolicName: com.puresol.purifinity.client.common.osgi.plugin
 Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .

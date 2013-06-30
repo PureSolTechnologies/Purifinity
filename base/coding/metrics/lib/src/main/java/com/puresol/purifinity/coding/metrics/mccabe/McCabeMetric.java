@@ -33,103 +33,98 @@ import com.puresol.purifinity.uhura.parser.ParserTree;
  */
 public class McCabeMetric extends CodeRangeEvaluator {
 
-    public static final String NAME = "McCabe Metric";
+	public static final String NAME = "McCabe Metric";
 
-    public static final String DESCRIPTION = "McCabe Metric calculation.";
+	public static final String DESCRIPTION = "McCabe Metric calculation.";
 
-    public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
-    static {
-	EVALUATED_QUALITY_CHARACTERISTICS
-		.add(QualityCharacteristic.ANALYSABILITY);
-	EVALUATED_QUALITY_CHARACTERISTICS
-		.add(QualityCharacteristic.TESTABILITY);
-    }
+	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
+	static {
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.ANALYSABILITY);
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.TESTABILITY);
+	}
 
-    private int cyclomaticNumber = 1;
-    private final List<Result> results = new ArrayList<Result>();
-    private final LanguageDependedMcCabeMetric langDepended;
-    private final AnalysisRun analysisRun;
-    private final CodeRange codeRange;
+	private int cyclomaticNumber = 1;
+	private final List<Result> results = new ArrayList<Result>();
+	private final LanguageDependedMcCabeMetric langDepended;
+	private final AnalysisRun analysisRun;
+	private final CodeRange codeRange;
 
-    public McCabeMetric(AnalysisRun analysisRun, ProgrammingLanguage language,
-	    CodeRange codeRange) {
-	super(NAME);
-	this.analysisRun = analysisRun;
-	this.codeRange = codeRange;
-	langDepended = language
-		.getImplementation(LanguageDependedMcCabeMetric.class);
-    }
+	public McCabeMetric(AnalysisRun analysisRun, ProgrammingLanguage language,
+			CodeRange codeRange) {
+		super(NAME);
+		this.analysisRun = analysisRun;
+		this.codeRange = codeRange;
+		langDepended = language
+				.getImplementation(LanguageDependedMcCabeMetric.class);
+	}
 
-    @Override
-    public AnalysisRun getAnalysisRun() {
-	return analysisRun;
-    }
+	@Override
+	public AnalysisRun getAnalysisRun() {
+		return analysisRun;
+	}
 
-    @Override
-    public CodeRange getCodeRange() {
-	return codeRange;
-    }
+	@Override
+	public CodeRange getCodeRange() {
+		return codeRange;
+	}
 
-    @Override
-    public Boolean call() {
-	boolean retVal = calculate();
-	createResultsList();
-	return retVal;
-    }
+	@Override
+	public Boolean call() {
+		boolean retVal = calculate();
+		createResultsList();
+		return retVal;
+	}
 
-    private boolean calculate() {
-	fireStarted("Evaluation started.", 1);
-	cyclomaticNumber = 1;
-	TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
-		codeRange.getParserTree());
-	do {
-	    cyclomaticNumber += langDepended
-		    .increasesCyclomaticComplexityBy(iterator.getCurrentNode());
-	} while (iterator.goForward());
-	fireDone("Evaluation finished.", true);
-	return true;
-    }
+	private boolean calculate() {
+		fireStarted("Evaluation started.", 1);
+		cyclomaticNumber = 1;
+		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
+				codeRange.getParserTree());
+		do {
+			cyclomaticNumber += langDepended
+					.increasesCyclomaticComplexityBy(iterator.getCurrentNode());
+		} while (iterator.goForward());
+		fireDone("Evaluation finished.", true);
+		return true;
+	}
 
-    private void createResultsList() {
-	results.clear();
-	results.add(new Result("v(G)", "Cyclomatic complexity",
-		cyclomaticNumber, ""));
-    }
+	private void createResultsList() {
+		results.clear();
+		results.add(new Result("v(G)", "Cyclomatic complexity",
+				cyclomaticNumber, ""));
+	}
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see com.puresol.coding.analysis.McCabeMetric#getCyclomaticNumber()
-     */
-    public int getCyclomaticNumber() {
-	return cyclomaticNumber;
-    }
+	public int getCyclomaticNumber() {
+		return cyclomaticNumber;
+	}
 
-    public void print() {
-	System.out.println("v(G) = " + cyclomaticNumber);
-    }
+	public void print() {
+		System.out.println("v(G) = " + cyclomaticNumber);
+	}
 
-    public static boolean isSuitable(CodeRange codeRange) {
-	return true;
-    }
+	public static boolean isSuitable(CodeRange codeRange) {
+		return true;
+	}
 
-    @Override
-    public SourceCodeQuality getQuality() {
-	return McCabeQuality.get(getCodeRange().getType(), cyclomaticNumber);
-    }
+	@Override
+	public SourceCodeQuality getQuality() {
+		return McCabeQuality.get(getCodeRange().getType(), cyclomaticNumber);
+	}
 
-    @Override
-    public String getDescription() {
-	return DESCRIPTION;
-    }
+	@Override
+	public String getDescription() {
+		return DESCRIPTION;
+	}
 
-    @Override
-    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return EVALUATED_QUALITY_CHARACTERISTICS;
-    }
+	@Override
+	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return EVALUATED_QUALITY_CHARACTERISTICS;
+	}
 
-    @Override
-    public List<Result> getResults() {
-	return results;
-    }
+	@Override
+	public List<Result> getResults() {
+		return results;
+	}
 }

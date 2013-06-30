@@ -95,35 +95,35 @@
       <view
             category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
             class="com.puresol.purifinity.client.common.analysis.views.AnalysisReportView"
-            id="com.puresol.coding.purifinity.common.analysis.views.AnalysisReportView"
+            id="com.puresol.purifinity.client.common.analysis.views.AnalysisReportView"
             name="Analysis Report"
             restorable="true">
       </view>
       <view
             category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
             class="com.puresol.purifinity.client.common.analysis.views.AnalysisStoreView"
-            id="com.puresol.coding.purifinity.common.analysis.views.AnalysisStoreView"
+            id="com.puresol.purifinity.client.common.analysis.views.AnalysisStoreView"
             name="Analysis Store"
             restorable="true">
       </view>
       <view
             category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
             class="com.puresol.purifinity.client.common.analysis.views.AvailableLanguagesView"
-            id="com.puresol.coding.purifinity.common.analysis.views.AvailableLanguagesView"
+            id="com.puresol.purifinity.client.common.analysis.views.AvailableLanguagesView"
             name="Available Languages"
             restorable="true">
       </view>
       <view
             category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
             class="com.puresol.purifinity.client.common.analysis.views.GrammarView"
-            id="com.puresol.coding.purifinity.common.analysis.views.GrammarView"
+            id="com.puresol.purifinity.client.common.analysis.views.GrammarView"
             name="Grammar Viewer"
             restorable="true">
       </view>
       <view
             category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
             class="com.puresol.purifinity.client.common.analysis.views.ParserTreeView"
-            id="com.puresol.coding.purifinity.common.analysis.views.ParserTreeView"
+            id="com.puresol.purifinity.client.common.analysis.views.ParserTreeView"
             name="Parser Tree Viewer"
             restorable="true">
       </view>

@@ -17,93 +17,93 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="com.puresol.purifinity.client.common.evaluation.perspectives.EvaluationPerspective"
-            id="com.puresol.coding.client.common.evaluation.perspectives.EvaluationPerspective"
+            id="com.puresol.purifinity.client.common.evaluation.perspectives.EvaluationPerspective"
             name="Code Evaluation">
       </perspective>
       <perspective
             class="com.puresol.purifinity.client.common.evaluation.perspectives.MetricsPerspective"
-            id="com.puresol.coding.client.common.evaluation.perspectives.MetricsPerspective"
+            id="com.puresol.purifinity.client.common.evaluation.perspectives.MetricsPerspective"
             name="Code Metrics">
       </perspective>
       <perspective
             class="com.puresol.purifinity.client.common.evaluation.perspectives.QualityDashboardPerspective"
-            id="com.puresol.coding.client.common.evaluation.perspectives.QualityDashboardPerspective"
+            id="com.puresol.purifinity.client.common.evaluation.perspectives.QualityDashboardPerspective"
             name="Quality Dashboard">
       </perspective>
    </extension>
    <extension
          point="org.eclipse.ui.views">
       <category
-            id="com.puresol.coding.client.common.evaluation.Evaluation"
+            id="com.puresol.purifinity.client.common.evaluation.Evaluation"
             name="Evaluation">
       </category>
       <view
-            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            category="com.puresol.purifinity.client.common.evaluation.Evaluation"
             class="com.puresol.purifinity.client.common.evaluation.views.AvailableEvaluatorsView"
-            id="com.puresol.coding.client.common.evaluation.views.AvailableEvaluatorsView"
+            id="com.puresol.purifinity.client.common.evaluation.views.AvailableEvaluatorsView"
             name="Available Evaluators"
             restorable="true">
       </view>
       <view
-            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            category="com.puresol.purifinity.client.common.evaluation.Evaluation"
             class="com.puresol.purifinity.client.common.evaluation.views.DefectDensityMapView"
-            id="com.puresol.coding.client.common.evaluation.views.DefectDensityMapView"
+            id="com.puresol.purifinity.client.common.evaluation.views.DefectDensityMapView"
             name="Defect Density Map"
             restorable="true">
       </view>
       <view
             allowMultiple="true"
-            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            category="com.puresol.purifinity.client.common.evaluation.Evaluation"
             class="com.puresol.purifinity.client.common.evaluation.views.MetricsMapView"
-            id="com.puresol.coding.client.common.evaluation.views.MetricsMapView"
+            id="com.puresol.purifinity.client.common.evaluation.views.MetricsMapView"
             name="Metrics Map"
             restorable="true">
       </view>
       <view
             allowMultiple="true"
-            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            category="com.puresol.purifinity.client.common.evaluation.Evaluation"
             class="com.puresol.purifinity.client.common.evaluation.views.MetricsTableView"
-            id="com.puresol.coding.client.common.evaluation.views.MetricsTableView"
+            id="com.puresol.purifinity.client.common.evaluation.views.MetricsTableView"
             name="Metrics Table"
             restorable="true">
       </view>
       <view
             allowMultiple="true"
-            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            category="com.puresol.purifinity.client.common.evaluation.Evaluation"
             class="com.puresol.purifinity.client.common.evaluation.views.CorrelationChartView"
-            id="com.puresol.coding.client.common.evaluation.views.CorrelationChartView"
+            id="com.puresol.purifinity.client.common.evaluation.views.CorrelationChartView"
             name="Correlation Chart"
             restorable="true">
       </view>
       <view
             allowMultiple="true"
-            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            category="com.puresol.purifinity.client.common.evaluation.Evaluation"
             class="com.puresol.purifinity.client.common.evaluation.views.ParetoChartView"
-            id="com.puresol.coding.client.common.evaluation.views.ParetoChartView"
+            id="com.puresol.purifinity.client.common.evaluation.views.ParetoChartView"
             name="Pareto Chart"
             restorable="true">
       </view>
       <view
             allowMultiple="true"
-            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            category="com.puresol.purifinity.client.common.evaluation.Evaluation"
             class="com.puresol.purifinity.client.common.evaluation.views.HistogramChartView"
-            id="com.puresol.coding.client.common.evaluation.views.HistogramChartView"
+            id="com.puresol.purifinity.client.common.evaluation.views.HistogramChartView"
             name="Histogram Chart"
             restorable="true">
       </view>
       <view
             allowMultiple="true"
-            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            category="com.puresol.purifinity.client.common.evaluation.Evaluation"
             class="com.puresol.purifinity.client.common.evaluation.metrics.maintainability.MaintainabilityIndexParetoChartView"
-            id="com.puresol.coding.client.common.evaluation.metrics.maintainability.MaintainabilityIndexParetoChartView"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.maintainability.MaintainabilityIndexParetoChartView"
             name="Maintainability Index Pareto Chart"
             restorable="true">
       </view>
       <view
             allowMultiple="true"
-            category="com.puresol.coding.client.common.evaluation.Evaluation"
+            category="com.puresol.purifinity.client.common.evaluation.Evaluation"
             class="com.puresol.purifinity.client.common.evaluation.metrics.maintainability.MaintainabilityIndexCumulativeDistributionChartView"
-            id="com.puresol.coding.client.common.evaluation.metrics.maintainability.MaintainabilityIndexCumulativeDistributionChartView"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.maintainability.MaintainabilityIndexCumulativeDistributionChartView"
             name="Maintainability Index Cumulative Distribution Chart"
             restorable="true">
       </view>
@@ -121,7 +121,7 @@
                   label="Re-evaluate"
                   mnemonic="R">
                <command
-                     commandId="com.puresol.coding.client.common.evaluation.handler.ReEvaluateHandler"
+                     commandId="com.puresol.purifinity.client.common.evaluation.handler.ReEvaluateHandler"
                      id="All"
                      label="All"
                      mnemonic="A"
@@ -136,7 +136,7 @@
       <command
             defaultHandler="com.puresol.purifinity.client.common.evaluation.handler.ReEvaluateHandler"
             description="Reevaluates the current analysis run."
-            id="com.puresol.coding.client.common.evaluation.handler.ReEvaluateHandler"
+            id="com.puresol.purifinity.client.common.evaluation.handler.ReEvaluateHandler"
             name="Re-evaluate">
       </command>
    </extension>
@@ -144,61 +144,61 @@
          point="org.eclipse.ui.preferencePages">
       <page
             class="com.puresol.purifinity.client.common.evaluation.prefs.CodeEvaluationPreferencePage"
-            id="com.puresol.coding.client.common.evaluation.prefs.CodeEvaluationPreferencePage"
+            id="com.puresol.purifinity.client.common.evaluation.prefs.CodeEvaluationPreferencePage"
             name="Code Evaluation">
       </page>
       <page
-            category="com.puresol.coding.client.common.evaluation.prefs.CodeEvaluationPreferencePage"
+            category="com.puresol.purifinity.client.common.evaluation.prefs.CodeEvaluationPreferencePage"
             class="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
-            id="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
             name="Metrics">
       </page>
       <page
-            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            category="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
             class="com.puresol.purifinity.client.common.evaluation.metrics.maintainability.prefs.MaintainabilityIndexPreferencePage"
-            id="com.puresol.coding.client.common.evaluation.metrics.maintainability.prefs.MaintainabilityIndexPreferencePage"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.maintainability.prefs.MaintainabilityIndexPreferencePage"
             name="Maintainability Index">
       </page>
       <page
-            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            category="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
             class="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.prefs.CoCoMoPreferencePage"
-            id="com.puresol.coding.client.common.evaluation.metrics.cocomo.prefs.CoCoMoPreferencePage"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.prefs.CoCoMoPreferencePage"
             name="COCOMO">
       </page>
       <page
-            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            category="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
             class="com.puresol.purifinity.client.common.evaluation.metrics.sloc.prefs.SLOCMetricPreferencePage"
-            id="com.puresol.coding.client.common.evaluation.metrics.sloc.prefs.SLOCMetricPreferencePage"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.sloc.prefs.SLOCMetricPreferencePage"
             name="SLOC">
       </page>
       <page
-            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            category="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
             class="com.puresol.purifinity.client.common.evaluation.metrics.entropy.prefs.EntropyMetricPreferencePage"
-            id="com.puresol.coding.client.common.evaluation.metrics.entropy.prefs.EntropyMetricPreferencePage"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.entropy.prefs.EntropyMetricPreferencePage"
             name="Entropy">
       </page>
       <page
-            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            category="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
             class="com.puresol.purifinity.client.common.evaluation.metrics.mccabe.prefs.McCabeMetricPreferencePage"
-            id="com.puresol.coding.client.common.evaluation.metrics.mccabe.prefs.McCabeMetricPreferencePage"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.mccabe.prefs.McCabeMetricPreferencePage"
             name="McCabe">
       </page>
       <page
-            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            category="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
             class="com.puresol.purifinity.client.common.evaluation.metrics.halstead.prefs.HalsteadMetricPreferencePage"
-            id="com.puresol.coding.client.common.evaluation.metrics.halstead.prefs.HalsteadMetricPreferencePage"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.halstead.prefs.HalsteadMetricPreferencePage"
             name="Halstead">
       </page>
       <page
-            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            category="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
             class="com.puresol.purifinity.client.common.evaluation.metrics.normmaint.prefs.NormalizedMaintainabilityIndexPreferencePage"
-            id="com.puresol.coding.client.common.evaluation.metrics.normmaint.prefs.NormalizedMaintainabilityIndexPreferencePage"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.normmaint.prefs.NormalizedMaintainabilityIndexPreferencePage"
             name="Normalized Maintainability Index">
       </page>
       <page
-            category="com.puresol.coding.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            category="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
             class="com.puresol.purifinity.client.common.evaluation.metrics.codedepth.prefs.CodeDepthPreferencePage"
-            id="com.puresol.coding.client.common.evaluation.metrics.codedepth.prefs.CodeDepthPreferencePage"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.codedepth.prefs.CodeDepthPreferencePage"
             name="Code Depth">
       </page>
    </extension>
