@@ -92,6 +92,9 @@
 	<modules>
 		<module>parent</module>
 		<module>dependency</module>
+		<module>osgi</module>
+		<module>utils</module>
+		<module>utils.bundle</module>
 		<module>license</module>
 	</modules>
 

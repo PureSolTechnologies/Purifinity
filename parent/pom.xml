@@ -9,12 +9,13 @@
 	</parent>
 
 	<artifactId>parent</artifactId>
+	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>java</module>
 		<module>javaee</module>
-		<module>eclipsercp</module>
+	<module>eclipsercp</module>
 	</modules>
 
 	<dependencyManagement>

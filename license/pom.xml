@@ -4,12 +4,21 @@
 
 	<parent>
 		<groupId>com.puresol.commons</groupId>
-		<artifactId>commons</artifactId>
+		<artifactId>parent.java</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../parent/java</relativePath>
 	</parent>
 
 	<artifactId>license</artifactId>
+	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>pom</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+	</dependencies>
 
 	<modules>
 		<module>domain</module>

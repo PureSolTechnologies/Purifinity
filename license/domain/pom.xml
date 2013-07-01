@@ -9,11 +9,7 @@
 	</parent>
 
 	<artifactId>license.client</artifactId>
-	<packaging>pom</packaging>
-
-	<modules>
-		<module>domain</module>
-		<module>client</module>
-	</modules>
+	<name>${project.groupId}.${project.artifactId}</name>
+	<packaging>jar</packaging>
 
 </project>

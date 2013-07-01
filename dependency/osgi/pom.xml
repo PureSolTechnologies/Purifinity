@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>dependency.osgi</artifactId>
+	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<properties>
