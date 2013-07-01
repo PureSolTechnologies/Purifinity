@@ -10,9 +10,9 @@ import java.security.KeyPair;
 import java.util.List;
 import java.util.Properties;
 
-import com.puresol.purifinity.license.api.Licensee;
+import com.puresol.license.domain.Licensee;
 import com.puresol.purifinity.license.creator.exception.LicenseStoreException;
-import com.puresol.purifinity.utils.crypt.RSAUtilities;
+import com.puresol.utils.crypt.RSAUtilities;
 
 public class FileSystemLicenseStore implements LicenseStore {
 

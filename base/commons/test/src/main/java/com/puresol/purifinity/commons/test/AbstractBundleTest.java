@@ -1,4 +1,4 @@
-package com.puresol.purifinity.commons;
+package com.puresol.purifinity.commons.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

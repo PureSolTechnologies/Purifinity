@@ -7,8 +7,9 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresol.purifinity.license.api.exception.ExpiredLicenseException;
-import com.puresol.purifinity.license.api.exception.LicenseException;
+import com.puresol.license.domain.ExpiredLicenseException;
+import com.puresol.license.domain.License;
+import com.puresol.license.domain.LicenseException;
 
 public class LicenseManagerClientImpl implements LicenseManagerClient {
 

@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 
-import com.puresol.purifinity.commons.AbstractBundleTest;
+import com.puresol.purifinity.commons.test.AbstractBundleTest;
 
 public class TreesBundleTest extends AbstractBundleTest {
 

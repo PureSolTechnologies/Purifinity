@@ -10,16 +10,16 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import com.puresol.purifinity.license.api.License;
-import com.puresol.purifinity.license.api.LicensedClass;
-import com.puresol.purifinity.license.api.Licensee;
-import com.puresol.purifinity.license.api.Licenser;
-import com.puresol.purifinity.license.api.Product;
+import com.puresol.license.domain.License;
+import com.puresol.license.domain.LicenseFile;
+import com.puresol.license.domain.LicensedClass;
+import com.puresol.license.domain.Licensee;
+import com.puresol.license.domain.Licenser;
+import com.puresol.license.domain.Product;
 import com.puresol.purifinity.license.creator.exception.LicenseStoreException;
 import com.puresol.purifinity.license.creator.store.LicenseStore;
 import com.puresol.purifinity.license.creator.store.LicenseStoreFactory;
-import com.puresol.purifinity.license.impl.lib.LicenseFile;
-import com.puresol.purifinity.utils.crypt.RSAUtilities;
+import com.puresol.utils.crypt.RSAUtilities;
 
 public class LicenseManager {
 

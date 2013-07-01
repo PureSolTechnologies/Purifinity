@@ -12,8 +12,6 @@ import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
-import com.puresol.purifinity.license.api.License;
-
 public class LicensesTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 

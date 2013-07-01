@@ -10,11 +10,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresol.purifinity.license.api.Licensee;
+import com.puresol.license.domain.Licensee;
 import com.puresol.purifinity.license.creator.exception.LicenseStoreException;
-import com.puresol.purifinity.license.test.TestFileSystemLicenseStore;
 import com.puresol.purifinity.utils.DirectoryUtilities;
-import com.puresol.purifinity.utils.crypt.RSAUtilities;
+import com.puresol.utils.crypt.RSAUtilities;
 
 public class FileSystemLicenseStoreTest extends AbstractLicenseFacilityTest {
 

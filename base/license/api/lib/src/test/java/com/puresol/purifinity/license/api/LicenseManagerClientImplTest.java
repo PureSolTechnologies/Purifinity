@@ -6,8 +6,7 @@ import java.util.GregorianCalendar;
 
 import org.junit.Test;
 
-import com.puresol.purifinity.license.api.LicenseManagerClientImpl;
-import com.puresol.purifinity.license.api.exception.ExpiredLicenseException;
+import com.puresol.license.domain.ExpiredLicenseException;
 
 public class LicenseManagerClientImplTest {
 
