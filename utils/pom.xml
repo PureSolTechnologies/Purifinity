@@ -28,6 +28,15 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresol.commons</groupId>
+			<artifactId>trees</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
