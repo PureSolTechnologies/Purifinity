@@ -3,7 +3,7 @@ package com.puresol.purifinity.coding.analysis.api;
 import java.io.File;
 import java.io.Serializable;
 
-import com.puresol.purifinity.utils.FileSearchConfiguration;
+import com.puresol.commons.utils.FileSearchConfiguration;
 
 /**
  * This immutable value object contains the settings of an analysis.

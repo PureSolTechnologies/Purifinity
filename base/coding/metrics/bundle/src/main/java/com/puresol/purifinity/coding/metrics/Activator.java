@@ -24,29 +24,29 @@ import com.puresol.purifinity.commons.osgi.AbstractActivator;
  */
 public class Activator extends AbstractActivator {
 
-    @Override
-    public void start(BundleContext context) throws Exception {
-	super.start(context);
+	@Override
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
 
-	Hashtable<String, String> properties = new Hashtable<String, String>();
-	properties.put("metric", "true");
+		Hashtable<String, String> properties = new Hashtable<String, String>();
+		properties.put("metric", "true");
 
-	registerService(EvaluatorFactory.class, new SLOCEvaluatorFactory(),
-		properties);
-	registerService(EvaluatorFactory.class, new CoCoMoServiceFactory(),
-		properties);
-	registerService(EvaluatorFactory.class,
-		new HalsteadMetricEvaluatorFactory(), properties);
-	registerService(EvaluatorFactory.class,
-		new EntropyMetricServiceFactory(), properties);
-	registerService(EvaluatorFactory.class,
-		new CodeDepthMetricEvaluatorFactory(), properties);
-	registerService(EvaluatorFactory.class,
-		new McCabeMetricServiceFactory(), properties);
-	registerService(EvaluatorFactory.class,
-		new MaintainabilityIndexEvaluatorFactory(), properties);
-	registerService(EvaluatorFactory.class,
-		new NormalizedMaintainabilityIndexEvaluatorFactory(),
-		properties);
-    }
+		registerService(EvaluatorFactory.class, new SLOCEvaluatorFactory(),
+				properties);
+		registerService(EvaluatorFactory.class, new CoCoMoServiceFactory(),
+				properties);
+		registerService(EvaluatorFactory.class,
+				new HalsteadMetricEvaluatorFactory(), properties);
+		registerService(EvaluatorFactory.class,
+				new EntropyMetricServiceFactory(), properties);
+		registerService(EvaluatorFactory.class,
+				new CodeDepthMetricEvaluatorFactory(), properties);
+		registerService(EvaluatorFactory.class,
+				new McCabeMetricServiceFactory(), properties);
+		registerService(EvaluatorFactory.class,
+				new MaintainabilityIndexEvaluatorFactory(), properties);
+		registerService(EvaluatorFactory.class,
+				new NormalizedMaintainabilityIndexEvaluatorFactory(),
+				properties);
+	}
 }

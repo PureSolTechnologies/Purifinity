@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalyzer;
@@ -13,7 +14,6 @@ import com.puresol.purifinity.coding.analysis.api.CodeAnalyzerFactory;
 import com.puresol.purifinity.coding.analysis.api.LanguageNotSupportedException;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.uhura.source.CodeLocation;
-import com.puresol.purifinity.utils.HashId;
 
 public class CodeAnalyzerImpl implements CodeAnalyzer {
 

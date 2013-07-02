@@ -25,7 +25,6 @@ import com.puresol.purifinity.client.common.evaluation.controls.QualityCharacter
 import com.puresol.purifinity.client.common.ui.controls.ParameterInformationComponent;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.purifinity.coding.evaluation.api.QualityCharacteristic;
-import com.puresol.purifinity.utils.StringUtils;
 import com.puresol.purifinity.utils.math.Parameter;
 
 public class EvaluatorInformationDialog extends Dialog implements

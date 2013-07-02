@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 
+import com.puresol.commons.utils.FileUtilities;
 import com.puresol.purifinity.uhura.grammar.Grammar;
 import com.puresol.purifinity.uhura.grammar.GrammarException;
 import com.puresol.purifinity.uhura.grammar.production.Construction;
@@ -19,7 +20,6 @@ import com.puresol.purifinity.uhura.parser.parsetable.AbstractParserTable;
 import com.puresol.purifinity.uhura.parser.parsetable.ActionType;
 import com.puresol.purifinity.uhura.parser.parsetable.ParserAction;
 import com.puresol.purifinity.uhura.parser.parsetable.ParserActionSet;
-import com.puresol.purifinity.utils.FileUtilities;
 
 public class LR0ParserTable extends AbstractParserTable {
 

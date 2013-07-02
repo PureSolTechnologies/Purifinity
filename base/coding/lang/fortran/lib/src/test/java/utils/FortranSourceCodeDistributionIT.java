@@ -18,15 +18,15 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.commons.trees.TreePrinter;
+import com.puresol.commons.utils.ConsoleUtils;
+import com.puresol.commons.utils.FileSearch;
+import com.puresol.commons.utils.StopWatch;
 import com.puresol.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresol.purifinity.coding.lang.fortran.Fortran;
-import com.puresol.purifinity.trees.TreePrinter;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.SourceFileLocation;
-import com.puresol.purifinity.utils.ConsoleUtils;
-import com.puresol.purifinity.utils.FileSearch;
-import com.puresol.purifinity.utils.StopWatch;
 
 /**
  * This is not a real JUnit test, but it's used manually to check the parser
@@ -38,125 +38,125 @@ import com.puresol.purifinity.utils.StopWatch;
  */
 public class FortranSourceCodeDistributionIT {
 
-    private static final String INSTALL_DIRECTORY = "/home/ludwig/workspaces/Dyn3D";
+	private static final String INSTALL_DIRECTORY = "/home/ludwig/workspaces/Dyn3D";
 
-    private final static Logger logger = LoggerFactory
-	    .getLogger(FortranSourceCodeDistributionIT.class);
+	private final static Logger logger = LoggerFactory
+			.getLogger(FortranSourceCodeDistributionIT.class);
 
-    @Test
-    @Ignore
-    public void test() {
-	try {
-	    File file = new File("ndicrs.f");
-	    Fortran fortran = Fortran.getInstance();
-	    StopWatch watch = new StopWatch();
-	    watch.start();
-	    CodeAnalyzer analyser = fortran
-		    .createAnalyser(new SourceFileLocation("src/fort", file
-			    .getPath()));
-	    analyser.analyze();
-	    watch.stop();
-	    ParserTree ast = analyser.getAnalysis().getParserTree();
-	    assertNotNull(ast);
-	    System.out.print(watch.getSeconds());
-	    if (logger.isTraceEnabled()) {
-		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-		new TreePrinter(new PrintStream(outStream)).println(ast);
-		logger.trace(outStream.toString());
-	    }
-	} catch (AnalyzerException e) {
-	    e.printStackTrace();
-	    fail("No exception was expected!");
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    fail("No exception was expected!");
+	@Test
+	@Ignore
+	public void test() {
+		try {
+			File file = new File("ndicrs.f");
+			Fortran fortran = Fortran.getInstance();
+			StopWatch watch = new StopWatch();
+			watch.start();
+			CodeAnalyzer analyser = fortran
+					.createAnalyser(new SourceFileLocation("src/fort", file
+							.getPath()));
+			analyser.analyze();
+			watch.stop();
+			ParserTree ast = analyser.getAnalysis().getParserTree();
+			assertNotNull(ast);
+			System.out.print(watch.getSeconds());
+			if (logger.isTraceEnabled()) {
+				ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+				new TreePrinter(new PrintStream(outStream)).println(ast);
+				logger.trace(outStream.toString());
+			}
+		} catch (AnalyzerException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		} catch (IOException e) {
+			e.printStackTrace();
+			fail("No exception was expected!");
+		}
 	}
-    }
 
-    private static void parseAllFiles(List<File> files) {
-	StopWatch totalWatch = new StopWatch();
-	totalWatch.start();
-	try {
-	    List<File> errors = new ArrayList<File>();
-	    List<String> successes = new ArrayList<String>();
-	    RandomAccessFile raFile = new RandomAccessFile("succeeded.txt",
-		    "rw");
-	    String line;
-	    while ((line = raFile.readLine()) != null) {
-		successes.add(line);
-	    }
-	    int counter = 0;
-	    StopWatch watch = new StopWatch();
-	    for (File file : files) {
-		assertTrue(new File(INSTALL_DIRECTORY, file.toString())
-			.exists());
-		if (file.getName().contains("-")) {
-		    raFile.writeBytes(file.toString() + "\n");
-		    successes.add(file.toString());
-		    continue;
+	private static void parseAllFiles(List<File> files) {
+		StopWatch totalWatch = new StopWatch();
+		totalWatch.start();
+		try {
+			List<File> errors = new ArrayList<File>();
+			List<String> successes = new ArrayList<String>();
+			RandomAccessFile raFile = new RandomAccessFile("succeeded.txt",
+					"rw");
+			String line;
+			while ((line = raFile.readLine()) != null) {
+				successes.add(line);
+			}
+			int counter = 0;
+			StopWatch watch = new StopWatch();
+			for (File file : files) {
+				assertTrue(new File(INSTALL_DIRECTORY, file.toString())
+						.exists());
+				if (file.getName().contains("-")) {
+					raFile.writeBytes(file.toString() + "\n");
+					successes.add(file.toString());
+					continue;
+				}
+				counter++;
+				System.out.print(ConsoleUtils.createPercentageBar(22,
+						(double) counter / (double) files.size(), true) + "\t");
+				if (successes.size() > 0) {
+					System.out.print((double) successes.size()
+							/ (double) (successes.size() + errors.size())
+							* 100.0);
+					System.out.print("%\t");
+				}
+				System.out
+						.print(Runtime.getRuntime().freeMemory() / 1024 / 1024);
+				System.out.print("MB\t");
+				System.out.print(file + "\t");
+				if (successes.contains(file.toString())) {
+					System.out.println();
+					continue;
+				}
+				watch.start();
+				if (parseFile(new File(INSTALL_DIRECTORY), file)) {
+					raFile.writeBytes(file.toString() + "\n");
+					successes.add(file.toString());
+				} else {
+					errors.add(file);
+				}
+				watch.stop();
+				System.out.println(watch.toString() + "s");
+			}
+			raFile.close();
+			System.out.println("\n\nERRORS FOR FILES:\n\n");
+			for (File file : errors) {
+				System.out.println(file);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		counter++;
-		System.out.print(ConsoleUtils.createPercentageBar(22,
-			(double) counter / (double) files.size(), true) + "\t");
-		if (successes.size() > 0) {
-		    System.out.print((double) successes.size()
-			    / (double) (successes.size() + errors.size())
-			    * 100.0);
-		    System.out.print("%\t");
-		}
-		System.out
-			.print(Runtime.getRuntime().freeMemory() / 1024 / 1024);
-		System.out.print("MB\t");
-		System.out.print(file + "\t");
-		if (successes.contains(file.toString())) {
-		    System.out.println();
-		    continue;
-		}
-		watch.start();
-		if (parseFile(new File(INSTALL_DIRECTORY), file)) {
-		    raFile.writeBytes(file.toString() + "\n");
-		    successes.add(file.toString());
-		} else {
-		    errors.add(file);
-		}
-		watch.stop();
-		System.out.println(watch.toString() + "s");
-	    }
-	    raFile.close();
-	    System.out.println("\n\nERRORS FOR FILES:\n\n");
-	    for (File file : errors) {
-		System.out.println(file);
-	    }
-	} catch (FileNotFoundException e) {
-	    e.printStackTrace();
-	} catch (IOException e) {
-	    e.printStackTrace();
+		totalWatch.stop();
+		System.out.println("\n\nTotal time:\t" + totalWatch.toString());
 	}
-	totalWatch.stop();
-	System.out.println("\n\nTotal time:\t" + totalWatch.toString());
-    }
 
-    private static boolean parseFile(File sourceDirectory, File file) {
-	try {
-	    Fortran fortran = Fortran.getInstance();
-	    CodeAnalyzer analyser = fortran
-		    .createAnalyser(new SourceFileLocation(sourceDirectory,
-			    file));
-	    analyser.analyze();
-	    analyser = null;
-	    return true;
-	} catch (AnalyzerException e) {
-	    e.printStackTrace();
-	    return false;
-	} catch (IOException e) {
-	    e.printStackTrace();
-	    return false;
+	private static boolean parseFile(File sourceDirectory, File file) {
+		try {
+			Fortran fortran = Fortran.getInstance();
+			CodeAnalyzer analyser = fortran
+					.createAnalyser(new SourceFileLocation(sourceDirectory,
+							file));
+			analyser.analyze();
+			analyser = null;
+			return true;
+		} catch (AnalyzerException e) {
+			e.printStackTrace();
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-    }
 
-    public static void main(String args[]) {
-	List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY), "*.f");
-	parseAllFiles(files);
-    }
+	public static void main(String args[]) {
+		List<File> files = FileSearch.find(new File(INSTALL_DIRECTORY), "*.f");
+		parseAllFiles(files);
+	}
 
 }

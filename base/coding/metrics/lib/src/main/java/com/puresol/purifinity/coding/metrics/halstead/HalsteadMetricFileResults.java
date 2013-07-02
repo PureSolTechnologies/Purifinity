@@ -25,13 +25,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.puresol.commons.utils.math.GeneralValue;
+import com.puresol.commons.utils.math.Parameter;
+import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.uhura.source.CodeLocation;
-import com.puresol.purifinity.utils.math.GeneralValue;
-import com.puresol.purifinity.utils.math.Parameter;
-import com.puresol.purifinity.utils.math.Value;
 
 public class HalsteadMetricFileResults implements MetricFileResults {
 

@@ -45,6 +45,21 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresol.commons</groupId>
+			<artifactId>license.client.bundle</artifactId>
+			<version>${commons.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol.commons</groupId>
+			<artifactId>license.domain.bundle</artifactId>
+			<version>${commons.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol.commons</groupId>
+			<artifactId>utils.bundle</artifactId>
+			<version>${commons.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>trees.bundle</artifactId>
 			<version>${project.version}</version>

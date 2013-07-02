@@ -12,8 +12,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresol.commons.utils.math.Money;
 import com.puresol.purifinity.coding.evaluation.api.MetricValue;
-import com.puresol.purifinity.utils.math.Money;
 
 public abstract class CoCoMoResults implements Serializable {
 

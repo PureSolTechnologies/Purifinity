@@ -5,11 +5,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.purifinity.trees.Tree;
-import com.puresol.purifinity.trees.TreeVisitor;
-import com.puresol.purifinity.trees.TreeWalker;
-import com.puresol.purifinity.trees.WalkingAction;
-import com.puresol.purifinity.utils.HashId;
+import com.puresol.commons.trees.Tree;
+import com.puresol.commons.trees.TreeVisitor;
+import com.puresol.commons.trees.TreeWalker;
+import com.puresol.commons.trees.WalkingAction;
+import com.puresol.commons.utils.HashId;
 
 public final class HashIdFileTree implements Tree<HashIdFileTree>, Serializable {
 

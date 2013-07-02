@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import com.puresol.purifinity.trees.TreeException;
+import com.puresol.commons.trees.TreeException;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 
 /**
@@ -30,48 +30,48 @@ import com.puresol.purifinity.uhura.parser.ParserTree;
  */
 public class GrammarReader implements Closeable {
 
-    private final ParserTree ast;
-    private final GrammarConverter converter;
-    private final GrammarFile grammarFile;
+	private final ParserTree ast;
+	private final GrammarConverter converter;
+	private final GrammarFile grammarFile;
 
-    /**
-     * Constructor for InputStream reading.
-     * 
-     * @param inputStream
-     * @throws IOException
-     * @throws GrammarException
-     * @throws TreeException
-     */
-    public GrammarReader(InputStream inputStream) throws GrammarException,
-	    IOException {
-	this(new InputStreamReader(inputStream));
-    }
+	/**
+	 * Constructor for InputStream reading.
+	 * 
+	 * @param inputStream
+	 * @throws IOException
+	 * @throws GrammarException
+	 * @throws TreeException
+	 */
+	public GrammarReader(InputStream inputStream) throws GrammarException,
+			IOException {
+		this(new InputStreamReader(inputStream));
+	}
 
-    /**
-     * Constructor taking a reader for reading the grammar.
-     * 
-     * @param reader
-     * @throws GrammarException
-     * @throws TreeException
-     * @throws IOException
-     */
-    public GrammarReader(Reader reader) throws GrammarException, IOException {
-	grammarFile = new GrammarFile(reader);
-	ast = grammarFile.getAST();
-	converter = new GrammarConverter(ast);
-    }
+	/**
+	 * Constructor taking a reader for reading the grammar.
+	 * 
+	 * @param reader
+	 * @throws GrammarException
+	 * @throws TreeException
+	 * @throws IOException
+	 */
+	public GrammarReader(Reader reader) throws GrammarException, IOException {
+		grammarFile = new GrammarFile(reader);
+		ast = grammarFile.getAST();
+		converter = new GrammarConverter(ast);
+	}
 
-    public ParserTree getAST() {
-	return ast;
-    }
+	public ParserTree getAST() {
+		return ast;
+	}
 
-    public Grammar getGrammar() {
-	return converter.getGrammar();
-    }
+	public Grammar getGrammar() {
+		return converter.getGrammar();
+	}
 
-    @Override
-    public void close() throws IOException {
-	grammarFile.close();
-    }
+	@Override
+	public void close() throws IOException {
+		grammarFile.close();
+	}
 
 }

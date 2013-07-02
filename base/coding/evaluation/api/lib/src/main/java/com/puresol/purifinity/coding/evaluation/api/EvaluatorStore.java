@@ -1,7 +1,7 @@
 package com.puresol.purifinity.coding.evaluation.api;
 
+import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresol.purifinity.utils.HashId;
 
 /**
  * This is a store for a single evaluator. THis stores can be changed depending

@@ -3,8 +3,8 @@ package com.puresol.purifinity.coding.lang.fortran.metrics;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresol.commons.trees.TreeException;
 import com.puresol.purifinity.coding.metrics.mccabe.LanguageDependedMcCabeMetric;
-import com.puresol.purifinity.trees.TreeException;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 
 /**

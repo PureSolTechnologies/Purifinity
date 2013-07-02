@@ -2,12 +2,12 @@ package com.puresol.purifinity.coding.store.fs.metrics;
 
 import java.io.File;
 
+import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
 import com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexFileResults;
 import com.puresol.purifinity.coding.store.fs.evaluation.AbstractEvaluatorStore;
-import com.puresol.purifinity.utils.HashId;
 
 public class MaintainabilityIndexEvaluatorStore extends AbstractEvaluatorStore {
 

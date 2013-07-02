@@ -3,8 +3,8 @@ package com.puresol.purifinity.coding.analysis.api;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.uhura.source.CodeLocation;
-import com.puresol.purifinity.utils.HashId;
 
 /**
  * This class is for keeping a list of analyzed files within ProjectAnalyzer.

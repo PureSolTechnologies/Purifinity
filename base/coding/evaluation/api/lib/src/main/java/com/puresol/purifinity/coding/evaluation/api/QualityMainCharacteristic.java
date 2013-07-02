@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.purifinity.utils.JARUtilities;
+import com.puresol.commons.utils.JARUtilities;
 
 public enum QualityMainCharacteristic {
 

@@ -8,10 +8,10 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import com.puresol.commons.utils.HashAlgorithm;
+import com.puresol.commons.utils.HashId;
+import com.puresol.commons.utils.StringUtils;
 import com.puresol.purifinity.coding.analysis.api.FileStoreException;
-import com.puresol.purifinity.utils.HashAlgorithm;
-import com.puresol.purifinity.utils.HashId;
-import com.puresol.utils.StringUtils;
 
 /**
  * This class provides some utilities for the analysis store.

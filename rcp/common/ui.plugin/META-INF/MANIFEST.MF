@@ -7,7 +7,8 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
 Bundle-ActivationPolicy: lazy
-Require-Bundle: com.puresol.purifinity.trees.bundle;bundle-version="0.1.0",
+Require-Bundle: com.puresol.commons.utils.bundle;bundle-version="0.0.1",
+ com.puresol.purifinity.trees.bundle;bundle-version="0.1.0",
  com.puresol.purifinity.utils.bundle;bundle-version="0.1.0",
  com.puresol.purifinity.client.common.branding.plugin;bundle-version="0.1.0",
  org.slf4j.api;bundle-version="1.6.4",

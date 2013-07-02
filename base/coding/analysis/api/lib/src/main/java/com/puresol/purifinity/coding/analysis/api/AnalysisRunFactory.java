@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 import java.util.UUID;
 
-import com.puresol.purifinity.utils.FileSearchConfiguration;
+import com.puresol.commons.utils.FileSearchConfiguration;
 
 public abstract class AnalysisRunFactory {
 

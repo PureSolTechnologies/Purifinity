@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1372801987058
+Build-Jdk: 1.7.0_21
+Built-By: ludwig
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.puresol.commons.license.domain.Activator
+Bundle-ClassPath: .,target/dependency/osgi-0.0.1-SNAPSHOT.jar,target/dep
+ endency/license.domain-0.0.1-SNAPSHOT.jar
+Bundle-DocURL: http://puresol-technologies.com
+Bundle-ManifestVersion: 2
+Bundle-Name: com.puresol.commons.license.domain.bundle
+Bundle-SymbolicName: com.puresol.commons.license.domain.bundle
+Bundle-Vendor: PureSol Technologies
+Bundle-Version: 0.0.1.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Embed-Dependency: *;scope=compile|runtime;inline=false
+Embed-Directory: target/dependency
+Embed-StripGroup: true
+Embedded-Artifacts: target/dependency/osgi-0.0.1-SNAPSHOT.jar;g="com.pur
+ esol.commons";a="osgi";v="0.0.1-SNAPSHOT",target/dependency/license.dom
+ ain-0.0.1-SNAPSHOT.jar;g="com.puresol.commons";a="license.domain";v="0.
+ 0.1-SNAPSHOT"
+Export-Package: com.puresol.commons.license.domain;uses:="org.osgi.frame
+ work,javax.crypto.spec,com.puresol.commons.utils.crypt,org.apache.commo
+ ns.io,javax.crypto,org.slf4j";version="0.0.1.SNAPSHOT"
+Import-Package: com.puresol.commons.utils.crypt,javax.crypto,javax.crypt
+ o.spec,org.apache.commons.io;version="[2.0,3)",org.osgi.framework;versi
+ on="[1.6,2)",org.slf4j;version="[1.6,2)"
+Tool: Bnd-1.50.0

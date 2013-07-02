@@ -3,15 +3,15 @@ package com.puresol.purifinity.coding.metrics.cocomo;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.puresol.commons.utils.math.LevelOfMeasurement;
+import com.puresol.commons.utils.math.Money;
+import com.puresol.commons.utils.math.Parameter;
+import com.puresol.commons.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.evaluation.api.CodeRangeNameParameter;
 import com.puresol.purifinity.coding.evaluation.api.CodeRangeTypeParameter;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeLocationParameter;
 import com.puresol.purifinity.uhura.source.CodeLocation;
-import com.puresol.purifinity.utils.math.LevelOfMeasurement;
-import com.puresol.purifinity.utils.math.Money;
-import com.puresol.purifinity.utils.math.Parameter;
-import com.puresol.purifinity.utils.math.ParameterWithArbitraryUnit;
 
 public class CoCoMoEvaluatorParameter {
 

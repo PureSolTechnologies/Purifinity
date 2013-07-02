@@ -15,13 +15,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
+import com.puresol.commons.utils.HashId;
+import com.puresol.commons.utils.StringUtils;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.FileStore;
 import com.puresol.purifinity.coding.analysis.api.FileStoreException;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
-import com.puresol.purifinity.utils.HashId;
-import com.puresol.utils.StringUtils;
 
 public final class FileStoreImpl implements FileStore {
 

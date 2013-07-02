@@ -3,7 +3,6 @@ package com.puresol.purifinity.coding.lang.c11;
 import org.osgi.framework.BundleContext;
 
 import com.puresol.purifinity.coding.analysis.api.AnalyzableProgrammingLanguage;
-import com.puresol.purifinity.coding.lang.c11.C11;
 import com.puresol.purifinity.commons.osgi.AbstractActivator;
 
 /**
@@ -15,11 +14,11 @@ import com.puresol.purifinity.commons.osgi.AbstractActivator;
  */
 public class Activator extends AbstractActivator {
 
-    @Override
-    public void start(BundleContext context) throws Exception {
-	super.start(context);
-	C11 c11 = C11.getInstance();
-	registerService(AnalyzableProgrammingLanguage.class, c11);
-    }
+	@Override
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		C11 c11 = C11.getInstance();
+		registerService(AnalyzableProgrammingLanguage.class, c11);
+	}
 
 }

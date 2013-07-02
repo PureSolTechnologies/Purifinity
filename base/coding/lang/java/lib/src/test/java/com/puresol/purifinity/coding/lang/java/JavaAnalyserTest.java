@@ -6,11 +6,9 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
-import com.puresol.purifinity.coding.lang.java.Java;
-import com.puresol.purifinity.coding.lang.java.JavaAnalyzer;
+import com.puresol.commons.utils.PathUtils;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.SourceFileLocation;
-import com.puresol.purifinity.utils.PathUtils;
 
 public class JavaAnalyserTest {
 

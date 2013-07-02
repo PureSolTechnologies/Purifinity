@@ -2,7 +2,7 @@ package com.puresol.purifinity.uhura.ust;
 
 import java.io.Serializable;
 
-import com.puresol.purifinity.trees.Tree;
+import com.puresol.commons.trees.Tree;
 
 /**
  * This class is an abstract implementation of a universal syntax tree node for

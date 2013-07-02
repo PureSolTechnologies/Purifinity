@@ -13,6 +13,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresol.commons</groupId>
+			<artifactId>utils</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>license.api.lib</artifactId>
 		</dependency>

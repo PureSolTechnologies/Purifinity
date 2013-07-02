@@ -22,6 +22,10 @@
 			<artifactId>commons.osgi</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresol.purifinity</groupId>
+			<artifactId>coding.evaluation.api.lib</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
 			<scope>provided</scope>

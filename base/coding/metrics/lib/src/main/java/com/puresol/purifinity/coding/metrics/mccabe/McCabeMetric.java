@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.puresol.commons.trees.TreeIterator;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.evaluation.api.QualityCharacteristic;
@@ -22,7 +23,6 @@ import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.coding.evaluation.impl.CodeRangeEvaluator;
 import com.puresol.purifinity.coding.evaluation.impl.Result;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
-import com.puresol.purifinity.trees.TreeIterator;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 
 /**

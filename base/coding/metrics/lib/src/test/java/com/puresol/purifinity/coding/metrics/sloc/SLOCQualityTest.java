@@ -7,11 +7,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.puresol.commons.utils.math.statistics.Statistics;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
-import com.puresol.purifinity.coding.metrics.sloc.SLOCMetric;
-import com.puresol.purifinity.coding.metrics.sloc.SLOCQuality;
-import com.puresol.purifinity.utils.math.statistics.Statistics;
 
 public class SLOCQualityTest {
 

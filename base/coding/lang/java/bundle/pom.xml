@@ -15,6 +15,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
+			<artifactId>coding.lang.commons.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.lang.java.lib</artifactId>
 		</dependency>
 		<dependency>

@@ -8,11 +8,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.puresol.commons.utils.FileUtilities;
+import com.puresol.commons.utils.PathUtils;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.source.SourceCodeLine;
 import com.puresol.purifinity.uhura.source.SourceFileLocation;
-import com.puresol.purifinity.utils.FileUtilities;
-import com.puresol.purifinity.utils.PathUtils;
 
 public class SourceCodeTest {
 

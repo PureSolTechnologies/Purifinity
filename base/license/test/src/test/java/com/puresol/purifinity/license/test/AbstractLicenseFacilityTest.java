@@ -6,11 +6,10 @@ import java.io.File;
 
 import org.junit.BeforeClass;
 
+import com.puresol.commons.utils.DirectoryUtilities;
 import com.puresol.purifinity.license.creator.LicenseManager;
 import com.puresol.purifinity.license.creator.store.LicenseStore;
 import com.puresol.purifinity.license.creator.store.LicenseStoreFactory;
-import com.puresol.purifinity.license.test.TestFileSystemLicenseStore;
-import com.puresol.purifinity.utils.DirectoryUtilities;
 
 public class AbstractLicenseFacilityTest {
 

@@ -8,10 +8,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.purifinity.utils.HashAlgorithm;
-import com.puresol.purifinity.utils.HashId;
-import com.puresol.purifinity.utils.data.HashCodeGenerator;
-import com.puresol.purifinity.utils.io.LineTerminator;
+import com.puresol.commons.utils.HashAlgorithm;
+import com.puresol.commons.utils.HashId;
+import com.puresol.commons.utils.data.HashCodeGenerator;
+import com.puresol.commons.utils.io.LineTerminator;
 
 /**
  * This class represents a whole source code from a file and additional later

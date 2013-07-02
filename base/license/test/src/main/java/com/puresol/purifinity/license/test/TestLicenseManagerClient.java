@@ -3,8 +3,8 @@ package com.puresol.purifinity.license.test;
 import java.io.File;
 import java.util.Set;
 
-import com.puresol.license.domain.License;
-import com.puresol.license.domain.LicenseException;
+import com.puresol.commons.license.domain.License;
+import com.puresol.commons.license.domain.LicenseException;
 import com.puresol.purifinity.license.api.LicenseManagerClient;
 
 public class TestLicenseManagerClient implements LicenseManagerClient {

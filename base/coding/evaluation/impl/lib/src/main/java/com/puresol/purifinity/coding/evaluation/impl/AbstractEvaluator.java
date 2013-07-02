@@ -12,6 +12,9 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.commons.trees.TreeUtils;
+import com.puresol.commons.utils.StopWatch;
+import com.puresol.commons.utils.progress.AbstractProgressObservable;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.DirectoryStore;
@@ -25,10 +28,7 @@ import com.puresol.purifinity.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.purifinity.license.api.LicensedObject;
-import com.puresol.purifinity.trees.TreeUtils;
 import com.puresol.purifinity.uhura.ust.eval.EvaluationException;
-import com.puresol.purifinity.utils.StopWatch;
-import com.puresol.purifinity.utils.progress.AbstractProgressObservable;
 
 /**
  * This interface is the main interface for all evaluators and the general

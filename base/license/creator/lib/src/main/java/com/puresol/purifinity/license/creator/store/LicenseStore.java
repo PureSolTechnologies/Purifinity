@@ -3,7 +3,7 @@ package com.puresol.purifinity.license.creator.store;
 import java.security.KeyPair;
 import java.util.List;
 
-import com.puresol.license.domain.Licensee;
+import com.puresol.commons.license.domain.Licensee;
 import com.puresol.purifinity.license.creator.exception.LicenseStoreException;
 
 /**

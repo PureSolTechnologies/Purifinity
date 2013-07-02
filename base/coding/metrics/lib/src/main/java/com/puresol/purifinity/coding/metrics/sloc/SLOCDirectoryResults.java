@@ -5,9 +5,9 @@ import static com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluatorParameter.
 import java.util.Map;
 import java.util.Set;
 
+import com.puresol.commons.utils.math.Parameter;
+import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;
-import com.puresol.purifinity.utils.math.Parameter;
-import com.puresol.purifinity.utils.math.Value;
 
 public class SLOCDirectoryResults extends AbstractSLOCResults implements
 		MetricDirectoryResults {

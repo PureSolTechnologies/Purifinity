@@ -7,9 +7,9 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresol.license.domain.ExpiredLicenseException;
-import com.puresol.license.domain.License;
-import com.puresol.license.domain.LicenseException;
+import com.puresol.commons.license.domain.ExpiredLicenseException;
+import com.puresol.commons.license.domain.License;
+import com.puresol.commons.license.domain.LicenseException;
 
 public class LicenseManagerClientImpl implements LicenseManagerClient {
 

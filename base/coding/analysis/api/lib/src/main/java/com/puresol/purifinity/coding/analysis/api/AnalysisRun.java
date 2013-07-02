@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.puresol.purifinity.trees.FileTree;
-import com.puresol.purifinity.utils.progress.ProgressObservable;
+import com.puresol.commons.trees.FileTree;
+import com.puresol.commons.utils.progress.ProgressObservable;
 
 /**
  * This is the general interface for a single project analysis. This analysis

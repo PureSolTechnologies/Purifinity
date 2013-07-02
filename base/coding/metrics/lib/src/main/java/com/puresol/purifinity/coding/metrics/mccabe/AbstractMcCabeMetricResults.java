@@ -9,11 +9,11 @@ import static com.puresol.purifinity.coding.metrics.mccabe.McCabeMetricEvaluator
 import java.util.HashMap;
 import java.util.Map;
 
+import com.puresol.commons.utils.math.GeneralValue;
+import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.uhura.source.CodeLocation;
-import com.puresol.purifinity.utils.math.GeneralValue;
-import com.puresol.purifinity.utils.math.Value;
 
 public class AbstractMcCabeMetricResults {
 

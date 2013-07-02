@@ -3,7 +3,7 @@ package com.puresol.purifinity.coding.analysis.test;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.purifinity.utils.FileSearchConfiguration;
+import com.puresol.commons.utils.FileSearchConfiguration;
 
 public class TestFileSearchConfiguration extends FileSearchConfiguration {
 

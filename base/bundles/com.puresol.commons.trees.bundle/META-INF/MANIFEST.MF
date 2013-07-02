@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1372801985407
+Build-Jdk: 1.7.0_21
+Built-By: ludwig
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.puresol.commons.trees.Activator
+Bundle-ClassPath: .,target/dependency/osgi-0.0.1-SNAPSHOT.jar,target/dep
+ endency/trees-0.0.1-SNAPSHOT.jar
+Bundle-DocURL: http://puresol-technologies.com
+Bundle-ManifestVersion: 2
+Bundle-Name: com.puresol.commons.trees.bundle
+Bundle-SymbolicName: com.puresol.commons.trees.bundle
+Bundle-Vendor: PureSol Technologies
+Bundle-Version: 0.0.1.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Embed-Dependency: *;scope=compile|runtime;inline=false
+Embed-Directory: target/dependency
+Embed-StripGroup: true
+Embedded-Artifacts: target/dependency/osgi-0.0.1-SNAPSHOT.jar;g="com.pur
+ esol.commons";a="osgi";v="0.0.1-SNAPSHOT",target/dependency/trees-0.0.1
+ -SNAPSHOT.jar;g="com.puresol.commons";a="trees";v="0.0.1-SNAPSHOT"
+Export-Package: com.puresol.commons.trees;uses:="org.osgi.framework";ver
+ sion="0.0.1.SNAPSHOT"
+Import-Package: org.osgi.framework;version="[1.6,2)",org.slf4j;version="
+ [1.6,2)"
+Tool: Bnd-1.50.0

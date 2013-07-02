@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 
-import com.puresol.license.domain.License;
-import com.puresol.license.domain.LicenseException;
+import com.puresol.commons.license.domain.License;
+import com.puresol.commons.license.domain.LicenseException;
 
 /**
  * This is the interface for license manager.

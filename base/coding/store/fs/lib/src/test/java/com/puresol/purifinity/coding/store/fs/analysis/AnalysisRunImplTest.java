@@ -11,6 +11,8 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.puresol.commons.utils.HashAlgorithm;
+import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProjectSettings;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
@@ -22,9 +24,6 @@ import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresol.purifinity.coding.analysis.api.DirectoryRepositoryLocation;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.analysis.test.TestFileSearchConfiguration;
-import com.puresol.purifinity.coding.store.fs.analysis.FileStoreImpl;
-import com.puresol.purifinity.utils.HashAlgorithm;
-import com.puresol.purifinity.utils.HashId;
 
 public class AnalysisRunImplTest {
 

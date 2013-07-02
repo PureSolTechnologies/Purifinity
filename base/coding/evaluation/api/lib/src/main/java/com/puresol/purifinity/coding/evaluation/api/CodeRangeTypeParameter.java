@@ -1,8 +1,8 @@
 package com.puresol.purifinity.coding.evaluation.api;
 
+import com.puresol.commons.utils.math.LevelOfMeasurement;
+import com.puresol.commons.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresol.purifinity.utils.math.LevelOfMeasurement;
-import com.puresol.purifinity.utils.math.ParameterWithArbitraryUnit;
 
 public class CodeRangeTypeParameter extends
 		ParameterWithArbitraryUnit<CodeRangeType> {

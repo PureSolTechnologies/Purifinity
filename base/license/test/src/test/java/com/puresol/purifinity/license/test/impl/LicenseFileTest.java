@@ -9,17 +9,17 @@ import java.util.GregorianCalendar;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresol.license.domain.License;
-import com.puresol.license.domain.LicenseFile;
-import com.puresol.license.domain.Licensee;
-import com.puresol.license.domain.Licenser;
-import com.puresol.license.domain.Product;
-import com.puresol.license.domain.Version;
+import com.puresol.commons.license.domain.License;
+import com.puresol.commons.license.domain.LicenseFile;
+import com.puresol.commons.license.domain.Licensee;
+import com.puresol.commons.license.domain.Licenser;
+import com.puresol.commons.license.domain.Product;
+import com.puresol.commons.license.domain.Version;
+import com.puresol.commons.utils.crypt.RSAUtilities;
 import com.puresol.purifinity.license.creator.LicenseManager;
 import com.puresol.purifinity.license.creator.exception.LicenseStoreException;
 import com.puresol.purifinity.license.test.AbstractLicenseFacilityTest;
 import com.puresol.purifinity.license.test.TestFileSystemLicenseStore;
-import com.puresol.utils.crypt.RSAUtilities;
 
 public class LicenseFileTest extends AbstractLicenseFacilityTest {
 

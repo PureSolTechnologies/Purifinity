@@ -12,10 +12,11 @@ import java.util.regex.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.purifinity.trees.TreeException;
-import com.puresol.purifinity.trees.TreeVisitor;
-import com.puresol.purifinity.trees.TreeWalker;
-import com.puresol.purifinity.trees.WalkingAction;
+import com.puresol.commons.trees.TreeException;
+import com.puresol.commons.trees.TreeVisitor;
+import com.puresol.commons.trees.TreeWalker;
+import com.puresol.commons.trees.WalkingAction;
+import com.puresol.commons.utils.StringUtils;
 import com.puresol.purifinity.uhura.grammar.Grammar;
 import com.puresol.purifinity.uhura.grammar.production.Construction;
 import com.puresol.purifinity.uhura.grammar.production.Production;
@@ -31,7 +32,6 @@ import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.source.SourceCodeLine;
 import com.puresol.purifinity.uhura.source.StringWithLocation;
-import com.puresol.utils.StringUtils;
 
 /**
  * This is a complete implementation of a packrat parser.

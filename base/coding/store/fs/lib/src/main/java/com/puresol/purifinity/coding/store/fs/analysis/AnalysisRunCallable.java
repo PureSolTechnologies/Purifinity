@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresol.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
@@ -14,7 +15,6 @@ import com.puresol.purifinity.coding.analysis.api.FileStore;
 import com.puresol.purifinity.coding.analysis.api.FileStoreException;
 import com.puresol.purifinity.coding.analysis.api.FileStoreFactory;
 import com.puresol.purifinity.uhura.source.CodeLocation;
-import com.puresol.purifinity.utils.HashId;
 
 public class AnalysisRunCallable implements Callable<AnalyzedCode> {
 

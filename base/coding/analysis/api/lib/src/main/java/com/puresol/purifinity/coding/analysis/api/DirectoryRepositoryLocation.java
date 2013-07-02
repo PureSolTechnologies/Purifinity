@@ -4,10 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.purifinity.trees.FileTree;
+import com.puresol.commons.trees.FileTree;
+import com.puresol.commons.utils.FileSearch;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceFileLocation;
-import com.puresol.purifinity.utils.FileSearch;
 
 /**
  * 
