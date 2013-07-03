@@ -1,4 +1,4 @@
-package com.puresol.purifinity.commons.osgi;
+package com.puresol.commons.osgi;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
