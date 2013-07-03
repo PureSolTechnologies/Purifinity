@@ -21,6 +21,14 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
+import com.puresol.commons.trees.TreeVisitor;
+import com.puresol.commons.trees.TreeWalker;
+import com.puresol.commons.trees.WalkingAction;
+import com.puresol.commons.utils.HashId;
+import com.puresol.commons.utils.math.LevelOfMeasurement;
+import com.puresol.commons.utils.math.Parameter;
+import com.puresol.commons.utils.math.ParameterWithArbitraryUnit;
+import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.purifinity.client.common.chart.Axis;
 import com.puresol.purifinity.client.common.chart.AxisDirection;
@@ -47,14 +55,6 @@ import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.purifinity.coding.evaluation.api.Evaluators;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
-import com.puresol.purifinity.trees.TreeVisitor;
-import com.puresol.purifinity.trees.TreeWalker;
-import com.puresol.purifinity.trees.WalkingAction;
-import com.puresol.purifinity.utils.HashId;
-import com.puresol.purifinity.utils.math.LevelOfMeasurement;
-import com.puresol.purifinity.utils.math.Parameter;
-import com.puresol.purifinity.utils.math.ParameterWithArbitraryUnit;
-import com.puresol.purifinity.utils.math.Value;
 
 public class ParetoChartView extends AbstractMetricChartViewPart implements
 		EvaluationsTarget {

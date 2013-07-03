@@ -5,6 +5,7 @@ import java.util.Hashtable;
 
 import org.osgi.framework.BundleContext;
 
+import com.puresol.commons.osgi.AbstractActivator;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStore;
 import com.puresol.purifinity.coding.analysis.api.DirectoryStore;
 import com.puresol.purifinity.coding.analysis.api.FileStore;
@@ -29,7 +30,6 @@ import com.puresol.purifinity.coding.store.fs.metrics.MaintainabilityIndexEvalua
 import com.puresol.purifinity.coding.store.fs.metrics.McCabeMetricEvaluatorStore;
 import com.puresol.purifinity.coding.store.fs.metrics.NormalizedMaintainabilityIndexEvaluatorStore;
 import com.puresol.purifinity.coding.store.fs.metrics.SLOCEvaluatorStore;
-import com.puresol.purifinity.commons.osgi.AbstractActivator;
 
 public class Activator extends AbstractActivator {
 

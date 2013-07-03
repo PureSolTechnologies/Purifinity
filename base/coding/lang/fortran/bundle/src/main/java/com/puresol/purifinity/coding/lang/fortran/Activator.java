@@ -2,8 +2,8 @@ package com.puresol.purifinity.coding.lang.fortran;
 
 import org.osgi.framework.BundleContext;
 
+import com.puresol.commons.osgi.AbstractActivator;
 import com.puresol.purifinity.coding.analysis.api.AnalyzableProgrammingLanguage;
-import com.puresol.purifinity.commons.osgi.AbstractActivator;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and

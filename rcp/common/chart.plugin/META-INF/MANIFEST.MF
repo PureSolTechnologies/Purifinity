@@ -7,11 +7,11 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
 Bundle-ActivationPolicy: lazy
-Require-Bundle: com.puresol.purifinity.trees.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.utils.bundle;bundle-version="0.1.0",
- org.eclipse.swt;bundle-version="3.100.1",
+Require-Bundle: org.eclipse.swt;bundle-version="3.100.1",
  org.eclipse.jface;bundle-version="3.8.102",
- com.puresol.purifinity.client.common.branding.plugin;bundle-version="0.1.0"
+ com.puresol.purifinity.client.common.branding.plugin;bundle-version="0.1.0",
+ com.puresol.commons.trees.bundle;bundle-version="0.0.1",
+ com.puresol.commons.utils.bundle;bundle-version="0.0.1"
 Export-Package: com.puresol.purifinity.client.common.chart,
  com.puresol.purifinity.client.common.chart.math,
  com.puresol.purifinity.client.common.chart.renderer

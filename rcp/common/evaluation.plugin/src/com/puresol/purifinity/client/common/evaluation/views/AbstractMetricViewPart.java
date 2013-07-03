@@ -13,6 +13,8 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.ViewPart;
 
+import com.puresol.commons.utils.math.Parameter;
+import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.purifinity.client.common.branding.Printable;
 import com.puresol.purifinity.client.common.evaluation.utils.EvaluationsTarget;
@@ -25,8 +27,6 @@ import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.evaluation.api.CodeRangeTypeParameter;
 import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
-import com.puresol.purifinity.utils.math.Parameter;
-import com.puresol.purifinity.utils.math.Value;
 
 public abstract class AbstractMetricViewPart extends ViewPart implements
 		Refreshable, Reproducable, ISelectionListener, PartSettingsCapability,

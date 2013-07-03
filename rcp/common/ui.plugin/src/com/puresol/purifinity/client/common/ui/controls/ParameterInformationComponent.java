@@ -8,8 +8,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresol.purifinity.utils.StringUtils;
-import com.puresol.purifinity.utils.math.Parameter;
+import com.puresol.commons.utils.StringUtils;
+import com.puresol.commons.utils.math.Parameter;
 
 /**
  * This components takes a {@link Parameter} and shows all its information for

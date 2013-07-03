@@ -14,10 +14,10 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 
+import com.puresol.commons.trees.Tree;
 import com.puresol.purifinity.client.common.chart.renderer.AreaMapData;
 import com.puresol.purifinity.client.common.chart.renderer.AreaMapRenderer;
 import com.puresol.purifinity.client.common.chart.renderer.ColorProvider;
-import com.puresol.purifinity.trees.Tree;
 
 /**
  * This component provides a 2D view on data. The data provided as a

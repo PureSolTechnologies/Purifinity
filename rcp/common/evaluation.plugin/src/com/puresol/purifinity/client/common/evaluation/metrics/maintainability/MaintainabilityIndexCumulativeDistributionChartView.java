@@ -17,6 +17,13 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.puresol.commons.trees.TreeVisitor;
+import com.puresol.commons.trees.TreeWalker;
+import com.puresol.commons.trees.WalkingAction;
+import com.puresol.commons.utils.HashId;
+import com.puresol.commons.utils.math.LevelOfMeasurement;
+import com.puresol.commons.utils.math.ParameterWithArbitraryUnit;
+import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.purifinity.client.common.chart.Axis;
 import com.puresol.purifinity.client.common.chart.AxisDirection;
@@ -39,13 +46,6 @@ import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
 import com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
-import com.puresol.purifinity.trees.TreeVisitor;
-import com.puresol.purifinity.trees.TreeWalker;
-import com.puresol.purifinity.trees.WalkingAction;
-import com.puresol.purifinity.utils.HashId;
-import com.puresol.purifinity.utils.math.LevelOfMeasurement;
-import com.puresol.purifinity.utils.math.ParameterWithArbitraryUnit;
-import com.puresol.purifinity.utils.math.Value;
 
 public class MaintainabilityIndexCumulativeDistributionChartView extends
 		AbstractMetricChartViewPart {

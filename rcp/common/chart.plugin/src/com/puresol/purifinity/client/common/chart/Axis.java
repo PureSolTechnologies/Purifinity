@@ -3,7 +3,7 @@ package com.puresol.purifinity.client.common.chart;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.purifinity.utils.math.Parameter;
+import com.puresol.commons.utils.math.Parameter;
 
 public class Axis<T> {
 

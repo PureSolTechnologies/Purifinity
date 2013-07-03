@@ -60,14 +60,9 @@
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresol.commons</groupId>
 			<artifactId>trees.bundle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
-			<artifactId>utils.bundle</artifactId>
-			<version>${project.version}</version>
+			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>

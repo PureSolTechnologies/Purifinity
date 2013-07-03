@@ -4,6 +4,7 @@ import java.util.Hashtable;
 
 import org.osgi.framework.BundleContext;
 
+import com.puresol.commons.osgi.AbstractActivator;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.purifinity.coding.metrics.cocomo.CoCoMoServiceFactory;
 import com.puresol.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluatorFactory;
@@ -13,7 +14,6 @@ import com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityInde
 import com.puresol.purifinity.coding.metrics.mccabe.McCabeMetricServiceFactory;
 import com.puresol.purifinity.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorFactory;
 import com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluatorFactory;
-import com.puresol.purifinity.commons.osgi.AbstractActivator;
 
 /**
  * This class is used as OSGi bundle activator. This class only registers and

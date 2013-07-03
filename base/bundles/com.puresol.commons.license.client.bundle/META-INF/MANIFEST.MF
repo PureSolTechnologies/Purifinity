@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1372801987450
+Bnd-LastModified: 1372876037583
 Build-Jdk: 1.7.0_21
 Built-By: ludwig
 Bundle-ActivationPolicy: lazy

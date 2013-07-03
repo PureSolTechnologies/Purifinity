@@ -9,8 +9,8 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 
+import com.puresol.commons.utils.math.MathUtils;
 import com.puresol.purifinity.client.common.chart.AreaMapComponent;
-import com.puresol.purifinity.utils.math.MathUtils;
 
 /**
  * This class renders area maps and is used in {@link AreaMapComponent}.

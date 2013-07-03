@@ -2,7 +2,7 @@ package com.puresol.purifinity.license.api;
 
 import org.osgi.framework.BundleContext;
 
-import com.puresol.purifinity.commons.osgi.AbstractActivator;
+import com.puresol.commons.osgi.AbstractActivator;
 
 public class Activator
 

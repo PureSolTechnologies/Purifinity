@@ -24,6 +24,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
+import com.puresol.commons.utils.math.Parameter;
 import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.purifinity.client.common.branding.Printable;
 import com.puresol.purifinity.client.common.chart.AreaMapComponent;
@@ -43,7 +44,6 @@ import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.purifinity.coding.evaluation.api.Evaluators;
 import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
-import com.puresol.purifinity.utils.math.Parameter;
 
 public class MetricsMapView extends AbstractMetricViewPart implements Printable {
 

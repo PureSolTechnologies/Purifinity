@@ -26,8 +26,8 @@
       <import plugin="org.eclipse.osgi"/>
       <import plugin="org.slf4j.api"/>
       <import plugin="com.puresol.purifinity.client.common.osgi.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.trees.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.utils.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.commons.trees.bundle" version="0.0.1" match="greaterOrEqual"/>
+      <import plugin="com.puresol.commons.utils.bundle" version="0.0.1" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.uhura.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.client.common.branding.plugin" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.coding.lang.api.bundle" version="0.1.0" match="greaterOrEqual"/>
@@ -50,6 +50,7 @@
       <import plugin="com.puresol.purifinity.coding.evaluation.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.client.common.chart.plugin" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.license.api.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.commons.license.domain.bundle" version="0.0.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
    </requires>
 
@@ -138,13 +139,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresol.purifinity.trees.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.puresol.purifinity.uhura.bundle"
          download-size="0"
          install-size="0"
@@ -152,7 +146,14 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresol.purifinity.utils.bundle"
+         id="com.puresol.commons.trees.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.commons.utils.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

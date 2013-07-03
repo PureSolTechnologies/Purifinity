@@ -13,6 +13,11 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
+import com.puresol.commons.trees.TreeVisitor;
+import com.puresol.commons.trees.TreeWalker;
+import com.puresol.commons.trees.WalkingAction;
+import com.puresol.commons.utils.HashId;
+import com.puresol.commons.utils.math.Parameter;
 import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.purifinity.client.common.chart.Axis;
 import com.puresol.purifinity.client.common.chart.AxisDirection;
@@ -34,11 +39,6 @@ import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.purifinity.coding.evaluation.api.Evaluators;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
-import com.puresol.purifinity.trees.TreeVisitor;
-import com.puresol.purifinity.trees.TreeWalker;
-import com.puresol.purifinity.trees.WalkingAction;
-import com.puresol.purifinity.utils.HashId;
-import com.puresol.purifinity.utils.math.Parameter;
 
 public class CorrelationChartView extends AbstractMetricChartViewPart {
 

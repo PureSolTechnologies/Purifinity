@@ -8,8 +8,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.puresol.commons.utils.StringUtils;
 import com.puresol.purifinity.coding.evaluation.api.QualityCharacteristic;
-import com.puresol.purifinity.utils.StringUtils;
 
 /**
  * This components takes a {@link QualityCharacteristic} and shows all its

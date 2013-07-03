@@ -3,22 +3,22 @@ package com.puresol.purifinity.client.common.ui.contents;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+import com.puresol.commons.trees.FileTree;
 import com.puresol.purifinity.client.common.branding.ClientImages;
-import com.puresol.purifinity.trees.FileTree;
 
 public class FileTreeLabelProvider extends LabelProvider {
 
-    @Override
-    public String getText(Object element) {
-	if (element instanceof String) {
-	    return (String) element;
+	@Override
+	public String getText(Object element) {
+		if (element instanceof String) {
+			return (String) element;
+		}
+		FileTree input = (FileTree) element;
+		return input.getName();
 	}
-	FileTree input = (FileTree) element;
-	return input.getName();
-    }
 
-    @Override
-    public Image getImage(Object element) {
-	return ClientImages.getImage(ClientImages.FOLDER_16x16);
-    }
+	@Override
+	public Image getImage(Object element) {
+		return ClientImages.getImage(ClientImages.FOLDER_16x16);
+	}
 }

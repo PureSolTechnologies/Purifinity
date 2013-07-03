@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresol.purifinity.trees.FileTree;
+import com.puresol.commons.trees.FileTree;
 
 public class FileTreeContentProvider implements ITreeContentProvider {
 

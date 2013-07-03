@@ -1,7 +1,7 @@
 package com.puresol.purifinity.client.common.chart.math;
 
+import com.puresol.commons.utils.math.Matrix;
 import com.puresol.purifinity.client.common.chart.AxisDirection;
-import com.puresol.purifinity.utils.math.Matrix;
 
 /**
  * This is a 3x3 matrix for 2D graphics transformations.

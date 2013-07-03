@@ -17,6 +17,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 
+import com.puresol.commons.utils.math.LevelOfMeasurement;
+import com.puresol.commons.utils.math.Parameter;
 import com.puresol.purifinity.client.common.analysis.controls.CodeRangeTypeComboViewer;
 import com.puresol.purifinity.client.common.evaluation.contents.MetricComboViewer;
 import com.puresol.purifinity.client.common.evaluation.contents.ParameterComboViewer;
@@ -25,8 +27,6 @@ import com.puresol.purifinity.client.common.ui.actions.AbstractPartSettingsDialo
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.purifinity.coding.evaluation.api.Evaluators;
-import com.puresol.purifinity.utils.math.LevelOfMeasurement;
-import com.puresol.purifinity.utils.math.Parameter;
 
 public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 		implements SelectionListener {

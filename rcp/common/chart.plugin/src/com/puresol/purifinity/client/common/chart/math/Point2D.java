@@ -1,6 +1,6 @@
 package com.puresol.purifinity.client.common.chart.math;
 
-import com.puresol.purifinity.utils.math.Vector;
+import com.puresol.commons.utils.math.Vector;
 
 public class Point2D extends Vector {
 

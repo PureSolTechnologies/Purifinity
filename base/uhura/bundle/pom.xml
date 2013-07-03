@@ -14,8 +14,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
-			<artifactId>commons.osgi</artifactId>
+			<groupId>com.puresol.commons</groupId>
+			<artifactId>osgi</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>

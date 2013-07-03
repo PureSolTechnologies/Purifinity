@@ -1,6 +1,6 @@
 package com.puresol.purifinity.client.common.chart;
 
-import com.puresol.purifinity.utils.math.Parameter;
+import com.puresol.commons.utils.math.Parameter;
 
 public class AxisFactory {
 

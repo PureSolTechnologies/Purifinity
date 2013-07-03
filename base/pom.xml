@@ -131,11 +131,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol.purifinity</groupId>
-				<artifactId>commons.osgi</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>commons.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
@@ -175,11 +170,6 @@
 			<!-- PureSol Technologies dependencies -->
 			<dependency>
 				<groupId>com.puresol.commons</groupId>
-				<artifactId>utils</artifactId>
-				<version>${commons.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresol.commons</groupId>
 				<artifactId>license.client</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
@@ -190,7 +180,17 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol.commons</groupId>
+				<artifactId>osgi</artifactId>
+				<version>${commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol.commons</groupId>
 				<artifactId>trees</artifactId>
+				<version>${commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol.commons</groupId>
+				<artifactId>utils</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<!-- IMPORTS -->

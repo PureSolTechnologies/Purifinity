@@ -7,60 +7,60 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 
-import com.puresol.purifinity.trees.TreeException;
+import com.puresol.commons.trees.TreeException;
 import com.puresol.purifinity.uhura.grammar.Quantity;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 
 public class ConstructionLiteralRenderer extends AbstractRenderer {
 
-    private final FontData font = new FontData(
-	    UhuraRenderProperties.getLiteralFontFamily(),
-	    UhuraRenderProperties.getLiteralFontSize(), SWT.NONE);
-    private final Renderer quantityLoopRenderer;
+	private final FontData font = new FontData(
+			UhuraRenderProperties.getLiteralFontFamily(),
+			UhuraRenderProperties.getLiteralFontSize(), SWT.NONE);
+	private final Renderer quantityLoopRenderer;
 
-    public ConstructionLiteralRenderer(ParserTree constructionLiteral)
-	    throws RenderException {
-	super();
-	String literal;
-	try {
-	    literal = constructionLiteral.getChild("STRING_LITERAL").getText();
-	} catch (TreeException e) {
-	    throw new RenderException(
-		    "Literal construction found without string literal!");
-	}
-	Quantity quantity = Quantity.EXPECT;
-	try {
-	    ParserTree quantifierAST = constructionLiteral
-		    .getChild("Quantifier");
-	    if (quantifierAST.hasChildren()) {
-		ParserTree quantifier = quantifierAST.getChildren().get(0);
-		if ("QUESTION_MARK".equals(quantifier.getName())) {
-		    quantity = Quantity.ACCEPT;
-		} else if ("STAR".equals(quantifier.getName())) {
-		    quantity = Quantity.ACCEPT_MANY;
-		} else if ("PLUS".equals(quantifier.getName())) {
-		    quantity = Quantity.EXPECT_MANY;
-		} else {
-		    throw new RenderException("Invalid Quantifier '"
-			    + quantifier.getName() + "' was found!");
+	public ConstructionLiteralRenderer(ParserTree constructionLiteral)
+			throws RenderException {
+		super();
+		String literal;
+		try {
+			literal = constructionLiteral.getChild("STRING_LITERAL").getText();
+		} catch (TreeException e) {
+			throw new RenderException(
+					"Literal construction found without string literal!");
 		}
-	    }
-	} catch (TreeException e) {
-	    throw new RenderException(e.getMessage(), e);
+		Quantity quantity = Quantity.EXPECT;
+		try {
+			ParserTree quantifierAST = constructionLiteral
+					.getChild("Quantifier");
+			if (quantifierAST.hasChildren()) {
+				ParserTree quantifier = quantifierAST.getChildren().get(0);
+				if ("QUESTION_MARK".equals(quantifier.getName())) {
+					quantity = Quantity.ACCEPT;
+				} else if ("STAR".equals(quantifier.getName())) {
+					quantity = Quantity.ACCEPT_MANY;
+				} else if ("PLUS".equals(quantifier.getName())) {
+					quantity = Quantity.EXPECT_MANY;
+				} else {
+					throw new RenderException("Invalid Quantifier '"
+							+ quantifier.getName() + "' was found!");
+				}
+			}
+		} catch (TreeException e) {
+			throw new RenderException(e.getMessage(), e);
+		}
+		Renderer constructionRenderer = new ConstructionRenderer(font, new RGB(
+				0, 0, 0), literal);
+		quantityLoopRenderer = new QuantityLoopRenderer(constructionRenderer,
+				quantity);
 	}
-	Renderer constructionRenderer = new ConstructionRenderer(font, new RGB(
-		0, 0, 0), literal);
-	quantityLoopRenderer = new QuantityLoopRenderer(constructionRenderer,
-		quantity);
-    }
 
-    @Override
-    public Dimension getPreferredSize() {
-	return quantityLoopRenderer.getPreferredSize();
-    }
+	@Override
+	public Dimension getPreferredSize() {
+		return quantityLoopRenderer.getPreferredSize();
+	}
 
-    @Override
-    public void render(GC graphics, int x1, int y1, int x2, int y2) {
-	quantityLoopRenderer.render(graphics, x1, y1, x2, y2);
-    }
+	@Override
+	public void render(GC graphics, int x1, int y1, int x2, int y2) {
+		quantityLoopRenderer.render(graphics, x1, y1, x2, y2);
+	}
 }

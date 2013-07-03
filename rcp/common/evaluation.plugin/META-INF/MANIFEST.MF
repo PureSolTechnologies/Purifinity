@@ -13,9 +13,8 @@ Require-Bundle: org.apache.commons.io;bundle-version="2.0.1",
  org.eclipse.core.jobs;bundle-version="3.5.300",
  org.eclipse.ui;bundle-version="3.104.0",
  org.slf4j.api;bundle-version="1.6.4",
+ com.puresol.commons.trees.bundle;bundle-version="0.0.1",
  com.puresol.commons.utils.bundle;bundle-version="0.0.1",
- com.puresol.purifinity.trees.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.utils.bundle;bundle-version="0.1.0",
  com.puresol.purifinity.uhura.bundle;bundle-version="0.1.0",
  com.puresol.purifinity.coding.analysis.api.bundle;bundle-version="0.1.0",
  com.puresol.purifinity.coding.evaluation.api.bundle;bundle-version="0.1.0",
@@ -28,4 +27,3 @@ Require-Bundle: org.apache.commons.io;bundle-version="2.0.1",
  com.puresol.purifinity.license.api.bundle;bundle-version="0.1.0",
  com.puresol.purifinity.client.common.branding.plugin;bundle-version="0.1.0"
 Bundle-Activator: com.puresol.purifinity.client.common.evaluation.Activator
-Import-Package: com.puresol.purifinity.utils

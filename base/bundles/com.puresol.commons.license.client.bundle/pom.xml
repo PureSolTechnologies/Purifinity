@@ -18,12 +18,10 @@
 		<dependency>
 			<groupId>com.puresol.commons</groupId>
 			<artifactId>osgi</artifactId>
-			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.commons</groupId>
 			<artifactId>license.client</artifactId>
-			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>

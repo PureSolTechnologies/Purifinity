@@ -18,8 +18,8 @@
 			<artifactId>coding.store.fs.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
-			<artifactId>commons.osgi</artifactId>
+			<groupId>com.puresol.commons</groupId>
+			<artifactId>osgi</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
@@ -49,7 +49,7 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<configuration>
 					<instructions>
-						<Import-Package>*,com.puresol.purifinity.uhura.parser,com.puresol.purifinity.uhura.lexer,com.puresol.purifinity.uhura.grammar.token,com.puresol.purifinity.utils.math,com.puresol.purifinity.utils.math.statistics,com.puresol.purifinity.coding.evaluation.impl</Import-Package>
+						<Import-Package>*,com.puresol.purifinity.uhura.parser,com.puresol.purifinity.uhura.lexer,com.puresol.purifinity.uhura.grammar.token,com.puresol.commons.utils.math,com.puresol.commons.utils.math.statistics,com.puresol.purifinity.coding.evaluation.impl</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>
