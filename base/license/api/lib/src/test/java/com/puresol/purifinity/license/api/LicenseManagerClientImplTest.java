@@ -1,5 +1,7 @@
 package com.puresol.purifinity.license.api;
 
+import static org.junit.Assume.assumeTrue;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -14,6 +16,8 @@ public class LicenseManagerClientImplTest {
 
 	@Test
 	public void testCheckExpirationNotExpired() {
+		assumeTrue(new GregorianCalendar(2013, 07, 01).before(GregorianCalendar
+				.getInstance()));
 		licenseManagerClient.checkExpiration(new Date());
 	}
 
