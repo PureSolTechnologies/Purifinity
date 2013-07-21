@@ -17,11 +17,13 @@
 		<jboss.version>7.1.1.Final</jboss.version>
 		<resteasy.version>2.3.4.Final</resteasy.version>
 		<!-- Arquillian -->
-		<arquillian.version>1.0.1.Final</arquillian.version>
+		<arquillian.version>1.1.0.Final</arquillian.version>
 		<arquillian.test.dir>${project.build.directory}/jboss</arquillian.test.dir>
 		<!-- Cargo -->
 		<cargo.dir>${work.dir}/cargo</cargo.dir>
 		<cargo.logging>medium</cargo.logging>
+		<!-- PostgrSQL -->
+		<postgresql.version>8.4-702.jdbc4</postgresql.version>
 	</properties>
 
 	<dependencyManagement>
@@ -64,6 +66,13 @@
 				<version>${resteasy.version}</version>
 				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-jaxrs</artifactId>
+				<version>1.9.2</version>
+				<scope>provided</scope>
+			</dependency>
+
 			<!-- Arquillian -->
 			<dependency>
 				<groupId>org.jboss.arquillian.junit</groupId>
