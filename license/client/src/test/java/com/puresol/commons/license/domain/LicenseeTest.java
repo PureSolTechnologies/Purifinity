@@ -2,29 +2,31 @@ package com.puresol.commons.license.domain;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Test;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
-import com.puresol.commons.license.domain.Licensee;
+import org.junit.Test;
 
 public class LicenseeTest {
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testInvlidIdNull() {
+	public void testInvalidIdNull() {
 		new Licensee(null, "licensee");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testInvlidNameEmpty() {
+	public void testInvalidNameEmpty() {
 		new Licensee("", "licensee");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testInvlidEmailNull() {
+	public void testInvalidEmailNull() {
 		new Licensee("id", null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testInvlidEmailEmpty() {
+	public void testInvalidEmailEmpty() {
 		new Licensee("id", "");
 	}
 
@@ -34,4 +36,22 @@ public class LicenseeTest {
 				Licensee.fromString("licensee (id)"));
 	}
 
+	@Test
+	public void testJsonSerialization() throws IOException {
+		Licensee licensee = new Licensee("id", "licensee");
+
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		JsonSerializer.serializeToStream(licensee, outputStream);
+		byte[] serializedByteArray = outputStream.toByteArray();
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(
+				serializedByteArray);
+		LicenseeTest deserialized = JsonSerializer.deserialize(inputStream,
+				this.getClass());
+
+		ByteArrayOutputStream outputStream2 = new ByteArrayOutputStream();
+		JsonSerializer.serializeToStream(deserialized, outputStream2);
+		byte[] serializedByteArray2 = outputStream2.toByteArray();
+
+		assertEquals(serializedByteArray, serializedByteArray2);
+	}
 }
