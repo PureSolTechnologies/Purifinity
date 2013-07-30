@@ -331,9 +331,9 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	public Boolean call() throws Exception {
 		try {
 			reset();
+			StopWatch stopWatch = new StopWatch();
+			stopWatch.start();
 			if (analyzeFiles()) {
-				StopWatch stopWatch = new StopWatch();
-				stopWatch.start();
 				saveAnalysisRunInformation();
 				buildCodeLocationTree();
 				storeAnalysisResultInformation();
