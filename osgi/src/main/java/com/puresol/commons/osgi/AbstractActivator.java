@@ -59,6 +59,10 @@ public abstract class AbstractActivator implements BundleActivator {
 			throw new RuntimeException("Bundle was never started!");
 		}
 		AbstractActivator.context = null;
+		unregisterServices();
+	}
+
+	private void unregisterServices() {
 		Iterator<ServiceRegistration<?>> serviceIterator = serviceRegistrations
 				.iterator();
 		while (serviceIterator.hasNext()) {
@@ -90,6 +94,8 @@ public abstract class AbstractActivator implements BundleActivator {
 
 	public <T> ServiceRegistration<T> registerService(Class<T> iface,
 			T instance, Dictionary<String, String> dictionary) {
+		logger.info("Register service '{}' for interface '{}'.", instance
+				.getClass().getName(), iface.getName());
 		ServiceRegistration<T> serviceRegistration = context.registerService(
 				iface, instance, dictionary);
 		serviceRegistrations.add(serviceRegistration);
