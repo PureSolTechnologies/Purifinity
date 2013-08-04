@@ -14,9 +14,12 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.purifinity.client.common.evaluation.Activator;
 import com.puresol.purifinity.client.common.evaluation.EvaluatorInformationDialog;
@@ -29,6 +32,9 @@ import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
 
 public class AvailableEvaluatorsView extends ViewPart implements Refreshable,
 		InformationProvider, ISelectionChangedListener {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(AvailableEvaluatorsView.class);
 
 	private Table table;
 	private TableViewer viewer;
@@ -72,6 +78,18 @@ public class AvailableEvaluatorsView extends ViewPart implements Refreshable,
 		try {
 			BundleContext bundleContext = Activator.getDefault().getBundle()
 					.getBundleContext();
+			logger.info("Available evalutors in context '"
+					+ bundleContext.getBundle().getSymbolicName() + "'.");
+			ServiceReference<?>[] references = bundleContext
+					.getServiceReferences((String) null, (String) null);
+			for (ServiceReference<?> serviceReference : references) {
+				Bundle bundle = serviceReference.getBundle();
+				Object service = bundleContext.getService(serviceReference);
+				String symbolicName = bundle.getSymbolicName();
+				logger.info("Service: " + service.getClass().getName()
+						+ " (bundle='" + symbolicName + "')");
+			}
+
 			Collection<ServiceReference<EvaluatorFactory>> allServiceReferences = bundleContext
 					.getServiceReferences(EvaluatorFactory.class, null);
 			List<EvaluatorFactory> evaluators = new ArrayList<EvaluatorFactory>();

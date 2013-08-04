@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -47,7 +48,10 @@ public class OsgiDebugView extends ViewPart implements SelectionListener {
 							+ "):\n\n");
 			for (ServiceReference<?> serviceReference : allServiceReferences) {
 				Object service = bundleContext.getService(serviceReference);
-				stringBuilder.append(service.getClass().getName() + "\n");
+				Bundle bundle = serviceReference.getBundle();
+				String symbolicName = bundle.getSymbolicName();
+				stringBuilder.append(service.getClass().getName()
+						+ " (bundle='" + symbolicName + "';)\n");
 				bundleContext.ungetService(serviceReference);
 			}
 			text.setText(stringBuilder.toString());
