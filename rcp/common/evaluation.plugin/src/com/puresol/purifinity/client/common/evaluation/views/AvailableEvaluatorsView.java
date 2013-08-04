@@ -14,9 +14,12 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.part.ViewPart;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresol.purifinity.client.common.evaluation.Activator;
 import com.puresol.purifinity.client.common.evaluation.EvaluatorInformationDialog;
@@ -28,90 +31,105 @@ import com.puresol.purifinity.client.common.ui.actions.Refreshable;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
 
 public class AvailableEvaluatorsView extends ViewPart implements Refreshable,
-	InformationProvider, ISelectionChangedListener {
+		InformationProvider, ISelectionChangedListener {
 
-    private Table table;
-    private TableViewer viewer;
-    private EvaluatorInformationDialog evaluatorInformationDialog = null;
-    private EvaluatorFactory evaluatorFactorySelection = null;
+	private static final Logger logger = LoggerFactory
+			.getLogger(AvailableEvaluatorsView.class);
 
-    public AvailableEvaluatorsView() {
-	super();
-    }
+	private Table table;
+	private TableViewer viewer;
+	private EvaluatorInformationDialog evaluatorInformationDialog = null;
+	private EvaluatorFactory evaluatorFactorySelection = null;
 
-    @Override
-    public void createPartControl(Composite parent) {
-	parent.setLayout(new FillLayout());
-	table = new Table(parent, SWT.NONE);
-	table.setHeaderVisible(true);
-	viewer = new AvailableEvaluatorsTableViewer(table);
-	viewer.addSelectionChangedListener(this);
-
-	initializeToolBar();
-
-	refresh();
-    }
-
-    /**
-     * Initialize the toolbar.
-     */
-    private void initializeToolBar() {
-	IToolBarManager toolbarManager = getViewSite().getActionBars()
-		.getToolBarManager();
-	toolbarManager.add(new InformationAction(this));
-	toolbarManager.add(new RefreshAction(this));
-    }
-
-    @Override
-    public void setFocus() {
-	table.setFocus();
-    }
-
-    @Override
-    public void refresh() {
-	try {
-	    BundleContext bundleContext = Activator.getDefault().getBundle()
-		    .getBundleContext();
-	    Collection<ServiceReference<EvaluatorFactory>> allServiceReferences = bundleContext
-		    .getServiceReferences(EvaluatorFactory.class, null);
-	    List<EvaluatorFactory> evaluators = new ArrayList<EvaluatorFactory>();
-	    for (ServiceReference<EvaluatorFactory> serviceReference : allServiceReferences) {
-		EvaluatorFactory service = bundleContext
-			.getService(serviceReference);
-		evaluators.add(service);
-		bundleContext.ungetService(serviceReference);
-	    }
-	    viewer.setInput(evaluators);
-	} catch (InvalidSyntaxException e1) {
-	    viewer.setInput(new ArrayList<EvaluatorFactory>());
+	public AvailableEvaluatorsView() {
+		super();
 	}
-    }
 
-    @Override
-    public void showInformation() {
-	if (evaluatorInformationDialog == null) {
-	    evaluatorInformationDialog = new EvaluatorInformationDialog(
-		    getSite(), evaluatorFactorySelection);
-	    evaluatorInformationDialog.open();
-	    evaluatorInformationDialog = null;
-	} else {
-	    evaluatorInformationDialog.close();
-	    evaluatorInformationDialog = null;
-	}
-    }
+	@Override
+	public void createPartControl(Composite parent) {
+		parent.setLayout(new FillLayout());
+		table = new Table(parent, SWT.NONE);
+		table.setHeaderVisible(true);
+		viewer = new AvailableEvaluatorsTableViewer(table);
+		viewer.addSelectionChangedListener(this);
 
-    @Override
-    public void selectionChanged(SelectionChangedEvent event) {
-	if (event.getSource() == viewer) {
-	    StructuredSelection selection = (StructuredSelection) viewer
-		    .getSelection();
-	    evaluatorFactorySelection = (EvaluatorFactory) selection
-		    .getFirstElement();
-	    if (evaluatorInformationDialog != null) {
-		evaluatorInformationDialog
-			.setEvaluatorFactory(evaluatorFactorySelection);
-	    }
+		initializeToolBar();
+
+		refresh();
 	}
-    }
+
+	/**
+	 * Initialize the toolbar.
+	 */
+	private void initializeToolBar() {
+		IToolBarManager toolbarManager = getViewSite().getActionBars()
+				.getToolBarManager();
+		toolbarManager.add(new InformationAction(this));
+		toolbarManager.add(new RefreshAction(this));
+	}
+
+	@Override
+	public void setFocus() {
+		table.setFocus();
+	}
+
+	@Override
+	public void refresh() {
+		try {
+			BundleContext bundleContext = Activator.getDefault().getBundle()
+					.getBundleContext();
+			logger.info("Available evalutors in context '"
+					+ bundleContext.getBundle().getSymbolicName() + "'.");
+			ServiceReference<?>[] references = bundleContext
+					.getServiceReferences((String) null, (String) null);
+			for (ServiceReference<?> serviceReference : references) {
+				Bundle bundle = serviceReference.getBundle();
+				Object service = bundleContext.getService(serviceReference);
+				String symbolicName = bundle.getSymbolicName();
+				logger.info("Service: " + service.getClass().getName()
+						+ " (bundle='" + symbolicName + "')");
+			}
+
+			Collection<ServiceReference<EvaluatorFactory>> allServiceReferences = bundleContext
+					.getServiceReferences(EvaluatorFactory.class, null);
+			List<EvaluatorFactory> evaluators = new ArrayList<EvaluatorFactory>();
+			for (ServiceReference<EvaluatorFactory> serviceReference : allServiceReferences) {
+				EvaluatorFactory service = bundleContext
+						.getService(serviceReference);
+				evaluators.add(service);
+				bundleContext.ungetService(serviceReference);
+			}
+			viewer.setInput(evaluators);
+		} catch (InvalidSyntaxException e1) {
+			viewer.setInput(new ArrayList<EvaluatorFactory>());
+		}
+	}
+
+	@Override
+	public void showInformation() {
+		if (evaluatorInformationDialog == null) {
+			evaluatorInformationDialog = new EvaluatorInformationDialog(
+					getSite(), evaluatorFactorySelection);
+			evaluatorInformationDialog.open();
+			evaluatorInformationDialog = null;
+		} else {
+			evaluatorInformationDialog.close();
+			evaluatorInformationDialog = null;
+		}
+	}
+
+	@Override
+	public void selectionChanged(SelectionChangedEvent event) {
+		if (event.getSource() == viewer) {
+			StructuredSelection selection = (StructuredSelection) viewer
+					.getSelection();
+			evaluatorFactorySelection = (EvaluatorFactory) selection
+					.getFirstElement();
+			if (evaluatorInformationDialog != null) {
+				evaluatorInformationDialog
+						.setEvaluatorFactory(evaluatorFactorySelection);
+			}
+		}
+	}
 
 }
