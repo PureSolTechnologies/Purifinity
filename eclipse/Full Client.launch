@@ -28,7 +28,7 @@
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dosgi.requiredJavaVersion=1.5 -Dhelp.lucene.tokenizer=standard -Xms40m -Xmx512m -XX:MaxPermSize=256m"/>
 <stringAttribute key="pde.version" value="3.3"/>
-<stringAttribute key="product" value="org.eclipse.epp.package.rcp.product"/>
+<stringAttribute key="product" value="com.puresol.purifinity.client.application.plugin.PurifinityFull"/>
 <setAttribute key="selected_features">
 <setEntry value="com.puresol.purifinity.client.application.feature:default"/>
 <setEntry value="com.puresol.purifinity.client.common.feature:default"/>
@@ -52,5 +52,5 @@
 <booleanAttribute key="useCustomFeatures" value="true"/>
 <booleanAttribute key="useDefaultConfig" value="true"/>
 <booleanAttribute key="useDefaultConfigArea" value="true"/>
-<booleanAttribute key="useProduct" value="false"/>
+<booleanAttribute key="useProduct" value="true"/>
 </launchConfiguration>

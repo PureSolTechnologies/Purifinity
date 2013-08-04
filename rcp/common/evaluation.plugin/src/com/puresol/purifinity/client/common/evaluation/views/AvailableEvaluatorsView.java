@@ -14,7 +14,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.part.ViewPart;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -78,18 +77,6 @@ public class AvailableEvaluatorsView extends ViewPart implements Refreshable,
 		try {
 			BundleContext bundleContext = Activator.getDefault().getBundle()
 					.getBundleContext();
-			logger.info("Available evalutors in context '"
-					+ bundleContext.getBundle().getSymbolicName() + "'.");
-			ServiceReference<?>[] references = bundleContext
-					.getServiceReferences((String) null, (String) null);
-			for (ServiceReference<?> serviceReference : references) {
-				Bundle bundle = serviceReference.getBundle();
-				Object service = bundleContext.getService(serviceReference);
-				String symbolicName = bundle.getSymbolicName();
-				logger.info("Service: " + service.getClass().getName()
-						+ " (bundle='" + symbolicName + "')");
-			}
-
 			Collection<ServiceReference<EvaluatorFactory>> allServiceReferences = bundleContext
 					.getServiceReferences(EvaluatorFactory.class, null);
 			List<EvaluatorFactory> evaluators = new ArrayList<EvaluatorFactory>();

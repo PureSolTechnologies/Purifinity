@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Purifinity" uid="com.puresol.coding.client.product.full" id="com.puresol.purifinity.client.application.plugin.PurifinityFull" application="com.puresol.purifinity.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Purifinity" uid="com.puresol.purifinity.client.product.full" id="com.puresol.purifinity.client.application.plugin.PurifinityFull" application="com.puresol.purifinity.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/com.puresol.coding.client.common.branding.plugin/icons/alt_about.gif"/>
+      <image path="/com.puresol.purifinity.client.common.branding.plugin/icons/alt_about.gif"/>
    </aboutInfo>
 
    <configIni use="default">
@@ -18,7 +18,7 @@
    <windowImages/>
 
    <splash
-      location="com.puresol.coding.client.common.branding.plugin"
+      location="com.puresol.purifinity.client.common.branding.plugin"
       startupProgressRect="50,100,445,32"
       startupMessageRect="28,252,445,20"
       startupForegroundColor="000000" />
@@ -62,12 +62,9 @@
    </features>
 
    <configurations>
-      <plugin id="com.puresol.purifinity.coding.metrics.bundle" autoStart="true" startLevel="3" />
-      <plugin id="com.puresol.purifinity.coding.store.fs.bundle" autoStart="true" startLevel="3" />
-      <plugin id="com.puresol.purifinity.coding.analysis.api.bundle" autoStart="true" startLevel="3" />
-      <plugin id="com.puresol.purifinity.coding.evaluation.api.bundle" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="2" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
+      <plugin id="org.eclipse.equinox.util" autoStart="true" startLevel="2" />
    </configurations>
 
 </product>
