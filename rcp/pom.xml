@@ -22,6 +22,7 @@
 		<module>common</module>
 		<module>lang</module>
 		<module>storage</module>
+		<module>features</module>
 		<module>product</module>
 		<module>repository</module>
 	</modules>

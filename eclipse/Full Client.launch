@@ -32,6 +32,8 @@
 <setAttribute key="selected_features">
 <setEntry value="com.puresol.purifinity.client.application.feature:default"/>
 <setEntry value="com.puresol.purifinity.client.common.feature:default"/>
+<setEntry value="com.puresol.purifinity.client.features.cleancode.feature:default"/>
+<setEntry value="com.puresol.purifinity.client.features.iso9126.feature:default"/>
 <setEntry value="com.puresol.purifinity.client.lang.c11.feature:default"/>
 <setEntry value="com.puresol.purifinity.client.lang.cpp11.feature:default"/>
 <setEntry value="com.puresol.purifinity.client.lang.fortran2008.feature:default"/>

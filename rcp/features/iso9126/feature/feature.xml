@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.puresol.purifinity.client.features.iso9126.feature"
+      label="com.puresol.purifinity.client.features.iso9126.feature"
+      version="0.1.0.qualifier"
+      provider-name="PureSol Techologies"
+      plugin="com.puresol.purifinity.client.common.branding.plugin"
+      os="linux,macosx,win32"
+      ws="carbon,cocoa,gtk,win32"
+      arch="x86,x86_64">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <requires>
+      <import plugin="org.apache.commons.io"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.slf4j.api"/>
+      <import plugin="com.puresol.purifinity.client.common.osgi.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.commons.trees.bundle" version="0.0.1" match="greaterOrEqual"/>
+      <import plugin="com.puresol.commons.utils.bundle" version="0.0.1" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.uhura.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.client.common.branding.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.coding.lang.api.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.coding.analysis.api.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.coding.analysis.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.client.common.ui.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.osgi" version="3.8.2" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.104.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.runtime" version="3.8.0" match="greaterOrEqual"/>
+      <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.io" version="2.0.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.e4.ui.workbench" version="0.11.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.client.application.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.swt" version="3.100.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jface" version="3.8.102" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.core.jobs" version="3.5.300" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.coding.evaluation.api.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.client.common.analysis.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.coding.metrics.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.coding.evaluation.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.client.common.chart.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.license.api.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresol.commons.license.domain.bundle" version="0.0.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
+   </requires>
+
+   <plugin
+         id="com.puresol.purifinity.coding.analysis.api.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.coding.analysis.impl.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.client.common.analysis.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.client.common.chart.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.client.common.evaluation.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.client.common.license.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.client.common.osgi.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.client.common.ui.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.coding.evaluation.api.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.coding.evaluation.impl.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.coding.lang.api.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.coding.lang.commons.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.uhura.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.commons.trees.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.commons.utils.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.coding.metrics.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
