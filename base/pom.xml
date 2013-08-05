@@ -86,7 +86,17 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol.purifinity</groupId>
+				<artifactId>coding.evaluation.cleancode.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.evaluation.impl.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol.purifinity</groupId>
+				<artifactId>coding.evaluation.iso9126.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

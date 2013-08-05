@@ -4,20 +4,14 @@
 
 	<parent>
 		<groupId>com.puresol.purifinity</groupId>
-		<artifactId>coding</artifactId>
+		<artifactId>coding.evaluation.cleancode</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>coding.evaluation</artifactId>
+	<artifactId>coding.evaluation.cleancode.lib</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
-	<packaging>pom</packaging>
 
-	<modules>
-		<module>api</module>
-		<module>iso9126</module>
-		<module>cleancode</module>
-		<module>impl</module>
-		<module>test</module>
-	</modules>
+	<dependencies>
+	</dependencies>
 
 </project>

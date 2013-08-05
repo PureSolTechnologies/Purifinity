@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1375738197314
+Build-Jdk: 1.7.0_25
+Built-By: ludwig
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.puresol.purifinity.coding.evaluation.iso9126.Activ
+ ator
+Bundle-ClassPath: .,target/dependency/coding.evaluation.iso9126.lib-0.1.
+ 0-SNAPSHOT.jar,target/dependency/osgi-0.0.1-20130804.111056-6.jar
+Bundle-DocURL: http://puresol-technologies.com
+Bundle-ManifestVersion: 2
+Bundle-Name: com.puresol.purifinity.coding.evaluation.iso9126.bundle
+Bundle-SymbolicName: com.puresol.purifinity.coding.evaluation.iso9126.bu
+ ndle
+Bundle-Vendor: PureSol Technologies
+Bundle-Version: 0.1.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Embed-Dependency: *;scope=compile|runtime;inline=false
+Embed-Directory: target/dependency
+Embed-StripGroup: true
+Embedded-Artifacts: target/dependency/coding.evaluation.iso9126.lib-0.1.
+ 0-SNAPSHOT.jar;g="com.puresol.purifinity";a="coding.evaluation.iso9126.
+ lib";v="0.1.0-SNAPSHOT",target/dependency/osgi-0.0.1-20130804.111056-6.
+ jar;g="com.puresol.commons";a="osgi";v="0.0.1-SNAPSHOT"
+Export-Package: com.puresol.purifinity.coding.evaluation.iso9126;version
+ ="0.1.0.SNAPSHOT"
+Import-Package: org.osgi.framework;version="[1.6,2)",org.slf4j;version="
+ [1.6,2)"
+Tool: Bnd-1.50.0
