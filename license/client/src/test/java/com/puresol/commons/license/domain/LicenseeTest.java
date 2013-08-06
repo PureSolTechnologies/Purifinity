@@ -1,8 +1,8 @@
 package com.puresol.commons.license.domain;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -43,15 +43,13 @@ public class LicenseeTest {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		JsonSerializer.serializeToStream(licensee, outputStream);
 		byte[] serializedByteArray = outputStream.toByteArray();
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(
-				serializedByteArray);
-		LicenseeTest deserialized = JsonSerializer.deserialize(inputStream,
-				this.getClass());
+		Licensee deserialized = JsonSerializer.deserialize(serializedByteArray,
+				Licensee.class);
 
 		ByteArrayOutputStream outputStream2 = new ByteArrayOutputStream();
 		JsonSerializer.serializeToStream(deserialized, outputStream2);
 		byte[] serializedByteArray2 = outputStream2.toByteArray();
 
-		assertEquals(serializedByteArray, serializedByteArray2);
+		assertArrayEquals(serializedByteArray, serializedByteArray2);
 	}
 }

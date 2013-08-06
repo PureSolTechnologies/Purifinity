@@ -3,6 +3,8 @@ package com.puresol.commons.license.domain;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 /**
  * This value object represents a single licensee.
  * 
@@ -18,7 +20,8 @@ public class Licensee {
 	private final String customerId;
 	private final String name;
 
-	public Licensee(String customerId, String name) {
+	public Licensee(@JsonProperty("customerId") String customerId,
+			@JsonProperty("name") String name) {
 		super();
 		if ((customerId == null) || (customerId.isEmpty())) {
 			throw new IllegalArgumentException(

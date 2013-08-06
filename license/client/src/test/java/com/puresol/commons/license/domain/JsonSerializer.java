@@ -21,4 +21,9 @@ public class JsonSerializer {
 			throws IOException {
 		return mapper.readValue(input, clazz);
 	}
+
+	public static <T> T deserialize(byte[] input, Class<? extends T> clazz)
+			throws IOException {
+		return mapper.readValue(input, clazz);
+	}
 }
