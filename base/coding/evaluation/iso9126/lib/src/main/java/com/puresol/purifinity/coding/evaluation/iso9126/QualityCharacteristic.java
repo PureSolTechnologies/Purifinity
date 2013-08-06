@@ -1,4 +1,4 @@
-package com.puresol.purifinity.coding.evaluation.api;
+package com.puresol.purifinity.coding.evaluation.iso9126;
 
 import java.io.IOException;
 

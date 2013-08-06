@@ -10,7 +10,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
 
-import com.puresol.purifinity.coding.evaluation.api.QualityCharacteristic;
+import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 
 public class QualityCharacteristicListViewer extends ListViewer implements
 		IStructuredContentProvider {

@@ -1,12 +1,12 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1375738197238
+Bnd-LastModified: 1375815124227
 Build-Jdk: 1.7.0_25
 Built-By: ludwig
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.puresol.purifinity.coding.evaluation.cleancode.Act
  ivator
 Bundle-ClassPath: .,target/dependency/coding.evaluation.cleancode.lib-0.
- 1.0-SNAPSHOT.jar,target/dependency/osgi-0.0.1-20130804.111056-6.jar
+ 1.0-SNAPSHOT.jar,target/dependency/osgi-0.0.1-SNAPSHOT.jar
 Bundle-DocURL: http://puresol-technologies.com
 Bundle-ManifestVersion: 2
 Bundle-Name: com.puresol.purifinity.coding.evaluation.cleancode.bundle
@@ -20,8 +20,8 @@ Embed-Directory: target/dependency
 Embed-StripGroup: true
 Embedded-Artifacts: target/dependency/coding.evaluation.cleancode.lib-0.
  1.0-SNAPSHOT.jar;g="com.puresol.purifinity";a="coding.evaluation.cleanc
- ode.lib";v="0.1.0-SNAPSHOT",target/dependency/osgi-0.0.1-20130804.11105
- 6-6.jar;g="com.puresol.commons";a="osgi";v="0.0.1-SNAPSHOT"
+ ode.lib";v="0.1.0-SNAPSHOT",target/dependency/osgi-0.0.1-SNAPSHOT.jar;g
+ ="com.puresol.commons";a="osgi";v="0.0.1-SNAPSHOT"
 Export-Package: com.puresol.purifinity.coding.evaluation.cleancode;uses:
  ="com.puresol.purifinity.coding.evaluation.cleancode.grade";version="0.
  1.0.SNAPSHOT",com.puresol.purifinity.coding.evaluation.cleancode.princi

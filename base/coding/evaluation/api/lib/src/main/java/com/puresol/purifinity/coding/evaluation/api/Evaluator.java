@@ -5,6 +5,7 @@ import java.util.Set;
 import com.puresol.commons.utils.progress.CallableProgressObservable;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.TimeAwareness;
+import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 
 /**
  * This is the central interface for an evaluator. An evaluator is responsible

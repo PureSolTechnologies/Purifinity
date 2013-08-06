@@ -12,7 +12,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>iso1926</module>
+		<module>iso9126</module>
 		<module>cleancode</module>
 	</modules>
 

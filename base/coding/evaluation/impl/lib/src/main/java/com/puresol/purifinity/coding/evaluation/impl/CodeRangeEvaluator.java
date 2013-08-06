@@ -9,8 +9,8 @@ import com.puresol.commons.utils.progress.AbstractProgressObservable;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.evaluation.api.Evaluator;
-import com.puresol.purifinity.coding.evaluation.api.QualityCharacteristic;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
+import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 
 /**
  * This interface is meant for evaluators which perform operations on ASTs or in

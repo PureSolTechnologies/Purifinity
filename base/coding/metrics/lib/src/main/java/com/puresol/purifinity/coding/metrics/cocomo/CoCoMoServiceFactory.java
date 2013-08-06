@@ -8,7 +8,7 @@ import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.evaluation.api.AbstractEvaluatorFactory;
 import com.puresol.purifinity.coding.evaluation.api.Evaluator;
-import com.puresol.purifinity.coding.evaluation.api.QualityCharacteristic;
+import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluator;
 
 public class CoCoMoServiceFactory extends AbstractEvaluatorFactory {

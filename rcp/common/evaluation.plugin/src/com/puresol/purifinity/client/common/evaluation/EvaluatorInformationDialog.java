@@ -26,7 +26,7 @@ import com.puresol.purifinity.client.common.evaluation.contents.QualityCharacter
 import com.puresol.purifinity.client.common.evaluation.controls.QualityCharacteristicInformationComponent;
 import com.puresol.purifinity.client.common.ui.controls.ParameterInformationComponent;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.purifinity.coding.evaluation.api.QualityCharacteristic;
+import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 
 public class EvaluatorInformationDialog extends Dialog implements
 		SelectionListener {

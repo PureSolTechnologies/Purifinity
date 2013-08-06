@@ -5,6 +5,7 @@ import java.util.Set;
 import com.puresol.commons.utils.math.Parameter;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
+import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 
 /**
  * This interface is the central interface for all factories for evaluators. The

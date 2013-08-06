@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.puresol.commons.utils.StringUtils;
-import com.puresol.purifinity.coding.evaluation.api.QualityCharacteristic;
+import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 
 /**
  * This components takes a {@link QualityCharacteristic} and shows all its

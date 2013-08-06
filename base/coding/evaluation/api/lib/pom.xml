@@ -13,16 +13,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresol.commons</groupId>
-			<artifactId>utils</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.analysis.api.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
+			<groupId>com.puresol.purifinity</groupId>
+			<artifactId>coding.evaluation.iso9126.lib</artifactId>
 		</dependency>
 	</dependencies>
 
