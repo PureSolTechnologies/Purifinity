@@ -16,7 +16,7 @@ import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
  *            is the type or interface of the elements contained in that list.
  */
 public class SyntaxElementList<T extends UniversalSyntaxTree> extends
-	CompilerRelevantElement {
+	AbstractProduction {
 
     private static final long serialVersionUID = -1875399758682948173L;
 

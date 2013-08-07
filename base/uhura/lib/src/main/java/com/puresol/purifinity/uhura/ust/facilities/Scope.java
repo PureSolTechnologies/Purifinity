@@ -13,7 +13,7 @@ import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Scope extends CompilerRelevantElement {
+public class Scope extends AbstractProduction {
 
     private static final long serialVersionUID = 7165390340532196126L;
 

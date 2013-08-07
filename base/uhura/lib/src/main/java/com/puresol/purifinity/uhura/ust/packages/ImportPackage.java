@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
-import com.puresol.purifinity.uhura.ust.facilities.CompilerRelevantElement;
+import com.puresol.purifinity.uhura.ust.facilities.AbstractProduction;
 
 /**
  * This is an import package statement like found in Java, Scala, D and other
@@ -13,7 +13,7 @@ import com.puresol.purifinity.uhura.ust.facilities.CompilerRelevantElement;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ImportPackage extends CompilerRelevantElement {
+public class ImportPackage extends AbstractProduction {
 
     private static final long serialVersionUID = -828922003801631227L;
 

@@ -1,6 +1,6 @@
 package com.puresol.purifinity.uhura.ust.comments;
 
-public class EndOfLineComment extends Comment {
+public class EndOfLineComment extends AbstractComment {
 
     private static final long serialVersionUID = 8664830280231683442L;
 

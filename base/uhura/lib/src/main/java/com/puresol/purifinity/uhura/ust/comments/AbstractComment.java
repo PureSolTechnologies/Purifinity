@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
-import com.puresol.purifinity.uhura.ust.facilities.CompilerIrrelavantElement;
+import com.puresol.purifinity.uhura.ust.facilities.AbstractToken;
 
-public abstract class Comment extends CompilerIrrelavantElement {
+public abstract class AbstractComment extends AbstractToken {
 
 	private static final long serialVersionUID = -7080420554044222389L;
 
-	public Comment(String originalSymbol) {
+	public AbstractComment(String originalSymbol) {
 		super(originalSymbol);
 
 	}

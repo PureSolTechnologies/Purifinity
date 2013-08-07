@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
-import com.puresol.purifinity.uhura.ust.facilities.CompilerRelevantElement;
+import com.puresol.purifinity.uhura.ust.facilities.AbstractProduction;
 
-public abstract class Modifier extends CompilerRelevantElement {
+public abstract class Modifier extends AbstractProduction {
 
 	private static final long serialVersionUID = 6970210094744093023L;
 

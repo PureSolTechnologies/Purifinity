@@ -1,7 +1,7 @@
 package com.puresol.purifinity.uhura.ust.comments;
 
 
-public class BlockComment extends Comment {
+public class BlockComment extends AbstractComment {
 
     private static final long serialVersionUID = -6042748959476468119L;
 

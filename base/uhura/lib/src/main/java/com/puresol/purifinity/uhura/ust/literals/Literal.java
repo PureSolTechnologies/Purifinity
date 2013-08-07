@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
-import com.puresol.purifinity.uhura.ust.facilities.CompilerRelevantElement;
+import com.puresol.purifinity.uhura.ust.facilities.AbstractProduction;
 
-public abstract class Literal extends CompilerRelevantElement {
+public abstract class Literal extends AbstractProduction {
 
 	private static final long serialVersionUID = -1731135665103554027L;
 

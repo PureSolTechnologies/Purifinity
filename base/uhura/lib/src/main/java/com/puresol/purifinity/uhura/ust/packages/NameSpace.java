@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
-import com.puresol.purifinity.uhura.ust.facilities.CompilerRelevantElement;
+import com.puresol.purifinity.uhura.ust.facilities.AbstractProduction;
 
 /**
  * This is a name space like found in C++ or C#. Name spaces do not have a name
@@ -14,7 +14,7 @@ import com.puresol.purifinity.uhura.ust.facilities.CompilerRelevantElement;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class NameSpace extends CompilerRelevantElement {
+public class NameSpace extends AbstractProduction {
 
     private static final long serialVersionUID = 4747868405422668380L;
 
