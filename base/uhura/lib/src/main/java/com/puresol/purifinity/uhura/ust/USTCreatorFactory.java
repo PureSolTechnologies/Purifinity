@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class USTCreatorFactory {
 
-	private static final Map<Package, USTCreator> creators = new HashMap<>();
+	private static final Map<Package, USTCreator> creators = new HashMap<Package, USTCreator>();
 
 	private static boolean initialized = false;
 
