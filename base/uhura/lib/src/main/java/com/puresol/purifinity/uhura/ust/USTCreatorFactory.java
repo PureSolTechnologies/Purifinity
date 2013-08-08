@@ -16,6 +16,10 @@ public class USTCreatorFactory {
 		}
 	}
 
+	public static boolean isInitialize() {
+		return initialized;
+	}
+
 	public static void destroy() {
 		synchronized (creators) {
 			assertInitialized();
@@ -24,12 +28,17 @@ public class USTCreatorFactory {
 		}
 	}
 
-	public void register(Package pkg) {
+	public static void register(Package pkg)
+			throws UniversalSyntaxTreeCreatorException {
 		assertInitialized();
+		if (creators.containsKey(pkg)) {
+			throw new IllegalStateException("Package '" + pkg.getName()
+					+ "' was already registered!");
+		}
 		creators.put(pkg, new USTCreatorImpl(pkg));
 	}
 
-	public void unregister(Package pkg) {
+	public static void unregister(Package pkg) {
 		assertInitialized();
 		creators.remove(pkg);
 	}
@@ -41,13 +50,13 @@ public class USTCreatorFactory {
 
 	private static void assertInitialized() {
 		if (!initialized) {
-			throw new IllegalArgumentException("Not initialized, yet!");
+			throw new IllegalStateException("Not initialized, yet!");
 		}
 	}
 
 	private static void assertNotInitialized() {
 		if (initialized) {
-			throw new IllegalArgumentException("Already initialized!");
+			throw new IllegalStateException("Already initialized!");
 		}
 	}
 
