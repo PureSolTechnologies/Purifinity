@@ -13,4 +13,5 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.8.0",
  com.puresol.commons.license.domain.bundle;bundle-version="0.0.1",
  com.puresol.purifinity.client.application.plugin;bundle-version="0.1.0",
  com.puresol.purifinity.license.api.bundle;bundle-version="0.1.0",
- org.reflections.reflections.bundle;bundle-version="0.9.9"
+ org.reflections.reflections.bundle;bundle-version="0.9.9",
+ jackson-jaxrs;bundle-version="1.9.2"
