@@ -6,13 +6,13 @@ package com.puresol.purifinity.uhura.ust.types;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class NumericType extends Type {
+public abstract class AbstractNumericType extends AbstractType {
 
 	private static final long serialVersionUID = -348395824381107195L;
 
 	private final int bitLength;
 
-	public NumericType(String originalSymbol, int bitLength) {
+	public AbstractNumericType(String originalSymbol, int bitLength) {
 		super(originalSymbol);
 		this.bitLength = bitLength;
 	}

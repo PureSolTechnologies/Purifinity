@@ -6,13 +6,13 @@ import java.util.List;
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 import com.puresol.purifinity.uhura.ust.facilities.AbstractProduction;
 
-public abstract class Type extends AbstractProduction {
+public abstract class AbstractType extends AbstractProduction {
 
 	private static final long serialVersionUID = 2846791515023904393L;
 
 	private final List<UniversalSyntaxTree> children = new ArrayList<UniversalSyntaxTree>();
 
-	public Type(String originalSymbol) {
+	public AbstractType(String originalSymbol) {
 		super(originalSymbol);
 	}
 

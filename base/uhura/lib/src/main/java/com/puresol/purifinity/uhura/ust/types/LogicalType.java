@@ -14,7 +14,7 @@ package com.puresol.purifinity.uhura.ust.types;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class LogicalType extends Type {
+public class LogicalType extends AbstractType {
 
     private static final long serialVersionUID = -5227270180409950680L;
 

@@ -14,7 +14,7 @@ package com.puresol.purifinity.uhura.ust.modifiers;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ConstantModifier extends Modifier {
+public class ConstantModifier extends AbstractModifier {
 
     private static final long serialVersionUID = -5800466279299023817L;
 

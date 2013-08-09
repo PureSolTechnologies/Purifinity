@@ -1,7 +1,7 @@
 package com.puresol.purifinity.uhura.ust.types;
 
 
-public class StringType extends Type {
+public class StringType extends AbstractType {
 
     private static final long serialVersionUID = 7805628949907717406L;
 

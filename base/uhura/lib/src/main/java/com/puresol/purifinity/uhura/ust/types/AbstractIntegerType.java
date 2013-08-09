@@ -7,11 +7,11 @@ package com.puresol.purifinity.uhura.ust.types;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class IntegerType extends NumericType {
+public abstract class AbstractIntegerType extends AbstractNumericType {
 
 	private static final long serialVersionUID = 1208013511094715942L;
 
-	public IntegerType(String originalSymbol, int bitLength) {
+	public AbstractIntegerType(String originalSymbol, int bitLength) {
 		super(originalSymbol, bitLength);
 	}
 

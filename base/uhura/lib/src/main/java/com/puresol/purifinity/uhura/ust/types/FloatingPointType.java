@@ -12,7 +12,7 @@ package com.puresol.purifinity.uhura.ust.types;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FloatingPointType extends NumericType {
+public class FloatingPointType extends AbstractNumericType {
 
     private static final long serialVersionUID = 47713101164319131L;
 

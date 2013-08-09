@@ -7,7 +7,7 @@ package com.puresol.purifinity.uhura.ust.types;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class UnsignedIntegerType extends IntegerType {
+public class UnsignedIntegerType extends AbstractIntegerType {
 
     private static final long serialVersionUID = 6211356961166357559L;
 

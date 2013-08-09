@@ -1,7 +1,7 @@
 package com.puresol.purifinity.uhura.ust.modifiers;
 
 
-public class MutableModifier extends Modifier {
+public class MutableModifier extends AbstractModifier {
 
     private static final long serialVersionUID = -4713670533029137280L;
 
