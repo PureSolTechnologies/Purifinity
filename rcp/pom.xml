@@ -145,6 +145,12 @@
 			<artifactId>license.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- External bundles -->
+		<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections.bundle</artifactId>
+			<version>0.9.9-RC1</version>
+		</dependency>
 	</dependencies>
 
 
