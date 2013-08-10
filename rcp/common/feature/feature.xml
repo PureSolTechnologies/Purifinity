@@ -52,6 +52,9 @@
       <import plugin="com.puresol.purifinity.license.api.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.commons.license.domain.bundle" version="0.0.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
+      <import plugin="org.reflections.reflections.bundle" version="0.9.9" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.coding.evaluation.iso9126.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="jackson-jaxrs" version="1.9.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin
