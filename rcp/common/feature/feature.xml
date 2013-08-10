@@ -41,9 +41,11 @@
       <import plugin="org.apache.commons.io" version="2.0.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.e4.ui.workbench" version="0.11.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.client.application.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.reflections.reflections.bundle" version="0.9.9" match="greaterOrEqual"/>
       <import plugin="org.eclipse.swt" version="3.100.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface" version="3.8.102" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.jobs" version="3.5.300" match="greaterOrEqual"/>
+      <import plugin="com.puresol.purifinity.coding.evaluation.iso9126.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.coding.evaluation.api.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.client.common.analysis.plugin" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.coding.metrics.bundle" version="0.1.0" match="greaterOrEqual"/>
@@ -52,9 +54,7 @@
       <import plugin="com.puresol.purifinity.license.api.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.commons.license.domain.bundle" version="0.0.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
-      <import plugin="org.reflections.reflections.bundle" version="0.9.9" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.coding.evaluation.iso9126.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="jackson-jaxrs" version="1.9.2" match="greaterOrEqual"/>
+      <import plugin="org.codehaus.jackson.jackson-jaxrs.bundle" version="1.9.2" match="greaterOrEqual"/>
    </requires>
 
    <plugin
