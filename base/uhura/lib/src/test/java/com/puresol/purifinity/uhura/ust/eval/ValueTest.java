@@ -4,13 +4,13 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.puresol.purifinity.uhura.ust.eval.EvaluationException;
+import com.puresol.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresol.purifinity.uhura.ust.eval.Value;
 
 public class ValueTest {
 
     private void testAdd(Value left, Value right, Value expectedResult)
-	    throws EvaluationException {
+	    throws UniversalSyntaxTreeEvaluationException {
 	Value result = left.add(right);
 	assertEquals(expectedResult, result);
     }

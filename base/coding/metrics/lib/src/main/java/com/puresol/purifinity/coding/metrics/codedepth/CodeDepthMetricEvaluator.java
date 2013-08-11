@@ -13,7 +13,7 @@ import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
-import com.puresol.purifinity.uhura.ust.eval.EvaluationException;
+import com.puresol.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
 
 public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
@@ -29,7 +29,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
     @Override
     protected void processFile(CodeAnalysis analysis)
-	    throws InterruptedException, EvaluationException {
+	    throws InterruptedException, UniversalSyntaxTreeEvaluationException {
 	CodeDepthFileResults results = new CodeDepthFileResults();
 	ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 		.createInstance();

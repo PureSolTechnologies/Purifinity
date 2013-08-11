@@ -15,7 +15,7 @@ import com.puresol.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
-import com.puresol.purifinity.uhura.ust.eval.EvaluationException;
+import com.puresol.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
 
 public class McCabeMetricEvaluator extends AbstractEvaluator {
 
@@ -30,7 +30,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 
     @Override
     protected void processFile(CodeAnalysis analysis)
-	    throws InterruptedException, EvaluationException {
+	    throws InterruptedException, UniversalSyntaxTreeEvaluationException {
 	McCabeMetricFileResults results = new McCabeMetricFileResults();
 	ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 		.createInstance();

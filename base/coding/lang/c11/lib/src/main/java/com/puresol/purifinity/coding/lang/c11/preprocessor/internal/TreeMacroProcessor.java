@@ -26,7 +26,7 @@ import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.source.SourceCodeLine;
 import com.puresol.purifinity.uhura.source.SourceFileLocation;
-import com.puresol.purifinity.uhura.ust.eval.EvaluationException;
+import com.puresol.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresol.purifinity.uhura.ust.eval.ValueTypeException;
 
 /**
@@ -316,7 +316,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 			try {
 				evaluator.evaluate();
 				return evaluator.getResult().getBooleanValue();
-			} catch (EvaluationException e) {
+			} catch (UniversalSyntaxTreeEvaluationException e) {
 				throw new PreprocessorException(
 						"Could not evaluate expression '"
 								+ expression.toString() + "'.", e);

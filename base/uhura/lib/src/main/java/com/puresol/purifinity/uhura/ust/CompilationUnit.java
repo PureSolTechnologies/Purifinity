@@ -1,16 +1,11 @@
 package com.puresol.purifinity.uhura.ust;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.puresol.purifinity.uhura.ust.facilities.AbstractProduction;
-
-public class CompilationUnit extends AbstractProduction {
+public class CompilationUnit extends AbstractUniversalSyntaxTree {
 
 	private static final long serialVersionUID = -5790049234290910253L;
 
-	private final List<UniversalSyntaxTree> children = new ArrayList<UniversalSyntaxTree>();
 	/**
 	 * This file keeps the file where the compilation unit was found.
 	 */
@@ -44,26 +39,4 @@ public class CompilationUnit extends AbstractProduction {
 	public String getVersion() {
 		return version;
 	}
-
-	public void addChild(UniversalSyntaxTree child) {
-		children.add(child);
-		child.setParent(this);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public final boolean hasChildren() {
-		return children.size() > 0;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public final List<UniversalSyntaxTree> getChildren() {
-		return children;
-	}
-
 }

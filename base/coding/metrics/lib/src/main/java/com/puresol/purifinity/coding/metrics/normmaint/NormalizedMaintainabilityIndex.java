@@ -34,7 +34,7 @@ import com.puresol.purifinity.coding.metrics.halstead.HalsteadMetric;
 import com.puresol.purifinity.coding.metrics.mccabe.McCabeMetric;
 import com.puresol.purifinity.coding.metrics.sloc.SLOCMetric;
 import com.puresol.purifinity.coding.metrics.sloc.SLOCMetricCalculator;
-import com.puresol.purifinity.uhura.ust.eval.EvaluationException;
+import com.puresol.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
 
 public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 
@@ -120,7 +120,7 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 			logger.warn("Evaluation was interrupted.", e);
 			fireDone("Evaluation was interrupted.", false);
 			return false;
-		} catch (EvaluationException e) {
+		} catch (UniversalSyntaxTreeEvaluationException e) {
 			logger.warn("Evaluation failed.", e);
 			fireDone("Evaluation failed.", false);
 			return false;
@@ -187,10 +187,10 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 	 * @param evaluator
 	 * @return
 	 * @throws InterruptedException
-	 * @throws EvaluationException
+	 * @throws UniversalSyntaxTreeEvaluationException
 	 */
 	private <T> T execute(Callable<T> evaluator) throws InterruptedException,
-			EvaluationException {
+			UniversalSyntaxTreeEvaluationException {
 		try {
 			ExecutorService executor = Executors.newSingleThreadExecutor();
 			Future<T> future = executor.submit(evaluator);
@@ -198,10 +198,10 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 			return future.get(30, TimeUnit.SECONDS);
 		} catch (ExecutionException e) {
 			fireDone(e.getMessage(), false);
-			throw new EvaluationException(e);
+			throw new UniversalSyntaxTreeEvaluationException(e);
 		} catch (TimeoutException e) {
 			fireDone(e.getMessage(), false);
-			throw new EvaluationException(e);
+			throw new UniversalSyntaxTreeEvaluationException(e);
 		}
 	}
 

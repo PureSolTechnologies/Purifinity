@@ -5,7 +5,7 @@ package com.puresol.purifinity.uhura.ust;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class UniversalSyntaxTreeCreatorException extends Exception {
+public class UniversalSyntaxTreeCreatorException extends RuntimeException {
 
 	private static final long serialVersionUID = -977915535666544669L;
 

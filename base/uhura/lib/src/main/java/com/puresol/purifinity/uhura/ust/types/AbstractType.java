@@ -1,29 +1,12 @@
 package com.puresol.purifinity.uhura.ust.types;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.puresol.purifinity.uhura.ust.AbstractUniversalSyntaxTree;
 
-import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
-import com.puresol.purifinity.uhura.ust.facilities.AbstractProduction;
-
-public abstract class AbstractType extends AbstractProduction {
+public abstract class AbstractType extends AbstractUniversalSyntaxTree {
 
 	private static final long serialVersionUID = 2846791515023904393L;
-
-	private final List<UniversalSyntaxTree> children = new ArrayList<UniversalSyntaxTree>();
 
 	public AbstractType(String originalSymbol) {
 		super(originalSymbol);
 	}
-
-	@Override
-	public final boolean hasChildren() {
-		return !children.isEmpty();
-	}
-
-	@Override
-	public final List<UniversalSyntaxTree> getChildren() {
-		return children;
-	}
-
 }

@@ -28,7 +28,7 @@ import com.puresol.purifinity.coding.evaluation.api.EvaluatorInformation;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.purifinity.license.api.LicensedObject;
-import com.puresol.purifinity.uhura.ust.eval.EvaluationException;
+import com.puresol.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -117,12 +117,12 @@ public abstract class AbstractEvaluator extends
 	 *            evaluated.
 	 * @throws InterruptedException
 	 *             is thrown if the evaluation was interrupted.
-	 * @throws EvaluationException
+	 * @throws UniversalSyntaxTreeEvaluationException
 	 *             is thrown if the evaluation was aborted by an exceptional
 	 *             event.
 	 */
 	abstract protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException, EvaluationException;
+			throws InterruptedException, UniversalSyntaxTreeEvaluationException;
 
 	/**
 	 * This method is used to run an evaluation of an entire directory. This
@@ -174,13 +174,13 @@ public abstract class AbstractEvaluator extends
 			processNode(tree);
 		} catch (FileStoreException e) {
 			logger.error("Evaluation result could not be stored.", e);
-		} catch (EvaluationException e) {
+		} catch (UniversalSyntaxTreeEvaluationException e) {
 			logger.error("Evaluation failed.", e);
 		}
 	}
 
 	private void processNode(HashIdFileTree node) throws FileStoreException,
-			InterruptedException, EvaluationException {
+			InterruptedException, UniversalSyntaxTreeEvaluationException {
 		if (Thread.currentThread().isInterrupted()) {
 			throw new InterruptedException();
 		}
@@ -202,12 +202,12 @@ public abstract class AbstractEvaluator extends
 	 *             is thrown if the file store had an exception.
 	 * @throws InterruptedException
 	 *             is thrown if the operation was interrupted.
-	 * @throws EvaluationException
+	 * @throws UniversalSyntaxTreeEvaluationException
 	 *             is thrown if the evaluation had an exception.
 	 */
 	private void processAsFile(HashIdFileTree fileNode)
 			throws FileStoreException, InterruptedException,
-			EvaluationException {
+			UniversalSyntaxTreeEvaluationException {
 		if (fileStore.wasAnalyzed(fileNode.getHashId())) {
 			if ((!evaluatorStore.hasFileResults(fileNode.getHashId()))
 					|| (reEvaluation)) {
@@ -228,12 +228,12 @@ public abstract class AbstractEvaluator extends
 	 *             is thrown if the file store had an exception.
 	 * @throws InterruptedException
 	 *             is thrown if the operation was interrupted.
-	 * @throws EvaluationException
+	 * @throws UniversalSyntaxTreeEvaluationException
 	 *             is thrown if the evaluation had an exception.
 	 */
 	private void processAsDirectory(HashIdFileTree directoryNode)
 			throws FileStoreException, InterruptedException,
-			EvaluationException {
+			UniversalSyntaxTreeEvaluationException {
 		if (directoryStore.isAvailable(directoryNode.getHashId())) {
 			if ((!evaluatorStore.hasDirectoryResults(directoryNode.getHashId()))
 					|| (reEvaluation)) {
@@ -256,10 +256,10 @@ public abstract class AbstractEvaluator extends
 	 * @param evaluator
 	 * @return
 	 * @throws InterruptedException
-	 * @throws EvaluationException
+	 * @throws UniversalSyntaxTreeEvaluationException
 	 */
 	protected <T> T execute(Callable<T> evaluator) throws InterruptedException,
-			EvaluationException {
+			UniversalSyntaxTreeEvaluationException {
 		try {
 			ExecutorService executor = Executors.newSingleThreadExecutor();
 			Future<T> future = executor.submit(evaluator);
@@ -267,10 +267,10 @@ public abstract class AbstractEvaluator extends
 			return future.get(EXECUTION_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
 		} catch (ExecutionException e) {
 			fireDone(e.getMessage(), false);
-			throw new EvaluationException(e);
+			throw new UniversalSyntaxTreeEvaluationException(e);
 		} catch (TimeoutException e) {
 			fireDone(e.getMessage(), false);
-			throw new EvaluationException(e);
+			throw new UniversalSyntaxTreeEvaluationException(e);
 		}
 	}
 }

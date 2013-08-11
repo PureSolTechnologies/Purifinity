@@ -247,43 +247,43 @@ public class Value implements Comparable<Value> {
 	return stringValue;
     }
 
-    public Value inclusiveOr(Value right) throws EvaluationException {
+    public Value inclusiveOr(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    return new Value(typeName, getIntegerValue()
 		    | right.getIntegerValue());
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException(
+	    throw new UniversalSyntaxTreeEvaluationException(
 		    "Cannot evaluate inclusive-or-expression '" + toString()
 			    + " | " + right.toString() + "'.", e);
 	}
     }
 
-    public Value exclusiveOr(Value right) throws EvaluationException {
+    public Value exclusiveOr(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    return new Value(typeName, getIntegerValue()
 		    ^ right.getIntegerValue());
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException(
+	    throw new UniversalSyntaxTreeEvaluationException(
 		    "Cannot evaluate exclusive-or-expression '" + toString()
 			    + " ^ " + right.toString() + "'.", e);
 	}
     }
 
-    public Value and(Value right) throws EvaluationException {
+    public Value and(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    return new Value(typeName, getIntegerValue()
 		    & right.getIntegerValue());
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException("Cannot evaluate and-expression '"
+	    throw new UniversalSyntaxTreeEvaluationException("Cannot evaluate and-expression '"
 		    + toString() + " & " + right.toString() + "'.", e);
 	}
     }
 
-    private Value negate() throws EvaluationException {
+    private Value negate() throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    return new Value(typeName, !getBooleanValue());
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException("Cannot evaluate negation '!"
+	    throw new UniversalSyntaxTreeEvaluationException("Cannot evaluate negation '!"
 		    + toString() + "'.", e);
 	}
     }
@@ -299,14 +299,14 @@ public class Value implements Comparable<Value> {
     public Value unequals(String resultTypeName, Value other) {
 	try {
 	    return equals(resultTypeName, other).negate();
-	} catch (EvaluationException e) {
+	} catch (UniversalSyntaxTreeEvaluationException e) {
 	    throw new RuntimeException(
 		    "The equality result should be a boolean and this exception should not be here!");
 	}
     }
 
     public Value greaterThan(String typeName, Value right)
-	    throws EvaluationException {
+	    throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    if (isInteger() && right.isInteger()) {
 		return new Value(typeName,
@@ -324,13 +324,13 @@ public class Value implements Comparable<Value> {
 			"compareTo() returned unexpected result!");
 	    }
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException(
+	    throw new UniversalSyntaxTreeEvaluationException(
 		    "Cannot evaluate greater-than-expression '" + toString()
 			    + " > " + right.toString() + "'.", e);
 	}
     }
 
-    public Value greaterThanOrEquals(Value right) throws EvaluationException {
+    public Value greaterThanOrEquals(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    if (isInteger() && right.isInteger()) {
 		return new Value(typeName,
@@ -348,13 +348,13 @@ public class Value implements Comparable<Value> {
 			"compareTo() returned unexpected result!");
 	    }
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException(
+	    throw new UniversalSyntaxTreeEvaluationException(
 		    "Cannot evaluate greater-than-or-equal-expression '"
 			    + toString() + " >= " + right.toString() + "'.", e);
 	}
     }
 
-    public Value lessThan(Value right) throws EvaluationException {
+    public Value lessThan(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    if (isInteger() && right.isInteger()) {
 		return new Value(typeName,
@@ -372,13 +372,13 @@ public class Value implements Comparable<Value> {
 			"compareTo() returned unexpected result!");
 	    }
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException(
+	    throw new UniversalSyntaxTreeEvaluationException(
 		    "Cannot evaluate less-than-expression '" + toString()
 			    + " < " + right.toString() + "'.", e);
 	}
     }
 
-    public Value lessThanOrEquals(Value right) throws EvaluationException {
+    public Value lessThanOrEquals(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    if (isInteger() && right.isInteger()) {
 		return new Value(typeName,
@@ -396,35 +396,35 @@ public class Value implements Comparable<Value> {
 			"compareTo() returned unexpected result!");
 	    }
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException(
+	    throw new UniversalSyntaxTreeEvaluationException(
 		    "Cannot evaluate less-than-or-equals-expression '"
 			    + toString() + " < " + right.toString() + "'.", e);
 	}
     }
 
-    public Value shiftLeft(Value right) throws EvaluationException {
+    public Value shiftLeft(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    return new Value(typeName,
 		    getIntegerValue() << right.getIntegerValue());
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException(
+	    throw new UniversalSyntaxTreeEvaluationException(
 		    "Cannot evaluate shift-left-expression '" + toString()
 			    + " << " + right.toString() + "'.", e);
 	}
     }
 
-    public Value shiftRight(Value right) throws EvaluationException {
+    public Value shiftRight(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    return new Value(typeName,
 		    getIntegerValue() >> right.getIntegerValue());
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException(
+	    throw new UniversalSyntaxTreeEvaluationException(
 		    "Cannot evaluate shift-left-expression '" + toString()
 			    + " >> " + right.toString() + "'.", e);
 	}
     }
 
-    public Value add(Value right) throws EvaluationException {
+    public Value add(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    if (isInteger() && right.isInteger()) {
 		return new Value(typeName, getIntegerValue()
@@ -433,12 +433,12 @@ public class Value implements Comparable<Value> {
 	    return new Value(typeName, bitSize, getNumericalValue().add(
 		    right.getNumericalValue()));
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException("Cannot evaluate add-expression '"
+	    throw new UniversalSyntaxTreeEvaluationException("Cannot evaluate add-expression '"
 		    + toString() + " + " + right.toString() + "'.", e);
 	}
     }
 
-    public Value subtract(Value right) throws EvaluationException {
+    public Value subtract(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    if (isInteger() && right.isInteger()) {
 		return new Value(typeName, getIntegerValue()
@@ -447,13 +447,13 @@ public class Value implements Comparable<Value> {
 	    return new Value(typeName, bitSize, getNumericalValue().subtract(
 		    right.getNumericalValue()));
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException(
+	    throw new UniversalSyntaxTreeEvaluationException(
 		    "Cannot evaluate subtract-expression '" + toString()
 			    + " - " + right.toString() + "'.", e);
 	}
     }
 
-    public Value multiply(Value right) throws EvaluationException {
+    public Value multiply(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    if (isInteger() && right.isInteger()) {
 		return new Value(typeName, getIntegerValue()
@@ -462,13 +462,13 @@ public class Value implements Comparable<Value> {
 	    return new Value(typeName, bitSize, getNumericalValue().multiply(
 		    right.getNumericalValue()));
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException(
+	    throw new UniversalSyntaxTreeEvaluationException(
 		    "Cannot evaluate multiply-expression '" + toString()
 			    + " * " + right.toString() + "'.", e);
 	}
     }
 
-    public Value divide(Value right) throws EvaluationException {
+    public Value divide(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    if (isInteger() && right.isInteger()) {
 		return new Value(typeName, getIntegerValue()
@@ -477,12 +477,12 @@ public class Value implements Comparable<Value> {
 	    return new Value(typeName, bitSize, getNumericalValue().divide(
 		    right.getNumericalValue()));
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException("Cannot evaluate divide-expression '"
+	    throw new UniversalSyntaxTreeEvaluationException("Cannot evaluate divide-expression '"
 		    + toString() + " / " + right.toString() + "'.", e);
 	}
     }
 
-    public Value remainder(Value right) throws EvaluationException {
+    public Value remainder(Value right) throws UniversalSyntaxTreeEvaluationException {
 	try {
 	    if (isInteger() && right.isInteger()) {
 		return new Value(typeName, getIntegerValue()
@@ -491,7 +491,7 @@ public class Value implements Comparable<Value> {
 	    return new Value(typeName, bitSize, getNumericalValue()
 		    .divideAndRemainder(right.getNumericalValue())[1]);
 	} catch (ValueTypeException e) {
-	    throw new EvaluationException(
+	    throw new UniversalSyntaxTreeEvaluationException(
 		    "Cannot evaluate remainder-expression '" + toString()
 			    + " % " + right.toString() + "'.", e);
 	}

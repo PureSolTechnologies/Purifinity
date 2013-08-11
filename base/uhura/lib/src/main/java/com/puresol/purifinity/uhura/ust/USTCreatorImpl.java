@@ -1,5 +1,7 @@
 package com.puresol.purifinity.uhura.ust;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -45,8 +47,11 @@ public class USTCreatorImpl implements USTCreator {
 			throws UniversalSyntaxTreeCreatorException {
 		String simpleName = clazz.getSimpleName();
 		try {
-			classes.put(simpleName, (USTCreator) clazz.newInstance());
-		} catch (InstantiationException | IllegalAccessException e) {
+			Constructor<?> constructor = clazz.getConstructor(USTCreator.class);
+			classes.put(simpleName, (USTCreator) constructor.newInstance(this));
+		} catch (InstantiationException | IllegalAccessException
+				| NoSuchMethodException | SecurityException
+				| IllegalArgumentException | InvocationTargetException e) {
 			throw new UniversalSyntaxTreeCreatorException(
 					"Could not instantiate USTCreator class '" + simpleName
 							+ "'.", e);

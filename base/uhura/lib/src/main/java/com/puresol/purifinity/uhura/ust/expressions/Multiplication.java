@@ -1,18 +1,17 @@
 package com.puresol.purifinity.uhura.ust.expressions;
 
+public class Multiplication extends AbstractBinaryOperator {
 
-public class Multiplication extends BinaryOperatorExpression {
+	private static final long serialVersionUID = -1577433621788208449L;
 
-    private static final long serialVersionUID = -1577433621788208449L;
+	public Multiplication(String originalSymbol, Expression factor1,
+			Expression factor2) {
+		super(originalSymbol, factor1, factor2);
+	}
 
-    public Multiplication(String originalSymbol, Expression factor1,
-	    Expression factor2) {
-	super(originalSymbol, factor1, factor2);
-    }
-
-    @Override
-    public String getName() {
-	return "Multiplication";
-    }
+	@Override
+	public String getName() {
+		return "Multiplication";
+	}
 
 }

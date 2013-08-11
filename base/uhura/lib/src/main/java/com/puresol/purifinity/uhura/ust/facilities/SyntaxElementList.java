@@ -1,8 +1,8 @@
 package com.puresol.purifinity.uhura.ust.facilities;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import com.puresol.purifinity.uhura.ust.AbstractUniversalSyntaxTree;
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
@@ -15,42 +15,27 @@ import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
  * @param <T>
  *            is the type or interface of the elements contained in that list.
  */
-public class SyntaxElementList<T extends UniversalSyntaxTree> extends
-	AbstractProduction {
+public class SyntaxElementList<T extends AbstractUniversalSyntaxTree> extends
+		AbstractUniversalSyntaxTree {
 
-    private static final long serialVersionUID = -1875399758682948173L;
+	private static final long serialVersionUID = -1875399758682948173L;
 
-    private final List<UniversalSyntaxTree> children = new ArrayList<UniversalSyntaxTree>();
+	/**
+	 * This constructor is inherited from AbstractUniversalSyntaxTree.
+	 * 
+	 * @param parent
+	 * @param originalSymbol
+	 *            could here be ',', ';' or something similar regarding the
+	 *            source programming language.
+	 */
+	public SyntaxElementList(String originalSymbol,
+			List<UniversalSyntaxTree> elements) {
+		super(originalSymbol);
+		addChildren(elements);
+	}
 
-    /**
-     * This constructor is inherited from AbstractUniversalSyntaxTree.
-     * 
-     * @param parent
-     * @param originalSymbol
-     *            could here be ',', ';' or something similar regarding the
-     *            source programming language.
-     */
-    public SyntaxElementList(String originalSymbol) {
-	super(originalSymbol);
-    }
-
-    public final void addElement(T element) {
-	children.add(element);
-    }
-
-    @Override
-    public String getName() {
-	return "Syntax Element List";
-    }
-
-    @Override
-    public final boolean hasChildren() {
-	return !children.isEmpty();
-    }
-
-    @Override
-    public final List<UniversalSyntaxTree> getChildren() {
-	return children;
-    }
-
+	@Override
+	public String getName() {
+		return "Syntax Element List";
+	}
 }

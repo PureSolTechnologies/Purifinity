@@ -1,6 +1,6 @@
 package com.puresol.purifinity.uhura.ust.expressions;
 
-public abstract class AssignmentExpression extends BinaryOperatorExpression {
+public abstract class AssignmentExpression extends AbstractBinaryOperator {
 
 	private static final long serialVersionUID = 4249485571689334300L;
 
