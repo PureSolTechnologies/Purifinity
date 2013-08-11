@@ -54,7 +54,7 @@
 						<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
 						<!-- assume public classes are in the top package, and private classes 
 							are under ".internal" -->
-						<Export-Package>*;version="${project.version}"</Export-Package>
+						<Export-Package>${bundle.namespace}*;version="${project.version}"</Export-Package>
 						<Import-Package>!com.sun.msv*,!org.relaxng*,!org.xmlpull*,!sun.misc*,!org.apache.commons.vfs2*,!org.gjt.xpp*,!org.jaxen*,*</Import-Package>
 						<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
 						<!-- embed compile/runtime dependencies using path that matches the 
