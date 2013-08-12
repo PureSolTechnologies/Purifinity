@@ -1,8 +1,8 @@
-package com.puresol.purifinity.uhura.ust.classes;
+package com.puresol.purifinity.uhura.ust.declarations;
 
-import com.puresol.purifinity.uhura.ust.AbstractUniversalSyntaxTree;
 
-public class ClassDeclaration extends AbstractUniversalSyntaxTree {
+
+public class ClassDeclaration extends AbstractTypeDeclaration {
 
 	private static final long serialVersionUID = 4241659851575261998L;
 
