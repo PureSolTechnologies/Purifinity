@@ -15,20 +15,17 @@ public class USTCreatorImplTest {
 
 	private static USTCreatorImpl impl;
 
-	private static Map<String, Class<?>> classes;
-
 	@BeforeClass
-	@SuppressWarnings("unchecked")
-	public static void initialized() throws Exception {
+	public static void initialized() {
 		impl = new USTCreatorImpl(CompilationUnitCreator.class.getPackage());
-
-		Field field = impl.getClass().getDeclaredField("classes");
-		field.setAccessible(true);
-		classes = (Map<String, Class<?>>) field.get(impl);
 	}
 
 	@Test
-	public void test() {
+	@SuppressWarnings("unchecked")
+	public void test() throws Exception {
+		Field field = impl.getClass().getDeclaredField("classes");
+		field.setAccessible(true);
+		Map<String, Class<?>> classes = (Map<String, Class<?>>) field.get(impl);
 		Set<String> keys = classes.keySet();
 		assertTrue(keys.contains("CompilationUnitCreator"));
 		assertTrue(keys.size() > 0);

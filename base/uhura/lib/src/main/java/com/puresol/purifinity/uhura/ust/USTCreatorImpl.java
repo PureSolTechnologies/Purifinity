@@ -2,13 +2,17 @@ package com.puresol.purifinity.uhura.ust;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 
+import com.google.common.collect.Multimap;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 
 public class USTCreatorImpl implements USTCreator {
@@ -30,6 +34,10 @@ public class USTCreatorImpl implements USTCreator {
 				// Exclude self...
 				continue;
 			}
+			if (Modifier.isAbstract(clazz.getModifiers())) {
+				// Abstract classes cannot be instantiated...
+				continue;
+			}
 			instantiateAndStore(clazz);
 		}
 	}
@@ -37,10 +45,24 @@ public class USTCreatorImpl implements USTCreator {
 	private Set<Class<? extends USTCreator>> getAllUSTCreatorClasses() {
 		String packageName = pkg.getName();
 		Reflections reflections = new Reflections(
-				ClasspathHelper.forPackage(packageName));
-		Set<Class<? extends USTCreator>> types = reflections
-				.getSubTypesOf(USTCreator.class);
-		return types;
+				ClasspathHelper.forPackage(packageName),
+				new RecursiveSubTypesScanner());
+		Multimap<String, String> map = reflections.getStore().get(
+				RecursiveSubTypesScanner.class);
+		Collection<String> creatorNames = map.get(USTCreator.class.getName());
+		Set<Class<? extends USTCreator>> creatorClasses = new HashSet<>();
+		for (String creatorName : creatorNames) {
+			try {
+				@SuppressWarnings("unchecked")
+				Class<? extends USTCreator> creatorClass = (Class<? extends USTCreator>) Class
+						.forName(creatorName);
+				creatorClasses.add(creatorClass);
+			} catch (ClassNotFoundException e) {
+				throw new RuntimeException(
+						"Could not scan for USTCreator classes.", e);
+			}
+		}
+		return creatorClasses;
 	}
 
 	private void instantiateAndStore(Class<?> clazz)
