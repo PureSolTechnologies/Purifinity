@@ -1012,7 +1012,7 @@ HELPER
 	;
 	
 	AnnotationTypeElementDeclaration:
-		AbstractMethodModifiers ? Type Identifier LPAREN RPAREN DefaultValue ? SEMICOLON
+		AbstractMethodModifiers ? Type Identifier LPAREN RPAREN Dims ? DefaultValue ? SEMICOLON
 	|	ConstantDeclaration
 	|	ClassDeclaration
 	|	InterfaceDeclaration
@@ -1321,6 +1321,7 @@ HELPER
 	TryStatement:
 		TRY Block Catches
 	|	TRY Block Catches ? Finally
+	|	TryWithResourcesStatement
 	;
 	
 	Catches:
@@ -1329,11 +1330,37 @@ HELPER
 	;
 	
 	CatchClause:
-		CATCH LPAREN FormalParameter RPAREN Block
+		CATCH LPAREN CatchFormalParameter RPAREN Block
+	;
+	
+	CatchFormalParameter:
+		VariableModifier ? CatchType VariableDeclaratorId
+	;
+	
+	CatchType:
+		ClassType
+	|	ClassType VERTICAL_BAR CatchType
 	;
 	
 	Finally:
 		FINALLY Block
+	;
+	
+	TryWithResourcesStatement:
+		TRY ResourceSpecification Block Catches ? Finally ?
+	;
+
+	ResourceSpecification:
+		LPAREN Resources SEMICOLON ? RPAREN
+	;
+
+	Resources:
+		Resource
+	|	Resource SEMICOLON Resources
+	;
+
+	Resource:
+		VariableModifiers ? Type VariableDeclaratorId EQUALS Expression
 	;
 	
 /**************
@@ -1372,14 +1399,19 @@ HELPER
 /* 15.9 Class Instance Creation Expressions */
 
 	ClassInstanceCreationExpression:
-		NEW TypeArguments ? ClassOrInterfaceType Arguments ClassBody ?
-	|	Primary DOT NEW TypeArguments ? Identifier TypeArguments ? Arguments ClassBody ?
+		NEW TypeArguments ? TypeDeclSpecifier TypeArgumentsOrDiamond ? LPAREN ArgumentList ? RPAREN ClassBody ?
+	|	Primary DOT NEW TypeArguments ? Identifier TypeArgumentsOrDiamond ? LPAREN ArgumentList ? RPAREN ClassBody ?
 	/*
 		this was added due to: 
 		hotspot/src/share/tools/IdealGraphVisualizer/HierarchicalLayout/src/com/sun/hotspot/igv/hierarchicallayout/OldHierarchicalLayoutManager.java 
 		"[...]graph.new[...]"
 	*/
-	|	Identifier DOT NEW TypeArguments ? Identifier TypeArguments ? Arguments ClassBody ? 
+	|	Identifier DOT NEW TypeArgumentsOrDiamond ? Identifier TypeArguments ? Arguments ClassBody ? 
+	;
+	
+	TypeArgumentsOrDiamond:
+		TypeArguments
+	|	LESS_THAN GREATER_THAN
 	;
 	
 	ArgumentList:
