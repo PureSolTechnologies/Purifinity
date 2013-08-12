@@ -12,8 +12,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>org.reflections.reflections.bundle</module>
-		<module>org.codehaus.jackson.jackson-jaxrs.bundle</module>
+		<module>org.reflections.reflections.external.bundle</module>
+		<module>org.codehaus.jackson.jackson-jaxrs.external.bundle</module>
 		<module>com.puresol.commons.trees.bundle</module>
 		<module>com.puresol.commons.utils.bundle</module>
 		<module>com.puresol.commons.license.domain.bundle</module>

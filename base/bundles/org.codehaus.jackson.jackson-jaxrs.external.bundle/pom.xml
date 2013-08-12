@@ -8,10 +8,9 @@
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.reflections</groupId>
-	<artifactId>reflections.bundle</artifactId>
+	<groupId>org.codehaus.jackson</groupId>
+	<artifactId>jackson-jaxrs.external.bundle</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
-	<version>0.9.9-RC1</version>
 	<packaging>bundle</packaging>
 
 	<dependencies>
@@ -20,8 +19,8 @@
 			<artifactId>osgi</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
@@ -34,7 +33,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>org.reflections</bundle.namespace>
+		<bundle.namespace>org.codehaus.jackson</bundle.namespace>
 	</properties>
 
 	<build>
@@ -55,7 +54,7 @@
 						<!-- assume public classes are in the top package, and private classes 
 							are under ".internal" -->
 						<Export-Package>${bundle.namespace}*;version="${project.version}"</Export-Package>
-						<Import-Package>!com.sun.msv*,!org.relaxng*,!org.xmlpull*,!sun.misc*,!org.apache.commons.vfs2*,!org.gjt.xpp*,!org.jaxen*,*</Import-Package>
+						<Import-Package>!org.codehaus.jackson.xc*,!org.joda*,!javax.ws*,*</Import-Package>
 						<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
 						<!-- embed compile/runtime dependencies using path that matches the 
 							copied dependency folder -->
