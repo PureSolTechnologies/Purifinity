@@ -1,5 +1,6 @@
 package com.puresol.purifinity.coding.lang.commons;
 
+import java.io.IOException;
 import java.util.Properties;
 
 import com.puresol.purifinity.coding.lang.api.LanguageGrammar;
@@ -7,6 +8,8 @@ import com.puresol.purifinity.uhura.grammar.Grammar;
 import com.puresol.purifinity.uhura.grammar.GrammarException;
 import com.puresol.purifinity.uhura.grammar.production.ProductionSet;
 import com.puresol.purifinity.uhura.grammar.token.TokenDefinitionSet;
+import com.puresol.purifinity.uhura.lexer.Lexer;
+import com.puresol.purifinity.uhura.parser.Parser;
 
 /**
  * This class is an extended {@link Grammar} for language implementations. For
@@ -27,4 +30,7 @@ public abstract class AbstractLanguageGrammar extends Grammar implements
 		super(options, tokenDefinitions, productions);
 	}
 
+	public abstract Lexer getLexer() throws IOException;
+
+	public abstract Parser getParser() throws IOException;
 }

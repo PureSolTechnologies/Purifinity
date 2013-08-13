@@ -21,37 +21,35 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.commons.utils.StopWatch;
+import com.puresol.purifinity.coding.analysis.api.AbstractCodeAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresol.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
-import com.puresol.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.coding.lang.c11.grammar.C11Grammar;
+import com.puresol.purifinity.coding.lang.c11.ust.STARTCreator;
 import com.puresol.purifinity.uhura.parser.ParserException;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.parser.packrat.PackratParser;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
+import com.puresol.purifinity.uhura.ust.CompilationUnit;
 
 /**
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class C11Analyzer implements CodeAnalyzer {
+public class C11Analyzer extends AbstractCodeAnalyzer {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(C11Analyzer.class);
 
-	private final CodeLocation sourceCodeLocation;
-	private final transient C11Grammar grammar;
 	private CodeAnalysis fileAnalysis;
 
 	public C11Analyzer(CodeLocation sourceCodeLocation) {
-		super();
-		this.sourceCodeLocation = sourceCodeLocation;
-		grammar = C11Grammar.getInstance();
+		super(sourceCodeLocation, C11Grammar.getInstance(), STARTCreator.class);
 	}
 
 	@Override
@@ -60,19 +58,21 @@ public class C11Analyzer implements CodeAnalyzer {
 			fileAnalysis = null;
 			Date date = new Date();
 			StopWatch watch = new StopWatch();
-			SourceCode sourceCode = sourceCodeLocation.loadSourceCode();
+			SourceCode sourceCode = getSource().loadSourceCode();
 			watch.start();
-			PackratParser packratParser = new PackratParser(grammar);
+			PackratParser packratParser = new PackratParser(getGrammar());
 			ParserTree parserTree = packratParser.parse(sourceCode);
 			watch.stop();
+			CompilationUnit compilationUnit = (CompilationUnit) getUstCreator()
+					.createUST(parserTree);
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 			C11 c11 = C11.getInstance();
 			AnalyzedCode analyzedFile = new AnalyzedCode(
-					sourceCode.getHashId(), sourceCodeLocation, date,
-					timeEffort, c11.getName(), c11.getVersion());
+					sourceCode.getHashId(), getSource(), date, timeEffort,
+					c11.getName(), c11.getVersion());
 			fileAnalysis = new CodeAnalysis(date, timeEffort, c11.getName(),
 					c11.getVersion(), analyzedFile, parserTree,
-					this.getAnalyzableCodeRanges(parserTree));
+					this.getAnalyzableCodeRanges(parserTree), compilationUnit);
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
@@ -81,11 +81,6 @@ public class C11Analyzer implements CodeAnalyzer {
 			throw new AnalyzerException(this);
 		}
 		return;
-	}
-
-	@Override
-	public CodeLocation getSource() {
-		return sourceCodeLocation;
 	}
 
 	@Override

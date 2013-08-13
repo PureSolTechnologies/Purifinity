@@ -27,4 +27,11 @@ public class NameTranslatorTest {
 		assertEquals("CorrectName", productionClassName);
 	}
 
+	@Test
+	public void test4() {
+		String productionClassName = NameTranslator
+				.getProductionClassName("_START_");
+		assertEquals("START", productionClassName);
+	}
+
 }

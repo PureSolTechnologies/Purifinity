@@ -26,13 +26,14 @@ import com.puresol.commons.trees.TreeVisitor;
 import com.puresol.commons.trees.TreeWalker;
 import com.puresol.commons.trees.WalkingAction;
 import com.puresol.commons.utils.StopWatch;
+import com.puresol.purifinity.coding.analysis.api.AbstractCodeAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresol.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
-import com.puresol.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.lang.fortran.grammar.FortranGrammar;
+import com.puresol.purifinity.coding.lang.fortran.ust.STARTCreator;
 import com.puresol.purifinity.uhura.lexer.LexerException;
 import com.puresol.purifinity.uhura.lexer.TokenStream;
 import com.puresol.purifinity.uhura.parser.Parser;
@@ -40,6 +41,7 @@ import com.puresol.purifinity.uhura.parser.ParserException;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
+import com.puresol.purifinity.uhura.ust.CompilationUnit;
 
 /**
  * This is the Fortran analyzer to scan and parse source files in Fortran source
@@ -48,19 +50,16 @@ import com.puresol.purifinity.uhura.source.SourceCode;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FortranAnalyzer implements CodeAnalyzer {
+public class FortranAnalyzer extends AbstractCodeAnalyzer {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(FortranAnalyzer.class);
 
-	private final CodeLocation sourceCodeLocation;
-	private final transient FortranGrammar grammar;
 	private CodeAnalysis fileAnalysis;
 
 	public FortranAnalyzer(CodeLocation sourceCodeLocation) {
-		super();
-		this.sourceCodeLocation = sourceCodeLocation;
-		grammar = FortranGrammar.getInstance();
+		super(sourceCodeLocation, FortranGrammar.getInstance(),
+				STARTCreator.class);
 	}
 
 	@Override
@@ -70,19 +69,22 @@ public class FortranAnalyzer implements CodeAnalyzer {
 			Date date = new Date();
 			StopWatch watch = new StopWatch();
 			watch.start();
-			SourceCode sourceCode = sourceCodeLocation.loadSourceCode();
+			SourceCode sourceCode = getSource().loadSourceCode();
 			TokenStream tokenStream = preConditioningAndLexing(sourceCode);
-			Parser parser = grammar.getParser();
+			Parser parser = getGrammar().getParser();
 			ParserTree parserTree = parser.parse(tokenStream);
 			watch.stop();
+			CompilationUnit compilationUnit = (CompilationUnit) getUstCreator()
+					.createUST(parserTree);
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 			Fortran fortran = Fortran.getInstance();
 			AnalyzedCode analyzedFile = new AnalyzedCode(
-					sourceCode.getHashId(), sourceCodeLocation, date,
-					timeEffort, fortran.getName(), fortran.getVersion());
+					sourceCode.getHashId(), getSource(), date, timeEffort,
+					fortran.getName(), fortran.getVersion());
 			fileAnalysis = new CodeAnalysis(date, timeEffort,
 					fortran.getName(), fortran.getVersion(), analyzedFile,
-					parserTree, getAnalyzableCodeRanges(parserTree));
+					parserTree, getAnalyzableCodeRanges(parserTree),
+					compilationUnit);
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
@@ -97,7 +99,7 @@ public class FortranAnalyzer implements CodeAnalyzer {
 		try {
 			FortranPreConditioner preconditioner = new FortranPreConditioner(
 					sourceCode);
-			return preconditioner.scan(grammar.getLexer());
+			return preconditioner.scan(getGrammar().getLexer());
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
@@ -173,11 +175,6 @@ public class FortranAnalyzer implements CodeAnalyzer {
 
 		});
 		return result;
-	}
-
-	@Override
-	public CodeLocation getSource() {
-		return sourceCodeLocation;
 	}
 
 	@Override

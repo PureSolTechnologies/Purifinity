@@ -22,14 +22,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresol.commons.utils.StopWatch;
+import com.puresol.purifinity.coding.analysis.api.AbstractCodeAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresol.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
-import com.puresol.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.coding.lang.test.grammar.TestLanguageGrammar;
+import com.puresol.purifinity.coding.lang.test.ust.STARTCreator;
 import com.puresol.purifinity.uhura.lexer.Lexer;
 import com.puresol.purifinity.uhura.lexer.LexerException;
 import com.puresol.purifinity.uhura.lexer.TokenStream;
@@ -38,25 +39,23 @@ import com.puresol.purifinity.uhura.parser.ParserException;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
+import com.puresol.purifinity.uhura.ust.CompilationUnit;
 
 /**
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TestLanguageAnalyser implements CodeAnalyzer {
+public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(TestLanguageAnalyser.class);
 
-	private final CodeLocation sourceCodeLocation;
-	private final transient TestLanguageGrammar grammar;
 	private CodeAnalysis fileAnalysis;
 
 	public TestLanguageAnalyser(CodeLocation sourceCodeLocation) {
-		super();
-		this.sourceCodeLocation = sourceCodeLocation;
-		grammar = TestLanguageGrammar.getInstance();
+		super(sourceCodeLocation, TestLanguageGrammar.getInstance(),
+				STARTCreator.class);
 	}
 
 	@Override
@@ -66,20 +65,22 @@ public class TestLanguageAnalyser implements CodeAnalyzer {
 			Date date = new Date();
 			StopWatch watch = new StopWatch();
 			watch.start();
-			SourceCode sourceCode = sourceCodeLocation.loadSourceCode();
-			Lexer lexer = grammar.getLexer();
+			SourceCode sourceCode = getSource().loadSourceCode();
+			Lexer lexer = getGrammar().getLexer();
 			TokenStream tokenStream = lexer.lex(sourceCode);
-			Parser parser = grammar.getParser();
+			Parser parser = getGrammar().getParser();
 			ParserTree parserTree = parser.parse(tokenStream);
 			watch.stop();
+			CompilationUnit compilationUnit = (CompilationUnit) getUstCreator()
+					.createUST(parserTree);
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 			TestLanguage language = TestLanguage.getInstance();
 			fileAnalysis = new CodeAnalysis(date, timeEffort,
 					language.getName(), language.getVersion(),
-					new AnalyzedCode(sourceCode.getHashId(),
-							sourceCodeLocation, date, timeEffort, language
-									.getName(), language.getVersion()),
-					parserTree, getAnalyzableCodeRanges(parserTree));
+					new AnalyzedCode(sourceCode.getHashId(), getSource(), date,
+							timeEffort, language.getName(), language
+									.getVersion()), parserTree,
+					getAnalyzableCodeRanges(parserTree), compilationUnit);
 
 		} catch (ParserException e) {
 			logger.error(e.getMessage(), e);
@@ -124,11 +125,6 @@ public class TestLanguageAnalyser implements CodeAnalyzer {
 		} finally {
 			objectOutputStream.close();
 		}
-	}
-
-	@Override
-	public CodeLocation getSource() {
-		return sourceCodeLocation;
 	}
 
 	@Override

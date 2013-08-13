@@ -8,9 +8,9 @@ import com.puresol.purifinity.uhura.ust.AbstractUniversalSyntaxTree;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
 import com.puresol.purifinity.uhura.ust.USTCreator;
 
-public class CompilationUnitCreator extends AbstractUSTCreator {
+public class STARTCreator extends AbstractUSTCreator {
 
-	public CompilationUnitCreator(USTCreator creator) {
+	public STARTCreator(USTCreator creator) {
 		super(creator);
 	}
 

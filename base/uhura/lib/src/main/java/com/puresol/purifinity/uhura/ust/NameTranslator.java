@@ -4,9 +4,17 @@ public class NameTranslator {
 
 	public static String getProductionClassName(String productionName) {
 		StringBuffer buffer = new StringBuffer(productionName);
+		removeLeadingUnderlines(buffer);
 		makeFirstLetterUpperCase(buffer);
 		replaceDashWithUpperCase(buffer);
+		removeTrailingUnderlines(buffer);
 		return buffer.toString();
+	}
+
+	private static void removeLeadingUnderlines(StringBuffer buffer) {
+		while (buffer.toString().startsWith("_")) {
+			buffer.delete(0, 1);
+		}
 	}
 
 	private static void replaceDashWithUpperCase(StringBuffer buffer) {
@@ -29,6 +37,13 @@ public class NameTranslator {
 		if (Character.isLowerCase(chars[0])) {
 			chars[0] = Character.toUpperCase(chars[0]);
 			buffer.replace(0, 1, new String(chars));
+		}
+	}
+
+	private static void removeTrailingUnderlines(StringBuffer buffer) {
+		while (buffer.toString().endsWith("_")) {
+			int bufferLength = buffer.length();
+			buffer.delete(bufferLength - 1, bufferLength);
 		}
 	}
 }

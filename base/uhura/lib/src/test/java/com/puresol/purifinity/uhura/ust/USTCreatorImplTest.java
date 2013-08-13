@@ -9,7 +9,7 @@ import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresol.purifinity.uhura.ust.test.CompilationUnitCreator;
+import com.puresol.purifinity.uhura.ust.test.STARTCreator;
 
 public class USTCreatorImplTest {
 
@@ -17,7 +17,7 @@ public class USTCreatorImplTest {
 
 	@BeforeClass
 	public static void initialized() {
-		impl = new USTCreatorImpl(CompilationUnitCreator.class.getPackage());
+		impl = new USTCreatorImpl(STARTCreator.class.getPackage());
 	}
 
 	@Test
