@@ -21,6 +21,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.commons.trees.TreeException;
 import com.puresol.commons.utils.StopWatch;
 import com.puresol.purifinity.coding.analysis.api.AbstractCodeAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
@@ -82,13 +83,7 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 									.getVersion()), parserTree,
 					getAnalyzableCodeRanges(parserTree), compilationUnit);
 
-		} catch (ParserException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (LexerException e) {
+		} catch (LexerException | ParserException | IOException | TreeException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
 		}

@@ -13,6 +13,7 @@ import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 
 import com.google.common.collect.Multimap;
+import com.puresol.commons.trees.TreeException;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 
 public class USTCreatorImpl implements USTCreator {
@@ -81,7 +82,8 @@ public class USTCreatorImpl implements USTCreator {
 	}
 
 	@Override
-	public UniversalSyntaxTree createUST(ParserTree parserTree) {
+	public UniversalSyntaxTree createUST(ParserTree parserTree)
+			throws TreeException {
 		String nodeName = parserTree.getName();
 		String className = NameTranslator.getProductionClassName(nodeName)
 				+ "Creator";

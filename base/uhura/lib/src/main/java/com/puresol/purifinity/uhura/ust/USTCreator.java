@@ -1,5 +1,6 @@
 package com.puresol.purifinity.uhura.ust;
 
+import com.puresol.commons.trees.TreeException;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 
 /**
@@ -10,6 +11,7 @@ import com.puresol.purifinity.uhura.parser.ParserTree;
  */
 public interface USTCreator {
 
-	public UniversalSyntaxTree createUST(ParserTree parserTree);
+	public UniversalSyntaxTree createUST(ParserTree parserTree)
+			throws TreeException;
 
 }

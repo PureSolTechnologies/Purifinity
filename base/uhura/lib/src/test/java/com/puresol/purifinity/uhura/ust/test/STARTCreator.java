@@ -1,12 +1,10 @@
 package com.puresol.purifinity.uhura.ust.test;
 
-import java.io.File;
-
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.ust.AbstractUSTCreator;
-import com.puresol.purifinity.uhura.ust.AbstractUniversalSyntaxTree;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
 import com.puresol.purifinity.uhura.ust.USTCreator;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 public class STARTCreator extends AbstractUSTCreator {
 
@@ -15,8 +13,8 @@ public class STARTCreator extends AbstractUSTCreator {
 	}
 
 	@Override
-	public AbstractUniversalSyntaxTree createUST(ParserTree parserTree) {
-		return new CompilationUnit(new File(""), "Java", "1.6");
+	public UniversalSyntaxTree createUST(ParserTree parserTree) {
+		return new CompilationUnit(null, null, null);
 	}
 
 }

@@ -64,7 +64,8 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 	private CodeAnalysis fileAnalysis;
 
 	public JavaAnalyzer(CodeLocation sourceCodeLocation) {
-		super(sourceCodeLocation, JavaGrammar.getInstance(), CompilationUnitCreator.class);
+		super(sourceCodeLocation, JavaGrammar.getInstance(),
+				CompilationUnitCreator.class);
 	}
 
 	@Override
@@ -90,13 +91,7 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 			fileAnalysis = new CodeAnalysis(date, timeEffort, java.getName(),
 					java.getVersion(), analyzedFile, parserTree,
 					this.getAnalyzableCodeRanges(parserTree), compilationUnit);
-		} catch (ParserException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (LexerException e) {
+		} catch (LexerException | ParserException | IOException | TreeException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
 		}

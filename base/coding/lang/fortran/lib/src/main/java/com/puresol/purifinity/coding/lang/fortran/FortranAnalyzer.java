@@ -85,10 +85,7 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 					fortran.getName(), fortran.getVersion(), analyzedFile,
 					parserTree, getAnalyzableCodeRanges(parserTree),
 					compilationUnit);
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (ParserException e) {
+		} catch (ParserException | IOException | TreeException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
 		}
