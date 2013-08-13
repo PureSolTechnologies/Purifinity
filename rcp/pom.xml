@@ -148,13 +148,13 @@
 		<!-- External bundles -->
 		<dependency>
 			<groupId>org.reflections</groupId>
-			<artifactId>reflections.bundle</artifactId>
-			<version>0.9.9-RC1</version>
+			<artifactId>reflections.external.bundle</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-jaxrs.bundle</artifactId>
-			<version>1.9.2</version>
+			<artifactId>jackson-jaxrs.external.bundle</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 
