@@ -23,76 +23,76 @@ import com.puresol.purifinity.uhura.source.CodeLocation;
  * 
  */
 public class Java extends AbstractProgrammingLanguage implements
-	AnalyzableProgrammingLanguage {
+		AnalyzableProgrammingLanguage {
 
-    public static final String[] FILE_SUFFIXES = { ".java" };
+	public static final String[] FILE_SUFFIXES = { ".java" };
 
-    private static Java instance = null;
+	private static Java instance = null;
 
-    public static Java getInstance() {
-	if (instance == null) {
-	    createInstance();
+	public static Java getInstance() {
+		if (instance == null) {
+			createInstance();
+		}
+		return instance;
 	}
-	return instance;
-    }
 
-    private static synchronized void createInstance() {
-	if (instance == null) {
-	    instance = new Java();
+	private static synchronized void createInstance() {
+		if (instance == null) {
+			instance = new Java();
+		}
 	}
-    }
 
-    public Java() {
-	super("Java", "1.6");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String[] getValidFileSuffixes() {
-	return FILE_SUFFIXES;
-    }
-
-    @Override
-    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-	try {
-	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
-		    file));
-	    try {
-		return (CodeAnalyzer) ois.readObject();
-	    } finally {
-		ois.close();
-	    }
-	} catch (ClassNotFoundException e) {
-	    /*
-	     * XXX This needs to be null to go on with the language try out...
-	     * :-(
-	     */
-	    return null;
+	public Java() {
+		super("Java", "7");
 	}
-    }
 
-    @Override
-    public CodeAnalyzer createAnalyser(CodeLocation sourceCodeLocation) {
-	return new JavaAnalyzer(sourceCodeLocation);
-    }
-
-    @Override
-    public LanguageGrammar getGrammar() {
-	return JavaGrammar.getInstance();
-    }
-
-    @Override
-    public <T> T getImplementation(Class<T> clazz) {
-	ServiceLoader<T> service = ServiceLoader.load(clazz);
-	Iterator<T> iterator = service.iterator();
-	T result = iterator.next();
-	if (iterator.hasNext()) {
-	    throw new RuntimeException(
-		    "There is more than one implementation available for '"
-			    + clazz.getName() + "'!");
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected String[] getValidFileSuffixes() {
+		return FILE_SUFFIXES;
 	}
-	return result;
-    }
+
+	@Override
+	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+		try {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+					file));
+			try {
+				return (CodeAnalyzer) ois.readObject();
+			} finally {
+				ois.close();
+			}
+		} catch (ClassNotFoundException e) {
+			/*
+			 * XXX This needs to be null to go on with the language try out...
+			 * :-(
+			 */
+			return null;
+		}
+	}
+
+	@Override
+	public CodeAnalyzer createAnalyser(CodeLocation sourceCodeLocation) {
+		return new JavaAnalyzer(sourceCodeLocation);
+	}
+
+	@Override
+	public LanguageGrammar getGrammar() {
+		return JavaGrammar.getInstance();
+	}
+
+	@Override
+	public <T> T getImplementation(Class<T> clazz) {
+		ServiceLoader<T> service = ServiceLoader.load(clazz);
+		Iterator<T> iterator = service.iterator();
+		T result = iterator.next();
+		if (iterator.hasNext()) {
+			throw new RuntimeException(
+					"There is more than one implementation available for '"
+							+ clazz.getName() + "'!");
+		}
+		return result;
+	}
 }

@@ -12,7 +12,7 @@
  * O P T I O N S
  ****************************************************************************/ 
 OPTIONS
-	grammar.name="Java-1.6";
+	grammar.name="Java-1.7";
 	grammar.checks=true;
 	grammar.ignore-case=false;
 	grammar.ignored-leading=true;
