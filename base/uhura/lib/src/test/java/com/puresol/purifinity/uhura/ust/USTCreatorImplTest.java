@@ -27,7 +27,7 @@ public class USTCreatorImplTest {
 		field.setAccessible(true);
 		Map<String, Class<?>> classes = (Map<String, Class<?>>) field.get(impl);
 		Set<String> keys = classes.keySet();
-		assertTrue(keys.contains("CompilationUnitCreator"));
+		assertTrue(keys.contains("STARTCreator"));
 		assertTrue(keys.size() > 0);
 	}
 

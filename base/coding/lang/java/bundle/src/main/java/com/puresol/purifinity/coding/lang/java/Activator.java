@@ -4,7 +4,7 @@ import org.osgi.framework.BundleContext;
 
 import com.puresol.commons.osgi.AbstractActivator;
 import com.puresol.purifinity.coding.analysis.api.AnalyzableProgrammingLanguage;
-import com.puresol.purifinity.coding.lang.java.ust.STARTCreator;
+import com.puresol.purifinity.coding.lang.java.ust.CompilationUnitCreator;
 import com.puresol.purifinity.uhura.ust.USTCreatorFactory;
 
 /**
@@ -21,12 +21,12 @@ public class Activator extends AbstractActivator {
 		super.start(context);
 		Java java = Java.getInstance();
 		registerService(AnalyzableProgrammingLanguage.class, java);
-		USTCreatorFactory.register(STARTCreator.class.getPackage());
+		USTCreatorFactory.register(CompilationUnitCreator.class.getPackage());
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		USTCreatorFactory.unregister(STARTCreator.class.getPackage());
+		USTCreatorFactory.unregister(CompilationUnitCreator.class.getPackage());
 		super.stop(context);
 	}
 

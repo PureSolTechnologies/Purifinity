@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -17,8 +18,10 @@ import com.puresol.commons.utils.FileSearchConfiguration;
 import com.puresol.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresol.purifinity.coding.lang.java.grammar.JavaGrammar;
+import com.puresol.purifinity.coding.lang.java.ust.CompilationUnitCreator;
 import com.puresol.purifinity.uhura.grammar.Grammar;
 import com.puresol.purifinity.uhura.source.SourceFileLocation;
+import com.puresol.purifinity.uhura.ust.USTCreatorFactory;
 
 /**
  * This is a stability test for the Java analyzer. It analyzes the source of the
@@ -52,6 +55,14 @@ public class SourceCodeAnalysisDistributionIT {
 		directory = directory.getParentFile();
 		assertEquals("base", directory.getName());
 		directory = directory.getParentFile();
+
+		USTCreatorFactory.initialize();
+		USTCreatorFactory.register(CompilationUnitCreator.class.getPackage());
+	}
+
+	@AfterClass
+	public static void destroy() {
+		USTCreatorFactory.destroy();
 	}
 
 	@Test

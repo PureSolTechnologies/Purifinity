@@ -33,7 +33,7 @@ import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.lang.fortran.grammar.FortranGrammar;
-import com.puresol.purifinity.coding.lang.fortran.ust.STARTCreator;
+import com.puresol.purifinity.coding.lang.fortran.ust.ProgramCreator;
 import com.puresol.purifinity.uhura.lexer.LexerException;
 import com.puresol.purifinity.uhura.lexer.TokenStream;
 import com.puresol.purifinity.uhura.parser.Parser;
@@ -59,7 +59,7 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 
 	public FortranAnalyzer(CodeLocation sourceCodeLocation) {
 		super(sourceCodeLocation, FortranGrammar.getInstance(),
-				STARTCreator.class);
+				ProgramCreator.class);
 	}
 
 	@Override

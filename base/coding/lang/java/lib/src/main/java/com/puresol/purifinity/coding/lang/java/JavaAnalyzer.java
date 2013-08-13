@@ -40,7 +40,7 @@ import com.puresol.purifinity.coding.lang.java.grammar.parts.EnumDeclaration;
 import com.puresol.purifinity.coding.lang.java.grammar.parts.MethodDeclaration;
 import com.puresol.purifinity.coding.lang.java.grammar.parts.NormalClassDeclaration;
 import com.puresol.purifinity.coding.lang.java.grammar.parts.NormalInterfaceDeclaration;
-import com.puresol.purifinity.coding.lang.java.ust.STARTCreator;
+import com.puresol.purifinity.coding.lang.java.ust.CompilationUnitCreator;
 import com.puresol.purifinity.uhura.lexer.Lexer;
 import com.puresol.purifinity.uhura.lexer.LexerException;
 import com.puresol.purifinity.uhura.lexer.TokenStream;
@@ -64,7 +64,7 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 	private CodeAnalysis fileAnalysis;
 
 	public JavaAnalyzer(CodeLocation sourceCodeLocation) {
-		super(sourceCodeLocation, JavaGrammar.getInstance(), STARTCreator.class);
+		super(sourceCodeLocation, JavaGrammar.getInstance(), CompilationUnitCreator.class);
 	}
 
 	@Override
