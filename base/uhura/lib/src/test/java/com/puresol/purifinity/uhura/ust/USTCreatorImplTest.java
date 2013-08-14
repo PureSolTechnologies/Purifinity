@@ -17,7 +17,7 @@ public class USTCreatorImplTest {
 
 	@BeforeClass
 	public static void initialized() {
-		impl = new USTCreatorImpl(STARTCreator.class.getPackage());
+		impl = new USTCreatorImpl(STARTCreator.class);
 	}
 
 	@Test

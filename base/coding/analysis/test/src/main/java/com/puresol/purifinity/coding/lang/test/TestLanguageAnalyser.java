@@ -41,6 +41,7 @@ import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
+import com.puresol.purifinity.uhura.ust.USTCreatorImpl;
 
 /**
  * 
@@ -56,7 +57,7 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 
 	public TestLanguageAnalyser(CodeLocation sourceCodeLocation) {
 		super(sourceCodeLocation, TestLanguageGrammar.getInstance(),
-				STARTCreator.class);
+				new USTCreatorImpl(STARTCreator.class));
 	}
 
 	@Override

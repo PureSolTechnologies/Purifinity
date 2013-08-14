@@ -22,14 +22,15 @@ public class USTCreatorImpl implements USTCreator {
 
 	private final Map<String, USTCreator> classes = new HashMap<String, USTCreator>();
 
-	public USTCreatorImpl(Package pkg)
+	public USTCreatorImpl(Class<? extends USTCreator> rootUSTNodeCreator)
 			throws UniversalSyntaxTreeCreatorException {
-		this.pkg = pkg;
-		scanPackage();
+		this.pkg = rootUSTNodeCreator.getPackage();
+		scanPackage(rootUSTNodeCreator.getClassLoader());
 	}
 
-	private void scanPackage() throws UniversalSyntaxTreeCreatorException {
-		Set<Class<? extends USTCreator>> types = getAllUSTCreatorClasses();
+	private void scanPackage(ClassLoader classLoader)
+			throws UniversalSyntaxTreeCreatorException {
+		Set<Class<? extends USTCreator>> types = getAllUSTCreatorClasses(classLoader);
 		for (Class<?> clazz : types) {
 			if (clazz.equals(getClass())) {
 				// Exclude self...
@@ -43,11 +44,12 @@ public class USTCreatorImpl implements USTCreator {
 		}
 	}
 
-	private Set<Class<? extends USTCreator>> getAllUSTCreatorClasses() {
+	private Set<Class<? extends USTCreator>> getAllUSTCreatorClasses(
+			ClassLoader classLoader) {
 		String packageName = pkg.getName();
 		Reflections reflections = new Reflections(
 				ClasspathHelper.forPackage(packageName),
-				new RecursiveSubTypesScanner());
+				new RecursiveSubTypesScanner(), classLoader);
 		Multimap<String, String> map = reflections.getStore().get(
 				RecursiveSubTypesScanner.class);
 		Collection<String> creatorNames = map.get(USTCreator.class.getName());
@@ -87,6 +89,12 @@ public class USTCreatorImpl implements USTCreator {
 		String nodeName = parserTree.getName();
 		String className = NameTranslator.getProductionClassName(nodeName)
 				+ "Creator";
-		return classes.get(className).createUST(parserTree);
+		USTCreator creator = classes.get(className);
+		if (creator == null) {
+			throw new UniversalSyntaxTreeCreatorException(
+					"Could not find a UST creator implementation for '"
+							+ nodeName + "' with name '" + className + "'!");
+		}
+		return creator.createUST(parserTree);
 	}
 }

@@ -36,6 +36,7 @@ import com.puresol.purifinity.uhura.parser.packrat.PackratParser;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
+import com.puresol.purifinity.uhura.ust.USTCreatorImpl;
 
 /**
  * 
@@ -50,7 +51,8 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 	private CodeAnalysis fileAnalysis;
 
 	public C11Analyzer(CodeLocation sourceCodeLocation) {
-		super(sourceCodeLocation, C11Grammar.getInstance(), STARTCreator.class);
+		super(sourceCodeLocation, C11Grammar.getInstance(), new USTCreatorImpl(
+				STARTCreator.class));
 	}
 
 	@Override

@@ -42,6 +42,7 @@ import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
+import com.puresol.purifinity.uhura.ust.USTCreatorImpl;
 
 /**
  * This is the Fortran analyzer to scan and parse source files in Fortran source
@@ -59,7 +60,7 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 
 	public FortranAnalyzer(CodeLocation sourceCodeLocation) {
 		super(sourceCodeLocation, FortranGrammar.getInstance(),
-				ProgramCreator.class);
+				new USTCreatorImpl(ProgramCreator.class));
 	}
 
 	@Override

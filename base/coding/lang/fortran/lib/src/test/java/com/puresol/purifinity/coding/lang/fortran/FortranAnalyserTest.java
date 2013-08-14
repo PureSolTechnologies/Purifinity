@@ -9,13 +9,9 @@ import static org.junit.Assert.assertSame;
 
 import java.io.File;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresol.purifinity.coding.lang.fortran.ust.ProgramCreator;
 import com.puresol.purifinity.uhura.source.SourceFileLocation;
-import com.puresol.purifinity.uhura.ust.USTCreatorFactory;
 
 /**
  * This test checks the JavaAnalyser.
@@ -24,17 +20,6 @@ import com.puresol.purifinity.uhura.ust.USTCreatorFactory;
  * 
  */
 public class FortranAnalyserTest {
-
-	@BeforeClass
-	public static void initialize() {
-		USTCreatorFactory.initialize();
-		USTCreatorFactory.register(ProgramCreator.class.getPackage());
-	}
-
-	@AfterClass
-	public static void destroy() {
-		USTCreatorFactory.destroy();
-	}
 
 	@Test
 	public void testInstance() {

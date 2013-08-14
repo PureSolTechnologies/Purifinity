@@ -113,11 +113,13 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
 	private McCabeMetricResult findFileResult(
 			McCabeMetricFileResults mcCabeFileResults, CodeRange codeRange) {
-		for (McCabeMetricResult t : mcCabeFileResults.getResults()) {
-			if ((t.getCodeRangeType() == codeRange.getType())
-					&& (t.getCodeRangeName().equals(codeRange
-							.getCanonicalName()))) {
-				return t;
+		if (mcCabeFileResults != null) {
+			for (McCabeMetricResult t : mcCabeFileResults.getResults()) {
+				if ((t.getCodeRangeType() == codeRange.getType())
+						&& (t.getCodeRangeName().equals(codeRange
+								.getCanonicalName()))) {
+					return t;
+				}
 			}
 		}
 		return null;
@@ -137,11 +139,13 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
 	private SLOCResult findFileResult(SLOCFileResults slocFileResults,
 			CodeRange codeRange) {
-		for (SLOCResult t : slocFileResults.getResults()) {
-			if ((t.getCodeRangeType() == codeRange.getType())
-					&& (t.getCodeRangeName().equals(codeRange
-							.getCanonicalName()))) {
-				return t;
+		if (slocFileResults != null) {
+			for (SLOCResult t : slocFileResults.getResults()) {
+				if ((t.getCodeRangeType() == codeRange.getType())
+						&& (t.getCodeRangeName().equals(codeRange
+								.getCanonicalName()))) {
+					return t;
+				}
 			}
 		}
 		return null;

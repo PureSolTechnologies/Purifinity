@@ -4,28 +4,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresol.commons.utils.PathUtils;
-import com.puresol.purifinity.coding.lang.java.ust.CompilationUnitCreator;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.SourceFileLocation;
-import com.puresol.purifinity.uhura.ust.USTCreatorFactory;
 
 public class JavaAnalyserTest {
-
-	@BeforeClass
-	public static void initialize() {
-		USTCreatorFactory.initialize();
-		USTCreatorFactory.register(CompilationUnitCreator.class.getPackage());
-	}
-
-	@AfterClass
-	public static void destroy() {
-		USTCreatorFactory.destroy();
-	}
 
 	@Test
 	public void testInstance() {

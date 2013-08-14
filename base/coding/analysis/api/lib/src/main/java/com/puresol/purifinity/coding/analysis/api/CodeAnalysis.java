@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.puresol.purifinity.uhura.parser.ParserTree;
-import com.puresol.purifinity.uhura.ust.CompilationUnit;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This is a interface to a single analysis. It's used to implement a language
@@ -36,12 +36,12 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 	private final AnalyzedCode analyzedFile;
 	private final ParserTree parserTree;
 	private final List<CodeRange> analyzableCodeRanges;
-	private final CompilationUnit universalSyntaxTree;
+	private final UniversalSyntaxTree universalSyntaxTree;
 
 	public CodeAnalysis(Date time, long timeOfRun, String languageName,
 			String languageVersion, AnalyzedCode analyzedFile,
 			ParserTree parserTree, List<CodeRange> analyzableCodeRanges,
-			CompilationUnit universalSyntaxTree) {
+			UniversalSyntaxTree universalSyntaxTree) {
 		super();
 		this.time = time;
 		this.timeOfRun = timeOfRun;
@@ -118,7 +118,7 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 		return analyzableCodeRanges;
 	}
 
-	public CompilationUnit getUniversalSyntaxTree() {
+	public UniversalSyntaxTree getUniversalSyntaxTree() {
 		return universalSyntaxTree;
 	}
 }
