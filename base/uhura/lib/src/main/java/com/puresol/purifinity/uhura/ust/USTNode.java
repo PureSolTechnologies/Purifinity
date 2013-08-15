@@ -1,7 +1,7 @@
 package com.puresol.purifinity.uhura.ust;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,13 +22,6 @@ public class USTNode implements UniversalSyntaxTree {
 	private final String content;
 	private final List<UniversalSyntaxTree> children = new ArrayList<>();
 
-	public USTNode(String name, String originalSymbol) {
-		super();
-		this.name = name;
-		this.originalSymbol = originalSymbol;
-		this.content = null;
-	}
-
 	public USTNode(String name, String originalSymbol, String content) {
 		super();
 		this.name = name;
@@ -36,12 +29,32 @@ public class USTNode implements UniversalSyntaxTree {
 		this.content = content;
 	}
 
-	protected final void addChildren(Collection<USTNode> children) {
-		this.children.addAll(children);
+	public USTNode(String name, String originalSymbol) {
+		this(name, originalSymbol, (String) null);
 	}
 
-	protected final void addChild(UniversalSyntaxTree child) {
-		children.add(child);
+	public USTNode(String name, String originalSymbol,
+			List<UniversalSyntaxTree> children) {
+		this(name, originalSymbol);
+		children.addAll(children);
+	}
+
+	public USTNode(String name, String originalSymbol, String content,
+			List<UniversalSyntaxTree> children) {
+		this(name, originalSymbol, content);
+		children.addAll(children);
+	}
+
+	public USTNode(String name, String originalSymbol,
+			UniversalSyntaxTree... children) {
+		this(name, originalSymbol);
+		this.children.addAll(Arrays.asList(children));
+	}
+
+	public USTNode(String name, String originalSymbol, String content,
+			UniversalSyntaxTree children) {
+		this(name, originalSymbol, content);
+		this.children.addAll(Arrays.asList(children));
 	}
 
 	public final List<UniversalSyntaxTree> getChildren() {

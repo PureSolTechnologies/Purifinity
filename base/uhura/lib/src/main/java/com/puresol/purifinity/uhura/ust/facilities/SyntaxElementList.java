@@ -3,6 +3,7 @@ package com.puresol.purifinity.uhura.ust.facilities;
 import java.util.List;
 
 import com.puresol.purifinity.uhura.ust.USTNode;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This class represents a typed list like for parameter lists in method
@@ -14,8 +15,7 @@ import com.puresol.purifinity.uhura.ust.USTNode;
  * @param <T>
  *            is the type or interface of the elements contained in that list.
  */
-public class SyntaxElementList<T extends USTNode> extends
-		USTNode {
+public class SyntaxElementList<T extends USTNode> extends USTNode {
 
 	private static final long serialVersionUID = -1875399758682948173L;
 
@@ -27,9 +27,8 @@ public class SyntaxElementList<T extends USTNode> extends
 	 *            could here be ',', ';' or something similar regarding the
 	 *            source programming language.
 	 */
-	public SyntaxElementList(String originalSymbol,
-			List<USTNode> elements) {
-		super("Syntax Element List", originalSymbol);
-		addChildren(elements);
+	public SyntaxElementList(String originalSymbol, List<USTNode> elements) {
+		super("Syntax Element List", originalSymbol, elements
+				.toArray(new UniversalSyntaxTree[elements.size()]));
 	}
 }

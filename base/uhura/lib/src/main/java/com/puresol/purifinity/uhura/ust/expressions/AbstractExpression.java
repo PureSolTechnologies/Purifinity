@@ -1,6 +1,7 @@
 package com.puresol.purifinity.uhura.ust.expressions;
 
 import com.puresol.purifinity.uhura.ust.USTNode;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 public abstract class AbstractExpression extends USTNode implements Expression {
 
@@ -8,6 +9,11 @@ public abstract class AbstractExpression extends USTNode implements Expression {
 
 	public AbstractExpression(String name, String originalSymbol) {
 		super(name, originalSymbol);
+	}
+
+	public AbstractExpression(String name, String originalSymbol,
+			UniversalSyntaxTree... children) {
+		super(name, originalSymbol, children);
 	}
 
 }

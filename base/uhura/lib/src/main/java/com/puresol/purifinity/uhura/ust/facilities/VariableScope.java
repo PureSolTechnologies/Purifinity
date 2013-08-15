@@ -15,7 +15,6 @@ public class VariableScope extends USTNode {
 	private static final long serialVersionUID = 7165390340532196126L;
 
 	public VariableScope(USTNode block) {
-		super("Variable Scope", "variable scope");
-		addChild(block);
+		super("Variable Scope", "variable scope", block);
 	}
 }

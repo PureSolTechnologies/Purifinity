@@ -10,13 +10,10 @@ public abstract class AbstractTertiaryOperator extends AbstractExpression {
 
 	public AbstractTertiaryOperator(String name, String originalSymbol,
 			Expression operand1, Expression operand2, Expression operand3) {
-		super(name, originalSymbol);
+		super(name, originalSymbol, operand1, operand2, operand3);
 		this.operand1 = operand1;
 		this.operand2 = operand2;
 		this.operand3 = operand3;
-		addChild(operand1);
-		addChild(operand2);
-		addChild(operand3);
 	}
 
 	public final Expression getOperand1() {
