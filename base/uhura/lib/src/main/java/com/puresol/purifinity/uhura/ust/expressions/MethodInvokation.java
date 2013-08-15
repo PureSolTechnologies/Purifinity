@@ -5,12 +5,6 @@ public class MethodInvokation extends AbstractExpression {
 	private static final long serialVersionUID = 3327912771024924207L;
 
 	public MethodInvokation(String originalSymbol) {
-		super(originalSymbol);
+		super("Method Invokation Expression", originalSymbol);
 	}
-
-	@Override
-	public String getName() {
-		return "Method Invokation Expression";
-	}
-
 }

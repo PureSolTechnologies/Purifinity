@@ -11,12 +11,6 @@ public class Continue extends AbstractStatement {
 	private static final long serialVersionUID = -2327674896241450199L;
 
 	public Continue(String originalSymbol) {
-		super(originalSymbol);
+		super("Next Statement", originalSymbol);
 	}
-
-	@Override
-	public String getName() {
-		return "Next Statement";
-	}
-
 }

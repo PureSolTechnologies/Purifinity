@@ -1,6 +1,5 @@
 package com.puresol.purifinity.uhura.ust.modifiers;
 
-
 /**
  * This class represents a modifier which sets a variable to immutable. This
  * modifier has several name in different languages:
@@ -16,15 +15,9 @@ package com.puresol.purifinity.uhura.ust.modifiers;
  */
 public class ConstantModifier extends AbstractModifier {
 
-    private static final long serialVersionUID = -5800466279299023817L;
+	private static final long serialVersionUID = -5800466279299023817L;
 
-    public ConstantModifier(String originalSymbol) {
-	super(originalSymbol);
-    }
-
-    @Override
-    public String getName() {
-	return "Constant Modifier";
-    }
-
+	public ConstantModifier(String originalSymbol) {
+		super("Constant Modifier", originalSymbol);
+	}
 }

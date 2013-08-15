@@ -11,8 +11,8 @@ public abstract class AbstractIntegerType extends AbstractNumericType {
 
 	private static final long serialVersionUID = 1208013511094715942L;
 
-	public AbstractIntegerType(String originalSymbol, int bitLength) {
-		super(originalSymbol, bitLength);
+	public AbstractIntegerType(String name, String originalSymbol, int bitLength) {
+		super(name, originalSymbol, bitLength);
 	}
 
 }

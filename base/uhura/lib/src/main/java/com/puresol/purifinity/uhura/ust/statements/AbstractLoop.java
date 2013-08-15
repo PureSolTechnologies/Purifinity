@@ -9,8 +9,8 @@ public abstract class AbstractLoop extends AbstractStatement {
 
 	private static final long serialVersionUID = 6821436133082697055L;
 
-	public AbstractLoop(String originalSymbol) {
-		super(originalSymbol);
+	public AbstractLoop(String name, String originalSymbol) {
+		super(name, originalSymbol);
 	}
 
 }

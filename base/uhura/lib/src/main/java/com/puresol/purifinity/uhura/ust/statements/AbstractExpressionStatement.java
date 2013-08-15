@@ -10,7 +10,7 @@ public abstract class AbstractExpressionStatement extends AbstractStatement {
 
 	private static final long serialVersionUID = 1734223272528966860L;
 
-	public AbstractExpressionStatement(String originalSymbol) {
-		super(originalSymbol);
+	public AbstractExpressionStatement(String name, String originalSymbol) {
+		super(name, originalSymbol);
 	}
 }

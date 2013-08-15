@@ -6,12 +6,6 @@ public class LeftShift extends AbstractBinaryOperator {
 
 	public LeftShift(String originalSymbol, Expression operand,
 			Expression shiftWidth) {
-		super(originalSymbol, operand, shiftWidth);
+		super("Left Shift", originalSymbol, operand, shiftWidth);
 	}
-
-	@Override
-	public String getName() {
-		return "Left Shift";
-	}
-
 }

@@ -6,7 +6,7 @@ import com.puresol.commons.trees.TreeException;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.ust.AbstractUSTCreator;
 import com.puresol.purifinity.uhura.ust.USTCreator;
-import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
+import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
 import com.puresol.purifinity.uhura.ust.packages.ImportPackage;
 
 public class ImportDeclarationCreator extends AbstractUSTCreator {
@@ -16,12 +16,12 @@ public class ImportDeclarationCreator extends AbstractUSTCreator {
 	}
 
 	@Override
-	public UniversalSyntaxTree createUST(ParserTree parserTree)
+	public AbstractUSTNode createUST(ParserTree parserTree)
 			throws TreeException {
 		List<ParserTree> children = parserTree.getChildren();
 		assertEquals("Only one child was expected.", 1, children.size());
 		ParserTree child = children.get(0);
-		UniversalSyntaxTree result = null;
+		AbstractUSTNode result = null;
 		if (parserTree.hasChild("SingleTypeImportDeclaration")) {
 			result = new ImportPackage("import", child.getChild("Name")
 					.getText());

@@ -6,12 +6,6 @@ public class AdditionAssignment extends AssignmentExpression {
 
 	public AdditionAssignment(String originalSymbol, Expression target,
 			Expression summand) {
-		super(originalSymbol, target, summand);
+		super("Addition Assignment", originalSymbol, target, summand);
 	}
-
-	@Override
-	public String getName() {
-		return "Addition Assignment";
-	}
-
 }

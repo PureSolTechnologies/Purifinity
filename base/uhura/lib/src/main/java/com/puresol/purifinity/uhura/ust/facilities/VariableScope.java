@@ -1,7 +1,6 @@
 package com.puresol.purifinity.uhura.ust.facilities;
 
-import com.puresol.purifinity.uhura.ust.AbstractUniversalSyntaxTree;
-import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
+import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
 
 /**
  * This tree element signals a scope for variable and element validity. This
@@ -11,17 +10,12 @@ import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class VariableScope extends AbstractUniversalSyntaxTree {
+public class VariableScope extends AbstractUSTNode {
 
 	private static final long serialVersionUID = 7165390340532196126L;
 
-	public VariableScope(UniversalSyntaxTree block) {
-		super("variable scope");
+	public VariableScope(AbstractUSTNode block) {
+		super("Variable Scope", "variable scope");
 		addChild(block);
-	}
-
-	@Override
-	public String getName() {
-		return "Variable Scope";
 	}
 }

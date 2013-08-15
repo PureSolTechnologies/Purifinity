@@ -1,7 +1,7 @@
 package com.puresol.purifinity.uhura.ust.statements;
 
-import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
+import com.puresol.purifinity.uhura.ust.USTNode;
 
-public interface Statement extends UniversalSyntaxTree {
+public interface Statement extends USTNode {
 
 }

@@ -5,12 +5,6 @@ public class Goto extends AbstractStatement {
 	private static final long serialVersionUID = 8391205239089622685L;
 
 	public Goto(String originalSymbol) {
-		super(originalSymbol);
+		super("Goto", originalSymbol);
 	}
-
-	@Override
-	public String getName() {
-		return "Goto";
-	}
-
 }

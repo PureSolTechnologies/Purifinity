@@ -6,12 +6,6 @@ public class SubstractionAssignment extends AssignmentExpression {
 
 	public SubstractionAssignment(String originalSymbol, Expression target,
 			Expression subtrahent) {
-		super(originalSymbol, target, subtrahent);
+		super("Substraction Assignment", originalSymbol, target, subtrahent);
 	}
-
-	@Override
-	public String getName() {
-		return "Substraction Assignment";
-	}
-
 }

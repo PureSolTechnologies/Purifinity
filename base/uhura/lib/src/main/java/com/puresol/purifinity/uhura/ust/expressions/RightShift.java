@@ -6,12 +6,6 @@ public class RightShift extends AbstractBinaryOperator {
 
 	public RightShift(String originalSymbol, Expression operand,
 			Expression shiftWidth) {
-		super(originalSymbol, operand, shiftWidth);
+		super("Right Shift", originalSymbol, operand, shiftWidth);
 	}
-
-	@Override
-	public String getName() {
-		return "Right Shift";
-	}
-
 }

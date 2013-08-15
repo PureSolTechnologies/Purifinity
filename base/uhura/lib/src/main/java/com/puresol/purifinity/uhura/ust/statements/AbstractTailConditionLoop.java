@@ -11,8 +11,8 @@ public abstract class AbstractTailConditionLoop extends AbstractLoop {
 
 	private static final long serialVersionUID = 556020073871576482L;
 
-	public AbstractTailConditionLoop(String originalSymbol) {
-		super(originalSymbol);
+	public AbstractTailConditionLoop(String name, String originalSymbol) {
+		super(name, originalSymbol);
 	}
 
 }

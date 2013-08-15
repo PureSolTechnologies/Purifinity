@@ -1,12 +1,12 @@
 package com.puresol.purifinity.uhura.ust.types;
 
-import com.puresol.purifinity.uhura.ust.AbstractUniversalSyntaxTree;
+import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
 
-public abstract class AbstractType extends AbstractUniversalSyntaxTree {
+public abstract class AbstractType extends AbstractUSTNode {
 
 	private static final long serialVersionUID = 2846791515023904393L;
 
-	public AbstractType(String originalSymbol) {
-		super(originalSymbol);
+	public AbstractType(String name, String originalSymbol) {
+		super(name, originalSymbol);
 	}
 }

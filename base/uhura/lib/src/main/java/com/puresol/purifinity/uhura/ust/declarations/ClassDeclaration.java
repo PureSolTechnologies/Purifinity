@@ -1,18 +1,11 @@
 package com.puresol.purifinity.uhura.ust.declarations;
 
+public class ClassDeclaration extends AbstractClassDeclaration {
 
-
-public class ClassDeclaration extends AbstractTypeDeclaration {
-
-	private static final long serialVersionUID = 4241659851575261998L;
+	private static final long serialVersionUID = -8064910958148661625L;
 
 	public ClassDeclaration(String originalSymbol) {
-		super(originalSymbol);
-	}
-
-	@Override
-	public String getName() {
-		return "Class Declaration";
+		super("Class Declaration", originalSymbol);
 	}
 
 }

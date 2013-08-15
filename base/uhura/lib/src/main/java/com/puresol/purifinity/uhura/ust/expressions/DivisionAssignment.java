@@ -6,12 +6,6 @@ public class DivisionAssignment extends AssignmentExpression {
 
 	public DivisionAssignment(String originalSymbol, Expression target,
 			Expression divisor) {
-		super(originalSymbol, target, divisor);
+		super("Division Assignment", originalSymbol, target, divisor);
 	}
-
-	@Override
-	public String getName() {
-		return "Division Assignment";
-	}
-
 }

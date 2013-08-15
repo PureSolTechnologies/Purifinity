@@ -6,12 +6,6 @@ public class LeftShiftAssignment extends AssignmentExpression {
 
 	public LeftShiftAssignment(String originalSymbol, Expression target,
 			Expression shiftWidth) {
-		super(originalSymbol, target, shiftWidth);
+		super("Left Shift Assignment", originalSymbol, target, shiftWidth);
 	}
-
-	@Override
-	public String getName() {
-		return "Left Shift Assignment";
-	}
-
 }

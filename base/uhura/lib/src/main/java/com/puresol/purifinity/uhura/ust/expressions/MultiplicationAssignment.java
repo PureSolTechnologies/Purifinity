@@ -6,12 +6,6 @@ public class MultiplicationAssignment extends AssignmentExpression {
 
 	public MultiplicationAssignment(String originalSymbol, Expression target,
 			Expression factor) {
-		super(originalSymbol, target, factor);
+		super("Multiplication Assignment", originalSymbol, target, factor);
 	}
-
-	@Override
-	public String getName() {
-		return "Multiplication Assignment";
-	}
-
 }

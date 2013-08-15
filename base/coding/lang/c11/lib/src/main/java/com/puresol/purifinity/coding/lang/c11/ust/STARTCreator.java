@@ -3,7 +3,7 @@ package com.puresol.purifinity.coding.lang.c11.ust;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.ust.AbstractUSTCreator;
 import com.puresol.purifinity.uhura.ust.USTCreator;
-import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
+import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
 
 public class STARTCreator extends AbstractUSTCreator {
 
@@ -12,7 +12,7 @@ public class STARTCreator extends AbstractUSTCreator {
 	}
 
 	@Override
-	public UniversalSyntaxTree createUST(ParserTree parserTree) {
+	public AbstractUSTNode createUST(ParserTree parserTree) {
 		return null;
 	}
 

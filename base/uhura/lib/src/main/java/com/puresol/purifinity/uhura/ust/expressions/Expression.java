@@ -1,7 +1,7 @@
 package com.puresol.purifinity.uhura.ust.expressions;
 
-import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
+import com.puresol.purifinity.uhura.ust.USTNode;
 
-public interface Expression extends UniversalSyntaxTree {
+public interface Expression extends USTNode {
 
 }

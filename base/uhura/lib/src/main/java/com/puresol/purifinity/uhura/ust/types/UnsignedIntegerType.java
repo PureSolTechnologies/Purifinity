@@ -1,6 +1,5 @@
 package com.puresol.purifinity.uhura.ust.types;
 
-
 /**
  * This class represents an unsigned integer type.
  * 
@@ -9,14 +8,10 @@ package com.puresol.purifinity.uhura.ust.types;
  */
 public class UnsignedIntegerType extends AbstractIntegerType {
 
-    private static final long serialVersionUID = 6211356961166357559L;
+	private static final long serialVersionUID = 6211356961166357559L;
 
-    public UnsignedIntegerType(String originalSymbol, int bitLength) {
-	super(originalSymbol, bitLength);
-    }
-
-    @Override
-    public String getName() {
-	return "Signed " + getBitLength() + "bit Integer Type";
-    }
+	public UnsignedIntegerType(String originalSymbol, int bitLength) {
+		super("Signed " + bitLength + "bit Integer Type", originalSymbol,
+				bitLength);
+	}
 }

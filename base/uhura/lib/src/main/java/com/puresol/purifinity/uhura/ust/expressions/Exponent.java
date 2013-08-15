@@ -6,12 +6,6 @@ public class Exponent extends AbstractBinaryOperator {
 
 	public Exponent(String originalSymbol, Expression mantissa,
 			Expression exponent) {
-		super(originalSymbol, mantissa, exponent);
+		super("Exponent", originalSymbol, mantissa, exponent);
 	}
-
-	@Override
-	public String getName() {
-		return "Exponent";
-	}
-
 }

@@ -5,12 +5,6 @@ public class This extends AbstractExpression {
 	private static final long serialVersionUID = -1725237580854743190L;
 
 	public This(String originalSymbol) {
-		super(originalSymbol);
+		super("This Expression", originalSymbol);
 	}
-
-	@Override
-	public String getName() {
-		return "This Expression";
-	}
-
 }

@@ -1,17 +1,10 @@
 package com.puresol.purifinity.uhura.ust.declarations;
 
-
-public class EnumClassDeclaration extends ClassDeclaration {
+public class EnumClassDeclaration extends AbstractClassDeclaration {
 
 	private static final long serialVersionUID = 3501719223735273021L;
 
 	public EnumClassDeclaration(String originalSymbol) {
-		super(originalSymbol);
+		super("Enum Class Declaration", originalSymbol);
 	}
-
-	@Override
-	public String getName() {
-		return "Enum Class Declaration";
-	}
-
 }

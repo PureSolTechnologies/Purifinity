@@ -4,7 +4,7 @@ import com.puresol.commons.trees.TreeException;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.ust.AbstractUSTCreator;
 import com.puresol.purifinity.uhura.ust.USTCreator;
-import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
+import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
 
 public class TypeDeclarationCreator extends AbstractUSTCreator {
 
@@ -13,7 +13,7 @@ public class TypeDeclarationCreator extends AbstractUSTCreator {
 	}
 
 	@Override
-	public UniversalSyntaxTree createUST(ParserTree parserTree)
+	public AbstractUSTNode createUST(ParserTree parserTree)
 			throws TreeException {
 		return null;
 	}

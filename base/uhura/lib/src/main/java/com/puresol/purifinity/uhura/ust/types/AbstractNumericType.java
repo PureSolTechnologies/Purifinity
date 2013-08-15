@@ -12,8 +12,8 @@ public abstract class AbstractNumericType extends AbstractType {
 
 	private final int bitLength;
 
-	public AbstractNumericType(String originalSymbol, int bitLength) {
-		super(originalSymbol);
+	public AbstractNumericType(String name, String originalSymbol, int bitLength) {
+		super(name, originalSymbol);
 		this.bitLength = bitLength;
 	}
 

@@ -11,12 +11,6 @@ public class Break extends AbstractStatement {
 	private static final long serialVersionUID = 7552943875590939150L;
 
 	public Break(String originalSymbol) {
-		super(originalSymbol);
+		super("Break Statement", originalSymbol);
 	}
-
-	@Override
-	public String getName() {
-		return "Break Statement";
-	}
-
 }

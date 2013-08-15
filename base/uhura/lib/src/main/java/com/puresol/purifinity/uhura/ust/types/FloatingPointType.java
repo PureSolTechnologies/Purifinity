@@ -14,14 +14,9 @@ package com.puresol.purifinity.uhura.ust.types;
  */
 public class FloatingPointType extends AbstractNumericType {
 
-    private static final long serialVersionUID = 47713101164319131L;
+	private static final long serialVersionUID = 47713101164319131L;
 
-    public FloatingPointType(String originalSymbol, int bitLength) {
-	super(originalSymbol, bitLength);
-    }
-
-    @Override
-    public String getName() {
-	return getBitLength() + "bit Floating Point Type";
-    }
+	public FloatingPointType(String originalSymbol, int bitLength) {
+		super(bitLength + "bit Floating Point Type", originalSymbol, bitLength);
+	}
 }

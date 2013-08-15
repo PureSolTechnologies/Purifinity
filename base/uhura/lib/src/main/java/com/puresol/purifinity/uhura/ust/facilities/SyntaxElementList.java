@@ -2,8 +2,7 @@ package com.puresol.purifinity.uhura.ust.facilities;
 
 import java.util.List;
 
-import com.puresol.purifinity.uhura.ust.AbstractUniversalSyntaxTree;
-import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
+import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
 
 /**
  * This class represents a typed list like for parameter lists in method
@@ -15,13 +14,13 @@ import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
  * @param <T>
  *            is the type or interface of the elements contained in that list.
  */
-public class SyntaxElementList<T extends AbstractUniversalSyntaxTree> extends
-		AbstractUniversalSyntaxTree {
+public class SyntaxElementList<T extends AbstractUSTNode> extends
+		AbstractUSTNode {
 
 	private static final long serialVersionUID = -1875399758682948173L;
 
 	/**
-	 * This constructor is inherited from AbstractUniversalSyntaxTree.
+	 * This constructor is inherited from AbstractUSTNode.
 	 * 
 	 * @param parent
 	 * @param originalSymbol
@@ -29,13 +28,8 @@ public class SyntaxElementList<T extends AbstractUniversalSyntaxTree> extends
 	 *            source programming language.
 	 */
 	public SyntaxElementList(String originalSymbol,
-			List<UniversalSyntaxTree> elements) {
-		super(originalSymbol);
+			List<AbstractUSTNode> elements) {
+		super("Syntax Element List", originalSymbol);
 		addChildren(elements);
-	}
-
-	@Override
-	public String getName() {
-		return "Syntax Element List";
 	}
 }

@@ -5,12 +5,6 @@ public class CoutingFor extends AbstractHeadConditionLoop {
 	private static final long serialVersionUID = 1040379931239394965L;
 
 	public CoutingFor(String originalSymbol) {
-		super(originalSymbol);
+		super("Counting For Loop", originalSymbol);
 	}
-
-	@Override
-	public String getName() {
-		return "Counting For Loop";
-	}
-
 }

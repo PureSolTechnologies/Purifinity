@@ -5,12 +5,6 @@ public class WhileLoop extends AbstractHeadConditionLoop {
 	private static final long serialVersionUID = -3215380137916478208L;
 
 	public WhileLoop(String originalSymbol) {
-		super(originalSymbol);
+		super("While Loop", originalSymbol);
 	}
-
-	@Override
-	public String getName() {
-		return "While Loop";
-	}
-
 }

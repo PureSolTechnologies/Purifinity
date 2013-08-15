@@ -6,12 +6,6 @@ public class Multiplication extends AbstractBinaryOperator {
 
 	public Multiplication(String originalSymbol, Expression factor1,
 			Expression factor2) {
-		super(originalSymbol, factor1, factor2);
+		super("Multiplication", originalSymbol, factor1, factor2);
 	}
-
-	@Override
-	public String getName() {
-		return "Multiplication";
-	}
-
 }

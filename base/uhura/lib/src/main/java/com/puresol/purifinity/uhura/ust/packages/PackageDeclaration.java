@@ -1,6 +1,6 @@
 package com.puresol.purifinity.uhura.ust.packages;
 
-import com.puresol.purifinity.uhura.ust.AbstractUniversalSyntaxTree;
+import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
 
 /**
  * This is a package declaration like found in Java, Scala, D and other
@@ -11,20 +11,15 @@ import com.puresol.purifinity.uhura.ust.AbstractUniversalSyntaxTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class PackageDeclaration extends AbstractUniversalSyntaxTree {
+public class PackageDeclaration extends AbstractUSTNode {
 
 	private static final long serialVersionUID = -828922003801631227L;
 
 	private final String packageName;
 
 	public PackageDeclaration(String originalSymbol, String packageName) {
-		super(originalSymbol);
+		super("Package Declaration", originalSymbol);
 		this.packageName = packageName;
-	}
-
-	@Override
-	public final String getName() {
-		return "Package Declaration: " + packageName;
 	}
 
 	public final String getPackageName() {

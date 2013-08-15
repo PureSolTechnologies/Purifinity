@@ -1,6 +1,5 @@
 package com.puresol.purifinity.uhura.ust.types;
 
-
 /**
  * This type is for logical values. This type has different names in different
  * languages:
@@ -16,15 +15,9 @@ package com.puresol.purifinity.uhura.ust.types;
  */
 public class LogicalType extends AbstractType {
 
-    private static final long serialVersionUID = -5227270180409950680L;
+	private static final long serialVersionUID = -5227270180409950680L;
 
-    public LogicalType(String originalSymbol) {
-	super(originalSymbol);
-    }
-
-    @Override
-    public String getName() {
-	return "Logical Type";
-    }
-
+	public LogicalType(String originalSymbol) {
+		super("Logical Type", originalSymbol);
+	}
 }

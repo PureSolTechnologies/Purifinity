@@ -8,15 +8,10 @@ package com.puresol.purifinity.uhura.ust.types;
  */
 public class SignedIntegerType extends AbstractIntegerType {
 
-    private static final long serialVersionUID = 2322028164241606186L;
+	private static final long serialVersionUID = 2322028164241606186L;
 
-    public SignedIntegerType(String originalSymbol, int bitLength) {
-	super(originalSymbol, bitLength);
-    }
-
-    @Override
-    public String getName() {
-	return "Signed " + getBitLength() + "bit Integer Type";
-    }
-
+	public SignedIntegerType(String originalSymbol, int bitLength) {
+		super("Signed " + bitLength + "bit Integer Type", originalSymbol,
+				bitLength);
+	}
 }

@@ -10,12 +10,6 @@ public class ThrowStatement extends AbstractStatement {
 	private static final long serialVersionUID = -197165528870354560L;
 
 	public ThrowStatement(String originalSymbol) {
-		super(originalSymbol);
+		super("Throw Statement", originalSymbol);
 	}
-
-	@Override
-	public String getName() {
-		return "Throw Statement";
-	}
-
 }

@@ -7,9 +7,9 @@ public abstract class AbstractBinaryOperator extends AbstractExpression {
 	private final Expression operand1;
 	private final Expression operand2;
 
-	public AbstractBinaryOperator(String originalSymbol, Expression operand1,
-			Expression operand2) {
-		super(originalSymbol);
+	public AbstractBinaryOperator(String name, String originalSymbol,
+			Expression operand1, Expression operand2) {
+		super(name, originalSymbol);
 		this.operand1 = operand1;
 		this.operand2 = operand2;
 		addChild(operand1);

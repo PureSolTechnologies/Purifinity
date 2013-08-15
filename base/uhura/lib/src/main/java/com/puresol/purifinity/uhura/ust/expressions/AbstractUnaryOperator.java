@@ -6,8 +6,9 @@ public abstract class AbstractUnaryOperator extends AbstractExpression {
 
 	private final Expression operand;
 
-	public AbstractUnaryOperator(String originalSymbol, Expression operand) {
-		super(originalSymbol);
+	public AbstractUnaryOperator(String name, String originalSymbol,
+			Expression operand) {
+		super(name, originalSymbol);
 		this.operand = operand;
 	}
 

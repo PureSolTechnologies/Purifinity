@@ -6,12 +6,6 @@ public class Substraction extends AbstractBinaryOperator {
 
 	public Substraction(String originalSymbol, Expression minutent,
 			Expression subtrahent) {
-		super(originalSymbol, minutent, subtrahent);
+		super("Substraction", originalSymbol, minutent, subtrahent);
 	}
-
-	@Override
-	public String getName() {
-		return "Substraction";
-	}
-
 }

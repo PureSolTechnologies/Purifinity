@@ -6,12 +6,6 @@ public class ModuloAssignment extends AssignmentExpression {
 
 	public ModuloAssignment(String originalSymbol, Expression target,
 			Expression divisor) {
-		super(originalSymbol, target, divisor);
+		super("Modulo Assignment", originalSymbol, target, divisor);
 	}
-
-	@Override
-	public String getName() {
-		return "Modulo Assignment";
-	}
-
 }

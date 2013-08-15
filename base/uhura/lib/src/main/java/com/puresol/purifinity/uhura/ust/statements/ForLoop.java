@@ -5,12 +5,6 @@ public class ForLoop extends AbstractHeadConditionLoop {
 	private static final long serialVersionUID = 911764200002860417L;
 
 	public ForLoop(String originalSymbol) {
-		super(originalSymbol);
+		super("For Loop", originalSymbol);
 	}
-
-	@Override
-	public String getName() {
-		return "For Loop";
-	}
-
 }

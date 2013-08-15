@@ -6,9 +6,10 @@ import java.util.List;
 import com.puresol.commons.trees.TreeException;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.ust.AbstractUSTCreator;
+import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
 import com.puresol.purifinity.uhura.ust.USTCreator;
-import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
+import com.puresol.purifinity.uhura.ust.USTNode;
 
 public class CompilationUnitCreator extends AbstractUSTCreator {
 
@@ -17,20 +18,19 @@ public class CompilationUnitCreator extends AbstractUSTCreator {
 	}
 
 	@Override
-	public UniversalSyntaxTree createUST(ParserTree parserTree)
+	public AbstractUSTNode createUST(ParserTree parserTree)
 			throws TreeException {
-		UniversalSyntaxTree packageDeclaration = createPackageDeclaration(parserTree);
-		List<UniversalSyntaxTree> importDeclarations = createImportDeclarations(parserTree);
-		List<UniversalSyntaxTree> typeDeclarations = createTypeDeclarations(parserTree);
-		return new CompilationUnit(packageDeclaration, importDeclarations,
-				typeDeclarations);
+		USTNode packageDeclaration = createPackageDeclaration(parserTree);
+		List<USTNode> importDeclarations = createImportDeclarations(parserTree);
+		List<USTNode> typeDeclarations = createTypeDeclarations(parserTree);
+		return new CompilationUnit();
 	}
 
-	private UniversalSyntaxTree createPackageDeclaration(ParserTree parserTree)
+	private USTNode createPackageDeclaration(ParserTree parserTree)
 			throws TreeException {
 		ParserTree packageDeclarationNode = parserTree
 				.getChild("PackageDeclaration");
-		UniversalSyntaxTree packageDeclaration = null;
+		USTNode packageDeclaration = null;
 		if (packageDeclarationNode != null) {
 			packageDeclaration = getParentCreator().createUST(
 					packageDeclarationNode);
@@ -38,9 +38,9 @@ public class CompilationUnitCreator extends AbstractUSTCreator {
 		return packageDeclaration;
 	}
 
-	private List<UniversalSyntaxTree> createImportDeclarations(
-			ParserTree parserTree) throws TreeException {
-		List<UniversalSyntaxTree> importDeclarations = new ArrayList<UniversalSyntaxTree>();
+	private List<USTNode> createImportDeclarations(ParserTree parserTree)
+			throws TreeException {
+		List<USTNode> importDeclarations = new ArrayList<>();
 		ParserTree importDeclarationsNode = parserTree
 				.getChild("ImportDeclarations");
 		if (importDeclarationsNode != null) {
@@ -48,16 +48,16 @@ public class CompilationUnitCreator extends AbstractUSTCreator {
 					.addAll(createImportDeclarations(importDeclarationsNode));
 			ParserTree importDeclarationNode = importDeclarationsNode
 					.getChild("ImportDeclaration");
-			UniversalSyntaxTree importDeclaration = getParentCreator()
-					.createUST(importDeclarationNode);
+			USTNode importDeclaration = getParentCreator().createUST(
+					importDeclarationNode);
 			importDeclarations.add(importDeclaration);
 		}
 		return importDeclarations;
 	}
 
-	private List<UniversalSyntaxTree> createTypeDeclarations(
-			ParserTree parserTree) throws TreeException {
-		List<UniversalSyntaxTree> typeDeclarations = new ArrayList<UniversalSyntaxTree>();
+	private List<USTNode> createTypeDeclarations(ParserTree parserTree)
+			throws TreeException {
+		List<USTNode> typeDeclarations = new ArrayList<>();
 		ParserTree typeDeclarationsNode = parserTree
 				.getChild("TypeDeclarations");
 		if (typeDeclarationsNode != null) {
@@ -65,7 +65,7 @@ public class CompilationUnitCreator extends AbstractUSTCreator {
 					.addAll(createTypeDeclarations(typeDeclarationsNode));
 			ParserTree typeDeclarationNode = typeDeclarationsNode
 					.getChild("TypeDeclaration");
-			UniversalSyntaxTree typeDeclaration = getParentCreator().createUST(
+			USTNode typeDeclaration = getParentCreator().createUST(
 					typeDeclarationNode);
 			typeDeclarations.add(typeDeclaration);
 		}

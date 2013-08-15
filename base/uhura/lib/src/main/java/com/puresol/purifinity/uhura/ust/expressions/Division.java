@@ -6,12 +6,6 @@ public class Division extends AbstractBinaryOperator {
 
 	public Division(String originalSymbol, Expression divident,
 			Expression divisor) {
-		super(originalSymbol, divident, divisor);
+		super("Division", originalSymbol, divident, divisor);
 	}
-
-	@Override
-	public String getName() {
-		return "Division";
-	}
-
 }

@@ -11,12 +11,6 @@ public class Return extends AbstractStatement {
 	private static final long serialVersionUID = -8944859904478474768L;
 
 	public Return(String originalSymbol) {
-		super(originalSymbol);
+		super("Return Statement", originalSymbol);
 	}
-
-	@Override
-	public String getName() {
-		return "Return Statement";
-	}
-
 }

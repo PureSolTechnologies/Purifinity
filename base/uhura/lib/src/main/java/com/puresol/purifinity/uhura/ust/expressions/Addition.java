@@ -6,12 +6,6 @@ public class Addition extends AbstractBinaryOperator {
 
 	public Addition(String originalSymbol, Expression summand1,
 			Expression summand2) {
-		super(originalSymbol, summand1, summand2);
+		super("Addition", originalSymbol, summand1, summand2);
 	}
-
-	@Override
-	public String getName() {
-		return "Addition";
-	}
-
 }

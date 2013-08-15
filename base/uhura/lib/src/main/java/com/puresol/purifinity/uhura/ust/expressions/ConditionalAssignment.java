@@ -6,12 +6,7 @@ public class ConditionalAssignment extends AbstractTertiaryOperator {
 
 	public ConditionalAssignment(String originalSymbol, Expression target,
 			Expression trueAlternative, Expression falseAlternative) {
-		super(originalSymbol, target, trueAlternative, falseAlternative);
+		super("Conditional Assignment", originalSymbol, target,
+				trueAlternative, falseAlternative);
 	}
-
-	@Override
-	public String getName() {
-		return "Conditional Assignment";
-	}
-
 }
