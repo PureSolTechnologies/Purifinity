@@ -1,8 +1,8 @@
 package com.puresol.purifinity.uhura.ust.declarations;
 
-import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
+import com.puresol.purifinity.uhura.ust.USTNode;
 
-public abstract class AbstractDeclaration extends AbstractUSTNode {
+public abstract class AbstractDeclaration extends USTNode {
 
 	private static final long serialVersionUID = 721736733272860703L;
 

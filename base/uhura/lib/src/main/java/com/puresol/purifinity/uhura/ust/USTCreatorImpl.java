@@ -84,7 +84,7 @@ public class USTCreatorImpl implements USTCreator {
 	}
 
 	@Override
-	public USTNode createUST(ParserTree parserTree) throws TreeException {
+	public UniversalSyntaxTree createUST(ParserTree parserTree) throws TreeException {
 		String nodeName = parserTree.getName();
 		String className = NameTranslator.getProductionClassName(nodeName)
 				+ "Creator";

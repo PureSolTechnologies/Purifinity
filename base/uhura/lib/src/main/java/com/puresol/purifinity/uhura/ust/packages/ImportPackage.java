@@ -1,6 +1,6 @@
 package com.puresol.purifinity.uhura.ust.packages;
 
-import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
+import com.puresol.purifinity.uhura.ust.USTNode;
 
 /**
  * This is an import package statement like found in Java, Scala, D and other
@@ -9,7 +9,7 @@ import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ImportPackage extends AbstractUSTNode {
+public class ImportPackage extends USTNode {
 
 	private static final long serialVersionUID = -828922003801631227L;
 

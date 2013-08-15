@@ -1,6 +1,6 @@
 package com.puresol.purifinity.uhura.ust.packages;
 
-import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
+import com.puresol.purifinity.uhura.ust.USTNode;
 
 /**
  * This is a name space like found in C++ or C#. Name spaces do not have a name
@@ -10,7 +10,7 @@ import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class NameSpace extends AbstractUSTNode {
+public class NameSpace extends USTNode {
 
 	private static final long serialVersionUID = 4747868405422668380L;
 

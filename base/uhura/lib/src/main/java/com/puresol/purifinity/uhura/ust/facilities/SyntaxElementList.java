@@ -2,7 +2,7 @@ package com.puresol.purifinity.uhura.ust.facilities;
 
 import java.util.List;
 
-import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
+import com.puresol.purifinity.uhura.ust.USTNode;
 
 /**
  * This class represents a typed list like for parameter lists in method
@@ -14,8 +14,8 @@ import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
  * @param <T>
  *            is the type or interface of the elements contained in that list.
  */
-public class SyntaxElementList<T extends AbstractUSTNode> extends
-		AbstractUSTNode {
+public class SyntaxElementList<T extends USTNode> extends
+		USTNode {
 
 	private static final long serialVersionUID = -1875399758682948173L;
 
@@ -28,7 +28,7 @@ public class SyntaxElementList<T extends AbstractUSTNode> extends
 	 *            source programming language.
 	 */
 	public SyntaxElementList(String originalSymbol,
-			List<AbstractUSTNode> elements) {
+			List<USTNode> elements) {
 		super("Syntax Element List", originalSymbol);
 		addChildren(elements);
 	}

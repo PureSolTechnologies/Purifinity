@@ -1,8 +1,8 @@
 package com.puresol.purifinity.uhura.ust.comments;
 
-import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
+import com.puresol.purifinity.uhura.ust.USTNode;
 
-public abstract class AbstractComment extends AbstractUSTNode {
+public abstract class AbstractComment extends USTNode {
 
 	private static final long serialVersionUID = -7080420554044222389L;
 

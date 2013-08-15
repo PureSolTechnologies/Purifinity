@@ -1,8 +1,8 @@
 package com.puresol.purifinity.uhura.ust.literals;
 
-import com.puresol.purifinity.uhura.ust.AbstractUSTNode;
+import com.puresol.purifinity.uhura.ust.USTNode;
 
-public abstract class Literal extends AbstractUSTNode {
+public abstract class Literal extends USTNode {
 
 	private static final long serialVersionUID = -1731135665103554027L;
 
