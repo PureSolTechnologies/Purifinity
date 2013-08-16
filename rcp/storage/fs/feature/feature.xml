@@ -36,9 +36,9 @@
       <import plugin="com.puresol.purifinity.coding.evaluation.impl.bundle"/>
       <import plugin="com.puresol.purifinity.coding.lang.api.bundle"/>
       <import plugin="com.puresol.purifinity.coding.metrics.bundle"/>
-      <import plugin="com.puresol.purifinity.uhura.bundle"/>
       <import plugin="org.apache.commons.io"/>
       <import plugin="org.eclipse.osgi"/>
+      <import plugin="com.puresol.purifinity.uhura.bundle" version="0.1.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

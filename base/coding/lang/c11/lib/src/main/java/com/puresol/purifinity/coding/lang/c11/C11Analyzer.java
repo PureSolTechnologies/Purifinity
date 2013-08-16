@@ -20,7 +20,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.commons.trees.TreeException;
 import com.puresol.commons.utils.StopWatch;
 import com.puresol.purifinity.coding.analysis.api.AbstractCodeAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
@@ -29,14 +28,12 @@ import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.coding.lang.c11.grammar.C11Grammar;
-import com.puresol.purifinity.coding.lang.c11.ust.STARTCreator;
 import com.puresol.purifinity.uhura.parser.ParserException;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.parser.packrat.PackratParser;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
-import com.puresol.purifinity.uhura.ust.USTCreatorImpl;
 
 /**
  * 
@@ -51,8 +48,7 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 	private CodeAnalysis fileAnalysis;
 
 	public C11Analyzer(CodeLocation sourceCodeLocation) {
-		super(sourceCodeLocation, C11Grammar.getInstance(), new USTCreatorImpl(
-				STARTCreator.class));
+		super(sourceCodeLocation, C11Grammar.getInstance());
 	}
 
 	@Override
@@ -66,8 +62,7 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 			PackratParser packratParser = new PackratParser(getGrammar());
 			ParserTree parserTree = packratParser.parse(sourceCode);
 			watch.stop();
-			CompilationUnit compilationUnit = (CompilationUnit) getUstCreator()
-					.createUST(parserTree);
+			CompilationUnit compilationUnit = null; // TODO
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 			C11 c11 = C11.getInstance();
 			AnalyzedCode analyzedFile = new AnalyzedCode(
@@ -76,7 +71,7 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 			fileAnalysis = new CodeAnalysis(date, timeEffort, c11.getName(),
 					c11.getVersion(), analyzedFile, parserTree,
 					this.getAnalyzableCodeRanges(parserTree), compilationUnit);
-		} catch (ParserException | IOException | TreeException e) {
+		} catch (ParserException | IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
 		}

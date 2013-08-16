@@ -52,10 +52,8 @@
       <import plugin="com.puresol.purifinity.client.common.chart.plugin" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.license.api.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.commons.license.domain.bundle" version="0.0.1" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
-      <import plugin="org.reflections.reflections.external.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="org.codehaus.jackson.jackson-jaxrs.external.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.google.guava"/>
+      <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

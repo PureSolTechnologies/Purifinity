@@ -33,7 +33,6 @@ import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.lang.fortran.grammar.FortranGrammar;
-import com.puresol.purifinity.coding.lang.fortran.ust.ProgramCreator;
 import com.puresol.purifinity.uhura.lexer.LexerException;
 import com.puresol.purifinity.uhura.lexer.TokenStream;
 import com.puresol.purifinity.uhura.parser.Parser;
@@ -42,7 +41,6 @@ import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
-import com.puresol.purifinity.uhura.ust.USTCreatorImpl;
 
 /**
  * This is the Fortran analyzer to scan and parse source files in Fortran source
@@ -59,8 +57,7 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 	private CodeAnalysis fileAnalysis;
 
 	public FortranAnalyzer(CodeLocation sourceCodeLocation) {
-		super(sourceCodeLocation, FortranGrammar.getInstance(),
-				new USTCreatorImpl(ProgramCreator.class));
+		super(sourceCodeLocation, FortranGrammar.getInstance());
 	}
 
 	@Override
@@ -75,8 +72,7 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 			Parser parser = getGrammar().getParser();
 			ParserTree parserTree = parser.parse(tokenStream);
 			watch.stop();
-			CompilationUnit compilationUnit = (CompilationUnit) getUstCreator()
-					.createUST(parserTree);
+			CompilationUnit compilationUnit = null; // TODO
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 			Fortran fortran = Fortran.getInstance();
 			AnalyzedCode analyzedFile = new AnalyzedCode(
@@ -86,7 +82,7 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 					fortran.getName(), fortran.getVersion(), analyzedFile,
 					parserTree, getAnalyzableCodeRanges(parserTree),
 					compilationUnit);
-		} catch (ParserException | IOException | TreeException e) {
+		} catch (ParserException | IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
 		}

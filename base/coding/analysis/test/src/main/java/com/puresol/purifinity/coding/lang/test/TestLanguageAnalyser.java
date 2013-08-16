@@ -21,7 +21,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.commons.trees.TreeException;
 import com.puresol.commons.utils.StopWatch;
 import com.puresol.purifinity.coding.analysis.api.AbstractCodeAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
@@ -31,7 +30,6 @@ import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.coding.lang.test.grammar.TestLanguageGrammar;
-import com.puresol.purifinity.coding.lang.test.ust.STARTCreator;
 import com.puresol.purifinity.uhura.lexer.Lexer;
 import com.puresol.purifinity.uhura.lexer.LexerException;
 import com.puresol.purifinity.uhura.lexer.TokenStream;
@@ -41,7 +39,6 @@ import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
-import com.puresol.purifinity.uhura.ust.USTCreatorImpl;
 
 /**
  * 
@@ -56,8 +53,7 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 	private CodeAnalysis fileAnalysis;
 
 	public TestLanguageAnalyser(CodeLocation sourceCodeLocation) {
-		super(sourceCodeLocation, TestLanguageGrammar.getInstance(),
-				new USTCreatorImpl(STARTCreator.class));
+		super(sourceCodeLocation, TestLanguageGrammar.getInstance());
 	}
 
 	@Override
@@ -73,8 +69,7 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 			Parser parser = getGrammar().getParser();
 			ParserTree parserTree = parser.parse(tokenStream);
 			watch.stop();
-			CompilationUnit compilationUnit = (CompilationUnit) getUstCreator()
-					.createUST(parserTree);
+			CompilationUnit compilationUnit = null; // TODO
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 			TestLanguage language = TestLanguage.getInstance();
 			fileAnalysis = new CodeAnalysis(date, timeEffort,
@@ -84,7 +79,7 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 									.getVersion()), parserTree,
 					getAnalyzableCodeRanges(parserTree), compilationUnit);
 
-		} catch (LexerException | ParserException | IOException | TreeException e) {
+		} catch (LexerException | ParserException | IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
 		}

@@ -50,7 +50,6 @@ import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
-import com.puresol.purifinity.uhura.ust.USTCreatorImpl;
 
 /**
  * 
@@ -65,8 +64,7 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 	private CodeAnalysis fileAnalysis;
 
 	public JavaAnalyzer(CodeLocation sourceCodeLocation) {
-		super(sourceCodeLocation, JavaGrammar.getInstance(),
-				new USTCreatorImpl(CompilationUnitCreator.class));
+		super(sourceCodeLocation, JavaGrammar.getInstance());
 	}
 
 	@Override
@@ -82,10 +80,8 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 			Parser parser = getGrammar().getParser();
 			ParserTree parserTree = parser.parse(tokenStream);
 			watch.stop();
-			CompilationUnit compilationUnit = null;
-			// CompilationUnit compilationUnit = (CompilationUnit)
-			// getUstCreator()
-			// .createUST(parserTree);
+			CompilationUnit compilationUnit = CompilationUnitCreator
+					.create(parserTree);
 			long timeEffort = watch.getMilliseconds();
 			Java java = Java.getInstance();
 			AnalyzedCode analyzedFile = new AnalyzedCode(

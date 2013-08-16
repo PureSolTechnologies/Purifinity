@@ -41,6 +41,10 @@
 			<artifactId>utils</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresol.purifinity</groupId>
+			<artifactId>uhura.lib</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>

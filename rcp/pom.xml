@@ -157,11 +157,6 @@
 		</dependency>
 		<!-- External bundles -->
 		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections.external.bundle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-jaxrs.external.bundle</artifactId>
 			<version>${project.version}</version>
