@@ -180,4 +180,12 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 		}
 		return new HalsteadSymbol(true, true, node.getText());
 	}
+
+	public List<String> getOperators() {
+		return operators;
+	}
+
+	public List<String> getLParenExceptions() {
+		return lParenExceptions;
+	}
 }

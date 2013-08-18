@@ -1,8 +1,8 @@
 package com.puresol.purifinity.uhura.ust.statements;
 
-import com.puresol.purifinity.uhura.ust.USTNode;
+import com.puresol.purifinity.uhura.ust.Production;
 
-public class GotoLabel extends USTNode {
+public class GotoLabel extends Production {
 
 	private static final long serialVersionUID = 5969840612811092250L;
 

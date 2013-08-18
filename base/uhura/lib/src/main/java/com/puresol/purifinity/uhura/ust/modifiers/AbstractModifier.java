@@ -1,8 +1,8 @@
 package com.puresol.purifinity.uhura.ust.modifiers;
 
-import com.puresol.purifinity.uhura.ust.USTNode;
+import com.puresol.purifinity.uhura.ust.Production;
 
-public abstract class AbstractModifier extends USTNode {
+public abstract class AbstractModifier extends Production {
 
 	private static final long serialVersionUID = 6970210094744093023L;
 

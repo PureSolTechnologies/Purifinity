@@ -1,6 +1,6 @@
 package com.puresol.purifinity.uhura.ust.facilities;
 
-import com.puresol.purifinity.uhura.ust.USTNode;
+import com.puresol.purifinity.uhura.ust.Production;
 
 /**
  * This tree element signals a scope for variable and element validity. This
@@ -10,11 +10,11 @@ import com.puresol.purifinity.uhura.ust.USTNode;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class VariableScope extends USTNode {
+public class VariableScope extends Production {
 
 	private static final long serialVersionUID = 7165390340532196126L;
 
-	public VariableScope(USTNode block) {
+	public VariableScope(Production block) {
 		super("Variable Scope", "variable scope", block);
 	}
 }
