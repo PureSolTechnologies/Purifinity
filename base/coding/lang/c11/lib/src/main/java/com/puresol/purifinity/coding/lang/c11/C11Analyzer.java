@@ -28,6 +28,7 @@ import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.coding.lang.c11.grammar.C11Grammar;
+import com.puresol.purifinity.coding.lang.c11.ust.CompilationUnitCreator;
 import com.puresol.purifinity.uhura.parser.ParserException;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.parser.packrat.PackratParser;
@@ -62,7 +63,8 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 			PackratParser packratParser = new PackratParser(getGrammar());
 			ParserTree parserTree = packratParser.parse(sourceCode);
 			watch.stop();
-			CompilationUnit compilationUnit = null; // TODO
+			CompilationUnit compilationUnit = CompilationUnitCreator
+					.create(parserTree);
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 			C11 c11 = C11.getInstance();
 			AnalyzedCode analyzedFile = new AnalyzedCode(

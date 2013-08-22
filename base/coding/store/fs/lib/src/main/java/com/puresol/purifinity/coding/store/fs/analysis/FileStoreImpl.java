@@ -26,7 +26,7 @@ import com.puresol.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
 public final class FileStoreImpl implements FileStore {
 
 	private static final String RAW_FILE = "raw";
-	private static final String PARSER_TREE_FILE = "parser_tree.persist";
+	private static final String CODE_ANALYSIS_FILE = "code_analysis.persist";
 
 	private static final File fileStoreDirectory = new File(
 			AnalysisStoreImpl.getStorageDirectory(), "files");
@@ -98,7 +98,7 @@ public final class FileStoreImpl implements FileStore {
 	public CodeAnalysis loadAnalysis(HashId hashId) throws FileStoreException {
 		try {
 			File fileDirectory = getFileDirectory(hashId);
-			File parserTreeFile = new File(fileDirectory, PARSER_TREE_FILE);
+			File parserTreeFile = new File(fileDirectory, CODE_ANALYSIS_FILE);
 			ObjectInputStream inStream = new ObjectInputStream(
 					new FileInputStream(parserTreeFile));
 			try {
@@ -122,7 +122,7 @@ public final class FileStoreImpl implements FileStore {
 			throws FileStoreException {
 		try {
 			File fileDirectory = getFileDirectory(hashId);
-			File parserTreeFile = new File(fileDirectory, PARSER_TREE_FILE);
+			File parserTreeFile = new File(fileDirectory, CODE_ANALYSIS_FILE);
 			ObjectOutputStream outStream = new ObjectOutputStream(
 					new FileOutputStream(parserTreeFile));
 			try {
@@ -172,7 +172,7 @@ public final class FileStoreImpl implements FileStore {
 	@Override
 	public final boolean wasAnalyzed(HashId hashId) {
 		File fileDirectory = getFileDirectory(hashId);
-		File parserTreeFile = new File(fileDirectory, PARSER_TREE_FILE);
+		File parserTreeFile = new File(fileDirectory, CODE_ANALYSIS_FILE);
 		return parserTreeFile.exists();
 	}
 }
