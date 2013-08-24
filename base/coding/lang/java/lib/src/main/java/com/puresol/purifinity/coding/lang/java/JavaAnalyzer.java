@@ -88,7 +88,7 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 					sourceCode.getHashId(), getSource(), date, timeEffort,
 					java.getName(), java.getVersion());
 			fileAnalysis = new CodeAnalysis(date, timeEffort, java.getName(),
-					java.getVersion(), analyzedFile, parserTree,
+					java.getVersion(), analyzedFile,
 					this.getAnalyzableCodeRanges(parserTree), compilationUnit);
 		} catch (LexerException | ParserException | IOException e) {
 			logger.error(e.getMessage(), e);

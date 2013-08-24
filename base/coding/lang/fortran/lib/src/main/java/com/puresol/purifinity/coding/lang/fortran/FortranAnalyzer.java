@@ -81,8 +81,7 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 					fortran.getName(), fortran.getVersion());
 			fileAnalysis = new CodeAnalysis(date, timeEffort,
 					fortran.getName(), fortran.getVersion(), analyzedFile,
-					parserTree, getAnalyzableCodeRanges(parserTree),
-					compilationUnit);
+					getAnalyzableCodeRanges(parserTree), compilationUnit);
 		} catch (ParserException | IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);

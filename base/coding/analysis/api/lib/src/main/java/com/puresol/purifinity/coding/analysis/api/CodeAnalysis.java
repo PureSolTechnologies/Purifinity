@@ -15,8 +15,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import com.puresol.purifinity.uhura.parser.ParserTree;
-import com.puresol.purifinity.uhura.ust.Production;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This is a interface to a single analysis. It's used to implement a language
@@ -34,23 +33,21 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 	private final String languageName;
 	private final String languageVersion;
 	private final AnalyzedCode analyzedFile;
-	private final ParserTree parserTree;
 	private final List<CodeRange> analyzableCodeRanges;
-	private final Production USTNode;
+	private final UniversalSyntaxTree universalSyntaxTree;
 
 	public CodeAnalysis(Date time, long timeOfRun, String languageName,
 			String languageVersion, AnalyzedCode analyzedFile,
-			ParserTree parserTree, List<CodeRange> analyzableCodeRanges,
-			Production USTNode) {
+			List<CodeRange> analyzableCodeRanges,
+			UniversalSyntaxTree universalSyntaxTree) {
 		super();
 		this.time = time;
 		this.timeOfRun = timeOfRun;
 		this.languageName = languageName;
 		this.languageVersion = languageVersion;
 		this.analyzedFile = analyzedFile;
-		this.parserTree = parserTree;
 		this.analyzableCodeRanges = analyzableCodeRanges;
-		this.USTNode = USTNode;
+		this.universalSyntaxTree = universalSyntaxTree;
 	}
 
 	/**
@@ -105,20 +102,21 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 	}
 
 	/**
-	 * This method returns the parser tree.
+	 * Returns a list of code ranges which can be analyzed and evaluated
+	 * separately.
 	 * 
-	 * @return
-	 * @throws IOException
+	 * @return A {@link List} of {@link CodeRange} is returned.
 	 */
-	public ParserTree getParserTree() {
-		return parserTree;
-	}
-
 	public List<CodeRange> getAnalyzableCodeRanges() {
 		return analyzableCodeRanges;
 	}
 
-	public Production getUSTNode() {
-		return USTNode;
+	/**
+	 * Returns the universal sytax tree.
+	 * 
+	 * @return A {@link UniversalSyntaxTree} object is returned.
+	 */
+	public UniversalSyntaxTree getUniversalSyntaxTree() {
+		return universalSyntaxTree;
 	}
 }

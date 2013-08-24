@@ -11,8 +11,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 
-import com.puresol.purifinity.client.common.analysis.contents.ParserTreeContentProvider;
-import com.puresol.purifinity.client.common.analysis.contents.ParserTreeLabelProvider;
+import com.puresol.purifinity.client.common.analysis.contents.UniversalSyntaxTreeContentProvider;
+import com.puresol.purifinity.client.common.analysis.contents.UniversalSyntaxTreeLabelProvider;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
@@ -55,8 +55,8 @@ public class ParserTreeControl extends Composite {
 		fd_tree.right = new FormAttachment(100, -10);
 		tree.setLayoutData(fd_tree);
 		treeViewer = new TreeViewer(tree);
-		treeViewer.setContentProvider(new ParserTreeContentProvider());
-		treeViewer.setLabelProvider(new ParserTreeLabelProvider());
+		treeViewer.setContentProvider(new UniversalSyntaxTreeContentProvider());
+		treeViewer.setLabelProvider(new UniversalSyntaxTreeLabelProvider());
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class ParserTreeControl extends Composite {
 					+ ": "
 					+ analyzedCode.getSourceLocation()
 							.getHumanReadableLocationString());
-			treeViewer.setInput(codeAnalysis.getParserTree());
+			treeViewer.setInput(codeAnalysis.getUniversalSyntaxTree());
 		} else {
 			lblNewLabel.setText("");
 			treeViewer.setInput(null);

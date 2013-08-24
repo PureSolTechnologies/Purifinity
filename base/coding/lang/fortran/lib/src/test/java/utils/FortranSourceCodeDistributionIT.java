@@ -25,8 +25,8 @@ import com.puresol.commons.utils.StopWatch;
 import com.puresol.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresol.purifinity.coding.lang.fortran.Fortran;
-import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.SourceFileLocation;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This is not a real JUnit test, but it's used manually to check the parser
@@ -56,12 +56,13 @@ public class FortranSourceCodeDistributionIT {
 							.getPath()));
 			analyser.analyze();
 			watch.stop();
-			ParserTree ast = analyser.getAnalysis().getParserTree();
-			assertNotNull(ast);
+			UniversalSyntaxTree ust = analyser.getAnalysis()
+					.getUniversalSyntaxTree();
+			assertNotNull(ust);
 			System.out.print(watch.getSeconds());
 			if (logger.isTraceEnabled()) {
 				ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-				new TreePrinter(new PrintStream(outStream)).println(ast);
+				new TreePrinter(new PrintStream(outStream)).println(ust);
 				logger.trace(outStream.toString());
 			}
 		} catch (AnalyzerException e) {

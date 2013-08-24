@@ -71,7 +71,7 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 					sourceCode.getHashId(), getSource(), date, timeEffort,
 					c11.getName(), c11.getVersion());
 			fileAnalysis = new CodeAnalysis(date, timeEffort, c11.getName(),
-					c11.getVersion(), analyzedFile, parserTree,
+					c11.getVersion(), analyzedFile,
 					this.getAnalyzableCodeRanges(parserTree), compilationUnit);
 		} catch (ParserException | IOException e) {
 			logger.error(e.getMessage(), e);

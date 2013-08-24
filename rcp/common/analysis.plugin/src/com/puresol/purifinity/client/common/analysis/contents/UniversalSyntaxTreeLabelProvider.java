@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import com.puresol.purifinity.uhura.lexer.Token;
 import com.puresol.purifinity.uhura.parser.ParserTree;
 
-public class ParserTreeLabelProvider extends LabelProvider {
+public class UniversalSyntaxTreeLabelProvider extends LabelProvider {
 
     @Override
     public String getText(Object element) {

@@ -1,8 +1,7 @@
 package com.puresol.purifinity.uhura.ust;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * This class is an abstract implementation of a universal syntax tree node for
@@ -12,50 +11,34 @@ import java.util.List;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Production extends AbstractUSTNode {
+public class Production extends AbstractUniversalSyntaxTreeNode {
 
 	private static final long serialVersionUID = 1640932177605345931L;
 
-	private final List<UniversalSyntaxTree> children = new ArrayList<>();
-
-	public Production(String name, String originalSymbol, String content) {
-		super(name, originalSymbol, content);
-	}
-
+	// XXX remove this constructor due to production always have children!
 	public Production(String name, String originalSymbol) {
-		this(name, originalSymbol, (String) null);
+		super(name, originalSymbol, (String) null,
+				(Collection<UniversalSyntaxTree>) null);
 	}
 
 	public Production(String name, String originalSymbol,
-			List<UniversalSyntaxTree> children) {
-		this(name, originalSymbol);
-		children.addAll(children);
+			Collection<UniversalSyntaxTree> children) {
+		super(name, originalSymbol, null, children);
 	}
 
 	public Production(String name, String originalSymbol, String content,
-			List<UniversalSyntaxTree> children) {
-		this(name, originalSymbol, content);
-		children.addAll(children);
+			Collection<UniversalSyntaxTree> children) {
+		super(name, originalSymbol, content, children);
 	}
 
 	public Production(String name, String originalSymbol,
 			UniversalSyntaxTree... children) {
-		this(name, originalSymbol);
-		this.children.addAll(Arrays.asList(children));
+		super(name, originalSymbol, null, Arrays.asList(children));
 	}
 
 	public Production(String name, String originalSymbol, String content,
 			UniversalSyntaxTree children) {
-		this(name, originalSymbol, content);
-		this.children.addAll(Arrays.asList(children));
-	}
-
-	public final List<UniversalSyntaxTree> getChildren() {
-		return children;
-	}
-
-	public final boolean hasChildren() {
-		return children.size() > 0;
+		this(name, originalSymbol, content, Arrays.asList(children));
 	}
 
 	@Override

@@ -7,8 +7,8 @@ import static org.junit.Assert.assertSame;
 import org.junit.Test;
 
 import com.puresol.commons.utils.PathUtils;
-import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.SourceFileLocation;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 public class JavaAnalyserTest {
 
@@ -32,7 +32,8 @@ public class JavaAnalyserTest {
 				"src/test/java", PathUtils.classToRelativePackagePath(
 						this.getClass()).getPath()));
 		analyser.analyze();
-		ParserTree tree = analyser.getAnalysis().getParserTree();
+		UniversalSyntaxTree tree = analyser.getAnalysis()
+				.getUniversalSyntaxTree();
 		assertNotNull(tree);
 		// new TreePrinter(System.out).println(tree);
 	}
