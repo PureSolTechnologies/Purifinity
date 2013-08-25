@@ -25,6 +25,7 @@ import com.puresol.purifinity.coding.evaluation.impl.Result;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
+import com.puresol.purifinity.uhura.ust.terminal.AbstractTerminal;
 
 public class HalsteadMetric extends CodeRangeEvaluator {
 
@@ -83,12 +84,15 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 				codeRange.getUniversalSyntaxTree());
 		do {
 			UniversalSyntaxTree node = iterator.getCurrentNode();
-			HalsteadSymbol result = langDepended.getHalsteadResult(node);
-			if (result.isCountable()) {
-				if (result.isOperator()) {
-					addOperator(result.getSymbol());
-				} else {
-					addOperant(result.getSymbol());
+			if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {
+				AbstractTerminal token = (AbstractTerminal) node;
+				HalsteadSymbol result = langDepended.getHalsteadResult(token);
+				if (result.isCountable()) {
+					if (result.isOperator()) {
+						addOperator(result.getSymbol());
+					} else {
+						addOperant(result.getSymbol());
+					}
 				}
 			}
 		} while (iterator.goForward());

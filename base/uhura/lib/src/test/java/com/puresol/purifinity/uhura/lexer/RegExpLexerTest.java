@@ -12,10 +12,6 @@ import com.puresol.purifinity.uhura.grammar.Grammar;
 import com.puresol.purifinity.uhura.grammar.production.ProductionSet;
 import com.puresol.purifinity.uhura.grammar.token.TokenDefinition;
 import com.puresol.purifinity.uhura.grammar.token.TokenDefinitionSet;
-import com.puresol.purifinity.uhura.lexer.Lexer;
-import com.puresol.purifinity.uhura.lexer.LexerException;
-import com.puresol.purifinity.uhura.lexer.RegExpLexer;
-import com.puresol.purifinity.uhura.lexer.TokenStream;
 import com.puresol.purifinity.uhura.parser.lr.LR0Parser;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
@@ -26,7 +22,7 @@ public class RegExpLexerTest {
 	public void test() throws Throwable {
 		TokenDefinitionSet rules = new TokenDefinitionSet();
 		rules.addDefinition(new TokenDefinition("NUMBER", "[0-9]+"));
-		rules.addDefinition(new TokenDefinition("WHITESPACE", "[ \\t]+"));
+		rules.addDefinition(new TokenDefinition("WHITESPACE", "[ \\t\\n]+"));
 		Properties options = new Properties();
 		options.put("lexer", RegExpLexer.class.getName());
 		options.put("parser", LR0Parser.class.getName());
@@ -34,26 +30,74 @@ public class RegExpLexerTest {
 		Grammar grammar = new Grammar(options, rules, new ProductionSet());
 		Lexer lexer = new RegExpLexer(grammar);
 		TokenStream tokenStream = lexer.lex(SourceCode.read(new StringReader(
-				"0 1\t2 \t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"),
+				"0\n1\t2\n\t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"),
 				new UnspecifiedSourceCodeLocation()));
 		assertNotNull(tokenStream);
 		assertEquals(31, tokenStream.size());
-		assertEquals("NUMBER", tokenStream.get(0).getName());
-		assertEquals("0", tokenStream.get(0).getText());
-		assertEquals("WHITESPACE", tokenStream.get(1).getName());
-		assertEquals(" ", tokenStream.get(1).getText());
-		assertEquals("NUMBER", tokenStream.get(2).getName());
-		assertEquals("1", tokenStream.get(2).getText());
-		assertEquals("WHITESPACE", tokenStream.get(3).getName());
-		assertEquals("\t", tokenStream.get(3).getText());
-		assertEquals("NUMBER", tokenStream.get(4).getName());
-		assertEquals("2", tokenStream.get(4).getText());
-		assertEquals("WHITESPACE", tokenStream.get(5).getName());
-		assertEquals(" \t", tokenStream.get(5).getText());
+		Token token0 = tokenStream.get(0);
+		TokenMetaData metaData0 = token0.getMetaData();
+		assertEquals("NUMBER", token0.getName());
+		assertEquals("0", token0.getText());
+		assertEquals(1, metaData0.getLine());
+		assertEquals(1, metaData0.getLineNum());
+		assertEquals(0, metaData0.getColumn());
+
+		Token token1 = tokenStream.get(1);
+		TokenMetaData metaData1 = token1.getMetaData();
+		assertEquals("WHITESPACE", token1.getName());
+		assertEquals("\n", token1.getText());
+		assertEquals(1, metaData1.getLine());
+		assertEquals(2, metaData1.getLineNum());
+		assertEquals(1, metaData1.getColumn());
+
+		Token token2 = tokenStream.get(2);
+		TokenMetaData metaData2 = token2.getMetaData();
+		assertEquals("NUMBER", token2.getName());
+		assertEquals("1", token2.getText());
+		assertEquals(2, metaData2.getLine());
+		assertEquals(1, metaData2.getLineNum());
+		assertEquals(0, metaData2.getColumn());
+
+		Token token3 = tokenStream.get(3);
+		TokenMetaData metaData3 = token3.getMetaData();
+		assertEquals("WHITESPACE", token3.getName());
+		assertEquals("\t", token3.getText());
+		assertEquals(2, metaData3.getLine());
+		assertEquals(1, metaData3.getLineNum());
+		assertEquals(1, metaData3.getColumn());
+
+		Token token4 = tokenStream.get(4);
+		TokenMetaData metaData4 = token4.getMetaData();
+		assertEquals("NUMBER", token4.getName());
+		assertEquals("2", token4.getText());
+		assertEquals(2, metaData4.getLine());
+		assertEquals(1, metaData4.getLineNum());
+		assertEquals(2, metaData4.getColumn());
+
+		Token token5 = tokenStream.get(5);
+		TokenMetaData metaData5 = token5.getMetaData();
+		assertEquals("WHITESPACE", token5.getName());
+		assertEquals("\n\t", token5.getText());
+		assertEquals(2, metaData5.getLine());
+		assertEquals(2, metaData5.getLineNum());
+		assertEquals(3, metaData5.getColumn());
+
+		Token token6 = tokenStream.get(6);
+		TokenMetaData metaData6 = token6.getMetaData();
+		assertEquals("NUMBER", token6.getName());
+		assertEquals("3", token6.getText());
+		assertEquals(3, metaData6.getLine());
+		assertEquals(1, metaData6.getLineNum());
+		assertEquals(1, metaData6.getColumn());
 	}
 
+	/**
+	 * Checks a lex error.
+	 * 
+	 * @throws Exception
+	 */
 	@Test(expected = LexerException.class)
-	public void testFindNextToken() throws Throwable {
+	public void testFindNextToken() throws Exception {
 		TokenDefinitionSet rules = new TokenDefinitionSet();
 		rules.addDefinition(new TokenDefinition("STRING", "\"[^\"]*\""));
 		Properties options = new Properties();

@@ -42,14 +42,14 @@ public final class CodeRange implements Serializable, Comparable<CodeRange> {
 	private final int hashcode;
 
 	public CodeRange(String simpleName, String canonicalName,
-			CodeRangeType type, UniversalSyntaxTree ast) {
+			CodeRangeType type, UniversalSyntaxTree ust) {
 		super();
 		this.simpleName = simpleName;
 		this.canonicalName = canonicalName;
 		this.type = type;
-		this.ust = ast;
+		this.ust = ust;
 		hashcode = ObjectUtilities.calculateConstantHashCode(simpleName, type,
-				ast);
+				ust);
 	}
 
 	public String getSimpleName() {

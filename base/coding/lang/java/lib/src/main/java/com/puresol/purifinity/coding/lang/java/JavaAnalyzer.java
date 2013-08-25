@@ -50,6 +50,7 @@ import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * 
@@ -89,7 +90,7 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 					java.getName(), java.getVersion());
 			fileAnalysis = new CodeAnalysis(date, timeEffort, java.getName(),
 					java.getVersion(), analyzedFile,
-					this.getAnalyzableCodeRanges(parserTree), compilationUnit);
+					getAnalyzableCodeRanges(compilationUnit), compilationUnit);
 		} catch (LexerException | ParserException | IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
@@ -113,14 +114,15 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 		}
 	}
 
-	private List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
+	private List<CodeRange> getAnalyzableCodeRanges(UniversalSyntaxTree ust) {
 		final List<CodeRange> result = new ArrayList<CodeRange>();
-		result.add(new CodeRange("", "", CodeRangeType.FILE, parserTree));
+		result.add(new CodeRange("", "", CodeRangeType.FILE, ust));
 
-		TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(parserTree);
-		walker.walk(new TreeVisitor<ParserTree>() {
+		TreeWalker<UniversalSyntaxTree> walker = new TreeWalker<UniversalSyntaxTree>(
+				ust);
+		walker.walk(new TreeVisitor<UniversalSyntaxTree>() {
 			@Override
-			public WalkingAction visit(ParserTree tree) {
+			public WalkingAction visit(UniversalSyntaxTree tree) {
 				try {
 					if (NormalClassDeclaration.is(tree)) {
 						result.add(new NormalClassDeclaration(tree)

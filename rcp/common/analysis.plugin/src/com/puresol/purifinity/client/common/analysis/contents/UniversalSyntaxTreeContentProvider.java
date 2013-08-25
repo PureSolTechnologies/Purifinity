@@ -5,7 +5,6 @@ import java.util.List;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 public class UniversalSyntaxTreeContentProvider implements ITreeContentProvider {
@@ -33,9 +32,9 @@ public class UniversalSyntaxTreeContentProvider implements ITreeContentProvider 
 		if (parentElement instanceof String) {
 			return new Object[] { tree };
 		}
-		ParserTree parent = (ParserTree) parentElement;
-		List<ParserTree> children = parent.getChildren();
-		return children.toArray(new ParserTree[children.size()]);
+		UniversalSyntaxTree parent = (UniversalSyntaxTree) parentElement;
+		List<UniversalSyntaxTree> children = parent.getChildren();
+		return children.toArray(new UniversalSyntaxTree[children.size()]);
 	}
 
 	@Override
@@ -43,8 +42,8 @@ public class UniversalSyntaxTreeContentProvider implements ITreeContentProvider 
 		if (element instanceof String) {
 			return null;
 		}
-		ParserTree node = (ParserTree) element;
-		ParserTree parent = node.getParent();
+		UniversalSyntaxTree node = (UniversalSyntaxTree) element;
+		UniversalSyntaxTree parent = node.getParent();
 		if (parent == null) {
 			return "Parser Tree";
 		}
@@ -56,7 +55,7 @@ public class UniversalSyntaxTreeContentProvider implements ITreeContentProvider 
 		if (element instanceof String) {
 			return (tree != null);
 		}
-		ParserTree node = (ParserTree) element;
+		UniversalSyntaxTree node = (UniversalSyntaxTree) element;
 		return node.hasChildren();
 	}
 

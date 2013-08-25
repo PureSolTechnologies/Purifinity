@@ -6,17 +6,18 @@ import com.puresol.commons.trees.Tree;
 import com.puresol.commons.trees.TreeException;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.USTUtils;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 public class MethodDeclaration {
 
-	public static boolean is(ParserTree part) {
+	public static boolean is(UniversalSyntaxTree part) {
 		return "MethodDeclaration".equals(part.getName());
 	}
 
-	private final ParserTree part;
+	private final UniversalSyntaxTree part;
 
-	public MethodDeclaration(ParserTree part) {
+	public MethodDeclaration(UniversalSyntaxTree part) {
 		super();
 		this.part = part;
 	}
@@ -30,10 +31,12 @@ public class MethodDeclaration {
 	 *             is thrown if the {@link Tree} was not in shape as expected.
 	 */
 	public String getIdentifier() throws TreeException {
-		ParserTree methodHeader = part.getChild("MethodHeader");
-		ParserTree methodDeclarator = methodHeader.getChild("MethodDeclarator");
-		ParserTree identifier = methodDeclarator.getChild("Identifier");
-		return identifier.getText();
+		UniversalSyntaxTree methodHeader = part.getChild("MethodHeader");
+		UniversalSyntaxTree methodDeclarator = methodHeader
+				.getChild("MethodDeclarator");
+		UniversalSyntaxTree identifier = methodDeclarator
+				.getChild("Identifier");
+		return identifier.getContent();
 	}
 
 	/**
@@ -44,36 +47,38 @@ public class MethodDeclaration {
 	 * @throws TreeException
 	 */
 	public String getCanonicalIdentifier() throws TreeException {
-		ParserTree methodHeader = part.getChild("MethodHeader");
-		ParserTree methodDeclarator = methodHeader.getChild("MethodDeclarator");
-		ParserTree identifier = methodDeclarator.getChild("Identifier");
+		UniversalSyntaxTree methodHeader = part.getChild("MethodHeader");
+		UniversalSyntaxTree methodDeclarator = methodHeader
+				.getChild("MethodDeclarator");
+		UniversalSyntaxTree identifier = methodDeclarator
+				.getChild("Identifier");
 		StringBuilder parameterTypes = new StringBuilder();
 		if (methodDeclarator.hasChild("FormalParameterList")) {
-			ParserTree formalParameterList = methodDeclarator
+			UniversalSyntaxTree formalParameterList = methodDeclarator
 					.getChild("FormalParameterList");
-			List<ParserTree> formalParameters = formalParameterList
-					.getSubTrees("FormalParameter");
-			for (ParserTree formalParameter : formalParameters) {
-				ParserTree type = formalParameter.getChild("Type");
+			List<UniversalSyntaxTree> formalParameters = USTUtils.getSubTrees(
+					formalParameterList, "FormalParameter");
+			for (UniversalSyntaxTree formalParameter : formalParameters) {
+				UniversalSyntaxTree type = formalParameter.getChild("Type");
 				if (parameterTypes.length() > 0) {
 					parameterTypes.append(",");
 				}
-				parameterTypes.append(type.getText().trim());
+				parameterTypes.append(type.getContent().trim());
 			}
 			if (formalParameterList.hasChild("LastFormalParameter")) {
-				ParserTree lastFormalParameter = formalParameterList
+				UniversalSyntaxTree lastFormalParameter = formalParameterList
 						.getChild("LastFormalParameter");
 				if (parameterTypes.length() > 0) {
 					parameterTypes.append(",");
 				}
-				ParserTree type = lastFormalParameter.getChild("Type");
-				parameterTypes.append(type.getText().trim());
+				UniversalSyntaxTree type = lastFormalParameter.getChild("Type");
+				parameterTypes.append(type.getContent().trim());
 				if (lastFormalParameter.hasChild("DOT")) {
 					parameterTypes.append("...");
 				}
 			}
 		}
-		return identifier.getText() + "(" + parameterTypes + ")";
+		return identifier.getContent() + "(" + parameterTypes + ")";
 	}
 
 	public CodeRange getCodeRange() throws TreeException {

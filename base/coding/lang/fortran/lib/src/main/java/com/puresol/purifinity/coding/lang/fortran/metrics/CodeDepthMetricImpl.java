@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.purifinity.coding.metrics.codedepth.LanguageDependedCodeDepthMetric;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This is the actual implementation of the code block test for Java.
@@ -44,7 +44,7 @@ public class CodeDepthMetricImpl implements LanguageDependedCodeDepthMetric {
 	}
 
 	@Override
-	public boolean cascadingNode(ParserTree node) {
+	public boolean cascadingNode(UniversalSyntaxTree node) {
 		return blockNames.contains(node.getName());
 	}
 

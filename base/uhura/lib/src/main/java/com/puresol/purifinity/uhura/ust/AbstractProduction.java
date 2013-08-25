@@ -25,11 +25,12 @@ public abstract class AbstractProduction extends
 	 * @return A {@link UniversalSyntaxTreeMetaData} object is returned which
 	 *         can be assigned to a node as meta data.
 	 */
-	private static UniversalSyntaxTreeMetaData computeMetaData(
+	private static UniversalSyntaxTreeMetaData computeMetaData(String name,
 			List<UniversalSyntaxTree> children) {
 		if ((children == null) || (children.size() == 0)) {
 			throw new IllegalStateException(
-					"A production needs to have at least one child.");
+					"A production needs to have at least one child. For production '"
+							+ name + "' no child was found.");
 		}
 		UniversalSyntaxTree firstChild = children.get(0);
 		UniversalSyntaxTreeMetaData firstMetaData = firstChild.getMetaData();
@@ -45,36 +46,32 @@ public abstract class AbstractProduction extends
 		return new UniversalSyntaxTreeMetaData(line, lineNum, column, length);
 	}
 
-	public AbstractProduction(String name, String originalSymbol,
+	public AbstractProduction(String name, List<UniversalSyntaxTree> children) {
+		super(name, null, computeMetaData(name, children), children);
+	}
+
+	public AbstractProduction(String name, String content,
 			List<UniversalSyntaxTree> children) {
-		super(name, originalSymbol, null, computeMetaData(children), children);
+		super(name, content, computeMetaData(name, children), children);
 	}
 
-	public AbstractProduction(String name, String originalSymbol,
-			String content, List<UniversalSyntaxTree> children) {
-		super(name, originalSymbol, content, computeMetaData(children),
-				children);
+	public AbstractProduction(String name, UniversalSyntaxTree... children) {
+		super(name, null, computeMetaData(name, Arrays.asList(children)),
+				Arrays.asList(children));
 	}
 
-	public AbstractProduction(String name, String originalSymbol,
+	public AbstractProduction(String name, String content,
 			UniversalSyntaxTree... children) {
-		super(name, originalSymbol, null, computeMetaData(Arrays
-				.asList(children)), Arrays.asList(children));
-	}
-
-	public AbstractProduction(String name, String originalSymbol,
-			String content, UniversalSyntaxTree... children) {
-		super(name, originalSymbol, content, computeMetaData(Arrays
-				.asList(children)), Arrays.asList(children));
+		super(name, content, computeMetaData(name, Arrays.asList(children)),
+				Arrays.asList(children));
 	}
 
 	@Override
 	public String toString() {
 		if (getContent() == null) {
-			return getName() + "(" + getOriginalName() + ")";
+			return getName() + "(" + getName() + ")";
 		} else {
-			return getName() + "(" + getOriginalName() + "): '" + getContent()
-					+ "'";
+			return getName() + "(" + getName() + "): '" + getContent() + "'";
 		}
 	}
 

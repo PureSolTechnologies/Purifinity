@@ -5,9 +5,7 @@ import java.util.List;
 
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadSymbol;
 import com.puresol.purifinity.coding.metrics.halstead.LanguageDependedHalsteadMetric;
-import com.puresol.purifinity.uhura.grammar.token.Visibility;
-import com.puresol.purifinity.uhura.lexer.Token;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.terminal.AbstractTerminal;
 
 /**
  * This is the actual implementation of the McCabe metric for Java.
@@ -216,17 +214,26 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 	}
 
 	@Override
-	public HalsteadSymbol getHalsteadResult(ParserTree node) {
-		Token token = node.getToken();
-		if ((token == null) || (token.getVisibility() != Visibility.VISIBLE)) {
+	public boolean isOperand(String name) {
+		return !operators.contains(name);
+	}
+
+	@Override
+	public boolean isOperator(String name) {
+		return operators.contains(name);
+	}
+
+	@Override
+	public HalsteadSymbol getHalsteadResult(AbstractTerminal token) {
+		if (!token.isVisible()) {
 			return new HalsteadSymbol(false, false, "");
 		}
-		if (operators.contains(node.getName())) {
-			return new HalsteadSymbol(true, true, node.getText());
+		if (operators.contains(token.getName())) {
+			return new HalsteadSymbol(true, true, token.getContent());
 		}
-		if (operatorLiterals.contains(node.getText())) {
-			return new HalsteadSymbol(true, true, node.getText());
+		if (operatorLiterals.contains(token.getContent())) {
+			return new HalsteadSymbol(true, true, token.getContent());
 		}
-		return new HalsteadSymbol(true, false, node.getText());
+		return new HalsteadSymbol(true, false, token.getContent());
 	}
 }

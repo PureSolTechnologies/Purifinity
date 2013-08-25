@@ -5,9 +5,7 @@ import java.util.List;
 
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadSymbol;
 import com.puresol.purifinity.coding.metrics.halstead.LanguageDependedHalsteadMetric;
-import com.puresol.purifinity.uhura.grammar.token.Visibility;
-import com.puresol.purifinity.uhura.lexer.Token;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.terminal.AbstractTerminal;
 
 /**
  * This is the actual implementation of the McCabe metric for Java.
@@ -117,68 +115,78 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 	}
 
 	@Override
-	public HalsteadSymbol getHalsteadResult(ParserTree node) {
-		Token token = node.getToken();
-		if ((token == null) || (token.getVisibility() != Visibility.VISIBLE)) {
+	public boolean isOperand(String name) {
+		return !operators.contains(name);
+	}
+
+	@Override
+	public boolean isOperator(String name) {
+		return operators.contains(name);
+	}
+
+	@Override
+	public HalsteadSymbol getHalsteadResult(AbstractTerminal token) {
+		if (!token.isVisible()) {
 			return new HalsteadSymbol(false, false, "");
 		}
-		if (!operators.contains(node.getName())) {
-			return new HalsteadSymbol(true, false, node.getText());
+		if (!operators.contains(token.getName())) {
+			return new HalsteadSymbol(true, false, token.getContent());
 		}
-		if ("RPAREN".equals(node.getName()) || "RCURLY".equals(node.getName())
-				|| "RRECTANGULAR".equals(node.getName())) {
+		if ("RPAREN".equals(token.getName())
+				|| "RCURLY".equals(token.getName())
+				|| "RRECTANGULAR".equals(token.getName())) {
 			/*
 			 * these tokens are not counted due to pairwise appearance with the
 			 * left part; double couting is not needed
 			 */
-			return new HalsteadSymbol(false, true, node.getText());
+			return new HalsteadSymbol(false, true, token.getContent());
 		}
-		if ("LCURLY".equals(node.getName())) {
+		if ("LCURLY".equals(token.getName())) {
 			/*
 			 * these tokens are not counted due to pairwise appearance with the
 			 * left part; double couting is not needed
 			 */
 			return new HalsteadSymbol(true, true, "{}");
 		}
-		if ("LRECTANGULAR".equals(node.getName())) {
+		if ("LRECTANGULAR".equals(token.getName())) {
 			/*
 			 * these tokens are not counted due to pairwise appearance with the
 			 * left part; double couting is not needed
 			 */
 			return new HalsteadSymbol(true, true, "[]");
 		}
-		if ("LPAREN".equals(node.getName())) {
-			if (lParenExceptions.contains(node.getParent().getName())) {
+		if ("LPAREN".equals(token.getName())) {
+			if (lParenExceptions.contains(token.getParent().getName())) {
 				/*
 				 * The left parenthesis is always connected to another operator
 				 * and therefore not counted again.
 				 */
-				return new HalsteadSymbol(false, true, node.getText());
+				return new HalsteadSymbol(false, true, token.getContent());
 			}
 			return new HalsteadSymbol(true, true, "()");
 		}
-		if ("IF".equals(node.getName())) {
+		if ("IF".equals(token.getName())) {
 			return new HalsteadSymbol(true, true, "if()");
 		}
-		if ("SWITCH".equals(node.getName())) {
+		if ("SWITCH".equals(token.getName())) {
 			return new HalsteadSymbol(true, true, "switch()");
 		}
-		if ("WHILE".equals(node.getName())) {
+		if ("WHILE".equals(token.getName())) {
 			return new HalsteadSymbol(true, true, "while()");
 		}
-		if ("FOR".equals(node.getName())) {
-			if ("EnhancedForStatement".equals(node.getParent().getName())) {
+		if ("FOR".equals(token.getName())) {
+			if ("EnhancedForStatement".equals(token.getParent().getName())) {
 				return new HalsteadSymbol(true, true, "for(:)");
 			}
 			return new HalsteadSymbol(true, true, "for(;;)");
 		}
-		if ("SYNCHRONIZED".equals(node.getName())) {
+		if ("SYNCHRONIZED".equals(token.getName())) {
 			return new HalsteadSymbol(true, true, "synchronized()");
 		}
-		if ("CATCH".equals(node.getName())) {
+		if ("CATCH".equals(token.getName())) {
 			return new HalsteadSymbol(true, true, "catch()");
 		}
-		return new HalsteadSymbol(true, true, node.getText());
+		return new HalsteadSymbol(true, true, token.getContent());
 	}
 
 	public List<String> getOperators() {

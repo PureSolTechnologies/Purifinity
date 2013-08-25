@@ -1,22 +1,21 @@
-package com.puresol.purifinity.uhura.ust.token;
+package com.puresol.purifinity.uhura.ust.terminal;
 
 import java.util.List;
 
 import com.puresol.commons.utils.StringUtils;
-import com.puresol.purifinity.uhura.grammar.token.Visibility;
 import com.puresol.purifinity.uhura.ust.AbstractUniversalSyntaxTreeNode;
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTreeMetaData;
 
 /**
- * This is an abstract implementation of a token. A token is a part of source of
- * a compilation unit and contains at least on character. Tokens do not have
- * children.
+ * This is an abstract implementation of a terminal. A terminal is a part of
+ * source of a compilation unit and contains at least on character. Terminals do
+ * not have children.
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AbstractToken extends AbstractUniversalSyntaxTreeNode {
+public class AbstractTerminal extends AbstractUniversalSyntaxTreeNode {
 
 	private static final long serialVersionUID = -1620557770406497800L;
 
@@ -34,23 +33,22 @@ public class AbstractToken extends AbstractUniversalSyntaxTreeNode {
 	private static String checkContent(String content) {
 		if ((content == null) || (content.length() == 0)) {
 			throw new IllegalStateException(
-					"A token needs to have at least one character.");
+					"A terminal needs to have at least one character.");
 		}
 		return content;
 	}
 
-	private final Visibility visibility;
+	private final boolean visible;
 
-	public AbstractToken(String name, String originalName, String content,
-			int line, int column, Visibility visibility) {
-		super(name, originalName, checkContent(content),
-				new UniversalSyntaxTreeMetaData(line,
-						StringUtils.countLineBreaks(content) + 1, column,
-						content.length()));
-		this.visibility = visibility;
+	public AbstractTerminal(String name, String content, int line, int column,
+			boolean visible) {
+		super(name, checkContent(content), new UniversalSyntaxTreeMetaData(
+				line, StringUtils.countLineBreaks(content) + 1, column,
+				content.length()));
+		this.visible = visible;
 	}
 
-	public final Visibility getVisibility() {
-		return visibility;
+	public final boolean isVisible() {
+		return visible;
 	}
 }

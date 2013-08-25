@@ -27,7 +27,7 @@ import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTreeMetaData;
-import com.puresol.purifinity.uhura.ust.token.AbstractToken;
+import com.puresol.purifinity.uhura.ust.terminal.AbstractTerminal;
 
 /**
  * This class calculates a small statistics for a source code for source lines
@@ -148,8 +148,8 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 				.getLine();
 		do {
 			UniversalSyntaxTree node = iterator.getCurrentNode();
-			if (AbstractToken.class.isAssignableFrom(node.getClass())) {
-				AbstractToken token = (AbstractToken) node;
+			if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {
+				AbstractTerminal token = (AbstractTerminal) node;
 				SLOCType type = langDepended.getType(token);
 				UniversalSyntaxTreeMetaData metaData = token.getMetaData();
 				int lineId = metaData.getLine() - lineOffset;

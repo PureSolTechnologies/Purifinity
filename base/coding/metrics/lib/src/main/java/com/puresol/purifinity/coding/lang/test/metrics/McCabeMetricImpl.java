@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.purifinity.coding.metrics.mccabe.LanguageDependedMcCabeMetric;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.AbstractProduction;
 
 /**
  * This is the actual implementation of the McCabe metric for Java.
@@ -33,17 +33,18 @@ public class McCabeMetricImpl implements LanguageDependedMcCabeMetric {
 	}
 
 	@Override
-	public int increasesCyclomaticComplexityBy(ParserTree node) {
-		if (!blockNames.contains(node.getName())) {
+	public int increasesCyclomaticComplexityBy(AbstractProduction production) {
+		if (!blockNames.contains(production.getName())) {
 			return 0;
 		}
-		if ("SwitchLabel".equals(node.getName())) {
-			if (node.getParent().getChildren().indexOf(node) > 0) {
+		if ("SwitchLabel".equals(production.getName())) {
+			if (production.getParent().getChildren().indexOf(production) > 0) {
 				return 0;
 			}
 		}
-		if ("QUESTION_MARK".equals(node.getName())) {
-			if ("ConditionalExpression".equals(node.getParent().getName())) {
+		if ("QUESTION_MARK".equals(production.getName())) {
+			if ("ConditionalExpression"
+					.equals(production.getParent().getName())) {
 				return 1;
 			} else {
 				return 0;

@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.puresol.commons.trees.TreeException;
 import com.puresol.purifinity.coding.metrics.mccabe.LanguageDependedMcCabeMetric;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.AbstractProduction;
+import com.puresol.purifinity.uhura.ust.USTUtils;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This is the actual implementation of the McCabe metric for Java.
@@ -30,16 +32,18 @@ public class McCabeMetricImpl implements LanguageDependedMcCabeMetric {
 	}
 
 	@Override
-	public int increasesCyclomaticComplexityBy(ParserTree node) {
-		if (!blockNames.contains(node.getName())) {
+	public int increasesCyclomaticComplexityBy(AbstractProduction production) {
+		if (!blockNames.contains(production.getName())) {
 			return 0;
 		}
-		if ("arithmetic-if-stmt".equals(node.getName())) {
+		if ("arithmetic-if-stmt".equals(production.getName())) {
 			return 2;
 		}
-		if ("computed-goto-stmt".equals(node.getName())) {
+		if ("computed-goto-stmt".equals(production.getName())) {
 			try {
-				return node.getChild("label-list").getSubTrees("label").size() - 1;
+				List<UniversalSyntaxTree> labels = USTUtils.getSubTrees(production.getChild("label-list"),
+						"label");
+				return labels.size() - 1;
 			} catch (TreeException e) {
 				return 0;
 			}

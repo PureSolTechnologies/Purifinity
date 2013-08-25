@@ -14,17 +14,17 @@ import com.puresol.purifinity.uhura.source.FixedCodeLocation;
 
 public class DefinedMacrosTest {
 
-    @Test
-    public void testDefineAndUndefine() {
-	DefinedMacros macros = new DefinedMacros();
-	assertFalse(macros.isDefined("Test"));
-	TokenStream tokenStream = new TokenStream();
-	tokenStream.add(new Token("Identifier", "Hallo", Visibility.VISIBLE,
-		new TokenMetaData(new FixedCodeLocation("Hallo"), 1, 1)));
-	macros.define("Test", tokenStream);
-	assertTrue(macros.isDefined("Test"));
-	assertTrue(macros.undefine("Test"));
-	assertFalse(macros.isDefined("Test"));
-    }
+	@Test
+	public void testDefineAndUndefine() {
+		DefinedMacros macros = new DefinedMacros();
+		assertFalse(macros.isDefined("Test"));
+		TokenStream tokenStream = new TokenStream();
+		tokenStream.add(new Token("Identifier", "Hallo", Visibility.VISIBLE,
+				new TokenMetaData(new FixedCodeLocation("Hallo"), 1, 1, 0)));
+		macros.define("Test", tokenStream);
+		assertTrue(macros.isDefined("Test"));
+		assertTrue(macros.undefine("Test"));
+		assertFalse(macros.isDefined("Test"));
+	}
 
 }

@@ -3,27 +3,27 @@ package com.puresol.purifinity.coding.lang.java.grammar.parts;
 import com.puresol.commons.trees.TreeException;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 public class EnumDeclaration {
 
-	public static boolean is(ParserTree part) {
+	public static boolean is(UniversalSyntaxTree part) {
 		return "EnumDeclaration".equals(part.getName());
 	}
 
-	private final ParserTree part;
+	private final UniversalSyntaxTree part;
 
-	public EnumDeclaration(ParserTree part) {
+	public EnumDeclaration(UniversalSyntaxTree part) {
 		super();
 		this.part = part;
 	}
 
 	public String getIdentifier() throws TreeException {
-		ParserTree identifier = part.getChild("Identifier");
+		UniversalSyntaxTree identifier = part.getChild("Identifier");
 		if (identifier == null) {
 			throw new TreeException("No Identifier child found!");
 		}
-		return identifier.getText();
+		return identifier.getContent();
 	}
 
 	public CodeRange getCodeRange() throws TreeException {

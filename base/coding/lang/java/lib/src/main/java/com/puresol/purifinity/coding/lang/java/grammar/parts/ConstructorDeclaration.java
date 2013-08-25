@@ -5,28 +5,29 @@ import java.util.List;
 import com.puresol.commons.trees.TreeException;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.USTUtils;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 public class ConstructorDeclaration {
 
-	public static boolean is(ParserTree part) {
+	public static boolean is(UniversalSyntaxTree part) {
 		return "ConstructorDeclaration".equals(part.getName());
 	}
 
-	private final ParserTree part;
+	private final UniversalSyntaxTree part;
 
-	public ConstructorDeclaration(ParserTree part) {
+	public ConstructorDeclaration(UniversalSyntaxTree part) {
 		super();
 		this.part = part;
 	}
 
 	public String getName() throws TreeException {
-		ParserTree constructorDeclarator = part
+		UniversalSyntaxTree constructorDeclarator = part
 				.getChild("ConstructorDeclarator");
-		ParserTree name = constructorDeclarator.getChild("Name");
+		UniversalSyntaxTree name = constructorDeclarator.getChild("Name");
 		StringBuffer nameBuffer = new StringBuffer();
-		for (ParserTree namePart : name.getChildren()) {
-			nameBuffer.append(namePart.getText());
+		for (UniversalSyntaxTree namePart : name.getChildren()) {
+			nameBuffer.append(namePart.getContent());
 		}
 		return nameBuffer.toString();
 	}
@@ -39,36 +40,36 @@ public class ConstructorDeclaration {
 	 * @throws TreeException
 	 */
 	public String getCanonicalName() throws TreeException {
-		ParserTree constructorDeclarator = part
+		UniversalSyntaxTree constructorDeclarator = part
 				.getChild("ConstructorDeclarator");
-		ParserTree name = constructorDeclarator.getChild("Name");
+		UniversalSyntaxTree name = constructorDeclarator.getChild("Name");
 		StringBuilder parameterTypes = new StringBuilder();
 		if (constructorDeclarator.hasChild("FormalParameterList")) {
-			ParserTree formalParameterList = constructorDeclarator
+			UniversalSyntaxTree formalParameterList = constructorDeclarator
 					.getChild("FormalParameterList");
-			List<ParserTree> formalParameters = formalParameterList
-					.getSubTrees("FormalParameter");
-			for (ParserTree formalParameter : formalParameters) {
-				ParserTree type = formalParameter.getChild("Type");
+			List<UniversalSyntaxTree> formalParameters = USTUtils.getSubTrees(
+					formalParameterList, "FormalParameter");
+			for (UniversalSyntaxTree formalParameter : formalParameters) {
+				UniversalSyntaxTree type = formalParameter.getChild("Type");
 				if (parameterTypes.length() > 0) {
 					parameterTypes.append(",");
 				}
-				parameterTypes.append(type.getText().trim());
+				parameterTypes.append(type.getContent().trim());
 			}
 			if (formalParameterList.hasChild("LastFormalParameter")) {
-				ParserTree lastFormalParameter = formalParameterList
+				UniversalSyntaxTree lastFormalParameter = formalParameterList
 						.getChild("LastFormalParameter");
 				if (parameterTypes.length() > 0) {
 					parameterTypes.append(",");
 				}
-				ParserTree type = lastFormalParameter.getChild("Type");
-				parameterTypes.append(type.getText().trim());
+				UniversalSyntaxTree type = lastFormalParameter.getChild("Type");
+				parameterTypes.append(type.getContent().trim());
 				if (lastFormalParameter.hasChild("DOT")) {
 					parameterTypes.append("...");
 				}
 			}
 		}
-		return name.getText() + "(" + parameterTypes + ")";
+		return name.getContent() + "(" + parameterTypes + ")";
 	}
 
 	public CodeRange getCodeRange() throws TreeException {

@@ -5,8 +5,7 @@ import java.util.List;
 
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadSymbol;
 import com.puresol.purifinity.coding.metrics.halstead.LanguageDependedHalsteadMetric;
-import com.puresol.purifinity.uhura.grammar.token.Visibility;
-import com.puresol.purifinity.uhura.ust.token.AbstractToken;
+import com.puresol.purifinity.uhura.ust.terminal.AbstractTerminal;
 
 /**
  * This is the actual implementation of the McCabe metric for Java.
@@ -116,38 +115,48 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 	}
 
 	@Override
-	public HalsteadSymbol getHalsteadResult(AbstractToken token) {
-		if ((token == null) || (token.getVisibility() != Visibility.VISIBLE)) {
+	public boolean isOperand(String name) {
+		return !operators.contains(name);
+	}
+
+	@Override
+	public boolean isOperator(String name) {
+		return operators.contains(name);
+	}
+
+	@Override
+	public HalsteadSymbol getHalsteadResult(AbstractTerminal token) {
+		if (!token.isVisible()) {
 			return new HalsteadSymbol(false, false, "");
 		}
-		if (!operators.contains(token.getOriginalName())) {
+		if (!operators.contains(token.getName())) {
 			return new HalsteadSymbol(true, false, token.getContent());
 		}
-		if ("RPAREN".equals(token.getOriginalName())
-				|| "RCURLY".equals(token.getOriginalName())
-				|| "RRECTANGULAR".equals(token.getOriginalName())) {
+		if ("RPAREN".equals(token.getName())
+				|| "RCURLY".equals(token.getName())
+				|| "RRECTANGULAR".equals(token.getName())) {
 			/*
 			 * these tokens are not counted due to pairwise appearance with the
 			 * left part; double couting is not needed
 			 */
 			return new HalsteadSymbol(false, true, token.getContent());
 		}
-		if ("LCURLY".equals(token.getOriginalName())) {
+		if ("LCURLY".equals(token.getName())) {
 			/*
 			 * these tokens are not counted due to pairwise appearance with the
 			 * left part; double couting is not needed
 			 */
 			return new HalsteadSymbol(true, true, "{}");
 		}
-		if ("LRECTANGULAR".equals(token.getOriginalName())) {
+		if ("LRECTANGULAR".equals(token.getName())) {
 			/*
 			 * these tokens are not counted due to pairwise appearance with the
 			 * left part; double counting is not needed
 			 */
 			return new HalsteadSymbol(true, true, "[]");
 		}
-		if ("LPAREN".equals(token.getOriginalName())) {
-			if (lParenExceptions.contains(token.getParent().getOriginalName())) {
+		if ("LPAREN".equals(token.getName())) {
+			if (lParenExceptions.contains(token.getParent().getName())) {
 				/*
 				 * The left parenthesis is always connected to another operator
 				 * and therefore not counted again.
@@ -156,26 +165,25 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 			}
 			return new HalsteadSymbol(true, true, "()");
 		}
-		if ("IF".equals(token.getOriginalName())) {
+		if ("IF".equals(token.getName())) {
 			return new HalsteadSymbol(true, true, "if()");
 		}
-		if ("SWITCH".equals(token.getOriginalName())) {
+		if ("SWITCH".equals(token.getName())) {
 			return new HalsteadSymbol(true, true, "switch()");
 		}
-		if ("WHILE".equals(token.getOriginalName())) {
+		if ("WHILE".equals(token.getName())) {
 			return new HalsteadSymbol(true, true, "while()");
 		}
-		if ("FOR".equals(token.getOriginalName())) {
-			if ("EnhancedForStatement".equals(token.getParent()
-					.getOriginalName())) {
+		if ("FOR".equals(token.getName())) {
+			if ("EnhancedForStatement".equals(token.getParent().getName())) {
 				return new HalsteadSymbol(true, true, "for(:)");
 			}
 			return new HalsteadSymbol(true, true, "for(;;)");
 		}
-		if ("SYNCHRONIZED".equals(token.getOriginalName())) {
+		if ("SYNCHRONIZED".equals(token.getName())) {
 			return new HalsteadSymbol(true, true, "synchronized()");
 		}
-		if ("CATCH".equals(token.getOriginalName())) {
+		if ("CATCH".equals(token.getName())) {
 			return new HalsteadSymbol(true, true, "catch()");
 		}
 		return new HalsteadSymbol(true, true, token.getContent());

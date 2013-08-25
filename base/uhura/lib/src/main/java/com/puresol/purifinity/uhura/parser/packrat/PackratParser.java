@@ -724,9 +724,9 @@ public class PackratParser implements Serializable {
 		String match = matcher.group();
 		int lineBreakNum = StringUtils.countLineBreaks(match);
 		CodeLocation source = sourceCode.getLines().get(line - 1).getSource();
-		SourceCodeLine originalLine = textWithSource.getSource(position);
-		TokenMetaData metaData = new TokenMetaData(source,
-				originalLine.getLineNumber(), lineBreakNum + 1);
+		int lineNumber = textWithSource.getLineNumber(position);
+		TokenMetaData metaData = new TokenMetaData(source, lineNumber,
+				lineBreakNum + 1, textWithSource.getColumn(position));
 		Token token = new Token(tokenDefinition.getName(), match,
 				tokenDefinition.getVisibility(), metaData);
 		ParserTree myTree = new ParserTree(token);

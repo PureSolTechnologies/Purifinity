@@ -4,6 +4,7 @@ public class StringWithLocation {
 
 	private final String text;
 	private final SourceCodeLine[] sourceLineReferences;
+	private final int[] columns;
 
 	public StringWithLocation(SourceCode sourceCode) {
 		super();
@@ -21,6 +22,14 @@ public class StringWithLocation {
 				position++;
 			}
 		}
+		columns = new int[text.length()];
+		position = 0;
+		for (SourceCodeLine line : sourceCode.getLines()) {
+			for (int column = 0; column < line.getLine().length(); column++) {
+				columns[position] = column;
+				position++;
+			}
+		}
 	}
 
 	public String getText() {
@@ -29,6 +38,14 @@ public class StringWithLocation {
 
 	public SourceCodeLine getSource(int position) {
 		return sourceLineReferences[position];
+	}
+
+	public int getLineNumber(int position) {
+		return sourceLineReferences[position].getLineNumber();
+	}
+
+	public int getColumn(int position) {
+		return columns[position];
 	}
 
 }

@@ -42,6 +42,7 @@ import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This is the Fortran analyzer to scan and parse source files in Fortran source
@@ -73,7 +74,7 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 			Parser parser = getGrammar().getParser();
 			ParserTree parserTree = parser.parse(tokenStream);
 			watch.stop();
-			CompilationUnit compilationUnit = ProgramCreator.create(parserTree);
+			CompilationUnit program = ProgramCreator.create(parserTree);
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 			Fortran fortran = Fortran.getInstance();
 			AnalyzedCode analyzedFile = new AnalyzedCode(
@@ -81,7 +82,7 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 					fortran.getName(), fortran.getVersion());
 			fileAnalysis = new CodeAnalysis(date, timeEffort,
 					fortran.getName(), fortran.getVersion(), analyzedFile,
-					getAnalyzableCodeRanges(parserTree), compilationUnit);
+					getAnalyzableCodeRanges(program), program);
 		} catch (ParserException | IOException e) {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
@@ -125,38 +126,45 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 		}
 	}
 
-	private List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
+	private List<CodeRange> getAnalyzableCodeRanges(
+			UniversalSyntaxTree parserTree) {
 		final List<CodeRange> result = new ArrayList<CodeRange>();
 		result.add(new CodeRange("", "", CodeRangeType.FILE, parserTree));
-		TreeWalker<ParserTree> walker = new TreeWalker<ParserTree>(parserTree);
-		walker.walk(new TreeVisitor<ParserTree>() {
+		TreeWalker<UniversalSyntaxTree> walker = new TreeWalker<UniversalSyntaxTree>(
+				parserTree);
+		walker.walk(new TreeVisitor<UniversalSyntaxTree>() {
 
 			@Override
-			public WalkingAction visit(ParserTree tree) {
+			public WalkingAction visit(UniversalSyntaxTree tree) {
 				try {
 					if ("main-program".equals(tree.getName())) {
 						String name = tree.getChild("program-stmt")
-								.getChildren("NAME_LITERAL").get(1).getText();
+								.getChildren("NAME_LITERAL").get(1)
+								.getContent();
 						result.add(new CodeRange(name, name,
 								CodeRangeType.PROGRAM, tree));
 					} else if ("function-subprogram".equals(tree.getName())) {
 						String name = tree.getChild("function-stmt")
-								.getChildren("NAME_LITERAL").get(1).getText();
+								.getChildren("NAME_LITERAL").get(1)
+								.getContent();
 						result.add(new CodeRange(name, name,
 								CodeRangeType.FUNCTION, tree));
 					} else if ("subroutine-subprogram".equals(tree.getName())) {
 						String name = tree.getChild("subroutine-stmt")
-								.getChildren("NAME_LITERAL").get(1).getText();
+								.getChildren("NAME_LITERAL").get(1)
+								.getContent();
 						result.add(new CodeRange(name, name,
 								CodeRangeType.SUBROUTINE, tree));
 					} else if ("module".equals(tree.getName())) {
 						String name = tree.getChild("module-stmt")
-								.getChildren("NAME_LITERAL").get(1).getText();
+								.getChildren("NAME_LITERAL").get(1)
+								.getContent();
 						result.add(new CodeRange(name, name,
 								CodeRangeType.MODULE, tree));
 					} else if ("submodule".equals(tree.getName())) {
 						String name = tree.getChild("submodule-stmt")
-								.getChildren("NAME_LITERAL").get(1).getText();
+								.getChildren("NAME_LITERAL").get(1)
+								.getContent();
 						result.add(new CodeRange(name, name,
 								CodeRangeType.MODULE, tree));
 					}

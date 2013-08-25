@@ -39,19 +39,25 @@ public class TokenMetaData implements Serializable, Cloneable {
 	 * normally the number of line terminators plus 1.
 	 */
 	private final int lineNum;
+
+	/**
+	 * This contains the column position of the token.
+	 */
+	private final int column;
 	/**
 	 * This is a constant hash code for {@link #hashCode()}. It is calculated in
 	 * the constructor for fast access.
 	 */
 	private final int hashcode;
 
-	public TokenMetaData(CodeLocation source, int line, int lineNum) {
+	public TokenMetaData(CodeLocation source, int line, int lineNum, int column) {
 		super();
 		this.source = source;
 		this.line = line;
 		this.lineNum = lineNum;
+		this.column = column;
 		hashcode = ObjectUtilities.calculateConstantHashCode(source, line,
-				lineNum);
+				lineNum, column);
 	}
 
 	public CodeLocation getSource() {
@@ -76,13 +82,24 @@ public class TokenMetaData implements Serializable, Cloneable {
 		return lineNum;
 	}
 
+	/**
+	 * This method returns the column of the token. This is the character
+	 * position within the line where the token starts.
+	 * 
+	 * @return An integer is returned.
+	 */
+	public int getColumn() {
+		return column;
+	}
+
 	@Override
 	public String toString() {
 		String result = "";
 		if (lineNum == 1) {
-			result += "line: " + line;
+			result += "line: " + line + "; column: " + column;
 		} else {
-			result += "lines: " + line + " - " + (line + lineNum - 1);
+			result += "lines: " + line + " - " + (line + lineNum - 1)
+					+ "; column: " + column;
 		}
 		return result;
 	}
@@ -107,6 +124,8 @@ public class TokenMetaData implements Serializable, Cloneable {
 			return false;
 		if (lineNum != other.lineNum)
 			return false;
+		if (column != other.column)
+			return false;
 		if (source == null) {
 			if (other.source != null)
 				return false;
@@ -117,6 +136,6 @@ public class TokenMetaData implements Serializable, Cloneable {
 
 	@Override
 	public TokenMetaData clone() {
-		return new TokenMetaData(source, line, lineNum);
+		return new TokenMetaData(source, line, lineNum, column);
 	}
 }
