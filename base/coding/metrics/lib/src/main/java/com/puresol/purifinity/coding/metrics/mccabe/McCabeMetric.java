@@ -23,7 +23,7 @@ import com.puresol.purifinity.coding.evaluation.impl.CodeRangeEvaluator;
 import com.puresol.purifinity.coding.evaluation.impl.Result;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This class calculates the cyclomatic number v(G) from a code range.
@@ -80,8 +80,8 @@ public class McCabeMetric extends CodeRangeEvaluator {
 	private boolean calculate() {
 		fireStarted("Evaluation started.", 1);
 		cyclomaticNumber = 1;
-		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
-				codeRange.getParserTree());
+		TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
+				codeRange.getUniversalSyntaxTree());
 		do {
 			cyclomaticNumber += langDepended
 					.increasesCyclomaticComplexityBy(iterator.getCurrentNode());

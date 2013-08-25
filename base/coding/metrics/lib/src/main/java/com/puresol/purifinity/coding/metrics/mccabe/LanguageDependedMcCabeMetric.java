@@ -2,7 +2,7 @@ package com.puresol.purifinity.coding.metrics.mccabe;
 
 import java.io.Serializable;
 
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This interface is used to implement a part of the McCabe metric (cyclomatic
@@ -24,6 +24,6 @@ public interface LanguageDependedMcCabeMetric extends Serializable {
 	 * @return True is returned in cases the node increases the cyclomatic
 	 *         complexity within source codes.
 	 */
-	public int increasesCyclomaticComplexityBy(ParserTree node);
+	public int increasesCyclomaticComplexityBy(UniversalSyntaxTree node);
 
 }

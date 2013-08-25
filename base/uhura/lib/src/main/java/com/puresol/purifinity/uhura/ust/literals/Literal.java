@@ -1,8 +1,8 @@
 package com.puresol.purifinity.uhura.ust.literals;
 
-import com.puresol.purifinity.uhura.ust.Production;
+import com.puresol.purifinity.uhura.ust.AbstractProduction;
 
-public abstract class Literal extends Production {
+public abstract class Literal extends AbstractProduction {
 
 	private static final long serialVersionUID = -1731135665103554027L;
 

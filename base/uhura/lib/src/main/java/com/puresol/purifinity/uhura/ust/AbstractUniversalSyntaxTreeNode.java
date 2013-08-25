@@ -1,7 +1,6 @@
 package com.puresol.purifinity.uhura.ust;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class AbstractUniversalSyntaxTreeNode implements UniversalSyntaxTree {
@@ -11,17 +10,29 @@ public class AbstractUniversalSyntaxTreeNode implements UniversalSyntaxTree {
 	private UniversalSyntaxTree parent = null;
 	private final String name;
 	private final String originalName;
+	private final UniversalSyntaxTreeMetaData metaData;
 	private final String content;
 
 	private final List<UniversalSyntaxTree> children = new ArrayList<>();
 
 	public AbstractUniversalSyntaxTreeNode(String name, String originalName,
-			String content, Collection<UniversalSyntaxTree> children) {
+			String content, UniversalSyntaxTreeMetaData metaData,
+			List<UniversalSyntaxTree> children) {
 		super();
 		this.name = name;
 		this.originalName = originalName;
+		this.metaData = metaData;
 		this.content = content;
 		children.addAll(children);
+	}
+
+	public AbstractUniversalSyntaxTreeNode(String name, String originalName,
+			String content, UniversalSyntaxTreeMetaData metaData) {
+		super();
+		this.name = name;
+		this.originalName = originalName;
+		this.metaData = metaData;
+		this.content = content;
 	}
 
 	@Override
@@ -38,8 +49,14 @@ public class AbstractUniversalSyntaxTreeNode implements UniversalSyntaxTree {
 		return name;
 	}
 
+	@Override
 	public final String getOriginalName() {
 		return originalName;
+	}
+
+	@Override
+	public final UniversalSyntaxTreeMetaData getMetaData() {
+		return metaData;
 	}
 
 	public final String getContent() {

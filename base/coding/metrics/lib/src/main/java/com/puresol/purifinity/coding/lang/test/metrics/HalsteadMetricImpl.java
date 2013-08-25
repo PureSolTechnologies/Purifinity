@@ -6,8 +6,7 @@ import java.util.List;
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadSymbol;
 import com.puresol.purifinity.coding.metrics.halstead.LanguageDependedHalsteadMetric;
 import com.puresol.purifinity.uhura.grammar.token.Visibility;
-import com.puresol.purifinity.uhura.lexer.Token;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.token.AbstractToken;
 
 /**
  * This is the actual implementation of the McCabe metric for Java.
@@ -117,67 +116,68 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 	}
 
 	@Override
-	public HalsteadSymbol getHalsteadResult(ParserTree node) {
-		Token token = node.getToken();
+	public HalsteadSymbol getHalsteadResult(AbstractToken token) {
 		if ((token == null) || (token.getVisibility() != Visibility.VISIBLE)) {
 			return new HalsteadSymbol(false, false, "");
 		}
-		if (!operators.contains(node.getName())) {
-			return new HalsteadSymbol(true, false, node.getText());
+		if (!operators.contains(token.getOriginalName())) {
+			return new HalsteadSymbol(true, false, token.getContent());
 		}
-		if ("RPAREN".equals(node.getName()) || "RCURLY".equals(node.getName())
-				|| "RRECTANGULAR".equals(node.getName())) {
+		if ("RPAREN".equals(token.getOriginalName())
+				|| "RCURLY".equals(token.getOriginalName())
+				|| "RRECTANGULAR".equals(token.getOriginalName())) {
 			/*
 			 * these tokens are not counted due to pairwise appearance with the
 			 * left part; double couting is not needed
 			 */
-			return new HalsteadSymbol(false, true, node.getText());
+			return new HalsteadSymbol(false, true, token.getContent());
 		}
-		if ("LCURLY".equals(node.getName())) {
+		if ("LCURLY".equals(token.getOriginalName())) {
 			/*
 			 * these tokens are not counted due to pairwise appearance with the
 			 * left part; double couting is not needed
 			 */
 			return new HalsteadSymbol(true, true, "{}");
 		}
-		if ("LRECTANGULAR".equals(node.getName())) {
+		if ("LRECTANGULAR".equals(token.getOriginalName())) {
 			/*
 			 * these tokens are not counted due to pairwise appearance with the
-			 * left part; double couting is not needed
+			 * left part; double counting is not needed
 			 */
 			return new HalsteadSymbol(true, true, "[]");
 		}
-		if ("LPAREN".equals(node.getName())) {
-			if (lParenExceptions.contains(node.getParent().getName())) {
+		if ("LPAREN".equals(token.getOriginalName())) {
+			if (lParenExceptions.contains(token.getParent().getOriginalName())) {
 				/*
 				 * The left parenthesis is always connected to another operator
 				 * and therefore not counted again.
 				 */
-				return new HalsteadSymbol(false, true, node.getText());
+				return new HalsteadSymbol(false, true, token.getContent());
 			}
 			return new HalsteadSymbol(true, true, "()");
 		}
-		if ("IF".equals(node.getName())) {
+		if ("IF".equals(token.getOriginalName())) {
 			return new HalsteadSymbol(true, true, "if()");
 		}
-		if ("SWITCH".equals(node.getName())) {
+		if ("SWITCH".equals(token.getOriginalName())) {
 			return new HalsteadSymbol(true, true, "switch()");
 		}
-		if ("WHILE".equals(node.getName())) {
+		if ("WHILE".equals(token.getOriginalName())) {
 			return new HalsteadSymbol(true, true, "while()");
 		}
-		if ("FOR".equals(node.getName())) {
-			if ("EnhancedForStatement".equals(node.getParent().getName())) {
+		if ("FOR".equals(token.getOriginalName())) {
+			if ("EnhancedForStatement".equals(token.getParent()
+					.getOriginalName())) {
 				return new HalsteadSymbol(true, true, "for(:)");
 			}
 			return new HalsteadSymbol(true, true, "for(;;)");
 		}
-		if ("SYNCHRONIZED".equals(node.getName())) {
+		if ("SYNCHRONIZED".equals(token.getOriginalName())) {
 			return new HalsteadSymbol(true, true, "synchronized()");
 		}
-		if ("CATCH".equals(node.getName())) {
+		if ("CATCH".equals(token.getOriginalName())) {
 			return new HalsteadSymbol(true, true, "catch()");
 		}
-		return new HalsteadSymbol(true, true, node.getText());
+		return new HalsteadSymbol(true, true, token.getContent());
 	}
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
-import com.puresol.purifinity.uhura.ust.Production;
+import com.puresol.purifinity.uhura.ust.AbstractProduction;
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 public class ProgramCreator {
@@ -23,6 +23,6 @@ public class ProgramCreator {
 		for (ParserTree child : node.getChildren()) {
 			ustChildren.add(createNode(child));
 		}
-		return new Production(node.getName(), node.getName(), ustChildren);
+		return new AbstractProduction(node.getName(), node.getName(), ustChildren);
 	}
 }

@@ -3,7 +3,7 @@ package com.puresol.purifinity.coding.analysis.api;
 import java.io.Serializable;
 
 import com.puresol.commons.utils.ObjectUtilities;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This class is for keeping information about a subtree. This sub tree is
@@ -37,17 +37,17 @@ public final class CodeRange implements Serializable, Comparable<CodeRange> {
 	/**
 	 * This is the actual code which is part of this code range.
 	 */
-	private final ParserTree ast;
+	private final UniversalSyntaxTree ust;
 
 	private final int hashcode;
 
 	public CodeRange(String simpleName, String canonicalName,
-			CodeRangeType type, ParserTree ast) {
+			CodeRangeType type, UniversalSyntaxTree ast) {
 		super();
 		this.simpleName = simpleName;
 		this.canonicalName = canonicalName;
 		this.type = type;
-		this.ast = ast;
+		this.ust = ast;
 		hashcode = ObjectUtilities.calculateConstantHashCode(simpleName, type,
 				ast);
 	}
@@ -64,8 +64,8 @@ public final class CodeRange implements Serializable, Comparable<CodeRange> {
 		return type;
 	}
 
-	public ParserTree getParserTree() {
-		return ast;
+	public UniversalSyntaxTree getUniversalSyntaxTree() {
+		return ust;
 	}
 
 	@Override
@@ -85,10 +85,10 @@ public final class CodeRange implements Serializable, Comparable<CodeRange> {
 		if (hashcode != other.hashcode) {
 			return false;
 		}
-		if (ast == null) {
-			if (other.ast != null)
+		if (ust == null) {
+			if (other.ust != null)
 				return false;
-		} else if (!ast.equals(other.ast))
+		} else if (!ust.equals(other.ust))
 			return false;
 		if (simpleName == null) {
 			if (other.simpleName != null)

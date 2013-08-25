@@ -24,7 +24,7 @@ import com.puresol.purifinity.coding.evaluation.impl.CodeRangeEvaluator;
 import com.puresol.purifinity.coding.evaluation.impl.Result;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 public class HalsteadMetric extends CodeRangeEvaluator {
 
@@ -79,10 +79,10 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 	}
 
 	private void createHashtables() {
-		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
-				codeRange.getParserTree());
+		TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
+				codeRange.getUniversalSyntaxTree());
 		do {
-			ParserTree node = iterator.getCurrentNode();
+			UniversalSyntaxTree node = iterator.getCurrentNode();
 			HalsteadSymbol result = langDepended.getHalsteadResult(node);
 			if (result.isCountable()) {
 				if (result.isOperator()) {

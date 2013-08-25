@@ -1,6 +1,6 @@
 package com.puresol.purifinity.uhura.ust.packages;
 
-import com.puresol.purifinity.uhura.ust.Production;
+import com.puresol.purifinity.uhura.ust.AbstractProduction;
 
 /**
  * This is a name space like found in C++ or C#. Name spaces do not have a name
@@ -10,7 +10,7 @@ import com.puresol.purifinity.uhura.ust.Production;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class NameSpace extends Production {
+public class NameSpace extends AbstractProduction {
 
 	private static final long serialVersionUID = 4747868405422668380L;
 

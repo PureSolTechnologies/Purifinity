@@ -2,7 +2,7 @@ package com.puresol.purifinity.uhura.ust.facilities;
 
 import java.util.List;
 
-import com.puresol.purifinity.uhura.ust.Production;
+import com.puresol.purifinity.uhura.ust.AbstractProduction;
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
@@ -15,7 +15,7 @@ import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
  * @param <T>
  *            is the type or interface of the elements contained in that list.
  */
-public class SyntaxElementList<T extends Production> extends Production {
+public class SyntaxElementList<T extends AbstractProduction> extends AbstractProduction {
 
 	private static final long serialVersionUID = -1875399758682948173L;
 
@@ -27,7 +27,7 @@ public class SyntaxElementList<T extends Production> extends Production {
 	 *            could here be ',', ';' or something similar regarding the
 	 *            source programming language.
 	 */
-	public SyntaxElementList(String originalSymbol, List<Production> elements) {
+	public SyntaxElementList(String originalSymbol, List<AbstractProduction> elements) {
 		super("Syntax Element List", originalSymbol, elements
 				.toArray(new UniversalSyntaxTree[elements.size()]));
 	}

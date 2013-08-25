@@ -21,4 +21,13 @@ import com.puresol.commons.trees.Tree;
 public interface UniversalSyntaxTree extends Tree<UniversalSyntaxTree>,
 		Serializable {
 
+	/**
+	 * This method returns the meta data for the node.
+	 * 
+	 * @return A {@link UniversalSyntaxTreeMetaData} object is returned.
+	 */
+	public UniversalSyntaxTreeMetaData getMetaData();
+
+	public String getOriginalName();
+
 }

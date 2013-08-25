@@ -1,9 +1,9 @@
 package com.puresol.purifinity.uhura.ust.statements;
 
-import com.puresol.purifinity.uhura.ust.Production;
+import com.puresol.purifinity.uhura.ust.AbstractProduction;
 import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
-public abstract class AbstractStatement extends Production {
+public abstract class AbstractStatement extends AbstractProduction {
 
 	private static final long serialVersionUID = 4075534361231046558L;
 

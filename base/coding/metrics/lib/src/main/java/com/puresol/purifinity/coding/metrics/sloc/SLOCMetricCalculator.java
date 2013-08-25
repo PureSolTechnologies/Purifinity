@@ -25,9 +25,9 @@ import com.puresol.purifinity.coding.evaluation.impl.CodeRangeEvaluator;
 import com.puresol.purifinity.coding.evaluation.impl.Result;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
-import com.puresol.purifinity.uhura.lexer.Token;
-import com.puresol.purifinity.uhura.lexer.TokenMetaData;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTreeMetaData;
+import com.puresol.purifinity.uhura.ust.token.AbstractToken;
 
 /**
  * This class calculates a small statistics for a source code for source lines
@@ -135,22 +135,23 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 	private void setup() {
 		sloc = null;
 		lineResults.clear();
-		for (int i = 0; i < codeRange.getParserTree().getMetaData()
+		for (int i = 0; i < codeRange.getUniversalSyntaxTree().getMetaData()
 				.getLineNum(); i++) {
 			lineResults.add(new LineResults());
 		}
 	}
 
 	private void count() {
-		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
-				codeRange.getParserTree());
-		int lineOffset = codeRange.getParserTree().getMetaData().getLine();
+		TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
+				codeRange.getUniversalSyntaxTree());
+		int lineOffset = codeRange.getUniversalSyntaxTree().getMetaData()
+				.getLine();
 		do {
-			ParserTree node = iterator.getCurrentNode();
-			Token token = node.getToken();
-			if (token != null) {
+			UniversalSyntaxTree node = iterator.getCurrentNode();
+			if (AbstractToken.class.isAssignableFrom(node.getClass())) {
+				AbstractToken token = (AbstractToken) node;
 				SLOCType type = langDepended.getType(token);
-				TokenMetaData metaData = token.getMetaData();
+				UniversalSyntaxTreeMetaData metaData = token.getMetaData();
 				int lineId = metaData.getLine() - lineOffset;
 				int lineNum = metaData.getLineNum();
 				for (int line = lineId; line < lineId + lineNum; line++) {
@@ -161,7 +162,7 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 					}
 					if (type != SLOCType.PHYSICAL) {
 						lineResults.get(line).addLength(
-								token.getText().length());
+								token.getContent().length());
 					}
 				}
 			}

@@ -2,7 +2,7 @@ package com.puresol.purifinity.coding.metrics.halstead;
 
 import java.io.Serializable;
 
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.token.AbstractToken;
 
 /**
  * This interface is used to implement a part of the Halstead metric
@@ -25,6 +25,6 @@ public interface LanguageDependedHalsteadMetric extends Serializable {
 	 * @return The HalsteadResult objects contains information about the current
 	 *         node and it's countability.
 	 */
-	public HalsteadSymbol getHalsteadResult(ParserTree node);
+	public HalsteadSymbol getHalsteadResult(AbstractToken node);
 
 }

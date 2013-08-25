@@ -2,7 +2,7 @@ package com.puresol.purifinity.uhura.ust;
 
 import java.util.List;
 
-public class CompilationUnit extends Production {
+public class CompilationUnit extends AbstractProduction {
 
 	private static final long serialVersionUID = -5790049234290910253L;
 

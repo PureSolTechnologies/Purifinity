@@ -1,7 +1,7 @@
 package com.puresol.purifinity.uhura.ust;
 
 /**
- * This exception is thrown by {@link Production} classes which have
+ * This exception is thrown by {@link AbstractProduction} classes which have
  * complaints about parents, children or what so ever which does not fit into
  * the UST.
  * 

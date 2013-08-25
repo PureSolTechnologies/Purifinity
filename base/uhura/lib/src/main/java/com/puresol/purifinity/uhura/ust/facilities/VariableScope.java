@@ -1,6 +1,6 @@
 package com.puresol.purifinity.uhura.ust.facilities;
 
-import com.puresol.purifinity.uhura.ust.Production;
+import com.puresol.purifinity.uhura.ust.AbstractProduction;
 
 /**
  * This tree element signals a scope for variable and element validity. This
@@ -10,11 +10,11 @@ import com.puresol.purifinity.uhura.ust.Production;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class VariableScope extends Production {
+public class VariableScope extends AbstractProduction {
 
 	private static final long serialVersionUID = 7165390340532196126L;
 
-	public VariableScope(Production block) {
+	public VariableScope(AbstractProduction block) {
 		super("Variable Scope", "variable scope", block);
 	}
 }

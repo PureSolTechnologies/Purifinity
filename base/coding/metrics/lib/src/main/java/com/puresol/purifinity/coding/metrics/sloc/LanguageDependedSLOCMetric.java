@@ -2,7 +2,7 @@ package com.puresol.purifinity.coding.metrics.sloc;
 
 import java.io.Serializable;
 
-import com.puresol.purifinity.uhura.lexer.Token;
+import com.puresol.purifinity.uhura.ust.token.AbstractToken;
 
 /**
  * This interface is used to implement a part of the SLOC metric implementation
@@ -24,6 +24,6 @@ public interface LanguageDependedSLOCMetric extends Serializable {
 	 *         PRODUCTIVE (e.g. is a line terminator), PHYSICAL is returned.
 	 *         null must never be returned!!!!
 	 */
-	public SLOCType getType(Token token);
+	public SLOCType getType(AbstractToken token);
 
 }

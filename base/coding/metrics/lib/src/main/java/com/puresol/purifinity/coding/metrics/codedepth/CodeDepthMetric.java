@@ -13,8 +13,7 @@ import com.puresol.purifinity.coding.evaluation.impl.CodeRangeEvaluator;
 import com.puresol.purifinity.coding.evaluation.impl.Result;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
-import com.puresol.purifinity.uhura.lexer.Token;
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This metric looks for cascaded code blocks and finds the maximum. The code
@@ -76,13 +75,12 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 	private boolean calculate() {
 		fireStarted("Starting evaluation.", 1);
 		maxDepth = 0;
-		TreeIterator<ParserTree> iterator = new TreeIterator<ParserTree>(
-				getCodeRange().getParserTree());
+		TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
+				getCodeRange().getUniversalSyntaxTree());
 		do {
-			ParserTree node = iterator.getCurrentNode();
-			Token token = node.getToken();
-			if (token != null) {
-				ParserTree parent = node;
+			UniversalSyntaxTree node = iterator.getCurrentNode();
+			if (!node.hasChildren()) {
+				UniversalSyntaxTree parent = node;
 				int depth = 0;
 				do {
 					if (langDepended.cascadingNode(parent)) {
@@ -90,7 +88,7 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 					}
 					parent = parent.getParent();
 				} while ((parent != null)
-						&& (parent != getCodeRange().getParserTree()));
+						&& (parent != getCodeRange().getUniversalSyntaxTree()));
 				if (depth > maxDepth) {
 					maxDepth = depth;
 				}

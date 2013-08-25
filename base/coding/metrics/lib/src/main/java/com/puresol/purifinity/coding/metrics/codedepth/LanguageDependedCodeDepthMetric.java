@@ -2,7 +2,7 @@ package com.puresol.purifinity.coding.metrics.codedepth;
 
 import java.io.Serializable;
 
-import com.puresol.purifinity.uhura.parser.ParserTree;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This interface is used to implement a part of the code depth metric
@@ -24,6 +24,6 @@ public interface LanguageDependedCodeDepthMetric extends Serializable {
 	 * @return If true is returned the current node is a part of the language
 	 *         specification which build an own structural block.
 	 */
-	public boolean cascadingNode(ParserTree node);
+	public boolean cascadingNode(UniversalSyntaxTree node);
 
 }

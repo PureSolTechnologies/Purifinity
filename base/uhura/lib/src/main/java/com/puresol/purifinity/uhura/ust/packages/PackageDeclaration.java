@@ -1,6 +1,6 @@
 package com.puresol.purifinity.uhura.ust.packages;
 
-import com.puresol.purifinity.uhura.ust.Production;
+import com.puresol.purifinity.uhura.ust.AbstractProduction;
 
 /**
  * This is a package declaration like found in Java, Scala, D and other
@@ -11,7 +11,7 @@ import com.puresol.purifinity.uhura.ust.Production;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class PackageDeclaration extends Production {
+public class PackageDeclaration extends AbstractProduction {
 
 	private static final long serialVersionUID = -828922003801631227L;
 

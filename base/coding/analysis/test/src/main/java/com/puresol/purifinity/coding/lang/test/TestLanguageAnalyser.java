@@ -39,6 +39,7 @@ import com.puresol.purifinity.uhura.parser.ParserTree;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 import com.puresol.purifinity.uhura.source.SourceCode;
 import com.puresol.purifinity.uhura.ust.CompilationUnit;
+import com.puresol.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * 
@@ -77,7 +78,7 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 					new AnalyzedCode(sourceCode.getHashId(), getSource(), date,
 							timeEffort, language.getName(), language
 									.getVersion()),
-					getAnalyzableCodeRanges(parserTree), compilationUnit);
+					getAnalyzableCodeRanges(compilationUnit), compilationUnit);
 
 		} catch (LexerException | ParserException | IOException e) {
 			logger.error(e.getMessage(), e);
@@ -102,9 +103,9 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 		}
 	}
 
-	private List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
+	private List<CodeRange> getAnalyzableCodeRanges(UniversalSyntaxTree ust) {
 		List<CodeRange> result = new ArrayList<CodeRange>();
-		result.add(new CodeRange("", "", CodeRangeType.FILE, parserTree));
+		result.add(new CodeRange("", "", CodeRangeType.FILE, ust));
 		return result;
 	}
 
