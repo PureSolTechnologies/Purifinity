@@ -24,7 +24,10 @@ public abstract class AbstractUniversalSyntaxTreeNode implements
 		this.name = name;
 		this.metaData = metaData;
 		this.content = content;
-		this.children.addAll(children);
+		for (UniversalSyntaxTree child : children) {
+			this.children.add(child);
+			((AbstractUniversalSyntaxTreeNode) child).setParent(this);
+		}
 	}
 
 	public AbstractUniversalSyntaxTreeNode(String name, String content,
