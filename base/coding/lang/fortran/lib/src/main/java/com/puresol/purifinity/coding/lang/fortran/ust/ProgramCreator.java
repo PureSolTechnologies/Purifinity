@@ -25,7 +25,10 @@ public class ProgramCreator {
 	public static CompilationUnit create(ParserTree parserTree) {
 		List<UniversalSyntaxTree> ustChildren = new ArrayList<>();
 		for (ParserTree child : parserTree.getChildren()) {
-			ustChildren.add(createNode(child));
+			UniversalSyntaxTree childNode = createNode(child);
+			if (childNode != null) {
+				ustChildren.add(childNode);
+			}
 		}
 		return new CompilationUnit(parserTree.getName(), parserTree.getText(),
 				ustChildren);
@@ -36,10 +39,17 @@ public class ProgramCreator {
 		if (token == null) {
 			List<UniversalSyntaxTree> ustChildren = new ArrayList<>();
 			for (ParserTree child : node.getChildren()) {
-				ustChildren.add(createNode(child));
+				UniversalSyntaxTree childNode = createNode(child);
+				if (childNode != null) {
+					ustChildren.add(childNode);
+				}
 			}
-			return new UnspecialistProduction(node.getName(), node.getName(),
-					ustChildren);
+			if (ustChildren.size() > 0) {
+				return new UnspecialistProduction(node.getName(),
+						node.getName(), ustChildren);
+			} else {
+				return null;
+			}
 		} else {
 			TokenMetaData metaData = token.getMetaData();
 			SLOCType type = slocMetricImpl.getTypeByName(token.getName());

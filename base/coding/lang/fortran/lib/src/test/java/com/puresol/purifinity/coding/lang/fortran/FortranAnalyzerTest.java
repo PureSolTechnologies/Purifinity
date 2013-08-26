@@ -19,7 +19,7 @@ import com.puresol.purifinity.uhura.source.SourceFileLocation;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FortranAnalyserTest {
+public class FortranAnalyzerTest {
 
 	@Test
 	public void testInstance() {
@@ -34,33 +34,44 @@ public class FortranAnalyserTest {
 		assertSame(Fortran.getInstance(), analyser.getLanguage());
 	}
 
-	private void test(File sourceDirectory, File file) throws Throwable {
+	private void test(File sourceDirectory, File file) throws Exception {
 		FortranAnalyzer analyser = new FortranAnalyzer(new SourceFileLocation(
 				sourceDirectory, file));
 		analyser.analyze();
 	}
 
 	@Test
-	public void testEmptyProgram() throws Throwable {
+	public void testEmptyProgram() throws Exception {
 		test(new File("src/test/resources"), new File(
 				"com/puresol/coding/lang/fortran/samples/EmptyProgram.f"));
 	}
 
 	@Test
-	public void testEmptySubroutine() throws Throwable {
+	public void testEmptySubroutine() throws Exception {
 		test(new File("src/test/resources"), new File(
 				"com/puresol/coding/lang/fortran/samples/EmptySubroutine.f"));
 	}
 
 	@Test
-	public void testZGERC() throws Throwable {
+	public void test2() throws Exception {
+		test(new File("src/test/resources"), new File(
+				"com/puresol/coding/lang/fortran/samples/FortranTest.f"));
+	}
+
+	@Test
+	public void testZGERC() throws Exception {
 		test(new File("src/test/resources"), new File(
 				"com/puresol/coding/lang/fortran/samples/zgerc.f"));
 	}
 
+	/**
+	 * This checks the correct removal of empty productions for Fortran.
+	 * 
+	 * @throws Throwable
+	 */
 	@Test
-	public void test2() throws Throwable {
+	public void testNDTRAN() throws Exception {
 		test(new File("src/test/resources"), new File(
-				"com/puresol/coding/lang/fortran/samples/FortranTest.f"));
+				"com/puresol/coding/lang/fortran/samples/ndtran.f"));
 	}
 }
