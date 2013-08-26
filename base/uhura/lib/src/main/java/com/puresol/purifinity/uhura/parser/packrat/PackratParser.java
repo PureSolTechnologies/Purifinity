@@ -546,7 +546,20 @@ public class PackratParser implements Serializable {
 						position + progress.getDeltaPosition(),
 						line + progress.getDeltaLine());
 				if (newProgress.getAnswer() instanceof ParserTree) {
-					node.addChild((ParserTree) newProgress.getAnswer());
+					ParserTree child = (ParserTree) newProgress.getAnswer();
+					if (child.isNode()) {
+						if (child.isStackingAllowed()) {
+							node.addChild(child);
+						} else {
+							if (node.getName().equals(child.getName())) {
+								node.addChildren(child.getChildren());
+							} else {
+								node.addChild(child);
+							}
+						}
+					} else {
+						node.addChildren(child.getChildren());
+					}
 					progress.add(newProgress);
 				} else if (newProgress.getAnswer().equals(Status.FAILED))
 					return MemoEntry.failed();

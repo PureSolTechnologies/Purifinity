@@ -172,6 +172,10 @@ public class LRTokenStreamConverter {
 					 * node, so all children are added to the tree in front at
 					 * the children list.
 					 */
+					/*
+					 * This property is also set in cases of auto generated
+					 * productions when the grammar as normalized to BNF.
+					 */
 					newAST.addChildrenInFront(poppedAST.getChildren());
 				}
 				/*

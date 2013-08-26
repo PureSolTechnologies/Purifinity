@@ -70,6 +70,6 @@ public interface UniversalSyntaxTree extends Tree<UniversalSyntaxTree>,
 	 * @return A {@link List} of {@link UniversalSyntaxTree} is returned
 	 *         containing all children found.
 	 */
-	public List<UniversalSyntaxTree> getChildren(String string);
+	public List<UniversalSyntaxTree> getChildren(String name);
 
 }

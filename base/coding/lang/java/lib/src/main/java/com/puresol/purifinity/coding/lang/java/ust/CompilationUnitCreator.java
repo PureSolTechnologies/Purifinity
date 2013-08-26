@@ -32,9 +32,9 @@ public class CompilationUnitCreator {
 	}
 
 	private static UniversalSyntaxTree createNode(ParserTree node) {
-		List<UniversalSyntaxTree> ustChildren = new ArrayList<>();
 		Token token = node.getToken();
 		if (token == null) {
+			List<UniversalSyntaxTree> ustChildren = new ArrayList<>();
 			for (ParserTree child : node.getChildren()) {
 				ustChildren.add(createNode(child));
 			}

@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.lang.java6;
+package com.puresol.purifinity.client.lang.java;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;

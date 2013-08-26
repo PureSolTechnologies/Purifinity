@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.lang.java6;
+package com.puresol.purifinity.client.lang.java;
 
 import com.puresol.purifinity.client.common.osgi.AbstractStartup;
 import com.puresol.purifinity.coding.lang.java.Activator;

@@ -99,7 +99,7 @@ public abstract class AbstractUniversalSyntaxTreeNode implements
 	}
 
 	@Override
-	public final List<UniversalSyntaxTree> getChildren(String string) {
+	public final List<UniversalSyntaxTree> getChildren(String name) {
 		List<UniversalSyntaxTree> foundChildren = new ArrayList<>();
 		for (UniversalSyntaxTree child : children) {
 			if (child.getName().equals(name)) {
