@@ -44,9 +44,9 @@ public class AnalysisRunImplTest {
 	public void test() throws Exception {
 		AnalysisRun analysisRun = analysis.createAnalysisRun();
 		assertNotNull(analysisRun);
-		List<AnalyzedCode> analyzedFiles = analysisRun.getAnalyzedCodes();
+		List<AnalyzedCode> analyzedFiles = analysisRun.getAnalyzedUnits();
 		assertNotNull(analyzedFiles);
-		List<AnalyzedCode> failedFiles = analysisRun.getFailedCodes();
+		List<AnalyzedCode> failedFiles = analysisRun.getFailedUnits();
 		assertNotNull(failedFiles);
 		HashIdFileTree fileTree = analysisRun.getFileTree();
 		assertNotNull(fileTree);

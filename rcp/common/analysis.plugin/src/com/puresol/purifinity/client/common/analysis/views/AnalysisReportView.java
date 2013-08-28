@@ -134,11 +134,11 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener {
 				name.setText(analysis.getSettings().getName());
 				if (analysisRun != null) {
 					analyzedTableViewer
-							.setInput(analysisRun.getAnalyzedCodes());
-					failedTableViewer.setInput(analysisRun.getFailedCodes());
-					int analyzedCodesSize = analysisRun.getAnalyzedCodes()
+							.setInput(analysisRun.getAnalyzedUnits());
+					failedTableViewer.setInput(analysisRun.getFailedUnits());
+					int analyzedCodesSize = analysisRun.getAnalyzedUnits()
 							.size();
-					int failedCodesSize = analysisRun.getFailedCodes().size();
+					int failedCodesSize = analysisRun.getFailedUnits().size();
 					totalFiles.setText(String.valueOf(analyzedCodesSize
 							+ failedCodesSize));
 					analyzedFiles.setText(String.valueOf(analyzedCodesSize));

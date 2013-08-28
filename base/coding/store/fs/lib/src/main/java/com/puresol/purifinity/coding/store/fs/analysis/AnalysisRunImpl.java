@@ -134,8 +134,8 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 
 	private final File runDirectory;
 
-	private final List<AnalyzedCode> analyzedFiles = new ArrayList<AnalyzedCode>();
-	private final List<AnalyzedCode> failedSources = new ArrayList<AnalyzedCode>();
+	private final List<AnalyzedCode> analyzedFiles = new ArrayList<>();
+	private final List<AnalyzedCode> failedSources = new ArrayList<>();
 
 	private HashIdFileTree fileTree;
 
@@ -304,7 +304,6 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 				runDirectory, FAILED_FILES_FILE));
 		failedSources.addAll(failed);
 		fileTree = (HashIdFileTree) restore(new File(runDirectory, TREE_FILE));
-		failedSources.addAll(failed);
 	}
 
 	private void storeAnalysisResultInformation() {
@@ -601,7 +600,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	}
 
 	@Override
-	public List<AnalyzedCode> getAnalyzedCodes() {
+	public List<AnalyzedCode> getAnalyzedUnits() {
 		return analyzedFiles;
 	}
 
@@ -611,7 +610,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	}
 
 	@Override
-	public List<AnalyzedCode> getFailedCodes() {
+	public List<AnalyzedCode> getFailedUnits() {
 		return failedSources;
 	}
 

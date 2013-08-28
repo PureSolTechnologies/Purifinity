@@ -25,9 +25,17 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 	private final long timeOfRun;
 	private final String languageName;
 	private final String languageVersion;
+	private final String analyzerErrorMessage;
 
 	public AnalyzedCode(HashId hashId, CodeLocation source, Date time,
 			long timeOfRun, String languageName, String languageVersion) {
+		this(hashId, source, time, timeOfRun, languageName, languageVersion,
+				null);
+	}
+
+	public AnalyzedCode(HashId hashId, CodeLocation source, Date time,
+			long timeOfRun, String languageName, String languageVersion,
+			String analyzerErrorMessage) {
 		super();
 		this.hashId = hashId;
 		this.source = source;
@@ -35,6 +43,7 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 		this.timeOfRun = timeOfRun;
 		this.languageName = languageName;
 		this.languageVersion = languageVersion;
+		this.analyzerErrorMessage = analyzerErrorMessage;
 	}
 
 	public final HashId getHashId() {
@@ -125,5 +134,14 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 
 	public boolean wasAnalyzed() {
 		return languageName != null;
+	}
+
+	public boolean wasError() {
+		return (analyzerErrorMessage != null)
+				&& (!analyzerErrorMessage.isEmpty());
+	}
+
+	public String getMessage() {
+		return analyzerErrorMessage;
 	}
 }

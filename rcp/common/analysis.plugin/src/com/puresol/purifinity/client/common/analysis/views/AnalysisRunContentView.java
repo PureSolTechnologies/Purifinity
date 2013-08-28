@@ -125,7 +125,7 @@ public class AnalysisRunContentView extends ViewPart implements
 		    analyzedCode, analysisRun);
 	    getSite().getPage().openEditor(fileAnalysisEditorInput,
 		    FileAnalysisEditor.class.getName());
-	} else if (!analysisRun.getFailedCodes().contains(
+	} else if (!analysisRun.getFailedUnits().contains(
 		firstElement.getPathFile(false))) {
 	    DirectoryAnalysisEditorInput directoryAnalysisEditorInput = new DirectoryAnalysisEditorInput(
 		    firstElement, analysisRun);

@@ -84,7 +84,7 @@ public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
 	Image documentImage = ClientImages
 		.getImage(ClientImages.DOCUMENT_EMPTY_16x16);
 	if (analyzedFile == null) {
-	    if (analysisRun.getFailedCodes().contains(input)) {
+	    if (analysisRun.getFailedUnits().contains(input)) {
 		return new DecorationOverlayIcon(documentImage,
 			errorDecoratorImage, IDecoration.TOP_LEFT)
 			.createImage();

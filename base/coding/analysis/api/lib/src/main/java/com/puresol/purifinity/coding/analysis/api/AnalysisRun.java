@@ -34,13 +34,13 @@ public interface AnalysisRun extends Serializable,
 	 * @return A {@link List} is returned containing the files as
 	 *         {@link AnalyzedCode}.
 	 */
-	public List<AnalyzedCode> getAnalyzedCodes();
+	public List<AnalyzedCode> getAnalyzedUnits();
 
 	/**
 	 * This method returns the whole source code tree as a {@link FileTree}.
 	 * This tree can be used for user output.
 	 * 
-	 * @return A {@link FileTree} object is returned.
+	 * @return A {@link HashIdFileTree} object is returned.
 	 */
 	public HashIdFileTree getFileTree();
 
@@ -50,7 +50,7 @@ public interface AnalysisRun extends Serializable,
 	 * 
 	 * @return A {@link List} of {@link File} is returned.
 	 */
-	public List<AnalyzedCode> getFailedCodes();
+	public List<AnalyzedCode> getFailedUnits();
 
 	/**
 	 * This method performs a lookup of the file provided and find the
