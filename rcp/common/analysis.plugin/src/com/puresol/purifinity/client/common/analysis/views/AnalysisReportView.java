@@ -2,8 +2,12 @@ package com.puresol.purifinity.client.common.analysis.views;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.browser.CloseWindowListener;
+import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
@@ -23,11 +27,14 @@ import com.puresol.purifinity.client.common.analysis.Activator;
 import com.puresol.purifinity.client.common.analysis.contents.AnalyzedFilesTableViewer;
 import com.puresol.purifinity.client.common.analysis.contents.FailedFilesTableViewer;
 import com.puresol.purifinity.client.common.analysis.controls.ParserTreeControl;
+import com.puresol.purifinity.client.common.analysis.dialogs.AnalysisInformationDialog;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreException;
+import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 
-public class AnalysisReportView extends ViewPart implements ISelectionListener {
+public class AnalysisReportView extends ViewPart implements ISelectionListener,
+		IDoubleClickListener, CloseWindowListener {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
@@ -39,6 +46,9 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener {
 	private Text totalFiles;
 	private Text analyzedFiles;
 	private Text unanalyzedFiles;
+	private Text errorFiles;
+
+	private AnalysisInformationDialog informationDialog;
 
 	public AnalysisReportView() {
 	}
@@ -58,7 +68,7 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener {
 		name.setEditable(false);
 
 		Composite numbers = new Composite(composite, SWT.BORDER);
-		numbers.setLayout(new GridLayout(3, true));
+		numbers.setLayout(new GridLayout(4, true));
 		FormData fd_numbers = new FormData();
 		fd_numbers.top = new FormAttachment(name, 10);
 		fd_numbers.right = new FormAttachment(name, 0, SWT.RIGHT);
@@ -68,10 +78,12 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener {
 		new Label(numbers, SWT.NONE).setText("#Total Files");
 		new Label(numbers, SWT.NONE).setText("#Analyzed Files");
 		new Label(numbers, SWT.NONE).setText("#Unanalyzed Files");
+		new Label(numbers, SWT.NONE).setText("#Files with Error");
 
 		totalFiles = new Text(numbers, SWT.BORDER);
 		analyzedFiles = new Text(numbers, SWT.BORDER);
 		unanalyzedFiles = new Text(numbers, SWT.BORDER);
+		errorFiles = new Text(numbers, SWT.BORDER);
 
 		TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
 		FormData fd_tabFolder = new FormData();
@@ -93,6 +105,7 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener {
 		analyzedTable.setHeaderVisible(true);
 		analyzedTable.setLinesVisible(true);
 		analyzedTableViewer = new AnalyzedFilesTableViewer(analyzedTable);
+		analyzedTableViewer.addDoubleClickListener(this);
 
 		TabItem failedTab = new TabItem(tabFolder, SWT.NONE);
 		failedTab.setText("Files without Analysis");
@@ -106,6 +119,7 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener {
 		failedTable.setHeaderVisible(true);
 		failedTable.setLinesVisible(true);
 		failedTableViewer = new FailedFilesTableViewer(failedTable);
+		failedTableViewer.addDoubleClickListener(this);
 
 		getSite().getWorkbenchWindow().getSelectionService()
 				.addSelectionListener(this);
@@ -143,11 +157,46 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener {
 							+ failedCodesSize));
 					analyzedFiles.setText(String.valueOf(analyzedCodesSize));
 					unanalyzedFiles.setText(String.valueOf(failedCodesSize));
+					int errors = 0;
+					for (AnalyzedCode analyzedCode : analysisRun
+							.getFailedUnits()) {
+						if (analyzedCode.wasError()) {
+							errors++;
+						}
+					}
+					errorFiles.setText(String.valueOf(errors));
 				}
 			}
 		} catch (AnalysisStoreException e) {
 			logger.log(new Status(Status.ERROR, ParserTreeControl.class
 					.getName(), "Can not read analysis store!", e));
 		}
+	}
+
+	@Override
+	public void doubleClick(DoubleClickEvent event) {
+		AnalyzedCode analyzedCode = null;
+		if (event.getSource() == analyzedTableViewer) {
+			analyzedCode = analyzedTableViewer.getSelectedAnalyzedCode();
+		} else if (event.getSource() == failedTableViewer) {
+			analyzedCode = failedTableViewer.getSelectedAnalyzedCode();
+		}
+		if (analyzedCode != null) {
+			if (informationDialog == null) {
+				informationDialog = new AnalysisInformationDialog(this,
+						analyzedCode);
+				informationDialog.addCloseListener(this);
+				informationDialog.open();
+			} else {
+				informationDialog.setAnalyzedCode(analyzedCode);
+			}
+
+		}
+	}
+
+	@Override
+	public void close(WindowEvent event) {
+		informationDialog.close();
+		informationDialog = null;
 	}
 }

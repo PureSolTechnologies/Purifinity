@@ -74,8 +74,7 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 					c11.getVersion(), analyzedFile,
 					this.getAnalyzableCodeRanges(parserTree), compilationUnit);
 		} catch (ParserException | IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
+			throw new AnalyzerException(this, e);
 		}
 		return;
 	}

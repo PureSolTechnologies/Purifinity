@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -33,7 +34,7 @@ public class AnalyzedFilesTableViewer extends TableViewer implements
 	private void setupNameColumn() {
 		TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
 		nameColumn.getColumn().setText("Name");
-		nameColumn.getColumn().setWidth(100);
+		nameColumn.getColumn().setWidth(200);
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -74,7 +75,7 @@ public class AnalyzedFilesTableViewer extends TableViewer implements
 	private void setupTimeColumn() {
 		TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
 		nameColumn.getColumn().setText("Time");
-		nameColumn.getColumn().setWidth(100);
+		nameColumn.getColumn().setWidth(150);
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -111,6 +112,11 @@ public class AnalyzedFilesTableViewer extends TableViewer implements
 	@Override
 	public AnalyzedCode[] getElements(Object inputElement) {
 		return files.toArray(new AnalyzedCode[files.size()]);
+	}
+
+	public AnalyzedCode getSelectedAnalyzedCode() {
+		IStructuredSelection selection = (IStructuredSelection) getSelection();
+		return (AnalyzedCode) selection.getFirstElement();
 	}
 
 }

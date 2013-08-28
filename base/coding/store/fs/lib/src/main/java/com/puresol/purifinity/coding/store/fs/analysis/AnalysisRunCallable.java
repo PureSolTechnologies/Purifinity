@@ -81,8 +81,18 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
+			Throwable t = e;
+			StringBuilder message = new StringBuilder();
+			int id = 1;
+			while (t != null) {
+				message.append(id).append(")\t");
+				message.append(t.getMessage());
+				message.append("\n");
+				t = t.getCause();
+				id++;
+			}
 			return new AnalyzedCode(hashId, sourceFile, null, 0, null, null,
-					e.getMessage());
+					message.toString());
 		}
 	}
 

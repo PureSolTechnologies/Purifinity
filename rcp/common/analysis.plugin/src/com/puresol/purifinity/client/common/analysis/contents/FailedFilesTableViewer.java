@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -26,12 +27,13 @@ public class FailedFilesTableViewer extends TableViewer implements
 		setContentProvider(this);
 		setupNameColumn();
 		setupTimeColumn();
+		setupMessageColumn();
 	}
 
 	private void setupNameColumn() {
 		TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
 		nameColumn.getColumn().setText("Name");
-		nameColumn.getColumn().setWidth(100);
+		nameColumn.getColumn().setWidth(200);
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -61,6 +63,22 @@ public class FailedFilesTableViewer extends TableViewer implements
 		});
 	}
 
+	private void setupMessageColumn() {
+		TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
+		nameColumn.getColumn().setText("Analyzer Error Message");
+		nameColumn.getColumn().setWidth(200);
+		nameColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				AnalyzedCode analysis = (AnalyzedCode) element;
+				if (analysis.wasError()) {
+					return analysis.getMessage();
+				}
+				return "";
+			}
+		});
+	}
+
 	@Override
 	public void dispose() {
 	}
@@ -82,6 +100,11 @@ public class FailedFilesTableViewer extends TableViewer implements
 	@Override
 	public AnalyzedCode[] getElements(Object inputElement) {
 		return files.toArray(new AnalyzedCode[files.size()]);
+	}
+
+	public AnalyzedCode getSelectedAnalyzedCode() {
+		IStructuredSelection selection = (IStructuredSelection) getSelection();
+		return (AnalyzedCode) selection.getFirstElement();
 	}
 
 }

@@ -92,8 +92,7 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 					java.getVersion(), analyzedFile,
 					getAnalyzableCodeRanges(compilationUnit), compilationUnit);
 		} catch (LexerException | ParserException | IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
+			throw new AnalyzerException(this, e);
 		}
 		return;
 	}
