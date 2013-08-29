@@ -6,7 +6,10 @@ import java.util.Map;
 
 import com.puresol.commons.utils.math.Parameter;
 import com.puresol.commons.utils.math.Value;
+import com.puresol.purifinity.client.common.branding.Printable;
+import com.puresol.purifinity.client.common.ui.actions.Exportable;
 import com.puresol.purifinity.client.common.ui.actions.PartSettingsCapability;
+import com.puresol.purifinity.client.common.ui.actions.Refreshable;
 import com.puresol.purifinity.client.common.ui.actions.Reproducable;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
@@ -15,7 +18,8 @@ import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
 
 public abstract class AbstractMetricViewPart extends AbstractEvaluationView
-		implements Reproducable, PartSettingsCapability {
+		implements Reproducable, PartSettingsCapability, Refreshable,
+		Exportable, Printable {
 
 	protected final Double findSuitableValue(HashIdFileTree path,
 			MetricFileResults results, Parameter<?> parameter,

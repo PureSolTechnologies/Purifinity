@@ -120,8 +120,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	 * Initialize the toolbar.
 	 */
 	private void initializeToolBar() {
-		IToolBarManager toolbarManager = getViewSite().getActionBars()
-				.getToolBarManager();
+		IToolBarManager toolbarManager = getToolBarManager();
 		toolbarManager.add(new ShowSettingsAction(this));
 		toolbarManager.add(new ViewReproductionAction(this));
 		toolbarManager.add(new RefreshAction(this));

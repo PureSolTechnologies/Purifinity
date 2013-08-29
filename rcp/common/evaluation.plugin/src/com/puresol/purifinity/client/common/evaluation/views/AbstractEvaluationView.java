@@ -1,5 +1,6 @@
 package com.puresol.purifinity.client.common.evaluation.views;
 
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
@@ -10,10 +11,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
-import com.puresol.purifinity.client.common.branding.Printable;
 import com.puresol.purifinity.client.common.evaluation.utils.EvaluationsTarget;
-import com.puresol.purifinity.client.common.ui.actions.Exportable;
-import com.puresol.purifinity.client.common.ui.actions.Refreshable;
 
 /**
  * This abstract class is a parent class for all views which contain a kind of
@@ -24,8 +22,7 @@ import com.puresol.purifinity.client.common.ui.actions.Refreshable;
  * @author Rick-Rainer Ludwig
  */
 public abstract class AbstractEvaluationView extends ViewPart implements
-		ISelectionListener, Refreshable, EvaluationsTarget, Exportable,
-		Printable {
+		ISelectionListener, EvaluationsTarget {
 
 	/**
 	 * This field contains the selection service which is used for subscription.
@@ -57,6 +54,15 @@ public abstract class AbstractEvaluationView extends ViewPart implements
 			analysisSelection = (FileAnalysisSelection) selection;
 			updateEvaluation();
 		}
+	}
+
+	/**
+	 * This method is a helper to get the current tool bar manager for the view.
+	 * 
+	 * @return An {@link IToolBarManager} object is returned.
+	 */
+	protected final IToolBarManager getToolBarManager() {
+		return getViewSite().getActionBars().getToolBarManager();
 	}
 
 	/**

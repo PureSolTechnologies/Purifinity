@@ -9,7 +9,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -32,11 +35,17 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 	public CoCoMoResultComponent(Composite parent, int style) {
 		super(parent, style);
 
+		setLayout(new FormLayout());
 		this.font = new Font(getDisplay(),
 				new FontData("Courier", 12, SWT.NONE));
 
 		Composite parameterSelection = new Composite(this, SWT.NONE);
-		parameterSelection.setLayout(new RowLayout());
+		parameterSelection.setLayout(new GridLayout(2, true));
+		FormData fdParameterSelection = new FormData();
+		fdParameterSelection.left = new FormAttachment(0, 10);
+		fdParameterSelection.right = new FormAttachment(100, -10);
+		fdParameterSelection.top = new FormAttachment(0, 10);
+		parameterSelection.setLayoutData(fdParameterSelection);
 
 		new Label(parameterSelection, SWT.NONE).setText("Complexity:");
 		complexityCombo = new Combo(parameterSelection, SWT.READ_ONLY);
@@ -53,7 +62,13 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 		currency = new Text(parameterSelection, SWT.BORDER);
 		currency.addModifyListener(this);
 
-		text = new Text(this, SWT.BORDER | SWT.V_SCROLL);
+		text = new Text(this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		FormData fdText = new FormData();
+		fdText.left = new FormAttachment(0, 10);
+		fdText.right = new FormAttachment(100, -10);
+		fdText.top = new FormAttachment(parameterSelection, 10);
+		fdText.bottom = new FormAttachment(100, -10);
+		text.setLayoutData(fdText);
 		text.setFont(font);
 		text.setEditable(false);
 	}
