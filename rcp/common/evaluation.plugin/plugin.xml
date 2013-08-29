@@ -107,6 +107,14 @@
             name="Maintainability Index Cumulative Distribution Chart"
             restorable="true">
       </view>
+      <view
+            allowMultiple="false"
+            category="com.puresol.purifinity.client.common.evaluation.Evaluation"
+            class="com.puresol.purifinity.client.common.evaluation.metrics.maintainability.MaintainabilityIndexView"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.maintainability.MaintainabilityIndexView"
+            name="Maintainability Index"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.menus">

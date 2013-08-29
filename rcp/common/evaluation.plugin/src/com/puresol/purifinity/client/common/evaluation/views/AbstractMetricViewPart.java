@@ -4,23 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.ISelectionService;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchPartSite;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.part.ViewPart;
-
 import com.puresol.commons.utils.math.Parameter;
 import com.puresol.commons.utils.math.Value;
-import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
-import com.puresol.purifinity.client.common.branding.Printable;
-import com.puresol.purifinity.client.common.evaluation.utils.EvaluationsTarget;
-import com.puresol.purifinity.client.common.ui.actions.Exportable;
 import com.puresol.purifinity.client.common.ui.actions.PartSettingsCapability;
-import com.puresol.purifinity.client.common.ui.actions.Refreshable;
 import com.puresol.purifinity.client.common.ui.actions.Reproducable;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
@@ -28,44 +14,8 @@ import com.puresol.purifinity.coding.evaluation.api.CodeRangeTypeParameter;
 import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
 
-public abstract class AbstractMetricViewPart extends ViewPart implements
-		Refreshable, Reproducable, ISelectionListener, PartSettingsCapability,
-		EvaluationsTarget, Exportable, Printable {
-
-	private ISelectionService selectionService;
-	private FileAnalysisSelection analysisSelection;
-
-	public AbstractMetricViewPart() {
-		super();
-	}
-
-	@Override
-	public void dispose() {
-		selectionService.removeSelectionListener(this);
-		super.dispose();
-	}
-
-	@Override
-	public void createPartControl(Composite parent) {
-		IWorkbenchPartSite site = getSite();
-		IWorkbenchWindow workbenchWindow = site.getWorkbenchWindow();
-		selectionService = workbenchWindow.getSelectionService();
-		selectionService.addSelectionListener(this);
-	}
-
-	@Override
-	public final void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (selection instanceof FileAnalysisSelection) {
-			analysisSelection = (FileAnalysisSelection) selection;
-			updateEvaluation();
-		}
-	}
-
-	protected abstract void updateEvaluation();
-
-	protected final FileAnalysisSelection getAnalysisSelection() {
-		return analysisSelection;
-	}
+public abstract class AbstractMetricViewPart extends AbstractEvaluationView
+		implements Reproducable, PartSettingsCapability {
 
 	protected final Double findSuitableValue(HashIdFileTree path,
 			MetricFileResults results, Parameter<?> parameter,

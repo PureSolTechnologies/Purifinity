@@ -42,7 +42,6 @@ import com.puresol.purifinity.client.common.evaluation.Activator;
 import com.puresol.purifinity.client.common.evaluation.ParetoChartViewSettingsDialog;
 import com.puresol.purifinity.client.common.evaluation.metrics.ChartConfigProvider;
 import com.puresol.purifinity.client.common.evaluation.metrics.DefaultParetoChartConfigProvider;
-import com.puresol.purifinity.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.purifinity.client.common.ui.actions.ExportAction;
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.ShowSettingsAction;
@@ -56,8 +55,7 @@ import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.purifinity.coding.evaluation.api.Evaluators;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
 
-public class ParetoChartView extends AbstractMetricChartViewPart implements
-		EvaluationsTarget {
+public class ParetoChartView extends AbstractMetricChartViewPart {
 
 	private ParetoChartViewSettingsDialog settingsDialog;
 
