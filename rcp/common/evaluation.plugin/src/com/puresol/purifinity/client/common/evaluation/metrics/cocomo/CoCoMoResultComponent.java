@@ -7,8 +7,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -24,8 +22,7 @@ import com.puresol.purifinity.coding.metrics.cocomo.Complexity;
 public class CoCoMoResultComponent extends Composite implements ModifyListener,
 		SelectionListener {
 
-	private final Font font;
-	private final Text text;
+	private final CoCoMoResultPanel resultPanel;
 	private final Combo complexityCombo;
 	private final ComboViewer complexityViewer;
 	private final Text avgSalary;
@@ -36,8 +33,6 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 		super(parent, style);
 
 		setLayout(new FormLayout());
-		this.font = new Font(getDisplay(),
-				new FontData("Courier", 12, SWT.NONE));
 
 		Composite parameterSelection = new Composite(this, SWT.NONE);
 		parameterSelection.setLayout(new GridLayout(2, true));
@@ -62,21 +57,19 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 		currency = new Text(parameterSelection, SWT.BORDER);
 		currency.addModifyListener(this);
 
-		text = new Text(this, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		resultPanel = new CoCoMoResultPanel(this);
 		FormData fdText = new FormData();
 		fdText.left = new FormAttachment(0, 10);
 		fdText.right = new FormAttachment(100, -10);
 		fdText.top = new FormAttachment(parameterSelection, 10);
 		fdText.bottom = new FormAttachment(100, -10);
-		text.setLayoutData(fdText);
-		text.setFont(font);
-		text.setEditable(false);
+		resultPanel.setLayoutData(fdText);
 	}
 
 	@Override
 	public void dispose() {
 		super.dispose();
-		font.dispose();
+		resultPanel.dispose();
 	}
 
 	public CoCoMoResults getResults() {
@@ -99,7 +92,7 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 	}
 
 	private void refresh() {
-		text.setText(results.toString());
+		resultPanel.setResults(results);
 	}
 
 	@Override
