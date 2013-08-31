@@ -164,15 +164,15 @@ public class CoCoMoResultPanel extends Composite {
 			numberOfDevelopersText.setText("");
 			estimatedCostsText.setText("");
 		}
-		group.layout();
-		group.redraw();
-		layout();
-		redraw();
 	}
 
 	public void setResults(CoCoMoResults results) {
 		this.results = results;
 		refreshLabels();
 		refreshTexts();
+		group.layout();
+		group.redraw();
+		layout();
+		redraw();
 	}
 }
