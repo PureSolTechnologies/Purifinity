@@ -3,6 +3,8 @@ package com.puresol.purifinity.client.common.evaluation.metrics.halstead;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -62,6 +64,12 @@ public class HalsteadMetricView extends AbstractEvaluationView {
 		group = new Group(parent, SWT.SHADOW_ETCHED_IN);
 		group.setText("Halstead Metric Results");
 		group.setLayout(new FormLayout());
+		Font font = group.getFont();
+		FontData fontData = font.getFontData()[0];
+		Font newFont = new Font(group.getDisplay(), fontData.getName(),
+				(int) (fontData.getHeight() * 1.2), fontData.getStyle()
+						| SWT.BOLD);
+		group.setFont(newFont);
 
 		differentOperatorsLabel = createLabel(null);
 		differentOperandsLabel = createLabel(differentOperatorsLabel);
@@ -125,7 +133,7 @@ public class HalsteadMetricView extends AbstractEvaluationView {
 
 	private Text createText(Label referenceLabel) {
 		Text newText = new Text(group, SWT.READ_ONLY | SWT.NO_FOCUS);
-		newText.setEnabled(false);
+		newText.setEditable(false);
 		FormData fdNewText = new FormData();
 		fdNewText.left = new FormAttachment(differentOperandsLabel, 10);
 		fdNewText.right = new FormAttachment(100, -10);
@@ -150,9 +158,12 @@ public class HalsteadMetricView extends AbstractEvaluationView {
 		} else {
 			HalsteadMetricDirectoryResults directoryResults = (HalsteadMetricDirectoryResults) evaluatorStore
 					.readDirectoryResults(path.getHashId());
-			HalsteadMetricResult directoryResult = directoryResults.getResult();
-			if (directoryResult != null) {
-				halsteadResult = directoryResult.getHalsteadResult();
+			if (directoryResults != null) {
+				HalsteadMetricResult directoryResult = directoryResults
+						.getResult();
+				if (directoryResult != null) {
+					halsteadResult = directoryResult.getHalsteadResult();
+				}
 			}
 		}
 		setResult(halsteadResult);

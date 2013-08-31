@@ -99,11 +99,13 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 	public void modifyText(ModifyEvent e) {
 		if ((e.getSource() == avgSalary) || (e.getSource() == currency)) {
 			try {
-				results.setAverageSalary(Double.valueOf(avgSalary.getText()),
-						currency.getText());
-				refresh();
+				if (results != null) {
+					results.setAverageSalary(
+							Double.valueOf(avgSalary.getText()),
+							currency.getText());
+					refresh();
+				}
 			} catch (NumberFormatException e1) {
-
 			}
 		}
 	}
@@ -111,18 +113,22 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 	@Override
 	public void widgetSelected(SelectionEvent e) {
 		if (e.getSource() == complexityCombo) {
-			results.setComplexity(Complexity.values()[complexityCombo
-					.getSelectionIndex()]);
-			refresh();
+			if (results != null) {
+				results.setComplexity(Complexity.values()[complexityCombo
+						.getSelectionIndex()]);
+				refresh();
+			}
 		}
 	}
 
 	@Override
 	public void widgetDefaultSelected(SelectionEvent e) {
 		if (e.getSource() == complexityCombo) {
-			results.setComplexity(Complexity.values()[complexityCombo
-					.getSelectionIndex()]);
-			refresh();
+			if (results != null) {
+				results.setComplexity(Complexity.values()[complexityCombo
+						.getSelectionIndex()]);
+				refresh();
+			}
 		}
 	}
 }

@@ -78,20 +78,6 @@ public class CoCoMoResultPanel extends Composite {
 		group.pack();
 	}
 
-	private Text newText(Label equalsLabel) {
-		Text newText = new Text(group, SWT.READ_ONLY | SWT.MULTI | SWT.NO_FOCUS);
-		newText.setEditable(false);
-		newText.setEnabled(false);
-		newText.setText("???");
-		FormData fdNewText = new FormData();
-		fdNewText.top = new FormAttachment(equalsLabel, 0, SWT.TOP);
-		fdNewText.bottom = new FormAttachment(equalsLabel, 0, SWT.BOTTOM);
-		fdNewText.left = new FormAttachment(equalsLabel, 10);
-		fdNewText.right = new FormAttachment(100, -10);
-		newText.setLayoutData(fdNewText);
-		return newText;
-	}
-
 	private Label newLabel(Label labelAbove) {
 		Label newLabel = new Label(group, SWT.NONE);
 		FormData fdNewLabel = new FormData();
@@ -116,26 +102,17 @@ public class CoCoMoResultPanel extends Composite {
 		return equals;
 	}
 
-	private void refreshLabels() {
-		String c1 = "??????";
-		String c2 = "??????";
-		String c3 = "??????";
-		if (results != null) {
-			c1 = String.valueOf(results.getC1());
-			c2 = String.valueOf(results.getC2());
-			c3 = String.valueOf(results.getC3());
-		}
-		totalSourceLinesLabel.setText("Total Physical Source Lines of Code");
-		complexityLabel.setText("Project Complexity");
-		developmentEffortLabel.setText("Estimated Development Effort\n"
-				+ "(Person-Months = " + c1 + " * kSLOC^" + c2 + ")");
-		scheduleEstimateLabel.setText("Estimated Schedule\n"
-				+ "(Months = 2.5 * Person-Months^" + c3 + ")");
-		numberOfDevelopersLabel
-				.setText("Estimated Average Number of Developers\n"
-						+ "(Effort / Schedule)");
-		estimatedCostsLabel.setText("Estimated Total Cost of Development\n"
-				+ "(2.4 * Average Salary * Number of Developers)");
+	private Text newText(Label equalsLabel) {
+		Text newText = new Text(group, SWT.READ_ONLY | SWT.MULTI | SWT.NO_FOCUS);
+		newText.setEditable(false);
+		// newText.setEnabled(false);
+		FormData fdNewText = new FormData();
+		fdNewText.top = new FormAttachment(equalsLabel, 0, SWT.TOP);
+		fdNewText.bottom = new FormAttachment(equalsLabel, 0, SWT.BOTTOM);
+		fdNewText.left = new FormAttachment(equalsLabel, 10);
+		fdNewText.right = new FormAttachment(100, -10);
+		newText.setLayoutData(fdNewText);
+		return newText;
 	}
 
 	private void refreshTexts() {
@@ -164,6 +141,28 @@ public class CoCoMoResultPanel extends Composite {
 			numberOfDevelopersText.setText("");
 			estimatedCostsText.setText("");
 		}
+	}
+
+	private void refreshLabels() {
+		String c1 = "??????";
+		String c2 = "??????";
+		String c3 = "??????";
+		if (results != null) {
+			c1 = String.valueOf(results.getC1());
+			c2 = String.valueOf(results.getC2());
+			c3 = String.valueOf(results.getC3());
+		}
+		totalSourceLinesLabel.setText("Total Physical Source Lines of Code");
+		complexityLabel.setText("Project Complexity");
+		developmentEffortLabel.setText("Estimated Development Effort\n"
+				+ "(Person-Months = " + c1 + " * kSLOC^" + c2 + ")");
+		scheduleEstimateLabel.setText("Estimated Schedule\n"
+				+ "(Months = 2.5 * Person-Months^" + c3 + ")");
+		numberOfDevelopersLabel
+				.setText("Estimated Average Number of Developers\n"
+						+ "(Effort / Schedule)");
+		estimatedCostsLabel.setText("Estimated Total Cost of Development\n"
+				+ "(2.4 * Average Salary * Number of Developers)");
 	}
 
 	public void setResults(CoCoMoResults results) {
