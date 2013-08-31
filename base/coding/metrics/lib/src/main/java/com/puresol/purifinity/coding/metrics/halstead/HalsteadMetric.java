@@ -115,18 +115,7 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 	}
 
 	private void calculateValues() {
-		int differentOperators = operators.keySet().size();
-		int differentOperands = operants.keySet().size();
-		int totalOperators = 0;
-		for (String key : operators.keySet()) {
-			totalOperators += operators.get(key);
-		}
-		int totalOperands = 0;
-		for (String key : operants.keySet()) {
-			totalOperands += operants.get(key);
-		}
-		result = new HalsteadResult(operants, operators, differentOperators,
-				differentOperands, totalOperators, totalOperands);
+		result = new HalsteadResult(operants, operators);
 	}
 
 	public HalsteadResult getHalsteadResults() {

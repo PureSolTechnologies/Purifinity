@@ -64,22 +64,29 @@ public class HalsteadResult implements Serializable {
 	 */
 	private final double estimatedBugs;
 	private final Map<String, Integer> operands;
-	private final Map<String, Integer> opertors;
+	private final Map<String, Integer> operators;
 
 	private final List<Result> results = new ArrayList<Result>();
 
 	public HalsteadResult(Map<String, Integer> operands,
-			Map<String, Integer> opertors, int differentOperators,
-			int differentOperands, int totalOperators, int totalOperands) {
+			Map<String, Integer> operators) {
 		super();
 		this.operands = operands;
-		this.opertors = opertors;
-		this.differentOperators = differentOperators;
-		this.differentOperands = differentOperands;
+		this.operators = operators;
+		this.differentOperators = operators.keySet().size();
+		this.differentOperands = operands.keySet().size();
+		int totalOperators = 0;
+		for (Integer i : operators.values()) {
+			totalOperators += i;
+		}
 		this.totalOperators = totalOperators;
+		int totalOperands = 0;
+		for (Integer i : operands.values()) {
+			totalOperands += i;
+		}
 		this.totalOperands = totalOperands;
 		vocabularySize = differentOperators + differentOperands;
-		programLength = totalOperators + totalOperands;
+		programLength = totalOperands + totalOperands;
 		halsteadLength = differentOperators * Math.log(differentOperators)
 				/ Math.log(2) + differentOperands * Math.log(differentOperands)
 				/ Math.log(2);
@@ -133,7 +140,7 @@ public class HalsteadResult implements Serializable {
 	}
 
 	public Map<String, Integer> getOperators() {
-		return opertors;
+		return operators;
 	}
 
 	public int getDifferentOperators() {
@@ -191,5 +198,4 @@ public class HalsteadResult implements Serializable {
 	public List<Result> getResults() {
 		return results;
 	}
-
 }

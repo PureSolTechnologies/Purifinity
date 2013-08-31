@@ -7,12 +7,14 @@ import org.apache.commons.io.IOUtils;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
+import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguages;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
+import com.puresol.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
 import com.puresol.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
 
 public class HalsteadMetricEvaluator extends AbstractEvaluator {
@@ -60,7 +62,60 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
-		// intentionally left blank
+		if (store.hasDirectoryResults(directory.getHashId())) {
+			return;
+		}
+		HalsteadMetricResult results = null;
+		for (HashIdFileTree child : directory.getChildren()) {
+			if (child.isFile()) {
+				results = processFile(directory, results, child);
+			} else {
+				results = processSubDirectory(directory, results, child);
+			}
+		}
+		HalsteadMetricDirectoryResults finalResults = new HalsteadMetricDirectoryResults(
+				results);
+		store.storeDirectoryResults(directory.getHashId(), finalResults);
+	}
+
+	private HalsteadMetricResult processFile(HashIdFileTree directory,
+			HalsteadMetricResult results, HashIdFileTree child) {
+		if (store.hasFileResults(child.getHashId())) {
+			HalsteadMetricFileResults fileResults = (HalsteadMetricFileResults) store
+					.readFileResults(child.getHashId());
+			for (HalsteadMetricResult result : fileResults.getResults()) {
+				if (result.getCodeRangeType() == CodeRangeType.FILE) {
+					results = combine(directory, results, result);
+					break;
+				}
+			}
+		}
+		return results;
+	}
+
+	private HalsteadMetricResult processSubDirectory(HashIdFileTree directory,
+			HalsteadMetricResult results, HashIdFileTree child) {
+		if (store.hasDirectoryResults(child.getHashId())) {
+			HalsteadMetricDirectoryResults halsteadResults = (HalsteadMetricDirectoryResults) store
+					.readDirectoryResults(child.getHashId());
+			results = combine(directory, results, halsteadResults.getResult());
+		}
+		return results;
+	}
+
+	private HalsteadMetricResult combine(HashIdFileTree directory,
+			HalsteadMetricResult results, HalsteadMetricResult result) {
+		if (result != null) {
+			if (results == null) {
+				results = new HalsteadMetricResult(
+						new UnspecifiedSourceCodeLocation(),
+						CodeRangeType.DIRECTORY, directory.getName(),
+						result.getHalsteadResult(), result.getQuality());
+			} else {
+				results = HalsteadMetricResult.combine(results, result);
+			}
+		}
+		return results;
 	}
 
 	@Override
