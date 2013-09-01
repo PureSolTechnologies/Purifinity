@@ -15,8 +15,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.part.ViewPart;
 
+import com.puresol.purifinity.client.common.analysis.contents.ProgrammingLanguageViewer;
 import com.puresol.purifinity.client.common.analysis.controls.GrammarCanvas;
-import com.puresol.purifinity.client.common.analysis.controls.ProgrammingLanguageViewer;
 import com.puresol.purifinity.client.common.analysis.grammar.RenderException;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.uhura.grammar.GrammarException;

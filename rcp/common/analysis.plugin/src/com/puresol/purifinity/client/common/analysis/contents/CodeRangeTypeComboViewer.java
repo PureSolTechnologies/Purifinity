@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.common.analysis.controls;
+package com.puresol.purifinity.client.common.analysis.contents;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
