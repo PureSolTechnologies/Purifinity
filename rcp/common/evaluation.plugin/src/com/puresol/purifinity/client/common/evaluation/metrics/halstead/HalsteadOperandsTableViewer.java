@@ -20,12 +20,12 @@ public class HalsteadOperandsTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 
 	private final List<Entry<String, Integer>> operands = new ArrayList<Entry<String, Integer>>();
-	private final MyViewerComparator comparator;
+	private final OperatorsAndOperandsViewerSorter comparator;
 
 	public HalsteadOperandsTableViewer(Table table) {
 		super(table);
 		setContentProvider(this);
-		comparator = new MyViewerComparator();
+		comparator = new OperatorsAndOperandsViewerSorter();
 		setComparator(comparator);
 		setupNameColumn();
 		setupNumberColumn();
