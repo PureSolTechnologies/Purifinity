@@ -78,15 +78,20 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 
 	public void setResults(CoCoMoResults results) {
 		this.results = results;
-		String avgSalaray = String.valueOf(results.getAverageSalary());
-		String currency2 = results.getCurrency();
-		avgSalary.setText(avgSalaray);
-		currency.setText(currency2);
-		for (int i = 0; i < Complexity.values().length; i++) {
-			Complexity complexity = Complexity.values()[i];
-			if (complexity == results.getComplexity()) {
-				complexityCombo.select(i);
+		if (results != null) {
+			String avgSalaray = String.valueOf(results.getAverageSalary());
+			String currency2 = results.getCurrency();
+			avgSalary.setText(avgSalaray);
+			currency.setText(currency2);
+			for (int i = 0; i < Complexity.values().length; i++) {
+				Complexity complexity = Complexity.values()[i];
+				if (complexity == results.getComplexity()) {
+					complexityCombo.select(i);
+				}
 			}
+		} else {
+			avgSalary.setText("");
+			currency.setText("");
 		}
 		refresh();
 	}

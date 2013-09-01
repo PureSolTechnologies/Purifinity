@@ -49,9 +49,9 @@ public class MaintainabilityIndexResultPanel extends Composite {
 		miCwLabel = createLabel(miWocLabel);
 		miLabel = createLabel(miCwLabel);
 
-		miCwLabel.setText("Number of different Operands");
-		miWocLabel.setText("Number of different Operators");
-		miLabel.setText("Total Number of Operators");
+		miCwLabel.setText("MIcw");
+		miWocLabel.setText("MIwoc");
+		miLabel.setText("MI");
 
 		miWoc = createText(miWocLabel);
 		miCw = createText(miCwLabel);

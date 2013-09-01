@@ -37,10 +37,12 @@ public class CodeRangeComboViewer extends ComboViewer implements
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
 		codeRanges.clear();
-		if (Collection.class.isAssignableFrom(newInput.getClass())) {
-			@SuppressWarnings("unchecked")
-			Collection<CodeRange> codeRanges = (Collection<CodeRange>) newInput;
-			this.codeRanges.addAll(codeRanges);
+		if (newInput != null) {
+			if (Collection.class.isAssignableFrom(newInput.getClass())) {
+				@SuppressWarnings("unchecked")
+				Collection<CodeRange> codeRanges = (Collection<CodeRange>) newInput;
+				this.codeRanges.addAll(codeRanges);
+			}
 		}
 		refresh();
 	}
