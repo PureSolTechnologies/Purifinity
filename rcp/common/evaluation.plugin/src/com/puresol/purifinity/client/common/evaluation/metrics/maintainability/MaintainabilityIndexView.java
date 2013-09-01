@@ -117,9 +117,9 @@ public class MaintainabilityIndexView extends AbstractEvaluationView implements
 		if (path.isFile()) {
 			HalsteadMetricFileResults fileResults = (HalsteadMetricFileResults) evaluatorStore
 					.readFileResults(path.getHashId());
-			List<HalsteadMetricResult> fileResultList = fileResults
-					.getResults();
-			if (fileResultList != null) {
+			if (fileResults != null) {
+				List<HalsteadMetricResult> fileResultList = fileResults
+						.getResults();
 				for (HalsteadMetricResult result : fileResultList) {
 					codeRanges.add(new CodeRange(result.getCodeRangeName(),
 							result.getCodeRangeName(), result
