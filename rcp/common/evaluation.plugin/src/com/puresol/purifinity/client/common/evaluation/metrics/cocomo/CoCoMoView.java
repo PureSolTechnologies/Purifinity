@@ -1,6 +1,5 @@
 package com.puresol.purifinity.client.common.evaluation.metrics.cocomo;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -22,7 +21,7 @@ public class CoCoMoView extends AbstractEvaluationView {
 	@Override
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
-		resultComponent = new CoCoMoResultComponent(parent, SWT.NONE);
+		resultComponent = new CoCoMoResultComponent(parent);
 		super.createPartControl(parent);
 	}
 

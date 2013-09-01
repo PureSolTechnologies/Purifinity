@@ -29,8 +29,8 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 	private final Text currency;
 	private CoCoMoResults results;
 
-	public CoCoMoResultComponent(Composite parent, int style) {
-		super(parent, style);
+	public CoCoMoResultComponent(Composite parent) {
+		super(parent, SWT.NONE);
 
 		setLayout(new FormLayout());
 

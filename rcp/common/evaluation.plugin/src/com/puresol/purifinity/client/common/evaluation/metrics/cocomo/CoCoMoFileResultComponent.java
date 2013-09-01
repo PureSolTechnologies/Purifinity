@@ -10,9 +10,9 @@ import com.puresol.purifinity.coding.metrics.cocomo.CoCoMoResults;
 
 public class CoCoMoFileResultComponent extends CoCoMoResultComponent {
 
-	public CoCoMoFileResultComponent(Composite parent, int style,
+	public CoCoMoFileResultComponent(Composite parent,
 			AnalyzedCode analyzedSourceCode) {
-		super(parent, style);
+		super(parent);
 
 		EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(CoCoMoEvaluator.class);

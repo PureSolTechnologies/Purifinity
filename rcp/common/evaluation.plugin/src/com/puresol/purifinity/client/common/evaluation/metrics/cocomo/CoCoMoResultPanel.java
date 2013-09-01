@@ -45,7 +45,12 @@ public class CoCoMoResultPanel extends Composite {
 
 		group = new Group(this, SWT.SHADOW_ETCHED_IN);
 		group.setText("Basic Cost Construction Model Results");
-		group.setLayout(new FormLayout());
+		FormLayout layout = new FormLayout();
+		layout.marginLeft = 10;
+		layout.marginRight = 10;
+		layout.marginTop = 10;
+		layout.marginBottom = 10;
+		group.setLayout(layout);
 		Font font = group.getFont();
 		FontData fontData = font.getFontData()[0];
 		Font newFont = new Font(group.getDisplay(), fontData.getName(),
@@ -82,7 +87,7 @@ public class CoCoMoResultPanel extends Composite {
 		Label newLabel = new Label(group, SWT.NONE);
 		FormData fdNewLabel = new FormData();
 		if (labelAbove == null) {
-			fdNewLabel.top = new FormAttachment(0, 10);
+			fdNewLabel.top = new FormAttachment(0, 0);
 		} else {
 			fdNewLabel.top = new FormAttachment(labelAbove, 10);
 		}
@@ -110,7 +115,7 @@ public class CoCoMoResultPanel extends Composite {
 		fdNewText.top = new FormAttachment(equalsLabel, 0, SWT.TOP);
 		fdNewText.bottom = new FormAttachment(equalsLabel, 0, SWT.BOTTOM);
 		fdNewText.left = new FormAttachment(equalsLabel, 10);
-		fdNewText.right = new FormAttachment(100, -10);
+		fdNewText.right = new FormAttachment(100, 0);
 		newText.setLayoutData(fdNewText);
 		return newText;
 	}
