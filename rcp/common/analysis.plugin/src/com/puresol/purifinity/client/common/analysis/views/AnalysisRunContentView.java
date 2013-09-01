@@ -10,7 +10,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeSelection;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -23,8 +22,7 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunContentTreeContentProvider;
-import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunContentTreeLabelProvider;
+import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunContentTreeViewer;
 import com.puresol.purifinity.client.common.analysis.editors.DirectoryAnalysisEditor;
 import com.puresol.purifinity.client.common.analysis.editors.DirectoryAnalysisEditorInput;
 import com.puresol.purifinity.client.common.analysis.editors.FileAnalysisEditor;
@@ -43,9 +41,8 @@ public class AnalysisRunContentView extends ViewPart implements
 	private AnalysisProject analysis;
 	private AnalysisRun analysisRun;
 	private Tree fileTree;
-	private TreeViewer fileTreeViewer;
+	private AnalysisRunContentTreeViewer fileTreeViewer;
 	private FileAnalysisSelection fileAnalysisSelection;
-	private AnalysisRunContentTreeLabelProvider labelProvider;
 	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
 	private HashIdFileTree lastSelection;
 
@@ -59,11 +56,7 @@ public class AnalysisRunContentView extends ViewPart implements
 		composite.setLayout(new FillLayout());
 
 		fileTree = new Tree(composite, SWT.BORDER);
-		fileTreeViewer = new TreeViewer(fileTree);
-		fileTreeViewer
-				.setContentProvider(new AnalysisRunContentTreeContentProvider());
-		labelProvider = new AnalysisRunContentTreeLabelProvider();
-		fileTreeViewer.setLabelProvider(labelProvider);
+		fileTreeViewer = new AnalysisRunContentTreeViewer(fileTree);
 		fileTree.setHeaderVisible(true);
 		fileTree.setEnabled(true);
 		fileTree.setVisible(true);
@@ -89,8 +82,7 @@ public class AnalysisRunContentView extends ViewPart implements
 		} else if (selection instanceof AnalysisRunSelection) {
 			AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
 			analysisRun = analysisRunSelection.getAnalysisRun();
-			labelProvider.setAnalysisRun(analysisRun);
-			fileTreeViewer.setInput(analysisRun.getFileTree());
+			fileTreeViewer.setInput(analysisRun);
 			fileTree.redraw();
 			fileTreeViewer.refresh();
 		}
