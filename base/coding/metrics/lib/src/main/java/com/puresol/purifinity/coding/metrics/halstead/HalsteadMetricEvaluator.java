@@ -62,8 +62,16 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
+		HalsteadMetricDirectoryResults finalResults = createDirectoryResults(directory);
+		if (finalResults != null) {
+			store.storeDirectoryResults(directory.getHashId(), finalResults);
+		}
+	}
+
+	private HalsteadMetricDirectoryResults createDirectoryResults(
+			HashIdFileTree directory) {
 		if (store.hasDirectoryResults(directory.getHashId())) {
-			return;
+			return null;
 		}
 		HalsteadMetricResult results = null;
 		for (HashIdFileTree child : directory.getChildren()) {
@@ -75,7 +83,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 		}
 		HalsteadMetricDirectoryResults finalResults = new HalsteadMetricDirectoryResults(
 				results);
-		store.storeDirectoryResults(directory.getHashId(), finalResults);
+		return finalResults;
 	}
 
 	private HalsteadMetricResult processFile(HashIdFileTree directory,
@@ -120,6 +128,10 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processProject() throws InterruptedException {
-		// intentionally left blank
+		HashIdFileTree directory = getAnalysisRun().getFileTree();
+		HalsteadMetricDirectoryResults finalResults = createDirectoryResults(directory);
+		if (finalResults != null) {
+			store.storeDirectoryResults(directory.getHashId(), finalResults);
+		}
 	}
 }

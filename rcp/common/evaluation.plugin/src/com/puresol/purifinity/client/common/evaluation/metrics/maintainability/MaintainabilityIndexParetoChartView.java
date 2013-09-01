@@ -111,7 +111,7 @@ public class MaintainabilityIndexParetoChartView extends
 	protected void updateEvaluation() {
 		FileAnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
-			HashIdFileTree path = analysisSelection.getHashIdFile();
+			HashIdFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
 				path = path.getParent();
 			}

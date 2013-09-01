@@ -43,7 +43,7 @@ public class MaintainabilityIndexEvaluatorStore extends AbstractEvaluatorStore {
 	}
 
 	@Override
-	public MetricFileResults readFileResults(HashId hashId) {
+	public MaintainabilityIndexFileResults readFileResults(HashId hashId) {
 		if (hasFileResults(hashId)) {
 			File file = getFileResultsFile(hashId);
 			return restore(file, MaintainabilityIndexFileResults.class);

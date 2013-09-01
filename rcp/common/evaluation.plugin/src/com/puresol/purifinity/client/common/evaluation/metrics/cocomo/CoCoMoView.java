@@ -50,7 +50,7 @@ public class CoCoMoView extends AbstractEvaluationView {
 	protected void updateEvaluation() {
 		FileAnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
-			showEvaluation(analysisSelection.getHashIdFile());
+			showEvaluation(analysisSelection.getFileTreeNode());
 		}
 	}
 

@@ -48,7 +48,7 @@ public class McCabeMetricEvaluatorStore extends AbstractEvaluatorStore {
 	}
 
 	@Override
-	public MetricFileResults readFileResults(HashId hashId) {
+	public McCabeMetricFileResults readFileResults(HashId hashId) {
 		if (hasFileResults(hashId)) {
 			File file = getFileResultsFile(hashId);
 			return restore(file, McCabeMetricFileResults.class);
@@ -58,7 +58,7 @@ public class McCabeMetricEvaluatorStore extends AbstractEvaluatorStore {
 	}
 
 	@Override
-	public MetricDirectoryResults readDirectoryResults(HashId hashId) {
+	public McCabeMetricDirectoryResults readDirectoryResults(HashId hashId) {
 		if (hasDirectoryResults(hashId)) {
 			File file = getDirectoryResultsFile(hashId);
 			return restore(file, McCabeMetricDirectoryResults.class);
@@ -68,8 +68,13 @@ public class McCabeMetricEvaluatorStore extends AbstractEvaluatorStore {
 	}
 
 	@Override
-	public MetricDirectoryResults readProjectResults(AnalysisRun analysisRun) {
-		File file = getProjectResultsFile(analysisRun);
-		return restore(file, McCabeMetricDirectoryResults.class);
+	public McCabeMetricDirectoryResults readProjectResults(
+			AnalysisRun analysisRun) {
+		if (hasProjectResults(analysisRun)) {
+			File file = getProjectResultsFile(analysisRun);
+			return restore(file, McCabeMetricDirectoryResults.class);
+		} else {
+			return null;
+		}
 	}
 }

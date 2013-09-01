@@ -167,7 +167,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 		FileAnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (metricSelection != null)
 				&& (parameterSelection != null)) {
-			HashIdFileTree path = analysisSelection.getHashIdFile();
+			HashIdFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
 				path = path.getParent();
 			}

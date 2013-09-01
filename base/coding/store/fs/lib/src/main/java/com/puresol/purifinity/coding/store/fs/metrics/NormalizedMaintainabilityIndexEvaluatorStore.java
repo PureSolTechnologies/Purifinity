@@ -44,7 +44,8 @@ public class NormalizedMaintainabilityIndexEvaluatorStore extends
 	}
 
 	@Override
-	public MetricFileResults readFileResults(HashId hashId) {
+	public NormalizedMaintainabilityIndexFileResults readFileResults(
+			HashId hashId) {
 		if (hasFileResults(hashId)) {
 			File file = getFileResultsFile(hashId);
 			return restore(file,

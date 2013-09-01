@@ -43,7 +43,7 @@ public class EntropyEvaluatorStore extends AbstractEvaluatorStore {
 	}
 
 	@Override
-	public MetricFileResults readFileResults(HashId hashId) {
+	public EntropyFileResults readFileResults(HashId hashId) {
 		if (hasFileResults(hashId)) {
 			File file = getFileResultsFile(hashId);
 			return restore(file, EntropyFileResults.class);

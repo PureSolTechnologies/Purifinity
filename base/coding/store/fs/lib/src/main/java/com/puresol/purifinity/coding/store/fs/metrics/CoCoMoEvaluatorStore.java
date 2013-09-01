@@ -49,7 +49,7 @@ public class CoCoMoEvaluatorStore extends AbstractEvaluatorStore {
 	}
 
 	@Override
-	public MetricFileResults readFileResults(HashId hashId) {
+	public CoCoMoFileResults readFileResults(HashId hashId) {
 		if (hasFileResults(hashId)) {
 			File file = getFileResultsFile(hashId);
 			return restore(file, CoCoMoFileResults.class);
@@ -59,7 +59,7 @@ public class CoCoMoEvaluatorStore extends AbstractEvaluatorStore {
 	}
 
 	@Override
-	public MetricDirectoryResults readDirectoryResults(HashId hashId) {
+	public CoCoMoDirectoryResults readDirectoryResults(HashId hashId) {
 		if (hasDirectoryResults(hashId)) {
 			File file = getDirectoryResultsFile(hashId);
 			return restore(file, CoCoMoDirectoryResults.class);
@@ -69,8 +69,12 @@ public class CoCoMoEvaluatorStore extends AbstractEvaluatorStore {
 	}
 
 	@Override
-	public MetricDirectoryResults readProjectResults(AnalysisRun analysisRun) {
-		File file = getProjectResultsFile(analysisRun);
-		return restore(file, CoCoMoDirectoryResults.class);
+	public CoCoMoDirectoryResults readProjectResults(AnalysisRun analysisRun) {
+		if (hasProjectResults(analysisRun)) {
+			File file = getProjectResultsFile(analysisRun);
+			return restore(file, CoCoMoDirectoryResults.class);
+		} else {
+			return null;
+		}
 	}
 }

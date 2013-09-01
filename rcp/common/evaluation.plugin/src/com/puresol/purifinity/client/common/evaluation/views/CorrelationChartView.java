@@ -194,7 +194,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		if ((analysisSelection != null) && (xMetricSelection != null)
 				&& (xParameterSelection != null) && (yMetricSelection != null)
 				&& (yParameterSelection != null)) {
-			HashIdFileTree path = analysisSelection.getHashIdFile();
+			HashIdFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
 				path = path.getParent();
 			}

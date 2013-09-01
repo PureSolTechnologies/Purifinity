@@ -19,8 +19,8 @@
 
    <splash
       location="com.puresol.purifinity.client.common.branding.plugin"
-      startupProgressRect="50,100,445,32"
-      startupMessageRect="28,252,445,20"
+      startupProgressRect="10,200,620,32"
+      startupMessageRect="10,248,620,20"
       startupForegroundColor="000000" />
    <launcher name="purifinity">
       <solaris/>
@@ -29,7 +29,7 @@
       </win>
    </launcher>
 
-   <intro introId="com.puresol.coding.client.application.plugin.intro"/>
+   <intro introId="com.puresol.purifinity.client.application.plugin.introProductBindingFull"/>
 
    <vm>
    </vm>

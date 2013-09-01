@@ -150,7 +150,7 @@ public class MetricsTableView extends ViewPart implements Refreshable,
 	}
 
 	private void updateEvaluation() {
-		HashIdFileTree path = analysisSelection.getHashIdFile();
+		HashIdFileTree path = analysisSelection.getFileTreeNode();
 		showEvaluation(path);
 	}
 

@@ -69,7 +69,11 @@ public class SLOCEvaluatorStore extends AbstractEvaluatorStore {
 
 	@Override
 	public MetricDirectoryResults readProjectResults(AnalysisRun analysisRun) {
-		File file = getProjectResultsFile(analysisRun);
-		return restore(file, SLOCDirectoryResults.class);
+		if (hasProjectResults(analysisRun)) {
+			File file = getProjectResultsFile(analysisRun);
+			return restore(file, SLOCDirectoryResults.class);
+		} else {
+			return null;
+		}
 	}
 }

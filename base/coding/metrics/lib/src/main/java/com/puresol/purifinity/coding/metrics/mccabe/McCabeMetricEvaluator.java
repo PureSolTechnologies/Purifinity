@@ -61,8 +61,16 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
+		McCabeMetricDirectoryResults finalResults = createDirectoryResults(directory);
+		if (finalResults != null) {
+			store.storeDirectoryResults(directory.getHashId(), finalResults);
+		}
+	}
+
+	private McCabeMetricDirectoryResults createDirectoryResults(
+			HashIdFileTree directory) {
 		if (store.hasDirectoryResults(directory.getHashId())) {
-			return;
+			return null;
 		}
 		McCabeMetricResult results = null;
 		for (HashIdFileTree child : directory.getChildren()) {
@@ -74,7 +82,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 		}
 		McCabeMetricDirectoryResults finalResults = new McCabeMetricDirectoryResults(
 				results);
-		store.storeDirectoryResults(directory.getHashId(), finalResults);
+		return finalResults;
 	}
 
 	private McCabeMetricResult processFile(HashIdFileTree directory,
@@ -119,7 +127,10 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processProject() throws InterruptedException {
-		// TODO Auto-generated method stub
-
+		HashIdFileTree directory = getAnalysisRun().getFileTree();
+		McCabeMetricDirectoryResults finalResults = createDirectoryResults(directory);
+		if (finalResults != null) {
+			store.storeDirectoryResults(directory.getHashId(), finalResults);
+		}
 	}
 }

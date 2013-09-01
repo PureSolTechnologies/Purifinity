@@ -43,7 +43,7 @@ public class CodeDepthEvaluatorStore extends AbstractEvaluatorStore {
 	}
 
 	@Override
-	public MetricFileResults readFileResults(HashId hashId) {
+	public CodeDepthFileResults readFileResults(HashId hashId) {
 		if (hasFileResults(hashId)) {
 			File file = getFileResultsFile(hashId);
 			return restore(file, CodeDepthFileResults.class);

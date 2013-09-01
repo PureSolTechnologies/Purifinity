@@ -101,6 +101,12 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
+		CoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
+		store.storeDirectoryResults(directory.getHashId(), directoryResults);
+	}
+
+	private CoCoMoDirectoryResults createDirectoryResults(
+			HashIdFileTree directory) {
 		int phyLoc = 0;
 		for (HashIdFileTree child : directory.getChildren()) {
 			HashId hashId = child.getHashId();
@@ -124,12 +130,14 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 		directoryResults.setAverageSalary(averageSalary, currency);
 		directoryResults.setComplexity(complexity);
 		directoryResults.setSloc(phyLoc);
-		store.storeDirectoryResults(directory.getHashId(), directoryResults);
+		return directoryResults;
 	}
 
 	@Override
 	protected void processProject() throws InterruptedException {
-		// TODO Auto-generated method stub
+		HashIdFileTree directory = getAnalysisRun().getFileTree();
+		CoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
+		store.storeDirectoryResults(directory.getHashId(), directoryResults);
 	}
 
 }

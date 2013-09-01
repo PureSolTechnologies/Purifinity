@@ -207,7 +207,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 		FileAnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (mapMetricSelection != null)
 				&& (mapValueSelection != null)) {
-			HashIdFileTree path = analysisSelection.getHashIdFile();
+			HashIdFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
 				path = path.getParent();
 			}

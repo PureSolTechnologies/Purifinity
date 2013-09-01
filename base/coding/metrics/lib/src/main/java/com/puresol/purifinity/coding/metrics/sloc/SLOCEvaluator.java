@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
+import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
@@ -65,8 +66,17 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
-		if (store.hasDirectoryResults(directory.getHashId())) {
-			return;
+		SLOCDirectoryResults finalResults = createDirectoryResults(directory);
+		if (finalResults != null) {
+			store.storeDirectoryResults(directory.getHashId(), finalResults);
+		}
+	}
+
+	private SLOCDirectoryResults createDirectoryResults(
+			HashIdFileTree directory) {
+		HashId hashId = directory.getHashId();
+		if (store.hasDirectoryResults(hashId)) {
+			return null;
 		}
 		SLOCResult results = null;
 		for (HashIdFileTree child : directory.getChildren()) {
@@ -77,7 +87,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 			}
 		}
 		SLOCDirectoryResults finalResults = new SLOCDirectoryResults(results);
-		store.storeDirectoryResults(directory.getHashId(), finalResults);
+		return finalResults;
 	}
 
 	private SLOCResult processFile(HashIdFileTree directory,
@@ -121,6 +131,10 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processProject() throws InterruptedException {
-		// TODO Auto-generated method stub
+		HashIdFileTree directory = getAnalysisRun().getFileTree();
+		SLOCDirectoryResults finalResults = createDirectoryResults(directory);
+		if (finalResults != null) {
+			store.storeProjectResults(getAnalysisRun(), finalResults);
+		}
 	}
 }
