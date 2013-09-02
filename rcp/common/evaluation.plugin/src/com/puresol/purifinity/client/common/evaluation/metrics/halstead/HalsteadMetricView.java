@@ -6,6 +6,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -68,16 +69,23 @@ public class HalsteadMetricView extends AbstractEvaluationView implements
 		fdTabFolder.left = new FormAttachment(0, 10);
 		fdTabFolder.right = new FormAttachment(100, -10);
 		fdTabFolder.top = new FormAttachment(codeRangeCombo, 10);
+		fdTabFolder.bottom = new FormAttachment(100, -10);
 		tabFolder.setLayoutData(fdTabFolder);
 
 		TabItem resultsTab = new TabItem(tabFolder, SWT.NONE);
 		resultsTab.setText("Results");
-		resultPanel = new HalsteadMetricResultPanel(tabFolder);
-		resultsTab.setControl(resultPanel);
+		ScrolledComposite scrolled = new ScrolledComposite(tabFolder,
+				SWT.V_SCROLL | SWT.H_SCROLL);
+		resultsTab.setControl(scrolled);
+		resultPanel = new HalsteadMetricResultPanel(scrolled);
+		scrolled.setContent(resultPanel);
+		scrolled.setExpandHorizontal(true);
+		scrolled.setExpandVertical(true);
+		scrolled.setMinSize(resultPanel.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		TabItem operatorsTab = new TabItem(tabFolder, SWT.NONE);
 		operatorsTab.setText("Operators");
-		Table operatorsTable = new Table(tabFolder, SWT.NONE);
+		Table operatorsTable = new Table(tabFolder, SWT.V_SCROLL);
 		operatorsTable.setHeaderVisible(true);
 		operatorsTable.setLinesVisible(true);
 		operatorsTab.setControl(operatorsTable);
@@ -85,7 +93,7 @@ public class HalsteadMetricView extends AbstractEvaluationView implements
 
 		TabItem operandsTab = new TabItem(tabFolder, SWT.NONE);
 		operandsTab.setText("Operands");
-		Table operandsTable = new Table(tabFolder, SWT.NONE);
+		Table operandsTable = new Table(tabFolder, SWT.V_SCROLL);
 		operandsTable.setHeaderVisible(true);
 		operandsTable.setLinesVisible(true);
 		operandsTab.setControl(operandsTable);

@@ -36,7 +36,9 @@ public abstract class AbstractEvaluationView extends ViewPart implements
 
 	@Override
 	public void dispose() {
-		selectionService.removeSelectionListener(this);
+		if (selectionService != null) {
+			selectionService.removeSelectionListener(this);
+		}
 		super.dispose();
 	}
 

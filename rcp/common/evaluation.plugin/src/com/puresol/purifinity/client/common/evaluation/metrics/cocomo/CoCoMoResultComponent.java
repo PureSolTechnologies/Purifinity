@@ -32,7 +32,10 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 	public CoCoMoResultComponent(Composite parent) {
 		super(parent, SWT.NONE);
 
-		setLayout(new FormLayout());
+		FormLayout layout = new FormLayout();
+		layout.marginWidth = 10;
+		layout.marginHeight = 10;
+		setLayout(layout);
 
 		Composite parameterSelection = new Composite(this, SWT.NONE);
 		parameterSelection.setLayout(new GridLayout(2, true));

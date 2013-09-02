@@ -1,5 +1,7 @@
 package com.puresol.purifinity.client.common.evaluation.metrics.cocomo;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
@@ -21,7 +23,14 @@ public class CoCoMoView extends AbstractEvaluationView {
 	@Override
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
-		resultComponent = new CoCoMoResultComponent(parent);
+		ScrolledComposite scrolledComposite = new ScrolledComposite(parent,
+				SWT.H_SCROLL | SWT.V_SCROLL);
+		resultComponent = new CoCoMoResultComponent(scrolledComposite);
+		scrolledComposite.setContent(resultComponent);
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);
+		scrolledComposite.setMinSize(resultComponent.computeSize(SWT.DEFAULT,
+				SWT.DEFAULT));
 		super.createPartControl(parent);
 	}
 
