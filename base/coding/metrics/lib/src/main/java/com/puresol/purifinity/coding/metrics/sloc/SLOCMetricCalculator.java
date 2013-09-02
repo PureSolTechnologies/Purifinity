@@ -160,10 +160,8 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 					} else if (type == SLOCType.PRODUCTIVE) {
 						lineResults.get(line).setProductiveContent(true);
 					}
-					if (type != SLOCType.PHYSICAL) {
-						lineResults.get(line).addLength(
-								token.getContent().length());
-					}
+					lineResults.get(line)
+							.addLength(token.getContent().length());
 				}
 			}
 		} while (iterator.goForward());

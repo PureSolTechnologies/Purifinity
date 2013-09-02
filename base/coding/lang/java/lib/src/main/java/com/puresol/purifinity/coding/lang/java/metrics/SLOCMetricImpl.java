@@ -13,13 +13,10 @@ public class SLOCMetricImpl implements LanguageDependedSLOCMetric {
 		if ("Comment".equals(name)) {
 			return SLOCType.COMMENT;
 		}
-		if ("WhiteSpace".equals(name)) {
+		if ("WhiteSpace".equals(name) || "LineTerminator".equals(name)) {
 			return SLOCType.BLANK;
 		}
-		if (!"LineTerminator".equals(name)) {
-			return SLOCType.PRODUCTIVE;
-		}
-		return SLOCType.PHYSICAL;
+		return SLOCType.PRODUCTIVE;
 	}
 
 	@Override

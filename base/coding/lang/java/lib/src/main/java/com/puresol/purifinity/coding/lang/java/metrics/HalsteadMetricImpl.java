@@ -17,6 +17,14 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 
 	private static final long serialVersionUID = -8803388779974090457L;
 
+	/*
+	 * Operators are only(?) keywords within the language. We take all keywords
+	 * from the language specification here and remove (via comment) all build
+	 * in operands.
+	 */
+	/**
+	 * Keeps the operators of Java.
+	 */
 	private static final List<String> operators = new ArrayList<String>();
 	static {
 		operators.add("ABSTRACT");
@@ -98,6 +106,10 @@ public class HalsteadMetricImpl implements LanguageDependedHalsteadMetric {
 		operators.add("VERTICAL_BAR");
 	}
 
+	/**
+	 * Some operators are special like language construct. The names/symbols are
+	 * kept in this field.
+	 */
 	private static final List<String> lParenExceptions = new ArrayList<String>();
 	static {
 		lParenExceptions.add("IfThenStatement");
