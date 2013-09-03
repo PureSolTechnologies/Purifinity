@@ -33,52 +33,49 @@ public class AbstractHalsteadResults implements Serializable {
 	private static final long serialVersionUID = 7911283186514371553L;
 
 	protected Map<String, Value<?>> convertToRow(HalsteadMetricResult result) {
-		HalsteadResult halstead = result.getHalsteadResult();
 		Map<String, Value<?>> row = new HashMap<String, Value<?>>();
-		row.put(SOURCE_CODE_LOCATION.getName(), new GeneralValue<CodeLocation>(
-				result.getSourceCodeLocation(), SOURCE_CODE_LOCATION));
-		row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
-				result.getCodeRangeType(), CODE_RANGE_TYPE));
-		row.put(CODE_RANGE_NAME.getName(),
-				new GeneralValue<String>(result.getCodeRangeName(),
-						CODE_RANGE_NAME));
-		row.put(DIFFERENT_OPERATORS.getName(), new GeneralValue<Integer>(
-				halstead.getDifferentOperators(), DIFFERENT_OPERATORS));
-		row.put(DIFFERENT_OPERANDS.getName(), new GeneralValue<Integer>(
-				halstead.getDifferentOperands(), DIFFERENT_OPERANDS));
-		row.put(TOTAL_OPERATORS.getName(),
-				new GeneralValue<Integer>(halstead.getTotalOperators(),
-						TOTAL_OPERATORS));
-		row.put(TOTAL_OPERANDS.getName(),
-				new GeneralValue<Integer>(halstead.getTotalOperands(),
-						TOTAL_OPERANDS));
-		row.put(VOCABULARY_SIZE.getName(),
-				new GeneralValue<Integer>(halstead.getVocabularySize(),
-						VOCABULARY_SIZE));
-		row.put(PROGRAM_LENGTH.getName(),
-				new GeneralValue<Integer>(halstead.getProgramLength(),
-						PROGRAM_LENGTH));
-		row.put(HALSTEAD_LENGTH.getName(),
-				new GeneralValue<Double>(halstead.getHalsteadLength(),
-						HALSTEAD_LENGTH));
-		row.put(HALSTEAD_VOLUMNE.getName(),
-				new GeneralValue<Double>(halstead.getHalsteadVolume(),
-						HALSTEAD_VOLUMNE));
-		row.put(DIFFICULTY.getName(),
-				new GeneralValue<Double>(halstead.getDifficulty(), DIFFICULTY));
-		row.put(PROGRAM_LEVEL.getName(),
-				new GeneralValue<Double>(halstead.getProgramLevel(),
-						PROGRAM_LEVEL));
-		row.put(IMPLEMENTATION_EFFORT.getName(), new GeneralValue<Double>(
-				halstead.getImplementationEffort(), IMPLEMENTATION_EFFORT));
-		row.put(IMPLEMENTATION_TIME.getName(), new GeneralValue<Double>(
-				halstead.getImplementationTime(), IMPLEMENTATION_TIME));
-		row.put(ESTIMATED_BUGS.getName(),
-				new GeneralValue<Double>(halstead.getEstimatedBugs(),
-						ESTIMATED_BUGS));
-		row.put(QUALITY.getName(),
-				new GeneralValue<SourceCodeQuality>(result.getQuality(),
-						QUALITY));
+		if (result != null) {
+			HalsteadResult halstead = result.getHalsteadResult();
+			row.put(SOURCE_CODE_LOCATION.getName(),
+					new GeneralValue<CodeLocation>(result
+							.getSourceCodeLocation(), SOURCE_CODE_LOCATION));
+			row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
+					result.getCodeRangeType(), CODE_RANGE_TYPE));
+			row.put(CODE_RANGE_NAME.getName(),
+					new GeneralValue<String>(result.getCodeRangeName(),
+							CODE_RANGE_NAME));
+			row.put(DIFFERENT_OPERATORS.getName(), new GeneralValue<Integer>(
+					halstead.getDifferentOperators(), DIFFERENT_OPERATORS));
+			row.put(DIFFERENT_OPERANDS.getName(), new GeneralValue<Integer>(
+					halstead.getDifferentOperands(), DIFFERENT_OPERANDS));
+			row.put(TOTAL_OPERATORS.getName(), new GeneralValue<Integer>(
+					halstead.getTotalOperators(), TOTAL_OPERATORS));
+			row.put(TOTAL_OPERANDS.getName(), new GeneralValue<Integer>(
+					halstead.getTotalOperands(), TOTAL_OPERANDS));
+			row.put(VOCABULARY_SIZE.getName(), new GeneralValue<Integer>(
+					halstead.getVocabularySize(), VOCABULARY_SIZE));
+			row.put(PROGRAM_LENGTH.getName(), new GeneralValue<Integer>(
+					halstead.getProgramLength(), PROGRAM_LENGTH));
+			row.put(HALSTEAD_LENGTH.getName(), new GeneralValue<Double>(
+					halstead.getHalsteadLength(), HALSTEAD_LENGTH));
+			row.put(HALSTEAD_VOLUMNE.getName(), new GeneralValue<Double>(
+					halstead.getHalsteadVolume(), HALSTEAD_VOLUMNE));
+			row.put(DIFFICULTY.getName(),
+					new GeneralValue<Double>(halstead.getDifficulty(),
+							DIFFICULTY));
+			row.put(PROGRAM_LEVEL.getName(),
+					new GeneralValue<Double>(halstead.getProgramLevel(),
+							PROGRAM_LEVEL));
+			row.put(IMPLEMENTATION_EFFORT.getName(), new GeneralValue<Double>(
+					halstead.getImplementationEffort(), IMPLEMENTATION_EFFORT));
+			row.put(IMPLEMENTATION_TIME.getName(), new GeneralValue<Double>(
+					halstead.getImplementationTime(), IMPLEMENTATION_TIME));
+			row.put(ESTIMATED_BUGS.getName(),
+					new GeneralValue<Double>(halstead.getEstimatedBugs(),
+							ESTIMATED_BUGS));
+			row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
+					result.getQuality(), QUALITY));
+		}
 		return row;
 	}
 

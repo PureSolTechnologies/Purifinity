@@ -131,6 +131,14 @@
             name="Halstead Metric"
             restorable="true">
       </view>
+      <view
+            allowMultiple="false"
+            category="com.puresol.purifinity.client.common.evaluation.Evaluation"
+            class="com.puresol.purifinity.client.common.evaluation.views.AnalysisRunEvaluationView"
+            id="com.puresol.purifinity.client.common.evaluation.views.AnalysisRunEvaluationView"
+            name="Evaluation File Tree"
+            restorable="true">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.menus">

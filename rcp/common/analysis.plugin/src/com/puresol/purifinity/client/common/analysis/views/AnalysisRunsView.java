@@ -247,11 +247,11 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 	if (selection instanceof AnalysisProjectSelection) {
-	    processGlobalAnalysisSelection(selection);
+	    processAnalysisProjectSelection(selection);
 	}
     }
 
-    private void processGlobalAnalysisSelection(ISelection selection) {
+    private void processAnalysisProjectSelection(ISelection selection) {
 	try {
 	    AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
 	    analysis = analysisSelection.getAnalysisProject();

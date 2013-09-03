@@ -148,18 +148,18 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener,
 				name.setText(analysis.getSettings().getName());
 				if (analysisRun != null) {
 					analyzedTableViewer
-							.setInput(analysisRun.getAnalyzedUnits());
-					failedTableViewer.setInput(analysisRun.getFailedUnits());
-					int analyzedCodesSize = analysisRun.getAnalyzedUnits()
+							.setInput(analysisRun.getAnalyzedFiles());
+					failedTableViewer.setInput(analysisRun.getFailedFiles());
+					int analyzedCodesSize = analysisRun.getAnalyzedFiles()
 							.size();
-					int failedCodesSize = analysisRun.getFailedUnits().size();
+					int failedCodesSize = analysisRun.getFailedFiles().size();
 					totalFiles.setText(String.valueOf(analyzedCodesSize
 							+ failedCodesSize));
 					analyzedFiles.setText(String.valueOf(analyzedCodesSize));
 					unanalyzedFiles.setText(String.valueOf(failedCodesSize));
 					int errors = 0;
 					for (AnalyzedCode analyzedCode : analysisRun
-							.getFailedUnits()) {
+							.getFailedFiles()) {
 						if (analyzedCode.wasError()) {
 							errors++;
 						}

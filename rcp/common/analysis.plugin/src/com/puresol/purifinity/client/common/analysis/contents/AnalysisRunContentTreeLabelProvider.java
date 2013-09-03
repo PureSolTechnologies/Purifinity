@@ -22,78 +22,102 @@ import com.puresol.purifinity.coding.analysis.api.FileStoreFactory;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 
 public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
+	private final Logger logger = LoggerFactory
+			.getLogger(AnalysisRunContentTreeLabelProvider.class);
 
-    private final Logger logger = LoggerFactory
-	    .getLogger(AnalysisRunContentTreeLabelProvider.class);
+	private final ISharedImages shareImageManager = PlatformUI.getWorkbench()
+			.getSharedImages();
+	private final ImageDescriptor errorDecoratorImage = shareImageManager
+			.getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR);
+	private final ImageDescriptor questionDecoratorImage = shareImageManager
+			.getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING);
 
-    private final ISharedImages shareImageManager = PlatformUI.getWorkbench()
-	    .getSharedImages();
-    private final ImageDescriptor errorDecoratorImage = shareImageManager
-	    .getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR);
-    private final ImageDescriptor questionDecoratorImage = shareImageManager
-	    .getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING);
+	private AnalysisRun analysisRun;
 
-    private AnalysisRun analysisRun;
-
-    public void setAnalysisRun(AnalysisRun analysisRun) {
-	this.analysisRun = analysisRun;
-    }
-
-    @Override
-    public String getText(Object element) {
-	if (element instanceof String) {
-	    return (String) element;
+	public void setAnalysisRun(AnalysisRun analysisRun) {
+		this.analysisRun = analysisRun;
 	}
-	HashIdFileTree input = (HashIdFileTree) element;
-	String text = input.getName();
-	File path = input.getPathFile(false);
-	AnalyzedCode analyzedFile = analysisRun
-		.findAnalyzedCode(path.getPath());
-	FileStore fileStore = FileStoreFactory.getFactory().getInstance();
-	if (fileStore != null) {
-	    if (analyzedFile != null) {
-		if (fileStore.wasAnalyzed(analyzedFile.getHashId())) {
-		    try {
-			CodeAnalysis analysisResult = fileStore
-				.loadAnalysis(analyzedFile.getHashId());
-			text += " (" + analysisResult.getLanguageName() + " "
-				+ analysisResult.getLanguageVersion() + ")";
-		    } catch (FileStoreException e) {
-			logger.warn(
-				"Could not load the analysis which was offered by the store.",
-				e);
-		    }
+
+	@Override
+	public String getText(Object element) {
+		if (element instanceof String) {
+			return (String) element;
 		}
-	    }
+		HashIdFileTree input = (HashIdFileTree) element;
+		String text = input.getName();
+		File path = input.getPathFile(false);
+		AnalyzedCode analyzedFile = analysisRun
+				.findAnalyzedCode(path.getPath());
+		FileStore fileStore = FileStoreFactory.getFactory().getInstance();
+		if ((fileStore != null) && (analyzedFile != null)) {
+			if (fileStore.wasAnalyzed(analyzedFile.getHashId())) {
+				try {
+					CodeAnalysis analysisResult = fileStore
+							.loadAnalysis(analyzedFile.getHashId());
+					text += " (" + analysisResult.getLanguageName() + " "
+							+ analysisResult.getLanguageVersion() + ")";
+				} catch (FileStoreException e) {
+					logger.warn(
+							"Could not load the analysis which was offered by the store.",
+							e);
+				}
+			}
+		}
+		return text;
 	}
-	return text;
-    }
 
-    @Override
-    public Image getImage(Object element) {
-	if (element instanceof String) {
-	    return ClientImages.getImage(ClientImages.ANALYSIS_RUN_16x16);
+	@Override
+	public Image getImage(Object element) {
+		if (element instanceof String) {
+			return createProjectImage();
+		}
+		HashIdFileTree input = (HashIdFileTree) element;
+		if (!input.isFile()) {
+			return createFolderImage(input);
+		}
+		return createFileImage(input);
 	}
-	HashIdFileTree input = (HashIdFileTree) element;
-	File path = input.getPathFile(false);
-	AnalyzedCode analyzedFile = analysisRun
-		.findAnalyzedCode(path.getPath());
-	if (!input.isFile()) {
-	    return ClientImages.getImage(ClientImages.FOLDER_16x16);
+
+	/**
+	 * Creates an image for the project node.
+	 * 
+	 * @return
+	 */
+	private Image createProjectImage() {
+		return ClientImages.getImage(ClientImages.ANALYSIS_RUN_16x16);
 	}
-	Image documentImage = ClientImages
-		.getImage(ClientImages.DOCUMENT_EMPTY_16x16);
-	if (analyzedFile == null) {
-	    if (analysisRun.getFailedUnits().contains(input)) {
-		return new DecorationOverlayIcon(documentImage,
-			errorDecoratorImage, IDecoration.TOP_LEFT)
-			.createImage();
-	    } else {
-		return new DecorationOverlayIcon(documentImage,
-			questionDecoratorImage, IDecoration.TOP_LEFT)
-			.createImage();
-	    }
+
+	protected Image createFolderImage(HashIdFileTree node) {
+		return ClientImages.getImage(ClientImages.FOLDER_16x16);
 	}
-	return documentImage;
-    }
+
+	/**
+	 * Creates a node for a document node.
+	 * 
+	 * @param node
+	 * @param analyzedFile
+	 * @return
+	 */
+	protected Image createFileImage(HashIdFileTree node) {
+		File path = node.getPathFile(false);
+		AnalyzedCode analyzedFile = analysisRun
+				.findAnalyzedCode(path.getPath());
+		Image documentImage = ClientImages
+				.getImage(ClientImages.DOCUMENT_EMPTY_16x16);
+		if (analyzedFile == null) {
+			if (analysisRun.getFailedFiles().contains(node)) {
+				/* Analysis failed. */
+				return new DecorationOverlayIcon(documentImage,
+						errorDecoratorImage, IDecoration.TOP_LEFT)
+						.createImage();
+			} else {
+				/* Unknown file. */
+				return new DecorationOverlayIcon(documentImage,
+						questionDecoratorImage, IDecoration.TOP_LEFT)
+						.createImage();
+			}
+		}
+		return documentImage;
+	}
+
 }

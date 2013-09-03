@@ -600,7 +600,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	}
 
 	@Override
-	public List<AnalyzedCode> getAnalyzedUnits() {
+	public List<AnalyzedCode> getAnalyzedFiles() {
 		return analyzedFiles;
 	}
 
@@ -610,7 +610,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	}
 
 	@Override
-	public List<AnalyzedCode> getFailedUnits() {
+	public List<AnalyzedCode> getFailedFiles() {
 		return failedSources;
 	}
 

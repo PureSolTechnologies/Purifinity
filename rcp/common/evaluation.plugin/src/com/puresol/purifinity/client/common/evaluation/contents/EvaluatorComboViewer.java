@@ -10,23 +10,23 @@ import com.puresol.purifinity.coding.evaluation.api.Evaluators;
 
 public class EvaluatorComboViewer extends ComboViewer {
 
-    private final Evaluators evaluators;
+	private final Evaluators evaluators;
 
-    public EvaluatorComboViewer(Combo list) {
-	super(list);
-	setContentProvider(new EvaluatorsContentProvider());
-	setLabelProvider(new LabelProvider() {
-	    @Override
-	    public String getText(Object element) {
-		EvaluatorFactory evaluator = (EvaluatorFactory) element;
-		return evaluator.getName();
-	    }
-	});
-	evaluators = Evaluators.createInstance();
-	setInput(evaluators.getAll());
-    }
+	public EvaluatorComboViewer(Combo list) {
+		super(list);
+		setContentProvider(new EvaluatorsContentProvider());
+		setLabelProvider(new LabelProvider() {
+			@Override
+			public String getText(Object element) {
+				EvaluatorFactory evaluator = (EvaluatorFactory) element;
+				return evaluator.getName();
+			}
+		});
+		evaluators = Evaluators.createInstance();
+		setInput(evaluators.getAll());
+	}
 
-    public void dispose() {
-	IOUtils.closeQuietly(evaluators);
-    }
+	public void dispose() {
+		IOUtils.closeQuietly(evaluators);
+	}
 }

@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.common.analysis.views;
+package com.puresol.purifinity.client.common.evaluation.views;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,31 +22,34 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunContentTreeViewer;
 import com.puresol.purifinity.client.common.analysis.editors.DirectoryAnalysisEditor;
 import com.puresol.purifinity.client.common.analysis.editors.DirectoryAnalysisEditorInput;
 import com.puresol.purifinity.client.common.analysis.editors.FileAnalysisEditor;
 import com.puresol.purifinity.client.common.analysis.editors.FileAnalysisEditorInput;
 import com.puresol.purifinity.client.common.analysis.editors.NotAnalyzedEditor;
 import com.puresol.purifinity.client.common.analysis.editors.NotAnalyzedEditorInput;
+import com.puresol.purifinity.client.common.analysis.views.AnalysisProjectSelection;
+import com.puresol.purifinity.client.common.analysis.views.AnalysisRunSelection;
+import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.purifinity.client.common.evaluation.contents.AnalysisRunEvaluationTreeViewer;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 
-public class AnalysisRunContentView extends ViewPart implements
+public class AnalysisRunEvaluationView extends ViewPart implements
 		ISelectionListener, IDoubleClickListener, ISelectionProvider,
 		SelectionListener {
 
 	private AnalysisProject analysis;
 	private AnalysisRun analysisRun;
 	private Tree fileTree;
-	private AnalysisRunContentTreeViewer fileTreeViewer;
+	private AnalysisRunEvaluationTreeViewer fileTreeViewer;
 	private FileAnalysisSelection fileAnalysisSelection;
 	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
 	private HashIdFileTree lastSelection;
 
-	public AnalysisRunContentView() {
+	public AnalysisRunEvaluationView() {
 		super();
 	}
 
@@ -56,7 +59,7 @@ public class AnalysisRunContentView extends ViewPart implements
 		composite.setLayout(new FillLayout());
 
 		fileTree = new Tree(composite, SWT.BORDER);
-		fileTreeViewer = new AnalysisRunContentTreeViewer(fileTree);
+		fileTreeViewer = new AnalysisRunEvaluationTreeViewer(fileTree);
 		fileTree.setHeaderVisible(true);
 		fileTree.setEnabled(true);
 		fileTree.setVisible(true);
