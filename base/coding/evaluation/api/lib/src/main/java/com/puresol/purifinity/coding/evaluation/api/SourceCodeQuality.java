@@ -18,31 +18,12 @@ package com.puresol.purifinity.coding.evaluation.api;
  * 
  */
 public enum SourceCodeQuality implements Comparable<SourceCodeQuality> {
-	UNSPECIFIED(10), LOW(1), MEDIUM(2), HIGH(3);
-
-	private final int level;
-
-	private SourceCodeQuality(int level) {
-		this.level = level;
-	}
-
-	public int getLevel() {
-		return level;
-	}
-
-	public static SourceCodeQuality fromLevel(int level) {
-		for (SourceCodeQuality qualityLevel : SourceCodeQuality.values()) {
-			if (level == qualityLevel.getLevel()) {
-				return qualityLevel;
-			}
-		}
-		return SourceCodeQuality.UNSPECIFIED;
-	}
+	LOW, MEDIUM, HIGH, UNSPECIFIED, ;
 
 	public static SourceCodeQuality getMinLevel(SourceCodeQuality... levels) {
 		SourceCodeQuality resultLevel = UNSPECIFIED;
 		for (SourceCodeQuality level : levels) {
-			if (level.getLevel() < resultLevel.getLevel()) {
+			if (level.ordinal() < resultLevel.ordinal()) {
 				resultLevel = level;
 			}
 		}
