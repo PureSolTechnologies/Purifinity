@@ -27,7 +27,7 @@ public class AnalysisRunEvaluationTreeViewer extends TreeViewer {
 	}
 
 	public void setInput(AnalysisRun analysisRun) {
-		labelProvider.setAnalysisRun(analysisRun);
 		super.setInput(analysisRun.getFileTree());
+		labelProvider.setAnalysisRun(analysisRun);
 	}
 }

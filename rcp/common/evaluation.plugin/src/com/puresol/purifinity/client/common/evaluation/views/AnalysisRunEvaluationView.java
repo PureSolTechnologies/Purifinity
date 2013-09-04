@@ -54,16 +54,24 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 	}
 
 	@Override
+	public void dispose() {
+		IWorkbenchPartSite site = getSite();
+		site.getWorkbenchWindow().getSelectionService()
+				.removeSelectionListener(this);
+		super.dispose();
+	}
+
+	@Override
 	public void createPartControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
 
 		fileTree = new Tree(composite, SWT.BORDER);
-		fileTreeViewer = new AnalysisRunEvaluationTreeViewer(fileTree);
 		fileTree.setHeaderVisible(true);
 		fileTree.setEnabled(true);
 		fileTree.setVisible(true);
 		fileTree.addSelectionListener(this);
+		fileTreeViewer = new AnalysisRunEvaluationTreeViewer(fileTree);
 
 		IWorkbenchPartSite site = getSite();
 		site.getWorkbenchWindow().getSelectionService()

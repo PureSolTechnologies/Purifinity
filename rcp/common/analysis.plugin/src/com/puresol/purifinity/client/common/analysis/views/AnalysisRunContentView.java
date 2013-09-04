@@ -51,6 +51,14 @@ public class AnalysisRunContentView extends ViewPart implements
 	}
 
 	@Override
+	public void dispose() {
+		IWorkbenchPartSite site = getSite();
+		site.getWorkbenchWindow().getSelectionService()
+				.removeSelectionListener(this);
+		super.dispose();
+	}
+
+	@Override
 	public void createPartControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
