@@ -215,11 +215,11 @@
             id="com.puresol.purifinity.client.application.PurifinityIntroPart">
       </intro>
       <introProductBinding
-            introId="com.puresol.purifinity.client.application.plugin.introProductBindingFull"
+            introId="com.puresol.purifinity.client.application.PurifinityIntroPart"
             productId="com.puresol.purifinity.client.application.plugin.PurifinityFull">
       </introProductBinding>
       <introProductBinding
-            introId="com.puresol.purifinity.client.application.plugin.introProductBindingBase"
+            introId="com.puresol.purifinity.client.application.PurifinityIntroPart"
             productId="com.puresol.purifinity.client.application.plugin.PurifinityBase">
       </introProductBinding>
    </extension>
