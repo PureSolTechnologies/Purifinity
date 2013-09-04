@@ -55,8 +55,7 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 
 	@Override
 	public void dispose() {
-		IWorkbenchPartSite site = getSite();
-		site.getWorkbenchWindow().getSelectionService()
+		getSite().getWorkbenchWindow().getSelectionService()
 				.removeSelectionListener(this);
 		super.dispose();
 	}

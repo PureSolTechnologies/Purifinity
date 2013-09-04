@@ -21,8 +21,11 @@ public class ParserTreeView extends ViewPart implements ISelectionListener {
 			.getInstance();
 	private ParserTreeControl viewer;
 
-	public ParserTreeView() {
-		super();
+	@Override
+	public void dispose() {
+		getSite().getWorkbenchWindow().getSelectionService()
+				.removeSelectionListener(this);
+		super.dispose();
 	}
 
 	@Override

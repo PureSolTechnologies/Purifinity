@@ -50,7 +50,11 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener,
 
 	private AnalysisInformationDialog informationDialog;
 
-	public AnalysisReportView() {
+	@Override
+	public void dispose() {
+		getSite().getWorkbenchWindow().getSelectionService()
+				.removeSelectionListener(this);
+		super.dispose();
 	}
 
 	@Override
