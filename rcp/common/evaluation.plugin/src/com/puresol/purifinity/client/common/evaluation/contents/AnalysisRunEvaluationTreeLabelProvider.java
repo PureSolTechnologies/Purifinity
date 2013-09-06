@@ -87,7 +87,7 @@ public class AnalysisRunEvaluationTreeLabelProvider extends
 								if (quality == SourceCodeQuality.UNSPECIFIED) {
 									quality = sourceCodeQuality;
 								} else {
-									quality = SourceCodeQuality.getMinLevel(
+									quality = SourceCodeQuality.getMinimum(
 											quality, sourceCodeQuality);
 								}
 							}
@@ -152,7 +152,7 @@ public class AnalysisRunEvaluationTreeLabelProvider extends
 								if (quality == SourceCodeQuality.UNSPECIFIED) {
 									quality = sourceCodeQuality;
 								} else {
-									quality = SourceCodeQuality.getMinLevel(
+									quality = SourceCodeQuality.getMinimum(
 											quality, sourceCodeQuality);
 								}
 							}

@@ -3,6 +3,7 @@ package com.puresol.purifinity.client.common.ui.actions;
 import org.eclipse.jface.action.Action;
 
 import com.puresol.purifinity.client.common.branding.ClientImages;
+import com.puresol.purifinity.client.common.branding.Exportable;
 
 /**
  * This action is used to refresh a part. The part using this action needs to

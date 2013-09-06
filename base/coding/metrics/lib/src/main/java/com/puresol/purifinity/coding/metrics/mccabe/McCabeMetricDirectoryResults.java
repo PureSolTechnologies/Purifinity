@@ -39,7 +39,7 @@ public class McCabeMetricDirectoryResults extends AbstractMcCabeMetricResults
 			McCabeMetricResult right) {
 		int vG = left.getCyclomaticComplexity()
 				+ right.getCyclomaticComplexity();
-		SourceCodeQuality quality = SourceCodeQuality.getMinLevel(
+		SourceCodeQuality quality = SourceCodeQuality.getMinimum(
 				left.getQuality(), right.getQuality());
 		return new McCabeMetricResult(left.getSourceCodeLocation(),
 				left.getCodeRangeType(), left.getCodeRangeName(), vG, quality);

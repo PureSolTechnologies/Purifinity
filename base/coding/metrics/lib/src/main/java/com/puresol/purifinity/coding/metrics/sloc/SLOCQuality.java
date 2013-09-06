@@ -11,7 +11,7 @@ public class SLOCQuality {
 		codeRangeType, sloc);
 	SourceCodeQuality levelLineLength = getQualityLevelLineLength(
 		codeRangeType, sloc);
-	return SourceCodeQuality.getMinLevel(levelLineCount, levelLineLength);
+	return SourceCodeQuality.getMinimum(levelLineCount, levelLineLength);
     }
 
     private static SourceCodeQuality getQualityLevelLineCount(

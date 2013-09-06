@@ -207,6 +207,11 @@
             id="org.eclipse.ui.file.print"
             name="Print">
       </command>
+      <command
+            defaultHandler="com.puresol.purifinity.client.application.handler.ExportHandler"
+            id="org.eclipse.ui.file.export"
+            name="Export">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.intro">

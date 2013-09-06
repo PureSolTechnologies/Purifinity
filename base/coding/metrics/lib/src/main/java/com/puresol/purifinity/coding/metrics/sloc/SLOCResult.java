@@ -68,7 +68,7 @@ public class SLOCResult implements Serializable {
 		Statistics lineStatistics = Statistics
 				.combine(leftMetric.getLineStatistics(),
 						rightMetric.getLineStatistics());
-		SourceCodeQuality quality = SourceCodeQuality.getMinLevel(
+		SourceCodeQuality quality = SourceCodeQuality.getMinimum(
 				left.getQuality(), right.getQuality());
 		return new SLOCResult(left.sourceCodeLocation, left.codeRangeType,
 				left.codeRangeName, new SLOCMetric(phyLOC, proLOC, comLOC,

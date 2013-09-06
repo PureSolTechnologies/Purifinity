@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.common.ui.actions;
+package com.puresol.purifinity.client.common.branding;
 
 /**
  * This interface is used by views which support an export of their content or

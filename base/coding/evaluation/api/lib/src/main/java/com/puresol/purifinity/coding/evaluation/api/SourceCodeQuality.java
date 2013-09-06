@@ -20,13 +20,21 @@ package com.puresol.purifinity.coding.evaluation.api;
 public enum SourceCodeQuality implements Comparable<SourceCodeQuality> {
 	LOW, MEDIUM, HIGH, UNSPECIFIED, ;
 
-	public static SourceCodeQuality getMinLevel(SourceCodeQuality... levels) {
-		SourceCodeQuality resultLevel = UNSPECIFIED;
-		for (SourceCodeQuality level : levels) {
-			if (level.ordinal() < resultLevel.ordinal()) {
-				resultLevel = level;
+	/**
+	 * This method returns the minimum quality.
+	 * 
+	 * @param qualities
+	 *            are the {@link SourceCodeQuality}s where the minimum is to be
+	 *            found of.
+	 * @return The minimum {@link SourceCodeQuality} is returned.
+	 */
+	public static SourceCodeQuality getMinimum(SourceCodeQuality... qualities) {
+		SourceCodeQuality minQuality = UNSPECIFIED;
+		for (SourceCodeQuality quality : qualities) {
+			if (quality.ordinal() < minQuality.ordinal()) {
+				minQuality = quality;
 			}
 		}
-		return resultLevel;
+		return minQuality;
 	}
 }
