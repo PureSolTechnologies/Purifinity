@@ -1,13 +1,29 @@
 package com.puresol.purifinity.coding.evaluation.api;
 
-import java.util.Arrays;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.puresol.commons.utils.math.statistics.Statistics;
 
-public class QualityLevel extends Statistics {
+/**
+ * This class is used for {@link SourceCodeQuality} statistics. It extends
+ * {@link Statistics} and uses the possibilties to store several levels to
+ * calculate averages and medians.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
+public class QualityLevel implements Serializable {
 
 	private static final long serialVersionUID = -1585502470333567684L;
 
+	/**
+	 * This method returns a double value as representation for a source
+	 * quality.
+	 * 
+	 * @param quality
+	 * @return
+	 */
 	public static double getLevel(SourceCodeQuality quality) {
 		double level;
 		switch (quality) {
@@ -29,15 +45,53 @@ public class QualityLevel extends Statistics {
 		return level;
 	}
 
+	private SourceCodeQuality getQuality(double level) {
+		if (level < 0.0) {
+			throw new IllegalArgumentException(
+					"Level needs to be between (and including) 0.0 and 1.0!");
+		}
+		if (level <= 1.0 / 3.0) {
+			return SourceCodeQuality.LOW;
+		}
+		if (level < 2.0 / 3.0) {
+			return SourceCodeQuality.MEDIUM;
+		}
+		if (level <= 1.0) {
+			return SourceCodeQuality.HIGH;
+		}
+		throw new IllegalArgumentException(
+				"Level needs to be between (and including) 0.0 and 1.0!");
+	}
+
+	private final List<Double> levels = new ArrayList<>();
+	private Statistics statistics = null;
+
 	public QualityLevel(SourceCodeQuality quality) {
-		super(Arrays.asList(getLevel(quality)));
+		levels.add(getLevel(quality));
 	}
 
 	public QualityLevel(double level) {
-		super(Arrays.asList(level));
+		levels.add(level);
 	}
 
 	public double getLevel() {
-		return getAvg();
+		assureCalculatedStatistics();
+		return statistics.getAvg();
 	}
+
+	private void assureCalculatedStatistics() {
+		if (statistics == null) {
+			statistics = new Statistics(levels);
+		}
+	}
+
+	public void add(SourceCodeQuality quality) {
+		statistics = null;
+		levels.add(getLevel(quality));
+	}
+
+	public SourceCodeQuality getQuality() {
+		return getQuality(getLevel());
+	}
+
 }

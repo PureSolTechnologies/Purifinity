@@ -22,6 +22,7 @@ import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.purifinity.coding.evaluation.api.Evaluators;
 import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQualityParameter;
 
@@ -38,30 +39,35 @@ public class AnalysisRunEvaluationTreeLabelProvider extends
 	@Override
 	protected Image createFolderImage(HashIdFileTree node) {
 		Image folderImage = super.createFolderImage(node);
-		SourceCodeQuality quality = getDirectoryQuality(node);
-		switch (quality) {
-		case HIGH:
-			folderImage = new DecorationOverlayIcon(folderImage,
-					highQualityDecorator, IDecoration.TOP_LEFT).createImage();
-			break;
-		case MEDIUM:
-			folderImage = new DecorationOverlayIcon(folderImage,
-					mediumQualityDecorator, IDecoration.TOP_LEFT).createImage();
-			break;
-		case LOW:
-			folderImage = new DecorationOverlayIcon(folderImage,
-					lowQualityDecorator, IDecoration.TOP_LEFT).createImage();
-			break;
-		case UNSPECIFIED:
-		default:
+		QualityLevel qualityLevel = getDirectoryQuality(node);
+		if (qualityLevel != null) {
+			switch (qualityLevel.getQuality()) {
+			case HIGH:
+				folderImage = new DecorationOverlayIcon(folderImage,
+						highQualityDecorator, IDecoration.TOP_LEFT)
+						.createImage();
+				break;
+			case MEDIUM:
+				folderImage = new DecorationOverlayIcon(folderImage,
+						mediumQualityDecorator, IDecoration.TOP_LEFT)
+						.createImage();
+				break;
+			case LOW:
+				folderImage = new DecorationOverlayIcon(folderImage,
+						lowQualityDecorator, IDecoration.TOP_LEFT)
+						.createImage();
+				break;
+			case UNSPECIFIED:
+			default:
+			}
 		}
 		return folderImage;
 	}
 
-	private SourceCodeQuality getDirectoryQuality(HashIdFileTree node) {
+	private QualityLevel getDirectoryQuality(HashIdFileTree node) {
 		Evaluators evaluators = Evaluators.createInstance();
-		SourceCodeQuality quality = SourceCodeQuality.UNSPECIFIED;
 		try {
+			QualityLevel qualityLevel = null;
 			EvaluatorStoreFactory storeFactory = EvaluatorStoreFactory
 					.getFactory();
 			List<EvaluatorFactory> allEvaluators = evaluators.getAll();
@@ -84,53 +90,60 @@ public class AnalysisRunEvaluationTreeLabelProvider extends
 							if (value != null) {
 								SourceCodeQuality sourceCodeQuality = (SourceCodeQuality) value
 										.getValue();
-								if (quality == SourceCodeQuality.UNSPECIFIED) {
-									quality = sourceCodeQuality;
+								if (qualityLevel == null) {
+									qualityLevel = new QualityLevel(
+											sourceCodeQuality);
 								} else {
-									quality = SourceCodeQuality.getMinimum(
-											quality, sourceCodeQuality);
+									if (sourceCodeQuality != SourceCodeQuality.UNSPECIFIED) {
+										qualityLevel.add(sourceCodeQuality);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
+			return qualityLevel;
 		} finally {
 			IOUtils.closeQuietly(evaluators);
 		}
-		return quality;
 	}
 
 	@Override
 	protected Image createFileImage(HashIdFileTree node) {
 		Image documentImage = super.createFileImage(node);
-		SourceCodeQuality quality = getFileQuality(node);
-		switch (quality) {
-		case HIGH:
-			documentImage = new DecorationOverlayIcon(documentImage,
-					highQualityDecorator, IDecoration.TOP_LEFT).createImage();
-			break;
-		case MEDIUM:
-			documentImage = new DecorationOverlayIcon(documentImage,
-					mediumQualityDecorator, IDecoration.TOP_LEFT).createImage();
-			break;
-		case LOW:
-			documentImage = new DecorationOverlayIcon(documentImage,
-					lowQualityDecorator, IDecoration.TOP_LEFT).createImage();
-			break;
-		case UNSPECIFIED:
-		default:
+		QualityLevel qualityLevel = getFileQuality(node);
+		if (qualityLevel != null) {
+			switch (qualityLevel.getQuality()) {
+			case HIGH:
+				documentImage = new DecorationOverlayIcon(documentImage,
+						highQualityDecorator, IDecoration.TOP_LEFT)
+						.createImage();
+				break;
+			case MEDIUM:
+				documentImage = new DecorationOverlayIcon(documentImage,
+						mediumQualityDecorator, IDecoration.TOP_LEFT)
+						.createImage();
+				break;
+			case LOW:
+				documentImage = new DecorationOverlayIcon(documentImage,
+						lowQualityDecorator, IDecoration.TOP_LEFT)
+						.createImage();
+				break;
+			case UNSPECIFIED:
+			default:
+			}
 		}
 		return documentImage;
 	}
 
-	private SourceCodeQuality getFileQuality(HashIdFileTree node) {
+	private QualityLevel getFileQuality(HashIdFileTree node) {
 		Evaluators evaluators = Evaluators.createInstance();
-		SourceCodeQuality quality = SourceCodeQuality.UNSPECIFIED;
 		try {
 			EvaluatorStoreFactory storeFactory = EvaluatorStoreFactory
 					.getFactory();
 			List<EvaluatorFactory> allEvaluators = evaluators.getAll();
+			QualityLevel qualityLevel = null;
 			for (EvaluatorFactory evaluatorFactory : allEvaluators) {
 				Class<? extends Evaluator> evaluatorClass = evaluatorFactory
 						.getEvaluatorClass();
@@ -149,20 +162,20 @@ public class AnalysisRunEvaluationTreeLabelProvider extends
 										.get(parameter.getName());
 								SourceCodeQuality sourceCodeQuality = (SourceCodeQuality) value
 										.getValue();
-								if (quality == SourceCodeQuality.UNSPECIFIED) {
-									quality = sourceCodeQuality;
+								if (qualityLevel == null) {
+									qualityLevel = new QualityLevel(
+											sourceCodeQuality);
 								} else {
-									quality = SourceCodeQuality.getMinimum(
-											quality, sourceCodeQuality);
+									qualityLevel.add(sourceCodeQuality);
 								}
 							}
 						}
 					}
 				}
 			}
+			return qualityLevel;
 		} finally {
 			IOUtils.closeQuietly(evaluators);
 		}
-		return quality;
 	}
 }
