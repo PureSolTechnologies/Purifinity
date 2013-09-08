@@ -11,10 +11,10 @@ import static com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluatorParameter.
 import static com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluatorParameter.PHY_LOC;
 import static com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluatorParameter.PRO_LOC;
 import static com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluatorParameter.QUALITY;
+import static com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluatorParameter.QUALITY_LEVEL;
 import static com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluatorParameter.SOURCE_CODE_LOCATION;
 import static com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluatorParameter.STD_DEV;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,10 +22,12 @@ import com.puresol.commons.utils.math.GeneralValue;
 import com.puresol.commons.utils.math.Value;
 import com.puresol.commons.utils.math.statistics.Statistics;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
+import com.puresol.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 
-public class AbstractSLOCResults implements Serializable {
+public abstract class AbstractSLOCResults extends AbstractEvaluatorResult {
 
 	private static final long serialVersionUID = -7340562001522028390L;
 
@@ -66,9 +68,13 @@ public class AbstractSLOCResults implements Serializable {
 			row.put(STD_DEV.getName(),
 					new GeneralValue<Double>(stdDev, STD_DEV));
 		}
-		row.put(QUALITY.getName(),
-				new GeneralValue<SourceCodeQuality>(result.getQuality(),
-						QUALITY));
+		SourceCodeQuality quality = result.getQuality();
+		row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(quality,
+				QUALITY));
+		if (quality != SourceCodeQuality.UNSPECIFIED) {
+			row.put(QUALITY_LEVEL.getName(), new GeneralValue<QualityLevel>(
+					new QualityLevel(quality), QUALITY_LEVEL));
+		}
 		return row;
 	}
 

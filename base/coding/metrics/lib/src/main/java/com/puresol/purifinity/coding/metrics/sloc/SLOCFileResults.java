@@ -10,6 +10,7 @@ import java.util.Set;
 import com.puresol.commons.utils.math.Parameter;
 import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 
 public class SLOCFileResults extends AbstractSLOCResults implements
 		MetricFileResults {
@@ -20,6 +21,12 @@ public class SLOCFileResults extends AbstractSLOCResults implements
 
 	public void add(SLOCResult result) {
 		results.add(result);
+		QualityLevel qualityLevel = getQualityLevel();
+		if (qualityLevel == null) {
+			setQualityLevel(new QualityLevel(result.getQuality()));
+		} else {
+			qualityLevel.add(result.getQuality());
+		}
 	}
 
 	public List<SLOCResult> getResults() {

@@ -7,6 +7,7 @@ import static com.puresol.purifinity.coding.metrics.maintainability.Maintainabil
 import static com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI_CW;
 import static com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI_WOC;
 import static com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.QUALITY;
+import static com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.QUALITY_LEVEL;
 import static com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.SOURCE_CODE_LOCATION;
 
 import java.util.ArrayList;
@@ -19,11 +20,14 @@ import com.puresol.commons.utils.math.GeneralValue;
 import com.puresol.commons.utils.math.Parameter;
 import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
+import com.puresol.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 
-public class MaintainabilityIndexFileResults implements MetricFileResults {
+public class MaintainabilityIndexFileResults extends AbstractEvaluatorResult
+		implements MetricFileResults {
 
 	private static final long serialVersionUID = -5901342878584699006L;
 
@@ -31,6 +35,12 @@ public class MaintainabilityIndexFileResults implements MetricFileResults {
 
 	public void add(MaintainabilityIndexFileResult result) {
 		results.add(result);
+		QualityLevel qualityLevel = getQualityLevel();
+		if (qualityLevel == null) {
+			setQualityLevel(new QualityLevel(result.getQuality()));
+		} else {
+			qualityLevel.add(result.getQuality());
+		}
 	}
 
 	public List<MaintainabilityIndexFileResult> getResults() {
@@ -63,8 +73,14 @@ public class MaintainabilityIndexFileResults implements MetricFileResults {
 			row.put(MI_CW.getName(), new GeneralValue<Double>(mi.getMIcw(),
 					MI_CW));
 			row.put(MI.getName(), new GeneralValue<Double>(mi.getMI(), MI));
+			SourceCodeQuality quality = result.getQuality();
 			row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
-					result.getQuality(), QUALITY));
+					quality, QUALITY));
+			if (quality != SourceCodeQuality.UNSPECIFIED) {
+				row.put(QUALITY_LEVEL.getName(),
+						new GeneralValue<QualityLevel>(
+								new QualityLevel(quality), QUALITY_LEVEL));
+			}
 			values.add(row);
 		}
 

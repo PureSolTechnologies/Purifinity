@@ -94,4 +94,8 @@ public class QualityLevel implements Serializable {
 		return getQuality(getLevel());
 	}
 
+	@Override
+	public String toString() {
+		return String.valueOf(getLevel());
+	}
 }

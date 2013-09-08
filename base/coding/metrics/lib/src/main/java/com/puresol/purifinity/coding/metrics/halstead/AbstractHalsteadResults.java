@@ -13,22 +13,24 @@ import static com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvalu
 import static com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.PROGRAM_LENGTH;
 import static com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.PROGRAM_LEVEL;
 import static com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.QUALITY;
+import static com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.QUALITY_LEVEL;
 import static com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.SOURCE_CODE_LOCATION;
 import static com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.TOTAL_OPERANDS;
 import static com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.TOTAL_OPERATORS;
 import static com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluatorParameter.VOCABULARY_SIZE;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.puresol.commons.utils.math.GeneralValue;
 import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
+import com.puresol.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 
-public class AbstractHalsteadResults implements Serializable {
+public abstract class AbstractHalsteadResults extends AbstractEvaluatorResult {
 
 	private static final long serialVersionUID = 7911283186514371553L;
 
@@ -73,8 +75,14 @@ public class AbstractHalsteadResults implements Serializable {
 			row.put(ESTIMATED_BUGS.getName(),
 					new GeneralValue<Double>(halstead.getEstimatedBugs(),
 							ESTIMATED_BUGS));
+			SourceCodeQuality quality = result.getQuality();
 			row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
-					result.getQuality(), QUALITY));
+					quality, QUALITY));
+			if (quality != SourceCodeQuality.UNSPECIFIED) {
+				row.put(QUALITY_LEVEL.getName(),
+						new GeneralValue<QualityLevel>(
+								new QualityLevel(quality), QUALITY_LEVEL));
+			}
 		}
 		return row;
 	}

@@ -9,6 +9,8 @@ import com.puresol.commons.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.evaluation.api.CodeRangeNameParameter;
 import com.puresol.purifinity.coding.evaluation.api.CodeRangeTypeParameter;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevelParameter;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeLocationParameter;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQualityParameter;
@@ -33,6 +35,8 @@ public class NormalizedMaintainabilityIndexEvaluatorParameter {
 			"Normalized maintainability index including comments", Double.class);
 	public static final ParameterWithArbitraryUnit<SourceCodeQuality> QUALITY = SourceCodeQualityParameter
 			.getInstance();
+	public static final ParameterWithArbitraryUnit<QualityLevel> QUALITY_LEVEL = QualityLevelParameter
+			.getInstance();
 
 	public static final Set<Parameter<?>> ALL = new HashSet<Parameter<?>>();
 	static {
@@ -43,5 +47,6 @@ public class NormalizedMaintainabilityIndexEvaluatorParameter {
 		ALL.add(NORM_MI_CW);
 		ALL.add(NORM_MI);
 		ALL.add(QUALITY);
+		ALL.add(QUALITY_LEVEL);
 	}
 }

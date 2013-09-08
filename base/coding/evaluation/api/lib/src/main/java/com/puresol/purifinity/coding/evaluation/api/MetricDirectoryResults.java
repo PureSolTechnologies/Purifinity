@@ -1,6 +1,5 @@
 package com.puresol.purifinity.coding.evaluation.api;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,7 +15,7 @@ import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
  * 
  * @author Rick-Rainer Ludwig
  */
-public interface MetricDirectoryResults extends Serializable {
+public interface MetricDirectoryResults extends MetricResult {
 
 	/**
 	 * This method returns a {@link List} of {@link Parameter} which contains

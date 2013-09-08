@@ -6,6 +6,7 @@ import static com.puresol.purifinity.coding.metrics.entropy.EntropyMetricEvaluat
 import static com.puresol.purifinity.coding.metrics.entropy.EntropyMetricEvaluatorParameter.N_DIFF;
 import static com.puresol.purifinity.coding.metrics.entropy.EntropyMetricEvaluatorParameter.N_TOTAL;
 import static com.puresol.purifinity.coding.metrics.entropy.EntropyMetricEvaluatorParameter.QUALITY;
+import static com.puresol.purifinity.coding.metrics.entropy.EntropyMetricEvaluatorParameter.QUALITY_LEVEL;
 import static com.puresol.purifinity.coding.metrics.entropy.EntropyMetricEvaluatorParameter.R;
 import static com.puresol.purifinity.coding.metrics.entropy.EntropyMetricEvaluatorParameter.RS;
 import static com.puresol.purifinity.coding.metrics.entropy.EntropyMetricEvaluatorParameter.R_NORM;
@@ -24,11 +25,14 @@ import com.puresol.commons.utils.math.GeneralValue;
 import com.puresol.commons.utils.math.Parameter;
 import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
+import com.puresol.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 
-public class EntropyFileResults implements MetricFileResults {
+public class EntropyFileResults extends AbstractEvaluatorResult implements
+		MetricFileResults {
 
 	private static final long serialVersionUID = 4585034044953318000L;
 
@@ -36,6 +40,12 @@ public class EntropyFileResults implements MetricFileResults {
 
 	public void add(EntropyResult result) {
 		results.add(result);
+		QualityLevel qualityLevel = getQualityLevel();
+		if (qualityLevel == null) {
+			setQualityLevel(new QualityLevel(result.getQuality()));
+		} else {
+			qualityLevel.add(result.getQuality());
+		}
 	}
 
 	@Override
@@ -76,8 +86,14 @@ public class EntropyFileResults implements MetricFileResults {
 			row.put(R_NORM.getName(),
 					new GeneralValue<Double>(entropy.getNormalizedRedundancy(),
 							R_NORM));
+			SourceCodeQuality quality = result.getQuality();
 			row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
-					result.getQuality(), QUALITY));
+					quality, QUALITY));
+			if (quality != SourceCodeQuality.UNSPECIFIED) {
+				row.put(QUALITY_LEVEL.getName(),
+						new GeneralValue<QualityLevel>(
+								new QualityLevel(quality), QUALITY_LEVEL));
+			}
 			values.add(row);
 		}
 

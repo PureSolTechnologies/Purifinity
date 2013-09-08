@@ -1,6 +1,14 @@
 package com.puresol.purifinity.coding.metrics.normmaint;
 
 import static com.puresol.purifinity.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.ALL;
+import static com.puresol.purifinity.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.CODE_RANGE_NAME;
+import static com.puresol.purifinity.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.CODE_RANGE_TYPE;
+import static com.puresol.purifinity.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.NORM_MI;
+import static com.puresol.purifinity.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.NORM_MI_CW;
+import static com.puresol.purifinity.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.NORM_MI_WOC;
+import static com.puresol.purifinity.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.QUALITY;
+import static com.puresol.purifinity.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.QUALITY_LEVEL;
+import static com.puresol.purifinity.coding.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.SOURCE_CODE_LOCATION;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,46 +17,30 @@ import java.util.Map;
 import java.util.Set;
 
 import com.puresol.commons.utils.math.GeneralValue;
-import com.puresol.commons.utils.math.LevelOfMeasurement;
 import com.puresol.commons.utils.math.Parameter;
-import com.puresol.commons.utils.math.ParameterWithArbitraryUnit;
 import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresol.purifinity.coding.evaluation.api.CodeRangeNameParameter;
-import com.puresol.purifinity.coding.evaluation.api.CodeRangeTypeParameter;
+import com.puresol.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
-import com.puresol.purifinity.coding.evaluation.api.SourceCodeLocationParameter;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
-import com.puresol.purifinity.coding.evaluation.api.SourceCodeQualityParameter;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 
-public class NormalizedMaintainabilityIndexFileResults implements
-		MetricFileResults {
+public class NormalizedMaintainabilityIndexFileResults extends
+		AbstractEvaluatorResult implements MetricFileResults {
 
 	private static final long serialVersionUID = 7667134885288322378L;
 
 	private final List<NormalizedMaintainabilityIndexFileResult> results = new ArrayList<NormalizedMaintainabilityIndexFileResult>();
 
-	private final ParameterWithArbitraryUnit<CodeLocation> sourceCodeLocationParameter = SourceCodeLocationParameter
-			.getInstance();
-	private final ParameterWithArbitraryUnit<CodeRangeType> codeRangeTypeParameter = CodeRangeTypeParameter
-			.getInstance();
-	private final ParameterWithArbitraryUnit<String> codeRangeNameParameter = CodeRangeNameParameter
-			.getInstance();
-	private final ParameterWithArbitraryUnit<Double> nMiwocParameter = new ParameterWithArbitraryUnit<Double>(
-			"nMIwoc", "", LevelOfMeasurement.ORDINAL,
-			"Normalized maintainability index without comments", Double.class);
-	private final ParameterWithArbitraryUnit<Double> nMicwParameter = new ParameterWithArbitraryUnit<Double>(
-			"nMIcw", "", LevelOfMeasurement.ORDINAL,
-			"Normalized maintainability index comment weight", Double.class);
-	private final ParameterWithArbitraryUnit<Double> nMiParameter = new ParameterWithArbitraryUnit<Double>(
-			"nMI", "", LevelOfMeasurement.ORDINAL,
-			"Normalized maintainability index including comments", Double.class);
-	private final ParameterWithArbitraryUnit<SourceCodeQuality> qualityParameter = SourceCodeQualityParameter
-			.getInstance();
-
 	public void add(NormalizedMaintainabilityIndexFileResult result) {
 		results.add(result);
+		QualityLevel qualityLevel = getQualityLevel();
+		if (qualityLevel == null) {
+			setQualityLevel(new QualityLevel(result.getQuality()));
+		} else {
+			qualityLevel.add(result.getQuality());
+		}
 	}
 
 	@Override
@@ -64,24 +56,28 @@ public class NormalizedMaintainabilityIndexFileResults implements
 			NormalizedMaintainabilityIndexResult mi = result
 					.getNormalizedMaintainabilityIndexResult();
 			Map<String, Value<?>> row = new HashMap<String, Value<?>>();
-			row.put(sourceCodeLocationParameter.getName(),
+			row.put(SOURCE_CODE_LOCATION.getName(),
 					new GeneralValue<CodeLocation>(result
-							.getSourceCodeLocation(),
-							sourceCodeLocationParameter));
-			row.put(codeRangeTypeParameter.getName(),
-					new GeneralValue<CodeRangeType>(result.getCodeRangeType(),
-							codeRangeTypeParameter));
-			row.put(codeRangeNameParameter.getName(), new GeneralValue<String>(
-					result.getCodeRangeName(), codeRangeNameParameter));
-			row.put(nMiwocParameter.getName(),
-					new GeneralValue<Double>(mi.getNMIwoc(), nMiwocParameter));
-			row.put(nMicwParameter.getName(),
-					new GeneralValue<Double>(mi.getNMIcw(), nMicwParameter));
-			row.put(nMiParameter.getName(),
-					new GeneralValue<Double>(mi.getNMI(), nMiParameter));
-			row.put(qualityParameter.getName(),
-					new GeneralValue<SourceCodeQuality>(result.getQuality(),
-							qualityParameter));
+							.getSourceCodeLocation(), SOURCE_CODE_LOCATION));
+			row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
+					result.getCodeRangeType(), CODE_RANGE_TYPE));
+			row.put(CODE_RANGE_NAME.getName(),
+					new GeneralValue<String>(result.getCodeRangeName(),
+							CODE_RANGE_NAME));
+			row.put(NORM_MI_WOC.getName(),
+					new GeneralValue<Double>(mi.getNMIwoc(), NORM_MI_WOC));
+			row.put(NORM_MI_CW.getName(),
+					new GeneralValue<Double>(mi.getNMIcw(), NORM_MI_CW));
+			row.put(NORM_MI.getName(), new GeneralValue<Double>(mi.getNMI(),
+					NORM_MI));
+			SourceCodeQuality quality = result.getQuality();
+			row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
+					quality, QUALITY));
+			if (quality != SourceCodeQuality.UNSPECIFIED) {
+				row.put(QUALITY_LEVEL.getName(),
+						new GeneralValue<QualityLevel>(
+								new QualityLevel(quality), QUALITY_LEVEL));
+			}
 			values.add(row);
 		}
 

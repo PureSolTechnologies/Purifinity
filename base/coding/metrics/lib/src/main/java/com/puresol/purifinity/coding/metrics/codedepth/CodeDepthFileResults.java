@@ -5,6 +5,7 @@ import static com.puresol.purifinity.coding.metrics.codedepth.CodeDepthMetricEva
 import static com.puresol.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.CODE_RANGE_TYPE;
 import static com.puresol.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.MAX_DEPTH;
 import static com.puresol.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.QUALITY;
+import static com.puresol.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.QUALITY_LEVEL;
 import static com.puresol.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.SOURCE_CODE_LOCATION;
 
 import java.util.ArrayList;
@@ -17,11 +18,14 @@ import com.puresol.commons.utils.math.GeneralValue;
 import com.puresol.commons.utils.math.Parameter;
 import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
+import com.puresol.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 
-public class CodeDepthFileResults implements MetricFileResults {
+public class CodeDepthFileResults extends AbstractEvaluatorResult implements
+		MetricFileResults {
 
 	private static final long serialVersionUID = 5885874850811986090L;
 
@@ -29,6 +33,12 @@ public class CodeDepthFileResults implements MetricFileResults {
 
 	public void add(CodeDepthResult result) {
 		results.add(result);
+		QualityLevel qualityLevel = getQualityLevel();
+		if (qualityLevel == null) {
+			setQualityLevel(new QualityLevel(result.getQuality()));
+		} else {
+			qualityLevel.add(result.getQuality());
+		}
 	}
 
 	@Override
@@ -52,9 +62,15 @@ public class CodeDepthFileResults implements MetricFileResults {
 							CODE_RANGE_NAME));
 			row.put(MAX_DEPTH.getName(),
 					new GeneralValue<Integer>(result.getMaxDepth(), MAX_DEPTH));
+			SourceCodeQuality quality = result.getQuality();
 			row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
-					result.getQuality(), QUALITY));
-			values.add(row);
+					quality, QUALITY));
+			if (quality != SourceCodeQuality.UNSPECIFIED) {
+				row.put(QUALITY_LEVEL.getName(),
+						new GeneralValue<QualityLevel>(
+								new QualityLevel(quality), QUALITY_LEVEL));
+				values.add(row);
+			}
 		}
 
 		return values;

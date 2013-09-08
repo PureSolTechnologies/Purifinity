@@ -8,14 +8,14 @@ import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParame
 import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SCHEDULED_YEARS;
 import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.TEAM_SIZE;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.puresol.commons.utils.math.Money;
+import com.puresol.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
 import com.puresol.purifinity.coding.evaluation.api.MetricValue;
 
-public abstract class CoCoMoResults implements Serializable {
+public abstract class CoCoMoResults extends AbstractEvaluatorResult {
 
 	private static final long serialVersionUID = 9107629880981197874L;
 

@@ -8,7 +8,8 @@ import java.util.Set;
 import com.puresol.commons.utils.math.Parameter;
 import com.puresol.commons.utils.math.Value;
 
-public class GenericMetricDirectoryResults implements MetricDirectoryResults {
+public class GenericMetricDirectoryResults extends AbstractEvaluatorResult
+		implements MetricDirectoryResults {
 
 	private static final long serialVersionUID = -8800107882009933892L;
 
