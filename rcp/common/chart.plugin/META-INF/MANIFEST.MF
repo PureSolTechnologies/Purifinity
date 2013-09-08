@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: com.puresol.purifinity.client.common.chart.plugin
 Bundle-SymbolicName: com.puresol.purifinity.client.common.chart.plugin
 Bundle-Version: 0.1.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
 Bundle-ActivationPolicy: lazy

@@ -5,6 +5,7 @@ package com.puresol.purifinity.client.test;
  * 
  * @author Rick-Rainer Ludwig
  */
+@RunWit
 public class ApplicationStartupTest {
 
 }
