@@ -25,6 +25,7 @@
 		<module>features</module>
 		<module>product</module>
 		<module>repository</module>
+		<module>test</module>
 	</modules>
 
 	<repositories>
