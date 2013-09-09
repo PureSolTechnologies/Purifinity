@@ -86,28 +86,13 @@ public class AnalysisRunEvaluationTreeLabelProvider extends
 				MetricDirectoryResults directoryResults = store
 						.readDirectoryResults(node.getHashId());
 				if (directoryResults != null) {
-					Set<Parameter<?>> parameters = directoryResults
-							.getParameters();
-					for (Parameter<?> parameter : parameters) {
-						if (parameter.equals(SourceCodeQualityParameter
-								.getInstance())) {
-							Map<String, Value<?>> column = directoryResults
-									.getValues();
-							Value<?> value = column.get(parameter.getName());
-							if (value != null) {
-								SourceCodeQuality sourceCodeQuality = (SourceCodeQuality) value
-										.getValue();
-								if (qualityLevel == null) {
-									if (sourceCodeQuality != SourceCodeQuality.UNSPECIFIED) {
-										qualityLevel = new QualityLevel(
-												sourceCodeQuality);
-									}
-								} else {
-									if (sourceCodeQuality != SourceCodeQuality.UNSPECIFIED) {
-										qualityLevel.add(sourceCodeQuality);
-									}
-								}
-							}
+					QualityLevel childLevel = directoryResults
+							.getQualityLevel();
+					if (childLevel != null) {
+						if (qualityLevel == null) {
+							qualityLevel = childLevel;
+						} else {
+							qualityLevel.add(childLevel);
 						}
 					}
 				}

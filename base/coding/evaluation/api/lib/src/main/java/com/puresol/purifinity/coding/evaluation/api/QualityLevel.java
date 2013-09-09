@@ -86,8 +86,24 @@ public class QualityLevel implements Serializable {
 	}
 
 	public void add(SourceCodeQuality quality) {
+		if (quality == null) {
+			throw new IllegalArgumentException("Quality must not be null.");
+		}
+		if (quality == SourceCodeQuality.UNSPECIFIED) {
+			throw new IllegalArgumentException(
+					"Quality must not be unspecified.");
+		}
 		statistics = null;
 		levels.add(getLevel(quality));
+	}
+
+	public void add(QualityLevel level) {
+		if (level == null) {
+			throw new IllegalArgumentException(
+					"Quality level must not be null.");
+		}
+		statistics = null;
+		levels.add(level.getLevel());
 	}
 
 	public SourceCodeQuality getQuality() {
@@ -98,4 +114,5 @@ public class QualityLevel implements Serializable {
 	public String toString() {
 		return String.valueOf(getLevel());
 	}
+
 }

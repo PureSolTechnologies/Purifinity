@@ -10,6 +10,7 @@ import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguages;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
@@ -61,28 +62,27 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
-		// QualityLevel qualityLevel = null;
-		// for (HashIdFileTree child : directory.getChildren()) {
-		// QualityLevel childLevel;
-		// if (child.isFile()) {
-		// MetricFileResults fileResults = store.readFileResults(child
-		// .getHashId());
-		// if (fileResults.getParameters().contains(
-		// QualityLevelParameter.getInstance())) {
-		// for (Map<String, Value<?>> row : fileResults.getValues()) {
-		// @SuppressWarnings("unchecked")
-		// Value<QualityLevel> subQualityLevel = (Value<QualityLevel>) row
-		// .get(QualityLevelParameter.getInstance()
-		// .getName());
-		// childLevel = subQualityLevel.getValue();
-		// }
-		// } else {
-		// continue;
-		// }
-		// } else {
-		//
-		// }
-		// }
+		CodeDepthDirectoryResults directoryResults = new CodeDepthDirectoryResults();
+		for (HashIdFileTree child : directory.getChildren()) {
+			QualityLevel childLevel;
+			if (child.isFile()) {
+				CodeDepthFileResults fileResults = (CodeDepthFileResults) store
+						.readFileResults(child.getHashId());
+				if (fileResults == null) {
+					continue;
+				}
+				childLevel = fileResults.getQualityLevel();
+			} else {
+				CodeDepthDirectoryResults childDirectoryResults = (CodeDepthDirectoryResults) store
+						.readDirectoryResults(child.getHashId());
+				if (childDirectoryResults == null) {
+					continue;
+				}
+				childLevel = childDirectoryResults.getQualityLevel();
+			}
+			directoryResults.addQualityLevel(childLevel);
+		}
+		store.storeDirectoryResults(directory.getHashId(), directoryResults);
 	}
 
 	@Override
