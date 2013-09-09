@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Tree;
 import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunContentTreeContentProvider;
 import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunContentTreeViewer;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
+import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
 
 /**
  * This viewer is used in {@link Tree}s to render the content of an analysis
@@ -29,5 +30,10 @@ public class AnalysisRunEvaluationTreeViewer extends TreeViewer {
 	public void setInput(AnalysisRun analysisRun) {
 		super.setInput(analysisRun.getFileTree());
 		labelProvider.setAnalysisRun(analysisRun);
+	}
+
+	public void setEvaluator(EvaluatorFactory evaluator) {
+		labelProvider.setEvaluator(evaluator);
+		refresh();
 	}
 }

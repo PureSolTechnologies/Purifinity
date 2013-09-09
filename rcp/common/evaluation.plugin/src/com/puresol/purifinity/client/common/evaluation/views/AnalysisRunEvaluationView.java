@@ -13,8 +13,12 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -32,6 +36,7 @@ import com.puresol.purifinity.client.common.analysis.views.AnalysisProjectSelect
 import com.puresol.purifinity.client.common.analysis.views.AnalysisRunSelection;
 import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.purifinity.client.common.evaluation.contents.AnalysisRunEvaluationTreeViewer;
+import com.puresol.purifinity.client.common.evaluation.contents.EvaluatorComboViewer;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
@@ -49,6 +54,9 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
 	private HashIdFileTree lastSelection;
 
+	private Combo evaluatorCombo;
+	private EvaluatorComboViewer comboViewer;
+
 	public AnalysisRunEvaluationView() {
 		super();
 	}
@@ -63,14 +71,39 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 	@Override
 	public void createPartControl(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new FillLayout());
+		composite.setLayout(new FormLayout());
+
+		Label label = new Label(composite, SWT.NONE);
+		label.setText("Evaluator selection for quality labels:");
+		FormData fdLabel = new FormData();
+		fdLabel.top = new FormAttachment(0, 5);
+		fdLabel.left = new FormAttachment(0, 5);
+		fdLabel.right = new FormAttachment(100, -5);
+		label.setLayoutData(fdLabel);
+
+		evaluatorCombo = new Combo(composite, SWT.NONE);
+		FormData fdCombo = new FormData();
+		fdCombo.top = new FormAttachment(label, 5);
+		fdCombo.left = new FormAttachment(0, 5);
+		fdCombo.right = new FormAttachment(100, -5);
+		evaluatorCombo.setLayoutData(fdCombo);
+		comboViewer = new EvaluatorComboViewer(evaluatorCombo);
+		evaluatorCombo.select(0);
+		evaluatorCombo.addSelectionListener(this);
 
 		fileTree = new Tree(composite, SWT.BORDER);
+		FormData fdFileTree = new FormData();
+		fdFileTree.top = new FormAttachment(evaluatorCombo, 5);
+		fdFileTree.left = new FormAttachment(0, 5);
+		fdFileTree.right = new FormAttachment(100, -5);
+		fdFileTree.bottom = new FormAttachment(100, -5);
+		fileTree.setLayoutData(fdFileTree);
 		fileTree.setHeaderVisible(true);
 		fileTree.setEnabled(true);
 		fileTree.setVisible(true);
 		fileTree.addSelectionListener(this);
 		fileTreeViewer = new AnalysisRunEvaluationTreeViewer(fileTree);
+		fileTreeViewer.setEvaluator(comboViewer.getSelectedEvaluator());
 
 		IWorkbenchPartSite site = getSite();
 		site.getWorkbenchWindow().getSelectionService()
@@ -169,25 +202,34 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 	@Override
 	public void widgetSelected(SelectionEvent e) {
 		if (e.getSource() == fileTree) {
-			TreeSelection selection = (TreeSelection) fileTreeViewer
-					.getSelection();
-			Object first = selection.getFirstElement();
-			if (first != null) {
-				if (first.getClass().equals(HashIdFileTree.class)) {
-					HashIdFileTree firstElement = (HashIdFileTree) first;
-					if (!firstElement.equals(lastSelection)) {
-						FileAnalysisSelection fileAnalysisSelection = new FileAnalysisSelection(
-								analysis, analysisRun, firstElement);
-						setSelection(fileAnalysisSelection);
-						lastSelection = firstElement;
-					}
-				} else if (first.getClass().equals(String.class)) {
-					HashIdFileTree firstElement = analysisRun.getFileTree();
+			processFileTreeSelection();
+		} else if (e.getSource() == evaluatorCombo) {
+			processEvaluatorSelection();
+		}
+	}
+
+	private void processEvaluatorSelection() {
+		fileTreeViewer.setEvaluator(comboViewer.getSelectedEvaluator());
+	}
+
+	private void processFileTreeSelection() {
+		TreeSelection selection = (TreeSelection) fileTreeViewer.getSelection();
+		Object first = selection.getFirstElement();
+		if (first != null) {
+			if (first.getClass().equals(HashIdFileTree.class)) {
+				HashIdFileTree firstElement = (HashIdFileTree) first;
+				if (!firstElement.equals(lastSelection)) {
 					FileAnalysisSelection fileAnalysisSelection = new FileAnalysisSelection(
 							analysis, analysisRun, firstElement);
 					setSelection(fileAnalysisSelection);
 					lastSelection = firstElement;
 				}
+			} else if (first.getClass().equals(String.class)) {
+				HashIdFileTree firstElement = analysisRun.getFileTree();
+				FileAnalysisSelection fileAnalysisSelection = new FileAnalysisSelection(
+						analysis, analysisRun, firstElement);
+				setSelection(fileAnalysisSelection);
+				lastSelection = firstElement;
 			}
 		}
 	}

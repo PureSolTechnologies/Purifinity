@@ -1,5 +1,6 @@
 package com.puresol.purifinity.client.common.evaluation.contents;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,6 +37,12 @@ public class AnalysisRunEvaluationTreeLabelProvider extends
 	private final ImageDescriptor lowQualityDecorator = ClientImages
 			.getImageDescriptor(ClientImages.DEC_LOW_QUALITY_8x8);
 
+	private EvaluatorFactory evaluator = null;
+
+	public void setEvaluator(EvaluatorFactory evaluator) {
+		this.evaluator = evaluator;
+	}
+
 	@Override
 	protected Image createFolderImage(HashIdFileTree node) {
 		Image folderImage = super.createFolderImage(node);
@@ -70,7 +77,7 @@ public class AnalysisRunEvaluationTreeLabelProvider extends
 			QualityLevel qualityLevel = null;
 			EvaluatorStoreFactory storeFactory = EvaluatorStoreFactory
 					.getFactory();
-			List<EvaluatorFactory> allEvaluators = evaluators.getAll();
+			List<EvaluatorFactory> allEvaluators = retrieveEvaluatorsForImage(evaluators);
 			for (EvaluatorFactory evaluatorFactory : allEvaluators) {
 				Class<? extends Evaluator> evaluatorClass = evaluatorFactory
 						.getEvaluatorClass();
@@ -91,8 +98,10 @@ public class AnalysisRunEvaluationTreeLabelProvider extends
 								SourceCodeQuality sourceCodeQuality = (SourceCodeQuality) value
 										.getValue();
 								if (qualityLevel == null) {
-									qualityLevel = new QualityLevel(
-											sourceCodeQuality);
+									if (sourceCodeQuality != SourceCodeQuality.UNSPECIFIED) {
+										qualityLevel = new QualityLevel(
+												sourceCodeQuality);
+									}
 								} else {
 									if (sourceCodeQuality != SourceCodeQuality.UNSPECIFIED) {
 										qualityLevel.add(sourceCodeQuality);
@@ -107,6 +116,17 @@ public class AnalysisRunEvaluationTreeLabelProvider extends
 		} finally {
 			IOUtils.closeQuietly(evaluators);
 		}
+	}
+
+	private List<EvaluatorFactory> retrieveEvaluatorsForImage(
+			Evaluators evaluators) {
+		List<EvaluatorFactory> allEvaluators;
+		if (evaluator == null) {
+			allEvaluators = evaluators.getAll();
+		} else {
+			allEvaluators = Arrays.asList(evaluator);
+		}
+		return allEvaluators;
 	}
 
 	@Override
@@ -142,7 +162,7 @@ public class AnalysisRunEvaluationTreeLabelProvider extends
 		try {
 			EvaluatorStoreFactory storeFactory = EvaluatorStoreFactory
 					.getFactory();
-			List<EvaluatorFactory> allEvaluators = evaluators.getAll();
+			List<EvaluatorFactory> allEvaluators = retrieveEvaluatorsForImage(evaluators);
 			QualityLevel qualityLevel = null;
 			for (EvaluatorFactory evaluatorFactory : allEvaluators) {
 				Class<? extends Evaluator> evaluatorClass = evaluatorFactory
