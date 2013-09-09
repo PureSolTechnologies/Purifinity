@@ -3,6 +3,7 @@ package com.puresol.purifinity.client.common.evaluation.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -37,6 +38,8 @@ import com.puresol.purifinity.client.common.analysis.views.AnalysisRunSelection;
 import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.purifinity.client.common.evaluation.contents.AnalysisRunEvaluationTreeViewer;
 import com.puresol.purifinity.client.common.evaluation.contents.EvaluatorComboViewer;
+import com.puresol.purifinity.client.common.ui.actions.PartSettingsCapability;
+import com.puresol.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
@@ -44,7 +47,7 @@ import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 
 public class AnalysisRunEvaluationView extends ViewPart implements
 		ISelectionListener, IDoubleClickListener, ISelectionProvider,
-		SelectionListener {
+		SelectionListener, PartSettingsCapability {
 
 	private AnalysisProject analysis;
 	private AnalysisRun analysisRun;
@@ -110,6 +113,16 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 				.addSelectionListener(this);
 		site.setSelectionProvider(this);
 		fileTreeViewer.addDoubleClickListener(this);
+		initializeToolBar();
+	}
+
+	/**
+	 * Initialize the toolbar.
+	 */
+	private void initializeToolBar() {
+		IToolBarManager toolbarManager = getViewSite().getActionBars()
+				.getToolBarManager();
+		toolbarManager.add(new ShowSettingsAction(this));
 	}
 
 	@Override
@@ -237,6 +250,24 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 	@Override
 	public void widgetDefaultSelected(SelectionEvent e) {
 		widgetSelected(e);
+	}
+
+	@Override
+	public void showSettings() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void applySettings() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void closeSettings() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
