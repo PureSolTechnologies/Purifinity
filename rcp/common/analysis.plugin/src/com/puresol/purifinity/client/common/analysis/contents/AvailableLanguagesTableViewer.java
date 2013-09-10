@@ -9,6 +9,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
@@ -21,6 +22,16 @@ public class AvailableLanguagesTableViewer extends TableViewer implements
 
 	public AvailableLanguagesTableViewer(Table table) {
 		super(table);
+		setComparator(new ViewerComparator() {
+			@Override
+			public int compare(Viewer viewer, Object e1, Object e2) {
+				AnalyzableProgrammingLanguage programmingLanguage1 = (AnalyzableProgrammingLanguage) e1;
+				AnalyzableProgrammingLanguage programmingLanguage2 = (AnalyzableProgrammingLanguage) e2;
+				String lang1 = programmingLanguage1.getName() + programmingLanguage1.getVersion();
+				String lang2 = programmingLanguage2.getName() + programmingLanguage2.getVersion();
+				return lang1.compareTo(lang2);
+			}
+		});
 		setContentProvider(this);
 		setupNameColumn();
 		setupVersionColumn();

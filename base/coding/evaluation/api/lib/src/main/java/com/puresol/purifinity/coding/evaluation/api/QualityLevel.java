@@ -103,7 +103,7 @@ public class QualityLevel implements Serializable {
 					"Quality level must not be null.");
 		}
 		statistics = null;
-		levels.add(level.getLevel());
+		levels.addAll(level.levels);
 	}
 
 	public SourceCodeQuality getQuality() {

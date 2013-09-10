@@ -132,7 +132,7 @@ public class MetricsTableViewer extends TableViewer implements
 					@SuppressWarnings("unchecked")
 					Map<String, Value<?>> values = (Map<String, Value<?>>) element;
 					Value<?> value = values.get(name);
-					if (value == null) {
+					if ((value == null) || (value.getValue() == null)) {
 						return "";
 					}
 					return value.getValue().toString();

@@ -9,6 +9,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
@@ -21,6 +22,14 @@ public class AvailableEvaluatorsTableViewer extends TableViewer implements
 
 	public AvailableEvaluatorsTableViewer(Table table) {
 		super(table);
+		setComparator(new ViewerComparator() {
+			@Override
+			public int compare(Viewer viewer, Object e1, Object e2) {
+				EvaluatorFactory evaluator1 = (EvaluatorFactory) e1;
+				EvaluatorFactory evaluator2 = (EvaluatorFactory) e2;
+				return evaluator1.getName().compareTo(evaluator2.getName());
+			}
+		});
 		setContentProvider(this);
 		setupNameColumn();
 		setupDescriptionColumn();

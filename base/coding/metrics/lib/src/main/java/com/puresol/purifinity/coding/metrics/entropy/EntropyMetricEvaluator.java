@@ -10,6 +10,7 @@ import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluator;
@@ -97,11 +98,39 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
-		// intentionally left blank
+		EntropyDirectoryResults directoryResults = calculateDirectoryResults(directory);
+		store.storeDirectoryResults(directory.getHashId(), directoryResults);
+	}
+
+	private EntropyDirectoryResults calculateDirectoryResults(
+			HashIdFileTree directory) {
+		EntropyDirectoryResults directoryResults = new EntropyDirectoryResults();
+		for (HashIdFileTree child : directory.getChildren()) {
+			QualityLevel childLevel;
+			if (child.isFile()) {
+				EntropyFileResults fileResults = (EntropyFileResults) store
+						.readFileResults(child.getHashId());
+				if (fileResults == null) {
+					continue;
+				}
+				childLevel = fileResults.getQualityLevel();
+			} else {
+				EntropyDirectoryResults childDirectoryResults = (EntropyDirectoryResults) store
+						.readDirectoryResults(child.getHashId());
+				if (childDirectoryResults == null) {
+					continue;
+				}
+				childLevel = childDirectoryResults.getQualityLevel();
+			}
+			directoryResults.addQualityLevel(childLevel);
+		}
+		return directoryResults;
 	}
 
 	@Override
 	protected void processProject() throws InterruptedException {
-		// intentionally left blank
+		HashIdFileTree directory = getAnalysisRun().getFileTree();
+		EntropyDirectoryResults directoryResults = calculateDirectoryResults(directory);
+		store.storeDirectoryResults(directory.getHashId(), directoryResults);
 	}
 }

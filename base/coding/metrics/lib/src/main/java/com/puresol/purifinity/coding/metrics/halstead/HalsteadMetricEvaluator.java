@@ -11,6 +11,7 @@ import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguages;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
@@ -73,42 +74,47 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 		if (store.hasDirectoryResults(directory.getHashId())) {
 			return null;
 		}
-		HalsteadMetricResult results = null;
+		QualityLevel qualityLevel = null;
+		HalsteadMetricResult metricResults = null;
 		for (HashIdFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
-				results = processFile(directory, results, child);
+				if (store.hasFileResults(child.getHashId())) {
+					HalsteadMetricFileResults results = (HalsteadMetricFileResults) store
+							.readFileResults(child.getHashId());
+					for (HalsteadMetricResult result : results.getResults()) {
+						if (result.getCodeRangeType() == CodeRangeType.FILE) {
+							metricResults = combine(directory, metricResults,
+									result);
+							break;
+						}
+					}
+					qualityLevel = combine(qualityLevel,
+							results.getQualityLevel());
+				}
 			} else {
-				results = processSubDirectory(directory, results, child);
-			}
-		}
-		HalsteadMetricDirectoryResults finalResults = new HalsteadMetricDirectoryResults(
-				results);
-		return finalResults;
-	}
-
-	private HalsteadMetricResult processFile(HashIdFileTree directory,
-			HalsteadMetricResult results, HashIdFileTree child) {
-		if (store.hasFileResults(child.getHashId())) {
-			HalsteadMetricFileResults fileResults = (HalsteadMetricFileResults) store
-					.readFileResults(child.getHashId());
-			for (HalsteadMetricResult result : fileResults.getResults()) {
-				if (result.getCodeRangeType() == CodeRangeType.FILE) {
-					results = combine(directory, results, result);
-					break;
+				if (store.hasDirectoryResults(child.getHashId())) {
+					HalsteadMetricDirectoryResults results = (HalsteadMetricDirectoryResults) store
+							.readDirectoryResults(child.getHashId());
+					metricResults = combine(directory, metricResults,
+							results.getResult());
+					qualityLevel = combine(qualityLevel,
+							results.getQualityLevel());
 				}
 			}
 		}
-		return results;
+		HalsteadMetricDirectoryResults finalResults = new HalsteadMetricDirectoryResults(
+				metricResults);
+		finalResults.addQualityLevel(qualityLevel);
+		return finalResults;
 	}
 
-	private HalsteadMetricResult processSubDirectory(HashIdFileTree directory,
-			HalsteadMetricResult results, HashIdFileTree child) {
-		if (store.hasDirectoryResults(child.getHashId())) {
-			HalsteadMetricDirectoryResults halsteadResults = (HalsteadMetricDirectoryResults) store
-					.readDirectoryResults(child.getHashId());
-			results = combine(directory, results, halsteadResults.getResult());
+	private QualityLevel combine(QualityLevel overallQualityLevel,
+			QualityLevel qualityLevel) {
+		if (overallQualityLevel == null) {
+			return qualityLevel;
 		}
-		return results;
+		overallQualityLevel.add(qualityLevel);
+		return overallQualityLevel;
 	}
 
 	private HalsteadMetricResult combine(HashIdFileTree directory,

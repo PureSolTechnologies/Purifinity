@@ -15,6 +15,15 @@ public abstract class AbstractEvaluatorResult implements EvaluationResult {
 		}
 	}
 
+	public final void addQualityLevel(QualityLevel level) {
+		QualityLevel qualityLevel = getQualityLevel();
+		if (qualityLevel == null) {
+			setQualityLevel(level);
+		} else {
+			qualityLevel.add(level);
+		}
+	}
+
 	@Override
 	public final QualityLevel getQualityLevel() {
 		return qualityLevel;

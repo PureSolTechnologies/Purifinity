@@ -62,6 +62,12 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
+		CodeDepthDirectoryResults directoryResults = calculateDirectoryResults(directory);
+		store.storeDirectoryResults(directory.getHashId(), directoryResults);
+	}
+
+	private CodeDepthDirectoryResults calculateDirectoryResults(
+			HashIdFileTree directory) {
 		CodeDepthDirectoryResults directoryResults = new CodeDepthDirectoryResults();
 		for (HashIdFileTree child : directory.getChildren()) {
 			QualityLevel childLevel;
@@ -80,13 +86,17 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 				}
 				childLevel = childDirectoryResults.getQualityLevel();
 			}
-			directoryResults.addQualityLevel(childLevel);
+			if (childLevel != null) {
+				directoryResults.addQualityLevel(childLevel);
+			}
 		}
-		store.storeDirectoryResults(directory.getHashId(), directoryResults);
+		return directoryResults;
 	}
 
 	@Override
 	protected void processProject() throws InterruptedException {
-		// intentionally left blank
+		HashIdFileTree directory = getAnalysisRun().getFileTree();
+		CodeDepthDirectoryResults directoryResults = calculateDirectoryResults(directory);
+		store.storeDirectoryResults(directory.getHashId(), directoryResults);
 	}
 }

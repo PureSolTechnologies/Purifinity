@@ -76,13 +76,19 @@ public abstract class AbstractHalsteadResults extends AbstractEvaluatorResult {
 					new GeneralValue<Double>(halstead.getEstimatedBugs(),
 							ESTIMATED_BUGS));
 			SourceCodeQuality quality = result.getQuality();
-			row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
-					quality, QUALITY));
 			if (quality != SourceCodeQuality.UNSPECIFIED) {
-				row.put(QUALITY_LEVEL.getName(),
-						new GeneralValue<QualityLevel>(
-								new QualityLevel(quality), QUALITY_LEVEL));
+				row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
+						quality, QUALITY));
+			} else {
+				if (getQualityLevel() != null) {
+					row.put(QUALITY.getName(),
+							new GeneralValue<SourceCodeQuality>(
+									getQualityLevel().getQuality(), QUALITY));
+				}
+
 			}
+			row.put(QUALITY_LEVEL.getName(), new GeneralValue<QualityLevel>(
+					getQualityLevel(), QUALITY_LEVEL));
 		}
 		return row;
 	}

@@ -1,6 +1,6 @@
-package com.puresol.purifinity.coding.metrics.codedepth;
+package com.puresol.purifinity.coding.metrics.entropy;
 
-import static com.puresol.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluatorParameter.ALL;
+import static com.puresol.purifinity.coding.metrics.entropy.EntropyMetricEvaluatorParameter.ALL;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,10 +14,10 @@ import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;
 import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.api.QualityLevelParameter;
 
-public class CodeDepthDirectoryResults extends AbstractEvaluatorResult
-		implements MetricDirectoryResults {
+public class EntropyDirectoryResults extends AbstractEvaluatorResult implements
+		MetricDirectoryResults {
 
-	private static final long serialVersionUID = 5885874850811986090L;
+	private static final long serialVersionUID = 4585034044953318000L;
 
 	@Override
 	public Set<Parameter<?>> getParameters() {
