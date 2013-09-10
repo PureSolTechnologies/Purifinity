@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
+import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
@@ -35,9 +36,10 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 				.createInstance();
 		try {
-			CodeDepthFileResults results = new CodeDepthFileResults();
 			ProgrammingLanguage language = programmingLanguages.findByName(
 					analysis.getLanguageName(), analysis.getLanguageVersion());
+
+			CodeDepthFileResults results = new CodeDepthFileResults();
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 				CodeDepthMetric metric = new CodeDepthMetric(getAnalysisRun(),
 						language, codeRange);
@@ -62,8 +64,14 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
+		HashId hashId = directory.getHashId();
+		if (store.hasDirectoryResults(hashId)) {
+			return;
+		}
 		CodeDepthDirectoryResults directoryResults = calculateDirectoryResults(directory);
-		store.storeDirectoryResults(directory.getHashId(), directoryResults);
+		if (directoryResults != null) {
+			store.storeDirectoryResults(hashId, directoryResults);
+		}
 	}
 
 	private CodeDepthDirectoryResults calculateDirectoryResults(
@@ -95,8 +103,13 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processProject() throws InterruptedException {
+		if (store.hasProjectResults(getAnalysisRun())) {
+			return;
+		}
 		HashIdFileTree directory = getAnalysisRun().getFileTree();
 		CodeDepthDirectoryResults directoryResults = calculateDirectoryResults(directory);
-		store.storeDirectoryResults(directory.getHashId(), directoryResults);
+		if (directoryResults != null) {
+			store.storeDirectoryResults(directory.getHashId(), directoryResults);
+		}
 	}
 }

@@ -6,6 +6,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
+import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
@@ -33,29 +34,30 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processFile(CodeAnalysis analysis)
 			throws InterruptedException, UniversalSyntaxTreeEvaluationException {
-		if (store.hasFileResults(analysis.getAnalyzedFile().getHashId())) {
+		AnalyzedCode analyzedFile = analysis.getAnalyzedFile();
+		HashId hashId = analyzedFile.getHashId();
+		if (store.hasFileResults(hashId)) {
 			return;
 		}
-		SLOCFileResults results = new SLOCFileResults();
 		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 				.createInstance();
 		try {
 			ProgrammingLanguage language = programmingLanguages.findByName(
 					analysis.getLanguageName(), analysis.getLanguageVersion());
 
+			SLOCFileResults results = new SLOCFileResults();
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 				SLOCMetricCalculator metric = new SLOCMetricCalculator(
 						getAnalysisRun(), language, codeRange);
 				execute(metric);
-				results.add(new SLOCResult(analysis.getAnalyzedFile()
-						.getSourceLocation(), codeRange.getType(), codeRange
-						.getCanonicalName(), metric.getSLOCResult(), metric
-						.getQuality()));
+				results.add(new SLOCResult(analyzedFile.getSourceLocation(),
+						codeRange.getType(), codeRange.getCanonicalName(),
+						metric.getSLOCResult(), metric.getQuality()));
 			}
+			store.storeFileResults(hashId, results);
 		} finally {
 			IOUtils.closeQuietly(programmingLanguages);
 		}
-		store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);
 	}
 
 	@Override
@@ -66,18 +68,17 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
+		HashId hashId = directory.getHashId();
+		if (store.hasDirectoryResults(hashId)) {
+			return;
+		}
 		SLOCDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), finalResults);
+			store.storeDirectoryResults(hashId, finalResults);
 		}
 	}
 
-	private SLOCDirectoryResults createDirectoryResults(
-			HashIdFileTree directory) {
-		HashId hashId = directory.getHashId();
-		if (store.hasDirectoryResults(hashId)) {
-			return null;
-		}
+	private SLOCDirectoryResults createDirectoryResults(HashIdFileTree directory) {
 		SLOCResult results = null;
 		for (HashIdFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
@@ -86,8 +87,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 				results = processSubDirectory(directory, results, child);
 			}
 		}
-		SLOCDirectoryResults finalResults = new SLOCDirectoryResults(results);
-		return finalResults;
+		return new SLOCDirectoryResults(results);
 	}
 
 	private SLOCResult processFile(HashIdFileTree directory,
@@ -131,6 +131,9 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processProject() throws InterruptedException {
+		if (store.hasProjectResults(getAnalysisRun())) {
+			return;
+		}
 		HashIdFileTree directory = getAnalysisRun().getFileTree();
 		SLOCDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {

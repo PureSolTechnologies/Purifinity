@@ -122,7 +122,9 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 				}
 				childLevel = childDirectoryResults.getQualityLevel();
 			}
-			directoryResults.addQualityLevel(childLevel);
+			if (childLevel != null) {
+				directoryResults.addQualityLevel(childLevel);
+			}
 		}
 		return directoryResults;
 	}

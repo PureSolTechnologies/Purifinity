@@ -6,6 +6,7 @@ import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
+import com.puresol.purifinity.coding.metrics.entropy.EntropyDirectoryResults;
 import com.puresol.purifinity.coding.metrics.entropy.EntropyFileResults;
 import com.puresol.purifinity.coding.store.fs.evaluation.AbstractEvaluatorStore;
 
@@ -35,11 +36,15 @@ public class EntropyEvaluatorStore extends AbstractEvaluatorStore {
 	@Override
 	public void storeDirectoryResults(HashId hashId,
 			MetricDirectoryResults results) {
+		File file = getDirectoryResultsFile(hashId);
+		persist(results, file);
 	}
 
 	@Override
 	public void storeProjectResults(AnalysisRun analysisRun,
 			MetricDirectoryResults results) {
+		File file = getProjectResultsFile(analysisRun);
+		persist(results, file);
 	}
 
 	@Override
@@ -53,12 +58,22 @@ public class EntropyEvaluatorStore extends AbstractEvaluatorStore {
 	}
 
 	@Override
-	public MetricDirectoryResults readDirectoryResults(HashId hashId) {
-		return null;
+	public EntropyDirectoryResults readDirectoryResults(HashId hashId) {
+		if (hasDirectoryResults(hashId)) {
+			File file = getDirectoryResultsFile(hashId);
+			return restore(file, EntropyDirectoryResults.class);
+		} else {
+			return null;
+		}
 	}
 
 	@Override
-	public MetricDirectoryResults readProjectResults(AnalysisRun analysisRun) {
-		return null;
+	public EntropyDirectoryResults readProjectResults(AnalysisRun analysisRun) {
+		if (hasProjectResults(analysisRun)) {
+			File file = getProjectResultsFile(analysisRun);
+			return restore(file, EntropyDirectoryResults.class);
+		} else {
+			return null;
+		}
 	}
 }
