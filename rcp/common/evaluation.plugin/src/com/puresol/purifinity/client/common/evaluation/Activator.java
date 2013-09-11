@@ -8,9 +8,11 @@ import org.osgi.framework.BundleContext;
 
 import com.puresol.purifinity.client.common.chart.renderer.ColorProvider;
 import com.puresol.purifinity.client.common.evaluation.metrics.ChartConfigProvider;
+import com.puresol.purifinity.client.common.evaluation.metrics.QualityLevelColorProvider;
 import com.puresol.purifinity.client.common.evaluation.metrics.SourceCodeQualityColorProvider;
 import com.puresol.purifinity.client.common.evaluation.metrics.maintainability.MIColorProvider;
 import com.puresol.purifinity.client.common.evaluation.metrics.maintainability.MIParetoChartConfigProvider;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevelParameter;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQualityParameter;
 import com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
 
@@ -28,6 +30,8 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 		registerColorProvider(new SourceCodeQualityColorProvider(),
 				SourceCodeQualityParameter.NAME);
+		registerColorProvider(new QualityLevelColorProvider(),
+				QualityLevelParameter.NAME);
 		registerColorProvider(new MIColorProvider(),
 				MaintainabilityIndexEvaluatorParameter.MI.getName());
 		registerParetoChartConfigProvider(new MIParetoChartConfigProvider(),
@@ -42,8 +46,8 @@ public class Activator extends AbstractUIPlugin {
 				provider, dictionary);
 	}
 
-	public void registerParetoChartConfigProvider(
-			ChartConfigProvider provider, String parameterName) {
+	public void registerParetoChartConfigProvider(ChartConfigProvider provider,
+			String parameterName) {
 		Dictionary<String, Object> dictionary = new Hashtable<String, Object>();
 		dictionary.put("parameterName", parameterName);
 		getBundle().getBundleContext().registerService(

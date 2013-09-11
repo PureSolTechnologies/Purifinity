@@ -6,7 +6,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
@@ -14,6 +13,7 @@ import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
@@ -27,9 +27,16 @@ import com.puresol.purifinity.client.common.branding.Printable;
 import com.puresol.purifinity.client.common.evaluation.contents.EvaluatorComboViewer;
 import com.puresol.purifinity.client.common.evaluation.contents.MetricsTableViewer;
 import com.puresol.purifinity.client.common.evaluation.utils.EvaluationsTarget;
+import com.puresol.purifinity.client.common.ui.SWTUtils;
 import com.puresol.purifinity.client.common.ui.actions.ExportAction;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
+import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
+import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;
+import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
+import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 
 public class MetricsTableView extends ViewPart implements ISelectionListener,
 		EvaluationsTarget, ISelectionChangedListener, Exportable, Printable {
@@ -37,12 +44,13 @@ public class MetricsTableView extends ViewPart implements ISelectionListener,
 	private ISelectionService selectionService;
 	private Combo evaluatorCombo;
 	private EvaluatorComboViewer evaluatorComboViewer;
-	private ScrolledComposite scrolledComposite;
 	private Table table;
 	private MetricsTableViewer tableViewer;
 
 	private FileAnalysisSelection analysisSelection;
 	private EvaluatorFactory selectedEvaluator;
+	private Text quality;
+	private Text qualityLevel;
 
 	@Override
 	public void dispose() {
@@ -62,9 +70,10 @@ public class MetricsTableView extends ViewPart implements ISelectionListener,
 
 		evaluatorCombo = new Combo(parent, SWT.READ_ONLY);
 		FormData fdEvaluatorCombo = new FormData();
-		fdEvaluatorCombo.left = new FormAttachment(0, 10);
-		fdEvaluatorCombo.right = new FormAttachment(100, -10);
-		fdEvaluatorCombo.top = new FormAttachment(0, 10);
+		fdEvaluatorCombo.left = new FormAttachment(0, SWTUtils.DEFAULT_MARGIN);
+		fdEvaluatorCombo.right = new FormAttachment(100,
+				-SWTUtils.DEFAULT_MARGIN);
+		fdEvaluatorCombo.top = new FormAttachment(0, SWTUtils.DEFAULT_MARGIN);
 		evaluatorCombo.setLayoutData(fdEvaluatorCombo);
 		evaluatorComboViewer = new EvaluatorComboViewer(evaluatorCombo);
 		evaluatorComboViewer.addSelectionChangedListener(this);
@@ -73,20 +82,32 @@ public class MetricsTableView extends ViewPart implements ISelectionListener,
 			selectedEvaluator = evaluatorComboViewer.getSelectedEvaluator();
 		}
 
-		scrolledComposite = new ScrolledComposite(parent, SWT.H_SCROLL
-				| SWT.V_SCROLL | SWT.BORDER);
-		FormData fdScrolledComposite = new FormData();
-		fdScrolledComposite.left = new FormAttachment(0, 10);
-		fdScrolledComposite.right = new FormAttachment(100, -10);
-		fdScrolledComposite.top = new FormAttachment(evaluatorCombo, 10);
-		fdScrolledComposite.bottom = new FormAttachment(100, -10);
-		scrolledComposite.setLayoutData(fdScrolledComposite);
+		quality = new Text(parent, SWT.NONE);
+		FormData fdQuality = new FormData();
+		fdQuality.left = new FormAttachment(0, SWTUtils.DEFAULT_MARGIN);
+		fdQuality.right = new FormAttachment(100, -SWTUtils.DEFAULT_MARGIN);
+		fdQuality.top = new FormAttachment(evaluatorCombo,
+				SWTUtils.DEFAULT_MARGIN);
+		quality.setLayoutData(fdQuality);
 
-		table = new Table(scrolledComposite, SWT.BORDER);
+		qualityLevel = new Text(parent, SWT.NONE);
+		FormData fdQualityLevel = new FormData();
+		fdQualityLevel.left = new FormAttachment(0, SWTUtils.DEFAULT_MARGIN);
+		fdQualityLevel.right = new FormAttachment(100, -SWTUtils.DEFAULT_MARGIN);
+		fdQualityLevel.top = new FormAttachment(quality,
+				SWTUtils.DEFAULT_MARGIN);
+		qualityLevel.setLayoutData(fdQualityLevel);
+
+		table = new Table(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		table.setVisible(true);
-		scrolledComposite.setContent(table);
+		FormData fdTable = new FormData();
+		fdTable.left = new FormAttachment(0, SWTUtils.DEFAULT_MARGIN);
+		fdTable.right = new FormAttachment(100, -SWTUtils.DEFAULT_MARGIN);
+		fdTable.top = new FormAttachment(qualityLevel, SWTUtils.DEFAULT_MARGIN);
+		fdTable.bottom = new FormAttachment(100, -SWTUtils.DEFAULT_MARGIN);
+		table.setLayoutData(fdTable);
 
 		IWorkbenchPartSite site = getSite();
 		IWorkbenchWindow workbenchWindow = site.getWorkbenchWindow();
@@ -139,8 +160,25 @@ public class MetricsTableView extends ViewPart implements ISelectionListener,
 		tableViewer = new MetricsTableViewer(table, selectedEvaluator);
 		tableViewer.setInput(path);
 
-		table.setSize(table.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		scrolledComposite.layout(true, true);
+		SourceCodeQuality sourceCodeQuality = null;
+		QualityLevel qualityLevel = null;
+
+		EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
+		EvaluatorStore store = factory.createInstance(selectedEvaluator
+				.getEvaluatorClass());
+		if (path.isFile()) {
+			MetricFileResults fileResults = store.readFileResults(path
+					.getHashId());
+			sourceCodeQuality = fileResults.getSourceQuality();
+			qualityLevel = fileResults.getQualityLevel();
+		} else {
+			MetricDirectoryResults directoryResults = store
+					.readDirectoryResults(path.getHashId());
+			sourceCodeQuality = directoryResults.getSourceQuality();
+			qualityLevel = directoryResults.getQualityLevel();
+		}
+		quality.setText("Quality: " + sourceCodeQuality.name());
+		this.qualityLevel.setText("Quality Level: " + qualityLevel.getLevel());
 	}
 
 	@Override
