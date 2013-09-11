@@ -116,7 +116,9 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 		if (overallQualityLevel == null) {
 			return qualityLevel;
 		}
-		overallQualityLevel.add(qualityLevel);
+		if (qualityLevel != null) {
+			overallQualityLevel.add(qualityLevel);
+		}
 		return overallQualityLevel;
 	}
 

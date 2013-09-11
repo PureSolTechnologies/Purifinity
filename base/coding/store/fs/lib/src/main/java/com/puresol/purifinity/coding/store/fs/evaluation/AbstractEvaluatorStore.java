@@ -10,56 +10,85 @@ import java.io.ObjectOutputStream;
 import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
+import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;
+import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
 import com.puresol.purifinity.coding.store.fs.analysis.AnalysisRunImpl;
 import com.puresol.purifinity.coding.store.fs.analysis.DirectoryStoreImpl;
 import com.puresol.purifinity.coding.store.fs.analysis.FileStoreImpl;
 
+/**
+ * This is an abstract implementation of an evaluator store.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 
-	protected abstract Class<?> getFileResultClass();
+	protected abstract Class<? extends MetricFileResults> getFileResultClass();
 
-	protected abstract Class<?> getDirectoryResultClass();
+	protected abstract Class<? extends MetricDirectoryResults> getDirectoryResultClass();
 
-	protected abstract Class<?> getProjectResultClass();
+	protected abstract Class<? extends MetricDirectoryResults> getProjectResultClass();
 
 	protected final File getFileResultsFile(HashId hashId) {
-		File directory = FileStoreImpl.getFileDirectory(hashId);
-		String fileName = getFileResultClass().getName();
-		File file = new File(directory, fileName);
-		return file;
+		Class<? extends MetricFileResults> fileResultClass = getFileResultClass();
+		if (fileResultClass != null) {
+			File directory = FileStoreImpl.getFileDirectory(hashId);
+			String fileName = fileResultClass.getName();
+			return new File(directory, fileName);
+		}
+		return null;
 	}
 
 	protected final File getDirectoryResultsFile(HashId hashId) {
-		File directory = DirectoryStoreImpl.getDirectoryStoreDirectory(hashId);
-		String fileName = getDirectoryResultClass().getName();
-		File file = new File(directory, fileName);
-		return file;
+		Class<? extends MetricDirectoryResults> directoryResultClass = getDirectoryResultClass();
+		if (directoryResultClass != null) {
+			File directory = DirectoryStoreImpl
+					.getDirectoryStoreDirectory(hashId);
+			String fileName = directoryResultClass.getName();
+			return new File(directory, fileName);
+		} else {
+			return null;
+		}
 	}
 
 	protected final File getProjectResultsFile(AnalysisRun analysisRun) {
-		File directory = AnalysisRunImpl.getStorageDirectory(analysisRun);
-		String fileName = getProjectResultClass().getName();
-		File file = new File(directory, fileName);
-		return file;
+		Class<? extends MetricDirectoryResults> projectResultClass = getProjectResultClass();
+		if (projectResultClass != null) {
+			File directory = AnalysisRunImpl.getStorageDirectory(analysisRun);
+			String fileName = projectResultClass.getName();
+			return new File(directory, fileName);
+		}
+		return null;
 	}
 
 	@Override
 	public final boolean hasFileResults(HashId hashId) {
-
-		return getFileResultsFile(hashId).exists();
+		File fileResultsFile = getFileResultsFile(hashId);
+		if (fileResultsFile != null) {
+			return fileResultsFile.exists();
+		}
+		return false;
 	}
 
 	@Override
 	public final boolean hasDirectoryResults(HashId hashId) {
-		return getDirectoryResultsFile(hashId).exists();
+		File directoryResultsFile = getDirectoryResultsFile(hashId);
+		if (directoryResultsFile != null) {
+			return directoryResultsFile.exists();
+		}
+		return false;
 	}
 
 	@Override
 	public final boolean hasProjectResults(AnalysisRun analysisRun) {
-		return getProjectResultsFile(analysisRun).exists();
+		File projectResultsFile = getProjectResultsFile(analysisRun);
+		if (projectResultsFile != null) {
+			return projectResultsFile.exists();
+		}
+		return false;
 	}
 
-	protected final static void persist(Object results, File file) {
+	private final void persist(Object results, File file) {
 		try {
 			FileOutputStream outputStream = new FileOutputStream(file);
 			try {
@@ -74,12 +103,38 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 				outputStream.close();
 			}
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Could not store object in file '"
+					+ file + "'.", e);
 		}
 	}
 
-	protected final static <T> T restore(File file, Class<T> clazz) {
+	@Override
+	public final void storeFileResults(HashId hashId, MetricFileResults results) {
+		File file = getFileResultsFile(hashId);
+		if (file != null) {
+			persist(results, file);
+		}
+	}
 
+	@Override
+	public final void storeDirectoryResults(HashId hashId,
+			MetricDirectoryResults results) {
+		File file = getDirectoryResultsFile(hashId);
+		if (file != null) {
+			persist(results, file);
+		}
+	}
+
+	@Override
+	public final void storeProjectResults(AnalysisRun analysisRun,
+			MetricDirectoryResults results) {
+		File file = getProjectResultsFile(analysisRun);
+		if (file != null) {
+			persist(results, file);
+		}
+	}
+
+	private <T> T restore(File file, Class<T> clazz) {
 		try {
 			FileInputStream inputStream = new FileInputStream(file);
 			try {
@@ -95,10 +150,43 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 			} finally {
 				inputStream.close();
 			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
+		} catch (IOException | ClassNotFoundException e) {
+			throw new RuntimeException("Could not restore object of type '"
+					+ clazz.getName() + "' from file '" + file + "'.", e);
 		}
+	}
+
+	@Override
+	public final MetricFileResults readFileResults(HashId hashId) {
+		if (hasFileResults(hashId)) {
+			File file = getFileResultsFile(hashId);
+			if (file != null) {
+				return restore(file, getFileResultClass());
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public final MetricDirectoryResults readDirectoryResults(HashId hashId) {
+		if (hasDirectoryResults(hashId)) {
+			File file = getDirectoryResultsFile(hashId);
+			if (file != null) {
+				return restore(file, getDirectoryResultClass());
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public final MetricDirectoryResults readProjectResults(
+			AnalysisRun analysisRun) {
+		if (hasProjectResults(analysisRun)) {
+			File file = getProjectResultsFile(analysisRun);
+			if (file != null) {
+				return restore(file, getProjectResultClass());
+			}
+		}
+		return null;
 	}
 }

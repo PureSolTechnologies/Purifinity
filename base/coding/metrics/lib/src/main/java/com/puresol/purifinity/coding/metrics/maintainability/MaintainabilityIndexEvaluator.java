@@ -199,7 +199,9 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 		// }
 		GenericMetricDirectoryResults results = new GenericMetricDirectoryResults();
 		// TODO
-		store.storeDirectoryResults(directory.getHashId(), results);
+		if (results != null) {
+			store.storeDirectoryResults(directory.getHashId(), results);
+		}
 	}
 
 	@Override

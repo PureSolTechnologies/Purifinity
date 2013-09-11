@@ -72,7 +72,9 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 					NormalizedMaintainabilityQuality.get(codeRange.getType(),
 							result)));
 		}
-		store.storeFileResults(hashId, results);
+		if (results != null) {
+			store.storeFileResults(hashId, results);
+		}
 	}
 
 	private MaintainabilityIndexFileResult findFileResult(
