@@ -79,6 +79,11 @@ public class QualityLevel implements Serializable {
 		return statistics.getAvg();
 	}
 
+	public double getDeviation() {
+		assureCalculatedStatistics();
+		return statistics.getStdDev();
+	}
+
 	private void assureCalculatedStatistics() {
 		if (statistics == null) {
 			statistics = new Statistics(levels);
@@ -114,5 +119,4 @@ public class QualityLevel implements Serializable {
 	public String toString() {
 		return String.valueOf(getLevel());
 	}
-
 }

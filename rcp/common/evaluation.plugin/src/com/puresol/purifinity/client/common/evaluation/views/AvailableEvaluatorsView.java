@@ -49,6 +49,7 @@ public class AvailableEvaluatorsView extends ViewPart implements Refreshable,
 		parent.setLayout(new FillLayout());
 		table = new Table(parent, SWT.NONE);
 		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
 		viewer = new AvailableEvaluatorsTableViewer(table);
 		viewer.addSelectionChangedListener(this);
 

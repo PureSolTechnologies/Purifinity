@@ -13,7 +13,6 @@ import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
@@ -26,6 +25,8 @@ import com.puresol.purifinity.client.common.branding.Exportable;
 import com.puresol.purifinity.client.common.branding.Printable;
 import com.puresol.purifinity.client.common.evaluation.contents.EvaluatorComboViewer;
 import com.puresol.purifinity.client.common.evaluation.contents.MetricsTableViewer;
+import com.puresol.purifinity.client.common.evaluation.ui.QualityLevelLabel;
+import com.puresol.purifinity.client.common.evaluation.ui.SourceCodeQualityLabel;
 import com.puresol.purifinity.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.purifinity.client.common.ui.SWTUtils;
 import com.puresol.purifinity.client.common.ui.actions.ExportAction;
@@ -49,8 +50,8 @@ public class MetricsTableView extends ViewPart implements ISelectionListener,
 
 	private FileAnalysisSelection analysisSelection;
 	private EvaluatorFactory selectedEvaluator;
-	private Text quality;
-	private Text qualityLevel;
+	private SourceCodeQualityLabel quality;
+	private QualityLevelLabel qualityLevel;
 
 	@Override
 	public void dispose() {
@@ -82,7 +83,7 @@ public class MetricsTableView extends ViewPart implements ISelectionListener,
 			selectedEvaluator = evaluatorComboViewer.getSelectedEvaluator();
 		}
 
-		quality = new Text(parent, SWT.NONE);
+		quality = new SourceCodeQualityLabel(parent, SWT.NONE);
 		FormData fdQuality = new FormData();
 		fdQuality.left = new FormAttachment(0, SWTUtils.DEFAULT_MARGIN);
 		fdQuality.right = new FormAttachment(100, -SWTUtils.DEFAULT_MARGIN);
@@ -90,7 +91,7 @@ public class MetricsTableView extends ViewPart implements ISelectionListener,
 				SWTUtils.DEFAULT_MARGIN);
 		quality.setLayoutData(fdQuality);
 
-		qualityLevel = new Text(parent, SWT.NONE);
+		qualityLevel = new QualityLevelLabel(parent, SWT.NONE);
 		FormData fdQualityLevel = new FormData();
 		fdQualityLevel.left = new FormAttachment(0, SWTUtils.DEFAULT_MARGIN);
 		fdQualityLevel.right = new FormAttachment(100, -SWTUtils.DEFAULT_MARGIN);
@@ -169,16 +170,27 @@ public class MetricsTableView extends ViewPart implements ISelectionListener,
 		if (path.isFile()) {
 			MetricFileResults fileResults = store.readFileResults(path
 					.getHashId());
-			sourceCodeQuality = fileResults.getSourceQuality();
-			qualityLevel = fileResults.getQualityLevel();
+			if (fileResults != null) {
+				sourceCodeQuality = fileResults.getSourceQuality();
+				qualityLevel = fileResults.getQualityLevel();
+			} else {
+				sourceCodeQuality = SourceCodeQuality.UNSPECIFIED;
+				qualityLevel = null;
+			}
 		} else {
 			MetricDirectoryResults directoryResults = store
 					.readDirectoryResults(path.getHashId());
-			sourceCodeQuality = directoryResults.getSourceQuality();
-			qualityLevel = directoryResults.getQualityLevel();
+			if (directoryResults != null) {
+				sourceCodeQuality = directoryResults.getSourceQuality();
+				qualityLevel = directoryResults.getQualityLevel();
+			} else {
+				sourceCodeQuality = SourceCodeQuality.UNSPECIFIED;
+				qualityLevel = null;
+			}
 		}
-		quality.setText("Quality: " + sourceCodeQuality.name());
-		this.qualityLevel.setText("Quality Level: " + qualityLevel.getLevel());
+
+		quality.setSourceCodeQuality(sourceCodeQuality);
+		this.qualityLevel.setQualityLevel(qualityLevel);
 	}
 
 	@Override
