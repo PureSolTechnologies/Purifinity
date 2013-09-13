@@ -105,6 +105,9 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 				}
 			}
 		}
+		if (metricResults == null) {
+			return null;
+		}
 		HalsteadMetricDirectoryResults finalResults = new HalsteadMetricDirectoryResults(
 				metricResults);
 		finalResults.addQualityLevel(qualityLevel);

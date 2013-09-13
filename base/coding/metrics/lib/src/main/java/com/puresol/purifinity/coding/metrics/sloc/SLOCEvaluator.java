@@ -19,6 +19,19 @@ import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
 import com.puresol.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
 
+/**
+ * This evaluator evaluates the Source Lines Of Code metrics which counts the
+ * lines in source files and distinguishes between physical lines (all lines),
+ * productive lines (lines which contain compilable code), comment lines (lines
+ * which contain at least a bit of comment) and blank lines which neither
+ * contain comments nor productive code.
+ * 
+ * The different counts of line types need to have a certain ratio between each
+ * other to represent a well balance amount of comments, blank lines and
+ * productive lines.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public class SLOCEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = -5093217611195212999L;

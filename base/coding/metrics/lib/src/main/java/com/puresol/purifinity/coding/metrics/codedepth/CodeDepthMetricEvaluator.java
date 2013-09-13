@@ -8,6 +8,7 @@ import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
+import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguages;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
@@ -16,8 +17,16 @@ import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
+import com.puresol.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
 import com.puresol.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
 
+/**
+ * This evaluator calculates the nesting depth of the source code. A too deep
+ * nesting leads into a hard understandable code and a maintainability
+ * nightmare.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = -5093217611195212999L;
@@ -76,7 +85,10 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
 	private CodeDepthDirectoryResults calculateDirectoryResults(
 			HashIdFileTree directory) {
-		CodeDepthDirectoryResults directoryResults = new CodeDepthDirectoryResults();
+		CodeDepthDirectoryResults directoryResults = new CodeDepthDirectoryResults(
+				new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
+				directory.getName());
+		int maxDepth = 0;
 		for (HashIdFileTree child : directory.getChildren()) {
 			QualityLevel childLevel;
 			if (child.isFile()) {
@@ -86,6 +98,9 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 					continue;
 				}
 				childLevel = fileResults.getQualityLevel();
+				for (CodeDepthResult result : fileResults.getResults()) {
+					maxDepth = Math.max(maxDepth, result.getMaxDepth());
+				}
 			} else {
 				CodeDepthDirectoryResults childDirectoryResults = (CodeDepthDirectoryResults) store
 						.readDirectoryResults(child.getHashId());
@@ -93,9 +108,12 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 					continue;
 				}
 				childLevel = childDirectoryResults.getQualityLevel();
+				maxDepth = Math.max(maxDepth,
+						childDirectoryResults.getMaxDepth());
 			}
 			if (childLevel != null) {
 				directoryResults.addQualityLevel(childLevel);
+				directoryResults.setMaxDepth(maxDepth);
 			}
 		}
 		return directoryResults;

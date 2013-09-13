@@ -41,6 +41,10 @@ public class CodeDepthFileResults extends AbstractEvaluatorResult implements
 		}
 	}
 
+	public List<CodeDepthResult> getResults() {
+		return results;
+	}
+
 	@Override
 	public Set<Parameter<?>> getParameters() {
 		return ALL;

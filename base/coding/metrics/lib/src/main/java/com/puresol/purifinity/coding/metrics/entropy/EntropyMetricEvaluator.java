@@ -7,16 +7,19 @@ import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
+import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
+import com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricDirectoryResults;
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricFileResults;
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricResult;
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadResult;
+import com.puresol.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class EntropyMetricEvaluator extends AbstractEvaluator {
 
@@ -45,37 +48,48 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 			HalsteadMetricResult halsteadFileResult = findFileResult(
 					halsteadFileResults, codeRange);
 			HalsteadResult halstead = halsteadFileResult.getHalsteadResult();
-
-			Map<String, Integer> operands = halstead.getOperands();
-
-			double maxEntropy = Math.log(halstead.getDifferentOperands())
-					/ Math.log(2.0);
-			double entropy = 0.0;
-			for (String operant : operands.keySet()) {
-				int count = operands.get(operant);
-				entropy += count
-						/ (double) halstead.getTotalOperands()
-						* Math.log(count / (double) halstead.getTotalOperands())
-						/ Math.log(2.0);
-			}
-			entropy *= -1.0;
-			double normEntropy = entropy / maxEntropy;
-			double entropyRedundancy = maxEntropy - entropy;
-			double redundancy = entropyRedundancy
-					* halstead.getDifferentOperands() / maxEntropy;
-			double normalizedRedundancy = redundancy
-					/ halstead.getDifferentOperands();
-			EntropyMetricResult result = new EntropyMetricResult(
-					halstead.getVocabularySize(), halstead.getProgramLength(),
-					entropy, maxEntropy, normEntropy, entropyRedundancy,
-					redundancy, normalizedRedundancy);
-
+			EntropyMetricResult result = calculateEntropyResult(halstead);
 			results.add(new EntropyResult(analysis.getAnalyzedFile()
 					.getSourceLocation(), codeRange.getType(), codeRange
 					.getCanonicalName(), result, EntropyQuality.get(
 					codeRange.getType(), result)));
 		}
 		store.storeFileResults(hashId, results);
+	}
+
+	/**
+	 * This method calculates the entropy result from a {@link HalsteadResult}.
+	 * 
+	 * @param halstead
+	 *            is a {@link HalsteadResult} object containing the Halstead
+	 *            results.
+	 * @return An {@link EntropyMetricResult} object is returned containing the
+	 *         result calculation results.
+	 */
+	private EntropyMetricResult calculateEntropyResult(HalsteadResult halstead) {
+		Map<String, Integer> operands = halstead.getOperands();
+
+		double maxEntropy = Math.log(halstead.getDifferentOperands())
+				/ Math.log(2.0);
+		double entropy = 0.0;
+		for (String operant : operands.keySet()) {
+			int count = operands.get(operant);
+			entropy += count / (double) halstead.getTotalOperands()
+					* Math.log(count / (double) halstead.getTotalOperands())
+					/ Math.log(2.0);
+		}
+		entropy *= -1.0;
+		double normEntropy = entropy / maxEntropy;
+		double entropyRedundancy = maxEntropy - entropy;
+		double redundancy = entropyRedundancy * halstead.getDifferentOperands()
+				/ maxEntropy;
+		double normalizedRedundancy = redundancy
+				/ halstead.getDifferentOperands();
+		EntropyMetricResult result = new EntropyMetricResult(
+				halstead.getVocabularySize(), halstead.getProgramLength(),
+				entropy, maxEntropy, normEntropy, entropyRedundancy,
+				redundancy, normalizedRedundancy);
+		return result;
 	}
 
 	private HalsteadMetricResult findFileResult(
@@ -99,12 +113,26 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
 		EntropyDirectoryResults directoryResults = calculateDirectoryResults(directory);
-		store.storeDirectoryResults(directory.getHashId(), directoryResults);
+		if (directoryResults != null) {
+			store.storeDirectoryResults(directory.getHashId(), directoryResults);
+		}
 	}
 
 	private EntropyDirectoryResults calculateDirectoryResults(
 			HashIdFileTree directory) {
-		EntropyDirectoryResults directoryResults = new EntropyDirectoryResults();
+		EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
+		EvaluatorStore halsteadMetricResultStore = factory
+				.createInstance(HalsteadMetricEvaluator.class);
+		HalsteadMetricDirectoryResults halsteadDirectoryResults = (HalsteadMetricDirectoryResults) halsteadMetricResultStore
+				.readDirectoryResults(directory.getHashId());
+		if (halsteadDirectoryResults == null) {
+			return null;
+		}
+		EntropyMetricResult entropyResult = calculateEntropyResult(halsteadDirectoryResults
+				.getResult().getHalsteadResult());
+		EntropyDirectoryResults directoryResults = new EntropyDirectoryResults(
+				new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
+				directory.getName());
 		for (HashIdFileTree child : directory.getChildren()) {
 			QualityLevel childLevel;
 			if (child.isFile()) {
@@ -126,6 +154,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 				directoryResults.addQualityLevel(childLevel);
 			}
 		}
+		directoryResults.setEntropyResult(entropyResult);
 		return directoryResults;
 	}
 

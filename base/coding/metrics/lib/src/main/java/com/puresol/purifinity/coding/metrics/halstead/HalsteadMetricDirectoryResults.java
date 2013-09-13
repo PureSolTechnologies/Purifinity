@@ -18,6 +18,9 @@ public class HalsteadMetricDirectoryResults extends AbstractHalsteadResults
 
 	public HalsteadMetricDirectoryResults(HalsteadMetricResult result) {
 		super();
+		if (result == null) {
+			throw new IllegalArgumentException("Result must not be null!");
+		}
 		this.result = result;
 	}
 
