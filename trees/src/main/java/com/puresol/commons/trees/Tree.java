@@ -19,32 +19,34 @@ import java.util.List;
  */
 public interface Tree<T> {
 
-    /**
-     * This mehtod returns the parent node.
-     * 
-     * @return
-     */
-    public T getParent();
+	/**
+	 * This mehtod returns the parent node.
+	 * 
+	 * @return
+	 */
+	public T getParent();
 
-    /**
-     * This method is used to check whether a node has children or not.
-     * 
-     * @return
-     */
-    public boolean hasChildren();
+	/**
+	 * This method returns whether or not the current node contains children.
+	 * 
+	 * @return <code>true</code> is returned in case the node contains children.
+	 *         <code>false</code> is returned otherwise.
+	 */
+	public boolean hasChildren();
 
-    /**
-     * This method returns all children of the node.
-     * 
-     * @return
-     */
-    public List<T> getChildren();
+	/**
+	 * This method returns the children which are contained in the node.
+	 * 
+	 * @return A {@link List} of T is returned. If not child is found this list
+	 *         is empty.
+	 */
+	public List<T> getChildren();
 
-    /**
-     * This method returns the node identifier. Each node in a tree should have
-     * an identifying name.
-     * 
-     * @return
-     */
-    public String getName();
+	/**
+	 * This method returns the node identifier. Each node in a tree should have
+	 * an identifying name.
+	 * 
+	 * @return
+	 */
+	public String getName();
 }
