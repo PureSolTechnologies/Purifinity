@@ -7,7 +7,7 @@
             allPopups="false"
             locationURI="menu:options?before=preferences">
          <command
-               commandId="com.puresol.purifinity.client.common.license.command.LicenseManagerCommand"
+               commandId="com.puresol.purifinity.client.common.license.command.LicenseManagerHandler"
                id="licenseManagerItem"
                label="License Manager..."
                mnemonic="L"

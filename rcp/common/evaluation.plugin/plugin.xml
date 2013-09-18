@@ -234,5 +234,13 @@
             name="Code Depth">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            category="com.puresol.purifinity"
+            file="help/toc.xml"
+            primary="false">
+      </toc>
+   </extension>
 
 </plugin>

@@ -32,6 +32,7 @@
 <setEntry value="org.eclipse.emf.ecore:default"/>
 <setEntry value="org.eclipse.equinox.p2.core.feature:default"/>
 <setEntry value="org.eclipse.equinox.p2.rcp.feature:default"/>
+<setEntry value="org.eclipse.help:default"/>
 <setEntry value="org.eclipse.rcp:default"/>
 </setAttribute>
 <booleanAttribute key="show_selected_only" value="false"/>

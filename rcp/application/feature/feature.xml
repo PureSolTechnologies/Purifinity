@@ -28,6 +28,10 @@
          id="org.eclipse.equinox.p2.rcp.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.help"
+         version="0.0.0"/>
+
    <requires>
       <import plugin="org.eclipse.core.runtime" version="3.6.0" match="compatible"/>
       <import plugin="org.eclipse.help" version="3.2.0" match="compatible"/>
@@ -76,6 +80,8 @@
       <import plugin="org.eclipse.equinox.event" version="1.2.200" match="greaterOrEqual"/>
       <import plugin="org.eclipse.equinox.util" version="1.0.400" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.intro"/>
+      <import plugin="org.eclipse.ui.forms" version="3.5.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.help" version="3.6.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin

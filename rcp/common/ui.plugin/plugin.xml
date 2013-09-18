@@ -5,6 +5,7 @@
          point="org.eclipse.ui.views">
       <view
             class="com.puresol.purifinity.client.common.ui.views.BugsAndEnhancementsView"
+            icon="icons/16x16/bug.png"
             id="com.puresol.purifinity.client.common.ui.views.BugsAndEnhancementsView"
             name="Bug and Enhancement Tracker"
             restorable="true">

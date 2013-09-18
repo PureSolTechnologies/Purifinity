@@ -20,76 +20,65 @@ import com.puresol.purifinity.client.application.dialogs.PickWorkspaceDialog;
  */
 public class Purifinity implements IApplication {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.equinox.app.IApplication#start(org.eclipse.equinox.app.
-     * IApplicationContext)
-     */
-    @Override
-    public Object start(IApplicationContext context) throws Exception {
-	if (!changeWorkspace()) {
-	    return IApplication.EXIT_OK;
+	@Override
+	public Object start(IApplicationContext context) throws Exception {
+		if (!changeWorkspace()) {
+			return IApplication.EXIT_OK;
+		}
+		Display display = PlatformUI.createDisplay();
+		try {
+			int returnCode = PlatformUI.createAndRunWorkbench(display,
+					new ApplicationWorkbenchAdvisor());
+			if (returnCode == PlatformUI.RETURN_RESTART)
+				return IApplication.EXIT_RESTART;
+			else
+				return IApplication.EXIT_OK;
+		} finally {
+			display.dispose();
+		}
 	}
-	Display display = PlatformUI.createDisplay();
-	try {
-	    int returnCode = PlatformUI.createAndRunWorkbench(display,
-		    new ApplicationWorkbenchAdvisor());
-	    if (returnCode == PlatformUI.RETURN_RESTART)
-		return IApplication.EXIT_RESTART;
-	    else
-		return IApplication.EXIT_OK;
-	} finally {
-	    display.dispose();
-	}
-    }
 
-    private boolean changeWorkspace() throws IOException, MalformedURLException {
-	boolean needNewLocation = false;
-	String purifinityUITestProperty = System
-		.getProperty("purifinity.ui.test");
-	if ((purifinityUITestProperty != null)
-		&& (purifinityUITestProperty.equals("true"))) {
-	    return false;
+	private boolean changeWorkspace() throws IOException, MalformedURLException {
+		boolean needNewLocation = false;
+		String purifinityUITestProperty = System
+				.getProperty("purifinity.ui.test");
+		if ((purifinityUITestProperty != null)
+				&& (purifinityUITestProperty.equals("true"))) {
+			return false;
+		}
+		Location location = Platform.getInstanceLocation();
+		String savedLocation = PickWorkspaceDialog.getWorkspaceLocation();
+		if (savedLocation == null) {
+			needNewLocation = true;
+		} else {
+			File directory = new File(savedLocation);
+			if ((!directory.exists()) || (!directory.isDirectory())) {
+				needNewLocation = true;
+			}
+		}
+		if (needNewLocation) {
+			PickWorkspaceDialog dialog = new PickWorkspaceDialog(false);
+			if (dialog.open() == PickWorkspaceDialog.CANCEL) {
+				return false;
+			}
+			savedLocation = dialog.getLocation();
+		}
+		location.set(new URL("file", null, savedLocation), true);
+		return true;
 	}
-	Location location = Platform.getInstanceLocation();
-	String savedLocation = PickWorkspaceDialog.getWorkspaceLocation();
-	if (savedLocation == null) {
-	    needNewLocation = true;
-	} else {
-	    File directory = new File(savedLocation);
-	    if ((!directory.exists()) || (!directory.isDirectory())) {
-		needNewLocation = true;
-	    }
-	}
-	if (needNewLocation) {
-	    PickWorkspaceDialog dialog = new PickWorkspaceDialog(false);
-	    if (dialog.open() == PickWorkspaceDialog.CANCEL) {
-		return false;
-	    }
-	    savedLocation = dialog.getLocation();
-	}
-	location.set(new URL("file", null, savedLocation), true);
-	return true;
-    }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.equinox.app.IApplication#stop()
-     */
-    @Override
-    public void stop() {
-	if (!PlatformUI.isWorkbenchRunning())
-	    return;
-	final IWorkbench workbench = PlatformUI.getWorkbench();
-	final Display display = workbench.getDisplay();
-	display.syncExec(new Runnable() {
-	    @Override
-	    public void run() {
-		if (!display.isDisposed())
-		    workbench.close();
-	    }
-	});
-    }
+	@Override
+	public void stop() {
+		if (!PlatformUI.isWorkbenchRunning())
+			return;
+		final IWorkbench workbench = PlatformUI.getWorkbench();
+		final Display display = workbench.getDisplay();
+		display.syncExec(new Runnable() {
+			@Override
+			public void run() {
+				if (!display.isDisposed())
+					workbench.close();
+			}
+		});
+	}
 }

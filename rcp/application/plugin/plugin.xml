@@ -169,11 +169,37 @@
                label="Help"
                mnemonic="H">
             <command
-                  commandId="org.eclipse.ui.help.quickStartAction"
+                  commandId="com.puresol.purifinity.client.application.handler.MyIntroHandler"
                   icon="icons/16x16/flower.png"
                   id="welcome"
                   label="Welcome"
                   mnemonic="W"
+                  style="push">
+            </command>
+            <separator
+                  name="com.puresol.purifinity.client.application.plugin.separator3"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="org.eclipse.ui.help.displayHelp"
+                  icon="icons/16x16/help.png"
+                  id="helpContents"
+                  label="Help Contents..."
+                  mnemonic="H"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.help.helpSearch"
+                  icon="icons/16x16/find.png"
+                  id="search"
+                  label="Search..."
+                  mnemonic="e"
+                  style="push">
+            </command>
+            <command
+                  commandId="org.eclipse.ui.help.dynamicHelp"
+                  label="Dynamic Help"
+                  mnemonic="D"
                   style="push">
             </command>
             <separator
@@ -188,12 +214,9 @@
             </command>
             <command
                   commandId="com.puresol.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
+                  icon="icons/16x16/bug.png"
                   id="bugtracker"
                   label="Bug and Feature Request Tracker Website..."
-                  style="push">
-            </command>
-            <command
-                  commandId="com.puresol.purifinity.client.application.plugin.command3"
                   style="push">
             </command>
             <separator
@@ -204,6 +227,7 @@
                   commandId="org.eclipse.ui.help.aboutAction"
                   id="about"
                   label="About Purifinity..."
+                  mnemonic="A"
                   style="push">
             </command>
          </menu>
@@ -248,34 +272,34 @@
             id="com.puresol.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
             name="Open Bug and Enhancement Tracker Website">
       </command>
+      <command
+            defaultHandler="com.puresol.purifinity.client.application.handler.MyIntroHandler"
+            id="com.puresol.purifinity.client.application.handler.MyIntroHandler"
+            name="Show Intro">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.intro">
       <intro
-            class="com.puresol.purifinity.client.application.PurifinityIntroPart"
-            id="com.puresol.purifinity.client.application.PurifinityIntroPart">
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            id="com.puresol.purifinity.client.intro">
       </intro>
       <introProductBinding
-            introId="com.puresol.purifinity.client.application.PurifinityIntroPart"
+            introId="com.puresol.purifinity.client.intro"
             productId="com.puresol.purifinity.client.application.plugin.PurifinityFull">
-      </introProductBinding>
-      <introProductBinding
-            introId="com.puresol.purifinity.client.application.PurifinityIntroPart"
-            productId="com.puresol.purifinity.client.application.plugin.PurifinityBase">
       </introProductBinding>
    </extension>
    <extension
          point="org.eclipse.ui.intro.config">
       <config
-            content="introContent.xml"
-            id="com.puresol.purifinity.client.application.plugin.introConfigId"
-            introId="com.puresol.purifinity.client.application.PurifinityIntroPart">
+            content="intro/introContent.xml"
+            id="com.puresol.purifinity.client.introConfig"
+            introId="com.puresol.purifinity.client.intro">
          <presentation
-               home-page-id="root">
+               home-page-id="root"
+               standby-page-id="standby">
             <implementation
-                  kind="swt"
-                  os="win32,linux,macosx"
-                  style="content/shared.css">
+                  kind="html">
             </implementation>
          </presentation>
       </config>
@@ -329,6 +353,21 @@
                value="28,252,445,20">
          </property>
       </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="org.eclipse.ui.help.helpSearch"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M3+F1">
+      </key>
+      <key
+            commandId="org.eclipse.ui.help.displayHelp"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+F1">
+      </key>
    </extension>
 
 </plugin>
