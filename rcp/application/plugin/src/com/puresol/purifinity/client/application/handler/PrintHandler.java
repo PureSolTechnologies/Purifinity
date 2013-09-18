@@ -1,9 +1,8 @@
 package com.puresol.purifinity.client.application.handler;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.IHandler;
-import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.printing.PrintDialog;
 import org.eclipse.swt.printing.Printer;
@@ -17,22 +16,14 @@ import com.puresol.purifinity.client.application.Activator;
 import com.puresol.purifinity.client.common.branding.Printable;
 
 /**
+ * This handler is used to print the currently selected view or editor.
+ * 
  * @see http://www.eclipsezone.com/eclipse/forums/t31374.html
  * @see http://www.eclipse.org/forums/index.php/m/638711/
- * @author Rick-Rainer Ludwig
  * 
+ * @author Rick-Rainer Ludwig
  */
-public class PrintHandler implements IHandler {
-
-	@Override
-	public void addHandlerListener(IHandlerListener handlerListener) {
-		// not needed
-	}
-
-	@Override
-	public void dispose() {
-		// not needed
-	}
+public class PrintHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -67,15 +58,4 @@ public class PrintHandler implements IHandler {
 		IWorkbenchPart part = activePage.getActivePart();
 		return Printable.class.isAssignableFrom(part.getClass());
 	}
-
-	@Override
-	public boolean isHandled() {
-		return true;
-	}
-
-	@Override
-	public void removeHandlerListener(IHandlerListener handlerListener) {
-		// not needed
-	}
-
 }

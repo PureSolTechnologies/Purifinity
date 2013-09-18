@@ -1,26 +1,19 @@
 package com.puresol.purifinity.client.common.license.command;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.commands.IHandler;
-import org.eclipse.core.commands.IHandlerListener;
 
 import com.puresol.purifinity.client.common.license.Activator;
 import com.puresol.purifinity.client.common.license.dialog.LicenseManagerDialog;
 
-public class LicenseManagerHandler implements IHandler {
-
-	@Override
-	public void addHandlerListener(IHandlerListener handlerListener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-
-	}
+/**
+ * This handler is used to open the {@link LicenseManagerDialog}.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public class LicenseManagerHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
@@ -30,22 +23,6 @@ public class LicenseManagerHandler implements IHandler {
 		dialog.setBlockOnOpen(true);
 		dialog.open();
 		return null;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return true;
-	}
-
-	@Override
-	public boolean isHandled() {
-		return true;
-	}
-
-	@Override
-	public void removeHandlerListener(IHandlerListener handlerListener) {
-		// TODO Auto-generated method stub
-
 	}
 
 }
