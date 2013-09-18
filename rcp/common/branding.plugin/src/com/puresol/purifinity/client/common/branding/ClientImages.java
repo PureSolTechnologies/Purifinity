@@ -6,6 +6,8 @@ import org.eclipse.wb.swt.ResourceManager;
 
 public enum ClientImages {
 
+	APPLICATION_GO_16x16("/icons/16x16/application_go.png"), //
+	//
 	ARROW_REFRESH_16x16("/icons/16x16/arrow_refresh.png"), //
 	//
 	DATABASE_REFRESH_16x16("/icons/16x16/database_refresh.png"), //
