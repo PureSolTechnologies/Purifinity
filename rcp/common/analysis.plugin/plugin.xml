@@ -153,5 +153,12 @@
          </menu>
       </menuContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.intro.configExtension">
+      <configExtension
+            configId="com.puresol.purifinity.client.introConfig"
+            content="intro/introContent.xml">
+      </configExtension>
+   </extension>
 
 </plugin>

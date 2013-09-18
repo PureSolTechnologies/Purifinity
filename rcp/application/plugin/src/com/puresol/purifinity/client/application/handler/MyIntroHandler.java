@@ -16,6 +16,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
  * @author Rick-Rainer Ludwig
  * 
  */
+@SuppressWarnings("restriction")
 public class MyIntroHandler extends AbstractHandler {
 
 	@Override

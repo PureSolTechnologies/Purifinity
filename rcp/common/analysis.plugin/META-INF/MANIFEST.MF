@@ -21,7 +21,8 @@ Require-Bundle: com.puresol.purifinity.client.common.osgi.plugin;bundle-version=
  org.slf4j.api;bundle-version="1.6.4",
  org.apache.commons.io;bundle-version="2.0.1",
  org.eclipse.e4.ui.workbench;bundle-version="0.11.0",
- com.puresol.purifinity.client.application.plugin;bundle-version="0.1.0"
+ com.puresol.purifinity.client.application.plugin;bundle-version="0.1.0",
+ org.eclipse.ui.intro;bundle-version="3.4.200"
 Export-Package: com.puresol.purifinity.client.common.analysis,
  com.puresol.purifinity.client.common.analysis.contents,
  com.puresol.purifinity.client.common.analysis.controls,

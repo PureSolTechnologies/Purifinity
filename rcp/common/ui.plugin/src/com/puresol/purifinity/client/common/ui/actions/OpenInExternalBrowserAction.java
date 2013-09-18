@@ -1,10 +1,12 @@
 package com.puresol.purifinity.client.common.ui.actions;
 
-import java.awt.Desktop;
-import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.browser.IWebBrowser;
 
 import com.puresol.purifinity.client.common.branding.ClientImages;
 
@@ -31,10 +33,12 @@ public class OpenInExternalBrowserAction extends Action {
 		super.run();
 		URI uri = uriProvider.getURI();
 		try {
-			Desktop.getDesktop().browse(uri);
-		} catch (IOException e) {
+			IWebBrowser externalBrowser = PlatformUI.getWorkbench()
+					.getBrowserSupport().getExternalBrowser();
+			externalBrowser.openURL(uri.toURL());
+		} catch (PartInitException | MalformedURLException e) {
 			throw new IllegalStateException(
-					"Could not open URI '" + uri + "'.", e);
+					"Could not open URL '" + uri + "'.", e);
 		}
 	}
 }
