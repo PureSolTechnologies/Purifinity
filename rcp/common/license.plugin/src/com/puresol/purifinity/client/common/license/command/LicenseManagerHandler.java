@@ -8,7 +8,7 @@ import org.eclipse.core.commands.IHandlerListener;
 import com.puresol.purifinity.client.common.license.Activator;
 import com.puresol.purifinity.client.common.license.dialog.LicenseManagerDialog;
 
-public class LicenseManagerCommand implements IHandler {
+public class LicenseManagerHandler implements IHandler {
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {

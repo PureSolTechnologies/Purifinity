@@ -176,6 +176,30 @@
                   mnemonic="W"
                   style="push">
             </command>
+            <separator
+                  name="com.puresol.purifinity.client.application.plugin.separator1"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="com.puresol.purifinity.client.application.commands.OpenPureSolTechnologiesWebsiteHandler"
+                  id="websitr"
+                  label="PureSol Technologies Website..."
+                  style="push">
+            </command>
+            <command
+                  commandId="com.puresol.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
+                  id="bugtracker"
+                  label="Bug and Feature Request Tracker Website..."
+                  style="push">
+            </command>
+            <command
+                  commandId="com.puresol.purifinity.client.application.plugin.command3"
+                  style="push">
+            </command>
+            <separator
+                  name="com.puresol.purifinity.client.application.plugin.separator2"
+                  visible="true">
+            </separator>
             <command
                   commandId="org.eclipse.ui.help.aboutAction"
                   id="about"
@@ -211,6 +235,18 @@
             defaultHandler="com.puresol.purifinity.client.application.handler.ExportHandler"
             id="org.eclipse.ui.file.export"
             name="Export">
+      </command>
+      <command
+            defaultHandler="com.puresol.purifinity.client.application.commands.OpenPureSolTechnologiesWebsiteHandler"
+            description="Opens the official website of PureSol Technologies"
+            id="com.puresol.purifinity.client.application.commands.OpenPureSolTechnologiesWebsiteHandler"
+            name="Open PureSol Technologies Website">
+      </command>
+      <command
+            defaultHandler="com.puresol.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
+            description="Opens the official bug tracker and feature request website"
+            id="com.puresol.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
+            name="Open Bug and Enhancement Tracker Website">
       </command>
    </extension>
    <extension
