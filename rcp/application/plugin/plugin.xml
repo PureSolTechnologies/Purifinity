@@ -280,33 +280,14 @@
    </extension>
    <extension
          point="org.eclipse.ui.intro">
-      <intro
-            class="com.puresol.purifinity.client.application.PurifinityIntroPart"
-            id="com.puresol.purifinity.client.intro">
-      </intro>
       <introProductBinding
-            introId="com.puresol.purifinity.client.intro"
+            introId="org.eclipse.ui.intro.universal"
             productId="com.puresol.purifinity.client.application.plugin.PurifinityFull">
       </introProductBinding>
       <introProductBinding
-            introId="com.puresol.purifinity.client.intro"
+            introId="org.eclipse.ui.intro.universal"
             productId="com.puresol.purifinity.client.application.plugin.PurifinityBase">
       </introProductBinding>
-   </extension>
-   <extension
-         point="org.eclipse.ui.intro.config">
-      <config
-            content="intro/introContent.xml"
-            id="com.puresol.purifinity.client.introConfig"
-            introId="com.puresol.purifinity.client.intro">
-         <presentation
-               home-page-id="root"
-               standby-page-id="standby">
-            <implementation
-                  kind="html">
-            </implementation>
-         </presentation>
-      </config>
    </extension>
    <extension
          id="PurifinityBase"
@@ -325,11 +306,23 @@
          </property>
          <property
                name="startupProgressRect"
-               value="50,100,445,32">
+               value="50,200,445,32">
          </property>
          <property
                name="startupMessageRect"
-               value="28,252,445,20">
+               value="50,250,445,20">
+         </property>
+         <property
+               name="introTitle"
+               value="Welcome to Purifinity">
+         </property>
+         <property
+               name="introBrandingImageText"
+               value="PureSol Technologies">
+         </property>
+         <property
+               name="introBrandingImage"
+               value="product:images/puresol-logo-green.png">
          </property>
       </product>
    </extension>
@@ -350,11 +343,23 @@
          </property>
          <property
                name="startupProgressRect"
-               value="50,100,445,32">
+               value="50,200,445,32">
          </property>
          <property
                name="startupMessageRect"
-               value="28,252,445,20">
+               value="50,250,445,20">
+         </property>
+         <property
+               name="introTitle"
+               value="Welcome to Purifinity">
+         </property>
+         <property
+               name="introBrandingImageText"
+               value="PureSol Technologies">
+         </property>
+         <property
+               name="introBrandingImage"
+               value="product:images/puresol-logo-green.png">
          </property>
       </product>
    </extension>
@@ -372,6 +377,15 @@
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+F1">
       </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.ui.preferencePages.Workbench"
+            class="org.eclipse.ui.intro.universal.ExtensionFactory:welcomeCustomization"
+            id="com.puresol.purifinity.client.application.plugin.introCustomization"
+            name="Intro Customization">
+      </page>
    </extension>
 
 </plugin>

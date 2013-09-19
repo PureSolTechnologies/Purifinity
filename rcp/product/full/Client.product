@@ -4,7 +4,16 @@
 <product name="Purifinity" uid="com.puresol.purifinity.client.product.full" id="com.puresol.purifinity.client.application.plugin.PurifinityFull" application="com.puresol.purifinity.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/com.puresol.purifinity.client.common.branding.plugin/icons/alt_about.gif"/>
+      <image path="/com.puresol.purifinity.client.product.full/images/puresol-logo-green_small.png"/>
+      <text>
+         Purifinity
+
+(c) Copyright PureSol Techologies 2009-2013.  All rights reserved.
+Visit http://puresol-technologies.com
+
+This product includes software developed by the
+Apache Software Foundation http://apache.org
+      </text>
    </aboutInfo>
 
    <configIni use="default">
@@ -29,7 +38,7 @@
       </win>
    </launcher>
 
-   <intro introId="com.puresol.purifinity.client.application.plugin.introProductBindingFull"/>
+   <intro introId="org.eclipse.ui.intro.universal"/>
 
    <vm>
    </vm>
