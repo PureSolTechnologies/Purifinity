@@ -76,7 +76,8 @@ public class PurifinityIntroPart extends IntroPart implements SelectionListener 
 		fdTitle.right = new FormAttachment(100, -10);
 		title.setLayoutData(fdTitle);
 
-		StyledText welcomeText = new StyledText(parent, SWT.MULTI | SWT.WRAP);
+		StyledText welcomeText = new StyledText(parent, SWT.READ_ONLY
+				| SWT.MULTI | SWT.WRAP);
 		welcomeText
 				.setText("This is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text, because this is a long text... :-)");
 		FormData fdWelcomeText = new FormData();
