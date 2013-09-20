@@ -32,6 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
@@ -61,10 +62,6 @@ public class AnalysisProjectsView extends ViewPart implements
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
-	public AnalysisProjectsView() {
-		super();
-	}
-
 	private Table analysisProjectsTable;
 	private TableViewer analysisProjectsViewer;
 	private ISelection selection = null;
@@ -74,8 +71,16 @@ public class AnalysisProjectsView extends ViewPart implements
 
 	private final java.util.List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
+	private Composite parent = null;
+
 	@Override
 	public void createPartControl(Composite parent) {
+		this.parent = parent;
+		PlatformUI
+				.getWorkbench()
+				.getHelpSystem()
+				.setHelp(parent,
+						"com.puresol.purifinity.client.common.analysis.plugin.analysisProjectsView");
 		parent.setLayout(new FormLayout());
 		analysisProjectsTable = new Table(parent, SWT.BORDER);
 		analysisProjectsTable.addSelectionListener(this);
@@ -136,7 +141,9 @@ public class AnalysisProjectsView extends ViewPart implements
 
 	@Override
 	public void setFocus() {
-		analysisProjectsTable.setFocus();
+		if (parent != null) {
+			parent.setFocus();
+		}
 	}
 
 	@Override

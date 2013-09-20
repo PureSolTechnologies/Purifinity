@@ -298,7 +298,11 @@
             name="Purifinity">
          <property
                name="aboutImage"
-               value="/com.puresol.purifinity.client.common.branding.plugin/icons/alt_about.gif">
+               value="images/alt_about.gif">
+         </property>
+         <property
+               name="aboutText"
+               value="About Purifinity">
          </property>
          <property
                name="startupForegroundColor"
@@ -335,7 +339,11 @@
             name="Purifinity">
          <property
                name="aboutImage"
-               value="/com.puresol.purifinity.client.common.branding.plugin/icons/alt_about.gif">
+               value="images/alt_about.gif">
+         </property>
+         <property
+               name="aboutText"
+               value="About Purifinity">
          </property>
          <property
                name="startupForegroundColor"
@@ -376,6 +384,12 @@
             contextId="org.eclipse.ui.contexts.window"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
             sequence="M1+F1">
+      </key>
+      <key
+            commandId="org.eclipse.ui.help.dynamicHelp"
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="F1">
       </key>
    </extension>
    <extension

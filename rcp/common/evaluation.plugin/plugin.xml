@@ -239,7 +239,7 @@
       <toc
             category="com.puresol.purifinity"
             file="help/toc.xml"
-            primary="false">
+            primary="true">
       </toc>
    </extension>
 
