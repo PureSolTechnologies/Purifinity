@@ -37,7 +37,7 @@
 <setEntry value="com.puresol.purifinity.client.lang.c11.feature:default"/>
 <setEntry value="com.puresol.purifinity.client.lang.cpp11.feature:default"/>
 <setEntry value="com.puresol.purifinity.client.lang.fortran2008.feature:default"/>
-<setEntry value="com.puresol.purifinity.client.lang.java6.feature:default"/>
+<setEntry value="com.puresol.purifinity.client.lang.java7.feature:default"/>
 <setEntry value="com.puresol.purifinity.client.storage.fs.feature:default"/>
 <setEntry value="org.eclipse.e4.rcp:default"/>
 <setEntry value="org.eclipse.emf.common:default"/>
