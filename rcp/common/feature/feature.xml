@@ -41,6 +41,8 @@
       <import plugin="org.apache.commons.io" version="2.0.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.e4.ui.workbench" version="0.11.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.client.application.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.intro" version="3.4.200" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.help" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.swt" version="3.100.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface" version="3.8.102" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.jobs" version="3.5.300" match="greaterOrEqual"/>
@@ -55,7 +57,6 @@
       <import plugin="org.codehaus.jackson.jackson-jaxrs.external.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.help" version="3.6.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -172,6 +173,13 @@
 
    <plugin
          id="com.puresol.purifinity.client.common.branding.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresol.purifinity.client.common.help.plugin"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -237,9 +237,12 @@
    <extension
          point="org.eclipse.help.toc">
       <toc
-            category="com.puresol.purifinity"
-            file="help/toc.xml"
-            primary="true">
+            file="help/toc_contribs.xml"
+            primary="false">
+      </toc>
+      <toc
+            file="help/toc_contribs2.xml"
+            primary="false">
       </toc>
    </extension>
 

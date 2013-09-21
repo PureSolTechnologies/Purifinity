@@ -16,6 +16,13 @@
             name="Fortran 2008">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="help/toc_contribs.xml"
+            primary="false">
+      </toc>
+   </extension>
 
 
 </plugin>

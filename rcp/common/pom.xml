@@ -12,6 +12,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+        <module>help.plugin</module>
         <module>chart.plugin</module>
 		<module>osgi.plugin</module>
 		<module>branding.plugin</module>

@@ -30,12 +30,13 @@
       <import plugin="com.puresol.purifinity.coding.lang.commons.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.coding.lang.c11.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="com.puresol.purifinity.client.common.ui.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.coding.lang.api.bundle"/>
-      <import plugin="com.puresol.purifinity.uhura.bundle"/>
-      <import plugin="org.eclipse.osgi"/>
       <import plugin="com.puresol.commons.trees.bundle"/>
       <import plugin="com.puresol.commons.utils.bundle"/>
+      <import plugin="com.puresol.purifinity.coding.lang.api.bundle"/>
       <import plugin="com.puresol.purifinity.license.api.bundle"/>
+      <import plugin="com.puresol.purifinity.uhura.bundle"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.eclipse.help"/>
    </requires>
 
    <plugin

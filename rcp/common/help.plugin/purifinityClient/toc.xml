@@ -1,0 +1,24 @@
+<toc label="Purifinity Client">
+	<topic label="Welcome" href="purifinityClient/welcome.html" />
+ <topic href="purifinityClient/usageConcepts.html" label="Usage Concepts">
+    <topic href="purifinityClient/usageConcepts/perspectives.html" label="Perspectives">
+    </topic>
+    <topic href="purifinityClient/usageConcepts/parts.html" label="Parts">
+       <topic href="purifinityClient/usageConcepts/parts/views.html" label="Views">
+       </topic>
+       <topic href="purifinityClient/usageConcepts/parts/editors.html" label="Editors">
+       </topic>
+    </topic>
+ </topic>
+ <topic href="purifinityClient/reference.html" label="Reference">
+	 <topic href="purifinityClient/reference/availablePerspectives.html" label="Available Perspectives">
+    	<anchor id="availablePerspectives"/>
+	 </topic>
+	 <topic href="purifinityClient/reference/availableViews.html" label="Available Views">
+    	<anchor id="availableViews"/>
+	 </topic>
+	 <topic href="purifinityClient/reference/availableEditors.html" label="Available Editors">
+	    <anchor id="availableEditors"/>
+	 </topic>
+ </topic>
+</toc>
