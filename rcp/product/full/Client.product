@@ -67,7 +67,7 @@ Apache Software Foundation http://apache.org
       <feature id="com.puresol.purifinity.client.lang.c11.feature" version="0.1.0.qualifier"/>
       <feature id="com.puresol.purifinity.client.lang.cpp11.feature" version="0.1.0.qualifier"/>
       <feature id="com.puresol.purifinity.client.lang.fortran2008.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.purifinity.client.lang.java6.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresol.purifinity.client.lang.java7.feature" version="0.1.0.qualifier"/>
       <feature id="com.puresol.purifinity.client.features.cleancode.feature" version="0.1.0.qualifier"/>
       <feature id="com.puresol.purifinity.client.features.iso9126.feature" version="0.1.0.qualifier"/>
       <feature id="com.puresol.purifinity.client.storage.fs.feature" version="0.1.0.qualifier"/>
