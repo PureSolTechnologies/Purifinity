@@ -43,6 +43,10 @@ public class NormalizedMaintainabilityIndexFileResults extends
 		}
 	}
 
+	public List<NormalizedMaintainabilityIndexFileResult> getResults() {
+		return results;
+	}
+
 	@Override
 	public Set<Parameter<?>> getParameters() {
 		return ALL;

@@ -7,15 +7,18 @@ import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
+import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
 import com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexFileResult;
 import com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexFileResults;
 import com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexResult;
+import com.puresol.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 
@@ -99,13 +102,51 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
-		// TODO Auto-generated method stub
+		NormalizedMaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(directory);
+		if (finalResults != null) {
+			store.storeDirectoryResults(directory.getHashId(), finalResults);
+		}
+	}
 
+	private NormalizedMaintainabilityIndexDirectoryResults createDirectoryResults(
+			HashIdFileTree directory) {
+		QualityLevel qualityLevel = null;
+		for (HashIdFileTree child : directory.getChildren()) {
+			if (child.isFile()) {
+				NormalizedMaintainabilityIndexFileResults results = (NormalizedMaintainabilityIndexFileResults) store
+						.readFileResults(child.getHashId());
+				if (results != null) {
+					for (NormalizedMaintainabilityIndexFileResult result : results
+							.getResults()) {
+						qualityLevel = QualityLevel.combine(qualityLevel,
+								new QualityLevel(result.getQuality()));
+					}
+				}
+			} else {
+				NormalizedMaintainabilityIndexDirectoryResults results = (NormalizedMaintainabilityIndexDirectoryResults) store
+						.readDirectoryResults(child.getHashId());
+				if (results != null) {
+					qualityLevel = QualityLevel.combine(qualityLevel,
+							results.getQualityLevel());
+				}
+			}
+		}
+		NormalizedMaintainabilityIndexDirectoryResults finalResults = new NormalizedMaintainabilityIndexDirectoryResults(
+				new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
+				directory.getName());
+		finalResults.addQualityLevel(qualityLevel);
+		return finalResults;
 	}
 
 	@Override
 	protected void processProject() throws InterruptedException {
-		// TODO Auto-generated method stub
-
+		if (store.hasProjectResults(getAnalysisRun())) {
+			return;
+		}
+		NormalizedMaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(getAnalysisRun()
+				.getFileTree());
+		if (finalResults != null) {
+			store.storeProjectResults(getAnalysisRun(), finalResults);
+		}
 	}
 }

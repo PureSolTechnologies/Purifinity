@@ -38,15 +38,24 @@ public class MaintainabilityIndexEvaluatorParameter {
 	public static final ParameterWithArbitraryUnit<QualityLevel> QUALITY_LEVEL = QualityLevelParameter
 			.getInstance();
 
-	public static final Set<Parameter<?>> ALL = new HashSet<Parameter<?>>();
+	public static final Set<Parameter<?>> ALL_FILE = new HashSet<Parameter<?>>();
 	static {
-		ALL.add(SOURCE_CODE_LOCATION);
-		ALL.add(CODE_RANGE_TYPE);
-		ALL.add(CODE_RANGE_NAME);
-		ALL.add(MI_WOC);
-		ALL.add(MI_CW);
-		ALL.add(MI);
-		ALL.add(QUALITY);
-		ALL.add(QUALITY_LEVEL);
+		ALL_FILE.add(SOURCE_CODE_LOCATION);
+		ALL_FILE.add(CODE_RANGE_TYPE);
+		ALL_FILE.add(CODE_RANGE_NAME);
+		ALL_FILE.add(MI_WOC);
+		ALL_FILE.add(MI_CW);
+		ALL_FILE.add(MI);
+		ALL_FILE.add(QUALITY);
+		ALL_FILE.add(QUALITY_LEVEL);
+	}
+
+	public static final Set<Parameter<?>> ALL_DIRECTORY = new HashSet<Parameter<?>>();
+	static {
+		ALL_DIRECTORY.add(SOURCE_CODE_LOCATION);
+		ALL_DIRECTORY.add(CODE_RANGE_TYPE);
+		ALL_DIRECTORY.add(CODE_RANGE_NAME);
+		ALL_DIRECTORY.add(QUALITY);
+		ALL_DIRECTORY.add(QUALITY_LEVEL);
 	}
 }

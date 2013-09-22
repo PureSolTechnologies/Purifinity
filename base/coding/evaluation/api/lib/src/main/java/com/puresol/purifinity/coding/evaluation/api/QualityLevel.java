@@ -45,6 +45,17 @@ public class QualityLevel implements Serializable {
 		return level;
 	}
 
+	public static QualityLevel combine(QualityLevel overallQualityLevel,
+			QualityLevel qualityLevel) {
+		if (overallQualityLevel == null) {
+			return qualityLevel;
+		}
+		if (qualityLevel != null) {
+			overallQualityLevel.add(qualityLevel);
+		}
+		return overallQualityLevel;
+	}
+
 	private SourceCodeQuality getQuality(double level) {
 		if (level < 0.0) {
 			throw new IllegalArgumentException(
@@ -118,5 +129,9 @@ public class QualityLevel implements Serializable {
 	@Override
 	public String toString() {
 		return String.valueOf(getLevel());
+	}
+
+	public QualityLevel combine(QualityLevel qualityLevel) {
+		return combine(this, qualityLevel);
 	}
 }

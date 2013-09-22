@@ -1,30 +1,18 @@
 package com.puresol.purifinity.coding.metrics.maintainability;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import com.puresol.commons.trees.TreeVisitor;
-import com.puresol.commons.trees.TreeWalker;
-import com.puresol.commons.trees.WalkingAction;
 import com.puresol.commons.utils.HashId;
-import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
-import com.puresol.purifinity.coding.evaluation.api.CodeRangeTypeParameter;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
-import com.puresol.purifinity.coding.evaluation.api.GenericMetricDirectoryResults;
-import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
-import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
-import com.puresol.purifinity.coding.evaluation.api.SourceCodeQualityParameter;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluator;
@@ -38,6 +26,7 @@ import com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.purifinity.coding.metrics.sloc.SLOCFileResults;
 import com.puresol.purifinity.coding.metrics.sloc.SLOCMetric;
 import com.puresol.purifinity.coding.metrics.sloc.SLOCResult;
+import com.puresol.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
@@ -159,53 +148,51 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
-		final CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter
-				.getInstance();
-		final List<SourceCodeQuality> qualities = new ArrayList<SourceCodeQuality>();
-		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
+		MaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(directory);
+		if (finalResults != null) {
+			store.storeDirectoryResults(directory.getHashId(), finalResults);
+		}
+	}
 
-			@Override
-			public WalkingAction visit(HashIdFileTree tree) {
-				if (tree.isFile()) {
-					MetricFileResults results = store.readFileResults(tree
-							.getHashId());
-					if (results != null) {
-						for (Map<String, Value<?>> result : results.getValues()) {
-							@SuppressWarnings("unchecked")
-							Value<CodeRangeType> value = (Value<CodeRangeType>) result
-									.get(codeRangeTypeParameter.getName());
-							if (value.getValue() == CodeRangeType.FILE) {
-								qualities.add((SourceCodeQuality) result.get(
-										SourceCodeQualityParameter.NAME)
-										.getValue());
-							}
-						}
+	private MaintainabilityIndexDirectoryResults createDirectoryResults(
+			HashIdFileTree directory) {
+		QualityLevel qualityLevel = null;
+		for (HashIdFileTree child : directory.getChildren()) {
+			if (child.isFile()) {
+				MaintainabilityIndexFileResults results = (MaintainabilityIndexFileResults) store
+						.readFileResults(child.getHashId());
+				if (results != null) {
+					for (MaintainabilityIndexFileResult result : results
+							.getResults()) {
+						qualityLevel = QualityLevel.combine(qualityLevel,
+								new QualityLevel(result.getQuality()));
 					}
 				}
-				return WalkingAction.PROCEED;
+			} else {
+				MaintainabilityIndexDirectoryResults results = (MaintainabilityIndexDirectoryResults) store
+						.readDirectoryResults(child.getHashId());
+				if (results != null) {
+					qualityLevel = QualityLevel.combine(qualityLevel,
+							results.getQualityLevel());
+				}
 			}
-
-		};
-		TreeWalker.walk(visitor, directory);
-		Collections.sort(qualities);
-		// int length = qualities.size();
-		// SourceCodeQuality directoryQuality;
-		// if (length % 2 == 1) {
-		// // get the median
-		// directoryQuality = qualities.get(length / 2 + 1);
-		// } else {
-		// // get the element worse than the median (left to median)
-		// directoryQuality = qualities.get(length / 2);
-		// }
-		GenericMetricDirectoryResults results = new GenericMetricDirectoryResults();
-		// TODO
-		if (results != null) {
-			store.storeDirectoryResults(directory.getHashId(), results);
 		}
+		MaintainabilityIndexDirectoryResults finalResults = new MaintainabilityIndexDirectoryResults(
+				new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
+				directory.getName());
+		finalResults.addQualityLevel(qualityLevel);
+		return finalResults;
 	}
 
 	@Override
 	protected void processProject() throws InterruptedException {
-		// intentionally left blank
+		if (store.hasProjectResults(getAnalysisRun())) {
+			return;
+		}
+		MaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(getAnalysisRun()
+				.getFileTree());
+		if (finalResults != null) {
+			store.storeProjectResults(getAnalysisRun(), finalResults);
+		}
 	}
 }

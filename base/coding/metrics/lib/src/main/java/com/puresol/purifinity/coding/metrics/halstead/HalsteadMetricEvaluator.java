@@ -91,7 +91,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 							break;
 						}
 					}
-					qualityLevel = combine(qualityLevel,
+					qualityLevel = QualityLevel.combine(qualityLevel,
 							results.getQualityLevel());
 				}
 			} else {
@@ -100,7 +100,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 							.readDirectoryResults(child.getHashId());
 					metricResults = combine(directory, metricResults,
 							results.getResult());
-					qualityLevel = combine(qualityLevel,
+					qualityLevel = QualityLevel.combine(qualityLevel,
 							results.getQualityLevel());
 				}
 			}
@@ -112,17 +112,6 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 				metricResults);
 		finalResults.addQualityLevel(qualityLevel);
 		return finalResults;
-	}
-
-	private QualityLevel combine(QualityLevel overallQualityLevel,
-			QualityLevel qualityLevel) {
-		if (overallQualityLevel == null) {
-			return qualityLevel;
-		}
-		if (qualityLevel != null) {
-			overallQualityLevel.add(qualityLevel);
-		}
-		return overallQualityLevel;
 	}
 
 	private HalsteadMetricResult combine(HashIdFileTree directory,

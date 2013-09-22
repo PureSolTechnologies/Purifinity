@@ -53,6 +53,6 @@ public class MaintainabilityIndexEvaluatorFactory extends
 
 	@Override
 	public Set<Parameter<?>> getParameters() {
-		return MaintainabilityIndexEvaluatorParameter.ALL;
+		return MaintainabilityIndexEvaluatorParameter.ALL_FILE;
 	}
 }

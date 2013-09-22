@@ -13,6 +13,7 @@ import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguages;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
+import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
@@ -92,40 +93,41 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	}
 
 	private SLOCDirectoryResults createDirectoryResults(HashIdFileTree directory) {
-		SLOCResult results = null;
+		QualityLevel qualityLevel = null;
+		SLOCResult metricResults = null;
 		for (HashIdFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
-				results = processFile(directory, results, child);
+				if (store.hasFileResults(child.getHashId())) {
+					SLOCFileResults results = (SLOCFileResults) store
+							.readFileResults(child.getHashId());
+					for (SLOCResult result : results.getResults()) {
+						if (result.getCodeRangeType() == CodeRangeType.FILE) {
+							metricResults = combine(directory, metricResults,
+									result);
+							break;
+						}
+					}
+					qualityLevel = QualityLevel.combine(qualityLevel,
+							results.getQualityLevel());
+				}
 			} else {
-				results = processSubDirectory(directory, results, child);
-			}
-		}
-		return new SLOCDirectoryResults(results);
-	}
-
-	private SLOCResult processFile(HashIdFileTree directory,
-			SLOCResult results, HashIdFileTree child) {
-		if (store.hasFileResults(child.getHashId())) {
-			SLOCFileResults slocResults = (SLOCFileResults) store
-					.readFileResults(child.getHashId());
-			for (SLOCResult result : slocResults.getResults()) {
-				if (result.getCodeRangeType() == CodeRangeType.FILE) {
-					results = combine(directory, results, result);
-					break;
+				if (store.hasDirectoryResults(child.getHashId())) {
+					SLOCDirectoryResults results = (SLOCDirectoryResults) store
+							.readDirectoryResults(child.getHashId());
+					metricResults = combine(directory, metricResults,
+							results.getResult());
+					qualityLevel = QualityLevel.combine(qualityLevel,
+							results.getQualityLevel());
 				}
 			}
 		}
-		return results;
-	}
-
-	private SLOCResult processSubDirectory(HashIdFileTree directory,
-			SLOCResult results, HashIdFileTree child) {
-		if (store.hasDirectoryResults(child.getHashId())) {
-			SLOCDirectoryResults slocResults = (SLOCDirectoryResults) store
-					.readDirectoryResults(child.getHashId());
-			results = combine(directory, results, slocResults.getResult());
+		if (metricResults == null) {
+			return null;
 		}
-		return results;
+		SLOCDirectoryResults finalResults = new SLOCDirectoryResults(
+				metricResults);
+		finalResults.addQualityLevel(qualityLevel);
+		return finalResults;
 	}
 
 	private SLOCResult combine(HashIdFileTree directory, SLOCResult results,

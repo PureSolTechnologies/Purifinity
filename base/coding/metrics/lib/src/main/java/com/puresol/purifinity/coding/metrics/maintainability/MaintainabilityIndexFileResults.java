@@ -1,6 +1,6 @@
 package com.puresol.purifinity.coding.metrics.maintainability;
 
-import static com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.ALL;
+import static com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.ALL_FILE;
 import static com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.CODE_RANGE_NAME;
 import static com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.CODE_RANGE_TYPE;
 import static com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI;
@@ -49,7 +49,7 @@ public class MaintainabilityIndexFileResults extends AbstractEvaluatorResult
 
 	@Override
 	public Set<Parameter<?>> getParameters() {
-		return ALL;
+		return ALL_FILE;
 	}
 
 	@Override
