@@ -33,9 +33,9 @@ public class SourceCodeQualityLabel extends Composite {
 	public SourceCodeQualityLabel(Composite parent, int style) {
 		super(parent, style);
 		setLayout(new RowLayout(SWT.HORIZONTAL));
-		label = new Label(this, SWT.NONE);
+		label = new Label(this, SWT.READ_ONLY);
 		label.setText("Quality:");
-		text = new Text(this, SWT.NONE);
+		text = new Text(this, SWT.READ_ONLY);
 		text.setBackground(backgroundColor);
 		text.setForeground(foregroundColor);
 	}

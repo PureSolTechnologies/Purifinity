@@ -84,7 +84,7 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 		fdLabel.right = new FormAttachment(100, -5);
 		label.setLayoutData(fdLabel);
 
-		evaluatorCombo = new Combo(composite, SWT.NONE);
+		evaluatorCombo = new Combo(composite, SWT.READ_ONLY);
 		FormData fdCombo = new FormData();
 		fdCombo.top = new FormAttachment(label, 5);
 		fdCombo.left = new FormAttachment(0, 5);
