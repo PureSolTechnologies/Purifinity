@@ -10,6 +10,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -31,6 +32,12 @@ public class AvailableLanguagesView extends ViewPart implements Refreshable {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		PlatformUI
+				.getWorkbench()
+				.getHelpSystem()
+				.setHelp(parent,
+						"com.puresol.purifinity.client.common.analysis.plugin.availableLanguagesView");
+
 		parent.setLayout(new FillLayout());
 		table = new Table(parent, SWT.NONE);
 		table.setHeaderVisible(true);

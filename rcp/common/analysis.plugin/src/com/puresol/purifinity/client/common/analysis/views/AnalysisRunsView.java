@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
@@ -73,6 +74,12 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
 	@Override
 	public void createPartControl(Composite parent) {
+		PlatformUI
+				.getWorkbench()
+				.getHelpSystem()
+				.setHelp(parent,
+						"com.puresol.purifinity.client.common.analysis.plugin.analysisRunsView");
+
 		parent.setLayout(new FormLayout());
 
 		analysisRunsList = new Table(parent, SWT.BORDER | SWT.MULTI);

@@ -79,15 +79,15 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener,
 		fd_numbers.left = new FormAttachment(name, 0, SWT.LEFT);
 		numbers.setLayoutData(fd_numbers);
 
-		new Label(numbers, SWT.READ_ONLY).setText("#Total Files");
-		new Label(numbers, SWT.READ_ONLY).setText("#Analyzed Files");
-		new Label(numbers, SWT.READ_ONLY).setText("#Unanalyzed Files");
-		new Label(numbers, SWT.READ_ONLY).setText("#Files with Error");
+		new Label(numbers, SWT.NONE).setText("#Total Files");
+		new Label(numbers, SWT.NONE).setText("#Analyzed Files");
+		new Label(numbers, SWT.NONE).setText("#Unanalyzed Files");
+		new Label(numbers, SWT.NONE).setText("#Files with Error");
 
-		totalFiles = new Text(numbers, SWT.BORDER);
-		analyzedFiles = new Text(numbers, SWT.BORDER);
-		unanalyzedFiles = new Text(numbers, SWT.BORDER);
-		errorFiles = new Text(numbers, SWT.BORDER);
+		totalFiles = new Text(numbers, SWT.BORDER | SWT.READ_ONLY);
+		analyzedFiles = new Text(numbers, SWT.BORDER | SWT.READ_ONLY);
+		unanalyzedFiles = new Text(numbers, SWT.BORDER | SWT.READ_ONLY);
+		errorFiles = new Text(numbers, SWT.BORDER | SWT.READ_ONLY);
 
 		TabFolder tabFolder = new TabFolder(composite, SWT.NONE);
 		FormData fd_tabFolder = new FormData();

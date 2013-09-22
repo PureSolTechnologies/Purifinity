@@ -1,9 +1,21 @@
 <contexts>
-	<context id="analysisProjectsView" title="Analysis Project">
+	<context id="analysisProjectsView" title="Analysis Projects">
 		<description>This view contains the configured projects. Additionally, this view provides functionality to create new projects, to edit them and to delete them.</description>
 		<!-- command
 			serialization="org.eclipse.ui.cheatsheets.openCheatSheet(cheatSheetId=org.eclipse.panic.button.cheatsheet)quot; label="
 			Pushing the panic button " />
 		<topic href="reference/panic_button.htm" label="Panic Button Reference" / -->
+	</context>
+	<context id="analysisRunContentView" title="Analysis Run Content">
+		<description></description>
+	</context>
+	<context id="analysisRunsView" title="Analysis Runs">
+		<description></description>
+	</context>
+	<context id="availableLanguagesView" title="Available Languages">
+		<description></description>
+	</context>
+	<context id="analysisReportView" title="Analysis Report">
+		<description></description>
 	</context>
 </contexts>

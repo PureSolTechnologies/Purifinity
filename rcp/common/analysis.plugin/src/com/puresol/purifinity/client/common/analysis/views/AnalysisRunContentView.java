@@ -20,6 +20,7 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunContentTreeViewer;
@@ -59,6 +60,12 @@ public class AnalysisRunContentView extends ViewPart implements
 
 	@Override
 	public void createPartControl(Composite parent) {
+		PlatformUI
+				.getWorkbench()
+				.getHelpSystem()
+				.setHelp(parent,
+						"com.puresol.purifinity.client.common.analysis.plugin.analysisRunContentView");
+
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
 
