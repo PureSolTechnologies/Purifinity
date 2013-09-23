@@ -8,32 +8,20 @@
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>coding.lang.java.lib</artifactId>
+	<artifactId>coding.lang.java.test</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
-			<artifactId>coding.analysis.api.lib</artifactId>
+			<artifactId>coding.lang.java.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
-			<artifactId>coding.lang.commons.lib</artifactId>
+			<artifactId>coding.metrics.test</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
-			<artifactId>coding.metrics.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
-			<artifactId>license.test</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
-			<artifactId>uhura.lib</artifactId>
-		</dependency>
-		<dependency>
-			<!-- needed for testing -->
 			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.store.fs.lib</artifactId>
 			<scope>test</scope>
@@ -41,10 +29,6 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

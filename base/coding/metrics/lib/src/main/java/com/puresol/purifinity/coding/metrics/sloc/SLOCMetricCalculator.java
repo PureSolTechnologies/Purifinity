@@ -142,6 +142,11 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 	}
 
 	private void count() {
+		gatherData();
+		calculateFinalResult();
+	}
+
+	private void gatherData() {
 		TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
 				codeRange.getUniversalSyntaxTree());
 		int lineOffset = codeRange.getUniversalSyntaxTree().getMetaData()
@@ -160,11 +165,17 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 					} else if (type == SLOCType.PRODUCTIVE) {
 						lineResults.get(line).setProductiveContent(true);
 					}
-					lineResults.get(line)
-							.addLength(token.getContent().length());
+					String[] tokenParts = token.getContent().split("\n");
+					for (int i = 0; i < tokenParts.length; i++) {
+						String tokenPart = tokenParts[i];
+						lineResults.get(line + i).addLength(tokenPart.length());
+					}
 				}
 			}
 		} while (iterator.goForward());
+	}
+
+	private void calculateFinalResult() {
 		int blLOC = 0;
 		int comLOC = 0;
 		int proLOC = 0;

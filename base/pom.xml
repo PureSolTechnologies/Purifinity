@@ -136,6 +136,12 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol.purifinity</groupId>
+				<artifactId>coding.metrics.test</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol.purifinity</groupId>
 				<artifactId>coding.store.fs.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
