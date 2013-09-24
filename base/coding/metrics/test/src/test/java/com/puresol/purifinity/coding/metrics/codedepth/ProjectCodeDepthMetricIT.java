@@ -18,7 +18,7 @@ public class ProjectCodeDepthMetricIT extends AbstractMetricTest {
 	private AnalysisRun analyzer = null;
 
 	public ProjectCodeDepthMetricIT() {
-		super(new File("test/analysis"), new FileSearchConfiguration());
+		super(new File("src/test/java"), new FileSearchConfiguration());
 	}
 
 	@Before

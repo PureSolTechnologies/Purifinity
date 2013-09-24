@@ -18,7 +18,7 @@ public class ProjectHalsteadMetricIT extends AbstractMetricTest {
 	private AnalysisRun analyzer = null;
 
 	public ProjectHalsteadMetricIT() {
-		super(new File("test/analysis"), new FileSearchConfiguration());
+		super(new File("src/test/java"), new FileSearchConfiguration());
 	}
 
 	@Before

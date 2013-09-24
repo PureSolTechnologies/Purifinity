@@ -18,7 +18,7 @@ public class ProjectMcCabeMetricIT extends AbstractMetricTest {
 	private AnalysisRun analyzer = null;
 
 	public ProjectMcCabeMetricIT() {
-		super(new File("test/analysis"), new FileSearchConfiguration());
+		super(new File("src/test/java"), new FileSearchConfiguration());
 	}
 
 	@Before

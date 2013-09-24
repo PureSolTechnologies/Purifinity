@@ -16,7 +16,7 @@ import com.puresol.purifinity.coding.metrics.AbstractMetricTest;
 public class ProjectNormalizedMaintainabilityIndexIT extends AbstractMetricTest {
 
 	public ProjectNormalizedMaintainabilityIndexIT() {
-		super(new File("test/analysis"), new FileSearchConfiguration());
+		super(new File("src/test/java"), new FileSearchConfiguration());
 	}
 
 	private AnalysisRun analyzer = null;
