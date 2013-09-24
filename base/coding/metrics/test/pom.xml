@@ -14,6 +14,14 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
+			<artifactId>coding.analysis.api.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol.purifinity</groupId>
+			<artifactId>coding.lang.java.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.metrics.lib</artifactId>
 		</dependency>
 		<dependency>

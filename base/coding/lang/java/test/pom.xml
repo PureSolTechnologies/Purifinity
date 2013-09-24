@@ -18,8 +18,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
+			<artifactId>coding.analysis.test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol.purifinity</groupId>
 			<artifactId>coding.metrics.test</artifactId>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
