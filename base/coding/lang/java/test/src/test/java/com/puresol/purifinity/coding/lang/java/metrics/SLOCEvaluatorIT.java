@@ -29,5 +29,6 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 		assertTrue(result);
 		List<AnalyzedCode> analyzedFiles = analysisRun.getAnalyzedFiles();
 		assertEquals(1, analyzedFiles.size());
+
 	}
 }
