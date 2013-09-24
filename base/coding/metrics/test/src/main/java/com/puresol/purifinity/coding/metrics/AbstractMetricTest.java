@@ -1,5 +1,8 @@
 package com.puresol.purifinity.coding.metrics;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.io.File;
 
 import org.junit.After;
@@ -13,6 +16,13 @@ import com.puresol.purifinity.coding.analysis.api.AnalysisStoreException;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.purifinity.coding.analysis.api.DirectoryRepositoryLocation;
 
+/**
+ * This class is used for metrics tests as parent class. This class guarantees a
+ * initialized analysis environment.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public abstract class AbstractMetricTest {
 
 	private static final AnalysisStoreFactory factory = AnalysisStoreFactory
@@ -27,7 +37,11 @@ public abstract class AbstractMetricTest {
 	public AbstractMetricTest(File directory,
 			FileSearchConfiguration fileSearchConfiguration) {
 		super();
+		assertNotNull("Project directory is null.", directory);
+		assertTrue("Project directory '" + directory + "' is not existing.",
+				directory.exists());
 		this.directory = directory;
+		assertNotNull("Search configuration is null.", fileSearchConfiguration);
 		this.fileSearchConfiguration = fileSearchConfiguration;
 	}
 
@@ -39,6 +53,8 @@ public abstract class AbstractMetricTest {
 						fileSearchConfiguration,
 						new DirectoryRepositoryLocation("TestProject",
 								directory)));
+		assertNotNull("Analysis project was not created and is null.",
+				analysisProject);
 	}
 
 	@After
