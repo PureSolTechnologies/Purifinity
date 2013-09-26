@@ -6,10 +6,15 @@ import java.util.Map;
 import com.puresol.purifinity.coding.evaluation.api.Evaluator;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluator;
+import com.puresol.purifinity.coding.store.fs.metrics.SLOCEvaluatorStore;
 
 public class EvaluatorStoreTestFactory extends EvaluatorStoreFactory {
 
 	private static final Map<Class<? extends Evaluator>, EvaluatorStore> INSTANCES = new HashMap<>();
+	static {
+		INSTANCES.put(SLOCEvaluator.class, new SLOCEvaluatorStore());
+	}
 
 	@Override
 	public EvaluatorStore createInstance(Class<? extends Evaluator> clazz) {
