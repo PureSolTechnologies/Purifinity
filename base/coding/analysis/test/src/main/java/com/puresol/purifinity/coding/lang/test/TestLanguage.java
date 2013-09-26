@@ -41,7 +41,7 @@ public class TestLanguage extends AbstractProgrammingLanguage implements
 		}
 	}
 
-	public TestLanguage() {
+	private TestLanguage() {
 		super("TestLanguage", "0.0");
 	}
 

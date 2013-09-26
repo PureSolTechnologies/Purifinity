@@ -12,7 +12,7 @@ public class TestProgrammingLanguages extends ProgrammingLanguages {
 
 	private static final List<AnalyzableProgrammingLanguage> languages = new ArrayList<>();
 	static {
-		languages.add(new Java());
+		languages.add(Java.getInstance());
 	}
 
 	@Override
@@ -22,8 +22,7 @@ public class TestProgrammingLanguages extends ProgrammingLanguages {
 
 	@Override
 	public List<AnalyzableProgrammingLanguage> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return languages;
 	}
 
 }

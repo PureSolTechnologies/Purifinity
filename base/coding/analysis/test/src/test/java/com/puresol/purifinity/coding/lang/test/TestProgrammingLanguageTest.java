@@ -7,18 +7,17 @@ import static org.junit.Assert.assertSame;
 import org.junit.Test;
 
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
-import com.puresol.purifinity.coding.lang.test.TestLanguage;
 
 public class TestProgrammingLanguageTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new TestLanguage());
+		assertNotNull(TestLanguage.getInstance());
 	}
 
 	@Test
 	public void testInitialValues() {
-		ProgrammingLanguage lang = new TestLanguage();
+		ProgrammingLanguage lang = TestLanguage.getInstance();
 		assertEquals("TestLanguage", lang.getName());
 	}
 

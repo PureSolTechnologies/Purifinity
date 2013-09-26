@@ -42,7 +42,7 @@ public class Java extends AbstractProgrammingLanguage implements
 		}
 	}
 
-	public Java() {
+	private Java() {
 		super("Java", "7");
 	}
 

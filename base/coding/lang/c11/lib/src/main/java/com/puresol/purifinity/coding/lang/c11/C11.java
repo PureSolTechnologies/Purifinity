@@ -23,76 +23,76 @@ import com.puresol.purifinity.uhura.source.CodeLocation;
  * 
  */
 public class C11 extends AbstractProgrammingLanguage implements
-	AnalyzableProgrammingLanguage {
+		AnalyzableProgrammingLanguage {
 
-    public static final String[] FILE_SUFFIXES = { ".h", ".c" };
+	public static final String[] FILE_SUFFIXES = { ".h", ".c" };
 
-    private static C11 instance = null;
+	private static C11 instance = null;
 
-    public static C11 getInstance() {
-	if (instance == null) {
-	    createInstance();
+	public static C11 getInstance() {
+		if (instance == null) {
+			createInstance();
+		}
+		return instance;
 	}
-	return instance;
-    }
 
-    private static synchronized void createInstance() {
-	if (instance == null) {
-	    instance = new C11();
+	private static synchronized void createInstance() {
+		if (instance == null) {
+			instance = new C11();
+		}
 	}
-    }
 
-    public C11() {
-	super("C", "11");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String[] getValidFileSuffixes() {
-	return FILE_SUFFIXES;
-    }
-
-    @Override
-    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-	try {
-	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
-		    file));
-	    try {
-		return (CodeAnalyzer) ois.readObject();
-	    } finally {
-		ois.close();
-	    }
-	} catch (ClassNotFoundException e) {
-	    /*
-	     * XXX This needs to be null to go on with the language try out...
-	     * :-(
-	     */
-	    return null;
+	private C11() {
+		super("C", "11");
 	}
-    }
 
-    @Override
-    public CodeAnalyzer createAnalyser(CodeLocation source) {
-	return new C11Analyzer(source);
-    }
-
-    @Override
-    public LanguageGrammar getGrammar() {
-	return C11Grammar.getInstance();
-    }
-
-    @Override
-    public <T> T getImplementation(Class<T> clazz) {
-	ServiceLoader<T> service = ServiceLoader.load(clazz);
-	Iterator<T> iterator = service.iterator();
-	T result = iterator.next();
-	if (iterator.hasNext()) {
-	    throw new RuntimeException(
-		    "There is more than one implementation available for '"
-			    + clazz.getName() + "'!");
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected String[] getValidFileSuffixes() {
+		return FILE_SUFFIXES;
 	}
-	return result;
-    }
+
+	@Override
+	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+		try {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+					file));
+			try {
+				return (CodeAnalyzer) ois.readObject();
+			} finally {
+				ois.close();
+			}
+		} catch (ClassNotFoundException e) {
+			/*
+			 * XXX This needs to be null to go on with the language try out...
+			 * :-(
+			 */
+			return null;
+		}
+	}
+
+	@Override
+	public CodeAnalyzer createAnalyser(CodeLocation source) {
+		return new C11Analyzer(source);
+	}
+
+	@Override
+	public LanguageGrammar getGrammar() {
+		return C11Grammar.getInstance();
+	}
+
+	@Override
+	public <T> T getImplementation(Class<T> clazz) {
+		ServiceLoader<T> service = ServiceLoader.load(clazz);
+		Iterator<T> iterator = service.iterator();
+		T result = iterator.next();
+		if (iterator.hasNext()) {
+			throw new RuntimeException(
+					"There is more than one implementation available for '"
+							+ clazz.getName() + "'!");
+		}
+		return result;
+	}
 }
