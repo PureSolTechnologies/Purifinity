@@ -9,16 +9,20 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.puresol.commons.utils.math.statistics.Statistics;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreException;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
+import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.analysis.test.TestFileSearchConfiguration;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.coding.metrics.AbstractMetricTest;
 import com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.purifinity.coding.metrics.sloc.SLOCFileResults;
+import com.puresol.purifinity.coding.metrics.sloc.SLOCMetric;
 import com.puresol.purifinity.coding.metrics.sloc.SLOCResult;
 
 public class SLOCEvaluatorIT extends AbstractMetricTest {
@@ -34,6 +38,9 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 	public void test() throws Exception {
 		AnalysisRun analysisRun = performAnalysis();
 		HashIdFileTree slocTestSample = findSLOCTestSample(analysisRun);
+		assertEquals("Sample file changed!", "ab48d201610fe5431600caee2240471d"
+				+ "902f517895af0d18492df69e92fc5148", slocTestSample
+				.getHashId().getHash());
 		SLOCFileResults fileResults = performSLOCEvaluation(analysisRun,
 				slocTestSample);
 		checkEvaluationResults(fileResults);
@@ -86,6 +93,39 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 		assertNotNull("No results list was returned.", results);
 		assertEquals("The number of code ranges does not match.", 4,
 				results.size());
+
+		SLOCResult result0 = results.get(0);
+		assertEquals(CodeRangeType.FILE, result0.getCodeRangeType());
+		assertEquals("", result0.getCodeRangeName());
+		assertEquals(SourceCodeQuality.HIGH, result0.getQuality());
+		SLOCMetric slocMetric0 = result0.getSLOCMetric();
+		assertEquals(40, slocMetric0.getPhyLOC());
+		assertEquals(9, slocMetric0.getProLOC());
+		assertEquals(4, slocMetric0.getBlLOC());
+		assertEquals(29, slocMetric0.getComLOC());
+
+		Statistics lineStatistics0 = slocMetric0.getLineStatistics();
+		assertEquals(40, lineStatistics0.getCount());
+		assertEquals(0.0, lineStatistics0.getMin(), 1e-8);
+		assertEquals(78.0, lineStatistics0.getMax(), 1e-8);
+		assertEquals(23.275, lineStatistics0.getAvg(), 1e-8);
+		assertEquals(7.5, lineStatistics0.getMedian(), 1e-8);
+		assertEquals(27.55040834, lineStatistics0.getStdDev(), 1e-8);
+
+		SLOCResult result1 = results.get(1);
+		assertEquals(CodeRangeType.CLASS, result1.getCodeRangeType());
+		assertEquals("SLOCTestSample", result1.getCodeRangeName());
+		assertEquals(SourceCodeQuality.HIGH, result1.getQuality());
+
+		SLOCResult result2 = results.get(2);
+		assertEquals(CodeRangeType.CONSTRUCTOR, result2.getCodeRangeType());
+		assertEquals("SLOCTestSample()", result2.getCodeRangeName());
+		assertEquals(SourceCodeQuality.HIGH, result2.getQuality());
+
+		SLOCResult result3 = results.get(3);
+		assertEquals(CodeRangeType.METHOD, result3.getCodeRangeType());
+		assertEquals("multiply(double,double)", result3.getCodeRangeName());
+		assertEquals(SourceCodeQuality.HIGH, result3.getQuality());
 	}
 
 }

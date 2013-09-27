@@ -161,15 +161,20 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 				int lineNum = metaData.getLineNum();
 				for (int line = lineId; line < lineId + lineNum; line++) {
 					if (type == SLOCType.COMMENT) {
-						lineResults.get(line).setComments(true);
+						// Additional check due to end-of-line comments contain
+						// an additional line break
+						if ((!token.getContent().endsWith("\n"))
+								|| (line < lineId + lineNum - 1)) {
+							lineResults.get(line).setComments(true);
+						}
 					} else if (type == SLOCType.PRODUCTIVE) {
 						lineResults.get(line).setProductiveContent(true);
 					}
-					String[] tokenParts = token.getContent().split("\n");
-					for (int i = 0; i < tokenParts.length; i++) {
-						String tokenPart = tokenParts[i];
-						lineResults.get(line + i).addLength(tokenPart.length());
-					}
+				}
+				String[] tokenParts = token.getContent().split("\n");
+				for (int i = 0; i < tokenParts.length; i++) {
+					String tokenPart = tokenParts[i];
+					lineResults.get(lineId + i).addLength(tokenPart.length());
 				}
 			}
 		} while (iterator.goForward());

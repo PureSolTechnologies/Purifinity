@@ -5,6 +5,7 @@ import java.util.regex.Matcher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.commons.utils.StringUtils;
 import com.puresol.purifinity.uhura.grammar.Grammar;
 import com.puresol.purifinity.uhura.grammar.token.TokenDefinition;
 import com.puresol.purifinity.uhura.grammar.token.Visibility;
@@ -102,16 +103,11 @@ public class RegExpLexer implements Lexer {
 			String tokenText = matcher.group(0);
 			if ((nextToken == null)
 					|| (tokenText.length() > nextToken.getText().length())) {
-				int lineCounter = 1;
-				for (char c : tokenText.toCharArray()) {
-					if (c == '\n') {
-						lineCounter++;
-					}
-				}
 				SourceCodeLine sourceCodeLine = fullText.getSource(position);
 				TokenMetaData metaData = new TokenMetaData(
 						sourceCodeLine.getSource(),
-						sourceCodeLine.getLineNumber(), lineCounter,
+						sourceCodeLine.getLineNumber(),
+						StringUtils.countLineBreaks(tokenText) + 1,
 						fullText.getColumn(position));
 				nextToken = new Token(definition.getName(), tokenText,
 						definition.getVisibility(), metaData);

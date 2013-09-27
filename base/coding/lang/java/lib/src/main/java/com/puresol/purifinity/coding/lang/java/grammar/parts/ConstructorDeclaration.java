@@ -25,11 +25,7 @@ public class ConstructorDeclaration {
 		UniversalSyntaxTree constructorDeclarator = part
 				.getChild("ConstructorDeclarator");
 		UniversalSyntaxTree name = constructorDeclarator.getChild("Name");
-		StringBuffer nameBuffer = new StringBuffer();
-		for (UniversalSyntaxTree namePart : name.getChildren()) {
-			nameBuffer.append(namePart.getContent());
-		}
-		return nameBuffer.toString();
+		return name.getChild("Identifier").getContent();
 	}
 
 	/**
@@ -42,7 +38,8 @@ public class ConstructorDeclaration {
 	public String getCanonicalName() throws TreeException {
 		UniversalSyntaxTree constructorDeclarator = part
 				.getChild("ConstructorDeclarator");
-		UniversalSyntaxTree name = constructorDeclarator.getChild("Name");
+		UniversalSyntaxTree name = constructorDeclarator.getChild("Name")
+				.getChild("Identifier");
 		StringBuilder parameterTypes = new StringBuilder();
 		if (constructorDeclarator.hasChild("FormalParameterList")) {
 			UniversalSyntaxTree formalParameterList = constructorDeclarator
@@ -69,7 +66,7 @@ public class ConstructorDeclaration {
 				}
 			}
 		}
-		return name.getContent() + "(" + parameterTypes + ")";
+		return name.getContent() + "(" + parameterTypes + ")".trim();
 	}
 
 	public CodeRange getCodeRange() throws TreeException {
