@@ -54,7 +54,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 	private static final ILog logger = Activator.getDefault().getLog();
 
 	private AnalysisProject analysis;
-	private Table analysisRunsList;
+	private Table analysisRunsTable;
 	private TableViewer analysisRunsViewer;
 	private ToolItem addAnalysisRun;
 	private ToolItem editAnalysisRun;
@@ -82,20 +82,21 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
 		parent.setLayout(new FormLayout());
 
-		analysisRunsList = new Table(parent, SWT.BORDER | SWT.MULTI);
-		FormData fd_analysisRunsList = new FormData();
-		fd_analysisRunsList.bottom = new FormAttachment(100);
-		fd_analysisRunsList.left = new FormAttachment(0);
-		analysisRunsList.setLayoutData(fd_analysisRunsList);
-		analysisRunsList
+		analysisRunsTable = new Table(parent, SWT.BORDER | SWT.MULTI);
+		analysisRunsTable.setHeaderVisible(false);
+		FormData fd_analysisRunsTable = new FormData();
+		fd_analysisRunsTable.bottom = new FormAttachment(100);
+		fd_analysisRunsTable.left = new FormAttachment(0);
+		analysisRunsTable.setLayoutData(fd_analysisRunsTable);
+		analysisRunsTable
 				.setToolTipText("Refreshs the analysis runs for the currently selected analysis from the analysis store.");
-		analysisRunsList.setLinesVisible(true);
-		analysisRunsList.setHeaderVisible(true);
-		analysisRunsViewer = new TableViewer(analysisRunsList);
+		analysisRunsTable.setLinesVisible(true);
+		analysisRunsTable.setHeaderVisible(true);
+		analysisRunsViewer = new TableViewer(analysisRunsTable);
 
 		ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
-		fd_analysisRunsList.top = new FormAttachment(toolBar, 6);
-		fd_analysisRunsList.right = new FormAttachment(toolBar, 0, SWT.RIGHT);
+		fd_analysisRunsTable.top = new FormAttachment(toolBar, 6);
+		fd_analysisRunsTable.right = new FormAttachment(toolBar, 0, SWT.RIGHT);
 		FormData fd_toolBar = new FormData();
 		fd_toolBar.left = new FormAttachment(0);
 		fd_toolBar.right = new FormAttachment(100);
@@ -125,9 +126,9 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 		analysisRunsViewer
 				.setContentProvider(new AnalysisRunListContentProvider());
 		analysisRunsViewer.setLabelProvider(new AnalysisRunListLabelProvider());
-		analysisRunsList.redraw();
+		analysisRunsTable.redraw();
 		analysisRunsViewer.refresh();
-		analysisRunsList.addSelectionListener(this);
+		analysisRunsTable.addSelectionListener(this);
 
 		getSite().setSelectionProvider(this);
 		getSite().getWorkbenchWindow().getSelectionService()
@@ -148,7 +149,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
 	@Override
 	public void setFocus() {
-		analysisRunsList.setFocus();
+		analysisRunsTable.setFocus();
 	}
 
 	@Override
@@ -178,7 +179,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
 	@Override
 	public void widgetSelected(SelectionEvent event) {
-		if (event.getSource() == analysisRunsList) {
+		if (event.getSource() == analysisRunsTable) {
 			processAnalysisRunSelection();
 		} else if (event.getSource() == addAnalysisRun) {
 			addAnalysisRun();

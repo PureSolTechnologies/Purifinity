@@ -21,14 +21,13 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.purifinity.client.common.analysis.editors.DirectoryAnalysisEditor;
-import com.puresol.purifinity.client.common.analysis.editors.DirectoryAnalysisEditorInput;
 import com.puresol.purifinity.client.common.analysis.editors.FileAnalysisEditor;
 import com.puresol.purifinity.client.common.analysis.editors.FileAnalysisEditorInput;
 import com.puresol.purifinity.client.common.analysis.editors.NotAnalyzedEditor;
@@ -73,10 +72,9 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 
 	@Override
 	public void createPartControl(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new FormLayout());
+		parent.setLayout(new FormLayout());
 
-		Label label = new Label(composite, SWT.NONE);
+		Label label = new Label(parent, SWT.NONE);
 		label.setText("Evaluator selection for quality labels:");
 		FormData fdLabel = new FormData();
 		fdLabel.top = new FormAttachment(0, 5);
@@ -84,7 +82,7 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 		fdLabel.right = new FormAttachment(100, -5);
 		label.setLayoutData(fdLabel);
 
-		evaluatorCombo = new Combo(composite, SWT.READ_ONLY);
+		evaluatorCombo = new Combo(parent, SWT.READ_ONLY);
 		FormData fdCombo = new FormData();
 		fdCombo.top = new FormAttachment(label, 5);
 		fdCombo.left = new FormAttachment(0, 5);
@@ -94,7 +92,7 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 		evaluatorCombo.select(0);
 		evaluatorCombo.addSelectionListener(this);
 
-		fileTree = new Tree(composite, SWT.BORDER);
+		fileTree = new Tree(parent, SWT.BORDER);
 		FormData fdFileTree = new FormData();
 		fdFileTree.top = new FormAttachment(evaluatorCombo, 5);
 		fdFileTree.left = new FormAttachment(0, 5);
@@ -102,9 +100,19 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 		fdFileTree.bottom = new FormAttachment(100, -5);
 		fileTree.setLayoutData(fdFileTree);
 		fileTree.setHeaderVisible(true);
-		fileTree.setEnabled(true);
-		fileTree.setVisible(true);
+		fileTree.setLinesVisible(true);
 		fileTree.addSelectionListener(this);
+
+		TreeColumn fileColumn = new TreeColumn(fileTree, SWT.LEFT);
+		fileColumn.setText("FS Object");
+		fileColumn.setAlignment(SWT.LEFT);
+		fileColumn.setWidth(250);
+
+		TreeColumn qualityColumn = new TreeColumn(fileTree, SWT.RIGHT);
+		qualityColumn.setText("Quality Level");
+		qualityColumn.setAlignment(SWT.LEFT);
+		qualityColumn.setWidth(50);
+
 		fileTreeViewer = new AnalysisRunEvaluationTreeViewer(fileTree);
 		fileTreeViewer.setEvaluator(comboViewer.getSelectedEvaluator());
 
@@ -175,10 +183,12 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 					FileAnalysisEditor.class.getName());
 		} else if (!analysisRun.getFailedFiles().contains(
 				firstElement.getPathFile(false))) {
-			DirectoryAnalysisEditorInput directoryAnalysisEditorInput = new DirectoryAnalysisEditorInput(
-					firstElement, analysisRun);
-			getSite().getPage().openEditor(directoryAnalysisEditorInput,
-					DirectoryAnalysisEditor.class.getName());
+			// TODO What do we do here? Can we open a meaningful window?
+			// DirectoryAnalysisEditorInput directoryAnalysisEditorInput = new
+			// DirectoryAnalysisEditorInput(
+			// firstElement, analysisRun);
+			// getSite().getPage().openEditor(directoryAnalysisEditorInput,
+			// DirectoryAnalysisEditor.class.getName());
 		} else {
 			NotAnalyzedEditorInput notAnalyzedEditorInput = new NotAnalyzedEditorInput(
 					firstElement.getPathFile(false), analysisRun);
