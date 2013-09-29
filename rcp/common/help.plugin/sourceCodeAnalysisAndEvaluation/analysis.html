@@ -4,5 +4,34 @@
 </head>
 <body>
 	<h1>Analysis</h1>
+	<p>
+		The Analysis stage is responsible to read the source from the
+		repository and to store it away in Purifinity's internal data store
+		for later use. Afterwards, the sources are read and converted into
+		syntax trees for later usage by the <a href="evaluation.html">evaluators</a>.
+		The languages which are available are dependent on the <a
+			href="reference/availableLanguages.html">installed plug-ins</a>. The
+		trees are also stored in the data store.
+	</p>
+	<h2>
+		<a id="ust">Universal Syntax Tree</a>
+	</h2>
+	<p>The syntax trees used in Purifinity are kind of special syntax
+		trees. Since Purifinity is optimized for source code analysis and
+		evaluation, the standard syntax trees used by compilers are not
+		sufficient. Compilers do not need to deal with comments and white
+		spaces in most languages, that is why during the lexical scan these
+		kind of source code parts are removed and not handed over to the
+		actual parser.</p>
+	<p>
+		The Universal Syntax Trees used by Purifinity contain <b>all</b>
+		information from the source file, so it could be reproduced byte by
+		byte and also contains additional information which is languages
+		independent to support languages independent evaluators. Evaluators
+		can be very powerful that way, because all information is available
+		and an evaluator may handle different source from different languages,
+		because some concepts and bugs are languages independent like
+		uninitialized variables, empty catch blocks and so forth.
+	</p>
 </body>
 </html>
