@@ -15,7 +15,7 @@
 	<modules>
 		<module>java</module>
 		<module>javaee</module>
-	<module>eclipsercp</module>
+		<module>eclipsercp</module>
 	</modules>
 
 	<dependencyManagement>
