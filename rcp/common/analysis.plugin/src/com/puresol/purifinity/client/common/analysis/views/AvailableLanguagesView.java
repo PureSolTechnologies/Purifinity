@@ -20,7 +20,7 @@ import com.puresol.purifinity.client.common.analysis.Activator;
 import com.puresol.purifinity.client.common.analysis.contents.AvailableLanguagesTableViewer;
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.Refreshable;
-import com.puresol.purifinity.coding.analysis.api.AnalyzableProgrammingLanguage;
+import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
 
 public class AvailableLanguagesView extends ViewPart implements Refreshable {
 
@@ -68,19 +68,19 @@ public class AvailableLanguagesView extends ViewPart implements Refreshable {
 		try {
 			BundleContext bundleContext = Activator.getDefault().getBundle()
 					.getBundleContext();
-			Collection<ServiceReference<AnalyzableProgrammingLanguage>> allServiceReferences = bundleContext
-					.getServiceReferences(AnalyzableProgrammingLanguage.class,
+			Collection<ServiceReference<ProgrammingLanguageAnalyzer>> allServiceReferences = bundleContext
+					.getServiceReferences(ProgrammingLanguageAnalyzer.class,
 							null);
-			List<AnalyzableProgrammingLanguage> languages = new ArrayList<AnalyzableProgrammingLanguage>();
-			for (ServiceReference<AnalyzableProgrammingLanguage> serviceReference : allServiceReferences) {
-				AnalyzableProgrammingLanguage service = bundleContext
+			List<ProgrammingLanguageAnalyzer> languages = new ArrayList<ProgrammingLanguageAnalyzer>();
+			for (ServiceReference<ProgrammingLanguageAnalyzer> serviceReference : allServiceReferences) {
+				ProgrammingLanguageAnalyzer service = bundleContext
 						.getService(serviceReference);
 				languages.add(service);
 				bundleContext.ungetService(serviceReference);
 			}
 			viewer.setInput(languages);
 		} catch (InvalidSyntaxException e1) {
-			viewer.setInput(new ArrayList<AnalyzableProgrammingLanguage>());
+			viewer.setInput(new ArrayList<ProgrammingLanguageAnalyzer>());
 		}
 	}
 }

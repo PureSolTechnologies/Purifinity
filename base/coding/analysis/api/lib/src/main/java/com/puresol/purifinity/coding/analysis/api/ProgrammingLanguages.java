@@ -38,7 +38,7 @@ public abstract class ProgrammingLanguages implements Closeable {
      * 
      * @return
      */
-    public abstract List<AnalyzableProgrammingLanguage> getAll();
+    public abstract List<ProgrammingLanguageAnalyzer> getAll();
 
     /**
      * This method is used to find a programming language by its name and

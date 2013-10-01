@@ -13,20 +13,20 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
-import com.puresol.purifinity.coding.analysis.api.AnalyzableProgrammingLanguage;
+import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
 
 public class AvailableLanguagesTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 
-	private final List<AnalyzableProgrammingLanguage> languages = new ArrayList<AnalyzableProgrammingLanguage>();
+	private final List<ProgrammingLanguageAnalyzer> languages = new ArrayList<ProgrammingLanguageAnalyzer>();
 
 	public AvailableLanguagesTableViewer(Table table) {
 		super(table);
 		setComparator(new ViewerComparator() {
 			@Override
 			public int compare(Viewer viewer, Object e1, Object e2) {
-				AnalyzableProgrammingLanguage programmingLanguage1 = (AnalyzableProgrammingLanguage) e1;
-				AnalyzableProgrammingLanguage programmingLanguage2 = (AnalyzableProgrammingLanguage) e2;
+				ProgrammingLanguageAnalyzer programmingLanguage1 = (ProgrammingLanguageAnalyzer) e1;
+				ProgrammingLanguageAnalyzer programmingLanguage2 = (ProgrammingLanguageAnalyzer) e2;
 				String lang1 = programmingLanguage1.getName() + programmingLanguage1.getVersion();
 				String lang2 = programmingLanguage2.getName() + programmingLanguage2.getVersion();
 				return lang1.compareTo(lang2);
@@ -44,7 +44,7 @@ public class AvailableLanguagesTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalyzableProgrammingLanguage language = (AnalyzableProgrammingLanguage) element;
+				ProgrammingLanguageAnalyzer language = (ProgrammingLanguageAnalyzer) element;
 				return language.getName();
 			}
 		});
@@ -57,7 +57,7 @@ public class AvailableLanguagesTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalyzableProgrammingLanguage language = (AnalyzableProgrammingLanguage) element;
+				ProgrammingLanguageAnalyzer language = (ProgrammingLanguageAnalyzer) element;
 				return language.getVersion();
 			}
 		});
@@ -75,15 +75,15 @@ public class AvailableLanguagesTableViewer extends TableViewer implements
 		}
 		if (Collection.class.isAssignableFrom(newInput.getClass())) {
 			@SuppressWarnings("unchecked")
-			Collection<AnalyzableProgrammingLanguage> collection = (Collection<AnalyzableProgrammingLanguage>) newInput;
+			Collection<ProgrammingLanguageAnalyzer> collection = (Collection<ProgrammingLanguageAnalyzer>) newInput;
 			languages.addAll(collection);
 		}
 		refresh();
 	}
 
 	@Override
-	public AnalyzableProgrammingLanguage[] getElements(Object inputElement) {
-		return languages.toArray(new AnalyzableProgrammingLanguage[languages
+	public ProgrammingLanguageAnalyzer[] getElements(Object inputElement) {
+		return languages.toArray(new ProgrammingLanguageAnalyzer[languages
 				.size()]);
 	}
 

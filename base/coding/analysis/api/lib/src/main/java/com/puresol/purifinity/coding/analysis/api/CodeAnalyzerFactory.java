@@ -64,7 +64,7 @@ public class CodeAnalyzerFactory {
 	ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 		.createInstance();
 	try {
-	    for (AnalyzableProgrammingLanguage language : programmingLanguages
+	    for (ProgrammingLanguageAnalyzer language : programmingLanguages
 		    .getAll()) {
 		CodeAnalyzer analyser = checkAndCreate(language, source);
 		if (analyser != null) {
@@ -81,7 +81,7 @@ public class CodeAnalyzerFactory {
 	}
     }
 
-    private CodeAnalyzer checkAndCreate(AnalyzableProgrammingLanguage clazz,
+    private CodeAnalyzer checkAndCreate(ProgrammingLanguageAnalyzer clazz,
 	    CodeLocation source) {
 	if (!clazz.isSuitable(source)) {
 	    return null;
@@ -94,7 +94,7 @@ public class CodeAnalyzerFactory {
 	    ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 		    .createInstance();
 	    try {
-		for (AnalyzableProgrammingLanguage language : programmingLanguages
+		for (ProgrammingLanguageAnalyzer language : programmingLanguages
 			.getAll()) {
 		    CodeAnalyzer analyzer = language
 			    .restoreAnalyzer(persistFile);

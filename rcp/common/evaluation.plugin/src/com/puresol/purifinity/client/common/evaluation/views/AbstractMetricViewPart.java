@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.puresol.commons.utils.math.Parameter;
-import com.puresol.commons.utils.math.Value;
+import com.puresol.commons.math.Parameter;
+import com.puresol.commons.math.Value;
 import com.puresol.purifinity.client.common.branding.Exportable;
 import com.puresol.purifinity.client.common.branding.Printable;
 import com.puresol.purifinity.client.common.ui.actions.PartSettingsCapability;

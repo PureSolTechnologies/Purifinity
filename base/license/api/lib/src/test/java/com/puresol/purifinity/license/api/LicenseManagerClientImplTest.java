@@ -16,32 +16,32 @@ public class LicenseManagerClientImplTest {
 
 	@Test
 	public void testCheckExpirationNotExpired() {
-		assumeTrue(new GregorianCalendar(2013, 9, 1).before(GregorianCalendar
+		assumeTrue(new GregorianCalendar(2014, 0, 1).before(GregorianCalendar
 				.getInstance()));
 		licenseManagerClient.checkExpiration(new Date());
 	}
 
 	@Test
 	public void testCheckExpirationNotExpired2() {
-		Calendar calendar = new GregorianCalendar(2013, 8, 30, 23, 59, 59);
+		Calendar calendar = new GregorianCalendar(2013, 11, 31, 23, 59, 59);
 		licenseManagerClient.checkExpiration(calendar.getTime());
 	}
 
 	@Test(expected = ExpiredLicenseException.class)
 	public void testCheckExpirationExpired() {
-		Calendar calendar = new GregorianCalendar(2013, 9, 1, 0, 0, 0);
+		Calendar calendar = new GregorianCalendar(2014, 0, 1, 0, 0, 0);
 		licenseManagerClient.checkExpiration(calendar.getTime());
 	}
 
 	@Test(expected = ExpiredLicenseException.class)
 	public void testCheckExpirationExpired2() {
-		Calendar calendar = new GregorianCalendar(2013, 9, 1, 0, 1);
+		Calendar calendar = new GregorianCalendar(2014, 0, 1, 0, 1);
 		licenseManagerClient.checkExpiration(calendar.getTime());
 	}
 
 	@Test(expected = ExpiredLicenseException.class)
 	public void testCheckExpirationExpired3() {
-		Calendar calendar = new GregorianCalendar(2013, 9, 1, 1, 0);
+		Calendar calendar = new GregorianCalendar(2014, 0, 1, 1, 0);
 		licenseManagerClient.checkExpiration(calendar.getTime());
 	}
 }

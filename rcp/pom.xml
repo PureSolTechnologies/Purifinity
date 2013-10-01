@@ -68,6 +68,16 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.commons</groupId>
+			<artifactId>configuration.bundle</artifactId>
+			<version>${commons.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol.commons</groupId>
+			<artifactId>math.bundle</artifactId>
+			<version>${commons.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol.commons</groupId>
 			<artifactId>utils.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>

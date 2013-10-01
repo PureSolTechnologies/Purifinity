@@ -16,7 +16,7 @@ import com.puresol.purifinity.coding.analysis.api.AnalysisProjectSettings;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStore;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreException;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreFactory;
-import com.puresol.purifinity.coding.analysis.api.AnalyzableProgrammingLanguage;
+import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.DirectoryRepositoryLocation;
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguages;
 import com.puresol.purifinity.coding.lang.java.Java;
@@ -38,7 +38,7 @@ public abstract class AbstractMetricTest {
 	public static void checkEnvironment() {
 		assertNotNull("Analysis store is null!", analysisStore);
 
-		List<AnalyzableProgrammingLanguage> languages = ProgrammingLanguages
+		List<ProgrammingLanguageAnalyzer> languages = ProgrammingLanguages
 				.createInstance().getAll();
 		assertNotNull("The list of languages is null!", languages);
 		assertTrue("No programming languages found!", languages.size() > 0);

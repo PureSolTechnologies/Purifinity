@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresol.commons.utils.math.MathUtils;
+import com.puresol.commons.math.MathUtils;
 import com.puresol.purifinity.client.common.evaluation.metrics.QualityLevelColorProvider;
 import com.puresol.purifinity.client.common.ui.SWTUtils;
 import com.puresol.purifinity.coding.evaluation.api.QualityLevel;

@@ -1,8 +1,8 @@
 package com.puresol.purifinity.coding.evaluation.api;
 
-import com.puresol.commons.utils.math.AbstractValue;
-import com.puresol.commons.utils.math.Parameter;
-import com.puresol.commons.utils.math.ParameterWithArbitraryUnit;
+import com.puresol.commons.math.AbstractValue;
+import com.puresol.commons.math.Parameter;
+import com.puresol.commons.math.ParameterWithArbitraryUnit;
 
 public class SourceCodeQualityValue extends AbstractValue<SourceCodeQuality> {
 

@@ -9,6 +9,7 @@ Bundle-Vendor: PureSol Technologies
 Require-Bundle: com.puresol.purifinity.client.common.osgi.plugin;bundle-version="0.1.0",
  com.puresol.commons.trees.bundle;bundle-version="0.0.1",
  com.puresol.commons.utils.bundle;bundle-version="0.0.1",
+ com.puresol.commons.configuration.bundle;bundle-version="0.0.1",
  com.puresol.purifinity.uhura.bundle;bundle-version="0.1.0",
  com.puresol.purifinity.client.common.branding.plugin;bundle-version="0.1.0",
  com.puresol.purifinity.coding.lang.api.bundle;bundle-version="0.1.0",

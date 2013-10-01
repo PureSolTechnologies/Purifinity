@@ -1,7 +1,7 @@
 package com.puresol.purifinity.coding.evaluation.api;
 
-import com.puresol.commons.utils.math.LevelOfMeasurement;
-import com.puresol.commons.utils.math.ParameterWithArbitraryUnit;
+import com.puresol.commons.math.LevelOfMeasurement;
+import com.puresol.commons.math.ParameterWithArbitraryUnit;
 
 public class SourceCodeQualityParameter extends
 		ParameterWithArbitraryUnit<SourceCodeQuality> {

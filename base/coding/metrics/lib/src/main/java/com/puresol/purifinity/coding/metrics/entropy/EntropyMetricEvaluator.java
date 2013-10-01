@@ -1,8 +1,10 @@
 package com.puresol.purifinity.coding.metrics.entropy;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.puresol.commons.configuration.ConfigurationParameter;
 import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
@@ -25,6 +27,8 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = -5093217611195212999L;
 
+	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+
 	private final EvaluatorStore store;
 	private final EvaluatorStore halsteadStore;
 
@@ -33,6 +37,11 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 		store = createEvaluatorStore();
 		halsteadStore = EvaluatorStoreFactory.getFactory().createInstance(
 				HalsteadMetricEvaluator.class);
+	}
+
+	@Override
+	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+		return configurationParameters;
 	}
 
 	@Override

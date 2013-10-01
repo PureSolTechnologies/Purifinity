@@ -2,7 +2,7 @@ package com.puresol.purifinity.coding.metrics.sloc;
 
 import java.io.Serializable;
 
-import com.puresol.commons.utils.math.statistics.Statistics;
+import com.puresol.commons.math.statistics.Statistics;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.uhura.source.CodeLocation;

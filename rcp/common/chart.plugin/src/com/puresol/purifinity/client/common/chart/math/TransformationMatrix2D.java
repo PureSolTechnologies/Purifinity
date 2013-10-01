@@ -1,6 +1,6 @@
 package com.puresol.purifinity.client.common.chart.math;
 
-import com.puresol.commons.utils.math.Matrix;
+import com.puresol.commons.math.Matrix;
 import com.puresol.purifinity.client.common.chart.AxisDirection;
 
 /**

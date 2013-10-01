@@ -19,8 +19,8 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.puresol.commons.math.Parameter;
 import com.puresol.commons.utils.StringUtils;
-import com.puresol.commons.utils.math.Parameter;
 import com.puresol.purifinity.client.common.evaluation.contents.ParameterListViewer;
 import com.puresol.purifinity.client.common.evaluation.contents.QualityCharacteristicListViewer;
 import com.puresol.purifinity.client.common.evaluation.controls.QualityCharacteristicInformationComponent;

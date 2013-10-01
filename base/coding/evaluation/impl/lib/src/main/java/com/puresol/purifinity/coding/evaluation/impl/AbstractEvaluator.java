@@ -1,6 +1,8 @@
 package com.puresol.purifinity.coding.evaluation.impl;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -12,6 +14,7 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresol.commons.configuration.ConfigurationParameter;
 import com.puresol.commons.trees.TreeUtils;
 import com.puresol.commons.utils.StopWatch;
 import com.puresol.commons.utils.progress.AbstractProgressObservable;
@@ -48,6 +51,8 @@ public abstract class AbstractEvaluator extends
 			.getLogger(AbstractEvaluator.class);
 
 	private static final int EXECUTION_TIMEOUT_IN_SECONDS = 30;
+
+	private final Map<String, Object> properties = new HashMap<>();
 
 	private final FileStore fileStore = FileStoreFactory.getFactory()
 			.getInstance();
@@ -106,6 +111,20 @@ public abstract class AbstractEvaluator extends
 	@Override
 	public final boolean isReEvaluation() {
 		return reEvaluation;
+	}
+
+	@Override
+	public final <T> T getConfigurationParameter(
+			ConfigurationParameter<T> parameter) {
+		@SuppressWarnings("unchecked")
+		T t = (T) properties.get(parameter.getPropertyKey());
+		return t != null ? t : parameter.getDefaultValue();
+	}
+
+	@Override
+	public final <T> void setConfigurationParameter(
+			ConfigurationParameter<T> parameter, T value) {
+		properties.put(parameter.getPropertyKey(), value);
 	}
 
 	/**

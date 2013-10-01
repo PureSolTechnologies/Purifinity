@@ -10,7 +10,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.List;
 
-import com.puresol.commons.utils.math.Parameter;
+import com.puresol.commons.math.Parameter;
 
 public class ParameterListViewer extends ListViewer implements
 		IStructuredContentProvider {

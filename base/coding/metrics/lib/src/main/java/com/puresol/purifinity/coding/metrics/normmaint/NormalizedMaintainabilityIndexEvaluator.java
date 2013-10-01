@@ -3,6 +3,7 @@ package com.puresol.purifinity.coding.metrics.normmaint;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.puresol.commons.configuration.ConfigurationParameter;
 import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
@@ -37,6 +38,8 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 				.add(QualityCharacteristic.TESTABILITY);
 	}
 
+	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+
 	private final EvaluatorStore store;
 	private final EvaluatorStore maintainabilityStore;
 
@@ -47,6 +50,11 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 
 		maintainabilityStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(MaintainabilityIndexEvaluator.class);
+	}
+
+	@Override
+	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+		return configurationParameters;
 	}
 
 	@Override

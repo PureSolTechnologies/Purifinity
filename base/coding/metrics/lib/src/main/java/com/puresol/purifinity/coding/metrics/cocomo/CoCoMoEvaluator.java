@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.puresol.commons.configuration.ConfigurationParameter;
 import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
@@ -47,6 +48,8 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 
 	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
 
+	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+
 	private final EvaluatorStore store;
 	private final EvaluatorStore slocStore;
 	private Complexity complexity = Complexity.LOW;
@@ -58,6 +61,11 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 		store = createEvaluatorStore();
 		slocStore = EvaluatorStoreFactory.getFactory().createInstance(
 				SLOCEvaluator.class);
+	}
+
+	@Override
+	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+		return configurationParameters;
 	}
 
 	public void setComplexity(Complexity complexity) {

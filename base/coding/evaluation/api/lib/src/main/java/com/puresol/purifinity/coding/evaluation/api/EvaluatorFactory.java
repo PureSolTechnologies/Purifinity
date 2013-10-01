@@ -2,7 +2,7 @@ package com.puresol.purifinity.coding.evaluation.api;
 
 import java.util.Set;
 
-import com.puresol.commons.utils.math.Parameter;
+import com.puresol.commons.math.Parameter;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;

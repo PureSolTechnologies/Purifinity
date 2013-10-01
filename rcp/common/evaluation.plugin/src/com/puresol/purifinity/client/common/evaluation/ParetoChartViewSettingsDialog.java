@@ -17,8 +17,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 
-import com.puresol.commons.utils.math.LevelOfMeasurement;
-import com.puresol.commons.utils.math.Parameter;
+import com.puresol.commons.math.LevelOfMeasurement;
+import com.puresol.commons.math.Parameter;
 import com.puresol.purifinity.client.common.analysis.contents.CodeRangeTypeComboViewer;
 import com.puresol.purifinity.client.common.evaluation.contents.MetricComboViewer;
 import com.puresol.purifinity.client.common.evaluation.contents.ParameterComboViewer;

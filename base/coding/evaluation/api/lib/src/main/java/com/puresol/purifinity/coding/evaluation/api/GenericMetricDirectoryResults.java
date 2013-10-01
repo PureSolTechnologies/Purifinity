@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.puresol.commons.utils.math.Parameter;
-import com.puresol.commons.utils.math.Value;
+import com.puresol.commons.math.Parameter;
+import com.puresol.commons.math.Value;
 
 public class GenericMetricDirectoryResults extends AbstractEvaluatorResult
 		implements MetricDirectoryResults {

@@ -3,6 +3,7 @@ package com.puresol.purifinity.coding.metrics.maintainability;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.puresol.commons.configuration.ConfigurationParameter;
 import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
@@ -44,6 +45,8 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 				.add(QualityCharacteristic.TESTABILITY);
 	}
 
+	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+
 	private final EvaluatorStore store;
 	private final EvaluatorStore slocStore;
 	private final EvaluatorStore mcCabeStore;
@@ -57,6 +60,11 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 		slocStore = factory.createInstance(SLOCEvaluator.class);
 		mcCabeStore = factory.createInstance(McCabeMetricEvaluator.class);
 		halsteadStore = factory.createInstance(HalsteadMetricEvaluator.class);
+	}
+
+	@Override
+	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+		return configurationParameters;
 	}
 
 	@Override

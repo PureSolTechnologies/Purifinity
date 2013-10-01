@@ -2,19 +2,21 @@ package com.puresol.purifinity.coding.lang.cpp;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
-import com.puresol.purifinity.coding.analysis.api.AnalyzableProgrammingLanguage;
+import com.puresol.commons.configuration.ConfigurationParameter;
+import com.puresol.purifinity.coding.analysis.api.AbstractProgrammingLanguageAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresol.purifinity.coding.lang.api.LanguageGrammar;
-import com.puresol.purifinity.coding.lang.commons.AbstractProgrammingLanguage;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 
-public class CPP extends AbstractProgrammingLanguage implements
-		AnalyzableProgrammingLanguage {
+public class CPP extends AbstractProgrammingLanguageAnalyzer {
 
 	public static final String[] FILE_SUFFIXES = { ".hpp", ".hxx", ".cpp",
 			".cxx" };
 
+	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 	private static CPP instance = null;
 
 	public static CPP getInstance() {
@@ -47,6 +49,11 @@ public class CPP extends AbstractProgrammingLanguage implements
 	@Override
 	protected String[] getValidFileSuffixes() {
 		return FILE_SUFFIXES;
+	}
+
+	@Override
+	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+		return configurationParameters;
 	}
 
 	@Override

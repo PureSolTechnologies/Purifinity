@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresol.commons.utils.math.statistics.Statistics;
+import com.puresol.commons.math.statistics.Statistics;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreException;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;

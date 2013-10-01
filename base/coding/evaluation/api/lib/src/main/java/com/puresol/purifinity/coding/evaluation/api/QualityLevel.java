@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.commons.utils.math.statistics.Statistics;
+import com.puresol.commons.math.statistics.Statistics;
 
 /**
  * This class is used for {@link SourceCodeQuality} statistics. It extends

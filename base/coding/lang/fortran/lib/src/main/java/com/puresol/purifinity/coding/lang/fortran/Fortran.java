@@ -4,22 +4,24 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ServiceLoader;
+import java.util.Set;
 
-import com.puresol.purifinity.coding.analysis.api.AnalyzableProgrammingLanguage;
+import com.puresol.commons.configuration.ConfigurationParameter;
+import com.puresol.purifinity.coding.analysis.api.AbstractProgrammingLanguageAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresol.purifinity.coding.lang.api.LanguageGrammar;
-import com.puresol.purifinity.coding.lang.commons.AbstractProgrammingLanguage;
 import com.puresol.purifinity.coding.lang.fortran.grammar.FortranGrammar;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 
-public class Fortran extends AbstractProgrammingLanguage implements
-		AnalyzableProgrammingLanguage {
+public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 
 	public static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
 			".f95", ".for" };
 
+	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 	private static Fortran instance = null;
 
 	public static Fortran getInstance() {
@@ -44,6 +46,11 @@ public class Fortran extends AbstractProgrammingLanguage implements
 	@Override
 	protected String[] getValidFileSuffixes() {
 		return FILE_SUFFIXES;
+	}
+
+	@Override
+	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+		return configurationParameters;
 	}
 
 	@Override

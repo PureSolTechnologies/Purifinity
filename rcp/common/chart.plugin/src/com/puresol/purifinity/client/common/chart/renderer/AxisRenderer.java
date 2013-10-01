@@ -8,7 +8,7 @@ import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Transform;
 
-import com.puresol.commons.utils.math.Parameter;
+import com.puresol.commons.math.Parameter;
 import com.puresol.purifinity.client.common.chart.Axis;
 import com.puresol.purifinity.client.common.chart.AxisDirection;
 import com.puresol.purifinity.client.common.chart.Tick;

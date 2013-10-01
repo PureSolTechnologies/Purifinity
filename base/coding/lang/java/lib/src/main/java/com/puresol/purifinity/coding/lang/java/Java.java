@@ -4,13 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ServiceLoader;
+import java.util.Set;
 
-import com.puresol.purifinity.coding.analysis.api.AnalyzableProgrammingLanguage;
+import com.puresol.commons.configuration.ConfigurationParameter;
+import com.puresol.purifinity.coding.analysis.api.AbstractProgrammingLanguageAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresol.purifinity.coding.lang.api.LanguageGrammar;
-import com.puresol.purifinity.coding.lang.commons.AbstractProgrammingLanguage;
 import com.puresol.purifinity.coding.lang.java.grammar.JavaGrammar;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 
@@ -22,11 +24,11 @@ import com.puresol.purifinity.uhura.source.CodeLocation;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Java extends AbstractProgrammingLanguage implements
-		AnalyzableProgrammingLanguage {
+public class Java extends AbstractProgrammingLanguageAnalyzer {
 
 	public static final String[] FILE_SUFFIXES = { ".java" };
 
+	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 	private static Java instance = null;
 
 	public static Java getInstance() {
@@ -52,6 +54,11 @@ public class Java extends AbstractProgrammingLanguage implements
 	@Override
 	protected String[] getValidFileSuffixes() {
 		return FILE_SUFFIXES;
+	}
+
+	@Override
+	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+		return configurationParameters;
 	}
 
 	@Override

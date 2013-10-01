@@ -10,7 +10,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Combo;
 
-import com.puresol.commons.utils.math.Parameter;
+import com.puresol.commons.math.Parameter;
 
 public class ParameterComboViewer extends ComboViewer implements
 		IStructuredContentProvider {

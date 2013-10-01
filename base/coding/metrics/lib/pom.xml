@@ -49,6 +49,10 @@
 			<artifactId>uhura.test</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresol.commons</groupId>
+			<artifactId>math</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>

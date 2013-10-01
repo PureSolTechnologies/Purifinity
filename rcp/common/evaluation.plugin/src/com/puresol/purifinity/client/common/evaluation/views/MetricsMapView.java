@@ -24,7 +24,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
-import com.puresol.commons.utils.math.Parameter;
+import com.puresol.commons.math.Parameter;
 import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.purifinity.client.common.branding.Printable;
 import com.puresol.purifinity.client.common.chart.AreaMapComponent;

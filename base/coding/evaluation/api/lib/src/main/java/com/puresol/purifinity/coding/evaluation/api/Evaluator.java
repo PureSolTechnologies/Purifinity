@@ -2,6 +2,7 @@ package com.puresol.purifinity.coding.evaluation.api;
 
 import java.util.Set;
 
+import com.puresol.commons.configuration.Configurable;
 import com.puresol.commons.utils.progress.CallableProgressObservable;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.TimeAwareness;
@@ -16,7 +17,8 @@ import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
  * 
  */
 public interface Evaluator extends
-		CallableProgressObservable<Evaluator, Boolean>, TimeAwareness {
+		CallableProgressObservable<Evaluator, Boolean>, TimeAwareness,
+		Configurable {
 
 	/**
 	 * This method returns the evaluator meta data which describes the evaluator

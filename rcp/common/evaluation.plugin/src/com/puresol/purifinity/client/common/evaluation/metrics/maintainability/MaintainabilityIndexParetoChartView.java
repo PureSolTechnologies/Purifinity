@@ -18,13 +18,13 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.puresol.commons.math.LevelOfMeasurement;
+import com.puresol.commons.math.ParameterWithArbitraryUnit;
+import com.puresol.commons.math.Value;
 import com.puresol.commons.trees.TreeVisitor;
 import com.puresol.commons.trees.TreeWalker;
 import com.puresol.commons.trees.WalkingAction;
 import com.puresol.commons.utils.HashId;
-import com.puresol.commons.utils.math.LevelOfMeasurement;
-import com.puresol.commons.utils.math.ParameterWithArbitraryUnit;
-import com.puresol.commons.utils.math.Value;
 import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
 import com.puresol.purifinity.client.common.chart.Axis;
 import com.puresol.purifinity.client.common.chart.AxisDirection;

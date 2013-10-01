@@ -49,7 +49,7 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<configuration>
 					<instructions>
-						<Import-Package>*,com.puresol.purifinity.uhura.parser,com.puresol.purifinity.uhura.lexer,com.puresol.purifinity.uhura.grammar.token,com.puresol.purifinity.uhura.ust,com.puresol.purifinity.uhura.ust.terminal,com.puresol.commons.utils.math,com.puresol.commons.utils.math.statistics,com.puresol.purifinity.coding.evaluation.impl</Import-Package>
+						<Import-Package>*,com.puresol.purifinity.uhura.parser,com.puresol.purifinity.uhura.lexer,com.puresol.purifinity.uhura.grammar.token,com.puresol.purifinity.uhura.ust,com.puresol.purifinity.uhura.ust.terminal,com.puresol.commons.math,com.puresol.commons.math.statistics,com.puresol.purifinity.coding.evaluation.impl</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

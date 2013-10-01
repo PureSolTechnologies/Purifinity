@@ -1,9 +1,11 @@
 package com.puresol.purifinity.coding.metrics.codedepth;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
+import com.puresol.commons.configuration.ConfigurationParameter;
 import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeAnalysis;
@@ -31,12 +33,19 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = -5093217611195212999L;
 
+	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+
 	private final EvaluatorStore store;
 
 	public CodeDepthMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 		super(CodeDepthMetric.NAME, CodeDepthMetric.DESCRIPTION, analysisRun,
 				path);
 		store = createEvaluatorStore();
+	}
+
+	@Override
+	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+		return configurationParameters;
 	}
 
 	@Override

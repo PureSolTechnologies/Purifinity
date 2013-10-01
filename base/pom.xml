@@ -186,12 +186,22 @@
 			<!-- PureSol Technologies dependencies -->
 			<dependency>
 				<groupId>com.puresol.commons</groupId>
+				<artifactId>configuration</artifactId>
+				<version>${commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol.commons</groupId>
 				<artifactId>license.client</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresol.commons</groupId>
 				<artifactId>license.domain</artifactId>
+				<version>${commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresol.commons</groupId>
+				<artifactId>math</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>

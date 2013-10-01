@@ -16,8 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.puresol.commons.math.statistics.Statistics;
 import com.puresol.commons.trees.TreeIterator;
-import com.puresol.commons.utils.math.statistics.Statistics;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;

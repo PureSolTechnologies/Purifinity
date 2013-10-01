@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.puresol.commons.utils.math.GeneralValue;
-import com.puresol.commons.utils.math.Parameter;
-import com.puresol.commons.utils.math.Value;
+import com.puresol.commons.math.GeneralValue;
+import com.puresol.commons.math.Parameter;
+import com.puresol.commons.math.Value;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
 import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;

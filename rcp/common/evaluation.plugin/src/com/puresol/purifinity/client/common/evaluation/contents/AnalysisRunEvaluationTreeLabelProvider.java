@@ -19,9 +19,9 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresol.commons.utils.math.MathUtils;
-import com.puresol.commons.utils.math.Parameter;
-import com.puresol.commons.utils.math.Value;
+import com.puresol.commons.math.MathUtils;
+import com.puresol.commons.math.Parameter;
+import com.puresol.commons.math.Value;
 import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunContentTreeLabelProvider;
 import com.puresol.purifinity.client.common.branding.ClientImages;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;

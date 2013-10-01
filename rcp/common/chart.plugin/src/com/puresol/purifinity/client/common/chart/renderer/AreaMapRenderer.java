@@ -9,7 +9,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 
-import com.puresol.commons.utils.math.MathUtils;
+import com.puresol.commons.math.MathUtils;
 import com.puresol.purifinity.client.common.chart.AreaMapComponent;
 
 /**
