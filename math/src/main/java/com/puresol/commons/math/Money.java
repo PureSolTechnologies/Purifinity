@@ -11,6 +11,9 @@ import java.util.Arrays;
  */
 public class Money {
 
+	/**
+	 * This field keeps the currency symbol of the currency.
+	 */
 	private final String currency;
 
 	/**
@@ -19,6 +22,7 @@ public class Money {
 	 * would be Cent for instance.
 	 */
 	private final long amount;
+
 	/**
 	 * This field contains the fraction of the currency's smallest unit to the
 	 * major unit.
@@ -49,6 +53,12 @@ public class Money {
 	 * This method calculates shares of this money object which are weigthed by
 	 * given ratios.
 	 * 
+	 * <b>Attention:</b> It is not guaranteed that all shares have exactly the
+	 * ratios to each other as specified due to the side condition that the sum
+	 * of all shares need to be <b>exactly</b> the source amount of money. The
+	 * error of the share difference is maximal the amount of the smallest
+	 * possible money amount.
+	 * 
 	 * @param ratios
 	 *            are the ration to be taken into acount for share calculation.
 	 * @return An array of {@link Money} is returned containing the shares.
@@ -67,10 +77,18 @@ public class Money {
 	}
 
 	/**
-	 * The method calculates equal
+	 * The method calculates equal shares. Only the number of shares need to be
+	 * specified.
+	 * 
+	 * <b>Attention:</b> It is not guaranteed that all shares have an equal
+	 * amount due to the side condition that the sum of all shares need to be
+	 * <b>exactly</b> the source amount of money. The error of the share
+	 * difference is maximal the amount of the smallest possible money amount.
 	 * 
 	 * @param numberOfShares
-	 * @return
+	 *            is the number of shares the current amount of money is split
+	 *            into.
+	 * @return An array of {@link Money} is returned containing the shares.
 	 */
 	public Money[] share(int numberOfShares) {
 		if (numberOfShares <= 0) {

@@ -15,6 +15,12 @@ import java.math.RoundingMode;
 public class MathUtils {
 
 	/**
+	 * Private default constructor to avoid instantiation.
+	 */
+	private MathUtils() {
+	}
+
+	/**
 	 * Splits a long value into an array of long values which sum up to the
 	 * original value, but are splitted into amounts given by ratios.
 	 * 

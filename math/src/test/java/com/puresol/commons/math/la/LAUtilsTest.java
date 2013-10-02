@@ -1,23 +1,14 @@
-package com.puresol.commons.math;
+package com.puresol.commons.math.la;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.puresol.commons.math.Matrix;
-
-public class MatrixTest {
-
-	@Test
-	public void testMatrixConstructors() {
-		Matrix matrix = new Matrix(2, 5);
-		assertEquals(2, matrix.getM());
-		assertEquals(5, matrix.getN());
-	}
+public class LAUtilsTest {
 
 	@Test
 	public void testCreateIdentity() {
-		Matrix matrix = Matrix.createIdentity(3);
+		Matrix matrix = LAUtils.createIdentity(3);
 		assertEquals(3, matrix.getM());
 		assertEquals(3, matrix.getN());
 		assertEquals(1.0, matrix.get(0, 0), 1e-10);
@@ -32,35 +23,13 @@ public class MatrixTest {
 	}
 
 	@Test
-	public void testSet() {
-		Matrix matrix = new Matrix(3, 2);
-		matrix.set(new double[][] { { 1, 2 }, { 3, 4 }, { 5, 6 } });
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalSet() {
-		Matrix matrix = new Matrix(2, 2);
-		matrix.set(new double[][] { { 1, 2 }, { 3, 4 }, { 5, 6 } });
-		assertEquals(1.0, matrix.get(0, 0), 1e-10);
-		assertEquals(2.0, matrix.get(0, 1), 1e-10);
-		assertEquals(3.0, matrix.get(1, 0), 1e-10);
-		assertEquals(4.0, matrix.get(1, 1), 1e-10);
-		assertEquals(5.0, matrix.get(2, 0), 1e-10);
-		assertEquals(6.0, matrix.get(2, 1), 1e-10);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testIllegalSet2() {
-		Matrix matrix = new Matrix(3, 3);
-		matrix.set(new double[][] { { 1, 2 }, { 3, 4 }, { 5, 6 } });
-	}
-
-	@Test
 	public void testMultiply() {
 		Matrix a = new Matrix(3, 2, new double[][] { { 1, 2 }, { 3, 4 },
 				{ 5, 6 } });
 		Matrix b = new Matrix(2, 3, new double[][] { { 1, 2, 3 }, { 4, 5, 6 } });
-		Matrix c = Matrix.multiply(a, b);
+		Matrix c = LAUtils.multiply(a, b);
+		assertEquals(3, c.getM());
+		assertEquals(3, c.getN());
 		assertEquals(9.0, c.get(0, 0), 1e-10);
 		assertEquals(12.0, c.get(0, 1), 1e-10);
 		assertEquals(15.0, c.get(0, 2), 1e-10);
@@ -74,9 +43,31 @@ public class MatrixTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testIllegalMultiply() {
-		Matrix a = new Matrix(2, 3, new double[][] { { 1, 2 }, { 3, 4 },
+		Matrix a = new Matrix(3, 2, new double[][] { { 1, 2 }, { 3, 4 },
 				{ 5, 6 } });
-		Matrix b = new Matrix(2, 2, new double[][] { { 1, 2 }, { 4, 5 } });
-		Matrix.multiply(a, b);
+		Matrix b = new Matrix(3, 2, new double[][] { { 1, 2 }, { 3, 4 },
+				{ 5, 6 } });
+		LAUtils.multiply(a, b);
 	}
+
+	@Test
+	public void testMultiplyWithVector() {
+		Matrix a = new Matrix(3, 2, new double[][] { { 1, 2 }, { 3, 4 },
+				{ 5, 6 } });
+		Vector b = new Vector(new double[] { 1, 2 });
+		Vector c = LAUtils.multiply(a, b);
+		assertEquals(3, c.getN());
+		assertEquals(5.0, c.get(0), 1e-10);
+		// assertEquals(11.0, c.get(1), 1e-10);
+		assertEquals(17.0, c.get(2), 1e-10);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testIllegalMultiplyWithVector() {
+		Matrix a = new Matrix(3, 2, new double[][] { { 1, 2 }, { 3, 4 },
+				{ 5, 6 } });
+		Vector b = new Vector(new double[] { 1, 2, 3 });
+		LAUtils.multiply(a, b);
+	}
+
 }
