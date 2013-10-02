@@ -1,6 +1,8 @@
 package com.puresol.purifinity.client.common.chart.math;
 
-import com.puresol.commons.math.Matrix;
+import com.puresol.commons.math.la.LAUtils;
+import com.puresol.commons.math.la.Matrix;
+import com.puresol.commons.math.la.Vector;
 import com.puresol.purifinity.client.common.chart.AxisDirection;
 
 /**
@@ -57,12 +59,8 @@ public class TransformationMatrix2D extends Matrix {
 	}
 
 	public Point2D transform(Point2D point) {
-		Matrix matrix = multiply(this, point);
-		Point2D transformedPoint = new Point2D();
-		for (int i = 0; i < DIMENSIONS; i++) {
-			transformedPoint.set(i, matrix.get(i, 0));
-		}
-		return transformedPoint;
+		Vector vector = LAUtils.multiply(this, point);
+		return new Point2D(vector);
 	}
 
 	public void mirror(AxisDirection axis) {
