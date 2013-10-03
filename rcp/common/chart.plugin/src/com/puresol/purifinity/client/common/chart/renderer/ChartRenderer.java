@@ -17,7 +17,7 @@ import com.puresol.purifinity.client.common.chart.Axis;
 import com.puresol.purifinity.client.common.chart.AxisDirection;
 import com.puresol.purifinity.client.common.chart.Chart2D;
 import com.puresol.purifinity.client.common.chart.ColoredArea;
-import com.puresol.purifinity.client.common.chart.DataPoint2D;
+import com.puresol.purifinity.client.common.chart.Mark2D;
 import com.puresol.purifinity.client.common.chart.MarkPosition;
 import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.math.Point2D;
@@ -192,7 +192,7 @@ public class ChartRenderer {
 		gc.setAntialias(SWT.ON);
 	}
 
-	public DataPoint2D<?, ?> getDataPointAt(int x, int y) {
+	public Mark2D<?, ?> getDataPointAt(int x, int y) {
 		for (Plot<?, ?> plot : markPositions.keySet()) {
 			for (MarkPosition markPosition : markPositions.get(plot)) {
 				Rectangle position = markPosition.getPosition();

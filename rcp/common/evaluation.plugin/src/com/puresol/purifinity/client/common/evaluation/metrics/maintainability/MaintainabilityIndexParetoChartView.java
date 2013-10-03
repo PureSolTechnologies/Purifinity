@@ -31,7 +31,8 @@ import com.puresol.purifinity.client.common.chart.AxisDirection;
 import com.puresol.purifinity.client.common.chart.AxisFactory;
 import com.puresol.purifinity.client.common.chart.Chart2D;
 import com.puresol.purifinity.client.common.chart.ChartCanvas;
-import com.puresol.purifinity.client.common.chart.DataPoint2D;
+import com.puresol.purifinity.client.common.chart.Mark2D;
+import com.puresol.purifinity.client.common.chart.GenericMark2D;
 import com.puresol.purifinity.client.common.chart.HorizontalColoredArea;
 import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.renderer.CircleMarkRenderer;
@@ -123,9 +124,9 @@ public class MaintainabilityIndexParetoChartView extends
 	public void showEvaluation(HashIdFileTree path) {
 		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
 				.createInstance(MaintainabilityIndexEvaluator.class);
-		final List<DataPoint2D<String, Double>> paretoValuesMI = new ArrayList<DataPoint2D<String, Double>>();
-		final Map<String, DataPoint2D<String, Double>> paretoValuesMIwoc = new HashMap<String, DataPoint2D<String, Double>>();
-		final Map<String, DataPoint2D<String, Double>> paretoValuesMIcw = new HashMap<String, DataPoint2D<String, Double>>();
+		final List<Mark2D<String, Double>> paretoValuesMI = new ArrayList<Mark2D<String, Double>>();
+		final Map<String, Mark2D<String, Double>> paretoValuesMIwoc = new HashMap<String, Mark2D<String, Double>>();
+		final Map<String, Mark2D<String, Double>> paretoValuesMIcw = new HashMap<String, Mark2D<String, Double>>();
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
@@ -146,18 +147,19 @@ public class MaintainabilityIndexParetoChartView extends
 					double value = convertToDouble(valueMap, MI);
 					String name = node.getPathFile(false).getPath() + "."
 							+ codeRangeName;
-					paretoValuesMI.add(new DataPoint2D<String, Double>(name,
-							value, codeRangeTypeSelection.getName() + " "
+					paretoValuesMI.add(new GenericMark2D<String, Double>(
+							name, value, codeRangeTypeSelection.getName() + " "
 									+ codeRangeName));
 					value = convertToDouble(valueMap, MI_WOC);
 					paretoValuesMIwoc.put(name,
-							new DataPoint2D<String, Double>(name, value,
+							new GenericMark2D<String, Double>(name, value,
 									codeRangeTypeSelection.getName() + " "
 											+ codeRangeName));
 					value = convertToDouble(valueMap, MI_CW);
-					paretoValuesMIcw.put(name, new DataPoint2D<String, Double>(
-							name, value, codeRangeTypeSelection.getName() + " "
-									+ codeRangeName));
+					paretoValuesMIcw.put(name,
+							new GenericMark2D<String, Double>(name, value,
+									codeRangeTypeSelection.getName() + " "
+											+ codeRangeName));
 				}
 				return WalkingAction.PROCEED;
 			}
@@ -167,19 +169,19 @@ public class MaintainabilityIndexParetoChartView extends
 		setupChart(paretoValuesMI, paretoValuesMIwoc, paretoValuesMIcw);
 	}
 
-	private void setupChart(List<DataPoint2D<String, Double>> paretoValuesMI,
-			Map<String, DataPoint2D<String, Double>> paretoValuesMIwoc,
-			Map<String, DataPoint2D<String, Double>> paretoValuesMIcw) {
+	private void setupChart(List<Mark2D<String, Double>> paretoValuesMI,
+			Map<String, Mark2D<String, Double>> paretoValuesMIwoc,
+			Map<String, Mark2D<String, Double>> paretoValuesMIcw) {
 		chart.removeAllPlots();
 
 		chart.setTitle("Maintainability");
 		chart.setSubTitle("Pareto Chart");
 
 		Collections.sort(paretoValuesMI,
-				new Comparator<DataPoint2D<String, Double>>() {
+				new Comparator<Mark2D<String, Double>>() {
 					@Override
-					public int compare(DataPoint2D<String, Double> o1,
-							DataPoint2D<String, Double> o2) {
+					public int compare(Mark2D<String, Double> o1,
+							Mark2D<String, Double> o2) {
 						return o2.getY().compareTo(o1.getY());
 					}
 				});
@@ -187,7 +189,7 @@ public class MaintainabilityIndexParetoChartView extends
 		List<String> categories = new ArrayList<String>();
 		double min = 0.0;
 		double max = 0.0;
-		for (DataPoint2D<String, Double> value : paretoValuesMI) {
+		for (Mark2D<String, Double> value : paretoValuesMI) {
 			categories.add(value.getX());
 			min = Math.min(min, value.getY());
 			max = Math.max(max, value.getY());
@@ -210,9 +212,9 @@ public class MaintainabilityIndexParetoChartView extends
 		plotMI.add(paretoValuesMI);
 		chart.addPlot(plotMI);
 
-		List<DataPoint2D<String, Double>> miWoc = new ArrayList<DataPoint2D<String, Double>>();
-		List<DataPoint2D<String, Double>> miCw = new ArrayList<DataPoint2D<String, Double>>();
-		for (DataPoint2D<String, Double> m : paretoValuesMI) {
+		List<Mark2D<String, Double>> miWoc = new ArrayList<Mark2D<String, Double>>();
+		List<Mark2D<String, Double>> miCw = new ArrayList<Mark2D<String, Double>>();
+		for (Mark2D<String, Double> m : paretoValuesMI) {
 			miWoc.add(paretoValuesMIwoc.get(m.getX()));
 			miCw.add(paretoValuesMIcw.get(m.getX()));
 		}

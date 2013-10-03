@@ -8,7 +8,7 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Rectangle;
 
-import com.puresol.purifinity.client.common.chart.DataPoint2D;
+import com.puresol.purifinity.client.common.chart.Mark2D;
 import com.puresol.purifinity.client.common.chart.MarkPosition;
 import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.math.TransformationMatrix2D;
@@ -47,7 +47,7 @@ public class PlotRenderer {
 		List<MarkPosition> markPositions = new ArrayList<MarkPosition>();
 		List<?> dataPoints = plot.getDataPoints();
 		for (int i = 0; i < dataPoints.size(); i++) {
-			DataPoint2D<?, ?> dataPoint = (DataPoint2D<?, ?>) dataPoints.get(i);
+			Mark2D<?, ?> dataPoint = (Mark2D<?, ?>) dataPoints.get(i);
 			Color foreground = null;
 			Color background = null;
 			if (colorProvider != null) {

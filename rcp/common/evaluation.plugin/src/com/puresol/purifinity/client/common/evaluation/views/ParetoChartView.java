@@ -35,7 +35,8 @@ import com.puresol.purifinity.client.common.chart.AxisDirection;
 import com.puresol.purifinity.client.common.chart.AxisFactory;
 import com.puresol.purifinity.client.common.chart.Chart2D;
 import com.puresol.purifinity.client.common.chart.ChartCanvas;
-import com.puresol.purifinity.client.common.chart.DataPoint2D;
+import com.puresol.purifinity.client.common.chart.Mark2D;
+import com.puresol.purifinity.client.common.chart.GenericMark2D;
 import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.renderer.BarMarkRenderer;
 import com.puresol.purifinity.client.common.evaluation.Activator;
@@ -193,7 +194,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	public void showEvaluation(HashIdFileTree path) {
 		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
 				.createInstance(metricSelection.getEvaluatorClass());
-		final List<DataPoint2D<String, Double>> paretoValues = new ArrayList<DataPoint2D<String, Double>>();
+		final List<Mark2D<String, Double>> paretoValues = new ArrayList<Mark2D<String, Double>>();
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
@@ -217,9 +218,9 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 					double value = convertToDouble(valueMap, parameterSelection);
 					String category = node.getPathFile(false).getPath() + "."
 							+ codeRangeName;
-					paretoValues.add(new DataPoint2D<String, Double>(category,
-							value, codeRangeTypeSelection.getName() + " "
-									+ codeRangeName));
+					paretoValues.add(new GenericMark2D<String, Double>(
+							category, value, codeRangeTypeSelection.getName()
+									+ " " + codeRangeName));
 					usedCategories.add(category);
 				}
 				return WalkingAction.PROCEED;
@@ -230,17 +231,17 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 		setupChart(paretoValues);
 	}
 
-	private void setupChart(final List<DataPoint2D<String, Double>> paretoValues) {
+	private void setupChart(final List<Mark2D<String, Double>> paretoValues) {
 		chart.removeAllPlots();
 
 		chart.setTitle("Pareto Chart for " + metricSelection.getName());
 		chart.setSubTitle(parameterSelection.getName());
 
 		Collections.sort(paretoValues,
-				new Comparator<DataPoint2D<String, Double>>() {
+				new Comparator<Mark2D<String, Double>>() {
 					@Override
-					public int compare(DataPoint2D<String, Double> o1,
-							DataPoint2D<String, Double> o2) {
+					public int compare(Mark2D<String, Double> o1,
+							Mark2D<String, Double> o2) {
 						return o2.getY().compareTo(o1.getY());
 					}
 				});
@@ -248,7 +249,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 		List<String> categories = new ArrayList<String>();
 		double min = 0.0;
 		double max = 0.0;
-		for (DataPoint2D<String, Double> value : paretoValues) {
+		for (Mark2D<String, Double> value : paretoValues) {
 			categories.add(value.getX());
 			min = Math.min(min, value.getY());
 			max = Math.max(max, value.getY());

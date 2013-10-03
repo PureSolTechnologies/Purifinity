@@ -13,6 +13,8 @@ import java.util.Map;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -30,7 +32,8 @@ import com.puresol.purifinity.client.common.chart.AxisDirection;
 import com.puresol.purifinity.client.common.chart.AxisFactory;
 import com.puresol.purifinity.client.common.chart.Chart2D;
 import com.puresol.purifinity.client.common.chart.ChartCanvas;
-import com.puresol.purifinity.client.common.chart.DataPoint2D;
+import com.puresol.purifinity.client.common.chart.Mark2D;
+import com.puresol.purifinity.client.common.chart.GenericMark2D;
 import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.VerticalColoredArea;
 import com.puresol.purifinity.client.common.chart.renderer.CircleMarkRenderer;
@@ -48,11 +51,15 @@ import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
 import com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
 
 public class MaintainabilityIndexCumulativeDistributionChartView extends
-		AbstractMetricChartViewPart {
+		AbstractMetricChartViewPart implements MouseListener {
 
 	private final CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
 	private Chart2D chart;
 	private ChartCanvas chartCanvas;
+
+	public MaintainabilityIndexCumulativeDistributionChartView() {
+		chartCanvas.addMouseListener(this);
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -120,9 +127,9 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 	public void showEvaluation(HashIdFileTree path) {
 		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
 				.createInstance(MaintainabilityIndexEvaluator.class);
-		final List<DataPoint2D<String, Double>> paretoValuesMI = new ArrayList<DataPoint2D<String, Double>>();
-		final List<DataPoint2D<String, Double>> paretoValuesMIwoc = new ArrayList<DataPoint2D<String, Double>>();
-		final List<DataPoint2D<String, Double>> paretoValuesMIcw = new ArrayList<DataPoint2D<String, Double>>();
+		final List<Mark2D<String, Double>> paretoValuesMI = new ArrayList<Mark2D<String, Double>>();
+		final List<Mark2D<String, Double>> paretoValuesMIwoc = new ArrayList<Mark2D<String, Double>>();
+		final List<Mark2D<String, Double>> paretoValuesMIcw = new ArrayList<Mark2D<String, Double>>();
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
@@ -143,17 +150,19 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 					double value = convertToDouble(valueMap, MI);
 					String name = node.getPathFile(false).getPath() + "."
 							+ codeRangeName;
-					paretoValuesMI.add(new DataPoint2D<String, Double>(name,
-							value, codeRangeTypeSelection.getName() + " "
+					paretoValuesMI.add(new GenericMark2D<String, Double>(
+							name, value, codeRangeTypeSelection.getName() + " "
 									+ codeRangeName));
 					value = convertToDouble(valueMap, MI_WOC);
-					paretoValuesMIwoc.add(new DataPoint2D<String, Double>(name,
-							value, codeRangeTypeSelection.getName() + " "
-									+ codeRangeName));
+					paretoValuesMIwoc
+							.add(new GenericMark2D<String, Double>(name,
+									value, codeRangeTypeSelection.getName()
+											+ " " + codeRangeName));
 					value = convertToDouble(valueMap, MI_CW);
-					paretoValuesMIcw.add(new DataPoint2D<String, Double>(name,
-							value, codeRangeTypeSelection.getName() + " "
-									+ codeRangeName));
+					paretoValuesMIcw
+							.add(new GenericMark2D<String, Double>(name,
+									value, codeRangeTypeSelection.getName()
+											+ " " + codeRangeName));
 				}
 				return WalkingAction.PROCEED;
 			}
@@ -163,52 +172,52 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 		setupChart(paretoValuesMI, paretoValuesMIwoc, paretoValuesMIcw);
 	}
 
-	private void setupChart(List<DataPoint2D<String, Double>> paretoValuesMI,
-			List<DataPoint2D<String, Double>> paretoValuesMIwoc,
-			List<DataPoint2D<String, Double>> paretoValuesMIcw) {
+	private void setupChart(List<Mark2D<String, Double>> paretoValuesMI,
+			List<Mark2D<String, Double>> paretoValuesMIwoc,
+			List<Mark2D<String, Double>> paretoValuesMIcw) {
 		chart.removeAllPlots();
 
 		chart.setTitle("Maintainability");
 		chart.setSubTitle("Cumulative Distribution Chart");
 
 		Collections.sort(paretoValuesMI,
-				new Comparator<DataPoint2D<String, Double>>() {
+				new Comparator<Mark2D<String, Double>>() {
 					@Override
-					public int compare(DataPoint2D<String, Double> o1,
-							DataPoint2D<String, Double> o2) {
+					public int compare(Mark2D<String, Double> o1,
+							Mark2D<String, Double> o2) {
 						return o1.getY().compareTo(o2.getY());
 					}
 				});
 
 		Collections.sort(paretoValuesMIwoc,
-				new Comparator<DataPoint2D<String, Double>>() {
+				new Comparator<Mark2D<String, Double>>() {
 					@Override
-					public int compare(DataPoint2D<String, Double> o1,
-							DataPoint2D<String, Double> o2) {
+					public int compare(Mark2D<String, Double> o1,
+							Mark2D<String, Double> o2) {
 						return o1.getY().compareTo(o2.getY());
 					}
 				});
 
 		Collections.sort(paretoValuesMIcw,
-				new Comparator<DataPoint2D<String, Double>>() {
+				new Comparator<Mark2D<String, Double>>() {
 					@Override
-					public int compare(DataPoint2D<String, Double> o1,
-							DataPoint2D<String, Double> o2) {
+					public int compare(Mark2D<String, Double> o1,
+							Mark2D<String, Double> o2) {
 						return o1.getY().compareTo(o2.getY());
 					}
 				});
 
 		double min = 0.0;
 		double max = 0.0;
-		for (DataPoint2D<String, Double> value : paretoValuesMI) {
+		for (Mark2D<String, Double> value : paretoValuesMI) {
 			min = Math.min(min, value.getY());
 			max = Math.max(max, value.getY());
 		}
-		for (DataPoint2D<String, Double> value : paretoValuesMIwoc) {
+		for (Mark2D<String, Double> value : paretoValuesMIwoc) {
 			min = Math.min(min, value.getY());
 			max = Math.max(max, value.getY());
 		}
-		for (DataPoint2D<String, Double> value : paretoValuesMIcw) {
+		for (Mark2D<String, Double> value : paretoValuesMIcw) {
 			min = Math.min(min, value.getY());
 			max = Math.max(max, value.getY());
 		}
@@ -227,17 +236,17 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 				0.0, 1.0, 0.1, 1, 2);
 		chart.setyAxis(yAxis);
 
-		List<DataPoint2D<Double, Double>> mi = new ArrayList<DataPoint2D<Double, Double>>();
-		List<DataPoint2D<Double, Double>> miWoc = new ArrayList<DataPoint2D<Double, Double>>();
-		List<DataPoint2D<Double, Double>> miCw = new ArrayList<DataPoint2D<Double, Double>>();
+		List<Mark2D<Double, Double>> mi = new ArrayList<Mark2D<Double, Double>>();
+		List<Mark2D<Double, Double>> miWoc = new ArrayList<Mark2D<Double, Double>>();
+		List<Mark2D<Double, Double>> miCw = new ArrayList<Mark2D<Double, Double>>();
 		for (int i = 0; i < paretoValuesMI.size(); i++) {
-			mi.add(new DataPoint2D<Double, Double>(
-					paretoValuesMI.get(i).getY(), (double) i
-							/ (double) paretoValuesMI.size()));
-			miWoc.add(new DataPoint2D<Double, Double>(paretoValuesMIwoc.get(i)
+			mi.add(new GenericMark2D<Double, Double>(paretoValuesMI.get(i)
 					.getY(), (double) i / (double) paretoValuesMI.size()));
-			miCw.add(new DataPoint2D<Double, Double>(paretoValuesMIcw.get(i)
-					.getY(), (double) i / (double) paretoValuesMIcw.size()));
+			miWoc.add(new GenericMark2D<Double, Double>(paretoValuesMIwoc
+					.get(i).getY(), (double) i / (double) paretoValuesMI.size()));
+			miCw.add(new GenericMark2D<Double, Double>(paretoValuesMIcw
+					.get(i).getY(), (double) i
+					/ (double) paretoValuesMIcw.size()));
 		}
 
 		Plot<Double, Double> plotMI = new Plot<Double, Double>(xAxis, yAxis,
@@ -286,5 +295,25 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 	@Override
 	protected ChartCanvas getChartCanvas() {
 		return chartCanvas;
+	}
+
+	@Override
+	public void mouseDoubleClick(MouseEvent e) {
+		// intentionally left blank
+	}
+
+	@Override
+	public void mouseDown(MouseEvent e) {
+		if (e.getSource() == chartCanvas) {
+			int x = e.x;
+			int y = e.y;
+			// TODO
+			chartCanvas.getTooltipText(x, y);
+		}
+	}
+
+	@Override
+	public void mouseUp(MouseEvent e) {
+		// intentionally left blank
 	}
 }

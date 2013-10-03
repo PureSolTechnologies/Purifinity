@@ -33,7 +33,7 @@ import com.puresol.purifinity.client.common.chart.AxisDirection;
 import com.puresol.purifinity.client.common.chart.AxisFactory;
 import com.puresol.purifinity.client.common.chart.Chart2D;
 import com.puresol.purifinity.client.common.chart.ChartCanvas;
-import com.puresol.purifinity.client.common.chart.DataPoint2D;
+import com.puresol.purifinity.client.common.chart.GenericMark2D;
 import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.renderer.BarMarkRenderer;
 import com.puresol.purifinity.client.common.chart.renderer.ConstantColorProvider;
@@ -269,7 +269,8 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 		Plot<String, Integer> plot = new Plot<String, Integer>(xAxis, yAxis,
 				"Histogram Plot");
 		for (int i = 0; i < sums.length; i++) {
-			plot.add(new DataPoint2D<String, Integer>(categoryArray[i], sums[i]));
+			plot.add(new GenericMark2D<String, Integer>(categoryArray[i],
+					sums[i]));
 		}
 		chart.addPlot(plot);
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
@@ -314,7 +315,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 				"Histogram Plot");
 		for (int i = 0; i < sums.size(); i++) {
 			String category = categoryArray[i];
-			plot.add(new DataPoint2D<String, Integer>(category, sums
+			plot.add(new GenericMark2D<String, Integer>(category, sums
 					.get(category)));
 		}
 		chart.addPlot(plot);

@@ -24,7 +24,8 @@ import com.puresol.purifinity.client.common.chart.AxisDirection;
 import com.puresol.purifinity.client.common.chart.AxisFactory;
 import com.puresol.purifinity.client.common.chart.Chart2D;
 import com.puresol.purifinity.client.common.chart.ChartCanvas;
-import com.puresol.purifinity.client.common.chart.DataPoint2D;
+import com.puresol.purifinity.client.common.chart.Mark2D;
+import com.puresol.purifinity.client.common.chart.GenericMark2D;
 import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresol.purifinity.client.common.chart.renderer.ConstantColorProvider;
@@ -208,7 +209,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 				.createInstance(xMetricSelection.getEvaluatorClass());
 		final EvaluatorStore yStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(yMetricSelection.getEvaluatorClass());
-		final List<DataPoint2D<Double, Double>> correlationValues = new ArrayList<DataPoint2D<Double, Double>>();
+		final List<Mark2D<Double, Double>> correlationValues = new ArrayList<Mark2D<Double, Double>>();
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
@@ -229,7 +230,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 				Double yValue = findSuitableValue(node, yResults,
 						yParameterSelection, CodeRangeType.FILE);
 				if ((xValue != null) && (yValue != null)) {
-					DataPoint2D<Double, Double> value = new DataPoint2D<Double, Double>(
+					Mark2D<Double, Double> value = new GenericMark2D<Double, Double>(
 							xValue, yValue, node.getPathFile(false).toString());
 					correlationValues.add(value);
 				}
@@ -242,7 +243,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 	}
 
 	private void setupChart(
-			final List<DataPoint2D<Double, Double>> correlationValues) {
+			final List<Mark2D<Double, Double>> correlationValues) {
 		chart.removeAllPlots();
 
 		chart.setTitle("Correlation Chart for " + xMetricSelection.getName()
@@ -254,7 +255,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		double xMax = Double.NEGATIVE_INFINITY;
 		double yMin = Double.POSITIVE_INFINITY;
 		double yMax = Double.NEGATIVE_INFINITY;
-		for (DataPoint2D<Double, Double> value : correlationValues) {
+		for (Mark2D<Double, Double> value : correlationValues) {
 			xMin = Math.min(xMin, value.getX());
 			xMax = Math.max(xMax, value.getX());
 			yMin = Math.min(yMin, value.getY());

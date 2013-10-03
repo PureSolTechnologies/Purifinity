@@ -3,6 +3,16 @@ package com.puresol.purifinity.client.common.chart;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresol.purifinity.client.common.chart.renderer.ChartRenderer;
+
+/**
+ * This class represents a 2D chart. The representation is on data level only.
+ * Rendering is handled in {@link ChartRenderer} and drawing in
+ * {@link ChartCanvas}.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class Chart2D {
 
 	private String title;
@@ -12,7 +22,7 @@ public class Chart2D {
 	private Axis<?> yAxis;
 	private Axis<?> alternateXAxis;
 	private Axis<?> alternateYAxis;
-	private final List<Plot<?, ?>> plots = new ArrayList<Plot<?, ?>>();
+	private final List<Plot<?, ?>> plots = new ArrayList<>();
 
 	public Chart2D() {
 		super();

@@ -20,6 +20,7 @@ import com.puresol.purifinity.client.common.chart.renderer.MarkRenderer;
  * This is the central canvas class for interactive charting.
  * 
  * @author Rick-Rainer Ludwig
+ * 
  */
 public class ChartCanvas extends Canvas implements PaintListener {
 
@@ -68,7 +69,7 @@ public class ChartCanvas extends Canvas implements PaintListener {
 	}
 
 	public String getTooltipText(int x, int y) {
-		DataPoint2D<?, ?> dataPoint2D = chartRenderer.getDataPointAt(x, y);
+		Mark2D<?, ?> dataPoint2D = chartRenderer.getDataPointAt(x, y);
 		if (dataPoint2D == null) {
 			return null;
 		}
@@ -85,19 +86,23 @@ public class ChartCanvas extends Canvas implements PaintListener {
 	public void paintControl(PaintEvent e) {
 		if ((getChart2D() == null) || (getChart2D().getXAxis() == null)
 				|| (getChart2D().getYAxis() == null)) {
+			// There is no chart and not axes. We do not have anything to do.
 			return;
 		}
 		GC gc = e.gc;
 		Rectangle clientArea = getClientArea();
 		if ((clientArea.width <= 2 * MARGIN || (clientArea.height <= 2 * MARGIN))) {
+			// Client area is to small to paint anything meaningful in it.
 			return;
 		}
 
+		// Adjust the client area for the chart.
 		clientArea.x += MARGIN;
 		clientArea.y += MARGIN;
 		clientArea.width -= 2 * MARGIN;
 		clientArea.height -= 2 * MARGIN;
 
+		// Render the chart
 		chartRenderer.render(gc, clientArea);
 	}
 

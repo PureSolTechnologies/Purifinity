@@ -9,47 +9,75 @@ package com.puresol.purifinity.client.common.chart;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class DataPoint2D<TX, TY> {
+public class GenericMark2D<TX, TY> implements Mark2D<TX, TY> {
 
 	private final TX x;
 	private final TY y;
 	private final Double size;
 	private final String remark;
+	private final Object reference;
 
-	public DataPoint2D(TX x, TY y) {
-		this(x, y, null, null);
+	public GenericMark2D(TX x, TY y) {
+		this(x, y, null, null, null);
 	}
 
-	public DataPoint2D(TX x, TY y, Double size) {
-		this(x, y, size, null);
+	public GenericMark2D(TX x, TY y, Object reference) {
+		this(x, y, null, null, reference);
 	}
 
-	public DataPoint2D(TX x, TY y, String remark) {
-		this(x, y, null, remark);
+	public GenericMark2D(TX x, TY y, Double size) {
+		this(x, y, size, null, null);
 	}
 
-	public DataPoint2D(TX x, TY y, Double size, String remark) {
+	public GenericMark2D(TX x, TY y, Double size, Object reference) {
+		this(x, y, size, null, reference);
+	}
+
+	public GenericMark2D(TX x, TY y, String remark) {
+		this(x, y, null, remark, null);
+	}
+
+	public GenericMark2D(TX x, TY y, String remark, Object reference) {
+		this(x, y, null, remark, reference);
+	}
+
+	public GenericMark2D(TX x, TY y, Double size, String remark) {
+		this(x, y, size, remark, null);
+	}
+
+	public GenericMark2D(TX x, TY y, Double size, String remark,
+			Object reference) {
 		super();
 		this.x = x;
 		this.y = y;
 		this.size = size;
 		this.remark = remark;
+		this.reference = reference;
 	}
 
+	@Override
 	public TX getX() {
 		return x;
 	}
 
+	@Override
 	public TY getY() {
 		return y;
 	}
 
+	@Override
 	public Double getSize() {
 		return size;
 	}
 
+	@Override
 	public String getRemark() {
 		return remark;
+	}
+
+	@Override
+	public Object getReference() {
+		return reference;
 	}
 
 	@Override
