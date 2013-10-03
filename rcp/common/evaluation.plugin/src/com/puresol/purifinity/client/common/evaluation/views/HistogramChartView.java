@@ -11,9 +11,7 @@ import java.util.Set;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -58,7 +56,6 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	private EvaluatorFactory metricSelection = null;
 	private Parameter<?> parameterSelection = null;
 
-	private ChartCanvas chartCanvas;
 	private Chart2D chart;
 
 	@Override
@@ -107,13 +104,12 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		parent.setLayout(new FillLayout());
-		chartCanvas = new ChartCanvas(parent, SWT.NONE);
+		super.createPartControl(parent);
+
 		chart = new Chart2D();
-		chartCanvas.setChart2D(chart);
+		getChartCanvas().setChart2D(chart);
 
 		initializeToolBar();
-		super.createPartControl(parent);
 	}
 
 	/**
@@ -124,11 +120,6 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 		toolbarManager.add(new ShowSettingsAction(this));
 		toolbarManager.add(new ViewReproductionAction(this));
 		toolbarManager.add(new RefreshAction(this));
-	}
-
-	@Override
-	public void setFocus() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -220,7 +211,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	private void createNumericalHistogram(List<Value<?>> histogramValues) {
 		if (histogramValues.size() == 0) {
 			chart.removeAllPlots();
-			chartCanvas.refresh();
+			getChartCanvas().refresh();
 			return;
 		}
 		List<Double> values = new ArrayList<Double>();
@@ -273,6 +264,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 					sums[i]));
 		}
 		chart.addPlot(plot);
+		ChartCanvas chartCanvas = getChartCanvas();
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
 		chartCanvas.setColorProvider(plot, new ConstantColorProvider(new RGB(0,
 				0, 0), new RGB(192, 0, 0)));
@@ -319,6 +311,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 					.get(category)));
 		}
 		chart.addPlot(plot);
+		ChartCanvas chartCanvas = getChartCanvas();
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
 		chartCanvas.setColorProvider(plot, new ConstantColorProvider(new RGB(0,
 				0, 0), new RGB(192, 0, 0)));
@@ -330,10 +323,5 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	public void export() {
 		MessageDialog.openInformation(getSite().getShell(), "Not implemented",
 				"This functionality is not implemented, yet!");
-	}
-
-	@Override
-	protected ChartCanvas getChartCanvas() {
-		return chartCanvas;
 	}
 }

@@ -11,8 +11,6 @@ import java.util.Set;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -35,8 +33,8 @@ import com.puresol.purifinity.client.common.chart.AxisDirection;
 import com.puresol.purifinity.client.common.chart.AxisFactory;
 import com.puresol.purifinity.client.common.chart.Chart2D;
 import com.puresol.purifinity.client.common.chart.ChartCanvas;
-import com.puresol.purifinity.client.common.chart.Mark2D;
 import com.puresol.purifinity.client.common.chart.GenericMark2D;
+import com.puresol.purifinity.client.common.chart.Mark2D;
 import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.renderer.BarMarkRenderer;
 import com.puresol.purifinity.client.common.evaluation.Activator;
@@ -65,7 +63,6 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	private CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
 
 	private Chart2D chart;
-	private ChartCanvas chartCanvas;
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -119,14 +116,12 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		parent.setLayout(new FillLayout());
-		chartCanvas = new ChartCanvas(parent, SWT.NONE);
-		chart = new Chart2D();
+		super.createPartControl(parent);
 
-		chartCanvas.setChart2D(chart);
+		chart = new Chart2D();
+		getChartCanvas().setChart2D(chart);
 
 		initializeToolBar();
-		super.createPartControl(parent);
 	}
 
 	/**
@@ -138,11 +133,6 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 		toolbarManager.add(new ShowSettingsAction(this));
 		toolbarManager.add(new ViewReproductionAction(this));
 		toolbarManager.add(new RefreshAction(this));
-	}
-
-	@Override
-	public void setFocus() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -273,6 +263,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 				"Pareto Plot");
 		plot.add(paretoValues);
 		chart.addPlot(plot);
+		ChartCanvas chartCanvas = getChartCanvas();
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
 
 		ChartConfigProvider configProvider = getConfigProvider();
@@ -313,8 +304,4 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 				"This functionality is not implemented, yet!");
 	}
 
-	@Override
-	protected ChartCanvas getChartCanvas() {
-		return chartCanvas;
-	}
 }

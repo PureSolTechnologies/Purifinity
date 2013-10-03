@@ -13,9 +13,7 @@ import java.util.Map;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.puresol.commons.math.LevelOfMeasurement;
@@ -31,9 +29,9 @@ import com.puresol.purifinity.client.common.chart.AxisDirection;
 import com.puresol.purifinity.client.common.chart.AxisFactory;
 import com.puresol.purifinity.client.common.chart.Chart2D;
 import com.puresol.purifinity.client.common.chart.ChartCanvas;
-import com.puresol.purifinity.client.common.chart.Mark2D;
 import com.puresol.purifinity.client.common.chart.GenericMark2D;
 import com.puresol.purifinity.client.common.chart.HorizontalColoredArea;
+import com.puresol.purifinity.client.common.chart.Mark2D;
 import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresol.purifinity.client.common.chart.renderer.ConstantColorProvider;
@@ -55,18 +53,15 @@ public class MaintainabilityIndexParetoChartView extends
 
 	private final CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
 	private Chart2D chart;
-	private ChartCanvas chartCanvas;
 
 	@Override
 	public void createPartControl(Composite parent) {
-		parent.setLayout(new FillLayout());
-		chartCanvas = new ChartCanvas(parent, SWT.NONE);
-		chart = new Chart2D();
+		super.createPartControl(parent);
 
-		chartCanvas.setChart2D(chart);
+		chart = new Chart2D();
+		getChartCanvas().setChart2D(chart);
 
 		initializeToolBar();
-		super.createPartControl(parent);
 	}
 
 	/**
@@ -100,11 +95,6 @@ public class MaintainabilityIndexParetoChartView extends
 
 	@Override
 	public void closeSettings() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void setFocus() {
 		// TODO Auto-generated method stub
 	}
 
@@ -147,8 +137,8 @@ public class MaintainabilityIndexParetoChartView extends
 					double value = convertToDouble(valueMap, MI);
 					String name = node.getPathFile(false).getPath() + "."
 							+ codeRangeName;
-					paretoValuesMI.add(new GenericMark2D<String, Double>(
-							name, value, codeRangeTypeSelection.getName() + " "
+					paretoValuesMI.add(new GenericMark2D<String, Double>(name,
+							value, codeRangeTypeSelection.getName() + " "
 									+ codeRangeName));
 					value = convertToDouble(valueMap, MI_WOC);
 					paretoValuesMIwoc.put(name,
@@ -229,6 +219,7 @@ public class MaintainabilityIndexParetoChartView extends
 		plotMIcw.add(miCw);
 		chart.addPlot(plotMIcw);
 
+		ChartCanvas chartCanvas = getChartCanvas();
 		chartCanvas.setMarkRenderer(plotMI, new CircleMarkRenderer());
 		chartCanvas.setColorProvider(plotMI, new ConstantColorProvider(new RGB(
 				255, 0, 0)));
@@ -255,10 +246,5 @@ public class MaintainabilityIndexParetoChartView extends
 	public void export() {
 		MessageDialog.openInformation(getSite().getShell(), "Not implemented",
 				"This functionality is not implemented, yet!");
-	}
-
-	@Override
-	protected ChartCanvas getChartCanvas() {
-		return chartCanvas;
 	}
 }

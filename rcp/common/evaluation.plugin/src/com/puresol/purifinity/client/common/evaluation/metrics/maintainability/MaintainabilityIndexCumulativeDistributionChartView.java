@@ -12,15 +12,7 @@ import java.util.Map;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.puresol.commons.math.LevelOfMeasurement;
@@ -46,8 +38,6 @@ import com.puresol.purifinity.client.common.evaluation.views.AbstractMetricChart
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
-import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.evaluation.api.CodeRangeNameParameter;
@@ -57,30 +47,19 @@ import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
 import com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
 
 public class MaintainabilityIndexCumulativeDistributionChartView extends
-		AbstractMetricChartViewPart implements MouseListener,
-		ISelectionProvider {
-
-	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
-	private AnalysisSelection analysisSelection;
+		AbstractMetricChartViewPart {
 
 	private final CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
 	private Chart2D chart;
-	private ChartCanvas chartCanvas;
 
 	@Override
 	public void createPartControl(Composite parent) {
-		parent.setLayout(new FillLayout());
-		chartCanvas = new ChartCanvas(parent, SWT.NONE);
-		chartCanvas.addMouseListener(this);
-		chart = new Chart2D();
+		super.createPartControl(parent);
 
-		chartCanvas.setChart2D(chart);
+		chart = new Chart2D();
+		getChartCanvas().setChart2D(chart);
 
 		initializeToolBar();
-
-		getSite().setSelectionProvider(this);
-
-		super.createPartControl(parent);
 	}
 
 	/**
@@ -113,11 +92,6 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 
 	@Override
 	public void closeSettings() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void setFocus() {
 		// TODO Auto-generated method stub
 	}
 
@@ -276,6 +250,7 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 		plotMIcw.add(miCw);
 		chart.addPlot(plotMIcw);
 
+		ChartCanvas chartCanvas = getChartCanvas();
 		chartCanvas.setMarkRenderer(plotMI, new CircleMarkRenderer());
 		chartCanvas.setColorProvider(plotMI, new ConstantColorProvider(new RGB(
 				255, 0, 0)));
@@ -303,64 +278,4 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 		MessageDialog.openInformation(getSite().getShell(), "Not implemented",
 				"This functionality is not implemented, yet!");
 	}
-
-	@Override
-	protected ChartCanvas getChartCanvas() {
-		return chartCanvas;
-	}
-
-	@Override
-	public void mouseDoubleClick(MouseEvent e) {
-		// intentionally left blank
-	}
-
-	@Override
-	public void mouseDown(MouseEvent e) {
-		if (e.getSource() == chartCanvas) {
-			int x = e.x;
-			int y = e.y;
-			Object reference = chartCanvas.getReference(x, y);
-			AnalysisSelection selection = getAnalysisSelection();
-			if ((reference != null) && (selection != null)) {
-				AnalysisProject analysis = selection.getAnalysis();
-				AnalysisRun analysisRun = selection.getAnalysisRun();
-				if (reference instanceof HashIdFileTree) {
-					HashIdFileTree node = (HashIdFileTree) reference;
-					setSelection(new AnalysisSelection(analysis, analysisRun,
-							node));
-				}
-			}
-		}
-	}
-
-	@Override
-	public void mouseUp(MouseEvent e) {
-		// intentionally left blank
-	}
-
-	@Override
-	public void addSelectionChangedListener(ISelectionChangedListener listener) {
-		selectionChangedListener.add(listener);
-	}
-
-	@Override
-	public void removeSelectionChangedListener(
-			ISelectionChangedListener listener) {
-		selectionChangedListener.remove(listener);
-	}
-
-	@Override
-	public ISelection getSelection() {
-		return analysisSelection;
-	}
-
-	@Override
-	public void setSelection(ISelection selection) {
-		analysisSelection = (AnalysisSelection) selection;
-		for (ISelectionChangedListener listener : selectionChangedListener) {
-			listener.selectionChanged(new SelectionChangedEvent(this,
-					analysisSelection));
-		}
-	}
-
 }

@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.RGB;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -24,8 +22,8 @@ import com.puresol.purifinity.client.common.chart.AxisDirection;
 import com.puresol.purifinity.client.common.chart.AxisFactory;
 import com.puresol.purifinity.client.common.chart.Chart2D;
 import com.puresol.purifinity.client.common.chart.ChartCanvas;
-import com.puresol.purifinity.client.common.chart.Mark2D;
 import com.puresol.purifinity.client.common.chart.GenericMark2D;
+import com.puresol.purifinity.client.common.chart.Mark2D;
 import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresol.purifinity.client.common.chart.renderer.ConstantColorProvider;
@@ -51,7 +49,6 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 	private Parameter<?> yParameterSelection = null;
 
 	private Chart2D chart;
-	private ChartCanvas chartCanvas;
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -131,13 +128,11 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		parent.setLayout(new FillLayout());
-		chartCanvas = new ChartCanvas(parent, SWT.NONE);
+		super.createPartControl(parent);
 		chart = new Chart2D();
-		chartCanvas.setChart2D(chart);
+		getChartCanvas().setChart2D(chart);
 
 		initializeToolBar();
-		super.createPartControl(parent);
 	}
 
 	/**
@@ -148,11 +143,6 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		toolbarManager.add(new ShowSettingsAction(this));
 		toolbarManager.add(new ViewReproductionAction(this));
 		toolbarManager.add(new RefreshAction(this));
-	}
-
-	@Override
-	public void setFocus() {
-		chartCanvas.setFocus();
 	}
 
 	@Override
@@ -242,8 +232,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		setupChart(correlationValues);
 	}
 
-	private void setupChart(
-			final List<Mark2D<Double, Double>> correlationValues) {
+	private void setupChart(final List<Mark2D<Double, Double>> correlationValues) {
 		chart.removeAllPlots();
 
 		chart.setTitle("Correlation Chart for " + xMetricSelection.getName()
@@ -284,6 +273,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		plot.add(correlationValues);
 		chart.addPlot(plot);
 		CircleMarkRenderer markRenderer = new CircleMarkRenderer();
+		ChartCanvas chartCanvas = getChartCanvas();
 		chartCanvas.setMarkRenderer(plot, markRenderer);
 		chartCanvas.setColorProvider(plot, new ConstantColorProvider(new RGB(0,
 				0, 0), new RGB(192, 0, 0)));
@@ -298,10 +288,5 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 	public void export() {
 		MessageDialog.openInformation(getSite().getShell(), "Not implemented",
 				"This functionality is not implemented, yet!");
-	}
-
-	@Override
-	protected ChartCanvas getChartCanvas() {
-		return chartCanvas;
 	}
 }
