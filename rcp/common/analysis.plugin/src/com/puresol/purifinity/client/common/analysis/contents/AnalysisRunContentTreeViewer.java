@@ -1,5 +1,11 @@
 package com.puresol.purifinity.client.common.analysis.contents;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
@@ -62,5 +68,21 @@ public class AnalysisRunContentTreeViewer extends TreeViewer {
 	public void setInput(AnalysisRun analysisRun) {
 		labelProvider.setAnalysisRun(analysisRun);
 		super.setInput(analysisRun.getFileTree());
+	}
+
+	public void setSelection(HashIdFileTree node) {
+		List<Object> path = new ArrayList<>();
+		do {
+			if (node.getParent() != null) {
+				path.add(node);
+			} else {
+				path.add(node.getName());
+			}
+			node = node.getParent();
+		} while (node != null);
+		Collections.reverse(path);
+		TreeSelection structuredSelection = new TreeSelection(new TreePath(
+				path.toArray()));
+		setSelection(structuredSelection);
 	}
 }

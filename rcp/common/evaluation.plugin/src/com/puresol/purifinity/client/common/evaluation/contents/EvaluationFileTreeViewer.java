@@ -1,11 +1,18 @@
 package com.puresol.purifinity.client.common.evaluation.contents;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.jface.viewers.TreePath;
+import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Tree;
 
 import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunContentTreeContentProvider;
 import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunContentTreeViewer;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
+import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
 
 /**
@@ -15,15 +22,15 @@ import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class AnalysisRunEvaluationTreeViewer extends TreeViewer {
+public class EvaluationFileTreeViewer extends TreeViewer {
 
-	private final AnalysisRunEvaluationTreeLabelProvider labelProvider;
+	private final EvaluationFileTreeLabelProvider labelProvider;
 
-	public AnalysisRunEvaluationTreeViewer(Tree tree) {
+	public EvaluationFileTreeViewer(Tree tree) {
 		super(tree);
 		setSorter(new AnalysisRunContentTreeViewer.AnalysisRunContentTreeSorter());
 		setContentProvider(new AnalysisRunContentTreeContentProvider());
-		labelProvider = new AnalysisRunEvaluationTreeLabelProvider();
+		labelProvider = new EvaluationFileTreeLabelProvider();
 		setLabelProvider(labelProvider);
 	}
 
@@ -35,5 +42,21 @@ public class AnalysisRunEvaluationTreeViewer extends TreeViewer {
 	public void setEvaluator(EvaluatorFactory evaluator) {
 		labelProvider.setEvaluator(evaluator);
 		refresh();
+	}
+
+	public void setSelection(HashIdFileTree node) {
+		List<Object> path = new ArrayList<>();
+		do {
+			if (node.getParent() != null) {
+				path.add(node);
+			} else {
+				path.add(node.getName());
+			}
+			node = node.getParent();
+		} while (node != null);
+		Collections.reverse(path);
+		TreeSelection structuredSelection = new TreeSelection(new TreePath(
+				path.toArray()));
+		setSelection(structuredSelection);
 	}
 }

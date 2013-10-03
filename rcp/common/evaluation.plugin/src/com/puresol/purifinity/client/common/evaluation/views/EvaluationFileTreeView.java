@@ -35,7 +35,7 @@ import com.puresol.purifinity.client.common.analysis.editors.NotAnalyzedEditorIn
 import com.puresol.purifinity.client.common.analysis.views.AnalysisProjectSelection;
 import com.puresol.purifinity.client.common.analysis.views.AnalysisRunSelection;
 import com.puresol.purifinity.client.common.analysis.views.AnalysisSelection;
-import com.puresol.purifinity.client.common.evaluation.contents.AnalysisRunEvaluationTreeViewer;
+import com.puresol.purifinity.client.common.evaluation.contents.EvaluationFileTreeViewer;
 import com.puresol.purifinity.client.common.evaluation.contents.EvaluatorComboViewer;
 import com.puresol.purifinity.client.common.ui.actions.PartSettingsCapability;
 import com.puresol.purifinity.client.common.ui.actions.ShowSettingsAction;
@@ -44,14 +44,14 @@ import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 
-public class AnalysisRunEvaluationView extends ViewPart implements
+public class EvaluationFileTreeView extends ViewPart implements
 		ISelectionListener, IDoubleClickListener, ISelectionProvider,
 		SelectionListener, PartSettingsCapability {
 
 	private AnalysisProject analysis;
 	private AnalysisRun analysisRun;
 	private Tree fileTree;
-	private AnalysisRunEvaluationTreeViewer fileTreeViewer;
+	private EvaluationFileTreeViewer fileTreeViewer;
 	private AnalysisSelection fileAnalysisSelection;
 	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
 	private HashIdFileTree lastSelection;
@@ -59,7 +59,7 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 	private Combo evaluatorCombo;
 	private EvaluatorComboViewer comboViewer;
 
-	public AnalysisRunEvaluationView() {
+	public EvaluationFileTreeView() {
 		super();
 	}
 
@@ -113,7 +113,7 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 		qualityColumn.setAlignment(SWT.LEFT);
 		qualityColumn.setWidth(50);
 
-		fileTreeViewer = new AnalysisRunEvaluationTreeViewer(fileTree);
+		fileTreeViewer = new EvaluationFileTreeViewer(fileTree);
 		fileTreeViewer.setEvaluator(comboViewer.getSelectedEvaluator());
 
 		IWorkbenchPartSite site = getSite();
@@ -140,16 +140,28 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (part == this) {
+			return;
+		}
 		if (selection instanceof AnalysisProjectSelection) {
 			AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
 			analysis = analysisSelection.getAnalysisProject();
 		} else if (selection instanceof AnalysisRunSelection) {
 			AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
-			analysisRun = analysisRunSelection.getAnalysisRun();
-			fileTreeViewer.setInput(analysisRun);
-			fileTree.redraw();
-			fileTreeViewer.refresh();
+			setAnalysisRun(analysisRunSelection.getAnalysisRun());
+		} else if (selection instanceof AnalysisSelection) {
+			AnalysisSelection analysisSelection = (AnalysisSelection) selection;
+			analysis = analysisSelection.getAnalysis();
+			setAnalysisRun(analysisSelection.getAnalysisRun());
+			fileTreeViewer.setSelection(analysisSelection.getFileTreeNode());
 		}
+	}
+
+	private void setAnalysisRun(AnalysisRun analysisRun) {
+		this.analysisRun = analysisRun;
+		fileTreeViewer.setInput(analysisRun);
+		fileTree.redraw();
+		fileTreeViewer.refresh();
 	}
 
 	@Override
@@ -172,8 +184,8 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 			throws PartInitException {
 		HashIdFileTree firstElement = (HashIdFileTree) selection
 				.getFirstElement();
-		fileAnalysisSelection = new AnalysisSelection(analysis,
-				analysisRun, firstElement);
+		fileAnalysisSelection = new AnalysisSelection(analysis, analysisRun,
+				firstElement);
 		AnalyzedCode analyzedCode = analysisRun.findAnalyzedCode(firstElement
 				.getPathFile(false).getPath());
 		if (analyzedCode != null) {

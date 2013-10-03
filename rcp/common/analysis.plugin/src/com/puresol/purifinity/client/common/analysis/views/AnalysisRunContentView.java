@@ -1,7 +1,6 @@
 package com.puresol.purifinity.client.common.analysis.views;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -10,7 +9,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -106,23 +104,7 @@ public class AnalysisRunContentView extends ViewPart implements
 			AnalysisSelection analysisSelection = (AnalysisSelection) selection;
 			analysis = analysisSelection.getAnalysis();
 			setAnalysisRun(analysisSelection.getAnalysisRun());
-			HashIdFileTree node = analysisSelection.getFileTreeNode();
-			List<Object> path = new ArrayList<>();
-			do {
-				if (node.getParent() != null) {
-					path.add(node);
-				} else {
-					path.add(node.getName());
-				}
-				node = node.getParent();
-			} while (node != null);
-			Collections.reverse(path);
-			while (path.size() > 2) {
-				path.remove(path.size() - 1);
-			}
-			StructuredSelection structuredSelection = new StructuredSelection(
-					path);
-			fileTreeViewer.setSelection(structuredSelection);
+			fileTreeViewer.setSelection(analysisSelection.getFileTreeNode());
 		}
 	}
 

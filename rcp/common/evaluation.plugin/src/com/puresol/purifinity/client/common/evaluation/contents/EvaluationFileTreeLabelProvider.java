@@ -42,7 +42,7 @@ import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQualityParameter;
 
-public class AnalysisRunEvaluationTreeLabelProvider implements
+public class EvaluationFileTreeLabelProvider implements
 		ITableLabelProvider {
 
 	private final Logger logger = LoggerFactory

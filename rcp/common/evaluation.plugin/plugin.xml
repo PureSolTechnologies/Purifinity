@@ -134,8 +134,8 @@
       <view
             allowMultiple="false"
             category="com.puresol.purifinity.client.common.evaluation.Evaluation"
-            class="com.puresol.purifinity.client.common.evaluation.views.AnalysisRunEvaluationView"
-            id="com.puresol.purifinity.client.common.evaluation.views.AnalysisRunEvaluationView"
+            class="com.puresol.purifinity.client.common.evaluation.views.EvaluationFileTreeView"
+            id="com.puresol.purifinity.client.common.evaluation.views.EvaluationFileTreeView"
             name="Evaluation File Tree"
             restorable="true">
       </view>
