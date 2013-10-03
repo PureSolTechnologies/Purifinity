@@ -13,7 +13,6 @@ import java.util.Map;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 
 import com.puresol.commons.math.LevelOfMeasurement;
@@ -36,6 +35,7 @@ import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresol.purifinity.client.common.chart.renderer.ConstantColorProvider;
 import com.puresol.purifinity.client.common.evaluation.views.AbstractMetricChartViewPart;
+import com.puresol.purifinity.client.common.ui.SWTColor;
 import com.puresol.purifinity.client.common.ui.actions.ExportAction;
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.ShowSettingsAction;
@@ -221,23 +221,23 @@ public class MaintainabilityIndexParetoChartView extends
 
 		ChartCanvas chartCanvas = getChartCanvas();
 		chartCanvas.setMarkRenderer(plotMI, new CircleMarkRenderer());
-		chartCanvas.setColorProvider(plotMI, new ConstantColorProvider(new RGB(
-				255, 0, 0)));
+		chartCanvas.setColorProvider(plotMI, new ConstantColorProvider(
+				SWTColor.RED));
 
 		chartCanvas.setMarkRenderer(plotMIwoc, new CircleMarkRenderer());
 		chartCanvas.setColorProvider(plotMIwoc, new ConstantColorProvider(
-				new RGB(0, 255, 0)));
+				SWTColor.GREEN));
 
 		chartCanvas.setMarkRenderer(plotMIcw, new CircleMarkRenderer());
 		chartCanvas.setColorProvider(plotMIcw, new ConstantColorProvider(
-				new RGB(0, 0, 255)));
+				SWTColor.BLUE));
 
 		chartCanvas.addColoredArea(new HorizontalColoredArea<String, Double>(
-				plotMI, yAxis.getMinimum(), 65, new RGB(255, 210, 210)));
+				plotMI, yAxis.getMinimum(), 65, SWTColor.PALE_RED));
 		chartCanvas.addColoredArea(new HorizontalColoredArea<String, Double>(
-				plotMI, 65, 85, new RGB(255, 255, 210)));
+				plotMI, 65, 85, SWTColor.PALE_YELLOW));
 		chartCanvas.addColoredArea(new HorizontalColoredArea<String, Double>(
-				plotMI, 85, yAxis.getMaximum(), new RGB(210, 255, 210)));
+				plotMI, 85, yAxis.getMaximum(), SWTColor.PALE_GREEN));
 
 		chartCanvas.refresh();
 	}

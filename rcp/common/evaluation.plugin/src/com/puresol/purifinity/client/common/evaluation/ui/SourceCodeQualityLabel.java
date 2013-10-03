@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.puresol.purifinity.client.common.evaluation.metrics.SourceCodeQualityColorProvider;
-import com.puresol.purifinity.client.common.ui.SWTUtils;
+import com.puresol.purifinity.client.common.ui.SWTColor;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 
 /**
@@ -27,8 +27,8 @@ public class SourceCodeQualityLabel extends Composite {
 	private SourceCodeQuality sourceCodeQuality = null;
 	private final Label label;
 	private final Text text;
-	private Color foregroundColor = new Color(getDisplay(), SWTUtils.BLACK);
-	private Color backgroundColor = new Color(getDisplay(), SWTUtils.WHITE);
+	private Color foregroundColor = new Color(getDisplay(), SWTColor.BLACK);
+	private Color backgroundColor = new Color(getDisplay(), SWTColor.WHITE);
 
 	public SourceCodeQualityLabel(Composite parent, int style) {
 		super(parent, style);
@@ -60,19 +60,19 @@ public class SourceCodeQualityLabel extends Composite {
 			if (backgroundRGB != null) {
 				backgroundColor = new Color(getDisplay(), backgroundRGB);
 			} else {
-				backgroundColor = new Color(getDisplay(), SWTUtils.WHITE);
+				backgroundColor = new Color(getDisplay(), SWTColor.WHITE);
 			}
 			RGB foregroundRGB = colorProvider
 					.getForegroundColor(sourceCodeQuality);
 			if (foregroundRGB != null) {
 				foregroundColor = new Color(getDisplay(), foregroundRGB);
 			} else {
-				foregroundColor = new Color(getDisplay(), SWTUtils.BLACK);
+				foregroundColor = new Color(getDisplay(), SWTColor.BLACK);
 			}
 		} else {
 			text.setText("");
-			backgroundColor = new Color(getDisplay(), SWTUtils.WHITE);
-			foregroundColor = new Color(getDisplay(), SWTUtils.BLACK);
+			backgroundColor = new Color(getDisplay(), SWTColor.WHITE);
+			foregroundColor = new Color(getDisplay(), SWTColor.BLACK);
 		}
 		text.setBackground(backgroundColor);
 		text.setForeground(foregroundColor);
