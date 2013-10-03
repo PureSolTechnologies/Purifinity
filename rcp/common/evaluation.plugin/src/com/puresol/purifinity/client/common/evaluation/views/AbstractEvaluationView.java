@@ -52,6 +52,9 @@ public abstract class AbstractEvaluationView extends ViewPart implements
 
 	@Override
 	public final void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (part == this) {
+			return;
+		}
 		if (selection instanceof AnalysisSelection) {
 			analysisSelection = (AnalysisSelection) selection;
 			updateEvaluation();
