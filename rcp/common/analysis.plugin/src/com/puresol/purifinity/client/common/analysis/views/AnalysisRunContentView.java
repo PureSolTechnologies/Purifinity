@@ -43,7 +43,7 @@ public class AnalysisRunContentView extends ViewPart implements
 	private AnalysisRun analysisRun;
 	private Tree fileTree;
 	private AnalysisRunContentTreeViewer fileTreeViewer;
-	private FileAnalysisSelection fileAnalysisSelection;
+	private AnalysisSelection analysisSelection;
 	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
 	private HashIdFileTree lastSelection;
 
@@ -53,7 +53,8 @@ public class AnalysisRunContentView extends ViewPart implements
 
 	@Override
 	public void dispose() {
-		getSite().getWorkbenchWindow().getSelectionService()
+		IWorkbenchPartSite site = getSite();
+		site.getWorkbenchWindow().getSelectionService()
 				.removeSelectionListener(this);
 		super.dispose();
 	}
@@ -122,8 +123,8 @@ public class AnalysisRunContentView extends ViewPart implements
 			throws PartInitException {
 		HashIdFileTree firstElement = (HashIdFileTree) selection
 				.getFirstElement();
-		fileAnalysisSelection = new FileAnalysisSelection(analysis,
-				analysisRun, firstElement);
+		analysisSelection = new AnalysisSelection(analysis, analysisRun,
+				firstElement);
 		AnalyzedCode analyzedCode = analysisRun.findAnalyzedCode(firstElement
 				.getPathFile(false).getPath());
 		if (analyzedCode != null) {
@@ -151,22 +152,22 @@ public class AnalysisRunContentView extends ViewPart implements
 	}
 
 	@Override
-	public ISelection getSelection() {
-		return fileAnalysisSelection;
-	}
-
-	@Override
 	public void removeSelectionChangedListener(
 			ISelectionChangedListener listener) {
 		selectionChangedListener.remove(listener);
 	}
 
 	@Override
+	public ISelection getSelection() {
+		return analysisSelection;
+	}
+
+	@Override
 	public void setSelection(ISelection selection) {
-		fileAnalysisSelection = (FileAnalysisSelection) selection;
+		analysisSelection = (AnalysisSelection) selection;
 		for (ISelectionChangedListener listener : selectionChangedListener) {
 			listener.selectionChanged(new SelectionChangedEvent(this,
-					fileAnalysisSelection));
+					analysisSelection));
 		}
 	}
 
@@ -180,16 +181,16 @@ public class AnalysisRunContentView extends ViewPart implements
 				if (first.getClass().equals(HashIdFileTree.class)) {
 					HashIdFileTree firstElement = (HashIdFileTree) first;
 					if (!firstElement.equals(lastSelection)) {
-						FileAnalysisSelection fileAnalysisSelection = new FileAnalysisSelection(
+						AnalysisSelection analysisSelection = new AnalysisSelection(
 								analysis, analysisRun, firstElement);
-						setSelection(fileAnalysisSelection);
+						setSelection(analysisSelection);
 						lastSelection = firstElement;
 					}
 				} else if (first.getClass().equals(String.class)) {
 					HashIdFileTree firstElement = analysisRun.getFileTree();
-					FileAnalysisSelection fileAnalysisSelection = new FileAnalysisSelection(
+					AnalysisSelection analysisSelection = new AnalysisSelection(
 							analysis, analysisRun, firstElement);
-					setSelection(fileAnalysisSelection);
+					setSelection(analysisSelection);
 					lastSelection = firstElement;
 				}
 			}

@@ -10,7 +10,7 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresol.purifinity.client.common.evaluation.utils.EvaluationsTarget;
 
 /**
@@ -32,7 +32,7 @@ public abstract class AbstractEvaluationView extends ViewPart implements
 	 * This field contains the analysis which was selected throught the service.
 	 * This analysis is the basis to load evaluations from.
 	 */
-	private FileAnalysisSelection analysisSelection;
+	private AnalysisSelection analysisSelection;
 
 	@Override
 	public void dispose() {
@@ -52,8 +52,8 @@ public abstract class AbstractEvaluationView extends ViewPart implements
 
 	@Override
 	public final void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (selection instanceof FileAnalysisSelection) {
-			analysisSelection = (FileAnalysisSelection) selection;
+		if (selection instanceof AnalysisSelection) {
+			analysisSelection = (AnalysisSelection) selection;
 			updateEvaluation();
 		}
 	}
@@ -79,10 +79,10 @@ public abstract class AbstractEvaluationView extends ViewPart implements
 	/**
 	 * This method returns the current selection.
 	 * 
-	 * @return A {@link FileAnalysisSelection} object is returned containing the
+	 * @return A {@link AnalysisSelection} object is returned containing the
 	 *         reference to the selection-
 	 */
-	protected final FileAnalysisSelection getAnalysisSelection() {
+	protected final AnalysisSelection getAnalysisSelection() {
 		return analysisSelection;
 	}
 

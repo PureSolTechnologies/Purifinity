@@ -34,7 +34,7 @@ import com.puresol.purifinity.client.common.analysis.editors.NotAnalyzedEditor;
 import com.puresol.purifinity.client.common.analysis.editors.NotAnalyzedEditorInput;
 import com.puresol.purifinity.client.common.analysis.views.AnalysisProjectSelection;
 import com.puresol.purifinity.client.common.analysis.views.AnalysisRunSelection;
-import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresol.purifinity.client.common.evaluation.contents.AnalysisRunEvaluationTreeViewer;
 import com.puresol.purifinity.client.common.evaluation.contents.EvaluatorComboViewer;
 import com.puresol.purifinity.client.common.ui.actions.PartSettingsCapability;
@@ -52,7 +52,7 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 	private AnalysisRun analysisRun;
 	private Tree fileTree;
 	private AnalysisRunEvaluationTreeViewer fileTreeViewer;
-	private FileAnalysisSelection fileAnalysisSelection;
+	private AnalysisSelection fileAnalysisSelection;
 	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
 	private HashIdFileTree lastSelection;
 
@@ -172,7 +172,7 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 			throws PartInitException {
 		HashIdFileTree firstElement = (HashIdFileTree) selection
 				.getFirstElement();
-		fileAnalysisSelection = new FileAnalysisSelection(analysis,
+		fileAnalysisSelection = new AnalysisSelection(analysis,
 				analysisRun, firstElement);
 		AnalyzedCode analyzedCode = analysisRun.findAnalyzedCode(firstElement
 				.getPathFile(false).getPath());
@@ -215,7 +215,7 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 
 	@Override
 	public void setSelection(ISelection selection) {
-		fileAnalysisSelection = (FileAnalysisSelection) selection;
+		fileAnalysisSelection = (AnalysisSelection) selection;
 		for (ISelectionChangedListener listener : selectionChangedListener) {
 			listener.selectionChanged(new SelectionChangedEvent(this,
 					fileAnalysisSelection));
@@ -242,14 +242,14 @@ public class AnalysisRunEvaluationView extends ViewPart implements
 			if (first.getClass().equals(HashIdFileTree.class)) {
 				HashIdFileTree firstElement = (HashIdFileTree) first;
 				if (!firstElement.equals(lastSelection)) {
-					FileAnalysisSelection fileAnalysisSelection = new FileAnalysisSelection(
+					AnalysisSelection fileAnalysisSelection = new AnalysisSelection(
 							analysis, analysisRun, firstElement);
 					setSelection(fileAnalysisSelection);
 					lastSelection = firstElement;
 				}
 			} else if (first.getClass().equals(String.class)) {
 				HashIdFileTree firstElement = analysisRun.getFileTree();
-				FileAnalysisSelection fileAnalysisSelection = new FileAnalysisSelection(
+				AnalysisSelection fileAnalysisSelection = new AnalysisSelection(
 						analysis, analysisRun, firstElement);
 				setSelection(fileAnalysisSelection);
 				lastSelection = firstElement;

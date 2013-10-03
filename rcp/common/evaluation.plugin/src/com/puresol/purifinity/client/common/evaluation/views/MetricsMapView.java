@@ -25,7 +25,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.puresol.commons.math.Parameter;
-import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresol.purifinity.client.common.branding.Printable;
 import com.puresol.purifinity.client.common.chart.AreaMapComponent;
 import com.puresol.purifinity.client.common.chart.renderer.AreaMapData;
@@ -204,7 +204,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 
 	@Override
 	protected void updateEvaluation() {
-		FileAnalysisSelection analysisSelection = getAnalysisSelection();
+		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (mapMetricSelection != null)
 				&& (mapValueSelection != null)) {
 			HashIdFileTree path = analysisSelection.getFileTreeNode();

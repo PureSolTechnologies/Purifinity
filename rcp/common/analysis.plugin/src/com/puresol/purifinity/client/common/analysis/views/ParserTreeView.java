@@ -44,7 +44,7 @@ public class ParserTreeView extends ViewPart implements ISelectionListener {
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		// try {
-		if (selection instanceof FileAnalysisSelection) {
+		if (selection instanceof AnalysisSelection) {
 			// AnalysisSelection analysisSelection = (AnalysisSelection)
 			// selection;
 			// AnalysisInformation information = analysisSelection

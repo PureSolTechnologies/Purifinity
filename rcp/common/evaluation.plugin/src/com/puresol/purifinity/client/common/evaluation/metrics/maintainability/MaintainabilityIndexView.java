@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import com.puresol.purifinity.client.common.analysis.contents.CodeRangeComboViewer;
-import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresol.purifinity.client.common.evaluation.views.AbstractEvaluationView;
 import com.puresol.purifinity.coding.analysis.api.CodeRange;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
@@ -144,7 +144,7 @@ public class MaintainabilityIndexView extends AbstractEvaluationView implements
 
 	@Override
 	protected void updateEvaluation() {
-		FileAnalysisSelection analysisSelection = getAnalysisSelection();
+		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
 			path = analysisSelection.getFileTreeNode();
 			updateCodeRanges(path);

@@ -5,7 +5,7 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresol.purifinity.client.common.evaluation.views.AbstractEvaluationView;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
@@ -56,7 +56,7 @@ public class CoCoMoView extends AbstractEvaluationView {
 
 	@Override
 	protected void updateEvaluation() {
-		FileAnalysisSelection analysisSelection = getAnalysisSelection();
+		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
 			showEvaluation(analysisSelection.getFileTreeNode());
 		}

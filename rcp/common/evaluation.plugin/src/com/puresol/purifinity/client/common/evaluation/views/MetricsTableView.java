@@ -20,7 +20,7 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.part.ViewPart;
 
-import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresol.purifinity.client.common.branding.Exportable;
 import com.puresol.purifinity.client.common.branding.Printable;
 import com.puresol.purifinity.client.common.evaluation.contents.EvaluatorComboViewer;
@@ -48,7 +48,7 @@ public class MetricsTableView extends ViewPart implements ISelectionListener,
 	private Table table;
 	private MetricsTableViewer tableViewer;
 
-	private FileAnalysisSelection analysisSelection;
+	private AnalysisSelection analysisSelection;
 	private EvaluatorFactory selectedEvaluator;
 	private SourceCodeQualityLabel quality;
 	private QualityLevelLabel qualityLevel;
@@ -145,8 +145,8 @@ public class MetricsTableView extends ViewPart implements ISelectionListener,
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (selection instanceof FileAnalysisSelection) {
-			analysisSelection = (FileAnalysisSelection) selection;
+		if (selection instanceof AnalysisSelection) {
+			analysisSelection = (AnalysisSelection) selection;
 			updateEvaluation();
 		}
 	}

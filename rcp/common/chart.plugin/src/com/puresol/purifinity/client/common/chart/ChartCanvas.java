@@ -82,6 +82,14 @@ public class ChartCanvas extends Canvas implements PaintListener {
 		return text;
 	}
 
+	public Object getReference(int x, int y) {
+		Mark2D<?, ?> dataPoint2D = chartRenderer.getDataPointAt(x, y);
+		if (dataPoint2D == null) {
+			return null;
+		}
+		return dataPoint2D.getReference();
+	}
+
 	@Override
 	public void paintControl(PaintEvent e) {
 		if ((getChart2D() == null) || (getChart2D().getXAxis() == null)

@@ -12,6 +12,10 @@ import java.util.Map;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -26,14 +30,14 @@ import com.puresol.commons.trees.TreeVisitor;
 import com.puresol.commons.trees.TreeWalker;
 import com.puresol.commons.trees.WalkingAction;
 import com.puresol.commons.utils.HashId;
-import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresol.purifinity.client.common.chart.Axis;
 import com.puresol.purifinity.client.common.chart.AxisDirection;
 import com.puresol.purifinity.client.common.chart.AxisFactory;
 import com.puresol.purifinity.client.common.chart.Chart2D;
 import com.puresol.purifinity.client.common.chart.ChartCanvas;
-import com.puresol.purifinity.client.common.chart.Mark2D;
 import com.puresol.purifinity.client.common.chart.GenericMark2D;
+import com.puresol.purifinity.client.common.chart.Mark2D;
 import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.VerticalColoredArea;
 import com.puresol.purifinity.client.common.chart.renderer.CircleMarkRenderer;
@@ -42,6 +46,8 @@ import com.puresol.purifinity.client.common.evaluation.views.AbstractMetricChart
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.purifinity.client.common.ui.actions.ViewReproductionAction;
+import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
+import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.evaluation.api.CodeRangeNameParameter;
@@ -51,25 +57,29 @@ import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
 import com.puresol.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
 
 public class MaintainabilityIndexCumulativeDistributionChartView extends
-		AbstractMetricChartViewPart implements MouseListener {
+		AbstractMetricChartViewPart implements MouseListener,
+		ISelectionProvider {
+
+	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
+	private AnalysisSelection analysisSelection;
 
 	private final CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
 	private Chart2D chart;
 	private ChartCanvas chartCanvas;
 
-	public MaintainabilityIndexCumulativeDistributionChartView() {
-		chartCanvas.addMouseListener(this);
-	}
-
 	@Override
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
 		chartCanvas = new ChartCanvas(parent, SWT.NONE);
+		chartCanvas.addMouseListener(this);
 		chart = new Chart2D();
 
 		chartCanvas.setChart2D(chart);
 
 		initializeToolBar();
+
+		getSite().setSelectionProvider(this);
+
 		super.createPartControl(parent);
 	}
 
@@ -113,7 +123,7 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 
 	@Override
 	protected void updateEvaluation() {
-		FileAnalysisSelection analysisSelection = getAnalysisSelection();
+		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
 			HashIdFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
@@ -127,9 +137,9 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 	public void showEvaluation(HashIdFileTree path) {
 		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
 				.createInstance(MaintainabilityIndexEvaluator.class);
-		final List<Mark2D<String, Double>> paretoValuesMI = new ArrayList<Mark2D<String, Double>>();
-		final List<Mark2D<String, Double>> paretoValuesMIwoc = new ArrayList<Mark2D<String, Double>>();
-		final List<Mark2D<String, Double>> paretoValuesMIcw = new ArrayList<Mark2D<String, Double>>();
+		final List<Mark2D<String, Double>> paretoValuesMI = new ArrayList<>();
+		final List<Mark2D<String, Double>> paretoValuesMIwoc = new ArrayList<>();
+		final List<Mark2D<String, Double>> paretoValuesMIcw = new ArrayList<>();
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
@@ -143,26 +153,21 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 				}
 				List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(
 						node, results, MI, codeRangeTypeSelection);
+				String path = node.getPathFile(false).getPath();
 				for (Map<String, Value<?>> valueMap : valueMaps) {
 					String codeRangeName = (String) valueMap.get(
 							CodeRangeNameParameter.getInstance().getName())
 							.getValue();
 					double value = convertToDouble(valueMap, MI);
-					String name = node.getPathFile(false).getPath() + "."
-							+ codeRangeName;
-					paretoValuesMI.add(new GenericMark2D<String, Double>(
-							name, value, codeRangeTypeSelection.getName() + " "
-									+ codeRangeName));
+					String name = path + "." + codeRangeName;
+					paretoValuesMI.add(new GenericMark2D<String, Double>(name,
+							value, name, node));
 					value = convertToDouble(valueMap, MI_WOC);
-					paretoValuesMIwoc
-							.add(new GenericMark2D<String, Double>(name,
-									value, codeRangeTypeSelection.getName()
-											+ " " + codeRangeName));
+					paretoValuesMIwoc.add(new GenericMark2D<String, Double>(
+							name, value, name, node));
 					value = convertToDouble(valueMap, MI_CW);
-					paretoValuesMIcw
-							.add(new GenericMark2D<String, Double>(name,
-									value, codeRangeTypeSelection.getName()
-											+ " " + codeRangeName));
+					paretoValuesMIcw.add(new GenericMark2D<String, Double>(
+							name, value, name, node));
 				}
 				return WalkingAction.PROCEED;
 			}
@@ -236,17 +241,24 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 				0.0, 1.0, 0.1, 1, 2);
 		chart.setyAxis(yAxis);
 
-		List<Mark2D<Double, Double>> mi = new ArrayList<Mark2D<Double, Double>>();
-		List<Mark2D<Double, Double>> miWoc = new ArrayList<Mark2D<Double, Double>>();
-		List<Mark2D<Double, Double>> miCw = new ArrayList<Mark2D<Double, Double>>();
+		List<Mark2D<Double, Double>> mi = new ArrayList<>();
+		List<Mark2D<Double, Double>> miWoc = new ArrayList<>();
+		List<Mark2D<Double, Double>> miCw = new ArrayList<>();
 		for (int i = 0; i < paretoValuesMI.size(); i++) {
-			mi.add(new GenericMark2D<Double, Double>(paretoValuesMI.get(i)
-					.getY(), (double) i / (double) paretoValuesMI.size()));
-			miWoc.add(new GenericMark2D<Double, Double>(paretoValuesMIwoc
-					.get(i).getY(), (double) i / (double) paretoValuesMI.size()));
-			miCw.add(new GenericMark2D<Double, Double>(paretoValuesMIcw
-					.get(i).getY(), (double) i
-					/ (double) paretoValuesMIcw.size()));
+			Mark2D<String, Double> miValue = paretoValuesMI.get(i);
+			mi.add(new GenericMark2D<>(miValue.getY(), (double) i
+					/ (double) paretoValuesMI.size(), miValue.getRemark(),
+					miValue.getReference()));
+
+			Mark2D<String, Double> miWocValue = paretoValuesMIwoc.get(i);
+			miWoc.add(new GenericMark2D<>(miWocValue.getY(), (double) i
+					/ (double) paretoValuesMIwoc.size(),
+					miWocValue.getRemark(), miWocValue.getReference()));
+
+			Mark2D<String, Double> miCwValue = paretoValuesMIcw.get(i);
+			miCw.add(new GenericMark2D<>(miCwValue.getY(), (double) i
+					/ (double) paretoValuesMIcw.size(), miCwValue.getRemark(),
+					miCwValue.getReference()));
 		}
 
 		Plot<Double, Double> plotMI = new Plot<Double, Double>(xAxis, yAxis,
@@ -307,8 +319,17 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 		if (e.getSource() == chartCanvas) {
 			int x = e.x;
 			int y = e.y;
-			// TODO
-			chartCanvas.getTooltipText(x, y);
+			Object reference = chartCanvas.getReference(x, y);
+			AnalysisSelection selection = getAnalysisSelection();
+			if ((reference != null) && (selection != null)) {
+				AnalysisProject analysis = selection.getAnalysis();
+				AnalysisRun analysisRun = selection.getAnalysisRun();
+				if (reference instanceof HashIdFileTree) {
+					HashIdFileTree node = (HashIdFileTree) reference;
+					setSelection(new AnalysisSelection(analysis, analysisRun,
+							node));
+				}
+			}
 		}
 	}
 
@@ -316,4 +337,30 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 	public void mouseUp(MouseEvent e) {
 		// intentionally left blank
 	}
+
+	@Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+		selectionChangedListener.add(listener);
+	}
+
+	@Override
+	public void removeSelectionChangedListener(
+			ISelectionChangedListener listener) {
+		selectionChangedListener.remove(listener);
+	}
+
+	@Override
+	public ISelection getSelection() {
+		return analysisSelection;
+	}
+
+	@Override
+	public void setSelection(ISelection selection) {
+		analysisSelection = (AnalysisSelection) selection;
+		for (ISelectionChangedListener listener : selectionChangedListener) {
+			listener.selectionChanged(new SelectionChangedEvent(this,
+					analysisSelection));
+		}
+	}
+
 }

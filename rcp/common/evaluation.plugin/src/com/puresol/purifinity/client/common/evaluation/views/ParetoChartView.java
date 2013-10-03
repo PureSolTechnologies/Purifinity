@@ -29,7 +29,7 @@ import com.puresol.commons.trees.TreeVisitor;
 import com.puresol.commons.trees.TreeWalker;
 import com.puresol.commons.trees.WalkingAction;
 import com.puresol.commons.utils.HashId;
-import com.puresol.purifinity.client.common.analysis.views.FileAnalysisSelection;
+import com.puresol.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresol.purifinity.client.common.chart.Axis;
 import com.puresol.purifinity.client.common.chart.AxisDirection;
 import com.puresol.purifinity.client.common.chart.AxisFactory;
@@ -179,7 +179,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	protected void updateEvaluation() {
-		FileAnalysisSelection analysisSelection = getAnalysisSelection();
+		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (metricSelection != null)
 				&& (parameterSelection != null)) {
 			HashIdFileTree path = analysisSelection.getFileTreeNode();

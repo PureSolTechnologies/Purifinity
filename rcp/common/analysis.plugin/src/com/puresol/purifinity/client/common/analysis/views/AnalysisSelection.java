@@ -16,13 +16,13 @@ import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FileAnalysisSelection implements ISelection {
+public class AnalysisSelection implements ISelection {
 
 	private final AnalysisProject analysis;
 	private final AnalysisRun analysisRun;
 	private final HashIdFileTree fileTreeNode;
 
-	public FileAnalysisSelection(AnalysisProject analysis,
+	public AnalysisSelection(AnalysisProject analysis,
 			AnalysisRun analysisRun, HashIdFileTree fileTreeNode) {
 		super();
 		this.analysis = analysis;
