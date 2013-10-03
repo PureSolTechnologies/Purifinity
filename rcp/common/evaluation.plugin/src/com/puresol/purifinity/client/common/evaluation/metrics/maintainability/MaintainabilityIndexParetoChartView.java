@@ -114,9 +114,9 @@ public class MaintainabilityIndexParetoChartView extends
 	public void showEvaluation(HashIdFileTree path) {
 		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
 				.createInstance(MaintainabilityIndexEvaluator.class);
-		final List<Mark2D<String, Double>> paretoValuesMI = new ArrayList<Mark2D<String, Double>>();
-		final Map<String, Mark2D<String, Double>> paretoValuesMIwoc = new HashMap<String, Mark2D<String, Double>>();
-		final Map<String, Mark2D<String, Double>> paretoValuesMIcw = new HashMap<String, Mark2D<String, Double>>();
+		final List<Mark2D<String, Double>> paretoValuesMI = new ArrayList<>();
+		final Map<String, Mark2D<String, Double>> paretoValuesMIwoc = new HashMap<>();
+		final Map<String, Mark2D<String, Double>> paretoValuesMIcw = new HashMap<>();
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
@@ -137,19 +137,18 @@ public class MaintainabilityIndexParetoChartView extends
 					double value = convertToDouble(valueMap, MI);
 					String name = node.getPathFile(false).getPath() + "."
 							+ codeRangeName;
-					paretoValuesMI.add(new GenericMark2D<String, Double>(name,
-							value, codeRangeTypeSelection.getName() + " "
-									+ codeRangeName));
+					String remark = codeRangeTypeSelection.getName() + " "
+							+ codeRangeName;
+					paretoValuesMI.add(new GenericMark2D<>(name, value, remark,
+							node));
 					value = convertToDouble(valueMap, MI_WOC);
 					paretoValuesMIwoc.put(name,
 							new GenericMark2D<String, Double>(name, value,
-									codeRangeTypeSelection.getName() + " "
-											+ codeRangeName));
+									remark, node));
 					value = convertToDouble(valueMap, MI_CW);
 					paretoValuesMIcw.put(name,
 							new GenericMark2D<String, Double>(name, value,
-									codeRangeTypeSelection.getName() + " "
-											+ codeRangeName));
+									remark, node));
 				}
 				return WalkingAction.PROCEED;
 			}
@@ -176,7 +175,7 @@ public class MaintainabilityIndexParetoChartView extends
 					}
 				});
 
-		List<String> categories = new ArrayList<String>();
+		List<String> categories = new ArrayList<>();
 		double min = 0.0;
 		double max = 0.0;
 		for (Mark2D<String, Double> value : paretoValuesMI) {
@@ -188,7 +187,7 @@ public class MaintainabilityIndexParetoChartView extends
 		max = Axis.suggestMax(max);
 
 		Axis<String> xAxis = AxisFactory.createCategoryAxis(AxisDirection.X,
-				new ParameterWithArbitraryUnit<String>("File", "",
+				new ParameterWithArbitraryUnit<>("File", "",
 						LevelOfMeasurement.NOMINAL, "", String.class),
 				categories.toArray(new String[categories.size()]));
 		chart.setxAxis(xAxis);

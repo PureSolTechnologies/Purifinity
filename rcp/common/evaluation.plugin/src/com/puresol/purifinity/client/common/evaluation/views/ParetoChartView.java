@@ -210,7 +210,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 							+ codeRangeName;
 					paretoValues.add(new GenericMark2D<String, Double>(
 							category, value, codeRangeTypeSelection.getName()
-									+ " " + codeRangeName));
+									+ " " + codeRangeName, node));
 					usedCategories.add(category);
 				}
 				return WalkingAction.PROCEED;

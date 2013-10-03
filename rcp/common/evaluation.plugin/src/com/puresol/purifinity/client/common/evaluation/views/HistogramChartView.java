@@ -11,7 +11,6 @@ import java.util.Set;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -36,6 +35,7 @@ import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.renderer.BarMarkRenderer;
 import com.puresol.purifinity.client.common.chart.renderer.ConstantColorProvider;
 import com.puresol.purifinity.client.common.evaluation.HistogramChartViewSettingsDialog;
+import com.puresol.purifinity.client.common.ui.SWTColor;
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.purifinity.client.common.ui.actions.ViewReproductionAction;
@@ -266,8 +266,8 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 		chart.addPlot(plot);
 		ChartCanvas chartCanvas = getChartCanvas();
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
-		chartCanvas.setColorProvider(plot, new ConstantColorProvider(new RGB(0,
-				0, 0), new RGB(192, 0, 0)));
+		chartCanvas.setColorProvider(plot, new ConstantColorProvider(
+				SWTColor.BLACK, SWTColor.DARK_RED));
 
 		chartCanvas.refresh();
 	}
@@ -313,8 +313,8 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 		chart.addPlot(plot);
 		ChartCanvas chartCanvas = getChartCanvas();
 		chartCanvas.setMarkRenderer(plot, new BarMarkRenderer(1.0));
-		chartCanvas.setColorProvider(plot, new ConstantColorProvider(new RGB(0,
-				0, 0), new RGB(192, 0, 0)));
+		chartCanvas.setColorProvider(plot, new ConstantColorProvider(
+				SWTColor.BLACK, SWTColor.DARK_RED));
 
 		chartCanvas.refresh();
 	}

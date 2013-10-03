@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
@@ -28,6 +27,7 @@ import com.puresol.purifinity.client.common.chart.Plot;
 import com.puresol.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresol.purifinity.client.common.chart.renderer.ConstantColorProvider;
 import com.puresol.purifinity.client.common.evaluation.CorrelationChartViewSettingsDialog;
+import com.puresol.purifinity.client.common.ui.SWTColor;
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresol.purifinity.client.common.ui.actions.ViewReproductionAction;
@@ -221,7 +221,8 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 						yParameterSelection, CodeRangeType.FILE);
 				if ((xValue != null) && (yValue != null)) {
 					Mark2D<Double, Double> value = new GenericMark2D<Double, Double>(
-							xValue, yValue, node.getPathFile(false).toString());
+							xValue, yValue, node.getPathFile(false).toString(),
+							node);
 					correlationValues.add(value);
 				}
 				return WalkingAction.PROCEED;
@@ -275,8 +276,8 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		CircleMarkRenderer markRenderer = new CircleMarkRenderer();
 		ChartCanvas chartCanvas = getChartCanvas();
 		chartCanvas.setMarkRenderer(plot, markRenderer);
-		chartCanvas.setColorProvider(plot, new ConstantColorProvider(new RGB(0,
-				0, 0), new RGB(192, 0, 0)));
+		chartCanvas.setColorProvider(plot, new ConstantColorProvider(
+				SWTColor.BLACK, SWTColor.DARK_RED));
 
 		// ChartConfigProvider configProvider = getConfigProvider();
 		// chartCanvas.setColorProvider(plot,

@@ -17,6 +17,8 @@ public class SWTColor {
 	public static final RGB GREEN = new RGB(0, 255, 0);
 	public static final RGB BLUE = new RGB(0, 0, 255);
 
+	public static final RGB DARK_RED = new RGB(192, 0, 0);
+
 	public static final RGB PALE_RED = new RGB(255, 210, 210);
 	public static final RGB PALE_GREEN = new RGB(210, 255, 210);
 	public static final RGB PALE_YELLOW = new RGB(255, 255, 210);
