@@ -38,6 +38,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.commons</groupId>
+			<artifactId>math</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresol.commons</groupId>
 			<artifactId>utils</artifactId>
 		</dependency>
 		<dependency>
