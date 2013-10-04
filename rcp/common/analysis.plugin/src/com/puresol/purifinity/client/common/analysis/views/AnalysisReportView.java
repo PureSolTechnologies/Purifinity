@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.purifinity.client.common.analysis.Activator;
@@ -59,6 +60,12 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener,
 
 	@Override
 	public void createPartControl(Composite parent) {
+		PlatformUI
+				.getWorkbench()
+				.getHelpSystem()
+				.setHelp(parent,
+						"com.puresol.purifinity.client.common.analysis.plugin.analysisReportView");
+
 		Composite composite = new Composite(parent, SWT.NONE);
 
 		composite.setLayout(new FormLayout());

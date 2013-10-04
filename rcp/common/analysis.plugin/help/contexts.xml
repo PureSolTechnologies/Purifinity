@@ -3,19 +3,23 @@
 		<description>This view contains the configured projects. Additionally, this view provides functionality to create new projects, to edit them and to delete them.</description>
 		<!-- command
 			serialization="org.eclipse.ui.cheatsheets.openCheatSheet(cheatSheetId=org.eclipse.panic.button.cheatsheet)quot; label="
-			Pushing the panic button " />
-		<topic href="reference/panic_button.htm" label="Panic Button Reference" / -->
-	</context>
-	<context id="analysisRunContentView" title="Analysis Run Content">
-		<description></description>
+			Pushing the panic button " / -->
+		<topic label="Analysis Projects View" href="help/analysisProjectsView.html"/>
 	</context>
 	<context id="analysisRunsView" title="Analysis Runs">
-		<description></description>
+		<description>This view contains a list of all analysis runs which relate to a project which was selected with the Analysis Projects View.</description>
+		<topic label="Analysis Runs View" href="help/analysisRunsView.html"/>
+	</context>
+	<context id="analysisRunContentView" title="Analysis Run Content">
+		<description>This view shows the content of the analysis run. A tree structure shows the files which were analyzed.</description>
+		<topic label="Analysis Run Content View" href="help/analysisRunContentView.html"/>
 	</context>
 	<context id="availableLanguagesView" title="Available Languages">
-		<description></description>
+		<description>This view shows a list of all available languages.</description>
+		<topic label="Available Languages View" href="help/availableLanguagesView.html"/>
 	</context>
 	<context id="analysisReportView" title="Analysis Report">
-		<description></description>
+		<description>This view contains the information about the analysis. The files which were analyzed are shown as well as files which provoked errors during analysis. Additionally, some meta information is provided.</description>
+		<topic label="Analysis Report View" href="help/analysisReportView.html"/>
 	</context>
 </contexts>
