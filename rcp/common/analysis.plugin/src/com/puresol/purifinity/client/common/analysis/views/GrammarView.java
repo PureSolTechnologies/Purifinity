@@ -2,6 +2,7 @@ package com.puresol.purifinity.client.common.analysis.views;
 
 import java.io.IOException;
 
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -13,15 +14,19 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.purifinity.client.common.analysis.contents.ProgrammingLanguageViewer;
 import com.puresol.purifinity.client.common.analysis.controls.GrammarCanvas;
 import com.puresol.purifinity.client.common.analysis.grammar.RenderException;
+import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
+import com.puresol.purifinity.client.common.ui.actions.Refreshable;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.uhura.grammar.GrammarException;
 
-public class GrammarView extends ViewPart implements ISelectionChangedListener {
+public class GrammarView extends ViewPart implements ISelectionChangedListener,
+		Refreshable {
 
 	private Combo languageCombo;
 	private ProgrammingLanguageViewer languageViewer;
@@ -39,6 +44,11 @@ public class GrammarView extends ViewPart implements ISelectionChangedListener {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		PlatformUI
+				.getWorkbench()
+				.getHelpSystem()
+				.setHelp(parent,
+						"com.puresol.purifinity.client.common.analysis.plugin.grammarView");
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FormLayout());
@@ -77,27 +87,39 @@ public class GrammarView extends ViewPart implements ISelectionChangedListener {
 				SWT.DEFAULT));
 		languageViewer.addSelectionChangedListener(this);
 
+		initializeToolBar();
+	}
+
+	/**
+	 * Initialize the toolbar.
+	 */
+	private void initializeToolBar() {
+		IToolBarManager toolbarManager = getViewSite().getActionBars()
+				.getToolBarManager();
+		toolbarManager.add(new RefreshAction(this));
 	}
 
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
-		try {
-			if (event.getSource() == languageViewer) {
-				ProgrammingLanguage selected = (ProgrammingLanguage) ((IStructuredSelection) languageViewer
-						.getSelection()).getFirstElement();
-				if (selected != selectedProgrammingLanguage) {
-					grammarCanvas.setProgrammingLanguage(selected);
-				}
-			}
-		} catch (GrammarException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (RenderException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (event.getSource() == languageViewer) {
+			ProgrammingLanguage selected = (ProgrammingLanguage) ((IStructuredSelection) languageViewer
+					.getSelection()).getFirstElement();
+			setLanguage(selected);
 		}
+	}
+
+	private void setLanguage(ProgrammingLanguage selected) {
+		try {
+			if (selected != selectedProgrammingLanguage) {
+				grammarCanvas.setProgrammingLanguage(selected);
+			}
+		} catch (GrammarException | IOException | RenderException e) {
+			throw new RuntimeException("Unexpected Exception occured.", e);
+		}
+	}
+
+	@Override
+	public void refresh() {
+		languageViewer.refresh();
 	}
 }

@@ -1,7 +1,10 @@
 <toc link_to="../com.puresol.purifinity.client.common.help.plugin/purifinityClient/toc.xml#availableViews" label="Analysis">
-	<topic label="Analysis Projects" href="help/analysisProjectsView.html" />
-	<topic label="Analysis Runs" href="help/analysisRunsView.html" />
-	<topic label="Analysis Run Content" href="help/analysisRunContentView.html" />
-	<topic label="Available Languages" href="help/availableLanguagesView.html" />
-	<topic label="Analysis Report" href="help/analysisReportView.html" />
+	<topic label="General Analysis Views" href="help/analysisViews.html">
+		<topic label="Analysis Projects" href="help/analysisViews/analysisProjectsView.html" />
+		<topic label="Analysis Runs" href="help/analysisViews/analysisRunsView.html" />
+		<topic label="Analysis Run Content" href="help/analysisViews/analysisRunContentView.html" />
+		<topic label="Available Languages" href="help/analysisViews/availableLanguagesView.html" />
+		<topic label="Analysis Report" href="help/analysisViews/analysisReportView.html" />
+		<topic label="Grammar View" href="help/analysisViews/grammarView.html" />
+	</topic>
 </toc>
