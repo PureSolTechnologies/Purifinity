@@ -9,8 +9,10 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -35,158 +37,190 @@ import org.eclipse.swt.widgets.Shell;
  */
 public class PickWorkspaceDialog extends TitleAreaDialog {
 
-    private static final String LOCATION_LIST_SEPARATOR = ";;;";
-    private static final int MAX_LOCATION_HISTORY = 20;
+	private static final String LOCATION_LIST_SEPARATOR = ";;;";
+	private static final int MAX_LOCATION_HISTORY = 20;
 
-    private static final String _KeyWorkspaceRootDir = "workspace.location";
-    private static final String _KeyRememberWorkspace = "workspace.remember";
-    private static final String _KeyLastUsedWorkspaces = "workspace.lastUsedWorkspaces";
+	private static final int DEFAULT_MARGIN = 5;
 
-    private static Preferences preferences = Preferences
-	    .userNodeForPackage(PickWorkspaceDialog.class);
+	private static final String _KeyWorkspaceRootDir = "workspace.location";
+	private static final String _KeyRememberWorkspace = "workspace.remember";
+	private static final String _KeyLastUsedWorkspaces = "workspace.lastUsedWorkspaces";
 
-    public static String getWorkspaceLocation() {
-	boolean isRemembering = preferences.getBoolean(_KeyRememberWorkspace,
-		false);
-	if (isRemembering) {
-	    return preferences.get(_KeyWorkspaceRootDir, null);
-	}
-	return null;
-    }
+	private static Preferences preferences = Preferences
+			.userNodeForPackage(PickWorkspaceDialog.class);
 
-    private final boolean isSwitchWorkspace;
-
-    private Combo comboLocation;
-    private Button btnRememberLocation;
-
-    private boolean rememberLocation = false;
-    private String location = "";
-    private final List<String> lastLocations = new ArrayList<String>();
-
-    public PickWorkspaceDialog(boolean isSwitchWorkspace) {
-	super(Display.getDefault().getActiveShell());
-	this.isSwitchWorkspace = isSwitchWorkspace;
-    }
-
-    @Override
-    protected void configureShell(Shell newShell) {
-	super.configureShell(newShell);
-	if (isSwitchWorkspace) {
-	    newShell.setText("Switch Workspace");
-	} else {
-	    newShell.setText("Workspace Selection");
-	}
-    }
-
-    @Override
-    protected Control createDialogArea(Composite parent) {
-	Composite superComposite = (Composite) super.createDialogArea(parent);
-
-	setTitle("Pick Workspace");
-	setMessage("Specify the location of the workspace where analysis projects and settings are to be stored.");
-
-	Composite locationComposite = new Composite(superComposite, SWT.NONE);
-	locationComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
-		false, 1, 1));
-	locationComposite.setLayout(new GridLayout(3, false));
-
-	Label lblLocation = new Label(locationComposite, SWT.NONE);
-	lblLocation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-		false, 1, 1));
-	lblLocation.setAlignment(SWT.CENTER);
-	lblLocation.setText("Workspace:");
-
-	comboLocation = new Combo(locationComposite, SWT.NONE);
-	comboLocation.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
-		false, 1, 1));
-
-	Button btnBrowse = new Button(locationComposite, SWT.NONE);
-	btnBrowse.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false,
-		false, 1, 1));
-	btnBrowse.setText("Browse...");
-	new Label(locationComposite, SWT.NONE);
-
-	btnRememberLocation = new Button(locationComposite, SWT.CHECK);
-	btnRememberLocation.setText("Remember Workspace Location");
-	new Label(locationComposite, SWT.NONE);
-	btnBrowse.addSelectionListener(new SelectionAdapter() {
-
-	    @Override
-	    public void widgetSelected(SelectionEvent e) {
-		browse();
-	    }
-
-	});
-
-	readSettings();
-
-	return superComposite;
-    }
-
-    private void browse() {
-	Shell shell = Display.getDefault().getActiveShell();
-	DirectoryDialog dialog = new DirectoryDialog(shell);
-	dialog.setText("Select Workspace Directory...");
-	String location = dialog.open();
-	if (location != null)
-	    comboLocation.setText(location);
-    }
-
-    private void readSettings() {
-	location = preferences.get(_KeyWorkspaceRootDir, null);
-	if (location != null) {
-	    comboLocation.setText(location);
+	/**
+	 * This static method returns the workspace location as string as it is got
+	 * from preference store.
+	 * 
+	 * @return A {@link String} is returned containing the workspace directory.
+	 */
+	public static String getWorkspaceLocation() {
+		boolean isRemembering = preferences.getBoolean(_KeyRememberWorkspace,
+				false);
+		String workspaceDirectory = null;
+		if (isRemembering) {
+			workspaceDirectory = preferences.get(_KeyWorkspaceRootDir, null);
+		}
+		return workspaceDirectory;
 	}
 
-	rememberLocation = preferences.getBoolean(_KeyRememberWorkspace, false);
-	btnRememberLocation.setSelection(rememberLocation);
+	private final boolean isSwitchWorkspace;
 
-	String lastLocationsString = preferences
-		.get(_KeyLastUsedWorkspaces, "");
-	for (String lastLocation : lastLocationsString
-		.split(LOCATION_LIST_SEPARATOR)) {
-	    comboLocation.add(lastLocation);
-	    lastLocations.add(lastLocation);
-	}
-    }
+	private Combo locationCombo;
+	private Button rememberLocationButton;
 
-    private void saveSettings() {
-	preferences.putBoolean(_KeyRememberWorkspace, isRememberLocation());
-	preferences.put(_KeyWorkspaceRootDir, getLocation());
-	lastLocations.remove(getLocation());
-	lastLocations.add(getLocation());
-	while (lastLocations.size() > MAX_LOCATION_HISTORY) {
-	    lastLocations.remove(0);
-	}
-	StringBuilder builder = new StringBuilder();
-	for (String lastLocation : lastLocations) {
-	    if (builder.length() > 0) {
-		builder.append(LOCATION_LIST_SEPARATOR);
-	    }
-	    builder.append(lastLocation);
-	}
-	preferences.put(_KeyLastUsedWorkspaces, builder.toString());
-    }
+	private boolean rememberLocation = false;
+	private String location = "";
+	private final List<String> lastLocations = new ArrayList<String>();
 
-    @Override
-    public void okPressed() {
-	rememberLocation = btnRememberLocation.getSelection();
-	location = comboLocation.getText();
-	if (location == null) {
-	    return;
+	public PickWorkspaceDialog(boolean isSwitchWorkspace) {
+		super(Display.getDefault().getActiveShell());
+		this.isSwitchWorkspace = isSwitchWorkspace;
 	}
-	File directory = new File(location);
-	if ((directory.exists()) && (directory.isDirectory())) {
-	    saveSettings();
-	    super.okPressed();
+
+	@Override
+	protected void configureShell(Shell newShell) {
+		super.configureShell(newShell);
+		if (isSwitchWorkspace) {
+			newShell.setText("Switch Workspace");
+		} else {
+			newShell.setText("Workspace Selection");
+		}
 	}
-    }
 
-    public String getLocation() {
-	return location;
-    }
+	@Override
+	public void create() {
+		super.create();
+		setTitle("Pick Workspace");
+		setMessage("Specify the location of the workspace where analysis projects and settings are to be stored.");
+	}
 
-    public boolean isRememberLocation() {
-	return rememberLocation;
-    }
+	@Override
+	protected Control createDialogArea(Composite parent) {
+
+		final Composite dialogArea = (Composite) super.createDialogArea(parent);
+
+		Composite locationComposite = new Composite(dialogArea, SWT.NONE);
+		locationComposite.setLayout(new FormLayout());
+		locationComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		Label locationLabel = new Label(locationComposite, SWT.NONE);
+		locationLabel.setText("Workspace Directory:");
+
+		locationCombo = new Combo(locationComposite, SWT.NONE);
+
+		Button browseButton = new Button(locationComposite, SWT.NONE);
+		browseButton.setText("Browse...");
+
+		FormData fdLocationLabel = new FormData();
+		fdLocationLabel.top = new FormAttachment(0, DEFAULT_MARGIN);
+		fdLocationLabel.left = new FormAttachment(0, DEFAULT_MARGIN);
+		locationLabel.setLayoutData(fdLocationLabel);
+
+		FormData fdLocationCombo = new FormData();
+		fdLocationCombo.left = new FormAttachment(0, DEFAULT_MARGIN);
+		fdLocationCombo.top = new FormAttachment(locationLabel, DEFAULT_MARGIN);
+		fdLocationCombo.right = new FormAttachment(browseButton,
+				-DEFAULT_MARGIN);
+		locationCombo.setLayoutData(fdLocationCombo);
+
+		FormData fdBrowseButton = new FormData();
+		fdBrowseButton.top = new FormAttachment(locationCombo, 0, SWT.TOP);
+		fdBrowseButton.right = new FormAttachment(100, -DEFAULT_MARGIN);
+		browseButton.setLayoutData(fdBrowseButton);
+
+		rememberLocationButton = new Button(locationComposite, SWT.CHECK);
+		rememberLocationButton.setText("Remember Workspace Location");
+		FormData fdRememberLocationButton = new FormData();
+		fdRememberLocationButton.top = new FormAttachment(locationCombo,
+				DEFAULT_MARGIN, SWT.BOTTOM);
+		fdRememberLocationButton.left = new FormAttachment(locationCombo, 0,
+				SWT.LEFT);
+		fdRememberLocationButton.right = new FormAttachment(100,
+				-DEFAULT_MARGIN);
+		rememberLocationButton.setLayoutData(fdRememberLocationButton);
+
+		browseButton.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				browse();
+			}
+
+		});
+
+		locationComposite.pack();
+
+		readSettings();
+
+		return dialogArea;
+	}
+
+	private void browse() {
+		Shell shell = Display.getDefault().getActiveShell();
+		DirectoryDialog dialog = new DirectoryDialog(shell);
+		dialog.setText("Select Workspace Directory...");
+		String location = dialog.open();
+		if (location != null)
+			locationCombo.setText(location);
+	}
+
+	private void readSettings() {
+		location = preferences.get(_KeyWorkspaceRootDir, null);
+		if (location != null) {
+			locationCombo.setText(location);
+		}
+
+		rememberLocation = preferences.getBoolean(_KeyRememberWorkspace, false);
+		rememberLocationButton.setSelection(rememberLocation);
+
+		String lastLocationsString = preferences
+				.get(_KeyLastUsedWorkspaces, "");
+		for (String lastLocation : lastLocationsString
+				.split(LOCATION_LIST_SEPARATOR)) {
+			locationCombo.add(lastLocation);
+			lastLocations.add(lastLocation);
+		}
+	}
+
+	private void saveSettings() {
+		preferences.putBoolean(_KeyRememberWorkspace, isRememberLocation());
+		preferences.put(_KeyWorkspaceRootDir, getLocation());
+		lastLocations.remove(getLocation());
+		lastLocations.add(getLocation());
+		while (lastLocations.size() > MAX_LOCATION_HISTORY) {
+			lastLocations.remove(0);
+		}
+		StringBuilder builder = new StringBuilder();
+		for (String lastLocation : lastLocations) {
+			if (builder.length() > 0) {
+				builder.append(LOCATION_LIST_SEPARATOR);
+			}
+			builder.append(lastLocation);
+		}
+		preferences.put(_KeyLastUsedWorkspaces, builder.toString());
+	}
+
+	@Override
+	public void okPressed() {
+		rememberLocation = rememberLocationButton.getSelection();
+		location = locationCombo.getText();
+		if (location == null) {
+			return;
+		}
+		File directory = new File(location);
+		if ((directory.exists()) && (directory.isDirectory())) {
+			saveSettings();
+			super.okPressed();
+		}
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public boolean isRememberLocation() {
+		return rememberLocation;
+	}
 }
