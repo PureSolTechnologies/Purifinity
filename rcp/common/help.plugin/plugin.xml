@@ -12,6 +12,10 @@
             file="help/sourceCodeAnalysisAndEvaluation/toc.xml"
             primary="true">
       </toc>
+      <toc
+            file="help/purifinityExtensionsDevelopment/toc.xml"
+            primary="true">
+      </toc>
    </extension>
 
 </plugin>
