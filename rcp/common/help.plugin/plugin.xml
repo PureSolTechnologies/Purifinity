@@ -5,11 +5,11 @@
          point="org.eclipse.help.toc">
       <toc
             category="com.puresol.purifinity"
-            file="purifinityClient/toc.xml"
+            file="help/purifinityClient/toc.xml"
             primary="true">
       </toc>
       <toc
-            file="sourceCodeAnalysisAndEvaluation/toc.xml"
+            file="help/sourceCodeAnalysisAndEvaluation/toc.xml"
             primary="true">
       </toc>
    </extension>

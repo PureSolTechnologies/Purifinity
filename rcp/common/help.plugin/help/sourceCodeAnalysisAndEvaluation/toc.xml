@@ -1,0 +1,21 @@
+<toc label="Source Code Analysis and Evaluation">
+ <topic label="Introduction" href="help/sourceCodeAnalysisAndEvaluation/introduction.html" />
+ <topic href="help/sourceCodeAnalysisAndEvaluation/architecture.html" label="Analysis and Evaluation Architecture"/>
+ <topic href="help/sourceCodeAnalysisAndEvaluation/analysis.html" label="Analysis"/>
+ <topic href="help/sourceCodeAnalysisAndEvaluation/evaluation.html" label="Evaluation">
+    <topic href="help/sourceCodeAnalysisAndEvaluation/evaluation/metrics.html" label="Metrics"/>
+    <topic href="help/sourceCodeAnalysisAndEvaluation/evaluation/defects.html" label="Defects"/>
+    <topic href="help/sourceCodeAnalysisAndEvaluation/evaluation/customEvaluations.html" label="Custom Evaluations"/>
+ </topic>
+ <topic href="help/sourceCodeAnalysisAndEvaluation/reference.html" label="Reference">
+    <topic href="help/sourceCodeAnalysisAndEvaluation/reference/availableLanguages.html" label="Available Languages">
+       <anchor id="availableLanguages"/>
+    </topic>
+    <topic href="help/sourceCodeAnalysisAndEvaluation/reference/availableMetrics.html" label="Available Metrics">
+       <anchor id="availableMetrics"/>
+    </topic>
+    <topic href="help/sourceCodeAnalysisAndEvaluation/reference/availableDefectScanners.html" label="Available Defect Scanners">
+       <anchor id="availableDefectScanners"/>
+    </topic>
+ </topic>
+</toc>

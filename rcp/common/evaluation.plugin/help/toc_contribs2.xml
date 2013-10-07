@@ -1,4 +1,4 @@
-<toc link_to="../com.puresol.purifinity.client.common.help.plugin/sourceCodeAnalysisAndEvaluation/toc.xml#availableMetrics" label="Metrics">
+<toc link_to="../com.puresol.purifinity.client.common.help.plugin/help/sourceCodeAnalysisAndEvaluation/toc.xml#availableMetrics" label="Metrics">
 	<topic label="SLOC Metric" href="help/slocMetric.html" />
 	<topic label="McCabe Metric" href="help/mcCabeMetric.html" />
 	<topic label="Halstead Metric" href="help/halsteadMetric.html" />
@@ -6,4 +6,5 @@
 	<topic label="Nesting Depth Metric" href="help/nestingDepthMetric.html" />
 	<topic label="Maintainability Index" href="help/maintainabilityIndex.html" />
 	<topic label="Normalized Maintainability Index" href="help/normalizedMaintainabilityIndex.html" />
+	<topic label="Cost Construction Model (COCOMO)" href="help/cocomo.html" />
 </toc>
