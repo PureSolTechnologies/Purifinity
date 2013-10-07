@@ -10,16 +10,18 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
+import com.puresol.commons.utils.DirectoryUtilities;
 import com.puresol.commons.utils.FileSearchConfiguration;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProjectSettings;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStore;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreException;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreFactory;
-import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.DirectoryRepositoryLocation;
+import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguages;
 import com.puresol.purifinity.coding.lang.java.Java;
+import com.puresol.purifinity.coding.store.fs.analysis.AnalysisStoreImpl;
 
 /**
  * This class is used for metrics tests as parent class. This class guarantees a
@@ -43,6 +45,16 @@ public abstract class AbstractMetricTest {
 		assertNotNull("The list of languages is null!", languages);
 		assertTrue("No programming languages found!", languages.size() > 0);
 		assertTrue(languages.contains(Java.getInstance()));
+	}
+
+	@BeforeClass
+	public static void cleanCodeAnalysisDirectory() {
+		File codeAnalysisDirectory = AnalysisStoreImpl.getStorageDirectory();
+		assertNotNull("Storage directory is not available.",
+				codeAnalysisDirectory);
+		if (codeAnalysisDirectory.exists()) {
+			DirectoryUtilities.deleteDirectoryRecursivly(codeAnalysisDirectory);
+		}
 	}
 
 	private AnalysisProject analysisProject;
