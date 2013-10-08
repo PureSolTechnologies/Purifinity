@@ -29,7 +29,7 @@
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
 					<argLine>-Xms128m -Xmx512m</argLine>
-					<product>com.puresol.purifinity.client.product.full</product>
+					<product>com.puresol.purifinity.client.application.plugin.PurifinityFull</product>
 				</configuration>
 			</plugin>
 		</plugins>
