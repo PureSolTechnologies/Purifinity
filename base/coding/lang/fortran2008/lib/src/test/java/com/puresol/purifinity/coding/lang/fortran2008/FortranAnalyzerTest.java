@@ -11,8 +11,6 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.puresol.purifinity.coding.lang.fortran2008.Fortran;
-import com.puresol.purifinity.coding.lang.fortran2008.FortranAnalyzer;
 import com.puresol.purifinity.uhura.source.SourceFileLocation;
 
 /**
@@ -45,25 +43,26 @@ public class FortranAnalyzerTest {
 	@Test
 	public void testEmptyProgram() throws Exception {
 		test(new File("src/test/resources"), new File(
-				"com/puresol/coding/lang/fortran/samples/EmptyProgram.f"));
+				"com/puresol/coding/lang/fortran2008/samples/EmptyProgram.f"));
 	}
 
 	@Test
 	public void testEmptySubroutine() throws Exception {
-		test(new File("src/test/resources"), new File(
-				"com/puresol/coding/lang/fortran/samples/EmptySubroutine.f"));
+		test(new File("src/test/resources"),
+				new File(
+						"com/puresol/coding/lang/fortran2008/samples/EmptySubroutine.f"));
 	}
 
 	@Test
 	public void test2() throws Exception {
 		test(new File("src/test/resources"), new File(
-				"com/puresol/coding/lang/fortran/samples/FortranTest.f"));
+				"com/puresol/coding/lang/fortran2008/samples/FortranTest.f"));
 	}
 
 	@Test
 	public void testZGERC() throws Exception {
 		test(new File("src/test/resources"), new File(
-				"com/puresol/coding/lang/fortran/samples/zgerc.f"));
+				"com/puresol/coding/lang/fortran2008/samples/zgerc.f"));
 	}
 
 	/**
@@ -74,6 +73,6 @@ public class FortranAnalyzerTest {
 	@Test
 	public void testNDTRAN() throws Exception {
 		test(new File("src/test/resources"), new File(
-				"com/puresol/coding/lang/fortran/samples/ndtran.f"));
+				"com/puresol/coding/lang/fortran2008/samples/ndtran.f"));
 	}
 }
