@@ -138,17 +138,17 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
-			<artifactId>coding.lang.cpp.bundle</artifactId>
+			<artifactId>coding.lang.cpp11.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
-			<artifactId>coding.lang.java.bundle</artifactId>
+			<artifactId>coding.lang.java7.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
-			<artifactId>coding.lang.fortran.bundle</artifactId>
+			<artifactId>coding.lang.fortran2008.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

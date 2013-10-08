@@ -45,7 +45,7 @@ public class SourceCodeAnalysisDistributionIT {
 		System.out.println(directory.toString());
 		assertEquals("lib", directory.getName());
 		directory = directory.getParentFile();
-		assertEquals("java", directory.getName());
+		assertEquals("java7", directory.getName());
 		directory = directory.getParentFile();
 		assertEquals("lang", directory.getName());
 		directory = directory.getParentFile();
