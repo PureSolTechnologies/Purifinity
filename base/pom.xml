@@ -116,17 +116,17 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresol.purifinity</groupId>
-				<artifactId>coding.lang.cpp.lib</artifactId>
+				<artifactId>coding.lang.cpp11.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresol.purifinity</groupId>
-				<artifactId>coding.lang.fortran.lib</artifactId>
+				<artifactId>coding.lang.fortran2008.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresol.purifinity</groupId>
-				<artifactId>coding.lang.java.lib</artifactId>
+				<artifactId>coding.lang.java7.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

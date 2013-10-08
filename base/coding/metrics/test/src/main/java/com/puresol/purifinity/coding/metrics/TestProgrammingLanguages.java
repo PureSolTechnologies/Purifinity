@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguages;
-import com.puresol.purifinity.coding.lang.java.Java;
+import com.puresol.purifinity.coding.lang.java7.Java;
 
 public class TestProgrammingLanguages extends ProgrammingLanguages {
 

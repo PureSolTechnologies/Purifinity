@@ -18,7 +18,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>
-			<artifactId>coding.lang.java.lib</artifactId>
+			<artifactId>coding.lang.java7.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresol.purifinity</groupId>

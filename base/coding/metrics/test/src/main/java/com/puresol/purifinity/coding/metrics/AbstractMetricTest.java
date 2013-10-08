@@ -20,7 +20,7 @@ import com.puresol.purifinity.coding.analysis.api.AnalysisStoreFactory;
 import com.puresol.purifinity.coding.analysis.api.DirectoryRepositoryLocation;
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguages;
-import com.puresol.purifinity.coding.lang.java.Java;
+import com.puresol.purifinity.coding.lang.java7.Java;
 import com.puresol.purifinity.coding.store.fs.analysis.AnalysisStoreImpl;
 
 /**
