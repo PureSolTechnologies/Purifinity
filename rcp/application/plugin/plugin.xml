@@ -22,6 +22,14 @@
                id="file"
                label="File"
                mnemonic="F">
+            <separator
+                  name="com.puresol.purifinity.client.application.plugin.separator8"
+                  visible="true">
+            </separator>
+            <separator
+                  name="additions"
+                  visible="false">
+            </separator>
             <command
                   commandId="org.eclipse.ui.file.print"
                   icon="icons/16x16/printer.png"
@@ -74,6 +82,10 @@
                   style="push">
             </command>
          </menu>
+         <separator
+               name="additions"
+               visible="false">
+         </separator>
          <menu
                id="options"
                label="Options"
@@ -163,6 +175,18 @@
                   mnemonic="l"
                   style="push">
             </command>
+            <separator
+                  name="com.puresol.purifinity.client.application.plugin.separator1"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="org.eclipse.ui.file.closePart"
+                  icon="icons/16x16/cross.png"
+                  id="closePart"
+                  label="Close Part"
+                  style="push"
+                  tooltip="Closes the current part (view or editor)">
+            </command>
          </menu>
          <menu
                id="help"
@@ -220,9 +244,17 @@
                   style="push">
             </command>
             <separator
-                  name="com.puresol.purifinity.client.application.plugin.separator2"
+                  name="com.puresol.purifinity.client.application.plugin.separator6"
                   visible="true">
             </separator>
+              <separator
+                    name="additions"
+                    visible="false">
+            </separator>
+              <separator
+                    name="com.puresol.purifinity.client.application.plugin.separator7"
+                    visible="true">
+              </separator>
             <command
                   commandId="org.eclipse.ui.help.aboutAction"
                   id="about"

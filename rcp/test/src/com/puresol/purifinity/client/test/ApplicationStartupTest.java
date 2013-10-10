@@ -3,119 +3,126 @@ package com.puresol.purifinity.client.test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import org.eclipse.swtbot.swt.finder.SWTBot;
-import org.eclipse.swtbot.swt.finder.junit.SWTBotJunit4ClassRunner;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotButton;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotMenu;
 import org.eclipse.swtbot.swt.finder.widgets.SWTBotShell;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 /**
- * http://www.vogella.com/articles/SWTBot/article.html
+ * <p>
+ * This test is used to check the basic Eclipse application which is used as
+ * basis for the standalone client.
+ * </p>
+ * <p>
+ * All basic menu entries need to be checked as well as the basic
+ * functionalities like perspective handling.
+ * </p>
  * 
  * @author Rick-Rainer Ludwig
  */
-@RunWith(SWTBotJunit4ClassRunner.class)
-public class ApplicationStartupTest {
-
-	private static SWTBot bot;
-
-	@BeforeClass
-	public static void initialize() {
-		bot = new SWTBot();
-	}
+public class ApplicationStartupTest extends AbstractUITest {
 
 	@Before
-	public void setupCleanUI() throws InterruptedException {
-		SWTBotMenu windowMenu = bot.menu("Window");
-		assertNotNull("No 'Window' menu present.", windowMenu);
-		SWTBotMenu closeAllPerspectivesMenu = windowMenu
-				.menu("Close All Perspectives");
-		assertNotNull("No 'Close All Perspectives' menu present.",
-				closeAllPerspectivesMenu);
-		if (closeAllPerspectivesMenu.isEnabled()) {
-			closeAllPerspectivesMenu.click();
-		}
-	}
-
-	private static SWTBotMenu checkAndReturnMenu(String name) {
-		SWTBotMenu menu = bot.menu(name);
-		assertNotNull("No '" + name + "' menu.", menu);
-		return menu;
-	}
-
-	private static SWTBotMenu checkAndReturnMenu(SWTBotMenu parentMenu,
-			String name) {
-		SWTBotMenu menu = parentMenu.menu(name);
-		assertNotNull("No '" + name + "' menu.", menu);
-		return menu;
+	public void clearUIBeforeEachTest() {
+		clearUI();
 	}
 
 	@Test
 	public void testFileMenu() {
-		SWTBotMenu fileMenu = checkAndReturnMenu("File");
-		checkAndReturnMenu(fileMenu, "Print...");
-		checkAndReturnMenu(fileMenu, "Restart");
-		checkAndReturnMenu(fileMenu, "Export...");
-		checkAndReturnMenu(fileMenu, "Exit");
+		SWTBotMenu fileMenu = getMenu("File");
+		getMenu(fileMenu, "Print...");
+		getMenu(fileMenu, "Restart");
+		getMenu(fileMenu, "Export...");
+		getMenu(fileMenu, "Exit");
 	}
 
 	@Test
 	public void testOptionsMenu() {
-		SWTBotMenu optionsMenu = checkAndReturnMenu("Options");
+		SWTBotMenu optionsMenu = getMenu("Options");
 		// XXX Removed, but needs to be put in again!
 		// checkAndReturnMenu(optionsMenu, "License Manager...");
-		checkAndReturnMenu(optionsMenu, "Preferences...");
+		getMenu(optionsMenu, "Preferences...");
 	}
 
 	@Test
 	public void testWindowMenu() {
-		SWTBotMenu windowMenu = checkAndReturnMenu("Window");
-		checkAndReturnMenu(windowMenu, "New Window");
-		checkAndReturnMenu(windowMenu, "Show View...");
-		checkAndReturnMenu(windowMenu, "Show Perspective...");
-		checkAndReturnMenu(windowMenu, "Customize Perspective...");
-		checkAndReturnMenu(windowMenu, "Save Perspective As...");
-		checkAndReturnMenu(windowMenu, "Reset Perspective...");
-		checkAndReturnMenu(windowMenu, "Close Perspective");
-		checkAndReturnMenu(windowMenu, "Close All Perspectives");
+		SWTBotMenu windowMenu = getMenu("Window");
+		getMenu(windowMenu, "New Window");
+		getMenu(windowMenu, "Show View...");
+		getMenu(windowMenu, "Show Perspective...");
+		getMenu(windowMenu, "Customize Perspective...");
+		getMenu(windowMenu, "Save Perspective As...");
+		getMenu(windowMenu, "Reset Perspective...");
+		getMenu(windowMenu, "Close Perspective");
+		getMenu(windowMenu, "Close All Perspectives");
+		getMenu(windowMenu, "Close Part");
 	}
 
 	@Test
 	public void testHelpMenu() {
-		SWTBotMenu helpMenu = checkAndReturnMenu("Help");
-		checkAndReturnMenu(helpMenu, "Welcome");
-		checkAndReturnMenu(helpMenu, "About Purifinity...");
+		SWTBotMenu helpMenu = getMenu("Help");
+		getMenu(helpMenu, "Welcome");
+		getMenu(helpMenu, "Help Contents...");
+		getMenu(helpMenu, "Search...");
+		getMenu(helpMenu, "Dynamic Help");
+		getMenu(helpMenu, "PureSol Technologies Website...");
+		getMenu(helpMenu, "Bug and Feature Request Tracker Website...");
+		getMenu(helpMenu, "About Purifinity...");
+		getMenu(helpMenu, "Check for Updates");
+		getMenu(helpMenu, "Install New Software...");
+	}
+
+	@Test
+	public void testPreferences() {
+		SWTBotMenu optionsMenu = getMenu("Options");
+		SWTBotMenu preferencesItem = optionsMenu.menu("Preferences...");
+		preferencesItem.click();
+		SWTBotShell activeShell = getWorkbenchBot().activeShell();
+		assertNotNull("Exptected 'Preferences' dialog.", activeShell.getText()
+				.contains("Preferences"));
+		SWTBotButton okButton = activeShell.bot().button("OK");
+		okButton.click();
+	}
+
+	@Test
+	public void testShowView() {
+		SWTBotMenu windowMenu = getMenu("Window");
+		SWTBotMenu showViewItem = windowMenu.menu("Show View...");
+		showViewItem.click();
+		SWTBotShell activeShell = getWorkbenchBot().activeShell();
+		assertNotNull("Exptected 'Show View' dialog.", activeShell.getText()
+				.contains("Show View"));
+		SWTBotButton cancelButton = activeShell.bot().button("Cancel");
+		cancelButton.click();
+	}
+
+	@Test
+	public void testShowPerspective() {
+		SWTBotMenu windowMenu = getMenu("Window");
+		SWTBotMenu showPerspectiveItem = windowMenu.menu("Show Perspective...");
+		showPerspectiveItem.click();
+		SWTBotShell activeShell = getWorkbenchBot().activeShell();
+		assertNotNull("Exptected 'Show Perspective' dialog.", activeShell
+				.getText().contains("Show Perspective"));
+		SWTBotButton cancelButton = activeShell.bot().button("Cancel");
+		cancelButton.click();
 	}
 
 	@Test
 	public void testAbout() {
-		SWTBotMenu helpMenu = checkAndReturnMenu("Help");
+		SWTBotMenu helpMenu = getMenu("Help");
 
-		SWTBotMenu aboutPurifinityMenu = checkAndReturnMenu(helpMenu,
+		SWTBotMenu aboutPurifinityMenu = getMenu(helpMenu,
 				"About Purifinity...");
 		aboutPurifinityMenu.click();
 
-		SWTBotShell activeShell = bot.activeShell();
+		SWTBotShell activeShell = getWorkbenchBot().activeShell();
 		assertTrue("Expected 'About' dialog did not pop up.", activeShell
 				.getText().contains("About"));
 		SWTBotButton okButton = activeShell.bot().button("OK");
 		assertNotNull("No 'OK' button found in 'About Purifinity' dialog.",
 				okButton);
 		okButton.click();
-	}
-
-	@AfterClass
-	public static void exitApplication() {
-		SWTBotMenu fileMenu = bot.menu("File");
-		assertNotNull(fileMenu);
-
-		SWTBotMenu exitMenu = fileMenu.menu("Exit");
-		assertNotNull(exitMenu);
-		exitMenu.click();
 	}
 }
