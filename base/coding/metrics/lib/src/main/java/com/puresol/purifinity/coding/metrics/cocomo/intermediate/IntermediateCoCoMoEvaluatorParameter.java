@@ -1,4 +1,4 @@
-package com.puresol.purifinity.coding.metrics.cocomo;
+package com.puresol.purifinity.coding.metrics.cocomo.intermediate;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,7 +13,7 @@ import com.puresol.purifinity.coding.evaluation.api.CodeRangeTypeParameter;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeLocationParameter;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 
-public class CoCoMoEvaluatorParameter {
+public class IntermediateCoCoMoEvaluatorParameter {
 
 	public static final ParameterWithArbitraryUnit<CodeLocation> SOURCE_CODE_LOCATION = SourceCodeLocationParameter
 			.getInstance();
@@ -31,7 +31,7 @@ public class CoCoMoEvaluatorParameter {
 	public static final ParameterWithArbitraryUnit<Double> PERSON_MONTH = new ParameterWithArbitraryUnit<Double>(
 			"Development Effort in Month", "Person-Months",
 			LevelOfMeasurement.RATIO,
-			"Basic COCOMO model, Person-Months = c1 * (kPhyLOC ^ c2)",
+			"Intermediate COCOMO model, Person-Months = c1 * (kPhyLOC ^ c2)",
 			Double.class);
 	public static final ParameterWithArbitraryUnit<Double> PERSON_YEARS = new ParameterWithArbitraryUnit<Double>(
 			"Development Effort in Years", "Person-Years",
@@ -39,7 +39,7 @@ public class CoCoMoEvaluatorParameter {
 			"Person-Years = Person-Month / (12 Month / Year)", Double.class);
 	public static final ParameterWithArbitraryUnit<Double> SCHEDULED_MONTH = new ParameterWithArbitraryUnit<Double>(
 			"Schedule in Months", "Months", LevelOfMeasurement.RATIO,
-			"Basic COCOMO model, Months = 2.5 * (Person-Months ^ c3)",
+			"Intermediate COCOMO model, Months = 2.5 * (Person-Months ^ c3)",
 			Double.class);
 	public static final ParameterWithArbitraryUnit<Double> SCHEDULED_YEARS = new ParameterWithArbitraryUnit<Double>(
 			"Schedule in Years", "Years", LevelOfMeasurement.RATIO,
@@ -53,12 +53,12 @@ public class CoCoMoEvaluatorParameter {
 	public static final ParameterWithArbitraryUnit<Money> SALARY = new ParameterWithArbitraryUnit<Money>(
 			"Salary", "Currency", LevelOfMeasurement.RATIO,
 			"Average developer salary.", Money.class);
-	public static final ParameterWithArbitraryUnit<Complexity> COMPLEXITY = new ParameterWithArbitraryUnit<Complexity>(
+	public static final ParameterWithArbitraryUnit<SoftwareComplexity> COMPLEXITY = new ParameterWithArbitraryUnit<SoftwareComplexity>(
 			"complexity",
 			"",
 			LevelOfMeasurement.ORDINAL,
 			"Complexity of the project. This complexity specifies the CoCoMo equation constants c1, c2 and c3",
-			Complexity.class);
+			SoftwareComplexity.class);
 	public static final ParameterWithArbitraryUnit<Double> C1 = new ParameterWithArbitraryUnit<Double>(
 			"c1", "", LevelOfMeasurement.RATIO,
 			"CoCoMo equation constant. This constant is set by complexity.",

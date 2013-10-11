@@ -1,12 +1,12 @@
-package com.puresol.purifinity.coding.metrics.cocomo;
+package com.puresol.purifinity.coding.metrics.cocomo.basic;
 
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.COSTS;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.KSLOC;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.PERSON_MONTH;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.PERSON_YEARS;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SCHEDULED_MONTH;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SCHEDULED_YEARS;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.TEAM_SIZE;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.COSTS;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.KSLOC;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.PERSON_MONTH;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.PERSON_YEARS;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.SCHEDULED_MONTH;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.SCHEDULED_YEARS;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.TEAM_SIZE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import com.puresol.commons.math.Money;
 import com.puresol.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
 import com.puresol.purifinity.coding.evaluation.api.MetricValue;
 
-public abstract class CoCoMoResults extends AbstractEvaluatorResult {
+public abstract class BasicCoCoMoResults extends AbstractEvaluatorResult {
 
 	private static final long serialVersionUID = 9107629880981197874L;
 
@@ -30,14 +30,14 @@ public abstract class CoCoMoResults extends AbstractEvaluatorResult {
 	private double c1; // complexity constant 1
 	private double c2; // complexity constant 2
 	private double c3; // complexity constant 3
-	private Complexity complexity;
+	private SoftwareComplexity complexity;
 	private double averageSalary;
 	private String currency;
 
 	private final List<MetricValue> results = new ArrayList<MetricValue>();
 
-	public CoCoMoResults() {
-		setComplexity(Complexity.LOW);
+	public BasicCoCoMoResults() {
+		setComplexity(SoftwareComplexity.LOW);
 		setAverageSalary(56286, "$");
 		refreshParameters();
 	}
@@ -131,7 +131,7 @@ public abstract class CoCoMoResults extends AbstractEvaluatorResult {
 	/**
 	 * @return the complexity
 	 */
-	public Complexity getComplexity() {
+	public SoftwareComplexity getComplexity() {
 		return complexity;
 	}
 
@@ -139,17 +139,17 @@ public abstract class CoCoMoResults extends AbstractEvaluatorResult {
 	 * @param complexity
 	 *            the complexity to set
 	 */
-	public void setComplexity(Complexity complexity) {
+	public void setComplexity(SoftwareComplexity complexity) {
 		this.complexity = complexity;
-		if (complexity == Complexity.LOW) {
+		if (complexity == SoftwareComplexity.LOW) {
 			c1 = 2.40;
 			c2 = 1.05;
 			c3 = 0.38;
-		} else if (complexity == Complexity.MEDIUM) {
+		} else if (complexity == SoftwareComplexity.MEDIUM) {
 			c1 = 3.00;
 			c2 = 1.12;
 			c3 = 0.35;
-		} else if (complexity == Complexity.HIGH) {
+		} else if (complexity == SoftwareComplexity.HIGH) {
 			c1 = 3.60;
 			c2 = 1.20;
 			c3 = 0.32;

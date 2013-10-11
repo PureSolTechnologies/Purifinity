@@ -12,6 +12,7 @@ import com.puresol.commons.utils.FileSearchConfiguration;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreException;
 import com.puresol.purifinity.coding.metrics.AbstractMetricTest;
+import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluator;
 
 public class CoCoMoProjectIT extends AbstractMetricTest {
 
@@ -29,12 +30,12 @@ public class CoCoMoProjectIT extends AbstractMetricTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new CoCoMoEvaluator(analyzer, null));
+		assertNotNull(new BasicCoCoMoEvaluator(analyzer, null));
 	}
 
 	@Test
 	public void testInitValues() {
-		CoCoMoEvaluator metric = new CoCoMoEvaluator(analyzer, null);
+		BasicCoCoMoEvaluator metric = new BasicCoCoMoEvaluator(analyzer, null);
 		assertSame(analyzer, metric.getAnalysisRun());
 		assertNotNull(metric.getInformation());
 		assertNotNull(metric.getEvaluatedQualityCharacteristics());

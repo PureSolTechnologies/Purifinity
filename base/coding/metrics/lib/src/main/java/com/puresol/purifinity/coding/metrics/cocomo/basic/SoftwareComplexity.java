@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.purifinity.coding.metrics.cocomo;
+package com.puresol.purifinity.coding.metrics.cocomo.basic;
 
 
 /**
@@ -21,5 +21,4 @@ package com.puresol.purifinity.coding.metrics.cocomo;
  */
 public enum SoftwareComplexity {
 	LOW, MEDIUM, HIGH;
-
 }

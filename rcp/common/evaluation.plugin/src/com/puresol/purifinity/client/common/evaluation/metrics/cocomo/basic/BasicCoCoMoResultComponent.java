@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.common.evaluation.metrics.cocomo;
+package com.puresol.purifinity.client.common.evaluation.metrics.cocomo.basic;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -16,20 +16,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresol.purifinity.coding.metrics.cocomo.CoCoMoResults;
-import com.puresol.purifinity.coding.metrics.cocomo.Complexity;
+import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoResults;
+import com.puresol.purifinity.coding.metrics.cocomo.basic.SoftwareComplexity;
 
-public class CoCoMoResultComponent extends Composite implements ModifyListener,
+public class BasicCoCoMoResultComponent extends Composite implements ModifyListener,
 		SelectionListener {
 
-	private final CoCoMoResultPanel resultPanel;
+	private final BasicCoCoMoResultPanel resultPanel;
 	private final Combo complexityCombo;
 	private final ComboViewer complexityViewer;
 	private final Text avgSalary;
 	private final Text currency;
-	private CoCoMoResults results;
+	private BasicCoCoMoResults results;
 
-	public CoCoMoResultComponent(Composite parent) {
+	public BasicCoCoMoResultComponent(Composite parent) {
 		super(parent, SWT.NONE);
 
 		FormLayout layout = new FormLayout();
@@ -50,7 +50,7 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 		complexityCombo.addSelectionListener(this);
 		complexityViewer = new ComboViewer(complexityCombo);
 		complexityViewer.setContentProvider(ArrayContentProvider.getInstance());
-		complexityViewer.setInput(Complexity.values());
+		complexityViewer.setInput(SoftwareComplexity.values());
 
 		new Label(parameterSelection, SWT.NONE).setText("Avg. Salary:");
 		avgSalary = new Text(parameterSelection, SWT.BORDER);
@@ -60,7 +60,7 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 		currency = new Text(parameterSelection, SWT.BORDER);
 		currency.addModifyListener(this);
 
-		resultPanel = new CoCoMoResultPanel(this);
+		resultPanel = new BasicCoCoMoResultPanel(this);
 		FormData fdText = new FormData();
 		fdText.left = new FormAttachment(0, 10);
 		fdText.right = new FormAttachment(100, -10);
@@ -75,19 +75,19 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 		resultPanel.dispose();
 	}
 
-	public CoCoMoResults getResults() {
+	public BasicCoCoMoResults getResults() {
 		return results;
 	}
 
-	public void setResults(CoCoMoResults results) {
+	public void setResults(BasicCoCoMoResults results) {
 		this.results = results;
 		if (results != null) {
 			String avgSalaray = String.valueOf(results.getAverageSalary());
 			String currency2 = results.getCurrency();
 			avgSalary.setText(avgSalaray);
 			currency.setText(currency2);
-			for (int i = 0; i < Complexity.values().length; i++) {
-				Complexity complexity = Complexity.values()[i];
+			for (int i = 0; i < SoftwareComplexity.values().length; i++) {
+				SoftwareComplexity complexity = SoftwareComplexity.values()[i];
 				if (complexity == results.getComplexity()) {
 					complexityCombo.select(i);
 				}
@@ -122,7 +122,7 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 	public void widgetSelected(SelectionEvent e) {
 		if (e.getSource() == complexityCombo) {
 			if (results != null) {
-				results.setComplexity(Complexity.values()[complexityCombo
+				results.setComplexity(SoftwareComplexity.values()[complexityCombo
 						.getSelectionIndex()]);
 				refresh();
 			}
@@ -133,7 +133,7 @@ public class CoCoMoResultComponent extends Composite implements ModifyListener,
 	public void widgetDefaultSelected(SelectionEvent e) {
 		if (e.getSource() == complexityCombo) {
 			if (results != null) {
-				results.setComplexity(Complexity.values()[complexityCombo
+				results.setComplexity(SoftwareComplexity.values()[complexityCombo
 						.getSelectionIndex()]);
 				refresh();
 			}

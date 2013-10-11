@@ -1,21 +1,21 @@
-package com.puresol.purifinity.coding.metrics.cocomo;
+package com.puresol.purifinity.coding.metrics.cocomo.basic;
 
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.ALL;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.C1;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.C2;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.C3;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.CODE_RANGE_NAME;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.CODE_RANGE_TYPE;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.COMPLEXITY;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.COSTS;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.KSLOC;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.PERSON_MONTH;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.PERSON_YEARS;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SALARY;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SCHEDULED_MONTH;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SCHEDULED_YEARS;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.SOURCE_CODE_LOCATION;
-import static com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluatorParameter.TEAM_SIZE;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.ALL;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.C1;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.C2;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.C3;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.CODE_RANGE_NAME;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.CODE_RANGE_TYPE;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.COMPLEXITY;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.COSTS;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.KSLOC;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.PERSON_MONTH;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.PERSON_YEARS;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.SALARY;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.SCHEDULED_MONTH;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.SCHEDULED_YEARS;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.SOURCE_CODE_LOCATION;
+import static com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.TEAM_SIZE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,14 +31,14 @@ import com.puresol.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
 import com.puresol.purifinity.uhura.source.CodeLocation;
 
-public class CoCoMoFileResults extends CoCoMoResults implements
+public class BasicCoCoMoFileResults extends BasicCoCoMoResults implements
 		MetricFileResults {
 
 	private static final long serialVersionUID = 7272355142441159285L;
 
 	private final CodeLocation codeLocation;
 
-	public CoCoMoFileResults(CodeLocation codeLocation) {
+	public BasicCoCoMoFileResults(CodeLocation codeLocation) {
 		super();
 		this.codeLocation = codeLocation;
 	}
@@ -74,7 +74,7 @@ public class CoCoMoFileResults extends CoCoMoResults implements
 				COSTS));
 
 		row.put(SALARY.getName(), new GeneralValue<Money>(getMoney(), SALARY));
-		row.put(COMPLEXITY.getName(), new GeneralValue<Complexity>(
+		row.put(COMPLEXITY.getName(), new GeneralValue<SoftwareComplexity>(
 				getComplexity(), COMPLEXITY));
 		row.put(C1.getName(), new GeneralValue<Double>(getC1(), C1));
 		row.put(C2.getName(), new GeneralValue<Double>(getC2(), C2));

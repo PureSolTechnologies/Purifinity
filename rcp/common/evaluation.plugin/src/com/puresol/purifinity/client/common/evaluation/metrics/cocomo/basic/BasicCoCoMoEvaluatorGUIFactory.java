@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.common.evaluation.metrics.cocomo;
+package com.puresol.purifinity.client.common.evaluation.metrics.cocomo.basic;
 
 import org.eclipse.swt.widgets.Composite;
 
@@ -6,12 +6,12 @@ import com.puresol.purifinity.client.common.evaluation.controls.EvaluatorGUIFact
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 
-public class CoCoMoEvaluatorGUIFactory implements EvaluatorGUIFactory {
+public class BasicCoCoMoEvaluatorGUIFactory implements EvaluatorGUIFactory {
 
 	@Override
 	public Composite createResultComponent(Composite parent,
 			AnalysisRun analysisRun, AnalyzedCode analyzedSourceCode) {
-		return new CoCoMoFileResultComponent(parent, analyzedSourceCode);
+		return new BasicCoCoMoFileResultComponent(parent, analyzedSourceCode);
 	}
 
 }

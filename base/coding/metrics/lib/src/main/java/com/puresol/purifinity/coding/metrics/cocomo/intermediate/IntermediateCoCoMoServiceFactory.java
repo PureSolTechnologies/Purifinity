@@ -1,4 +1,4 @@
-package com.puresol.purifinity.coding.metrics.cocomo;
+package com.puresol.purifinity.coding.metrics.cocomo.intermediate;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,16 +11,16 @@ import com.puresol.purifinity.coding.evaluation.api.Evaluator;
 import com.puresol.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluator;
 
-public class CoCoMoServiceFactory extends AbstractEvaluatorFactory {
+public class IntermediateCoCoMoServiceFactory extends AbstractEvaluatorFactory {
 
 	@Override
 	public String getDescription() {
-		return CoCoMoEvaluator.DESCRIPTION;
+		return IntermediateCoCoMoEvaluator.DESCRIPTION;
 	}
 
 	@Override
 	public String getName() {
-		return CoCoMoEvaluator.NAME;
+		return IntermediateCoCoMoEvaluator.NAME;
 	}
 
 	/**
@@ -35,8 +35,8 @@ public class CoCoMoServiceFactory extends AbstractEvaluatorFactory {
 	}
 
 	@Override
-	public CoCoMoEvaluator create(AnalysisRun analysisRun, HashIdFileTree path) {
-		return new CoCoMoEvaluator(analysisRun, path);
+	public IntermediateCoCoMoEvaluator create(AnalysisRun analysisRun, HashIdFileTree path) {
+		return new IntermediateCoCoMoEvaluator(analysisRun, path);
 	}
 
 	@Override
@@ -48,11 +48,11 @@ public class CoCoMoServiceFactory extends AbstractEvaluatorFactory {
 
 	@Override
 	public Class<? extends Evaluator> getEvaluatorClass() {
-		return CoCoMoEvaluator.class;
+		return IntermediateCoCoMoEvaluator.class;
 	}
 
 	@Override
 	public Set<Parameter<?>> getParameters() {
-		return CoCoMoEvaluatorParameter.ALL;
+		return IntermediateCoCoMoEvaluatorParameter.ALL;
 	}
 }

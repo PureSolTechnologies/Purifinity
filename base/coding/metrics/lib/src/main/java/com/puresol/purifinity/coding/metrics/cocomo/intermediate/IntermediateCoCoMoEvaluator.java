@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.purifinity.coding.metrics.cocomo;
+package com.puresol.purifinity.coding.metrics.cocomo.intermediate;
 
 import java.io.File;
 import java.util.HashSet;
@@ -36,7 +36,7 @@ import com.puresol.purifinity.uhura.source.SourceFileLocation;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CoCoMoEvaluator extends AbstractEvaluator {
+public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = 5098378023541671490L;
 
@@ -52,11 +52,12 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 
 	private final EvaluatorStore store;
 	private final EvaluatorStore slocStore;
-	private Complexity complexity = Complexity.LOW;
+	private SoftwareComplexity complexity = SoftwareComplexity.LOW;
 	private int averageSalary = 56286;
 	private String currency = "USD";
 
-	public CoCoMoEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
+	public IntermediateCoCoMoEvaluator(AnalysisRun analysisRun,
+			HashIdFileTree path) {
 		super(NAME, DESCRIPTION, analysisRun, path);
 		store = createEvaluatorStore();
 		slocStore = EvaluatorStoreFactory.getFactory().createInstance(
@@ -68,7 +69,7 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 		return configurationParameters;
 	}
 
-	public void setComplexity(Complexity complexity) {
+	public void setComplexity(SoftwareComplexity complexity) {
 		this.complexity = complexity;
 	}
 
@@ -94,7 +95,7 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 			for (SLOCResult results : slocResults.getResults()) {
 				if (results.getCodeRangeType() == CodeRangeType.FILE) {
 					int phyLoc = results.getSLOCMetric().getPhyLOC();
-					CoCoMoFileResults fileResults = new CoCoMoFileResults(
+					IntermediateCoCoMoFileResults fileResults = new IntermediateCoCoMoFileResults(
 							analysis.getAnalyzedFile().getSourceLocation());
 					fileResults.setAverageSalary(averageSalary, currency);
 					fileResults.setComplexity(complexity);
@@ -109,30 +110,30 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
 			throws InterruptedException {
-		CoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
+		IntermediateCoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
 		store.storeDirectoryResults(directory.getHashId(), directoryResults);
 	}
 
-	private CoCoMoDirectoryResults createDirectoryResults(
+	private IntermediateCoCoMoDirectoryResults createDirectoryResults(
 			HashIdFileTree directory) {
 		int phyLoc = 0;
 		for (HashIdFileTree child : directory.getChildren()) {
 			HashId hashId = child.getHashId();
 			if (child.isFile()) {
 				if (store.hasFileResults(hashId)) {
-					CoCoMoResults fileResults = (CoCoMoResults) store
+					IntermediateCoCoMoResults fileResults = (IntermediateCoCoMoResults) store
 							.readFileResults(hashId);
 					phyLoc += fileResults.getPhyLOC();
 				}
 			} else {
 				if (store.hasDirectoryResults(hashId)) {
-					CoCoMoDirectoryResults directoryResults = (CoCoMoDirectoryResults) store
+					IntermediateCoCoMoDirectoryResults directoryResults = (IntermediateCoCoMoDirectoryResults) store
 							.readDirectoryResults(hashId);
 					phyLoc += directoryResults.getPhyLOC();
 				}
 			}
 		}
-		CoCoMoDirectoryResults directoryResults = new CoCoMoDirectoryResults(
+		IntermediateCoCoMoDirectoryResults directoryResults = new IntermediateCoCoMoDirectoryResults(
 				new SourceFileLocation(new File(""),
 						directory.getPathFile(false)));
 		directoryResults.setAverageSalary(averageSalary, currency);
@@ -144,7 +145,7 @@ public class CoCoMoEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processProject() throws InterruptedException {
 		HashIdFileTree directory = getAnalysisRun().getFileTree();
-		CoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
+		IntermediateCoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
 		store.storeDirectoryResults(directory.getHashId(), directoryResults);
 	}
 

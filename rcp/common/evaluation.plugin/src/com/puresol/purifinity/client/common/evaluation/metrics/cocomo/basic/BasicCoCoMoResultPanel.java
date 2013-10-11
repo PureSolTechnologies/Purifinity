@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.common.evaluation.metrics.cocomo;
+package com.puresol.purifinity.client.common.evaluation.metrics.cocomo.basic;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresol.purifinity.coding.metrics.cocomo.CoCoMoResults;
+import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoResults;
 
 /**
  * This panel contains the results of a CoCoMo evaluation in a nifty panel for
@@ -19,9 +19,9 @@ import com.puresol.purifinity.coding.metrics.cocomo.CoCoMoResults;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class CoCoMoResultPanel extends Composite {
+public class BasicCoCoMoResultPanel extends Composite {
 
-	private CoCoMoResults results;
+	private BasicCoCoMoResults results;
 
 	private final Group group;
 
@@ -39,7 +39,7 @@ public class CoCoMoResultPanel extends Composite {
 	private final Text numberOfDevelopersText;
 	private final Text estimatedCostsText;
 
-	public CoCoMoResultPanel(Composite parent) {
+	public BasicCoCoMoResultPanel(Composite parent) {
 		super(parent, SWT.NONE);
 		setLayout(new FormLayout());
 
@@ -170,7 +170,7 @@ public class CoCoMoResultPanel extends Composite {
 				+ "(2.4 * Average Salary * Number of Developers)");
 	}
 
-	public void setResults(CoCoMoResults results) {
+	public void setResults(BasicCoCoMoResults results) {
 		this.results = results;
 		refreshLabels();
 		refreshTexts();

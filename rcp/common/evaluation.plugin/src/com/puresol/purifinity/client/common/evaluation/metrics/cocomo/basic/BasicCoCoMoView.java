@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.common.evaluation.metrics.cocomo;
+package com.puresol.purifinity.client.common.evaluation.metrics.cocomo.basic;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -12,20 +12,20 @@ import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresol.purifinity.coding.evaluation.api.MetricDirectoryResults;
 import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
-import com.puresol.purifinity.coding.metrics.cocomo.CoCoMoDirectoryResults;
-import com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluator;
-import com.puresol.purifinity.coding.metrics.cocomo.CoCoMoFileResults;
+import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoDirectoryResults;
+import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluator;
+import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoFileResults;
 
-public class CoCoMoView extends AbstractEvaluationView {
+public class BasicCoCoMoView extends AbstractEvaluationView {
 
-	private CoCoMoResultComponent resultComponent = null;
+	private BasicCoCoMoResultComponent resultComponent = null;
 
 	@Override
 	public void createPartControl(Composite parent) {
 		parent.setLayout(new FillLayout());
 		ScrolledComposite scrolledComposite = new ScrolledComposite(parent,
 				SWT.H_SCROLL | SWT.V_SCROLL);
-		resultComponent = new CoCoMoResultComponent(scrolledComposite);
+		resultComponent = new BasicCoCoMoResultComponent(scrolledComposite);
 		scrolledComposite.setContent(resultComponent);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
@@ -39,16 +39,16 @@ public class CoCoMoView extends AbstractEvaluationView {
 		EvaluatorStoreFactory evaluationStoreFactory = EvaluatorStoreFactory
 				.getFactory();
 		EvaluatorStore evaluationStore = evaluationStoreFactory
-				.createInstance(CoCoMoEvaluator.class);
+				.createInstance(BasicCoCoMoEvaluator.class);
 		if (path.isFile()) {
 			MetricFileResults fileResults = evaluationStore
 					.readFileResults(path.getHashId());
-			CoCoMoFileResults cocomoResults = (CoCoMoFileResults) fileResults;
+			BasicCoCoMoFileResults cocomoResults = (BasicCoCoMoFileResults) fileResults;
 			resultComponent.setResults(cocomoResults);
 		} else {
 			MetricDirectoryResults directoryResults = evaluationStore
 					.readDirectoryResults(path.getHashId());
-			CoCoMoDirectoryResults cocomoResults = (CoCoMoDirectoryResults) directoryResults;
+			BasicCoCoMoDirectoryResults cocomoResults = (BasicCoCoMoDirectoryResults) directoryResults;
 			resultComponent.setResults(cocomoResults);
 		}
 		resultComponent.setVisible(true);

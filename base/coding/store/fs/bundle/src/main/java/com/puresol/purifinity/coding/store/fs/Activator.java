@@ -11,7 +11,7 @@ import com.puresol.purifinity.coding.analysis.api.DirectoryStore;
 import com.puresol.purifinity.coding.analysis.api.FileStore;
 import com.puresol.purifinity.coding.evaluation.api.Evaluator;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
-import com.puresol.purifinity.coding.metrics.cocomo.CoCoMoEvaluator;
+import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluator;
 import com.puresol.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluator;
 import com.puresol.purifinity.coding.metrics.entropy.EntropyMetricEvaluator;
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluator;
@@ -42,7 +42,7 @@ public class Activator extends AbstractActivator {
 		registerService(FileStore.class, new FileStoreImpl());
 
 		registerEvaluatorStore(new CoCoMoEvaluatorStore(),
-				CoCoMoEvaluator.class);
+				BasicCoCoMoEvaluator.class);
 		registerEvaluatorStore(new CodeDepthEvaluatorStore(),
 				CodeDepthMetricEvaluator.class);
 		registerEvaluatorStore(new EntropyEvaluatorStore(),

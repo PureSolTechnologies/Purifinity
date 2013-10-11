@@ -8,7 +8,7 @@
  *
  ***************************************************************************/
 
-package com.puresol.purifinity.coding.metrics.cocomo;
+package com.puresol.purifinity.coding.metrics.cocomo.intermediate;
 
 
 /**
@@ -19,6 +19,6 @@ package com.puresol.purifinity.coding.metrics.cocomo;
  * @author Rick-Rainer Ludwig
  * 
  */
-public enum Complexity {
+public enum SoftwareComplexity {
 	LOW, MEDIUM, HIGH;
 }

@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.common.evaluation.metrics.cocomo.prefs;
+package com.puresol.purifinity.client.common.evaluation.metrics.cocomo.basic.prefs;
 
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -7,18 +7,18 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class CoCoMoPreferencePage extends PreferencePage implements
+public class BasicCoCoMoPreferencePage extends PreferencePage implements
 	IWorkbenchPreferencePage {
 
-    public CoCoMoPreferencePage() {
+    public BasicCoCoMoPreferencePage() {
 	super();
     }
 
-    public CoCoMoPreferencePage(String title) {
+    public BasicCoCoMoPreferencePage(String title) {
 	super(title);
     }
 
-    public CoCoMoPreferencePage(String title, ImageDescriptor image) {
+    public BasicCoCoMoPreferencePage(String title, ImageDescriptor image) {
 	super(title, image);
     }
 

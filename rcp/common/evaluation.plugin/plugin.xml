@@ -118,9 +118,9 @@
       <view
             allowMultiple="false"
             category="com.puresol.purifinity.client.common.evaluation.Evaluation"
-            class="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.CoCoMoView"
-            id="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.CoCoMoView"
-            name="Cost Construction Model"
+            class="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.basic.BasicCoCoMoView"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.basic.BasicCoCoMoView"
+            name="Basic Cost Construction Model"
             restorable="true">
       </view>
       <view
@@ -137,6 +137,14 @@
             class="com.puresol.purifinity.client.common.evaluation.views.EvaluationFileTreeView"
             id="com.puresol.purifinity.client.common.evaluation.views.EvaluationFileTreeView"
             name="Evaluation File Tree"
+            restorable="true">
+      </view>
+      <view
+            allowMultiple="false"
+            category="com.puresol.purifinity.client.common.evaluation.Evaluation"
+            class="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoView"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoView"
+            name="Intermediate Cost Construction Model"
             restorable="true">
       </view>
    </extension>
@@ -193,9 +201,9 @@
       </page>
       <page
             category="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
-            class="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.prefs.CoCoMoPreferencePage"
-            id="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.prefs.CoCoMoPreferencePage"
-            name="COCOMO">
+            class="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.basic.prefs.BasicCoCoMoPreferencePage"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.basic.prefs.BasicCoCoMoPreferencePage"
+            name="Basic COCOMO">
       </page>
       <page
             category="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
@@ -232,6 +240,12 @@
             class="com.puresol.purifinity.client.common.evaluation.metrics.codedepth.prefs.CodeDepthPreferencePage"
             id="com.puresol.purifinity.client.common.evaluation.metrics.codedepth.prefs.CodeDepthPreferencePage"
             name="Code Depth">
+      </page>
+      <page
+            category="com.puresol.purifinity.client.common.evaluation.metrics.CodeMetricsPreferencePage"
+            class="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.intermediate.prefs.IntermediateCoCoMoPreferencePage"
+            id="com.puresol.purifinity.client.common.evaluation.metrics.cocomo.intermediate.prefs.IntermediateCoCoMoPreferencePage"
+            name="Intermediate COCOMO">
       </page>
    </extension>
    <extension
