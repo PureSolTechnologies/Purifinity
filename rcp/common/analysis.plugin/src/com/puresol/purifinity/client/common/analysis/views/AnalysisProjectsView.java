@@ -45,7 +45,6 @@ import com.puresol.purifinity.client.common.branding.ClientImages;
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.Refreshable;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
-import com.puresol.purifinity.coding.analysis.api.AnalysisProjectInformation;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStore;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreException;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreFactory;
@@ -264,12 +263,13 @@ public class AnalysisProjectsView extends ViewPart implements
 							"Do you really want to delete analysis the selected analysis project(s)?")) {
 				Iterator<?> iterator = selection.iterator();
 				while (iterator.hasNext()) {
-					AnalysisProjectInformation information = (AnalysisProjectInformation) iterator
+					AnalysisProject information = (AnalysisProject) iterator
 							.next();
 					AnalysisStore store = AnalysisStoreFactory.getFactory()
 							.getInstance();
 					if (store != null) {
-						store.removeAnalysis(information.getUUID());
+						store.removeAnalysis(information.getInformation()
+								.getUUID());
 						refreshAnalysisProjectList();
 					}
 				}

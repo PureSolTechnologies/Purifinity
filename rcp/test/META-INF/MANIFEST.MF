@@ -3,7 +3,9 @@ Bundle-ManifestVersion: 2
 Bundle-Name: com.puresol.purifinity.client.test
 Bundle-SymbolicName: com.puresol.purifinity.client.test;singleton:=true
 Bundle-Version: 0.1.0.qualifier
-Require-Bundle: com.puresol.purifinity.client.application.plugin;bundle-version="0.1.0",
+Require-Bundle: com.puresol.commons.utils.bundle;bundle-version="0.0.1",
+ com.puresol.purifinity.coding.store.fs.bundle;bundle-version="0.1.0",
+ com.puresol.purifinity.client.application.plugin;bundle-version="0.1.0",
  org.eclipse.swt;bundle-version="3.100.1",
  org.eclipse.swtbot.go;bundle-version="2.1.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
