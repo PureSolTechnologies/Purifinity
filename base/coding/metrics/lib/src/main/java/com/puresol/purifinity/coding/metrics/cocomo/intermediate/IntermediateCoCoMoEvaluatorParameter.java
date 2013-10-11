@@ -53,23 +53,33 @@ public class IntermediateCoCoMoEvaluatorParameter {
 	public static final ParameterWithArbitraryUnit<Money> SALARY = new ParameterWithArbitraryUnit<Money>(
 			"Salary", "Currency", LevelOfMeasurement.RATIO,
 			"Average developer salary.", Money.class);
-	public static final ParameterWithArbitraryUnit<SoftwareComplexity> COMPLEXITY = new ParameterWithArbitraryUnit<SoftwareComplexity>(
-			"complexity",
+	public static final ParameterWithArbitraryUnit<SoftwareProject> PROJECT = new ParameterWithArbitraryUnit<>(
+			"project", "", LevelOfMeasurement.NOMINAL,
+			"Software project. Specifies the type of project.",
+			SoftwareProject.class);
+	public static final ParameterWithArbitraryUnit<Double> AI = new ParameterWithArbitraryUnit<Double>(
+			"ai",
 			"",
-			LevelOfMeasurement.ORDINAL,
-			"Complexity of the project. This complexity specifies the CoCoMo equation constants c1, c2 and c3",
-			SoftwareComplexity.class);
-	public static final ParameterWithArbitraryUnit<Double> C1 = new ParameterWithArbitraryUnit<Double>(
-			"c1", "", LevelOfMeasurement.RATIO,
-			"CoCoMo equation constant. This constant is set by complexity.",
+			LevelOfMeasurement.RATIO,
+			"Intermediate CoCoMo equation constant. This constant is set by project.",
 			Double.class);
-	public static final ParameterWithArbitraryUnit<Double> C2 = new ParameterWithArbitraryUnit<Double>(
-			"c2", "", LevelOfMeasurement.RATIO,
-			"CoCoMo equation constant. This constant is set by complexity.",
+	public static final ParameterWithArbitraryUnit<Double> BI = new ParameterWithArbitraryUnit<Double>(
+			"bi",
+			"",
+			LevelOfMeasurement.RATIO,
+			"Intermediate CoCoMo equation constant. This constant is set by project.",
 			Double.class);
-	public static final ParameterWithArbitraryUnit<Double> C3 = new ParameterWithArbitraryUnit<Double>(
-			"c3", "", LevelOfMeasurement.RATIO,
-			"CoCoMo equation constant. This constant is set by complexity.",
+	public static final ParameterWithArbitraryUnit<Double> CI = new ParameterWithArbitraryUnit<Double>(
+			"ci",
+			"",
+			LevelOfMeasurement.RATIO,
+			"Intermediate CoCoMo equation constant. This constant is set by project.",
+			Double.class);
+	public static final ParameterWithArbitraryUnit<Double> DI = new ParameterWithArbitraryUnit<Double>(
+			"di",
+			"",
+			LevelOfMeasurement.RATIO,
+			"Intermediate CoCoMo equation constant. This constant is set by project.",
 			Double.class);
 
 	public static final Set<Parameter<?>> ALL = new HashSet<Parameter<?>>();
@@ -85,9 +95,9 @@ public class IntermediateCoCoMoEvaluatorParameter {
 		ALL.add(TEAM_SIZE);
 		ALL.add(COSTS);
 		ALL.add(SALARY);
-		ALL.add(COMPLEXITY);
-		ALL.add(C1);
-		ALL.add(C2);
-		ALL.add(C3);
+		ALL.add(PROJECT);
+		ALL.add(AI);
+		ALL.add(BI);
+		ALL.add(CI);
 	}
 }

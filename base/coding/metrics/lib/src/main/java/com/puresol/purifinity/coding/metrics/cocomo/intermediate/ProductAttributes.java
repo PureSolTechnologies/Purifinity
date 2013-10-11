@@ -1,29 +1,20 @@
 package com.puresol.purifinity.coding.metrics.cocomo.intermediate;
 
-import java.util.HashMap;
-import java.util.Map;
+public class ProductAttributes extends IntermediateCOCOMOAttribute {
 
-public enum ProductAttributes {
+	public static final ProductAttributes REQUIRED_SOFTWARE_RELIABILITY = new ProductAttributes(
+			"Required Software Reliability",//
+			0.75, 0.88, 1.00, 1.15, 1.40, null);
+	public static final ProductAttributes SIZE_OF_APPLICATION_DATABASE = new ProductAttributes(
+			"Size of Application Database",//
+			null, 0.94, 1.00, 1.08, 1.16, null);
+	public static final ProductAttributes COMPLEXITY_OF_THE_PRODUCT = new ProductAttributes(
+			"Complexity of the Product",//
+			0.70, 0.85, 1.00, 1.15, 1.30, 1.65);
 
-	REQUIRED_SOFTWARE_RELIABILITY(0.75, 0.88, 1.00, 1.15, 1.40, null), //
-	SIZE_OF_APPLICATION_DATABASE(null, 0.94, 1.00, 1.08, 1.16, null), //
-	COMPLEXITY_OF_THE_PRODUCT(0.70, 0.85, 1.00, 1.15, 1.30, 1.65), //
-	;
-
-	private final Map<Rating, Double> ratings = new HashMap<>();
-
-	private ProductAttributes(Double veryLow, Double low, Double nominal,
-			Double high, Double veryHigh, Double extraHigh) {
-		ratings.put(Rating.VERY_LOW, veryLow);
-		ratings.put(Rating.LOW, low);
-		ratings.put(Rating.NOMINAL, nominal);
-		ratings.put(Rating.HIGH, high);
-		ratings.put(Rating.VERY_HIGH, veryHigh);
-		ratings.put(Rating.EXTRA_HIGH, extraHigh);
-	}
-
-	public double getFactor(Rating rating) {
-		return ratings.get(rating);
+	protected ProductAttributes(String name, Double veryLow, Double low,
+			Double nominal, Double high, Double veryHigh, Double extraHigh) {
+		super(name, veryLow, low, nominal, high, veryHigh, extraHigh);
 	}
 
 }

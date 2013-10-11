@@ -1,16 +1,17 @@
 package com.puresol.purifinity.coding.metrics.cocomo.intermediate;
 
+import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.AI;
 import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.ALL;
-import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.C1;
-import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.C2;
-import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.C3;
+import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.BI;
+import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.CI;
 import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.CODE_RANGE_NAME;
 import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.CODE_RANGE_TYPE;
-import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.COMPLEXITY;
 import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.COSTS;
+import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.DI;
 import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.KSLOC;
 import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.PERSON_MONTH;
 import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.PERSON_YEARS;
+import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.PROJECT;
 import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.SALARY;
 import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.SCHEDULED_MONTH;
 import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.SCHEDULED_YEARS;
@@ -72,11 +73,16 @@ public class IntermediateCoCoMoDirectoryResults extends
 				COSTS));
 
 		row.put(SALARY.getName(), new GeneralValue<Money>(getMoney(), SALARY));
-		row.put(COMPLEXITY.getName(), new GeneralValue<SoftwareComplexity>(
-				getComplexity(), COMPLEXITY));
-		row.put(C1.getName(), new GeneralValue<Double>(getC1(), C1));
-		row.put(C2.getName(), new GeneralValue<Double>(getC2(), C2));
-		row.put(C3.getName(), new GeneralValue<Double>(getC3(), C3));
+		row.put(PROJECT.getName(), new GeneralValue<SoftwareProject>(
+				getProject(), PROJECT));
+		row.put(AI.getName(),
+				new GeneralValue<Double>(getProject().getAi(), AI));
+		row.put(BI.getName(),
+				new GeneralValue<Double>(getProject().getBi(), BI));
+		row.put(CI.getName(),
+				new GeneralValue<Double>(getProject().getCi(), CI));
+		row.put(DI.getName(),
+				new GeneralValue<Double>(getProject().getDi(), DI));
 
 		return row;
 	}

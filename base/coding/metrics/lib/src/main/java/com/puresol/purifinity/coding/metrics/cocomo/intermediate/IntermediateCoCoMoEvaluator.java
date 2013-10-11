@@ -40,19 +40,19 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = 5098378023541671490L;
 
-	public static final String NAME = "COst COnstruction MOdel";
+	public static final String NAME = "Intermediate COst COnstruction MOdel";
 
-	public static final String DESCRIPTION = "The COst COnstruction MOdel is a simple way "
+	public static final String DESCRIPTION = "The Intermediate COst COnstruction MOdel is a simple way "
 			+ "to estimate the construction costs of a "
 			+ "software project by couting the physical lines of code.";
 
-	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
+	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<>();
 
 	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 
 	private final EvaluatorStore store;
 	private final EvaluatorStore slocStore;
-	private SoftwareComplexity complexity = SoftwareComplexity.LOW;
+	private SoftwareProject project = SoftwareProject.SEMI_DETACHED;
 	private int averageSalary = 56286;
 	private String currency = "USD";
 
@@ -69,8 +69,8 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 		return configurationParameters;
 	}
 
-	public void setComplexity(SoftwareComplexity complexity) {
-		this.complexity = complexity;
+	public void setComplexity(SoftwareProject project) {
+		this.project = project;
 	}
 
 	public void setAverageSalary(int averageSalary, String currency) {
@@ -98,7 +98,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 					IntermediateCoCoMoFileResults fileResults = new IntermediateCoCoMoFileResults(
 							analysis.getAnalyzedFile().getSourceLocation());
 					fileResults.setAverageSalary(averageSalary, currency);
-					fileResults.setComplexity(complexity);
+					fileResults.setProject(project);
 					fileResults.setSloc(phyLoc);
 					store.storeFileResults(hashId, fileResults);
 					break;
@@ -137,7 +137,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 				new SourceFileLocation(new File(""),
 						directory.getPathFile(false)));
 		directoryResults.setAverageSalary(averageSalary, currency);
-		directoryResults.setComplexity(complexity);
+		directoryResults.setProject(project);
 		directoryResults.setSloc(phyLoc);
 		return directoryResults;
 	}

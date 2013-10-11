@@ -40,13 +40,13 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = 5098378023541671490L;
 
-	public static final String NAME = "COst COnstruction MOdel";
+	public static final String NAME = "Basic COst COnstruction MOdel";
 
-	public static final String DESCRIPTION = "The COst COnstruction MOdel is a simple way "
+	public static final String DESCRIPTION = "The Basic COst COnstruction MOdel is a simple way "
 			+ "to estimate the construction costs of a "
 			+ "software project by couting the physical lines of code.";
 
-	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
+	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<>();
 
 	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 

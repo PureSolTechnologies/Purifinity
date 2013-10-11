@@ -7,6 +7,7 @@ import org.osgi.framework.BundleContext;
 import com.puresol.commons.osgi.AbstractActivator;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoServiceFactory;
+import com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoServiceFactory;
 import com.puresol.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluatorFactory;
 import com.puresol.purifinity.coding.metrics.entropy.EntropyMetricServiceFactory;
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluatorFactory;
@@ -33,8 +34,10 @@ public class Activator extends AbstractActivator {
 
 		registerService(EvaluatorFactory.class, new SLOCEvaluatorFactory(),
 				properties);
-		registerService(EvaluatorFactory.class, new BasicCoCoMoServiceFactory(),
-				properties);
+		registerService(EvaluatorFactory.class,
+				new BasicCoCoMoServiceFactory(), properties);
+		registerService(EvaluatorFactory.class,
+				new IntermediateCoCoMoServiceFactory(), properties);
 		registerService(EvaluatorFactory.class,
 				new HalsteadMetricEvaluatorFactory(), properties);
 		registerService(EvaluatorFactory.class,

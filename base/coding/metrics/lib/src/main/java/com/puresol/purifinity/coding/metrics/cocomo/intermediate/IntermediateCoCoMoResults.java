@@ -21,23 +21,22 @@ public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult 
 
 	private int phyLOC;
 	private double ksloc;
+	private final double eaf;
 	private double personMonth;
 	private double personYears;
 	private double scheduledMonth;
 	private double scheduledYears;
 	private double teamSize;
 	private double estimatedCosts;
-	private double c1; // complexity constant 1
-	private double c2; // complexity constant 2
-	private double c3; // complexity constant 3
-	private SoftwareComplexity complexity;
+	private SoftwareProject project;
 	private double averageSalary;
 	private String currency;
 
 	private final List<MetricValue> results = new ArrayList<MetricValue>();
 
 	public IntermediateCoCoMoResults() {
-		setComplexity(SoftwareComplexity.LOW);
+		eaf = 1.0;
+		setProject(SoftwareProject.SEMI_DETACHED);
 		setAverageSalary(56286, "$");
 		refreshParameters();
 	}
@@ -108,52 +107,18 @@ public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult 
 	}
 
 	/**
-	 * @return the c1
-	 */
-	public double getC1() {
-		return c1;
-	}
-
-	/**
-	 * @return the c2
-	 */
-	public double getC2() {
-		return c2;
-	}
-
-	/**
-	 * @return the c3
-	 */
-	public double getC3() {
-		return c3;
-	}
-
-	/**
 	 * @return the complexity
 	 */
-	public SoftwareComplexity getComplexity() {
-		return complexity;
+	public SoftwareProject getProject() {
+		return project;
 	}
 
 	/**
-	 * @param complexity
+	 * @param project
 	 *            the complexity to set
 	 */
-	public void setComplexity(SoftwareComplexity complexity) {
-		this.complexity = complexity;
-		if (complexity == SoftwareComplexity.LOW) {
-			c1 = 2.40;
-			c2 = 1.05;
-			c3 = 0.38;
-		} else if (complexity == SoftwareComplexity.MEDIUM) {
-			c1 = 3.00;
-			c2 = 1.12;
-			c3 = 0.35;
-		} else if (complexity == SoftwareComplexity.HIGH) {
-			c1 = 3.60;
-			c2 = 1.20;
-			c3 = 0.32;
-		}
+	public void setProject(SoftwareProject project) {
+		this.project = project;
 		refresh();
 	}
 
@@ -189,10 +154,11 @@ public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult 
 
 	private void calculate() {
 		ksloc = phyLOC / 1000.0;
-		personMonth = Math.round(c1 * Math.exp(c2 * Math.log(ksloc)) * 100.0) / 100.0;
+		personMonth = Math.round(project.getAi()
+				* Math.exp(project.getBi() * Math.log(ksloc)) * eaf * 100.0) / 100.0;
 		personYears = Math.round(personMonth / 12.0 * 100.0) / 100.0;
-		scheduledMonth = Math
-				.round(2.5 * Math.exp(c3 * Math.log(personMonth)) * 100.0) / 100.0;
+		scheduledMonth = Math.round(project.getCi()
+				* Math.exp(project.getDi() * Math.log(personMonth)) * 100.0) / 100.0;
 		scheduledYears = Math.round(scheduledMonth / 12 * 100.0) / 100.0;
 		teamSize = Math.round(personMonth / scheduledMonth * 100.0) / 100.0;
 		estimatedCosts = Math.round(personYears * averageSalary * 2.4 / 1000.0
@@ -218,17 +184,18 @@ public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult 
 	public String toString() {
 		String text = "Total Physical Source Lines of Code (SLOC)"
 				+ "                = " + phyLOC + "\n";
-		text += "Calculation for a " + complexity.name()
+		text += "Calculation for a " + project.name()
 				+ " complexity project.\n";
 		text += "Development Effort Estimate, Person-Years (Person-Months) = "
 				+ personYears + " (" + personMonth + ")\n";
-		text += " (Intermediate COCOMO model, Person-Months = " + c1
-				+ " * (KSLOC^" + c2 + ")) / " + complexity.name()
-				+ " complexity\n";
+		text += " (Intermediate COCOMO model, Person-Months = "
+				+ project.getAi() + " * (KSLOC^" + project.getBi() + ") * "
+				+ eaf + ") / " + project.name() + " complexity\n";
 		text += "Schedule Estimate, Years (Months)                         = "
 				+ scheduledYears + " (" + scheduledMonth + ")\n";
-		text += " (Intermediate COCOMO model, Months = 2.5 * (person-months^"
-				+ c3 + ")) / " + complexity.name() + " complexity\n";
+		text += " (Intermediate COCOMO model, Months = " + project.getCi()
+				+ " * (person-months^" + project.getDi() + ")) / "
+				+ project.name() + " complexity\n";
 		text += "Estimated Average Number of Developers (Effort/Schedule)  = "
 				+ teamSize + "\n";
 		text += "Total Estimated Cost to Develop                           = "
@@ -240,5 +207,9 @@ public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult 
 
 	public Money getMoney() {
 		return new Money(currency, 100, Math.round(averageSalary * 100));
+	}
+
+	public double getEAF() {
+		return eaf;
 	}
 }
