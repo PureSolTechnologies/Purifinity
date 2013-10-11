@@ -1,8 +1,8 @@
 package com.puresol.purifinity.client.test;
 
 import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.widgetOfType;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.List;
@@ -32,8 +32,8 @@ public class AbstractUITest {
 	@BeforeClass
 	public static void initialize() {
 		workbenchBot = new SWTWorkbenchBot();
-		assertEquals("Purifinity was not started.", "Purifinity", workbenchBot
-				.activeShell().getText());
+		assertTrue("Purifinity was not started.", workbenchBot.activeShell()
+				.getText().contains("Purifinity"));
 		clearUI();
 	}
 
