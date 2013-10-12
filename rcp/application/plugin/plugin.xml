@@ -243,18 +243,14 @@
                   label="Bug and Feature Request Tracker Website..."
                   style="push">
             </command>
+              <separator
+                    name="additions"
+                    visible="true">
+            </separator>
             <separator
                   name="com.puresol.purifinity.client.application.plugin.separator6"
                   visible="true">
             </separator>
-              <separator
-                    name="additions"
-                    visible="false">
-            </separator>
-              <separator
-                    name="com.puresol.purifinity.client.application.plugin.separator7"
-                    visible="true">
-              </separator>
             <command
                   commandId="org.eclipse.ui.help.aboutAction"
                   id="about"
