@@ -6,7 +6,7 @@ import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoDirectoryRe
 import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoFileResults;
 import com.puresol.purifinity.coding.store.fs.evaluation.AbstractEvaluatorStore;
 
-public class CoCoMoEvaluatorStore extends AbstractEvaluatorStore {
+public class BasicCoCoMoEvaluatorStore extends AbstractEvaluatorStore {
 
 	@Override
 	protected Class<? extends MetricFileResults> getFileResultClass() {

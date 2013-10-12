@@ -1,5 +1,7 @@
 package com.puresol.purifinity.client.common.evaluation.metrics.cocomo.intermediate;
 
+import static com.puresol.purifinity.client.common.ui.SWTUtils.DEFAULT_MARGIN;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -26,7 +28,7 @@ public class IntermediateCoCoMoResultPanel extends Composite {
 	private final Group group;
 
 	private final Label totalSourceLinesLabel;
-	private final Label complexityLabel;
+	private final Label softwareProjectLabel;
 	private final Label developmentEffortLabel;
 	private final Label scheduleEstimateLabel;
 	private final Label numberOfDevelopersLabel;
@@ -58,22 +60,22 @@ public class IntermediateCoCoMoResultPanel extends Composite {
 						| SWT.BOLD);
 		group.setFont(newFont);
 
-		totalSourceLinesLabel = newLabel(null);
-		complexityLabel = newLabel(totalSourceLinesLabel);
-		developmentEffortLabel = newLabel(complexityLabel);
-		scheduleEstimateLabel = newLabel(developmentEffortLabel);
-		numberOfDevelopersLabel = newLabel(scheduleEstimateLabel);
-		estimatedCostsLabel = newLabel(numberOfDevelopersLabel);
+		totalSourceLinesLabel = newLabel(null, false);
+		softwareProjectLabel = newLabel(totalSourceLinesLabel, false);
+		developmentEffortLabel = newLabel(softwareProjectLabel, false);
+		scheduleEstimateLabel = newLabel(developmentEffortLabel, false);
+		numberOfDevelopersLabel = newLabel(scheduleEstimateLabel, false);
+		estimatedCostsLabel = newLabel(numberOfDevelopersLabel, true);
 
 		Label totalSourceLinesEqualsLabel = addEquals(totalSourceLinesLabel);
-		Label complexityEqualsLabel = addEquals(complexityLabel);
+		Label softwareProjectsEqualsLabel = addEquals(softwareProjectLabel);
 		Label developmentEffortEqualsLabel = addEquals(developmentEffortLabel);
 		Label scheduleEstimateEqualsLabel = addEquals(scheduleEstimateLabel);
 		Label numberOfDevelopersEqualsLabel = addEquals(numberOfDevelopersLabel);
 		Label estimatedCostsEqualsLabel = addEquals(estimatedCostsLabel);
 
 		totalSourceLinesText = newText(totalSourceLinesEqualsLabel);
-		projectText = newText(complexityEqualsLabel);
+		projectText = newText(softwareProjectsEqualsLabel);
 		developmentEffortText = newText(developmentEffortEqualsLabel);
 		scheduleEstimateText = newText(scheduleEstimateEqualsLabel);
 		numberOfDevelopersText = newText(numberOfDevelopersEqualsLabel);
@@ -83,15 +85,18 @@ public class IntermediateCoCoMoResultPanel extends Composite {
 		group.pack();
 	}
 
-	private Label newLabel(Label labelAbove) {
+	private Label newLabel(Label labelAbove, boolean last) {
 		Label newLabel = new Label(group, SWT.NONE);
 		FormData fdNewLabel = new FormData();
 		if (labelAbove == null) {
 			fdNewLabel.top = new FormAttachment(0, 0);
 		} else {
-			fdNewLabel.top = new FormAttachment(labelAbove, 10);
+			fdNewLabel.top = new FormAttachment(labelAbove, DEFAULT_MARGIN);
 		}
-		fdNewLabel.left = new FormAttachment(0, 10);
+		fdNewLabel.left = new FormAttachment(0, DEFAULT_MARGIN);
+		if (last) {
+			fdNewLabel.bottom = new FormAttachment(100, -DEFAULT_MARGIN);
+		}
 		newLabel.setLayoutData(fdNewLabel);
 		return newLabel;
 	}
@@ -110,7 +115,6 @@ public class IntermediateCoCoMoResultPanel extends Composite {
 	private Text newText(Label equalsLabel) {
 		Text newText = new Text(group, SWT.READ_ONLY | SWT.MULTI | SWT.NO_FOCUS);
 		newText.setEditable(false);
-		// newText.setEnabled(false);
 		FormData fdNewText = new FormData();
 		fdNewText.top = new FormAttachment(equalsLabel, 0, SWT.TOP);
 		fdNewText.bottom = new FormAttachment(equalsLabel, 0, SWT.BOTTOM);
@@ -162,7 +166,7 @@ public class IntermediateCoCoMoResultPanel extends Composite {
 			eaf = String.valueOf(results.getEAF());
 		}
 		totalSourceLinesLabel.setText("Total Physical Source Lines of Code");
-		complexityLabel.setText("Project Complexity");
+		softwareProjectLabel.setText("Software Project");
 		developmentEffortLabel.setText("Estimated Development Effort\n"
 				+ "(Person-Months = " + ai + " * kSLOC^" + bi + " * " + eaf
 				+ ")");

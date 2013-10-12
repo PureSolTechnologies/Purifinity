@@ -30,14 +30,14 @@ public abstract class BasicCoCoMoResults extends AbstractEvaluatorResult {
 	private double c1; // complexity constant 1
 	private double c2; // complexity constant 2
 	private double c3; // complexity constant 3
-	private SoftwareComplexity complexity;
+	private SoftwareProject complexity;
 	private double averageSalary;
 	private String currency;
 
 	private final List<MetricValue> results = new ArrayList<MetricValue>();
 
 	public BasicCoCoMoResults() {
-		setComplexity(SoftwareComplexity.LOW);
+		setComplexity(SoftwareProject.LOW);
 		setAverageSalary(56286, "$");
 		refreshParameters();
 	}
@@ -131,7 +131,7 @@ public abstract class BasicCoCoMoResults extends AbstractEvaluatorResult {
 	/**
 	 * @return the complexity
 	 */
-	public SoftwareComplexity getComplexity() {
+	public SoftwareProject getComplexity() {
 		return complexity;
 	}
 
@@ -139,17 +139,17 @@ public abstract class BasicCoCoMoResults extends AbstractEvaluatorResult {
 	 * @param complexity
 	 *            the complexity to set
 	 */
-	public void setComplexity(SoftwareComplexity complexity) {
+	public void setComplexity(SoftwareProject complexity) {
 		this.complexity = complexity;
-		if (complexity == SoftwareComplexity.LOW) {
+		if (complexity == SoftwareProject.LOW) {
 			c1 = 2.40;
 			c2 = 1.05;
 			c3 = 0.38;
-		} else if (complexity == SoftwareComplexity.MEDIUM) {
+		} else if (complexity == SoftwareProject.MEDIUM) {
 			c1 = 3.00;
 			c2 = 1.12;
 			c3 = 0.35;
-		} else if (complexity == SoftwareComplexity.HIGH) {
+		} else if (complexity == SoftwareProject.HIGH) {
 			c1 = 3.60;
 			c2 = 1.20;
 			c3 = 0.32;

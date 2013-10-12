@@ -52,7 +52,7 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
 
 	private final EvaluatorStore store;
 	private final EvaluatorStore slocStore;
-	private SoftwareComplexity complexity = SoftwareComplexity.LOW;
+	private SoftwareProject complexity = SoftwareProject.LOW;
 	private int averageSalary = 56286;
 	private String currency = "USD";
 
@@ -68,7 +68,7 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
 		return configurationParameters;
 	}
 
-	public void setComplexity(SoftwareComplexity complexity) {
+	public void setComplexity(SoftwareProject complexity) {
 		this.complexity = complexity;
 	}
 

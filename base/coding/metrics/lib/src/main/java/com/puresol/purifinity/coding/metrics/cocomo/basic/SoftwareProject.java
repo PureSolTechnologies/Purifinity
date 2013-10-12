@@ -19,6 +19,6 @@ package com.puresol.purifinity.coding.metrics.cocomo.basic;
  * @author Rick-Rainer Ludwig
  * 
  */
-public enum SoftwareComplexity {
+public enum SoftwareProject {
 	LOW, MEDIUM, HIGH;
 }

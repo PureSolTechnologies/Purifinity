@@ -72,7 +72,7 @@ public class BasicCoCoMoDirectoryResults extends BasicCoCoMoResults implements
 				COSTS));
 
 		row.put(SALARY.getName(), new GeneralValue<Money>(getMoney(), SALARY));
-		row.put(COMPLEXITY.getName(), new GeneralValue<SoftwareComplexity>(
+		row.put(COMPLEXITY.getName(), new GeneralValue<SoftwareProject>(
 				getComplexity(), COMPLEXITY));
 		row.put(C1.getName(), new GeneralValue<Double>(getC1(), C1));
 		row.put(C2.getName(), new GeneralValue<Double>(getC2(), C2));

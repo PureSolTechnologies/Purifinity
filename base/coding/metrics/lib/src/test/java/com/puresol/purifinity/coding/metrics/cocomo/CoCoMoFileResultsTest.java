@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoFileResults;
-import com.puresol.purifinity.coding.metrics.cocomo.basic.SoftwareComplexity;
+import com.puresol.purifinity.coding.metrics.cocomo.basic.SoftwareProject;
 import com.puresol.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class CoCoMoFileResultsTest {
@@ -22,7 +22,7 @@ public class CoCoMoFileResultsTest {
 				new UnspecifiedSourceCodeLocation());
 		assertEquals(56286, set.getAverageSalary(), 1e-8);
 		assertEquals("$", set.getCurrency());
-		assertEquals(SoftwareComplexity.LOW, set.getComplexity());
+		assertEquals(SoftwareProject.LOW, set.getComplexity());
 	}
 
 	@Test
@@ -30,12 +30,12 @@ public class CoCoMoFileResultsTest {
 		BasicCoCoMoFileResults set = new BasicCoCoMoFileResults(
 				new UnspecifiedSourceCodeLocation());
 		set.setAverageSalary(12345.67, "EUR");
-		set.setComplexity(SoftwareComplexity.HIGH);
+		set.setComplexity(SoftwareProject.HIGH);
 		set.setSloc(1234567);
 
 		assertEquals(12345.67, set.getAverageSalary(), 1e-8);
 		assertEquals("EUR", set.getCurrency());
-		assertEquals(SoftwareComplexity.HIGH, set.getComplexity());
+		assertEquals(SoftwareProject.HIGH, set.getComplexity());
 		assertEquals(1234567, set.getPhyLOC());
 	}
 
@@ -43,17 +43,17 @@ public class CoCoMoFileResultsTest {
 	public void testFormalaConstants() {
 		BasicCoCoMoFileResults set = new BasicCoCoMoFileResults(
 				new UnspecifiedSourceCodeLocation());
-		set.setComplexity(SoftwareComplexity.LOW);
+		set.setComplexity(SoftwareProject.LOW);
 		assertEquals(2.4, set.getC1(), 1e-8);
 		assertEquals(1.05, set.getC2(), 1e-8);
 		assertEquals(0.38, set.getC3(), 1e-8);
 
-		set.setComplexity(SoftwareComplexity.MEDIUM);
+		set.setComplexity(SoftwareProject.MEDIUM);
 		assertEquals(3.0, set.getC1(), 1e-8);
 		assertEquals(1.12, set.getC2(), 1e-8);
 		assertEquals(0.35, set.getC3(), 1e-8);
 
-		set.setComplexity(SoftwareComplexity.HIGH);
+		set.setComplexity(SoftwareProject.HIGH);
 		assertEquals(3.6, set.getC1(), 1e-8);
 		assertEquals(1.20, set.getC2(), 1e-8);
 		assertEquals(0.32, set.getC3(), 1e-8);
@@ -64,12 +64,12 @@ public class CoCoMoFileResultsTest {
 		BasicCoCoMoFileResults set = new BasicCoCoMoFileResults(
 				new UnspecifiedSourceCodeLocation());
 		set.setAverageSalary(50000, "$");
-		set.setComplexity(SoftwareComplexity.LOW);
+		set.setComplexity(SoftwareProject.LOW);
 		set.setSloc(100000);
 
 		assertEquals(50000.0, set.getAverageSalary(), 1e-8);
 		assertEquals("$", set.getCurrency());
-		assertEquals(SoftwareComplexity.LOW, set.getComplexity());
+		assertEquals(SoftwareProject.LOW, set.getComplexity());
 		assertEquals(100000, set.getPhyLOC());
 
 		assertEquals(3021.6, set.getEstimatedCosts(), 1e-8);

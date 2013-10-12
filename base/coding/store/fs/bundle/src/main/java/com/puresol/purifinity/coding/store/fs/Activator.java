@@ -12,6 +12,7 @@ import com.puresol.purifinity.coding.analysis.api.FileStore;
 import com.puresol.purifinity.coding.evaluation.api.Evaluator;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluator;
+import com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluator;
 import com.puresol.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluator;
 import com.puresol.purifinity.coding.metrics.entropy.EntropyMetricEvaluator;
 import com.puresol.purifinity.coding.metrics.halstead.HalsteadMetricEvaluator;
@@ -22,10 +23,11 @@ import com.puresol.purifinity.coding.metrics.sloc.SLOCEvaluator;
 import com.puresol.purifinity.coding.store.fs.analysis.AnalysisStoreImpl;
 import com.puresol.purifinity.coding.store.fs.analysis.DirectoryStoreImpl;
 import com.puresol.purifinity.coding.store.fs.analysis.FileStoreImpl;
-import com.puresol.purifinity.coding.store.fs.metrics.CoCoMoEvaluatorStore;
+import com.puresol.purifinity.coding.store.fs.metrics.BasicCoCoMoEvaluatorStore;
 import com.puresol.purifinity.coding.store.fs.metrics.CodeDepthEvaluatorStore;
 import com.puresol.purifinity.coding.store.fs.metrics.EntropyEvaluatorStore;
 import com.puresol.purifinity.coding.store.fs.metrics.HalsteadMetricEvaluatorStore;
+import com.puresol.purifinity.coding.store.fs.metrics.IntermediateCoCoMoEvaluatorStore;
 import com.puresol.purifinity.coding.store.fs.metrics.MaintainabilityIndexEvaluatorStore;
 import com.puresol.purifinity.coding.store.fs.metrics.McCabeMetricEvaluatorStore;
 import com.puresol.purifinity.coding.store.fs.metrics.NormalizedMaintainabilityIndexEvaluatorStore;
@@ -41,7 +43,7 @@ public class Activator extends AbstractActivator {
 		registerService(DirectoryStore.class, new DirectoryStoreImpl());
 		registerService(FileStore.class, new FileStoreImpl());
 
-		registerEvaluatorStore(new CoCoMoEvaluatorStore(),
+		registerEvaluatorStore(new BasicCoCoMoEvaluatorStore(),
 				BasicCoCoMoEvaluator.class);
 		registerEvaluatorStore(new CodeDepthEvaluatorStore(),
 				CodeDepthMetricEvaluator.class);
@@ -49,6 +51,8 @@ public class Activator extends AbstractActivator {
 				EntropyMetricEvaluator.class);
 		registerEvaluatorStore(new HalsteadMetricEvaluatorStore(),
 				HalsteadMetricEvaluator.class);
+		registerEvaluatorStore(new IntermediateCoCoMoEvaluatorStore(),
+				IntermediateCoCoMoEvaluator.class);
 		registerEvaluatorStore(new MaintainabilityIndexEvaluatorStore(),
 				MaintainabilityIndexEvaluator.class);
 		registerEvaluatorStore(new McCabeMetricEvaluatorStore(),

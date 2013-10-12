@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.puresol.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoResults;
-import com.puresol.purifinity.coding.metrics.cocomo.basic.SoftwareComplexity;
+import com.puresol.purifinity.coding.metrics.cocomo.basic.SoftwareProject;
 
 public class BasicCoCoMoResultComponent extends Composite implements ModifyListener,
 		SelectionListener {
@@ -50,7 +50,7 @@ public class BasicCoCoMoResultComponent extends Composite implements ModifyListe
 		complexityCombo.addSelectionListener(this);
 		complexityViewer = new ComboViewer(complexityCombo);
 		complexityViewer.setContentProvider(ArrayContentProvider.getInstance());
-		complexityViewer.setInput(SoftwareComplexity.values());
+		complexityViewer.setInput(SoftwareProject.values());
 
 		new Label(parameterSelection, SWT.NONE).setText("Avg. Salary:");
 		avgSalary = new Text(parameterSelection, SWT.BORDER);
@@ -86,8 +86,8 @@ public class BasicCoCoMoResultComponent extends Composite implements ModifyListe
 			String currency2 = results.getCurrency();
 			avgSalary.setText(avgSalaray);
 			currency.setText(currency2);
-			for (int i = 0; i < SoftwareComplexity.values().length; i++) {
-				SoftwareComplexity complexity = SoftwareComplexity.values()[i];
+			for (int i = 0; i < SoftwareProject.values().length; i++) {
+				SoftwareProject complexity = SoftwareProject.values()[i];
 				if (complexity == results.getComplexity()) {
 					complexityCombo.select(i);
 				}
@@ -122,7 +122,7 @@ public class BasicCoCoMoResultComponent extends Composite implements ModifyListe
 	public void widgetSelected(SelectionEvent e) {
 		if (e.getSource() == complexityCombo) {
 			if (results != null) {
-				results.setComplexity(SoftwareComplexity.values()[complexityCombo
+				results.setComplexity(SoftwareProject.values()[complexityCombo
 						.getSelectionIndex()]);
 				refresh();
 			}
@@ -133,7 +133,7 @@ public class BasicCoCoMoResultComponent extends Composite implements ModifyListe
 	public void widgetDefaultSelected(SelectionEvent e) {
 		if (e.getSource() == complexityCombo) {
 			if (results != null) {
-				results.setComplexity(SoftwareComplexity.values()[complexityCombo
+				results.setComplexity(SoftwareProject.values()[complexityCombo
 						.getSelectionIndex()]);
 				refresh();
 			}

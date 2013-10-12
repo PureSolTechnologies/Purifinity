@@ -9,7 +9,10 @@ import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.Intermed
 import static com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.TEAM_SIZE;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.puresol.commons.math.Money;
 import com.puresol.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
@@ -21,7 +24,6 @@ public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult 
 
 	private int phyLOC;
 	private double ksloc;
-	private final double eaf;
 	private double personMonth;
 	private double personYears;
 	private double scheduledMonth;
@@ -34,11 +36,11 @@ public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult 
 
 	private final List<MetricValue> results = new ArrayList<MetricValue>();
 
+	private final Map<IntermediateCOCOMOAttribute, Rating> attributes = new HashMap<>();
+
 	public IntermediateCoCoMoResults() {
-		eaf = 1.0;
 		setProject(SoftwareProject.SEMI_DETACHED);
 		setAverageSalary(56286, "$");
-		refreshParameters();
 	}
 
 	/**
@@ -148,14 +150,14 @@ public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult 
 
 	private void refresh() {
 		calculate();
-		refreshParameters();
 		recreateResultsList();
 	}
 
 	private void calculate() {
 		ksloc = phyLOC / 1000.0;
 		personMonth = Math.round(project.getAi()
-				* Math.exp(project.getBi() * Math.log(ksloc)) * eaf * 100.0) / 100.0;
+				* Math.exp(project.getBi() * Math.log(ksloc)) * getEAF()
+				* 100.0) / 100.0;
 		personYears = Math.round(personMonth / 12.0 * 100.0) / 100.0;
 		scheduledMonth = Math.round(project.getCi()
 				* Math.exp(project.getDi() * Math.log(personMonth)) * 100.0) / 100.0;
@@ -165,12 +167,8 @@ public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult 
 				* 100.0) / 100.0;
 	}
 
-	private void refreshParameters() {
-	}
-
 	private void recreateResultsList() {
 		results.clear();
-		results.add(new MetricValue(ksloc, KSLOC));
 		results.add(new MetricValue(ksloc, KSLOC));
 		results.add(new MetricValue(personMonth, PERSON_MONTH));
 		results.add(new MetricValue(personYears, PERSON_YEARS));
@@ -190,7 +188,7 @@ public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult 
 				+ personYears + " (" + personMonth + ")\n";
 		text += " (Intermediate COCOMO model, Person-Months = "
 				+ project.getAi() + " * (KSLOC^" + project.getBi() + ") * "
-				+ eaf + ") / " + project.name() + " complexity\n";
+				+ getEAF() + ") / " + project.name() + " complexity\n";
 		text += "Schedule Estimate, Years (Months)                         = "
 				+ scheduledYears + " (" + scheduledMonth + ")\n";
 		text += " (Intermediate COCOMO model, Months = " + project.getCi()
@@ -210,6 +208,17 @@ public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult 
 	}
 
 	public double getEAF() {
+		double eaf = 1.0;
+		for (Entry<IntermediateCOCOMOAttribute, Rating> attribute : attributes
+				.entrySet()) {
+			eaf *= attribute.getKey().getFactor(attribute.getValue());
+		}
 		return eaf;
+	}
+
+	public void setAttribute(IntermediateCOCOMOAttribute attribute,
+			Rating rating) {
+		attributes.put(attribute, rating);
+		refresh();
 	}
 }

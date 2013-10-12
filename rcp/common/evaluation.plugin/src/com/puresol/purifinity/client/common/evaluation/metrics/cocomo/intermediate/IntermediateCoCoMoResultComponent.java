@@ -1,73 +1,103 @@
 package com.puresol.purifinity.client.common.evaluation.metrics.cocomo.intermediate;
 
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ComboViewer;
+import static com.puresol.purifinity.client.common.ui.SWTUtils.DEFAULT_MARGIN;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 
-import com.puresol.purifinity.coding.metrics.cocomo.basic.SoftwareComplexity;
 import com.puresol.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoResults;
-import com.puresol.purifinity.coding.metrics.cocomo.intermediate.SoftwareProject;
 
 public class IntermediateCoCoMoResultComponent extends Composite implements
-		ModifyListener, SelectionListener {
+		AttributeChangedListener {
 
-	private final IntermediateCoCoMoResultPanel resultPanel;
-	private final Combo complexityCombo;
-	private final ComboViewer complexityViewer;
-	private final Text avgSalary;
-	private final Text currency;
+	private ProjectSettingsControl projectSettings;
+	private IntermediateCoCoMoResultPanel resultPanel;
 	private IntermediateCoCoMoResults results;
+	private ProductAttributesContol productAttributes;
+	private ProjectAttributesControl projectAttributes;
+	private HardwareAttributesControl hardwareAttributes;
+	private PersonellAttributesControl personellAttributes;
 
 	public IntermediateCoCoMoResultComponent(Composite parent) {
 		super(parent, SWT.NONE);
 
 		FormLayout layout = new FormLayout();
-		layout.marginWidth = 10;
-		layout.marginHeight = 10;
+		layout.marginWidth = DEFAULT_MARGIN;
+		layout.marginHeight = DEFAULT_MARGIN;
 		setLayout(layout);
 
-		Composite parameterSelection = new Composite(this, SWT.NONE);
-		parameterSelection.setLayout(new GridLayout(2, true));
-		FormData fdParameterSelection = new FormData();
-		fdParameterSelection.left = new FormAttachment(0, 10);
-		fdParameterSelection.right = new FormAttachment(100, -10);
-		fdParameterSelection.top = new FormAttachment(0, 10);
-		parameterSelection.setLayoutData(fdParameterSelection);
+		createAttributesPanel(projectSettings);
+	}
 
-		new Label(parameterSelection, SWT.NONE).setText("Complexity:");
-		complexityCombo = new Combo(parameterSelection, SWT.READ_ONLY);
-		complexityCombo.addSelectionListener(this);
-		complexityViewer = new ComboViewer(complexityCombo);
-		complexityViewer.setContentProvider(ArrayContentProvider.getInstance());
-		complexityViewer.setInput(SoftwareComplexity.values());
+	private void createAttributesPanel(Composite parameterSelection) {
+		Composite attributesPanel = new Composite(this, SWT.NONE);
+		FormData fdAttributesPanel = new FormData();
+		fdAttributesPanel.top = new FormAttachment(parameterSelection,
+				DEFAULT_MARGIN);
+		fdAttributesPanel.left = new FormAttachment(0, DEFAULT_MARGIN);
+		fdAttributesPanel.right = new FormAttachment(100, -DEFAULT_MARGIN);
+		attributesPanel.setLayoutData(fdAttributesPanel);
+		GridLayout layout = new GridLayout(2, true);
+		attributesPanel.setLayout(layout);
 
-		new Label(parameterSelection, SWT.NONE).setText("Avg. Salary:");
-		avgSalary = new Text(parameterSelection, SWT.BORDER);
-		avgSalary.addModifyListener(this);
+		addProjectSettingsPanel(attributesPanel);
+		addResultsPanel(attributesPanel);
+		addProductAttributes(attributesPanel);
+		addHardwareAttributes(attributesPanel);
+		addPersonellAttributes(attributesPanel);
+		addProjectAttributes(attributesPanel);
+	}
 
-		new Label(parameterSelection, SWT.NONE).setText("Currency:");
-		currency = new Text(parameterSelection, SWT.BORDER);
-		currency.addModifyListener(this);
+	private void addProjectSettingsPanel(Composite attributesPanel) {
+		projectSettings = new ProjectSettingsControl(attributesPanel,
+				SWT.SHADOW_IN);
+		projectSettings.addAttributeChangedListener(this);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		projectSettings.setLayoutData(gridData);
+	}
 
-		resultPanel = new IntermediateCoCoMoResultPanel(this);
-		FormData fdText = new FormData();
-		fdText.left = new FormAttachment(0, 10);
-		fdText.right = new FormAttachment(100, -10);
-		fdText.top = new FormAttachment(parameterSelection, 10);
-		fdText.bottom = new FormAttachment(100, -10);
-		resultPanel.setLayoutData(fdText);
+	private void addProductAttributes(Composite attributesPanel) {
+		productAttributes = new ProductAttributesContol(attributesPanel,
+				SWT.SHADOW_IN);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		productAttributes.setLayoutData(gridData);
+		productAttributes.addAttributeChangedListener(this);
+	}
+
+	private void addHardwareAttributes(Composite attributesPanel) {
+		hardwareAttributes = new HardwareAttributesControl(attributesPanel,
+				SWT.SHADOW_IN);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		hardwareAttributes.setLayoutData(gridData);
+		hardwareAttributes.addAttributeChangedListener(this);
+	}
+
+	private void addPersonellAttributes(Composite attributesPanel) {
+		personellAttributes = new PersonellAttributesControl(attributesPanel,
+				SWT.SHADOW_IN);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		personellAttributes.setLayoutData(gridData);
+		personellAttributes.addAttributeChangedListener(this);
+	}
+
+	private void addProjectAttributes(Composite attributesPanel) {
+		projectAttributes = new ProjectAttributesControl(attributesPanel,
+				SWT.SHADOW_IN);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		projectAttributes.setLayoutData(gridData);
+		projectAttributes.addAttributeChangedListener(this);
+	}
+
+	private void addResultsPanel(Composite attributesPanel) {
+		resultPanel = new IntermediateCoCoMoResultPanel(attributesPanel);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		resultPanel.setLayoutData(gridData);
 	}
 
 	@Override
@@ -82,21 +112,11 @@ public class IntermediateCoCoMoResultComponent extends Composite implements
 
 	public void setResults(IntermediateCoCoMoResults results) {
 		this.results = results;
-		if (results != null) {
-			String avgSalaray = String.valueOf(results.getAverageSalary());
-			String currency2 = results.getCurrency();
-			avgSalary.setText(avgSalaray);
-			currency.setText(currency2);
-			for (int i = 0; i < SoftwareComplexity.values().length; i++) {
-				SoftwareProject project = SoftwareProject.values()[i];
-				if (project == results.getProject()) {
-					complexityCombo.select(i);
-				}
-			}
-		} else {
-			avgSalary.setText("");
-			currency.setText("");
-		}
+		projectSettings.setResults(results);
+		productAttributes.setResults(results);
+		hardwareAttributes.setResults(results);
+		projectAttributes.setResults(results);
+		personellAttributes.setResults(results);
 		refresh();
 	}
 
@@ -105,39 +125,9 @@ public class IntermediateCoCoMoResultComponent extends Composite implements
 	}
 
 	@Override
-	public void modifyText(ModifyEvent e) {
-		if ((e.getSource() == avgSalary) || (e.getSource() == currency)) {
-			try {
-				if (results != null) {
-					results.setAverageSalary(
-							Double.valueOf(avgSalary.getText()),
-							currency.getText());
-					refresh();
-				}
-			} catch (NumberFormatException e1) {
-			}
-		}
-	}
-
-	@Override
-	public void widgetSelected(SelectionEvent e) {
-		if (e.getSource() == complexityCombo) {
-			if (results != null) {
-				results.setProject(SoftwareProject.values()[complexityCombo
-						.getSelectionIndex()]);
-				refresh();
-			}
-		}
-	}
-
-	@Override
-	public void widgetDefaultSelected(SelectionEvent e) {
-		if (e.getSource() == complexityCombo) {
-			if (results != null) {
-				results.setProject(SoftwareProject.values()[complexityCombo
-						.getSelectionIndex()]);
-				refresh();
-			}
+	public void attributeChanged(Widget source) {
+		if (results != null) {
+			refresh();
 		}
 	}
 }
