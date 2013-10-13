@@ -11,4 +11,29 @@
 	<artifactId>com.puresol.purifinity.client.common.help.plugin</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xml-maven-plugin</artifactId>
+				<version>1.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>transform</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<transformationSets>
+						<transformationSet>
+							<dir>docbook/purifinityClient</dir>
+							<stylesheet>docbook/xsl/eclipse.xsl</stylesheet>
+						</transformationSet>
+					</transformationSets>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
