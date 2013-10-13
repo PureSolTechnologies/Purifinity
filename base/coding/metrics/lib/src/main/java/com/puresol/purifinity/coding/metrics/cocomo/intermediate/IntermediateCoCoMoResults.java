@@ -207,6 +207,13 @@ public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult 
 		return new Money(currency, 100, Math.round(averageSalary * 100));
 	}
 
+	/**
+	 * This method calculates the EAF factor. It reads out the
+	 * {@link #attributes} field and multiplies each values. If an attribute is
+	 * not set, it is treated as {@link Rating#NOMINAL} (factor 1.0).
+	 * 
+	 * @return
+	 */
 	public double getEAF() {
 		double eaf = 1.0;
 		for (Entry<IntermediateCOCOMOAttribute, Rating> attribute : attributes

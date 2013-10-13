@@ -6,5 +6,6 @@
 	<topic label="Nesting Depth Metric" href="help/nestingDepthMetric.html" />
 	<topic label="Maintainability Index" href="help/maintainabilityIndex.html" />
 	<topic label="Normalized Maintainability Index" href="help/normalizedMaintainabilityIndex.html" />
-	<topic label="Cost Construction Model (COCOMO)" href="help/cocomo.html" />
+	<topic label="Basic Cost Construction Model (Basic COCOMO)" href="help/basicCOCOMO.html" />
+	<topic label="Intermediate Cost Construction Model (Intermediate COCOMO)" href="help/intermediateCOCOMO.html" />
 </toc>
