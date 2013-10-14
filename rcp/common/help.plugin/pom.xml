@@ -49,6 +49,13 @@
 						</configuration>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.saxon</groupId>
+						<artifactId>saxon-B</artifactId>
+						<version>9.0</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -64,12 +71,19 @@
 							<transformationSets>
 								<transformationSet>
 									<dir>docbook/purifinityClient</dir>
-									<stylesheet>target/docbook/eclipse/eclipse3.xsl</stylesheet>
+									<stylesheet>target/docbook/xhtml/docbook.xsl</stylesheet>
 								</transformationSet>
 							</transformationSets>
 						</configuration>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.saxon</groupId>
+						<artifactId>saxon-B</artifactId>
+						<version>9.0</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
