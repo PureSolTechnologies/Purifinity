@@ -11,27 +11,65 @@
 	<artifactId>com.puresol.purifinity.client.common.help.plugin</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
+	<dependencies>
+		<dependency>
+			<groupId>net.sf.docbook</groupId>
+			<artifactId>docbook-xsl</artifactId>
+			<version>1.78.0</version>
+			<type>zip</type>
+			<classifier>resources</classifier>
+		</dependency>
+	</dependencies>
+
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>net.sf.docbook</groupId>
+									<artifactId>docbook-xsl</artifactId>
+									<version>1.78.0</version>
+									<type>zip</type>
+									<classifier>resources</classifier>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>xml-maven-plugin</artifactId>
 				<version>1.0</version>
 				<executions>
 					<execution>
+						<phase>process-resources</phase>
 						<goals>
 							<goal>transform</goal>
 						</goals>
+						<configuration>
+							<transformationSets>
+								<transformationSet>
+									<dir>docbook/purifinityClient</dir>
+									<stylesheet>target/docbook/eclipse/eclipse3.xsl</stylesheet>
+								</transformationSet>
+							</transformationSets>
+						</configuration>
 					</execution>
 				</executions>
-				<configuration>
-					<transformationSets>
-						<transformationSet>
-							<dir>docbook/purifinityClient</dir>
-							<stylesheet>docbook/xsl/eclipse.xsl</stylesheet>
-						</transformationSet>
-					</transformationSets>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>
