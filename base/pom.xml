@@ -305,7 +305,6 @@
 		<module>license</module>
 		<module>uhura</module>
 		<module>coding</module>
-		<!-- module>thirdparty</module -->
 	</modules>
 
 </project>

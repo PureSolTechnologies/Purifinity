@@ -12,10 +12,10 @@
 	exclude-result-prefixes="exsl db ng">
 	<xsl:import href="../target/docbook/xhtml/docbook.xsl" />
 	<xsl:param name="manifest">
-		0
+		1
 	</xsl:param>
 	<xsl:param name="create.plugin.xml">
-		0
+		1
 	</xsl:param>
 
 	<xsl:template name="plugin.xml">
