@@ -17,6 +17,11 @@
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Library parent module</name>
+	<licenses>
+		<license>
+			<name>PureSol Technologies Commercial License</name>
+		</license>
+	</licenses>
 
 	<repositories>
 		<repository>
@@ -297,6 +302,39 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>com.puresol.maven.plugins</groupId>
+				<artifactId>license-plugin</artifactId>
+				<configuration>
+					<recursive>true</recursive>
+					<validLicenses>
+						<validLicense>PureSol Technologies Commercial License</validLicense>
+						<!-- Apache License -->
+						<validLicense>Apache License, Version 2.0</validLicense>
+						<validLicense>The Apache Software License, Version 2.0</validLicense>
+						<!-- BSD License -->
+						<validLicense>BSD style</validLicense>
+						<!-- CPL -->
+						<validLicense>Common Public License Version 1.0</validLicense>
+						<!-- EPL -->
+						<validLicense>Eclipse Public License</validLicense>
+						<!-- LGPL -->
+						<validLicense>GNU Lesser General Public License (LGPL), Version 2.1</validLicense>
+						<!-- MIT License -->
+						<validLicense>MIT License</validLicense>
+						<validLicense>The MIT License</validLicense>
+						<validLicense></validLicense>
+						<validLicense></validLicense>
+						<validLicense></validLicense>
+						<validLicense></validLicense>
+						<validLicense></validLicense>
+						<validLicense></validLicense>
+						<validLicense></validLicense>
+					</validLicenses>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 	<modules>

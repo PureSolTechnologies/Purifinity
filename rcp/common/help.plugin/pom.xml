@@ -90,17 +90,6 @@
 				<artifactId>docbook-plugin</artifactId>
 				<version>0.1.0-SNAPSHOT</version>
 			</plugin>
-			<plugin>
-				<groupId>com.puresol.maven.plugins</groupId>
-				<artifactId>license-plugin</artifactId>
-				<version>0.1.0-SNAPSHOT</version>
-				<configuration>
-					<recursive>true</recursive>
-					<validLicenses>
-						<validLicense>MIT like</validLicense>
-					</validLicenses>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
