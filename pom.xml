@@ -40,6 +40,12 @@
 		</developer>
 	</developers>
 
+	<licenses>
+		<license>
+			<name>PureSol Technologies Commercial License</name>
+		</license>
+	</licenses>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -59,11 +65,8 @@
 			<name>libs-snapshot</name>
 			<url>http://repo/libs-snapshot</url>
 		</repository>
-		<!-- repository>
-			<id>JBoss</id>
-			<name>JBoss</name>
-			<url>https://repository.jboss.org/nexus/content/groups/public</url>
-		</repository -->
+		<!-- repository> <id>JBoss</id> <name>JBoss</name> <url>https://repository.jboss.org/nexus/content/groups/public</url> 
+			</repository -->
 	</repositories>
 
 	<pluginRepositories>
@@ -104,5 +107,30 @@
 		<module>configuration</module>
 		<module>license</module>
 	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.puresol.maven.plugins</groupId>
+				<artifactId>license-plugin</artifactId>
+				<version>0.1.0-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>validate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<recursive>true</recursive>
+					<validLicenses>
+						<validLicense>PureSol Technologies Commercial License</validLicense>
+						<validLicense>The Apache Software License, Version 2.0</validLicense>
+					</validLicenses>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>
