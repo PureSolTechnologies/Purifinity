@@ -38,7 +38,26 @@
 			<name>libs-snapshot</name>
 			<url>http://repo/libs-snapshot</url>
 		</repository>
+		<!-- repository> <id>JBoss</id> <name>JBoss</name> <url>https://repository.jboss.org/nexus/content/groups/public</url> 
+			</repository -->
 	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>plugins-release</name>
+			<url>http://repo/plugins-release</url>
+		</pluginRepository>
+		<pluginRepository>
+			<snapshots />
+			<id>snapshots</id>
+			<name>plugins-snapshot</name>
+			<url>http://repo/plugins-snapshot</url>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<profiles>
 		<profile>
@@ -320,7 +339,8 @@
 						<!-- EPL -->
 						<validLicense>Eclipse Public License</validLicense>
 						<!-- LGPL -->
-						<validLicense>GNU Lesser General Public License (LGPL), Version 2.1</validLicense>
+						<validLicense>GNU Lesser General Public License (LGPL), Version
+							2.1</validLicense>
 						<!-- MIT License -->
 						<validLicense>MIT License</validLicense>
 						<validLicense>The MIT License</validLicense>
