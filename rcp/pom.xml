@@ -264,11 +264,13 @@
 						<validLicense>MIT like</validLicense>
 						<validLicense>PureSol Technologies Commercial License</validLicense>
 						<validLicense>The Apache Software License, Version 2.0</validLicense>
-						<validLicense>GNU Lesser General Public License (LGPL), Version 2.1</validLicense>
-						<validLicense></validLicense>
-						<validLicense></validLicense>
-						<validLicense></validLicense>
+						<validLicense><![CDATA[GNU Lesser General Public License (LGPL), Version 2.1]]></validLicense>
 					</validLicenses>
+					<approvedDependencies>
+						<approvedDependency>p2.eclipse-plugin:.*:.*</approvedDependency>
+						<approvedDependency>p2.eclipse-feature:.*:.*</approvedDependency>
+						<approvedDependency></approvedDependency>
+					</approvedDependencies>
 				</configuration>
 			</plugin>
 		</plugins>
