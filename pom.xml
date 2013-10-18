@@ -127,7 +127,12 @@
 					<validLicenses>
 						<validLicense>PureSol Technologies Commercial License</validLicense>
 						<validLicense>The Apache Software License, Version 2.0</validLicense>
+						<validLicense>Apache License, Version 2.0</validLicense>
+						<validLicense>MIT License</validLicense>
+						<validLicense>GNU Lesser General Public License (LGPL), Version 2.1</validLicense>
 					</validLicenses>
+					<validPlugins>
+					</validPlugins>
 				</configuration>
 			</plugin>
 		</plugins>
