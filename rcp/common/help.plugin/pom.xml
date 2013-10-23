@@ -49,46 +49,14 @@
 						</configuration>
 					</execution>
 				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>net.sf.saxon</groupId>
-						<artifactId>saxon-B</artifactId>
-						<version>9.0</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>xml-maven-plugin</artifactId>
-				<version>1.0</version>
-				<executions>
-					<execution>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>transform</goal>
-						</goals>
-						<configuration>
-							<transformationSets>
-								<transformationSet>
-									<dir>docbook/purifinityClient</dir>
-									<stylesheet>docbook/eclipse.xsl</stylesheet>
-								</transformationSet>
-							</transformationSets>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>net.sf.saxon</groupId>
-						<artifactId>saxon-B</artifactId>
-						<version>9.0</version>
-					</dependency>
-				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>com.puresol.maven.plugins</groupId>
 				<artifactId>docbook-plugin</artifactId>
 				<version>0.1.0-SNAPSHOT</version>
+				<configuration>
+					<docbookSourceDirectory>src/docbook/purifinityClient</docbookSourceDirectory>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
