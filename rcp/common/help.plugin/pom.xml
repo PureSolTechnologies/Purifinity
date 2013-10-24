@@ -24,38 +24,22 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>unpack</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>net.sf.docbook</groupId>
-									<artifactId>docbook-xsl</artifactId>
-									<version>1.78.0</version>
-									<type>zip</type>
-									<classifier>resources</classifier>
-								</artifactItem>
-							</artifactItems>
-							<outputDirectory>${project.build.directory}</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>true</overWriteSnapshots>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>com.puresol.maven.plugins</groupId>
 				<artifactId>docbook-plugin</artifactId>
 				<version>0.1.0-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>convert2eclipse</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<docbookSourceDirectory>src/docbook/purifinityClient</docbookSourceDirectory>
+					<books>
+						<book>purifinityClient.xml</book>
+					</books>
 				</configuration>
 			</plugin>
 		</plugins>
