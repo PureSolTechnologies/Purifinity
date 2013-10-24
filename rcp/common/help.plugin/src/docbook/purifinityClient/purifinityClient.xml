@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../dtd/docbook.dtd">
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "docbook.dtd">
 <book xmlns="http://docbook.org/ns/docbook" version="5.0">
 	<title>My First Book</title>
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="welcome.xml" />
