@@ -37,9 +37,12 @@
 				</executions>
 				<configuration>
 					<docbookSourceDirectory>src/docbook/purifinityClient</docbookSourceDirectory>
-					<books>
-						<book>purifinityClient.xml</book>
-					</books>
+					<eclipseBooks>
+						<eclipseBook>
+							<docbookFile>purifinityClient.xml</docbookFile>
+							<bookDirectoryName>purifinityClient</bookDirectoryName>
+						</eclipseBook>
+					</eclipseBooks>
 				</configuration>
 			</plugin>
 		</plugins>
