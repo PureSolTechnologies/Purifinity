@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "docbook.dtd">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="Requirements">Requirements</title>
+	<para>To be done...</para>
+	<!-- 		<topic href="help/purifinityClient/reference/availablePerspectives.html" label="Available Perspectives">
+    		<anchor id="availablePerspectives"/>
+	 	</topic>
+	 	<topic href="help/purifinityClient/reference/availableViews.html" label="Available Views">
+    		<anchor id="availableViews"/>
+	 	</topic>
+	 	<topic href="help/purifinityClient/reference/availableEditors.html" label="Available Editors">
+	    	<anchor id="availableEditors"/>
+	 	</topic>
+	 -->
+</chapter>

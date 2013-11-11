@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../docbook.dtd">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="Workspace">Workspace</title>
+	<para>The workspace is a directory where information can be stored by
+		Purifinity. These information are settings, current UI layouts and
+		others which simplify the work with Purifinity for the user. During
+		the first startup and if configured Purifinity asks for a workspace
+		directory which is to be used. It is possible that way to organize the
+		own work and to keep the focus on singular projects.
+	</para>
+	<section>
+		<title>An Example Usage Scenario</title>
+		<para>As a quality manager it is possibly needed to keep an eye on the
+			source code quality of multiple projects which is also contains
+			multiple modules or libraries. In this case it is possible to keep a
+			single workspace for each of the different software projects. The
+			different modules or libraries are organized than into different
+			analysis projects.
+		</para>
+		<para>
+			Depending on the current focus, the workspace can be selected with
+			the
+			<link linkend="SelectWorkspace">Switch Workspace</link>
+			functionality.
+			Additionally, it is also possible to run multiple
+			instances of
+			Purifinity on different workspaces.
+		</para>
+	</section>
+	<section>
+		<title>Limitation</title>
+		<para>It is not possible to run multiple instances of Purifinity on a
+			single workspace. It is also not really meaningful. During startup
+			Purifinity will complain as soon as another instance locks the
+			selected workspace.
+		</para>
+	</section>
+</section>

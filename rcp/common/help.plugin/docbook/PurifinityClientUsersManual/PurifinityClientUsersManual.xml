@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "docbook.dtd">
+<book xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title>Purifinity Client Users Manual</title>
+
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Welcome.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Requirements.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="ClientInstallation.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="SystemConfiguration.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="UsageConcepts.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="ClientUsage.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="CustomersFeedback.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Reference.xml" />
+
+</book>
+       

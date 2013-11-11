@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../../docbook.dtd">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="Views">Views</title>
+	<para>
+		Editors are the second type of
+		<link linkend="Parts">part</link>
+		next to
+		<link linkend="Views">views</link>
+		in a
+		<link linkend="Perspectives">perspective</link>
+		.
+		Differently to views, editor may contain data which is editable by
+		the user and needs to be saved afterwards. Editors have a 'changed'
+		flag which leads to the typical question about whether the changes
+		needed to be saved or not.
+	</para>
+</section>

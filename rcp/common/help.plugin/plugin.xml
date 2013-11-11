@@ -9,6 +9,10 @@
             primary="true">
       </toc>
       <toc
+            file="books/PurifinityClientUsersManual/toc.xml"
+            primary="true">
+      </toc>
+      <toc
             file="help/sourceCodeAnalysisAndEvaluation/toc.xml"
             primary="true">
       </toc>

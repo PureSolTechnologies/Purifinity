@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../../docbook.dtd">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="Views">Views</title>
+	<para>
+		Views are parts of one or more <link linkend="Perspectives">Perspectives</link>
+		(as well as <link linkend="Editors">Editors</link>). Views are used to
+		present data which is not editable. Nevertheless, views might be very
+		flexible components even they do not provide some editorial
+		functionality. Additionally, views may have a state which is
+		persistent when Purifinity Client is shutdown and loaded again during
+		the next startup to provide the same setup again.
+	</para>
+</section>

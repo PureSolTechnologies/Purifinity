@@ -11,16 +11,6 @@
 	<artifactId>com.puresol.purifinity.client.common.help.plugin</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>net.sf.docbook</groupId>
-			<artifactId>docbook-xsl</artifactId>
-			<version>1.78.0</version>
-			<type>zip</type>
-			<classifier>resources</classifier>
-		</dependency>
-	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -36,13 +26,11 @@
 					</execution>
 				</executions>
 				<configuration>
-					<docbookSourceDirectory>src/docbook/purifinityClient</docbookSourceDirectory>
-					<eclipseBooks>
-						<eclipseBook>
-							<docbookFile>purifinityClient.xml</docbookFile>
-							<bookDirectoryName>purifinityClient</bookDirectoryName>
-						</eclipseBook>
-					</eclipseBooks>
+					<docbookSourceDirectory>docbook</docbookSourceDirectory>
+					<docbookFiles>
+						<docbookFile>PurifinityClientUsersManual/PurifinityClientUsersManual.xml</docbookFile>
+					</docbookFiles>
+					<targetDirectory>${basedir}/books</targetDirectory>
 				</configuration>
 			</plugin>
 		</plugins>

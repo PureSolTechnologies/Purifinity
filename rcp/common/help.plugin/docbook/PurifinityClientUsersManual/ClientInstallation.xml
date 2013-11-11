@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "docbook.dtd">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="ClientInstallation">Client Installation</title>
+	<para>
+		After the
+		<link linkend="Requirements">Requirements</link>
+		are met, Purifinity is installed in the following way:
+	</para>
+	<orderedlist>
+		<listitem>
+			<para>Purifinity is shipped for each Operating System in a ZIP
+				file.
+				This is to be copied onto the target computer.
+			</para>
+		</listitem>
+		<listitem>
+			<para>Simply unpack the ZIP file into a location of you choice.
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				Start Purifinity by starting the executable file in the
+				<filename>purifinity</filename>
+				directory which is called
+				<filename>purifinity</filename>
+				or
+				<filename>purifinity.exe</filename>
+				.
+			</para>
+		</listitem>
+	</orderedlist>
+	<para>
+		After the installation, the client can be started. Purifinity client
+		is already ready to use after unpacking. It can be proceeded with the
+		<link linkend="SystemConfiguration">
+			System Configuration
+		</link>
+		section to setup the Purifinity system.
+	</para>
+</chapter>

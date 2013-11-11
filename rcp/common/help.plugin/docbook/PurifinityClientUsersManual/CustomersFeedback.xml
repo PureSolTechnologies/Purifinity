@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "docbook.dtd">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="CustomersFeedback">Customers' Feedback</title>
+	<para>To be done...</para>
+	
+	<!--    	<topic href="help/purifinityClient/feedback/wiki.html" label="Wiki"/>
+    	<topic href="help/purifinityClient/feedback/bugTracker.html" label="Bug Tracker"/>
+    	<topic href="help/purifinityClient/feedback/featureRequestTracker.html" label="Feature Request Tracker"/>
+    	<topic href="help/purifinityClient/feedback/forums.html" label="Forums"/>
+	-->
+</chapter>

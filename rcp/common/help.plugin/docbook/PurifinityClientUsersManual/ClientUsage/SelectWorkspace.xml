@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../docbook.dtd">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="SelectWorkspace">SelectWorkspace</title>
+	<para>
+		In menu
+		<menuchoice>
+			<guimenu>File</guimenu>
+			<guimenuitem>Select Workspace...</guimenuitem>
+		</menuchoice>
+		a new
+		<link linkend="Workspace">workspace</link>
+		can be selected.
+		A dialog pops up which is already known from the first
+		startup:
+	</para>
+	<figure>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="SelectWorkspaceDialog.png" />
+			</imageobject>
+		</mediaobject>
+		<caption>Selection dialog for workspace.</caption>
+	</figure>
+	<para>Within the dialog a new workspace directory can be selected.
+		Additionally, it can be specified whether it is asked explicitly for a
+		workspace before the next startup with the check box provided in the
+		dialog.
+	</para>
+</section>
