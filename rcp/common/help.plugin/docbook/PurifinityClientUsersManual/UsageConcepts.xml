@@ -22,11 +22,4 @@
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="UsageConcepts/Perspectives.xml" />
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="UsageConcepts/Parts.xml" />
 
-	<!-- <topic href="help/purifinityClient/usageConcepts/workspace.html" label="Workspaces"/> 
-		<topic href="help/purifinityClient/usageConcepts/perspectives.html" label="Perspectives"/> 
-		<topic href="help/purifinityClient/usageConcepts/parts.html" label="Parts"> 
-		<topic href="help/purifinityClient/usageConcepts/parts/views.html" label="Views"/> 
-		<topic href="help/purifinityClient/usageConcepts/parts/editors.html" label="Editors"/> 
-		</topic> -->
-
 </chapter>

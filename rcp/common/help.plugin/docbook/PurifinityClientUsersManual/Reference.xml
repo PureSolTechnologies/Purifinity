@@ -2,15 +2,12 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "docbook.dtd">
 <chapter xmlns="http://docbook.org/ns/docbook" version="5.0">
 	<title xml:id="Requirements">Requirements</title>
-	<para>To be done...</para>
-	<!-- 		<topic href="help/purifinityClient/reference/availablePerspectives.html" label="Available Perspectives">
-    		<anchor id="availablePerspectives"/>
-	 	</topic>
-	 	<topic href="help/purifinityClient/reference/availableViews.html" label="Available Views">
-    		<anchor id="availableViews"/>
-	 	</topic>
-	 	<topic href="help/purifinityClient/reference/availableEditors.html" label="Available Editors">
-	    	<anchor id="availableEditors"/>
-	 	</topic>
-	 -->
+	<para>The reference contains information about the installed components
+		which came in with plug-ins.
+	</para>
+
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Reference/AvailablePerspectives.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Reference/AvailableViews.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Reference/AvailableEditors.xml" />
+
 </chapter>
