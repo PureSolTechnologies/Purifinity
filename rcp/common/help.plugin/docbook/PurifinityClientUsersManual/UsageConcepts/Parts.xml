@@ -4,7 +4,7 @@
 	<title xml:id="Parts">Parts</title>
 	<para>
 		Parts are called that way, because they are the parts of a
-		<a href="perspectives.html">perspective</a>
+		<link linkend="Perspectives">perspective</link>
 		. Each perspective can
 		contain multiple parts which are aligned site by
 		site or stacked over
@@ -28,4 +28,8 @@
 			</para>
 		</listitem>
 	</orderedlist>
+	
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Parts/Views.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Parts/Editors.xml" />
+	
 </section>

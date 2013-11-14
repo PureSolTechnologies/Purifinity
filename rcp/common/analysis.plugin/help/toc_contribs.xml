@@ -1,4 +1,4 @@
-<toc link_to="../com.puresol.purifinity.client.common.help.plugin/help/purifinityClient/toc.xml#availableViews" label="Analysis">
+<toc link_to="../com.puresol.purifinity.client.common.help.plugin/books/PurifinityClientUsersManual/toc.xml#AvailableViews" label="Analysis">
 	<topic label="General Analysis Views" href="help/analysisViews.html">
 		<topic label="Analysis Projects" href="help/analysisViews/analysisProjectsView.html" />
 		<topic label="Analysis Runs" href="help/analysisViews/analysisRunsView.html" />
