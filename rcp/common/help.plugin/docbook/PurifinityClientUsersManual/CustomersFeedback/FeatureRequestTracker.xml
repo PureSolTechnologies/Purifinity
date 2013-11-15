@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../docbook.dtd">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="FeatureRequestTracker">Feature Request Tracker - Write ideas how to
+		improve
+		Purifinity
+	</title>
+	<para>
+		The Feature Request Tracker can be found at
+		<link xlink:href="http://bugs.puresol-technologies.net">http://bugs.puresol-technologies.net</link>
+		.
+	</para>
+	<para>A Feature Request Tracker is used by users and developers of a
+		software product to request new functionality and to suggest
+		improvements in the product. The features (as well as bugs) are
+		reported in so-called tickets. Each ticket contains at least title and
+		a description.
+	</para>
+	<para>
+		The usage of the Feature Request Tracker is exactly the same as the
+		<link linkend="BugTracker">Bug Tracker</link>
+		. Only the type of the ticket
+		needs to be set to 'Feature'. For more
+		information, please have a look
+		into the usage hints of the Bug
+		Tracker.
+	</para>
+</section>

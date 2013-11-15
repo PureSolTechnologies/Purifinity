@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../docbook.dtd">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="BugTracker">Bug Tracker - Report found bugs to get them fixed
+	</title>
+	<para>
+		The Bug Tracker can be found at
+		<link xlink:href="http://bugs.puresol-technologies.net">http://bugs.puresol-technologies.net</link>
+		.
+	</para>
+	<para>A Bug Tracker is used by users and developers of a software
+		product to report bugs in the product. The bugs are reported in
+		so-called tickets. Each ticket contains at least title, a description
+		and a version of the software where the bug was observed.
+	</para>
+</section>

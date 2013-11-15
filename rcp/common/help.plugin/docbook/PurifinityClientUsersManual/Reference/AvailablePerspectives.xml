@@ -2,5 +2,16 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../docbook.dtd">
 <section xmlns="http://docbook.org/ns/docbook" version="5.0">
 	<title xml:id="AvailablePerspectives">Available Perspectives</title>
-	<para>TODO</para>
+	<para>
+		<link linkend="Perspectives">Perspectives</link> can be
+		best seen as kind of pages within the application which assemble Views
+		and Editors into a concise UI or dash board.
+	</para>
+	<para>
+		For more information about perspectives, have a look to the
+		<link linkend="Perspectives">Perspectives</link>
+		section in
+		<link linkend="UsageConcepts">Usage Concepts</link>
+		.
+	</para>
 </section>

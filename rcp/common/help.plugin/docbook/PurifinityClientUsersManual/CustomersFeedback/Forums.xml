@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../docbook.dtd">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="Forums">Forums - Information exchange with other users
+	</title>
+	<para>
+		The Forums can be found at
+		<link
+			xlink:href="http://bugs.puresol-technologies.net/projects/purifinity-client/boards">http://bugs.puresol-technologies.net/projects/purifinity-client/boards
+		</link>
+		.
+	</para>
+</section>
