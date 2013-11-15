@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "docbook.dtd">
+<chapter>
+	<title>Purifinity's Analysis and Evaluation Architecture</title>
+	<p>In this chapter an introduction is given on Purifinity's
+		architecture for source code analysis and evaluation. The view on this
+		architecture is from functional point of view which is most
+		interesting for the user of Purifinity. A technical overview is given
+		in a dedicated Administrator's Manual on how to setup and maintain
+		Purifinity on a server.</p>
+	<p>The architecture is twofold on first level. There are two
+		subsystems
+		which are responsible for:</p>
+	<ol>
+		<li>
+			<a href="analysis.html">Analysis</a>
+		</li>
+		<li>
+			<a href="evaluation.html">Evaluation</a>
+		</li>
+	</ol>
+	<p>
+		Both systems are invoked in the order given above to archive results.
+		The Analysis does the reading of the source code, the storage of it
+		and the analysis of the source into a so-called
+		<a href="analysis.html#ust">Universal Syntax Tree</a>
+		. The evaluation
+		steps reads the trees and performs
+		<a href="evaluation/metrics.html">metric
+			calculations</a>
+		and
+		<a href="evaluation/defects.html">defect scans</a>
+		.
+	</p>
+</chapter>

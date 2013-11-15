@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "docbook.dtd">
+<chapter>
+	<title>Reference</title>
+
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Reference/AvailableLanguages.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Reference/AvailableMetrics.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Reference/AvailableDefectScanners.xml" />
+</chapter>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "docbook.dtd">
+<chapter>
+		<title>Evaluation</title>
+		<p>
+			The evaluation takes place after the
+			<a href="../analysis.html">analysis</a>
+			.
+			All meta information of the file and universal syntax tree is taken to
+			do evaluations on the source code and the project as a whole.
+		</p>
+		<p>The results of predefined evaluations in Purifinity can be
+			categorized roughly into:
+		</p>
+		<ul>
+			<li>
+				<a href="evaluation/metrics.html">Metrics</a>
+			</li>
+			<li>
+				<a href="evaluation/defects.html">Defects</a>
+			</li>
+			<li>
+		</ul>
+		<p>
+			An additional section about
+			<a href="customEvaluations.html">custom
+				evaluations
+			</a>
+			explains roughly what can be done on customer site to add
+			additional evaluations.
+		</p>
+
+		<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+			href="Evaluation/Metrics.xml" />
+		<xi:include xmlns:xi="http://www.w3.org/2001/XInclude"
+			href="Evaluation/Defects.xml" />
+</chapter>
