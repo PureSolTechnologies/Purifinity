@@ -4,11 +4,6 @@
    <extension
          point="org.eclipse.help.toc">
       <toc
-            category="com.puresol.purifinity"
-            file="help/purifinityClient/toc.xml"
-            primary="true">
-      </toc>
-      <toc
             file="books/PurifinityClientUsersManual/toc.xml"
             primary="true">
       </toc>
