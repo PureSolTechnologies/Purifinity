@@ -29,6 +29,7 @@
 					<docbookSourceDirectory>docbook</docbookSourceDirectory>
 					<docbookFiles>
 						<docbookFile>PurifinityClientUsersManual/PurifinityClientUsersManual.xml</docbookFile>
+						<docbookFile>SourceCodeAnalysisAndEvaluation/SourceCodeAnalysisAndEvaluation.xml</docbookFile>
 					</docbookFiles>
 					<targetDirectory>${basedir}/books</targetDirectory>
 				</configuration>

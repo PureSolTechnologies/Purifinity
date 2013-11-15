@@ -8,11 +8,11 @@
             primary="true">
       </toc>
       <toc
-            file="help/sourceCodeAnalysisAndEvaluation/toc.xml"
+            file="help/purifinityExtensionsDevelopment/toc.xml"
             primary="true">
       </toc>
       <toc
-            file="help/purifinityExtensionsDevelopment/toc.xml"
+            file="books/SourceCodeAnalysisAndEvaluation/toc.xml"
             primary="true">
       </toc>
    </extension>

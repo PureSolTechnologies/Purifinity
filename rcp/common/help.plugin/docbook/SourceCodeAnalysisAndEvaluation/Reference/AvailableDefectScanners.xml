@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../docbook.dtd">
-<section>
-	<title>Available Defect Scanners</title>
+<section xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="AvailableDefectScanners">Available Defect Scanners</title>
+	<para>TODO</para>
 </section>
