@@ -248,6 +248,25 @@
 										<ignore></ignore>
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.puresol.maven.plugins
+										</groupId>
+										<artifactId>
+											docbook-plugin
+										</artifactId>
+										<versionRange>
+											[0.1.0-SNAPSHOT,)
+										</versionRange>
+										<goals>
+											<goal>convert2pdf</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
