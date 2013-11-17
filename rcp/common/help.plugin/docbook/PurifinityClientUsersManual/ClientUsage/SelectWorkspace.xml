@@ -17,7 +17,7 @@
 	<figure>
 		<mediaobject>
 			<imageobject>
-				<imagedata fileref="SelectWorkspaceDialog.png" />
+				<imagedata fileref="images/SelectWorkspaceDialog.png" />
 			</imageobject>
 		</mediaobject>
 		<caption>Selection dialog for workspace.</caption>

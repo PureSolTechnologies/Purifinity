@@ -4,6 +4,7 @@
 	<title>Evaluation Development</title>
 	<para>TODO</para>
 
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="EvaluationDevelopment/Preparation.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="AnalysisDevelopment/TheGoalOfEvaluations.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="EvaluationDevelopment/PreparationForEvaluationDevelopment.xml" />
 
 </chapter>

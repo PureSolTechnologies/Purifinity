@@ -4,6 +4,7 @@
 	<title>Analysis Development</title>
 	<para>TODO</para>
 
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="AnalysisDevelopment/Preparation.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="AnalysisDevelopment/TheGoalOfAnalyzes.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="AnalysisDevelopment/PreparationForAnalysisDevelopment.xml" />
 
 </chapter>

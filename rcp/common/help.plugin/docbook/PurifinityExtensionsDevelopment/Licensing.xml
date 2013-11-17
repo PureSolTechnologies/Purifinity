@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "docbook.dtd">
+<chapter xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="Licensing">Licensing</title>
+	<para>
+		Plug-ins for Analysis and Evaluation developed by customers and
+		users
+		of Purifinity shall be the property of the respective
+		customers, users
+		or their organizations they belong to. For that reason the APIs for
+		the Purifinity plug-in development are published under the
+		<link xlink:href="http://apache.org/license">Apache License version 2</link>
+		.
+	</para>
+</chapter>
