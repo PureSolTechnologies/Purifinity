@@ -35,7 +35,7 @@
 	</modules>
 
 	<repositories>
-		<!-- repository>
+		<repository>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
@@ -48,7 +48,7 @@
 			<id>snapshots</id>
 			<name>libs-snapshot</name>
 			<url>http://repo/libs-snapshot</url>
-		</repository -->
+		</repository>
 		<repository>
 			<id>kepler</id>
 			<layout>p2</layout>
@@ -61,7 +61,7 @@
 		</repository>
 	</repositories>
 
-	<!-- pluginRepositories>
+	<pluginRepositories>
 		<pluginRepository>
 			<snapshots>
 				<enabled>false</enabled>
@@ -76,7 +76,7 @@
 			<name>plugins-snapshot</name>
 			<url>http://repo/plugins-snapshot</url>
 		</pluginRepository>
-	</pluginRepositories -->
+	</pluginRepositories>
 
 	<dependencies>
 		<dependency>

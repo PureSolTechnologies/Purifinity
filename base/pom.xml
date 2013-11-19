@@ -38,8 +38,11 @@
 			<name>libs-snapshot</name>
 			<url>http://repo/libs-snapshot</url>
 		</repository>
-		<!-- repository> <id>JBoss</id> <name>JBoss</name> <url>https://repository.jboss.org/nexus/content/groups/public</url> 
-			</repository -->
+		<repository>
+			<id>JBoss</id>
+			<name>JBoss</name>
+			<url>https://repository.jboss.org/nexus/content/groups/public</url>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
@@ -319,7 +322,8 @@
 						</execution>
 					</executions>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -370,7 +374,8 @@
 						<!-- EPL -->
 						<validLicense>Eclipse Public License</validLicense>
 						<!-- LGPL -->
-						<validLicense>GNU Lesser General Public License (LGPL), Version 2.1</validLicense>
+						<validLicense>GNU Lesser General Public License (LGPL), Version
+							2.1</validLicense>
 						<!-- MIT License -->
 						<validLicense>MIT License</validLicense>
 						<validLicense>The MIT License</validLicense>
