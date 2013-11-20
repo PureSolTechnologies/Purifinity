@@ -374,17 +374,10 @@
 						<!-- EPL -->
 						<validLicense>Eclipse Public License</validLicense>
 						<!-- LGPL -->
-						<validLicense>GNU Lesser General Public License (LGPL), Version
-							2.1</validLicense>
+						<validLicense><![CDATA[GNU Lesser General Public License (LGPL), Version 2.1]]></validLicense>
 						<!-- MIT License -->
 						<validLicense>MIT License</validLicense>
 						<validLicense>The MIT License</validLicense>
-						<validLicense></validLicense>
-						<validLicense></validLicense>
-						<validLicense></validLicense>
-						<validLicense></validLicense>
-						<validLicense></validLicense>
-						<validLicense></validLicense>
 					</validLicenses>
 				</configuration>
 			</plugin>
