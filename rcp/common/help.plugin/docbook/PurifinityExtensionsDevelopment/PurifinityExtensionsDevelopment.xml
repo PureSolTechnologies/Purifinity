@@ -7,7 +7,7 @@
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="AnalysisDevelopment.xml" />
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="EvaluationDevelopment.xml" />
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="OSGiBundles.xml" />
-	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="EvaluationPlugins.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="EclipsePlugins.xml" />
 
 </book>
        
