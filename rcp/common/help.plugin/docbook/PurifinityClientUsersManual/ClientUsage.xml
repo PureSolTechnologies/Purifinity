@@ -5,5 +5,6 @@
 	<para>In this chapter different usage scenarios are explained.</para>
 
 	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="ClientUsage/SelectWorkspace.xml" />
+	<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="ClientUsage/HandlingAnalysisProjects.xml" />
 
 </chapter>
