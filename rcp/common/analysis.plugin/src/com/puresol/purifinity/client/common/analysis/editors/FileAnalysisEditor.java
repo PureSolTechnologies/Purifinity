@@ -15,18 +15,18 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
 
 import com.puresol.commons.utils.HashId;
 import com.puresol.purifinity.client.common.analysis.Activator;
 import com.puresol.purifinity.client.common.analysis.controls.ParserTreeControl;
 import com.puresol.purifinity.client.common.analysis.controls.ScrollableFileViewer;
+import com.puresol.purifinity.client.common.ui.editors.AbstractPureSolTechnologiesEditor;
 import com.puresol.purifinity.coding.analysis.api.FileStore;
 import com.puresol.purifinity.coding.analysis.api.FileStoreException;
 import com.puresol.purifinity.coding.analysis.api.FileStoreFactory;
 import com.puresol.purifinity.uhura.source.SourceCode;
 
-public class FileAnalysisEditor extends EditorPart {
+public class FileAnalysisEditor extends AbstractPureSolTechnologiesEditor {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
@@ -34,7 +34,7 @@ public class FileAnalysisEditor extends EditorPart {
 	private ParserTreeControl treeViewer;
 
 	public FileAnalysisEditor() {
-		super();
+		super(Activator.getDefault());
 	}
 
 	@Override
@@ -69,6 +69,8 @@ public class FileAnalysisEditor extends EditorPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+
 		try {
 			Composite composite = new Composite(parent, SWT.NONE);
 			composite.setLayout(new FormLayout());

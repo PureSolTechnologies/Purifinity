@@ -14,9 +14,16 @@ Require-Bundle: com.puresol.commons.trees.bundle;bundle-version="0.0.1",
  org.slf4j.api;bundle-version="1.6.4",
  org.eclipse.ui;bundle-version="3.104.0",
  org.eclipse.core.runtime;bundle-version="3.8.0"
-Export-Package: com.puresol.purifinity.client.common.ui,
- com.puresol.purifinity.client.common.ui.actions,
- com.puresol.purifinity.client.common.ui.contents,
- com.puresol.purifinity.client.common.ui.controls,
- com.puresol.purifinity.client.common.ui.jobs
+Export-Package: com.puresol.purifinity.client.common.ui;uses:="org.eclipse.ui.plugin,org.eclipse.swt.graphics,org.osgi.framework",
+ com.puresol.purifinity.client.common.ui.actions;
+  uses:="org.eclipse.jface.action,
+   com.puresol.purifinity.client.common.branding,
+   org.eclipse.ui,
+   org.eclipse.swt.widgets,
+   org.eclipse.jface.dialogs",
+ com.puresol.purifinity.client.common.ui.contents;uses:="org.eclipse.swt.graphics,org.eclipse.jface.viewers",
+ com.puresol.purifinity.client.common.ui.controls;uses:="com.puresol.commons.math,org.eclipse.swt.events,org.eclipse.swt.widgets",
+ com.puresol.purifinity.client.common.ui.editors,
+ com.puresol.purifinity.client.common.ui.jobs;uses:="org.eclipse.core.runtime,org.eclipse.core.runtime.jobs,com.puresol.commons.utils.progress",
+ com.puresol.purifinity.client.common.ui.views
 Bundle-Activator: com.puresol.purifinity.client.common.ui.Activator

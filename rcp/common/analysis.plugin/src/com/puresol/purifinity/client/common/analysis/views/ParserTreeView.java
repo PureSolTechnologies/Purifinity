@@ -6,20 +6,25 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.purifinity.client.common.analysis.Activator;
 import com.puresol.purifinity.client.common.analysis.controls.ParserTreeControl;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStore;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreFactory;
 
-public class ParserTreeView extends ViewPart implements ISelectionListener {
+public class ParserTreeView extends AbstractPureSolTechnologiesView implements
+		ISelectionListener {
 
 	private static final ILog log = Activator.getDefault().getLog();
 
 	private final AnalysisStore store = AnalysisStoreFactory.getFactory()
 			.getInstance();
 	private ParserTreeControl viewer;
+
+	public ParserTreeView() {
+		super(Activator.getDefault());
+	}
 
 	@Override
 	public void dispose() {

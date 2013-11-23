@@ -26,7 +26,6 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.purifinity.client.common.analysis.editors.FileAnalysisEditor;
 import com.puresol.purifinity.client.common.analysis.editors.FileAnalysisEditorInput;
@@ -35,18 +34,20 @@ import com.puresol.purifinity.client.common.analysis.editors.NotAnalyzedEditorIn
 import com.puresol.purifinity.client.common.analysis.views.AnalysisProjectSelection;
 import com.puresol.purifinity.client.common.analysis.views.AnalysisRunSelection;
 import com.puresol.purifinity.client.common.analysis.views.AnalysisSelection;
+import com.puresol.purifinity.client.common.evaluation.Activator;
 import com.puresol.purifinity.client.common.evaluation.contents.EvaluationFileTreeViewer;
 import com.puresol.purifinity.client.common.evaluation.contents.EvaluatorComboViewer;
 import com.puresol.purifinity.client.common.ui.actions.PartSettingsCapability;
 import com.puresol.purifinity.client.common.ui.actions.ShowSettingsAction;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 
-public class EvaluationFileTreeView extends ViewPart implements
-		ISelectionListener, IDoubleClickListener, ISelectionProvider,
-		SelectionListener, PartSettingsCapability {
+public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
+		implements ISelectionListener, IDoubleClickListener,
+		ISelectionProvider, SelectionListener, PartSettingsCapability {
 
 	private AnalysisProject analysis;
 	private AnalysisRun analysisRun;
@@ -60,7 +61,7 @@ public class EvaluationFileTreeView extends ViewPart implements
 	private EvaluatorComboViewer comboViewer;
 
 	public EvaluationFileTreeView() {
-		super();
+		super(Activator.getDefault());
 	}
 
 	@Override
@@ -72,6 +73,8 @@ public class EvaluationFileTreeView extends ViewPart implements
 
 	@Override
 	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+
 		parent.setLayout(new FormLayout());
 
 		Label label = new Label(parent, SWT.NONE);

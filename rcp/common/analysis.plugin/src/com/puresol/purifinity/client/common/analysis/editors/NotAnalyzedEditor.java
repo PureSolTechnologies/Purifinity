@@ -7,21 +7,22 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
 
+import com.puresol.purifinity.client.common.analysis.Activator;
 import com.puresol.purifinity.client.common.analysis.controls.ScrollableFileViewer;
+import com.puresol.purifinity.client.common.ui.editors.AbstractPureSolTechnologiesEditor;
 import com.puresol.purifinity.coding.analysis.api.FileStore;
 import com.puresol.purifinity.coding.analysis.api.FileStoreException;
 import com.puresol.purifinity.coding.analysis.api.FileStoreFactory;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.uhura.source.SourceCode;
 
-public class NotAnalyzedEditor extends EditorPart {
+public class NotAnalyzedEditor extends AbstractPureSolTechnologiesEditor {
 
 	private ScrollableFileViewer text;
 
 	public NotAnalyzedEditor() {
-		super();
+		super(Activator.getDefault());
 	}
 
 	@Override
@@ -54,6 +55,8 @@ public class NotAnalyzedEditor extends EditorPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+
 		parent.setLayout(new FillLayout(SWT.HORIZONTAL));
 		text = new ScrollableFileViewer(parent);
 		NotAnalyzedEditorInput editorInput = (NotAnalyzedEditorInput) getEditorInput();

@@ -108,9 +108,9 @@
       </view>
       <view
             category="com.puresol.purifinity.client.common.analysis.AnalysisCategory"
-            class="com.puresol.purifinity.client.common.analysis.views.AvailableLanguagesView"
-            id="com.puresol.purifinity.client.common.analysis.views.AvailableLanguagesView"
-            name="Available Languages"
+            class="com.puresol.purifinity.client.common.analysis.views.AvailableAnalyzersView"
+            id="com.puresol.purifinity.client.common.analysis.views.AvailableAnalyzersView"
+            name="Available Analyzers"
             restorable="true">
       </view>
       <view

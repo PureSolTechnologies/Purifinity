@@ -5,12 +5,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.EditorPart;
 
-public class DirectoryAnalysisEditor extends EditorPart {
+import com.puresol.purifinity.client.common.analysis.Activator;
+import com.puresol.purifinity.client.common.ui.editors.AbstractPureSolTechnologiesEditor;
+
+public class DirectoryAnalysisEditor extends AbstractPureSolTechnologiesEditor {
 
 	public DirectoryAnalysisEditor() {
-		super();
+		super(Activator.getDefault());
 	}
 
 	@Override
@@ -43,6 +45,7 @@ public class DirectoryAnalysisEditor extends EditorPart {
 
 	@Override
 	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
 		DirectoryAnalysisEditorInput editorInput = (DirectoryAnalysisEditorInput) getEditorInput();
 	}
 

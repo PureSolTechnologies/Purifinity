@@ -20,9 +20,8 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ViewPart;
 
+import com.puresol.purifinity.client.common.analysis.Activator;
 import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunContentTreeViewer;
 import com.puresol.purifinity.client.common.analysis.editors.DirectoryAnalysisEditor;
 import com.puresol.purifinity.client.common.analysis.editors.DirectoryAnalysisEditorInput;
@@ -30,14 +29,15 @@ import com.puresol.purifinity.client.common.analysis.editors.FileAnalysisEditor;
 import com.puresol.purifinity.client.common.analysis.editors.FileAnalysisEditorInput;
 import com.puresol.purifinity.client.common.analysis.editors.NotAnalyzedEditor;
 import com.puresol.purifinity.client.common.analysis.editors.NotAnalyzedEditorInput;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 
-public class AnalysisRunContentView extends ViewPart implements
-		ISelectionListener, IDoubleClickListener, ISelectionProvider,
-		SelectionListener {
+public class AnalysisRunContentView extends AbstractPureSolTechnologiesView
+		implements ISelectionListener, IDoubleClickListener,
+		ISelectionProvider, SelectionListener {
 
 	private AnalysisProject analysis;
 	private AnalysisRun analysisRun;
@@ -48,7 +48,7 @@ public class AnalysisRunContentView extends ViewPart implements
 	private HashIdFileTree lastSelection;
 
 	public AnalysisRunContentView() {
-		super();
+		super(Activator.getDefault());
 	}
 
 	@Override
@@ -61,11 +61,7 @@ public class AnalysisRunContentView extends ViewPart implements
 
 	@Override
 	public void createPartControl(Composite parent) {
-		PlatformUI
-				.getWorkbench()
-				.getHelpSystem()
-				.setHelp(parent,
-						"com.puresol.purifinity.client.common.analysis.plugin.analysisRunContentView");
+		super.createPartControl(parent);
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());

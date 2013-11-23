@@ -14,19 +14,19 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ViewPart;
 
+import com.puresol.purifinity.client.common.analysis.Activator;
 import com.puresol.purifinity.client.common.analysis.contents.ProgrammingLanguageViewer;
 import com.puresol.purifinity.client.common.analysis.controls.GrammarCanvas;
 import com.puresol.purifinity.client.common.analysis.grammar.RenderException;
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.Refreshable;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresol.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresol.purifinity.uhura.grammar.GrammarException;
 
-public class GrammarView extends ViewPart implements ISelectionChangedListener,
-		Refreshable {
+public class GrammarView extends AbstractPureSolTechnologiesView implements
+		ISelectionChangedListener, Refreshable {
 
 	private Combo languageCombo;
 	private ProgrammingLanguageViewer languageViewer;
@@ -34,7 +34,7 @@ public class GrammarView extends ViewPart implements ISelectionChangedListener,
 	private GrammarCanvas grammarCanvas;
 
 	public GrammarView() {
-		super();
+		super(Activator.getDefault());
 	}
 
 	@Override
@@ -44,11 +44,7 @@ public class GrammarView extends ViewPart implements ISelectionChangedListener,
 
 	@Override
 	public void createPartControl(Composite parent) {
-		PlatformUI
-				.getWorkbench()
-				.getHelpSystem()
-				.setHelp(parent,
-						"com.puresol.purifinity.client.common.analysis.plugin.grammarView");
+		super.createPartControl(parent);
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FormLayout());

@@ -5,14 +5,17 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.part.ViewPart;
 
+import com.puresol.purifinity.client.common.evaluation.Activator;
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.Refreshable;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 
-public class DefectDensityMapView extends ViewPart implements Refreshable {
+public class DefectDensityMapView extends AbstractPureSolTechnologiesView
+		implements Refreshable {
 
 	public DefectDensityMapView() {
+		super(Activator.getDefault());
 	}
 
 	/**
@@ -22,6 +25,8 @@ public class DefectDensityMapView extends ViewPart implements Refreshable {
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new FillLayout(SWT.HORIZONTAL));
 

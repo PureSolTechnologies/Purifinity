@@ -13,7 +13,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -27,10 +26,11 @@ import com.puresol.purifinity.client.common.ui.actions.InformationAction;
 import com.puresol.purifinity.client.common.ui.actions.InformationProvider;
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.Refreshable;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
 
-public class AvailableEvaluatorsView extends ViewPart implements Refreshable,
-		InformationProvider, ISelectionChangedListener {
+public class AvailableEvaluatorsView extends AbstractPureSolTechnologiesView
+		implements Refreshable, InformationProvider, ISelectionChangedListener {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(AvailableEvaluatorsView.class);
@@ -41,11 +41,13 @@ public class AvailableEvaluatorsView extends ViewPart implements Refreshable,
 	private EvaluatorFactory evaluatorFactorySelection = null;
 
 	public AvailableEvaluatorsView() {
-		super();
+		super(Activator.getDefault());
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+
 		parent.setLayout(new FillLayout());
 		table = new Table(parent, SWT.NONE);
 		table.setHeaderVisible(true);

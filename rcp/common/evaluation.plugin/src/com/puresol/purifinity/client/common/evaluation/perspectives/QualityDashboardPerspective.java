@@ -6,7 +6,7 @@ import org.eclipse.ui.IPerspectiveFactory;
 
 import com.puresol.purifinity.client.common.analysis.views.AnalysisProjectsView;
 import com.puresol.purifinity.client.common.analysis.views.AnalysisRunsView;
-import com.puresol.purifinity.client.common.analysis.views.AvailableLanguagesView;
+import com.puresol.purifinity.client.common.analysis.views.AvailableAnalyzersView;
 
 public class QualityDashboardPerspective implements IPerspectiveFactory {
 
@@ -23,7 +23,7 @@ public class QualityDashboardPerspective implements IPerspectiveFactory {
 	IFolderLayout folder = layout.createFolder("EvaluationMonitorAreas",
 		IPageLayout.BOTTOM, 0.75f, layout.getEditorArea());
 	folder.addView(IPageLayout.ID_PROGRESS_VIEW);
-	folder.addView(AvailableLanguagesView.class.getName());
+	folder.addView(AvailableAnalyzersView.class.getName());
 
     }
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../docbook.dtd">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="ManagingAnalysisRuns">Managing Analysis Runs</title>
+	<para>
+		As soon as an Analysis Project is created (see
+		<link linkend="HandlingAnalysisProjects">Handling Analysis Projects</link>
+		), an analysis is started, a so called Analysis Run. By selecting an
+		Analysis Project, in Analysis Runs view the list of analysis runs of a
+		project are shown.
+	</para>
+	<figure>
+		<mediaobject>
+			<imageobject>
+				<imagedata fileref="images/AnalysisRunsView.png" />
+			</imageobject>
+		</mediaobject>
+		<caption>Analysis Projects View</caption>
+	</figure>
+	<section>
+		<title>Starting a new Analysis Run</title>
+		<para>
+			A new Analysis Run is started simply by selecting the
+			<guibutton>Add...</guibutton>
+			button. A new Analysis Run is started and appears as soon as it is
+			finished. The progress can be checked in the Progress View.
+		</para>
+	</section>
+	<section>
+		<title>Deleting an Analysis Run</title>
+		<para>
+			To delete an Analysis Run, the run needs to be selected in
+			Analysis
+			Runs View. With button
+			<guibutton>Delete...</guibutton>
+			and a verification of the choice, the Analysis Run is deleted.
+		</para>
+	</section>
+	<section>
+		<title>Editing Analysis Runs</title>
+		<para>
+			To edit an Analysis Run, the Analysis Run needs to be selected in
+			Analysis Runs View. With button
+			<guibutton>Edit...</guibutton>
+			the Analyis Run Edit dialog is opened.
+		</para>
+	</section>
+</section>

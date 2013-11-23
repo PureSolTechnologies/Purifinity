@@ -31,8 +31,6 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
 import com.puresol.purifinity.client.common.analysis.Activator;
@@ -43,13 +41,15 @@ import com.puresol.purifinity.client.common.analysis.jobs.AnalysisJob;
 import com.puresol.purifinity.client.common.branding.ClientImages;
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.Refreshable;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRunInformation;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreException;
 
-public class AnalysisRunsView extends ViewPart implements SelectionListener,
-		ISelectionProvider, ISelectionListener, IJobChangeListener, Refreshable {
+public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
+		SelectionListener, ISelectionProvider, ISelectionListener,
+		IJobChangeListener, Refreshable {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
@@ -64,6 +64,10 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
 	private final java.util.List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
+	public AnalysisRunsView() {
+		super(Activator.getDefault());
+	}
+
 	@Override
 	public void dispose() {
 		Job.getJobManager().removeJobChangeListener(this);
@@ -74,11 +78,7 @@ public class AnalysisRunsView extends ViewPart implements SelectionListener,
 
 	@Override
 	public void createPartControl(Composite parent) {
-		PlatformUI
-				.getWorkbench()
-				.getHelpSystem()
-				.setHelp(parent,
-						"com.puresol.purifinity.client.common.analysis.plugin.analysisRunsView");
+		super.createPartControl(parent);
 
 		parent.setLayout(new FormLayout());
 

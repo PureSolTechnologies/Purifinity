@@ -8,10 +8,11 @@ import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.purifinity.client.common.analysis.views.AnalysisSelection;
+import com.puresol.purifinity.client.common.evaluation.Activator;
 import com.puresol.purifinity.client.common.evaluation.utils.EvaluationsTarget;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 
 /**
  * This abstract class is a parent class for all views which contain a kind of
@@ -21,8 +22,9 @@ import com.puresol.purifinity.client.common.evaluation.utils.EvaluationsTarget;
  * 
  * @author Rick-Rainer Ludwig
  */
-public abstract class AbstractEvaluationView extends ViewPart implements
-		ISelectionListener, EvaluationsTarget {
+public abstract class AbstractEvaluationView extends
+		AbstractPureSolTechnologiesView implements ISelectionListener,
+		EvaluationsTarget {
 
 	/**
 	 * This field contains the selection service which is used for subscription.
@@ -34,6 +36,10 @@ public abstract class AbstractEvaluationView extends ViewPart implements
 	 */
 	private AnalysisSelection analysisSelection;
 
+	public AbstractEvaluationView() {
+		super(Activator.getDefault());
+	}
+
 	@Override
 	public void dispose() {
 		if (selectionService != null) {
@@ -44,6 +50,8 @@ public abstract class AbstractEvaluationView extends ViewPart implements
 
 	@Override
 	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+
 		IWorkbenchPartSite site = getSite();
 		IWorkbenchWindow workbenchWindow = site.getWorkbenchWindow();
 		selectionService = workbenchWindow.getSelectionService();

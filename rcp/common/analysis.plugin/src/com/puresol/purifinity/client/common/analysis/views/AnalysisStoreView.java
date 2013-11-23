@@ -16,13 +16,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.purifinity.client.common.analysis.Activator;
 import com.puresol.purifinity.client.common.analysis.contents.AnalysisListContentProvider;
 import com.puresol.purifinity.client.common.analysis.contents.AnalysisListLabelProvider;
 import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunListContentProvider;
 import com.puresol.purifinity.client.common.analysis.contents.AnalysisRunListLabelProvider;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProjectInformation;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
@@ -38,7 +38,8 @@ import com.puresol.purifinity.coding.analysis.api.AnalysisStoreFactory;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AnalysisStoreView extends ViewPart implements SelectionListener {
+public class AnalysisStoreView extends AbstractPureSolTechnologiesView
+		implements SelectionListener {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
@@ -58,11 +59,13 @@ public class AnalysisStoreView extends ViewPart implements SelectionListener {
 	private AnalysisRun selectedAnalysisRun = null;
 
 	public AnalysisStoreView() {
-		super();
+		super(Activator.getDefault());
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+
 		parent.setLayout(new FormLayout());
 
 		analysisList = new List(parent, SWT.BORDER);

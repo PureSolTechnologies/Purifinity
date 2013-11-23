@@ -32,9 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.IHandlerService;
-import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.progress.UIJob;
 
 import com.puresol.purifinity.client.common.analysis.Activator;
@@ -44,6 +42,7 @@ import com.puresol.purifinity.client.common.analysis.jobs.AnalysisJob;
 import com.puresol.purifinity.client.common.branding.ClientImages;
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.Refreshable;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStore;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreException;
@@ -56,8 +55,9 @@ import com.puresol.purifinity.coding.analysis.api.AnalysisStoreFactory;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AnalysisProjectsView extends ViewPart implements
-		IJobChangeListener, ISelectionProvider, SelectionListener, Refreshable {
+public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
+		implements IJobChangeListener, ISelectionProvider, SelectionListener,
+		Refreshable {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
@@ -72,14 +72,15 @@ public class AnalysisProjectsView extends ViewPart implements
 
 	private Composite parent = null;
 
+	public AnalysisProjectsView() {
+		super(Activator.getDefault());
+	}
+
 	@Override
 	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+
 		this.parent = parent;
-		PlatformUI
-				.getWorkbench()
-				.getHelpSystem()
-				.setHelp(parent,
-						"com.puresol.purifinity.client.common.analysis.plugin.analysisProjectsView");
 		parent.setLayout(new FormLayout());
 		analysisProjectsTable = new Table(parent, SWT.BORDER);
 		analysisProjectsTable.addSelectionListener(this);

@@ -15,12 +15,12 @@ import org.eclipse.swt.widgets.Table;
 
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
 
-public class AvailableLanguagesTableViewer extends TableViewer implements
+public class AvailableAnalyzersTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 
 	private final List<ProgrammingLanguageAnalyzer> languages = new ArrayList<ProgrammingLanguageAnalyzer>();
 
-	public AvailableLanguagesTableViewer(Table table) {
+	public AvailableAnalyzersTableViewer(Table table) {
 		super(table);
 		setComparator(new ViewerComparator() {
 			@Override

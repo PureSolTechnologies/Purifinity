@@ -18,11 +18,11 @@ import org.eclipse.ui.ISelectionService;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresol.purifinity.client.common.branding.Exportable;
 import com.puresol.purifinity.client.common.branding.Printable;
+import com.puresol.purifinity.client.common.evaluation.Activator;
 import com.puresol.purifinity.client.common.evaluation.contents.EvaluatorComboViewer;
 import com.puresol.purifinity.client.common.evaluation.contents.MetricsTableViewer;
 import com.puresol.purifinity.client.common.evaluation.ui.QualityLevelLabel;
@@ -30,6 +30,7 @@ import com.puresol.purifinity.client.common.evaluation.ui.SourceCodeQualityLabel
 import com.puresol.purifinity.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresol.purifinity.client.common.ui.SWTUtils;
 import com.puresol.purifinity.client.common.ui.actions.ExportAction;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresol.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorFactory;
 import com.puresol.purifinity.coding.evaluation.api.EvaluatorStore;
@@ -39,8 +40,9 @@ import com.puresol.purifinity.coding.evaluation.api.MetricFileResults;
 import com.puresol.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresol.purifinity.coding.evaluation.api.SourceCodeQuality;
 
-public class MetricsTableView extends ViewPart implements ISelectionListener,
-		EvaluationsTarget, ISelectionChangedListener, Exportable, Printable {
+public class MetricsTableView extends AbstractPureSolTechnologiesView implements
+		ISelectionListener, EvaluationsTarget, ISelectionChangedListener,
+		Exportable, Printable {
 
 	private ISelectionService selectionService;
 	private Combo evaluatorCombo;
@@ -52,6 +54,10 @@ public class MetricsTableView extends ViewPart implements ISelectionListener,
 	private EvaluatorFactory selectedEvaluator;
 	private SourceCodeQualityLabel quality;
 	private QualityLevelLabel qualityLevel;
+
+	public MetricsTableView() {
+		super(Activator.getDefault());
+	}
 
 	@Override
 	public void dispose() {
@@ -67,6 +73,8 @@ public class MetricsTableView extends ViewPart implements ISelectionListener,
 	 */
 	@Override
 	public void createPartControl(Composite parent) {
+		super.createPartControl(parent);
+
 		parent.setLayout(new FormLayout());
 
 		evaluatorCombo = new Combo(parent, SWT.READ_ONLY);

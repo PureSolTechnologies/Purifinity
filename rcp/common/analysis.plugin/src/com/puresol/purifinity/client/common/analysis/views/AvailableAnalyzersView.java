@@ -10,21 +10,22 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.puresol.purifinity.client.common.analysis.Activator;
-import com.puresol.purifinity.client.common.analysis.contents.AvailableLanguagesTableViewer;
+import com.puresol.purifinity.client.common.analysis.contents.AvailableAnalyzersTableViewer;
 import com.puresol.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresol.purifinity.client.common.ui.actions.Refreshable;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresol.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
 
-public class AvailableLanguagesView extends ViewPart implements Refreshable {
+public class AvailableAnalyzersView extends AbstractPureSolTechnologiesView
+		implements Refreshable {
 
-	public AvailableLanguagesView() {
+	public AvailableAnalyzersView() {
+		super(Activator.getDefault());
 	}
 
 	private Table table;
@@ -32,17 +33,13 @@ public class AvailableLanguagesView extends ViewPart implements Refreshable {
 
 	@Override
 	public void createPartControl(Composite parent) {
-		PlatformUI
-				.getWorkbench()
-				.getHelpSystem()
-				.setHelp(parent,
-						"com.puresol.purifinity.client.common.analysis.plugin.availableLanguagesView");
+		super.createPartControl(parent);
 
 		parent.setLayout(new FillLayout());
 		table = new Table(parent, SWT.NONE);
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		viewer = new AvailableLanguagesTableViewer(table);
+		viewer = new AvailableAnalyzersTableViewer(table);
 
 		initializeToolBar();
 

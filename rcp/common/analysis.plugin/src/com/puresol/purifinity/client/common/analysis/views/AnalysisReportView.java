@@ -21,21 +21,21 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ViewPart;
 
 import com.puresol.purifinity.client.common.analysis.Activator;
 import com.puresol.purifinity.client.common.analysis.contents.AnalyzedFilesTableViewer;
 import com.puresol.purifinity.client.common.analysis.contents.FailedFilesTableViewer;
 import com.puresol.purifinity.client.common.analysis.controls.ParserTreeControl;
 import com.puresol.purifinity.client.common.analysis.dialogs.AnalysisInformationDialog;
+import com.puresol.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresol.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresol.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresol.purifinity.coding.analysis.api.AnalysisStoreException;
 import com.puresol.purifinity.coding.analysis.api.AnalyzedCode;
 
-public class AnalysisReportView extends ViewPart implements ISelectionListener,
-		IDoubleClickListener, CloseWindowListener {
+public class AnalysisReportView extends AbstractPureSolTechnologiesView
+		implements ISelectionListener, IDoubleClickListener,
+		CloseWindowListener {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
@@ -51,6 +51,10 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener,
 
 	private AnalysisInformationDialog informationDialog;
 
+	public AnalysisReportView() {
+		super(Activator.getDefault());
+	}
+
 	@Override
 	public void dispose() {
 		getSite().getWorkbenchWindow().getSelectionService()
@@ -60,11 +64,7 @@ public class AnalysisReportView extends ViewPart implements ISelectionListener,
 
 	@Override
 	public void createPartControl(Composite parent) {
-		PlatformUI
-				.getWorkbench()
-				.getHelpSystem()
-				.setHelp(parent,
-						"com.puresol.purifinity.client.common.analysis.plugin.analysisReportView");
+		super.createPartControl(parent);
 
 		Composite composite = new Composite(parent, SWT.NONE);
 
