@@ -13,7 +13,7 @@ import org.eclipse.ui.browser.IWebBrowser;
 
 public class OpenBugAndEnhancementTrackerWebsiteHandler extends AbstractHandler {
 
-	private static final String URL = "https://bugs.puresol-technologies.net";
+	private static final String URL = "https://bugs.puresol-technologies.com";
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {

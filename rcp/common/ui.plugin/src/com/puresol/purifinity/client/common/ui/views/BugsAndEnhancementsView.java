@@ -16,7 +16,7 @@ import com.puresol.purifinity.client.common.ui.actions.URIProvider;
 public class BugsAndEnhancementsView extends AbstractPureSolTechnologiesView
 		implements URIProvider {
 
-	private static final String URL = "https://bugs.puresol-technologies.net";
+	private static final String URL = "https://bugs.puresol-technologies.com";
 
 	private Browser browser;
 
