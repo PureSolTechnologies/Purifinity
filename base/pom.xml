@@ -334,7 +334,7 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>
-											com.puresol.maven.plugins
+											com.puresoltechnologies.maven.plugins
 										</groupId>
 										<artifactId>
 											license-plugin
@@ -358,8 +358,8 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
-				<groupId>com.puresol.maven.plugins</groupId>
-				<artifactId>license-plugin</artifactId>
+				<groupId>com.puresoltechnologies.maven.plugins</groupId>
+				<artifactId>license-maven-plugin</artifactId>
 				<configuration>
 					<recursive>true</recursive>
 					<validLicenses>
