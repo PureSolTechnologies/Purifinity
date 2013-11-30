@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol.commons</groupId>
+		<groupId>com.puresoltechnologies.commons</groupId>
 		<artifactId>parent.java</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../parent/java</relativePath>
@@ -15,7 +15,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresol.commons</groupId>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>math</artifactId>
 			<version>${project.version}</version>
 		</dependency>
