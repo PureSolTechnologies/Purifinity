@@ -10,14 +10,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 
-import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalyzedCode;
-import com.puresol.coding.analysis.api.CodeAnalysis;
-import com.puresol.coding.analysis.api.CodeStore;
-import com.puresol.coding.analysis.api.CodeStoreException;
-import com.puresol.coding.analysis.api.CodeStoreFactory;
-import com.puresol.coding.richclient.application.content.ParserTreeContentProvider;
-import com.puresol.coding.richclient.application.content.ParserTreeLabelProvider;
+import com.puresoltechnologies.coding.analysis.api.AnalysisRun;
+import com.puresoltechnologies.coding.analysis.api.AnalyzedCode;
+import com.puresoltechnologies.coding.analysis.api.CodeAnalysis;
+import com.puresoltechnologies.coding.analysis.api.CodeStore;
+import com.puresoltechnologies.coding.analysis.api.CodeStoreException;
+import com.puresoltechnologies.coding.analysis.api.CodeStoreFactory;
+import com.puresoltechnologies.coding.richclient.application.content.ParserTreeContentProvider;
+import com.puresoltechnologies.coding.richclient.application.content.ParserTreeLabelProvider;
 
 /**
  * This is a simple text element which show a text file.

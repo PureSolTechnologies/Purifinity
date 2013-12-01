@@ -6,8 +6,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 
-import com.puresol.coding.richclient.application.grammar.Arrow.ArrowType;
-import com.puresol.uhura.grammar.Quantity;
+import com.puresoltechnologies.coding.richclient.application.grammar.Arrow.ArrowType;
+import com.puresoltechnologies.uhura.grammar.Quantity;
 
 public class QuantityLoopRenderer extends AbstractRenderer {
 

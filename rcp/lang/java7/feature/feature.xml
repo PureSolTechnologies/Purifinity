@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.puresol.purifinity.client.lang.java7.feature"
-      label="com.puresol.purifinity.client.lang.java7.feature"
+      id="com.puresoltechnologies.purifinity.client.lang.java7.feature"
+      label="com.puresoltechnologies.purifinity.client.lang.java7.feature"
       version="0.1.0.qualifier"
       provider-name="PureSol Techologies"
-      plugin="com.puresol.purifinity.client.common.branding.plugin"
+      plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin"
       os="linux,macosx,win32"
       ws="carbon,cocoa,gtk,win32"
       arch="x86,x86_64">
@@ -22,26 +22,34 @@
    </license>
 
    <requires>
-      <import plugin="com.puresol.purifinity.coding.analysis.api.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.coding.lang.commons.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.client.common.osgi.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.client.common.ui.plugin" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.8.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
       <import plugin="org.eclipse.help"/>
-      <import plugin="com.puresol.purifinity.coding.lang.java7.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.analysis.api.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.lang.commons.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.lang.java7.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.ui.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.configuration.bundle"/>
+      <import plugin="com.puresoltechnologies.commons.trees.bundle"/>
+      <import plugin="com.puresoltechnologies.commons.utils.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.lang.api.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.metrics.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.license.api.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.uhura.bundle"/>
+      <import plugin="org.eclipse.osgi"/>
    </requires>
 
    <plugin
-         id="com.puresol.purifinity.client.lang.java7.plugin"
+         id="com.puresoltechnologies.purifinity.client.lang.java7.plugin"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.puresol.purifinity.coding.lang.java7.bundle"
+         id="com.puresoltechnologies.purifinity.coding.lang.java7.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -14,8 +14,8 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
 
-import com.puresol.coding.analysis.api.AnalyzableProgrammingLanguage;
-import com.puresol.coding.analysis.api.ProgrammingLanguages;
+import com.puresoltechnologies.coding.analysis.api.AnalyzableProgrammingLanguage;
+import com.puresoltechnologies.coding.analysis.api.ProgrammingLanguages;
 
 public class SupportedLanguagesPart implements SelectionListener {
 

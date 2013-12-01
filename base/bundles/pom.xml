@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol.purifinity</groupId>
+		<groupId>com.puresoltechnologies.purifinity</groupId>
 		<artifactId>base</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
@@ -14,12 +14,12 @@
 	<modules>
 		<module>org.reflections.reflections.external.bundle</module>
 		<module>org.codehaus.jackson.jackson-jaxrs.external.bundle</module>
-		<module>com.puresol.commons.trees.bundle</module>
-		<module>com.puresol.commons.utils.bundle</module>
-		<module>com.puresol.commons.math.bundle</module>
-		<module>com.puresol.commons.configuration.bundle</module>
-		<module>com.puresol.commons.license.domain.bundle</module>
-		<module>com.puresol.commons.license.client.bundle</module>
+		<module>com.puresoltechnologies.commons.trees.bundle</module>
+		<module>com.puresoltechnologies.commons.utils.bundle</module>
+		<module>com.puresoltechnologies.commons.math.bundle</module>
+		<module>com.puresoltechnologies.commons.configuration.bundle</module>
+		<module>com.puresoltechnologies.commons.license.domain.bundle</module>
+		<module>com.puresoltechnologies.commons.license.client.bundle</module>
 	</modules>
 
 </project>

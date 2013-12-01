@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 
-import com.puresol.coding.richclient.application.prefs.NewAnalysisPreferencePage;
-import com.puresol.utils.FileSearchConfiguration;
+import com.puresoltechnologies.coding.richclient.application.prefs.NewAnalysisPreferencePage;
+import com.puresoltechnologies.utils.FileSearchConfiguration;
 
 public class PreferencesUtils {
 

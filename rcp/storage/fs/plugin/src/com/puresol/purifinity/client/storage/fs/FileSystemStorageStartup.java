@@ -1,7 +1,7 @@
 package com.puresol.purifinity.client.storage.fs;
 
-import com.puresol.purifinity.client.common.osgi.AbstractStartup;
-import com.puresol.purifinity.coding.store.fs.Activator;
+import com.puresoltechnologies.purifinity.client.common.osgi.AbstractStartup;
+import com.puresoltechnologies.purifinity.coding.store.fs.Activator;
 
 public class FileSystemStorageStartup extends AbstractStartup {
 

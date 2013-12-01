@@ -19,8 +19,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresol.commons.utils.DirectoryUtilities;
-import com.puresol.purifinity.coding.store.fs.analysis.AnalysisStoreImpl;
+import com.puresoltechnologies.commons.utils.DirectoryUtilities;
+import com.puresoltechnologies.purifinity.coding.store.fs.analysis.AnalysisStoreImpl;
 
 public class AnalysisPerspectiveTest extends AbstractUITest {
 

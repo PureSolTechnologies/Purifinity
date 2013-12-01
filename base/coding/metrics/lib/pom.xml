@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol.purifinity</groupId>
+		<groupId>com.puresoltechnologies.purifinity</groupId>
 		<artifactId>coding.metrics</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
@@ -13,43 +13,43 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.analysis.api.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.analysis.impl.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.analysis.test</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.evaluation.api.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.evaluation.impl.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.lang.api.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>license.test</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>uhura.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>uhura.test</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.commons</groupId>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>math</artifactId>
 		</dependency>
 		<dependency>

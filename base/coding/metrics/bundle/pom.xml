@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol.purifinity</groupId>
+		<groupId>com.puresoltechnologies.purifinity</groupId>
 		<artifactId>coding.metrics</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
@@ -14,11 +14,11 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.metrics.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.commons</groupId>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>osgi</artifactId>
 		</dependency>
 		<dependency>
@@ -52,7 +52,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresol.purifinity.coding.metrics</bundle.namespace>
+		<bundle.namespace>com.puresoltechnologies.purifinity.coding.metrics</bundle.namespace>
 	</properties>
 
 	<build>

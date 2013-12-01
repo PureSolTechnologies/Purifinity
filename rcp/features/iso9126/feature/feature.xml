@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.puresol.purifinity.client.features.iso9126.feature"
-      label="com.puresol.purifinity.client.features.iso9126.feature"
+      id="com.puresoltechnologies.purifinity.client.features.iso9126.feature"
+      label="com.puresoltechnologies.purifinity.client.features.iso9126.feature"
       version="0.1.0.qualifier"
       provider-name="PureSol Techologies"
-      plugin="com.puresol.purifinity.client.common.branding.plugin"
+      plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin"
       os="linux,macosx,win32"
       ws="carbon,cocoa,gtk,win32"
       arch="x86,x86_64">
@@ -22,18 +22,26 @@
    </license>
 
    <requires>
-      <import plugin="com.puresol.purifinity.client.common.osgi.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.client.common.branding.plugin" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.osgi" version="3.8.2" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.104.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.8.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
       <import plugin="org.eclipse.e4.ui.workbench" version="0.11.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.client.application.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.application.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.utils.bundle"/>
    </requires>
 
    <plugin
-         id="com.puresol.purifinity.client.features.iso9126.plugin"
+         id="com.puresoltechnologies.purifinity.client.features.iso9126.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.purifinity.coding.evaluation.iso9126.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

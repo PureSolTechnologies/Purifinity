@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>com.puresol.purifinity.coding.richclient.application</artifactId>
+		<artifactId>com.puresoltechnologies.purifinity.coding.richclient.application</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.purifinity.coding.richclient.application.repository</artifactId>
+	<artifactId>com.puresoltechnologies.purifinity.coding.richclient.application.repository</artifactId>
 	<packaging>eclipse-repository</packaging>
 
 </project>

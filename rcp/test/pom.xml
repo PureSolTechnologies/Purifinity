@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol.purifinity</groupId>
-		<artifactId>com.puresol.purifinity.client</artifactId>
+		<groupId>com.puresoltechnologies.purifinity</groupId>
+		<artifactId>com.puresoltechnologies.purifinity.client</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.purifinity.client.test</artifactId>
+	<artifactId>com.puresoltechnologies.purifinity.client.test</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
 	<dependencies>
@@ -29,7 +29,7 @@
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
 					<argLine>-Xms128m -Xmx512m</argLine>
-					<product>com.puresol.purifinity.client.application.plugin.PurifinityFull</product>
+					<product>com.puresoltechnologies.purifinity.client.application.plugin.PurifinityFull</product>
 				</configuration>
 			</plugin>
 		</plugins>

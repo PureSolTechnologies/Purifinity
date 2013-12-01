@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.puresol.purifinity.client.storage.fs.feature"
-      label="com.puresol.purifinity.client.storage.fs.feature"
+      id="com.puresoltechnologies.purifinity.client.storage.fs.feature"
+      label="com.puresoltechnologies.purifinity.client.storage.fs.feature"
       version="0.1.0.qualifier"
       provider-name="PureSol Techologies"
-      plugin="com.puresol.purifinity.client.common.branding.plugin"
+      plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin"
       os="linux,macosx,win32"
       ws="carbon,cocoa,gtk,win32"
       arch="x86,x86_64">
@@ -22,34 +22,35 @@
    </license>
 
    <requires>
-      <import plugin="com.puresol.commons.utils.bundle" version="0.0.1" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.client.common.osgi.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.coding.lang.commons.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.coding.analysis.api.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresol.purifinity.coding.store.fs.bundle" version="0.1.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.8.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
-      <import plugin="com.puresol.commons.trees.bundle"/>
-      <import plugin="com.puresol.purifinity.coding.analysis.impl.bundle"/>
-      <import plugin="com.puresol.purifinity.coding.evaluation.api.bundle"/>
-      <import plugin="com.puresol.purifinity.coding.evaluation.impl.bundle"/>
-      <import plugin="com.puresol.purifinity.coding.lang.api.bundle"/>
-      <import plugin="com.puresol.purifinity.coding.metrics.bundle"/>
       <import plugin="org.apache.commons.io"/>
       <import plugin="org.eclipse.osgi"/>
-      <import plugin="com.puresol.purifinity.uhura.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.utils.bundle" version="0.0.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.lang.commons.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.analysis.api.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.store.fs.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.uhura.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.math.bundle"/>
+      <import plugin="com.puresoltechnologies.commons.trees.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.api.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.impl.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.lang.api.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.metrics.bundle"/>
    </requires>
 
    <plugin
-         id="com.puresol.purifinity.client.storage.fs.plugin"
+         id="com.puresoltechnologies.purifinity.client.storage.fs.plugin"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.puresol.purifinity.coding.store.fs.bundle"
+         id="com.puresoltechnologies.purifinity.coding.store.fs.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

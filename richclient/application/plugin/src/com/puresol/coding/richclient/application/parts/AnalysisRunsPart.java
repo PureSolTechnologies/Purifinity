@@ -17,7 +17,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
 
-import com.puresol.coding.analysis.api.AnalysisInformation;
+import com.puresoltechnologies.coding.analysis.api.AnalysisInformation;
 
 /**
  * This part shows the analysis projects. In a simple list.

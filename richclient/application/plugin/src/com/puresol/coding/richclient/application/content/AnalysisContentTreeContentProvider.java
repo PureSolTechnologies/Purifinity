@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresol.coding.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.coding.analysis.api.HashIdFileTree;
 
 public class AnalysisContentTreeContentProvider implements ITreeContentProvider {
 

@@ -8,8 +8,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresol.uhura.source.SourceCode;
-import com.puresol.uhura.source.SourceCodeLine;
+import com.puresoltechnologies.uhura.source.SourceCode;
+import com.puresoltechnologies.uhura.source.SourceCodeLine;
 
 /**
  * This is a simple text element which show a text file.

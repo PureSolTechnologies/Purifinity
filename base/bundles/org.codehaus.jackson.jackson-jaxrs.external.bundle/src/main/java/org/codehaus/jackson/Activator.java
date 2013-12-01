@@ -2,7 +2,7 @@ package org.codehaus.jackson;
 
 import org.osgi.framework.BundleContext;
 
-import com.puresol.commons.osgi.AbstractActivator;
+import com.puresoltechnologies.commons.osgi.AbstractActivator;
 
 public class Activator
 

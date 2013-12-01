@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol.purifinity</groupId>
+		<groupId>com.puresoltechnologies.purifinity</groupId>
 		<artifactId>coding.store.fs</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
@@ -14,15 +14,15 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.store.fs.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.commons</groupId>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>osgi</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.evaluation.api.lib</artifactId>
 			<scope>provided</scope>
 		</dependency>
@@ -39,7 +39,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresol.purifinity.coding.store.fs</bundle.namespace>
+		<bundle.namespace>com.puresoltechnologies.purifinity.coding.store.fs</bundle.namespace>
 	</properties>
 
 	<build>
@@ -49,7 +49,7 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<configuration>
 					<instructions>
-						<Import-Package>*,com.puresol.purifinity.uhura.parser,com.puresol.purifinity.uhura.lexer,com.puresol.purifinity.uhura.grammar.token,com.puresol.purifinity.uhura.ust,com.puresol.purifinity.uhura.ust.terminal,com.puresol.commons.math,com.puresol.commons.math.statistics,com.puresol.purifinity.coding.evaluation.impl</Import-Package>
+						<Import-Package>*,com.puresoltechnologies.purifinity.uhura.parser,com.puresoltechnologies.purifinity.uhura.lexer,com.puresoltechnologies.purifinity.uhura.grammar.token,com.puresoltechnologies.purifinity.uhura.ust,com.puresoltechnologies.purifinity.uhura.ust.terminal,com.puresoltechnologies.commons.math,com.puresoltechnologies.commons.math.statistics,com.puresoltechnologies.purifinity.coding.evaluation.impl</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

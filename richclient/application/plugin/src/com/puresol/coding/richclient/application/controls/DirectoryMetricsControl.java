@@ -18,12 +18,12 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
-import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.evaluation.api.Evaluator;
-import com.puresol.coding.evaluation.api.EvaluatorFactory;
-import com.puresol.coding.richclient.application.Activator;
-import com.puresol.coding.richclient.application.content.EvaluatorComboViewer;
+import com.puresoltechnologies.coding.analysis.api.AnalysisRun;
+import com.puresoltechnologies.coding.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.coding.evaluation.api.Evaluator;
+import com.puresoltechnologies.coding.evaluation.api.EvaluatorFactory;
+import com.puresoltechnologies.coding.richclient.application.Activator;
+import com.puresoltechnologies.coding.richclient.application.content.EvaluatorComboViewer;
 
 /**
  * This is a simple text element which show a text file.

@@ -6,8 +6,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.wb.swt.ResourceManager;
 
-import com.puresol.coding.analysis.api.AnalysisInformation;
-import com.puresol.coding.richclient.application.ClientImages;
+import com.puresoltechnologies.coding.analysis.api.AnalysisInformation;
+import com.puresoltechnologies.coding.richclient.application.ClientImages;
 
 /**
  * This is a simple label provider for AnalysisInformation list controls.

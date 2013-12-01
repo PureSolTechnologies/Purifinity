@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: com.puresol.coding.richclient.application.plugin
-Bundle-SymbolicName: com.puresol.coding.richclient.application.plugin;singleton:=true
+Bundle-Name: com.puresoltechnologies.coding.richclient.application.plugin
+Bundle-SymbolicName: com.puresoltechnologies.coding.richclient.application.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: PureSol Technologies
 Require-Bundle: org.eclipse.equinox.event;bundle-version="1.2.200",
@@ -25,21 +25,21 @@ Require-Bundle: org.eclipse.equinox.event;bundle-version="1.2.200",
  org.eclipse.jface;bundle-version="3.8.101",
  org.eclipse.core.runtime;bundle-version="3.8.0",
  org.eclipse.platform;bundle-version="4.2.1",
- com.puresol.purifinity.trees.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.utils.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.uhura.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.lang.api.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.lang.commons.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.analysis.api.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.analysis.impl.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.evaluation.api.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.evaluation.impl.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.metrics.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.lang.java.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.lang.fortran.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.lang.c11.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.lang.cpp.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.store.fs.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.trees.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.utils.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.uhura.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.lang.api.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.lang.commons.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.analysis.api.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.analysis.impl.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.evaluation.api.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.evaluation.impl.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.metrics.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.lang.java.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.lang.fortran.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.lang.c11.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.lang.cpp.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.store.fs.bundle;bundle-version="0.1.0",
  org.slf4j.api;bundle-version="1.6.4",
  org.eclipse.ui;bundle-version="3.103.0",
  org.eclipse.e4.core.commands;bundle-version="0.10.1",
@@ -51,25 +51,25 @@ Require-Bundle: org.eclipse.equinox.event;bundle-version="1.2.200",
  org.eclipse.e4.tools.compat;bundle-version="0.12.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: org.slf4j;version="1.6.4"
-Export-Package: com.puresol.coding.richclient.application.analysis;
+Export-Package: com.puresoltechnologies.coding.richclient.application.analysis;
   uses:="org.eclipse.core.runtime,
-   com.puresol.coding.analysis.api,
+   com.puresoltechnologies.coding.analysis.api,
    org.eclipse.core.runtime.jobs,
-   com.puresol.coding.evaluation.api",
- com.puresol.coding.richclient.application.controls;
-  uses:="com.puresol.coding.analysis.api,
+   com.puresoltechnologies.coding.evaluation.api",
+ com.puresoltechnologies.coding.richclient.application.controls;
+  uses:="com.puresoltechnologies.coding.analysis.api,
    org.eclipse.swt.events,
    org.eclipse.swt.custom,
-   com.puresol.uhura.source,
-   com.puresol.coding.lang.api,
+   com.puresoltechnologies.uhura.source,
+   com.puresoltechnologies.coding.lang.api,
    org.eclipse.jface.viewers,
    org.eclipse.swt.widgets",
- com.puresol.coding.richclient.application.dialogs;uses:="org.eclipse.swt.widgets,org.eclipse.jface.dialogs",
- com.puresol.coding.richclient.application.handlers;
+ com.puresoltechnologies.coding.richclient.application.dialogs;uses:="org.eclipse.swt.widgets,org.eclipse.jface.dialogs",
+ com.puresoltechnologies.coding.richclient.application.handlers;
   uses:="org.eclipse.e4.ui.model.application,
    org.eclipse.e4.ui.model.application.ui.basic,
    org.eclipse.e4.ui.workbench,
    org.eclipse.swt.widgets",
- com.puresol.coding.richclient.application.parts;uses:="org.eclipse.swt.widgets",
- com.puresol.coding.richclient.application.utils;uses:="org.eclipse.swt.graphics,com.puresol.coding.evaluation.api,org.eclipse.swt.widgets"
+ com.puresoltechnologies.coding.richclient.application.parts;uses:="org.eclipse.swt.widgets",
+ com.puresoltechnologies.coding.richclient.application.utils;uses:="org.eclipse.swt.graphics,com.puresoltechnologies.coding.evaluation.api,org.eclipse.swt.widgets"
 Bundle-ClassPath: .

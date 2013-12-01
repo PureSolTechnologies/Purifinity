@@ -7,13 +7,13 @@
 	</properties>
 
 	<parent>
-		<groupId>com.puresol.commons</groupId>
+		<groupId>com.puresoltechnologies.commons</groupId>
 		<artifactId>parent.eclipsercp</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.puresol.purifinity</groupId>
-	<artifactId>com.puresol.purifinity.client</artifactId>
+	<groupId>com.puresoltechnologies.purifinity</groupId>
+	<artifactId>com.puresoltechnologies.purifinity.client</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -80,112 +80,112 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresol.commons</groupId>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>license.client.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.commons</groupId>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>license.domain.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.commons</groupId>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>configuration.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.commons</groupId>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>math.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.commons</groupId>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>utils.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.commons</groupId>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>trees.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>uhura.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.analysis.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.analysis.impl.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.evaluation.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.evaluation.cleancode.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.evaluation.impl.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.evaluation.iso9126.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.lang.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.lang.commons.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.lang.c11.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.lang.cpp11.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.lang.java7.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.lang.fortran2008.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.metrics.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.store.fs.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresol.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>license.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -201,6 +201,11 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>com.puresoltechnologies.maven.plugins</groupId>
+					<artifactId>docbook-maven-plugin</artifactId>
+					<version>0.1.0-SNAPSHOT</version>
+				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
@@ -251,16 +256,17 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>
-											com.puresol.maven.plugins
+											com.puresoltechnologies.maven.plugins
 										</groupId>
 										<artifactId>
-											docbook-plugin
+											docbook-maven-plugin
 										</artifactId>
 										<versionRange>
 											[0.1.0-SNAPSHOT,)
 										</versionRange>
 										<goals>
 											<goal>convert2pdf</goal>
+											<goal>convert2eclipse</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>

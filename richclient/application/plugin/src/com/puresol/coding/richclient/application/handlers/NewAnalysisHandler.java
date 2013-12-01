@@ -4,7 +4,7 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
-import com.puresol.coding.richclient.application.wizards.NewAnalysisWizard;
+import com.puresoltechnologies.coding.richclient.application.wizards.NewAnalysisWizard;
 
 @SuppressWarnings("restriction")
 public class NewAnalysisHandler {

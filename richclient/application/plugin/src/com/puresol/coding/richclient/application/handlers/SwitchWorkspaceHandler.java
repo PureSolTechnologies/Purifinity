@@ -6,7 +6,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-import com.puresol.coding.richclient.application.dialogs.PickWorkspaceDialog;
+import com.puresoltechnologies.coding.richclient.application.dialogs.PickWorkspaceDialog;
 
 @SuppressWarnings("restriction")
 public class SwitchWorkspaceHandler {

@@ -4,11 +4,11 @@
 
 	<parent>
 		<groupId>com.puresol</groupId>
-		<artifactId>com.puresol.purifinity.coding.richclient.application</artifactId>
+		<artifactId>com.puresoltechnologies.purifinity.coding.richclient.application</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.purifinity.coding.richclient.application.test</artifactId>
+	<artifactId>com.puresoltechnologies.purifinity.coding.richclient.application.test</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 
 	<build>
@@ -21,8 +21,8 @@
 				<configuration>
 					<useUIHarness>true</useUIHarness>
 					<useUIThread>false</useUIThread>
-					<product>com.puresol.purifinity.richclient.application.product</product>
-					<application>com.puresol.purifinity.richclient.application.product</application>
+					<product>com.puresoltechnologies.purifinity.richclient.application.product</product>
+					<application>com.puresoltechnologies.purifinity.richclient.application.product</application>
 					<dependencies>
 						<dependency>
 							<type>p2-installable-unit</type>

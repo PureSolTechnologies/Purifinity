@@ -2,9 +2,9 @@ package com.puresol.coding.richclient.application.controls;
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalyzedCode;
-import com.puresol.coding.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.coding.analysis.api.AnalysisRun;
+import com.puresoltechnologies.coding.analysis.api.AnalyzedCode;
+import com.puresoltechnologies.coding.analysis.api.HashIdFileTree;
 
 /**
  * This interface is used to register factories which produce file result

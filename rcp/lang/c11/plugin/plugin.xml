@@ -4,14 +4,14 @@
    <extension
          point="org.eclipse.ui.startup">
       <startup
-            class="com.puresol.purifinity.client.lang.c11.C11Startup">
+            class="com.puresoltechnologies.purifinity.client.lang.c11.C11Startup">
       </startup>
    </extension>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="com.puresol.purifinity.client.common.analysis.preferences.CodeAnalysisPreferencePage"
-            class="com.puresol.purifinity.client.lang.c11.prefs.C11AnalysisPreferencePage"
+            class="com.puresoltechnologies.purifinity.client.lang.c11.prefs.C11AnalysisPreferencePage"
             id="com.puresol.purifinity.client.lang.c11.prefs.C11AnalysisPreferencePage"
             name="C11">
       </page>

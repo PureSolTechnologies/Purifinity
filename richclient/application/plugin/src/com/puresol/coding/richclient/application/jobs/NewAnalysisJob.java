@@ -9,15 +9,15 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.e4.ui.internal.workbench.WorkbenchLogger;
 
-import com.puresol.coding.analysis.api.Analysis;
-import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.AnalysisSettings;
-import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.AnalysisStoreFactory;
-import com.puresol.coding.analysis.api.ModuleStoreException;
-import com.puresol.coding.analysis.api.RepositoryLocation;
-import com.puresol.coding.richclient.application.utils.PreferencesUtils;
-import com.puresol.utils.FileSearchConfiguration;
+import com.puresoltechnologies.coding.analysis.api.Analysis;
+import com.puresoltechnologies.coding.analysis.api.AnalysisRun;
+import com.puresoltechnologies.coding.analysis.api.AnalysisSettings;
+import com.puresoltechnologies.coding.analysis.api.AnalysisStore;
+import com.puresoltechnologies.coding.analysis.api.AnalysisStoreFactory;
+import com.puresoltechnologies.coding.analysis.api.ModuleStoreException;
+import com.puresoltechnologies.coding.analysis.api.RepositoryLocation;
+import com.puresoltechnologies.coding.richclient.application.utils.PreferencesUtils;
+import com.puresoltechnologies.utils.FileSearchConfiguration;
 
 @SuppressWarnings("restriction")
 public class NewAnalysisJob extends Job {

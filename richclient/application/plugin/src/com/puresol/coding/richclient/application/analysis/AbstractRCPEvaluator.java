@@ -12,23 +12,23 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
-import com.puresol.coding.analysis.api.AnalysisRun;
-import com.puresol.coding.analysis.api.CodeAnalysis;
-import com.puresol.coding.analysis.api.CodeStore;
-import com.puresol.coding.analysis.api.CodeStoreException;
-import com.puresol.coding.analysis.api.CodeStoreFactory;
-import com.puresol.coding.analysis.api.HashIdFileTree;
-import com.puresol.coding.analysis.api.ModuleStore;
-import com.puresol.coding.analysis.api.ModuleStoreFactory;
-import com.puresol.coding.evaluation.api.Evaluator;
-import com.puresol.coding.evaluation.api.EvaluatorInformation;
-import com.puresol.coding.evaluation.api.EvaluatorStore;
-import com.puresol.coding.richclient.application.Activator;
-import com.puresol.trees.TreeUtils;
-import com.puresol.trees.TreeVisitor;
-import com.puresol.trees.TreeWalker;
-import com.puresol.trees.WalkingAction;
-import com.puresol.utils.StopWatch;
+import com.puresoltechnologies.coding.analysis.api.AnalysisRun;
+import com.puresoltechnologies.coding.analysis.api.CodeAnalysis;
+import com.puresoltechnologies.coding.analysis.api.CodeStore;
+import com.puresoltechnologies.coding.analysis.api.CodeStoreException;
+import com.puresoltechnologies.coding.analysis.api.CodeStoreFactory;
+import com.puresoltechnologies.coding.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.coding.analysis.api.ModuleStore;
+import com.puresoltechnologies.coding.analysis.api.ModuleStoreFactory;
+import com.puresoltechnologies.coding.evaluation.api.Evaluator;
+import com.puresoltechnologies.coding.evaluation.api.EvaluatorInformation;
+import com.puresoltechnologies.coding.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.coding.richclient.application.Activator;
+import com.puresoltechnologies.trees.TreeUtils;
+import com.puresoltechnologies.trees.TreeVisitor;
+import com.puresoltechnologies.trees.TreeWalker;
+import com.puresoltechnologies.trees.WalkingAction;
+import com.puresoltechnologies.utils.StopWatch;
 
 /**
  * This interface is the main interface for all evaluators and the general

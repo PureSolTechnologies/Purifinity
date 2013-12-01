@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Purifinity" uid="com.puresol.purifinity.client.product.base" id="com.puresol.purifinity.client.application.plugin.PurifinityBase" application="com.puresol.purifinity.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Purifinity" uid="com.puresoltechnologies.purifinity.client.product.base" id="com.puresol.purifinity.client.application.plugin.PurifinityBase" application="com.puresol.purifinity.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/com.puresol.purifinity.client.product.base/images/puresol-logo-green_small.png"/>
+      <image path="/com.puresoltechnologies.purifinity.client.product.base/images/puresol-logo-green_small.png"/>
       <text>
          Purifinity
 
@@ -27,7 +27,7 @@ Apache Software Foundation http://apache.org
    <windowImages/>
 
    <splash
-      location="com.puresol.purifinity.client.common.branding.plugin"
+      location="com.puresoltechnologies.purifinity.client.common.branding.plugin"
       startupProgressRect="10,200,620,32"
       startupMessageRect="10,248,620,20"
       startupForegroundColor="000000" />
@@ -56,8 +56,8 @@ Apache Software Foundation http://apache.org
    </plugins>
 
    <features>
-      <feature id="com.puresol.purifinity.client.application.feature"/>
-      <feature id="com.puresol.purifinity.client.common.feature"/>
+      <feature id="com.puresoltechnologies.purifinity.client.application.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresoltechnologies.purifinity.client.common.feature" version="0.1.0.qualifier"/>
       <feature id="org.eclipse.emf.ecore"/>
       <feature id="org.eclipse.e4.rcp"/>
       <feature id="org.eclipse.equinox.p2.core.feature"/>

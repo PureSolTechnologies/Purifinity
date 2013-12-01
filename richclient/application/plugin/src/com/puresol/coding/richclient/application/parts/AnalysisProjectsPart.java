@@ -30,14 +30,14 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.wb.swt.ResourceManager;
 
-import com.puresol.coding.analysis.api.AnalysisStore;
-import com.puresol.coding.analysis.api.AnalysisStoreFactory;
-import com.puresol.coding.analysis.api.ModuleStoreException;
-import com.puresol.coding.richclient.application.content.AnalysisListContentProvider;
-import com.puresol.coding.richclient.application.content.AnalysisListLabelProvider;
-import com.puresol.coding.richclient.application.handlers.DeleteAnalysisHandler;
-import com.puresol.coding.richclient.application.handlers.EditAnalysisHandler;
-import com.puresol.coding.richclient.application.handlers.NewAnalysisHandler;
+import com.puresoltechnologies.coding.analysis.api.AnalysisStore;
+import com.puresoltechnologies.coding.analysis.api.AnalysisStoreFactory;
+import com.puresoltechnologies.coding.analysis.api.ModuleStoreException;
+import com.puresoltechnologies.coding.richclient.application.content.AnalysisListContentProvider;
+import com.puresoltechnologies.coding.richclient.application.content.AnalysisListLabelProvider;
+import com.puresoltechnologies.coding.richclient.application.handlers.DeleteAnalysisHandler;
+import com.puresoltechnologies.coding.richclient.application.handlers.EditAnalysisHandler;
+import com.puresoltechnologies.coding.richclient.application.handlers.NewAnalysisHandler;
 
 /**
  * This part shows the contents of an analysis project. The content is spit into

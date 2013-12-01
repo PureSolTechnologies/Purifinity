@@ -5,7 +5,7 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.ILoggerFactory;
 import org.slf4j.Logger;
 
-import com.puresol.coding.richclient.application.Activator;
+import com.puresoltechnologies.coding.richclient.application.Activator;
 
 public class LoggerFactory implements ILoggerFactory {
 

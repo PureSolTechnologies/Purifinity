@@ -4,8 +4,8 @@ import java.io.File;
 
 import org.eclipse.jface.wizard.Wizard;
 
-import com.puresol.coding.analysis.api.DirectoryRepositoryLocation;
-import com.puresol.coding.richclient.application.jobs.NewAnalysisJob;
+import com.puresoltechnologies.coding.analysis.api.DirectoryRepositoryLocation;
+import com.puresoltechnologies.coding.richclient.application.jobs.NewAnalysisJob;
 
 public class NewAnalysisWizard extends Wizard {
 

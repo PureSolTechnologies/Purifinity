@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Purifinity" uid="com.puresol.purifinity.client.product.full" id="com.puresol.purifinity.client.application.plugin.PurifinityFull" application="com.puresol.purifinity.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="Purifinity" uid="com.puresoltechnologies.purifinity.client.product.full" id="com.puresol.purifinity.client.application.plugin.PurifinityFull" application="com.puresol.purifinity.client.application.plugin.application" version="0.1.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/com.puresol.purifinity.client.product.full/images/puresol-logo-green_small.png"/>
+      <image path="/com.puresoltechnologies.purifinity.client.product.full/images/puresol-logo-green_small.png"/>
       <text>
          Purifinity
 
@@ -27,7 +27,7 @@ Apache Software Foundation http://apache.org
    <windowImages/>
 
    <splash
-      location="com.puresol.purifinity.client.common.branding.plugin"
+      location="com.puresoltechnologies.purifinity.client.common.branding.plugin"
       startupProgressRect="10,200,620,32"
       startupMessageRect="10,248,620,20"
       startupForegroundColor="000000" />
@@ -62,16 +62,16 @@ Apache Software Foundation http://apache.org
       <feature id="org.eclipse.emf.common"/>
       <feature id="org.eclipse.equinox.p2.rcp.feature"/>
       <feature id="org.eclipse.rcp"/>
-      <feature id="com.puresol.purifinity.client.application.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.purifinity.client.common.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.purifinity.client.lang.c11.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.purifinity.client.lang.cpp11.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.purifinity.client.lang.fortran2008.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.purifinity.client.lang.java7.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.purifinity.client.features.cleancode.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.purifinity.client.features.iso9126.feature" version="0.1.0.qualifier"/>
-      <feature id="com.puresol.purifinity.client.storage.fs.feature" version="0.1.0.qualifier"/>
       <feature id="org.eclipse.help"/>
+      <feature id="com.puresoltechnologies.purifinity.client.application.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresoltechnologies.purifinity.client.common.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresoltechnologies.purifinity.client.lang.c11.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresoltechnologies.purifinity.client.lang.cpp11.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresoltechnologies.purifinity.client.lang.fortran2008.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresoltechnologies.purifinity.client.lang.java7.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresoltechnologies.purifinity.client.features.cleancode.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresoltechnologies.purifinity.client.features.iso9126.feature" version="0.1.0.qualifier"/>
+      <feature id="com.puresoltechnologies.purifinity.client.storage.fs.feature" version="0.1.0.qualifier"/>
    </features>
 
    <configurations>

@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: com.puresol.coding.richclient.application.test
-Bundle-SymbolicName: com.puresol.coding.richclient.application.test;singleton:=true
+Bundle-Name: com.puresoltechnologies.coding.richclient.application.test
+Bundle-SymbolicName: com.puresoltechnologies.coding.richclient.application.test;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-Vendor: PureSol Technologies
-Require-Bundle: com.puresol.coding.richclient.application.plugin;bundle-version="0.1.0",
+Require-Bundle: com.puresoltechnologies.coding.richclient.application.plugin;bundle-version="0.1.0",
  org.eclipse.ui;bundle-version="3.103.0",
  org.junit4;bundle-version="4.8.1",
  org.hamcrest;bundle-version="1.1.0",

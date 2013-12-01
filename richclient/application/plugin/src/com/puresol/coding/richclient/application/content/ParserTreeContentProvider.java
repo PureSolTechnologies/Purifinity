@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresol.uhura.parser.ParserTree;
+import com.puresoltechnologies.uhura.parser.ParserTree;
 
 public class ParserTreeContentProvider implements ITreeContentProvider {
 

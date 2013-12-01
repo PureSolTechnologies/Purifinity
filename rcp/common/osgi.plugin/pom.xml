@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresol.purifinity</groupId>
-		<artifactId>com.puresol.purifinity.client.common</artifactId>
+		<groupId>com.puresoltechnologies.purifinity</groupId>
+		<artifactId>com.puresoltechnologies.purifinity.client.common</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresol.purifinity.client.common.osgi.plugin</artifactId>
+	<artifactId>com.puresoltechnologies.purifinity.client.common.osgi.plugin</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
 	<build>

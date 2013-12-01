@@ -7,7 +7,7 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 
-import com.puresol.coding.richclient.application.grammar.Arrow.ArrowType;
+import com.puresoltechnologies.coding.richclient.application.grammar.Arrow.ArrowType;
 
 public class ConstructionRenderer extends AbstractRenderer {
 

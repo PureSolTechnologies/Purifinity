@@ -13,13 +13,13 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresol.coding.lang.api.LanguageGrammar;
-import com.puresol.coding.lang.api.ProgrammingLanguage;
-import com.puresol.coding.richclient.application.grammar.GrammarRenderer;
-import com.puresol.coding.richclient.application.grammar.RenderException;
-import com.puresol.uhura.grammar.GrammarException;
-import com.puresol.uhura.grammar.GrammarReader;
-import com.puresol.uhura.parser.ParserTree;
+import com.puresoltechnologies.coding.lang.api.LanguageGrammar;
+import com.puresoltechnologies.coding.lang.api.ProgrammingLanguage;
+import com.puresoltechnologies.coding.richclient.application.grammar.GrammarRenderer;
+import com.puresoltechnologies.coding.richclient.application.grammar.RenderException;
+import com.puresoltechnologies.uhura.grammar.GrammarException;
+import com.puresoltechnologies.uhura.grammar.GrammarReader;
+import com.puresoltechnologies.uhura.parser.ParserTree;
 
 public class GrammarCanvas extends Canvas implements PaintListener {
 

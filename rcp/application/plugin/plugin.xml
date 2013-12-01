@@ -9,7 +9,7 @@
       <application
             visible="true">
          <run
-               class="com.puresol.purifinity.client.application.Purifinity">
+               class="com.puresoltechnologies.purifinity.client.application.Purifinity">
          </run>
       </application>
    </extension>
@@ -265,7 +265,7 @@
          point="org.eclipse.ui.views">
       <view
             category="org.eclipse.debug.ui"
-            class="com.puresol.purifinity.client.application.views.OsgiDebugView"
+            class="com.puresoltechnologies.purifinity.client.application.views.OsgiDebugView"
             id="com.puresol.purifinity.client.application.views.OsgiDebugView"
             name="OSGI Debug"
             restorable="true">
@@ -274,34 +274,34 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="com.puresol.purifinity.client.application.handler.SwitchWorkspaceHandler"
+            defaultHandler="com.puresoltechnologies.purifinity.client.application.handler.SwitchWorkspaceHandler"
             id="com.puresol.purifinity.client.application.handler.SwitchWorkspaceHandler"
             name="Switch Workspace">
       </command>
       <command
-            defaultHandler="com.puresol.purifinity.client.application.handler.PrintHandler"
+            defaultHandler="com.puresoltechnologies.purifinity.client.application.handler.PrintHandler"
             id="org.eclipse.ui.file.print"
             name="Print">
       </command>
       <command
-            defaultHandler="com.puresol.purifinity.client.application.handler.ExportHandler"
+            defaultHandler="com.puresoltechnologies.purifinity.client.application.handler.ExportHandler"
             id="org.eclipse.ui.file.export"
             name="Export">
       </command>
       <command
-            defaultHandler="com.puresol.purifinity.client.application.commands.OpenPureSolTechnologiesWebsiteHandler"
+            defaultHandler="com.puresoltechnologies.purifinity.client.application.commands.OpenPureSolTechnologiesWebsiteHandler"
             description="Opens the official website of PureSol Technologies"
             id="com.puresol.purifinity.client.application.commands.OpenPureSolTechnologiesWebsiteHandler"
             name="Open PureSol Technologies Website">
       </command>
       <command
-            defaultHandler="com.puresol.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
+            defaultHandler="com.puresoltechnologies.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
             description="Opens the official bug tracker and feature request website"
             id="com.puresol.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
             name="Open Bug and Enhancement Tracker Website">
       </command>
       <command
-            defaultHandler="com.puresol.purifinity.client.application.handler.MyIntroHandler"
+            defaultHandler="com.puresoltechnologies.purifinity.client.application.handler.MyIntroHandler"
             id="com.puresol.purifinity.client.application.handler.MyIntroHandler"
             name="Show Intro">
       </command>

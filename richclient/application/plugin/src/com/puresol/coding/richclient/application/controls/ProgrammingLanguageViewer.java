@@ -7,8 +7,8 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresol.coding.analysis.api.ProgrammingLanguagesOSGI;
-import com.puresol.coding.lang.api.ProgrammingLanguage;
+import com.puresoltechnologies.coding.analysis.api.ProgrammingLanguagesOSGI;
+import com.puresoltechnologies.coding.lang.api.ProgrammingLanguage;
 
 /**
  * This class is a simple viewer for combo boxes which provide a selection for

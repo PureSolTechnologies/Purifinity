@@ -5,7 +5,7 @@ import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 
-import com.puresol.coding.analysis.api.AnalysisInformation;
+import com.puresoltechnologies.coding.analysis.api.AnalysisInformation;
 
 @SuppressWarnings("restriction")
 public class DeleteAnalysisHandler {

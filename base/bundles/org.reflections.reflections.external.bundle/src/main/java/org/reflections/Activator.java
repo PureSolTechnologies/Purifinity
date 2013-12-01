@@ -2,7 +2,7 @@ package org.reflections;
 
 import org.osgi.framework.BundleContext;
 
-import com.puresol.commons.osgi.AbstractActivator;
+import com.puresoltechnologies.commons.osgi.AbstractActivator;
 
 public class Activator
 

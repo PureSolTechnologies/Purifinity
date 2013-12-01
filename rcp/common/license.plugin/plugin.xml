@@ -23,7 +23,7 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="com.puresol.purifinity.client.common.license.command.LicenseManagerHandler"
+            defaultHandler="com.puresoltechnologies.purifinity.client.common.license.command.LicenseManagerHandler"
             description="Starts the License Manager."
             id="com.puresol.purifinity.client.common.license.command.LicenseManagerHandler"
             name="License Manager">

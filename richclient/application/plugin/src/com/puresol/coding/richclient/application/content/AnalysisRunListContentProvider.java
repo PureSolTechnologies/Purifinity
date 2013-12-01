@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresol.coding.analysis.api.AnalysisRunInformation;
+import com.puresoltechnologies.coding.analysis.api.AnalysisRunInformation;
 
 /**
  * This content provider is used to show a list of available analysis runs from

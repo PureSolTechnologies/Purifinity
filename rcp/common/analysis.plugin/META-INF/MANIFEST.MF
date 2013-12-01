@@ -1,41 +1,41 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: com.puresol.purifinity.client.common.analysis.plugin
-Bundle-SymbolicName: com.puresol.purifinity.client.common.analysis.plugin;singleton:=true
+Bundle-Name: com.puresoltechnologies.purifinity.client.common.analysis.plugin
+Bundle-SymbolicName: com.puresoltechnologies.purifinity.client.common.analysis.plugin;singleton:=true
 Bundle-Version: 0.1.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
-Require-Bundle: com.puresol.purifinity.client.common.osgi.plugin;bundle-version="0.1.0",
- com.puresol.commons.trees.bundle;bundle-version="0.0.1",
- com.puresol.commons.utils.bundle;bundle-version="0.0.1",
- com.puresol.commons.configuration.bundle;bundle-version="0.0.1",
- com.puresol.purifinity.uhura.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.client.common.branding.plugin;bundle-version="0.1.0",
- com.puresol.purifinity.coding.lang.api.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.analysis.api.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.coding.analysis.impl.bundle;bundle-version="0.1.0",
- com.puresol.purifinity.client.common.ui.plugin;bundle-version="0.1.0",
+Require-Bundle: com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.1.0",
+ com.puresoltechnologies.commons.trees.bundle;bundle-version="0.0.1",
+ com.puresoltechnologies.commons.utils.bundle;bundle-version="0.0.1",
+ com.puresoltechnologies.commons.configuration.bundle;bundle-version="0.0.1",
+ com.puresoltechnologies.purifinity.uhura.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.client.common.branding.plugin;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.lang.api.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.analysis.api.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.coding.analysis.impl.bundle;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.1.0",
  org.eclipse.osgi;bundle-version="3.8.2",
  org.eclipse.ui;bundle-version="3.104.0",
  org.eclipse.core.runtime;bundle-version="3.8.0",
  org.slf4j.api;bundle-version="1.6.4",
  org.apache.commons.io;bundle-version="2.0.1",
  org.eclipse.e4.ui.workbench;bundle-version="0.11.0",
- com.puresol.purifinity.client.application.plugin;bundle-version="0.1.0",
+ com.puresoltechnologies.purifinity.client.application.plugin;bundle-version="0.1.0",
  org.eclipse.ui.intro;bundle-version="3.4.200",
  org.eclipse.help;bundle-version="3.6.0"
-Export-Package: com.puresol.purifinity.client.common.analysis,
- com.puresol.purifinity.client.common.analysis.contents,
- com.puresol.purifinity.client.common.analysis.controls,
- com.puresol.purifinity.client.common.analysis.editors,
- com.puresol.purifinity.client.common.analysis.grammar,
- com.puresol.purifinity.client.common.analysis.handlers,
- com.puresol.purifinity.client.common.analysis.jobs,
- com.puresol.purifinity.client.common.analysis.perspectives,
- com.puresol.purifinity.client.common.analysis.preferences,
- com.puresol.purifinity.client.common.analysis.utils,
- com.puresol.purifinity.client.common.analysis.views,
- com.puresol.purifinity.client.common.analysis.wizards
-Bundle-Activator: com.puresol.purifinity.client.common.analysis.Activator
+Export-Package: com.puresoltechnologies.purifinity.client.common.analysis,
+ com.puresoltechnologies.purifinity.client.common.analysis.contents,
+ com.puresoltechnologies.purifinity.client.common.analysis.controls,
+ com.puresoltechnologies.purifinity.client.common.analysis.editors,
+ com.puresoltechnologies.purifinity.client.common.analysis.grammar,
+ com.puresoltechnologies.purifinity.client.common.analysis.handlers,
+ com.puresoltechnologies.purifinity.client.common.analysis.jobs,
+ com.puresoltechnologies.purifinity.client.common.analysis.perspectives,
+ com.puresoltechnologies.purifinity.client.common.analysis.preferences,
+ com.puresoltechnologies.purifinity.client.common.analysis.utils,
+ com.puresoltechnologies.purifinity.client.common.analysis.views,
+ com.puresoltechnologies.purifinity.client.common.analysis.wizards
+Bundle-Activator: com.puresoltechnologies.purifinity.client.common.analysis.Activator
 Bundle-ActivationPolicy: lazy

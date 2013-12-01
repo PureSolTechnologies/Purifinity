@@ -2,8 +2,8 @@ package com.puresol.coding.richclient.application.content;
 
 import org.eclipse.jface.viewers.LabelProvider;
 
-import com.puresol.uhura.lexer.Token;
-import com.puresol.uhura.parser.ParserTree;
+import com.puresoltechnologies.uhura.lexer.Token;
+import com.puresoltechnologies.uhura.parser.ParserTree;
 
 public class ParserTreeLabelProvider extends LabelProvider {
 
