@@ -5,13 +5,13 @@
 OPTIONS
 
 	// lexer is the class to be used for lexing
-	lexer="com.puresol.uhura.lexer.RegExpLexer";
+	lexer="com.puresoltechnologies.uhura.lexer.RegExpLexer";
 	
 	// this options tells the lexer to be case insensitve
 	lexer.case_sensitive=true;
 	
 	// parser is the class to be used for parsing
-	parser="com.puresol.uhura.parser.lr.LR1Parser";
+	parser="com.puresoltechnologies.uhura.parser.lr.LR1Parser";
 
 /*
  The next section is the HELPER section where all tokens are to be defined

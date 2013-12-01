@@ -1,8 +1,0 @@
-Artifactory
------------
-
-Start:
-
-Artifactory needs to be started manually. Be root and start the commands from
-the jenkins.sh and artifactory.sh file manually on the command line. Afterwards
-tomcat can be started.
