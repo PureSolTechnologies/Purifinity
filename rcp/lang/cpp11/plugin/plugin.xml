@@ -10,9 +10,9 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="com.puresol.purifinity.client.common.analysis.preferences.CodeAnalysisPreferencePage"
+            category="com.puresoltechnologies.purifinity.client.common.analysis.preferences.CodeAnalysisPreferencePage"
             class="com.puresoltechnologies.purifinity.client.lang.cpp11.prefs.CPP11AnalysisPreferencePage"
-            id="com.puresol.purifinity.client.lang.cpp11.prefs.CPP11AnalysisPreferencePage"
+            id="com.puresoltechnologies.purifinity.client.lang.cpp11.prefs.CPP11AnalysisPreferencePage"
             name="C++11">
       </page>
    </extension>

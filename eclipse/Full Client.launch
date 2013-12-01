@@ -2,7 +2,6 @@
 <launchConfiguration type="org.eclipse.pde.ui.RuntimeWorkbench">
 <setAttribute key="additional_plugins"/>
 <booleanAttribute key="append.args" value="true"/>
-<stringAttribute key="application" value="com.puresol.purifinity.client.application.plugin.application"/>
 <booleanAttribute key="askclear" value="true"/>
 <booleanAttribute key="automaticAdd" value="true"/>
 <booleanAttribute key="automaticValidate" value="false"/>
@@ -23,22 +22,22 @@
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-os ${target.os} -ws ${target.ws} -arch ${target.arch} -nl ${target.nl} -consoleLog -data @noDefault"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.pde.ui.workbenchClasspathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dosgi.requiredJavaVersion=1.5 -Dhelp.lucene.tokenizer=standard -Xss8m -Xms40m -Xmx512m -XX:MaxPermSize=256m"/>
 <stringAttribute key="pde.version" value="3.3"/>
-<stringAttribute key="product" value="com.puresol.purifinity.client.application.plugin.PurifinityFull"/>
+<stringAttribute key="product" value="com.puresoltechnologies.purifinity.client.application.plugin.PurifinityFull"/>
 <setAttribute key="selected_features">
-<setEntry value="com.puresol.purifinity.client.application.feature:default"/>
-<setEntry value="com.puresol.purifinity.client.common.feature:default"/>
-<setEntry value="com.puresol.purifinity.client.features.cleancode.feature:default"/>
-<setEntry value="com.puresol.purifinity.client.features.iso9126.feature:default"/>
-<setEntry value="com.puresol.purifinity.client.lang.c11.feature:default"/>
-<setEntry value="com.puresol.purifinity.client.lang.cpp11.feature:default"/>
-<setEntry value="com.puresol.purifinity.client.lang.fortran2008.feature:default"/>
-<setEntry value="com.puresol.purifinity.client.lang.java7.feature:default"/>
-<setEntry value="com.puresol.purifinity.client.storage.fs.feature:default"/>
+<setEntry value="com.puresoltechnologies.purifinity.client.application.feature:default"/>
+<setEntry value="com.puresoltechnologies.purifinity.client.common.feature:default"/>
+<setEntry value="com.puresoltechnologies.purifinity.client.features.cleancode.feature:default"/>
+<setEntry value="com.puresoltechnologies.purifinity.client.features.iso9126.feature:default"/>
+<setEntry value="com.puresoltechnologies.purifinity.client.lang.c11.feature:default"/>
+<setEntry value="com.puresoltechnologies.purifinity.client.lang.cpp11.feature:default"/>
+<setEntry value="com.puresoltechnologies.purifinity.client.lang.fortran2008.feature:default"/>
+<setEntry value="com.puresoltechnologies.purifinity.client.lang.java7.feature:default"/>
+<setEntry value="com.puresoltechnologies.purifinity.client.storage.fs.feature:default"/>
 <setEntry value="org.eclipse.e4.rcp:default"/>
 <setEntry value="org.eclipse.emf.common:default"/>
 <setEntry value="org.eclipse.emf.ecore:default"/>

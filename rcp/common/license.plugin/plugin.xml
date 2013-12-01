@@ -7,7 +7,7 @@
             allPopups="false"
             locationURI="menu:options?before=preferences">
          <command
-               commandId="com.puresol.purifinity.client.common.license.command.LicenseManagerHandler"
+               commandId="com.puresoltechnologies.purifinity.client.common.license.command.LicenseManagerHandler"
                id="licenseManagerItem"
                label="License Manager..."
                mnemonic="L"
@@ -15,7 +15,7 @@
                tooltip="Starts the License Manager.">
          </command>
          <separator
-               name="com.puresol.purifinity.client.common.license.plugin.separator1"
+               name="com.puresoltechnologies.purifinity.client.common.license.plugin.separator1"
                visible="true">
          </separator>
       </menuContribution>
@@ -25,7 +25,7 @@
       <command
             defaultHandler="com.puresoltechnologies.purifinity.client.common.license.command.LicenseManagerHandler"
             description="Starts the License Manager."
-            id="com.puresol.purifinity.client.common.license.command.LicenseManagerHandler"
+            id="com.puresoltechnologies.purifinity.client.common.license.command.LicenseManagerHandler"
             name="License Manager">
       </command>
    </extension>

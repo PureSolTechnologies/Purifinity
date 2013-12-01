@@ -23,7 +23,7 @@
                label="File"
                mnemonic="F">
             <separator
-                  name="com.puresol.purifinity.client.application.plugin.separator8"
+                  name="com.puresoltechnologies.purifinity.client.application.plugin.separator8"
                   visible="true">
             </separator>
             <separator
@@ -43,7 +43,7 @@
                   visible="true">
             </separator>
             <command
-                  commandId="com.puresol.purifinity.client.application.handler.SwitchWorkspaceHandler"
+                  commandId="com.puresoltechnologies.purifinity.client.application.handler.SwitchWorkspaceHandler"
                   icon="icons/16x16/arrow_switch.png"
                   id="switchWorkspace"
                   label="Switch Workspace..."
@@ -176,7 +176,7 @@
                   style="push">
             </command>
             <separator
-                  name="com.puresol.purifinity.client.application.plugin.separator1"
+                  name="com.puresoltechnologies.purifinity.client.application.plugin.separator1"
                   visible="true">
             </separator>
             <command
@@ -193,7 +193,7 @@
                label="Help"
                mnemonic="H">
             <command
-                  commandId="com.puresol.purifinity.client.application.handler.MyIntroHandler"
+                  commandId="com.puresoltechnologies.purifinity.client.application.handler.MyIntroHandler"
                   icon="icons/16x16/flower.png"
                   id="welcome"
                   label="Welcome"
@@ -201,7 +201,7 @@
                   style="push">
             </command>
             <separator
-                  name="com.puresol.purifinity.client.application.plugin.separator3"
+                  name="com.puresoltechnologies.purifinity.client.application.plugin.separator3"
                   visible="true">
             </separator>
             <command
@@ -227,17 +227,17 @@
                   style="push">
             </command>
             <separator
-                  name="com.puresol.purifinity.client.application.plugin.separator1"
+                  name="com.puresoltechnologies.purifinity.client.application.plugin.separator1"
                   visible="true">
             </separator>
             <command
-                  commandId="com.puresol.purifinity.client.application.commands.OpenPureSolTechnologiesWebsiteHandler"
+                  commandId="com.puresoltechnologies.purifinity.client.application.commands.OpenPureSolTechnologiesWebsiteHandler"
                   id="websitr"
                   label="PureSol Technologies Website..."
                   style="push">
             </command>
             <command
-                  commandId="com.puresol.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
+                  commandId="com.puresoltechnologies.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
                   icon="icons/16x16/bug.png"
                   id="bugtracker"
                   label="Bug and Feature Request Tracker Website..."
@@ -248,7 +248,7 @@
                     visible="true">
             </separator>
             <separator
-                  name="com.puresol.purifinity.client.application.plugin.separator6"
+                  name="com.puresoltechnologies.purifinity.client.application.plugin.separator6"
                   visible="true">
             </separator>
             <command
@@ -266,7 +266,7 @@
       <view
             category="org.eclipse.debug.ui"
             class="com.puresoltechnologies.purifinity.client.application.views.OsgiDebugView"
-            id="com.puresol.purifinity.client.application.views.OsgiDebugView"
+            id="com.puresoltechnologies.purifinity.client.application.views.OsgiDebugView"
             name="OSGI Debug"
             restorable="true">
       </view>
@@ -275,7 +275,7 @@
          point="org.eclipse.ui.commands">
       <command
             defaultHandler="com.puresoltechnologies.purifinity.client.application.handler.SwitchWorkspaceHandler"
-            id="com.puresol.purifinity.client.application.handler.SwitchWorkspaceHandler"
+            id="com.puresoltechnologies.purifinity.client.application.handler.SwitchWorkspaceHandler"
             name="Switch Workspace">
       </command>
       <command
@@ -291,18 +291,18 @@
       <command
             defaultHandler="com.puresoltechnologies.purifinity.client.application.commands.OpenPureSolTechnologiesWebsiteHandler"
             description="Opens the official website of PureSol Technologies"
-            id="com.puresol.purifinity.client.application.commands.OpenPureSolTechnologiesWebsiteHandler"
+            id="com.puresoltechnologies.purifinity.client.application.commands.OpenPureSolTechnologiesWebsiteHandler"
             name="Open PureSol Technologies Website">
       </command>
       <command
             defaultHandler="com.puresoltechnologies.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
             description="Opens the official bug tracker and feature request website"
-            id="com.puresol.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
+            id="com.puresoltechnologies.purifinity.client.application.commands.OpenBugAndEnhancementTrackerWebsiteHandler"
             name="Open Bug and Enhancement Tracker Website">
       </command>
       <command
             defaultHandler="com.puresoltechnologies.purifinity.client.application.handler.MyIntroHandler"
-            id="com.puresol.purifinity.client.application.handler.MyIntroHandler"
+            id="com.puresoltechnologies.purifinity.client.application.handler.MyIntroHandler"
             name="Show Intro">
       </command>
    </extension>
@@ -310,11 +310,11 @@
          point="org.eclipse.ui.intro">
       <introProductBinding
             introId="org.eclipse.ui.intro.universal"
-            productId="com.puresol.purifinity.client.application.plugin.PurifinityFull">
+            productId="com.puresoltechnologies.purifinity.client.application.plugin.PurifinityFull">
       </introProductBinding>
       <introProductBinding
             introId="org.eclipse.ui.intro.universal"
-            productId="com.puresol.purifinity.client.application.plugin.PurifinityBase">
+            productId="com.puresoltechnologies.purifinity.client.application.plugin.PurifinityBase">
       </introProductBinding>
    </extension>
    <extension
@@ -322,7 +322,7 @@
          name="Purifinity"
          point="org.eclipse.core.runtime.products">
       <product
-            application="com.puresol.purifinity.client.application.plugin.application"
+            application="com.puresoltechnologies.purifinity.client.application.plugin.application"
             name="Purifinity">
          <property
                name="aboutImage"
@@ -363,7 +363,7 @@
          name="Purifinity"
          point="org.eclipse.core.runtime.products">
       <product
-            application="com.puresol.purifinity.client.application.plugin.application"
+            application="com.puresoltechnologies.purifinity.client.application.plugin.application"
             name="Purifinity">
          <property
                name="aboutImage"
@@ -425,7 +425,7 @@
       <page
             category="org.eclipse.ui.preferencePages.Workbench"
             class="org.eclipse.ui.intro.universal.ExtensionFactory:welcomeCustomization"
-            id="com.puresol.purifinity.client.application.plugin.introCustomization"
+            id="com.puresoltechnologies.purifinity.client.application.plugin.introCustomization"
             name="Intro Customization">
       </page>
    </extension>

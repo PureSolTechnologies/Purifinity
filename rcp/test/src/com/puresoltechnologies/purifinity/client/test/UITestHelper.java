@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.test;
+package com.puresoltechnologies.purifinity.client.test;
 
 import java.util.concurrent.TimeUnit;
 

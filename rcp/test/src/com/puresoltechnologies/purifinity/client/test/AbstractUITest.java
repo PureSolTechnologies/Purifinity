@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.test;
+package com.puresoltechnologies.purifinity.client.test;
 
 import static org.eclipse.swtbot.swt.finder.matchers.WidgetMatcherFactory.widgetOfType;
 import static org.junit.Assert.assertNotNull;

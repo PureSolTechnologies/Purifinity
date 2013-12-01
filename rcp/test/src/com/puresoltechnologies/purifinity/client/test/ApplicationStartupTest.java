@@ -1,4 +1,4 @@
-package com.puresol.purifinity.client.test;
+package com.puresoltechnologies.purifinity.client.test;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
