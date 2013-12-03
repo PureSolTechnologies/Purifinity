@@ -2,32 +2,40 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
 	<groupId>com.puresoltechnologies.commons</groupId>
 	<artifactId>commons</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>PureSolTechnologiesCommons</name>
+	<description>PureSol Technologies' Commons</description>
+	<inceptionYear>2009</inceptionYear>
 	<url>http://puresol-technologies.com</url>
-
-	<prerequisites>
-		<maven>3.0</maven>
-	</prerequisites>
 
 	<organization>
 		<name>PureSol Technologies</name>
 		<url>http://puresol-technologies.com</url>
 	</organization>
 
-	<inceptionYear>2009</inceptionYear>
-
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>http://ci</url>
-	</ciManagement>
+	<licenses>
+		<license>
+			<name>PureSol Technologies Commercial License</name>
+		</license>
+	</licenses>
 
 	<scm>
+		<developerConnection>scm:git:git@git:PureSolTechnologiesCommons</developerConnection>
+		<connection>scm:git:git@git:PureSolTechnologiesCommons</connection>
 		<url>http://git/gitweb/</url>
+		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
@@ -40,15 +48,15 @@
 		</developer>
 	</developers>
 
-	<licenses>
-		<license>
-			<name>PureSol Technologies Commercial License</name>
-		</license>
-	</licenses>
+	<issueManagement>
+		<system>Redmine</system>
+		<url>https://bugs.puresol-technologies.net</url>
+	</issueManagement>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>http://ci</url>
+	</ciManagement>
 
 	<repositories>
 		<repository>
@@ -135,10 +143,16 @@
 					</approvedDependencies>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.4.1</version>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
