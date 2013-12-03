@@ -16,12 +16,21 @@
 	<artifactId>base</artifactId>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
+
 	<name>Library parent module</name>
+
 	<licenses>
 		<license>
 			<name>PureSol Technologies Commercial License</name>
 		</license>
 	</licenses>
+
+	<scm>
+		<developerConnection>scm:git:git@git:Purifinity</developerConnection>
+		<connection>scm:git:git@git:Purifinity</connection>
+		<url>http://git/gitweb/</url>
+		<tag>HEAD</tag>
+	</scm>
 
 	<repositories>
 		<repository>
