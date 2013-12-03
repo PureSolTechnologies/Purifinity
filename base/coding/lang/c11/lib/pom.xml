@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity</groupId>
 		<artifactId>coding.lang.c11</artifactId>
-		<version>0.1.0</version>
+		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>coding.lang.c11.lib</artifactId>

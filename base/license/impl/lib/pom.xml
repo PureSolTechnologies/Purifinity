@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity</groupId>
 		<artifactId>license.impl</artifactId>
-		<version>0.1.0</version>
+		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>license.impl.lib</artifactId>
