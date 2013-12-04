@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.puresoltechnologies.purifinity.client.features.cleancode.plugin
 Bundle-SymbolicName: com.puresoltechnologies.purifinity.client.features.cleancode.plugin;singleton:=true
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 0.1.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
@@ -14,6 +14,7 @@ Require-Bundle: com.puresoltechnologies.purifinity.client.common.osgi.plugin;bun
  org.slf4j.api;bundle-version="1.6.4",
  org.eclipse.e4.ui.workbench;bundle-version="0.11.0",
  com.puresoltechnologies.purifinity.client.application.plugin;bundle-version="0.1.0"
-Export-Package: com.puresoltechnologies.purifinity.client.features.cleancode
+Export-Package: com.puresoltechnologies.purifinity.client.features.cle
+ ancode
 Bundle-Activator: com.puresoltechnologies.purifinity.client.features.cleancode.Activator
 Bundle-ActivationPolicy: lazy

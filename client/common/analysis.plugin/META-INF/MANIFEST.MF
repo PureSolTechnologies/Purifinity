@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.puresoltechnologies.purifinity.client.common.analysis.plugin
 Bundle-SymbolicName: com.puresoltechnologies.purifinity.client.common.analysis.plugin;singleton:=true
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 0.1.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
@@ -25,17 +25,17 @@ Require-Bundle: com.puresoltechnologies.purifinity.client.common.osgi.plugin;bun
  com.puresoltechnologies.purifinity.client.application.plugin;bundle-version="0.1.0",
  org.eclipse.ui.intro;bundle-version="3.4.200",
  org.eclipse.help;bundle-version="3.6.0"
-Export-Package: com.puresoltechnologies.purifinity.client.common.analysis,
- com.puresoltechnologies.purifinity.client.common.analysis.contents,
- com.puresoltechnologies.purifinity.client.common.analysis.controls,
- com.puresoltechnologies.purifinity.client.common.analysis.editors,
- com.puresoltechnologies.purifinity.client.common.analysis.grammar,
- com.puresoltechnologies.purifinity.client.common.analysis.handlers,
- com.puresoltechnologies.purifinity.client.common.analysis.jobs,
- com.puresoltechnologies.purifinity.client.common.analysis.perspectives,
- com.puresoltechnologies.purifinity.client.common.analysis.preferences,
- com.puresoltechnologies.purifinity.client.common.analysis.utils,
- com.puresoltechnologies.purifinity.client.common.analysis.views,
- com.puresoltechnologies.purifinity.client.common.analysis.wizards
+Export-Package: com.puresoltechnologies.purifinity.client.common.analy
+ sis,com.puresoltechnologies.purifinity.client.common.analysis.content
+ s,com.puresoltechnologies.purifinity.client.common.analysis.controls,
+ com.puresoltechnologies.purifinity.client.common.analysis.editors,com
+ .puresoltechnologies.purifinity.client.common.analysis.grammar,com.pu
+ resoltechnologies.purifinity.client.common.analysis.handlers,com.pure
+ soltechnologies.purifinity.client.common.analysis.jobs,com.puresoltec
+ hnologies.purifinity.client.common.analysis.perspectives,com.puresolt
+ echnologies.purifinity.client.common.analysis.preferences,com.puresol
+ technologies.purifinity.client.common.analysis.utils,com.puresoltechn
+ ologies.purifinity.client.common.analysis.views,com.puresoltechnologi
+ es.purifinity.client.common.analysis.wizards
 Bundle-Activator: com.puresoltechnologies.purifinity.client.common.analysis.Activator
 Bundle-ActivationPolicy: lazy

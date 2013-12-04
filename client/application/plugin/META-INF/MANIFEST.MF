@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Purifinity
 Bundle-SymbolicName: com.puresoltechnologies.purifinity.client.application.plugin;singleton:=true
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 0.1.0
 Bundle-Activator: com.puresoltechnologies.purifinity.client.application.Activator
 Require-Bundle: org.slf4j.api;bundle-version="1.6.4",
  com.puresoltechnologies.purifinity.client.common.branding.plugin;bundle-version="0.1.0",

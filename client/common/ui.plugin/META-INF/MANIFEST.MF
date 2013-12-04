@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.puresoltechnologies.purifinity..client.common.ui.plugin
 Bundle-SymbolicName: com.puresoltechnologies.purifinity.client.common.ui.plugin;singleton:=true
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 0.1.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
@@ -14,16 +14,18 @@ Require-Bundle: com.puresoltechnologies.commons.trees.bundle;bundle-version="0.1
  org.slf4j.api;bundle-version="1.6.4",
  org.eclipse.ui;bundle-version="3.104.0",
  org.eclipse.core.runtime;bundle-version="3.8.0"
-Export-Package: com.puresoltechnologies.purifinity.client.common.ui;uses:="org.eclipse.ui.plugin,org.eclipse.swt.graphics,org.osgi.framework",
- com.puresoltechnologies.purifinity.client.common.ui.actions;
-  uses:="org.eclipse.jface.action,
-   com.puresoltechnologies.purifinity.client.common.branding,
-   org.eclipse.ui,
-   org.eclipse.swt.widgets,
-   org.eclipse.jface.dialogs",
- com.puresoltechnologies.purifinity.client.common.ui.contents;uses:="org.eclipse.swt.graphics,org.eclipse.jface.viewers",
- com.puresoltechnologies.purifinity.client.common.ui.controls;uses:="com.puresoltechnologies.commons.math,org.eclipse.swt.events,org.eclipse.swt.widgets",
- com.puresoltechnologies.purifinity.client.common.ui.editors,
- com.puresoltechnologies.purifinity.client.common.ui.jobs;uses:="org.eclipse.core.runtime,org.eclipse.core.runtime.jobs,com.puresoltechnologies.commons.utils.progress",
- com.puresoltechnologies.purifinity.client.common.ui.views
+Export-Package: com.puresoltechnologies.purifinity.client.common.ui;us
+ es:="org.eclipse.ui.plugin,org.eclipse.swt.graphics,org.osgi.framewor
+ k",com.puresoltechnologies.purifinity.client.common.ui.actions; uses:
+ ="org.eclipse.jface.action,  com.puresoltechnologies.purifinity.clien
+ t.common.branding,  org.eclipse.ui,  org.eclipse.swt.widgets,  org.ec
+ lipse.jface.dialogs",com.puresoltechnologies.purifinity.client.common
+ .ui.contents;uses:="org.eclipse.swt.graphics,org.eclipse.jface.viewer
+ s",com.puresoltechnologies.purifinity.client.common.ui.controls;uses:
+ ="com.puresoltechnologies.commons.math,org.eclipse.swt.events,org.ecl
+ ipse.swt.widgets",com.puresoltechnologies.purifinity.client.common.ui
+ .editors,com.puresoltechnologies.purifinity.client.common.ui.jobs;use
+ s:="org.eclipse.core.runtime,org.eclipse.core.runtime.jobs,com.pureso
+ ltechnologies.commons.utils.progress",com.puresoltechnologies.purifin
+ ity.client.common.ui.views
 Bundle-Activator: com.puresoltechnologies.purifinity.client.common.ui.Activator
