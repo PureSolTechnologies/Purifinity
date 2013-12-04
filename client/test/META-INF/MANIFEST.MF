@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.puresoltechnologies.purifinity.client.test
 Bundle-SymbolicName: com.puresoltechnologies.purifinity.client.test;singleton:=true
-Bundle-Version: 0.1.0
+Bundle-Version: 0.1.1.qualifier
 Require-Bundle: com.puresoltechnologies.commons.utils.bundle;bundle-version="0.1.0",
  com.puresoltechnologies.purifinity.coding.store.fs.bundle;bundle-version="0.1.0",
  com.puresoltechnologies.purifinity.client.application.plugin;bundle-version="0.1.0",

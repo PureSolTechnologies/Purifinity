@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="Purifinity" uid="com.puresoltechnologies.purifinity.client.product.base" id="com.puresoltechnologies.purifinity.client.application.plugin.PurifinityBase" application="com.puresoltechnologies.purifinity.client.application.plugin.application" version="0.1.0" useFeatures="true" includeLaunchers="true">
+<product name="Purifinity" uid="com.puresoltechnologies.purifinity.client.product.base" id="com.puresoltechnologies.purifinity.client.application.plugin.PurifinityBase" application="com.puresoltechnologies.purifinity.client.application.plugin.application" version="0.1.1.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/com.puresoltechnologies.purifinity.client.product.base/images/puresol-logo-green_small.png"/>
@@ -56,8 +56,8 @@ Apache Software Foundation http://apache.org
    </plugins>
 
    <features>
-      <feature id="com.puresoltechnologies.purifinity.client.application.feature" version="0.1.0"/>
-      <feature id="com.puresoltechnologies.purifinity.client.common.feature" version="0.1.0"/>
+      <feature id="com.puresoltechnologies.purifinity.client.application.feature" version="0.1.1.qualifier"/>
+      <feature id="com.puresoltechnologies.purifinity.client.common.feature" version="0.1.1.qualifier"/>
       <feature id="org.eclipse.emf.ecore"/>
       <feature id="org.eclipse.e4.rcp"/>
       <feature id="org.eclipse.equinox.p2.core.feature"/>

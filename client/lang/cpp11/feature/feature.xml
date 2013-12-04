@@ -2,7 +2,7 @@
 <feature
       id="com.puresoltechnologies.purifinity.client.lang.cpp11.feature"
       label="com.puresoltechnologies.purifinity.client.lang.cpp11.feature"
-      version="0.1.0"
+      version="0.1.1.qualifier"
       provider-name="PureSol Techologies"
       plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin"
       os="linux,macosx,win32"

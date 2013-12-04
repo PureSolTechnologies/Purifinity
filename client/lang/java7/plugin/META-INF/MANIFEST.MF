@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.puresoltechnologies.purifinity.client.lang.java7.plugin
 Bundle-SymbolicName: com.puresoltechnologies.purifinity.client.lang.java7.plugin;singleton:=true
-Bundle-Version: 0.1.0
+Bundle-Version: 0.1.1.qualifier
 Bundle-Activator: com.puresoltechnologies.purifinity.client.lang.java7.Activator
 Require-Bundle: com.puresoltechnologies.purifinity.coding.analysis.api.bundle;bundle-version="0.1.0",
  com.puresoltechnologies.purifinity.coding.lang.commons.bundle;bundle-version="0.1.0",

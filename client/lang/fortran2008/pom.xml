@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity</groupId>
 		<artifactId>com.puresoltechnologies.purifinity.client.lang</artifactId>
-		<version>0.1.0</version>
+		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.puresoltechnologies.purifinity.client.lang.fortran2008</artifactId>
