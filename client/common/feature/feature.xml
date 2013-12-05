@@ -36,28 +36,28 @@
       <import plugin="org.eclipse.swt" version="3.100.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface" version="3.8.102" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.jobs" version="3.5.300" match="greaterOrEqual"/>
-      <import plugin="org.codehaus.jackson.jackson-jaxrs.external.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="org.codehaus.jackson.jackson-jaxrs.external.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.commons.trees.bundle" version="0.0.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.commons.utils.bundle" version="0.0.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.commons.configuration.bundle" version="0.0.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.uhura.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.lang.api.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.analysis.api.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.ui.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.application.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.commons.math.bundle" version="0.0.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.iso9126.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.api.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.analysis.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.metrics.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.impl.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.chart.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.license.api.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.commons.license.domain.bundle" version="0.0.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.trees.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.utils.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.configuration.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.uhura.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.lang.api.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.analysis.api.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.ui.plugin" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.application.plugin" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.math.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.iso9126.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.api.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.analysis.plugin" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.metrics.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.chart.plugin" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.license.api.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.license.domain.bundle" version="0.1.1" match="greaterOrEqual"/>
    </requires>
 
    <plugin

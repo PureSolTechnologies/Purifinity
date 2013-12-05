@@ -27,12 +27,12 @@
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.io"/>
       <import plugin="org.eclipse.osgi"/>
-      <import plugin="com.puresoltechnologies.commons.utils.bundle" version="0.0.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.lang.commons.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.analysis.api.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.store.fs.bundle" version="0.1.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.uhura.bundle" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.utils.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.lang.commons.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.analysis.api.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.coding.store.fs.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.uhura.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.math.bundle"/>
       <import plugin="com.puresoltechnologies.commons.trees.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle"/>

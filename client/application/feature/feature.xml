@@ -81,7 +81,7 @@
       <import plugin="org.eclipse.equinox.util" version="1.0.400" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.intro"/>
       <import plugin="org.eclipse.ui.intro.universal" version="3.2.600" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin" version="0.1.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin" version="0.1.1" match="greaterOrEqual"/>
    </requires>
 
    <plugin

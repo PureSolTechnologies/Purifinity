@@ -53,7 +53,7 @@
       </view>
       <view
             allowMultiple="true"
-            category="com.purepuresoltechnologiessol.purifinity.client.common.evaluation.Evaluation"
+            category="com.puresoltechnologies.purifinity.client.common.evaluation.Evaluation"
             class="com.puresoltechnologies.purifinity.client.common.evaluation.views.MetricsMapView"
             id="com.puresoltechnologies.purifinity.client.common.evaluation.views.MetricsMapView"
             name="Metrics Map"
