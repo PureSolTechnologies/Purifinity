@@ -4,11 +4,11 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity</groupId>
-		<artifactId>api</artifactId>
+		<artifactId>parent</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>api.analysis</artifactId>
+	<artifactId>analysis.api</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>pom</packaging>
 

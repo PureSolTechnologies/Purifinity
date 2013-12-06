@@ -1,20 +1,21 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity</groupId>
-		<artifactId>api.evaluation</artifactId>
+		<artifactId>parser.api</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>api.evaluation.bundle</artifactId>
+	<artifactId>parser.api.bundle</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>api.evaluation.lib</artifactId>
+			<artifactId>parser.api.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -33,7 +34,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresoltechnologies.purifinity.api.analysis</bundle.namespace>
+		<bundle.namespace>com.puresoltechnologies.purifinity.parser.api</bundle.namespace>
 	</properties>
 
 	<build>

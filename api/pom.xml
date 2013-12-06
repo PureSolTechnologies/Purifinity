@@ -12,7 +12,7 @@
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity</groupId>
-	<artifactId>api</artifactId>
+	<artifactId>parent</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -139,12 +139,22 @@
 			<!-- Project internal -->
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>api.analysis.lib</artifactId>
+				<artifactId>analysis.api.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>api.evaluation.lib</artifactId>
+				<artifactId>evaluation.api.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity</groupId>
+				<artifactId>lang.api.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity</groupId>
+				<artifactId>parser.api.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
@@ -251,8 +261,10 @@
 	</build>
 
 	<modules>
-		<module>analysis</module>
-		<module>evaluation</module>
+		<module>parser.api</module>
+		<module>lang.api</module>
+		<module>analysis.api</module>
+		<module>evaluation.api</module>
 	</modules>
 
 </project>

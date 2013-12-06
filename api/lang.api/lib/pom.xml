@@ -3,17 +3,14 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity</groupId>
-		<artifactId>api</artifactId>
+		<artifactId>lang.api</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>api.evaluation</artifactId>
+	<artifactId>lang.api.lib</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
-	<packaging>pom</packaging>
 
-	<modules>
-		<module>lib</module>
-		<module>bundle</module>
-	</modules>
+	<dependencies>
+	</dependencies>
 
 </project>
