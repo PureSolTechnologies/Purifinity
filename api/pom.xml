@@ -1,0 +1,258 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<commons.version>0.1.1-SNAPSHOT</commons.version>
+	</properties>
+
+	<groupId>com.puresoltechnologies.purifinity</groupId>
+	<artifactId>api</artifactId>
+	<version>0.1.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Purifinity API</name>
+	<description>This is the API of Purifinity which is used to develop extensions.</description>
+
+	<inceptionYear>2009</inceptionYear>
+	<url>http://oss.puresol-technologies.com/purifinity-api</url>
+
+	<organization>
+		<name>PureSol Technologies</name>
+		<url>http://puresol-technologies.com</url>
+	</organization>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<developerConnection>scm:git:git@git:Purifinity</developerConnection>
+		<connection>scm:git:git@git:Purifinity</connection>
+		<url>http://git/gitweb/</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<developers>
+		<developer>
+			<name>Rick-Rainer Ludwig</name>
+			<email>ludwig@puresol-technologies.com</email>
+			<organization>PureSol Technologies</organization>
+			<organizationUrl>http://puresol-technologies.com</organizationUrl>
+			<url>http://rick-rainer-ludwig.com</url>
+		</developer>
+	</developers>
+
+	<issueManagement>
+		<system>Redmine</system>
+		<url>https://bugs.puresol-technologies.net/projects/license-maven-plugin</url>
+	</issueManagement>
+
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>https://travis-ci.org/RickRainerLudwig/license-maven-plugin</url>
+	</ciManagement>
+
+	<distributionManagement>
+		<site>
+			<id>FTPPureSolTechnologiesCom</id>
+			<name>FTPPureSolTechnologiesCom</name>
+			<url>ftp://puresol-technologies.com/test/license-maven-plugin</url>
+		</site>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>libs-release</name>
+			<url>http://repo/libs-release</url>
+		</repository>
+		<repository>
+			<snapshots />
+			<id>snapshots</id>
+			<name>libs-snapshot</name>
+			<url>http://repo/libs-snapshot</url>
+		</repository>
+		<repository>
+			<id>JBoss</id>
+			<name>JBoss</name>
+			<url>https://repository.jboss.org/nexus/content/groups/public</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>plugins-release</name>
+			<url>http://repo/plugins-release</url>
+		</pluginRepository>
+		<pluginRepository>
+			<snapshots />
+			<id>snapshots</id>
+			<name>plugins-snapshot</name>
+			<url>http://repo/plugins-snapshot</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<profiles>
+		<profile>
+			<id>it</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<forkMode>always</forkMode>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- Project internal -->
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity</groupId>
+				<artifactId>api.analysis.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity</groupId>
+				<artifactId>api.evaluation.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<!-- Specific external libraries -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.10</version>
+			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.core</artifactId>
+				<version>4.3.1</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.6.6</version>
+				<scope>provided</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>maven-bundle-plugin</artifactId>
+					<version>2.3.7</version>
+					<extensions>true</extensions>
+					<configuration>
+						<manifestLocation>META-INF</manifestLocation>
+						<instructions>
+							<!-- The Bundle-SymbolicName is fixed in this way. Otherwise Tycho 
+								will not find the bundle. -->
+							<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+							<Bundle-Name>${project.groupId}.${project.artifactId}</Bundle-Name>
+							<Bundle-Version>${project.version}</Bundle-Version>
+							<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
+							<!-- assume public classes are in the top package, and private classes 
+								are under ".internal" -->
+							<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${project.version}"</Export-Package>
+							<Private-Package>${bundle.namespace}.internal.*</Private-Package>
+							<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
+							<!-- embed compile/runtime dependencies using path that matches the 
+								copied dependency folder -->
+							<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
+							<Embed-Directory>target/dependency</Embed-Directory>
+							<Embed-StripGroup>true</Embed-StripGroup>
+							<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+						</instructions>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<inherited>false</inherited>
+					<executions>
+						<execution>
+							<id>CleanManifest</id>
+							<inherited>true</inherited>
+							<phase>clean</phase>
+							<goals>
+								<goal>clean</goal>
+							</goals>
+							<configuration>
+								<filesets>
+									<fileset>
+										<directory>META-INF</directory>
+									</fileset>
+								</filesets>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>com.puresoltechnologies.maven.plugins</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<configuration>
+					<recursive>true</recursive>
+					<validLicenses>
+						<!-- Apache License -->
+						<validLicense>Apache License, Version 2.0</validLicense>
+						<validLicense>The Apache Software License, Version 2.0</validLicense>
+						<!-- BSD License -->
+						<validLicense>BSD style</validLicense>
+						<!-- CPL -->
+						<validLicense>Common Public License Version 1.0</validLicense>
+						<!-- EPL -->
+						<validLicense>Eclipse Public License</validLicense>
+						<!-- LGPL -->
+						<validLicense><![CDATA[GNU Lesser General Public License (LGPL), Version 2.1]]></validLicense>
+						<!-- MIT License -->
+						<validLicense>MIT License</validLicense>
+						<validLicense>The MIT License</validLicense>
+					</validLicenses>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<modules>
+		<module>analysis</module>
+		<module>evaluation</module>
+	</modules>
+
+</project>
