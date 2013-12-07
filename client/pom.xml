@@ -110,7 +110,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.parser</groupId>
-			<artifactId>impl.bundle</artifactId>
+			<artifactId>parser.impl.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

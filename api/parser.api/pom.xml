@@ -9,7 +9,7 @@
 	</parent>
 
 	<groupId>com.puresoltechnologies.parser</groupId>
-	<artifactId>api</artifactId>
+	<artifactId>parser.api</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>pom</packaging>
 

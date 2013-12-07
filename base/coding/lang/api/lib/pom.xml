@@ -13,7 +13,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.parser</groupId>
-			<artifactId>impl.lib</artifactId>
+			<artifactId>parser.impl.lib</artifactId>
 		</dependency>
 	</dependencies>
 

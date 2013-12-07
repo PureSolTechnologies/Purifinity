@@ -7,7 +7,7 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>impl.bundle</artifactId>
+	<artifactId>parser.impl.bundle</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
@@ -18,7 +18,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.parser</groupId>
-			<artifactId>impl.lib</artifactId>
+			<artifactId>parser.impl.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>

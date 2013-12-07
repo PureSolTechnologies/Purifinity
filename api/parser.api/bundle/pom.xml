@@ -4,11 +4,11 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.parser</groupId>
-		<artifactId>api</artifactId>
+		<artifactId>parser.api</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>api.bundle</artifactId>
+	<artifactId>parser.api.bundle</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>bundle</packaging>
 

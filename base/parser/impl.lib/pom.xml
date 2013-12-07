@@ -7,7 +7,7 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>impl.lib</artifactId>
+	<artifactId>parser.impl.lib</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 
 	<dependencies>
