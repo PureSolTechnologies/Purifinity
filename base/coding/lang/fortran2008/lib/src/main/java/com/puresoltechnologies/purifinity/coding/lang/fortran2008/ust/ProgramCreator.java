@@ -3,19 +3,19 @@ package com.puresoltechnologies.purifinity.coding.lang.fortran2008.ust;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresoltechnologies.parser.impl.lexer.Token;
+import com.puresoltechnologies.parser.impl.lexer.TokenMetaData;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
+import com.puresoltechnologies.parser.impl.ust.CompilationUnit;
+import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parser.impl.ust.UnspecialistProduction;
+import com.puresoltechnologies.parser.impl.ust.terminal.Comment;
+import com.puresoltechnologies.parser.impl.ust.terminal.Operand;
+import com.puresoltechnologies.parser.impl.ust.terminal.Operator;
+import com.puresoltechnologies.parser.impl.ust.terminal.WhiteSpace;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.metrics.HalsteadMetricImpl;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.metrics.SLOCMetricImpl;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCType;
-import com.puresoltechnologies.purifinity.uhura.lexer.Token;
-import com.puresoltechnologies.purifinity.uhura.lexer.TokenMetaData;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
-import com.puresoltechnologies.purifinity.uhura.ust.CompilationUnit;
-import com.puresoltechnologies.purifinity.uhura.ust.UniversalSyntaxTree;
-import com.puresoltechnologies.purifinity.uhura.ust.UnspecialistProduction;
-import com.puresoltechnologies.purifinity.uhura.ust.terminal.Comment;
-import com.puresoltechnologies.purifinity.uhura.ust.terminal.Operand;
-import com.puresoltechnologies.purifinity.uhura.ust.terminal.Operator;
-import com.puresoltechnologies.purifinity.uhura.ust.terminal.WhiteSpace;
 
 public class ProgramCreator {
 

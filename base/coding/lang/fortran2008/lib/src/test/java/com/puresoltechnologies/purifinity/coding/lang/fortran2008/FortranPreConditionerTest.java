@@ -10,10 +10,10 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
+import com.puresoltechnologies.parser.impl.lexer.Token;
+import com.puresoltechnologies.parser.impl.lexer.TokenStream;
+import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.grammar.FortranGrammar;
-import com.puresoltechnologies.purifinity.uhura.lexer.Token;
-import com.puresoltechnologies.purifinity.uhura.lexer.TokenStream;
-import com.puresoltechnologies.purifinity.uhura.source.SourceFileLocation;
 
 public class FortranPreConditionerTest {
 

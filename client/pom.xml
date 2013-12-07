@@ -109,8 +109,8 @@
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>uhura.bundle</artifactId>
+			<groupId>com.puresoltechnologies.parser</groupId>
+			<artifactId>impl.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

@@ -10,8 +10,8 @@ import java.util.List;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.utils.FileSearchConfiguration;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryRepositoryLocation;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
 
 public class DirectoryRepositoryLocationTest {
 

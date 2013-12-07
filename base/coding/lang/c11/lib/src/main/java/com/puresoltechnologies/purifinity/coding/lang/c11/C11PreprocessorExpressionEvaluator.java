@@ -1,12 +1,12 @@
 package com.puresoltechnologies.purifinity.coding.lang.c11;
 
 import com.puresoltechnologies.commons.trees.TreeException;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
+import com.puresoltechnologies.parser.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
+import com.puresoltechnologies.parser.impl.ust.eval.Value;
+import com.puresoltechnologies.parser.impl.ust.eval.ValueTypeException;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.DefinedMacros;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.Macro;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
-import com.puresoltechnologies.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
-import com.puresoltechnologies.purifinity.uhura.ust.eval.Value;
-import com.puresoltechnologies.purifinity.uhura.ust.eval.ValueTypeException;
 
 public class C11PreprocessorExpressionEvaluator {
 

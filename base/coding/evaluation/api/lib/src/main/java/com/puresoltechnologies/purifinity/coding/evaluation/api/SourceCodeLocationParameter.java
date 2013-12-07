@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.coding.evaluation.api;
 
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 
 public class SourceCodeLocationParameter extends
 		ParameterWithArbitraryUnit<CodeLocation> {

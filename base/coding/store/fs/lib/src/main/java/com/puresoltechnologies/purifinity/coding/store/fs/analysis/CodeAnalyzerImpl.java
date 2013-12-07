@@ -7,13 +7,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.utils.HashId;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzerFactory;
 import com.puresoltechnologies.purifinity.coding.analysis.api.LanguageNotSupportedException;
 import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
 
 public class CodeAnalyzerImpl implements CodeAnalyzer {
 

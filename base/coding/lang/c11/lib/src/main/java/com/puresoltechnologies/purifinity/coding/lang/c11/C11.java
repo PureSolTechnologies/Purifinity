@@ -10,11 +10,11 @@ import java.util.ServiceLoader;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AbstractProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.lang.api.LanguageGrammar;
 import com.puresoltechnologies.purifinity.coding.lang.c11.grammar.C11Grammar;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
 
 /**
  * This is the base class for Java Programming Language. The lexical and

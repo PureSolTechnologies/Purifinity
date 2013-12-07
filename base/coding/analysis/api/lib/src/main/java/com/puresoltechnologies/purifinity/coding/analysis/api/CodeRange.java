@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.coding.analysis.api;
 import java.io.Serializable;
 
 import com.puresoltechnologies.commons.utils.ObjectUtilities;
-import com.puresoltechnologies.purifinity.uhura.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
 
 /**
  * This class is for keeping information about a subtree. This sub tree is

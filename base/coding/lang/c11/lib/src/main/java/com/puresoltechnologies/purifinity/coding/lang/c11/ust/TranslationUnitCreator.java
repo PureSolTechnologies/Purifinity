@@ -3,10 +3,10 @@ package com.puresoltechnologies.purifinity.coding.lang.c11.ust;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
-import com.puresoltechnologies.purifinity.uhura.ust.CompilationUnit;
-import com.puresoltechnologies.purifinity.uhura.ust.UniversalSyntaxTree;
-import com.puresoltechnologies.purifinity.uhura.ust.UnspecialistProduction;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
+import com.puresoltechnologies.parser.impl.ust.CompilationUnit;
+import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parser.impl.ust.UnspecialistProduction;
 
 public class TranslationUnitCreator {
 

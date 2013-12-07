@@ -10,8 +10,8 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 
 import com.puresoltechnologies.commons.trees.TreeException;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.grammar.Arrow.ArrowType;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
 
 public class ProductionDefinitionRenderer extends AbstractRenderer {
 

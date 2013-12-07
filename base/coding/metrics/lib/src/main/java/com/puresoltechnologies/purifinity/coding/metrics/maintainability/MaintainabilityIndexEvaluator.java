@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
 import com.puresoltechnologies.commons.utils.HashId;
+import com.puresoltechnologies.parser.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
@@ -27,7 +28,6 @@ import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCResult;
-import com.puresoltechnologies.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 

@@ -11,10 +11,10 @@ import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.puresoltechnologies.parser.impl.grammar.Grammar;
+import com.puresoltechnologies.parser.impl.grammar.GrammarConverter;
+import com.puresoltechnologies.parser.impl.grammar.GrammarFile;
 import com.puresoltechnologies.purifinity.coding.lang.c11.grammar.C11Grammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.Grammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.GrammarConverter;
-import com.puresoltechnologies.purifinity.uhura.grammar.GrammarFile;
 
 public class C11GrammarTest {
 

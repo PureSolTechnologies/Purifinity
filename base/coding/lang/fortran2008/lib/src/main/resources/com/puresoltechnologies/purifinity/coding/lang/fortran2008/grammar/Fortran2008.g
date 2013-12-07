@@ -18,8 +18,8 @@
 	grammar.normalize_to_bnf=false;					// defines whether the grammar needs to be normalized to BNF
 	preprocessor.use=true;							// usage of preprocessor required? 
 	preprocessor="com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.C11Preprocessor";	// usage of preprocessor required? 
-	lexer="com.puresoltechnologies.purifinity.uhura.lexer.RegExpLexer";	// use this lexer
-	parser="com.puresoltechnologies.purifinity.uhura.parser.lr.LR1Parser";	// use this parser
+	lexer="com.puresoltechnologies.parser.impl.lexer.RegExpLexer";	// use this lexer
+	parser="com.puresoltechnologies.parser.impl.parser.lr.LR1Parser";	// use this parser
 	parser.backtracking=true;						// backtracking switched on?
 	parser.backtracking.depth=100;					// keep maximum backtrack locations
 	parser.timeout=10;								// timeout of parser after this amount of seconds

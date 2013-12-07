@@ -7,8 +7,8 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
+import com.puresoltechnologies.parser.impl.grammar.token.TokenDefinition;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.grammar.FortranGrammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.token.TokenDefinition;
 
 public class LineCommentIT {
 

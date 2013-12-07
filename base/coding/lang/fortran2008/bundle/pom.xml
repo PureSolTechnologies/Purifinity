@@ -47,7 +47,7 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<configuration>
 					<instructions>
-						<Import-Package>*,com.puresoltechnologies.purifinity.uhura.parser.lr,com.puresoltechnologies.purifinity.uhura.parser.parsetable,com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor</Import-Package>
+						<Import-Package>*,com.puresoltechnologies.parser.impl.parser.lr,com.puresoltechnologies.parser.impl.parser.parsetable,com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

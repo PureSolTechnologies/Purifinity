@@ -6,12 +6,12 @@ import static org.junit.Assert.assertTrue;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.puresoltechnologies.parser.impl.grammar.Grammar;
+import com.puresoltechnologies.parser.impl.grammar.token.TokenDefinition;
+import com.puresoltechnologies.parser.impl.grammar.token.TokenDefinitionSet;
+import com.puresoltechnologies.parser.impl.lexer.Lexer;
+import com.puresoltechnologies.parser.impl.source.FixedCodeLocation;
 import com.puresoltechnologies.purifinity.coding.lang.c11.grammar.C11Grammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.Grammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.token.TokenDefinition;
-import com.puresoltechnologies.purifinity.uhura.grammar.token.TokenDefinitionSet;
-import com.puresoltechnologies.purifinity.uhura.lexer.Lexer;
-import com.puresoltechnologies.purifinity.uhura.source.FixedCodeLocation;
 
 public class LexerTest {
 

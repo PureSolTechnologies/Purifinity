@@ -3,10 +3,10 @@ package com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.purifinity.uhura.grammar.token.Visibility;
-import com.puresoltechnologies.purifinity.uhura.lexer.Token;
-import com.puresoltechnologies.purifinity.uhura.lexer.TokenStream;
-import com.puresoltechnologies.purifinity.uhura.preprocessor.PreprocessorException;
+import com.puresoltechnologies.parser.impl.grammar.token.Visibility;
+import com.puresoltechnologies.parser.impl.lexer.Token;
+import com.puresoltechnologies.parser.impl.lexer.TokenStream;
+import com.puresoltechnologies.parser.impl.preprocessor.PreprocessorException;
 
 public class ReplacementParameterResult {
 

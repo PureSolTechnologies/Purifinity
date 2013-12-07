@@ -20,8 +20,8 @@
 			<artifactId>license.api.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>uhura.lib</artifactId>
+			<groupId>com.puresoltechnologies.parser</groupId>
+			<artifactId>impl.lib</artifactId>
 		</dependency>
 	</dependencies>
 

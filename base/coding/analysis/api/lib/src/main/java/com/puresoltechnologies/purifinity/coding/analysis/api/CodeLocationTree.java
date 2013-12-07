@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.puresoltechnologies.commons.trees.AbstractTreeImpl;
 import com.puresoltechnologies.commons.utils.HashId;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 
 public class CodeLocationTree extends AbstractTreeImpl<CodeLocationTree>
 		implements Serializable {

@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.puresoltechnologies.purifinity.uhura.grammar.token.Visibility;
-import com.puresoltechnologies.purifinity.uhura.lexer.Lexer;
-import com.puresoltechnologies.purifinity.uhura.lexer.LexerException;
-import com.puresoltechnologies.purifinity.uhura.lexer.Token;
-import com.puresoltechnologies.purifinity.uhura.lexer.TokenMetaData;
-import com.puresoltechnologies.purifinity.uhura.lexer.TokenStream;
-import com.puresoltechnologies.purifinity.uhura.source.FixedCodeLocation;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCode;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCodeLine;
+import com.puresoltechnologies.parser.impl.grammar.token.Visibility;
+import com.puresoltechnologies.parser.impl.lexer.Lexer;
+import com.puresoltechnologies.parser.impl.lexer.LexerException;
+import com.puresoltechnologies.parser.impl.lexer.Token;
+import com.puresoltechnologies.parser.impl.lexer.TokenMetaData;
+import com.puresoltechnologies.parser.impl.lexer.TokenStream;
+import com.puresoltechnologies.parser.impl.source.FixedCodeLocation;
+import com.puresoltechnologies.parser.impl.source.SourceCode;
+import com.puresoltechnologies.parser.impl.source.SourceCodeLine;
 
 /**
  * This class checks source files for matching the fixed form and converts them

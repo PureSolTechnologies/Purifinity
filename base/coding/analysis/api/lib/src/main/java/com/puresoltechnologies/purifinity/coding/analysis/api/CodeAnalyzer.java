@@ -13,8 +13,8 @@ package com.puresoltechnologies.purifinity.coding.analysis.api;
 import java.io.File;
 import java.io.IOException;
 
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
 
 /**
  * This is a interface to a analyzer. It's used to implement a language

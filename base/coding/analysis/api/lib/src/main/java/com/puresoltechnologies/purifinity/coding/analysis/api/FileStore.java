@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.coding.analysis.api;
 import java.io.InputStream;
 
 import com.puresoltechnologies.commons.utils.HashId;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCode;
+import com.puresoltechnologies.parser.impl.source.SourceCode;
 
 /**
  * This is the interface for a file store. The filess are stored by id and the

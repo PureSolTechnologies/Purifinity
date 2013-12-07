@@ -21,6 +21,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.utils.StopWatch;
+import com.puresoltechnologies.parser.impl.parser.ParserException;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
+import com.puresoltechnologies.parser.impl.parser.packrat.PackratParser;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.source.SourceCode;
+import com.puresoltechnologies.parser.impl.ust.CompilationUnit;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AbstractCodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerException;
@@ -29,12 +35,6 @@ import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.lang.c11.grammar.C11Grammar;
 import com.puresoltechnologies.purifinity.coding.lang.c11.ust.TranslationUnitCreator;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserException;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
-import com.puresoltechnologies.purifinity.uhura.parser.packrat.PackratParser;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCode;
-import com.puresoltechnologies.purifinity.uhura.ust.CompilationUnit;
 
 /**
  * 

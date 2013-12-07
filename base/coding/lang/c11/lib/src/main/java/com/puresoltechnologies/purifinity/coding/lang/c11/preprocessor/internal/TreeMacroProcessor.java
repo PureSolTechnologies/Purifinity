@@ -12,22 +12,22 @@ import com.puresoltechnologies.commons.trees.TreeException;
 import com.puresoltechnologies.commons.trees.TreeVisitor;
 import com.puresoltechnologies.commons.trees.TreeWalker;
 import com.puresoltechnologies.commons.trees.WalkingAction;
+import com.puresoltechnologies.parser.impl.grammar.token.Visibility;
+import com.puresoltechnologies.parser.impl.lexer.Token;
+import com.puresoltechnologies.parser.impl.lexer.TokenMetaData;
+import com.puresoltechnologies.parser.impl.lexer.TokenStream;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
+import com.puresoltechnologies.parser.impl.preprocessor.PreprocessorException;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.source.SourceCode;
+import com.puresoltechnologies.parser.impl.source.SourceCodeLine;
+import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
+import com.puresoltechnologies.parser.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
+import com.puresoltechnologies.parser.impl.ust.eval.ValueTypeException;
 import com.puresoltechnologies.purifinity.coding.lang.c11.C11PreprocessorExpressionEvaluator;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.C11Preprocessor;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.DefinedMacros;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.IncludeDirectories;
-import com.puresoltechnologies.purifinity.uhura.grammar.token.Visibility;
-import com.puresoltechnologies.purifinity.uhura.lexer.Token;
-import com.puresoltechnologies.purifinity.uhura.lexer.TokenMetaData;
-import com.puresoltechnologies.purifinity.uhura.lexer.TokenStream;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
-import com.puresoltechnologies.purifinity.uhura.preprocessor.PreprocessorException;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCode;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCodeLine;
-import com.puresoltechnologies.purifinity.uhura.source.SourceFileLocation;
-import com.puresoltechnologies.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
-import com.puresoltechnologies.purifinity.uhura.ust.eval.ValueTypeException;
 
 /**
  * <pre>

@@ -4,8 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.puresoltechnologies.parser.impl.lexer.TokenStream;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.Macro;
-import com.puresoltechnologies.purifinity.uhura.lexer.TokenStream;
 
 /**
  * This class handles the macro definitions put into the {@link C11Preprocessor}

@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.coding.metrics.mccabe;
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.purifinity.uhura.ust.AbstractProduction;
+import com.puresoltechnologies.parser.impl.ust.AbstractProduction;
 
 /**
  * This interface is used to implement a part of the McCabe metric (cyclomatic

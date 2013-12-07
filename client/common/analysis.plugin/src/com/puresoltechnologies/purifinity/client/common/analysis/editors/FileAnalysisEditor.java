@@ -17,6 +17,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
 import com.puresoltechnologies.commons.utils.HashId;
+import com.puresoltechnologies.parser.impl.source.SourceCode;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ParserTreeControl;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ScrollableFileViewer;
@@ -24,7 +25,6 @@ import com.puresoltechnologies.purifinity.client.common.ui.editors.AbstractPureS
 import com.puresoltechnologies.purifinity.coding.analysis.api.FileStore;
 import com.puresoltechnologies.purifinity.coding.analysis.api.FileStoreException;
 import com.puresoltechnologies.purifinity.coding.analysis.api.FileStoreFactory;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCode;
 
 public class FileAnalysisEditor extends AbstractPureSolTechnologiesEditor {
 

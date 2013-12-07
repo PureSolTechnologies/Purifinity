@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.puresoltechnologies.commons.utils.HashId;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 
 /**
  * This class is for keeping a list of analyzed files within ProjectAnalyzer.

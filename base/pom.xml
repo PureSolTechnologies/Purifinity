@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<properties>
@@ -13,7 +14,6 @@
 
 	<groupId>com.puresoltechnologies.purifinity</groupId>
 	<artifactId>base</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Library parent module</name>
@@ -208,13 +208,13 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>uhura.lib</artifactId>
+				<groupId>com.puresoltechnologies.parser</groupId>
+				<artifactId>impl.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>uhura.test</artifactId>
+				<groupId>com.puresoltechnologies.parser</groupId>
+				<artifactId>impl.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
 			</dependency>
@@ -396,7 +396,7 @@
 		<module>bundles</module>
 		<module>commons</module>
 		<module>license</module>
-		<module>uhura</module>
+		<module>parser</module>
 		<module>coding</module>
 	</modules>
 

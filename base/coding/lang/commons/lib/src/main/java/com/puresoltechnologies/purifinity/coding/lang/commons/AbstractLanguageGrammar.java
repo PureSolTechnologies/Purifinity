@@ -3,13 +3,13 @@ package com.puresoltechnologies.purifinity.coding.lang.commons;
 import java.io.IOException;
 import java.util.Properties;
 
+import com.puresoltechnologies.parser.impl.grammar.Grammar;
+import com.puresoltechnologies.parser.impl.grammar.GrammarException;
+import com.puresoltechnologies.parser.impl.grammar.production.ProductionSet;
+import com.puresoltechnologies.parser.impl.grammar.token.TokenDefinitionSet;
+import com.puresoltechnologies.parser.impl.lexer.Lexer;
+import com.puresoltechnologies.parser.impl.parser.Parser;
 import com.puresoltechnologies.purifinity.coding.lang.api.LanguageGrammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.Grammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.GrammarException;
-import com.puresoltechnologies.purifinity.uhura.grammar.production.ProductionSet;
-import com.puresoltechnologies.purifinity.uhura.grammar.token.TokenDefinitionSet;
-import com.puresoltechnologies.purifinity.uhura.lexer.Lexer;
-import com.puresoltechnologies.purifinity.uhura.parser.Parser;
 
 /**
  * This class is an extended {@link Grammar} for language implementations. For

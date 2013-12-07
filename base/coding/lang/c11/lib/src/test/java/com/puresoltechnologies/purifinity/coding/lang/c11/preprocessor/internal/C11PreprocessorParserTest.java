@@ -8,12 +8,12 @@ import org.junit.Test;
 import com.puresoltechnologies.commons.trees.SearchVisitor;
 import com.puresoltechnologies.commons.trees.TreeSearchCriterion;
 import com.puresoltechnologies.commons.trees.TreeWalker;
+import com.puresoltechnologies.parser.impl.grammar.Grammar;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
+import com.puresoltechnologies.parser.impl.parser.packrat.PackratParser;
+import com.puresoltechnologies.parser.impl.source.SourceCode;
 import com.puresoltechnologies.purifinity.coding.lang.c11.grammar.C11Grammar;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.C11PreprocessorParser;
-import com.puresoltechnologies.purifinity.uhura.grammar.Grammar;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
-import com.puresoltechnologies.purifinity.uhura.parser.packrat.PackratParser;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCode;
 
 public class C11PreprocessorParserTest {
 

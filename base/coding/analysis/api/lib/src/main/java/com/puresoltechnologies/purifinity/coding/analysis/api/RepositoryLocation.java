@@ -6,7 +6,7 @@ import java.net.URL;
 import java.util.List;
 
 import com.puresoltechnologies.commons.utils.FileSearchConfiguration;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 
 /**
  * This is an interface for a repository source. The actual implementation may

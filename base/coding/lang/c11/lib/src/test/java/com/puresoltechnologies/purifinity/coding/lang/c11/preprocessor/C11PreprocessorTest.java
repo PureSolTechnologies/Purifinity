@@ -9,11 +9,11 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.uhura.preprocessor.PreprocessorException;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCode;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCodeLine;
-import com.puresoltechnologies.purifinity.uhura.source.SourceFileLocation;
+import com.puresoltechnologies.parser.impl.preprocessor.PreprocessorException;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.source.SourceCode;
+import com.puresoltechnologies.parser.impl.source.SourceCodeLine;
+import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
 
 public class C11PreprocessorTest {
 

@@ -26,6 +26,16 @@ import com.puresoltechnologies.commons.trees.TreeVisitor;
 import com.puresoltechnologies.commons.trees.TreeWalker;
 import com.puresoltechnologies.commons.trees.WalkingAction;
 import com.puresoltechnologies.commons.utils.StopWatch;
+import com.puresoltechnologies.parser.impl.lexer.Lexer;
+import com.puresoltechnologies.parser.impl.lexer.LexerException;
+import com.puresoltechnologies.parser.impl.lexer.TokenStream;
+import com.puresoltechnologies.parser.impl.parser.Parser;
+import com.puresoltechnologies.parser.impl.parser.ParserException;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.source.SourceCode;
+import com.puresoltechnologies.parser.impl.ust.CompilationUnit;
+import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AbstractCodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerException;
@@ -41,16 +51,6 @@ import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.Method
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.NormalClassDeclaration;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.NormalInterfaceDeclaration;
 import com.puresoltechnologies.purifinity.coding.lang.java7.ust.CompilationUnitCreator;
-import com.puresoltechnologies.purifinity.uhura.lexer.Lexer;
-import com.puresoltechnologies.purifinity.uhura.lexer.LexerException;
-import com.puresoltechnologies.purifinity.uhura.lexer.TokenStream;
-import com.puresoltechnologies.purifinity.uhura.parser.Parser;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserException;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCode;
-import com.puresoltechnologies.purifinity.uhura.ust.CompilationUnit;
-import com.puresoltechnologies.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * 

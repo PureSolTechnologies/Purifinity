@@ -6,14 +6,14 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.puresoltechnologies.parser.impl.grammar.Grammar;
+import com.puresoltechnologies.parser.impl.parser.ParserException;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
+import com.puresoltechnologies.parser.impl.parser.packrat.PackratParser;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.source.FixedCodeLocation;
+import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.JavaGrammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.Grammar;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserException;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
-import com.puresoltechnologies.purifinity.uhura.parser.packrat.PackratParser;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
-import com.puresoltechnologies.purifinity.uhura.source.FixedCodeLocation;
-import com.puresoltechnologies.purifinity.uhura.source.SourceFileLocation;
 
 public class JavaPackratParserTest {
 

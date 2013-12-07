@@ -7,6 +7,8 @@ import org.apache.commons.io.IOUtils;
 
 import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
 import com.puresoltechnologies.commons.utils.HashId;
+import com.puresoltechnologies.parser.impl.source.UnspecifiedSourceCodeLocation;
+import com.puresoltechnologies.parser.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
@@ -19,8 +21,6 @@ import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQualit
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
-import com.puresoltechnologies.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
 
 /**
  * This evaluator calculates the nesting depth of the source code. A too deep

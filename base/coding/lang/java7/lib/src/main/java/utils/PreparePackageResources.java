@@ -8,16 +8,16 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.utils.packages.PackageBuilderUtils;
 import com.puresoltechnologies.commons.utils.packages.PackageDirectory;
+import com.puresoltechnologies.parser.impl.grammar.Grammar;
+import com.puresoltechnologies.parser.impl.grammar.GrammarException;
+import com.puresoltechnologies.parser.impl.grammar.GrammarReader;
+import com.puresoltechnologies.parser.impl.lexer.Lexer;
+import com.puresoltechnologies.parser.impl.lexer.LexerFactory;
+import com.puresoltechnologies.parser.impl.lexer.LexerFactoryException;
+import com.puresoltechnologies.parser.impl.parser.Parser;
+import com.puresoltechnologies.parser.impl.parser.ParserFactory;
+import com.puresoltechnologies.parser.impl.parser.ParserFactoryException;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.JavaGrammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.Grammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.GrammarException;
-import com.puresoltechnologies.purifinity.uhura.grammar.GrammarReader;
-import com.puresoltechnologies.purifinity.uhura.lexer.Lexer;
-import com.puresoltechnologies.purifinity.uhura.lexer.LexerFactory;
-import com.puresoltechnologies.purifinity.uhura.lexer.LexerFactoryException;
-import com.puresoltechnologies.purifinity.uhura.parser.Parser;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserFactory;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserFactoryException;
 
 public class PreparePackageResources {
 

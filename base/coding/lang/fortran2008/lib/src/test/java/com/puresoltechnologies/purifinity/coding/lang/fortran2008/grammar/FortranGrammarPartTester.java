@@ -5,17 +5,17 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.puresoltechnologies.parser.impl.grammar.Grammar;
+import com.puresoltechnologies.parser.impl.grammar.GrammarException;
+import com.puresoltechnologies.parser.impl.lexer.Lexer;
+import com.puresoltechnologies.parser.impl.lexer.LexerException;
+import com.puresoltechnologies.parser.impl.lexer.TokenStream;
+import com.puresoltechnologies.parser.impl.parser.Parser;
+import com.puresoltechnologies.parser.impl.parser.ParserException;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.source.FixedCodeLocation;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.FortranPreConditioner;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.grammar.FortranGrammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.Grammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.GrammarException;
-import com.puresoltechnologies.purifinity.uhura.lexer.Lexer;
-import com.puresoltechnologies.purifinity.uhura.lexer.LexerException;
-import com.puresoltechnologies.purifinity.uhura.lexer.TokenStream;
-import com.puresoltechnologies.purifinity.uhura.parser.Parser;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserException;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
-import com.puresoltechnologies.purifinity.uhura.source.FixedCodeLocation;
 
 public class FortranGrammarPartTester {
 

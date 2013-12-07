@@ -10,7 +10,7 @@ Require-Bundle: com.puresoltechnologies.purifinity.client.common.osgi.plugin;bun
  com.puresoltechnologies.commons.trees.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.commons.utils.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.commons.configuration.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.uhura.bundle;bundle-version="0.1.1",
+ com.puresoltechnologies.parser.impl.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.client.common.branding.plugin;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.coding.lang.api.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.coding.analysis.api.bundle;bundle-version="0.1.1",

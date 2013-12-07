@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.trees.TreeIterator;
+import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parser.impl.ust.terminal.AbstractTerminal;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
@@ -24,8 +26,6 @@ import com.puresoltechnologies.purifinity.coding.evaluation.impl.CodeRangeEvalua
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.Result;
 import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.uhura.ust.UniversalSyntaxTree;
-import com.puresoltechnologies.purifinity.uhura.ust.terminal.AbstractTerminal;
 
 public class HalsteadMetric extends CodeRangeEvaluator {
 

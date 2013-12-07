@@ -18,8 +18,8 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.purifinity.uhura.analyzer.Analyzer;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.analyzer.Analyzer;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 
 /**
  * This factory creates an {@link Analyzer} class for a given File in dependence

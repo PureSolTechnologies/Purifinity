@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.coding.lang.api;
 
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 
 /**
  * This interface is the central interface for a programming language

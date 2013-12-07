@@ -37,7 +37,7 @@
       <import plugin="com.puresoltechnologies.purifinity.coding.lang.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.metrics.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.license.api.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.uhura.bundle"/>
+      <import plugin="com.puresoltechnologies.parser.impl.bundle"/>
       <import plugin="org.eclipse.osgi"/>
    </requires>
 

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresoltechnologies.commons.trees.TreeException;
+import com.puresoltechnologies.parser.impl.ust.AbstractProduction;
+import com.puresoltechnologies.parser.impl.ust.USTUtils;
+import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.coding.metrics.mccabe.LanguageDependedMcCabeMetric;
-import com.puresoltechnologies.purifinity.uhura.ust.AbstractProduction;
-import com.puresoltechnologies.purifinity.uhura.ust.USTUtils;
-import com.puresoltechnologies.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This is the actual implementation of the McCabe metric for Java.

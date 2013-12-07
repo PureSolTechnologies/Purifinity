@@ -3,9 +3,9 @@ package com.puresoltechnologies.purifinity.coding.metrics.sloc;
 import java.io.Serializable;
 
 import com.puresoltechnologies.commons.math.statistics.Statistics;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
 
 public class SLOCResult implements Serializable {
 

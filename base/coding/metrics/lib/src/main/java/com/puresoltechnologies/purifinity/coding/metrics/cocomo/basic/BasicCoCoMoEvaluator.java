@@ -16,6 +16,7 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
 import com.puresoltechnologies.commons.utils.HashId;
+import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
@@ -27,7 +28,6 @@ import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityChara
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCResult;
-import com.puresoltechnologies.purifinity.uhura.source.SourceFileLocation;
 
 /**
  * This class calculates the CoCoMo for a set number of sloc and a given average

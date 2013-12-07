@@ -7,8 +7,8 @@ import java.net.URL;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.puresoltechnologies.parser.impl.grammar.Grammar;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.grammar.FortranGrammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.Grammar;
 
 public class FortranGrammarTest {
 

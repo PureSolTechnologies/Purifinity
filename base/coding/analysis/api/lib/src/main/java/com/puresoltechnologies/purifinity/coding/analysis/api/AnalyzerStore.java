@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.coding.analysis.api;
 import java.io.File;
 import java.io.IOException;
 
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 
 /**
  * This interface is implemented by language classes which support creating and

@@ -14,12 +14,12 @@ import org.junit.Test;
 import com.puresoltechnologies.commons.trees.FileTree;
 import com.puresoltechnologies.commons.utils.FileSearch;
 import com.puresoltechnologies.commons.utils.FileSearchConfiguration;
+import com.puresoltechnologies.parser.impl.grammar.Grammar;
+import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.lang.java7.Java;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.JavaGrammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.Grammar;
-import com.puresoltechnologies.purifinity.uhura.source.SourceFileLocation;
 
 /**
  * This is a stability test for the Java analyzer. It analyzes the source of the

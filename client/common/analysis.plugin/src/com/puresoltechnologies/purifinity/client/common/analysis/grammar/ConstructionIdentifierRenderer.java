@@ -8,8 +8,8 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 
 import com.puresoltechnologies.commons.trees.TreeException;
-import com.puresoltechnologies.purifinity.uhura.grammar.Quantity;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
+import com.puresoltechnologies.parser.impl.grammar.Quantity;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
 
 public class ConstructionIdentifierRenderer extends AbstractRenderer {
 

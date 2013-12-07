@@ -7,23 +7,23 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.puresoltechnologies.commons.trees.TreeException;
+import com.puresoltechnologies.parser.impl.grammar.Grammar;
+import com.puresoltechnologies.parser.impl.grammar.GrammarException;
+import com.puresoltechnologies.parser.impl.grammar.GrammarReader;
+import com.puresoltechnologies.parser.impl.grammar.token.TokenDefinition;
+import com.puresoltechnologies.parser.impl.grammar.token.TokenDefinitionSet;
+import com.puresoltechnologies.parser.impl.grammar.token.Visibility;
+import com.puresoltechnologies.parser.impl.lexer.Lexer;
+import com.puresoltechnologies.parser.impl.lexer.LexerException;
+import com.puresoltechnologies.parser.impl.lexer.RegExpLexer;
+import com.puresoltechnologies.parser.impl.lexer.Token;
+import com.puresoltechnologies.parser.impl.lexer.TokenStream;
+import com.puresoltechnologies.parser.impl.parser.ParserException;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
+import com.puresoltechnologies.parser.impl.parser.packrat.PackratParser;
+import com.puresoltechnologies.parser.impl.source.SourceCode;
+import com.puresoltechnologies.parser.impl.source.SourceCodeLine;
 import com.puresoltechnologies.purifinity.coding.lang.c11.grammar.C11Grammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.Grammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.GrammarException;
-import com.puresoltechnologies.purifinity.uhura.grammar.GrammarReader;
-import com.puresoltechnologies.purifinity.uhura.grammar.token.TokenDefinition;
-import com.puresoltechnologies.purifinity.uhura.grammar.token.TokenDefinitionSet;
-import com.puresoltechnologies.purifinity.uhura.grammar.token.Visibility;
-import com.puresoltechnologies.purifinity.uhura.lexer.Lexer;
-import com.puresoltechnologies.purifinity.uhura.lexer.LexerException;
-import com.puresoltechnologies.purifinity.uhura.lexer.RegExpLexer;
-import com.puresoltechnologies.purifinity.uhura.lexer.Token;
-import com.puresoltechnologies.purifinity.uhura.lexer.TokenStream;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserException;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
-import com.puresoltechnologies.purifinity.uhura.parser.packrat.PackratParser;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCode;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCodeLine;
 
 public class C11PreprocessorParser {
 

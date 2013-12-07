@@ -23,6 +23,7 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresoltechnologies.parser.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
@@ -34,7 +35,6 @@ import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetric
 import com.puresoltechnologies.purifinity.coding.metrics.mccabe.McCabeMetric;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCMetricCalculator;
-import com.puresoltechnologies.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
 
 public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 

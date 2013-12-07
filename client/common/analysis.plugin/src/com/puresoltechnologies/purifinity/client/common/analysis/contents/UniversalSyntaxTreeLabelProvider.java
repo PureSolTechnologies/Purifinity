@@ -2,9 +2,9 @@ package com.puresoltechnologies.purifinity.client.common.analysis.contents;
 
 import org.eclipse.jface.viewers.LabelProvider;
 
-import com.puresoltechnologies.purifinity.uhura.ust.UniversalSyntaxTree;
-import com.puresoltechnologies.purifinity.uhura.ust.UniversalSyntaxTreeMetaData;
-import com.puresoltechnologies.purifinity.uhura.ust.terminal.AbstractTerminal;
+import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTreeMetaData;
+import com.puresoltechnologies.parser.impl.ust.terminal.AbstractTerminal;
 
 public class UniversalSyntaxTreeLabelProvider extends LabelProvider {
 

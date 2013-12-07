@@ -153,8 +153,8 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>parser.api.lib</artifactId>
+				<groupId>com.puresoltechnologies.parser</groupId>
+				<artifactId>api.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
@@ -181,6 +181,15 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.5.1</version>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>

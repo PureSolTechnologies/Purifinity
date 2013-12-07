@@ -18,6 +18,7 @@ import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
 import com.puresoltechnologies.commons.trees.TreeUtils;
 import com.puresoltechnologies.commons.utils.StopWatch;
 import com.puresoltechnologies.commons.utils.progress.AbstractProgressObservable;
+import com.puresoltechnologies.parser.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryStore;
@@ -31,7 +32,6 @@ import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorInforma
 import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.license.api.LicensedObject;
-import com.puresoltechnologies.purifinity.uhura.ust.eval.UniversalSyntaxTreeEvaluationException;
 
 /**
  * This interface is the main interface for all evaluators and the general

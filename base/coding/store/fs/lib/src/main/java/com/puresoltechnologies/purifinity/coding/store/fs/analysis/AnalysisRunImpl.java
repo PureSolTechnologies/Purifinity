@@ -39,6 +39,7 @@ import com.puresoltechnologies.commons.utils.HashId;
 import com.puresoltechnologies.commons.utils.StopWatch;
 import com.puresoltechnologies.commons.utils.data.HashCodeGenerator;
 import com.puresoltechnologies.commons.utils.progress.AbstractProgressObservable;
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRunInformation;
@@ -50,7 +51,6 @@ import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryStoreFact
 import com.puresoltechnologies.purifinity.coding.analysis.api.FileStoreException;
 import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.coding.analysis.api.RepositoryLocation;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
 
 /**
  * This class is an implementation of {@link AnalysisRun}.

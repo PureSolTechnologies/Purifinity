@@ -3,8 +3,8 @@ package com.puresoltechnologies.purifinity.coding.lang.fortran2008.metrics;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.coding.metrics.codedepth.LanguageDependedCodeDepthMetric;
-import com.puresoltechnologies.purifinity.uhura.ust.UniversalSyntaxTree;
 
 /**
  * This is the actual implementation of the code block test for Java.

@@ -1,8 +1,8 @@
 package com.puresoltechnologies.purifinity.coding.lang.test.metrics;
 
+import com.puresoltechnologies.parser.impl.ust.terminal.AbstractTerminal;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.LanguageDependedSLOCMetric;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCType;
-import com.puresoltechnologies.purifinity.uhura.ust.terminal.AbstractTerminal;
 
 public class SLOCMetricImpl implements LanguageDependedSLOCMetric {
 

@@ -3,9 +3,9 @@ package com.puresoltechnologies.purifinity.coding.lang.test.metrics;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresoltechnologies.parser.impl.ust.terminal.AbstractTerminal;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadSymbol;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.LanguageDependedHalsteadMetric;
-import com.puresoltechnologies.purifinity.uhura.ust.terminal.AbstractTerminal;
 
 /**
  * This is the actual implementation of the McCabe metric for Java.

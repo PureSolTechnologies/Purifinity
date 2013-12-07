@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.coding.analysis.api;
 
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.lang.commons.AbstractLanguageGrammar;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
 
 public abstract class AbstractCodeAnalyzer implements CodeAnalyzer {
 

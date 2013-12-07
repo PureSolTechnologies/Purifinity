@@ -3,10 +3,10 @@ package com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts;
 import java.util.List;
 
 import com.puresoltechnologies.commons.trees.TreeException;
+import com.puresoltechnologies.parser.impl.ust.USTUtils;
+import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.uhura.ust.USTUtils;
-import com.puresoltechnologies.purifinity.uhura.ust.UniversalSyntaxTree;
 
 public class ConstructorDeclaration {
 

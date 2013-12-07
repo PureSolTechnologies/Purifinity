@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
 import com.puresoltechnologies.commons.utils.HashId;
+import com.puresoltechnologies.parser.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
@@ -19,7 +20,6 @@ import com.puresoltechnologies.purifinity.coding.metrics.maintainability.Maintai
 import com.puresoltechnologies.purifinity.coding.metrics.maintainability.MaintainabilityIndexFileResult;
 import com.puresoltechnologies.purifinity.coding.metrics.maintainability.MaintainabilityIndexFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.maintainability.MaintainabilityIndexResult;
-import com.puresoltechnologies.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 

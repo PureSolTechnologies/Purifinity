@@ -5,14 +5,14 @@ import java.util.regex.Pattern;
 
 import com.puresoltechnologies.commons.trees.TreeException;
 import com.puresoltechnologies.commons.utils.io.LineTerminator;
+import com.puresoltechnologies.parser.impl.parser.ParserException;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
+import com.puresoltechnologies.parser.impl.preprocessor.Preprocessor;
+import com.puresoltechnologies.parser.impl.preprocessor.PreprocessorException;
+import com.puresoltechnologies.parser.impl.source.SourceCode;
+import com.puresoltechnologies.parser.impl.source.SourceCodeLine;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.C11PreprocessorParser;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.TreeMacroProcessor;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserException;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
-import com.puresoltechnologies.purifinity.uhura.preprocessor.Preprocessor;
-import com.puresoltechnologies.purifinity.uhura.preprocessor.PreprocessorException;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCode;
-import com.puresoltechnologies.purifinity.uhura.source.SourceCodeLine;
 
 /**
  * This is a C preprocessor on basis on C11 grammar.

@@ -7,10 +7,10 @@ import static org.junit.Assert.assertSame;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.utils.PathUtils;
+import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
+import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.coding.lang.java7.Java;
 import com.puresoltechnologies.purifinity.coding.lang.java7.JavaAnalyzer;
-import com.puresoltechnologies.purifinity.uhura.source.SourceFileLocation;
-import com.puresoltechnologies.purifinity.uhura.ust.UniversalSyntaxTree;
 
 public class JavaAnalyserTest {
 

@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
 import com.puresoltechnologies.commons.utils.HashId;
+import com.puresoltechnologies.parser.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
@@ -21,7 +22,6 @@ import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetric
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetricFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetricResult;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadResult;
-import com.puresoltechnologies.purifinity.uhura.source.UnspecifiedSourceCodeLocation;
 
 public class EntropyMetricEvaluator extends AbstractEvaluator {
 

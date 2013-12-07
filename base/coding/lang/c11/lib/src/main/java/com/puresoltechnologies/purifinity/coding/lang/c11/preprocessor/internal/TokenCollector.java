@@ -2,9 +2,9 @@ package com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal
 
 import com.puresoltechnologies.commons.trees.TreeVisitor;
 import com.puresoltechnologies.commons.trees.WalkingAction;
-import com.puresoltechnologies.purifinity.uhura.lexer.Token;
-import com.puresoltechnologies.purifinity.uhura.lexer.TokenStream;
-import com.puresoltechnologies.purifinity.uhura.parser.ParserTree;
+import com.puresoltechnologies.parser.impl.lexer.Token;
+import com.puresoltechnologies.parser.impl.lexer.TokenStream;
+import com.puresoltechnologies.parser.impl.parser.ParserTree;
 
 public class TokenCollector implements TreeVisitor<ParserTree> {
 

@@ -5,8 +5,8 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.coding.lang.test.TestLanguageAnalyser;
-import com.puresoltechnologies.purifinity.uhura.source.SourceFileLocation;
 
 public class TestLanguageAnalyserTest {
 

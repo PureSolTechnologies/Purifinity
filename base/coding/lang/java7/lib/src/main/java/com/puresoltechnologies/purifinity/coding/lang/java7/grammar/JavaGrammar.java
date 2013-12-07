@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
+import com.puresoltechnologies.parser.impl.grammar.Grammar;
+import com.puresoltechnologies.parser.impl.grammar.GrammarException;
+import com.puresoltechnologies.parser.impl.grammar.GrammarManager;
+import com.puresoltechnologies.parser.impl.grammar.GrammarReader;
+import com.puresoltechnologies.parser.impl.lexer.Lexer;
+import com.puresoltechnologies.parser.impl.parser.Parser;
 import com.puresoltechnologies.purifinity.coding.lang.commons.AbstractLanguageGrammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.Grammar;
-import com.puresoltechnologies.purifinity.uhura.grammar.GrammarException;
-import com.puresoltechnologies.purifinity.uhura.grammar.GrammarManager;
-import com.puresoltechnologies.purifinity.uhura.grammar.GrammarReader;
-import com.puresoltechnologies.purifinity.uhura.lexer.Lexer;
-import com.puresoltechnologies.purifinity.uhura.parser.Parser;
 
 /**
  * This class represents the Java programming language.

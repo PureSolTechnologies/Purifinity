@@ -1,8 +1,8 @@
 package com.puresoltechnologies.purifinity.coding.lang.commons;
 
+import com.puresoltechnologies.parser.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.license.api.LicensedObject;
-import com.puresoltechnologies.purifinity.uhura.source.CodeLocation;
 
 public abstract class AbstractProgrammingLanguage extends LicensedObject
 		implements ProgrammingLanguage {

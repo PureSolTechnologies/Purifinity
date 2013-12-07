@@ -20,8 +20,8 @@ OPTIONS
 	grammar.normalize_to_bnf=true;					// defines whether the grammar needs to be normalized to BNF
 	preprocessor.use=false;							// usage of preprocessor required? 
 	//preprocessor="com.puresoltechnologies.purifinity.coding.lang.cpp.CPreprocessor";								// usage of preprocessor required? 
-	lexer="com.puresoltechnologies.purifinity.uhura.lexer.RegExpLexer";
-	parser="com.puresoltechnologies.purifinity.uhura.parser.packrat.PackratParser";
+	lexer="com.puresoltechnologies.parser.impl.lexer.RegExpLexer";
+	parser="com.puresoltechnologies.parser.impl.parser.packrat.PackratParser";
 	parser.backtracking=true;
 
 /****************************************************************************
