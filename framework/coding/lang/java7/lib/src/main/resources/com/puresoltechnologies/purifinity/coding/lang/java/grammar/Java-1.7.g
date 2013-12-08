@@ -19,8 +19,8 @@ OPTIONS
 	grammar.normalize_to_bnf=true;					// defines whether the grammar needs to be normalized to BNF
 	preprocessor.use=false;							// usage of preprocessor required? 
 	preprocessor="";								// usage of preprocessor required? 
-	lexer="com.puresoltechnologies.parser.impl.lexer.RegExpLexer";
-	parser="com.puresoltechnologies.parser.impl.parser.lr.LR1Parser";
+	lexer="com.puresoltechnologies.parsers.impl.lexer.RegExpLexer";
+	parser="com.puresoltechnologies.parsers.impl.parser.lr.LR1Parser";
 	parser.backtracking=true;
 
 /****************************************************************************

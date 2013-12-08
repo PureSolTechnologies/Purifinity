@@ -13,12 +13,10 @@ public class GrammarManagerTest {
 	@Test
 	public void testURLHandlingForClass() {
 		URL url = GrammarManagerTest.class
-				.getResource("/com/puresoltechnologies/purifinity/uhura/grammar/TestGrammar.g");
+				.getResource("/com/puresoltechnologies/parsers/impl/grammar/TestGrammar.g");
 		assertNotNull(url);
-		assertTrue(url
-				.toString()
-				.endsWith(
-						"/com/puresoltechnologies/purifinity/uhura/grammar/TestGrammar.g"));
+		assertTrue(url.toString().endsWith(
+				"/com/puresoltechnologies/parsers/impl/grammar/TestGrammar.g"));
 		assertEquals("file", url.getProtocol());
 	}
 

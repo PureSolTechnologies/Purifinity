@@ -9,20 +9,14 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.parsers.impl.grammar.Grammar;
-import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
-import com.puresoltechnologies.parsers.impl.grammar.GrammarPartTester;
-import com.puresoltechnologies.parsers.impl.grammar.GrammarReader;
 import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
 
 public class GrammarReaderTest {
 
 	@Test
 	public void testInstance() throws GrammarException, IOException {
-		assertNotNull(new GrammarReader(
-				getClass()
-						.getResourceAsStream(
-								"/com/puresoltechnologies/purifinity/uhura/grammar/TestGrammar.g")));
+		assertNotNull(new GrammarReader(getClass().getResourceAsStream(
+				"/com/puresoltechnologies/parsers/impl/grammar/TestGrammar.g")));
 	}
 
 	@Test
@@ -30,7 +24,7 @@ public class GrammarReaderTest {
 		GrammarReader grammar = new GrammarReader(
 				getClass()
 						.getResourceAsStream(
-								"/com/puresoltechnologies/purifinity/uhura/grammar/TestGrammar.g"));
+								"/com/puresoltechnologies/parsers/impl/grammar/TestGrammar.g"));
 		try {
 			assertNotNull(grammar.getGrammar());
 			assertNotNull(grammar.getAST());
@@ -44,7 +38,7 @@ public class GrammarReaderTest {
 		GrammarReader reader = new GrammarReader(
 				getClass()
 						.getResourceAsStream(
-								"/com/puresoltechnologies/purifinity/uhura/grammar/TestGrammar.g"));
+								"/com/puresoltechnologies/parsers/impl/grammar/TestGrammar.g"));
 		try {
 			assertNotNull(reader.getAST());
 			Grammar grammar = reader.getGrammar();
@@ -63,7 +57,7 @@ public class GrammarReaderTest {
 		GrammarReader reader = new GrammarReader(
 				getClass()
 						.getResourceAsStream(
-								"/com/puresoltechnologies/purifinity/uhura/grammar/TestGrammarForAutoGeneration.g"));
+								"/com/puresoltechnologies/parsers/impl/grammar/TestGrammarForAutoGeneration.g"));
 		try {
 			assertNotNull(reader.getAST());
 			Grammar grammar = reader.getGrammar();
@@ -79,7 +73,7 @@ public class GrammarReaderTest {
 		GrammarReader reader = new GrammarReader(
 				getClass()
 						.getResourceAsStream(
-								"/com/puresoltechnologies/purifinity/uhura/grammar/TestRuleAutoGeneration.g"));
+								"/com/puresoltechnologies/parsers/impl/grammar/TestRuleAutoGeneration.g"));
 		try {
 			Grammar grammar = reader.getGrammar();
 			assertNotNull(grammar);
@@ -97,7 +91,7 @@ public class GrammarReaderTest {
 		GrammarReader reader = new GrammarReader(
 				getClass()
 						.getResourceAsStream(
-								"/com/puresoltechnologies/purifinity/uhura/grammar/TestRuleAutoGeneration.g"));
+								"/com/puresoltechnologies/parsers/impl/grammar/TestRuleAutoGeneration.g"));
 		try {
 			Grammar grammar = reader.getGrammar();
 			assertNotNull(grammar);
@@ -116,7 +110,7 @@ public class GrammarReaderTest {
 		GrammarReader reader = new GrammarReader(
 				getClass()
 						.getResourceAsStream(
-								"/com/puresoltechnologies/purifinity/uhura/grammar/TestRuleAutoGeneration.g"));
+								"/com/puresoltechnologies/parsers/impl/grammar/TestRuleAutoGeneration.g"));
 		try {
 			Grammar grammar = reader.getGrammar();
 			assertNotNull(grammar);

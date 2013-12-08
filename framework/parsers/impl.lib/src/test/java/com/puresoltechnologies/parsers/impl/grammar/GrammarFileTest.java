@@ -8,7 +8,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresoltechnologies.parsers.impl.grammar.GrammarFile;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 
 public class GrammarFileTest {
@@ -17,9 +16,8 @@ public class GrammarFileTest {
 
 	@Before
 	public void testInputStreamAndSetup() {
-		inputStream = getClass()
-				.getResourceAsStream(
-						"/com/puresoltechnologies/purifinity/uhura/grammar/TestGrammar.g");
+		inputStream = getClass().getResourceAsStream(
+				"/com/puresoltechnologies/parsers/impl/grammar/TestGrammar.g");
 		assertNotNull(inputStream);
 	}
 

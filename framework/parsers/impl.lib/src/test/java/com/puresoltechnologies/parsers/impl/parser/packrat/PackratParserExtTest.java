@@ -11,7 +11,6 @@ import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarConverter;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarFile;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
-import com.puresoltechnologies.parsers.impl.parser.packrat.PackratParser;
 import com.puresoltechnologies.parsers.impl.source.CodeLocation;
 import com.puresoltechnologies.parsers.impl.source.FixedCodeLocation;
 
@@ -28,7 +27,7 @@ public class PackratParserExtTest {
 	private ParserTree parseText(CodeLocation source) throws Throwable {
 		InputStream inputStream = getClass()
 				.getResourceAsStream(
-						"/com/puresoltechnologies/purifinity/uhura/grammar/TestGrammarForJavaPrimaryExpressions.g");
+						"/com/puresoltechnologies/parsers/impl/grammar/TestGrammarForJavaPrimaryExpressions.g");
 		assertNotNull(inputStream);
 		try {
 			GrammarFile grammarFile = new GrammarFile(inputStream);

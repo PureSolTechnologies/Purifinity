@@ -28,8 +28,6 @@ import com.puresoltechnologies.parsers.impl.grammar.token.TokenDefinitionSet;
 import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
 import com.puresoltechnologies.parsers.impl.lexer.Token;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
-import com.puresoltechnologies.parsers.impl.parser.packrat.MemoEntry;
-import com.puresoltechnologies.parsers.impl.parser.packrat.PackratParser;
 import com.puresoltechnologies.parsers.impl.source.FixedCodeLocation;
 import com.puresoltechnologies.parsers.impl.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.source.StringWithLocation;
@@ -103,11 +101,11 @@ public class PackratParserTest {
 
 	@BeforeClass
 	public static void initialize() throws Throwable {
-		directRecursionGrammar = readGrammar("/com/puresoltechnologies/purifinity/uhura/grammar/DirectRecursiveTestGrammar.g");
-		directRecursionGrammarZero = readGrammar("/com/puresoltechnologies/purifinity/uhura/grammar/DirectRecursiveTestGrammarZero.g");
-		indirectRecursionGrammar = readGrammar("/com/puresoltechnologies/purifinity/uhura/grammar/IndirectRecursiveTestGrammar.g");
-		nestedRecursionsGrammar = readGrammar("/com/puresoltechnologies/purifinity/uhura/grammar/NestedRecursionTestGrammar.g");
-		testGrammar = readGrammar("/com/puresoltechnologies/purifinity/uhura/grammar/TestGrammar.g");
+		directRecursionGrammar = readGrammar("/com/puresoltechnologies/parsers/impl/grammar/DirectRecursiveTestGrammar.g");
+		directRecursionGrammarZero = readGrammar("/com/puresoltechnologies/parsers/impl/grammar/DirectRecursiveTestGrammarZero.g");
+		indirectRecursionGrammar = readGrammar("/com/puresoltechnologies/parsers/impl/grammar/IndirectRecursiveTestGrammar.g");
+		nestedRecursionsGrammar = readGrammar("/com/puresoltechnologies/parsers/impl/grammar/NestedRecursionTestGrammar.g");
+		testGrammar = readGrammar("/com/puresoltechnologies/parsers/impl/grammar/TestGrammar.g");
 	}
 
 	private static Grammar readGrammar(String resource) throws Throwable {
