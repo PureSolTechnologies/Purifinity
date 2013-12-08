@@ -187,7 +187,7 @@
 	<modules>
 		<module>parent</module>
 		<module>dependency</module>
-		<module>trees.impl</module>
+		<module>trees.impl.lib</module>
 		<module>utils</module>
 		<module>math</module>
 		<module>configuration</module>

@@ -3,7 +3,7 @@ package com.puresoltechnologies.parsers.impl.ust;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.commons.trees.api.TreeException;
 
 public abstract class AbstractUniversalSyntaxTreeNode implements
 		UniversalSyntaxTree {

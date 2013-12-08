@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
-import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 
 /**

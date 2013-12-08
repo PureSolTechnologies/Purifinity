@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarReader;

@@ -246,7 +246,12 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>trees.impl</artifactId>
+				<artifactId>trees.api.lib</artifactId>
+				<version>${commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>trees.impl.lib</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>

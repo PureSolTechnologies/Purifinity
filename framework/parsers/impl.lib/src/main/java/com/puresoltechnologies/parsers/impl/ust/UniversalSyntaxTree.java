@@ -3,8 +3,8 @@ package com.puresoltechnologies.parsers.impl.ust;
 import java.io.Serializable;
 import java.util.List;
 
-import com.puresoltechnologies.commons.trees.impl.Tree;
-import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.commons.trees.api.Tree;
+import com.puresoltechnologies.commons.trees.api.TreeException;
 
 /**
  * This is the central interface for universal syntax trees.

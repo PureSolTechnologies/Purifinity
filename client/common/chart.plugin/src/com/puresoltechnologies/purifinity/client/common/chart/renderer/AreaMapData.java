@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.puresoltechnologies.commons.trees.impl.Tree;
+import com.puresoltechnologies.commons.trees.api.Tree;
 
 public class AreaMapData implements Tree<AreaMapData>, Comparable<AreaMapData> {
 

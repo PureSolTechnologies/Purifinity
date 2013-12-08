@@ -6,7 +6,7 @@ import java.util.Stack;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.commons.trees.impl.TreeIterator;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.production.Production;

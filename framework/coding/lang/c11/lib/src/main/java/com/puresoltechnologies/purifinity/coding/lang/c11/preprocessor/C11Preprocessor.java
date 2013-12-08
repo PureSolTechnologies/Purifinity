@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.commons.utils.io.LineTerminator;
 import com.puresoltechnologies.parsers.impl.parser.ParserException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;

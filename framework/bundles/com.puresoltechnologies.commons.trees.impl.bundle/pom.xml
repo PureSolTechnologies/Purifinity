@@ -19,7 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>trees.impl</artifactId>
+			<artifactId>trees.impl.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>

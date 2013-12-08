@@ -24,7 +24,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>trees.impl</artifactId>
+			<artifactId>trees.impl.lib</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

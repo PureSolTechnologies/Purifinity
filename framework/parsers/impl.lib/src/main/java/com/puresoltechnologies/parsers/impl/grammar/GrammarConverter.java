@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.parsers.impl.grammar.production.Construction;
 import com.puresoltechnologies.parsers.impl.grammar.production.NonTerminal;
 import com.puresoltechnologies.parsers.impl.grammar.production.Production;

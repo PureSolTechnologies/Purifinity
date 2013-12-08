@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.coding.lang.c11;
 
-import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.parsers.impl.ust.eval.Value;

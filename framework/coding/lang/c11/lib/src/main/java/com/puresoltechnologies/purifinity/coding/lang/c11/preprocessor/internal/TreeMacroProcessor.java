@@ -8,7 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.commons.trees.impl.TreeVisitor;
 import com.puresoltechnologies.commons.trees.impl.TreeWalker;
 import com.puresoltechnologies.commons.trees.impl.WalkingAction;

@@ -4,7 +4,7 @@ import java.awt.Dimension;
 
 import org.eclipse.swt.graphics.GC;
 
-import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.parsers.impl.grammar.Quantity;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 
