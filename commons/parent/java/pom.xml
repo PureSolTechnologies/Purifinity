@@ -1,0 +1,71 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.puresoltechnologies.commons</groupId>
+		<artifactId>parent</artifactId>
+		<version>0.1.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>parent.java</artifactId>
+	<name>${project.groupId}.${project.artifactId}</name>
+	<packaging>pom</packaging>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>maven-bundle-plugin</artifactId>
+					<version>2.3.7</version>
+					<extensions>true</extensions>
+					<configuration>
+						<manifestLocation>META-INF</manifestLocation>
+						<instructions>
+							<!-- The Bundle-SymbolicName is fixed in this way. Otherwise Tycho 
+								will not find the bundle. -->
+							<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+							<Bundle-Name>${project.groupId}.${project.artifactId}</Bundle-Name>
+							<Bundle-Version>${project.version}</Bundle-Version>
+							<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
+							<!-- assume public classes are in the top package, and private classes 
+								are under ".internal" -->
+							<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${project.version}"</Export-Package>
+							<Private-Package>${bundle.namespace}.internal.*</Private-Package>
+							<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
+							<!-- embed compile/runtime dependencies using path that matches the 
+								copied dependency folder -->
+							<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
+							<Embed-Directory>target/dependency</Embed-Directory>
+							<Embed-StripGroup>true</Embed-StripGroup>
+							<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
+						</instructions>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<inherited>false</inherited>
+					<executions>
+						<execution>
+							<id>CleanManifest</id>
+							<inherited>true</inherited>
+							<phase>clean</phase>
+							<goals>
+								<goal>clean</goal>
+							</goals>
+							<configuration>
+								<filesets>
+									<fileset>
+										<directory>META-INF</directory>
+									</fileset>
+								</filesets>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>
