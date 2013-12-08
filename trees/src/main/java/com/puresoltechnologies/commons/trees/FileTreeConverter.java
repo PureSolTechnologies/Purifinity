@@ -12,23 +12,23 @@ import java.util.List;
  */
 public class FileTreeConverter {
 
-    public static FileTree convertFileListToTree(String rootName,
-	    List<File> files) {
-	FileTree top = new FileTree(null, rootName);
-	for (File file : files) {
-	    String[] pathComponents = file.getPath().split(File.separator);
-	    FileTree current = top;
-	    for (String component : pathComponents) {
-		if (component.isEmpty()) {
-		    continue;
+	public static FileTree convertFileListToTree(String rootName,
+			List<File> files) {
+		FileTree top = new FileTree(null, rootName);
+		for (File file : files) {
+			String[] pathComponents = file.getPath().split(File.separator);
+			FileTree current = top;
+			for (String component : pathComponents) {
+				if (component.isEmpty()) {
+					continue;
+				}
+				FileTree child = current.getChild(component);
+				if (child == null) {
+					child = new FileTree(current, component);
+				}
+				current = child;
+			}
 		}
-		FileTree child = current.getChild(component);
-		if (child == null) {
-		    child = new FileTree(current, component);
-		}
-		current = child;
-	    }
+		return top;
 	}
-	return top;
-    }
 }
