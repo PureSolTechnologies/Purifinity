@@ -33,8 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.puresoltechnologies.commons.trees.FileTree;
-
 /**
  * This class was implemented for recursive file search.
  * 

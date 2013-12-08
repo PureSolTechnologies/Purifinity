@@ -11,9 +11,9 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.trees.TreeVisitor;
-import com.puresoltechnologies.commons.trees.TreeWalker;
-import com.puresoltechnologies.commons.trees.WalkingAction;
+import com.puresoltechnologies.commons.trees.impl.TreeVisitor;
+import com.puresoltechnologies.commons.trees.impl.TreeWalker;
+import com.puresoltechnologies.commons.trees.impl.WalkingAction;
 import com.puresoltechnologies.commons.utils.HashId;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.Axis;

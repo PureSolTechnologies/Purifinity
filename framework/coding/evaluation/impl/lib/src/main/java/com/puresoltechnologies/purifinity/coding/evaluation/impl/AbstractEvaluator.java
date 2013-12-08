@@ -15,10 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
-import com.puresoltechnologies.commons.trees.TreeUtils;
+import com.puresoltechnologies.commons.trees.impl.TreeUtils;
 import com.puresoltechnologies.commons.utils.StopWatch;
 import com.puresoltechnologies.commons.utils.progress.AbstractProgressObservable;
-import com.puresoltechnologies.parser.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
+import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryStore;

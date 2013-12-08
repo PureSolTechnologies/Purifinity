@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.parser.impl.lexer.Token;
-import com.puresoltechnologies.parser.impl.lexer.TokenStream;
-import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
+import com.puresoltechnologies.parsers.impl.lexer.Token;
+import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
+import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.grammar.FortranGrammar;
 
 public class FortranPreConditionerTest {

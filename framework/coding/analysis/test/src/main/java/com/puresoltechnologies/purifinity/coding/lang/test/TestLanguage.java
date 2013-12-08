@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import com.puresoltechnologies.parser.impl.source.CodeLocation;
+import com.puresoltechnologies.parsers.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerStore;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.lang.api.LanguageGrammar;

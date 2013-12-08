@@ -3,10 +3,10 @@ package com.puresoltechnologies.purifinity.coding.lang.fortran2008.metrics;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.commons.trees.TreeException;
-import com.puresoltechnologies.parser.impl.ust.AbstractProduction;
-import com.puresoltechnologies.parser.impl.ust.USTUtils;
-import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.parsers.impl.ust.AbstractProduction;
+import com.puresoltechnologies.parsers.impl.ust.USTUtils;
+import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.coding.metrics.mccabe.LanguageDependedMcCabeMetric;
 
 /**

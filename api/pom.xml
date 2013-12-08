@@ -12,7 +12,7 @@
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity</groupId>
-	<artifactId>parent</artifactId>
+	<artifactId>api-parent</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -29,7 +29,7 @@
 
 	<licenses>
 		<license>
-			<name>Apache License, Version 2.0</name>
+			<name>The Apache Software License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
 			<distribution>repo</distribution>
 		</license>
@@ -138,6 +138,21 @@
 		<dependencies>
 			<!-- Project internal -->
 			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>osgi</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>trees.api.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.parsers</groupId>
+				<artifactId>parsers.api.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
 				<artifactId>analysis.api.lib</artifactId>
 				<version>${project.version}</version>
@@ -150,11 +165,6 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
 				<artifactId>lang.api.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.parsers</groupId>
-				<artifactId>parsers.api.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
@@ -212,7 +222,7 @@
 							<!-- embed compile/runtime dependencies using path that matches the 
 								copied dependency folder -->
 							<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
-							<Embed-Directory>target/dependency</Embed-Directory>
+							<Embed-Directory>dependencies</Embed-Directory>
 							<Embed-StripGroup>true</Embed-StripGroup>
 							<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
 						</instructions>
@@ -270,6 +280,8 @@
 	</build>
 
 	<modules>
+		<module>osgi</module>
+		<module>trees.api</module>
 		<module>parser.api</module>
 		<module>lang.api</module>
 		<module>analysis.api</module>

@@ -6,7 +6,7 @@ import java.util.Set;
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
-import com.puresoltechnologies.parser.impl.source.CodeLocation;
+import com.puresoltechnologies.parsers.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.evaluation.api.CodeRangeNameParameter;
 import com.puresoltechnologies.purifinity.coding.evaluation.api.CodeRangeTypeParameter;

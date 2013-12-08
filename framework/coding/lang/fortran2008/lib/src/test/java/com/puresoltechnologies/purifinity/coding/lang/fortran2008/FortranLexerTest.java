@@ -8,12 +8,12 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.parser.impl.grammar.Grammar;
-import com.puresoltechnologies.parser.impl.lexer.Lexer;
-import com.puresoltechnologies.parser.impl.lexer.LexerException;
-import com.puresoltechnologies.parser.impl.lexer.RegExpLexer;
-import com.puresoltechnologies.parser.impl.lexer.TokenStream;
-import com.puresoltechnologies.parser.impl.source.FixedCodeLocation;
+import com.puresoltechnologies.parsers.impl.grammar.Grammar;
+import com.puresoltechnologies.parsers.impl.lexer.Lexer;
+import com.puresoltechnologies.parsers.impl.lexer.LexerException;
+import com.puresoltechnologies.parsers.impl.lexer.RegExpLexer;
+import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
+import com.puresoltechnologies.parsers.impl.source.FixedCodeLocation;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.grammar.FortranGrammar;
 
 public class FortranLexerTest {

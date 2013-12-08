@@ -24,12 +24,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>trees</artifactId>
+			<artifactId>trees.impl</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.parser</groupId>
-			<artifactId>parser.impl.lib</artifactId>
+			<groupId>com.puresoltechnologies.parsers</groupId>
+			<artifactId>parsers.impl.lib</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.parser.impl.source.UnspecifiedSourceCodeLocation;
+import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.cocomo.basic.SoftwareProject;
 

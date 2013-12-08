@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.trees.FileTree;
 import com.puresoltechnologies.commons.utils.FileSearch;
 import com.puresoltechnologies.commons.utils.FileSearchConfiguration;
 

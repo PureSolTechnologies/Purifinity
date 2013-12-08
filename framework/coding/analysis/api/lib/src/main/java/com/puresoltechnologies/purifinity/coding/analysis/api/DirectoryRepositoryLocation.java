@@ -6,8 +6,8 @@ import java.util.List;
 
 import com.puresoltechnologies.commons.utils.FileSearch;
 import com.puresoltechnologies.commons.utils.FileTree;
-import com.puresoltechnologies.parser.impl.source.CodeLocation;
-import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
+import com.puresoltechnologies.parsers.impl.source.CodeLocation;
+import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
 
 /**
  * 

@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.parser.impl.grammar.token.Visibility;
-import com.puresoltechnologies.parser.impl.lexer.Lexer;
-import com.puresoltechnologies.parser.impl.lexer.TokenStream;
-import com.puresoltechnologies.parser.impl.source.FixedCodeLocation;
+import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
+import com.puresoltechnologies.parsers.impl.lexer.Lexer;
+import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
+import com.puresoltechnologies.parsers.impl.source.FixedCodeLocation;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.JavaGrammar;
 
 public class CommentIT {

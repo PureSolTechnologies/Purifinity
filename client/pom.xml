@@ -100,13 +100,23 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>utils.bundle</artifactId>
+			<artifactId>trees.api.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>trees.bundle</artifactId>
+			<artifactId>trees.impl.bundle</artifactId>
 			<version>${commons.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>utils.bundle</artifactId>
+			<version>${commons.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.parsers</groupId>
+			<artifactId>parsers.api.bundle</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.parsers</groupId>

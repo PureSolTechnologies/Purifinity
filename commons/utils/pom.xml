@@ -28,7 +28,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>trees</artifactId>
+			<artifactId>trees.impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

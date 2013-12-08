@@ -3,10 +3,10 @@ package utils;
 import java.io.File;
 import java.io.IOException;
 
-import com.puresoltechnologies.parser.impl.grammar.Grammar;
-import com.puresoltechnologies.parser.impl.grammar.GrammarException;
-import com.puresoltechnologies.parser.impl.parser.ParserFactory;
-import com.puresoltechnologies.parser.impl.parser.ParserFactoryException;
+import com.puresoltechnologies.parsers.impl.grammar.Grammar;
+import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
+import com.puresoltechnologies.parsers.impl.parser.ParserFactory;
+import com.puresoltechnologies.parsers.impl.parser.ParserFactoryException;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.grammar.FortranGrammar;
 
 public class GrammarInspector {

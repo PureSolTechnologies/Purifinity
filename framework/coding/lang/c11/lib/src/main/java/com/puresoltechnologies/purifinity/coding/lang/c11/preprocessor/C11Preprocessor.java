@@ -3,14 +3,14 @@ package com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.puresoltechnologies.commons.trees.TreeException;
+import com.puresoltechnologies.commons.trees.impl.TreeException;
 import com.puresoltechnologies.commons.utils.io.LineTerminator;
-import com.puresoltechnologies.parser.impl.parser.ParserException;
-import com.puresoltechnologies.parser.impl.parser.ParserTree;
-import com.puresoltechnologies.parser.impl.preprocessor.Preprocessor;
-import com.puresoltechnologies.parser.impl.preprocessor.PreprocessorException;
-import com.puresoltechnologies.parser.impl.source.SourceCode;
-import com.puresoltechnologies.parser.impl.source.SourceCodeLine;
+import com.puresoltechnologies.parsers.impl.parser.ParserException;
+import com.puresoltechnologies.parsers.impl.parser.ParserTree;
+import com.puresoltechnologies.parsers.impl.preprocessor.Preprocessor;
+import com.puresoltechnologies.parsers.impl.preprocessor.PreprocessorException;
+import com.puresoltechnologies.parsers.impl.source.SourceCode;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeLine;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.C11PreprocessorParser;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.TreeMacroProcessor;
 

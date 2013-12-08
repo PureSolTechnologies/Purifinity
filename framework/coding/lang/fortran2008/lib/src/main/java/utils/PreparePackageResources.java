@@ -8,15 +8,15 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.utils.packages.PackageBuilderUtils;
 import com.puresoltechnologies.commons.utils.packages.PackageDirectory;
-import com.puresoltechnologies.parser.impl.grammar.Grammar;
-import com.puresoltechnologies.parser.impl.grammar.GrammarException;
-import com.puresoltechnologies.parser.impl.grammar.GrammarReader;
-import com.puresoltechnologies.parser.impl.lexer.Lexer;
-import com.puresoltechnologies.parser.impl.lexer.LexerFactory;
-import com.puresoltechnologies.parser.impl.lexer.LexerFactoryException;
-import com.puresoltechnologies.parser.impl.parser.Parser;
-import com.puresoltechnologies.parser.impl.parser.ParserFactory;
-import com.puresoltechnologies.parser.impl.parser.ParserFactoryException;
+import com.puresoltechnologies.parsers.impl.grammar.Grammar;
+import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
+import com.puresoltechnologies.parsers.impl.grammar.GrammarReader;
+import com.puresoltechnologies.parsers.impl.lexer.Lexer;
+import com.puresoltechnologies.parsers.impl.lexer.LexerFactory;
+import com.puresoltechnologies.parsers.impl.lexer.LexerFactoryException;
+import com.puresoltechnologies.parsers.impl.parser.Parser;
+import com.puresoltechnologies.parsers.impl.parser.ParserFactory;
+import com.puresoltechnologies.parsers.impl.parser.ParserFactoryException;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.grammar.FortranGrammar;
 
 public class PreparePackageResources {

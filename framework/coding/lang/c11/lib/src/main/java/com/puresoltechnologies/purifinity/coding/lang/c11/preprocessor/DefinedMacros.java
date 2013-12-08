@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.puresoltechnologies.parser.impl.lexer.TokenStream;
+import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.Macro;
 
 /**

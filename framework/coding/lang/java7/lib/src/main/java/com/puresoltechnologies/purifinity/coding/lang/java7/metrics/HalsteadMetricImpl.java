@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.coding.lang.java7.metrics;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.parser.impl.ust.terminal.AbstractTerminal;
+import com.puresoltechnologies.parsers.impl.ust.terminal.AbstractTerminal;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadSymbol;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.LanguageDependedHalsteadMetric;
 

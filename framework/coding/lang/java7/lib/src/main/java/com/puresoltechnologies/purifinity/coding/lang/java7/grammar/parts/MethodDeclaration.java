@@ -2,10 +2,10 @@ package com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts;
 
 import java.util.List;
 
-import com.puresoltechnologies.commons.trees.Tree;
-import com.puresoltechnologies.commons.trees.TreeException;
-import com.puresoltechnologies.parser.impl.ust.USTUtils;
-import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.commons.trees.impl.Tree;
+import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.parsers.impl.ust.USTUtils;
+import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
 

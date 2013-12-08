@@ -15,9 +15,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.trees.TreeIterator;
-import com.puresoltechnologies.parser.impl.ust.AbstractProduction;
-import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.commons.trees.impl.TreeIterator;
+import com.puresoltechnologies.parsers.impl.ust.AbstractProduction;
+import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;

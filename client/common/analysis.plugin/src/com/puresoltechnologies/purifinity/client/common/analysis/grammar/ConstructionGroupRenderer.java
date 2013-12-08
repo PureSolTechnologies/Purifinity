@@ -4,9 +4,9 @@ import java.awt.Dimension;
 
 import org.eclipse.swt.graphics.GC;
 
-import com.puresoltechnologies.commons.trees.TreeException;
-import com.puresoltechnologies.parser.impl.grammar.Quantity;
-import com.puresoltechnologies.parser.impl.parser.ParserTree;
+import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.parsers.impl.grammar.Quantity;
+import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 
 public class ConstructionGroupRenderer extends AbstractRenderer {
 

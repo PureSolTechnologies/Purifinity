@@ -14,6 +14,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>osgi</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>lang.api.lib</artifactId>
 		</dependency>
@@ -34,7 +38,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresoltechnologies.purifinity.api.lang</bundle.namespace>
+		<bundle.namespace>com.puresoltechnologies.purifinity.lang.api</bundle.namespace>
 	</properties>
 
 	<build>

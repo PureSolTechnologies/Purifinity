@@ -3,11 +3,11 @@ package com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.parser.impl.grammar.token.Visibility;
-import com.puresoltechnologies.parser.impl.lexer.Token;
-import com.puresoltechnologies.parser.impl.lexer.TokenMetaData;
-import com.puresoltechnologies.parser.impl.lexer.TokenStream;
-import com.puresoltechnologies.parser.impl.source.UnspecifiedSourceCodeLocation;
+import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
+import com.puresoltechnologies.parsers.impl.lexer.Token;
+import com.puresoltechnologies.parsers.impl.lexer.TokenMetaData;
+import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
+import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 
 /**
  * This class provides the information for a single defined preprocessor macro,

@@ -5,13 +5,13 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.trees.SearchVisitor;
-import com.puresoltechnologies.commons.trees.TreeSearchCriterion;
-import com.puresoltechnologies.commons.trees.TreeWalker;
-import com.puresoltechnologies.parser.impl.grammar.Grammar;
-import com.puresoltechnologies.parser.impl.parser.ParserTree;
-import com.puresoltechnologies.parser.impl.parser.packrat.PackratParser;
-import com.puresoltechnologies.parser.impl.source.SourceCode;
+import com.puresoltechnologies.commons.trees.impl.SearchVisitor;
+import com.puresoltechnologies.commons.trees.impl.TreeSearchCriterion;
+import com.puresoltechnologies.commons.trees.impl.TreeWalker;
+import com.puresoltechnologies.parsers.impl.grammar.Grammar;
+import com.puresoltechnologies.parsers.impl.parser.ParserTree;
+import com.puresoltechnologies.parsers.impl.parser.packrat.PackratParser;
+import com.puresoltechnologies.parsers.impl.source.SourceCode;
 import com.puresoltechnologies.purifinity.coding.lang.c11.grammar.C11Grammar;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.C11PreprocessorParser;
 

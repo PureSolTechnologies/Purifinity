@@ -1,10 +1,10 @@
 package com.puresoltechnologies.purifinity.coding.lang.c11;
 
-import com.puresoltechnologies.commons.trees.TreeException;
-import com.puresoltechnologies.parser.impl.parser.ParserTree;
-import com.puresoltechnologies.parser.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
-import com.puresoltechnologies.parser.impl.ust.eval.Value;
-import com.puresoltechnologies.parser.impl.ust.eval.ValueTypeException;
+import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.parsers.impl.parser.ParserTree;
+import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
+import com.puresoltechnologies.parsers.impl.ust.eval.Value;
+import com.puresoltechnologies.parsers.impl.ust.eval.ValueTypeException;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.DefinedMacros;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.Macro;
 

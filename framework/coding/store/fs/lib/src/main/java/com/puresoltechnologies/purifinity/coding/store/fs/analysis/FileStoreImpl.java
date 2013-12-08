@@ -17,8 +17,8 @@ import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import com.puresoltechnologies.commons.utils.HashId;
 import com.puresoltechnologies.commons.utils.StringUtils;
-import com.puresoltechnologies.parser.impl.source.SourceCode;
-import com.puresoltechnologies.parser.impl.source.UnspecifiedSourceCodeLocation;
+import com.puresoltechnologies.parsers.impl.source.SourceCode;
+import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.coding.analysis.api.FileStore;
 import com.puresoltechnologies.purifinity.coding.analysis.api.FileStoreException;

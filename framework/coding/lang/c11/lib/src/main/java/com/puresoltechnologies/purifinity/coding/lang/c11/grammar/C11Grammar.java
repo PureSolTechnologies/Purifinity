@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 
-import com.puresoltechnologies.parser.impl.grammar.Grammar;
-import com.puresoltechnologies.parser.impl.grammar.GrammarException;
-import com.puresoltechnologies.parser.impl.grammar.GrammarManager;
-import com.puresoltechnologies.parser.impl.grammar.GrammarReader;
-import com.puresoltechnologies.parser.impl.lexer.Lexer;
-import com.puresoltechnologies.parser.impl.parser.Parser;
+import com.puresoltechnologies.parsers.impl.grammar.Grammar;
+import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
+import com.puresoltechnologies.parsers.impl.grammar.GrammarManager;
+import com.puresoltechnologies.parsers.impl.grammar.GrammarReader;
+import com.puresoltechnologies.parsers.impl.lexer.Lexer;
+import com.puresoltechnologies.parsers.impl.parser.Parser;
 import com.puresoltechnologies.purifinity.coding.lang.commons.AbstractLanguageGrammar;
 
 public class C11Grammar extends AbstractLanguageGrammar {

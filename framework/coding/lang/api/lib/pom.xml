@@ -12,8 +12,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.parser</groupId>
-			<artifactId>parser.impl.lib</artifactId>
+			<groupId>com.puresoltechnologies.parsers</groupId>
+			<artifactId>parsers.impl.lib</artifactId>
 		</dependency>
 	</dependencies>
 

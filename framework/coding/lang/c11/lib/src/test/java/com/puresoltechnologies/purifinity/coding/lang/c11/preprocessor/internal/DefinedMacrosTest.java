@@ -5,11 +5,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.parser.impl.grammar.token.Visibility;
-import com.puresoltechnologies.parser.impl.lexer.Token;
-import com.puresoltechnologies.parser.impl.lexer.TokenMetaData;
-import com.puresoltechnologies.parser.impl.lexer.TokenStream;
-import com.puresoltechnologies.parser.impl.source.FixedCodeLocation;
+import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
+import com.puresoltechnologies.parsers.impl.lexer.Token;
+import com.puresoltechnologies.parsers.impl.lexer.TokenMetaData;
+import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
+import com.puresoltechnologies.parsers.impl.source.FixedCodeLocation;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.DefinedMacros;
 
 public class DefinedMacrosTest {

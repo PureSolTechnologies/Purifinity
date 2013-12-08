@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.coding.lang.java7.metrics;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.parser.impl.ust.AbstractProduction;
+import com.puresoltechnologies.parsers.impl.ust.AbstractProduction;
 import com.puresoltechnologies.purifinity.coding.metrics.mccabe.LanguageDependedMcCabeMetric;
 
 /**

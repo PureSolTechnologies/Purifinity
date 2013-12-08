@@ -18,12 +18,12 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.trees.TreePrinter;
+import com.puresoltechnologies.commons.trees.impl.TreePrinter;
 import com.puresoltechnologies.commons.utils.ConsoleUtils;
 import com.puresoltechnologies.commons.utils.FileSearch;
 import com.puresoltechnologies.commons.utils.StopWatch;
-import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
-import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
+import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.Fortran;

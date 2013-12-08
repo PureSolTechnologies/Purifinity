@@ -10,7 +10,7 @@
 	</properties>
 
 	<groupId>com.puresoltechnologies.commons</groupId>
-	<artifactId>commons</artifactId>
+	<artifactId>commons-parent</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -104,17 +104,6 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	<modules>
-		<module>parent</module>
-		<module>dependency</module>
-		<module>osgi</module>
-		<module>trees</module>
-		<module>utils</module>
-		<module>math</module>
-		<module>configuration</module>
-		<module>license</module>
-	</modules>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -194,5 +183,15 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	<modules>
+		<module>parent</module>
+		<module>dependency</module>
+		<module>trees.impl</module>
+		<module>utils</module>
+		<module>math</module>
+		<module>configuration</module>
+		<module>license</module>
+	</modules>
 
 </project>

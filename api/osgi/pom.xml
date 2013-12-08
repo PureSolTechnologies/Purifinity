@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.puresoltechnologies.purifinity</groupId>
+		<artifactId>api-parent</artifactId>
+		<version>0.1.1-SNAPSHOT</version>
+	</parent>
+
+	<properties>
+		<osgi.version>4.3.1</osgi.version>
+	</properties>
+
+	<groupId>com.puresoltechnologies.commons</groupId>
+	<artifactId>osgi</artifactId>
+	<name>${project.groupId}.${project.artifactId}</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<version>${osgi.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>

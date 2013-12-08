@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import com.puresoltechnologies.parser.impl.grammar.GrammarException;
+import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.ProgrammingLanguageViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.GrammarCanvas;

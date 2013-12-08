@@ -4,8 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.parser.impl.grammar.Grammar;
-import com.puresoltechnologies.parser.impl.parser.packrat.PackratParser;
+import com.puresoltechnologies.parsers.impl.grammar.Grammar;
+import com.puresoltechnologies.parsers.impl.parser.packrat.PackratParser;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.JavaGrammar;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.JavaGrammarPartTester;
 

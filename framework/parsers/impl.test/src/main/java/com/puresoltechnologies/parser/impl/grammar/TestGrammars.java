@@ -8,17 +8,17 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.parser.impl.grammar.Grammar;
-import com.puresoltechnologies.parser.impl.grammar.GrammarException;
-import com.puresoltechnologies.parser.impl.grammar.production.NonTerminal;
-import com.puresoltechnologies.parser.impl.grammar.production.Production;
-import com.puresoltechnologies.parser.impl.grammar.production.ProductionSet;
-import com.puresoltechnologies.parser.impl.grammar.production.Terminal;
-import com.puresoltechnologies.parser.impl.grammar.token.TokenDefinition;
-import com.puresoltechnologies.parser.impl.grammar.token.TokenDefinitionSet;
-import com.puresoltechnologies.parser.impl.grammar.token.Visibility;
-import com.puresoltechnologies.parser.impl.lexer.RegExpLexer;
-import com.puresoltechnologies.parser.impl.parser.lr.SLR1Parser;
+import com.puresoltechnologies.parsers.impl.grammar.Grammar;
+import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
+import com.puresoltechnologies.parsers.impl.grammar.production.NonTerminal;
+import com.puresoltechnologies.parsers.impl.grammar.production.Production;
+import com.puresoltechnologies.parsers.impl.grammar.production.ProductionSet;
+import com.puresoltechnologies.parsers.impl.grammar.production.Terminal;
+import com.puresoltechnologies.parsers.impl.grammar.token.TokenDefinition;
+import com.puresoltechnologies.parsers.impl.grammar.token.TokenDefinitionSet;
+import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
+import com.puresoltechnologies.parsers.impl.lexer.RegExpLexer;
+import com.puresoltechnologies.parsers.impl.parser.lr.SLR1Parser;
 
 /**
  * This class contains several grammars from DragonBook or the LR1 Pamphlet.

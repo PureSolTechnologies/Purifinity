@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.puresoltechnologies.parser.impl.ust.terminal.Operand;
+import com.puresoltechnologies.parsers.impl.ust.terminal.Operand;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;

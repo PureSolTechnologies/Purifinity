@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import com.puresoltechnologies.parser.impl.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
 
 /**
  * This is a interface to a single analysis. It's used to implement a language

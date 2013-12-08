@@ -13,7 +13,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>trees</artifactId>
+			<artifactId>trees.impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>utils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
@@ -24,8 +28,8 @@
 			<artifactId>coding.lang.commons.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.parser</groupId>
-			<artifactId>parser.impl.lib</artifactId>
+			<groupId>com.puresoltechnologies.parsers</groupId>
+			<artifactId>parsers.impl.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>

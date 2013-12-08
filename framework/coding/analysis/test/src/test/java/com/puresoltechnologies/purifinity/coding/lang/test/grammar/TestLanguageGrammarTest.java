@@ -9,9 +9,9 @@ import java.io.InputStream;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.parser.impl.grammar.Grammar;
-import com.puresoltechnologies.parser.impl.grammar.GrammarException;
-import com.puresoltechnologies.parser.impl.grammar.GrammarReader;
+import com.puresoltechnologies.parsers.impl.grammar.Grammar;
+import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
+import com.puresoltechnologies.parsers.impl.grammar.GrammarReader;
 
 public class TestLanguageGrammarTest {
 

@@ -3,12 +3,12 @@ package com.puresoltechnologies.purifinity.coding.lang.commons;
 import java.io.IOException;
 import java.util.Properties;
 
-import com.puresoltechnologies.parser.impl.grammar.Grammar;
-import com.puresoltechnologies.parser.impl.grammar.GrammarException;
-import com.puresoltechnologies.parser.impl.grammar.production.ProductionSet;
-import com.puresoltechnologies.parser.impl.grammar.token.TokenDefinitionSet;
-import com.puresoltechnologies.parser.impl.lexer.Lexer;
-import com.puresoltechnologies.parser.impl.parser.Parser;
+import com.puresoltechnologies.parsers.impl.grammar.Grammar;
+import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
+import com.puresoltechnologies.parsers.impl.grammar.production.ProductionSet;
+import com.puresoltechnologies.parsers.impl.grammar.token.TokenDefinitionSet;
+import com.puresoltechnologies.parsers.impl.lexer.Lexer;
+import com.puresoltechnologies.parsers.impl.parser.Parser;
 import com.puresoltechnologies.purifinity.coding.lang.api.LanguageGrammar;
 
 /**

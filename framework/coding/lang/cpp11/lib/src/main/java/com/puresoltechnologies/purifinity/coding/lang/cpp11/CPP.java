@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
-import com.puresoltechnologies.parser.impl.source.CodeLocation;
+import com.puresoltechnologies.parsers.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AbstractProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.lang.api.LanguageGrammar;

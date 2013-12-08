@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.coding.metrics.halstead;
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.parser.impl.ust.terminal.AbstractTerminal;
+import com.puresoltechnologies.parsers.impl.ust.terminal.AbstractTerminal;
 
 /**
  * This interface is used to implement a part of the Halstead metric

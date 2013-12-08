@@ -11,7 +11,7 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
+import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
 
 /**
  * This test checks the JavaAnalyser.

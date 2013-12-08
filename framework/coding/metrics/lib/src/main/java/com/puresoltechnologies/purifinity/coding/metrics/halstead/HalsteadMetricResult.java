@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.puresoltechnologies.parser.impl.source.CodeLocation;
+import com.puresoltechnologies.parsers.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
 

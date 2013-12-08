@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.coding.lang.commons;
 
-import com.puresoltechnologies.parser.impl.source.CodeLocation;
+import com.puresoltechnologies.parsers.impl.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.license.api.LicensedObject;
 

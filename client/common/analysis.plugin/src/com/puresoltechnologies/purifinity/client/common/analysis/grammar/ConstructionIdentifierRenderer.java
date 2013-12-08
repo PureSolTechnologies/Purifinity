@@ -7,9 +7,9 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 
-import com.puresoltechnologies.commons.trees.TreeException;
-import com.puresoltechnologies.parser.impl.grammar.Quantity;
-import com.puresoltechnologies.parser.impl.parser.ParserTree;
+import com.puresoltechnologies.commons.trees.impl.TreeException;
+import com.puresoltechnologies.parsers.impl.grammar.Quantity;
+import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 
 public class ConstructionIdentifierRenderer extends AbstractRenderer {
 

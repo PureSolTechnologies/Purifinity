@@ -48,7 +48,7 @@
 				<artifactId>maven-bundle-plugin</artifactId>
 				<configuration>
 					<instructions>
-						<Import-Package>*,com.puresoltechnologies.parser.impl.parser,com.puresoltechnologies.parser.impl.lexer,com.puresoltechnologies.parser.impl.grammar.token,com.puresoltechnologies.parser.impl.ust,com.puresoltechnologies.parser.impl.ust.terminal,com.puresoltechnologies.commons.math,com.puresoltechnologies.commons.math.statistics,com.puresoltechnologies.purifinity.coding.evaluation.impl</Import-Package>
+						<Import-Package>*,com.puresoltechnologies.parsers.impl.parser,com.puresoltechnologies.parsers.impl.lexer,com.puresoltechnologies.parsers.impl.grammar.token,com.puresoltechnologies.parsers.impl.ust,com.puresoltechnologies.parsers.impl.ust.terminal,com.puresoltechnologies.commons.math,com.puresoltechnologies.commons.math.statistics,com.puresoltechnologies.purifinity.coding.evaluation.impl</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

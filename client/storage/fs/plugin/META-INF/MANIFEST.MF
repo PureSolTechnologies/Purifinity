@@ -11,7 +11,7 @@ Require-Bundle: com.puresoltechnologies.commons.utils.bundle;bundle-version="0.1
  org.eclipse.core.runtime;bundle-version="3.8.0",
  org.eclipse.ui;bundle-version="3.103.0",
  org.slf4j.api;bundle-version="1.6.4",
- com.puresoltechnologies.parser.impl.bundle;bundle-version="0.1.1"
+ com.puresoltechnologies.parsers.impl.bundle;bundle-version="0.1.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: PureSol Technologies
 Bundle-ClassPath: .

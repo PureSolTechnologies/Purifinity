@@ -246,7 +246,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>trees</artifactId>
+				<artifactId>trees.impl</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
@@ -302,7 +302,7 @@
 							<!-- embed compile/runtime dependencies using path that matches the 
 								copied dependency folder -->
 							<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
-							<Embed-Directory>target/dependency</Embed-Directory>
+							<Embed-Directory>dependencies</Embed-Directory>
 							<Embed-StripGroup>true</Embed-StripGroup>
 							<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
 						</instructions>
