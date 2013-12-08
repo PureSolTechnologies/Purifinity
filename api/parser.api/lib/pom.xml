@@ -2,12 +2,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresoltechnologies.parser</groupId>
-		<artifactId>parser.api</artifactId>
+		<groupId>com.puresoltechnologies.parsers</groupId>
+		<artifactId>parsers.api</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>parser.api.lib</artifactId>
+	<artifactId>parsers.api.lib</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 
 	<dependencies>

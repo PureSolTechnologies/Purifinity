@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.puresoltechnologies.commons.trees.FileTree;
+import com.puresoltechnologies.commons.utils.FileTree;
 import com.puresoltechnologies.commons.utils.progress.ProgressObservable;
 
 /**

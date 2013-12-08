@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresoltechnologies.parser</groupId>
-		<artifactId>parser</artifactId>
+		<groupId>com.puresoltechnologies.parsers</groupId>
+		<artifactId>parsers</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>parser.impl.test</artifactId>
+	<artifactId>parsers.impl.test</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 
 	<dependencies>

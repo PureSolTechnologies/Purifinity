@@ -1,4 +1,4 @@
-package com.puresoltechnologies.parser.impl;
+package com.puresoltechnologies.parsers.impl;
 
 import org.osgi.framework.BundleContext;
 

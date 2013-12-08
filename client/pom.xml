@@ -109,8 +109,8 @@
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.parser</groupId>
-			<artifactId>parser.impl.bundle</artifactId>
+			<groupId>com.puresoltechnologies.parsers</groupId>
+			<artifactId>parsers.impl.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

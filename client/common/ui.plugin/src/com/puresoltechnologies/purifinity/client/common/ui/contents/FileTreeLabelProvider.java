@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.client.common.ui.contents;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import com.puresoltechnologies.commons.trees.FileTree;
+import com.puresoltechnologies.commons.utils.FileTree;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 
 public class FileTreeLabelProvider extends LabelProvider {

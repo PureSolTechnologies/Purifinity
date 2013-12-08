@@ -2,12 +2,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresoltechnologies.parser</groupId>
-		<artifactId>parser</artifactId>
+		<groupId>com.puresoltechnologies.parsers</groupId>
+		<artifactId>parsers</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>parser.impl.bundle</artifactId>
+	<artifactId>parsers.impl.bundle</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
@@ -33,7 +33,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresoltechnologies.parser.impl</bundle.namespace>
+		<bundle.namespace>com.puresoltechnologies.parsers.impl</bundle.namespace>
 	</properties>
 
 	<build>

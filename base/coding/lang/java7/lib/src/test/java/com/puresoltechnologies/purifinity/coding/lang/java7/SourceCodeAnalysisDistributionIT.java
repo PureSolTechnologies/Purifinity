@@ -11,9 +11,9 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.trees.FileTree;
 import com.puresoltechnologies.commons.utils.FileSearch;
 import com.puresoltechnologies.commons.utils.FileSearchConfiguration;
+import com.puresoltechnologies.commons.utils.FileTree;
 import com.puresoltechnologies.parser.impl.grammar.Grammar;
 import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerException;

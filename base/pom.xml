@@ -208,13 +208,13 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.parser</groupId>
-				<artifactId>parser.impl.lib</artifactId>
+				<groupId>com.puresoltechnologies.parsers</groupId>
+				<artifactId>parsers.impl.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.parser</groupId>
-				<artifactId>parser.impl.test</artifactId>
+				<groupId>com.puresoltechnologies.parsers</groupId>
+				<artifactId>parsers.impl.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
 			</dependency>
@@ -396,7 +396,7 @@
 		<module>bundles</module>
 		<module>commons</module>
 		<module>license</module>
-		<module>parser</module>
+		<module>parsers</module>
 		<module>coding</module>
 	</modules>
 

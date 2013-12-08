@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.commons.trees.FileTree;
 import com.puresoltechnologies.commons.utils.FileSearch;
+import com.puresoltechnologies.commons.utils.FileTree;
 import com.puresoltechnologies.parser.impl.source.CodeLocation;
 import com.puresoltechnologies.parser.impl.source.SourceFileLocation;
 

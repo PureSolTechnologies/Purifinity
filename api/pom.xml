@@ -153,8 +153,8 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.parser</groupId>
-				<artifactId>api.lib</artifactId>
+				<groupId>com.puresoltechnologies.parsers</groupId>
+				<artifactId>parsers.api.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
