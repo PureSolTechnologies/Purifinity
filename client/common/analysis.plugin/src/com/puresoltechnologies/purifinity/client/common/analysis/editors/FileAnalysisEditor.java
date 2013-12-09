@@ -16,15 +16,15 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
-import com.puresoltechnologies.commons.utils.HashId;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
+import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.purifinity.analysis.api.FileStore;
+import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;
+import com.puresoltechnologies.purifinity.analysis.api.FileStoreFactory;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ParserTreeControl;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ScrollableFileViewer;
 import com.puresoltechnologies.purifinity.client.common.ui.editors.AbstractPureSolTechnologiesEditor;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStoreFactory;
 
 public class FileAnalysisEditor extends AbstractPureSolTechnologiesEditor {
 

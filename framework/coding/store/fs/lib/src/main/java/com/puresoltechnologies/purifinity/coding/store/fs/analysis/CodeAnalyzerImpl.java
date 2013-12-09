@@ -6,14 +6,14 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.utils.HashId;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzer;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzerFactory;
-import com.puresoltechnologies.purifinity.coding.analysis.api.LanguageNotSupportedException;
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
+import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
+import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.api.LanguageNotSupportedException;
+import com.puresoltechnologies.purifinity.coding.analysis.impl.CodeAnalyzerFactory;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 public class CodeAnalyzerImpl implements CodeAnalyzer {
 

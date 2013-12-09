@@ -7,16 +7,16 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.Wizard;
 
-import com.puresoltechnologies.commons.utils.FileSearchConfiguration;
+import com.puresoltechnologies.commons.FileSearchConfiguration;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreFactory;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
 import com.puresoltechnologies.purifinity.client.common.analysis.utils.PreferencesUtils;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStoreFactory;
-import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryRepositoryLocation;
+import com.puresoltechnologies.purifinity.coding.analysis.impl.DirectoryRepositoryLocation;
 
 public class NewAnalysisWizard extends Wizard {
 

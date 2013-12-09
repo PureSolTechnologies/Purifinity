@@ -22,8 +22,8 @@ import com.puresoltechnologies.purifinity.client.common.evaluation.contents.Metr
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.ParameterComboViewer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.CorrelationChartView;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.AbstractPartSettingsDialog;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.Evaluators;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.Evaluators;
 
 public class CorrelationChartViewSettingsDialog extends
 		AbstractPartSettingsDialog implements SelectionListener {

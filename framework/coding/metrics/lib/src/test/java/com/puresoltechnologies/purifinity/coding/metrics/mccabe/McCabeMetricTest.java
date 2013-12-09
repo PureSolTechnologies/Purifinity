@@ -6,9 +6,9 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.puresoltechnologies.parsers.impl.ust.terminal.Operand;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.lang.test.TestLanguage;
 import com.puresoltechnologies.purifinity.coding.metrics.mccabe.McCabeMetric;
 

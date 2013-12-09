@@ -1,7 +1,7 @@
 package com.puresoltechnologies.parsers.impl.ust.expressions;
 
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.impl.ust.AbstractProduction;
-import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
 
 public abstract class AbstractExpression extends AbstractProduction implements Expression {
 

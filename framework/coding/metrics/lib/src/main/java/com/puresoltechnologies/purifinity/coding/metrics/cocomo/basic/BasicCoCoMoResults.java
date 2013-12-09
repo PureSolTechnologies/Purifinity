@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresoltechnologies.commons.math.Money;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.MetricValue;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluatorResult;
+import com.puresoltechnologies.purifinity.evaluation.api.MetricValue;
 
 public abstract class BasicCoCoMoResults extends AbstractEvaluatorResult {
 

@@ -17,19 +17,19 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 
+import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.CodeRangeComboViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractEvaluationView;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetricDirectoryResults;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetricFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetricResult;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadResult;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
 
 public class HalsteadMetricView extends AbstractEvaluationView implements
 		ISelectionChangedListener {

@@ -14,20 +14,20 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
-import com.puresoltechnologies.commons.utils.HashId;
+import com.puresoltechnologies.commons.ConfigurationParameter;
+import com.puresoltechnologies.commons.HashId;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCResult;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 
 /**
  * This class calculates the CoCoMo for a set number of sloc and a given average

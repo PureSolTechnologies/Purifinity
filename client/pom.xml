@@ -80,17 +80,22 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>commons.bundle</artifactId>
+			<version>${commons.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>configuration.bundle</artifactId>
+			<version>${commons.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>license.client.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>license.domain.bundle</artifactId>
-			<version>${commons.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>configuration.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>
@@ -125,17 +130,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.analysis.api.bundle</artifactId>
+			<artifactId>analysis.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.analysis.impl.bundle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.evaluation.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -146,21 +146,6 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.evaluation.impl.bundle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.evaluation.iso9126.bundle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.lang.api.bundle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.lang.commons.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -191,6 +176,16 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.store.fs.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
+			<artifactId>evaluation.api.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
+			<artifactId>lang.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -309,5 +304,5 @@
 			</plugin>
 		</plugins>
 	</build>
-<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.1-SNAPSHOT</version>
 </project>

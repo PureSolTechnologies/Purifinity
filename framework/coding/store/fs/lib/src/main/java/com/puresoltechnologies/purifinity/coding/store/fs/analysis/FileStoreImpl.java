@@ -15,13 +15,14 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
-import com.puresoltechnologies.commons.utils.HashId;
+import com.puresoltechnologies.commons.HashId;
 import com.puresoltechnologies.commons.utils.StringUtils;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStoreException;
+import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.api.FileStore;
+import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;
 
 public final class FileStoreImpl implements FileStore {
 
@@ -148,7 +149,7 @@ public final class FileStoreImpl implements FileStore {
 		try {
 			InputStream inputStream = readRawFile(hashId);
 			try {
-				return SourceCode.read(inputStream,
+				return SourceCodeImpl.read(inputStream,
 						new UnspecifiedSourceCodeLocation());
 			} finally {
 				inputStream.close();

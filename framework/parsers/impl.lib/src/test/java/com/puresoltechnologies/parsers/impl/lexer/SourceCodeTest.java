@@ -10,15 +10,16 @@ import org.junit.Test;
 
 import com.puresoltechnologies.commons.utils.FileUtilities;
 import com.puresoltechnologies.commons.utils.PathUtils;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
-import com.puresoltechnologies.parsers.impl.source.SourceCodeLine;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
 
 public class SourceCodeTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new SourceCode());
+		assertNotNull(new SourceCodeImpl());
 	}
 
 	@Test

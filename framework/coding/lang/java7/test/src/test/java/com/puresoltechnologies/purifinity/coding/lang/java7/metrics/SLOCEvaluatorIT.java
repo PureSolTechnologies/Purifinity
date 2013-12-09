@@ -10,20 +10,20 @@ import java.util.List;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.math.statistics.Statistics;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzedCode;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.coding.analysis.test.TestFileSearchConfiguration;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.coding.metrics.AbstractMetricTest;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCResult;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 
 public class SLOCEvaluatorIT extends AbstractMetricTest {
 

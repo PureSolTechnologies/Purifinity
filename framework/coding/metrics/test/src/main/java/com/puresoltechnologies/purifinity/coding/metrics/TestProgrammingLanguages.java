@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
-import com.puresoltechnologies.purifinity.coding.analysis.api.ProgrammingLanguages;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.coding.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.coding.lang.java7.Java;
 
 public class TestProgrammingLanguages extends ProgrammingLanguages {

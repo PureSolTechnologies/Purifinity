@@ -1,6 +1,6 @@
 package com.puresoltechnologies.parsers.impl.grammar.production;
 
-import com.puresoltechnologies.commons.utils.ObjectUtilities;
+import com.puresoltechnologies.commons.ObjectUtilities;
 
 /**
  * THIS CLASS IS NOT THREAD SAFE!!!

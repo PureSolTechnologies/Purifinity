@@ -7,8 +7,8 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.MetricDirectoryResults;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 
 public class McCabeMetricDirectoryResults extends AbstractMcCabeMetricResults
 		implements MetricDirectoryResults {

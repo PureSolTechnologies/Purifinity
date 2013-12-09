@@ -12,11 +12,11 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import com.puresoltechnologies.commons.utils.progress.ProgressObserver;
+import com.puresoltechnologies.commons.ProgressObserver;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStoreException;
 
 public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
 

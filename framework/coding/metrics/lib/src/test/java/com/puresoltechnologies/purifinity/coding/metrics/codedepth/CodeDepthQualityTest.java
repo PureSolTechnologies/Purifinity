@@ -4,9 +4,9 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.metrics.codedepth.CodeDepthQuality;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 
 public class CodeDepthQualityTest {
 

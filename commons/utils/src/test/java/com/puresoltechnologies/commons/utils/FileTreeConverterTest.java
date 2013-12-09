@@ -9,29 +9,27 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.trees.impl.TreePrinter;
-import com.puresoltechnologies.commons.utils.FileTree;
-import com.puresoltechnologies.commons.utils.FileTreeConverter;
+import com.puresoltechnologies.commons.trees.api.TreePrinter;
 
 public class FileTreeConverterTest {
 
-    @Test
-    public void testConvertFileListToTree() {
-	List<File> files = new ArrayList<File>();
-	files.add(new File("/test1/test11/File1.txt"));
-	files.add(new File("/test1/test12/File2.txt"));
-	files.add(new File("/test1/test13/File3.txt"));
-	files.add(new File("/test2/test21/File4.txt"));
-	files.add(new File("/test3/test31/File5.txt"));
-	assertEquals(5, files.size());
-	FileTree tree = FileTreeConverter.convertFileListToTree("/", files);
+	@Test
+	public void testConvertFileListToTree() {
+		List<File> files = new ArrayList<File>();
+		files.add(new File("/test1/test11/File1.txt"));
+		files.add(new File("/test1/test12/File2.txt"));
+		files.add(new File("/test1/test13/File3.txt"));
+		files.add(new File("/test2/test21/File4.txt"));
+		files.add(new File("/test3/test31/File5.txt"));
+		assertEquals(5, files.size());
+		FileTree tree = FileTreeConverter.convertFileListToTree("/", files);
 
-	TreePrinter printer = new TreePrinter(System.out);
-	printer.println(tree);
+		TreePrinter printer = new TreePrinter(System.out);
+		printer.println(tree);
 
-	assertTrue(tree.hasChildren());
-	assertEquals(3, tree.getChildren().size());
-	assertEquals("File2.txt", tree.getChild("test1").getChild("test12")
-		.getChildren().get(0).getName());
-    }
+		assertTrue(tree.hasChildren());
+		assertEquals(3, tree.getChildren().size());
+		assertEquals("File2.txt", tree.getChild("test1").getChild("test12")
+				.getChildren().get(0).getName());
+	}
 }

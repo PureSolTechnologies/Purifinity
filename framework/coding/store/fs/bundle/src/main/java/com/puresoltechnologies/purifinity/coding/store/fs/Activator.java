@@ -6,11 +6,9 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleContext;
 
 import com.puresoltechnologies.commons.osgi.AbstractActivator;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStore;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
+import com.puresoltechnologies.purifinity.analysis.api.DirectoryStore;
+import com.puresoltechnologies.purifinity.analysis.api.FileStore;
 import com.puresoltechnologies.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluator;
 import com.puresoltechnologies.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluator;
 import com.puresoltechnologies.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluator;
@@ -32,6 +30,8 @@ import com.puresoltechnologies.purifinity.coding.store.fs.metrics.Maintainabilit
 import com.puresoltechnologies.purifinity.coding.store.fs.metrics.McCabeMetricEvaluatorStore;
 import com.puresoltechnologies.purifinity.coding.store.fs.metrics.NormalizedMaintainabilityIndexEvaluatorStore;
 import com.puresoltechnologies.purifinity.coding.store.fs.metrics.SLOCEvaluatorStore;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 
 public class Activator extends AbstractActivator {
 

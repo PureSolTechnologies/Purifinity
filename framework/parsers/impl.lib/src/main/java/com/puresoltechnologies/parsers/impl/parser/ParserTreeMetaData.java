@@ -2,8 +2,8 @@ package com.puresoltechnologies.parsers.impl.parser;
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.commons.utils.ObjectUtilities;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
+import com.puresoltechnologies.commons.ObjectUtilities;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
 
 /**
  * This class is used to store meta information for each node in an AST.

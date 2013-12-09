@@ -2,9 +2,9 @@ package com.puresoltechnologies.purifinity.coding.metrics.entropy;
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 
 public class EntropyResult implements Serializable {
 

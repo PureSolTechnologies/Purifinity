@@ -3,7 +3,7 @@ package com.puresoltechnologies.parsers.impl.lexer;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
-import com.puresoltechnologies.commons.utils.ObjectUtilities;
+import com.puresoltechnologies.commons.ObjectUtilities;
 import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
 
 /**

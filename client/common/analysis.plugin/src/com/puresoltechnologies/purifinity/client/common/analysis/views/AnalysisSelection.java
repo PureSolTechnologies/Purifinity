@@ -2,9 +2,9 @@ package com.puresoltechnologies.purifinity.client.common.analysis.views;
 
 import org.eclipse.jface.viewers.ISelection;
 
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 
 /**
  * This class represents a global file analysis selection. This selection is

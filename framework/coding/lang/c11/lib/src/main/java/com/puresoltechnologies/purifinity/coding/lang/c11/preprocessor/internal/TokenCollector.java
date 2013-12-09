@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal;
 
-import com.puresoltechnologies.commons.trees.impl.TreeVisitor;
-import com.puresoltechnologies.commons.trees.impl.WalkingAction;
+import com.puresoltechnologies.commons.trees.api.TreeVisitor;
+import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.parsers.impl.lexer.Token;
 import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;

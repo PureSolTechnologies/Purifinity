@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresoltechnologies.purifinity.coding.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 
 public class EvaluatorsContentProvider implements IStructuredContentProvider {
 

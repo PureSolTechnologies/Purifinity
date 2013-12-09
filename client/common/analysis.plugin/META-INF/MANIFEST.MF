@@ -6,15 +6,15 @@ Bundle-Version: 0.1.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
-Require-Bundle: com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.1.1",
+Require-Bundle: com.puresoltechnologies.purifinity.analysis.api.bundle;bundle-version="0.1.1",
+ com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.1.1",
  com.puresoltechnologies.commons.trees.api.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.commons.trees.impl.bundle;bundle-version="0.1.1",
+ com.puresoltechnologies.commons.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.commons.utils.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.commons.configuration.bundle;bundle-version="0.1.1",
+ com.puresoltechnologies.parsers.api.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.parsers.impl.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.client.common.branding.plugin;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.coding.lang.api.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.coding.analysis.api.bundle;bundle-version="0.1.1",
+ com.puresoltechnologies.purifinity.lang.api.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.coding.analysis.impl.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.1.1",
  org.eclipse.osgi;bundle-version="3.8.2",

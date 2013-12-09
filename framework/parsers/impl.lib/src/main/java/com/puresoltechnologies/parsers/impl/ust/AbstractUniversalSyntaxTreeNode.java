@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresoltechnologies.commons.trees.api.TreeException;
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTreeMetaData;
 
 public abstract class AbstractUniversalSyntaxTreeNode implements
 		UniversalSyntaxTree {

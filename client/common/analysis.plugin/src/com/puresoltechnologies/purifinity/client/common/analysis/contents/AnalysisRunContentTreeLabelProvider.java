@@ -12,14 +12,14 @@ import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.api.FileStore;
+import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;
+import com.puresoltechnologies.purifinity.analysis.api.FileStoreFactory;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzedCode;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStoreFactory;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
 
 public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
 	private final Logger logger = LoggerFactory

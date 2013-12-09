@@ -3,6 +3,9 @@ package com.puresoltechnologies.parsers.impl.ust;
 import java.util.Arrays;
 import java.util.List;
 
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTreeMetaData;
+
 /**
  * This class is an implementation of a production. A production is a definition
  * for a group of productions and tokens. A production always has at least on

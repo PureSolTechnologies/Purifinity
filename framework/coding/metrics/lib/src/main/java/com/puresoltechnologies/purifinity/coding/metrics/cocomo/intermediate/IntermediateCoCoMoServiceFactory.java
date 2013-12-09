@@ -4,12 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.AbstractEvaluatorFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluatorFactory;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCEvaluator;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 
 public class IntermediateCoCoMoServiceFactory extends AbstractEvaluatorFactory {
 
@@ -35,7 +35,8 @@ public class IntermediateCoCoMoServiceFactory extends AbstractEvaluatorFactory {
 	}
 
 	@Override
-	public IntermediateCoCoMoEvaluator create(AnalysisRun analysisRun, HashIdFileTree path) {
+	public IntermediateCoCoMoEvaluator create(AnalysisRun analysisRun,
+			HashIdFileTree path) {
 		return new IntermediateCoCoMoEvaluator(analysisRun, path);
 	}
 

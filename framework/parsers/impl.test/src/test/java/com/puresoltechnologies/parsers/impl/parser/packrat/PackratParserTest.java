@@ -12,12 +12,13 @@ import java.util.regex.Pattern;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.trees.impl.TreePrinter;
-import com.puresoltechnologies.commons.trees.impl.TreeVisitor;
-import com.puresoltechnologies.commons.trees.impl.TreeWalker;
-import com.puresoltechnologies.commons.trees.impl.WalkingAction;
+import com.puresoltechnologies.commons.trees.api.TreePrinter;
+import com.puresoltechnologies.commons.trees.api.TreeVisitor;
+import com.puresoltechnologies.commons.trees.api.TreeWalker;
+import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.commons.utils.IntrospectionUtilities;
 import com.puresoltechnologies.parser.impl.grammar.TestGrammars;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarConverter;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarFile;
@@ -29,7 +30,6 @@ import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
 import com.puresoltechnologies.parsers.impl.lexer.Token;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.source.FixedCodeLocation;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.source.StringWithLocation;
 
 public class PackratParserTest {

@@ -3,23 +3,23 @@ package com.puresoltechnologies.purifinity.coding.metrics.normmaint;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
-import com.puresoltechnologies.commons.utils.HashId;
+import com.puresoltechnologies.commons.ConfigurationParameter;
+import com.puresoltechnologies.commons.HashId;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.QualityLevel;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluator;
 import com.puresoltechnologies.purifinity.coding.metrics.maintainability.MaintainabilityIndexFileResult;
 import com.puresoltechnologies.purifinity.coding.metrics.maintainability.MaintainabilityIndexFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.maintainability.MaintainabilityIndexResult;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
+import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 
 public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 

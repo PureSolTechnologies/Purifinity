@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
 import com.puresoltechnologies.parsers.impl.lexer.Lexer;
 import com.puresoltechnologies.parsers.impl.lexer.LexerException;
@@ -13,8 +15,6 @@ import com.puresoltechnologies.parsers.impl.lexer.Token;
 import com.puresoltechnologies.parsers.impl.lexer.TokenMetaData;
 import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
 import com.puresoltechnologies.parsers.impl.source.FixedCodeLocation;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
-import com.puresoltechnologies.parsers.impl.source.SourceCodeLine;
 
 /**
  * This class checks source files for matching the fixed form and converts them

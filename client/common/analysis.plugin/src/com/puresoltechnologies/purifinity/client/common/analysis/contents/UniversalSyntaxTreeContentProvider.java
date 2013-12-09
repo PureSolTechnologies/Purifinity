@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 
 public class UniversalSyntaxTreeContentProvider implements ITreeContentProvider {
 

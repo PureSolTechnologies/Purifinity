@@ -6,15 +6,15 @@ import java.util.Set;
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.CodeRangeNameParameter;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.CodeRangeTypeParameter;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.QualityLevel;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.QualityLevelParameter;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeLocationParameter;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQualityParameter;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
+import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
+import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
+import com.puresoltechnologies.purifinity.evaluation.api.QualityLevelParameter;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeLocationParameter;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
 
 public class EntropyMetricEvaluatorParameter {
 

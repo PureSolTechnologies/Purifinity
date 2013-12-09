@@ -5,22 +5,22 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
-import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
-import com.puresoltechnologies.commons.utils.HashId;
+import com.puresoltechnologies.commons.ConfigurationParameter;
+import com.puresoltechnologies.commons.HashId;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzedCode;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.coding.analysis.api.ProgrammingLanguages;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.QualityLevel;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.coding.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
+import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * This evaluator evaluates the Source Lines Of Code metrics which counts the

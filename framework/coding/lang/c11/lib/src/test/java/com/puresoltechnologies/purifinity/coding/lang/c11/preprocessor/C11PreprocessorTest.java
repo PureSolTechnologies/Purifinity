@@ -9,10 +9,11 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.preprocessor.PreprocessorException;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
-import com.puresoltechnologies.parsers.impl.source.SourceCodeLine;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeLineImpl;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
 
 public class C11PreprocessorTest {
@@ -64,14 +65,14 @@ public class C11PreprocessorTest {
 		SourceCode sourceWithoutMacros2 = new SourceFileLocation(directory,
 				"FileWithoutMacros2.txt").loadSourceCode();
 
-		SourceCode expected = new SourceCode();
+		SourceCodeImpl expected = new SourceCodeImpl();
 		expected.addSourceCode(sourceWithoutMacros);
-		expected.addSourceCodeLine(new SourceCodeLine(source, 2, "\n"));
+		expected.addSourceCodeLine(new SourceCodeLineImpl(source, 2, "\n"));
 		expected.addSourceCode(sourceWithoutMacros);
-		expected.addSourceCodeLine(new SourceCodeLine(source, 4,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(source, 4,
 				"// This is a non empty line\n"));
 		expected.addSourceCode(sourceWithoutMacros2);
-		expected.addSourceCodeLine(new SourceCodeLine(source, 6,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(source, 6,
 				"<end of file>"));
 
 		assertEquals(expected, preProcessedSourceCode);
@@ -92,9 +93,10 @@ public class C11PreprocessorTest {
 		SourceCode sourceWithoutMacros2 = new SourceFileLocation(directory,
 				"FileWithoutMacros2.txt").loadSourceCode();
 
-		SourceCode expected = new SourceCode();
-		expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
-				directory, "RecursiveIncludeMacros3.txt"), 1, "<end of file>"));
+		SourceCodeImpl expected = new SourceCodeImpl();
+		expected.addSourceCodeLine(new SourceCodeLineImpl(
+				new SourceFileLocation(directory, "RecursiveIncludeMacros3.txt"),
+				1, "<end of file>"));
 		expected.addSourceCode(sourceWithoutMacros2);
 		expected.addSourceCode(sourceWithoutMacros);
 
@@ -111,11 +113,12 @@ public class C11PreprocessorTest {
 		SourceCode preProcessedSourceCode = new C11Preprocessor()
 				.process(sourceCode);
 
-		SourceCode expected = new SourceCode();
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 2, "1\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 4,
+		SourceCodeImpl expected = new SourceCodeImpl();
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 2,
+				"1\n"));
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 4,
 				"\"Hello, world!\"\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 6,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 6,
 				"HELLO_WORLD\n"));
 		assertEquals(expected, preProcessedSourceCode);
 	}
@@ -131,8 +134,8 @@ public class C11PreprocessorTest {
 		SourceCode preProcessedSourceCode = new C11Preprocessor()
 				.process(sourceCode);
 
-		SourceCode expected = new SourceCode();
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 2,
+		SourceCodeImpl expected = new SourceCodeImpl();
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 2,
 				"Call the printf(\"This is a simple object macro!\"); macro now...\n"));
 		assertEquals(expected, preProcessedSourceCode);
 	}
@@ -148,8 +151,8 @@ public class C11PreprocessorTest {
 		SourceCode preProcessedSourceCode = new C11Preprocessor()
 				.process(sourceCode);
 
-		SourceCode expected = new SourceCode();
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 2,
+		SourceCodeImpl expected = new SourceCodeImpl();
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 2,
 				"fprintf(stderr, \"%s\\\\n\", \"Error message!\");\n"));
 		assertEquals(expected, preProcessedSourceCode);
 	}
@@ -165,19 +168,21 @@ public class C11PreprocessorTest {
 		SourceCode preProcessedSourceCode = new C11Preprocessor()
 				.process(sourceCode);
 
-		SourceCode expected = new SourceCode();
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 3, "\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 4,
+		SourceCodeImpl expected = new SourceCodeImpl();
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 3,
+				"\n"));
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 4,
 				"    fprintf(stderr, \"%s\\\\n\", \n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 5,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 5,
 				"// This is a comment\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 6,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 6,
 				"\"Error message!\"\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 7,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 7,
 				"/* This is another comment\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 8,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 8,
 				"   with multiple lines! */\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 9, ");\n"));
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 9,
+				");\n"));
 		assertEquals(expected, preProcessedSourceCode);
 	}
 
@@ -191,14 +196,14 @@ public class C11PreprocessorTest {
 		SourceCode preProcessedSourceCode = new C11Preprocessor()
 				.process(sourceCode);
 
-		SourceCode expected = new SourceCode();
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 4,
+		SourceCodeImpl expected = new SourceCodeImpl();
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 4,
 				"Else shown...\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 7,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 7,
 				"Shown...\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 13,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 13,
 				"Shown...\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 20,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 20,
 				"Else shown...\n"));
 		assertEquals(expected, preProcessedSourceCode);
 	}
@@ -213,18 +218,18 @@ public class C11PreprocessorTest {
 		SourceCode preProcessedSourceCode = new C11Preprocessor()
 				.process(sourceCode);
 
-		SourceCode expected = new SourceCode();
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 5,
+		SourceCodeImpl expected = new SourceCodeImpl();
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 5,
 				"Calculation valid.\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 8,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 8,
 				"Calculation valid.\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 12,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 12,
 				"Calculation invalid.\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 15,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 15,
 				"Calculation valid.\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 19,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 19,
 				"Calculation valid.\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 25,
+		expected.addSourceCodeLine(new SourceCodeLineImpl(sourceLocation, 25,
 				"Calculation valid.\n"));
 		assertEquals(expected, preProcessedSourceCode);
 	}

@@ -2,7 +2,7 @@ package com.puresoltechnologies.parsers.impl.lexer;
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
 
 /**
  * This is the primary lexer interace. The lexer read
@@ -12,8 +12,8 @@ import com.puresoltechnologies.parsers.impl.source.SourceCode;
  */
 public interface Lexer extends Serializable, Cloneable {
 
-    public TokenStream lex(SourceCode sourceCode) throws LexerException;
+	public TokenStream lex(SourceCode sourceCode) throws LexerException;
 
-    public Lexer clone();
+	public Lexer clone();
 
 }

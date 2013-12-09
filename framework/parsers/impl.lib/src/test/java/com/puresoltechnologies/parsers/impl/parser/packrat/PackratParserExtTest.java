@@ -6,12 +6,12 @@ import java.io.InputStream;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.trees.impl.TreePrinter;
+import com.puresoltechnologies.commons.trees.api.TreePrinter;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarConverter;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarFile;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
 import com.puresoltechnologies.parsers.impl.source.FixedCodeLocation;
 
 /**

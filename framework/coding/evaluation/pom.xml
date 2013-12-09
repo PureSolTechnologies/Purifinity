@@ -12,8 +12,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>api</module>
-		<module>iso9126</module>
 		<module>cleancode</module>
 		<module>impl</module>
 		<module>test</module>

@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.puresoltechnologies.commons.ProgressObservable;
+import com.puresoltechnologies.commons.ProgressObserver;
+
 /**
  * This class implements an abstract {@link ProgressObservable}. It can be used
  * by subclassing. The adding and removing of {@link ProgressObserver}s is

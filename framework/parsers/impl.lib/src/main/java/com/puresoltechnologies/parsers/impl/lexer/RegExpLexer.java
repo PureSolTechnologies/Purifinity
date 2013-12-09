@@ -6,11 +6,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.utils.StringUtils;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.token.TokenDefinition;
 import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
-import com.puresoltechnologies.parsers.impl.source.SourceCodeLine;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
 import com.puresoltechnologies.parsers.impl.source.StringWithLocation;
 
 /**
@@ -125,7 +126,9 @@ public class RegExpLexer implements Lexer {
 			cloned.tokenStream = null;
 		}
 		if (this.sourceCode != null) {
-			cloned.sourceCode = this.sourceCode.clone();
+			SourceCodeImpl clonedSourceCode = new SourceCodeImpl();
+			clonedSourceCode.addSourceCode(sourceCode);
+			cloned.sourceCode = clonedSourceCode;
 		} else {
 			cloned.sourceCode = null;
 		}

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
 import com.puresoltechnologies.parsers.impl.lexer.Lexer;
@@ -12,7 +13,6 @@ import com.puresoltechnologies.parsers.impl.lexer.LexerException;
 import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
 import com.puresoltechnologies.parsers.impl.parser.Parser;
 import com.puresoltechnologies.parsers.impl.parser.ParserException;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
 import com.puresoltechnologies.parsers.impl.source.FixedCodeLocation;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.JavaGrammar;
 

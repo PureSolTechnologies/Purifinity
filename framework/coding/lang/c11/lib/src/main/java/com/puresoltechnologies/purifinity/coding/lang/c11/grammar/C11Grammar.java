@@ -10,7 +10,7 @@ import com.puresoltechnologies.parsers.impl.grammar.GrammarManager;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarReader;
 import com.puresoltechnologies.parsers.impl.lexer.Lexer;
 import com.puresoltechnologies.parsers.impl.parser.Parser;
-import com.puresoltechnologies.purifinity.coding.lang.commons.AbstractLanguageGrammar;
+import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractLanguageGrammar;
 
 public class C11Grammar extends AbstractLanguageGrammar {
 

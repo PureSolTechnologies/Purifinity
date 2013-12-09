@@ -18,8 +18,8 @@ import com.puresoltechnologies.parsers.impl.grammar.GrammarReader;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.grammar.GrammarRenderer;
 import com.puresoltechnologies.purifinity.client.common.analysis.grammar.RenderException;
-import com.puresoltechnologies.purifinity.coding.lang.api.LanguageGrammar;
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.lang.api.LanguageGrammar;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 public class GrammarCanvas extends Canvas implements PaintListener {
 

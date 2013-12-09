@@ -21,6 +21,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunContentTreeViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.editors.DirectoryAnalysisEditor;
@@ -30,10 +34,6 @@ import com.puresoltechnologies.purifinity.client.common.analysis.editors.FileAna
 import com.puresoltechnologies.purifinity.client.common.analysis.editors.NotAnalyzedEditor;
 import com.puresoltechnologies.purifinity.client.common.analysis.editors.NotAnalyzedEditorInput;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzedCode;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
 
 public class AnalysisRunContentView extends AbstractPureSolTechnologiesView
 		implements ISelectionListener, IDoubleClickListener,

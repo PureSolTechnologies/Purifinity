@@ -19,14 +19,16 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
+import com.puresoltechnologies.commons.HashId;
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.commons.trees.impl.TreeVisitor;
-import com.puresoltechnologies.commons.trees.impl.TreeWalker;
-import com.puresoltechnologies.commons.trees.impl.WalkingAction;
-import com.puresoltechnologies.commons.utils.HashId;
+import com.puresoltechnologies.commons.trees.api.TreeVisitor;
+import com.puresoltechnologies.commons.trees.api.TreeWalker;
+import com.puresoltechnologies.commons.trees.api.WalkingAction;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.Axis;
 import com.puresoltechnologies.purifinity.client.common.chart.AxisDirection;
@@ -45,14 +47,12 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.ExportAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.CodeRangeNameParameter;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.Evaluators;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.MetricFileResults;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.Evaluators;
+import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
 
 public class ParetoChartView extends AbstractMetricChartViewPart {
 

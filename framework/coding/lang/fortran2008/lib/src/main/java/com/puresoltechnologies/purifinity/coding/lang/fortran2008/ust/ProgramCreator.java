@@ -3,11 +3,11 @@ package com.puresoltechnologies.purifinity.coding.lang.fortran2008.ust;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.impl.lexer.Token;
 import com.puresoltechnologies.parsers.impl.lexer.TokenMetaData;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.ust.CompilationUnit;
-import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.impl.ust.UnspecialistProduction;
 import com.puresoltechnologies.parsers.impl.ust.terminal.Comment;
 import com.puresoltechnologies.parsers.impl.ust.terminal.Operand;

@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.coding.metrics.codedepth;
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 
 /**
  * This interface is used to implement a part of the code depth metric

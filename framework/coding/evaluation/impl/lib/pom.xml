@@ -13,15 +13,23 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>math</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.parsers</groupId>
+			<artifactId>parsers.impl.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
+			<artifactId>evaluation.api.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>license.api.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.evaluation.api.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>

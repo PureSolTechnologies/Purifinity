@@ -28,29 +28,29 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.trees.impl.TreePrinter;
-import com.puresoltechnologies.commons.trees.impl.TreeVisitor;
-import com.puresoltechnologies.commons.trees.impl.TreeWalker;
-import com.puresoltechnologies.commons.trees.impl.WalkingAction;
+import com.puresoltechnologies.commons.FileSearchConfiguration;
+import com.puresoltechnologies.commons.HashAlgorithm;
+import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.commons.trees.api.TreePrinter;
+import com.puresoltechnologies.commons.trees.api.TreeVisitor;
+import com.puresoltechnologies.commons.trees.api.TreeWalker;
+import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.commons.utils.DirectoryUtilities;
-import com.puresoltechnologies.commons.utils.FileSearchConfiguration;
-import com.puresoltechnologies.commons.utils.HashAlgorithm;
-import com.puresoltechnologies.commons.utils.HashId;
 import com.puresoltechnologies.commons.utils.StopWatch;
 import com.puresoltechnologies.commons.utils.data.HashCodeGenerator;
 import com.puresoltechnologies.commons.utils.progress.AbstractProgressObservable;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzedCode;
-import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryStoreFactory;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.coding.analysis.api.RepositoryLocation;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.RepositoryLocation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.api.DirectoryStore;
+import com.puresoltechnologies.purifinity.analysis.api.DirectoryStoreException;
+import com.puresoltechnologies.purifinity.analysis.api.DirectoryStoreFactory;
+import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 
 /**
  * This class is an implementation of {@link AnalysisRun}.

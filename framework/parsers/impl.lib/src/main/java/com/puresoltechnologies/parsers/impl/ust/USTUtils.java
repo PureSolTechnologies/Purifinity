@@ -3,6 +3,8 @@ package com.puresoltechnologies.parsers.impl.ust;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
+
 /**
  * This class contains some helper methods to deal with
  * {@link UniversalSyntaxTree} trees.

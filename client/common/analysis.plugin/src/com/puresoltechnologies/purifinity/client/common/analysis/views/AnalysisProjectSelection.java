@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.client.common.analysis.views;
 
 import org.eclipse.jface.viewers.ISelection;
 
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 
 /**
  * This class contains the selection of an {@link AnalysisProject}.

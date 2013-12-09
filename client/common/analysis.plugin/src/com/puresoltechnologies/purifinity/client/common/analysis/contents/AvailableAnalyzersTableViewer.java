@@ -13,7 +13,7 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
-import com.puresoltechnologies.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 
 public class AvailableAnalyzersTableViewer extends TableViewer implements
 		IStructuredContentProvider {

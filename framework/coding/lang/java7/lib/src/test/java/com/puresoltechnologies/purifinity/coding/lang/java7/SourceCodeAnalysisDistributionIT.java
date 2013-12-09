@@ -11,13 +11,13 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.puresoltechnologies.commons.FileSearchConfiguration;
 import com.puresoltechnologies.commons.utils.FileSearch;
-import com.puresoltechnologies.commons.utils.FileSearchConfiguration;
 import com.puresoltechnologies.commons.utils.FileTree;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
+import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.JavaGrammar;
 
 /**

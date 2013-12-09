@@ -14,23 +14,23 @@ import java.util.concurrent.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
-import com.puresoltechnologies.commons.trees.impl.TreeUtils;
+import com.puresoltechnologies.commons.ConfigurationParameter;
+import com.puresoltechnologies.commons.trees.api.TreeUtils;
 import com.puresoltechnologies.commons.utils.StopWatch;
 import com.puresoltechnologies.commons.utils.progress.AbstractProgressObservable;
 import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
-import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryStoreFactory;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.FileStoreFactory;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorInformation;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.api.DirectoryStore;
+import com.puresoltechnologies.purifinity.analysis.api.DirectoryStoreFactory;
+import com.puresoltechnologies.purifinity.analysis.api.FileStore;
+import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;
+import com.puresoltechnologies.purifinity.analysis.api.FileStoreFactory;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.license.api.LicensedObject;
 
 /**

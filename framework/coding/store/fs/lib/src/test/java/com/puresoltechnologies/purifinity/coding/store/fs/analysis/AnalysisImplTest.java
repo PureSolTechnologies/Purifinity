@@ -12,14 +12,14 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProjectInformation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryRepositoryLocation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.coding.analysis.impl.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.test.TestFileSearchConfiguration;
 import com.puresoltechnologies.purifinity.coding.store.fs.analysis.AnalysisStoreImpl;
 

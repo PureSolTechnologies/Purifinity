@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.coding.lang.fortran2008;
 import org.osgi.framework.BundleContext;
 
 import com.puresoltechnologies.commons.osgi.AbstractActivator;
-import com.puresoltechnologies.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.coding.lang.fortran2008.Fortran;
 
 /**

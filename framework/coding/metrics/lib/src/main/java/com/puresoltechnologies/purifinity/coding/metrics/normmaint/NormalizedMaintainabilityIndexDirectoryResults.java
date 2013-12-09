@@ -14,12 +14,12 @@ import java.util.Set;
 import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.MetricDirectoryResults;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.QualityLevel;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluatorResult;
+import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
+import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 
 public class NormalizedMaintainabilityIndexDirectoryResults extends
 		AbstractEvaluatorResult implements MetricDirectoryResults {

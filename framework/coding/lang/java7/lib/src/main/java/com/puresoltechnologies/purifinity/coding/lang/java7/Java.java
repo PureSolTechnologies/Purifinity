@@ -9,12 +9,12 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AbstractProgrammingLanguageAnalyzer;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzer;
-import com.puresoltechnologies.purifinity.coding.lang.api.LanguageGrammar;
+import com.puresoltechnologies.commons.ConfigurationParameter;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
+import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.JavaGrammar;
+import com.puresoltechnologies.purifinity.lang.api.LanguageGrammar;
 
 /**
  * This is the base class for Java Programming Language. The lexical and

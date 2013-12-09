@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.coding.lang.test.metrics;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.coding.metrics.codedepth.LanguageDependedCodeDepthMetric;
 
 /**

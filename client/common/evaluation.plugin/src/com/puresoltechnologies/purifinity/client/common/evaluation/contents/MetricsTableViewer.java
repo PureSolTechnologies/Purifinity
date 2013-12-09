@@ -16,15 +16,15 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+import com.puresoltechnologies.commons.HashId;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.commons.utils.HashId;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.MetricDirectoryResults;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.MetricFileResults;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
+import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
 
 public class MetricsTableViewer extends TableViewer implements
 		IStructuredContentProvider {

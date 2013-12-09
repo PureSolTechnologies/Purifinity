@@ -23,7 +23,7 @@ import com.puresoltechnologies.purifinity.client.common.analysis.grammar.RenderE
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 public class GrammarView extends AbstractPureSolTechnologiesView implements
 		ISelectionChangedListener, Refreshable {

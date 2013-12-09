@@ -15,8 +15,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.puresoltechnologies.commons.math.Money;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.MetricValue;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluatorResult;
+import com.puresoltechnologies.purifinity.evaluation.api.MetricValue;
 
 public abstract class IntermediateCoCoMoResults extends AbstractEvaluatorResult {
 

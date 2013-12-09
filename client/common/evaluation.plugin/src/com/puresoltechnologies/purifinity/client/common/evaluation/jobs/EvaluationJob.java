@@ -9,13 +9,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.ui.jobs.ObservedJob;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.Evaluators;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.Evaluators;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 
 public class EvaluationJob extends Job {
 

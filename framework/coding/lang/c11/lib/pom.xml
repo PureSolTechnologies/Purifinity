@@ -12,16 +12,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.analysis.api.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.lang.commons.lib</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.puresoltechnologies.parsers</groupId>
 			<artifactId>parsers.impl.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
+			<artifactId>coding.analysis.impl.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

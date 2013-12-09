@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.puresoltechnologies.commons.trees.api.TreeException;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarReader;
@@ -21,8 +23,7 @@ import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
 import com.puresoltechnologies.parsers.impl.parser.ParserException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.parser.packrat.PackratParser;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
-import com.puresoltechnologies.parsers.impl.source.SourceCodeLine;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
 import com.puresoltechnologies.purifinity.coding.lang.c11.grammar.C11Grammar;
 
 public class C11PreprocessorParser {
@@ -230,7 +231,7 @@ public class C11PreprocessorParser {
 			throw new IllegalArgumentException("Line number '" + lineNum
 					+ "' is not present.");
 		}
-		SourceCode codeToParse = new SourceCode();
+		SourceCodeImpl codeToParse = new SourceCodeImpl();
 		SourceCodeLine line;
 		int lineCount = 0;
 		SourceCodeLine nextLine;
@@ -279,7 +280,7 @@ public class C11PreprocessorParser {
 			throw new IllegalArgumentException("Line number '" + lineNum
 					+ "' is not present.");
 		}
-		SourceCode codeToParse = new SourceCode();
+		SourceCodeImpl codeToParse = new SourceCodeImpl();
 		SourceCodeLine line;
 		int lineCount = 0;
 		do {

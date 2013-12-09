@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleContext;
 
 import com.puresoltechnologies.commons.osgi.AbstractActivator;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoServiceFactory;
 import com.puresoltechnologies.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoServiceFactory;
 import com.puresoltechnologies.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluatorFactory;

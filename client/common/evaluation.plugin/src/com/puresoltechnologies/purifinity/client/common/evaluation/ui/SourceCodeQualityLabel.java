@@ -10,7 +10,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.SourceCodeQualityColorProvider;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 
 /**
  * This is a special label to show a {@link SourceCodeQuality} label. The label

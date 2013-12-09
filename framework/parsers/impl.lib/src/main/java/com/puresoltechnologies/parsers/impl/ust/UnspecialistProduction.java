@@ -2,6 +2,8 @@ package com.puresoltechnologies.parsers.impl.ust;
 
 import java.util.List;
 
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
+
 /**
  * This class is used in cases where no special production can be used for
  * example in transition productions.

@@ -1,9 +1,9 @@
 package com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts;
 
 import com.puresoltechnologies.commons.trees.api.TreeException;
-import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 
 public class NormalInterfaceDeclaration {
 

@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.commons.trees.impl.AbstractTreeImpl;
+import com.puresoltechnologies.commons.trees.api.AbstractTreeImpl;
 
 /**
  * This is a special implementation of a tree for files. This tree can be used

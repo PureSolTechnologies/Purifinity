@@ -1,7 +1,7 @@
 package com.puresoltechnologies.parsers.impl.parser.lr;
 
-import com.puresoltechnologies.commons.trees.impl.TreeVisitor;
-import com.puresoltechnologies.commons.trees.impl.WalkingAction;
+import com.puresoltechnologies.commons.trees.api.TreeVisitor;
+import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.parsers.impl.lexer.Token;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.parser.ParserTreeMetaData;

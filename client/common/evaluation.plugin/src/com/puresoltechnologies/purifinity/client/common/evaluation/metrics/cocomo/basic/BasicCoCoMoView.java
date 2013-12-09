@@ -5,16 +5,16 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractEvaluationView;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStoreFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.MetricDirectoryResults;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.MetricFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoDirectoryResults;
 import com.puresoltechnologies.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoEvaluator;
 import com.puresoltechnologies.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoFileResults;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
+import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
 
 public class BasicCoCoMoView extends AbstractEvaluationView {
 

@@ -16,12 +16,12 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.widgets.Composite;
 
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.ChartCanvas;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ChartRenderer;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.HashIdFileTree;
 
 public abstract class AbstractMetricChartViewPart extends
 		AbstractMetricViewPart implements MouseListener, ISelectionProvider {

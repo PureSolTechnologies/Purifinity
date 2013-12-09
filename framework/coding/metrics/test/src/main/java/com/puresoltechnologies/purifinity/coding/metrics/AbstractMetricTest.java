@@ -10,16 +10,16 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
+import com.puresoltechnologies.commons.FileSearchConfiguration;
 import com.puresoltechnologies.commons.utils.DirectoryUtilities;
-import com.puresoltechnologies.commons.utils.FileSearchConfiguration;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStoreFactory;
-import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryRepositoryLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
-import com.puresoltechnologies.purifinity.coding.analysis.api.ProgrammingLanguages;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.coding.analysis.impl.DirectoryRepositoryLocation;
+import com.puresoltechnologies.purifinity.coding.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.coding.lang.java7.Java;
 import com.puresoltechnologies.purifinity.coding.store.fs.analysis.AnalysisStoreImpl;
 

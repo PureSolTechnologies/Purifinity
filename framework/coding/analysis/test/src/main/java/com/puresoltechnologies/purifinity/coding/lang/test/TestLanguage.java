@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzer;
-import com.puresoltechnologies.purifinity.coding.lang.api.LanguageGrammar;
-import com.puresoltechnologies.purifinity.coding.lang.commons.AbstractProgrammingLanguage;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzerStore;
+import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
+import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.lang.test.grammar.TestLanguageGrammar;
+import com.puresoltechnologies.purifinity.lang.api.LanguageGrammar;
 
 /**
  * This is a test programming languages which is used as a mock up for real

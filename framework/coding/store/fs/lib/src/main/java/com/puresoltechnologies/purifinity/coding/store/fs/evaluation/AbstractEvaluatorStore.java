@@ -7,14 +7,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import com.puresoltechnologies.commons.utils.HashId;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.MetricDirectoryResults;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.MetricFileResults;
+import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.store.fs.analysis.AnalysisRunImpl;
 import com.puresoltechnologies.purifinity.coding.store.fs.analysis.DirectoryStoreImpl;
 import com.puresoltechnologies.purifinity.coding.store.fs.analysis.FileStoreImpl;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
+import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
 
 /**
  * This is an abstract implementation of an evaluator store.

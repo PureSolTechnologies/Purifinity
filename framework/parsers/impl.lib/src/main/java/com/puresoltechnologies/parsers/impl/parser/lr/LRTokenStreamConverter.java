@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.trees.api.TreeException;
-import com.puresoltechnologies.commons.trees.impl.TreeIterator;
+import com.puresoltechnologies.commons.trees.api.TreeIterator;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.production.Production;
 import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;

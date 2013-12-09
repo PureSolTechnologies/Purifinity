@@ -10,8 +10,8 @@ import com.puresoltechnologies.parsers.impl.grammar.GrammarManager;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarReader;
 import com.puresoltechnologies.parsers.impl.lexer.Lexer;
 import com.puresoltechnologies.parsers.impl.parser.Parser;
+import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractLanguageGrammar;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.C11Preprocessor;
-import com.puresoltechnologies.purifinity.coding.lang.commons.AbstractLanguageGrammar;
 
 public class FortranGrammar extends AbstractLanguageGrammar {
 

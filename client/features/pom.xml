@@ -12,7 +12,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>iso9126</module>
 		<module>cleancode</module>
 	</modules>
 

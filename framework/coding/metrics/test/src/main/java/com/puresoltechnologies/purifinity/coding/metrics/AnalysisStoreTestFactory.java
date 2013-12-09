@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.coding.metrics;
 
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreFactory;
 import com.puresoltechnologies.purifinity.coding.store.fs.analysis.AnalysisStoreImpl;
 
 public class AnalysisStoreTestFactory extends AnalysisStoreFactory {

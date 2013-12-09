@@ -13,7 +13,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 
 public class AnalysisProjectsTableViewer extends TableViewer implements
 	IStructuredContentProvider {

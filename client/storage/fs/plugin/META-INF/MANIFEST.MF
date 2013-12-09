@@ -5,8 +5,6 @@ Bundle-SymbolicName: com.puresoltechnologies.purifinity.client.storage.fs.plugin
 Bundle-Version: 0.1.1.qualifier
 Require-Bundle: com.puresoltechnologies.commons.utils.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.coding.lang.commons.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.coding.analysis.api.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.coding.store.fs.bundle;bundle-version="0.1.1",
  org.eclipse.core.runtime;bundle-version="3.8.0",
  org.eclipse.ui;bundle-version="3.103.0",

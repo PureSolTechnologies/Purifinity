@@ -12,14 +12,8 @@ import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.production.ProductionSet;
 import com.puresoltechnologies.parsers.impl.grammar.token.TokenDefinition;
 import com.puresoltechnologies.parsers.impl.grammar.token.TokenDefinitionSet;
-import com.puresoltechnologies.parsers.impl.lexer.Lexer;
-import com.puresoltechnologies.parsers.impl.lexer.LexerException;
-import com.puresoltechnologies.parsers.impl.lexer.RegExpLexer;
-import com.puresoltechnologies.parsers.impl.lexer.Token;
-import com.puresoltechnologies.parsers.impl.lexer.TokenMetaData;
-import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
 import com.puresoltechnologies.parsers.impl.parser.lr.LR0Parser;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 
 public class RegExpLexerTest {
@@ -35,8 +29,9 @@ public class RegExpLexerTest {
 		options.put("grammar.checks", "false");
 		Grammar grammar = new Grammar(options, rules, new ProductionSet());
 		Lexer lexer = new RegExpLexer(grammar);
-		TokenStream tokenStream = lexer.lex(SourceCode.read(new StringReader(
-				"0\n1\t2\n\t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"),
+		TokenStream tokenStream = lexer.lex(SourceCodeImpl.read(
+				new StringReader(
+						"0\n1\t2\n\t3 \t4 \t5\t 6 7 8 9 10 11 12 13 14 15"),
 				new UnspecifiedSourceCodeLocation()));
 		assertNotNull(tokenStream);
 		assertEquals(31, tokenStream.size());
@@ -112,7 +107,7 @@ public class RegExpLexerTest {
 		options.put("grammar.checks", "false");
 		Grammar grammar = new Grammar(options, rules, new ProductionSet());
 		Lexer lexer = new RegExpLexer(grammar);
-		lexer.lex(SourceCode.read(new StringReader(
+		lexer.lex(SourceCodeImpl.read(new StringReader(
 				"\"String without trailing double quote!"),
 				new UnspecifiedSourceCodeLocation()));
 	}

@@ -8,10 +8,10 @@ import java.util.List;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.math.statistics.Statistics;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCQuality;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 
 public class SLOCQualityTest {
 

@@ -7,7 +7,7 @@ import java.io.PrintStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.trees.impl.TreePrinter;
+import com.puresoltechnologies.commons.trees.api.TreePrinter;
 import com.puresoltechnologies.commons.utils.StopWatch;
 import com.puresoltechnologies.parsers.impl.lexer.Lexer;
 import com.puresoltechnologies.parsers.impl.lexer.LexerException;
@@ -21,7 +21,7 @@ import com.puresoltechnologies.parsers.impl.parser.ParserFactory;
 import com.puresoltechnologies.parsers.impl.parser.ParserFactoryException;
 import com.puresoltechnologies.parsers.impl.parser.ParserManager;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
 
 /**
  * This class is a simple tester for checking grammars and parts of grammars.
@@ -46,7 +46,7 @@ public class GrammarPartTester {
 			}
 			grammar = grammar.createWithNewStartProduction(production);
 			Lexer lexer = LexerFactory.create(grammar);
-			TokenStream tokenStream = lexer.lex(SourceCode
+			TokenStream tokenStream = lexer.lex(SourceCodeImpl
 					.fromStringArray(lines));
 
 			Parser parser = ParserFactory.create(grammar);
@@ -87,7 +87,7 @@ public class GrammarPartTester {
 			StopWatch watch = new StopWatch();
 			Lexer lexer = new RegExpLexer(grammar);
 			watch.start();
-			TokenStream tokenStream = lexer.lex(SourceCode
+			TokenStream tokenStream = lexer.lex(SourceCodeImpl
 					.fromStringArray(lines));
 			watch.stop();
 			logger.debug("Lexer time: " + watch);

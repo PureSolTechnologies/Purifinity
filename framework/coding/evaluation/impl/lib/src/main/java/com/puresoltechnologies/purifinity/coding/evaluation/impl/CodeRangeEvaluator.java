@@ -6,11 +6,11 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 
 import com.puresoltechnologies.commons.utils.progress.AbstractProgressObservable;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
-import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 
 /**
  * This interface is meant for evaluators which perform operations on ASTs or in

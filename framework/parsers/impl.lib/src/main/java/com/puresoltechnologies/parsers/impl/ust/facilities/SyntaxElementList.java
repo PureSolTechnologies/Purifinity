@@ -2,8 +2,8 @@ package com.puresoltechnologies.parsers.impl.ust.facilities;
 
 import java.util.List;
 
+import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.impl.ust.AbstractProduction;
-import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
 
 /**
  * This class represents a typed list like for parameter lists in method

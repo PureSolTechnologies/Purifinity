@@ -5,8 +5,8 @@ import java.text.SimpleDateFormat;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRunInformation;
 
 /**
  * This is a simple label provider for AnalysisRunInformation list controls.

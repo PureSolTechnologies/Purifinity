@@ -6,9 +6,9 @@ import java.util.List;
 
 import com.puresoltechnologies.commons.trees.api.Tree;
 import com.puresoltechnologies.commons.trees.api.TreeException;
-import com.puresoltechnologies.commons.trees.impl.TreeVisitor;
-import com.puresoltechnologies.commons.trees.impl.TreeWalker;
-import com.puresoltechnologies.commons.trees.impl.WalkingAction;
+import com.puresoltechnologies.commons.trees.api.TreeVisitor;
+import com.puresoltechnologies.commons.trees.api.TreeWalker;
+import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.parsers.impl.grammar.production.Production;
 import com.puresoltechnologies.parsers.impl.lexer.Token;
 

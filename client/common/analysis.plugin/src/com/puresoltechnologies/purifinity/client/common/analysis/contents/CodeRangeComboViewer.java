@@ -10,7 +10,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Combo;
 
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 
 public class CodeRangeComboViewer extends ComboViewer implements
 		IStructuredContentProvider {

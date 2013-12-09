@@ -6,10 +6,10 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadQuality;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadResult;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 
 public class HalsteadQualityTest {
 
