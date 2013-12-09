@@ -8,17 +8,17 @@ import org.junit.Test;
 import com.puresoltechnologies.commons.trees.impl.SearchVisitor;
 import com.puresoltechnologies.commons.trees.impl.TreeSearchCriterion;
 import com.puresoltechnologies.commons.trees.impl.TreeWalker;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.parser.packrat.PackratParser;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
 import com.puresoltechnologies.purifinity.coding.lang.c11.grammar.C11Grammar;
-import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.C11PreprocessorParser;
 
 public class C11PreprocessorParserTest {
 
 	private ParserTree checkParser(String... lines) throws Exception {
-		SourceCode sourceCode = SourceCode.fromStringArray(lines);
+		SourceCode sourceCode = SourceCodeImpl.fromStringArray(lines);
 
 		C11PreprocessorParser parser = new C11PreprocessorParser();
 		ParserTree ast = parser.parse(sourceCode);
@@ -34,7 +34,7 @@ public class C11PreprocessorParserTest {
 		C11PreprocessorParser.setLineTerminatorToVisible(production);
 		System.out.println(production.toString());
 		PackratParser parser = new PackratParser(production);
-		ParserTree ast = parser.parse(SourceCode.fromStringArray(lines));
+		ParserTree ast = parser.parse(SourceCodeImpl.fromStringArray(lines));
 		assertContainsNode(productionName, ast);
 	}
 

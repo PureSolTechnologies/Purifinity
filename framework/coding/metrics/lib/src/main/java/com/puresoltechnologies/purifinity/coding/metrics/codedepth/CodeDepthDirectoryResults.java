@@ -15,7 +15,7 @@ import java.util.Set;
 import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
 import com.puresoltechnologies.purifinity.coding.evaluation.api.MetricDirectoryResults;

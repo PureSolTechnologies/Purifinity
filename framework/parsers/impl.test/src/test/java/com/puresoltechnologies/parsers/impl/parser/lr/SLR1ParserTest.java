@@ -11,8 +11,7 @@ import com.puresoltechnologies.parsers.impl.lexer.Lexer;
 import com.puresoltechnologies.parsers.impl.lexer.RegExpLexer;
 import com.puresoltechnologies.parsers.impl.parser.Parser;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
-import com.puresoltechnologies.parsers.impl.parser.lr.SLR1Parser;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 
 public class SLR1ParserTest {
@@ -23,7 +22,7 @@ public class SLR1ParserTest {
 		Parser parser = new SLR1Parser(grammar);
 		Lexer lexer = new RegExpLexer(grammar);
 		ParserTree syntaxTree = parser
-				.parse(lexer.lex(SourceCode.read(new StringReader("1*2+3"),
+				.parse(lexer.lex(SourceCodeImpl.read(new StringReader("1*2+3"),
 						new UnspecifiedSourceCodeLocation())));
 		new TreePrinter(System.out).println(syntaxTree);
 	}
@@ -33,7 +32,7 @@ public class SLR1ParserTest {
 		Grammar grammar = TestGrammars.getSLR1TestGrammarFromDragonBook();
 		Parser parser = new SLR1Parser(grammar);
 		Lexer lexer = new RegExpLexer(grammar);
-		ParserTree syntaxTree = parser.parse(lexer.lex(SourceCode.read(
+		ParserTree syntaxTree = parser.parse(lexer.lex(SourceCodeImpl.read(
 				new StringReader("((1*(2+3)+4*5)+6)*7"),
 				new UnspecifiedSourceCodeLocation())));
 		new TreePrinter(System.out).println(syntaxTree);

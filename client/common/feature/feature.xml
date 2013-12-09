@@ -25,10 +25,13 @@
       <import plugin="org.eclipse.osgi"/>
       <import plugin="org.slf4j.api"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.trees.api.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.trees.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.utils.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.configuration.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.lang.api.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.lang.api.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.analysis.api.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.ui.plugin" version="0.1.1" match="greaterOrEqual"/>
@@ -56,8 +59,7 @@
       <import plugin="com.puresoltechnologies.commons.license.domain.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="org.codehaus.jackson.jackson-jaxrs.external.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.commons.trees.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.parsers.api.bundle" version="0.1.1" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -152,13 +154,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresoltechnologies.purifinity.coding.lang.api.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.puresoltechnologies.purifinity.coding.lang.commons.bundle"
          download-size="0"
          install-size="0"
@@ -195,6 +190,13 @@
 
    <plugin
          id="com.puresoltechnologies.parsers.impl.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.purifinity.lang.api.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

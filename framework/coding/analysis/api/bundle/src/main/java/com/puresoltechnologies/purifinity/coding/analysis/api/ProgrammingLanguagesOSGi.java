@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.purifinity.coding.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.coding.analysis.api.ProgrammingLanguages;
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * This class is used to manage the ProgrammingLanguage services. This is the

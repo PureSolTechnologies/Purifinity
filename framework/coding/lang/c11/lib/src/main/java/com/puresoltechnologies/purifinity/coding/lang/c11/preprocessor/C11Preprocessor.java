@@ -5,12 +5,14 @@ import java.util.regex.Pattern;
 
 import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.commons.utils.io.LineTerminator;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 import com.puresoltechnologies.parsers.impl.parser.ParserException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.preprocessor.Preprocessor;
 import com.puresoltechnologies.parsers.impl.preprocessor.PreprocessorException;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
-import com.puresoltechnologies.parsers.impl.source.SourceCodeLine;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeLineImpl;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.C11PreprocessorParser;
 import com.puresoltechnologies.purifinity.coding.lang.c11.preprocessor.internal.TreeMacroProcessor;
 
@@ -137,7 +139,7 @@ public class C11Preprocessor implements Preprocessor {
 	public SourceCode process(SourceCode sourceCode)
 			throws PreprocessorException {
 		boolean added = assureLineTerminatorAtLastLine(sourceCode);
-		SourceCode preProcessedSourceCode = performPreprocessing(sourceCode);
+		SourceCodeImpl preProcessedSourceCode = performPreprocessing(sourceCode);
 		if (added) {
 			preProcessedSourceCode.removeLineTerminatorAtLastLine();
 		}
@@ -171,7 +173,7 @@ public class C11Preprocessor implements Preprocessor {
 			}
 		}
 		lines.remove(lastLine);
-		lastLine = new SourceCodeLine(lastLine.getSource(),
+		lastLine = new SourceCodeLineImpl(lastLine.getSource(),
 				lastLine.getLineNumber(), text + "\n");
 		lines.add(lastLine);
 		/*
@@ -190,7 +192,7 @@ public class C11Preprocessor implements Preprocessor {
 	 * @return
 	 * @throws PreprocessorException
 	 */
-	private SourceCode performPreprocessing(SourceCode sourceCode)
+	private SourceCodeImpl performPreprocessing(SourceCode sourceCode)
 			throws PreprocessorException {
 		try {
 			C11PreprocessorParser parser = new C11PreprocessorParser();

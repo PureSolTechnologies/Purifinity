@@ -18,6 +18,7 @@ import com.puresoltechnologies.commons.trees.impl.TreeWalker;
 import com.puresoltechnologies.commons.trees.impl.WalkingAction;
 import com.puresoltechnologies.commons.utils.IntrospectionUtilities;
 import com.puresoltechnologies.parser.impl.grammar.TestGrammars;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarConverter;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarFile;
@@ -29,7 +30,6 @@ import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
 import com.puresoltechnologies.parsers.impl.lexer.Token;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.source.FixedCodeLocation;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.source.StringWithLocation;
 
 public class PackratParserTest {

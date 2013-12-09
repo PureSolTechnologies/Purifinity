@@ -27,8 +27,8 @@ import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQualit
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.CodeRangeEvaluator;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.Result;
 import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetric;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * This class calculates entropy and redundancy for a code range. The entropy is

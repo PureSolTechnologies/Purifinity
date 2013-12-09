@@ -16,6 +16,10 @@
 			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>trees.api.lib</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>utils</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

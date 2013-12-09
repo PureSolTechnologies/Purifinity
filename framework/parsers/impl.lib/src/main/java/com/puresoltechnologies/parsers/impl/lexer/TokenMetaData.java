@@ -3,7 +3,7 @@ package com.puresoltechnologies.parsers.impl.lexer;
 import java.io.Serializable;
 
 import com.puresoltechnologies.commons.utils.ObjectUtilities;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
 
 /**
  * This class is used to store additional data for the tokens found like the

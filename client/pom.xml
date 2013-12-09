@@ -155,11 +155,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.lang.api.bundle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.lang.commons.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -191,6 +186,11 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>coding.store.fs.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
+			<artifactId>lang.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
 
 /**
@@ -16,90 +19,90 @@ import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
  */
 public class FixedCodeLocation extends AbstractCodeLocation {
 
-    private static final long serialVersionUID = -694681290095697777L;
+	private static final long serialVersionUID = -694681290095697777L;
 
-    private final SourceCode sourceCode;
+	private final SourceCode sourceCode;
 
-    public FixedCodeLocation(SourceCode sourceCode) {
-	this.sourceCode = sourceCode;
-    }
-
-    public FixedCodeLocation(String... lines) {
-	SourceCode sourceCode = new SourceCode();
-	int lineNum = 0;
-	for (String line : lines) {
-	    if ((line != null) && (!line.isEmpty())) {
-		lineNum++;
-		sourceCode.addSourceCodeLine(new SourceCodeLine(this, lineNum,
-			line));
-	    }
+	public FixedCodeLocation(SourceCode sourceCode) {
+		this.sourceCode = sourceCode;
 	}
-	this.sourceCode = sourceCode;
-    }
 
-    @Override
-    public InputStream openStream() throws IOException {
-	StringBuilder builder = new StringBuilder();
-	for (SourceCodeLine line : sourceCode.getLines()) {
-	    builder.append(line.getLine());
+	public FixedCodeLocation(String... lines) {
+		SourceCodeImpl sourceCode = new SourceCodeImpl();
+		int lineNum = 0;
+		for (String line : lines) {
+			if ((line != null) && (!line.isEmpty())) {
+				lineNum++;
+				sourceCode.addSourceCodeLine(new SourceCodeLineImpl(this,
+						lineNum, line));
+			}
+		}
+		this.sourceCode = sourceCode;
 	}
-	return new ByteArrayInputStream(builder.toString().getBytes());
-    }
 
-    @Override
-    public SourceCode loadSourceCode() throws IOException {
-	return sourceCode;
-    }
+	@Override
+	public InputStream openStream() throws IOException {
+		StringBuilder builder = new StringBuilder();
+		for (SourceCodeLine line : sourceCode.getLines()) {
+			builder.append(line.getLine());
+		}
+		return new ByteArrayInputStream(builder.toString().getBytes());
+	}
 
-    @Override
-    public String getHumanReadableLocationString() {
-	return "build-in";
-    }
+	@Override
+	public SourceCode loadSourceCode() throws IOException {
+		return sourceCode;
+	}
 
-    @Override
-    public int hashCode() {
-	final int prime = 31;
-	int result = 1;
-	result = prime * result
-		+ ((sourceCode == null) ? 0 : sourceCode.hashCode());
-	return result;
-    }
+	@Override
+	public String getHumanReadableLocationString() {
+		return "build-in";
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-	if (this == obj)
-	    return true;
-	if (obj == null)
-	    return false;
-	if (getClass() != obj.getClass())
-	    return false;
-	FixedCodeLocation other = (FixedCodeLocation) obj;
-	if (sourceCode == null) {
-	    if (other.sourceCode != null)
-		return false;
-	} else if (!sourceCode.equals(other.sourceCode))
-	    return false;
-	return true;
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((sourceCode == null) ? 0 : sourceCode.hashCode());
+		return result;
+	}
 
-    @Override
-    public CodeLocation newRelativeSource(String relativePath) {
-	throw new IllegalStateException(
-		"Cannot provide a new relative source to a built-in source!");
-    }
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FixedCodeLocation other = (FixedCodeLocation) obj;
+		if (sourceCode == null) {
+			if (other.sourceCode != null)
+				return false;
+		} else if (!sourceCode.equals(other.sourceCode))
+			return false;
+		return true;
+	}
 
-    @Override
-    public String getName() {
-	return "built-in source";
-    }
+	@Override
+	public CodeLocation newRelativeSource(String relativePath) {
+		throw new IllegalStateException(
+				"Cannot provide a new relative source to a built-in source!");
+	}
 
-    @Override
-    public String getInternalLocation() {
-	return "";
-    }
+	@Override
+	public String getName() {
+		return "built-in source";
+	}
 
-    @Override
-    public boolean isAvailable() {
-	return true;
-    }
+	@Override
+	public String getInternalLocation() {
+		return "";
+	}
+
+	@Override
+	public boolean isAvailable() {
+		return true;
+	}
 }

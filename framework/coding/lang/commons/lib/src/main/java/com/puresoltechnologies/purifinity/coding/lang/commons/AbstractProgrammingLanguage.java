@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.coding.lang.commons;
 
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.license.api.LicensedObject;
 
 public abstract class AbstractProgrammingLanguage extends LicensedObject

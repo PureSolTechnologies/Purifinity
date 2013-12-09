@@ -12,6 +12,9 @@ import com.puresoltechnologies.commons.utils.HashAlgorithm;
 import com.puresoltechnologies.commons.utils.HashId;
 import com.puresoltechnologies.commons.utils.data.HashCodeGenerator;
 import com.puresoltechnologies.commons.utils.io.LineTerminator;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 
 /**
  * This class represents a whole source code from a file and additional later
@@ -20,7 +23,7 @@ import com.puresoltechnologies.commons.utils.io.LineTerminator;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SourceCode implements Serializable, Cloneable {
+public class SourceCodeImpl implements SourceCode, Serializable, Cloneable {
 
 	private static final long serialVersionUID = -4132802914950017966L;
 
@@ -46,7 +49,7 @@ public class SourceCode implements Serializable, Cloneable {
 	public static SourceCode read(Reader reader, CodeLocation source)
 			throws IOException {
 		char[] buffer = new char[4096];
-		SourceCode code = new SourceCode();
+		SourceCodeImpl code = new SourceCodeImpl();
 		int length;
 		StringBuffer stringBuffer = new StringBuffer();
 		do {
@@ -61,14 +64,14 @@ public class SourceCode implements Serializable, Cloneable {
 			String br = findNextLineBreak(stringBuffer);
 			if (br.isEmpty()) {
 				String line = stringBuffer.toString();
-				code.addSourceCodeLine(new SourceCodeLine(source, lineNumber,
-						line));
+				code.addSourceCodeLine(new SourceCodeLineImpl(source,
+						lineNumber, line));
 				break;
 			} else {
 				int pos = stringBuffer.indexOf(br);
 				String line = stringBuffer.substring(0, pos + br.length());
-				code.addSourceCodeLine(new SourceCodeLine(source, lineNumber,
-						line));
+				code.addSourceCodeLine(new SourceCodeLineImpl(source,
+						lineNumber, line));
 				stringBuffer.delete(0, pos + br.length());
 			}
 		}
@@ -99,10 +102,11 @@ public class SourceCode implements Serializable, Cloneable {
 	private final List<SourceCodeLine> lines = new ArrayList<SourceCodeLine>();
 	private HashId hashId = null;
 
-	public SourceCode() {
+	public SourceCodeImpl() {
 		super();
 	}
 
+	@Override
 	public List<SourceCodeLine> getLines() {
 		return lines;
 	}
@@ -137,6 +141,7 @@ public class SourceCode implements Serializable, Cloneable {
 		}
 	}
 
+	@Override
 	public HashId getHashId() {
 		if (hashId == null) {
 			generateHashId();
@@ -154,7 +159,7 @@ public class SourceCode implements Serializable, Cloneable {
 		for (LineTerminator terminator : LineTerminator.values()) {
 			if (text.endsWith(terminator.getCRString())) {
 				lines.remove(lastLine);
-				lastLine = new SourceCodeLine(lastLine.getSource(),
+				lastLine = new SourceCodeLineImpl(lastLine.getSource(),
 						lastLine.getLineNumber(), text.substring(0,
 								text.length()
 										- terminator.getCRString().length()));
@@ -182,7 +187,7 @@ public class SourceCode implements Serializable, Cloneable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SourceCode other = (SourceCode) obj;
+		SourceCodeImpl other = (SourceCodeImpl) obj;
 		if (lines == null) {
 			if (other.lines != null)
 				return false;
@@ -194,7 +199,7 @@ public class SourceCode implements Serializable, Cloneable {
 	@Override
 	public SourceCode clone() {
 		try {
-			SourceCode cloned = (SourceCode) super.clone();
+			SourceCodeImpl cloned = (SourceCodeImpl) super.clone();
 			cloned.lines.addAll(cloned.lines);
 			return cloned;
 		} catch (CloneNotSupportedException e) {

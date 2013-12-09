@@ -12,15 +12,17 @@ import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.commons.trees.impl.TreeVisitor;
 import com.puresoltechnologies.commons.trees.impl.TreeWalker;
 import com.puresoltechnologies.commons.trees.impl.WalkingAction;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
 import com.puresoltechnologies.parsers.impl.lexer.Token;
 import com.puresoltechnologies.parsers.impl.lexer.TokenMetaData;
 import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.preprocessor.PreprocessorException;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
-import com.puresoltechnologies.parsers.impl.source.SourceCodeLine;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
+import com.puresoltechnologies.parsers.impl.source.SourceCodeLineImpl;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
 import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.parsers.impl.ust.eval.ValueTypeException;
@@ -64,7 +66,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	/**
 	 * This field contains after processing the new source code.
 	 */
-	private final SourceCode sourceCode = new SourceCode();
+	private final SourceCodeImpl sourceCode = new SourceCodeImpl();
 	/**
 	 * This field contains the original {@link ParserTree} of the source file
 	 * which is now to be processed.
@@ -132,7 +134,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	 * @return A new {@link SourceCode} object containing the process code is
 	 *         returned.
 	 */
-	public SourceCode getSourceCode() {
+	public SourceCodeImpl getSourceCode() {
 		return sourceCode;
 	}
 
@@ -240,7 +242,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 			while (pos < buffer.length()) {
 				int index = buffer.indexOf("\n", pos);
 				String line = buffer.substring(pos, index + 1);
-				SourceCodeLine sourceCodeLine = new SourceCodeLine(
+				SourceCodeLine sourceCodeLine = new SourceCodeLineImpl(
 						metaData.getSource(), metaData.getLine() + lineNum,
 						line);
 				sourceCode.addSourceCodeLine(sourceCodeLine);

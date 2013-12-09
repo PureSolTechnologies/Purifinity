@@ -26,14 +26,14 @@ import com.puresoltechnologies.commons.trees.impl.TreeVisitor;
 import com.puresoltechnologies.commons.trees.impl.TreeWalker;
 import com.puresoltechnologies.commons.trees.impl.WalkingAction;
 import com.puresoltechnologies.commons.utils.StopWatch;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.lexer.Lexer;
 import com.puresoltechnologies.parsers.impl.lexer.LexerException;
 import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
 import com.puresoltechnologies.parsers.impl.parser.Parser;
 import com.puresoltechnologies.parsers.impl.parser.ParserException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.ust.CompilationUnit;
 import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AbstractCodeAnalyzer;
@@ -42,7 +42,6 @@ import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.JavaGrammar;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.AnnotationTypeDeclaration;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.ConstructorDeclaration;
@@ -51,6 +50,7 @@ import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.Method
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.NormalClassDeclaration;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.NormalInterfaceDeclaration;
 import com.puresoltechnologies.purifinity.coding.lang.java7.ust.CompilationUnitCreator;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * 

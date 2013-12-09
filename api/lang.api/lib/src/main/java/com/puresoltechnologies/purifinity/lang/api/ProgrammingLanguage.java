@@ -1,6 +1,6 @@
-package com.puresoltechnologies.purifinity.coding.lang.api;
+package com.puresoltechnologies.purifinity.lang.api;
 
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
 
 /**
  * This interface is the central interface for a programming language

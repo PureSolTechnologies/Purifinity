@@ -1,5 +1,8 @@
 package com.puresoltechnologies.parsers.impl.source;
 
+import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
+
 public class StringWithLocation {
 
 	private final String text;

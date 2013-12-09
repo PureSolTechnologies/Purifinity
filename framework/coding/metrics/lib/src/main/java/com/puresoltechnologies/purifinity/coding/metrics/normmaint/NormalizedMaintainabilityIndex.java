@@ -30,11 +30,11 @@ import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQualit
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.CodeRangeEvaluator;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.Result;
 import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetric;
 import com.puresoltechnologies.purifinity.coding.metrics.mccabe.McCabeMetric;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCMetricCalculator;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 

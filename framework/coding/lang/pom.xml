@@ -12,7 +12,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>api</module>
 		<module>commons</module>
 		<module>java7</module>
 		<module>c11</module>

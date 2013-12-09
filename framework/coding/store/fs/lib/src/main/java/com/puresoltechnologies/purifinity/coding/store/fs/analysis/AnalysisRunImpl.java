@@ -39,7 +39,7 @@ import com.puresoltechnologies.commons.utils.HashId;
 import com.puresoltechnologies.commons.utils.StopWatch;
 import com.puresoltechnologies.commons.utils.data.HashCodeGenerator;
 import com.puresoltechnologies.commons.utils.progress.AbstractProgressObservable;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalysisRunInformation;

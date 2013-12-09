@@ -32,8 +32,8 @@
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
       <import plugin="org.eclipse.help"/>
       <import plugin="com.puresoltechnologies.commons.configuration.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.lang.api.bundle"/>
       <import plugin="org.eclipse.osgi"/>
+      <import plugin="com.puresoltechnologies.purifinity.lang.api.bundle"/>
    </requires>
 
    <plugin

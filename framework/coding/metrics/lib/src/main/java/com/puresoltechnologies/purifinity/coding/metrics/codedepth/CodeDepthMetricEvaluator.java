@@ -20,7 +20,7 @@ import com.puresoltechnologies.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * This evaluator calculates the nesting depth of the source code. A too deep

@@ -3,6 +3,8 @@ package com.puresoltechnologies.parsers.impl.source;
 import java.io.Serializable;
 
 import com.puresoltechnologies.commons.utils.ObjectUtilities;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 
 /**
  * This class represents a single line of source code taken from a source code
@@ -12,7 +14,8 @@ import com.puresoltechnologies.commons.utils.ObjectUtilities;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SourceCodeLine implements Serializable, Cloneable {
+public class SourceCodeLineImpl implements SourceCodeLine, Serializable,
+		Cloneable {
 
 	private static final long serialVersionUID = -3788483766559761026L;
 
@@ -21,7 +24,7 @@ public class SourceCodeLine implements Serializable, Cloneable {
 	private final String line;
 	private final int hashCode;
 
-	public SourceCodeLine(CodeLocation source, int lineNumber, String line) {
+	public SourceCodeLineImpl(CodeLocation source, int lineNumber, String line) {
 		super();
 		this.source = source;
 		this.lineNumber = lineNumber;
@@ -30,14 +33,17 @@ public class SourceCodeLine implements Serializable, Cloneable {
 				lineNumber, line);
 	}
 
+	@Override
 	public CodeLocation getSource() {
 		return source;
 	}
 
+	@Override
 	public int getLineNumber() {
 		return lineNumber;
 	}
 
+	@Override
 	public String getLine() {
 		return line;
 	}
@@ -55,7 +61,7 @@ public class SourceCodeLine implements Serializable, Cloneable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SourceCodeLine other = (SourceCodeLine) obj;
+		SourceCodeLineImpl other = (SourceCodeLineImpl) obj;
 		if (hashCode != other.hashCode) {
 			return false;
 		}
@@ -81,6 +87,6 @@ public class SourceCodeLine implements Serializable, Cloneable {
 
 	@Override
 	public SourceCodeLine clone() {
-		return new SourceCodeLine(source, lineNumber, line);
+		return new SourceCodeLineImpl(source, lineNumber, line);
 	}
 }

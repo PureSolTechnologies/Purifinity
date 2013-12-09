@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * This class is used to manage the ProgrammingLanguage services. This is the

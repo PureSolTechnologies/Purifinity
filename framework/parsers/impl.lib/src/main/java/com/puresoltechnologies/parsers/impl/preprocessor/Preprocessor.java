@@ -1,6 +1,6 @@
 package com.puresoltechnologies.parsers.impl.preprocessor;
 
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
 
 /**
  * This is an interface for PreProcessor implementations. A PreProcessor is
@@ -16,20 +16,20 @@ import com.puresoltechnologies.parsers.impl.source.SourceCode;
  */
 public interface Preprocessor {
 
-    /**
-     * This is the central method for any preprocessor. A source code object is
-     * provided which is processed by the preprocessor implementation. The
-     * return value is also a source code object. So several preprocessors can
-     * be stacked.
-     * 
-     * @param sourceCode
-     *            is the source code to be processed.
-     * @return A new {@link SourceCode} object is returned containing the
-     *         preprocessed source code.
-     * @throws PreprocessorException
-     *             is thrown if anything goes wrong during the process.
-     */
-    public SourceCode process(SourceCode sourceCode)
-	    throws PreprocessorException;
+	/**
+	 * This is the central method for any preprocessor. A source code object is
+	 * provided which is processed by the preprocessor implementation. The
+	 * return value is also a source code object. So several preprocessors can
+	 * be stacked.
+	 * 
+	 * @param sourceCode
+	 *            is the source code to be processed.
+	 * @return A new {@link SourceCode} object is returned containing the
+	 *         preprocessed source code.
+	 * @throws PreprocessorException
+	 *             is thrown if anything goes wrong during the process.
+	 */
+	public SourceCode process(SourceCode sourceCode)
+			throws PreprocessorException;
 
 }

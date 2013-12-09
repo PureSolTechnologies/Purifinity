@@ -13,7 +13,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.lang.api.lib</artifactId>
+			<artifactId>lang.api.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>

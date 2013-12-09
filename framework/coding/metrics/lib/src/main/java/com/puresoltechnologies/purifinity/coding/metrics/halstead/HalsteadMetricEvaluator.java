@@ -19,7 +19,7 @@ import com.puresoltechnologies.purifinity.coding.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.coding.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 public class HalsteadMetricEvaluator extends AbstractEvaluator {
 

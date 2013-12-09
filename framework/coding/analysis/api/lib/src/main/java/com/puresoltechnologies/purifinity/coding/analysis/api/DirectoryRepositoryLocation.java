@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.puresoltechnologies.commons.utils.FileSearch;
 import com.puresoltechnologies.commons.utils.FileTree;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
 
 /**

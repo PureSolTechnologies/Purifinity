@@ -136,11 +136,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.lang.api.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
 				<artifactId>coding.lang.c11.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -188,6 +183,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
+				<artifactId>lang.api.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity</groupId>
 				<artifactId>license.api.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -206,6 +206,11 @@
 				<artifactId>license.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.parsers</groupId>
+				<artifactId>parsers.api.lib</artifactId>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>

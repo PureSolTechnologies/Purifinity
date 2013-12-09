@@ -30,16 +30,17 @@
       <import plugin="org.eclipse.core.runtime" version="3.8.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.math.bundle"/>
+      <import plugin="com.puresoltechnologies.commons.trees.impl.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.impl.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.lang.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.metrics.bundle"/>
       <import plugin="org.apache.commons.io"/>
       <import plugin="org.eclipse.osgi"/>
-      <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.commons.trees.impl.bundle"/>
+      <import plugin="com.puresoltechnologies.commons.trees.api.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.lang.api.bundle"/>
    </requires>
 
    <plugin

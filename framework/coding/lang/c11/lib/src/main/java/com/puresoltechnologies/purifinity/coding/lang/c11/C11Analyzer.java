@@ -21,20 +21,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.utils.StopWatch;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.parser.ParserException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.parser.packrat.PackratParser;
-import com.puresoltechnologies.parsers.impl.source.CodeLocation;
-import com.puresoltechnologies.parsers.impl.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.ust.CompilationUnit;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AbstractCodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
-import com.puresoltechnologies.purifinity.coding.lang.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.lang.c11.grammar.C11Grammar;
 import com.puresoltechnologies.purifinity.coding.lang.c11.ust.TranslationUnitCreator;
+import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * 
