@@ -150,12 +150,20 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
+<<<<<<< HEAD
 			<artifactId>coding.lang.c11.bundle</artifactId>
+=======
+			<artifactId>coding.evaluation.iso9126.bundle</artifactId>
+>>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
+<<<<<<< HEAD
 			<artifactId>coding.lang.cpp11.bundle</artifactId>
+=======
+			<artifactId>coding.lang.commons.bundle</artifactId>
+>>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -181,6 +189,11 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>evaluation.api.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
+			<artifactId>lang.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

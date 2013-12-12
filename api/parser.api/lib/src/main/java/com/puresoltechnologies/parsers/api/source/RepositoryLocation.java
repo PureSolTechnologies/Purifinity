@@ -5,7 +5,12 @@ import java.io.Serializable;
 import java.net.URL;
 import java.util.List;
 
+<<<<<<< HEAD:api/parser.api/lib/src/main/java/com/puresoltechnologies/parsers/api/source/RepositoryLocation.java
 import com.puresoltechnologies.commons.FileSearchConfiguration;
+=======
+import com.puresoltechnologies.commons.utils.FileSearchConfiguration;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+>>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9:framework/coding/analysis/api/lib/src/main/java/com/puresoltechnologies/purifinity/coding/analysis/api/RepositoryLocation.java
 
 /**
  * This is an interface for a repository source. The actual implementation may

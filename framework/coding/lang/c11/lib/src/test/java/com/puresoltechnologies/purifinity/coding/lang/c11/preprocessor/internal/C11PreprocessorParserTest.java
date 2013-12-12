@@ -5,9 +5,15 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+<<<<<<< HEAD
 import com.puresoltechnologies.commons.trees.api.SearchVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeSearchCriterion;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
+=======
+import com.puresoltechnologies.commons.trees.impl.SearchVisitor;
+import com.puresoltechnologies.commons.trees.impl.TreeSearchCriterion;
+import com.puresoltechnologies.commons.trees.impl.TreeWalker;
+>>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;

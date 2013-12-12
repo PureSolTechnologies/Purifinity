@@ -25,9 +25,14 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.CodeRangeEvaluator;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.Result;
+<<<<<<< HEAD
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetric;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
+=======
+import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
+import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetric;
+>>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**

@@ -16,10 +16,14 @@ import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluator;
+<<<<<<< HEAD
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
+=======
+import com.puresoltechnologies.purifinity.coding.evaluation.iso9126.QualityCharacteristic;
+>>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**

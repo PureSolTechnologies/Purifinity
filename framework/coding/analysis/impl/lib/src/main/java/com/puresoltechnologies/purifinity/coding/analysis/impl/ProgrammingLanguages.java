@@ -5,7 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
+<<<<<<< HEAD:framework/coding/analysis/impl/lib/src/main/java/com/puresoltechnologies/purifinity/coding/analysis/impl/ProgrammingLanguages.java
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+=======
+>>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9:framework/coding/analysis/api/lib/src/main/java/com/puresoltechnologies/purifinity/coding/analysis/api/ProgrammingLanguages.java
 import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**

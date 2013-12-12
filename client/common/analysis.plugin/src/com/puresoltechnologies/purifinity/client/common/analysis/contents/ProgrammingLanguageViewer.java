@@ -8,7 +8,11 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+<<<<<<< HEAD
 import com.puresoltechnologies.purifinity.coding.analysis.impl.ProgrammingLanguages;
+=======
+import com.puresoltechnologies.purifinity.coding.analysis.api.ProgrammingLanguages;
+>>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**

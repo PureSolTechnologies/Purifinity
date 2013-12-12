@@ -9,9 +9,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.trees.api.TreeException;
+<<<<<<< HEAD
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
+=======
+import com.puresoltechnologies.commons.trees.impl.TreeVisitor;
+import com.puresoltechnologies.commons.trees.impl.TreeWalker;
+import com.puresoltechnologies.commons.trees.impl.WalkingAction;
+>>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.parsers.api.source.CodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLine;

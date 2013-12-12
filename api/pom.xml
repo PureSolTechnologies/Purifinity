@@ -158,6 +158,11 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
 				<artifactId>parsers.api.lib</artifactId>
 				<version>${project.version}</version>
@@ -297,7 +302,11 @@
 
 	<modules>
 		<module>osgi</module>
+<<<<<<< HEAD
 		<module>math</module>
+=======
+		<module>utils</module>
+>>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 		<module>trees.api</module>
 		<module>commons</module>
 		<module>parser.api</module>
