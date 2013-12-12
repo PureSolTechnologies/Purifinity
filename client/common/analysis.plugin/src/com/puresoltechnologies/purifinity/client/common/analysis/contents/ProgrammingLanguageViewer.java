@@ -8,11 +8,7 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-<<<<<<< HEAD
 import com.puresoltechnologies.purifinity.coding.analysis.impl.ProgrammingLanguages;
-=======
-import com.puresoltechnologies.purifinity.coding.analysis.api.ProgrammingLanguages;
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
@@ -25,45 +21,45 @@ import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
  */
 public class ProgrammingLanguageViewer extends ComboViewer {
 
-    public ProgrammingLanguageViewer(CCombo list) {
-	super(list);
-	init();
-    }
-
-    public ProgrammingLanguageViewer(Combo list) {
-	super(list);
-	init();
-    }
-
-    public ProgrammingLanguageViewer(Composite parent) {
-	super(parent);
-	init();
-    }
-
-    public ProgrammingLanguageViewer(Composite parent, int style) {
-	super(parent, style);
-	init();
-    }
-
-    private void init() {
-	setContentProvider(ArrayContentProvider.getInstance());
-	setLabelProvider(new LabelProvider() {
-	    @Override
-	    public String getText(Object element) {
-		return ((ProgrammingLanguage) element).getName();
-	    }
-	});
-    }
-
-    @Override
-    public void refresh() {
-	super.refresh();
-	ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-		.createInstance();
-	try {
-	    setInput(programmingLanguages.getAll());
-	} finally {
-	    IOUtils.closeQuietly(programmingLanguages);
+	public ProgrammingLanguageViewer(CCombo list) {
+		super(list);
+		init();
 	}
-    }
+
+	public ProgrammingLanguageViewer(Combo list) {
+		super(list);
+		init();
+	}
+
+	public ProgrammingLanguageViewer(Composite parent) {
+		super(parent);
+		init();
+	}
+
+	public ProgrammingLanguageViewer(Composite parent, int style) {
+		super(parent, style);
+		init();
+	}
+
+	private void init() {
+		setContentProvider(ArrayContentProvider.getInstance());
+		setLabelProvider(new LabelProvider() {
+			@Override
+			public String getText(Object element) {
+				return ((ProgrammingLanguage) element).getName();
+			}
+		});
+	}
+
+	@Override
+	public void refresh() {
+		super.refresh();
+		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
+				.createInstance();
+		try {
+			setInput(programmingLanguages.getAll());
+		} finally {
+			IOUtils.closeQuietly(programmingLanguages);
+		}
+	}
 }

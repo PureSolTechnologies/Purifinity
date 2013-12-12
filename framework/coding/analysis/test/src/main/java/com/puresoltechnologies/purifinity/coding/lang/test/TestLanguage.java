@@ -6,15 +6,9 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 
 import com.puresoltechnologies.parsers.api.source.CodeLocation;
-<<<<<<< HEAD
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerStore;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractProgrammingLanguage;
-=======
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerStore;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzer;
-import com.puresoltechnologies.purifinity.coding.lang.commons.AbstractProgrammingLanguage;
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.purifinity.coding.lang.test.grammar.TestLanguageGrammar;
 import com.puresoltechnologies.purifinity.lang.api.LanguageGrammar;
 

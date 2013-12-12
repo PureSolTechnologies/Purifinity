@@ -5,10 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
-<<<<<<< HEAD:framework/coding/analysis/impl/lib/src/main/java/com/puresoltechnologies/purifinity/coding/analysis/impl/ProgrammingLanguages.java
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
-=======
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9:framework/coding/analysis/api/lib/src/main/java/com/puresoltechnologies/purifinity/coding/analysis/api/ProgrammingLanguages.java
 import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
@@ -20,46 +17,46 @@ import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
  */
 public abstract class ProgrammingLanguages implements Closeable {
 
-    public static ProgrammingLanguages createInstance() {
-	ServiceLoader<ProgrammingLanguages> loader = ServiceLoader
-		.load(ProgrammingLanguages.class);
-	Iterator<ProgrammingLanguages> iterator = loader.iterator();
-	if (!iterator.hasNext()) {
-	    throw new IllegalStateException("No implementation for '"
-		    + ProgrammingLanguages.class.getName() + "' found.");
+	public static ProgrammingLanguages createInstance() {
+		ServiceLoader<ProgrammingLanguages> loader = ServiceLoader
+				.load(ProgrammingLanguages.class);
+		Iterator<ProgrammingLanguages> iterator = loader.iterator();
+		if (!iterator.hasNext()) {
+			throw new IllegalStateException("No implementation for '"
+					+ ProgrammingLanguages.class.getName() + "' found.");
+		}
+		ProgrammingLanguages instance = iterator.next();
+		if (iterator.hasNext()) {
+			throw new IllegalStateException("Too many implementations for '"
+					+ ProgrammingLanguages.class.getName() + "' found.");
+		}
+		return instance;
 	}
-	ProgrammingLanguages instance = iterator.next();
-	if (iterator.hasNext()) {
-	    throw new IllegalStateException("Too many implementations for '"
-		    + ProgrammingLanguages.class.getName() + "' found.");
-	}
-	return instance;
-    }
 
-    /**
-     * This method looks into the bundle context and returns all available
-     * programming languages.
-     * 
-     * @return
-     */
-    public abstract List<ProgrammingLanguageAnalyzer> getAll();
+	/**
+	 * This method looks into the bundle context and returns all available
+	 * programming languages.
+	 * 
+	 * @return
+	 */
+	public abstract List<ProgrammingLanguageAnalyzer> getAll();
 
-    /**
-     * This method is used to find a programming language by its name and
-     * version.
-     * 
-     * @param name
-     *            is the name of the programming language to be found.
-     * @return The programming language is returned. If the language was not
-     *         found null is returned.
-     */
-    public ProgrammingLanguage findByName(String name, String version) {
-	for (ProgrammingLanguage language : getAll()) {
-	    if ((language.getName().equals(name))
-		    && (language.getVersion().equals(version))) {
-		return language;
-	    }
+	/**
+	 * This method is used to find a programming language by its name and
+	 * version.
+	 * 
+	 * @param name
+	 *            is the name of the programming language to be found.
+	 * @return The programming language is returned. If the language was not
+	 *         found null is returned.
+	 */
+	public ProgrammingLanguage findByName(String name, String version) {
+		for (ProgrammingLanguage language : getAll()) {
+			if ((language.getName().equals(name))
+					&& (language.getVersion().equals(version))) {
+				return language;
+			}
+		}
+		return null;
 	}
-	return null;
-    }
 }

@@ -9,13 +9,10 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
 import com.puresoltechnologies.parsers.api.source.SourceCode;
-<<<<<<< HEAD
 import com.puresoltechnologies.purifinity.analysis.api.FileStore;
 import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;
 import com.puresoltechnologies.purifinity.analysis.api.FileStoreFactory;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
-=======
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ScrollableFileViewer;
 import com.puresoltechnologies.purifinity.client.common.ui.editors.AbstractPureSolTechnologiesEditor;

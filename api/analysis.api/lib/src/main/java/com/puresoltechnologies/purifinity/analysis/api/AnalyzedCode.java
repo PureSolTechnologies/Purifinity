@@ -3,6 +3,10 @@ package com.puresoltechnologies.purifinity.analysis.api;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.commons.TimeAwareness;
+import com.puresoltechnologies.parsers.api.source.CodeLocation;
+
 /**
  * This class is for keeping a list of analyzed files within ProjectAnalyzer.
  * This class provides easy and standardized access to the workspace

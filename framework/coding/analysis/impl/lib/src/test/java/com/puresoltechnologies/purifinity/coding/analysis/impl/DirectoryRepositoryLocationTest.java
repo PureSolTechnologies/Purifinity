@@ -9,15 +9,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-<<<<<<< HEAD:framework/coding/analysis/impl/lib/src/test/java/com/puresoltechnologies/purifinity/coding/analysis/impl/DirectoryRepositoryLocationTest.java
 import com.puresoltechnologies.commons.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.api.source.CodeLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.impl.DirectoryRepositoryLocation;
-=======
-import com.puresoltechnologies.commons.utils.FileSearchConfiguration;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.DirectoryRepositoryLocation;
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9:framework/coding/analysis/api/lib/src/test/java/com/puresoltechnologies/purifinity/coding/analysis/api/DirectoryRepositoryLocationTest.java
 
 public class DirectoryRepositoryLocationTest {
 

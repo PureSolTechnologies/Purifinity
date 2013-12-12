@@ -3,9 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresoltechnologies.purifinity</groupId>
-		<artifactId>api-parent</artifactId>
+		<groupId>com.puresoltechnologies.commons</groupId>
+		<artifactId>parent.java</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
+		<relativePath>../parent/java</relativePath>
 	</parent>
 
 	<artifactId>utils</artifactId>

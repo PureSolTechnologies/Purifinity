@@ -2,11 +2,7 @@ package com.puresoltechnologies.purifinity.analysis.api;
 
 import java.io.InputStream;
 
-<<<<<<< HEAD:api/analysis.api/lib/src/main/java/com/puresoltechnologies/purifinity/analysis/api/FileStore.java
 import com.puresoltechnologies.commons.HashId;
-=======
-import com.puresoltechnologies.commons.utils.HashId;
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9:framework/coding/analysis/api/lib/src/main/java/com/puresoltechnologies/purifinity/coding/analysis/api/FileStore.java
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 
 /**

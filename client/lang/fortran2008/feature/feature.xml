@@ -29,29 +29,17 @@
       <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
       <import plugin="org.eclipse.help"/>
-<<<<<<< HEAD
       <import plugin="com.puresoltechnologies.commons.trees.api.bundle"/>
       <import plugin="com.puresoltechnologies.commons.utils.bundle"/>
       <import plugin="com.puresoltechnologies.parsers.api.bundle"/>
       <import plugin="com.puresoltechnologies.parsers.impl.bundle"/>
-=======
-      <import plugin="com.puresoltechnologies.commons.configuration.bundle"/>
-      <import plugin="com.puresoltechnologies.commons.trees.impl.bundle"/>
-      <import plugin="com.puresoltechnologies.commons.utils.bundle"/>
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
       <import plugin="com.puresoltechnologies.purifinity.coding.lang.c11.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.metrics.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.lang.api.bundle"/>
       <import plugin="org.eclipse.osgi"/>
-<<<<<<< HEAD
       <import plugin="com.puresoltechnologies.commons.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle"/>
-=======
-      <import plugin="com.puresoltechnologies.commons.trees.api.bundle"/>
-      <import plugin="com.puresoltechnologies.parsers.impl.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.lang.api.bundle"/>
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
    </requires>
 
    <plugin

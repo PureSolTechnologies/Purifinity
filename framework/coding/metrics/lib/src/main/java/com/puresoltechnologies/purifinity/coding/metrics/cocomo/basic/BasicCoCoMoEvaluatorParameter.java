@@ -8,17 +8,10 @@ import com.puresoltechnologies.commons.math.Money;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.parsers.api.source.CodeLocation;
-<<<<<<< HEAD
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeLocationParameter;
-=======
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.CodeRangeNameParameter;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.CodeRangeTypeParameter;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeLocationParameter;
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 
 public class BasicCoCoMoEvaluatorParameter {
 

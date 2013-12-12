@@ -25,17 +25,10 @@ import java.util.Map;
 import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.parsers.api.source.CodeLocation;
-<<<<<<< HEAD
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluatorResult;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
-=======
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.AbstractEvaluatorResult;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.QualityLevel;
-import com.puresoltechnologies.purifinity.coding.evaluation.api.SourceCodeQuality;
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 
 public abstract class AbstractHalsteadResults extends AbstractEvaluatorResult {
 

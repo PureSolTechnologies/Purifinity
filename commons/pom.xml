@@ -187,12 +187,7 @@
 	<modules>
 		<module>parent</module>
 		<module>dependency</module>
-<<<<<<< HEAD
 		<module>utils</module>
-=======
-		<module>trees.impl.lib</module>
-		<module>math</module>
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 		<module>configuration</module>
 		<module>license</module>
 	</modules>

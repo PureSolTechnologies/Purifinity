@@ -5,17 +5,10 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-<<<<<<< HEAD
 import com.puresoltechnologies.commons.ConfigurationParameter;
 import com.puresoltechnologies.parsers.api.source.CodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractProgrammingLanguageAnalyzer;
-=======
-import com.puresoltechnologies.commons.configuration.ConfigurationParameter;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AbstractProgrammingLanguageAnalyzer;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalyzer;
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.purifinity.lang.api.LanguageGrammar;
 
 public class CPP extends AbstractProgrammingLanguageAnalyzer {

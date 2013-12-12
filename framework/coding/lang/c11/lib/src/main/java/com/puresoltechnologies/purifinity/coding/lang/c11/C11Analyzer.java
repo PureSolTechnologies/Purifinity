@@ -27,19 +27,11 @@ import com.puresoltechnologies.parsers.impl.parser.ParserException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.parser.packrat.PackratParser;
 import com.puresoltechnologies.parsers.impl.ust.CompilationUnit;
-<<<<<<< HEAD
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractCodeAnalyzer;
-=======
-import com.puresoltechnologies.purifinity.coding.analysis.api.AbstractCodeAnalyzer;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzedCode;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.purifinity.coding.lang.c11.grammar.C11Grammar;
 import com.puresoltechnologies.purifinity.coding.lang.c11.ust.TranslationUnitCreator;
 import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;

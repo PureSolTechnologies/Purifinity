@@ -28,10 +28,7 @@ import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.commons.utils.StopWatch;
 import com.puresoltechnologies.parsers.api.source.CodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
-<<<<<<< HEAD
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
-=======
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.parsers.impl.lexer.LexerException;
 import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
 import com.puresoltechnologies.parsers.impl.parser.Parser;

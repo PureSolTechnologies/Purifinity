@@ -28,10 +28,7 @@ import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.commons.utils.StopWatch;
 import com.puresoltechnologies.parsers.api.source.CodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
-<<<<<<< HEAD
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
-=======
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.parsers.impl.lexer.Lexer;
 import com.puresoltechnologies.parsers.impl.lexer.LexerException;
 import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
@@ -39,22 +36,12 @@ import com.puresoltechnologies.parsers.impl.parser.Parser;
 import com.puresoltechnologies.parsers.impl.parser.ParserException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.ust.CompilationUnit;
-<<<<<<< HEAD
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractCodeAnalyzer;
-=======
-import com.puresoltechnologies.parsers.impl.ust.UniversalSyntaxTree;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AbstractCodeAnalyzer;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzedCode;
-import com.puresoltechnologies.purifinity.coding.analysis.api.AnalyzerException;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeAnalysis;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRange;
-import com.puresoltechnologies.purifinity.coding.analysis.api.CodeRangeType;
->>>>>>> 22bb20bf218d5d810e936dd668128ce7c35efbf9
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.JavaGrammar;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.AnnotationTypeDeclaration;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.ConstructorDeclaration;
