@@ -13,16 +13,15 @@ import com.puresoltechnologies.purifinity.client.common.chart.AxisDirection;
  */
 public class TransformationMatrix2D extends Matrix {
 
-	public static TransformationMatrix2D createRotationMatrixRad(double rad) {
-		TransformationMatrix2D transform = new TransformationMatrix2D();
-		transform.rotateDeg(rad);
-		return transform;
+	public static Matrix createRotationMatrixRad2D(double rad) {
+		Matrix rotationMatrix = new Matrix(3, 3, new double[][] {
+				{ Math.cos(rad), -Math.sin(rad), 0.0 },
+				{ Math.sin(rad), Math.cos(rad), 0.0 }, { 0.0, 0.0, 1.0 } });
+		return rotationMatrix;
 	}
 
-	public static TransformationMatrix2D createRotationMatrixDeg(double deg) {
-		TransformationMatrix2D transform = new TransformationMatrix2D();
-		transform.rotateDeg(deg);
-		return transform;
+	public static Matrix createRotationMatrixDeg2D(double deg) {
+		return createRotationMatrixRad2D(deg / 180.0 * Math.PI);
 	}
 
 	private static final int DIMENSIONS = 3;
@@ -88,9 +87,7 @@ public class TransformationMatrix2D extends Matrix {
 	}
 
 	public void rotateRad(double rad) {
-		Matrix rotationMatrix = new Matrix(3, 3, new double[][] {
-				{ Math.cos(rad), -Math.sin(rad), 0.0 },
-				{ Math.sin(rad), Math.cos(rad), 0.0 }, { 0.0, 0.0, 1.0 } });
+		Matrix rotationMatrix = createRotationMatrixRad2D(rad);
 		multiplyFromRight(rotationMatrix);
 	}
 }

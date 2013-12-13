@@ -24,9 +24,9 @@ import java.util.Map;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.math.GeneralValue;
-import com.puresoltechnologies.commons.math.Money;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
+import com.puresoltechnologies.commons.math.money.Money;
 import com.puresoltechnologies.parsers.api.source.CodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;

@@ -111,7 +111,7 @@ public class AxisRenderer {
 			TransformationMatrix2D t = new TransformationMatrix2D(
 					transformation);
 			t.multiplyFromLeft(TransformationMatrix2D
-					.createRotationMatrixDeg(90));
+					.createRotationMatrixDeg2D(90));
 			// Now we can paint... :-)
 			String text = getAxisText(axis);
 			Font currentFont = gc.getFont();

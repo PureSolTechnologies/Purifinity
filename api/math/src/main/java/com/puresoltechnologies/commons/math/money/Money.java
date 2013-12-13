@@ -1,6 +1,8 @@
-package com.puresoltechnologies.commons.math;
+package com.puresoltechnologies.commons.math.money;
 
 import java.util.Arrays;
+
+import com.puresoltechnologies.commons.math.MathUtils;
 
 /**
  * This class is inspired by the Money imlementation in Fowler's book

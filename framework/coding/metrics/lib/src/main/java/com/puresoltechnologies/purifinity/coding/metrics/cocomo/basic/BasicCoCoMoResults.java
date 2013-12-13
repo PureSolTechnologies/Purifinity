@@ -11,7 +11,7 @@ import static com.puresoltechnologies.purifinity.coding.metrics.cocomo.basic.Bas
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.commons.math.Money;
+import com.puresoltechnologies.commons.math.money.Money;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluatorResult;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricValue;
 

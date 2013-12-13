@@ -1,4 +1,8 @@
-package com.puresoltechnologies.commons.math;
+package com.puresoltechnologies.commons.math.money;
+
+import com.puresoltechnologies.commons.math.CompoundSIUnitWithMoney;
+import com.puresoltechnologies.commons.math.LevelOfMeasurement;
+import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 
 /**
  * This class is for describing physical values. This can be used to store

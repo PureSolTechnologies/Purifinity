@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * This is an abstract Activator implementation which can be used by all OSGi
  * bundles. This Activator logs the start and stop and provides simple
  * functionality like {@link BundleContext} retrieval and automated
- * deregistration of registered services.
+ * de-registration of registered services.
  * 
  * 
  * @author Rick-Rainer Ludwig
@@ -75,7 +75,7 @@ public abstract class AbstractActivator implements BundleActivator {
 	}
 
 	/**
-	 * This method deregisters all former registered services.
+	 * This method de-registers all former registered services.
 	 */
 	private void deregisterServices() {
 		Iterator<ServiceRegistration<?>> serviceIterator = serviceRegistrations
@@ -83,7 +83,7 @@ public abstract class AbstractActivator implements BundleActivator {
 		while (serviceIterator.hasNext()) {
 			ServiceRegistration<?> serviceReference = serviceIterator.next();
 			serviceReference.unregister();
-			serviceRegistrations.remove(serviceIterator);
+			serviceIterator.remove();
 		}
 	}
 
@@ -122,7 +122,7 @@ public abstract class AbstractActivator implements BundleActivator {
 
 	/**
 	 * This method should be used to register services. Services registered with
-	 * this method auto deregistered during bundle stop.
+	 * this method auto de-registered during bundle stop.
 	 * 
 	 * @param iface
 	 *            is the interface of the service to be used for later

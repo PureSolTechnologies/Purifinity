@@ -1,4 +1,6 @@
-package com.puresoltechnologies.commons.math;
+package com.puresoltechnologies.commons.math.money;
+
+import com.puresoltechnologies.commons.math.AbstractValue;
 
 public class PhysicalValueWithMoney<T> extends AbstractValue<T> {
 
