@@ -14,8 +14,8 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.ConfigurationParameter;
-import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.commons.misc.ConfigurationParameter;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;

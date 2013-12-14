@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.List;
 
-import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.api.DirectoryStore;
 import com.puresoltechnologies.purifinity.analysis.api.DirectoryStoreException;
 

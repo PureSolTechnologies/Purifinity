@@ -100,7 +100,7 @@
 			<!-- Project internal -->
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>analysis.api.lib</artifactId>
+				<artifactId>analysis.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -168,7 +168,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>evaluation.api.lib</artifactId>
+				<artifactId>evaluation.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -194,7 +194,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
-				<artifactId>parsers.api.lib</artifactId>
+				<artifactId>parsers.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -226,7 +226,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>math.lib</artifactId>
+				<artifactId>math</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
@@ -236,7 +236,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>trees.api.lib</artifactId>
+				<artifactId>trees.api</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
@@ -299,12 +299,12 @@
 							<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${project.version}"</Export-Package>
 							<Private-Package>${bundle.namespace}.internal.*</Private-Package>
 							<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
+							<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
 							<!-- embed compile/runtime dependencies using path that matches the 
 								copied dependency folder -->
 							<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
 							<Embed-Directory>dependencies</Embed-Directory>
 							<Embed-StripGroup>true</Embed-StripGroup>
-							<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
 						</instructions>
 					</configuration>
 				</plugin>

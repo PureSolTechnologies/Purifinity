@@ -12,8 +12,8 @@ import java.io.RandomAccessFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.HashAlgorithm;
-import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.commons.misc.HashAlgorithm;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.utils.data.HashCodeGenerator;
 
 /**

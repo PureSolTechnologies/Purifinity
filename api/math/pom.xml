@@ -4,18 +4,24 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity</groupId>
-		<artifactId>api-parent</artifactId>
+		<artifactId>open</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.puresoltechnologies.commons</groupId>
 	<artifactId>math</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 
-	<modules>
-		<module>lib</module>
-		<module>bundle</module>
-	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
 
 </project>

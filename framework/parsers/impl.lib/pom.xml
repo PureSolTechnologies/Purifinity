@@ -17,7 +17,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.parsers</groupId>
-			<artifactId>parsers.api.lib</artifactId>
+			<artifactId>parsers.api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

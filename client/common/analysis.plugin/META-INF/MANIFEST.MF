@@ -7,7 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
 Require-Bundle: com.puresoltechnologies.commons.trees.api.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.commons.bundle;bundle-version="0.1.1",
+ com.puresoltechnologies.commons.misc.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.commons.utils.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.parsers.api.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.parsers.impl.bundle;bundle-version="0.1.1",

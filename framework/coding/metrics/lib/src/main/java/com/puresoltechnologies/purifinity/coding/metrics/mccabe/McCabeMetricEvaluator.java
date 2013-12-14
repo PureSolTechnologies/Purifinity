@@ -5,8 +5,8 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
-import com.puresoltechnologies.commons.ConfigurationParameter;
-import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.commons.misc.ConfigurationParameter;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;

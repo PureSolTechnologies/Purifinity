@@ -8,8 +8,8 @@ import java.security.DigestInputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import com.puresoltechnologies.commons.HashAlgorithm;
-import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.commons.misc.HashAlgorithm;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.utils.StringUtils;
 import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;
 

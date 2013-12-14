@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
-import com.puresoltechnologies.purifinity.coding.lang.test.TestLanguageAnalyser;
 
 public class TestLanguageAnalyserTest {
 

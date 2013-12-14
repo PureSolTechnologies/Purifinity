@@ -26,7 +26,7 @@ import java.security.Security;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.HashAlgorithm;
+import com.puresoltechnologies.commons.misc.HashAlgorithm;
 import com.puresoltechnologies.commons.utils.StringUtils;
 
 public class HashCodeGenerator {

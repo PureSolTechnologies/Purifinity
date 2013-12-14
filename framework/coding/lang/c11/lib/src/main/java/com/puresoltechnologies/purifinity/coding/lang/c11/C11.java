@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.ConfigurationParameter;
+import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.parsers.api.source.CodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;

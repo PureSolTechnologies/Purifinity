@@ -16,7 +16,7 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
-import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.api.FileStore;
 import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;

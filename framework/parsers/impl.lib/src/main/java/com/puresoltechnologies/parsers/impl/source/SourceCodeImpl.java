@@ -8,8 +8,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.commons.HashAlgorithm;
-import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.commons.misc.HashAlgorithm;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.utils.data.HashCodeGenerator;
 import com.puresoltechnologies.commons.utils.io.LineTerminator;
 import com.puresoltechnologies.parsers.api.source.CodeLocation;

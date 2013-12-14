@@ -15,7 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
-import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.utils.StringUtils;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;

@@ -2,7 +2,7 @@ package com.puresoltechnologies.parsers.impl.source;
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.commons.ObjectUtilities;
+import com.puresoltechnologies.commons.misc.ObjectUtilities;
 import com.puresoltechnologies.parsers.api.source.CodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 

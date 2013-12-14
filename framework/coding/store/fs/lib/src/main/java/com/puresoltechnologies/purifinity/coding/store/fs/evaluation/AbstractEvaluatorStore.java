@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import com.puresoltechnologies.commons.HashId;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.coding.store.fs.analysis.AnalysisRunImpl;
 import com.puresoltechnologies.purifinity.coding.store.fs.analysis.DirectoryStoreImpl;

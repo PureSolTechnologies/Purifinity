@@ -4,18 +4,23 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity</groupId>
-		<artifactId>api-parent</artifactId>
+		<artifactId>open</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.puresoltechnologies.parsers</groupId>
 	<artifactId>parsers.api</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
-	<packaging>pom</packaging>
 
-	<modules>
-		<module>lib</module>
-		<module>bundle</module>
-	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>misc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>trees.api</artifactId>
+		</dependency>
+	</dependencies>
 
 </project>

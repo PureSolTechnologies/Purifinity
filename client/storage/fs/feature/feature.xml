@@ -29,7 +29,7 @@
       <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.commons.bundle"/>
+      <import plugin="com.puresoltechnologies.commons.misc.bundle"/>
       <import plugin="com.puresoltechnologies.commons.trees.api.bundle"/>
       <import plugin="com.puresoltechnologies.parsers.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle"/>

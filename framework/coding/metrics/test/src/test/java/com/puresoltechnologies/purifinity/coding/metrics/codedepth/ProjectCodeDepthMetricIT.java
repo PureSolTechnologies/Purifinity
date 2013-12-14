@@ -8,11 +8,10 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.coding.metrics.AbstractMetricTest;
-import com.puresoltechnologies.purifinity.coding.metrics.codedepth.CodeDepthMetricEvaluator;
 
 public class ProjectCodeDepthMetricIT extends AbstractMetricTest {
 

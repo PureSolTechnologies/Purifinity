@@ -80,7 +80,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>commons.bundle</artifactId>
+			<artifactId>misc.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>
 		<dependency>

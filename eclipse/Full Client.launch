@@ -32,7 +32,6 @@
 <setEntry value="com.puresoltechnologies.purifinity.client.application.feature:default"/>
 <setEntry value="com.puresoltechnologies.purifinity.client.common.feature:default"/>
 <setEntry value="com.puresoltechnologies.purifinity.client.features.cleancode.feature:default"/>
-<setEntry value="com.puresoltechnologies.purifinity.client.features.iso9126.feature:default"/>
 <setEntry value="com.puresoltechnologies.purifinity.client.lang.c11.feature:default"/>
 <setEntry value="com.puresoltechnologies.purifinity.client.lang.cpp11.feature:default"/>
 <setEntry value="com.puresoltechnologies.purifinity.client.lang.fortran2008.feature:default"/>

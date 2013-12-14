@@ -12,12 +12,12 @@
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity</groupId>
-	<artifactId>api-parent</artifactId>
+	<artifactId>open</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Purifinity API</name>
-	<description>This is the API of Purifinity which is used to develop extensions.</description>
+	<name>Purifinity's public APIs and SPIs</name>
+	<description>This Maven project and all its sub-projects contain public APIs and SPIs of Purifinity.</description>
 
 	<inceptionYear>2009</inceptionYear>
 	<url>http://oss.puresol-technologies.com/purifinity-api</url>
@@ -139,12 +139,12 @@
 			<!-- Project internal -->
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>commons.lib</artifactId>
+				<artifactId>math</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>math.lib</artifactId>
+				<artifactId>misc</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -154,22 +154,22 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>trees.api.lib</artifactId>
+				<artifactId>trees.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
-				<artifactId>parsers.api.lib</artifactId>
+				<artifactId>parsers.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>analysis.api.lib</artifactId>
+				<artifactId>analysis.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>evaluation.api.lib</artifactId>
+				<artifactId>evaluation.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
@@ -235,18 +235,19 @@
 							<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${project.version}"</Export-Package>
 							<Private-Package>${bundle.namespace}.internal.*</Private-Package>
 							<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
+							<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
 							<!-- embed compile/runtime dependencies using path that matches the 
 								copied dependency folder -->
 							<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
 							<Embed-Directory>dependencies</Embed-Directory>
 							<Embed-StripGroup>true</Embed-StripGroup>
-							<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
 						</instructions>
 					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.5</version>
 					<inherited>false</inherited>
 					<executions>
 						<execution>
@@ -272,6 +273,7 @@
 			<plugin>
 				<groupId>com.puresoltechnologies.maven.plugins</groupId>
 				<artifactId>license-maven-plugin</artifactId>
+				<version>1.1.1</version>
 				<configuration>
 					<recursive>true</recursive>
 					<validLicenses>
@@ -298,11 +300,17 @@
 	<modules>
 		<module>osgi</module>
 		<module>math</module>
+		<module>math.bundle</module>
 		<module>trees.api</module>
-		<module>commons</module>
+		<module>trees.api.bundle</module>
+		<module>misc</module>
+		<module>misc.bundle</module>
 		<module>parser.api</module>
+		<module>parser.api.bundle</module>
 		<module>analysis.api</module>
+		<module>analysis.api.bundle</module>
 		<module>evaluation.api</module>
+		<module>evaluation.api.bundle</module>
 	</modules>
 
 </project>

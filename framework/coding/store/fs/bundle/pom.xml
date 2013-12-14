@@ -27,7 +27,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>evaluation.api.lib</artifactId>
+			<artifactId>evaluation.api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

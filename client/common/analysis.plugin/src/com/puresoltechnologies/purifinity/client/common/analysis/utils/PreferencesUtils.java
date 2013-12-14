@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import com.puresoltechnologies.commons.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.client.common.analysis.preferences.NewAnalysisPreferencePage;
 
 public class PreferencesUtils {

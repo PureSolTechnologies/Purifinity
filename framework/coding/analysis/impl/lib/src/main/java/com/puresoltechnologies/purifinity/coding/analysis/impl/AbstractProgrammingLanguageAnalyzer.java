@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.coding.analysis.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.puresoltechnologies.commons.ConfigurationParameter;
+import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 
 /**

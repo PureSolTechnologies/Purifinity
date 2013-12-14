@@ -13,8 +13,8 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import com.puresoltechnologies.commons.CallableProgressObservable;
-import com.puresoltechnologies.commons.ProgressObserver;
+import com.puresoltechnologies.commons.misc.CallableProgressObservable;
+import com.puresoltechnologies.commons.misc.ProgressObserver;
 import com.puresoltechnologies.purifinity.client.common.ui.Activator;
 
 public class ObservedJob<Observable, Return> extends Job implements

@@ -1,6 +1,6 @@
 package com.puresoltechnologies.parsers.impl.parser.items;
 
-import com.puresoltechnologies.commons.ObjectUtilities;
+import com.puresoltechnologies.commons.misc.ObjectUtilities;
 import com.puresoltechnologies.parsers.impl.grammar.production.Production;
 import com.puresoltechnologies.parsers.impl.grammar.production.Terminal;
 

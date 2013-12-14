@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.coding.analysis.impl;
 
-import com.puresoltechnologies.commons.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.api.source.RepositoryLocation;
 
 public abstract class AbstractRepositoryLocation implements RepositoryLocation {

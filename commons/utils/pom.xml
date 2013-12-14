@@ -28,17 +28,17 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>commons.lib</artifactId>
+			<artifactId>math</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>math.lib</artifactId>
+			<artifactId>misc</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>trees.api.lib</artifactId>
+			<artifactId>trees.api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
