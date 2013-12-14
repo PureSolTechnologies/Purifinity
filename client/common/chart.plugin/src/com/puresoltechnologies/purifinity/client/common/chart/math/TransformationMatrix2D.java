@@ -1,8 +1,9 @@
 package com.puresoltechnologies.purifinity.client.common.chart.math;
 
-import com.puresoltechnologies.commons.math.la.LAUtils;
-import com.puresoltechnologies.commons.math.la.Matrix;
-import com.puresoltechnologies.commons.math.la.Vector;
+import org.apache.commons.math3.exception.DimensionMismatchException;
+import org.apache.commons.math3.exception.NotStrictlyPositiveException;
+import org.apache.commons.math3.linear.BlockRealMatrix;
+
 import com.puresoltechnologies.purifinity.client.common.chart.AxisDirection;
 
 /**
@@ -11,36 +12,43 @@ import com.puresoltechnologies.purifinity.client.common.chart.AxisDirection;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TransformationMatrix2D extends Matrix {
+public class TransformationMatrix2D extends BlockRealMatrix {
+	private static final long serialVersionUID = -967323828848599371L;
 
-	public static Matrix createRotationMatrixRad2D(double rad) {
-		Matrix rotationMatrix = new Matrix(3, 3, new double[][] {
-				{ Math.cos(rad), -Math.sin(rad), 0.0 },
-				{ Math.sin(rad), Math.cos(rad), 0.0 }, { 0.0, 0.0, 1.0 } });
+	public static TransformationMatrix2D createRotationMatrixRad2D(double rad) {
+		TransformationMatrix2D rotationMatrix = new TransformationMatrix2D(
+				new double[][] { { Math.cos(rad), -Math.sin(rad), 0.0 },
+						{ Math.sin(rad), Math.cos(rad), 0.0 },
+						{ 0.0, 0.0, 1.0 } });
 		return rotationMatrix;
 	}
 
-	public static Matrix createRotationMatrixDeg2D(double deg) {
+	public static TransformationMatrix2D createRotationMatrixDeg2D(double deg) {
 		return createRotationMatrixRad2D(deg / 180.0 * Math.PI);
 	}
 
 	private static final int DIMENSIONS = 3;
 
 	/**
+	 * This constructor creates a new transformation matrix with the given data.
+	 * This constructor is to be used internally and is set to private.
+	 * 
+	 * @param rawData
+	 *            is the data to be used for the new transformation matrix.
+	 * @throws DimensionMismatchException
+	 * @throws NotStrictlyPositiveException
+	 */
+	private TransformationMatrix2D(double[][] rawData)
+			throws DimensionMismatchException, NotStrictlyPositiveException {
+		super(rawData);
+	}
+
+	/**
 	 * This is the default constructor. This constructor initializes a new
 	 * instance with an identity.
 	 */
 	public TransformationMatrix2D() {
-		super(DIMENSIONS, DIMENSIONS);
-		setIdentity();
-	}
-
-	/**
-	 * This is the initial constructor which takes another
-	 * {@link TransformationMatrix2D} as initial value.
-	 */
-	public TransformationMatrix2D(TransformationMatrix2D transform) {
-		super(transform);
+		this(new double[][] { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } });
 	}
 
 	/**
@@ -52,14 +60,13 @@ public class TransformationMatrix2D extends Matrix {
 	 */
 	public void scale(double scaleX, double scaleY) {
 		for (int i = 0; i < DIMENSIONS; i++) {
-			set(i, 0, get(i, 0) * scaleX);
-			set(i, 1, get(i, 1) * scaleY);
+			setEntry(i, 0, getEntry(i, 0) * scaleX);
+			setEntry(i, 1, getEntry(i, 1) * scaleY);
 		}
 	}
 
 	public Point2D transform(Point2D point) {
-		Vector vector = LAUtils.multiply(this, point);
-		return new Point2D(vector);
+		return new Point2D(operate(point.getData()));
 	}
 
 	public void mirror(AxisDirection axis) {
@@ -78,7 +85,8 @@ public class TransformationMatrix2D extends Matrix {
 
 	public void translate(double x, double y) {
 		for (int i = 0; i < DIMENSIONS; i++) {
-			set(i, 2, get(i, 0) * x + get(i, 1) * y + get(i, 2));
+			setEntry(i, 2,
+					getEntry(i, 0) * x + getEntry(i, 1) * y + getEntry(i, 2));
 		}
 	}
 
@@ -87,7 +95,8 @@ public class TransformationMatrix2D extends Matrix {
 	}
 
 	public void rotateRad(double rad) {
-		Matrix rotationMatrix = createRotationMatrixRad2D(rad);
-		multiplyFromRight(rotationMatrix);
+		TransformationMatrix2D rotationMatrix = createRotationMatrixRad2D(rad);
+		BlockRealMatrix newMatrix = multiply(rotationMatrix);
+		setSubMatrix(newMatrix.getData(), 0, 0);
 	}
 }

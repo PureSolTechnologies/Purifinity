@@ -8,10 +8,6 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<properties>
-		<osgi.version>4.3.1</osgi.version>
-	</properties>
-
 	<groupId>com.puresoltechnologies.commons</groupId>
 	<artifactId>osgi</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
@@ -20,7 +16,6 @@
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
-			<version>${osgi.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

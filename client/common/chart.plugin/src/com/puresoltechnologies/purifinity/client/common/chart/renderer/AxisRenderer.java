@@ -108,10 +108,9 @@ public class AxisRenderer {
 			gc.getTransform(transform);
 			transform.rotate(-90);
 			gc.setTransform(transform);
-			TransformationMatrix2D t = new TransformationMatrix2D(
-					transformation);
-			t.multiplyFromLeft(TransformationMatrix2D
-					.createRotationMatrixDeg2D(90));
+			TransformationMatrix2D t = (TransformationMatrix2D) transformation
+					.multiply(TransformationMatrix2D
+							.createRotationMatrixDeg2D(90));
 			// Now we can paint... :-)
 			String text = getAxisText(axis);
 			Font currentFont = gc.getFont();

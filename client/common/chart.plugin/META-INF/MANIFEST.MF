@@ -9,11 +9,21 @@ Bundle-Vendor: PureSol Technologies
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.swt;bundle-version="3.100.1",
  org.eclipse.jface;bundle-version="3.8.102",
+ org.apache.commons.commons-math.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.client.common.branding.plugin;bundle-version="0.1.1",
  com.puresoltechnologies.commons.trees.api.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.commons.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.commons.utils.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.commons.math.bundle;bundle-version="0.1.1"
-Export-Package: com.puresoltechnologies.purifinity.client.common.chart
- ,com.puresoltechnologies.purifinity.client.common.chart.math,com.pure
- soltechnologies.purifinity.client.common.chart.renderer
+Export-Package: com.puresoltechnologies.purifinity.client.common.chart;
+  uses:="com.puresoltechnologies.commons.math,
+   com.puresoltechnologies.purifinity.client.common.chart.renderer,
+   org.eclipse.swt.events,
+   org.eclipse.swt.graphics,
+   org.eclipse.swt.widgets",
+ com.puresoltechnologies.purifinity.client.common.chart.math;uses:="com.puresoltechnologies.purifinity.client.common.chart",
+ com.puresoltechnologies.purifinity.client.common.chart.renderer;
+  uses:="com.puresoltechnologies.purifinity.client.common.chart,
+   com.puresoltechnologies.commons.trees.api,
+   org.eclipse.swt.graphics,
+   com.puresoltechnologies.purifinity.client.common.chart.math"
