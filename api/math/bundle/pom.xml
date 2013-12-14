@@ -2,12 +2,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresoltechnologies.purifinity</groupId>
-		<artifactId>base.bundles</artifactId>
+		<groupId>com.puresoltechnologies.commons</groupId>
+		<artifactId>math</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.puresoltechnologies.commons</groupId>
 	<artifactId>math.bundle</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>bundle</packaging>
@@ -19,7 +18,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>math</artifactId>
+			<artifactId>math.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>

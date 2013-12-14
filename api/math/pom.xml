@@ -11,17 +11,11 @@
 	<groupId>com.puresoltechnologies.commons</groupId>
 	<artifactId>math</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-math3</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-	</dependencies>
+	<modules>
+		<module>lib</module>
+		<module>bundle</module>
+	</modules>
 
 </project>

@@ -23,7 +23,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>math</artifactId>
+			<artifactId>math.lib</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

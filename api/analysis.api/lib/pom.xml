@@ -18,7 +18,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>math</artifactId>
+			<artifactId>math.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
