@@ -20,11 +20,11 @@ import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.impl.ust.AbstractProduction;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.CodeRangeEvaluator;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.Result;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * This class calculates the cyclomatic number v(G) from a code range.

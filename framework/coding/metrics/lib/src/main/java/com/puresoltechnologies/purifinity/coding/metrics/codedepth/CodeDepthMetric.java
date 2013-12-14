@@ -9,11 +9,11 @@ import com.puresoltechnologies.commons.trees.api.TreeIterator;
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.CodeRangeEvaluator;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.Result;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * This metric looks for cascaded code blocks and finds the maximum. The code

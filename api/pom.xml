@@ -158,11 +158,6 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>utils</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
 				<artifactId>parsers.api.lib</artifactId>
 				<version>${project.version}</version>
@@ -175,11 +170,6 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
 				<artifactId>evaluation.api.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>lang.api.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
@@ -311,7 +301,6 @@
 		<module>trees.api</module>
 		<module>commons</module>
 		<module>parser.api</module>
-		<module>lang.api</module>
 		<module>analysis.api</module>
 		<module>evaluation.api</module>
 	</modules>

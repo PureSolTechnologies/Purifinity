@@ -14,12 +14,12 @@ import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 public class McCabeMetricEvaluator extends AbstractEvaluator {
 

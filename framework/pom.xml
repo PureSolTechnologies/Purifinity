@@ -173,11 +173,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>lang.api.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
 				<artifactId>license.api.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>

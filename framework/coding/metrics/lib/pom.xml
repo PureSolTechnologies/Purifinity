@@ -33,10 +33,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>lang.api.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>license.test</artifactId>
 		</dependency>
 		<dependency>

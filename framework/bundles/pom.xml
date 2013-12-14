@@ -15,7 +15,6 @@
 		<module>org.apache.commons.commons-math.bundle</module>
 		<module>org.reflections.reflections.external.bundle</module>
 		<module>org.codehaus.jackson.jackson-jaxrs.external.bundle</module>
-		<module>com.puresoltechnologies.commons.trees.impl.bundle</module>
 		<module>com.puresoltechnologies.commons.utils.bundle</module>
 		<module>com.puresoltechnologies.commons.math.bundle</module>
 		<module>com.puresoltechnologies.commons.configuration.bundle</module>

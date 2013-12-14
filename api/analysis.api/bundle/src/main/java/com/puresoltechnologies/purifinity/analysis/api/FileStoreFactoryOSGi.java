@@ -1,10 +1,7 @@
-package com.puresoltechnologies.purifinity.coding.store.fs;
+package com.puresoltechnologies.purifinity.analysis.api;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-
-import com.puresoltechnologies.purifinity.analysis.api.FileStore;
-import com.puresoltechnologies.purifinity.analysis.api.FileStoreFactory;
 
 /**
  * This is the central factory for a code store. It creates {@link CodeStore}

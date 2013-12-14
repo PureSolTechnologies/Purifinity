@@ -1,5 +1,5 @@
 #!/bin/bash
-cd api && mvn -o clean install -DskipTests && \
-cd ../commons && mvn -o clean install -DskipTests && \
-cd ../framework && mvn -o clean install -DskipTests && \
-cd ../client && mvn -o clean install -DskipTests
+mvn -f api/pom.xml -o clean install && \
+mvn -f commons/pom.xml -o clean install && \
+mvn -f framework/pom.xml -o clean install && \
+mvn -f client/pom.xml -o clean install

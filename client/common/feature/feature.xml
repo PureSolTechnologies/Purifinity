@@ -22,18 +22,16 @@
    </license>
 
    <requires>
-      <import plugin="org.eclipse.osgi"/>
-      <import plugin="org.slf4j.api"/>
-      <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.trees.api.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.utils.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.parsers.api.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.lang.api.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.application.plugin" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.ui.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.osgi" version="3.8.2" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.104.0" match="greaterOrEqual"/>
@@ -41,12 +39,12 @@
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.io" version="2.0.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.e4.ui.workbench" version="0.11.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.application.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.intro" version="3.4.200" match="greaterOrEqual"/>
       <import plugin="org.eclipse.help" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.swt" version="3.100.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jface" version="3.8.102" match="greaterOrEqual"/>
+      <import plugin="org.apache.commons.commons-math.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.math.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.evaluation.api.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
@@ -59,13 +57,6 @@
       <import plugin="org.codehaus.jackson.jackson-jaxrs.external.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
    </requires>
-
-   <plugin
-         id="com.puresoltechnologies.commons.utils.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
    <plugin
          id="com.puresoltechnologies.purifinity.client.common.analysis.plugin"
@@ -145,7 +136,14 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresoltechnologies.commons.trees.impl.bundle"
+         id="com.puresoltechnologies.purifinity.evaluation.api.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.commons.math.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -153,6 +151,13 @@
 
    <plugin
          id="com.puresoltechnologies.commons.trees.api.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.commons.utils.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -167,41 +172,6 @@
 
    <plugin
          id="com.puresoltechnologies.parsers.impl.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.puresoltechnologies.purifinity.lang.api.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.puresoltechnologies.purifinity.analysis.api.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.puresoltechnologies.purifinity.evaluation.api.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.puresoltechnologies.commons.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.puresoltechnologies.purifinity.lang.api.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

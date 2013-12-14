@@ -19,11 +19,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>commons.test</artifactId>
+			<artifactId>coding.evaluation.impl.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.evaluation.impl.lib</artifactId>
+			<artifactId>commons.test</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>

@@ -1,7 +1,9 @@
-package com.puresoltechnologies.purifinity.analysis.api;
+package com.puresoltechnologies.purifinity.coding.analysis.impl;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
+
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
 
 /**
  * This is the central factory for a analysis store.

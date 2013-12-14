@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.lang.api;
+package com.puresoltechnologies.purifinity.analysis.api;
 
 import java.io.InputStream;
 

@@ -31,10 +31,10 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractCodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.lang.c11.grammar.C11Grammar;
 import com.puresoltechnologies.purifinity.coding.lang.c11.ust.TranslationUnitCreator;
-import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * 

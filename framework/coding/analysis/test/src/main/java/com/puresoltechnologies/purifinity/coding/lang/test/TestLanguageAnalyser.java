@@ -37,9 +37,9 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractCodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.lang.test.grammar.TestLanguageGrammar;
-import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * 

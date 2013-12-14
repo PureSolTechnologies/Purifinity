@@ -12,8 +12,8 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageNotSupportedException;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.CodeAnalyzerFactory;
-import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 public class CodeAnalyzerImpl implements CodeAnalyzer {
 

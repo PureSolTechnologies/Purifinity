@@ -41,6 +41,7 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractCodeAnalyzer;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.JavaGrammar;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.AnnotationTypeDeclaration;
@@ -50,7 +51,6 @@ import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.Method
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.NormalClassDeclaration;
 import com.puresoltechnologies.purifinity.coding.lang.java7.grammar.parts.NormalInterfaceDeclaration;
 import com.puresoltechnologies.purifinity.coding.lang.java7.ust.CompilationUnitCreator;
-import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * 

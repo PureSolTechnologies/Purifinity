@@ -29,12 +29,11 @@
       <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
       <import plugin="org.eclipse.help"/>
-      <import plugin="com.puresoltechnologies.parsers.api.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.lang.api.bundle"/>
-      <import plugin="org.eclipse.osgi"/>
       <import plugin="com.puresoltechnologies.commons.bundle"/>
+      <import plugin="com.puresoltechnologies.parsers.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle"/>
+      <import plugin="org.eclipse.osgi"/>
    </requires>
 
    <plugin

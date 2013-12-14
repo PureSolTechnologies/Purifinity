@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.ProgrammingLanguageViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.GrammarCanvas;
@@ -23,7 +24,6 @@ import com.puresoltechnologies.purifinity.client.common.analysis.grammar.RenderE
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 public class GrammarView extends AbstractPureSolTechnologiesView implements
 		ISelectionChangedListener, Refreshable {

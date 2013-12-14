@@ -1,10 +1,9 @@
-package com.puresoltechnologies.purifinity.coding.store.fs;
+package com.puresoltechnologies.purifinity.coding.analysis.impl;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreFactory;
 
 /**
  * This is the central factory for a analysis store.

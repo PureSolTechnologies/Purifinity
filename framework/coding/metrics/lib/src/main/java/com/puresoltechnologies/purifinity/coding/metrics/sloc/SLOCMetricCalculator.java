@@ -23,11 +23,11 @@ import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTreeMetaData;
 import com.puresoltechnologies.parsers.impl.ust.terminal.AbstractTerminal;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.CodeRangeEvaluator;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.Result;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.lang.api.ProgrammingLanguage;
 
 /**
  * This class calculates a small statistics for a source code for source lines

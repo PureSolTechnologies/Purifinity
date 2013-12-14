@@ -1,10 +1,7 @@
-package com.puresoltechnologies.purifinity.coding.store.fs;
+package com.puresoltechnologies.purifinity.analysis.api;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-
-import com.puresoltechnologies.purifinity.analysis.api.DirectoryStore;
-import com.puresoltechnologies.purifinity.analysis.api.DirectoryStoreFactory;
 
 /**
  * This is the central factory for a directory store. It creates

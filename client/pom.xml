@@ -110,11 +110,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>trees.impl.bundle</artifactId>
-			<version>${commons.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>utils.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>
@@ -181,16 +176,6 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>evaluation.api.bundle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>lang.api.bundle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>lang.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -314,5 +299,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	<version>0.1.1-SNAPSHOT</version>
 </project>
