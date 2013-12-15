@@ -21,8 +21,8 @@ import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
 

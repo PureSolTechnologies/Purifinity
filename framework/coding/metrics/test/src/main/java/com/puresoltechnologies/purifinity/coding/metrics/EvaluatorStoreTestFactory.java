@@ -3,11 +3,11 @@ package com.puresoltechnologies.purifinity.coding.metrics;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.coding.store.fs.metrics.SLOCEvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
 
 public class EvaluatorStoreTestFactory extends EvaluatorStoreFactory {
 

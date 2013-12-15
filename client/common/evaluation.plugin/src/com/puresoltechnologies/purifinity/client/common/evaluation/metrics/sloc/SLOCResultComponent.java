@@ -14,11 +14,11 @@ import org.eclipse.swt.widgets.Table;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.client.common.evaluation.utils.ColorUtils;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCResult;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 
 public class SLOCResultComponent extends Composite {

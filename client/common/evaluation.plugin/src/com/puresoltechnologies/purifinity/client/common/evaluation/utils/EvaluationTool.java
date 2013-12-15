@@ -11,9 +11,9 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.ui.jobs.ObservedJob;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
 
 /**
  * This class contains helpers to handle evaluation in RCP application.

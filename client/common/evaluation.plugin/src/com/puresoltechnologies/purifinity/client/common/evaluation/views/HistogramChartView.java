@@ -42,9 +42,9 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.Evaluators;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
 
 public class HistogramChartView extends AbstractMetricChartViewPart {

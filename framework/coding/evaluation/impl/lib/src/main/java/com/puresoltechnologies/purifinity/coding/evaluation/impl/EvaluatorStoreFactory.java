@@ -1,7 +1,10 @@
-package com.puresoltechnologies.purifinity.evaluation.api;
+package com.puresoltechnologies.purifinity.coding.evaluation.impl;
 
 import java.util.Iterator;
 import java.util.ServiceLoader;
+
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 
 
 /**

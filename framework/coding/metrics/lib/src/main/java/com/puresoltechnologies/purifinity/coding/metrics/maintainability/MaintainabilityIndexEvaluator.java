@@ -13,6 +13,7 @@ import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetricFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.halstead.HalsteadMetricResult;
@@ -25,7 +26,6 @@ import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCResult;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 
