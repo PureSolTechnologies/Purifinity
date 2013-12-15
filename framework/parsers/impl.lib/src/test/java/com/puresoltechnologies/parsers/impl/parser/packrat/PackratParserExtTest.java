@@ -7,7 +7,7 @@ import java.io.InputStream;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.trees.api.TreePrinter;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarConverter;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarFile;
@@ -24,7 +24,7 @@ import com.puresoltechnologies.parsers.impl.source.FixedCodeLocation;
  */
 public class PackratParserExtTest {
 
-	private ParserTree parseText(CodeLocation source) throws Throwable {
+	private ParserTree parseText(SourceCodeLocation source) throws Throwable {
 		InputStream inputStream = getClass()
 				.getResourceAsStream(
 						"/com/puresoltechnologies/parsers/impl/grammar/TestGrammarForJavaPrimaryExpressions.g");

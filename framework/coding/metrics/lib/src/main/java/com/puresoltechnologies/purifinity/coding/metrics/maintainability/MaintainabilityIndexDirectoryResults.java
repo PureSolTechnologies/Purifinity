@@ -14,7 +14,7 @@ import java.util.Set;
 import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluatorResult;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
@@ -26,12 +26,12 @@ public class MaintainabilityIndexDirectoryResults extends
 
 	private static final long serialVersionUID = -5901342878584699006L;
 
-	private final CodeLocation sourceCodeLocation;
+	private final SourceCodeLocation sourceCodeLocation;
 	private final CodeRangeType codeRangeType;
 	private final String codeRangeName;
 
 	public MaintainabilityIndexDirectoryResults(
-			CodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
+			SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
 			String codeRangeName) {
 		super();
 		this.sourceCodeLocation = sourceCodeLocation;
@@ -48,7 +48,7 @@ public class MaintainabilityIndexDirectoryResults extends
 	public Map<String, Value<?>> getValues() {
 
 		Map<String, Value<?>> row = new HashMap<String, Value<?>>();
-		row.put(SOURCE_CODE_LOCATION.getName(), new GeneralValue<CodeLocation>(
+		row.put(SOURCE_CODE_LOCATION.getName(), new GeneralValue<SourceCodeLocation>(
 				sourceCodeLocation, SOURCE_CODE_LOCATION));
 		row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
 				codeRangeType, CODE_RANGE_TYPE));

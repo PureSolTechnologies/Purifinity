@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
@@ -20,12 +20,12 @@ public class CodeAnalyzerImpl implements CodeAnalyzer {
 	private static final Logger logger = LoggerFactory
 			.getLogger(CodeAnalyzerImpl.class);
 
-	private final CodeLocation source;
+	private final SourceCodeLocation source;
 	private CodeAnalyzer analyzer = null;
 	private boolean analyzed = false;
 	private long timeOfRun;
 
-	public CodeAnalyzerImpl(CodeLocation source, HashId hashId)
+	public CodeAnalyzerImpl(SourceCodeLocation source, HashId hashId)
 			throws AnalyzerException {
 		super();
 		this.source = source;
@@ -76,7 +76,7 @@ public class CodeAnalyzerImpl implements CodeAnalyzer {
 	}
 
 	@Override
-	public CodeLocation getSource() {
+	public SourceCodeLocation getSource() {
 		return source;
 	}
 

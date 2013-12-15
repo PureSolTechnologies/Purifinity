@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractProgrammingLanguageAnalyzer;
@@ -57,7 +57,7 @@ public class CPP extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public CodeAnalyzer createAnalyser(CodeLocation source) {
+	public CodeAnalyzer createAnalyser(SourceCodeLocation source) {
 		return null;
 	}
 

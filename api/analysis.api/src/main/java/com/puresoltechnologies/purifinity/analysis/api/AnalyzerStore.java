@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.analysis.api;
 import java.io.File;
 import java.io.IOException;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 
 /**
  * This interface is implemented by language classes which support creating and
@@ -21,7 +21,7 @@ public interface AnalyzerStore {
 	 * @param source
 	 * @return
 	 */
-	public CodeAnalyzer createAnalyser(CodeLocation source);
+	public CodeAnalyzer createAnalyser(SourceCodeLocation source);
 
 	public CodeAnalyzer restoreAnalyzer(File file) throws IOException;
 

@@ -26,7 +26,7 @@ import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.commons.utils.StopWatch;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.impl.lexer.LexerException;
@@ -58,7 +58,7 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 
 	private CodeAnalysis fileAnalysis;
 
-	public FortranAnalyzer(CodeLocation sourceCodeLocation) {
+	public FortranAnalyzer(SourceCodeLocation sourceCodeLocation) {
 		super(sourceCodeLocation, FortranGrammar.getInstance());
 	}
 

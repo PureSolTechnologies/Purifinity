@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.utils.StopWatch;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.impl.lexer.Lexer;
@@ -53,7 +53,7 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 
 	private CodeAnalysis fileAnalysis;
 
-	public TestLanguageAnalyser(CodeLocation sourceCodeLocation) {
+	public TestLanguageAnalyser(SourceCodeLocation sourceCodeLocation) {
 		super(sourceCodeLocation, TestLanguageGrammar.getInstance());
 	}
 

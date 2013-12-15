@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
@@ -86,7 +86,7 @@ public class FixedCodeLocation extends AbstractCodeLocation {
 	}
 
 	@Override
-	public CodeLocation newRelativeSource(String relativePath) {
+	public SourceCodeLocation newRelativeSource(String relativePath) {
 		throw new IllegalStateException(
 				"Cannot provide a new relative source to a built-in source!");
 	}

@@ -21,7 +21,7 @@ import java.util.Map;
 import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.math.statistics.Statistics;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluatorResult;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
@@ -38,7 +38,7 @@ public abstract class AbstractSLOCResults extends AbstractEvaluatorResult {
 		}
 		SLOCMetric metric = result.getSLOCMetric();
 		Statistics stat = metric.getLineStatistics();
-		row.put(SOURCE_CODE_LOCATION.getName(), new GeneralValue<CodeLocation>(
+		row.put(SOURCE_CODE_LOCATION.getName(), new GeneralValue<SourceCodeLocation>(
 				result.getSourceCodeLocation(), SOURCE_CODE_LOCATION));
 		row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
 				result.getCodeRangeType(), CODE_RANGE_TYPE));

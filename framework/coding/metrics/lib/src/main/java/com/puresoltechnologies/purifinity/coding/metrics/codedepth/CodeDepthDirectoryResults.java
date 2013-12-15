@@ -15,7 +15,7 @@ import java.util.Set;
 import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluatorResult;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
@@ -27,12 +27,12 @@ public class CodeDepthDirectoryResults extends AbstractEvaluatorResult
 
 	private static final long serialVersionUID = 5885874850811986090L;
 
-	private final CodeLocation sourceCodeLocation;
+	private final SourceCodeLocation sourceCodeLocation;
 	private final CodeRangeType codeRangeType;
 	private final String codeRangeName;
 	private int maxDepth;
 
-	public CodeDepthDirectoryResults(CodeLocation sourceCodeLocation,
+	public CodeDepthDirectoryResults(SourceCodeLocation sourceCodeLocation,
 			CodeRangeType codeRangeType, String codeRangeName) {
 		super();
 		this.sourceCodeLocation = sourceCodeLocation;
@@ -40,7 +40,7 @@ public class CodeDepthDirectoryResults extends AbstractEvaluatorResult
 		this.codeRangeName = codeRangeName;
 	}
 
-	public CodeLocation getSourceCodeLocation() {
+	public SourceCodeLocation getSourceCodeLocation() {
 		return sourceCodeLocation;
 	}
 
@@ -69,7 +69,7 @@ public class CodeDepthDirectoryResults extends AbstractEvaluatorResult
 	public Map<String, Value<?>> getValues() {
 		Map<String, Value<?>> values = new HashMap<>();
 		values.put(SOURCE_CODE_LOCATION.getName(),
-				new GeneralValue<CodeLocation>(sourceCodeLocation,
+				new GeneralValue<SourceCodeLocation>(sourceCodeLocation,
 						SOURCE_CODE_LOCATION));
 		values.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
 				codeRangeType, CODE_RANGE_TYPE));

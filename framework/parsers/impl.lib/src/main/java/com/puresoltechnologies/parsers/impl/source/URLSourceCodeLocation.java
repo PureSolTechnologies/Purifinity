@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 
 public class URLSourceCodeLocation extends AbstractCodeLocation {
@@ -64,7 +64,7 @@ public class URLSourceCodeLocation extends AbstractCodeLocation {
 	}
 
 	@Override
-	public CodeLocation newRelativeSource(String relativePath) {
+	public SourceCodeLocation newRelativeSource(String relativePath) {
 		throw new IllegalStateException(
 				"This functionality is not implemented, yet!");
 	}

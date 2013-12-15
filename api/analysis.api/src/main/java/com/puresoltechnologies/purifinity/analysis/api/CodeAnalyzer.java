@@ -13,7 +13,7 @@ package com.puresoltechnologies.purifinity.analysis.api;
 import java.io.File;
 import java.io.IOException;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 
 /**
  * This is a interface to a analyzer. It's used to implement a language
@@ -29,7 +29,7 @@ public interface CodeAnalyzer {
 	 * 
 	 * @return
 	 */
-	public CodeLocation getSource();
+	public SourceCodeLocation getSource();
 
 	/**
 	 * This method returns from the implemented parser the supported programming

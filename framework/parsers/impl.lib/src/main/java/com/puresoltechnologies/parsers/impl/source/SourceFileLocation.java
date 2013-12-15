@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 
 public class SourceFileLocation extends AbstractCodeLocation {
@@ -81,7 +81,7 @@ public class SourceFileLocation extends AbstractCodeLocation {
 	}
 
 	@Override
-	public CodeLocation newRelativeSource(String relativePath) {
+	public SourceCodeLocation newRelativeSource(String relativePath) {
 		File internalFile = new File(internalPath);
 		File internalParentFile = internalFile.getParentFile();
 		File newInternalPath;

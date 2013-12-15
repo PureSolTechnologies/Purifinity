@@ -17,7 +17,7 @@ import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.commons.utils.StringUtils;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
@@ -736,7 +736,7 @@ public class PackratParser implements Serializable {
 		}
 		String match = matcher.group();
 		int lineBreakNum = StringUtils.countLineBreaks(match);
-		CodeLocation source = sourceCode.getLines().get(line - 1).getSource();
+		SourceCodeLocation source = sourceCode.getLines().get(line - 1).getSource();
 		int lineNumber = textWithSource.getLineNumber(position);
 		TokenMetaData metaData = new TokenMetaData(source, lineNumber,
 				lineBreakNum + 1, textWithSource.getColumn(position));

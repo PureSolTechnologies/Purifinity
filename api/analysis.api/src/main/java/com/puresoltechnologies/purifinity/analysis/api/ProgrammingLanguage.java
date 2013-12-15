@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.analysis.api;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 
 /**
  * This interface is the central interface for a programming language
@@ -34,7 +34,7 @@ public interface ProgrammingLanguage { // do not Serialize!
 	 * 
 	 * @return
 	 */
-	public boolean isSuitable(CodeLocation source);
+	public boolean isSuitable(SourceCodeLocation source);
 
 	/**
 	 * This method returns the grammar of the programming language.

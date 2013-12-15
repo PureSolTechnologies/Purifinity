@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.coding.analysis.impl;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.license.api.LicensedObject;
 
@@ -39,7 +39,7 @@ public abstract class AbstractProgrammingLanguage extends LicensedObject
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isSuitable(CodeLocation source) {
+	public boolean isSuitable(SourceCodeLocation source) {
 		String name = source.getHumanReadableLocationString();
 		for (String suffix : getValidFileSuffixes()) {
 			if (name.endsWith(suffix)) {

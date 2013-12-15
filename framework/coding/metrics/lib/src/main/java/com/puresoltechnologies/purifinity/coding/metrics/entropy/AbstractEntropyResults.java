@@ -19,7 +19,7 @@ import java.util.Map;
 
 import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluatorResult;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
@@ -32,7 +32,7 @@ public class AbstractEntropyResults extends AbstractEvaluatorResult {
 	protected Map<String, Value<?>> convertToRow(EntropyResult result) {
 		EntropyMetricResult entropy = result.getEntropyMetricResult();
 		Map<String, Value<?>> row = new HashMap<String, Value<?>>();
-		row.put(SOURCE_CODE_LOCATION.getName(), new GeneralValue<CodeLocation>(
+		row.put(SOURCE_CODE_LOCATION.getName(), new GeneralValue<SourceCodeLocation>(
 				result.getSourceCodeLocation(), SOURCE_CODE_LOCATION));
 		row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
 				result.getCodeRangeType(), CODE_RANGE_TYPE));

@@ -12,7 +12,7 @@ import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 import com.puresoltechnologies.parsers.impl.grammar.token.Visibility;
@@ -478,7 +478,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	 * @param includeFile
 	 * @throws PreprocessorException
 	 */
-	private void performInclude(CodeLocation source, String includeFile)
+	private void performInclude(SourceCodeLocation source, String includeFile)
 			throws PreprocessorException {
 		if (nestingDepth == C11Preprocessor.getNestingLimit()) {
 			throw new PreprocessorException("Nesting limit for #include of "
@@ -487,7 +487,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		boolean includeFileDirectory = isFileDirectoryInclude(includeFile);
 		includeFile = includeFile.substring(1, includeFile.length() - 1);
 		if (includeFileDirectory) {
-			CodeLocation includeSource = source.newRelativeSource(includeFile);
+			SourceCodeLocation includeSource = source.newRelativeSource(includeFile);
 			if (includeFile(includeSource)) {
 				return;
 			}
@@ -505,7 +505,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	 * @param includeSource
 	 * @throws PreprocessorException
 	 */
-	private boolean includeFile(CodeLocation includeSource)
+	private boolean includeFile(SourceCodeLocation includeSource)
 			throws PreprocessorException {
 		try {
 			if (!includeSource.isAvailable()) {

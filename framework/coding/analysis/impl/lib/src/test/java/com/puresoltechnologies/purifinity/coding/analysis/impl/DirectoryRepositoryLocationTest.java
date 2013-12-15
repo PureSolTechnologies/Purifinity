@@ -10,7 +10,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 
 public class DirectoryRepositoryLocationTest {
 
@@ -30,7 +30,7 @@ public class DirectoryRepositoryLocationTest {
 		FileSearchConfiguration searchConfiguration = new FileSearchConfiguration(
 				dirIncludes, dirExcludes, fileIncludes, fileExcludes, true);
 		location.setCodeSearchConfiguration(searchConfiguration);
-		List<CodeLocation> sourceCodes = location.getSourceCodes();
+		List<SourceCodeLocation> sourceCodes = location.getSourceCodes();
 		assertNotNull(sourceCodes);
 		assertEquals(0, sourceCodes.size());
 	}
@@ -46,7 +46,7 @@ public class DirectoryRepositoryLocationTest {
 		FileSearchConfiguration searchConfiguration = new FileSearchConfiguration(
 				dirIncludes, dirExcludes, fileIncludes, fileExcludes, true);
 		location.setCodeSearchConfiguration(searchConfiguration);
-		List<CodeLocation> sourceCodes = location.getSourceCodes();
+		List<SourceCodeLocation> sourceCodes = location.getSourceCodes();
 		assertNotNull(sourceCodes);
 		assert (sourceCodes.size() > 0);
 	}

@@ -3,7 +3,7 @@ package com.puresoltechnologies.parsers.impl.source;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 
 public class UnspecifiedSourceCodeLocation extends AbstractCodeLocation {
@@ -38,7 +38,7 @@ public class UnspecifiedSourceCodeLocation extends AbstractCodeLocation {
 	}
 
 	@Override
-	public CodeLocation newRelativeSource(String relativePath) {
+	public SourceCodeLocation newRelativeSource(String relativePath) {
 		throw new IllegalStateException(
 				"Cannot provide a new relative source to an unspecified source!");
 	}

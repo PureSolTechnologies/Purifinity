@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.coding.metrics.maintainability;
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 
@@ -10,13 +10,13 @@ public class MaintainabilityIndexFileResult implements Serializable {
 
 	private static final long serialVersionUID = 2302225864694571092L;
 
-	private final CodeLocation sourceCodeLocation;
+	private final SourceCodeLocation sourceCodeLocation;
 	private final CodeRangeType codeRangeType;
 	private final String codeRangeName;
 	private final MaintainabilityIndexResult maintainabilityIndexResult;
 	private final SourceCodeQuality quality;
 
-	public MaintainabilityIndexFileResult(CodeLocation sourceCodeLocation,
+	public MaintainabilityIndexFileResult(SourceCodeLocation sourceCodeLocation,
 			CodeRangeType codeRangeType, String codeRangeName,
 			MaintainabilityIndexResult maintainabilityIndexResult,
 			SourceCodeQuality quality) {
@@ -28,7 +28,7 @@ public class MaintainabilityIndexFileResult implements Serializable {
 		this.quality = quality;
 	}
 
-	public CodeLocation getSourceCodeLocation() {
+	public SourceCodeLocation getSourceCodeLocation() {
 		return sourceCodeLocation;
 	}
 

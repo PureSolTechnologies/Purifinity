@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 
@@ -13,13 +13,13 @@ public class HalsteadMetricResult implements Serializable {
 
 	private static final long serialVersionUID = 2302225864694571092L;
 
-	private final CodeLocation sourceCodeLocation;
+	private final SourceCodeLocation sourceCodeLocation;
 	private final CodeRangeType codeRangeType;
 	private final String codeRangeName;
 	private final HalsteadResult halsteadResult;
 	private final SourceCodeQuality quality;
 
-	public HalsteadMetricResult(CodeLocation sourceCodeLocation,
+	public HalsteadMetricResult(SourceCodeLocation sourceCodeLocation,
 			CodeRangeType codeRangeType, String codeRangeName,
 			HalsteadResult halsteadResult, SourceCodeQuality quality) {
 		super();
@@ -30,7 +30,7 @@ public class HalsteadMetricResult implements Serializable {
 		this.quality = quality;
 	}
 
-	public CodeLocation getSourceCodeLocation() {
+	public SourceCodeLocation getSourceCodeLocation() {
 		return sourceCodeLocation;
 	}
 

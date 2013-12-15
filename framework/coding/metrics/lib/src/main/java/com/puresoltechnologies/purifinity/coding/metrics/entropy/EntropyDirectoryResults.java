@@ -8,7 +8,7 @@ import java.util.Set;
 import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
@@ -19,12 +19,12 @@ public class EntropyDirectoryResults extends AbstractEntropyResults implements
 
 	private static final long serialVersionUID = 4585034044953318000L;
 
-	private final CodeLocation sourceCodeLocation;
+	private final SourceCodeLocation sourceCodeLocation;
 	private final CodeRangeType codeRangeType;
 	private final String codeRangeName;
 	private EntropyMetricResult entropyResult;
 
-	public EntropyDirectoryResults(CodeLocation sourceCodeLocation,
+	public EntropyDirectoryResults(SourceCodeLocation sourceCodeLocation,
 			CodeRangeType codeRangeType, String codeRangeName) {
 		super();
 		this.sourceCodeLocation = sourceCodeLocation;
@@ -32,7 +32,7 @@ public class EntropyDirectoryResults extends AbstractEntropyResults implements
 		this.codeRangeName = codeRangeName;
 	}
 
-	public CodeLocation getSourceCodeLocation() {
+	public SourceCodeLocation getSourceCodeLocation() {
 		return sourceCodeLocation;
 	}
 

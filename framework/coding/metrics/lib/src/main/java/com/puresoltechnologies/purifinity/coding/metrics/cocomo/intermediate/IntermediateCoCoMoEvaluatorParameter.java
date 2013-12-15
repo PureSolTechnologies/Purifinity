@@ -7,7 +7,7 @@ import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.math.money.Money;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
@@ -15,7 +15,7 @@ import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeLocationParam
 
 public class IntermediateCoCoMoEvaluatorParameter {
 
-	public static final ParameterWithArbitraryUnit<CodeLocation> SOURCE_CODE_LOCATION = SourceCodeLocationParameter
+	public static final ParameterWithArbitraryUnit<SourceCodeLocation> SOURCE_CODE_LOCATION = SourceCodeLocationParameter
 			.getInstance();
 	public static final ParameterWithArbitraryUnit<CodeRangeType> CODE_RANGE_TYPE = CodeRangeTypeParameter
 			.getInstance();

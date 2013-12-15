@@ -18,7 +18,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.analyzer.Analyzer;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageNotSupportedException;
@@ -55,14 +55,14 @@ public class CodeAnalyzerFactory {
 		// needs to be private...
 	}
 
-	public CodeAnalyzer create(CodeLocation source)
+	public CodeAnalyzer create(SourceCodeLocation source)
 			throws LanguageNotSupportedException, FileNotFoundException {
 		logger.debug("Create analyser for file '"
 				+ source.getHumanReadableLocationString() + "'...");
 		return createAnalyser(source);
 	}
 
-	private CodeAnalyzer createAnalyser(CodeLocation source)
+	private CodeAnalyzer createAnalyser(SourceCodeLocation source)
 			throws LanguageNotSupportedException {
 		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 				.createInstance();
@@ -85,7 +85,7 @@ public class CodeAnalyzerFactory {
 	}
 
 	private CodeAnalyzer checkAndCreate(ProgrammingLanguageAnalyzer clazz,
-			CodeLocation source) {
+			SourceCodeLocation source) {
 		if (!clazz.isSuitable(source)) {
 			return null;
 		}

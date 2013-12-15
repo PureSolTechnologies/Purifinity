@@ -28,7 +28,7 @@ import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.math.money.Money;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
 
@@ -37,9 +37,9 @@ public class IntermediateCoCoMoFileResults extends IntermediateCoCoMoResults
 
 	private static final long serialVersionUID = 7272355142441159285L;
 
-	private final CodeLocation codeLocation;
+	private final SourceCodeLocation codeLocation;
 
-	public IntermediateCoCoMoFileResults(CodeLocation codeLocation) {
+	public IntermediateCoCoMoFileResults(SourceCodeLocation codeLocation) {
 		super();
 		this.codeLocation = codeLocation;
 	}
@@ -53,7 +53,7 @@ public class IntermediateCoCoMoFileResults extends IntermediateCoCoMoResults
 	public List<Map<String, Value<?>>> getValues() {
 		Map<String, Value<?>> row = new HashMap<String, Value<?>>();
 
-		row.put(SOURCE_CODE_LOCATION.getName(), new GeneralValue<CodeLocation>(
+		row.put(SOURCE_CODE_LOCATION.getName(), new GeneralValue<SourceCodeLocation>(
 				codeLocation, SOURCE_CODE_LOCATION));
 		row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
 				CodeRangeType.FILE, CODE_RANGE_TYPE));

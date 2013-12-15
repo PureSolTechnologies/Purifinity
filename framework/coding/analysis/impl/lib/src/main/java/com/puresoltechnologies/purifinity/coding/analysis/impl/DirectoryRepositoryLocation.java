@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.puresoltechnologies.commons.utils.FileSearch;
 import com.puresoltechnologies.commons.utils.FileTree;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
 
 /**
@@ -31,10 +31,10 @@ public class DirectoryRepositoryLocation extends AbstractRepositoryLocation {
 	}
 
 	@Override
-	public List<CodeLocation> getSourceCodes() {
+	public List<SourceCodeLocation> getSourceCodes() {
 		FileTree fileTree = FileSearch.getFileTree(repositoryDirectory,
 				getCodeSearchConfiguration());
-		List<CodeLocation> locations = new ArrayList<CodeLocation>();
+		List<SourceCodeLocation> locations = new ArrayList<SourceCodeLocation>();
 		for (FileTree fileNode : fileTree) {
 			File file = fileNode.getPathFile(false);
 			if (new File(repositoryDirectory, file.getPath()).isFile()) {

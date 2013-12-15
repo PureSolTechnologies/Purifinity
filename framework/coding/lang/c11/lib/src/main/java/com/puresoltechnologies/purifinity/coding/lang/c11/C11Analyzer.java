@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.utils.StopWatch;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.parser.ParserException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
@@ -48,7 +48,7 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 
 	private CodeAnalysis fileAnalysis;
 
-	public C11Analyzer(CodeLocation sourceCodeLocation) {
+	public C11Analyzer(SourceCodeLocation sourceCodeLocation) {
 		super(sourceCodeLocation, C11Grammar.getInstance());
 	}
 

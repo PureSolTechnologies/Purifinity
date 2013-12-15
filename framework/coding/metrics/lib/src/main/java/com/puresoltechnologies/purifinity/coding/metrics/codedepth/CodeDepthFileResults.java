@@ -17,7 +17,7 @@ import java.util.Set;
 import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.AbstractEvaluatorResult;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
@@ -57,7 +57,7 @@ public class CodeDepthFileResults extends AbstractEvaluatorResult implements
 		for (CodeDepthResult result : results) {
 			Map<String, Value<?>> row = new HashMap<String, Value<?>>();
 			row.put(SOURCE_CODE_LOCATION.getName(),
-					new GeneralValue<CodeLocation>(result
+					new GeneralValue<SourceCodeLocation>(result
 							.getSourceCodeLocation(), SOURCE_CODE_LOCATION));
 			row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
 					result.getCodeRangeType(), CODE_RANGE_TYPE));

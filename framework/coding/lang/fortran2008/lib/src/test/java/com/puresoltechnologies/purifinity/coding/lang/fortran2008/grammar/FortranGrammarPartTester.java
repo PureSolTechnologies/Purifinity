@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
 import com.puresoltechnologies.parsers.impl.lexer.Lexer;
@@ -32,7 +32,7 @@ public class FortranGrammarPartTester {
 	return test(production, new FixedCodeLocation(lines));
     }
 
-    public static boolean test(String production, CodeLocation source)
+    public static boolean test(String production, SourceCodeLocation source)
 	    throws GrammarException, LexerException, IOException,
 	    ParserException {
 	if (grammar == null) {

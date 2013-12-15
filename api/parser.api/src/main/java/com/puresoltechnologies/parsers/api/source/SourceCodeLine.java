@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 public interface SourceCodeLine extends Serializable, Cloneable {
 
-	public CodeLocation getSource();
+	public SourceCodeLocation getSource();
 
 	public int getLineNumber();
 

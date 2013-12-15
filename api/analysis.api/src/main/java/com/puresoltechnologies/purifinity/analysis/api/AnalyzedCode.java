@@ -5,7 +5,7 @@ import java.util.Date;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.TimeAwareness;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 
 /**
  * This class is for keeping a list of analyzed files within ProjectAnalyzer.
@@ -21,20 +21,20 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 	private static final long serialVersionUID = 2030120585873480183L;
 
 	private final HashId hashId;
-	private final CodeLocation source;
+	private final SourceCodeLocation source;
 	private final Date time;
 	private final long timeOfRun;
 	private final String languageName;
 	private final String languageVersion;
 	private final String analyzerErrorMessage;
 
-	public AnalyzedCode(HashId hashId, CodeLocation source, Date time,
+	public AnalyzedCode(HashId hashId, SourceCodeLocation source, Date time,
 			long timeOfRun, String languageName, String languageVersion) {
 		this(hashId, source, time, timeOfRun, languageName, languageVersion,
 				null);
 	}
 
-	public AnalyzedCode(HashId hashId, CodeLocation source, Date time,
+	public AnalyzedCode(HashId hashId, SourceCodeLocation source, Date time,
 			long timeOfRun, String languageName, String languageVersion,
 			String analyzerErrorMessage) {
 		super();
@@ -51,7 +51,7 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 		return hashId;
 	}
 
-	public final CodeLocation getSourceLocation() {
+	public final SourceCodeLocation getSourceLocation() {
 		return source;
 	}
 

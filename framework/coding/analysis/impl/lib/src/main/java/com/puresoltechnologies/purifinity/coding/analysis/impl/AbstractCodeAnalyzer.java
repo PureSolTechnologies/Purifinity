@@ -1,14 +1,14 @@
 package com.puresoltechnologies.purifinity.coding.analysis.impl;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 
 public abstract class AbstractCodeAnalyzer implements CodeAnalyzer {
 
-	private final CodeLocation sourceCodeLocation;
+	private final SourceCodeLocation sourceCodeLocation;
 	private final transient AbstractLanguageGrammar grammar;
 
-	public AbstractCodeAnalyzer(CodeLocation sourceCodeLocation,
+	public AbstractCodeAnalyzer(SourceCodeLocation sourceCodeLocation,
 			AbstractLanguageGrammar grammar) {
 		super();
 		this.sourceCodeLocation = sourceCodeLocation;
@@ -16,7 +16,7 @@ public abstract class AbstractCodeAnalyzer implements CodeAnalyzer {
 	}
 
 	@Override
-	public final CodeLocation getSource() {
+	public final SourceCodeLocation getSource() {
 		return sourceCodeLocation;
 	}
 

@@ -26,7 +26,7 @@ import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.commons.utils.StopWatch;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.impl.lexer.Lexer;
@@ -64,7 +64,7 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 
 	private CodeAnalysis fileAnalysis;
 
-	public JavaAnalyzer(CodeLocation sourceCodeLocation) {
+	public JavaAnalyzer(SourceCodeLocation sourceCodeLocation) {
 		super(sourceCodeLocation, JavaGrammar.getInstance());
 	}
 

@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.preprocessor.PreprocessorException;
 import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
@@ -54,7 +54,7 @@ public class C11PreprocessorTest {
 			PreprocessorException {
 		File directory = new File(
 				"src/test/resources/com/puresoltechnologies/purifinity/coding/lang/c11/preprocessor/files");
-		CodeLocation source = new SourceFileLocation(directory,
+		SourceCodeLocation source = new SourceFileLocation(directory,
 				"MultipleIncludeMacros.txt");
 		SourceCode sourceCode = source.loadSourceCode();
 		SourceCode preProcessedSourceCode = new C11Preprocessor()

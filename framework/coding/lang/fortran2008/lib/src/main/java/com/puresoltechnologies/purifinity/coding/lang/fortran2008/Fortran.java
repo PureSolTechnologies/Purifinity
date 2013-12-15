@@ -10,7 +10,7 @@ import java.util.ServiceLoader;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.AbstractProgrammingLanguageAnalyzer;
@@ -73,7 +73,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public CodeAnalyzer createAnalyser(CodeLocation sourceCodeLocation) {
+	public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
 		return new FortranAnalyzer(sourceCodeLocation);
 	}
 

@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.coding.metrics.sloc;
 import java.io.Serializable;
 
 import com.puresoltechnologies.commons.math.statistics.Statistics;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 
@@ -11,13 +11,13 @@ public class SLOCResult implements Serializable {
 
 	private static final long serialVersionUID = 2302225864694571092L;
 
-	private final CodeLocation sourceCodeLocation;
+	private final SourceCodeLocation sourceCodeLocation;
 	private final CodeRangeType codeRangeType;
 	private final String codeRangeName;
 	private final SLOCMetric slocMetric;
 	private final SourceCodeQuality quality;
 
-	public SLOCResult(CodeLocation sourceCodeLocation,
+	public SLOCResult(SourceCodeLocation sourceCodeLocation,
 			CodeRangeType codeRangeType, String codeRangeName,
 			SLOCMetric slocResult, SourceCodeQuality quality) {
 		super();
@@ -28,7 +28,7 @@ public class SLOCResult implements Serializable {
 		this.quality = quality;
 	}
 
-	public CodeLocation getSourceCodeLocation() {
+	public SourceCodeLocation getSourceCodeLocation() {
 		return sourceCodeLocation;
 	}
 

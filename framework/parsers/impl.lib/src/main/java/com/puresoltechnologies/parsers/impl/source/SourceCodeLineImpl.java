@@ -3,7 +3,7 @@ package com.puresoltechnologies.parsers.impl.source;
 import java.io.Serializable;
 
 import com.puresoltechnologies.commons.misc.ObjectUtilities;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 
 /**
@@ -19,12 +19,12 @@ public class SourceCodeLineImpl implements SourceCodeLine, Serializable,
 
 	private static final long serialVersionUID = -3788483766559761026L;
 
-	private final CodeLocation source;
+	private final SourceCodeLocation source;
 	private final int lineNumber;
 	private final String line;
 	private final int hashCode;
 
-	public SourceCodeLineImpl(CodeLocation source, int lineNumber, String line) {
+	public SourceCodeLineImpl(SourceCodeLocation source, int lineNumber, String line) {
 		super();
 		this.source = source;
 		this.lineNumber = lineNumber;
@@ -34,7 +34,7 @@ public class SourceCodeLineImpl implements SourceCodeLine, Serializable,
 	}
 
 	@Override
-	public CodeLocation getSource() {
+	public SourceCodeLocation getSource() {
 		return source;
 	}
 

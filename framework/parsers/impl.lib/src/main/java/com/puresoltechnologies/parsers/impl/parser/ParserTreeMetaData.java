@@ -3,7 +3,7 @@ package com.puresoltechnologies.parsers.impl.parser;
 import java.io.Serializable;
 
 import com.puresoltechnologies.commons.misc.ObjectUtilities;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 
 /**
  * This class is used to store meta information for each node in an AST.
@@ -15,12 +15,12 @@ public class ParserTreeMetaData implements Serializable, Cloneable {
 
 	private static final long serialVersionUID = 7846977139079079374L;
 
-	private final CodeLocation source;
+	private final SourceCodeLocation source;
 	private final int line;
 	private final int lineNum;
 	private final int hashcode;
 
-	public ParserTreeMetaData(CodeLocation source, int line, int lineNum) {
+	public ParserTreeMetaData(SourceCodeLocation source, int line, int lineNum) {
 		super();
 		this.source = source;
 		this.line = line;
@@ -30,7 +30,7 @@ public class ParserTreeMetaData implements Serializable, Cloneable {
 				lineNum);
 	}
 
-	public CodeLocation getSource() {
+	public SourceCodeLocation getSource() {
 		return source;
 	}
 

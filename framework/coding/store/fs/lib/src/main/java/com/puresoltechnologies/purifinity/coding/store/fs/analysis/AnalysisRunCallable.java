@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
@@ -24,10 +24,10 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
 	private static final FileStoreFactory codeStoreFactory = FileStoreFactory
 			.getFactory();
 
-	private final CodeLocation sourceFile;
+	private final SourceCodeLocation sourceFile;
 	private final FileStore codeStore = codeStoreFactory.getInstance();
 
-	public AnalysisRunCallable(CodeLocation sourceFile) {
+	public AnalysisRunCallable(SourceCodeLocation sourceFile) {
 		super();
 		this.sourceFile = sourceFile;
 	}
@@ -72,7 +72,7 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
 	 * @param file
 	 *            is the file to be analyzed.
 	 */
-	private AnalyzedCode analyzeCode(HashId hashId, CodeLocation sourceFile) {
+	private AnalyzedCode analyzeCode(HashId hashId, SourceCodeLocation sourceFile) {
 		try {
 			if (codeStore.wasAnalyzed(hashId)) {
 				return loadAnalysis(hashId, sourceFile);
@@ -107,7 +107,7 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
 	 * @throws FileStoreException
 	 */
 	private AnalyzedCode createNewAnalysis(HashId hashId,
-			CodeLocation sourceFile) throws AnalyzerException, IOException,
+			SourceCodeLocation sourceFile) throws AnalyzerException, IOException,
 			FileStoreException {
 		CodeAnalyzerImpl fileAnalyzer = new CodeAnalyzerImpl(sourceFile, hashId);
 		fileAnalyzer.analyze();
@@ -130,7 +130,7 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
 	 * @return
 	 * @throws FileStoreException
 	 */
-	private AnalyzedCode loadAnalysis(HashId hashId, CodeLocation sourceFile)
+	private AnalyzedCode loadAnalysis(HashId hashId, SourceCodeLocation sourceFile)
 			throws FileStoreException {
 		CodeAnalysis analysis = codeStore.loadAnalysis(hashId);
 		AnalyzedCode analyzedCode = new AnalyzedCode(hashId, sourceFile,

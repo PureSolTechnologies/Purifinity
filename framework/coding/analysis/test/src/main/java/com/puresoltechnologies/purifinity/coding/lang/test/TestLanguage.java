@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerStore;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
@@ -57,7 +57,7 @@ public class TestLanguage extends AbstractProgrammingLanguage implements
 	}
 
 	@Override
-	public CodeAnalyzer createAnalyser(CodeLocation sourceCodeLocation) {
+	public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
 		return new TestLanguageAnalyser(sourceCodeLocation);
 	}
 

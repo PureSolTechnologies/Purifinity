@@ -39,13 +39,13 @@ public interface RepositoryLocation extends Serializable {
 	public String getHumanReadableLocationString();
 
 	/**
-	 * This method returns a list of {@link CodeLocation} from all source codes
+	 * This method returns a list of {@link SourceCodeLocation} from all source codes
 	 * which are available within the specified repository.
 	 * 
-	 * @return A {@link List} of {@link CodeLocation} is returned containing all
+	 * @return A {@link List} of {@link SourceCodeLocation} is returned containing all
 	 *         locations.
 	 */
-	public List<CodeLocation> getSourceCodes();
+	public List<SourceCodeLocation> getSourceCodes();
 
 	/**
 	 * This method returns the set {@link FileSearchConfiguration}.

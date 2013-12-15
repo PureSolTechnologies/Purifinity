@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.parser.ParserException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
@@ -25,14 +25,14 @@ public class JavaPackratParserTest {
 	}
 
 	private void check(String... text) throws ParserException, IOException {
-		CodeLocation source = new FixedCodeLocation(text);
+		SourceCodeLocation source = new FixedCodeLocation(text);
 		PackratParser parser = createParser();
 		assertNotNull(parser.parse(source.loadSourceCode()));
 	}
 
 	private void check(String text, String production) throws ParserException,
 			IOException {
-		CodeLocation source = new FixedCodeLocation(text);
+		SourceCodeLocation source = new FixedCodeLocation(text);
 		PackratParser parser = createParser();
 		assertNotNull(parser.parse(source.loadSourceCode(), production));
 	}

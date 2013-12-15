@@ -12,7 +12,7 @@ import com.puresoltechnologies.commons.misc.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.utils.data.HashCodeGenerator;
 import com.puresoltechnologies.commons.utils.io.LineTerminator;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 
@@ -36,7 +36,7 @@ public class SourceCodeImpl implements SourceCode, Serializable, Cloneable {
 		}
 	}
 
-	public static SourceCode read(InputStream inputStream, CodeLocation source)
+	public static SourceCode read(InputStream inputStream, SourceCodeLocation source)
 			throws IOException {
 		Reader reader = new InputStreamReader(inputStream);
 		try {
@@ -46,7 +46,7 @@ public class SourceCodeImpl implements SourceCode, Serializable, Cloneable {
 		}
 	}
 
-	public static SourceCode read(Reader reader, CodeLocation source)
+	public static SourceCode read(Reader reader, SourceCodeLocation source)
 			throws IOException {
 		char[] buffer = new char[4096];
 		SourceCodeImpl code = new SourceCodeImpl();

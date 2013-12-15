@@ -13,7 +13,7 @@ import java.net.URL;
  * 
  * @author Rick-Rainer Ludwig
  */
-public interface CodeLocation extends Serializable {
+public interface SourceCodeLocation extends Serializable {
 
 	/**
 	 * This method returns the name of the returned source code. This might be a
@@ -75,7 +75,7 @@ public interface CodeLocation extends Serializable {
 	public SourceCode loadSourceCode() throws IOException;
 
 	/**
-	 * This method returns a new {@link CodeLocation} which is pointing to a new
+	 * This method returns a new {@link SourceCodeLocation} which is pointing to a new
 	 * location specified by a relative path/location provided as parameter.
 	 * 
 	 * This is used for preprocessor #include actions.
@@ -83,7 +83,7 @@ public interface CodeLocation extends Serializable {
 	 * @param relativePath
 	 * @return
 	 */
-	public CodeLocation newRelativeSource(String relativePath);
+	public SourceCodeLocation newRelativeSource(String relativePath);
 
 	/**
 	 * This method checks whether this source is available or not. This is

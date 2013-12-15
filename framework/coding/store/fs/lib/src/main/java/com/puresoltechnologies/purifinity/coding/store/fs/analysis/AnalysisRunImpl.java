@@ -39,7 +39,7 @@ import com.puresoltechnologies.commons.utils.DirectoryUtilities;
 import com.puresoltechnologies.commons.utils.StopWatch;
 import com.puresoltechnologies.commons.utils.data.HashCodeGenerator;
 import com.puresoltechnologies.commons.utils.progress.AbstractProgressObservable;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.RepositoryLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
@@ -386,14 +386,14 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	 */
 	private List<Future<AnalyzedCode>> startAllAnalysisThreads() {
 		repositoryLocation.setCodeSearchConfiguration(searchConfig);
-		List<CodeLocation> sourceFiles = repositoryLocation.getSourceCodes();
+		List<SourceCodeLocation> sourceFiles = repositoryLocation.getSourceCodes();
 
 		ExecutorService threadPool = Executors
 				.newFixedThreadPool(NUMBER_OF_PARALLEL_THREADS);
 		fireStarted("Analyze files", sourceFiles.size());
 		List<Future<AnalyzedCode>> futures = new ArrayList<Future<AnalyzedCode>>();
 		for (int index = 0; index < sourceFiles.size(); index++) {
-			CodeLocation sourceFile = sourceFiles.get(index);
+			SourceCodeLocation sourceFile = sourceFiles.get(index);
 			Callable<AnalyzedCode> callable = new AnalysisRunCallable(
 					sourceFile);
 			futures.add(threadPool.submit(callable));
@@ -518,7 +518,7 @@ public class AnalysisRunImpl extends AbstractProgressObservable<AnalysisRun>
 	}
 
 	private void addToIntermediateTree(HashIdFileTree intermediate,
-			CodeLocation location, HashId hashId) {
+			SourceCodeLocation location, HashId hashId) {
 		String internalLocation = location.getInternalLocation();
 		String[] directories = internalLocation.split("/");
 		HashIdFileTree node = intermediate;

@@ -3,7 +3,7 @@ package com.puresoltechnologies.parsers.impl.lexer;
 import java.io.Serializable;
 
 import com.puresoltechnologies.commons.misc.ObjectUtilities;
-import com.puresoltechnologies.parsers.api.source.CodeLocation;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 
 /**
  * This class is used to store additional data for the tokens found like the
@@ -24,10 +24,10 @@ public class TokenMetaData implements Serializable, Cloneable {
 
 	/**
 	 * This is the location of the token. This needs to point to a file or
-	 * document, where the token is in. See {@link CodeLocation} for more
+	 * document, where the token is in. See {@link SourceCodeLocation} for more
 	 * information.
 	 */
-	private final CodeLocation source;
+	private final SourceCodeLocation source;
 	/**
 	 * This is the line number within the containing document.
 	 * 
@@ -50,7 +50,7 @@ public class TokenMetaData implements Serializable, Cloneable {
 	 */
 	private final int hashcode;
 
-	public TokenMetaData(CodeLocation source, int line, int lineNum, int column) {
+	public TokenMetaData(SourceCodeLocation source, int line, int lineNum, int column) {
 		super();
 		this.source = source;
 		this.line = line;
@@ -60,7 +60,7 @@ public class TokenMetaData implements Serializable, Cloneable {
 				lineNum, column);
 	}
 
-	public CodeLocation getSource() {
+	public SourceCodeLocation getSource() {
 		return source;
 	}
 
