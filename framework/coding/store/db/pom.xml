@@ -3,17 +3,17 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity</groupId>
-		<artifactId>coding</artifactId>
+		<artifactId>coding.store</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>coding.store</artifactId>
+	<artifactId>coding.store.db</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>fs</module>
-		<module>db</module>
+		<module>lib</module>
+		<module>bundle</module>
 	</modules>
 
 </project>
