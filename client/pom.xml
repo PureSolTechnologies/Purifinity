@@ -160,7 +160,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.store.fs.bundle</artifactId>
+			<artifactId>store.fs.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

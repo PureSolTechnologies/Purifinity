@@ -13,10 +13,10 @@
 	</parent>
 
 	<groupId>com.puresoltechnologies.purifinity</groupId>
-	<artifactId>base</artifactId>
+	<artifactId>framework</artifactId>
 	<packaging>pom</packaging>
 
-	<name>Library parent module</name>
+	<name>Purifinity Framework</name>
 
 	<licenses>
 		<license>
@@ -157,12 +157,17 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.store.db.lib</artifactId>
+				<artifactId>store.commons</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.store.fs.lib</artifactId>
+				<artifactId>store.db.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity</groupId>
+				<artifactId>store.fs.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -237,6 +242,11 @@
 				<version>${commons.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>misc</artifactId>
+				<version>${project.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
 			<dependency>
@@ -347,20 +357,41 @@
 					<validLicenses>
 						<validLicense>PureSol Technologies Commercial License</validLicense>
 						<!-- Apache License -->
+						<validLicense>Apache 2</validLicense>
+						<validLicense>Apache Software License - Version 2.0</validLicense>
+						<validLicense>Apache License</validLicense>
+						<validLicense>Apache License 2.0</validLicense>
+						<validLicense>Apache License Version 2.0</validLicense>
 						<validLicense>Apache License, Version 2.0</validLicense>
 						<validLicense>The Apache Software License, Version 2.0</validLicense>
 						<!-- BSD License -->
+						<validLicense>BSD</validLicense>
+						<validLicense>BSD License</validLicense>
+						<validLicense>BSD licence</validLicense>
+						<validLicense>BSD license</validLicense>
 						<validLicense>BSD style</validLicense>
+						<validLicense>ISC/BSD License</validLicense>
 						<!-- CPL -->
 						<validLicense>Common Public License Version 1.0</validLicense>
 						<!-- EPL -->
 						<validLicense>Eclipse Public License</validLicense>
+						<validLicense>Eclipse Public License - Version 1.0</validLicense>
 						<!-- LGPL -->
 						<validLicense><![CDATA[GNU Lesser General Public License (LGPL), Version 2.1]]></validLicense>
 						<!-- MIT License -->
 						<validLicense>MIT License</validLicense>
 						<validLicense>The MIT License</validLicense>
+						<!-- Public Domain -->
+						<validLicense>Public Domain</validLicense>
+						<!-- Snaptree License -->
+						<validLicense>SNAPTREE LICENSE</validLicense>
 					</validLicenses>
+					<approvedDependencies>
+						<approvedDependency>commons-codec:.*:.*</approvedDependency>
+						<approvedDependency>org\.antlr:.*:.*</approvedDependency>
+						<approvedDependency>org\.apache\.cassandra\..*:.*:.*</approvedDependency>
+						<approvedDependency>javax.servlet:servlet-api:.*</approvedDependency>
+					</approvedDependencies>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -371,6 +402,7 @@
 		<module>commons</module>
 		<module>parsers</module>
 		<module>coding</module>
+		<module>store</module>
 	</modules>
 
 </project>
