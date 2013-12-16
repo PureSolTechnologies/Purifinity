@@ -189,7 +189,6 @@
 		<module>dependency</module>
 		<module>utils</module>
 		<module>configuration</module>
-		<module>license</module>
 	</modules>
 
 </project>

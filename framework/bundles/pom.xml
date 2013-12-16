@@ -17,8 +17,6 @@
 		<module>org.codehaus.jackson.jackson-jaxrs.external.bundle</module>
 		<module>com.puresoltechnologies.commons.utils.bundle</module>
 		<module>com.puresoltechnologies.commons.configuration.bundle</module>
-		<module>com.puresoltechnologies.commons.license.domain.bundle</module>
-		<module>com.puresoltechnologies.commons.license.client.bundle</module>
 	</modules>
 
 </project>

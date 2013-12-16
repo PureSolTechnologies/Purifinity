@@ -30,7 +30,6 @@ import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.license.api.LicensedObject;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -74,7 +73,6 @@ public abstract class AbstractEvaluator extends
 	public AbstractEvaluator(String name, String description,
 			AnalysisRun analysisRun, HashIdFileTree path) {
 		super();
-		LicensedObject.checkIfLicensed(getClass());
 		this.information = new EvaluatorInformation(name, description);
 		this.analysisRun = analysisRun;
 		this.path = path;

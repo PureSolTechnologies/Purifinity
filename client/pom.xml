@@ -90,16 +90,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>license.client.bundle</artifactId>
-			<version>${commons.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>license.domain.bundle</artifactId>
-			<version>${commons.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>math.bundle</artifactId>
 			<version>${commons.version}</version>
 		</dependency>
@@ -176,11 +166,6 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity</groupId>
 			<artifactId>evaluation.api.bundle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>license.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- External bundles -->

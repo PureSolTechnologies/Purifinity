@@ -2,26 +2,24 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresoltechnologies.purifinity</groupId>
-		<artifactId>coding.analysis.impl</artifactId>
+		<groupId>com.puresoltechnologies.license</groupId>
+		<artifactId>license.creator</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>coding.analysis.impl.lib</artifactId>
+	<artifactId>license.creator.lib</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>utils</artifactId>
+			<groupId>com.puresoltechnologies.license</groupId>
+			<artifactId>license.api.lib</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.parsers</groupId>
-			<artifactId>parsers.impl.lib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>analysis.api</artifactId>
+			<groupId>com.puresoltechnologies.license</groupId>
+			<artifactId>license.impl.lib</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -32,4 +30,5 @@
 			<artifactId>junit</artifactId>
 		</dependency>
 	</dependencies>
+
 </project>

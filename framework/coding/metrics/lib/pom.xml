@@ -32,10 +32,6 @@
 			<artifactId>evaluation.api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>license.test</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.puresoltechnologies.parsers</groupId>
 			<artifactId>parsers.impl.lib</artifactId>
 		</dependency>

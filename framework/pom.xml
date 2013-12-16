@@ -172,27 +172,6 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>license.api.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>license.creator.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>license.impl.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>license.test</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
 				<artifactId>parsers.api</artifactId>
 				<version>${project.version}</version>
@@ -212,16 +191,6 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>configuration</artifactId>
-				<version>${commons.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>license.client</artifactId>
-				<version>${commons.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>license.domain</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
@@ -395,7 +364,6 @@
 	<modules>
 		<module>bundles</module>
 		<module>commons</module>
-		<module>license</module>
 		<module>parsers</module>
 		<module>coding</module>
 	</modules>

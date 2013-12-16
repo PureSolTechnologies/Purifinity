@@ -28,10 +28,6 @@
 			<artifactId>evaluation.api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>license.api.lib</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>configuration</artifactId>
 		</dependency>
