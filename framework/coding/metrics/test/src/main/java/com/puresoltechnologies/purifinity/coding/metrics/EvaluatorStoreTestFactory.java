@@ -5,9 +5,9 @@ import java.util.Map;
 
 import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCEvaluator;
-import com.puresoltechnologies.purifinity.coding.store.fs.metrics.SLOCEvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.store.fs.metrics.SLOCEvaluatorStore;
 
 public class EvaluatorStoreTestFactory extends EvaluatorStoreFactory {
 

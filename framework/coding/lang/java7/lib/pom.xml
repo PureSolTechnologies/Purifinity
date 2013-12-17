@@ -26,7 +26,7 @@
 		<dependency>
 			<!-- needed for testing -->
 			<groupId>com.puresoltechnologies.purifinity</groupId>
-			<artifactId>coding.store.fs.lib</artifactId>
+			<artifactId>store.fs.lib</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

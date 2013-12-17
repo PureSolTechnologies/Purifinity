@@ -49,7 +49,14 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresoltechnologies.purifinity.coding.store.fs.bundle"
+         id="com.puresoltechnologies.purifinity.store.commons.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.purifinity.store.fs.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

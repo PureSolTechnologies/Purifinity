@@ -21,7 +21,7 @@ import com.puresoltechnologies.purifinity.coding.analysis.impl.AnalysisStoreFact
 import com.puresoltechnologies.purifinity.coding.analysis.impl.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.coding.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.coding.lang.java7.Java;
-import com.puresoltechnologies.purifinity.coding.store.fs.analysis.AnalysisStoreImpl;
+import com.puresoltechnologies.purifinity.store.fs.analysis.AnalysisStoreImpl;
 
 /**
  * This class is used for metrics tests as parent class. This class guarantees a
