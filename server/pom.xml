@@ -157,6 +157,11 @@
 				<artifactId>titan-core</artifactId>
 				<version>0.4.1</version>
 			</dependency>
+			<dependency>
+				<groupId>com.thinkaurelius.titan</groupId>
+				<artifactId>titan-cassandra</artifactId>
+				<version>0.4.1</version>
+			</dependency>
 			<!-- Logging -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -225,7 +230,8 @@
 						<nativeTransportPort>9042</nativeTransportPort>
 					</configuration>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -277,18 +283,24 @@
 						<validLicense>PureSol Technologies Commercial License</validLicense>
 						<!-- Apache License -->
 						<validLicense>Apache 2</validLicense>
-						<validLicense>Apache License, Version 2.0</validLicense>
+						<validLicense>Apache License</validLicense>
 						<validLicense>Apache License 2.0</validLicense>
+						<validLicense>Apache License Version 2.0</validLicense>
+						<validLicense>Apache License, Version 2.0</validLicense>
+						<validLicense>Apache Software License - Version 2.0</validLicense>
 						<validLicense>The Apache Software License, Version 2.0</validLicense>
 						<!-- BSD License -->
 						<validLicense>BSD</validLicense>
 						<validLicense>BSD 3-Clause</validLicense>
 						<validLicense>BSD License</validLicense>
+						<validLicense>BSD licence</validLicense>
 						<validLicense>BSD style</validLicense>
+						<validLicense>ISC/BSD License</validLicense>
 						<validLicense>New BSD License</validLicense>
 						<!-- CPL -->
 						<validLicense>Common Public License Version 1.0</validLicense>
 						<!-- EPL -->
+						<validLicense>Eclipse Public License - Version 1.0</validLicense>
 						<!-- LGPL -->
 						<validLicense>LGPL 2.1</validLicense>
 						<validLicense>GNU Lesser General Public License</validLicense>
@@ -301,10 +313,15 @@
 						<validLicense>Public Domain</validLicense>
 						<validLicense>Public domain, Sun Microsoystems</validLicense>
 						<validLicense>provided without support or warranty</validLicense>
+						<!-- Snaptree License -->
+						<validLicense>SNAPTREE LICENSE</validLicense>
 					</validLicenses>
 					<approvedDependencies>
 						<approvedDependency>commons-beanutils:commons-beanutils:1.7.0</approvedDependency>
 						<approvedDependency>colt:colt:1.2.0</approvedDependency>
+						<approvedDependency>javax.servlet:servlet-api:2.5</approvedDependency>
+						<approvedDependency>org.apache.cassandra.deps:avro:1.4.0-cassandra-1</approvedDependency>
+						<approvedDependency>org.antlr:antlr.*:.*</approvedDependency>
 					</approvedDependencies>
 				</configuration>
 			</plugin>
