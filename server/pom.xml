@@ -139,6 +139,11 @@
 				<artifactId>database.cassandra.setup</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity</groupId>
+				<artifactId>database.titan.utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<!-- =========================== -->
 			<!-- Specific external libraries -->
 			<!-- =========================== -->
@@ -146,6 +151,11 @@
 				<groupId>com.datastax.cassandra</groupId>
 				<artifactId>cassandra-driver-core</artifactId>
 				<version>2.0.0-rc2</version>
+			</dependency>
+			<dependency>
+				<groupId>com.thinkaurelius.titan</groupId>
+				<artifactId>titan-core</artifactId>
+				<version>0.4.1</version>
 			</dependency>
 			<!-- Logging -->
 			<dependency>
@@ -222,24 +232,49 @@
 				<groupId>com.puresoltechnologies.maven.plugins</groupId>
 				<artifactId>license-maven-plugin</artifactId>
 				<version>1.1.1</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>validate</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<recursive>true</recursive>
 					<validLicenses>
+						<validLicense>PureSol Technologies Commercial License</validLicense>
 						<!-- Apache License -->
+						<validLicense>Apache 2</validLicense>
 						<validLicense>Apache License, Version 2.0</validLicense>
+						<validLicense>Apache License 2.0</validLicense>
 						<validLicense>The Apache Software License, Version 2.0</validLicense>
 						<!-- BSD License -->
+						<validLicense>BSD</validLicense>
+						<validLicense>BSD 3-Clause</validLicense>
+						<validLicense>BSD License</validLicense>
 						<validLicense>BSD style</validLicense>
+						<validLicense>New BSD License</validLicense>
 						<!-- CPL -->
 						<validLicense>Common Public License Version 1.0</validLicense>
 						<!-- EPL -->
-						<validLicense>Eclipse Public License</validLicense>
 						<!-- LGPL -->
-						<validLicense><![CDATA[GNU Lesser General Public License (LGPL), Version 2.1]]></validLicense>
+						<validLicense>LGPL 2.1</validLicense>
+						<validLicense>GNU Lesser General Public License</validLicense>
+						<!-- MPL -->
+						<validLicenses>MPL 1.1</validLicenses>
 						<!-- MIT License -->
 						<validLicense>MIT License</validLicense>
 						<validLicense>The MIT License</validLicense>
+						<!-- Public Domain -->
+						<validLicense>Public Domain</validLicense>
+						<validLicense>Public domain, Sun Microsoystems</validLicense>
+						<validLicense>provided without support or warranty</validLicense>
 					</validLicenses>
+					<approvedDependencies>
+						<approvedDependency>commons-beanutils:commons-beanutils:1.7.0</approvedDependency>
+						<approvedDependency>colt:colt:1.2.0</approvedDependency>
+					</approvedDependencies>
 				</configuration>
 			</plugin>
 		</plugins>
