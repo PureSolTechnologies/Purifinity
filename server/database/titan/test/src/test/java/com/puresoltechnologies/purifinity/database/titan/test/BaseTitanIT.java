@@ -20,6 +20,7 @@ public class BaseTitanIT {
 		conf.setProperty("storage.backend", "cassandra");
 		conf.setProperty("storage.hostname", "127.0.0.1");
 		TitanGraph graph = TitanFactory.open(conf);
+		assertTrue("Titan graph is not open.", graph.isOpen());
 		try {
 			String s = "projects";
 			Vertex projectsVertex = graph.addVertex(s);

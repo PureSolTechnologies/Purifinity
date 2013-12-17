@@ -21,7 +21,7 @@ public final class CassandraTestHelper {
 	private static final Logger logger = LoggerFactory
 			.getLogger(CassandraTestHelper.class);
 
-	private static final String CASSANDRA_HOST = "localhost";
+	private static final String CASSANDRA_HOST = "127.0.0.1";
 
 	private static Cluster cluster = null;
 	private static Session session = null;
@@ -35,7 +35,8 @@ public final class CassandraTestHelper {
 				cluster);
 		assertNull("The session to Cassandra cluster was already connected.",
 				session);
-		cluster = Cluster.builder().addContactPoints(CASSANDRA_HOST).build();
+		cluster = Cluster.builder().addContactPoints(CASSANDRA_HOST)
+				.withPort(9042).build();
 		logger.info(String.format("Connected to cluster: %s\n",
 				cluster.getClusterName()));
 		logMetadata();
