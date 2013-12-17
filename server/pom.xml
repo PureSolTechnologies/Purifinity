@@ -126,8 +126,53 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- ================ -->
 			<!-- Project internal -->
+			<!-- ================ -->
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity</groupId>
+				<artifactId>database.cassandra.utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity</groupId>
+				<artifactId>database.cassandra.setup</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<!-- =========================== -->
 			<!-- Specific external libraries -->
+			<!-- =========================== -->
+			<dependency>
+				<groupId>com.datastax.cassandra</groupId>
+				<artifactId>cassandra-driver-core</artifactId>
+				<version>2.0.0-rc2</version>
+			</dependency>
+			<!-- Logging -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.6.6</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.7.2</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- Testing -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.10</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>1.9.0</version>
+				<scope>test</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -141,6 +186,33 @@
 						<source>1.7</source>
 						<target>1.7</target>
 						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>cassandra-maven-plugin</artifactId>
+					<version>2.0.0-1</version>
+					<executions>
+						<execution>
+							<id>startCassandra</id>
+							<inherited>true</inherited>
+							<phase>pre-integration-test</phase>
+							<goals>
+								<goal>start</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>stopCassandra</id>
+							<inherited>true</inherited>
+							<phase>post-integration-test</phase>
+							<goals>
+								<goal>stop</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<listenAddress>localhost</listenAddress>
+						<nativeTransportPort>9042</nativeTransportPort>
 					</configuration>
 				</plugin>
 			</plugins>
@@ -174,6 +246,7 @@
 	</build>
 
 	<modules>
+		<module>database</module>
 	</modules>
 
 </project>
