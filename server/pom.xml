@@ -9,15 +9,16 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<commons.version>0.1.1-SNAPSHOT</commons.version>
-		<!-- Geronimo settings -->
-		<geronimo.http.port>8080</geronimo.http.port>
+		<!-- JBoss settings -->
+		<jboss.http.port>8080</jboss.http.port>
 		<server.config.directory>${work.dir}/config</server.config.directory>
 		<server.data.directory>${work.dir}/data</server.data.directory>
-		<geronimo.debug.options>-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</geronimo.debug.options>
-		<geronimo.memory.options>-Xms128m -Xmx512m -XX:MaxPermSize=256m</geronimo.memory.options>
-		<geronimo.options>${geronimo.memory.options} ${geronimo.debug.options}</geronimo.options>
+		<jboss.debug.options>-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</jboss.debug.options>
+		<jboss.memory.options>-Xms128m -Xmx512m -XX:MaxPermSize=256m</jboss.memory.options>
+		<jboss.options>${jboss.memory.options} ${jboss.debug.options}</jboss.options>
 		<!-- JBoss -->
-		<geronimo.version>3.0.1</geronimo.version>
+		<jboss.version>7.1.1.Final</jboss.version>
+		<resteasy.version>2.3.4.Final</resteasy.version>
 		<!-- Arquillian -->
 		<arquillian.version>1.1.2.Final</arquillian.version>
 		<arquillian.test.dir>${project.build.directory}/jboss</arquillian.test.dir>
@@ -161,7 +162,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>geronimo.configuration</artifactId>
+				<artifactId>jboss.configuration</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- =========================== -->
@@ -193,12 +194,31 @@
 				<artifactId>commons-io</artifactId>
 				<version>1.3.2</version>
 			</dependency>
+			<!-- JBoss -->
 			<dependency>
-				<groupId>org.apache.geronimo</groupId>
-				<artifactId>geronimo</artifactId>
-				<version>${geronimo.version}</version>
-				<classifier>bin</classifier>
-				<type>tar.gz</type>
+				<groupId>org.jboss.as</groupId>
+				<artifactId>jboss-as-server</artifactId>
+				<version>${jboss.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- REST library -->
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jaxrs</artifactId>
+				<version>${resteasy.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>jaxrs-api</artifactId>
+				<version>${resteasy.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-jaxrs</artifactId>
+				<version>1.9.2</version>
+				<scope>provided</scope>
 			</dependency>
 			<!-- Arquillian -->
 			<dependency>
@@ -217,6 +237,12 @@
 				<groupId>org.jboss.arquillian.protocol</groupId>
 				<artifactId>arquillian-protocol-servlet</artifactId>
 				<version>${arquillian.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.as</groupId>
+				<artifactId>jboss-as-arquillian-container-managed</artifactId>
+				<version>${jboss.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<!-- Logging -->
@@ -272,9 +298,6 @@
 							<goals>
 								<goal>start</goal>
 							</goals>
-							<configuration>
-								<startNativeTransport>true</startNativeTransport>
-							</configuration>
 						</execution>
 						<execution>
 							<id>stopCassandra</id>
@@ -287,6 +310,59 @@
 					</executions>
 					<configuration>
 						<startNativeTransport>true</startNativeTransport>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.cargo</groupId>
+					<artifactId>cargo-maven2-plugin</artifactId>
+					<version>1.2.2</version>
+					<executions>
+						<execution>
+							<id>JBoss Configuration</id>
+							<phase>package</phase>
+							<goals>
+								<goal>configure</goal>
+								<goal>deployer-deploy</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<!-- wait>false</wait -->
+						<container>
+							<containerId>jboss71x</containerId>
+							<timeout>60000</timeout>
+							<artifactInstaller>
+								<groupId>org.jboss.as</groupId>
+								<artifactId>jboss-as-dist</artifactId>
+								<version>${jboss.version}</version>
+								<type>zip</type>
+								<extractDir>${cargo.dir}</extractDir>
+							</artifactInstaller>
+						</container>
+						<configuration>
+							<type>standalone</type>
+							<home>${arquillian.test.dir}</home>
+							<configfiles>
+								<configfile>
+									<file>${cargo.dir}/template/standalone/configuration/standalone.xml</file>
+									<todir>configuration</todir>
+								</configfile>
+							</configfiles>
+							<files>
+								<file>
+									<file>${cargo.dir}/template/standalone</file>
+									<todir>/</todir>
+								</file>
+							</files>
+							<properties>
+								<cargo.jboss.configuration>default</cargo.jboss.configuration>
+								<cargo.servlet.port>8080</cargo.servlet.port>
+								<cargo.rmi.port>1099</cargo.rmi.port>
+								<cargo.jvmargs>${jboss.jvm.options}</cargo.jvmargs>
+								<cargo.servlet.port>${jboss.http.port}</cargo.servlet.port>
+								<cargo.logging>${cargo.logging}</cargo.logging>
+							</properties>
+						</configuration>
 					</configuration>
 				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
@@ -346,6 +422,7 @@
 						<validLicense>Apache License 2.0</validLicense>
 						<validLicense>Apache License Version 2.0</validLicense>
 						<validLicense>Apache License, Version 2.0</validLicense>
+						<validLicense>Apache Public License 2.0</validLicense>
 						<validLicense>Apache Software License - Version 2.0</validLicense>
 						<validLicense>The Apache Software License, Version 2.0</validLicense>
 						<!-- BSD License -->
@@ -362,9 +439,14 @@
 						<validLicense>Common Public License Version 1.0</validLicense>
 						<!-- EPL -->
 						<validLicense>Eclipse Public License - Version 1.0</validLicense>
+						<validLicense>Eclipse Public License, Version 1.0</validLicense>
+						<!-- GPL with Classpath Exception -->
+						<validLicense>GPLv2 (with classpath exception)</validLicense>
 						<!-- LGPL -->
+						<validLicense>lgpl</validLicense>
 						<validLicense>LGPL 2.1</validLicense>
 						<validLicense>GNU Lesser General Public License</validLicense>
+						<validLicense>GNU Lesser General Public License, version 2.1</validLicense>
 						<!-- MPL -->
 						<validLicenses>MPL 1.1</validLicenses>
 						<!-- MIT License -->
@@ -383,6 +465,8 @@
 						<approvedDependency>javax.servlet:servlet-api:2.5</approvedDependency>
 						<approvedDependency>org.apache.cassandra.deps:avro:1.4.0-cassandra-1</approvedDependency>
 						<approvedDependency>org.antlr:antlr.*:.*</approvedDependency>
+						<approvedDependency>org.osgi:org.osgi.*:4.2.0</approvedDependency>
+						<approvedDependency>system:jdk-tools:jdk</approvedDependency>
 					</approvedDependencies>
 				</configuration>
 			</plugin>
@@ -391,7 +475,7 @@
 
 	<modules>
 		<module>database</module>
-		<module>geronimo</module>
+		<module>jboss</module>
 	</modules>
 
 </project>
