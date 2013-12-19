@@ -3,7 +3,6 @@
 .project
 bin
 target
-META-INF
 felix-cache
 workspace
 *.log
