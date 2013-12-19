@@ -192,6 +192,13 @@
 				<artifactId>logger</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<!-- PureSol Technologies -->
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
 			<!-- =========================== -->
 			<!-- Specific external libraries -->
 			<!-- =========================== -->
@@ -488,7 +495,7 @@
 						<validLicense>Eclipse Public License, Version 1.0</validLicense>
 						<!-- GPL with Classpath Exception -->
 						<validLicense>GPLv2 (with classpath exception)</validLicense>
-						<validLicense>GNU General Public License, Version 2 with the Classpath Exception</validLicense>
+						<validLicense><![CDATA[GNU General Public License, Version 2 with the Classpath Exception]]></validLicense>
 						<!-- LGPL -->
 						<validLicense>lgpl</validLicense>
 						<validLicense>lgpl_v2_1</validLicense>

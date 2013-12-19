@@ -17,6 +17,7 @@ public class EventLoggerBeanIT extends AbstractServerTest {
 	@Test
 	public void test() {
 		assertNotNull(eventLogger);
+		eventLogger.logUserAction("user", "message");
 	}
 
 }

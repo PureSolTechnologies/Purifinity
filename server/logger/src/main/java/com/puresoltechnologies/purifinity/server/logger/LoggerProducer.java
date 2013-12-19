@@ -10,7 +10,7 @@ public class LoggerProducer {
 
 	@Produces
 	public Logger produceLogger(InjectionPoint injectionPoint) {
-		Class<?> beanClass = injectionPoint.getBean().getBeanClass();
+		Class<?> beanClass = injectionPoint.getMember().getDeclaringClass();
 		return LoggerFactory.getLogger(beanClass);
 	}
 

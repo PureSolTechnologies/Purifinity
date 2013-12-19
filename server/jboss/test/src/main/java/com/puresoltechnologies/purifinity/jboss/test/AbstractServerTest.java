@@ -216,13 +216,12 @@ public abstract class AbstractServerTest {
 	 *            The service class.
 	 */
 	private static void addServices(JavaArchive jar, Class<?> serviceClass) {
-		Enumeration<URL> resources;
-		FileWriter writer = null;
 		try {
 			File file = File.createTempFile(Extension.class.getName(), "");
 			file.deleteOnExit();
-			resources = AbstractServerTest.class.getClassLoader().getResources(
-					"META-INF/services/" + serviceClass.getName());
+			Enumeration<URL> resources = AbstractServerTest.class
+					.getClassLoader().getResources(
+							"META-INF/services/" + serviceClass.getName());
 			List<String> extensions = new ArrayList<String>();
 			while (resources.hasMoreElements()) {
 				URL resource = resources.nextElement();
@@ -230,15 +229,14 @@ public abstract class AbstractServerTest {
 				List<String> lines = IOUtils.readLines(resource.openStream());
 				extensions.addAll(lines);
 			}
-			writer = new FileWriter(file);
-			IOUtils.writeLines(extensions, null, writer);
-			writer.close();
-			jar.addAsManifestResource(file,
-					"services/" + serviceClass.getName());
+			try (FileWriter writer = new FileWriter(file)) {
+				IOUtils.writeLines(extensions, null, writer);
+				writer.close();
+				jar.addAsManifestResource(file,
+						"services/" + serviceClass.getName());
+			}
 		} catch (IOException e) {
 			throw new IllegalStateException("Cannot read files", e);
-		} finally {
-			IOUtils.closeQuietly(writer);
 		}
 	}
 

@@ -14,6 +14,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>utils</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>database.cassandra.utils</artifactId>
 		</dependency>
