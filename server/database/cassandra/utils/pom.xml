@@ -13,7 +13,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>database.cassandra.setup</artifactId>
 		</dependency>
 		<dependency>

@@ -276,12 +276,12 @@
 			<connector name="http" protocol="HTTP/1.1" scheme="http"
 				socket-binding="http" redirect-port="8443" />
 			<!-- The https connector was added completely! -->
-			<connector name="https" protocol="HTTP/1.1" scheme="https"
+			<!-- connector name="https" protocol="HTTP/1.1" scheme="https"
 				socket-binding="https" enable-lookups="false" secure="true">
 				<ssl name="ssl" key-alias="passwordstore" password="rmi+ssl"
 					certificate-key-file="/home/ludwig/CommunityShopping.keystore"
 					protocol="TLSv1" verify-client="false" />
-			</connector>
+			</connector  -->
 			<virtual-server name="default-host"
 				enable-welcome-root="false">
 				<alias name="localhost" />
