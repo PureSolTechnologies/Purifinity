@@ -19,7 +19,9 @@ public class LoggerProducerIT {
 	public static JavaArchive createDeployment() {
 		JavaArchive javaArchive = ShrinkWrap.create(JavaArchive.class);
 		javaArchive.addClass(LoggerProducer.class);
-		javaArchive.addAsResource("META-INF/beans.xml", "");
+		javaArchive.addAsResource(
+				LoggerProducerIT.class.getResource("/META-INF/beans.xml"),
+				"META-INF/beans.xml");
 		return javaArchive;
 	}
 
