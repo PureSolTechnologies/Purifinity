@@ -3,12 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresoltechnologies.purifinity</groupId>
+		<groupId>com.puresoltechnologies.purifinity.server</groupId>
 		<artifactId>database.cassandra</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>database.cassandra.setup</artifactId>
+	<name>${project.groupId}.${project.artifactId}</name>
 
 	<dependencies>
 	</dependencies>

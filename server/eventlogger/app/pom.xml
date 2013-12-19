@@ -4,18 +4,28 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.server</groupId>
-		<artifactId>database.titan</artifactId>
+		<artifactId>eventlogger</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>database.titan.utils</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<artifactId>eventlogger.app</artifactId>
+	<packaging>ear</packaging>
 
 	<dependencies>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>eventlogger.core.impl</artifactId>
+			<type>ejb</type>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ear-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

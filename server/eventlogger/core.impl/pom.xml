@@ -4,14 +4,27 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.server</groupId>
-		<artifactId>jboss</artifactId>
+		<artifactId>eventlogger</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jboss.utils</artifactId>
+	<artifactId>eventlogger.core.impl</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
+	<packaging>ejb</packaging>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity</groupId>
+			<artifactId>database.cassandra.utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>eventlogger.core.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>logger</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>

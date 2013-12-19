@@ -33,7 +33,7 @@ public final class WebArchiveUtils {
 			throws IOException {
 		WebArchive war = ShrinkWrap.create(WebArchive.class, archiveName);
 		war.setWebXML(WebArchiveUtils.class
-				.getResource("/com/puresol/jboss/test/standard_web.xml"));
+				.getResource("/com/puresoltechnologies/purifinity/jboss/test/standard_web.xml"));
 		return war;
 	}
 
