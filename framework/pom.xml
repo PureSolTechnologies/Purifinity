@@ -305,6 +305,7 @@
 				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>
+					<version>2.4.0</version>
 					<extensions>true</extensions>
 					<configuration>
 						<manifestLocation>META-INF</manifestLocation>
@@ -331,6 +332,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.5</version>
 					<inherited>false</inherited>
 					<executions>
 						<execution>
@@ -388,6 +390,7 @@
 			<plugin>
 				<groupId>com.puresoltechnologies.maven.plugins</groupId>
 				<artifactId>license-maven-plugin</artifactId>
+				<version>1.1.1</version>
 				<configuration>
 					<recursive>true</recursive>
 					<validLicenses>

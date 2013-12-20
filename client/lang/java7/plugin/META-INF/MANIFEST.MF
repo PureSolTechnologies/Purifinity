@@ -15,4 +15,3 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: PureSol Technologies
 Bundle-ClassPath: .
 Bundle-ActivationPolicy: lazy
-Import-Package: com.puresoltechnologies.purifinity.framework.lang.java7
