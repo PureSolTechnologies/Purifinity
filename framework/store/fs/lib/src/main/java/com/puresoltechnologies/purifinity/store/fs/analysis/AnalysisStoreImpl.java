@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.puresoltechnologies.commons.utils.FileUtilities;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.framework.commons.utils.FileUtilities;
 
 public class AnalysisStoreImpl implements AnalysisStore {
 

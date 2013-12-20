@@ -1,9 +1,9 @@
 package com.puresoltechnologies.purifinity.store.fs.metrics;
 
-import com.puresoltechnologies.purifinity.coding.metrics.entropy.EntropyDirectoryResults;
-import com.puresoltechnologies.purifinity.coding.metrics.entropy.EntropyFileResults;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.entropy.EntropyDirectoryResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.entropy.EntropyFileResults;
 import com.puresoltechnologies.purifinity.store.fs.evaluation.AbstractEvaluatorStore;
 
 public class EntropyEvaluatorStore extends AbstractEvaluatorStore {

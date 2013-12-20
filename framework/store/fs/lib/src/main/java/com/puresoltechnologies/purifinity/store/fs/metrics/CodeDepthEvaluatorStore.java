@@ -1,9 +1,9 @@
 package com.puresoltechnologies.purifinity.store.fs.metrics;
 
-import com.puresoltechnologies.purifinity.coding.metrics.codedepth.CodeDepthDirectoryResults;
-import com.puresoltechnologies.purifinity.coding.metrics.codedepth.CodeDepthFileResults;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.codedepth.CodeDepthDirectoryResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.codedepth.CodeDepthFileResults;
 import com.puresoltechnologies.purifinity.store.fs.evaluation.AbstractEvaluatorStore;
 
 public class CodeDepthEvaluatorStore extends AbstractEvaluatorStore {

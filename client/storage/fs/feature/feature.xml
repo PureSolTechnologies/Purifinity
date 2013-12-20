@@ -22,23 +22,23 @@
    </license>
 
    <requires>
-      <import plugin="com.puresoltechnologies.commons.utils.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.store.fs.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.8.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.misc.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle"/>
+      <import plugin="org.eclipse.osgi"/>
       <import plugin="com.puresoltechnologies.commons.trees.api.bundle"/>
       <import plugin="com.puresoltechnologies.parsers.api.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.impl.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.metrics.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.evaluation.api.bundle"/>
-      <import plugin="org.apache.commons.io"/>
-      <import plugin="org.eclipse.osgi"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.commons.utils.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.store.commons.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.store.fs.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.analysis.impl.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.metrics.bundle"/>
+      <import plugin="com.puresoltechnologies.commons.math.bundle"/>
    </requires>
 
    <plugin

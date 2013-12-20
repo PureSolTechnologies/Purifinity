@@ -7,7 +7,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.coding.analysis.impl.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisStoreFactory;
 
 /**
  * This content provider is used to show a list of available analyzes from the
@@ -20,25 +20,25 @@ import com.puresoltechnologies.purifinity.coding.analysis.impl.AnalysisStoreFact
  */
 public class AnalysisListContentProvider implements IStructuredContentProvider {
 
-    private final List<AnalysisProject> allAnalyzes = new ArrayList<AnalysisProject>();
+	private final List<AnalysisProject> allAnalyzes = new ArrayList<AnalysisProject>();
 
-    @Override
-    public void dispose() {
-	// Intentionally left blank
-    }
-
-    @Override
-    public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-	allAnalyzes.clear();
-	if (newInput != null) {
-	    @SuppressWarnings("unchecked")
-	    List<AnalysisProject> allAnalysisInformation = (List<AnalysisProject>) newInput;
-	    allAnalyzes.addAll(allAnalysisInformation);
+	@Override
+	public void dispose() {
+		// Intentionally left blank
 	}
-    }
 
-    @Override
-    public AnalysisProject[] getElements(Object inputElement) {
-	return allAnalyzes.toArray(new AnalysisProject[allAnalyzes.size()]);
-    }
+	@Override
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		allAnalyzes.clear();
+		if (newInput != null) {
+			@SuppressWarnings("unchecked")
+			List<AnalysisProject> allAnalysisInformation = (List<AnalysisProject>) newInput;
+			allAnalyzes.addAll(allAnalysisInformation);
+		}
+	}
+
+	@Override
+	public AnalysisProject[] getElements(Object inputElement) {
+		return allAnalyzes.toArray(new AnalysisProject[allAnalyzes.size()]);
+	}
 }

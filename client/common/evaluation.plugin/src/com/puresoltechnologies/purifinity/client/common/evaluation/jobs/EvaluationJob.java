@@ -13,9 +13,9 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.ui.jobs.ObservedJob;
-import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.impl.Evaluators;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 
 public class EvaluationJob extends Job {
 

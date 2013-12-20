@@ -14,7 +14,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.puresoltechnologies.purifinity.client.common.ui.controls.FileFilterGroup;
 import com.puresoltechnologies.purifinity.client.lang.cpp11.Activator;
-import com.puresoltechnologies.purifinity.coding.lang.cpp11.CPP;
+import com.puresoltechnologies.purifinity.framework.lang.cpp11.CPP;
 
 public class CPP11AnalysisPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {

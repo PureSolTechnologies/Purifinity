@@ -10,11 +10,11 @@ import java.util.List;
 
 import com.puresoltechnologies.commons.misc.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.utils.data.HashCodeGenerator;
-import com.puresoltechnologies.commons.utils.io.LineTerminator;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
+import com.puresoltechnologies.purifinity.framework.commons.utils.data.HashCodeGenerator;
+import com.puresoltechnologies.purifinity.framework.commons.utils.io.LineTerminator;
 
 /**
  * This class represents a whole source code from a file and additional later

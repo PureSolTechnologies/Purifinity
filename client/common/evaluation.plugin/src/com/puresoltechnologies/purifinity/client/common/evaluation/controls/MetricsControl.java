@@ -22,8 +22,8 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.EvaluatorComboViewer;
-import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 
 /**
  * This is a simple text element which show a text file.

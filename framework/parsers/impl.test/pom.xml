@@ -28,8 +28,8 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>utils</artifactId>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>commons.utils</artifactId>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>

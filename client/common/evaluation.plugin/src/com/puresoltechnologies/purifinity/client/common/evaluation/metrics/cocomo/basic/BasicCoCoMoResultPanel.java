@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresoltechnologies.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.basic.BasicCoCoMoResults;
 
 /**
  * This panel contains the results of a CoCoMo evaluation in a nifty panel for

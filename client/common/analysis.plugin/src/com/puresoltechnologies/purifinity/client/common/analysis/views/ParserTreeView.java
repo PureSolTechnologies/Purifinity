@@ -11,7 +11,7 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ParserTreeControl;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.coding.analysis.impl.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisStoreFactory;
 
 public class ParserTreeView extends AbstractPureSolTechnologiesView implements
 		ISelectionListener {

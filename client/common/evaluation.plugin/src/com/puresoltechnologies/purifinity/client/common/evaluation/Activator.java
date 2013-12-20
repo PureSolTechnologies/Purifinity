@@ -12,9 +12,9 @@ import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.Quali
 import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.SourceCodeQualityColorProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.maintainability.MIColorProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.maintainability.MIParetoChartConfigProvider;
-import com.puresoltechnologies.purifinity.coding.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevelParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
 
 public class Activator extends AbstractUIPlugin {
 	// The shared instance

@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.coding.analysis.impl.ProgrammingLanguages;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
 
 /**
  * This class is a simple viewer for combo boxes which provide a selection for

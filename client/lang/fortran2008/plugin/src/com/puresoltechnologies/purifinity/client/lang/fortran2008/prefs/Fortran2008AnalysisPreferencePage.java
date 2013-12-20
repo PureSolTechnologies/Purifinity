@@ -14,7 +14,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import com.puresoltechnologies.purifinity.client.common.ui.controls.FileFilterGroup;
 import com.puresoltechnologies.purifinity.client.lang.fortran2008.Activator;
-import com.puresoltechnologies.purifinity.coding.lang.fortran2008.Fortran;
+import com.puresoltechnologies.purifinity.framework.lang.fortran2008.Fortran;
 
 public class Fortran2008AnalysisPreferencePage extends PreferencePage implements
 		IWorkbenchPreferencePage {

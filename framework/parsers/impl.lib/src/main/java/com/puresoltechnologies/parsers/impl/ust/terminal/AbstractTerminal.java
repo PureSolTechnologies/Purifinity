@@ -2,10 +2,10 @@ package com.puresoltechnologies.parsers.impl.ust.terminal;
 
 import java.util.List;
 
-import com.puresoltechnologies.commons.utils.StringUtils;
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTreeMetaData;
 import com.puresoltechnologies.parsers.impl.ust.AbstractUniversalSyntaxTreeNode;
+import com.puresoltechnologies.purifinity.framework.commons.utils.StringUtils;
 
 /**
  * This is an abstract implementation of a terminal. A terminal is a part of

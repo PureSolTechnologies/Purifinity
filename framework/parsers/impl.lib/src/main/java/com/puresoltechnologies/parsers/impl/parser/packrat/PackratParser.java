@@ -16,7 +16,6 @@ import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
-import com.puresoltechnologies.commons.utils.StringUtils;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
@@ -32,6 +31,7 @@ import com.puresoltechnologies.parsers.impl.lexer.TokenMetaData;
 import com.puresoltechnologies.parsers.impl.parser.ParserException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.source.StringWithLocation;
+import com.puresoltechnologies.purifinity.framework.commons.utils.StringUtils;
 
 /**
  * This is a complete implementation of a packrat parser.

@@ -32,13 +32,13 @@ import com.puresoltechnologies.purifinity.client.common.evaluation.utils.Evaluat
 import com.puresoltechnologies.purifinity.client.common.ui.SWTUtils;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ExportAction;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorStoreFactory;
 
 public class MetricsTableView extends AbstractPureSolTechnologiesView implements
 		ISelectionListener, EvaluationsTarget, ISelectionChangedListener,

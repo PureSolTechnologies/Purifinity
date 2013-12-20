@@ -16,8 +16,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresoltechnologies.purifinity.coding.metrics.cocomo.basic.BasicCoCoMoResults;
-import com.puresoltechnologies.purifinity.coding.metrics.cocomo.basic.SoftwareProject;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.basic.BasicCoCoMoResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.basic.SoftwareProject;
 
 public class BasicCoCoMoResultComponent extends Composite implements ModifyListener,
 		SelectionListener {

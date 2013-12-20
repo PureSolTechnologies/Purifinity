@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresoltechnologies.purifinity</groupId>
+		<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 		<artifactId>store.db</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
@@ -18,11 +18,11 @@
 			<artifactId>osgi</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 			<artifactId>store.db.lib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity</groupId>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
 			<artifactId>evaluation.api</artifactId>
 			<scope>provided</scope>
 		</dependency>

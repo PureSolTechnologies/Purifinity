@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresoltechnologies.purifinity</groupId>
+		<groupId>com.puresoltechnologies.purifinity.client</groupId>
 		<artifactId>com.puresoltechnologies.purifinity.client.application</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>

@@ -7,7 +7,6 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.utils.FileUtilities;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
 import com.puresoltechnologies.parsers.impl.grammar.production.Construction;
@@ -24,6 +23,7 @@ import com.puresoltechnologies.parsers.impl.parser.parsetable.AbstractParserTabl
 import com.puresoltechnologies.parsers.impl.parser.parsetable.ActionType;
 import com.puresoltechnologies.parsers.impl.parser.parsetable.ParserAction;
 import com.puresoltechnologies.parsers.impl.parser.parsetable.ParserActionSet;
+import com.puresoltechnologies.purifinity.framework.commons.utils.FileUtilities;
 
 public class SLR1ParserTable extends AbstractParserTable {
 

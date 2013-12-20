@@ -12,14 +12,14 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
-import com.puresoltechnologies.commons.utils.FileUtilities;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.impl.PersistenceUtils;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.PersistenceUtils;
+import com.puresoltechnologies.purifinity.framework.commons.utils.FileUtilities;
 
 public class AnalysisProjectImpl implements AnalysisProject {
 

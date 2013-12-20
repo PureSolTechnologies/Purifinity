@@ -29,7 +29,7 @@ import com.puresoltechnologies.purifinity.client.common.analysis.contents.Analys
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListLabelProvider;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.coding.analysis.impl.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisStoreFactory;
 
 /**
  * This view is a view into the analysis store. All analyzes which are available

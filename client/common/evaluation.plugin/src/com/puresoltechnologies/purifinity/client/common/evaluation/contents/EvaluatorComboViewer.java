@@ -8,8 +8,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.widgets.Combo;
 
-import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.impl.Evaluators;
+import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 
 public class EvaluatorComboViewer extends ComboViewer {
 

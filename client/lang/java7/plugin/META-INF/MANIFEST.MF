@@ -4,7 +4,7 @@ Bundle-Name: com.puresoltechnologies.purifinity.client.lang.java7.plugin
 Bundle-SymbolicName: com.puresoltechnologies.purifinity.client.lang.java7.plugin;singleton:=true
 Bundle-Version: 0.1.1.qualifier
 Bundle-Activator: com.puresoltechnologies.purifinity.client.lang.java7.Activator
-Require-Bundle: com.puresoltechnologies.purifinity.coding.lang.java7.bundle;bundle-version="0.1.1",
+Require-Bundle: com.puresoltechnologies.purifinity.framework.lang.java7.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.1.1",
  org.eclipse.core.runtime;bundle-version="3.8.0",
@@ -15,4 +15,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: PureSol Technologies
 Bundle-ClassPath: .
 Bundle-ActivationPolicy: lazy
-Import-Package: com.puresoltechnologies.purifinity.coding.lang.java7
+Import-Package: com.puresoltechnologies.purifinity.framework.lang.java7

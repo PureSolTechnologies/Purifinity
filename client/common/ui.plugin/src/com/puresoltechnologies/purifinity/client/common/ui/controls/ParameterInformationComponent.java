@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.utils.StringUtils;
+import com.puresoltechnologies.purifinity.framework.commons.utils.StringUtils;
 
 /**
  * This components takes a {@link Parameter} and shows all its information for

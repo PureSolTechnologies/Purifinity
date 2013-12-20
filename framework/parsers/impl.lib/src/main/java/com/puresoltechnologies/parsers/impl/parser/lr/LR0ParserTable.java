@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 
-import com.puresoltechnologies.commons.utils.FileUtilities;
 import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
 import com.puresoltechnologies.parsers.impl.grammar.production.Construction;
@@ -20,6 +19,7 @@ import com.puresoltechnologies.parsers.impl.parser.parsetable.AbstractParserTabl
 import com.puresoltechnologies.parsers.impl.parser.parsetable.ActionType;
 import com.puresoltechnologies.parsers.impl.parser.parsetable.ParserAction;
 import com.puresoltechnologies.parsers.impl.parser.parsetable.ParserActionSet;
+import com.puresoltechnologies.purifinity.framework.commons.utils.FileUtilities;
 
 public class LR0ParserTable extends AbstractParserTable {
 

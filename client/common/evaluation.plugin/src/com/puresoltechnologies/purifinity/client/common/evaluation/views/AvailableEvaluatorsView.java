@@ -27,7 +27,7 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.InformationPr
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 
 public class AvailableEvaluatorsView extends AbstractPureSolTechnologiesView
 		implements Refreshable, InformationProvider, ISelectionChangedListener {

@@ -35,10 +35,6 @@ import com.puresoltechnologies.commons.trees.api.TreePrinter;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
-import com.puresoltechnologies.commons.utils.DirectoryUtilities;
-import com.puresoltechnologies.commons.utils.StopWatch;
-import com.puresoltechnologies.commons.utils.data.HashCodeGenerator;
-import com.puresoltechnologies.commons.utils.progress.AbstractProgressObservable;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.RepositoryLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
@@ -51,6 +47,10 @@ import com.puresoltechnologies.purifinity.analysis.api.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.analysis.api.DirectoryStoreFactory;
 import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.framework.commons.utils.DirectoryUtilities;
+import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
+import com.puresoltechnologies.purifinity.framework.commons.utils.data.HashCodeGenerator;
+import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;
 import com.puresoltechnologies.purifinity.store.commons.StoreUtilities;
 
 /**

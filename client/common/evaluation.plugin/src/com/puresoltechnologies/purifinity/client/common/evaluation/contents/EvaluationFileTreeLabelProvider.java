@@ -31,9 +31,6 @@ import com.puresoltechnologies.purifinity.analysis.api.FileStoreFactory;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunContentTreeLabelProvider;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
-import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.impl.EvaluatorStoreFactory;
-import com.puresoltechnologies.purifinity.coding.evaluation.impl.Evaluators;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
@@ -41,6 +38,9 @@ import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
+import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 
 public class EvaluationFileTreeLabelProvider implements
 		ITableLabelProvider {

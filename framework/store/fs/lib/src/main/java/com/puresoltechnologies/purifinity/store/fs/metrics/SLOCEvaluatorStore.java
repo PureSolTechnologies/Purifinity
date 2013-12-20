@@ -1,9 +1,9 @@
 package com.puresoltechnologies.purifinity.store.fs.metrics;
 
-import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCDirectoryResults;
-import com.puresoltechnologies.purifinity.coding.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCDirectoryResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.store.fs.evaluation.AbstractEvaluatorStore;
 
 public class SLOCEvaluatorStore extends AbstractEvaluatorStore {

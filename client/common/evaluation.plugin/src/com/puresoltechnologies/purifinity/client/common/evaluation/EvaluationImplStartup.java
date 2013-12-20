@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.client.common.evaluation;
 import org.eclipse.core.runtime.jobs.Job;
 
 import com.puresoltechnologies.purifinity.client.common.osgi.AbstractStartup;
-import com.puresoltechnologies.purifinity.coding.evaluation.impl.Activator;
+import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Activator;
 
 public class EvaluationImplStartup extends AbstractStartup {
 

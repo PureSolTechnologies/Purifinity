@@ -16,8 +16,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresoltechnologies.purifinity.coding.metrics.cocomo.intermediate.IntermediateCoCoMoResults;
-import com.puresoltechnologies.purifinity.coding.metrics.cocomo.intermediate.SoftwareProject;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.SoftwareProject;
 
 public class ProjectSettingsControl extends Composite implements
 		SelectionListener, ModifyListener {

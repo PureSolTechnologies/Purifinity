@@ -19,8 +19,8 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.impl.DirectoryRepositoryLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.test.TestFileSearchConfiguration;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
+import com.puresoltechnologies.purifinity.framework.analysis.test.TestFileSearchConfiguration;
 import com.puresoltechnologies.purifinity.store.fs.analysis.AnalysisStoreImpl;
 
 public class AnalysisImplTest {

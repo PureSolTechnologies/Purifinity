@@ -46,7 +46,7 @@ import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.coding.analysis.impl.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisStoreFactory;
 
 /**
  * This view shows a list of all analysis which are opened and the tree of files

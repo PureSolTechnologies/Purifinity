@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
@@ -15,10 +16,11 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformatio
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.coding.analysis.impl.AnalysisStoreFactory;
-import com.puresoltechnologies.purifinity.coding.analysis.impl.DirectoryRepositoryLocation;
-import com.puresoltechnologies.purifinity.coding.analysis.test.TestFileSearchConfiguration;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
+import com.puresoltechnologies.purifinity.framework.analysis.test.TestFileSearchConfiguration;
 
+@Ignore("The services are not reachable here.")
 public class AnalysisStoreImplTest {
 
 	@Test

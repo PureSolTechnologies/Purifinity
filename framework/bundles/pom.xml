@@ -3,20 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresoltechnologies.purifinity</groupId>
-		<artifactId>framework</artifactId>
+		<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+		<artifactId>framework-parent</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>framework.bundles</artifactId>
+	<artifactId>bundles</artifactId>
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>org.apache.commons.commons-math.bundle</module>
 		<module>org.reflections.reflections.external.bundle</module>
 		<module>org.codehaus.jackson.jackson-jaxrs.external.bundle</module>
-		<module>com.puresoltechnologies.commons.utils.bundle</module>
-		<module>com.puresoltechnologies.commons.configuration.bundle</module>
 	</modules>
 
 </project>

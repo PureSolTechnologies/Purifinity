@@ -15,8 +15,8 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
 import com.puresoltechnologies.purifinity.client.common.analysis.utils.PreferencesUtils;
-import com.puresoltechnologies.purifinity.coding.analysis.impl.AnalysisStoreFactory;
-import com.puresoltechnologies.purifinity.coding.analysis.impl.DirectoryRepositoryLocation;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
 
 public class NewAnalysisWizard extends Wizard {
 

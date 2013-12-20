@@ -24,11 +24,9 @@
    <requires>
       <import plugin="com.puresoltechnologies.commons.trees.api.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.misc.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.commons.utils.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.parsers.api.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.application.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin" version="0.1.1" match="greaterOrEqual"/>
@@ -48,12 +46,14 @@
       <import plugin="com.puresoltechnologies.commons.math.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.jobs" version="3.5.300" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.evaluation.api.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.evaluation.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.analysis.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.chart.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.help.plugin" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.metrics.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.commons.utils.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.analysis.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.metrics.bundle" version="0.1.1" match="greaterOrEqual"/>
    </requires>
 
    <plugin
@@ -106,13 +106,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresoltechnologies.purifinity.coding.metrics.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.puresoltechnologies.commons.misc.bundle"
          download-size="0"
          install-size="0"
@@ -148,13 +141,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresoltechnologies.commons.utils.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.apache.commons.commons-math.bundle"
          download-size="0"
          install-size="0"
@@ -169,20 +155,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.puresoltechnologies.purifinity.coding.evaluation.impl.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.puresoltechnologies.purifinity.evaluation.api.bundle"
          download-size="0"
          install-size="0"
@@ -190,7 +162,28 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresoltechnologies.commons.configuration.bundle"
+         id="com.puresoltechnologies.purifinity.framework.commons.utils.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.purifinity.framework.analysis.impl.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.purifinity.framework.evaluation.metrics.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

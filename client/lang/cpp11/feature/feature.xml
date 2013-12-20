@@ -23,17 +23,17 @@
 
    <requires>
       <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.lang.cpp11.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.ui.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.runtime" version="3.8.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
       <import plugin="org.eclipse.help"/>
+      <import plugin="com.puresoltechnologies.commons.misc.bundle"/>
       <import plugin="com.puresoltechnologies.parsers.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.coding.analysis.impl.bundle"/>
       <import plugin="org.eclipse.osgi"/>
-      <import plugin="com.puresoltechnologies.commons.misc.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.lang.cpp11.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.analysis.impl.bundle"/>
    </requires>
 
    <plugin
@@ -44,7 +44,7 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresoltechnologies.purifinity.coding.lang.cpp11.bundle"
+         id="com.puresoltechnologies.purifinity.framework.lang.cpp11.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

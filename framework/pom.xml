@@ -2,21 +2,29 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<prerequisites>
+		<maven>3.0</maven>
+	</prerequisites>
+
 	<properties>
-		<commons.version>0.1.1-SNAPSHOT</commons.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<parent>
-		<groupId>com.puresoltechnologies.commons</groupId>
-		<artifactId>parent.java</artifactId>
-		<version>0.1.1-SNAPSHOT</version>
-	</parent>
-
-	<groupId>com.puresoltechnologies.purifinity</groupId>
-	<artifactId>framework</artifactId>
+	<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+	<artifactId>framework-parent</artifactId>
+	<version>0.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Purifinity Framework</name>
+	<description>This is the functional framework for Purifinity.</description>
+
+	<inceptionYear>2009</inceptionYear>
+	<url>http://oss.puresol-technologies.com/purifinity-api</url>
+
+	<organization>
+		<name>PureSol Technologies</name>
+		<url>http://puresol-technologies.com</url>
+	</organization>
 
 	<licenses>
 		<license>
@@ -99,89 +107,6 @@
 		<dependencies>
 			<!-- Project internal -->
 			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>analysis.api</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.analysis.impl.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.analysis.test</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.evaluation.cleancode.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.evaluation.impl.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.lang.c11.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.lang.cpp11.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.lang.fortran2008.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.lang.java7.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.metrics.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>coding.metrics.test</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>store.commons</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>store.db.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>store.fs.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>commons.test</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity</groupId>
-				<artifactId>evaluation.api</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
 				<artifactId>parsers.api</artifactId>
 				<version>${project.version}</version>
@@ -197,58 +122,122 @@
 				<version>${project.version}</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>analysis.api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>evaluation.api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>analysis.impl.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>analysis.test</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>evaluation.cleancode.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>evaluation.commons.impl.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>lang.c11.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>lang.cpp11.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>lang.fortran2008.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>lang.java7.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>evaluation.metrics.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>evaluation.metrics.test</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>commons.utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>store.commons</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>store.db.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>store.fs.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>commons.test</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>
+			</dependency>
 			<!-- PureSol Technologies dependencies -->
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>configuration</artifactId>
-				<version>${commons.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>math</artifactId>
-				<version>${commons.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>osgi</artifactId>
-				<version>${commons.version}</version>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>trees.api</artifactId>
-				<version>${commons.version}</version>
+				<version>${project.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>trees.impl.lib</artifactId>
-				<version>${commons.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>utils</artifactId>
-				<version>${commons.version}</version>
-			</dependency>
-			<!-- IMPORTS -->
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>dependency.apache-commons</artifactId>
-				<version>${commons.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>dependency.osgi</artifactId>
-				<version>${commons.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
+			<!-- PureSol Technologies -->
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>misc</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.4</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-math3</artifactId>
@@ -259,12 +248,60 @@
 				<artifactId>jackson-jaxrs</artifactId>
 				<version>1.9.2</version>
 			</dependency>
+			<dependency>
+				<groupId>org.osgi</groupId>
+				<artifactId>org.osgi.core</artifactId>
+				<version>4.3.1</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>1.6.6</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>1.6.6</version>
+				<scope>test</scope>
+			</dependency>
+			<!-- Testing -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.10</version>
+				<scope>test</scope>
+			</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.9.0</version>
+		</dependency>
+			<dependency>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>org.apache.felix.framework</artifactId>
+				<version>4.0.3</version>
+				<scope>test</scope>
+			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 
 	<build>
 		<pluginManagement>
 			<plugins>
+
+
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.5.1</version>
+					<configuration>
+						<source>1.7</source>
+						<target>1.7</target>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>
@@ -280,8 +317,7 @@
 							<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
 							<!-- assume public classes are in the top package, and private classes 
 								are under ".internal" -->
-							<Export-Package>!${bundle.namespace}.internal.*,${bundle.namespace}.*;version="${project.version}"</Export-Package>
-							<Private-Package>${bundle.namespace}.internal.*</Private-Package>
+							<Export-Package>${bundle.namespace}.*;version="${project.version}"</Export-Package>
 							<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
 							<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
 							<!-- embed compile/runtime dependencies using path that matches the 
@@ -401,7 +437,9 @@
 		<module>bundles</module>
 		<module>commons</module>
 		<module>parsers</module>
-		<module>coding</module>
+		<module>analysis</module>
+		<module>lang</module>
+		<module>evaluation</module>
 		<module>store</module>
 	</modules>
 
