@@ -7,7 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.LanguageDependedSLOCMetric;
@@ -23,7 +22,6 @@ public class JavaTest {
 	}
 
 	@Test
-	@Ignore("Currently, it returns multiple implementations...")
 	public void checkServices() {
 		Java java = Java.getInstance();
 		LanguageDependedSLOCMetric implementation = java
