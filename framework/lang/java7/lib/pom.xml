@@ -25,7 +25,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.parsers</groupId>
-			<artifactId>parsers.impl.lib</artifactId>
+			<artifactId>parsers.impl</artifactId>
 		</dependency>
 		<dependency>
 			<!-- needed for testing -->

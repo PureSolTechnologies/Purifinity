@@ -14,7 +14,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>impl.lib</module>
+		<module>impl</module>
 		<module>impl.test</module>
 		<module>impl.bundle</module>
 	</modules>
