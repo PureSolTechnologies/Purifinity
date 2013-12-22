@@ -28,18 +28,18 @@
       <import plugin="com.puresoltechnologies.purifinity.framework.commons.utils.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.store.commons.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.commons.misc.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle"/>
-      <import plugin="org.eclipse.osgi"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.store.commons.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.store.fs.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.math.bundle"/>
+      <import plugin="com.puresoltechnologies.commons.misc.bundle"/>
       <import plugin="com.puresoltechnologies.commons.trees.api.bundle"/>
       <import plugin="com.puresoltechnologies.parsers.api.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.evaluation.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.analysis.impl.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.metrics.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.framework.store.fs.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.metrics.bundle"/>
+      <import plugin="org.eclipse.osgi"/>
    </requires>
 
    <plugin
@@ -50,14 +50,14 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresoltechnologies.purifinity.store.commons.bundle"
+         id="com.puresoltechnologies.purifinity.framework.store.fs.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="com.puresoltechnologies.purifinity.framework.store.fs.bundle"
+         id="com.puresoltechnologies.purifinity.framework.store.commons.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

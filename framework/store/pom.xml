@@ -13,6 +13,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>api</module>
+		<module>api.bundle</module>
 		<module>commons</module>
 		<module>commons.bundle</module>
 		<module>fs</module>

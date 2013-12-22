@@ -145,6 +145,21 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>database.cassandra.utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>database.cassandra.setup</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>database.titan.utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 				<artifactId>evaluation.cleancode.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -191,6 +206,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>store.api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 				<artifactId>store.commons</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -218,6 +238,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>misc</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>osgi</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -226,13 +251,22 @@
 				<artifactId>trees.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-			<!-- PureSol Technologies -->
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>misc</artifactId>
-				<version>${project.version}</version>
-			</dependency>
 			<!-- Specific external libraries -->
+			<dependency>
+				<groupId>com.datastax.cassandra</groupId>
+				<artifactId>cassandra-driver-core</artifactId>
+				<version>2.0.0-rc2</version>
+			</dependency>
+			<dependency>
+				<groupId>com.thinkaurelius.titan</groupId>
+				<artifactId>titan-core</artifactId>
+				<version>0.4.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.thinkaurelius.titan</groupId>
+				<artifactId>titan-cassandra</artifactId>
+				<version>0.4.1</version>
+			</dependency>
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
@@ -273,11 +307,11 @@
 				<version>4.10</version>
 				<scope>test</scope>
 			</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.9.0</version>
-		</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>1.9.0</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>org.apache.felix.framework</artifactId>
@@ -439,6 +473,7 @@
 	<modules>
 		<module>bundles</module>
 		<module>commons</module>
+		<module>database</module>
 		<module>parsers</module>
 		<module>analysis</module>
 		<module>lang</module>

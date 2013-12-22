@@ -147,21 +147,6 @@
 			<!-- ================ -->
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.cassandra.utils</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.cassandra.setup</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.titan.utils</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>jboss.configuration</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -198,25 +183,29 @@
 				<artifactId>utils</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>commons.utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>database.cassandra.utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>database.cassandra.setup</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>database.titan.utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<!-- =========================== -->
 			<!-- Specific external libraries -->
 			<!-- =========================== -->
-			<dependency>
-				<groupId>com.datastax.cassandra</groupId>
-				<artifactId>cassandra-driver-core</artifactId>
-				<version>2.0.0-rc2</version>
-			</dependency>
-			<dependency>
-				<groupId>com.thinkaurelius.titan</groupId>
-				<artifactId>titan-core</artifactId>
-				<version>0.4.1</version>
-			</dependency>
-			<dependency>
-				<groupId>com.thinkaurelius.titan</groupId>
-				<artifactId>titan-cassandra</artifactId>
-				<version>0.4.1</version>
-			</dependency>
 			<dependency>
 				<groupId>javax</groupId>
 				<artifactId>javaee-api</artifactId>
@@ -583,7 +572,6 @@
 	</build>
 
 	<modules>
-		<module>database</module>
 		<module>jboss</module>
 		<module>logger</module>
 		<module>eventlogger</module>

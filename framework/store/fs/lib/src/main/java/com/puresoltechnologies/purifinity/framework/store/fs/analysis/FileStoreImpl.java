@@ -23,7 +23,7 @@ import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.FileStore;
 import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StringUtils;
-import com.puresoltechnologies.purifinity.store.commons.StoreUtilities;
+import com.puresoltechnologies.purifinity.framework.store.commons.StoreUtilities;
 
 public final class FileStoreImpl implements FileStore {
 

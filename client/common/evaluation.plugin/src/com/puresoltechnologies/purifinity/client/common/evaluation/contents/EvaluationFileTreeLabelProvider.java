@@ -42,8 +42,7 @@ import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Eval
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 
-public class EvaluationFileTreeLabelProvider implements
-		ITableLabelProvider {
+public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 
 	private final Logger logger = LoggerFactory
 			.getLogger(AnalysisRunContentTreeLabelProvider.class);

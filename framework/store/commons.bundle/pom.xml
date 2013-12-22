@@ -34,7 +34,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresoltechnologies.purifinity.store.commons</bundle.namespace>
+		<bundle.namespace>com.puresoltechnologies.purifinity.framework.store.commons</bundle.namespace>
 	</properties>
 
 	<build>

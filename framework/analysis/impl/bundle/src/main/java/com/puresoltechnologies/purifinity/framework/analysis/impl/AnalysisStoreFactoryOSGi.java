@@ -4,7 +4,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisStoreFactory;
 
 /**
  * This is the central factory for a analysis store.

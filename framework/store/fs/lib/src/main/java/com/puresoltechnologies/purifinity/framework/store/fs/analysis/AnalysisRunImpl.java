@@ -51,7 +51,7 @@ import com.puresoltechnologies.purifinity.framework.commons.utils.DirectoryUtili
 import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.data.HashCodeGenerator;
 import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;
-import com.puresoltechnologies.purifinity.store.commons.StoreUtilities;
+import com.puresoltechnologies.purifinity.framework.store.commons.StoreUtilities;
 
 /**
  * This class is an implementation of {@link AnalysisRun}.

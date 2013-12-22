@@ -19,8 +19,8 @@ import com.datastax.driver.core.Host;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.Metadata;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.database.cassandra.utils.CassandraUtils;
-import com.puresoltechnologies.database.cassandra.utils.ReplicationStrategy;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraUtils;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
 import com.puresoltechnologies.purifinity.server.eventlogger.EventLogger;
 import com.puresoltechnologies.purifinity.server.eventlogger.EventLoggerRemote;
 
