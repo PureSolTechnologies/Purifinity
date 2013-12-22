@@ -8,7 +8,8 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
 /**
  * This is the central factory for a file store.

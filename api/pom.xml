@@ -171,6 +171,11 @@
 				<artifactId>evaluation.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>store.api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<!-- Specific external libraries -->
 			<dependency>
 				<groupId>commons-io</groupId>

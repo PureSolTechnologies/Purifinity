@@ -9,10 +9,10 @@ import java.io.ObjectOutputStream;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
-import com.puresoltechnologies.purifinity.framework.store.fs.analysis.AnalysisRunImpl;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.framework.store.fs.analysis.AnalysisStoreImpl;
 import com.puresoltechnologies.purifinity.framework.store.fs.analysis.DirectoryStoreImpl;
 import com.puresoltechnologies.purifinity.framework.store.fs.analysis.FileStoreImpl;
 
@@ -54,11 +54,25 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	protected final File getProjectResultsFile(AnalysisRun analysisRun) {
 		Class<? extends MetricDirectoryResults> projectResultClass = getProjectResultClass();
 		if (projectResultClass != null) {
-			File directory = AnalysisRunImpl.getStorageDirectory(analysisRun);
+			File directory = getStorageDirectory(analysisRun);
 			String fileName = projectResultClass.getName();
 			return new File(directory, fileName);
 		}
 		return null;
+	}
+
+	/**
+	 * This method returns the storage directory of the given analysis run.
+	 * 
+	 * @param analysisRun
+	 * @return
+	 */
+	public static File getStorageDirectory(AnalysisRun analysisRun) {
+		File analysisStorageDirectory = AnalysisStoreImpl
+				.getStorageDirectory(analysisRun.getInformation()
+						.getAnalysisProject().getInformation().getUUID());
+		return new File(analysisStorageDirectory, analysisRun.getInformation()
+				.getUUID().toString());
 	}
 
 	@Override

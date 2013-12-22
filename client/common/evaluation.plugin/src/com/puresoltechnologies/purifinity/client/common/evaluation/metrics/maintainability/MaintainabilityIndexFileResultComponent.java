@@ -13,12 +13,12 @@ import org.eclipse.swt.widgets.Table;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.client.common.evaluation.utils.ColorUtils;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexFileResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexFileResults;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
 public class MaintainabilityIndexFileResultComponent extends Composite {
 

@@ -11,19 +11,19 @@ import org.junit.Test;
 
 import com.puresoltechnologies.commons.math.statistics.Statistics;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.analysis.test.TestFileSearchConfiguration;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.AbstractMetricTest;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCResult;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
 public class SLOCEvaluatorIT extends AbstractMetricTest {
 

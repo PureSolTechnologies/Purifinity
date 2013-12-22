@@ -15,11 +15,11 @@ import org.slf4j.LoggerFactory;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
-import com.puresoltechnologies.purifinity.analysis.api.FileStore;
-import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;
-import com.puresoltechnologies.purifinity.analysis.api.FileStoreFactory;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
+import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
+import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
+import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;
 
 public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
 	private final Logger logger = LoggerFactory

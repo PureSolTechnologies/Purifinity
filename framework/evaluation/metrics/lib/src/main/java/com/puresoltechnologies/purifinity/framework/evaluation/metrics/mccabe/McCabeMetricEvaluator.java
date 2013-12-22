@@ -14,11 +14,11 @@ import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 
 public class McCabeMetricEvaluator extends AbstractEvaluator {
 
@@ -30,7 +30,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 
 	public McCabeMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 		super(McCabeMetric.NAME, McCabeMetric.DESCRIPTION, analysisRun, path);
-		store = createEvaluatorStore();
+		store = getEvaluatorStore();
 	}
 
 	@Override

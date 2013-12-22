@@ -14,11 +14,11 @@ import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 
 public class HalsteadMetricEvaluator extends AbstractEvaluator {
 
@@ -31,7 +31,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 	public HalsteadMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 		super(HalsteadMetric.NAME, HalsteadMetric.DESCRIPTION, analysisRun,
 				path);
-		store = createEvaluatorStore();
+		store = getEvaluatorStore();
 	}
 
 	@Override

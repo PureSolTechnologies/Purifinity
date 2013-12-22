@@ -16,14 +16,14 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.HashUtilities;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
-import com.puresoltechnologies.purifinity.analysis.api.FileStore;
-import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StringUtils;
-import com.puresoltechnologies.purifinity.framework.store.commons.StoreUtilities;
+import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
+import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 
 public final class FileStoreImpl implements FileStore {
 
@@ -39,7 +39,7 @@ public final class FileStoreImpl implements FileStore {
 			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 			try {
 				DigestInputStream digestInputStream = new DigestInputStream(
-						rawStream, StoreUtilities.getDefaultMessageDigest());
+						rawStream, HashUtilities.getDefaultMessageDigest());
 				try {
 					IOUtils.copy(digestInputStream, buffer);
 					byte[] hashBytes = digestInputStream.getMessageDigest()
@@ -47,7 +47,7 @@ public final class FileStoreImpl implements FileStore {
 					String hashString = StringUtils
 							.convertByteArrayToString(hashBytes);
 					HashId hashId = new HashId(
-							StoreUtilities.getDefaultMessageDigestAlgorithm(),
+							HashUtilities.getDefaultMessageDigestAlgorithm(),
 							hashString);
 					File targetDirectory = getFileDirectory(hashId);
 					File targetFile = new File(targetDirectory, RAW_FILE);

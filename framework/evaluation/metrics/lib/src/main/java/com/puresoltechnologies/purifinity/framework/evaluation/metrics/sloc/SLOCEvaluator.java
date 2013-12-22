@@ -15,11 +15,11 @@ import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 
 /**
  * This evaluator evaluates the Source Lines Of Code metrics which counts the
@@ -45,7 +45,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	public SLOCEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 		super(SLOCMetricCalculator.NAME, SLOCMetricCalculator.DESCRIPTION,
 				analysisRun, path);
-		store = createEvaluatorStore();
+		store = getEvaluatorStore();
 	}
 
 	@Override

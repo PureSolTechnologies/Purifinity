@@ -9,10 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.AbstractMetricTest;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluator;
 
 public class ProjectMaintainabilityIndexIT extends AbstractMetricTest {
 
@@ -23,8 +22,7 @@ public class ProjectMaintainabilityIndexIT extends AbstractMetricTest {
 	}
 
 	@Before
-	public void createAnalyzer() throws AnalysisStoreException,
-			InterruptedException {
+	public void createAnalyzer() throws AnalysisProjectException {
 		analyzer = getAnalysisProject().createAnalysisRun();
 	}
 

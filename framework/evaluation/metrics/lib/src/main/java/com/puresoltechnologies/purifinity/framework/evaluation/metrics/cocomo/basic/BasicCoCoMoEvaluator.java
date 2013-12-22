@@ -21,13 +21,13 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
 /**
  * This class calculates the CoCoMo for a set number of sloc and a given average
@@ -58,7 +58,7 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
 
 	public BasicCoCoMoEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 		super(NAME, DESCRIPTION, analysisRun, path);
-		store = createEvaluatorStore();
+		store = getEvaluatorStore();
 		slocStore = EvaluatorStoreFactory.getFactory().createInstance(
 				SLOCEvaluator.class);
 	}

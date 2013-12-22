@@ -45,15 +45,6 @@ public interface Evaluator extends
 	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 
 	/**
-	 * This method creates an {@link EvaluatorStore} object which is responsible
-	 * for storing and restoring evaluation results.
-	 * 
-	 * @return An {@link EvaluatorStore} object is returned containing the
-	 *         appropriate evaluator store.
-	 */
-	public EvaluatorStore createEvaluatorStore();
-
-	/**
 	 * This method set whether or not a re-evaluation is needed. If
 	 * re-evaluation is set to true, an evaluation is performed even if results
 	 * are available.

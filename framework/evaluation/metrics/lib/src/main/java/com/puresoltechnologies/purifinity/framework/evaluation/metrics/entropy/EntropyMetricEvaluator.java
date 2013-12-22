@@ -12,16 +12,16 @@ import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricDirectoryResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
 public class EntropyMetricEvaluator extends AbstractEvaluator {
 
@@ -34,7 +34,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 
 	public EntropyMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 		super(EntropyMetric.NAME, EntropyMetric.DESCRIPTION, analysisRun, path);
-		store = createEvaluatorStore();
+		store = getEvaluatorStore();
 		halsteadStore = EvaluatorStoreFactory.getFactory().createInstance(
 				HalsteadMetricEvaluator.class);
 	}

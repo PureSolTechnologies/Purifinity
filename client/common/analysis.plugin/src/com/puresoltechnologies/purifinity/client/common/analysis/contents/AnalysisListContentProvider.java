@@ -7,7 +7,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
 
 /**
  * This content provider is used to show a list of available analyzes from the

@@ -19,17 +19,18 @@ import com.puresoltechnologies.commons.trees.api.TreeUtils;
 import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
-import com.puresoltechnologies.purifinity.analysis.api.DirectoryStore;
-import com.puresoltechnologies.purifinity.analysis.api.DirectoryStoreFactory;
-import com.puresoltechnologies.purifinity.analysis.api.FileStore;
-import com.puresoltechnologies.purifinity.analysis.api.FileStoreException;
-import com.puresoltechnologies.purifinity.analysis.api.FileStoreFactory;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;
+import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
+import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreFactory;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
+import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
+import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -77,7 +78,7 @@ public abstract class AbstractEvaluator extends
 		this.analysisRun = analysisRun;
 		this.path = path;
 		timeStamp = new Date();
-		evaluatorStore = createEvaluatorStore();
+		evaluatorStore = evaluatorStoreFactory.createInstance(getClass());
 	}
 
 	@Override
@@ -108,6 +109,10 @@ public abstract class AbstractEvaluator extends
 	@Override
 	public final boolean isReEvaluation() {
 		return reEvaluation;
+	}
+
+	protected EvaluatorStore getEvaluatorStore() {
+		return evaluatorStore;
 	}
 
 	@Override
@@ -259,11 +264,6 @@ public abstract class AbstractEvaluator extends
 				processDirectory(directoryNode);
 			}
 		}
-	}
-
-	@Override
-	public EvaluatorStore createEvaluatorStore() {
-		return evaluatorStoreFactory.createInstance(getClass());
 	}
 
 	/**

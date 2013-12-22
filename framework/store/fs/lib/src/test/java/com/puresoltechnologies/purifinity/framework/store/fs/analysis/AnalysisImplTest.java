@@ -13,75 +13,75 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.framework.analysis.test.TestFileSearchConfiguration;
-import com.puresoltechnologies.purifinity.framework.store.fs.analysis.AnalysisStoreImpl;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 
 public class AnalysisImplTest {
 
-    private static AnalysisStore analysisStore;
-    private static AnalysisProject analysis;
+	private static AnalysisStore analysisStore;
+	private static AnalysisProject analysis;
 
-    @BeforeClass
-    public static void initialize() throws AnalysisStoreException {
-	analysisStore = new AnalysisStoreImpl();
-	analysis = analysisStore.createAnalysis(new AnalysisProjectSettings(
-		"Name", "Description", new TestFileSearchConfiguration(),
-		new DirectoryRepositoryLocation(".", new File("."))));
-	assertNotNull(analysis);
-    }
+	@BeforeClass
+	public static void initialize() throws AnalysisStoreException {
+		analysisStore = new AnalysisStoreImpl();
+		analysis = analysisStore.createAnalysis(new AnalysisProjectSettings(
+				"Name", "Description", new TestFileSearchConfiguration(),
+				new DirectoryRepositoryLocation(".", new File("."))));
+		assertNotNull(analysis);
+	}
 
-    @Test
-    public void test() throws AnalysisStoreException {
-	List<AnalysisRunInformation> allRunInformation = analysis
-		.getAllRunInformation();
-	assertNotNull(allRunInformation);
-    }
+	@Test
+	public void test() throws AnalysisProjectException {
+		List<AnalysisRunInformation> allRunInformation = analysis
+				.getAllRunInformation();
+		assertNotNull(allRunInformation);
+	}
 
-    @Test
-    public void testUpdateSettings() throws AnalysisStoreException {
-	AnalysisProjectInformation oldInformation = analysis.getInformation();
-	AnalysisProjectSettings settingsForUpdate = new AnalysisProjectSettings(
-		"Name2", "Description2", new TestFileSearchConfiguration(),
-		new DirectoryRepositoryLocation("/", new File("/")));
+	@Test
+	public void testUpdateSettings() throws AnalysisProjectException {
+		AnalysisProjectInformation oldInformation = analysis.getInformation();
+		AnalysisProjectSettings settingsForUpdate = new AnalysisProjectSettings(
+				"Name2", "Description2", new TestFileSearchConfiguration(),
+				new DirectoryRepositoryLocation("/", new File("/")));
 
-	analysis.updateSettings(settingsForUpdate);
+		analysis.updateSettings(settingsForUpdate);
 
-	AnalysisProjectInformation newInformation = analysis.getInformation();
-	AnalysisProjectSettings newSettings = analysis.getSettings();
+		AnalysisProjectInformation newInformation = analysis.getInformation();
+		AnalysisProjectSettings newSettings = analysis.getSettings();
 
-	/* UUID and creation time must not to be changed! */
-	assertNotSame(oldInformation, newInformation);
-	assertEquals(oldInformation.getUUID(), newInformation.getUUID());
-	assertEquals(oldInformation.getCreationTime(),
-		newInformation.getCreationTime());
-	/* name and description are updated */
+		/* UUID and creation time must not to be changed! */
+		assertNotSame(oldInformation, newInformation);
+		assertEquals(oldInformation.getUUID(), newInformation.getUUID());
+		assertEquals(oldInformation.getCreationTime(),
+				newInformation.getCreationTime());
+		/* name and description are updated */
 
-	assertEquals("Name2", newSettings.getName());
-	assertEquals("Description2", newSettings.getDescription());
-	assertEquals("/", newSettings.getRepositoryLocation().getName());
-    }
+		assertEquals("Name2", newSettings.getName());
+		assertEquals("Description2", newSettings.getDescription());
+		assertEquals("/", newSettings.getRepositoryLocation().getName());
+	}
 
-    @Test
-    @Ignore("For tests, we do not have a bundle context!")
-    public void testCreateRun() throws Exception {
-	AnalysisRun analysisRun = analysis.createAnalysisRun();
-	assertNotNull(analysisRun);
-	AnalysisRun run = analysis.loadLastAnalysisRun();
-	assertNotNull(run);
-    }
+	@Test
+	@Ignore("For tests, we do not have a bundle context!")
+	public void testCreateRun() throws Exception {
+		AnalysisRun analysisRun = analysis.createAnalysisRun();
+		assertNotNull(analysisRun);
+		AnalysisRun run = analysis.loadLastAnalysisRun();
+		assertNotNull(run);
+	}
 
-    @AfterClass
-    public static void destroy() throws AnalysisStoreException {
-	assertNotNull(analysisStore);
-	assertNotNull(analysis);
-	analysisStore.removeAnalysis(analysis.getInformation().getUUID());
-    }
+	@AfterClass
+	public static void destroy() throws AnalysisStoreException {
+		assertNotNull(analysisStore);
+		assertNotNull(analysis);
+		analysisStore.removeAnalysis(analysis.getInformation().getUUID());
+	}
 
 }

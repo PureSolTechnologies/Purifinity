@@ -9,8 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.AbstractMetricTest;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.basic.BasicCoCoMoEvaluator;
 
@@ -23,8 +23,7 @@ public class CoCoMoProjectIT extends AbstractMetricTest {
 	}
 
 	@Before
-	public void createanalyzer() throws AnalysisStoreException,
-			InterruptedException {
+	public void createanalyzer() throws AnalysisProjectException {
 		analyzer = getAnalysisProject().createAnalysisRun();
 	}
 

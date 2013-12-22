@@ -39,7 +39,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresoltechnologies.purifinity.store.db</bundle.namespace>
+		<bundle.namespace>com.puresoltechnologies.purifinity.framework.store.db</bundle.namespace>
 	</properties>
 
 	<build>

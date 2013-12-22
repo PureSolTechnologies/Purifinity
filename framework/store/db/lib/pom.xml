@@ -13,9 +13,36 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.datastax.cassandra</groupId>
-			<artifactId>cassandra-driver-core</artifactId>
-			<version>1.0.5</version>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>analysis.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>evaluation.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>analysis.impl.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>commons.utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>database.cassandra.utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>evaluation.metrics.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>store.commons</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.parsers</groupId>
+			<artifactId>parsers.impl</artifactId>
 		</dependency>
 	</dependencies>
 

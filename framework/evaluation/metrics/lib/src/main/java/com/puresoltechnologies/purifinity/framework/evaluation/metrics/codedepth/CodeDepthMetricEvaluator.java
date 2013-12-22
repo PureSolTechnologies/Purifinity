@@ -14,12 +14,12 @@ import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 
 /**
  * This evaluator calculates the nesting depth of the source code. A too deep
@@ -39,7 +39,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 	public CodeDepthMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
 		super(CodeDepthMetric.NAME, CodeDepthMetric.DESCRIPTION, analysisRun,
 				path);
-		store = createEvaluatorStore();
+		store = getEvaluatorStore();
 	}
 
 	@Override

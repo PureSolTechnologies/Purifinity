@@ -6,11 +6,7 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleContext;
 
 import com.puresoltechnologies.commons.osgi.AbstractActivator;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.analysis.api.DirectoryStore;
-import com.puresoltechnologies.purifinity.analysis.api.FileStore;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.basic.BasicCoCoMoEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.codedepth.CodeDepthMetricEvaluator;
@@ -20,6 +16,10 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintaina
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.mccabe.McCabeMetricEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.normmaint.NormalizedMaintainabilityIndexEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCEvaluator;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
+import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.fs.analysis.AnalysisStoreImpl;
 import com.puresoltechnologies.purifinity.framework.store.fs.analysis.DirectoryStoreImpl;
 import com.puresoltechnologies.purifinity.framework.store.fs.analysis.FileStoreImpl;

@@ -32,7 +32,7 @@ public interface AnalysisProject extends Serializable {
 	 *             is thrown in cases of issues.
 	 */
 	public List<AnalysisRunInformation> getAllRunInformation()
-			throws AnalysisStoreException;
+			throws AnalysisProjectException;
 
 	/**
 	 * This method returns the settings of the analysis.
@@ -52,7 +52,7 @@ public interface AnalysisProject extends Serializable {
 	 *             is thrown in cases of issues.
 	 */
 	public void updateSettings(AnalysisProjectSettings settings)
-			throws AnalysisStoreException;
+			throws AnalysisProjectException;
 
 	/**
 	 * This method returns the analysis run defined by the uuid.
@@ -65,7 +65,8 @@ public interface AnalysisProject extends Serializable {
 	 * @throws AnalysisStoreException
 	 *             is thrown in cases of issues.
 	 */
-	public AnalysisRun loadAnalysisRun(UUID uuid) throws AnalysisStoreException;
+	public AnalysisRun loadAnalysisRun(UUID uuid)
+			throws AnalysisProjectException;
 
 	/**
 	 * A new analysis is run with this method. After the run a new
@@ -80,8 +81,7 @@ public interface AnalysisProject extends Serializable {
 	 *             is thrown in cases of issues.
 	 * @throws InterruptedException
 	 */
-	public AnalysisRun createAnalysisRun() throws AnalysisStoreException,
-			InterruptedException;
+	public AnalysisRun createAnalysisRun() throws AnalysisProjectException;
 
 	/**
 	 * This method loads the last analysis run available. It is the most
@@ -91,7 +91,7 @@ public interface AnalysisProject extends Serializable {
 	 * @throws AnalysisStoreException
 	 *             is thrown in cases of issues.
 	 */
-	public AnalysisRun loadLastAnalysisRun() throws AnalysisStoreException;
+	public AnalysisRun loadLastAnalysisRun() throws AnalysisProjectException;
 
 	/**
 	 * This method deletes an analysis run from the store.
@@ -101,5 +101,5 @@ public interface AnalysisProject extends Serializable {
 	 * @throws AnalysisStoreException
 	 *             is thrown in events of issues.
 	 */
-	public void removeAnalysisRun(UUID uuid) throws AnalysisStoreException;
+	public void removeAnalysisRun(UUID uuid) throws AnalysisProjectException;
 }

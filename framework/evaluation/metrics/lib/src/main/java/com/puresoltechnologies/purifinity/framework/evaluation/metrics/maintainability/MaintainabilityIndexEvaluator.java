@@ -12,11 +12,9 @@ import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricResult;
@@ -28,6 +26,8 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOC
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
 public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
@@ -55,7 +55,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	public MaintainabilityIndexEvaluator(AnalysisRun analysisRun,
 			HashIdFileTree path) {
 		super(NAME, DESCRIPTION, analysisRun, path);
-		store = createEvaluatorStore();
+		store = getEvaluatorStore();
 		EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
 		slocStore = factory.createInstance(SLOCEvaluator.class);
 		mcCabeStore = factory.createInstance(McCabeMetricEvaluator.class);
