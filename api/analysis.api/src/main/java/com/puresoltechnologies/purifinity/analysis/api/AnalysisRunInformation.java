@@ -17,16 +17,16 @@ public final class AnalysisRunInformation implements Serializable,
 
 	private static final long serialVersionUID = -2618256066434770094L;
 
-	private final AnalysisProject analysisProject;
+	private final UUID analysisProjectUUID;
 	private final UUID uuid;
 	private final Date time;
 	private final long timeOfRun;
 	private final String description;
 
-	public AnalysisRunInformation(AnalysisProject analysisProject, UUID uuid,
+	public AnalysisRunInformation(UUID analysisProjectUUID, UUID uuid,
 			Date time, long timeOfRun, String description) {
 		super();
-		this.analysisProject = analysisProject;
+		this.analysisProjectUUID = analysisProjectUUID;
 		this.uuid = uuid;
 		this.time = time;
 		this.timeOfRun = timeOfRun;
@@ -39,8 +39,8 @@ public final class AnalysisRunInformation implements Serializable,
 	 * 
 	 * @return An UUID object is returned.
 	 */
-	public final AnalysisProject getAnalysisProject() {
-		return analysisProject;
+	public final UUID getAnalysisProjectUUID() {
+		return analysisProjectUUID;
 	}
 
 	/**

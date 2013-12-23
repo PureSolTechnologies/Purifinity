@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import com.puresoltechnologies.commons.math.statistics.Statistics;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
@@ -48,8 +49,10 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 
 	private AnalysisRun performAnalysis() throws AnalysisStoreException,
 			InterruptedException, Exception {
-		AnalysisRun analysisRun = getAnalysisProject().createAnalysisRun();
-		assertTrue("Analysis run did not succeed.", analysisRun.call());
+		AnalysisRunner analysisRunner = getAnalysisProject()
+				.createAnalysisRunner();
+		assertTrue("Analysis run did not succeed.", analysisRunner.call());
+		AnalysisRun analysisRun = analysisRunner.getAnalysisRun();
 		List<AnalyzedCode> analyzedFiles = analysisRun.getAnalyzedFiles();
 		assertEquals(1, analyzedFiles.size());
 		return analysisRun;

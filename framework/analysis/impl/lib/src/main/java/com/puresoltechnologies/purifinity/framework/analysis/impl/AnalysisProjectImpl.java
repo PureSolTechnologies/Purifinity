@@ -13,6 +13,7 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformatio
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
@@ -23,19 +24,6 @@ public class AnalysisProjectImpl implements AnalysisProject {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(AnalysisProjectImpl.class);
-
-	public static AnalysisProject open(UUID uuid) throws AnalysisStoreException {
-		AnalysisStore analysisStore = AnalysisStoreFactory.getFactory()
-				.getInstance();
-		return analysisStore.loadAnalysis(uuid);
-	}
-
-	public static AnalysisProject create(AnalysisProjectSettings settings)
-			throws AnalysisStoreException {
-		AnalysisStore analysisStore = AnalysisStoreFactory.getFactory()
-				.getInstance();
-		return analysisStore.createAnalysis(settings);
-	}
 
 	private final UUID uuid;
 	private final Date creationTime;
@@ -96,13 +84,8 @@ public class AnalysisProjectImpl implements AnalysisProject {
 	}
 
 	@Override
-	public AnalysisRun createAnalysisRun() throws AnalysisProjectException {
-		try {
-			return analysisStore.createAnalysisRun(this.uuid);
-		} catch (AnalysisStoreException e) {
-			logger.error("Could not create analysis run.", e);
-			throw new AnalysisProjectException("Could not create analysis run.");
-		}
+	public AnalysisRunner createAnalysisRunner() {
+		return new AnalysisRunnerImpl(uuid);
 	}
 
 	@Override

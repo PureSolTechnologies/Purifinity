@@ -72,7 +72,7 @@ public class ParserTreeControl extends Composite {
 				.getHashId());
 		if (codeAnalysis != null) {
 			lblNewLabel.setText(analysisRun.getInformation()
-					.getAnalysisProject().getSettings().getName()
+					.getAnalysisProjectUUID().getSettings().getName()
 					+ ": "
 					+ analyzedCode.getSourceLocation()
 							.getHumanReadableLocationString());

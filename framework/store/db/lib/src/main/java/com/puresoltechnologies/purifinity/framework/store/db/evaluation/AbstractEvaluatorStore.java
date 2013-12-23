@@ -70,7 +70,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public static File getStorageDirectory(AnalysisRun analysisRun) {
 		File analysisStorageDirectory = AnalysisStoreImpl
 				.getStorageDirectory(analysisRun.getInformation()
-						.getAnalysisProject().getInformation().getUUID());
+						.getAnalysisProjectUUID().getInformation().getUUID());
 		return new File(analysisStorageDirectory, analysisRun.getInformation()
 				.getUUID().toString());
 	}

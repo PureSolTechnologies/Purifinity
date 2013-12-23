@@ -75,13 +75,13 @@ public interface AnalysisProject extends Serializable {
 	 * ATTENTION(!): This method work synchronously! The method only returns
 	 * after the analysis is finished or interrupted!
 	 * 
-	 * @return A {@link AnalysisRun} object is returned containing the
+	 * @return A {@link AnalysisRunner} object is returned containing the
 	 *         information and results about the run.
 	 * @throws AnalysisStoreException
 	 *             is thrown in cases of issues.
 	 * @throws InterruptedException
 	 */
-	public AnalysisRun createAnalysisRun() throws AnalysisProjectException;
+	public AnalysisRunner createAnalysisRunner();
 
 	/**
 	 * This method loads the last analysis run available. It is the most

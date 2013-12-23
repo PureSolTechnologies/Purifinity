@@ -16,12 +16,10 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
-import com.puresoltechnologies.purifinity.framework.commons.utils.DirectoryUtilities;
 import com.puresoltechnologies.purifinity.framework.lang.java7.Java;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
-import com.puresoltechnologies.purifinity.framework.store.fs.analysis.AnalysisStoreImpl;
 
 /**
  * This class is used for metrics tests as parent class. This class guarantees a
@@ -49,12 +47,12 @@ public abstract class AbstractMetricTest {
 
 	@BeforeClass
 	public static void cleanCodeAnalysisDirectory() {
-		File codeAnalysisDirectory = AnalysisStoreImpl.getStorageDirectory();
+		File codeAnalysisDirectory = null;
 		assertNotNull("Storage directory is not available.",
 				codeAnalysisDirectory);
-		if (codeAnalysisDirectory.exists()) {
-			DirectoryUtilities.deleteDirectoryRecursivly(codeAnalysisDirectory);
-		}
+		// if (codeAnalysisDirectory.exists()) {
+		// DirectoryUtilities.deleteDirectoryRecursivly(codeAnalysisDirectory);
+		// }
 	}
 
 	private AnalysisProject analysisProject;

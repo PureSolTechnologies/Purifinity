@@ -33,6 +33,9 @@ public class Activator extends AbstractActivator {
 		// NormalizedMaintainabilityIndexEvaluator.class);
 		// registerEvaluatorStore(new SLOCEvaluatorStore(),
 		// SLOCEvaluator.class);
+
+		CassandraConnection.connect();
+		TitanConnection.connect();
 	}
 
 	// private <T extends EvaluatorStore> void registerEvaluatorStore(T
@@ -42,4 +45,11 @@ public class Activator extends AbstractActivator {
 	// dictionary.put("evaluator", evaluator.getName());
 	// registerService(EvaluatorStore.class, instance, dictionary);
 	// }
+
+	@Override
+	public void stop(BundleContext context) throws Exception {
+		TitanConnection.disconnect();
+		CassandraConnection.disconnect();
+		super.stop(context);
+	}
 }

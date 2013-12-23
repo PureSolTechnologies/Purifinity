@@ -153,7 +153,7 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 			} else if (selection instanceof AnalysisRunSelection) {
 				AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
 				analysisRun = analysisRunSelection.getAnalysisRun();
-				analysis = analysisRun.getInformation().getAnalysisProject();
+				analysis = analysisRun.getInformation().getAnalysisProjectUUID();
 			}
 			if (analysis != null) {
 				name.setText(analysis.getSettings().getName());

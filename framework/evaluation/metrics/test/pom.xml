@@ -25,7 +25,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>store.fs.lib</artifactId>
+			<artifactId>store.api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

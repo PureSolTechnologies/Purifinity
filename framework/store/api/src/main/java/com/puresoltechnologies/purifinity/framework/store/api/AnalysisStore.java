@@ -1,12 +1,16 @@
 package com.puresoltechnologies.purifinity.framework.store.api;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
 
 /**
  * This is the central interface to access the delivered analysis store. The
@@ -77,12 +81,30 @@ public interface AnalysisStore {
 	public AnalysisRun loadAnalysisRun(UUID projectUUID, UUID uuid)
 			throws AnalysisStoreException;
 
-	public AnalysisRun createAnalysisRun(UUID projectUUID)
-			throws AnalysisStoreException;
-
 	public AnalysisRun loadLastAnalysisRun(UUID projectUUID)
 			throws AnalysisStoreException;
 
 	public void removeAnalysisRun(UUID projectUUID, UUID uuid)
 			throws AnalysisStoreException;
+
+	public AnalysisRunInformation loadAnalysisRunInformation(UUID projectUUID,
+			UUID uuid) throws AnalysisStoreException;
+
+	public void saveAnalysisRunInformation(UUID projectUUID, UUID uuid,
+			Date creationTime, long timeOfRun) throws AnalysisStoreException;
+
+	public FileSearchConfiguration readSearchConfiguration(
+			UUID analysisProjectUUID, UUID analysisRunUUID)
+			throws AnalysisStoreException;
+
+	public void writeSearchConfiguration(UUID analysisProjectUUID,
+			UUID analysisRunUUID,
+			FileSearchConfiguration fileSearchConfiguration)
+			throws AnalysisStoreException;
+
+	public void storeAnalysisResultInformation(UUID analysisProjectUUID,
+			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
+			List<AnalyzedCode> failedSources, HashIdFileTree fileTree);
+
+	public void storeModules(HashIdFileTree fileTree);
 }

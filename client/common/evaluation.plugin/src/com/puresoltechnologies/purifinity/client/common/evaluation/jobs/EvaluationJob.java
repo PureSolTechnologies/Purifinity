@@ -36,7 +36,7 @@ public class EvaluationJob extends Job {
 		super("");
 		this.analysisRun = analysisRun;
 		this.reEvaluation = reEvaluation;
-		analysisProject = analysisRun.getInformation().getAnalysisProject();
+		analysisProject = analysisRun.getInformation().getAnalysisProjectUUID();
 		projectName = analysisProject.getSettings().getName();
 		setName("Evaluation of project '" + projectName + "'");
 	}

@@ -3,9 +3,6 @@ package com.puresoltechnologies.purifinity.analysis.api;
 import java.io.File;
 import java.io.Serializable;
 import java.util.List;
-import java.util.concurrent.Callable;
-
-import com.puresoltechnologies.commons.misc.ProgressObservable;
 
 /**
  * This is the general interface for a single project analysis. This analysis
@@ -16,8 +13,7 @@ import com.puresoltechnologies.commons.misc.ProgressObservable;
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface AnalysisRun extends Serializable,
-		ProgressObservable<AnalysisRun>, Callable<Boolean> {
+public interface AnalysisRun extends Serializable {
 
 	/**
 	 * This method returns the information about the run.

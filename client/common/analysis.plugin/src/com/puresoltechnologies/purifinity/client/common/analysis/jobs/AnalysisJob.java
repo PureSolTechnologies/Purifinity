@@ -53,7 +53,7 @@ public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
 		try {
 			this.monitor = monitor;
 
-			analysisRun = analysisProject.createAnalysisRun();
+			analysisRun = analysisProject.createAnalysisRunner();
 			analysisRun.addObserver(this);
 
 			ExecutorService executor = Executors.newSingleThreadExecutor();
