@@ -6,8 +6,8 @@ import com.puresoltechnologies.commons.trees.api.Tree;
 import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.impl.ust.USTUtils;
-import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 
 public class MethodDeclaration {
 

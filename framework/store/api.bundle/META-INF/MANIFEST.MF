@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1387794386848
+Bnd-LastModified: 1387823320993
 Build-Jdk: 1.7.0_25
-Built-By: ludwig
+Built-By: Rick-Rainer Ludwig
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.puresoltechnologies.purifinity.framework.store.api
  .Activator
@@ -25,8 +25,8 @@ Embedded-Artifacts: dependencies/store.api-0.1.1-SNAPSHOT.jar;g="com.pur
  ,dependencies/osgi-0.1.1-SNAPSHOT.jar;g="com.puresoltechnologies.common
  s";a="osgi";v="0.1.1-SNAPSHOT"
 Export-Package: com.puresoltechnologies.purifinity.framework.store.api;u
- ses:="com.puresoltechnologies.purifinity.analysis.api,org.osgi.framewor
- k,com.puresoltechnologies.commons.misc,com.puresoltechnologies.purifini
+ ses:="com.puresoltechnologies.purifinity.analysis.api,com.puresoltechno
+ logies.commons.misc,org.osgi.framework,com.puresoltechnologies.purifini
  ty.evaluation.api,com.puresoltechnologies.parsers.api.source";version="
  0.1.1.SNAPSHOT"
 Import-Package: com.puresoltechnologies.commons.misc,com.puresoltechnolo

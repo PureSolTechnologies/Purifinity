@@ -3,15 +3,13 @@ package com.puresoltechnologies.purifinity.framework.store.db.analysis;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
@@ -19,28 +17,31 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.trees.api.TreePrinter;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
-import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisProjectImpl;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunImpl;
-import com.puresoltechnologies.purifinity.framework.commons.utils.FileUtilities;
-import com.puresoltechnologies.purifinity.framework.commons.utils.PersistenceUtils;
+import com.puresoltechnologies.parsers.api.source.RepositoryLocation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreFactory;
+import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
+import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
+import com.thinkaurelius.titan.core.TitanGraph;
+import com.tinkerpop.blueprints.Vertex;
 
 public class AnalysisStoreImpl implements AnalysisStore {
 
@@ -58,154 +59,149 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	private static final String SEARCH_CONFIGURATION_FILE = "search_configuration.persist";
 	private static final String ANALYSIS_RUN_PROPERTIES_FILE = "analysis_run.properties";
 
-	
-	private final Cluster
-	
 	public AnalysisStoreImpl() {
 	}
 
 	@Override
-	public List<AnalysisProject> getAnalysisProjects()
+	public List<AnalysisProjectInformation> getAllAnalysisProjectInformation()
 			throws AnalysisStoreException {
-		List<AnalysisProject> projects = new ArrayList<AnalysisProject>();
-		File[] files = storageDirectory.listFiles();
-		if (files != null) {
-			for (File analysisDirectory : files) {
-				if (isAnalysisProjectDirectory(analysisDirectory)) {
-					AnalysisProject analysis = openProject(analysisDirectory);
-					projects.add(analysis);
-				}
-			}
+		TitanGraph graph = TitanConnection.getGraph();
+		List<AnalysisProjectInformation> projects = new ArrayList<>();
+		Iterable<Vertex> vertices = graph.query()
+				.has(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY).vertices();
+		Iterator<Vertex> vertexIterator = vertices.iterator();
+		while (vertexIterator.hasNext()) {
+			Vertex vertex = vertexIterator.next();
+			UUID uuid = (UUID) vertex
+					.getProperty(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY);
+			AnalysisProjectInformation information = readAnalysisProjectInformation(uuid);
+			projects.add(information);
 		}
 		return projects;
 	}
 
-	private AnalysisProject openProject(File analysisDirectory)
-			throws AnalysisStoreException {
-		try {
-			try (FileInputStream fileInputStream = new FileInputStream(
-					new File(analysisDirectory, SETTINGS_FILE))) {
-				try (ObjectInputStream objectInputStream = new ObjectInputStream(
-						fileInputStream)) {
-					AnalysisProjectSettings settings = (AnalysisProjectSettings) objectInputStream
-							.readObject();
-					return loadProperties(analysisDirectory, settings);
-				} catch (ClassNotFoundException e) {
-					throw new RuntimeException(e);
-				}
-			}
-		} catch (IOException e) {
-			throw new AnalysisStoreException("Could not open the analysis!", e);
-		}
-	}
-
-	private AnalysisProject loadProperties(File analysisDirectory,
-			AnalysisProjectSettings settings) throws IOException {
-		try (FileReader reader = new FileReader(new File(analysisDirectory,
-				"analysis.properties"))) {
-			Properties properties = new Properties();
-			properties.load(reader);
-			UUID uuid = UUID.fromString(properties.get("uuid").toString());
-			Date creationTime = new Date(Long.valueOf((String) properties
-					.get("creation.time")));
-			return new AnalysisProjectImpl(uuid, creationTime, settings);
-		}
-	}
-
 	@Override
-	public AnalysisProject loadAnalysis(UUID uuid)
+	public AnalysisProjectInformation readAnalysisProjectInformation(UUID uuid)
 			throws AnalysisStoreException {
-		File analysisDirectory = new File(storageDirectory, uuid.toString());
-		return openProject(analysisDirectory);
+		TitanGraph graph = TitanConnection.getGraph();
+		Vertex vertex = findAnalysisProjectVertex(graph, uuid);
+		Date creationTime = (Date) vertex
+				.getProperty(TitanConnection.CREATION_TIME_PROPERTY);
+		return new AnalysisProjectInformation(uuid, creationTime);
 	}
 
-	@Override
-	public AnalysisProject createAnalysis(AnalysisProjectSettings settings)
+	private Vertex findAnalysisProjectVertex(TitanGraph graph, UUID uuid)
 			throws AnalysisStoreException {
-		try {
-			UUID uuid = UUID.randomUUID();
-			Date creationTime = new Date();
-			File analysisDirectory = getAnalysisProjectDirectory(uuid);
-			if (!analysisDirectory.exists()) {
-				analysisDirectory.mkdirs();
-			}
-			new File(analysisDirectory, PROJECT_DIRECTORY_FLAG).createNewFile();
-			PersistenceUtils.store(new File(analysisDirectory, SETTINGS_FILE),
-					settings);
-			saveProperties(uuid, creationTime, analysisDirectory);
-			return new AnalysisProjectImpl(uuid, creationTime, settings);
-		} catch (IOException e) {
+		Iterable<Vertex> vertices = graph.getVertices(
+				TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY, uuid);
+		Iterator<Vertex> vertexIterator = vertices.iterator();
+		if (!vertexIterator.hasNext()) {
 			throw new AnalysisStoreException(
-					"Could not store files for analysis!", e);
+					"Could not find a project with UUID '" + uuid + "'.");
 		}
-	}
-
-	private void saveProperties(UUID uuid, Date creationTime,
-			File analysisDirectory) throws IOException {
-		Properties properties = new Properties();
-		properties.put("uuid", uuid.toString());
-		properties.put("creation.time", String.valueOf(creationTime.getTime()));
-		FileWriter writer = new FileWriter(new File(analysisDirectory,
-				"analysis.properties"));
-		try {
-			properties.store(writer, "");
-		} finally {
-			writer.close();
+		Vertex vertex = vertexIterator.next();
+		if (vertexIterator.hasNext()) {
+			throw new AnalysisStoreException(
+					"Find multiple projects with UUID '" + uuid + "'.");
 		}
+		return vertex;
 	}
 
 	@Override
-	public void removeAnalysis(UUID uuid) throws AnalysisStoreException {
-		try {
-			File analysisDirectory = new File(storageDirectory, uuid.toString());
-			FileUtilities.deleteFileOrDir(analysisDirectory);
-		} catch (IOException e) {
-			throw new AnalysisStoreException(
-					"Could not delete analysis with UUID '" + uuid.toString()
-							+ "'!", e);
-		}
+	public AnalysisProjectInformation createAnalysisProject(
+			AnalysisProjectSettings settings) throws AnalysisStoreException {
+		UUID uuid = UUID.randomUUID();
+		Date creationTime = new Date();
+		TitanGraph graph = TitanConnection.getGraph();
+		Vertex vertex = graph.addVertex(null);
+		vertex.setProperty(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY,
+				uuid.toString());
+		vertex.setProperty(TitanConnection.CREATION_TIME_PROPERTY, creationTime);
+		graph.commit();
+
+		String name = settings.getName();
+		String description = settings.getDescription();
+		FileSearchConfiguration fileSearchConfiguration = settings
+				.getFileSearchConfiguration();
+
+		Session session = CassandraConnection.getAnalysisSession();
+		PreparedStatement preparedStatement = session.prepare("INSERT INTO "
+				+ CassandraConnection.ANALYSIS_PROJECT_SETTINGS_TABLE
+				+ " (uuid, name, description, "
+				+ "file_includes, file_excludes, "
+				+ "location_includes, location_excludes, "
+				+ "ignore_hidden, repository_location) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		RepositoryLocation repositoryLocation = settings
+				.getRepositoryLocation();
+		Properties repositoryLocationString = repositoryLocation == null ? null
+				: repositoryLocation.getSerialization();
+		BoundStatement bound = preparedStatement.bind(uuid, name, description,
+				fileSearchConfiguration.getFileIncludes(),
+				fileSearchConfiguration.getFileExcludes(),
+				fileSearchConfiguration.getLocationIncludes(),
+				fileSearchConfiguration.getLocationExcludes(),
+				fileSearchConfiguration.isIgnoreHidden(),
+				repositoryLocationString);
+		session.execute(bound);
+
+		return new AnalysisProjectInformation(uuid, creationTime);
+	}
+
+	private void applySettings(Vertex vertex, AnalysisProjectSettings settings) {
+		vertex.setProperty(TitanConnection.ANALYSIS_PROJECT_NAME_PROPERTY,
+				settings.getName());
+		vertex.setProperty(
+				TitanConnection.ANALYSIS_PROJECT_DESCRIPTION_PROPERTY,
+				settings.getDescription());
+	}
+
+	@Override
+	public void removeAnalysisProject(UUID uuid) throws AnalysisStoreException {
+		TitanGraph graph = TitanConnection.getGraph();
+		Vertex vertex = findAnalysisProjectVertex(graph, uuid);
+		vertex.remove();
 	}
 
 	@Override
 	public void updateSettings(UUID uuid, AnalysisProjectSettings settings)
 			throws AnalysisStoreException {
-		try {
-			File analysisDirectory = getAnalysisProjectDirectory(uuid);
-			PersistenceUtils.store(new File(analysisDirectory, SETTINGS_FILE),
-					settings);
-		} catch (IOException e) {
-			throw new AnalysisStoreException("Could not store new settings!", e);
-		}
+		TitanGraph graph = TitanConnection.getGraph();
+		Vertex vertex = findAnalysisProjectVertex(graph, uuid);
+		applySettings(vertex, settings);
+		graph.commit();
 	}
 
 	@Override
 	public List<AnalysisRunInformation> getAllRunInformation(UUID projectUUID)
 			throws AnalysisStoreException {
-		List<AnalysisRunInformation> analysisInformation = new ArrayList<AnalysisRunInformation>();
-		File analysisDirectory = getAnalysisProjectDirectory(projectUUID);
-		File[] files = analysisDirectory.listFiles();
-		if (files != null) {
-			for (File runDirectory : files) {
-				if (isAnalysisRunDirectory(runDirectory)) {
-					AnalysisRun analysisRun = openAnalysisRun(projectUUID,
-							UUID.fromString(runDirectory.getName()));
-					if (analysisRun != null) {
-						analysisInformation.add(analysisRun.getInformation());
-					}
-				}
-			}
-		}
-		return analysisInformation;
+		// List<AnalysisRunInformation> analysisInformation = new
+		// ArrayList<AnalysisRunInformation>();
+		// File analysisDirectory = getAnalysisProjectDirectory(projectUUID);
+		// File[] files = analysisDirectory.listFiles();
+		// if (files != null) {
+		// for (File runDirectory : files) {
+		// if (isAnalysisRunDirectory(runDirectory)) {
+		// AnalysisRun analysisRun = openAnalysisRun(projectUUID,
+		// UUID.fromString(runDirectory.getName()));
+		// if (analysisRun != null) {
+		// analysisInformation.add(analysisRun.getInformation());
+		// }
+		// }
+		// }
+		// }
+		// return analysisInformation;
+		return null;
 	}
 
 	@Override
-	public AnalysisRun loadAnalysisRun(UUID projectUUID, UUID uuid)
+	public AnalysisRunInformation loadAnalysisRun(UUID projectUUID, UUID uuid)
 			throws AnalysisStoreException {
 		return openAnalysisRun(projectUUID, uuid);
 	}
 
 	@Override
-	public AnalysisRun loadLastAnalysisRun(UUID projectUUID)
+	public AnalysisRunInformation loadLastAnalysisRun(UUID projectUUID)
 			throws AnalysisStoreException {
 		List<AnalysisRunInformation> allRunInformation = getAllRunInformation(projectUUID);
 		UUID uuid = null;
@@ -227,16 +223,16 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	@Override
 	public void removeAnalysisRun(UUID projectUUID, UUID uuid)
 			throws AnalysisStoreException {
-		try {
-			File analysisRunDirectory = getAnalysisRunDirectory(projectUUID,
-					uuid);
-			FileUtilities.deleteFileOrDir(analysisRunDirectory);
-		} catch (IOException e) {
-			throw new AnalysisStoreException(
-					"Could not delete analysis run with UUID '"
-							+ uuid.toString() + "' for analysis with UUID '"
-							+ projectUUID.toString() + "'!", e);
-		}
+		// try {
+		// File analysisRunDirectory = getAnalysisRunDirectory(projectUUID,
+		// uuid);
+		// FileUtilities.deleteFileOrDir(analysisRunDirectory);
+		// } catch (IOException e) {
+		// throw new AnalysisStoreException(
+		// "Could not delete analysis run with UUID '"
+		// + uuid.toString() + "' for analysis with UUID '"
+		// + projectUUID.toString() + "'!", e);
+		// }
 	}
 
 	/**
@@ -245,55 +241,88 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	 * @return
 	 * @throws DirectoryStoreException
 	 */
-	private AnalysisRun openAnalysisRun(UUID analysisProjectUUID,
+	private AnalysisRunInformation openAnalysisRun(UUID analysisProjectUUID,
 			UUID analysisRunUUID) throws AnalysisStoreException {
-		try {
-			File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
-					analysisRunUUID);
-			if (!runDirectory.exists()) {
-				throw new IOException("Analysis run directory '" + runDirectory
-						+ "' does not exist!");
-			}
-			AnalysisRunInformation analysisRunInformation = loadAnalysisRunInformation(
-					analysisProjectUUID, analysisRunUUID);
-			// loadAnalysisResultInformation();
-			return new AnalysisRunImpl(analysisProjectUUID, analysisRunUUID,
-					analysisRunInformation.getStartTime(),
-					analysisRunInformation.getDuration());
-		} catch (IOException e) {
-			throw new AnalysisStoreException("Could not open analysis run!", e);
+		// try {
+		// File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
+		// analysisRunUUID);
+		// if (!runDirectory.exists()) {
+		// throw new IOException("Analysis run directory '" + runDirectory
+		// + "' does not exist!");
+		// }
+		// AnalysisRunInformation analysisRunInformation =
+		// loadAnalysisRunInformation(
+		// analysisProjectUUID, analysisRunUUID);
+		// // loadAnalysisResultInformation();
+		// return new AnalysisRunImpl(analysisProjectUUID, analysisRunUUID,
+		// analysisRunInformation.getStartTime(),
+		// analysisRunInformation.getDuration());
+		// } catch (IOException e) {
+		// throw new AnalysisStoreException("Could not open analysis run!", e);
+		// }
+		return null;
+	}
+
+	@Override
+	public FileSearchConfiguration readSearchConfiguration(
+			UUID analysisProjectUUID) throws AnalysisStoreException {
+		Session session = CassandraConnection.getAnalysisSession();
+		ResultSet resultSet = session
+				.execute("SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
+						+ CassandraConnection.ANALYSIS_PROJECT_SETTINGS_TABLE
+						+ " WHERE uuid=" + analysisProjectUUID.toString());
+		Row result = resultSet.one();
+		if (!resultSet.isExhausted()) {
+			throw new RuntimeException(
+					"Multiple results where found for uuid '"
+							+ analysisProjectUUID + "'.");
 		}
+		List<String> fileIncludes = result.getList("file_includes",
+				String.class);
+		List<String> fileExcludes = result.getList("file_excludes",
+				String.class);
+		List<String> locationIncludes = result.getList("location_includes",
+				String.class);
+		List<String> locationExcludes = result.getList("location_excludes",
+				String.class);
+		boolean ignoreHidden = result.getBool("ignore_hidden");
+		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
+				locationIncludes, locationExcludes, fileIncludes, fileExcludes,
+				ignoreHidden);
+		return fileSearchConfiguration;
 	}
 
 	@Override
 	public FileSearchConfiguration readSearchConfiguration(
 			UUID analysisProjectUUID, UUID analysisRunUUID)
 			throws AnalysisStoreException {
-		try {
-			File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
-					analysisRunUUID);
-			FileSearchConfiguration searchConfig = new FileSearchConfiguration();
-			try (FileInputStream fileInputStream = new FileInputStream(
-					new File(runDirectory, SEARCH_CONFIGURATION_FILE))) {
-				try (ObjectInputStream objectOutputStream = new ObjectInputStream(
-						fileInputStream)) {
-					FileSearchConfiguration config = (FileSearchConfiguration) objectOutputStream
-							.readObject();
-					searchConfig.setLocationExcludes(config
-							.getLocationExcludes());
-					searchConfig.setLocationIncludes(config
-							.getLocationIncludes());
-					searchConfig.setFileExcludes(config.getFileExcludes());
-					searchConfig.setFileIncludes(config.getFileIncludes());
-					return config;
-				}
-			} catch (IOException e) {
-				throw new AnalysisStoreException(
-						"Could not write analysis run search configuration.", e);
-			}
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		}
+		// try {
+		// File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
+		// analysisRunUUID);
+		// FileSearchConfiguration searchConfig = new FileSearchConfiguration();
+		// try (FileInputStream fileInputStream = new FileInputStream(
+		// new File(runDirectory, SEARCH_CONFIGURATION_FILE))) {
+		// try (ObjectInputStream objectOutputStream = new ObjectInputStream(
+		// fileInputStream)) {
+		// FileSearchConfiguration config = (FileSearchConfiguration)
+		// objectOutputStream
+		// .readObject();
+		// searchConfig.setLocationExcludes(config
+		// .getLocationExcludes());
+		// searchConfig.setLocationIncludes(config
+		// .getLocationIncludes());
+		// searchConfig.setFileExcludes(config.getFileExcludes());
+		// searchConfig.setFileIncludes(config.getFileIncludes());
+		// return config;
+		// }
+		// } catch (IOException e) {
+		// throw new AnalysisStoreException(
+		// "Could not write analysis run search configuration.", e);
+		// }
+		// } catch (ClassNotFoundException e) {
+		// throw new RuntimeException(e);
+		// }
+		return null;
 	}
 
 	@Override
@@ -301,64 +330,42 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			UUID analysisRunUUID,
 			FileSearchConfiguration fileSearchConfiguration)
 			throws AnalysisStoreException {
-		File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
-				analysisRunUUID);
-		try (FileOutputStream fileOutputStream = new FileOutputStream(new File(
-				runDirectory, SEARCH_CONFIGURATION_FILE))) {
-
-			try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-					fileOutputStream)) {
-				objectOutputStream.writeObject(fileSearchConfiguration);
-			}
-		} catch (IOException e) {
-			throw new AnalysisStoreException(
-					"Could not write analysis run search configuration.", e);
-		}
+		// File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
+		// analysisRunUUID);
+		// try (FileOutputStream fileOutputStream = new FileOutputStream(new
+		// File(
+		// runDirectory, SEARCH_CONFIGURATION_FILE))) {
+		//
+		// try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		// fileOutputStream)) {
+		// objectOutputStream.writeObject(fileSearchConfiguration);
+		// }
+		// } catch (IOException e) {
+		// throw new AnalysisStoreException(
+		// "Could not write analysis run search configuration.", e);
+		// }
 	}
 
 	@Override
-	public AnalysisRunInformation loadAnalysisRunInformation(
-			UUID analysisProjectUUID, UUID analysisRunUUID)
+	public void saveAnalysisRunInformation(UUID projectUUID,
+			AnalysisRunInformation anRunInformation)
 			throws AnalysisStoreException {
-		File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
-				analysisRunUUID);
-		Properties properties = new Properties();
-		try (FileReader reader = new FileReader(new File(runDirectory,
-				ANALYSIS_RUN_PROPERTIES_FILE))) {
-			properties.load(reader);
-			analysisRunUUID = UUID
-					.fromString(properties.get("uuid").toString());
-			Date creationTime = new Date(Long.valueOf(properties.get(
-					"creation.time").toString()));
-			long timeOfRun = Long.valueOf(properties.get("run.duration")
-					.toString());
-			return new AnalysisRunInformation(analysisProjectUUID,
-					analysisRunUUID, creationTime, timeOfRun, "");
-		} catch (IOException e) {
-			throw new AnalysisStoreException(
-					"Could not load analysis run information.", e);
-		}
-	}
-
-	@Override
-	public void saveAnalysisRunInformation(UUID projectUUID, UUID uuid,
-			Date creationTime, long timeOfRun) throws AnalysisStoreException {
-		try {
-			File runDirectory = getAnalysisRunDirectory(projectUUID, uuid);
-			Properties properties = new Properties();
-			properties.put("uuid", uuid.toString());
-			properties.put("creation.time",
-					String.valueOf(creationTime.getTime()));
-			properties.put("run.duration", String.valueOf(timeOfRun));
-			File propertiesFile = new File(runDirectory,
-					ANALYSIS_RUN_PROPERTIES_FILE);
-			try (FileWriter writer = new FileWriter(propertiesFile)) {
-				properties.store(writer, "Analysis run properties");
-			}
-		} catch (IOException e) {
-			throw new AnalysisStoreException(
-					"Could not store analysis run information.", e);
-		}
+		// try {
+		// File runDirectory = getAnalysisRunDirectory(projectUUID, uuid);
+		// Properties properties = new Properties();
+		// properties.put("uuid", uuid.toString());
+		// properties.put("creation.time",
+		// String.valueOf(creationTime.getTime()));
+		// properties.put("run.duration", String.valueOf(timeOfRun));
+		// File propertiesFile = new File(runDirectory,
+		// ANALYSIS_RUN_PROPERTIES_FILE);
+		// try (FileWriter writer = new FileWriter(propertiesFile)) {
+		// properties.store(writer, "Analysis run properties");
+		// }
+		// } catch (IOException e) {
+		// throw new AnalysisStoreException(
+		// "Could not store analysis run information.", e);
+		// }
 	}
 
 	private void loadAnalysisResultInformation(UUID projectUUID, UUID uuid)
@@ -380,25 +387,25 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	public void storeAnalysisResultInformation(UUID analysisProjectUUID,
 			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
 			List<AnalyzedCode> failedSources, HashIdFileTree fileTree) {
-		try {
-			File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
-					analysisRunUUID);
-			persist(analyzedFiles, new File(runDirectory, ANALYZED_FILES_FILE));
-			persist(failedSources, new File(runDirectory, FAILED_FILES_FILE));
-			persist(fileTree, new File(runDirectory, TREE_FILE));
-			if (fileTree != null) {
-				File contentFile = new File(runDirectory, "content.txt");
-				PrintStream stream = new PrintStream(contentFile);
-				try {
-					TreePrinter printer = new TreePrinter(stream);
-					printer.println(fileTree);
-				} finally {
-					stream.close();
-				}
-			}
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-		}
+		// try {
+		// File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
+		// analysisRunUUID);
+		// persist(analyzedFiles, new File(runDirectory, ANALYZED_FILES_FILE));
+		// persist(failedSources, new File(runDirectory, FAILED_FILES_FILE));
+		// persist(fileTree, new File(runDirectory, TREE_FILE));
+		// if (fileTree != null) {
+		// File contentFile = new File(runDirectory, "content.txt");
+		// PrintStream stream = new PrintStream(contentFile);
+		// try {
+		// TreePrinter printer = new TreePrinter(stream);
+		// printer.println(fileTree);
+		// } finally {
+		// stream.close();
+		// }
+		// }
+		// } catch (IOException e) {
+		// logger.error(e.getMessage(), e);
+		// }
 	}
 
 	@Override

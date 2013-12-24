@@ -7,8 +7,8 @@ import org.mockito.Mockito;
 
 import com.puresoltechnologies.parsers.impl.ust.terminal.Operand;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.mccabe.McCabeMetric;
 import com.puresoltechnologies.purifinity.framework.lang.test.TestLanguage;
 

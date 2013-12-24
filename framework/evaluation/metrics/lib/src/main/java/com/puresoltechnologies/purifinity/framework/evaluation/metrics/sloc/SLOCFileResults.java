@@ -9,8 +9,8 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
-import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
+import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 
 public class SLOCFileResults extends AbstractSLOCResults implements
 		MetricFileResults {

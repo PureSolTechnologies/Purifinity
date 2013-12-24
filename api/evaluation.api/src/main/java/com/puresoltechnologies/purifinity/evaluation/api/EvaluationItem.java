@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.evaluation.api;
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 
 /**
  * This class contains the information about the item which was evaluated. This

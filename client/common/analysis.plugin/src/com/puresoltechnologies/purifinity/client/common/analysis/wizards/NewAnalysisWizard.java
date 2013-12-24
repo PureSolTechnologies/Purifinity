@@ -9,7 +9,7 @@ import org.eclipse.jface.wizard.Wizard;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
 import com.puresoltechnologies.purifinity.client.common.analysis.utils.PreferencesUtils;

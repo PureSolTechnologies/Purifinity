@@ -4,7 +4,7 @@ import java.io.InputStream;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
-import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 
 /**
  * This is the interface for a file store. The filess are stored by id and the

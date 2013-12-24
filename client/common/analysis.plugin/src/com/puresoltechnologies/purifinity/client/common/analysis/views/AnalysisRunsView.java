@@ -35,7 +35,7 @@ import org.eclipse.ui.progress.UIJob;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListLabelProvider;

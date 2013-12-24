@@ -32,8 +32,8 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
-import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
-import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.data.HashCodeGenerator;
 import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;
@@ -79,7 +79,7 @@ public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
 			stopWatch.start();
 			if (analyzeFiles()) {
 				AnalysisProject analysisProject = analysisStore
-						.loadAnalysis(analysisProjectUUID);
+						.readAnalysisProjectInformation(analysisProjectUUID);
 				UUID projectUUID = analysisProject.getInformation().getUUID();
 				analysisStore.saveAnalysisRunInformation(projectUUID, uuid,
 						creationTime, timeOfRun);
@@ -138,7 +138,7 @@ public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
 	private List<Future<AnalyzedCode>> startAllAnalysisThreads()
 			throws AnalysisStoreException {
 		AnalysisProject analysisProject = analysisStore
-				.loadAnalysis(analysisProjectUUID);
+				.readAnalysisProjectInformation(analysisProjectUUID);
 		RepositoryLocation repositoryLocation = analysisProject.getSettings()
 				.getRepositoryLocation();
 		repositoryLocation.setCodeSearchConfiguration(searchConfig);
@@ -229,7 +229,7 @@ public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
 	private HashIdFileTree createIntermediateTree()
 			throws AnalysisStoreException {
 		AnalysisProject analysisProject = analysisStore
-				.loadAnalysis(analysisProjectUUID);
+				.readAnalysisProjectInformation(analysisProjectUUID);
 		RepositoryLocation repositoryLocation = analysisProject.getSettings()
 				.getRepositoryLocation();
 		HashIdFileTree intermediate = new HashIdFileTree(null,

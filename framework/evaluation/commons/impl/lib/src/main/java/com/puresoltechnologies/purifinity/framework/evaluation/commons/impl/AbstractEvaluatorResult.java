@@ -1,8 +1,8 @@
 package com.puresoltechnologies.purifinity.framework.evaluation.commons.impl;
 
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluationResult;
-import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
-import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.EvaluationResult;
+import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
+import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 
 public abstract class AbstractEvaluatorResult implements EvaluationResult {
 

@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.UUID;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
-import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 
 /**
  * This class is an implementation of {@link AnalysisRun}.

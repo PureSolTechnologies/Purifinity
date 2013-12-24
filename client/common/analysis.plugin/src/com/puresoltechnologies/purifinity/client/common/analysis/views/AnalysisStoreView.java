@@ -18,9 +18,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisListContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisListLabelProvider;

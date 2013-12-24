@@ -21,6 +21,10 @@
 			<artifactId>analysis.api</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>evaluation.domain</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>

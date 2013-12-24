@@ -1,9 +1,8 @@
 package com.puresoltechnologies.purifinity.framework.store.api;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
-import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 
 /**
  * This is a store for a single evaluator. THis stores can be changed depending

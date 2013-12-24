@@ -29,8 +29,8 @@ import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.math.money.Money;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 
 public class IntermediateCoCoMoFileResults extends IntermediateCoCoMoResults
 		implements MetricFileResults {

@@ -1,16 +1,14 @@
 package com.puresoltechnologies.purifinity.framework.store.api;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
-import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 
 /**
  * This is the central interface to access the delivered analysis store. The
@@ -32,7 +30,7 @@ public interface AnalysisStore {
 	 * @throws AnalysisStoreException
 	 *             is thrown for unexpected issues.
 	 */
-	public AnalysisProject loadAnalysis(UUID uuid)
+	public AnalysisProjectInformation readAnalysisProjectInformation(UUID uuid)
 			throws AnalysisStoreException;
 
 	/**
@@ -46,8 +44,8 @@ public interface AnalysisStore {
 	 * @throws AnalysisStoreException
 	 *             is thrown for unexpected issues.
 	 */
-	public AnalysisProject createAnalysis(AnalysisProjectSettings settings)
-			throws AnalysisStoreException;
+	public AnalysisProjectInformation createAnalysisProject(
+			AnalysisProjectSettings settings) throws AnalysisStoreException;
 
 	/**
 	 * This method deletes an analysis from the store.
@@ -57,7 +55,7 @@ public interface AnalysisStore {
 	 * @throws AnalysisStoreException
 	 *             is thrown in cases of issues.
 	 */
-	public void removeAnalysis(UUID uuid) throws AnalysisStoreException;
+	public void removeAnalysisProject(UUID uuid) throws AnalysisStoreException;
 
 	/**
 	 * This method returns a list of all {@link AnalysisProject}s. Additionally
@@ -69,7 +67,7 @@ public interface AnalysisStore {
 	 * 
 	 * @return A {@link List} of {@link AnalysisProject} is returned.
 	 */
-	public List<AnalysisProject> getAnalysisProjects()
+	public List<AnalysisProjectInformation> getAllAnalysisProjectInformation()
 			throws AnalysisStoreException;
 
 	public void updateSettings(UUID uuid, AnalysisProjectSettings settings)
@@ -78,21 +76,37 @@ public interface AnalysisStore {
 	public List<AnalysisRunInformation> getAllRunInformation(UUID projectUUID)
 			throws AnalysisStoreException;
 
-	public AnalysisRun loadAnalysisRun(UUID projectUUID, UUID uuid)
+	public AnalysisRunInformation loadAnalysisRun(UUID projectUUID, UUID uuid)
 			throws AnalysisStoreException;
 
-	public AnalysisRun loadLastAnalysisRun(UUID projectUUID)
+	public AnalysisRunInformation loadLastAnalysisRun(UUID projectUUID)
 			throws AnalysisStoreException;
 
 	public void removeAnalysisRun(UUID projectUUID, UUID uuid)
 			throws AnalysisStoreException;
 
-	public AnalysisRunInformation loadAnalysisRunInformation(UUID projectUUID,
-			UUID uuid) throws AnalysisStoreException;
+	public void saveAnalysisRunInformation(UUID projectUUID,
+			AnalysisRunInformation analysisRunInformation)
+			throws AnalysisStoreException;
 
-	public void saveAnalysisRunInformation(UUID projectUUID, UUID uuid,
-			Date creationTime, long timeOfRun) throws AnalysisStoreException;
+	/**
+	 * Reads the default search configuration for the analysis project.
+	 * 
+	 * @param analysisProjectUUID
+	 * @return
+	 * @throws AnalysisStoreException
+	 */
+	public FileSearchConfiguration readSearchConfiguration(
+			UUID analysisProjectUUID) throws AnalysisStoreException;
 
+	/**
+	 * Reads the search configuration which was applied for the analysis run
+	 * specified by its UUIDs.
+	 * 
+	 * @param analysisProjectUUID
+	 * @return
+	 * @throws AnalysisStoreException
+	 */
 	public FileSearchConfiguration readSearchConfiguration(
 			UUID analysisProjectUUID, UUID analysisRunUUID)
 			throws AnalysisStoreException;

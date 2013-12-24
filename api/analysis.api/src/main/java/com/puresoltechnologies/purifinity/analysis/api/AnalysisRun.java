@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+
 /**
  * This is the general interface for a single project analysis. This analysis
  * represents one project for a single snap shot. The several analysis runs are

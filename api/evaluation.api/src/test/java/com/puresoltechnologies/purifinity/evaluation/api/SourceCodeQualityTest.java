@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 
 public class SourceCodeQualityTest {
 

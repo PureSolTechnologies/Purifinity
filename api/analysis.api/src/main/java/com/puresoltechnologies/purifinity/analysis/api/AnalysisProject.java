@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
+
 /**
  * This is the central interface for a analysis project. This analyzer handles a
  * whole software project. It is responsible for storing and loading the

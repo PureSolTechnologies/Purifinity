@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
-import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;

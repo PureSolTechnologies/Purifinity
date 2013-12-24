@@ -6,8 +6,8 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadQuality;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadResult;
 

@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 
 /**
  * This is a interface to a analyzer. It's used to implement a language

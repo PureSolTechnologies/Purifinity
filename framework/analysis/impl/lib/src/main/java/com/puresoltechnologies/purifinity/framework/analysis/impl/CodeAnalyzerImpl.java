@@ -9,10 +9,10 @@ import org.slf4j.LoggerFactory;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
-import com.puresoltechnologies.purifinity.analysis.api.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageNotSupportedException;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 
 public class CodeAnalyzerImpl implements CodeAnalyzer {
 

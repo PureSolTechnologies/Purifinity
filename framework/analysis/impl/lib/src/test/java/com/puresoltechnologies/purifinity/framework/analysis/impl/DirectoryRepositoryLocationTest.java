@@ -2,16 +2,18 @@ package com.puresoltechnologies.purifinity.framework.analysis.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
 
 public class DirectoryRepositoryLocationTest {
 
@@ -30,8 +32,8 @@ public class DirectoryRepositoryLocationTest {
 		fileExcludes.add("*");
 		FileSearchConfiguration searchConfiguration = new FileSearchConfiguration(
 				dirIncludes, dirExcludes, fileIncludes, fileExcludes, true);
-		location.setCodeSearchConfiguration(searchConfiguration);
-		List<SourceCodeLocation> sourceCodes = location.getSourceCodes();
+		List<SourceCodeLocation> sourceCodes = location
+				.getSourceCodes(searchConfiguration);
 		assertNotNull(sourceCodes);
 		assertEquals(0, sourceCodes.size());
 	}
@@ -46,9 +48,20 @@ public class DirectoryRepositoryLocationTest {
 		List<String> fileExcludes = new ArrayList<String>();
 		FileSearchConfiguration searchConfiguration = new FileSearchConfiguration(
 				dirIncludes, dirExcludes, fileIncludes, fileExcludes, true);
-		location.setCodeSearchConfiguration(searchConfiguration);
-		List<SourceCodeLocation> sourceCodes = location.getSourceCodes();
+		List<SourceCodeLocation> sourceCodes = location
+				.getSourceCodes(searchConfiguration);
 		assertNotNull(sourceCodes);
-		assert (sourceCodes.size() > 0);
+		assertTrue(sourceCodes.size() > 0);
+	}
+
+	@Test
+	public void testSerialization() {
+		DirectoryRepositoryLocation location = new DirectoryRepositoryLocation(
+				"TestRepository", new File("/home/ludwig"));
+		Properties serialization = location.getSerialization();
+		DirectoryRepositoryLocation clonedLocation = new DirectoryRepositoryLocation(
+				serialization);
+		assertNotSame(location, clonedLocation);
+		assertEquals(location, clonedLocation);
 	}
 }

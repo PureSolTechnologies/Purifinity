@@ -22,10 +22,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
+import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.CodeRangeEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Result;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetric;

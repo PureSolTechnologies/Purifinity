@@ -6,6 +6,5 @@ public class StoreStartStopIT extends AbstractDbStoreTest {
 
 	@Test
 	public void test() {
-
 	}
 }

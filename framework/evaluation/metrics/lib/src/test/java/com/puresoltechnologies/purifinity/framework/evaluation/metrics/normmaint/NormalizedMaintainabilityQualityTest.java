@@ -4,8 +4,8 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.normmaint.NormalizedMaintainabilityIndexResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.normmaint.NormalizedMaintainabilityQuality;
 

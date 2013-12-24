@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.framework.evaluation.metrics.entropy;
 
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 
 public class EntropyQuality {
 

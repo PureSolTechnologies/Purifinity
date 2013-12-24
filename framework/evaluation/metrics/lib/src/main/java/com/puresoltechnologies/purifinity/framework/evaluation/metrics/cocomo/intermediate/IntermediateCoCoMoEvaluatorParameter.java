@@ -8,7 +8,7 @@ import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.math.money.Money;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeLocationParameter;

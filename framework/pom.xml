@@ -129,7 +129,17 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>analysis.domain</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
 				<artifactId>evaluation.api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>evaluation.domain</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -207,11 +217,6 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 				<artifactId>store.api</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>store.commons</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

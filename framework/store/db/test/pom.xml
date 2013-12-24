@@ -14,7 +14,16 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>store.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 			<artifactId>store.db.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>analysis.impl.lib</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

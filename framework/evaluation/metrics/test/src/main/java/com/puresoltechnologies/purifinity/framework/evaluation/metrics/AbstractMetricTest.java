@@ -12,8 +12,8 @@ import org.junit.BeforeClass;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.framework.lang.java7.Java;
@@ -76,7 +76,7 @@ public abstract class AbstractMetricTest {
 	@Before
 	public final void setup() throws AnalysisStoreException {
 		analysisProject = analysisStore
-				.createAnalysis(new AnalysisProjectSettings("TestProject",
+				.createAnalysisProject(new AnalysisProjectSettings("TestProject",
 						"This project was created for testing purposes.",
 						fileSearchConfiguration,
 						new DirectoryRepositoryLocation("TestProject",
@@ -88,7 +88,7 @@ public abstract class AbstractMetricTest {
 	@After
 	public final void destroy() throws AnalysisStoreException {
 		analysisStore
-				.removeAnalysis(analysisProject.getInformation().getUUID());
+				.removeAnalysisProject(analysisProject.getInformation().getUUID());
 	}
 
 	protected AnalysisProject getAnalysisProject() {

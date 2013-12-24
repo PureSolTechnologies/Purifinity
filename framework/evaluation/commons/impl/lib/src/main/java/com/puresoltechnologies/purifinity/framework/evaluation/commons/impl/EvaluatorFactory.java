@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 

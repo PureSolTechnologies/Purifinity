@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 
 public class HalsteadMetricResult implements Serializable {
 

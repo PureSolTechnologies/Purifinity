@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.evaluation.api;
 
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 
 public class CodeRangeTypeParameter extends
 		ParameterWithArbitraryUnit<CodeRangeType> {

@@ -21,12 +21,14 @@ public class CassandraConnection {
 	private static final String CASSANDRA_HOST = "localhost";
 	private static final int CASSANDRA_CQL_PORT = 9042;
 
-	private static final String ANALYSIS_KEYSPACE = "analysis_store";
-	private static final String EVALUATION_KEYSPACE = "evaluation_store";
+	public static final String ANALYSIS_KEYSPACE = "analysis_store";
+	public static final String EVALUATION_KEYSPACE = "evaluation_store";
 
 	private static final String CHANGELOG_TABLE = "changelog";
-	private static final String ANALYSIS_FILES_TABLE = "files";
-	private static final String ANALYSIS_DIRECTORIES_TABLE = "directories";
+
+	public static final String ANALYSIS_FILES_TABLE = "files";
+	public static final String ANALYSIS_DIRECTORIES_TABLE = "directories";
+	public static final String ANALYSIS_PROJECT_SETTINGS_TABLE = "project_settings";
 
 	private static Cluster cluster = null;
 	private static Session analysisSession = null;
@@ -71,15 +73,15 @@ public class CassandraConnection {
 		return cluster != null;
 	}
 
-	public Cluster getCluster() {
+	public static Cluster getCluster() {
 		return cluster;
 	}
 
-	public Session getAnalysisSession() {
+	public static Session getAnalysisSession() {
 		return analysisSession;
 	}
 
-	public Session getEvaluationSession() {
+	public static Session getEvaluationSession() {
 		return evaluationSession;
 	}
 
@@ -117,7 +119,7 @@ public class CassandraConnection {
 			analysisSession
 					.execute("CREATE TABLE "
 							+ ANALYSIS_FILES_TABLE
-							+ " (hashId varchar, raw varchar, parser_tree blob, PRIMARY KEY(hashId));");
+							+ " (hashId varchar, raw varchar, parser_tree varchar, PRIMARY KEY(hashId));");
 		}
 		TableMetadata directoriesTable = analysisKeyspace
 				.getTable(ANALYSIS_DIRECTORIES_TABLE);
@@ -126,9 +128,18 @@ public class CassandraConnection {
 					+ ANALYSIS_DIRECTORIES_TABLE
 					+ " (hashId varchar, PRIMARY KEY(hashId));");
 		}
+		TableMetadata projectSettingsTable = analysisKeyspace
+				.getTable(ANALYSIS_DIRECTORIES_TABLE);
+		if (projectSettingsTable == null) {
+			analysisSession
+					.execute("CREATE TABLE "
+							+ ANALYSIS_PROJECT_SETTINGS_TABLE
+							+ " (uuid uuid, name varchar, description varchar, file_includes list<text>, file_excludes list<text>, location_includes list<text>, location_excludes list<text>, ignore_hidden boolean, repository_location map<text,text>, PRIMARY KEY(uuid));");
+		}
 	}
 
 	private static void checkAndCreateEvaluationTables() {
 
 	}
+
 }

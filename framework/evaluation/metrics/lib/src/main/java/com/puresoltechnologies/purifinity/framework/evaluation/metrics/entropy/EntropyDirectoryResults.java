@@ -9,10 +9,10 @@ import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
-import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevelParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
+import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 
 public class EntropyDirectoryResults extends AbstractEntropyResults implements
 		MetricDirectoryResults {
