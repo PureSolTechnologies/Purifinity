@@ -48,7 +48,7 @@ public class AnalysisProjectImpl implements AnalysisProject {
 	public List<AnalysisRunInformation> getAllRunInformation()
 			throws AnalysisProjectException {
 		try {
-			return analysisStore.getAllRunInformation(this.uuid);
+			return analysisStore.readAllRunInformation(this.uuid);
 		} catch (AnalysisStoreException e) {
 			logger.error("Could not read run information.", e);
 			throw new AnalysisProjectException(
@@ -91,7 +91,7 @@ public class AnalysisProjectImpl implements AnalysisProject {
 	@Override
 	public AnalysisRun loadLastAnalysisRun() throws AnalysisProjectException {
 		try {
-			return analysisStore.loadLastAnalysisRun(uuid);
+			return analysisStore.readLastAnalysisRun(uuid);
 		} catch (AnalysisStoreException e) {
 			logger.error("Could not load last analysis run.", e);
 			throw new AnalysisProjectException(

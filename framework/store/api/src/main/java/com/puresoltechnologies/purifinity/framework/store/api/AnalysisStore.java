@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.framework.store.api;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,18 +23,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 public interface AnalysisStore {
 
 	/**
-	 * This method is used to load a single Analysis by {@link UUID}.
-	 * 
-	 * @param projectUUID
-	 *            is the {@link UUID} of the analysis to be loaded.
-	 * @return An {@link AnalysisProject} is returned which was loaded.
-	 * @throws AnalysisStoreException
-	 *             is thrown for unexpected issues.
-	 */
-	public AnalysisProjectInformation readAnalysisProjectInformation(
-			UUID projectUUID) throws AnalysisStoreException;
-
-	/**
 	 * This method creates a new Analysis which is specified by
 	 * {@link AnalysisProjectSettings}.
 	 * 
@@ -48,6 +37,31 @@ public interface AnalysisStore {
 			AnalysisProjectSettings settings) throws AnalysisStoreException;
 
 	/**
+	 * This method returns a list of all {@link AnalysisProject}s. Additionally
+	 * to {@link #getAllAnalysisInformation()}, other information is included
+	 * like repository location.
+	 * 
+	 * @throws AnalysisStoreException
+	 *             is thrown in cases of issues.
+	 * 
+	 * @return A {@link List} of {@link AnalysisProject} is returned.
+	 */
+	public List<AnalysisProjectInformation> readAllAnalysisProjectInformation()
+			throws AnalysisStoreException;
+
+	/**
+	 * This method is used to load a single Analysis by {@link UUID}.
+	 * 
+	 * @param projectUUID
+	 *            is the {@link UUID} of the analysis to be loaded.
+	 * @return An {@link AnalysisProject} is returned which was loaded.
+	 * @throws AnalysisStoreException
+	 *             is thrown for unexpected issues.
+	 */
+	public AnalysisProjectInformation readAnalysisProjectInformation(
+			UUID projectUUID) throws AnalysisStoreException;
+
+	/**
 	 * This method deletes an analysis from the store.
 	 * 
 	 * @param projectUUID
@@ -59,22 +73,6 @@ public interface AnalysisStore {
 			throws AnalysisStoreException;
 
 	/**
-	 * This method returns a list of all {@link AnalysisProject}s. Additionally
-	 * to {@link #getAllAnalysisInformation()}, other information is included
-	 * like repository location.
-	 * 
-	 * @throws AnalysisStoreException
-	 *             is thrown in cases of issues.
-	 * 
-	 * @return A {@link List} of {@link AnalysisProject} is returned.
-	 */
-	public List<AnalysisProjectInformation> getAllAnalysisProjectInformation()
-			throws AnalysisStoreException;
-
-	public void updateAnalysisProjectSettings(UUID projectUUID,
-			AnalysisProjectSettings settings) throws AnalysisStoreException;
-
-	/**
 	 * Reads the default search configuration for the analysis project.
 	 * 
 	 * @param analysisProjectUUID
@@ -84,20 +82,19 @@ public interface AnalysisStore {
 	public AnalysisProjectSettings readAnalysisProjectSettings(
 			UUID analysisProjectUUID) throws AnalysisStoreException;
 
-	public List<AnalysisRunInformation> getAllRunInformation(UUID projectUUID)
+	public void updateAnalysisProjectSettings(UUID projectUUID,
+			AnalysisProjectSettings settings) throws AnalysisStoreException;
+
+	public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
 			throws AnalysisStoreException;
 
 	public AnalysisRunInformation loadAnalysisRun(UUID projectUUID, UUID uuid)
 			throws AnalysisStoreException;
 
-	public AnalysisRunInformation loadLastAnalysisRun(UUID projectUUID)
+	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)
 			throws AnalysisStoreException;
 
 	public void removeAnalysisRun(UUID projectUUID, UUID uuid)
-			throws AnalysisStoreException;
-
-	public void saveAnalysisRunInformation(UUID projectUUID,
-			AnalysisRunInformation analysisRunInformation)
 			throws AnalysisStoreException;
 
 	/**
@@ -112,14 +109,14 @@ public interface AnalysisStore {
 			UUID analysisProjectUUID, UUID analysisRunUUID)
 			throws AnalysisStoreException;
 
-	public void writeSearchConfiguration(UUID analysisProjectUUID,
-			UUID analysisRunUUID,
-			FileSearchConfiguration fileSearchConfiguration)
-			throws AnalysisStoreException;
-
 	public void storeAnalysisResultInformation(UUID analysisProjectUUID,
 			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
 			List<AnalyzedCode> failedSources, HashIdFileTree fileTree);
 
 	public void storeModules(HashIdFileTree fileTree);
+
+	public AnalysisRunInformation createAnalysisRun(UUID analysisProjectUUID,
+			Date startTime, long duration, String description,
+			FileSearchConfiguration fileSearchConfiguration)
+			throws AnalysisStoreException;
 }

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -15,6 +16,7 @@ import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.api.source.RepositoryLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
@@ -135,5 +137,49 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 				.readAnalysisProjectSettings(projectUUID);
 		assertNotSame(settings2, settingsRead);
 		assertEquals(settings2, settingsRead);
+	}
+
+	@Test
+	public void testCreateAndReadAnalysisRun() throws AnalysisStoreException {
+		Date startTime = new Date();
+
+		RepositoryLocation location = new DirectoryRepositoryLocation(
+				"DirRepo", new File("/home/ludwig"));
+		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration();
+		fileSearchConfiguration.getFileExcludes().add("*.bak");
+		fileSearchConfiguration.getFileIncludes().add("*.java");
+		fileSearchConfiguration.getFileIncludes().add("*.xml");
+		fileSearchConfiguration.getLocationExcludes().add(".*");
+		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
+				"Description", fileSearchConfiguration,
+				location.getSerialization());
+		AnalysisProjectInformation information = analysisStore
+				.createAnalysisProject(settings);
+		assertNotNull(information);
+
+		UUID projectUUID = information.getUUID();
+
+		AnalysisRunInformation analysisRun = analysisStore.createAnalysisRun(
+				projectUUID, startTime, 12345, "Analysis Run Description",
+				fileSearchConfiguration);
+		assertNotNull(analysisRun);
+		assertNotNull(analysisRun.getUUID());
+		assertEquals(projectUUID, analysisRun.getProjectUUID());
+		assertEquals(startTime, analysisRun.getStartTime());
+		assertEquals(12345, analysisRun.getDuration());
+		assertEquals("Analysis Run Description", analysisRun.getDescription());
+
+		List<AnalysisRunInformation> allRunInformation = analysisStore
+				.readAllRunInformation(projectUUID);
+		assertNotNull(allRunInformation);
+		assertEquals(1, allRunInformation.size());
+		AnalysisRunInformation analysisRunRead = allRunInformation.get(0);
+		assertNotSame(analysisRun, analysisRunRead);
+		assertEquals(analysisRun, analysisRunRead);
+
+		analysisRunRead = analysisStore.loadAnalysisRun(projectUUID,
+				analysisRun.getUUID());
+		assertNotSame(analysisRun, analysisRunRead);
+		assertEquals(analysisRun, analysisRunRead);
 	}
 }

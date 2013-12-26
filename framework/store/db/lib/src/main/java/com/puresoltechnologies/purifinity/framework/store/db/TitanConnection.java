@@ -8,6 +8,7 @@ import org.apache.commons.configuration.Configuration;
 import com.thinkaurelius.titan.core.KeyMaker;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 /**
@@ -25,6 +26,9 @@ public class TitanConnection {
 	public static final String ANALYSIS_PROJECT_NAME_PROPERTY = "analysis.projects.name";
 	public static final String ANALYSIS_PROJECT_DESCRIPTION_PROPERTY = "analysis.projects.description";
 	public static final String ANALYSIS_RUN_UUID_PROPERTY = "analysis.run.uuid";
+	public static final String ANALYSIS_RUN_START_TIME_PROPERTY = "analysis.run.time.start";
+	public static final String ANALYSIS_RUN_DURATION_PROPERTY = "analysis.run.duration";
+	public static final String ANALYSIS_RUN_DESCRIPTION_PROPERTY = "analysis.run.description";
 	public static final String CREATION_TIME_PROPERTY = "time.creation";
 
 	public static void connect() throws TitanConnectionException {
@@ -80,7 +84,30 @@ public class TitanConnection {
 			 */
 			keyMaker.dataType(String.class);
 			keyMaker.indexed(Vertex.class);
+			keyMaker.indexed(Edge.class);
 			keyMaker.unique();
+			keyMaker.make();
+		}
+
+		if (graph.getType(ANALYSIS_RUN_START_TIME_PROPERTY) == null) {
+			KeyMaker keyMaker = graph.makeKey(ANALYSIS_RUN_START_TIME_PROPERTY);
+			keyMaker.dataType(Date.class);
+			keyMaker.indexed(Vertex.class);
+			keyMaker.indexed(Edge.class);
+			keyMaker.make();
+		}
+
+		if (graph.getType(ANALYSIS_RUN_DURATION_PROPERTY) == null) {
+			KeyMaker keyMaker = graph.makeKey(ANALYSIS_RUN_DURATION_PROPERTY);
+			keyMaker.dataType(Long.class);
+			keyMaker.indexed(Vertex.class);
+			keyMaker.make();
+		}
+
+		if (graph.getType(ANALYSIS_RUN_DESCRIPTION_PROPERTY) == null) {
+			KeyMaker keyMaker = graph
+					.makeKey(ANALYSIS_RUN_DESCRIPTION_PROPERTY);
+			keyMaker.dataType(String.class);
 			keyMaker.make();
 		}
 	}

@@ -29,6 +29,7 @@ public class CassandraConnection {
 	public static final String ANALYSIS_FILES_TABLE = "files";
 	public static final String ANALYSIS_DIRECTORIES_TABLE = "directories";
 	public static final String ANALYSIS_PROJECT_SETTINGS_TABLE = "project_settings";
+	public static final String RUN_SETTINGS_TABLE = "run_settings";
 
 	private static Cluster cluster = null;
 	private static Session analysisSession = null;
@@ -135,6 +136,14 @@ public class CassandraConnection {
 					.execute("CREATE TABLE "
 							+ ANALYSIS_PROJECT_SETTINGS_TABLE
 							+ " (uuid uuid, name varchar, description varchar, file_includes list<text>, file_excludes list<text>, location_includes list<text>, location_excludes list<text>, ignore_hidden boolean, repository_location map<text,text>, PRIMARY KEY(uuid));");
+		}
+		TableMetadata runSettingsTable = analysisKeyspace
+				.getTable(RUN_SETTINGS_TABLE);
+		if (runSettingsTable == null) {
+			analysisSession
+					.execute("CREATE TABLE "
+							+ RUN_SETTINGS_TABLE
+							+ " (uuid uuid, file_includes list<text>, file_excludes list<text>, location_includes list<text>, location_excludes list<text>, ignore_hidden boolean, PRIMARY KEY(uuid));");
 		}
 	}
 

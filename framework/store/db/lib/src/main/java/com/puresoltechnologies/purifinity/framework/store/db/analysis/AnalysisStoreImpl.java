@@ -1,11 +1,5 @@
 package com.puresoltechnologies.purifinity.framework.store.db.analysis;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -41,6 +35,8 @@ import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreFact
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
 import com.thinkaurelius.titan.core.TitanGraph;
+import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 public class AnalysisStoreImpl implements AnalysisStore {
@@ -52,7 +48,51 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public List<AnalysisProjectInformation> getAllAnalysisProjectInformation()
+	public AnalysisProjectInformation createAnalysisProject(
+			AnalysisProjectSettings settings) throws AnalysisStoreException {
+		UUID uuid = UUID.randomUUID();
+		Date creationTime = new Date();
+		createAnalysisProjectVertex(uuid, creationTime);
+		insertProjectAnalysisSettings(settings, uuid);
+		return new AnalysisProjectInformation(uuid, creationTime);
+	}
+
+	private void createAnalysisProjectVertex(UUID uuid, Date creationTime) {
+		TitanGraph graph = TitanConnection.getGraph();
+		Vertex vertex = graph.addVertex(null);
+		vertex.setProperty(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY,
+				uuid.toString());
+		vertex.setProperty(TitanConnection.CREATION_TIME_PROPERTY, creationTime);
+		graph.commit();
+	}
+
+	private void insertProjectAnalysisSettings(
+			AnalysisProjectSettings settings, UUID uuid) {
+		String name = settings.getName();
+		String description = settings.getDescription();
+		FileSearchConfiguration fileSearchConfiguration = settings
+				.getFileSearchConfiguration();
+
+		Session session = CassandraConnection.getAnalysisSession();
+		PreparedStatement preparedStatement = session.prepare("INSERT INTO "
+				+ CassandraConnection.ANALYSIS_PROJECT_SETTINGS_TABLE
+				+ " (uuid, name, description, "
+				+ "file_includes, file_excludes, "
+				+ "location_includes, location_excludes, "
+				+ "ignore_hidden, repository_location) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		BoundStatement bound = preparedStatement.bind(uuid, name, description,
+				fileSearchConfiguration.getFileIncludes(),
+				fileSearchConfiguration.getFileExcludes(),
+				fileSearchConfiguration.getLocationIncludes(),
+				fileSearchConfiguration.getLocationExcludes(),
+				fileSearchConfiguration.isIgnoreHidden(),
+				settings.getRepositoryLocation());
+		session.execute(bound);
+	}
+
+	@Override
+	public List<AnalysisProjectInformation> readAllAnalysisProjectInformation()
 			throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		List<AnalysisProjectInformation> projects = new ArrayList<>();
@@ -63,8 +103,9 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			Vertex vertex = vertexIterator.next();
 			UUID uuid = (UUID) vertex
 					.getProperty(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY);
-			AnalysisProjectInformation information = readAnalysisProjectInformation(uuid);
-			projects.add(information);
+			Date creationTime = (Date) vertex
+					.getProperty(TitanConnection.CREATION_TIME_PROPERTY);
+			projects.add(new AnalysisProjectInformation(uuid, creationTime));
 		}
 		return projects;
 	}
@@ -97,151 +138,10 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public AnalysisProjectInformation createAnalysisProject(
-			AnalysisProjectSettings settings) throws AnalysisStoreException {
-		UUID uuid = UUID.randomUUID();
-		Date creationTime = new Date();
-		createAnalysisProjectVertex(uuid, creationTime);
-		insertProjectAnalysisSettings(settings, uuid);
-		return new AnalysisProjectInformation(uuid, creationTime);
-	}
-
-	private void insertProjectAnalysisSettings(
-			AnalysisProjectSettings settings, UUID uuid) {
-		String name = settings.getName();
-		String description = settings.getDescription();
-		FileSearchConfiguration fileSearchConfiguration = settings
-				.getFileSearchConfiguration();
-
-		Session session = CassandraConnection.getAnalysisSession();
-		PreparedStatement preparedStatement = session.prepare("INSERT INTO "
-				+ CassandraConnection.ANALYSIS_PROJECT_SETTINGS_TABLE
-				+ " (uuid, name, description, "
-				+ "file_includes, file_excludes, "
-				+ "location_includes, location_excludes, "
-				+ "ignore_hidden, repository_location) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-		BoundStatement bound = preparedStatement.bind(uuid, name, description,
-				fileSearchConfiguration.getFileIncludes(),
-				fileSearchConfiguration.getFileExcludes(),
-				fileSearchConfiguration.getLocationIncludes(),
-				fileSearchConfiguration.getLocationExcludes(),
-				fileSearchConfiguration.isIgnoreHidden(),
-				settings.getRepositoryLocation());
-		session.execute(bound);
-	}
-
-	private void createAnalysisProjectVertex(UUID uuid, Date creationTime) {
-		TitanGraph graph = TitanConnection.getGraph();
-		Vertex vertex = graph.addVertex(null);
-		vertex.setProperty(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY,
-				uuid.toString());
-		vertex.setProperty(TitanConnection.CREATION_TIME_PROPERTY, creationTime);
-		graph.commit();
-	}
-
-	@Override
 	public void removeAnalysisProject(UUID uuid) throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		Vertex vertex = findAnalysisProjectVertex(graph, uuid);
 		vertex.remove();
-	}
-
-	@Override
-	public void updateAnalysisProjectSettings(UUID uuid,
-			AnalysisProjectSettings settings) throws AnalysisStoreException {
-		insertProjectAnalysisSettings(settings, uuid);
-	}
-
-	@Override
-	public List<AnalysisRunInformation> getAllRunInformation(UUID projectUUID)
-			throws AnalysisStoreException {
-		// List<AnalysisRunInformation> analysisInformation = new
-		// ArrayList<AnalysisRunInformation>();
-		// File analysisDirectory = getAnalysisProjectDirectory(projectUUID);
-		// File[] files = analysisDirectory.listFiles();
-		// if (files != null) {
-		// for (File runDirectory : files) {
-		// if (isAnalysisRunDirectory(runDirectory)) {
-		// AnalysisRun analysisRun = openAnalysisRun(projectUUID,
-		// UUID.fromString(runDirectory.getName()));
-		// if (analysisRun != null) {
-		// analysisInformation.add(analysisRun.getInformation());
-		// }
-		// }
-		// }
-		// }
-		// return analysisInformation;
-		return null;
-	}
-
-	@Override
-	public AnalysisRunInformation loadAnalysisRun(UUID projectUUID, UUID uuid)
-			throws AnalysisStoreException {
-		return openAnalysisRun(projectUUID, uuid);
-	}
-
-	@Override
-	public AnalysisRunInformation loadLastAnalysisRun(UUID projectUUID)
-			throws AnalysisStoreException {
-		List<AnalysisRunInformation> allRunInformation = getAllRunInformation(projectUUID);
-		UUID uuid = null;
-		Date time = null;
-		for (AnalysisRunInformation runInformation : allRunInformation) {
-			if ((uuid == null)
-					|| (runInformation.getStartTime().compareTo(time) < 0)) {
-				uuid = runInformation.getUUID();
-				time = runInformation.getStartTime();
-			}
-		}
-		if (uuid != null) {
-			return loadAnalysisRun(projectUUID, uuid);
-		} else {
-			return null;
-		}
-	}
-
-	@Override
-	public void removeAnalysisRun(UUID projectUUID, UUID uuid)
-			throws AnalysisStoreException {
-		// try {
-		// File analysisRunDirectory = getAnalysisRunDirectory(projectUUID,
-		// uuid);
-		// FileUtilities.deleteFileOrDir(analysisRunDirectory);
-		// } catch (IOException e) {
-		// throw new AnalysisStoreException(
-		// "Could not delete analysis run with UUID '"
-		// + uuid.toString() + "' for analysis with UUID '"
-		// + projectUUID.toString() + "'!", e);
-		// }
-	}
-
-	/**
-	 * This method opens the project directory and loads all information files.
-	 * 
-	 * @return
-	 * @throws DirectoryStoreException
-	 */
-	private AnalysisRunInformation openAnalysisRun(UUID analysisProjectUUID,
-			UUID analysisRunUUID) throws AnalysisStoreException {
-		// try {
-		// File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
-		// analysisRunUUID);
-		// if (!runDirectory.exists()) {
-		// throw new IOException("Analysis run directory '" + runDirectory
-		// + "' does not exist!");
-		// }
-		// AnalysisRunInformation analysisRunInformation =
-		// loadAnalysisRunInformation(
-		// analysisProjectUUID, analysisRunUUID);
-		// // loadAnalysisResultInformation();
-		// return new AnalysisRunImpl(analysisProjectUUID, analysisRunUUID,
-		// analysisRunInformation.getStartTime(),
-		// analysisRunInformation.getDuration());
-		// } catch (IOException e) {
-		// throw new AnalysisStoreException("Could not open analysis run!", e);
-		// }
-		return null;
 	}
 
 	@Override
@@ -253,6 +153,9 @@ public class AnalysisStoreImpl implements AnalysisStore {
 						+ CassandraConnection.ANALYSIS_PROJECT_SETTINGS_TABLE
 						+ " WHERE uuid=" + analysisProjectUUID.toString());
 		Row result = resultSet.one();
+		if (result == null) {
+			return null;
+		}
 		if (!resultSet.isExhausted()) {
 			throw new RuntimeException(
 					"Multiple results where found for uuid '"
@@ -284,97 +187,192 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
+	public void updateAnalysisProjectSettings(UUID uuid,
+			AnalysisProjectSettings settings) throws AnalysisStoreException {
+		insertProjectAnalysisSettings(settings, uuid);
+	}
+
+	@Override
+	public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
+			throws AnalysisStoreException {
+		TitanGraph graph = TitanConnection.getGraph();
+		Vertex projectVertex = findAnalysisProjectVertex(graph, projectUUID);
+		Iterable<Vertex> analysisRuns = projectVertex.query()
+				.direction(Direction.OUT).labels("hasAnalysisRun").vertices();
+		Iterator<Vertex> runIterator = analysisRuns.iterator();
+		List<AnalysisRunInformation> allRunInformation = new ArrayList<>();
+		while (runIterator.hasNext()) {
+			Vertex run = runIterator.next();
+			UUID uuid = UUID.fromString((String) run
+					.getProperty(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY));
+			Date startTime = (Date) run
+					.getProperty(TitanConnection.ANALYSIS_RUN_START_TIME_PROPERTY);
+			long duration = (long) run
+					.getProperty(TitanConnection.ANALYSIS_RUN_DURATION_PROPERTY);
+			String description = (String) run
+					.getProperty(TitanConnection.ANALYSIS_RUN_DESCRIPTION_PROPERTY);
+			FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(
+					projectUUID, uuid);
+			allRunInformation.add(new AnalysisRunInformation(projectUUID, uuid,
+					startTime, duration, description, fileSearchConfiguration));
+		}
+		return allRunInformation;
+	}
+
+	@Override
+	public AnalysisRunInformation createAnalysisRun(UUID analysisProjectUUID,
+			Date startTime, long duration, String description,
+			FileSearchConfiguration fileSearchConfiguration)
+			throws AnalysisStoreException {
+		UUID uuid = UUID.randomUUID();
+		Date creationTime = new Date();
+
+		TitanGraph graph = TitanConnection.getGraph();
+		Vertex projectVertex = findAnalysisProjectVertex(graph,
+				analysisProjectUUID);
+
+		Vertex runVertex = graph.addVertex(uuid);
+		runVertex.setProperty(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY,
+				uuid.toString());
+		runVertex.setProperty(TitanConnection.CREATION_TIME_PROPERTY,
+				creationTime);
+		runVertex.setProperty(TitanConnection.ANALYSIS_RUN_START_TIME_PROPERTY,
+				startTime);
+		runVertex.setProperty(TitanConnection.ANALYSIS_RUN_DURATION_PROPERTY,
+				duration);
+		runVertex.setProperty(
+				TitanConnection.ANALYSIS_RUN_DESCRIPTION_PROPERTY, description);
+
+		Edge hasAnalysisRunEdge = projectVertex.addEdge("hasAnalysisRun",
+				runVertex);
+		hasAnalysisRunEdge.setProperty(
+				TitanConnection.ANALYSIS_RUN_UUID_PROPERTY, uuid.toString());
+		hasAnalysisRunEdge.setProperty(
+				TitanConnection.ANALYSIS_RUN_START_TIME_PROPERTY, startTime);
+
+		graph.commit();
+
+		Session session = CassandraConnection.getAnalysisSession();
+		PreparedStatement preparedStatement = session.prepare("INSERT INTO "
+				+ CassandraConnection.RUN_SETTINGS_TABLE + " (uuid, "
+				+ "file_includes, file_excludes, "
+				+ "location_includes, location_excludes, " + "ignore_hidden) "
+				+ "VALUES (?, ?, ?, ?, ?, ?)");
+		BoundStatement bound = preparedStatement.bind(uuid,
+				fileSearchConfiguration.getFileIncludes(),
+				fileSearchConfiguration.getFileExcludes(),
+				fileSearchConfiguration.getLocationIncludes(),
+				fileSearchConfiguration.getLocationExcludes(),
+				fileSearchConfiguration.isIgnoreHidden());
+		session.execute(bound);
+
+		return new AnalysisRunInformation(analysisProjectUUID, uuid, startTime,
+				duration, description, fileSearchConfiguration);
+	}
+
+	@Override
+	public AnalysisRunInformation loadAnalysisRun(UUID projectUUID, UUID uuid)
+			throws AnalysisStoreException {
+		TitanGraph graph = TitanConnection.getGraph();
+		Vertex projectVertex = findAnalysisProjectVertex(graph, projectUUID);
+		Iterable<Vertex> analysisRuns = projectVertex.query()
+				.direction(Direction.OUT).labels("hasAnalysisRun")
+				.has(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY, uuid)
+				.vertices();
+		Iterator<Vertex> runIterator = analysisRuns.iterator();
+		if (!runIterator.hasNext()) {
+			return null;
+		}
+		Vertex run = runIterator.next();
+		if (runIterator.hasNext()) {
+			throw new AnalysisStoreException(
+					"Multiple analysis runs found for '" + uuid
+							+ "'. Database is inconsistent!");
+		}
+		UUID uuidRead = UUID.fromString((String) run
+				.getProperty(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY));
+		if (!uuid.equals(uuidRead)) {
+			throw new AnalysisStoreException("Anaysis run for '" + uuid
+					+ "' was not found, but a vertex with uuid='" + uuidRead
+					+ "'. Database is inconsistent!");
+		}
+		Date startTime = (Date) run
+				.getProperty(TitanConnection.ANALYSIS_RUN_START_TIME_PROPERTY);
+		long duration = (long) run
+				.getProperty(TitanConnection.ANALYSIS_RUN_DURATION_PROPERTY);
+		String description = (String) run
+				.getProperty(TitanConnection.ANALYSIS_RUN_DESCRIPTION_PROPERTY);
+		FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(
+				projectUUID, uuid);
+		return new AnalysisRunInformation(projectUUID, uuid, startTime,
+				duration, description, fileSearchConfiguration);
+	}
+
+	@Override
+	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)
+			throws AnalysisStoreException {
+		List<AnalysisRunInformation> allRunInformation = readAllRunInformation(projectUUID);
+		Date time = null;
+		AnalysisRunInformation lastRun = null;
+		for (AnalysisRunInformation runInformation : allRunInformation) {
+			if ((lastRun == null)
+					|| (runInformation.getStartTime().compareTo(time) < 0)) {
+				lastRun = runInformation;
+				time = runInformation.getStartTime();
+			}
+		}
+		return lastRun;
+	}
+
+	@Override
+	@Deprecated
+	public void removeAnalysisRun(UUID projectUUID, UUID uuid)
+			throws AnalysisStoreException {
+		// try {
+		// File analysisRunDirectory = getAnalysisRunDirectory(projectUUID,
+		// uuid);
+		// FileUtilities.deleteFileOrDir(analysisRunDirectory);
+		// } catch (IOException e) {
+		// throw new AnalysisStoreException(
+		// "Could not delete analysis run with UUID '"
+		// + uuid.toString() + "' for analysis with UUID '"
+		// + projectUUID.toString() + "'!", e);
+		// }
+	}
+
+	@Override
 	public FileSearchConfiguration readSearchConfiguration(
 			UUID analysisProjectUUID, UUID analysisRunUUID)
 			throws AnalysisStoreException {
-		// try {
-		// File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
-		// analysisRunUUID);
-		// FileSearchConfiguration searchConfig = new FileSearchConfiguration();
-		// try (FileInputStream fileInputStream = new FileInputStream(
-		// new File(runDirectory, SEARCH_CONFIGURATION_FILE))) {
-		// try (ObjectInputStream objectOutputStream = new ObjectInputStream(
-		// fileInputStream)) {
-		// FileSearchConfiguration config = (FileSearchConfiguration)
-		// objectOutputStream
-		// .readObject();
-		// searchConfig.setLocationExcludes(config
-		// .getLocationExcludes());
-		// searchConfig.setLocationIncludes(config
-		// .getLocationIncludes());
-		// searchConfig.setFileExcludes(config.getFileExcludes());
-		// searchConfig.setFileIncludes(config.getFileIncludes());
-		// return config;
-		// }
-		// } catch (IOException e) {
-		// throw new AnalysisStoreException(
-		// "Could not write analysis run search configuration.", e);
-		// }
-		// } catch (ClassNotFoundException e) {
-		// throw new RuntimeException(e);
-		// }
-		return null;
+		Session session = CassandraConnection.getAnalysisSession();
+		ResultSet resultSet = session
+				.execute("SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
+						+ CassandraConnection.RUN_SETTINGS_TABLE
+						+ " WHERE uuid=" + analysisRunUUID.toString());
+		Row result = resultSet.one();
+		if (result == null) {
+			return null;
+		}
+		if (!resultSet.isExhausted()) {
+			throw new RuntimeException(
+					"Multiple results where found for uuid '"
+							+ analysisProjectUUID + "'.");
+		}
+		List<String> fileIncludes = result.getList("file_includes",
+				String.class);
+		List<String> fileExcludes = result.getList("file_excludes",
+				String.class);
+		List<String> locationIncludes = result.getList("location_includes",
+				String.class);
+		List<String> locationExcludes = result.getList("location_excludes",
+				String.class);
+		boolean ignoreHidden = result.getBool("ignore_hidden");
+		return new FileSearchConfiguration(locationIncludes, locationExcludes,
+				fileIncludes, fileExcludes, ignoreHidden);
 	}
 
 	@Override
-	public void writeSearchConfiguration(UUID analysisProjectUUID,
-			UUID analysisRunUUID,
-			FileSearchConfiguration fileSearchConfiguration)
-			throws AnalysisStoreException {
-		// File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
-		// analysisRunUUID);
-		// try (FileOutputStream fileOutputStream = new FileOutputStream(new
-		// File(
-		// runDirectory, SEARCH_CONFIGURATION_FILE))) {
-		//
-		// try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-		// fileOutputStream)) {
-		// objectOutputStream.writeObject(fileSearchConfiguration);
-		// }
-		// } catch (IOException e) {
-		// throw new AnalysisStoreException(
-		// "Could not write analysis run search configuration.", e);
-		// }
-	}
-
-	@Override
-	public void saveAnalysisRunInformation(UUID projectUUID,
-			AnalysisRunInformation anRunInformation)
-			throws AnalysisStoreException {
-		// try {
-		// File runDirectory = getAnalysisRunDirectory(projectUUID, uuid);
-		// Properties properties = new Properties();
-		// properties.put("uuid", uuid.toString());
-		// properties.put("creation.time",
-		// String.valueOf(creationTime.getTime()));
-		// properties.put("run.duration", String.valueOf(timeOfRun));
-		// File propertiesFile = new File(runDirectory,
-		// ANALYSIS_RUN_PROPERTIES_FILE);
-		// try (FileWriter writer = new FileWriter(propertiesFile)) {
-		// properties.store(writer, "Analysis run properties");
-		// }
-		// } catch (IOException e) {
-		// throw new AnalysisStoreException(
-		// "Could not store analysis run information.", e);
-		// }
-	}
-
-	private void loadAnalysisResultInformation(UUID projectUUID, UUID uuid)
-			throws IOException {
-		// File runDirectory = getAnalysisRunDirectory(projectUUID, uuid);
-		// @SuppressWarnings("unchecked")
-		// List<AnalyzedCode> analyzed = (List<AnalyzedCode>) restore(new File(
-		// runDirectory, ANALYZED_FILES_FILE));
-		// analyzedFiles.addAll(analyzed);
-		// @SuppressWarnings("unchecked")
-		// List<AnalyzedCode> failed = (List<AnalyzedCode>) restore(new File(
-		// runDirectory, FAILED_FILES_FILE));
-		// failedSources.addAll(failed);
-		// fileTree = (HashIdFileTree) restore(new File(runDirectory,
-		// TREE_FILE));
-	}
-
-	@Override
+	@Deprecated
 	public void storeAnalysisResultInformation(UUID analysisProjectUUID,
 			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
 			List<AnalyzedCode> failedSources, HashIdFileTree fileTree) {
@@ -400,6 +398,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
+	@Deprecated
 	public void storeModules(HashIdFileTree fileTree) {
 		DirectoryStoreFactory moduleStoreFactory = DirectoryStoreFactory
 				.getFactory();
@@ -434,30 +433,4 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		};
 		TreeWalker.walk(visitor, fileTree);
 	}
-
-	private static <T> void persist(T object, File file) throws IOException {
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-				new FileOutputStream(file));
-		try {
-			objectOutputStream.writeObject(object);
-		} finally {
-			objectOutputStream.close();
-		}
-	}
-
-	private static <T> T restore(File file) throws IOException {
-		ObjectInputStream objectOutputStream = new ObjectInputStream(
-				new FileInputStream(file));
-		try {
-			@SuppressWarnings("unchecked")
-			T t = (T) objectOutputStream.readObject();
-			return t;
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("Could not restore class from file '"
-					+ file + "'!", e);
-		} finally {
-			objectOutputStream.close();
-		}
-	}
-
 }
