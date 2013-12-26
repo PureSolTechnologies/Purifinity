@@ -24,14 +24,14 @@ public interface AnalysisStore {
 	/**
 	 * This method is used to load a single Analysis by {@link UUID}.
 	 * 
-	 * @param uuid
+	 * @param projectUUID
 	 *            is the {@link UUID} of the analysis to be loaded.
 	 * @return An {@link AnalysisProject} is returned which was loaded.
 	 * @throws AnalysisStoreException
 	 *             is thrown for unexpected issues.
 	 */
-	public AnalysisProjectInformation readAnalysisProjectInformation(UUID uuid)
-			throws AnalysisStoreException;
+	public AnalysisProjectInformation readAnalysisProjectInformation(
+			UUID projectUUID) throws AnalysisStoreException;
 
 	/**
 	 * This method creates a new Analysis which is specified by
@@ -50,12 +50,13 @@ public interface AnalysisStore {
 	/**
 	 * This method deletes an analysis from the store.
 	 * 
-	 * @param uuid
+	 * @param projectUUID
 	 *            is the identifier of the analysis to be deleted.
 	 * @throws AnalysisStoreException
 	 *             is thrown in cases of issues.
 	 */
-	public void removeAnalysisProject(UUID uuid) throws AnalysisStoreException;
+	public void removeAnalysisProject(UUID projectUUID)
+			throws AnalysisStoreException;
 
 	/**
 	 * This method returns a list of all {@link AnalysisProject}s. Additionally
@@ -70,8 +71,18 @@ public interface AnalysisStore {
 	public List<AnalysisProjectInformation> getAllAnalysisProjectInformation()
 			throws AnalysisStoreException;
 
-	public void updateSettings(UUID uuid, AnalysisProjectSettings settings)
-			throws AnalysisStoreException;
+	public void updateAnalysisProjectSettings(UUID projectUUID,
+			AnalysisProjectSettings settings) throws AnalysisStoreException;
+
+	/**
+	 * Reads the default search configuration for the analysis project.
+	 * 
+	 * @param analysisProjectUUID
+	 * @return
+	 * @throws AnalysisStoreException
+	 */
+	public AnalysisProjectSettings readAnalysisProjectSettings(
+			UUID analysisProjectUUID) throws AnalysisStoreException;
 
 	public List<AnalysisRunInformation> getAllRunInformation(UUID projectUUID)
 			throws AnalysisStoreException;
@@ -88,16 +99,6 @@ public interface AnalysisStore {
 	public void saveAnalysisRunInformation(UUID projectUUID,
 			AnalysisRunInformation analysisRunInformation)
 			throws AnalysisStoreException;
-
-	/**
-	 * Reads the default search configuration for the analysis project.
-	 * 
-	 * @param analysisProjectUUID
-	 * @return
-	 * @throws AnalysisStoreException
-	 */
-	public FileSearchConfiguration readSearchConfiguration(
-			UUID analysisProjectUUID) throws AnalysisStoreException;
 
 	/**
 	 * Reads the search configuration which was applied for the analysis run

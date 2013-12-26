@@ -34,7 +34,8 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 		fileSearchConfiguration.getFileIncludes().add("*.xml");
 		fileSearchConfiguration.getLocationExcludes().add(".*");
 		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
-				"Description", fileSearchConfiguration, location);
+				"Description", fileSearchConfiguration,
+				location.getSerialization());
 		AnalysisProjectInformation information = analysisStore
 				.createAnalysisProject(settings);
 		assertNotNull(information);
@@ -57,7 +58,8 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 		fileSearchConfiguration.getFileIncludes().add("*.xml");
 		fileSearchConfiguration.getLocationExcludes().add(".*");
 		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
-				"Description", fileSearchConfiguration, location);
+				"Description", fileSearchConfiguration,
+				location.getSerialization());
 		AnalysisProjectInformation information = analysisStore
 				.createAnalysisProject(settings);
 		assertNotNull(information);
@@ -70,7 +72,7 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 	}
 
 	@Test
-	public void testCreateAndReadSearchConfiguration()
+	public void testCreateAndReadAnalysisProjectSettings()
 			throws AnalysisStoreException {
 		RepositoryLocation location = new DirectoryRepositoryLocation(
 				"DirRepo", new File("/home/ludwig"));
@@ -80,15 +82,58 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 		fileSearchConfiguration.getFileIncludes().add("*.xml");
 		fileSearchConfiguration.getLocationExcludes().add(".*");
 		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
-				"Description", fileSearchConfiguration, location);
+				"Description", fileSearchConfiguration,
+				location.getSerialization());
 		AnalysisProjectInformation information = analysisStore
 				.createAnalysisProject(settings);
 		assertNotNull(information);
 
 		UUID projectUUID = information.getUUID();
-		FileSearchConfiguration readSearchConfiguration = analysisStore
-				.readSearchConfiguration(projectUUID);
-		assertNotSame(fileSearchConfiguration, readSearchConfiguration);
-		assertEquals(fileSearchConfiguration, readSearchConfiguration);
+		AnalysisProjectSettings analysisProjectSettings = analysisStore
+				.readAnalysisProjectSettings(projectUUID);
+		assertNotSame(settings, analysisProjectSettings);
+		assertEquals(settings, analysisProjectSettings);
+	}
+
+	@Test
+	public void testCreateUpdateAndReadAnalysisProjectInformationAndSettings()
+			throws AnalysisStoreException {
+		RepositoryLocation location = new DirectoryRepositoryLocation(
+				"DirRepo", new File("/home/ludwig"));
+		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration();
+		fileSearchConfiguration.getFileExcludes().add("*.bak");
+		fileSearchConfiguration.getFileIncludes().add("*.java");
+		fileSearchConfiguration.getFileIncludes().add("*.xml");
+		fileSearchConfiguration.getLocationExcludes().add(".*");
+		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
+				"Description", fileSearchConfiguration,
+				location.getSerialization());
+		AnalysisProjectInformation information = analysisStore
+				.createAnalysisProject(settings);
+		assertNotNull(information);
+
+		UUID projectUUID = information.getUUID();
+
+		RepositoryLocation location2 = new DirectoryRepositoryLocation(
+				"DirRepo", new File("/home/ludwig2"));
+		FileSearchConfiguration fileSearchConfiguration2 = new FileSearchConfiguration();
+		fileSearchConfiguration2.getFileExcludes().add("*.bak2");
+		fileSearchConfiguration2.getFileIncludes().add("*.java2");
+		fileSearchConfiguration2.getFileIncludes().add("*.xml2");
+		fileSearchConfiguration2.getLocationExcludes().add(".*");
+		AnalysisProjectSettings settings2 = new AnalysisProjectSettings(
+				"Name2", "Description2", fileSearchConfiguration2,
+				location2.getSerialization());
+		analysisStore.updateAnalysisProjectSettings(projectUUID, settings2);
+
+		AnalysisProjectInformation information2 = analysisStore
+				.readAnalysisProjectInformation(projectUUID);
+		assertNotSame(information, information2);
+		assertEquals(information, information2);
+
+		AnalysisProjectSettings settingsRead = analysisStore
+				.readAnalysisProjectSettings(projectUUID);
+		assertNotSame(settings2, settingsRead);
+		assertEquals(settings2, settingsRead);
 	}
 }

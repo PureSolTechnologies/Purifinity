@@ -65,7 +65,7 @@ public class AnalysisProjectImpl implements AnalysisProject {
 	public void updateSettings(AnalysisProjectSettings settings)
 			throws AnalysisProjectException {
 		try {
-			analysisStore.updateSettings(uuid, settings);
+			analysisStore.updateAnalysisProjectSettings(uuid, settings);
 		} catch (AnalysisStoreException e) {
 			logger.error("Could not update settings.", e);
 			throw new AnalysisProjectException("Could not update settings.");

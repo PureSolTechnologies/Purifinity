@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -27,7 +28,6 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
-import com.puresoltechnologies.parsers.api.source.RepositoryLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
@@ -47,17 +47,6 @@ public class AnalysisStoreImpl implements AnalysisStore {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(AnalysisStoreImpl.class);
-
-	private static final String SETTINGS_FILE = "analysis_settings.persist";
-
-	private static final String PROJECT_DIRECTORY_FLAG = ".analysis";
-	private static final String RUN_DIRECTORY_FLAG = ".analysis_run";
-
-	private static final String ANALYZED_FILES_FILE = "analyzed_files.persist";
-	private static final String FAILED_FILES_FILE = "failed_files.persist";
-	private static final String TREE_FILE = "code_tree.persist";
-	private static final String SEARCH_CONFIGURATION_FILE = "search_configuration.persist";
-	private static final String ANALYSIS_RUN_PROPERTIES_FILE = "analysis_run.properties";
 
 	public AnalysisStoreImpl() {
 	}
@@ -112,13 +101,13 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			AnalysisProjectSettings settings) throws AnalysisStoreException {
 		UUID uuid = UUID.randomUUID();
 		Date creationTime = new Date();
-		TitanGraph graph = TitanConnection.getGraph();
-		Vertex vertex = graph.addVertex(null);
-		vertex.setProperty(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY,
-				uuid.toString());
-		vertex.setProperty(TitanConnection.CREATION_TIME_PROPERTY, creationTime);
-		graph.commit();
+		createAnalysisProjectVertex(uuid, creationTime);
+		insertProjectAnalysisSettings(settings, uuid);
+		return new AnalysisProjectInformation(uuid, creationTime);
+	}
 
+	private void insertProjectAnalysisSettings(
+			AnalysisProjectSettings settings, UUID uuid) {
 		String name = settings.getName();
 		String description = settings.getDescription();
 		FileSearchConfiguration fileSearchConfiguration = settings
@@ -132,28 +121,23 @@ public class AnalysisStoreImpl implements AnalysisStore {
 				+ "location_includes, location_excludes, "
 				+ "ignore_hidden, repository_location) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-		RepositoryLocation repositoryLocation = settings
-				.getRepositoryLocation();
-		Properties repositoryLocationString = repositoryLocation == null ? null
-				: repositoryLocation.getSerialization();
 		BoundStatement bound = preparedStatement.bind(uuid, name, description,
 				fileSearchConfiguration.getFileIncludes(),
 				fileSearchConfiguration.getFileExcludes(),
 				fileSearchConfiguration.getLocationIncludes(),
 				fileSearchConfiguration.getLocationExcludes(),
 				fileSearchConfiguration.isIgnoreHidden(),
-				repositoryLocationString);
+				settings.getRepositoryLocation());
 		session.execute(bound);
-
-		return new AnalysisProjectInformation(uuid, creationTime);
 	}
 
-	private void applySettings(Vertex vertex, AnalysisProjectSettings settings) {
-		vertex.setProperty(TitanConnection.ANALYSIS_PROJECT_NAME_PROPERTY,
-				settings.getName());
-		vertex.setProperty(
-				TitanConnection.ANALYSIS_PROJECT_DESCRIPTION_PROPERTY,
-				settings.getDescription());
+	private void createAnalysisProjectVertex(UUID uuid, Date creationTime) {
+		TitanGraph graph = TitanConnection.getGraph();
+		Vertex vertex = graph.addVertex(null);
+		vertex.setProperty(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY,
+				uuid.toString());
+		vertex.setProperty(TitanConnection.CREATION_TIME_PROPERTY, creationTime);
+		graph.commit();
 	}
 
 	@Override
@@ -164,12 +148,9 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public void updateSettings(UUID uuid, AnalysisProjectSettings settings)
-			throws AnalysisStoreException {
-		TitanGraph graph = TitanConnection.getGraph();
-		Vertex vertex = findAnalysisProjectVertex(graph, uuid);
-		applySettings(vertex, settings);
-		graph.commit();
+	public void updateAnalysisProjectSettings(UUID uuid,
+			AnalysisProjectSettings settings) throws AnalysisStoreException {
+		insertProjectAnalysisSettings(settings, uuid);
 	}
 
 	@Override
@@ -264,11 +245,11 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public FileSearchConfiguration readSearchConfiguration(
+	public AnalysisProjectSettings readAnalysisProjectSettings(
 			UUID analysisProjectUUID) throws AnalysisStoreException {
 		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session
-				.execute("SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
+				.execute("SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location FROM "
 						+ CassandraConnection.ANALYSIS_PROJECT_SETTINGS_TABLE
 						+ " WHERE uuid=" + analysisProjectUUID.toString());
 		Row result = resultSet.one();
@@ -277,6 +258,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					"Multiple results where found for uuid '"
 							+ analysisProjectUUID + "'.");
 		}
+		String name = result.getString("name");
+		String description = result.getString("description");
 		List<String> fileIncludes = result.getList("file_includes",
 				String.class);
 		List<String> fileExcludes = result.getList("file_excludes",
@@ -289,7 +272,15 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
 				locationIncludes, locationExcludes, fileIncludes, fileExcludes,
 				ignoreHidden);
-		return fileSearchConfiguration;
+		Map<String, String> repositoryLocationMap = result.getMap(
+				"repository_location", String.class, String.class);
+		Properties repositoryLocation = new Properties();
+		for (Object key : repositoryLocationMap.keySet()) {
+			repositoryLocation.put(key.toString(),
+					repositoryLocationMap.get(key).toString());
+		}
+		return new AnalysisProjectSettings(name, description,
+				fileSearchConfiguration, repositoryLocation);
 	}
 
 	@Override

@@ -2,9 +2,9 @@ package com.puresoltechnologies.purifinity.analysis.domain;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Properties;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.parsers.api.source.RepositoryLocation;
 
 /**
  * This immutable value object contains the settings of an analysis.
@@ -36,7 +36,7 @@ public final class AnalysisProjectSettings implements Serializable {
 	 * This is the original source directory which is searched for files for
 	 * analysis.
 	 */
-	private final RepositoryLocation repositoryLocation;
+	private final Properties repositoryLocation;
 
 	/**
 	 * This is the initial value constructor for this object to set all
@@ -53,7 +53,7 @@ public final class AnalysisProjectSettings implements Serializable {
 	 */
 	public AnalysisProjectSettings(String name, String description,
 			FileSearchConfiguration fileSearchConfiguration,
-			RepositoryLocation repositoryLocation) {
+			Properties repositoryLocation) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -93,7 +93,7 @@ public final class AnalysisProjectSettings implements Serializable {
 	 * 
 	 * @return A {@link File} is returned.
 	 */
-	public final RepositoryLocation getRepositoryLocation() {
+	public final Properties getRepositoryLocation() {
 		return repositoryLocation;
 	}
 
