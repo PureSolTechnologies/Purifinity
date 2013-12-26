@@ -113,7 +113,8 @@ public interface AnalysisStore {
 			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
 			List<AnalyzedCode> failedSources, HashIdFileTree fileTree);
 
-	public void storeModules(HashIdFileTree fileTree);
+	public void storeFileTree(UUID projectUUID, UUID runUUID,
+			HashIdFileTree fileTree) throws AnalysisStoreException;
 
 	public AnalysisRunInformation createAnalysisRun(UUID analysisProjectUUID,
 			Date startTime, long duration, String description,

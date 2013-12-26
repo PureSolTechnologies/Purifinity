@@ -84,7 +84,7 @@ public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
 				analysisStore.saveAnalysisRunInformation(projectUUID, uuid,
 						creationTime, timeOfRun);
 				buildCodeLocationTree();
-				analysisStore.storeModules(fileTree);
+				analysisStore.storeFileTree(fileTree);
 				stopWatch.stop();
 				timeOfRun = stopWatch.getMilliseconds();
 				analysisStore.storeAnalysisResultInformation(projectUUID, uuid,

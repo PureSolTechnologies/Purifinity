@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.framework.store.db.analysis;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -9,19 +8,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.trees.api.TreeVisitor;
-import com.puresoltechnologies.commons.trees.api.TreeWalker;
-import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
@@ -29,9 +21,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
-import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreFactory;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
 import com.thinkaurelius.titan.core.TitanGraph;
@@ -40,9 +29,6 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 public class AnalysisStoreImpl implements AnalysisStore {
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(AnalysisStoreImpl.class);
 
 	public AnalysisStoreImpl() {
 	}
@@ -271,28 +257,17 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public AnalysisRunInformation loadAnalysisRun(UUID projectUUID, UUID uuid)
+	public AnalysisRunInformation loadAnalysisRun(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
-		Vertex projectVertex = findAnalysisProjectVertex(graph, projectUUID);
-		Iterable<Vertex> analysisRuns = projectVertex.query()
-				.direction(Direction.OUT).labels("hasAnalysisRun")
-				.has(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY, uuid)
-				.vertices();
-		Iterator<Vertex> runIterator = analysisRuns.iterator();
-		if (!runIterator.hasNext()) {
+		Vertex run = findAnalysisRunVertex(graph, projectUUID, runUUID);
+		if (run == null) {
 			return null;
-		}
-		Vertex run = runIterator.next();
-		if (runIterator.hasNext()) {
-			throw new AnalysisStoreException(
-					"Multiple analysis runs found for '" + uuid
-							+ "'. Database is inconsistent!");
 		}
 		UUID uuidRead = UUID.fromString((String) run
 				.getProperty(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY));
-		if (!uuid.equals(uuidRead)) {
-			throw new AnalysisStoreException("Anaysis run for '" + uuid
+		if (!runUUID.equals(uuidRead)) {
+			throw new AnalysisStoreException("Anaysis run for '" + runUUID
 					+ "' was not found, but a vertex with uuid='" + uuidRead
 					+ "'. Database is inconsistent!");
 		}
@@ -303,9 +278,29 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		String description = (String) run
 				.getProperty(TitanConnection.ANALYSIS_RUN_DESCRIPTION_PROPERTY);
 		FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(
-				projectUUID, uuid);
-		return new AnalysisRunInformation(projectUUID, uuid, startTime,
+				projectUUID, runUUID);
+		return new AnalysisRunInformation(projectUUID, runUUID, startTime,
 				duration, description, fileSearchConfiguration);
+	}
+
+	private Vertex findAnalysisRunVertex(TitanGraph graph, UUID projectUUID,
+			UUID runUUID) throws AnalysisStoreException {
+		Vertex projectVertex = findAnalysisProjectVertex(graph, projectUUID);
+		Iterable<Vertex> analysisRuns = projectVertex.query()
+				.direction(Direction.OUT).labels("hasAnalysisRun")
+				.has(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY, runUUID)
+				.vertices();
+		Iterator<Vertex> runIterator = analysisRuns.iterator();
+		if (!runIterator.hasNext()) {
+			return null;
+		}
+		Vertex run = runIterator.next();
+		if (runIterator.hasNext()) {
+			throw new AnalysisStoreException(
+					"Multiple analysis runs found for '" + runUUID
+							+ "'. Database is inconsistent!");
+		}
+		return run;
 	}
 
 	@Override
@@ -398,39 +393,42 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	@Deprecated
-	public void storeModules(HashIdFileTree fileTree) {
-		DirectoryStoreFactory moduleStoreFactory = DirectoryStoreFactory
-				.getFactory();
-		final DirectoryStore moduleStore = moduleStoreFactory.getInstance();
-		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
+	public void storeFileTree(UUID projectUUID, UUID runUUID,
+			HashIdFileTree fileTree) throws AnalysisStoreException {
+		TitanGraph graph = TitanConnection.getGraph();
+		Vertex run = findAnalysisRunVertex(graph, projectUUID, runUUID);
+		addFileTreeVertex(graph, fileTree, run, "analyzed");
+	}
 
-			@Override
-			public WalkingAction visit(HashIdFileTree tree) {
-				try {
-					if (!moduleStore.isAvailable(tree.getHashId())) {
-						List<HashId> files = new ArrayList<HashId>();
-						List<HashId> directories = new ArrayList<HashId>();
-						for (HashIdFileTree child : tree.getChildren()) {
-							if (child.isFile()) {
-								files.add(child.getHashId());
-							} else {
-								directories.add(child.getHashId());
-							}
-						}
-						Collections.sort(files);
-						Collections.sort(directories);
-						moduleStore.createPackage(tree.getHashId(), files,
-								directories);
-					}
-					return WalkingAction.PROCEED;
-				} catch (DirectoryStoreException e) {
-					logger.error("Could not create module store entry for '"
-							+ tree.getHashId() + "'.");
-					return WalkingAction.ABORT;
-				}
+	private void addFileTreeVertex(TitanGraph graph, HashIdFileTree fileTree,
+			Vertex parentVertex, String edgeLabel)
+			throws AnalysisStoreException {
+		Iterable<Vertex> vertices = graph
+				.query()
+				.has(TitanConnection.TREE_ELEMENT_HASH,
+						fileTree.getHashId().toString()).vertices();
+		Iterator<Vertex> iterator = vertices.iterator();
+		if (iterator.hasNext()) {
+			Vertex existingVertex = iterator.next();
+			if (iterator.hasNext()) {
+				throw new AnalysisStoreException("Found multiple nodes of '"
+						+ fileTree + "'. Database is inconsistent!");
 			}
-		};
-		TreeWalker.walk(visitor, fileTree);
+			parentVertex.addEdge("analyzed", existingVertex);
+		} else {
+			Vertex vertex = graph.addVertex(null);
+			vertex.setProperty(TitanConnection.TREE_ELEMENT_HASH, fileTree
+					.getHashId().toString());
+			vertex.setProperty(TitanConnection.TREE_ELEMENT_IS_FILE,
+					fileTree.isFile());
+			Edge edge = parentVertex.addEdge(edgeLabel, vertex);
+			edge.setProperty(TitanConnection.TREE_ELEMENT_HASH, fileTree
+					.getHashId().toString());
+			edge.setProperty(TitanConnection.TREE_ELEMENT_IS_FILE,
+					fileTree.isFile());
+			for (HashIdFileTree child : fileTree.getChildren()) {
+				addFileTreeVertex(graph, child, vertex, "contains");
+			}
+		}
 	}
 }

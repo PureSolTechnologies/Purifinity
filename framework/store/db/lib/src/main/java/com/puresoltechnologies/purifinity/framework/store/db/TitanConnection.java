@@ -31,6 +31,9 @@ public class TitanConnection {
 	public static final String ANALYSIS_RUN_DESCRIPTION_PROPERTY = "analysis.run.description";
 	public static final String CREATION_TIME_PROPERTY = "time.creation";
 
+	public static final String TREE_ELEMENT_HASH = "tree.element.hash";
+	public static final String TREE_ELEMENT_IS_FILE = "tree.element.isFile";
+
 	public static void connect() throws TitanConnectionException {
 		if (graph != null) {
 			throw new TitanConnectionException(
@@ -108,6 +111,21 @@ public class TitanConnection {
 			KeyMaker keyMaker = graph
 					.makeKey(ANALYSIS_RUN_DESCRIPTION_PROPERTY);
 			keyMaker.dataType(String.class);
+			keyMaker.make();
+		}
+
+		if (graph.getType(TREE_ELEMENT_IS_FILE) == null) {
+			KeyMaker keyMaker = graph.makeKey(TREE_ELEMENT_IS_FILE);
+			keyMaker.dataType(Boolean.class);
+			keyMaker.make();
+		}
+
+		if (graph.getType(TREE_ELEMENT_HASH) == null) {
+			KeyMaker keyMaker = graph.makeKey(TREE_ELEMENT_HASH);
+			keyMaker.dataType(String.class);
+			keyMaker.unique();
+			keyMaker.indexed(Vertex.class);
+			keyMaker.indexed(Edge.class);
 			keyMaker.make();
 		}
 	}
