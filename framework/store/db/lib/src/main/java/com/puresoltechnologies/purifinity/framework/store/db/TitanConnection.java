@@ -31,7 +31,7 @@ public class TitanConnection {
 	public static final String ANALYSIS_RUN_DESCRIPTION_PROPERTY = "analysis.run.description";
 	public static final String CREATION_TIME_PROPERTY = "time.creation";
 
-	public static final String TREE_ELEMENT_HASH = "tree.element.hash";
+	public static final String TREE_ELEMENT_HASH = "tree.element.hashid";
 	public static final String TREE_ELEMENT_IS_FILE = "tree.element.isFile";
 
 	public static void connect() throws TitanConnectionException {

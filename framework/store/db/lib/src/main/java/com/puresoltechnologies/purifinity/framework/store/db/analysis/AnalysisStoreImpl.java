@@ -39,7 +39,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		UUID uuid = UUID.randomUUID();
 		Date creationTime = new Date();
 		createAnalysisProjectVertex(uuid, creationTime);
-		insertProjectAnalysisSettings(settings, uuid);
+		storeProjectAnalysisSettings(settings, uuid);
 		return new AnalysisProjectInformation(uuid, creationTime);
 	}
 
@@ -52,21 +52,25 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		graph.commit();
 	}
 
-	private void insertProjectAnalysisSettings(
-			AnalysisProjectSettings settings, UUID uuid) {
+	private void storeProjectAnalysisSettings(AnalysisProjectSettings settings,
+			UUID uuid) {
 		String name = settings.getName();
 		String description = settings.getDescription();
 		FileSearchConfiguration fileSearchConfiguration = settings
 				.getFileSearchConfiguration();
 
 		Session session = CassandraConnection.getAnalysisSession();
-		PreparedStatement preparedStatement = session.prepare("INSERT INTO "
-				+ CassandraConnection.ANALYSIS_PROJECT_SETTINGS_TABLE
-				+ " (uuid, name, description, "
-				+ "file_includes, file_excludes, "
-				+ "location_includes, location_excludes, "
-				+ "ignore_hidden, repository_location) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(
+						session,
+						"storeProjectAnalysisSettings",
+						"INSERT INTO "
+								+ CassandraConnection.ANALYSIS_PROJECT_SETTINGS_TABLE
+								+ " (uuid, name, description, "
+								+ "file_includes, file_excludes, "
+								+ "location_includes, location_excludes, "
+								+ "ignore_hidden, repository_location) "
+								+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		BoundStatement bound = preparedStatement.bind(uuid, name, description,
 				fileSearchConfiguration.getFileIncludes(),
 				fileSearchConfiguration.getFileExcludes(),
@@ -175,7 +179,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	@Override
 	public void updateAnalysisProjectSettings(UUID uuid,
 			AnalysisProjectSettings settings) throws AnalysisStoreException {
-		insertProjectAnalysisSettings(settings, uuid);
+		storeProjectAnalysisSettings(settings, uuid);
 	}
 
 	@Override
@@ -239,11 +243,13 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		graph.commit();
 
 		Session session = CassandraConnection.getAnalysisSession();
-		PreparedStatement preparedStatement = session.prepare("INSERT INTO "
-				+ CassandraConnection.RUN_SETTINGS_TABLE + " (uuid, "
-				+ "file_includes, file_excludes, "
-				+ "location_includes, location_excludes, " + "ignore_hidden) "
-				+ "VALUES (?, ?, ?, ?, ?, ?)");
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(session, "createAnalysisRun",
+						"INSERT INTO " + CassandraConnection.RUN_SETTINGS_TABLE
+								+ " (uuid, " + "file_includes, file_excludes, "
+								+ "location_includes, location_excludes, "
+								+ "ignore_hidden) "
+								+ "VALUES (?, ?, ?, ?, ?, ?)");
 		BoundStatement bound = preparedStatement.bind(uuid,
 				fileSearchConfiguration.getFileIncludes(),
 				fileSearchConfiguration.getFileExcludes(),

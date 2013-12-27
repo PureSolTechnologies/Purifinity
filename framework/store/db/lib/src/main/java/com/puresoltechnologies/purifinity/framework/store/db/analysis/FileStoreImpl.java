@@ -50,11 +50,11 @@ public final class FileStoreImpl implements FileStore {
 								"storeRawFile",
 								"INSERT INTO "
 										+ CassandraConnection.ANALYSIS_FILES_TABLE
-										+ " (hash, raw) VALUES (?,?)");
+										+ " (hashid, raw) VALUES (?,?)");
 				byte[] array = buffer.toByteArray();
 				ByteBuffer byteBuffer = ByteBuffer.wrap(array);
 				BoundStatement boundStatement = preparedStmt.bind(hashId
-						.getHash());
+						.toString());
 				boundStatement.setBytes("raw", byteBuffer);
 				session.execute(boundStatement);
 				return hashId;
@@ -68,8 +68,8 @@ public final class FileStoreImpl implements FileStore {
 	public InputStream readRawFile(HashId hashId) throws FileStoreException {
 		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session.execute("SELECT raw FROM "
-				+ CassandraConnection.ANALYSIS_FILES_TABLE + " WHERE hash='"
-				+ hashId.getHash() + "'");
+				+ CassandraConnection.ANALYSIS_FILES_TABLE + " WHERE hashid='"
+				+ hashId.toString() + "'");
 		Row result = resultSet.one();
 		if (result == null) {
 			throw new FileStoreException("Could not find file with hash id '"
@@ -77,8 +77,8 @@ public final class FileStoreImpl implements FileStore {
 
 		}
 		if (resultSet.one() != null) {
-			throw new FileStoreException("Multiple files for hash '"
-					+ hashId.getHash() + "' found!");
+			throw new FileStoreException("Multiple files for hashid '" + hashId
+					+ "' found!");
 		}
 		ByteBuffer byteBuffer = result.getBytes("raw");
 		return new ByteArrayInputStream(byteBuffer.array(),
@@ -89,8 +89,8 @@ public final class FileStoreImpl implements FileStore {
 	public CodeAnalysis loadAnalysis(HashId hashId) throws FileStoreException {
 		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session.execute("SELECT analysis FROM "
-				+ CassandraConnection.ANALYSIS_FILES_TABLE + " WHERE hash='"
-				+ hashId.getHash() + "'");
+				+ CassandraConnection.ANALYSIS_FILES_TABLE + " WHERE hashid='"
+				+ hashId.toString() + "'");
 		Row result = resultSet.one();
 		if (result == null) {
 			throw new FileStoreException(
@@ -118,9 +118,9 @@ public final class FileStoreImpl implements FileStore {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "storeAnalysis", "INSERT INTO "
 						+ CassandraConnection.ANALYSIS_FILES_TABLE
-						+ " (hash, analysis) VALUES (?,?)");
-		BoundStatement boundStatement = preparedStatement
-				.bind(hashId.getHash());
+						+ " (hashid, analysis) VALUES (?,?)");
+		BoundStatement boundStatement = preparedStatement.bind(hashId
+				.toString());
 		try {
 			try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 				try (ObjectOutputStream outStream = new ObjectOutputStream(
@@ -142,8 +142,8 @@ public final class FileStoreImpl implements FileStore {
 	public final boolean isAvailable(HashId hashId) {
 		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session.execute("SELECT hash FROM "
-				+ CassandraConnection.ANALYSIS_FILES_TABLE + " WHERE hash='"
-				+ hashId.getHash() + "'");
+				+ CassandraConnection.ANALYSIS_FILES_TABLE + " WHERE hashid='"
+				+ hashId.toString() + "'");
 		Row result = resultSet.one();
 		return result != null;
 	}
@@ -164,8 +164,8 @@ public final class FileStoreImpl implements FileStore {
 	public final boolean wasAnalyzed(HashId hashId) {
 		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session.execute("SELECT analysis FROM "
-				+ CassandraConnection.ANALYSIS_FILES_TABLE + " WHERE hash='"
-				+ hashId.getHash() + "'");
+				+ CassandraConnection.ANALYSIS_FILES_TABLE + " WHERE hashid='"
+				+ hashId.toString() + "'");
 		Row result = resultSet.one();
 		return result.getBytes("analysis") != null;
 	}

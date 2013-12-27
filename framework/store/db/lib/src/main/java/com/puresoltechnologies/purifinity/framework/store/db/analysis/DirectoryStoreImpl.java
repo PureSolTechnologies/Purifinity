@@ -16,15 +16,12 @@ import com.tinkerpop.blueprints.Vertex;
 
 public class DirectoryStoreImpl implements DirectoryStore {
 
-	private static final String FILES_FILE = "files.persist";
-	private static final String DIRECTORIES_FILE = "directories.persist";
-
 	@Override
 	public boolean isAvailable(HashId hashId) {
 		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session
 				.execute("SELECT hashid FROM files WHERE hashid="
-						+ hashId.getHash());
+						+ hashId.toString());
 		return resultSet.one() != null;
 	}
 
@@ -48,7 +45,7 @@ public class DirectoryStoreImpl implements DirectoryStore {
 			throws DirectoryStoreException {
 		Iterable<Vertex> vertices = graph.query()
 				.has(TitanConnection.TREE_ELEMENT_IS_FILE, false)
-				.has(TitanConnection.TREE_ELEMENT_HASH, hashId.getHash())
+				.has(TitanConnection.TREE_ELEMENT_HASH, hashId.toString())
 				.vertices();
 		Iterator<Vertex> vertexIterator = vertices.iterator();
 		if (!vertexIterator.hasNext()) {
@@ -57,7 +54,8 @@ public class DirectoryStoreImpl implements DirectoryStore {
 		Vertex vertex = vertexIterator.next();
 		if (vertexIterator.hasNext()) {
 			throw new DirectoryStoreException(
-					"Found multiple directories with hash '" + hashId.getHash()
+					"Found multiple directories with hash '"
+							+ hashId.toString()
 							+ "'. Database is inconsistent!");
 		}
 		return vertex;

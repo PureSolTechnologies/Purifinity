@@ -141,14 +141,14 @@ public class CassandraConnection {
 			analysisSession
 					.execute("CREATE TABLE "
 							+ ANALYSIS_FILES_TABLE
-							+ " (hash varchar, raw blob, analysis blob, PRIMARY KEY(hash));");
+							+ " (hashid varchar, raw blob, analysis blob, PRIMARY KEY(hashid));");
 		}
 		TableMetadata directoriesTable = analysisKeyspace
 				.getTable(ANALYSIS_DIRECTORIES_TABLE);
 		if (directoriesTable == null) {
 			analysisSession.execute("CREATE TABLE "
 					+ ANALYSIS_DIRECTORIES_TABLE
-					+ " (hash varchar, PRIMARY KEY(hash));");
+					+ " (hashid varchar, PRIMARY KEY(hashid));");
 		}
 		TableMetadata projectSettingsTable = analysisKeyspace
 				.getTable(ANALYSIS_PROJECT_SETTINGS_TABLE);
