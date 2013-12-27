@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.framework.store.db.analysis;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,7 +31,7 @@ public class DirectoryStoreImpl implements DirectoryStore {
 	@Override
 	public List<HashId> getFiles(HashId hashId) throws DirectoryStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
-		Vertex vertex = findTreeElement(graph, hashId);
+		Vertex vertex = findDirectory(graph, hashId);
 		Iterable<Vertex> vertices = vertex.query()
 				.has(TitanConnection.TREE_ELEMENT_IS_FILE, true).vertices();
 		Iterator<Vertex> vertexIterator = vertices.iterator();
@@ -45,7 +44,7 @@ public class DirectoryStoreImpl implements DirectoryStore {
 		return hashIds;
 	}
 
-	private Vertex findTreeElement(TitanGraph graph, HashId hashId)
+	private Vertex findDirectory(TitanGraph graph, HashId hashId)
 			throws DirectoryStoreException {
 		Iterable<Vertex> vertices = graph.query()
 				.has(TitanConnection.TREE_ELEMENT_IS_FILE, false)
@@ -67,7 +66,17 @@ public class DirectoryStoreImpl implements DirectoryStore {
 	@Override
 	public List<HashId> getDirectories(HashId hashId)
 			throws DirectoryStoreException {
-		return restore(new File(getDirectoryStoreDirectory(hashId),
-				DIRECTORIES_FILE));
+		TitanGraph graph = TitanConnection.getGraph();
+		Vertex vertex = findDirectory(graph, hashId);
+		Iterable<Vertex> vertices = vertex.query()
+				.has(TitanConnection.TREE_ELEMENT_IS_FILE, false).vertices();
+		Iterator<Vertex> vertexIterator = vertices.iterator();
+		List<HashId> hashIds = new ArrayList<>();
+		while (vertexIterator.hasNext()) {
+			Vertex fileVertex = vertexIterator.next();
+			hashIds.add(HashId.fromString((String) fileVertex
+					.getProperty(TitanConnection.TREE_ELEMENT_HASH)));
+		}
+		return hashIds;
 	}
 }
