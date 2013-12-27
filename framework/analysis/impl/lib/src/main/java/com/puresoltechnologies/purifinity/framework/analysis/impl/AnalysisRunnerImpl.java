@@ -32,6 +32,8 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
@@ -78,9 +80,9 @@ public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
 			StopWatch stopWatch = new StopWatch();
 			stopWatch.start();
 			if (analyzeFiles()) {
-				AnalysisProject analysisProject = analysisStore
+				AnalysisProjectInformation analysisProjectInformation = analysisStore
 						.readAnalysisProjectInformation(analysisProjectUUID);
-				UUID projectUUID = analysisProject.getInformation().getUUID();
+				UUID projectUUID = analysisProjectInformation.getUUID();
 				analysisStore.saveAnalysisRunInformation(projectUUID, uuid,
 						creationTime, timeOfRun);
 				buildCodeLocationTree();
@@ -95,7 +97,7 @@ public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
 				fireDone("Run aborted.", false);
 				return false;
 			}
-		} catch (RuntimeException e) {
+		} catch (RuntimeException le) {
 			fireDone("Finished with runtime exception: '" + e.getMessage()
 					+ "'", false);
 			throw e;
@@ -137,13 +139,13 @@ public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
 	 */
 	private List<Future<AnalyzedCode>> startAllAnalysisThreads()
 			throws AnalysisStoreException {
-		AnalysisProject analysisProject = analysisStore
-				.readAnalysisProjectInformation(analysisProjectUUID);
-		RepositoryLocation repositoryLocation = analysisProject.getSettings()
-				.getRepositoryLocation();
-		repositoryLocation.setCodeSearchConfiguration(searchConfig);
+		AnalysisProjectSettings analysisProjectSettings = analysisStore
+				.readAnalysisProjectSettings(analysisProjectUUID);
+		RepositoryLocation repositoryLocation = RepositoryLocationCreator
+				.createFromSerialization(analysisProjectSettings
+						.getRepositoryLocation());
 		List<SourceCodeLocation> sourceFiles = repositoryLocation
-				.getSourceCodes();
+				.getSourceCodes(searchConfig);
 
 		ExecutorService threadPool = Executors
 				.newFixedThreadPool(NUMBER_OF_PARALLEL_THREADS);
