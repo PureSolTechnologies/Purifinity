@@ -23,7 +23,7 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 	private final HashId hashId;
 	private final SourceCodeLocation source;
 	private final Date time;
-	private final long timeOfRun;
+	private final long duration;
 	private final String languageName;
 	private final String languageVersion;
 	private final String analyzerErrorMessage;
@@ -41,7 +41,7 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 		this.hashId = hashId;
 		this.source = source;
 		this.time = time;
-		this.timeOfRun = timeOfRun;
+		this.duration = timeOfRun;
 		this.languageName = languageName;
 		this.languageVersion = languageVersion;
 		this.analyzerErrorMessage = analyzerErrorMessage;
@@ -62,7 +62,7 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 
 	@Override
 	public final long getDuration() {
-		return timeOfRun;
+		return duration;
 	}
 
 	public final String getLanguageName() {
@@ -84,7 +84,7 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 		result = prime * result
 				+ ((languageVersion == null) ? 0 : languageVersion.hashCode());
 		result = prime * result + ((time == null) ? 0 : time.hashCode());
-		result = prime * result + (int) (timeOfRun ^ (timeOfRun >>> 32));
+		result = prime * result + (int) (duration ^ (duration >>> 32));
 		return result;
 	}
 
@@ -122,7 +122,7 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 				return false;
 		} else if (!time.equals(other.time))
 			return false;
-		if (timeOfRun != other.timeOfRun)
+		if (duration != other.duration)
 			return false;
 		return true;
 	}

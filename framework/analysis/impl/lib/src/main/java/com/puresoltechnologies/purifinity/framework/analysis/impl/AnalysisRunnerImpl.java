@@ -28,12 +28,12 @@ import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.parsers.api.source.RepositoryLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
@@ -54,22 +54,23 @@ public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
 			.availableProcessors();
 	private static final int WAITTIME_IN_SECONDS_FOR_THREAD_POLL = 1000;
 
+	private HashIdFileTree fileTree = null;
+	private FileSearchConfiguration searchConfig = null;
+	private Date startTime = null;
+	private long timeOfRun = 0;
+	private AnalysisRunInformation analysisRun = null;
+
 	private final List<AnalyzedCode> analyzedFiles = new ArrayList<>();
 	private final List<AnalyzedCode> failedSources = new ArrayList<>();
-	private HashIdFileTree fileTree;
-	private FileSearchConfiguration searchConfig;
-	private long timeOfRun;
 
 	private final UUID analysisProjectUUID;
 	private final UUID uuid;
-	private final Date creationTime;
 	private final AnalysisStore analysisStore;
 
 	public AnalysisRunnerImpl(UUID analysisProjectUUID) {
 		super();
 		this.analysisProjectUUID = analysisProjectUUID;
 		uuid = UUID.randomUUID();
-		creationTime = new Date();
 		analysisStore = AnalysisStoreFactory.getFactory().getInstance();
 	}
 
@@ -79,16 +80,22 @@ public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
 			reset();
 			StopWatch stopWatch = new StopWatch();
 			stopWatch.start();
-			if (analyzeFiles()) {
+			boolean analysisSuccessful = analyzeFiles();
+			stopWatch.stop();
+			startTime = stopWatch.getStartTime();
+			timeOfRun = stopWatch.getMilliseconds();
+			if (analysisSuccessful) {
 				AnalysisProjectInformation analysisProjectInformation = analysisStore
 						.readAnalysisProjectInformation(analysisProjectUUID);
+				AnalysisProjectSettings settings = analysisStore
+						.readAnalysisProjectSettings(analysisProjectUUID);
 				UUID projectUUID = analysisProjectInformation.getUUID();
-				analysisStore.saveAnalysisRunInformation(projectUUID, uuid,
-						creationTime, timeOfRun);
+				searchConfig = settings.getFileSearchConfiguration();
+				analysisRun = analysisStore.createAnalysisRun(projectUUID,
+						stopWatch.getStartTime(), timeOfRun, "", searchConfig);
 				buildCodeLocationTree();
-				analysisStore.storeFileTree(fileTree);
-				stopWatch.stop();
-				timeOfRun = stopWatch.getMilliseconds();
+				analysisStore.storeFileTree(projectUUID, analysisRun.getUUID(),
+						fileTree);
 				analysisStore.storeAnalysisResultInformation(projectUUID, uuid,
 						analyzedFiles, failedSources, fileTree);
 				fireDone("Finished successfully.", true);
@@ -97,7 +104,7 @@ public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
 				fireDone("Run aborted.", false);
 				return false;
 			}
-		} catch (RuntimeException le) {
+		} catch (RuntimeException e) {
 			fireDone("Finished with runtime exception: '" + e.getMessage()
 					+ "'", false);
 			throw e;
@@ -230,10 +237,11 @@ public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
 	 */
 	private HashIdFileTree createIntermediateTree()
 			throws AnalysisStoreException {
-		AnalysisProject analysisProject = analysisStore
-				.readAnalysisProjectInformation(analysisProjectUUID);
-		RepositoryLocation repositoryLocation = analysisProject.getSettings()
-				.getRepositoryLocation();
+		AnalysisProjectSettings analysisProjectSettings = analysisStore
+				.readAnalysisProjectSettings(analysisProjectUUID);
+		RepositoryLocation repositoryLocation = RepositoryLocationCreator
+				.createFromSerialization(analysisProjectSettings
+						.getRepositoryLocation());
 		HashIdFileTree intermediate = new HashIdFileTree(null,
 				repositoryLocation.getHumanReadableLocationString(), null,
 				false);
@@ -332,12 +340,8 @@ public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
 
 	@Override
 	public AnalysisRun getAnalysisRun() throws AnalysisProjectException {
-		try {
-			return analysisStore.loadAnalysisRun(analysisProjectUUID, uuid);
-		} catch (AnalysisStoreException e) {
-			logger.error("Could not load analysis.", e);
-			throw new AnalysisProjectException("Could not load analysis.");
-		}
+		return new AnalysisRunImpl(analysisProjectUUID, uuid, startTime,
+				timeOfRun, fileTree, analyzedFiles, failedSources, searchConfig);
 	}
 
 }

@@ -88,13 +88,13 @@ public interface AnalysisStore {
 	public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
 			throws AnalysisStoreException;
 
-	public AnalysisRunInformation loadAnalysisRun(UUID projectUUID, UUID uuid)
-			throws AnalysisStoreException;
+	public AnalysisRunInformation loadAnalysisRun(UUID projectUUID,
+			UUID analysisRunUUID) throws AnalysisStoreException;
 
 	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)
 			throws AnalysisStoreException;
 
-	public void removeAnalysisRun(UUID projectUUID, UUID uuid)
+	public void removeAnalysisRun(UUID projectUUID, UUID analysisRunUUID)
 			throws AnalysisStoreException;
 
 	/**
@@ -105,15 +105,14 @@ public interface AnalysisStore {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	public FileSearchConfiguration readSearchConfiguration(
-			UUID analysisProjectUUID, UUID analysisRunUUID)
-			throws AnalysisStoreException;
+	public FileSearchConfiguration readSearchConfiguration(UUID projectUUID,
+			UUID analysisRunUUID) throws AnalysisStoreException;
 
-	public void storeAnalysisResultInformation(UUID analysisProjectUUID,
+	public void storeAnalysisResultInformation(UUID projectUUID,
 			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
 			List<AnalyzedCode> failedSources, HashIdFileTree fileTree);
 
-	public void storeFileTree(UUID projectUUID, UUID runUUID,
+	public void storeFileTree(UUID projectUUID, UUID analysisRunUUID,
 			HashIdFileTree fileTree) throws AnalysisStoreException;
 
 	public AnalysisRunInformation createAnalysisRun(UUID analysisProjectUUID,

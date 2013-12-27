@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
@@ -73,7 +72,7 @@ public class AnalysisProjectImpl implements AnalysisProject {
 	}
 
 	@Override
-	public AnalysisRun loadAnalysisRun(UUID uuid)
+	public AnalysisRunInformation loadAnalysisRun(UUID uuid)
 			throws AnalysisProjectException {
 		try {
 			return analysisStore.loadAnalysisRun(this.uuid, uuid);
@@ -89,7 +88,8 @@ public class AnalysisProjectImpl implements AnalysisProject {
 	}
 
 	@Override
-	public AnalysisRun loadLastAnalysisRun() throws AnalysisProjectException {
+	public AnalysisRunInformation loadLastAnalysisRun()
+			throws AnalysisProjectException {
 		try {
 			return analysisStore.readLastAnalysisRun(uuid);
 		} catch (AnalysisStoreException e) {

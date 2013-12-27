@@ -30,20 +30,20 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 	private static final long serialVersionUID = 4670045857614462051L;
 
 	private final Date time;
-	private final long timeOfRun;
+	private final long duration;
 	private final String languageName;
 	private final String languageVersion;
 	private final AnalyzedCode analyzedFile;
 	private final List<CodeRange> analyzableCodeRanges;
 	private final UniversalSyntaxTree universalSyntaxTree;
 
-	public CodeAnalysis(Date time, long timeOfRun, String languageName,
+	public CodeAnalysis(Date time, long duration, String languageName,
 			String languageVersion, AnalyzedCode analyzedFile,
 			List<CodeRange> analyzableCodeRanges,
 			UniversalSyntaxTree universalSyntaxTree) {
 		super();
 		this.time = time;
-		this.timeOfRun = timeOfRun;
+		this.duration = duration;
 		this.languageName = languageName;
 		this.languageVersion = languageVersion;
 		this.analyzedFile = analyzedFile;
@@ -71,7 +71,7 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 	 */
 	@Override
 	public long getDuration() {
-		return timeOfRun;
+		return duration;
 	}
 
 	/**
@@ -120,4 +120,72 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 	public UniversalSyntaxTree getUniversalSyntaxTree() {
 		return universalSyntaxTree;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime
+				* result
+				+ ((analyzableCodeRanges == null) ? 0 : analyzableCodeRanges
+						.hashCode());
+		result = prime * result
+				+ ((analyzedFile == null) ? 0 : analyzedFile.hashCode());
+		result = prime * result + (int) (duration ^ (duration >>> 32));
+		result = prime * result
+				+ ((languageName == null) ? 0 : languageName.hashCode());
+		result = prime * result
+				+ ((languageVersion == null) ? 0 : languageVersion.hashCode());
+		result = prime * result + ((time == null) ? 0 : time.hashCode());
+		result = prime
+				* result
+				+ ((universalSyntaxTree == null) ? 0 : universalSyntaxTree
+						.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CodeAnalysis other = (CodeAnalysis) obj;
+		if (analyzableCodeRanges == null) {
+			if (other.analyzableCodeRanges != null)
+				return false;
+		} else if (!analyzableCodeRanges.equals(other.analyzableCodeRanges))
+			return false;
+		if (analyzedFile == null) {
+			if (other.analyzedFile != null)
+				return false;
+		} else if (!analyzedFile.equals(other.analyzedFile))
+			return false;
+		if (duration != other.duration)
+			return false;
+		if (languageName == null) {
+			if (other.languageName != null)
+				return false;
+		} else if (!languageName.equals(other.languageName))
+			return false;
+		if (languageVersion == null) {
+			if (other.languageVersion != null)
+				return false;
+		} else if (!languageVersion.equals(other.languageVersion))
+			return false;
+		if (time == null) {
+			if (other.time != null)
+				return false;
+		} else if (!time.equals(other.time))
+			return false;
+		if (universalSyntaxTree == null) {
+			if (other.universalSyntaxTree != null)
+				return false;
+		} else if (!universalSyntaxTree.equals(other.universalSyntaxTree))
+			return false;
+		return true;
+	}
+
 }

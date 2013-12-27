@@ -1,9 +1,12 @@
 package com.puresoltechnologies.purifinity.framework.store.db;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
+import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.TableMetadata;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraUtils;
@@ -35,6 +38,8 @@ public class CassandraConnection {
 	private static Session analysisSession = null;
 	private static Session evaluationSession = null;
 
+	private static Map<String, PreparedStatement> preparedStatements = new HashMap<>();
+
 	public static String getHost() {
 		return CASSANDRA_HOST;
 	}
@@ -62,6 +67,7 @@ public class CassandraConnection {
 			throw new CassandraConnectionException(
 					"Cassandra database has not been connected, yet.");
 		}
+		preparedStatements.clear();
 		evaluationSession.shutdown();
 		evaluationSession = null;
 		analysisSession.shutdown();
@@ -76,6 +82,21 @@ public class CassandraConnection {
 
 	public static Cluster getCluster() {
 		return cluster;
+	}
+
+	public static PreparedStatement getPreparedStatement(Session session,
+			String id, String statement) {
+		PreparedStatement preparedStatement = preparedStatements.get(id);
+		if (preparedStatement == null) {
+			synchronized (preparedStatements) {
+				preparedStatement = preparedStatements.get(id);
+				if (preparedStatement == null) {
+					preparedStatement = session.prepare(statement);
+					preparedStatements.put(id, preparedStatement);
+				}
+			}
+		}
+		return preparedStatement;
 	}
 
 	public static Session getAnalysisSession() {
@@ -120,17 +141,17 @@ public class CassandraConnection {
 			analysisSession
 					.execute("CREATE TABLE "
 							+ ANALYSIS_FILES_TABLE
-							+ " (hashId varchar, raw varchar, parser_tree varchar, PRIMARY KEY(hashId));");
+							+ " (hash varchar, raw blob, analysis blob, PRIMARY KEY(hash));");
 		}
 		TableMetadata directoriesTable = analysisKeyspace
 				.getTable(ANALYSIS_DIRECTORIES_TABLE);
 		if (directoriesTable == null) {
 			analysisSession.execute("CREATE TABLE "
 					+ ANALYSIS_DIRECTORIES_TABLE
-					+ " (hashId varchar, PRIMARY KEY(hashId));");
+					+ " (hash varchar, PRIMARY KEY(hash));");
 		}
 		TableMetadata projectSettingsTable = analysisKeyspace
-				.getTable(ANALYSIS_DIRECTORIES_TABLE);
+				.getTable(ANALYSIS_PROJECT_SETTINGS_TABLE);
 		if (projectSettingsTable == null) {
 			analysisSession
 					.execute("CREATE TABLE "

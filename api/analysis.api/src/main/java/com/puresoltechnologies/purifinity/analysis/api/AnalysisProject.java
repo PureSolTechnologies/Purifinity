@@ -69,7 +69,7 @@ public interface AnalysisProject extends Serializable {
 	 * @throws AnalysisStoreException
 	 *             is thrown in cases of issues.
 	 */
-	public AnalysisRun loadAnalysisRun(UUID uuid)
+	public AnalysisRunInformation loadAnalysisRun(UUID uuid)
 			throws AnalysisProjectException;
 
 	/**
@@ -95,7 +95,8 @@ public interface AnalysisProject extends Serializable {
 	 * @throws AnalysisStoreException
 	 *             is thrown in cases of issues.
 	 */
-	public AnalysisRun loadLastAnalysisRun() throws AnalysisProjectException;
+	public AnalysisRunInformation loadLastAnalysisRun()
+			throws AnalysisProjectException;
 
 	/**
 	 * This method deletes an analysis run from the store.

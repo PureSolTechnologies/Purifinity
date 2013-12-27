@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1387823320993
+Bnd-LastModified: 1388170631909
 Build-Jdk: 1.7.0_25
 Built-By: Rick-Rainer Ludwig
 Bundle-ActivationPolicy: lazy
@@ -25,12 +25,13 @@ Embedded-Artifacts: dependencies/store.api-0.1.1-SNAPSHOT.jar;g="com.pur
  ,dependencies/osgi-0.1.1-SNAPSHOT.jar;g="com.puresoltechnologies.common
  s";a="osgi";v="0.1.1-SNAPSHOT"
 Export-Package: com.puresoltechnologies.purifinity.framework.store.api;u
- ses:="com.puresoltechnologies.purifinity.analysis.api,com.puresoltechno
- logies.commons.misc,org.osgi.framework,com.puresoltechnologies.purifini
- ty.evaluation.api,com.puresoltechnologies.parsers.api.source";version="
- 0.1.1.SNAPSHOT"
+ ses:="com.puresoltechnologies.commons.misc,com.puresoltechnologies.puri
+ finity.analysis.domain,org.osgi.framework,com.puresoltechnologies.purif
+ inity.evaluation.domain,com.puresoltechnologies.purifinity.evaluation.a
+ pi,com.puresoltechnologies.parsers.api.source";version="0.1.1.SNAPSHOT"
 Import-Package: com.puresoltechnologies.commons.misc,com.puresoltechnolo
- gies.parsers.api.source,com.puresoltechnologies.purifinity.analysis.api
- ,com.puresoltechnologies.purifinity.evaluation.api,org.osgi.framework;v
- ersion="[1.6,2)",org.slf4j;version="[1.6,2)"
+ gies.parsers.api.source,com.puresoltechnologies.purifinity.analysis.dom
+ ain,com.puresoltechnologies.purifinity.evaluation.api,com.puresoltechno
+ logies.purifinity.evaluation.domain,org.osgi.framework;version="[1.6,2)
+ ",org.slf4j;version="[1.6,2)"
 Tool: Bnd-1.50.0

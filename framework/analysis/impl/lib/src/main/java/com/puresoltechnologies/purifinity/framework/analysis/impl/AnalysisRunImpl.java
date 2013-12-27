@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
@@ -19,15 +20,14 @@ public class AnalysisRunImpl implements AnalysisRun {
 
 	private static final long serialVersionUID = 6413809660830217670L;
 
-	private final List<AnalyzedCode> analyzedFiles = new ArrayList<>();
-	private final List<AnalyzedCode> failedSources = new ArrayList<>();
-
-	private HashIdFileTree fileTree;
-
 	private final UUID analysisProjectUUID;
 	private final UUID uuid;
-	private final Date creationTime;
+	private final Date startTime;
 	private final long timeOfRun;
+	private final HashIdFileTree fileTree;
+	private final List<AnalyzedCode> analyzedFiles = new ArrayList<>();
+	private final List<AnalyzedCode> failedSources = new ArrayList<>();
+	private final FileSearchConfiguration fileSearchConfiguration;
 
 	/**
 	 * This constructor is used to create a new analysis run. All setup
@@ -38,12 +38,18 @@ public class AnalysisRunImpl implements AnalysisRun {
 	 * @param searchConfiguration
 	 */
 	public AnalysisRunImpl(UUID analysisProjectUUID, UUID uuid,
-			Date creationTime, long timeOfRun) {
+			Date creationTime, long timeOfRun, HashIdFileTree fileTree,
+			List<AnalyzedCode> analyzedFiles, List<AnalyzedCode> failedSources,
+			FileSearchConfiguration fileSearchConfiguration) {
 		super();
 		this.analysisProjectUUID = analysisProjectUUID;
 		this.uuid = uuid;
-		this.creationTime = creationTime;
+		this.startTime = creationTime;
 		this.timeOfRun = timeOfRun;
+		this.fileTree = fileTree;
+		this.analyzedFiles.addAll(analyzedFiles);
+		this.failedSources.addAll(failedSources);
+		this.fileSearchConfiguration = fileSearchConfiguration;
 	}
 
 	@Override
@@ -74,8 +80,8 @@ public class AnalysisRunImpl implements AnalysisRun {
 
 	@Override
 	public AnalysisRunInformation getInformation() {
-		return new AnalysisRunInformation(analysisProjectUUID, uuid,
-				creationTime, timeOfRun, "<Not implemented, yet!>");
+		return new AnalysisRunInformation(analysisProjectUUID, uuid, startTime,
+				timeOfRun, "<Not implemented, yet!>", fileSearchConfiguration);
 	}
 
 }

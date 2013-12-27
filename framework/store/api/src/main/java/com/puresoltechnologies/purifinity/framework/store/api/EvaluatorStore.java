@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.framework.store.api;
 
+import java.util.UUID;
+
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
@@ -44,7 +46,7 @@ public interface EvaluatorStore {
 	 * @return <code>true</code> is returned in case results are available.
 	 *         <code>false</code> is returned otherwise.
 	 */
-	public boolean hasProjectResults(AnalysisRun analysisRun);
+	public boolean hasProjectResults(UUID analysisRunUUID);
 
 	/**
 	 * This method stores the results for a single file.
@@ -79,7 +81,7 @@ public interface EvaluatorStore {
 	 *            is the {@link MetricDirectoryResults} object containing the
 	 *            results to be stored.
 	 */
-	public void storeProjectResults(AnalysisRun analysisRun,
+	public void storeProjectResults(UUID analysisRunUUID,
 			MetricDirectoryResults results);
 
 	/**
@@ -113,6 +115,6 @@ public interface EvaluatorStore {
 	 *         the results. <code>null</code> is returned if no results are
 	 *         available.
 	 */
-	public MetricDirectoryResults readProjectResults(AnalysisRun analysisRun);
+	public MetricDirectoryResults readProjectResults(UUID analysisRunUUID);
 
 }

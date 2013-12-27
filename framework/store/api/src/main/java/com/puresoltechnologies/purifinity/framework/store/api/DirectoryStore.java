@@ -18,19 +18,6 @@ import com.puresoltechnologies.commons.misc.HashId;
 public interface DirectoryStore {
 
 	/**
-	 * Stores the file in the store.
-	 * 
-	 * @param analyzedFile
-	 * @return True is returned in case of a successful storage. False is
-	 *         returned in case of an already stored file. In this case the new
-	 *         file is not stored and the already stored file is assumed to be
-	 *         equal due to the same hash id.
-	 * @throws DirectoryStoreException
-	 */
-	public boolean createPackage(HashId hashId, List<HashId> files,
-			List<HashId> directories) throws DirectoryStoreException;
-
-	/**
 	 * This method checks whether a directory is already present or not.
 	 * 
 	 * @param hashId
