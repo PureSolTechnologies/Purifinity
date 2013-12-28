@@ -19,6 +19,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 
 /**
@@ -49,7 +50,8 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException, UniversalSyntaxTreeEvaluationException {
+			throws InterruptedException,
+			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 				.createInstance();
 		try {
@@ -84,7 +86,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationStoreException {
 		HashId hashId = directory.getHashId();
 		if (store.hasDirectoryResults(hashId)) {
 			return;
@@ -96,7 +98,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 	}
 
 	private CodeDepthDirectoryResults calculateDirectoryResults(
-			HashIdFileTree directory) {
+			HashIdFileTree directory) throws EvaluationStoreException {
 		CodeDepthDirectoryResults directoryResults = new CodeDepthDirectoryResults(
 				new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
 				directory.getName());
@@ -132,8 +134,10 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processProject() throws InterruptedException {
-		if (store.hasProjectResults(getAnalysisRun())) {
+	protected void processProject() throws InterruptedException,
+			EvaluationStoreException {
+		if (store
+				.hasProjectResults(getAnalysisRun().getInformation().getUUID())) {
 			return;
 		}
 		HashIdFileTree directory = getAnalysisRun().getFileTree();

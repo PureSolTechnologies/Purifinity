@@ -26,6 +26,7 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOC
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -69,7 +70,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationStoreException {
 		MaintainabilityIndexFileResults results = new MaintainabilityIndexFileResults();
 
 		AnalyzedCode analyzedFile = analysis.getAnalyzedFile();
@@ -155,7 +156,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationStoreException {
 		MaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
 			store.storeDirectoryResults(directory.getHashId(), finalResults);
@@ -163,7 +164,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	private MaintainabilityIndexDirectoryResults createDirectoryResults(
-			HashIdFileTree directory) {
+			HashIdFileTree directory) throws EvaluationStoreException {
 		QualityLevel qualityLevel = null;
 		for (HashIdFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
@@ -193,14 +194,17 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processProject() throws InterruptedException {
-		if (store.hasProjectResults(getAnalysisRun())) {
+	protected void processProject() throws InterruptedException,
+			EvaluationStoreException {
+		if (store
+				.hasProjectResults(getAnalysisRun().getInformation().getUUID())) {
 			return;
 		}
 		MaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(getAnalysisRun()
 				.getFileTree());
 		if (finalResults != null) {
-			store.storeProjectResults(getAnalysisRun(), finalResults);
+			store.storeProjectResults(getAnalysisRun().getInformation()
+					.getUUID(), finalResults);
 		}
 	}
 }

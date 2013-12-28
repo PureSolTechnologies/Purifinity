@@ -19,6 +19,7 @@ import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacte
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 
 /**
@@ -55,7 +56,8 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException, UniversalSyntaxTreeEvaluationException {
+			throws InterruptedException,
+			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 		AnalyzedCode analyzedFile = analysis.getAnalyzedFile();
 		HashId hashId = analyzedFile.getHashId();
 		if (store.hasFileResults(hashId)) {
@@ -93,7 +95,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationStoreException {
 		HashId hashId = directory.getHashId();
 		if (store.hasDirectoryResults(hashId)) {
 			return;
@@ -104,7 +106,8 @@ public class SLOCEvaluator extends AbstractEvaluator {
 		}
 	}
 
-	private SLOCDirectoryResults createDirectoryResults(HashIdFileTree directory) {
+	private SLOCDirectoryResults createDirectoryResults(HashIdFileTree directory)
+			throws EvaluationStoreException {
 		QualityLevel qualityLevel = null;
 		SLOCResult metricResults = null;
 		for (HashIdFileTree child : directory.getChildren()) {
@@ -157,14 +160,17 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processProject() throws InterruptedException {
-		if (store.hasProjectResults(getAnalysisRun())) {
+	protected void processProject() throws InterruptedException,
+			EvaluationStoreException {
+		if (store
+				.hasProjectResults(getAnalysisRun().getInformation().getUUID())) {
 			return;
 		}
 		HashIdFileTree directory = getAnalysisRun().getFileTree();
 		SLOCDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeProjectResults(getAnalysisRun(), finalResults);
+			store.storeProjectResults(getAnalysisRun().getInformation()
+					.getUUID(), finalResults);
 		}
 	}
 }

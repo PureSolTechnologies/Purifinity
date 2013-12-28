@@ -20,6 +20,7 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -46,7 +47,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationStoreException {
 		HashId hashId = analysis.getAnalyzedFile().getHashId();
 		HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
 				.readFileResults(hashId);
@@ -120,7 +121,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationStoreException {
 		EntropyDirectoryResults directoryResults = calculateDirectoryResults(directory);
 		if (directoryResults != null) {
 			store.storeDirectoryResults(directory.getHashId(), directoryResults);
@@ -128,7 +129,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	}
 
 	private EntropyDirectoryResults calculateDirectoryResults(
-			HashIdFileTree directory) {
+			HashIdFileTree directory) throws EvaluationStoreException {
 		EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
 		EvaluatorStore halsteadMetricResultStore = factory
 				.createInstance(HalsteadMetricEvaluator.class);
@@ -168,7 +169,8 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processProject() throws InterruptedException {
+	protected void processProject() throws InterruptedException,
+			EvaluationStoreException {
 		HashIdFileTree directory = getAnalysisRun().getFileTree();
 		EntropyDirectoryResults directoryResults = calculateDirectoryResults(directory);
 		store.storeDirectoryResults(directory.getHashId(), directoryResults);

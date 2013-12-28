@@ -1,12 +1,17 @@
-package com.puresoltechnologies.purifinity.framework.store.fs.metrics;
+package com.puresoltechnologies.purifinity.framework.store.db.metrics;
 
-import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
-import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCDirectoryResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCFileResults;
-import com.puresoltechnologies.purifinity.framework.store.fs.evaluation.AbstractEvaluatorStore;
+import com.puresoltechnologies.purifinity.framework.store.db.evaluation.AbstractEvaluatorStore;
 
 public class SLOCEvaluatorStore extends AbstractEvaluatorStore {
+
+	@Override
+	public String getStoreName() {
+		return "sloc_metric_store";
+	}
 
 	@Override
 	protected Class<? extends MetricFileResults> getFileResultClass() {

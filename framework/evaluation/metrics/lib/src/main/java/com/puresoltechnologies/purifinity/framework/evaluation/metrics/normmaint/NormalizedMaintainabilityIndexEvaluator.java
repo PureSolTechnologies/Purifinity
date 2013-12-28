@@ -18,6 +18,7 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintaina
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexFileResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -59,7 +60,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationStoreException {
 		NormalizedMaintainabilityIndexFileResults results = new NormalizedMaintainabilityIndexFileResults();
 
 		HashId hashId = analysis.getAnalyzedFile().getHashId();
@@ -109,7 +110,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationStoreException {
 		NormalizedMaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
 			store.storeDirectoryResults(directory.getHashId(), finalResults);
@@ -117,7 +118,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	private NormalizedMaintainabilityIndexDirectoryResults createDirectoryResults(
-			HashIdFileTree directory) {
+			HashIdFileTree directory) throws EvaluationStoreException {
 		QualityLevel qualityLevel = null;
 		for (HashIdFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
@@ -147,14 +148,17 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processProject() throws InterruptedException {
-		if (store.hasProjectResults(getAnalysisRun())) {
+	protected void processProject() throws InterruptedException,
+			EvaluationStoreException {
+		if (store
+				.hasProjectResults(getAnalysisRun().getInformation().getUUID())) {
 			return;
 		}
 		NormalizedMaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(getAnalysisRun()
 				.getFileTree());
 		if (finalResults != null) {
-			store.storeProjectResults(getAnalysisRun(), finalResults);
+			store.storeProjectResults(getAnalysisRun().getInformation()
+					.getUUID(), finalResults);
 		}
 	}
 }

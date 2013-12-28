@@ -8,7 +8,6 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.TableMetadata;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraUtils;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
 
@@ -33,6 +32,9 @@ public class CassandraConnection {
 	public static final String ANALYSIS_DIRECTORIES_TABLE = "directories";
 	public static final String ANALYSIS_PROJECT_SETTINGS_TABLE = "project_settings";
 	public static final String RUN_SETTINGS_TABLE = "run_settings";
+	public static final String EVALUATION_FILES_TABLE = "files";
+	public static final String EVALUATION_DIRECTORIES_TABLE = "directories";
+	public static final String EVALUATION_PROJECTS_TABLE = "projects";
 
 	private static Cluster cluster = null;
 	private static Session analysisSession = null;
@@ -111,11 +113,11 @@ public class CassandraConnection {
 		Session session = cluster.connect();
 		try {
 			if (cluster.getMetadata().getKeyspace(ANALYSIS_KEYSPACE) == null) {
-				CassandraUtils.createKeyspace(session, ANALYSIS_KEYSPACE,
+				CassandraUtils.createKeyspace(cluster, ANALYSIS_KEYSPACE,
 						ReplicationStrategy.SIMPLE_STRATEGY, 1);
 			}
 			if (cluster.getMetadata().getKeyspace(EVALUATION_KEYSPACE) == null) {
-				CassandraUtils.createKeyspace(session, EVALUATION_KEYSPACE,
+				CassandraUtils.createKeyspace(cluster, EVALUATION_KEYSPACE,
 						ReplicationStrategy.SIMPLE_STRATEGY, 1);
 			}
 		} finally {
@@ -126,50 +128,48 @@ public class CassandraConnection {
 	private static void checkAndCreateAnalysisTables() {
 		KeyspaceMetadata analysisKeyspace = cluster.getMetadata().getKeyspace(
 				ANALYSIS_KEYSPACE);
-		TableMetadata changelogTable = analysisKeyspace
-				.getTable(CHANGELOG_TABLE);
-		if (changelogTable == null) {
-			analysisSession.execute("CREATE TABLE " + CHANGELOG_TABLE
-					+ " (version int, utc timestamp, PRIMARY KEY(version));");
-			analysisSession.execute("INSERT INTO " + CHANGELOG_TABLE
-					+ " (version, utc) VALUES (1, " + new Date().getTime()
-					+ ");");
-		}
-		TableMetadata filesTable = analysisKeyspace
-				.getTable(ANALYSIS_FILES_TABLE);
-		if (filesTable == null) {
-			analysisSession
-					.execute("CREATE TABLE "
-							+ ANALYSIS_FILES_TABLE
-							+ " (hashid varchar, raw blob, analysis blob, PRIMARY KEY(hashid));");
-		}
-		TableMetadata directoriesTable = analysisKeyspace
-				.getTable(ANALYSIS_DIRECTORIES_TABLE);
-		if (directoriesTable == null) {
-			analysisSession.execute("CREATE TABLE "
-					+ ANALYSIS_DIRECTORIES_TABLE
-					+ " (hashid varchar, PRIMARY KEY(hashid));");
-		}
-		TableMetadata projectSettingsTable = analysisKeyspace
-				.getTable(ANALYSIS_PROJECT_SETTINGS_TABLE);
-		if (projectSettingsTable == null) {
-			analysisSession
-					.execute("CREATE TABLE "
-							+ ANALYSIS_PROJECT_SETTINGS_TABLE
-							+ " (uuid uuid, name varchar, description varchar, file_includes list<text>, file_excludes list<text>, location_includes list<text>, location_excludes list<text>, ignore_hidden boolean, repository_location map<text,text>, PRIMARY KEY(uuid));");
-		}
-		TableMetadata runSettingsTable = analysisKeyspace
-				.getTable(RUN_SETTINGS_TABLE);
-		if (runSettingsTable == null) {
-			analysisSession
-					.execute("CREATE TABLE "
-							+ RUN_SETTINGS_TABLE
-							+ " (uuid uuid, file_includes list<text>, file_excludes list<text>, location_includes list<text>, location_excludes list<text>, ignore_hidden boolean, PRIMARY KEY(uuid));");
-		}
+		CassandraUtils
+				.checkAndCreateTable(
+						analysisSession,
+						analysisKeyspace,
+						CHANGELOG_TABLE,
+						"CREATE TABLE "
+								+ CHANGELOG_TABLE
+								+ " (version int, utc timestamp, PRIMARY KEY(version));",
+						"INSERT INTO " + CHANGELOG_TABLE
+								+ " (version, utc) VALUES (1, "
+								+ new Date().getTime() + ");");
+		CassandraUtils
+				.checkAndCreateTable(
+						analysisSession,
+						analysisKeyspace,
+						ANALYSIS_FILES_TABLE,
+						"CREATE TABLE "
+								+ ANALYSIS_FILES_TABLE
+								+ " (hashid varchar, raw blob, analysis blob, PRIMARY KEY(hashid));");
+		CassandraUtils.checkAndCreateTable(analysisSession, analysisKeyspace,
+				ANALYSIS_DIRECTORIES_TABLE, "CREATE TABLE "
+						+ ANALYSIS_DIRECTORIES_TABLE
+						+ " (hashid varchar, PRIMARY KEY(hashid));");
+		CassandraUtils
+				.checkAndCreateTable(
+						analysisSession,
+						analysisKeyspace,
+						ANALYSIS_PROJECT_SETTINGS_TABLE,
+						"CREATE TABLE "
+								+ ANALYSIS_PROJECT_SETTINGS_TABLE
+								+ " (uuid uuid, name varchar, description varchar, file_includes list<text>, file_excludes list<text>, location_includes list<text>, location_excludes list<text>, ignore_hidden boolean, repository_location map<text,text>, PRIMARY KEY(uuid));");
+		CassandraUtils
+				.checkAndCreateTable(
+						analysisSession,
+						analysisKeyspace,
+						RUN_SETTINGS_TABLE,
+						"CREATE TABLE "
+								+ RUN_SETTINGS_TABLE
+								+ " (uuid uuid, file_includes list<text>, file_excludes list<text>, location_includes list<text>, location_excludes list<text>, ignore_hidden boolean, PRIMARY KEY(uuid));");
 	}
 
 	private static void checkAndCreateEvaluationTables() {
-
 	}
 
 }

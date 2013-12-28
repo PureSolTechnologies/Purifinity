@@ -3,6 +3,7 @@ package com.puresoltechnologies.purifinity.framework.store.api;
 import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 
@@ -16,6 +17,16 @@ import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 public interface EvaluatorStore {
 
 	/**
+	 * This method returns the store name which is used to be put into a
+	 * database as value, to be used as table name or keyspace name depending on
+	 * the database. The name should only consist of alpha numeric characters
+	 * and underline. The maximum length is 48 for Cassandra.
+	 * 
+	 * @return
+	 */
+	public String getStoreName();
+
+	/**
 	 * Returns whether there are results for the specified file available or
 	 * not.
 	 * 
@@ -23,8 +34,10 @@ public interface EvaluatorStore {
 	 *            specifies the file to be looked up.
 	 * @return <code>true</code> is returned in case results are available.
 	 *         <code>false</code> is returned otherwise.
+	 * @throws EvaluationStoreException
 	 */
-	public boolean hasFileResults(HashId hashId);
+	public boolean hasFileResults(HashId hashId)
+			throws EvaluationStoreException;
 
 	/**
 	 * Returns whether there are results for the specified directory available
@@ -34,8 +47,10 @@ public interface EvaluatorStore {
 	 *            specifies the directory to be looked up.
 	 * @return <code>true</code> is returned in case results are available.
 	 *         <code>false</code> is returned otherwise.
+	 * @throws EvaluationStoreException
 	 */
-	public boolean hasDirectoryResults(HashId hashId);
+	public boolean hasDirectoryResults(HashId hashId)
+			throws EvaluationStoreException;
 
 	/**
 	 * Returns whether there are results for the specified project available or
@@ -45,8 +60,10 @@ public interface EvaluatorStore {
 	 *            specifies the project to be looked up.
 	 * @return <code>true</code> is returned in case results are available.
 	 *         <code>false</code> is returned otherwise.
+	 * @throws EvaluationStoreException
 	 */
-	public boolean hasProjectResults(UUID analysisRunUUID);
+	public boolean hasProjectResults(UUID analysisRunUUID)
+			throws EvaluationStoreException;
 
 	/**
 	 * This method stores the results for a single file.
@@ -56,8 +73,10 @@ public interface EvaluatorStore {
 	 * @param results
 	 *            is the {@link MetricFileResults} object containing the results
 	 *            to be stored.
+	 * @throws EvaluationStoreException
 	 */
-	public void storeFileResults(HashId hashId, MetricFileResults results);
+	public void storeFileResults(HashId hashId, MetricFileResults results)
+			throws EvaluationStoreException;
 
 	/**
 	 * This method stores the results for a single directory.
@@ -67,9 +86,10 @@ public interface EvaluatorStore {
 	 * @param results
 	 *            is the {@link MetricDirectoryResults} object containing the
 	 *            results to be stored.
+	 * @throws EvaluationStoreException
 	 */
 	public void storeDirectoryResults(HashId hashId,
-			MetricDirectoryResults results);
+			MetricDirectoryResults results) throws EvaluationStoreException;
 
 	/**
 	 * This method stores the results for a whole project.
@@ -80,9 +100,10 @@ public interface EvaluatorStore {
 	 * @param results
 	 *            is the {@link MetricDirectoryResults} object containing the
 	 *            results to be stored.
+	 * @throws EvaluationStoreException
 	 */
 	public void storeProjectResults(UUID analysisRunUUID,
-			MetricDirectoryResults results);
+			MetricDirectoryResults results) throws EvaluationStoreException;
 
 	/**
 	 * This method reads the results for a single file.
@@ -92,8 +113,10 @@ public interface EvaluatorStore {
 	 * @return A {@link MetricFileResults} object is returned containing the
 	 *         results. <code>null</code> is returned if no results are
 	 *         available.
+	 * @throws EvaluationStoreException
 	 */
-	public MetricFileResults readFileResults(HashId hashId);
+	public MetricFileResults readFileResults(HashId hashId)
+			throws EvaluationStoreException;
 
 	/**
 	 * This method reads the results for a single directory.
@@ -103,8 +126,10 @@ public interface EvaluatorStore {
 	 * @return A {@link MetricDirectoryResults} object is returned containing
 	 *         the results. <code>null</code> is returned if no results are
 	 *         available.
+	 * @throws EvaluationStoreException
 	 */
-	public MetricDirectoryResults readDirectoryResults(HashId hashId);
+	public MetricDirectoryResults readDirectoryResults(HashId hashId)
+			throws EvaluationStoreException;
 
 	/**
 	 * This method reads the results for a whole project.
@@ -114,7 +139,9 @@ public interface EvaluatorStore {
 	 * @return A {@link MetricDirectoryResults} object is returned containing
 	 *         the results. <code>null</code> is returned if no results are
 	 *         available.
+	 * @throws EvaluationStoreException
 	 */
-	public MetricDirectoryResults readProjectResults(UUID analysisRunUUID);
+	public MetricDirectoryResults readProjectResults(UUID analysisRunUUID)
+			throws EvaluationStoreException;
 
 }

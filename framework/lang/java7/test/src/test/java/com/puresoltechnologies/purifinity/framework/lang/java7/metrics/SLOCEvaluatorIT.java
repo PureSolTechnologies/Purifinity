@@ -12,10 +12,12 @@ import org.junit.Test;
 import com.puresoltechnologies.commons.math.statistics.Statistics;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunnerImpl;
 import com.puresoltechnologies.purifinity.framework.analysis.test.TestFileSearchConfiguration;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.AbstractMetricTest;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCEvaluator;
@@ -23,6 +25,7 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOC
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCResult;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -49,8 +52,9 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 
 	private AnalysisRun performAnalysis() throws AnalysisStoreException,
 			InterruptedException, Exception {
-		AnalysisRunner analysisRunner = getAnalysisProject()
-				.createAnalysisRunner();
+		AnalysisProjectInformation analysisProject = getAnalysisProject();
+		AnalysisRunner analysisRunner = new AnalysisRunnerImpl(
+				analysisProject.getUUID());
 		assertTrue("Analysis run did not succeed.", analysisRunner.call());
 		AnalysisRun analysisRun = analysisRunner.getAnalysisRun();
 		List<AnalyzedCode> analyzedFiles = analysisRun.getAnalyzedFiles();
@@ -80,7 +84,8 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 	}
 
 	private SLOCFileResults performSLOCEvaluation(AnalysisRun analysisRun,
-			HashIdFileTree slocTestSample) throws InterruptedException {
+			HashIdFileTree slocTestSample) throws InterruptedException,
+			EvaluationStoreException {
 		SLOCEvaluator evaluator = new SLOCEvaluator(analysisRun, slocTestSample);
 		assertTrue("Evaluator call did not succeed.", evaluator.call());
 		EvaluatorStore store = EvaluatorStoreFactory.getFactory()

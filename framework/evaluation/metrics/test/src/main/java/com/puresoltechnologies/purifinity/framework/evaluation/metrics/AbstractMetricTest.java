@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
@@ -55,7 +55,7 @@ public abstract class AbstractMetricTest {
 		// }
 	}
 
-	private AnalysisProject analysisProject;
+	private AnalysisProjectInformation analysisProjectInformation;
 
 	private final File directory;
 	private final FileSearchConfiguration fileSearchConfiguration;
@@ -75,24 +75,25 @@ public abstract class AbstractMetricTest {
 
 	@Before
 	public final void setup() throws AnalysisStoreException {
-		analysisProject = analysisStore
-				.createAnalysisProject(new AnalysisProjectSettings("TestProject",
+		analysisProjectInformation = analysisStore
+				.createAnalysisProject(new AnalysisProjectSettings(
+						"TestProject",
 						"This project was created for testing purposes.",
 						fileSearchConfiguration,
 						new DirectoryRepositoryLocation("TestProject",
-								directory)));
+								directory).getSerialization()));
 		assertNotNull("Analysis project was not created and is null.",
-				analysisProject);
+				analysisProjectInformation);
 	}
 
 	@After
 	public final void destroy() throws AnalysisStoreException {
-		analysisStore
-				.removeAnalysisProject(analysisProject.getInformation().getUUID());
+		analysisStore.removeAnalysisProject(analysisProjectInformation
+				.getUUID());
 	}
 
-	protected AnalysisProject getAnalysisProject() {
-		return analysisProject;
+	protected AnalysisProjectInformation getAnalysisProject() {
+		return analysisProjectInformation;
 	}
 
 }

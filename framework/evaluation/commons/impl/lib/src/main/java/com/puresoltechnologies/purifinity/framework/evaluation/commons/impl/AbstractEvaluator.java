@@ -25,7 +25,9 @@ import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
+import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreFactory;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
@@ -141,9 +143,11 @@ public abstract class AbstractEvaluator extends
 	 * @throws UniversalSyntaxTreeEvaluationException
 	 *             is thrown if the evaluation was aborted by an exceptional
 	 *             event.
+	 * @throws EvaluationStoreException
 	 */
 	abstract protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException, UniversalSyntaxTreeEvaluationException;
+			throws InterruptedException,
+			UniversalSyntaxTreeEvaluationException, EvaluationStoreException;
 
 	/**
 	 * This method is used to run an evaluation of an entire directory. This
@@ -154,9 +158,10 @@ public abstract class AbstractEvaluator extends
 	 *            evaluated.
 	 * @throws InterruptedException
 	 *             is thrown if the evaluation was interrupted.
+	 * @throws EvaluationStoreException
 	 */
 	abstract protected void processDirectory(HashIdFileTree directory)
-			throws InterruptedException;
+			throws InterruptedException, EvaluationStoreException;
 
 	/**
 	 * This method is used to run an evaluation of the entire project. This
@@ -164,11 +169,14 @@ public abstract class AbstractEvaluator extends
 	 * 
 	 * @throws InterruptedException
 	 *             is thrown if the evaluation was interrupted.
+	 * @throws EvaluationStoreException
 	 */
-	abstract protected void processProject() throws InterruptedException;
+	abstract protected void processProject() throws InterruptedException,
+			EvaluationStoreException;
 
 	@Override
-	public final Boolean call() throws InterruptedException {
+	public final Boolean call() throws InterruptedException,
+			EvaluationStoreException {
 		// Start time measurement
 		StopWatch watch = new StopWatch();
 		watch.start();
@@ -193,7 +201,8 @@ public abstract class AbstractEvaluator extends
 	private void processTree(HashIdFileTree tree) throws InterruptedException {
 		try {
 			processNode(tree);
-		} catch (FileStoreException e) {
+		} catch (FileStoreException | DirectoryStoreException
+				| ArrayStoreException | EvaluationStoreException e) {
 			logger.error("Evaluation result could not be stored.", e);
 		} catch (UniversalSyntaxTreeEvaluationException e) {
 			logger.error("Evaluation failed.", e);
@@ -201,7 +210,8 @@ public abstract class AbstractEvaluator extends
 	}
 
 	private void processNode(HashIdFileTree node) throws FileStoreException,
-			InterruptedException, UniversalSyntaxTreeEvaluationException {
+			InterruptedException, UniversalSyntaxTreeEvaluationException,
+			EvaluationStoreException, DirectoryStoreException {
 		if (Thread.currentThread().isInterrupted()) {
 			throw new InterruptedException();
 		}
@@ -225,10 +235,11 @@ public abstract class AbstractEvaluator extends
 	 *             is thrown if the operation was interrupted.
 	 * @throws UniversalSyntaxTreeEvaluationException
 	 *             is thrown if the evaluation had an exception.
+	 * @throws EvaluationStoreException
 	 */
 	private void processAsFile(HashIdFileTree fileNode)
 			throws FileStoreException, InterruptedException,
-			UniversalSyntaxTreeEvaluationException {
+			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 		if (fileStore.wasAnalyzed(fileNode.getHashId())) {
 			if ((!evaluatorStore.hasFileResults(fileNode.getHashId()))
 					|| (reEvaluation)) {
@@ -251,10 +262,13 @@ public abstract class AbstractEvaluator extends
 	 *             is thrown if the operation was interrupted.
 	 * @throws UniversalSyntaxTreeEvaluationException
 	 *             is thrown if the evaluation had an exception.
+	 * @throws EvaluationStoreException
+	 * @throws DirectoryStoreException
 	 */
 	private void processAsDirectory(HashIdFileTree directoryNode)
 			throws FileStoreException, InterruptedException,
-			UniversalSyntaxTreeEvaluationException {
+			UniversalSyntaxTreeEvaluationException, DirectoryStoreException,
+			EvaluationStoreException {
 		if (directoryStore.isAvailable(directoryNode.getHashId())) {
 			if ((!evaluatorStore.hasDirectoryResults(directoryNode.getHashId()))
 					|| (reEvaluation)) {

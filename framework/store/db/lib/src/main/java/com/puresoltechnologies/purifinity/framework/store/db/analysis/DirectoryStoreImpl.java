@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
-import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Vertex;
@@ -17,12 +14,10 @@ import com.tinkerpop.blueprints.Vertex;
 public class DirectoryStoreImpl implements DirectoryStore {
 
 	@Override
-	public boolean isAvailable(HashId hashId) {
-		Session session = CassandraConnection.getAnalysisSession();
-		ResultSet resultSet = session
-				.execute("SELECT hashid FROM files WHERE hashid="
-						+ hashId.toString());
-		return resultSet.one() != null;
+	public boolean isAvailable(HashId hashId) throws DirectoryStoreException {
+		TitanGraph graph = TitanConnection.getGraph();
+		Vertex vertex = findDirectory(graph, hashId);
+		return vertex != null;
 	}
 
 	@Override

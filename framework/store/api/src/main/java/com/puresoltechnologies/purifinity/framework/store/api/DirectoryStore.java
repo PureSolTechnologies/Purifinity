@@ -22,8 +22,9 @@ public interface DirectoryStore {
 	 * 
 	 * @param hashId
 	 * @return
+	 * @throws DirectoryStoreException
 	 */
-	public boolean isAvailable(HashId hashId);
+	public boolean isAvailable(HashId hashId) throws DirectoryStoreException;
 
 	/**
 	 * This method returns a list of hashes of the files contained in the

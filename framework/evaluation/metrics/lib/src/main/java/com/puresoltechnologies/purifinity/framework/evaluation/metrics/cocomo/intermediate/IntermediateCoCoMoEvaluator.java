@@ -26,6 +26,7 @@ import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Abst
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -87,7 +88,8 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processFile(CodeAnalysis analysis) {
+	protected void processFile(CodeAnalysis analysis)
+			throws EvaluationStoreException {
 		HashId hashId = analysis.getAnalyzedFile().getHashId();
 		if (slocStore.hasFileResults(hashId)) {
 			SLOCFileResults slocResults = (SLOCFileResults) slocStore
@@ -109,13 +111,13 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationStoreException {
 		IntermediateCoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
 		store.storeDirectoryResults(directory.getHashId(), directoryResults);
 	}
 
 	private IntermediateCoCoMoDirectoryResults createDirectoryResults(
-			HashIdFileTree directory) {
+			HashIdFileTree directory) throws EvaluationStoreException {
 		int phyLoc = 0;
 		for (HashIdFileTree child : directory.getChildren()) {
 			HashId hashId = child.getHashId();
@@ -143,7 +145,8 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processProject() throws InterruptedException {
+	protected void processProject() throws InterruptedException,
+			EvaluationStoreException {
 		HashIdFileTree directory = getAnalysisRun().getFileTree();
 		IntermediateCoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
 		store.storeDirectoryResults(directory.getHashId(), directoryResults);

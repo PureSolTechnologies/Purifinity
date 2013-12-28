@@ -109,7 +109,17 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>analysis.domain.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
 			<artifactId>evaluation.api.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>evaluation.domain.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -159,15 +169,25 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>store.commons.bundle</artifactId>
+			<artifactId>store.api.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>store.fs.bundle</artifactId>
+			<artifactId>store.db.bundle</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- External bundles -->
+		<dependency>
+			<groupId>com.datastax</groupId>
+			<artifactId>cassandra.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.thinkaurelius</groupId>
+			<artifactId>titan.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math.bundle</artifactId>

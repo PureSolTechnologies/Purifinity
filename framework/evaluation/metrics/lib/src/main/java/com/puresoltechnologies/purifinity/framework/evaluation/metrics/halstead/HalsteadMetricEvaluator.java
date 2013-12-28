@@ -18,6 +18,7 @@ import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacte
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 
 public class HalsteadMetricEvaluator extends AbstractEvaluator {
@@ -41,7 +42,8 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processFile(CodeAnalysis analysis)
-			throws InterruptedException, UniversalSyntaxTreeEvaluationException {
+			throws InterruptedException,
+			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 				.createInstance();
 		try {
@@ -76,7 +78,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 
 	@Override
 	protected void processDirectory(HashIdFileTree directory)
-			throws InterruptedException {
+			throws InterruptedException, EvaluationStoreException {
 		HashId hashId = directory.getHashId();
 		if (store.hasDirectoryResults(hashId)) {
 			return;
@@ -88,7 +90,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 	}
 
 	private HalsteadMetricDirectoryResults createDirectoryResults(
-			HashIdFileTree directory) {
+			HashIdFileTree directory) throws EvaluationStoreException {
 		QualityLevel qualityLevel = null;
 		HalsteadMetricResult metricResults = null;
 		for (HashIdFileTree child : directory.getChildren()) {
@@ -142,8 +144,10 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processProject() throws InterruptedException {
-		if (store.hasProjectResults(getAnalysisRun())) {
+	protected void processProject() throws InterruptedException,
+			EvaluationStoreException {
+		if (store
+				.hasProjectResults(getAnalysisRun().getInformation().getUUID())) {
 			return;
 		}
 		HashIdFileTree directory = getAnalysisRun().getFileTree();
