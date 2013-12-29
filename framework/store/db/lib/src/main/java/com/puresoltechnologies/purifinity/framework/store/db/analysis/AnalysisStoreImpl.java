@@ -14,6 +14,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
@@ -189,7 +190,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		TitanGraph graph = TitanConnection.getGraph();
 		Vertex projectVertex = findAnalysisProjectVertex(graph, projectUUID);
 		Iterable<Vertex> analysisRuns = projectVertex.query()
-				.direction(Direction.OUT).labels("hasAnalysisRun").vertices();
+				.direction(Direction.OUT)
+				.labels(TitanConnection.HAS_ANALYSIS_RUN_LABEL).vertices();
 		Iterator<Vertex> runIterator = analysisRuns.iterator();
 		List<AnalysisRunInformation> allRunInformation = new ArrayList<>();
 		while (runIterator.hasNext()) {
@@ -234,8 +236,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		runVertex.setProperty(
 				TitanConnection.ANALYSIS_RUN_DESCRIPTION_PROPERTY, description);
 
-		Edge hasAnalysisRunEdge = projectVertex.addEdge("hasAnalysisRun",
-				runVertex);
+		Edge hasAnalysisRunEdge = projectVertex.addEdge(
+				TitanConnection.HAS_ANALYSIS_RUN_LABEL, runVertex);
 		hasAnalysisRunEdge.setProperty(
 				TitanConnection.ANALYSIS_RUN_UUID_PROPERTY, uuid.toString());
 		hasAnalysisRunEdge.setProperty(
@@ -294,7 +296,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			UUID runUUID) throws AnalysisStoreException {
 		Vertex projectVertex = findAnalysisProjectVertex(graph, projectUUID);
 		Iterable<Vertex> analysisRuns = projectVertex.query()
-				.direction(Direction.OUT).labels("hasAnalysisRun")
+				.direction(Direction.OUT)
+				.labels(TitanConnection.HAS_ANALYSIS_RUN_LABEL)
 				.has(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY, runUUID)
 				.vertices();
 		Iterator<Vertex> runIterator = analysisRuns.iterator();
@@ -403,7 +406,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			HashIdFileTree fileTree) throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		Vertex run = findAnalysisRunVertex(graph, projectUUID, runUUID);
-		addFileTreeVertex(graph, fileTree, run, "analyzed");
+		addFileTreeVertex(graph, fileTree, run, TitanConnection.ANALYZED_LABEL);
 	}
 
 	private void addFileTreeVertex(TitanGraph graph, HashIdFileTree fileTree,
@@ -420,7 +423,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 				throw new AnalysisStoreException("Found multiple nodes of '"
 						+ fileTree + "'. Database is inconsistent!");
 			}
-			parentVertex.addEdge("analyzed", existingVertex);
+			parentVertex.addEdge(edgeLabel, existingVertex);
 			graph.commit();
 		} else {
 			Vertex vertex = graph.addVertex(null);
@@ -435,21 +438,74 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					fileTree.isFile());
 			graph.commit();
 			for (HashIdFileTree child : fileTree.getChildren()) {
-				addFileTreeVertex(graph, child, vertex, "contains");
+				if (child.isFile()) {
+					addFileTreeVertex(graph, child, vertex,
+							TitanConnection.CONTAINS_FILE_LABEL);
+				} else {
+					addFileTreeVertex(graph, child, vertex,
+							TitanConnection.CONTAINS_DIRECTORY_LABEL);
+				}
 			}
 			addMetadata(graph, vertex, fileTree);
 		}
+	}
+
+	@Override
+	public HashIdFileTree readFileTree(UUID projectUUID, UUID runUUID)
+			throws AnalysisStoreException {
+		TitanGraph graph = TitanConnection.getGraph();
+		Iterable<Vertex> runVertices = graph.query()
+				.has(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY, runUUID)
+				.vertices();
+		Iterator<Vertex> runVertexIterator = runVertices.iterator();
+		if (!runVertexIterator.hasNext()) {
+			return null;
+		}
+		Vertex runVertex = runVertexIterator.next();
+		Iterable<Vertex> analysisVertices = runVertex.query()
+				.labels(TitanConnection.ANALYZED_LABEL).vertices();
+		Iterator<Vertex> analysisVertexIterator = analysisVertices.iterator();
+		if (!analysisVertexIterator.hasNext()) {
+			return null;
+		}
+		Vertex treeVertex = analysisVertexIterator.next();
+		HashIdFileTree tree = convertToHashIdFileTree(treeVertex, null);
+		return tree;
+	}
+
+	private HashIdFileTree convertToHashIdFileTree(Vertex treeVertex,
+			HashIdFileTree parent) {
+		String hash = (String) treeVertex
+				.getProperty(TitanConnection.TREE_ELEMENT_HASH);
+		boolean isFile = (boolean) treeVertex
+				.getProperty(TitanConnection.TREE_ELEMENT_IS_FILE);
+		HashIdFileTree hashIdFileTree = new HashIdFileTree(parent, "???",
+				HashId.fromString(hash), isFile);
+		Iterable<Vertex> vertices = treeVertex
+				.query()
+				.direction(Direction.OUT)
+				.labels(TitanConnection.CONTAINS_DIRECTORY_LABEL,
+						TitanConnection.CONTAINS_FILE_LABEL).vertices();
+		Iterator<Vertex> vertexIterator = vertices.iterator();
+		while (vertexIterator.hasNext()) {
+			convertToHashIdFileTree(vertexIterator.next(), hashIdFileTree);
+		}
+		return hashIdFileTree;
 	}
 
 	private void addMetadata(TitanGraph graph, Vertex vertex,
 			HashIdFileTree fileTreeNode) throws AnalysisStoreException {
 		TitanUtils.printVertexInformation(System.out, vertex);
 		if (fileTreeNode.isFile()) {
-			int size = AnalysisStoreDAO.getFileSize(fileTreeNode.getHashId());
+			long size = AnalysisStoreDAO.getFileSize(fileTreeNode.getHashId());
 			vertex.setProperty(TitanConnection.TREE_ELEMENT_SIZE, size);
 			graph.commit();
 		} else {
-			Iterable<Vertex> childVertexes = vertex.query().vertices();
+			Iterable<Vertex> childVertexes = vertex
+					.query()
+					.direction(Direction.OUT)
+					.labels(TitanConnection.CONTAINS_DIRECTORY_LABEL,
+							TitanConnection.CONTAINS_FILE_LABEL).vertices();
 			Iterator<Vertex> childVertexIterator = childVertexes.iterator();
 			long files = 0;
 			long directories = 0;
@@ -471,13 +527,15 @@ public class AnalysisStoreImpl implements AnalysisStore {
 				} else {
 					directories++;
 					directoriesRecursive++;
-					directoriesRecursive += (int) childVertex
+					Long dr = (Long) childVertex
 							.getProperty(TitanConnection.TREE_ELEMENT_CONTAINS_DIRECTORIES_RECURSIVE);
-					filesRecursive += (int) childVertex
+					directoriesRecursive += dr != null ? dr : 0;
+					Long fr = (Long) childVertex
 							.getProperty(TitanConnection.TREE_ELEMENT_CONTAINS_FILES_RECURSIVE);
-					long directorySize = (long) childVertex
+					filesRecursive += fr != null ? fr : 0;
+					Long sr = (Long) childVertex
 							.getProperty(TitanConnection.TREE_ELEMENT_SIZE_RECURSIVE);
-					sizeRecursive += directorySize;
+					sizeRecursive += sr != null ? sr : 0;
 				}
 			}
 			vertex.setProperty(TitanConnection.TREE_ELEMENT_CONTAINS_FILES,

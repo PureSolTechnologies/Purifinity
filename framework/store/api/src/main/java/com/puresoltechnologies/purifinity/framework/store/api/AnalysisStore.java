@@ -116,8 +116,12 @@ public interface AnalysisStore {
 	public void storeFileTree(UUID projectUUID, UUID analysisRunUUID,
 			HashIdFileTree fileTree) throws AnalysisStoreException;
 
+	public HashIdFileTree readFileTree(UUID projectUUID, UUID runUUID)
+			throws AnalysisStoreException;
+
 	public AnalysisRunInformation createAnalysisRun(UUID analysisProjectUUID,
 			Date startTime, long duration, String description,
 			FileSearchConfiguration fileSearchConfiguration)
 			throws AnalysisStoreException;
+
 }

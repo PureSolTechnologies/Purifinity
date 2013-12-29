@@ -6,8 +6,10 @@ import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 
 import com.thinkaurelius.titan.core.KeyMaker;
+import com.thinkaurelius.titan.core.LabelMaker;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
+import com.thinkaurelius.titan.core.TypeMaker.UniquenessConsistency;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
@@ -35,6 +37,8 @@ public class TitanConnection {
 	public static final String ANALYSIS_RUN_START_TIME_PROPERTY = "analysis.run.time.start";
 	public static final String ANALYSIS_RUN_DURATION_PROPERTY = "analysis.run.time.duration";
 	public static final String ANALYSIS_RUN_DESCRIPTION_PROPERTY = "analysis.run.description";
+	public static final String ANALYZED_LABEL = "analyzedFileTree";
+	public static final String HAS_ANALYSIS_RUN_LABEL = "hasAnalysisRun";
 	/*
 	 * FILE TREE
 	 */
@@ -46,6 +50,8 @@ public class TitanConnection {
 	public static final String TREE_ELEMENT_CONTAINS_DIRECTORIES_RECURSIVE = "tree.element.contains.directories.recursive";
 	public static final String TREE_ELEMENT_SIZE = "tree.element.size";
 	public static final String TREE_ELEMENT_SIZE_RECURSIVE = "tree.element.size.recursive";
+	public static final String CONTAINS_FILE_LABEL = "containsFile";
+	public static final String CONTAINS_DIRECTORY_LABEL = "containsDirectory";
 	/*
 	 * ANALYSIS
 	 */
@@ -151,7 +157,7 @@ public class TitanConnection {
 
 		if (graph.getType(TREE_ELEMENT_CONTAINS_FILES) == null) {
 			KeyMaker keyMaker = graph.makeKey(TREE_ELEMENT_CONTAINS_FILES);
-			keyMaker.dataType(Boolean.class);
+			keyMaker.dataType(Long.class);
 			keyMaker.make();
 		}
 		if (graph.getType(TREE_ELEMENT_CONTAINS_DIRECTORIES) == null) {
@@ -178,8 +184,7 @@ public class TitanConnection {
 			keyMaker.make();
 		}
 		if (graph.getType(TREE_ELEMENT_SIZE_RECURSIVE) == null) {
-			KeyMaker keyMaker = graph
-					.makeKey(TREE_ELEMENT_SIZE_RECURSIVE);
+			KeyMaker keyMaker = graph.makeKey(TREE_ELEMENT_SIZE_RECURSIVE);
 			keyMaker.dataType(Long.class);
 			keyMaker.make();
 		}
@@ -233,6 +238,27 @@ public class TitanConnection {
 			KeyMaker keyMaker = graph.makeKey(ANALYSIS_MESSAGE_PROPERTY);
 			keyMaker.dataType(String.class);
 			keyMaker.make();
+		}
+
+		if (graph.getType(ANALYZED_LABEL) == null) {
+			LabelMaker makeLabel = graph.makeLabel(ANALYZED_LABEL);
+			makeLabel.oneToOne();
+			makeLabel.make();
+		}
+		if (graph.getType(HAS_ANALYSIS_RUN_LABEL) == null) {
+			LabelMaker makeLabel = graph.makeLabel(HAS_ANALYSIS_RUN_LABEL);
+			makeLabel.oneToMany(UniquenessConsistency.LOCK);
+			makeLabel.make();
+		}
+		if (graph.getType(CONTAINS_FILE_LABEL) == null) {
+			LabelMaker makeLabel = graph.makeLabel(CONTAINS_FILE_LABEL);
+			makeLabel.manyToMany();
+			makeLabel.make();
+		}
+		if (graph.getType(CONTAINS_DIRECTORY_LABEL) == null) {
+			LabelMaker makeLabel = graph.makeLabel(CONTAINS_DIRECTORY_LABEL);
+			makeLabel.manyToMany();
+			makeLabel.make();
 		}
 	}
 

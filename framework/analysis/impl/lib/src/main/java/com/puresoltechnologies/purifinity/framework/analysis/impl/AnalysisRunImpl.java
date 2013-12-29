@@ -29,6 +29,8 @@ public class AnalysisRunImpl implements AnalysisRun {
 				.getInstance();
 		AnalysisRunInformation information = analysisStore.readAnalysisRun(
 				projectUUID, runUUID);
+		HashIdFileTree hashIdFileTree = analysisStore.readFileTree(projectUUID,
+				runUUID);
 		return new AnalysisRunImpl(information, fileTree, analyzedFiles,
 				failedSources);
 	}
