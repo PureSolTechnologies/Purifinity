@@ -7,7 +7,7 @@ Require-Bundle: org.eclipse.swt;bundle-version="3.100.1",
  org.eclipse.swtbot.go;bundle-version="2.1.1",
  com.puresoltechnologies.purifinity.framework.commons.utils.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.client.application.plugin;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.framework.store.fs.bundle;bundle-version="0.1.1"
+ com.puresoltechnologies.purifinity.framework.store.db.bundle;bundle-version="0.1.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: PureSol Technologies
 Bundle-ClassPath: .

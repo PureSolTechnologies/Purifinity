@@ -22,6 +22,7 @@ import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ParserTreeControl;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ScrollableFileViewer;
 import com.puresoltechnologies.purifinity.client.common.ui.editors.AbstractPureSolTechnologiesEditor;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;
@@ -109,10 +110,7 @@ public class FileAnalysisEditor extends AbstractPureSolTechnologiesEditor {
 			FileStore codeStore = FileStoreFactory.getFactory().getInstance();
 			SourceCode sourceCode = codeStore.readSourceCode(hashId);
 			fileViewer.setStreamAndUpdateContent(sourceCode);
-		} catch (IOException e) {
-			logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
-					.getName(), e.getMessage(), e));
-		} catch (FileStoreException e) {
+		} catch (IOException | FileStoreException | AnalysisStoreException e) {
 			logger.log(new Status(Status.ERROR, FileAnalysisEditor.class
 					.getName(), e.getMessage(), e));
 		}

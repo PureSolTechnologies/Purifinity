@@ -13,25 +13,33 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import com.puresoltechnologies.commons.misc.ProgressObserver;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunnerImpl;
 
-public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
+public class AnalysisJob extends Job implements
+		ProgressObserver<AnalysisRunner> {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
 	private static final int RUN_TIMEOUT_IN_SECONDS = 3600;
 
-	private final AnalysisProject analysisProject;
+	private final AnalysisProjectInformation analysisProjectInformation;
+	private final AnalysisProjectSettings analysisProjectSettings;
+	private AnalysisRunner analysisRunner;
 	private AnalysisRun analysisRun;
 	private IProgressMonitor monitor = null;
 	private Future<Boolean> future = null;
 
-	public AnalysisJob(AnalysisProject analysisProject) {
-		super(analysisProject.getSettings().getName());
-		this.analysisProject = analysisProject;
+	public AnalysisJob(AnalysisProjectInformation analysisProjectInformation,
+			AnalysisProjectSettings analysisProjectSettings) {
+		super(analysisProjectSettings.getName());
+		this.analysisProjectInformation = analysisProjectInformation;
+		this.analysisProjectSettings = analysisProjectSettings;
 	}
 
 	/**
@@ -44,8 +52,8 @@ public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
 		return analysisRun;
 	}
 
-	public AnalysisProject getAnalysis() {
-		return analysisProject;
+	public AnalysisProjectSettings getAnalysisSettings() {
+		return analysisProjectSettings;
 	}
 
 	@Override
@@ -53,25 +61,27 @@ public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
 		try {
 			this.monitor = monitor;
 
-			analysisRun = analysisProject.createAnalysisRunner();
-			analysisRun.addObserver(this);
+			analysisRunner = new AnalysisRunnerImpl(
+					analysisProjectInformation.getUUID());
+			analysisRunner.addObserver(this);
 
 			ExecutorService executor = Executors.newSingleThreadExecutor();
-			future = executor.submit(analysisRun);
+			future = executor.submit(analysisRunner);
 			executor.shutdown();
 			executor.awaitTermination(RUN_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
+			analysisRun = analysisRunner.getAnalysisRun();
 			return Status.OK_STATUS;
 		} catch (OperationCanceledException e) {
 			logger.log(new Status(Status.INFO, AnalysisJob.class.getName(),
 					"Analysis was cancelled!", e));
 			return Status.CANCEL_STATUS;
-		} catch (AnalysisStoreException e) {
-			logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
-					"Error in directory store!", e));
-			return Status.CANCEL_STATUS;
 		} catch (InterruptedException e) {
 			logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
 					"Analysis was interrupted!", e));
+			return Status.CANCEL_STATUS;
+		} catch (AnalysisProjectException e) {
+			logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
+					"Analysis project has issues!", e));
 			return Status.CANCEL_STATUS;
 		}
 	}
@@ -85,20 +95,22 @@ public class AnalysisJob extends Job implements ProgressObserver<AnalysisRun> {
 	}
 
 	@Override
-	public void started(AnalysisRun observable, String message, long total) {
-		monitor.beginTask(analysisProject.getSettings().getName(), (int) total);
+	public void started(AnalysisRunner observable, String message, long total) {
+		monitor.beginTask(analysisProjectSettings.getName(), (int) total);
 		monitor.subTask(message);
 	}
 
 	@Override
-	public void done(AnalysisRun observable, String message, boolean successful) {
+	public void done(AnalysisRunner observable, String message,
+			boolean successful) {
 		monitor.subTask(message);
 		monitor.setCanceled(successful);
 		monitor.done();
 	}
 
 	@Override
-	public void updateWork(AnalysisRun observable, String message, long finished) {
+	public void updateWork(AnalysisRunner observable, String message,
+			long finished) {
 		monitor.subTask(message);
 		monitor.worked((int) finished);
 	}

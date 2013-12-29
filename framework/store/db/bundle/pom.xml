@@ -22,6 +22,14 @@
 			<artifactId>store.db.lib</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>database.cassandra.utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>database.titan.utils</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.api</groupId>
 			<artifactId>evaluation.api</artifactId>
 			<scope>provided</scope>

@@ -37,6 +37,7 @@
       <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.domain.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.store.api.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.analysis.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.application.plugin" version="0.1.1" match="greaterOrEqual"/>
@@ -48,6 +49,7 @@
       <import plugin="org.apache.commons.commons-math.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.math.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.jobs" version="3.5.300" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.evaluation.domain.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.evaluation.api.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.analysis.plugin" version="0.1.1" match="greaterOrEqual"/>
@@ -55,19 +57,6 @@
       <import plugin="com.puresoltechnologies.purifinity.client.common.help.plugin" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.metrics.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.framework.store.api.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.evaluation.domain.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.jcraft.jsch"/>
-      <import plugin="org.eclipse.jdt.debug"/>
-      <import plugin="javax.inject"/>
-      <import plugin="javax.mail"/>
-      <import plugin="javax.servlet.jsp"/>
-      <import plugin="org.junit"/>
-      <import plugin="org.apache.commons.httpclient"/>
-      <import plugin="org.apache.xml.resolver"/>
-      <import plugin="javax.servlet"/>
-      <import plugin="org.apache.commons.logging"/>
-      <import plugin="org.apache.log4j"/>
    </requires>
 
    <plugin
@@ -212,20 +201,6 @@
 
    <plugin
          id="com.puresoltechnologies.purifinity.evaluation.domain.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.thinkaurelius.titan.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.datastax.cassandra.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

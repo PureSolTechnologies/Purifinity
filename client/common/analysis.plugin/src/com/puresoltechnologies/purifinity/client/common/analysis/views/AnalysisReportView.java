@@ -24,7 +24,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalyzedFilesTableViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.FailedFilesTableViewer;
@@ -153,7 +153,8 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 			} else if (selection instanceof AnalysisRunSelection) {
 				AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
 				analysisRun = analysisRunSelection.getAnalysisRun();
-				analysis = analysisRun.getInformation().getAnalysisProjectUUID();
+				analysis = analysisRun.getInformation()
+						.getAnalysisProjectUUID();
 			}
 			if (analysis != null) {
 				name.setText(analysis.getSettings().getName());

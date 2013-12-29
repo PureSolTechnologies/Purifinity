@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.metrics;
 import org.eclipse.swt.graphics.RGB;
 
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ColorProvider;
-import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 
 public class SourceCodeQualityColorProvider implements ColorProvider {
 

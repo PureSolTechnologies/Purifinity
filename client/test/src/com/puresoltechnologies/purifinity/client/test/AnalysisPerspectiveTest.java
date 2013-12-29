@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.client.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -19,16 +18,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.framework.commons.utils.DirectoryUtilities;
-import com.puresoltechnologies.purifinity.framework.store.fs.analysis.AnalysisStoreImpl;
-
 public class AnalysisPerspectiveTest extends AbstractUITest {
 
 	@BeforeClass
 	public static void cleanCodeStore() {
-		assertTrue("Could not delete code storage.",
-				DirectoryUtilities.deleteDirectoryRecursivly(AnalysisStoreImpl
-						.getStorageDirectory()));
+		// TODO Storage reset!!!
+		// assertTrue("Could not delete code storage.",
+		// DirectoryUtilities.deleteDirectoryRecursivly(AnalysisStoreImpl
+		// .getStorageDirectory()));
 	}
 
 	@Before

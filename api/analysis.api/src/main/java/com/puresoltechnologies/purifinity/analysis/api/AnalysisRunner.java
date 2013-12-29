@@ -1,8 +1,9 @@
 package com.puresoltechnologies.purifinity.analysis.api;
 
-import java.util.concurrent.Callable;
+import com.puresoltechnologies.commons.misc.CallableProgressObservable;
 
-public interface AnalysisRunner extends Callable<Boolean> {
+public interface AnalysisRunner extends
+		CallableProgressObservable<AnalysisRunner, Boolean> {
 
 	public AnalysisRun getAnalysisRun() throws AnalysisProjectException;
 

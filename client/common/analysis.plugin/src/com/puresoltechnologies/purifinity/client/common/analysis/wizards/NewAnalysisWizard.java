@@ -8,7 +8,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.Wizard;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
@@ -46,11 +46,11 @@ public class NewAnalysisWizard extends Wizard {
 			AnalysisProjectSettings analysisSettings = new AnalysisProjectSettings(
 					projectName, description, searchConfiguration,
 					new DirectoryRepositoryLocation(projectName,
-							sourceDirectory));
-			AnalysisProject analysis = analysisStore
-					.createAnalysis(analysisSettings);
+							sourceDirectory).getSerialization());
+			AnalysisProjectInformation analysisInformation = analysisStore
+					.createAnalysisProject(analysisSettings);
 
-			AnalysisJob job = new AnalysisJob(analysis);
+			AnalysisJob job = new AnalysisJob(analysisInformation, analysisSettings);
 			job.schedule();
 			return true;
 		} catch (AnalysisStoreException e) {

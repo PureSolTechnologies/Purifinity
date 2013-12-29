@@ -269,8 +269,8 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 					AnalysisStore store = AnalysisStoreFactory.getFactory()
 							.getInstance();
 					if (store != null) {
-						store.removeAnalysis(information.getInformation()
-								.getUUID());
+						store.removeAnalysisProject(information
+								.getInformation().getUUID());
 						refreshAnalysisProjectList();
 					}
 				}
@@ -288,8 +288,8 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 				AnalysisStore store = AnalysisStoreFactory.getFactory()
 						.getInstance();
 				if (store != null) {
-					analysisProjectsViewer
-							.setInput(store.getAnalysisProjects());
+					analysisProjectsViewer.setInput(store
+							.readAllAnalysisProjectInformation());
 				}
 			}
 		} catch (AnalysisStoreException e) {

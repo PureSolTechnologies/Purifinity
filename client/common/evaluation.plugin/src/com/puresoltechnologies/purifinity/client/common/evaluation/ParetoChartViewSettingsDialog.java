@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Group;
 
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.CodeRangeTypeComboViewer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.MetricComboViewer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.ParameterComboViewer;

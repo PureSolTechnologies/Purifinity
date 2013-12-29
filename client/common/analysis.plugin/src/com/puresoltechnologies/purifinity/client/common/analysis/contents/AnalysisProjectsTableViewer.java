@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.contents;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,99 +13,105 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.RepositoryLocationCreator;
 
 public class AnalysisProjectsTableViewer extends TableViewer implements
-	IStructuredContentProvider {
+		IStructuredContentProvider {
 
-    private final List<AnalysisProject> analysisProjects = new ArrayList<AnalysisProject>();
+	private final List<AnalysisProjectSettings> analysisProjectsSettings = new ArrayList<AnalysisProjectSettings>();
 
-    public AnalysisProjectsTableViewer(Table table) {
-	super(table);
-	setContentProvider(this);
-	setupNameColumn();
-	setupDescriptionColumn();
-	setupRepositoryColumn();
-	setupCreatedColumn();
-    }
-
-    private void setupNameColumn() {
-	TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
-	nameColumn.getColumn().setText("Name");
-	nameColumn.getColumn().setWidth(100);
-	nameColumn.setLabelProvider(new ColumnLabelProvider() {
-	    @Override
-	    public String getText(Object element) {
-		AnalysisProject analysisProject = (AnalysisProject) element;
-		return analysisProject.getSettings().getName();
-	    }
-	});
-    }
-
-    private void setupDescriptionColumn() {
-	TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
-	nameColumn.getColumn().setText("Description");
-	nameColumn.getColumn().setWidth(100);
-	nameColumn.setLabelProvider(new ColumnLabelProvider() {
-	    @Override
-	    public String getText(Object element) {
-		AnalysisProject analysisProject = (AnalysisProject) element;
-		return analysisProject.getSettings().getDescription();
-	    }
-	});
-    }
-
-    private void setupRepositoryColumn() {
-	TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
-	nameColumn.getColumn().setText("Repository");
-	nameColumn.getColumn().setWidth(100);
-	nameColumn.setLabelProvider(new ColumnLabelProvider() {
-	    @Override
-	    public String getText(Object element) {
-		AnalysisProject analysisProject = (AnalysisProject) element;
-		return analysisProject.getSettings().getRepositoryLocation()
-			.getHumanReadableLocationString();
-	    }
-	});
-    }
-
-    private void setupCreatedColumn() {
-	TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
-	nameColumn.getColumn().setText("Created");
-	nameColumn.getColumn().setWidth(100);
-	nameColumn.setLabelProvider(new ColumnLabelProvider() {
-	    @Override
-	    public String getText(Object element) {
-		AnalysisProject analysisProject = (AnalysisProject) element;
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-			"yyyy-mm-dd HH:MM:ss");
-		return simpleDateFormat.format(analysisProject.getInformation()
-			.getCreationTime());
-	    }
-	});
-    }
-
-    @Override
-    public void dispose() {
-    }
-
-    @Override
-    public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-	analysisProjects.clear();
-	if (newInput == null) {
-	    return;
+	public AnalysisProjectsTableViewer(Table table) {
+		super(table);
+		setContentProvider(this);
+		setupNameColumn();
+		setupDescriptionColumn();
+		setupRepositoryColumn();
+		setupCreatedColumn();
 	}
-	if (Collection.class.isAssignableFrom(newInput.getClass())) {
-	    @SuppressWarnings("unchecked")
-	    Collection<AnalysisProject> collection = (Collection<AnalysisProject>) newInput;
-	    analysisProjects.addAll(collection);
-	}
-	refresh();
-    }
 
-    @Override
-    public AnalysisProject[] getElements(Object inputElement) {
-	return analysisProjects.toArray(new AnalysisProject[analysisProjects
-		.size()]);
-    }
+	private void setupNameColumn() {
+		TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
+		nameColumn.getColumn().setText("Name");
+		nameColumn.getColumn().setWidth(100);
+		nameColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				AnalysisProjectSettings analysisProject = (AnalysisProjectSettings) element;
+				return analysisProject.getName();
+			}
+		});
+	}
+
+	private void setupDescriptionColumn() {
+		TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
+		nameColumn.getColumn().setText("Description");
+		nameColumn.getColumn().setWidth(100);
+		nameColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				AnalysisProjectSettings analysisProject = (AnalysisProjectSettings) element;
+				return analysisProject.getDescription();
+			}
+		});
+	}
+
+	private void setupRepositoryColumn() {
+		TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
+		nameColumn.getColumn().setText("Repository");
+		nameColumn.getColumn().setWidth(100);
+		nameColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				AnalysisProjectSettings analysisProject = (AnalysisProjectSettings) element;
+				return RepositoryLocationCreator.createFromSerialization(
+						analysisProject.getRepositoryLocation())
+						.getHumanReadableLocationString();
+			}
+		});
+	}
+
+	private void setupCreatedColumn() {
+		TableViewerColumn nameColumn = new TableViewerColumn(this, SWT.NONE);
+		nameColumn.getColumn().setText("Created");
+		nameColumn.getColumn().setWidth(100);
+		nameColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(Object element) {
+				return "UNKNOWN!!!";
+				// AnalysisProjectSettings analysisProject =
+				// (AnalysisProjectSettings) element;
+				// SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+				// "yyyy-mm-dd HH:MM:ss");
+				// return
+				// simpleDateFormat.format(analysisProject.getInformation()
+				// .getCreationTime());
+			}
+		});
+	}
+
+	@Override
+	public void dispose() {
+	}
+
+	@Override
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		analysisProjectsSettings.clear();
+		if (newInput == null) {
+			return;
+		}
+		if (Collection.class.isAssignableFrom(newInput.getClass())) {
+			@SuppressWarnings("unchecked")
+			Collection<AnalysisProjectSettings> collection = (Collection<AnalysisProjectSettings>) newInput;
+			analysisProjectsSettings.addAll(collection);
+		}
+		refresh();
+	}
+
+	@Override
+	public AnalysisProject[] getElements(Object inputElement) {
+		return analysisProjectsSettings
+				.toArray(new AnalysisProject[analysisProjectsSettings.size()]);
+	}
 
 }

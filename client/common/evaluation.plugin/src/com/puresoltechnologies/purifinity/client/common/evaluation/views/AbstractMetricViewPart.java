@@ -6,16 +6,16 @@ import java.util.Map;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.purifinity.analysis.api.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.branding.Exportable;
 import com.puresoltechnologies.purifinity.client.common.branding.Printable;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.PartSettingsCapability;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Reproducable;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
-import com.puresoltechnologies.purifinity.evaluation.api.MetricDirectoryResults;
-import com.puresoltechnologies.purifinity.evaluation.api.MetricFileResults;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 
 public abstract class AbstractMetricViewPart extends AbstractEvaluationView
 		implements Reproducable, PartSettingsCapability, Refreshable,

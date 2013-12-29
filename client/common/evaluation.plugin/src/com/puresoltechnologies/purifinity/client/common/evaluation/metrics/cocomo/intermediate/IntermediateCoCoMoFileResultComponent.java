@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.metrics.coco
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.basic.BasicCoCoMoEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoResults;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;

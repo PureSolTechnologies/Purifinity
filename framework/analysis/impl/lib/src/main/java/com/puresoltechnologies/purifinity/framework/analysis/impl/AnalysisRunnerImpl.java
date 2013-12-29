@@ -44,8 +44,8 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreExcep
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 
-public class AnalysisRunnerImpl extends AbstractProgressObservable<AnalysisRun>
-		implements AnalysisRunner {
+public class AnalysisRunnerImpl extends
+		AbstractProgressObservable<AnalysisRunner> implements AnalysisRunner {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(AnalysisRunnerImpl.class);

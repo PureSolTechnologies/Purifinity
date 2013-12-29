@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.client.common.analysis.contents;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
 import com.puresoltechnologies.purifinity.client.common.ui.contents.AbstractViewerSorter;
 
 public class FailedFilesViewerSorter extends AbstractViewerSorter {

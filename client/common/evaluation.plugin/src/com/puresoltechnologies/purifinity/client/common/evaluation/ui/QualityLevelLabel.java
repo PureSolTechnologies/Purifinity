@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Text;
 import com.puresoltechnologies.commons.math.MathUtils;
 import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.QualityLevelColorProvider;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
-import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
+import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 
 /**
  * This is a special label to show a {@link QualityLevel} label. The label

@@ -4,7 +4,7 @@ import org.eclipse.swt.graphics.RGB;
 
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ColorProvider;
 import com.puresoltechnologies.purifinity.client.common.ui.ColorGradient;
-import com.puresoltechnologies.purifinity.evaluation.api.QualityLevel;
+import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 
 public class QualityLevelColorProvider implements ColorProvider {
 

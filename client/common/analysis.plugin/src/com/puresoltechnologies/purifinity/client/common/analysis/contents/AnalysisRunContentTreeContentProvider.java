@@ -5,59 +5,60 @@ import java.util.List;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresoltechnologies.purifinity.analysis.api.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 
-public class AnalysisRunContentTreeContentProvider implements ITreeContentProvider {
+public class AnalysisRunContentTreeContentProvider implements
+		ITreeContentProvider {
 
-    private HashIdFileTree fileTree;
+	private HashIdFileTree fileTree;
 
-    @Override
-    public void dispose() {
-	// intentionally left blank
-    }
-
-    @Override
-    public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-	fileTree = (HashIdFileTree) newInput;
-    }
-
-    @Override
-    public Object[] getElements(Object inputElement) {
-	return new String[] { fileTree.getName() };
-    }
-
-    @Override
-    public Object[] getChildren(Object parentElement) {
-	List<HashIdFileTree> children;
-	if (parentElement instanceof String) {
-	    children = fileTree.getChildren();
-	} else {
-	    HashIdFileTree input = (HashIdFileTree) parentElement;
-	    children = input.getChildren();
+	@Override
+	public void dispose() {
+		// intentionally left blank
 	}
-	return children.toArray();
-    }
 
-    @Override
-    public Object getParent(Object element) {
-	if (element instanceof String) {
-	    return null;
-	} else {
-	    HashIdFileTree input = (HashIdFileTree) element;
-	    if (input.getParent() == null) {
-		return fileTree.getName();
-	    }
-	    return input.getParent();
+	@Override
+	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+		fileTree = (HashIdFileTree) newInput;
 	}
-    }
 
-    @Override
-    public boolean hasChildren(Object element) {
-	if (element instanceof String) {
-	    return fileTree.hasChildren();
+	@Override
+	public Object[] getElements(Object inputElement) {
+		return new String[] { fileTree.getName() };
 	}
-	HashIdFileTree input = (HashIdFileTree) element;
-	return input.hasChildren();
-    }
+
+	@Override
+	public Object[] getChildren(Object parentElement) {
+		List<HashIdFileTree> children;
+		if (parentElement instanceof String) {
+			children = fileTree.getChildren();
+		} else {
+			HashIdFileTree input = (HashIdFileTree) parentElement;
+			children = input.getChildren();
+		}
+		return children.toArray();
+	}
+
+	@Override
+	public Object getParent(Object element) {
+		if (element instanceof String) {
+			return null;
+		} else {
+			HashIdFileTree input = (HashIdFileTree) element;
+			if (input.getParent() == null) {
+				return fileTree.getName();
+			}
+			return input.getParent();
+		}
+	}
+
+	@Override
+	public boolean hasChildren(Object element) {
+		if (element instanceof String) {
+			return fileTree.hasChildren();
+		}
+		HashIdFileTree input = (HashIdFileTree) element;
+		return input.hasChildren();
+	}
 
 }
