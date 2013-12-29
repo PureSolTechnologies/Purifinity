@@ -32,6 +32,7 @@ public class CassandraConnection {
 	public static final String ANALYSIS_DIRECTORIES_TABLE = "directories";
 	public static final String ANALYSIS_PROJECT_SETTINGS_TABLE = "project_settings";
 	public static final String RUN_SETTINGS_TABLE = "run_settings";
+	public static final String RUN_FILES_TABLE = "run_files";
 	public static final String EVALUATION_FILES_TABLE = "files";
 	public static final String EVALUATION_DIRECTORIES_TABLE = "directories";
 	public static final String EVALUATION_PROJECTS_TABLE = "projects";
@@ -146,7 +147,7 @@ public class CassandraConnection {
 						ANALYSIS_FILES_TABLE,
 						"CREATE TABLE "
 								+ ANALYSIS_FILES_TABLE
-								+ " (hashid varchar, raw blob, analysis blob, PRIMARY KEY(hashid));");
+								+ " (hashid varchar, raw blob, size int, analysis blob, PRIMARY KEY(hashid));");
 		CassandraUtils.checkAndCreateTable(analysisSession, analysisKeyspace,
 				ANALYSIS_DIRECTORIES_TABLE, "CREATE TABLE "
 						+ ANALYSIS_DIRECTORIES_TABLE
@@ -167,6 +168,14 @@ public class CassandraConnection {
 						"CREATE TABLE "
 								+ RUN_SETTINGS_TABLE
 								+ " (uuid uuid, file_includes list<text>, file_excludes list<text>, location_includes list<text>, location_excludes list<text>, ignore_hidden boolean, PRIMARY KEY(uuid));");
+		CassandraUtils
+				.checkAndCreateTable(
+						analysisSession,
+						analysisKeyspace,
+						RUN_FILES_TABLE,
+						"CREATE TABLE "
+								+ RUN_FILES_TABLE
+								+ " (uuid uuid, analyzed_files list<text>, failed_files list<text>, PRIMARY KEY(uuid));");
 	}
 
 	private static void checkAndCreateEvaluationTables() {

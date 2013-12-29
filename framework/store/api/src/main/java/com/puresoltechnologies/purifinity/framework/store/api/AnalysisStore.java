@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
@@ -88,7 +89,7 @@ public interface AnalysisStore {
 	public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
 			throws AnalysisStoreException;
 
-	public AnalysisRunInformation loadAnalysisRun(UUID projectUUID,
+	public AnalysisRunInformation readAnalysisRun(UUID projectUUID,
 			UUID analysisRunUUID) throws AnalysisStoreException;
 
 	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)
@@ -108,9 +109,9 @@ public interface AnalysisStore {
 	public FileSearchConfiguration readSearchConfiguration(UUID projectUUID,
 			UUID analysisRunUUID) throws AnalysisStoreException;
 
-	public void storeAnalysisResultInformation(UUID projectUUID,
+	public void storeAnalysisInformation(UUID projectUUID,
 			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
-			List<AnalyzedCode> failedSources, HashIdFileTree fileTree);
+			List<AnalyzedCode> failedSources);
 
 	public void storeFileTree(UUID projectUUID, UUID analysisRunUUID,
 			HashIdFileTree fileTree) throws AnalysisStoreException;

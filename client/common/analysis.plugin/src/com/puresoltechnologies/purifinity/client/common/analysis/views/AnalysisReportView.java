@@ -24,6 +24,7 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalyzedFilesTableViewer;
@@ -31,7 +32,10 @@ import com.puresoltechnologies.purifinity.client.common.analysis.contents.Failed
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ParserTreeControl;
 import com.puresoltechnologies.purifinity.client.common.analysis.dialogs.AnalysisInformationDialog;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunImpl;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
 
 public class AnalysisReportView extends AbstractPureSolTechnologiesView
 		implements ISelectionListener, IDoubleClickListener,
@@ -48,6 +52,9 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 	private Text analyzedFiles;
 	private Text unanalyzedFiles;
 	private Text errorFiles;
+
+	private final AnalysisStore analysisStore = AnalysisStoreFactory
+			.getFactory().getInstance();
 
 	private AnalysisInformationDialog informationDialog;
 
@@ -149,12 +156,17 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 			if (selection instanceof AnalysisProjectSelection) {
 				AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
 				analysis = analysisSelection.getAnalysisProject();
-				analysisRun = analysis.loadLastAnalysisRun();
+				AnalysisRunInformation runInformation = analysisStore
+						.readLastAnalysisRun(analysis.getInformation()
+								.getUUID());
+				analysisRun = new AnalysisRunImpl(analysis.getInformation()
+						.getUUID(), runInformation, fileTree, analyzedFiles,
+						failedSources);
 			} else if (selection instanceof AnalysisRunSelection) {
 				AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
 				analysisRun = analysisRunSelection.getAnalysisRun();
-				analysis = analysisRun.getInformation()
-						.getAnalysisProjectUUID();
+				analysis = analysisStore.ranalysisRun.getInformation()
+						.getProjectUUID();
 			}
 			if (analysis != null) {
 				name.setText(analysis.getSettings().getName());

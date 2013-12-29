@@ -187,7 +187,7 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 		assertNotSame(analysisRun, analysisRunRead);
 		assertEquals(analysisRun, analysisRunRead);
 
-		analysisRunRead = analysisStore.loadAnalysisRun(projectUUID,
+		analysisRunRead = analysisStore.readAnalysisRun(projectUUID,
 				analysisRun.getUUID());
 		assertNotSame(analysisRun, analysisRunRead);
 		assertEquals(analysisRun, analysisRunRead);

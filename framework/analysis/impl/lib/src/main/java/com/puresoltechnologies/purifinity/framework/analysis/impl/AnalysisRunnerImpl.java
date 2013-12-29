@@ -31,7 +31,6 @@ import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
@@ -55,7 +54,6 @@ public class AnalysisRunnerImpl extends
 	private static final int WAITTIME_IN_SECONDS_FOR_THREAD_POLL = 1000;
 
 	private HashIdFileTree fileTree = null;
-	private FileSearchConfiguration searchConfig = null;
 	private Date startTime = null;
 	private long timeOfRun = 0;
 	private AnalysisRunInformation analysisRun = null;
@@ -66,12 +64,17 @@ public class AnalysisRunnerImpl extends
 	private final UUID analysisProjectUUID;
 	private final UUID uuid;
 	private final AnalysisStore analysisStore;
+	private final FileSearchConfiguration searchConfig;
 
-	public AnalysisRunnerImpl(UUID analysisProjectUUID) {
+	public AnalysisRunnerImpl(UUID analysisProjectUUID)
+			throws AnalysisStoreException {
 		super();
 		this.analysisProjectUUID = analysisProjectUUID;
 		uuid = UUID.randomUUID();
 		analysisStore = AnalysisStoreFactory.getFactory().getInstance();
+		AnalysisProjectSettings settings = analysisStore
+				.readAnalysisProjectSettings(analysisProjectUUID);
+		searchConfig = settings.getFileSearchConfiguration();
 	}
 
 	@Override
@@ -85,19 +88,15 @@ public class AnalysisRunnerImpl extends
 			startTime = stopWatch.getStartTime();
 			timeOfRun = stopWatch.getMilliseconds();
 			if (analysisSuccessful) {
-				AnalysisProjectInformation analysisProjectInformation = analysisStore
-						.readAnalysisProjectInformation(analysisProjectUUID);
-				AnalysisProjectSettings settings = analysisStore
-						.readAnalysisProjectSettings(analysisProjectUUID);
-				UUID projectUUID = analysisProjectInformation.getUUID();
-				searchConfig = settings.getFileSearchConfiguration();
-				analysisRun = analysisStore.createAnalysisRun(projectUUID,
-						stopWatch.getStartTime(), timeOfRun, "", searchConfig);
+				analysisRun = analysisStore.createAnalysisRun(
+						analysisProjectUUID, stopWatch.getStartTime(),
+						timeOfRun, "", searchConfig);
 				buildCodeLocationTree();
-				analysisStore.storeFileTree(projectUUID, analysisRun.getUUID(),
-						fileTree);
-				analysisStore.storeAnalysisResultInformation(projectUUID, uuid,
-						analyzedFiles, failedSources, fileTree);
+				analysisStore.storeFileTree(analysisProjectUUID,
+						analysisRun.getUUID(), fileTree);
+				analysisStore
+						.storeAnalysisInformation(analysisProjectUUID,
+								uuid, analyzedFiles, failedSources);
 				fireDone("Finished successfully.", true);
 				return true;
 			} else {

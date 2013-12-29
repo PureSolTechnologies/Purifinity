@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.contents;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,13 +14,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.RepositoryLocationCreator;
 
 public class AnalysisProjectsTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 
-	private final List<AnalysisProjectSettings> analysisProjectsSettings = new ArrayList<AnalysisProjectSettings>();
+	private final List<AnalysisProject> analysisProjects = new ArrayList<AnalysisProject>();
 
 	public AnalysisProjectsTableViewer(Table table) {
 		super(table);
@@ -37,8 +37,8 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalysisProjectSettings analysisProject = (AnalysisProjectSettings) element;
-				return analysisProject.getName();
+				AnalysisProject analysisProject = (AnalysisProject) element;
+				return analysisProject.getSettings().getName();
 			}
 		});
 	}
@@ -50,8 +50,8 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalysisProjectSettings analysisProject = (AnalysisProjectSettings) element;
-				return analysisProject.getDescription();
+				AnalysisProject analysisProject = (AnalysisProject) element;
+				return analysisProject.getSettings().getDescription();
 			}
 		});
 	}
@@ -63,9 +63,9 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalysisProjectSettings analysisProject = (AnalysisProjectSettings) element;
+				AnalysisProject analysisProject = (AnalysisProject) element;
 				return RepositoryLocationCreator.createFromSerialization(
-						analysisProject.getRepositoryLocation())
+						analysisProject.getSettings().getRepositoryLocation())
 						.getHumanReadableLocationString();
 			}
 		});
@@ -78,14 +78,11 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return "UNKNOWN!!!";
-				// AnalysisProjectSettings analysisProject =
-				// (AnalysisProjectSettings) element;
-				// SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-				// "yyyy-mm-dd HH:MM:ss");
-				// return
-				// simpleDateFormat.format(analysisProject.getInformation()
-				// .getCreationTime());
+				AnalysisProject analysisProject = (AnalysisProject) element;
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+						"yyyy-mm-dd HH:MM:ss");
+				return simpleDateFormat.format(analysisProject.getInformation()
+						.getCreationTime());
 			}
 		});
 	}
@@ -96,22 +93,22 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		analysisProjectsSettings.clear();
+		analysisProjects.clear();
 		if (newInput == null) {
 			return;
 		}
 		if (Collection.class.isAssignableFrom(newInput.getClass())) {
 			@SuppressWarnings("unchecked")
-			Collection<AnalysisProjectSettings> collection = (Collection<AnalysisProjectSettings>) newInput;
-			analysisProjectsSettings.addAll(collection);
+			Collection<AnalysisProject> collection = (Collection<AnalysisProject>) newInput;
+			analysisProjects.addAll(collection);
 		}
 		refresh();
 	}
 
 	@Override
 	public AnalysisProject[] getElements(Object inputElement) {
-		return analysisProjectsSettings
-				.toArray(new AnalysisProject[analysisProjectsSettings.size()]);
+		return analysisProjects.toArray(new AnalysisProject[analysisProjects
+				.size()]);
 	}
 
 }

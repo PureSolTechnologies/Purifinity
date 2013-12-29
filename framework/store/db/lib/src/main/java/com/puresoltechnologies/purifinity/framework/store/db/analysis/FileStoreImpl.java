@@ -50,12 +50,13 @@ public final class FileStoreImpl implements FileStore {
 								"storeRawFile",
 								"INSERT INTO "
 										+ CassandraConnection.ANALYSIS_FILES_TABLE
-										+ " (hashid, raw) VALUES (?,?)");
+										+ " (hashid, raw, size) VALUES (?,?,?)");
 				byte[] array = buffer.toByteArray();
 				ByteBuffer byteBuffer = ByteBuffer.wrap(array);
 				BoundStatement boundStatement = preparedStmt.bind(hashId
 						.toString());
 				boundStatement.setBytes("raw", byteBuffer);
+				boundStatement.setInt("size", buffer.size());
 				session.execute(boundStatement);
 				return hashId;
 			}

@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.client.common.analysis.views;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.NotEnabledException;
@@ -36,6 +37,8 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.progress.UIJob;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisProjectsTableViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.handlers.NewAnalysisProjectHandler;
@@ -44,6 +47,7 @@ import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisProjectImpl;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
@@ -288,8 +292,18 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 				AnalysisStore store = AnalysisStoreFactory.getFactory()
 						.getInstance();
 				if (store != null) {
-					analysisProjectsViewer.setInput(store
-							.readAllAnalysisProjectInformation());
+					List<AnalysisProjectInformation> allAnalysisProjectInformation = store
+							.readAllAnalysisProjectInformation();
+					List<AnalysisProject> analysisProjects = new ArrayList<>();
+					for (AnalysisProjectInformation information : allAnalysisProjectInformation) {
+						AnalysisProjectSettings settings = store
+								.readAnalysisProjectSettings(information
+										.getUUID());
+						analysisProjects.add(new AnalysisProjectImpl(
+								information.getUUID(), information
+										.getCreationTime(), settings));
+					}
+					analysisProjectsViewer.setInput(analysisProjects);
 				}
 			}
 		} catch (AnalysisStoreException e) {

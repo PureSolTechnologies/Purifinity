@@ -24,30 +24,44 @@ public class AnalysisProjectImpl implements AnalysisProject {
 	private static final Logger logger = LoggerFactory
 			.getLogger(AnalysisProjectImpl.class);
 
-	private final UUID uuid;
-	private final Date creationTime;
+	public static AnalysisProjectImpl readFromStore(UUID uuid)
+			throws AnalysisStoreException {
+		AnalysisStore analysisStore = AnalysisStoreFactory.getFactory()
+				.getInstance();
+		AnalysisProjectInformation information = analysisStore
+				.readAnalysisProjectInformation(uuid);
+		AnalysisProjectSettings settings = analysisStore
+				.readAnalysisProjectSettings(uuid);
+		return new AnalysisProjectImpl(information, settings);
+	}
+
+	private final AnalysisProjectInformation information;
 	private final AnalysisProjectSettings settings;
 	private final AnalysisStore analysisStore;
 
 	public AnalysisProjectImpl(UUID uuid, Date creationTime,
 			AnalysisProjectSettings settings) {
+		this(new AnalysisProjectInformation(uuid, creationTime), settings);
+	}
+
+	public AnalysisProjectImpl(AnalysisProjectInformation information,
+			AnalysisProjectSettings settings) {
 		super();
-		this.uuid = uuid;
-		this.creationTime = creationTime;
+		this.information = information;
 		this.settings = settings;
 		analysisStore = AnalysisStoreFactory.getFactory().getInstance();
 	}
 
 	@Override
 	public AnalysisProjectInformation getInformation() {
-		return new AnalysisProjectInformation(uuid, creationTime);
+		return information;
 	}
 
 	@Override
 	public List<AnalysisRunInformation> getAllRunInformation()
 			throws AnalysisProjectException {
 		try {
-			return analysisStore.readAllRunInformation(this.uuid);
+			return analysisStore.readAllRunInformation(information.getUUID());
 		} catch (AnalysisStoreException e) {
 			logger.error("Could not read run information.", e);
 			throw new AnalysisProjectException(
@@ -64,7 +78,8 @@ public class AnalysisProjectImpl implements AnalysisProject {
 	public void updateSettings(AnalysisProjectSettings settings)
 			throws AnalysisProjectException {
 		try {
-			analysisStore.updateAnalysisProjectSettings(uuid, settings);
+			analysisStore.updateAnalysisProjectSettings(information.getUUID(),
+					settings);
 		} catch (AnalysisStoreException e) {
 			logger.error("Could not update settings.", e);
 			throw new AnalysisProjectException("Could not update settings.");
@@ -75,7 +90,7 @@ public class AnalysisProjectImpl implements AnalysisProject {
 	public AnalysisRunInformation loadAnalysisRun(UUID uuid)
 			throws AnalysisProjectException {
 		try {
-			return analysisStore.loadAnalysisRun(this.uuid, uuid);
+			return analysisStore.readAnalysisRun(information.getUUID(), uuid);
 		} catch (AnalysisStoreException e) {
 			logger.error("Could not load analysis run.", e);
 			throw new AnalysisProjectException("Could not load analysis run.");
@@ -84,14 +99,14 @@ public class AnalysisProjectImpl implements AnalysisProject {
 
 	@Override
 	public AnalysisRunner createAnalysisRunner() {
-		return new AnalysisRunnerImpl(uuid);
+		return new AnalysisRunnerImpl(information.getUUID());
 	}
 
 	@Override
 	public AnalysisRunInformation loadLastAnalysisRun()
 			throws AnalysisProjectException {
 		try {
-			return analysisStore.readLastAnalysisRun(uuid);
+			return analysisStore.readLastAnalysisRun(information.getUUID());
 		} catch (AnalysisStoreException e) {
 			logger.error("Could not load last analysis run.", e);
 			throw new AnalysisProjectException(
@@ -102,7 +117,7 @@ public class AnalysisProjectImpl implements AnalysisProject {
 	@Override
 	public void removeAnalysisRun(UUID uuid) throws AnalysisProjectException {
 		try {
-			analysisStore.removeAnalysisRun(this.uuid, uuid);
+			analysisStore.removeAnalysisRun(information.getUUID(), uuid);
 		} catch (AnalysisStoreException e) {
 			logger.error("Could not remove analysis run.", e);
 			throw new AnalysisProjectException("Could not remove analysis run.");

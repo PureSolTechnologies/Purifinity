@@ -19,6 +19,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSetting
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.database.titan.utils.TitanUtils;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
@@ -263,7 +264,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public AnalysisRunInformation loadAnalysisRun(UUID projectUUID, UUID runUUID)
+	public AnalysisRunInformation readAnalysisRun(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		Vertex run = findAnalysisRunVertex(graph, projectUUID, runUUID);
@@ -373,10 +374,9 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	@Deprecated
-	public void storeAnalysisResultInformation(UUID analysisProjectUUID,
+	public void storeAnalysisInformation(UUID analysisProjectUUID,
 			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
-			List<AnalyzedCode> failedSources, HashIdFileTree fileTree) {
+			List<AnalyzedCode> failedSources) {
 		// try {
 		// File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
 		// analysisRunUUID);
@@ -421,6 +421,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 						+ fileTree + "'. Database is inconsistent!");
 			}
 			parentVertex.addEdge("analyzed", existingVertex);
+			graph.commit();
 		} else {
 			Vertex vertex = graph.addVertex(null);
 			vertex.setProperty(TitanConnection.TREE_ELEMENT_HASH, fileTree
@@ -432,9 +433,68 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					.getHashId().toString());
 			edge.setProperty(TitanConnection.TREE_ELEMENT_IS_FILE,
 					fileTree.isFile());
+			graph.commit();
 			for (HashIdFileTree child : fileTree.getChildren()) {
 				addFileTreeVertex(graph, child, vertex, "contains");
 			}
+			addMetadata(graph, vertex, fileTree);
+		}
+	}
+
+	private void addMetadata(TitanGraph graph, Vertex vertex,
+			HashIdFileTree fileTreeNode) throws AnalysisStoreException {
+		TitanUtils.printVertexInformation(System.out, vertex);
+		if (fileTreeNode.isFile()) {
+			int size = AnalysisStoreDAO.getFileSize(fileTreeNode.getHashId());
+			vertex.setProperty(TitanConnection.TREE_ELEMENT_SIZE, size);
+			graph.commit();
+		} else {
+			Iterable<Vertex> childVertexes = vertex.query().vertices();
+			Iterator<Vertex> childVertexIterator = childVertexes.iterator();
+			long files = 0;
+			long directories = 0;
+			long filesRecursive = 0;
+			long directoriesRecursive = 0;
+			long size = 0;
+			long sizeRecursive = 0;
+			while (childVertexIterator.hasNext()) {
+				Vertex childVertex = childVertexIterator.next();
+				boolean isFile = (boolean) childVertex
+						.getProperty(TitanConnection.TREE_ELEMENT_IS_FILE);
+				if (isFile) {
+					files++;
+					filesRecursive++;
+					long fileSize = (long) childVertex
+							.getProperty(TitanConnection.TREE_ELEMENT_SIZE);
+					size += fileSize;
+					sizeRecursive += fileSize;
+				} else {
+					directories++;
+					directoriesRecursive++;
+					directoriesRecursive += (int) childVertex
+							.getProperty(TitanConnection.TREE_ELEMENT_CONTAINS_DIRECTORIES_RECURSIVE);
+					filesRecursive += (int) childVertex
+							.getProperty(TitanConnection.TREE_ELEMENT_CONTAINS_FILES_RECURSIVE);
+					long directorySize = (long) childVertex
+							.getProperty(TitanConnection.TREE_ELEMENT_SIZE_RECURSIVE);
+					sizeRecursive += directorySize;
+				}
+			}
+			vertex.setProperty(TitanConnection.TREE_ELEMENT_CONTAINS_FILES,
+					files);
+			vertex.setProperty(
+					TitanConnection.TREE_ELEMENT_CONTAINS_FILES_RECURSIVE,
+					filesRecursive);
+			vertex.setProperty(
+					TitanConnection.TREE_ELEMENT_CONTAINS_DIRECTORIES,
+					directories);
+			vertex.setProperty(
+					TitanConnection.TREE_ELEMENT_CONTAINS_DIRECTORIES_RECURSIVE,
+					directoriesRecursive);
+			vertex.setProperty(TitanConnection.TREE_ELEMENT_SIZE, size);
+			vertex.setProperty(TitanConnection.TREE_ELEMENT_SIZE_RECURSIVE,
+					sizeRecursive);
+			graph.commit();
 		}
 	}
 }
