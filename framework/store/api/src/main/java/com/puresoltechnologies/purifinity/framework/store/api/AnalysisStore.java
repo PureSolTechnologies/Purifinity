@@ -111,7 +111,7 @@ public interface AnalysisStore {
 
 	public void storeAnalysisInformation(UUID projectUUID,
 			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
-			List<AnalyzedCode> failedSources);
+			List<AnalyzedCode> failedSources) throws AnalysisStoreException;
 
 	public void storeFileTree(UUID projectUUID, UUID analysisRunUUID,
 			HashIdFileTree fileTree) throws AnalysisStoreException;

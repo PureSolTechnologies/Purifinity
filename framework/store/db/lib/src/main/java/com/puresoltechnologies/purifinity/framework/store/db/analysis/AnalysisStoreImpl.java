@@ -358,7 +358,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	@Override
 	public void storeAnalysisInformation(UUID analysisProjectUUID,
 			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
-			List<AnalyzedCode> failedSources) {
+			List<AnalyzedCode> failedSources) throws AnalysisStoreException {
 		for (AnalyzedCode analyzedCode : analyzedFiles) {
 			addAnalysisInformation(analyzedCode, true);
 		}
@@ -368,34 +368,47 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	private void addAnalysisInformation(AnalyzedCode analyzedCode,
-			boolean successful) {
+			boolean successful) throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		Iterable<Vertex> vertices = graph
 				.query()
 				.has(TitanConnection.TREE_ELEMENT_HASH,
 						analyzedCode.getHashId().toString()).vertices();
 		Iterator<Vertex> vertexIterator = vertices.iterator();
-		if (vertexIterator.hasNext()) {
-			Vertex treeNode = vertexIterator.next();
-			treeNode.setProperty(TitanConnection.ANALYSIS_NAME_PROPERTY, "n/a");
-			treeNode.setProperty(TitanConnection.ANALYSIS_VERSION_PROPERTY,
-					"n/a");
-			treeNode.setProperty(TitanConnection.ANALYSIS_START_TIME_PROPERTY,
-					analyzedCode.getStartTime());
-			treeNode.setProperty(TitanConnection.ANALYSIS_DURATION_PROPERTY,
-					analyzedCode.getDuration());
-			treeNode.setProperty(
-					TitanConnection.ANALYSIS_LANGUAGE_NAME_PROPERTY,
-					analyzedCode.getLanguageName());
-			treeNode.setProperty(
-					TitanConnection.ANALYSIS_LANGUAGE_VERSION_PROPERTY,
-					analyzedCode.getLanguageVersion());
-			treeNode.setProperty(TitanConnection.ANALYSIS_SUCCESSFUL_PROPERTY,
-					successful);
-			treeNode.setProperty(TitanConnection.ANALYSIS_MESSAGE_PROPERTY,
-					analyzedCode.getMessage());
-			graph.commit();
+		if (!vertexIterator.hasNext()) {
+			throw new AnalysisStoreException(
+					"Cannot store analysis information for '" + analyzedCode
+							+ ", because there is no file stored in file tree.");
 		}
+		Vertex treeNode = vertexIterator.next();
+		Vertex analysisVertex = graph.addVertex(null);
+
+		treeNode.addEdge(TitanConnection.HAS_ANALYSIS_LABEL, analysisVertex);
+		treeNode.setProperty(TitanConnection.ANALYSIS_NAME_PROPERTY, "n/a");
+		treeNode.setProperty(TitanConnection.ANALYSIS_VERSION_PROPERTY, "n/a");
+		treeNode.setProperty(TitanConnection.ANALYSIS_START_TIME_PROPERTY,
+				analyzedCode.getStartTime());
+
+		analysisVertex.setProperty(TitanConnection.ANALYSIS_NAME_PROPERTY,
+				"n/a");
+		analysisVertex.setProperty(TitanConnection.ANALYSIS_VERSION_PROPERTY,
+				"n/a");
+		analysisVertex.setProperty(
+				TitanConnection.ANALYSIS_START_TIME_PROPERTY,
+				analyzedCode.getStartTime());
+		analysisVertex.setProperty(TitanConnection.ANALYSIS_DURATION_PROPERTY,
+				analyzedCode.getDuration());
+		analysisVertex.setProperty(
+				TitanConnection.ANALYSIS_LANGUAGE_NAME_PROPERTY,
+				analyzedCode.getLanguageName());
+		analysisVertex.setProperty(
+				TitanConnection.ANALYSIS_LANGUAGE_VERSION_PROPERTY,
+				analyzedCode.getLanguageVersion());
+		analysisVertex.setProperty(
+				TitanConnection.ANALYSIS_SUCCESSFUL_PROPERTY, successful);
+		analysisVertex.setProperty(TitanConnection.ANALYSIS_MESSAGE_PROPERTY,
+				analyzedCode.getMessage());
+		graph.commit();
 	}
 
 	@Override

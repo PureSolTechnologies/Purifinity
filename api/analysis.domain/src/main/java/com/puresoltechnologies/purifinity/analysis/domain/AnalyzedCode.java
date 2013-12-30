@@ -145,4 +145,14 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 	public String getMessage() {
 		return analyzerErrorMessage;
 	}
+
+	@Override
+	public String toString() {
+		String string = source.toString() + ":" + languageName + " "
+				+ languageVersion + " " + time + "/" + duration + "ms";
+		if (analyzerErrorMessage != null) {
+			string += " (message:'" + analyzerErrorMessage + "')";
+		}
+		return string;
+	}
 }
