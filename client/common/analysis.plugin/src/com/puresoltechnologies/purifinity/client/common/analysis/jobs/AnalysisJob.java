@@ -20,6 +20,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInforma
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunnerImpl;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 
 public class AnalysisJob extends Job implements
 		ProgressObserver<AnalysisRunner> {
@@ -82,6 +83,10 @@ public class AnalysisJob extends Job implements
 		} catch (AnalysisProjectException e) {
 			logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
 					"Analysis project has issues!", e));
+			return Status.CANCEL_STATUS;
+		} catch (AnalysisStoreException e) {
+			logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
+					"Analysis store has issues!", e));
 			return Status.CANCEL_STATUS;
 		}
 	}

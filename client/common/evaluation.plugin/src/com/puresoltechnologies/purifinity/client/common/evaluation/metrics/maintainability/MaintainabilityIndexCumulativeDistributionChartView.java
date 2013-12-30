@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
@@ -35,6 +36,7 @@ import com.puresoltechnologies.purifinity.client.common.chart.Plot;
 import com.puresoltechnologies.purifinity.client.common.chart.VerticalColoredArea;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
+import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractMetricChartViewPart;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
@@ -43,6 +45,7 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproduct
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluator;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -117,33 +120,43 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
-				if (!node.isFile()) {
+				try {
+					if (!node.isFile()) {
+						return WalkingAction.PROCEED;
+					}
+					HashId hashId = node.getHashId();
+					MetricFileResults results = store.readFileResults(hashId);
+					if (results == null) {
+						return WalkingAction.PROCEED;
+					}
+					List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(
+							node, results, MI, codeRangeTypeSelection);
+					String path = node.getPathFile(false).getPath();
+					for (Map<String, Value<?>> valueMap : valueMaps) {
+						String codeRangeName = (String) valueMap.get(
+								CodeRangeNameParameter.getInstance().getName())
+								.getValue();
+						double value = convertToDouble(valueMap, MI);
+						String name = path + "." + codeRangeName;
+						paretoValuesMI.add(new GenericMark2D<String, Double>(
+								name, value, name, node));
+						value = convertToDouble(valueMap, MI_WOC);
+						paretoValuesMIwoc
+								.add(new GenericMark2D<String, Double>(name,
+										value, name, node));
+						value = convertToDouble(valueMap, MI_CW);
+						paretoValuesMIcw.add(new GenericMark2D<String, Double>(
+								name, value, name, node));
+					}
 					return WalkingAction.PROCEED;
+				} catch (EvaluationStoreException e) {
+					Activator activator = Activator.getDefault();
+					activator.getLog().log(
+							new Status(Status.ERROR, activator.getBundle()
+									.getSymbolicName(),
+									"Could not handle new selection.", e));
+					return WalkingAction.ABORT;
 				}
-				HashId hashId = node.getHashId();
-				MetricFileResults results = store.readFileResults(hashId);
-				if (results == null) {
-					return WalkingAction.PROCEED;
-				}
-				List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(
-						node, results, MI, codeRangeTypeSelection);
-				String path = node.getPathFile(false).getPath();
-				for (Map<String, Value<?>> valueMap : valueMaps) {
-					String codeRangeName = (String) valueMap.get(
-							CodeRangeNameParameter.getInstance().getName())
-							.getValue();
-					double value = convertToDouble(valueMap, MI);
-					String name = path + "." + codeRangeName;
-					paretoValuesMI.add(new GenericMark2D<String, Double>(name,
-							value, name, node));
-					value = convertToDouble(valueMap, MI_WOC);
-					paretoValuesMIwoc.add(new GenericMark2D<String, Double>(
-							name, value, name, node));
-					value = convertToDouble(valueMap, MI_CW);
-					paretoValuesMIcw.add(new GenericMark2D<String, Double>(
-							name, value, name, node));
-				}
-				return WalkingAction.PROCEED;
 			}
 		};
 		TreeWalker.walk(visitor, path);

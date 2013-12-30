@@ -13,6 +13,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoDirectoryResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoFileResults;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -35,7 +36,8 @@ public class IntermediateCoCoMoView extends AbstractEvaluationView {
 	}
 
 	@Override
-	public void showEvaluation(HashIdFileTree path) {
+	public void showEvaluation(HashIdFileTree path)
+			throws EvaluationStoreException {
 		EvaluatorStoreFactory evaluationStoreFactory = EvaluatorStoreFactory
 				.getFactory();
 		EvaluatorStore evaluationStore = evaluationStoreFactory
@@ -55,7 +57,7 @@ public class IntermediateCoCoMoView extends AbstractEvaluationView {
 	}
 
 	@Override
-	protected void updateEvaluation() {
+	protected void updateEvaluation() throws EvaluationStoreException {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
 			showEvaluation(analysisSelection.getFileTreeNode());

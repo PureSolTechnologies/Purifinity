@@ -34,6 +34,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.progress.UIJob;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
@@ -218,7 +219,7 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 					refreshAnalysisRunList();
 				}
 			}
-		} catch (AnalysisStoreException e) {
+		} catch (AnalysisProjectException e) {
 			logger.log(new Status(Status.ERROR, ParserTreeControl.class
 					.getName(), "Can not read analysis runs from store!", e));
 		}
@@ -231,7 +232,7 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 						.getAllRunInformation();
 				analysisRunsViewer.setInput(allRunInformation);
 			}
-		} catch (AnalysisStoreException e) {
+		} catch (AnalysisProjectException e) {
 			logger.log(new Status(Status.ERROR, ParserTreeControl.class
 					.getName(), "Can not read analysis runs from store!", e));
 		}
@@ -269,7 +270,7 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 			AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
 			analysis = analysisSelection.getAnalysisProject();
 			analysisRunsViewer.setInput(analysis.getAllRunInformation());
-		} catch (AnalysisStoreException e) {
+		} catch (AnalysisProjectException e) {
 			logger.log(new Status(Status.ERROR, ParserTreeControl.class
 					.getName(), "Can not read analysis store!", e));
 		}

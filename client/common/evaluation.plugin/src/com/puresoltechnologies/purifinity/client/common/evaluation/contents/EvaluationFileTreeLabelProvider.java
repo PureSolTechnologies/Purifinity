@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
 import org.eclipse.jface.viewers.IDecoration;
@@ -28,6 +29,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunContentTreeLabelProvider;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
+import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
@@ -36,6 +38,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
@@ -76,16 +79,25 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
-		if (analysisRun == null) {
+		try {
+			if (analysisRun == null) {
+				return "";
+			}
+			switch (columnIndex) {
+			case 0:
+				return getFileColumnText(element);
+			case 1:
+				return getQualityLevelColumnText(element);
+			}
+			return "";
+		} catch (EvaluationStoreException e) {
+			Activator activator = Activator.getDefault();
+			activator.getLog().log(
+					new Status(Status.ERROR, activator.getBundle()
+							.getSymbolicName(),
+							"Could not handle new selection.", e));
 			return "";
 		}
-		switch (columnIndex) {
-		case 0:
-			return getFileColumnText(element);
-		case 1:
-			return getQualityLevelColumnText(element);
-		}
-		return "";
 	}
 
 	private String getFileColumnText(Object element) {
@@ -115,7 +127,8 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		return text;
 	}
 
-	private String getQualityLevelColumnText(Object element) {
+	private String getQualityLevelColumnText(Object element)
+			throws EvaluationStoreException {
 		QualityLevel qualityLevel = null;
 		if (element instanceof String) {
 			qualityLevel = getDirectoryQuality(analysisRun.getFileTree());
@@ -135,17 +148,26 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
-		if (columnIndex != 0) {
+		try {
+			if (columnIndex != 0) {
+				return null;
+			}
+			if (element instanceof String) {
+				return createProjectImage();
+			}
+			HashIdFileTree input = (HashIdFileTree) element;
+			if (!input.isFile()) {
+				return createFolderImage(input);
+			}
+			return createFileImage(input);
+		} catch (EvaluationStoreException e) {
+			Activator activator = Activator.getDefault();
+			activator.getLog().log(
+					new Status(Status.ERROR, activator.getBundle()
+							.getSymbolicName(),
+							"Could not handle new selection.", e));
 			return null;
 		}
-		if (element instanceof String) {
-			return createProjectImage();
-		}
-		HashIdFileTree input = (HashIdFileTree) element;
-		if (!input.isFile()) {
-			return createFolderImage(input);
-		}
-		return createFileImage(input);
 	}
 
 	/**
@@ -157,7 +179,8 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		return ClientImages.getImage(ClientImages.ANALYSIS_RUN_16x16);
 	}
 
-	protected Image createFileImage(HashIdFileTree node) {
+	protected Image createFileImage(HashIdFileTree node)
+			throws EvaluationStoreException {
 		Image documentImage = createBaseFileImage(node);
 		QualityLevel qualityLevel = getFileQuality(node);
 		if (qualityLevel != null) {
@@ -213,7 +236,8 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		return documentImage;
 	}
 
-	private QualityLevel getFileQuality(HashIdFileTree node) {
+	private QualityLevel getFileQuality(HashIdFileTree node)
+			throws EvaluationStoreException {
 		Evaluators evaluators = Evaluators.createInstance();
 		try {
 			EvaluatorStoreFactory storeFactory = EvaluatorStoreFactory
@@ -255,7 +279,8 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		}
 	}
 
-	protected Image createFolderImage(HashIdFileTree node) {
+	protected Image createFolderImage(HashIdFileTree node)
+			throws EvaluationStoreException {
 		Image folderImage = ClientImages.getImage(ClientImages.FOLDER_16x16);
 		QualityLevel qualityLevel = getDirectoryQuality(node);
 		if (qualityLevel != null) {
@@ -282,7 +307,8 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		return folderImage;
 	}
 
-	private QualityLevel getDirectoryQuality(HashIdFileTree node) {
+	private QualityLevel getDirectoryQuality(HashIdFileTree node)
+			throws EvaluationStoreException {
 		Evaluators evaluators = Evaluators.createInstance();
 		try {
 			QualityLevel qualityLevel = null;

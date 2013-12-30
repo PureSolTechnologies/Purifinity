@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.views;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
@@ -13,6 +14,7 @@ import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisS
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 
 /**
  * This abstract class is a parent class for all views which contain a kind of
@@ -65,7 +67,15 @@ public abstract class AbstractEvaluationView extends
 		}
 		if (selection instanceof AnalysisSelection) {
 			analysisSelection = (AnalysisSelection) selection;
-			updateEvaluation();
+			try {
+				updateEvaluation();
+			} catch (EvaluationStoreException e) {
+				Activator activator = Activator.getDefault();
+				activator.getLog().log(
+						new Status(Status.ERROR, activator.getBundle()
+								.getSymbolicName(),
+								"Could not handle new selection."));
+			}
 		}
 	}
 
@@ -84,8 +94,10 @@ public abstract class AbstractEvaluationView extends
 	 * 
 	 * {@link AbstractEvaluationView#getAnalysisSelection()} is used to retrieve
 	 * the current selection.
+	 * 
+	 * @throws EvaluationStoreException
 	 */
-	protected abstract void updateEvaluation();
+	protected abstract void updateEvaluation() throws EvaluationStoreException;
 
 	/**
 	 * This method returns the current selection.

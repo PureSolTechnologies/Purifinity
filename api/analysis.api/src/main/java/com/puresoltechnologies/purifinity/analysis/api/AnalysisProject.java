@@ -73,21 +73,6 @@ public interface AnalysisProject extends Serializable {
 			throws AnalysisProjectException;
 
 	/**
-	 * A new analysis is run with this method. After the run a new
-	 * {@link AnalysisRun} object is created and returned.
-	 * 
-	 * ATTENTION(!): This method work synchronously! The method only returns
-	 * after the analysis is finished or interrupted!
-	 * 
-	 * @return A {@link AnalysisRunner} object is returned containing the
-	 *         information and results about the run.
-	 * @throws AnalysisStoreException
-	 *             is thrown in cases of issues.
-	 * @throws InterruptedException
-	 */
-	public AnalysisRunner createAnalysisRunner();
-
-	/**
 	 * This method loads the last analysis run available. It is the most
 	 * up-to-date analysis.
 	 * 

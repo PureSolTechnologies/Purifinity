@@ -3,6 +3,7 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.views;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
@@ -28,6 +29,7 @@ import com.puresoltechnologies.purifinity.client.common.chart.Mark2D;
 import com.puresoltechnologies.purifinity.client.common.chart.Plot;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
+import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.CorrelationChartViewSettingsDialog;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
@@ -36,6 +38,7 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproduct
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -203,29 +206,38 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
-				if (!node.isFile()) {
+				try {
+					if (!node.isFile()) {
+						return WalkingAction.PROCEED;
+					}
+					HashId hashId = node.getHashId();
+					MetricFileResults xResults = xStore.readFileResults(hashId);
+					if (xResults == null) {
+						return WalkingAction.PROCEED;
+					}
+					MetricFileResults yResults = yStore.readFileResults(hashId);
+					if (yResults == null) {
+						return WalkingAction.PROCEED;
+					}
+					Double xValue = findSuitableValue(node, xResults,
+							xParameterSelection, CodeRangeType.FILE);
+					Double yValue = findSuitableValue(node, yResults,
+							yParameterSelection, CodeRangeType.FILE);
+					if ((xValue != null) && (yValue != null)) {
+						Mark2D<Double, Double> value = new GenericMark2D<Double, Double>(
+								xValue, yValue, node.getPathFile(false)
+										.toString(), node);
+						correlationValues.add(value);
+					}
 					return WalkingAction.PROCEED;
+				} catch (EvaluationStoreException e) {
+					Activator activator = Activator.getDefault();
+					activator.getLog().log(
+							new Status(Status.ERROR, activator.getBundle()
+									.getSymbolicName(),
+									"Could not handle new selection.", e));
+					return WalkingAction.ABORT;
 				}
-				HashId hashId = node.getHashId();
-				MetricFileResults xResults = xStore.readFileResults(hashId);
-				if (xResults == null) {
-					return WalkingAction.PROCEED;
-				}
-				MetricFileResults yResults = yStore.readFileResults(hashId);
-				if (yResults == null) {
-					return WalkingAction.PROCEED;
-				}
-				Double xValue = findSuitableValue(node, xResults,
-						xParameterSelection, CodeRangeType.FILE);
-				Double yValue = findSuitableValue(node, yResults,
-						yParameterSelection, CodeRangeType.FILE);
-				if ((xValue != null) && (yValue != null)) {
-					Mark2D<Double, Double> value = new GenericMark2D<Double, Double>(
-							xValue, yValue, node.getPathFile(false).toString(),
-							node);
-					correlationValues.add(value);
-				}
-				return WalkingAction.PROCEED;
 			}
 		};
 		TreeWalker.walk(visitor, path);

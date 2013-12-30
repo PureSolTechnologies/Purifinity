@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.views;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
@@ -37,6 +38,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -155,17 +157,26 @@ public class MetricsTableView extends AbstractPureSolTechnologiesView implements
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		if (selection instanceof AnalysisSelection) {
 			analysisSelection = (AnalysisSelection) selection;
-			updateEvaluation();
+			try {
+				updateEvaluation();
+			} catch (EvaluationStoreException e) {
+				Activator activator = Activator.getDefault();
+				activator.getLog().log(
+						new Status(Status.ERROR, activator.getBundle()
+								.getSymbolicName(),
+								"Could not handle new selection.", e));
+			}
 		}
 	}
 
-	private void updateEvaluation() {
+	private void updateEvaluation() throws EvaluationStoreException {
 		HashIdFileTree path = analysisSelection.getFileTreeNode();
 		showEvaluation(path);
 	}
 
 	@Override
-	public void showEvaluation(HashIdFileTree path) {
+	public void showEvaluation(HashIdFileTree path)
+			throws EvaluationStoreException {
 		tableViewer = new MetricsTableViewer(table, selectedEvaluator);
 		tableViewer.setInput(path);
 
@@ -205,7 +216,15 @@ public class MetricsTableView extends AbstractPureSolTechnologiesView implements
 	public void selectionChanged(SelectionChangedEvent event) {
 		selectedEvaluator = evaluatorComboViewer.getSelectedEvaluator();
 		if (analysisSelection != null) {
-			showEvaluation(analysisSelection.getFileTreeNode());
+			try {
+				showEvaluation(analysisSelection.getFileTreeNode());
+			} catch (EvaluationStoreException e) {
+				Activator activator = Activator.getDefault();
+				activator.getLog().log(
+						new Status(Status.ERROR, activator.getBundle()
+								.getSymbolicName(),
+								"Could not handle new selection.", e));
+			}
 		}
 	}
 

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
@@ -36,6 +37,7 @@ import com.puresoltechnologies.purifinity.client.common.chart.GenericMark2D;
 import com.puresoltechnologies.purifinity.client.common.chart.Plot;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.BarMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
+import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.HistogramChartViewSettingsDialog;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
@@ -44,6 +46,7 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproduct
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -174,21 +177,31 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
-				if (!node.isFile()) {
+				try {
+					if (!node.isFile()) {
+						return WalkingAction.PROCEED;
+					}
+					HashId hashId = node.getHashId();
+					MetricFileResults results = store.readFileResults(hashId);
+					if (results == null) {
+						return WalkingAction.PROCEED;
+					}
+					List<Map<String, Value<?>>> values = findSuitableValueMaps(
+							node, results, parameterSelection,
+							CodeRangeType.FILE);
+					for (Map<String, Value<?>> value : values) {
+						histogramValues.add(value.get(parameterSelection
+								.getName()));
+					}
 					return WalkingAction.PROCEED;
+				} catch (EvaluationStoreException e) {
+					Activator activator = Activator.getDefault();
+					activator.getLog().log(
+							new Status(Status.ERROR, activator.getBundle()
+									.getSymbolicName(),
+									"Could not handle new selection.", e));
+					return WalkingAction.ABORT;
 				}
-				HashId hashId = node.getHashId();
-				MetricFileResults results = store.readFileResults(hashId);
-				if (results == null) {
-					return WalkingAction.PROCEED;
-				}
-				List<Map<String, Value<?>>> values = findSuitableValueMaps(
-						node, results, parameterSelection, CodeRangeType.FILE);
-				for (Map<String, Value<?>> value : values) {
-					histogramValues
-							.add(value.get(parameterSelection.getName()));
-				}
-				return WalkingAction.PROCEED;
 			}
 		};
 		TreeWalker.walk(visitor, path);

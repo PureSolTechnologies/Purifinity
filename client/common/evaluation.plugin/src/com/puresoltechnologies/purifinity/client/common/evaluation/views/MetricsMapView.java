@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -42,6 +43,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResul
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -203,7 +205,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	}
 
 	@Override
-	protected void updateEvaluation() {
+	protected void updateEvaluation() throws EvaluationStoreException {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (mapMetricSelection != null)
 				&& (mapValueSelection != null)) {
@@ -216,7 +218,8 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	}
 
 	@Override
-	public void showEvaluation(HashIdFileTree path) {
+	public void showEvaluation(HashIdFileTree path)
+			throws EvaluationStoreException {
 		label.setText(path.getPathFile(false).getPath());
 		EvaluatorStore mapStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(mapMetricSelection.getEvaluatorClass());
@@ -264,9 +267,11 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	 * @param path
 	 *            is the path to be calculated.
 	 * @return
+	 * @throws EvaluationStoreException
 	 */
 	private AreaMapData calculateAreaData(EvaluatorStore mapStore,
-			EvaluatorStore colorStore, HashIdFileTree path) {
+			EvaluatorStore colorStore, HashIdFileTree path)
+			throws EvaluationStoreException {
 		List<AreaMapData> childAreas = calculateChildAreaMaps(mapStore,
 				colorStore, path);
 		Object secondaryValue = null;
@@ -317,9 +322,11 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	 * @param colorStore
 	 * @param path
 	 * @return
+	 * @throws EvaluationStoreException
 	 */
 	private List<AreaMapData> calculateChildAreaMaps(EvaluatorStore mapStore,
-			EvaluatorStore colorStore, HashIdFileTree path) {
+			EvaluatorStore colorStore, HashIdFileTree path)
+			throws EvaluationStoreException {
 		List<HashIdFileTree> children = path.getChildren();
 		List<AreaMapData> childAreas = new ArrayList<AreaMapData>();
 		for (int i = 0; i < children.size(); i++) {
@@ -371,7 +378,14 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 		mapValueSelection = settingsDialog.getMapValue();
 		colorMetricSelection = settingsDialog.getColorMetric();
 		colorValueSelection = settingsDialog.getColorValue();
-		updateEvaluation();
+		try {
+			updateEvaluation();
+		} catch (EvaluationStoreException e) {
+			Activator activator = Activator.getDefault();
+			activator.getLog().log(
+					new Status(Status.ERROR, activator.getBundle()
+							.getSymbolicName(), "Could not update view.", e));
+		}
 	}
 
 	@Override

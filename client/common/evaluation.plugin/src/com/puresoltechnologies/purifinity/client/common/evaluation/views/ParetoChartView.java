@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
@@ -51,6 +52,7 @@ import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -188,32 +190,45 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
 			@Override
 			public WalkingAction visit(HashIdFileTree node) {
-				if (!node.isFile()) {
+				try {
+					if (!node.isFile()) {
+						return WalkingAction.PROCEED;
+					}
+					HashId hashId = node.getHashId();
+					MetricFileResults results = store.readFileResults(hashId);
+					if (results == null) {
+						return WalkingAction.PROCEED;
+					}
+					List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(
+							node, results, parameterSelection,
+							codeRangeTypeSelection);
+					String codeRangeNameParameterName = CodeRangeNameParameter
+							.getInstance().getName();
+					Set<String> usedCategories = new HashSet<String>();
+					for (Map<String, Value<?>> valueMap : valueMaps) {
+						String codeRangeName = (String) valueMap.get(
+								codeRangeNameParameterName).getValue();
+						double value = convertToDouble(valueMap,
+								parameterSelection);
+						String category = node.getPathFile(false).getPath()
+								+ "." + codeRangeName;
+						paretoValues
+								.add(new GenericMark2D<String, Double>(
+										category, value, codeRangeTypeSelection
+												.getName()
+												+ " "
+												+ codeRangeName, node));
+						usedCategories.add(category);
+					}
 					return WalkingAction.PROCEED;
+				} catch (EvaluationStoreException e) {
+					Activator activator = Activator.getDefault();
+					activator.getLog().log(
+							new Status(Status.ERROR, activator.getBundle()
+									.getSymbolicName(),
+									"Could not handle new selection.", e));
+					return WalkingAction.ABORT;
 				}
-				HashId hashId = node.getHashId();
-				MetricFileResults results = store.readFileResults(hashId);
-				if (results == null) {
-					return WalkingAction.PROCEED;
-				}
-				List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(
-						node, results, parameterSelection,
-						codeRangeTypeSelection);
-				String codeRangeNameParameterName = CodeRangeNameParameter
-						.getInstance().getName();
-				Set<String> usedCategories = new HashSet<String>();
-				for (Map<String, Value<?>> valueMap : valueMaps) {
-					String codeRangeName = (String) valueMap.get(
-							codeRangeNameParameterName).getValue();
-					double value = convertToDouble(valueMap, parameterSelection);
-					String category = node.getPathFile(false).getPath() + "."
-							+ codeRangeName;
-					paretoValues.add(new GenericMark2D<String, Double>(
-							category, value, codeRangeTypeSelection.getName()
-									+ " " + codeRangeName, node));
-					usedCategories.add(category);
-				}
-				return WalkingAction.PROCEED;
 			}
 		};
 		TreeWalker.walk(visitor, path);

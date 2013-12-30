@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
@@ -95,11 +94,6 @@ public class AnalysisProjectImpl implements AnalysisProject {
 			logger.error("Could not load analysis run.", e);
 			throw new AnalysisProjectException("Could not load analysis run.");
 		}
-	}
-
-	@Override
-	public AnalysisRunner createAnalysisRunner() {
-		return new AnalysisRunnerImpl(information.getUUID());
 	}
 
 	@Override

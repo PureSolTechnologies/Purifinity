@@ -12,6 +12,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.ui.jobs.ObservedJob;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -38,11 +39,13 @@ public class EvaluationTool {
 	 *            evaluation on.
 	 * @param path
 	 *            is the path to be shown.
+	 * @throws EvaluationStoreException
 	 */
 	public static synchronized void showEvaluationAsynchronous(
 			final EvaluationsTarget target,
 			final EvaluatorFactory evaluatorFactory,
-			final AnalysisRun analysisRun, final HashIdFileTree path) {
+			final AnalysisRun analysisRun, final HashIdFileTree path)
+			throws EvaluationStoreException {
 		boolean hasResults = checkForResults(evaluatorFactory, path);
 		if (hasResults) {
 			showSynchronous(target, path);
@@ -58,9 +61,10 @@ public class EvaluationTool {
 	 * @param evaluatorFactory
 	 * @param path
 	 * @return
+	 * @throws EvaluationStoreException
 	 */
 	private static boolean checkForResults(EvaluatorFactory evaluatorFactory,
-			HashIdFileTree path) {
+			HashIdFileTree path) throws EvaluationStoreException {
 		EvaluatorStoreFactory evaluatorStoreFactory = EvaluatorStoreFactory
 				.getFactory();
 		Class<? extends Evaluator> evaluatorClass = evaluatorFactory
@@ -102,7 +106,12 @@ public class EvaluationTool {
 				UIJob uiJob = new UIJob("Update view") {
 					@Override
 					public IStatus runInUIThread(IProgressMonitor monitor) {
-						showSynchronous(target, path);
+						try {
+							showSynchronous(target, path);
+						} catch (EvaluationStoreException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						return Status.OK_STATUS;
 					}
 				};
@@ -118,9 +127,10 @@ public class EvaluationTool {
 	 * 
 	 * @param target
 	 * @param path
+	 * @throws EvaluationStoreException
 	 */
 	private static void showSynchronous(final EvaluationsTarget target,
-			final HashIdFileTree path) {
+			final HashIdFileTree path) throws EvaluationStoreException {
 		target.showEvaluation(path);
 	}
 }

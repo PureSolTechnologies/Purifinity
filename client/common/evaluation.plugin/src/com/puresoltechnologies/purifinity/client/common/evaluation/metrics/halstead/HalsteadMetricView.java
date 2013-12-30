@@ -3,6 +3,7 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.metrics.hals
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -22,12 +23,14 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.CodeRangeComboViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
+import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractEvaluationView;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricDirectoryResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -103,11 +106,13 @@ public class HalsteadMetricView extends AbstractEvaluationView implements
 	}
 
 	@Override
-	public void showEvaluation(HashIdFileTree path) {
+	public void showEvaluation(HashIdFileTree path)
+			throws EvaluationStoreException {
 		showEvaluation(path, 0);
 	}
 
-	public void showEvaluation(HashIdFileTree path, int codeRangeId) {
+	public void showEvaluation(HashIdFileTree path, int codeRangeId)
+			throws EvaluationStoreException {
 		HalsteadResult halsteadResult = null;
 		if ((codeRangeId >= 0) && (codeRangeId < codeRanges.size())) {
 			EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
@@ -136,7 +141,8 @@ public class HalsteadMetricView extends AbstractEvaluationView implements
 		setHalsteadResult(halsteadResult);
 	}
 
-	private void updateCodeRanges(HashIdFileTree path) {
+	private void updateCodeRanges(HashIdFileTree path)
+			throws EvaluationStoreException {
 		codeRanges.clear();
 		EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(HalsteadMetricEvaluator.class);
@@ -180,7 +186,7 @@ public class HalsteadMetricView extends AbstractEvaluationView implements
 	}
 
 	@Override
-	protected void updateEvaluation() {
+	protected void updateEvaluation() throws EvaluationStoreException {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
 			path = analysisSelection.getFileTreeNode();
@@ -199,7 +205,15 @@ public class HalsteadMetricView extends AbstractEvaluationView implements
 	@Override
 	public void selectionChanged(SelectionChangedEvent event) {
 		if (event.getSource() == comboViewer) {
-			showEvaluation(path, codeRangeCombo.getSelectionIndex());
+			try {
+				showEvaluation(path, codeRangeCombo.getSelectionIndex());
+			} catch (EvaluationStoreException e) {
+				Activator activator = Activator.getDefault();
+				activator.getLog().log(
+						new Status(Status.ERROR, activator.getBundle()
+								.getSymbolicName(),
+								"Could not handle new selection.", e));
+			}
 		}
 	}
 
