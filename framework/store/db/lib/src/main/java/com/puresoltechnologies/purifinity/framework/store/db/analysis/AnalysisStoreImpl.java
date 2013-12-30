@@ -359,26 +359,43 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	public void storeAnalysisInformation(UUID analysisProjectUUID,
 			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
 			List<AnalyzedCode> failedSources) {
+		for (AnalyzedCode analyzedCode : analyzedFiles) {
+			addAnalysisInformation(analyzedCode, true);
+		}
+		for (AnalyzedCode analyzedCode : failedSources) {
+			addAnalysisInformation(analyzedCode, false);
+		}
+	}
 
-		// try {
-		// File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
-		// analysisRunUUID);
-		// persist(analyzedFiles, new File(runDirectory, ANALYZED_FILES_FILE));
-		// persist(failedSources, new File(runDirectory, FAILED_FILES_FILE));
-		// persist(fileTree, new File(runDirectory, TREE_FILE));
-		// if (fileTree != null) {
-		// File contentFile = new File(runDirectory, "content.txt");
-		// PrintStream stream = new PrintStream(contentFile);
-		// try {
-		// TreePrinter printer = new TreePrinter(stream);
-		// printer.println(fileTree);
-		// } finally {
-		// stream.close();
-		// }
-		// }
-		// } catch (IOException e) {
-		// logger.error(e.getMessage(), e);
-		// }
+	private void addAnalysisInformation(AnalyzedCode analyzedCode,
+			boolean successful) {
+		TitanGraph graph = TitanConnection.getGraph();
+		Iterable<Vertex> vertices = graph
+				.query()
+				.has(TitanConnection.TREE_ELEMENT_HASH,
+						analyzedCode.getHashId().toString()).vertices();
+		Iterator<Vertex> vertexIterator = vertices.iterator();
+		if (vertexIterator.hasNext()) {
+			Vertex treeNode = vertexIterator.next();
+			treeNode.setProperty(TitanConnection.ANALYSIS_NAME_PROPERTY, "n/a");
+			treeNode.setProperty(TitanConnection.ANALYSIS_VERSION_PROPERTY,
+					"n/a");
+			treeNode.setProperty(TitanConnection.ANALYSIS_START_TIME_PROPERTY,
+					analyzedCode.getStartTime());
+			treeNode.setProperty(TitanConnection.ANALYSIS_DURATION_PROPERTY,
+					analyzedCode.getDuration());
+			treeNode.setProperty(
+					TitanConnection.ANALYSIS_LANGUAGE_NAME_PROPERTY,
+					analyzedCode.getLanguageName());
+			treeNode.setProperty(
+					TitanConnection.ANALYSIS_LANGUAGE_VERSION_PROPERTY,
+					analyzedCode.getLanguageVersion());
+			treeNode.setProperty(TitanConnection.ANALYSIS_SUCCESSFUL_PROPERTY,
+					successful);
+			treeNode.setProperty(TitanConnection.ANALYSIS_MESSAGE_PROPERTY,
+					analyzedCode.getMessage());
+			graph.commit();
+		}
 	}
 
 	@Override
