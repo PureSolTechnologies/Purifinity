@@ -37,8 +37,9 @@ public class TitanConnection {
 	public static final String ANALYSIS_RUN_START_TIME_PROPERTY = "analysis.run.time.start";
 	public static final String ANALYSIS_RUN_DURATION_PROPERTY = "analysis.run.time.duration";
 	public static final String ANALYSIS_RUN_DESCRIPTION_PROPERTY = "analysis.run.description";
-	public static final String ANALYZED_LABEL = "analyzedFileTree";
+	public static final String ANALYZED_FILE_TREE_LABEL = "analyzedFileTree";
 	public static final String HAS_ANALYSIS_RUN_LABEL = "hasAnalysisRun";
+	public static final String HAS_ANALYSIS_LABEL = "hasAnalysis";
 	/*
 	 * FILE TREE
 	 */
@@ -192,9 +193,9 @@ public class TitanConnection {
 		if (graph.getType(TREE_ELEMENT_HASH) == null) {
 			KeyMaker keyMaker = graph.makeKey(TREE_ELEMENT_HASH);
 			keyMaker.dataType(String.class);
-			keyMaker.unique();
 			keyMaker.indexed(Vertex.class);
 			keyMaker.indexed(Edge.class);
+			keyMaker.unique();
 			keyMaker.make();
 		}
 
@@ -240,24 +241,37 @@ public class TitanConnection {
 			keyMaker.make();
 		}
 
-		if (graph.getType(ANALYZED_LABEL) == null) {
-			LabelMaker makeLabel = graph.makeLabel(ANALYZED_LABEL);
-			makeLabel.oneToOne();
-			makeLabel.make();
-		}
 		if (graph.getType(HAS_ANALYSIS_RUN_LABEL) == null) {
 			LabelMaker makeLabel = graph.makeLabel(HAS_ANALYSIS_RUN_LABEL);
 			makeLabel.oneToMany(UniquenessConsistency.LOCK);
+			makeLabel.signature(graph.getType(ANALYSIS_RUN_UUID_PROPERTY),
+					graph.getType(ANALYSIS_RUN_START_TIME_PROPERTY));
+			makeLabel.make();
+		}
+		if (graph.getType(ANALYZED_FILE_TREE_LABEL) == null) {
+			LabelMaker makeLabel = graph.makeLabel(ANALYZED_FILE_TREE_LABEL);
+			makeLabel.oneToOne();
+			makeLabel.signature(graph.getType(TREE_ELEMENT_HASH),
+					graph.getType(TREE_ELEMENT_IS_FILE));
 			makeLabel.make();
 		}
 		if (graph.getType(CONTAINS_FILE_LABEL) == null) {
 			LabelMaker makeLabel = graph.makeLabel(CONTAINS_FILE_LABEL);
 			makeLabel.manyToMany();
+			makeLabel.signature(graph.getType(TREE_ELEMENT_HASH),
+					graph.getType(TREE_ELEMENT_IS_FILE));
 			makeLabel.make();
 		}
 		if (graph.getType(CONTAINS_DIRECTORY_LABEL) == null) {
 			LabelMaker makeLabel = graph.makeLabel(CONTAINS_DIRECTORY_LABEL);
 			makeLabel.manyToMany();
+			makeLabel.signature(graph.getType(TREE_ELEMENT_HASH),
+					graph.getType(TREE_ELEMENT_IS_FILE));
+			makeLabel.make();
+		}
+		if (graph.getType(HAS_ANALYSIS_LABEL) == null) {
+			LabelMaker makeLabel = graph.makeLabel(HAS_ANALYSIS_LABEL);
+			makeLabel.oneToMany(UniquenessConsistency.LOCK);
 			makeLabel.make();
 		}
 	}

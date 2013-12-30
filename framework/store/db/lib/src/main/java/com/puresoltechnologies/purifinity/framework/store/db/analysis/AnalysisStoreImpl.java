@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.framework.store.db.analysis;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSetting
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
 import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
-import com.puresoltechnologies.purifinity.database.titan.utils.TitanUtils;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
@@ -121,12 +121,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			throw new AnalysisStoreException(
 					"Could not find a project with UUID '" + uuid + "'.");
 		}
-		Vertex vertex = vertexIterator.next();
-		if (vertexIterator.hasNext()) {
-			throw new AnalysisStoreException(
-					"Find multiple projects with UUID '" + uuid + "'.");
-		}
-		return vertex;
+		return vertexIterator.next();
 	}
 
 	@Override
@@ -147,11 +142,6 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		Row result = resultSet.one();
 		if (result == null) {
 			return null;
-		}
-		if (!resultSet.isExhausted()) {
-			throw new RuntimeException(
-					"Multiple results where found for uuid '"
-							+ analysisProjectUUID + "'.");
 		}
 		String name = result.getString("name");
 		String description = result.getString("description");
@@ -304,13 +294,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		if (!runIterator.hasNext()) {
 			return null;
 		}
-		Vertex run = runIterator.next();
-		if (runIterator.hasNext()) {
-			throw new AnalysisStoreException(
-					"Multiple analysis runs found for '" + runUUID
-							+ "'. Database is inconsistent!");
-		}
-		return run;
+		return runIterator.next();
 	}
 
 	@Override
@@ -358,11 +342,6 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		if (result == null) {
 			return null;
 		}
-		if (!resultSet.isExhausted()) {
-			throw new RuntimeException(
-					"Multiple results where found for uuid '"
-							+ analysisProjectUUID + "'.");
-		}
 		List<String> fileIncludes = result.getList("file_includes",
 				String.class);
 		List<String> fileExcludes = result.getList("file_excludes",
@@ -380,6 +359,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	public void storeAnalysisInformation(UUID analysisProjectUUID,
 			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
 			List<AnalyzedCode> failedSources) {
+
 		// try {
 		// File runDirectory = getAnalysisRunDirectory(analysisProjectUUID,
 		// analysisRunUUID);
@@ -406,12 +386,31 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			HashIdFileTree fileTree) throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		Vertex run = findAnalysisRunVertex(graph, projectUUID, runUUID);
-		addFileTreeVertex(graph, fileTree, run, TitanConnection.ANALYZED_LABEL);
+		Map<String, String> names = new HashMap<>();
+		addFileTreeVertex(graph, fileTree, run,
+				TitanConnection.ANALYZED_FILE_TREE_LABEL, names);
+		storeFileTreeNames(projectUUID, runUUID, names);
+	}
+
+	private void storeFileTreeNames(UUID projectUUID, UUID runUUID,
+			Map<String, String> names) {
+		Session session = CassandraConnection.getAnalysisSession();
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(
+						session,
+						"storeFileTreeNames",
+						"INSERT INTO "
+								+ CassandraConnection.ANALYSIS_RUN_FILE_TREE_NAMES
+								+ " (uuid, names) VALUES (?,?)");
+		BoundStatement boundStatement = preparedStatement.bind(runUUID);
+		boundStatement.setMap("names", names);
+		session.execute(boundStatement);
 	}
 
 	private void addFileTreeVertex(TitanGraph graph, HashIdFileTree fileTree,
-			Vertex parentVertex, String edgeLabel)
+			Vertex parentVertex, String edgeLabel, Map<String, String> names)
 			throws AnalysisStoreException {
+		names.put(fileTree.getHashId().toString(), fileTree.getName());
 		Iterable<Vertex> vertices = graph
 				.query()
 				.has(TitanConnection.TREE_ELEMENT_HASH,
@@ -419,11 +418,12 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		Iterator<Vertex> iterator = vertices.iterator();
 		if (iterator.hasNext()) {
 			Vertex existingVertex = iterator.next();
-			if (iterator.hasNext()) {
-				throw new AnalysisStoreException("Found multiple nodes of '"
-						+ fileTree + "'. Database is inconsistent!");
-			}
-			parentVertex.addEdge(edgeLabel, existingVertex);
+			Edge edge = parentVertex.addEdge(edgeLabel, existingVertex);
+			edge.setProperty(TitanConnection.TREE_ELEMENT_HASH, existingVertex
+					.getProperty(TitanConnection.TREE_ELEMENT_HASH));
+			edge.setProperty(TitanConnection.TREE_ELEMENT_IS_FILE,
+					existingVertex
+							.getProperty(TitanConnection.TREE_ELEMENT_IS_FILE));
 			graph.commit();
 		} else {
 			Vertex vertex = graph.addVertex(null);
@@ -440,10 +440,10 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			for (HashIdFileTree child : fileTree.getChildren()) {
 				if (child.isFile()) {
 					addFileTreeVertex(graph, child, vertex,
-							TitanConnection.CONTAINS_FILE_LABEL);
+							TitanConnection.CONTAINS_FILE_LABEL, names);
 				} else {
 					addFileTreeVertex(graph, child, vertex,
-							TitanConnection.CONTAINS_DIRECTORY_LABEL);
+							TitanConnection.CONTAINS_DIRECTORY_LABEL, names);
 				}
 			}
 			addMetadata(graph, vertex, fileTree);
@@ -453,6 +453,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	@Override
 	public HashIdFileTree readFileTree(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException {
+		Map<String, String> names = readFileTreeNames(projectUUID, runUUID);
 		TitanGraph graph = TitanConnection.getGraph();
 		Iterable<Vertex> runVertices = graph.query()
 				.has(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY, runUUID)
@@ -463,24 +464,35 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		}
 		Vertex runVertex = runVertexIterator.next();
 		Iterable<Vertex> analysisVertices = runVertex.query()
-				.labels(TitanConnection.ANALYZED_LABEL).vertices();
+				.labels(TitanConnection.ANALYZED_FILE_TREE_LABEL).vertices();
 		Iterator<Vertex> analysisVertexIterator = analysisVertices.iterator();
 		if (!analysisVertexIterator.hasNext()) {
 			return null;
 		}
 		Vertex treeVertex = analysisVertexIterator.next();
-		HashIdFileTree tree = convertToHashIdFileTree(treeVertex, null);
+		HashIdFileTree tree = convertToHashIdFileTree(treeVertex, null, names);
 		return tree;
 	}
 
+	private Map<String, String> readFileTreeNames(UUID projectUUID, UUID runUUID) {
+		Session session = CassandraConnection.getAnalysisSession();
+		ResultSet resultSet = session.execute("SELECT names FROM "
+				+ CassandraConnection.ANALYSIS_RUN_FILE_TREE_NAMES
+				+ " WHERE uuid=" + runUUID);
+		Row result = resultSet.one();
+		Map<String, String> names = result.getMap("names", String.class,
+				String.class);
+		return names;
+	}
+
 	private HashIdFileTree convertToHashIdFileTree(Vertex treeVertex,
-			HashIdFileTree parent) {
+			HashIdFileTree parent, Map<String, String> names) {
 		String hash = (String) treeVertex
 				.getProperty(TitanConnection.TREE_ELEMENT_HASH);
 		boolean isFile = (boolean) treeVertex
 				.getProperty(TitanConnection.TREE_ELEMENT_IS_FILE);
-		HashIdFileTree hashIdFileTree = new HashIdFileTree(parent, "???",
-				HashId.fromString(hash), isFile);
+		HashIdFileTree hashIdFileTree = new HashIdFileTree(parent,
+				names.get(hash), HashId.fromString(hash), isFile);
 		Iterable<Vertex> vertices = treeVertex
 				.query()
 				.direction(Direction.OUT)
@@ -488,14 +500,14 @@ public class AnalysisStoreImpl implements AnalysisStore {
 						TitanConnection.CONTAINS_FILE_LABEL).vertices();
 		Iterator<Vertex> vertexIterator = vertices.iterator();
 		while (vertexIterator.hasNext()) {
-			convertToHashIdFileTree(vertexIterator.next(), hashIdFileTree);
+			convertToHashIdFileTree(vertexIterator.next(), hashIdFileTree,
+					names);
 		}
 		return hashIdFileTree;
 	}
 
 	private void addMetadata(TitanGraph graph, Vertex vertex,
 			HashIdFileTree fileTreeNode) throws AnalysisStoreException {
-		TitanUtils.printVertexInformation(System.out, vertex);
 		if (fileTreeNode.isFile()) {
 			long size = AnalysisStoreDAO.getFileSize(fileTreeNode.getHashId());
 			vertex.setProperty(TitanConnection.TREE_ELEMENT_SIZE, size);

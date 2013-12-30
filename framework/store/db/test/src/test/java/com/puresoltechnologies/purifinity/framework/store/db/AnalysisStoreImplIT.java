@@ -25,6 +25,7 @@ import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepos
 import com.puresoltechnologies.purifinity.framework.analysis.test.HashIdFileTreeUtils;
 import com.puresoltechnologies.purifinity.framework.commons.utils.FileSearch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.FileTree;
+import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
@@ -224,6 +225,8 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 		assertNotNull(fileTree);
 		assertTrue(TreeUtils.countNodes(fileTree) > 0);
 
+		StopWatch storeRawFileWatch = new StopWatch();
+		storeRawFileWatch.start();
 		FileStore fileStore = new FileStoreImpl();
 		for (FileTree f : fileTree) {
 			File file = f.getPathFile(true);
@@ -233,17 +236,33 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 				}
 			}
 		}
+		storeRawFileWatch.stop();
 
 		HashIdFileTree hashIdFileTree = HashIdFileTreeUtils
 				.convertToHashIdFileTree(fileTree);
+
+		StopWatch storeFileTreeWatch = new StopWatch();
+		storeFileTreeWatch.start();
 		analysisStore.storeFileTree(projectUUID, analysisRun.getUUID(),
 				hashIdFileTree);
+		storeFileTreeWatch.stop();
 
-		HashIdFileTree tree = analysisStore.readFileTree(projectUUID,
+		StopWatch readFileTreeWatch = new StopWatch();
+		readFileTreeWatch.start();
+		HashIdFileTree treeRead = analysisStore.readFileTree(projectUUID,
 				analysisRun.getUUID());
-		assertNotNull(tree);
+		readFileTreeWatch.stop();
+
+		System.out.println("Storing raw files: "
+				+ storeRawFileWatch.getMilliseconds() + "ms");
+		System.out.println("Storing file tree: "
+				+ storeFileTreeWatch.getMilliseconds() + "ms");
+		System.out.println("Reading file tree: "
+				+ readFileTreeWatch.getMilliseconds() + "ms");
+
+		assertNotNull(treeRead);
 		assertEquals(TreeUtils.countNodes(hashIdFileTree),
-				TreeUtils.countNodes(tree));
-		// TODO not enough tested here! The content needs to be checked, too.
+				TreeUtils.countNodes(treeRead));
+		TreeUtils.equalsWithoutOrder(hashIdFileTree, treeRead);
 	}
 }

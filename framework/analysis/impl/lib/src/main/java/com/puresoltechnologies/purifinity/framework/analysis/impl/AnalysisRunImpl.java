@@ -31,7 +31,7 @@ public class AnalysisRunImpl implements AnalysisRun {
 				projectUUID, runUUID);
 		HashIdFileTree hashIdFileTree = analysisStore.readFileTree(projectUUID,
 				runUUID);
-		return new AnalysisRunImpl(information, fileTree, analyzedFiles,
+		return new AnalysisRunImpl(information, hashIdFileTree, analyzedFiles,
 				failedSources);
 	}
 
