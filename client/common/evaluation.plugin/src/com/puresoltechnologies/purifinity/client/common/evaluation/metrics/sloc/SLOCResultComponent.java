@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.client.common.evaluation.utils.ColorUtils;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCEvaluator;
@@ -24,10 +24,10 @@ import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFact
 public class SLOCResultComponent extends Composite {
 
 	private final AnalysisRun analysisRun;
-	private final AnalyzedCode analyzedCode;
+	private final AnalysisInformation analyzedCode;
 
 	public SLOCResultComponent(Composite parent, int style,
-			AnalysisRun analysisRun, AnalyzedCode analyzedCode) {
+			AnalysisRun analysisRun, AnalysisInformation analyzedCode) {
 		super(parent, style);
 
 		this.analysisRun = analysisRun;

@@ -16,8 +16,8 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.Axis;
 import com.puresoltechnologies.purifinity.client.common.chart.AxisDirection;
@@ -188,7 +188,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		if ((analysisSelection != null) && (xMetricSelection != null)
 				&& (xParameterSelection != null) && (yMetricSelection != null)
 				&& (yParameterSelection != null)) {
-			HashIdFileTree path = analysisSelection.getFileTreeNode();
+			AnalysisFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
 				path = path.getParent();
 			}
@@ -197,15 +197,15 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 	}
 
 	@Override
-	public void showEvaluation(HashIdFileTree path) {
+	public void showEvaluation(AnalysisFileTree path) {
 		final EvaluatorStore xStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(xMetricSelection.getEvaluatorClass());
 		final EvaluatorStore yStore = EvaluatorStoreFactory.getFactory()
 				.createInstance(yMetricSelection.getEvaluatorClass());
 		final List<Mark2D<Double, Double>> correlationValues = new ArrayList<Mark2D<Double, Double>>();
-		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
+		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
 			@Override
-			public WalkingAction visit(HashIdFileTree node) {
+			public WalkingAction visit(AnalysisFileTree node) {
 				try {
 					if (!node.isFile()) {
 						return WalkingAction.PROCEED;

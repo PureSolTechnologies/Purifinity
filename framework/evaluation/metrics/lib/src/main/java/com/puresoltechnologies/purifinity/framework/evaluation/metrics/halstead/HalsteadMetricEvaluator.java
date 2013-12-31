@@ -6,14 +6,15 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
@@ -29,7 +30,8 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 
 	private final EvaluatorStore store;
 
-	public HalsteadMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
+	public HalsteadMetricEvaluator(AnalysisRun analysisRun,
+			AnalysisFileTree path) {
 		super(HalsteadMetric.NAME, HalsteadMetric.DESCRIPTION, analysisRun,
 				path);
 		store = getEvaluatorStore();
@@ -51,17 +53,18 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 					analysis.getLanguageName(), analysis.getLanguageVersion());
 
 			HalsteadMetricFileResults results = new HalsteadMetricFileResults();
+			HashId hashId = analysis.getAnalysisInformation().getHashId();
+			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
+					.getSourceCodeLocation(hashId);
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 				HalsteadMetric metric = new HalsteadMetric(getAnalysisRun(),
 						language, codeRange);
 				execute(metric);
-				results.add(new HalsteadMetricResult(analysis.getAnalyzedFile()
-						.getSourceLocation(), codeRange.getType(), codeRange
-						.getCanonicalName(), metric.getHalsteadResults(),
-						metric.getQuality()));
+				results.add(new HalsteadMetricResult(sourceCodeLocation,
+						codeRange.getType(), codeRange.getCanonicalName(),
+						metric.getHalsteadResults(), metric.getQuality()));
 			}
-			store.storeFileResults(analysis.getAnalyzedFile().getHashId(),
-					results);
+			store.storeFileResults(hashId, results);
 		} finally {
 			try {
 				programmingLanguages.close();
@@ -77,7 +80,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processDirectory(HashIdFileTree directory)
+	protected void processDirectory(AnalysisFileTree directory)
 			throws InterruptedException, EvaluationStoreException {
 		HashId hashId = directory.getHashId();
 		if (store.hasDirectoryResults(hashId)) {
@@ -90,10 +93,10 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 	}
 
 	private HalsteadMetricDirectoryResults createDirectoryResults(
-			HashIdFileTree directory) throws EvaluationStoreException {
+			AnalysisFileTree directory) throws EvaluationStoreException {
 		QualityLevel qualityLevel = null;
 		HalsteadMetricResult metricResults = null;
-		for (HashIdFileTree child : directory.getChildren()) {
+		for (AnalysisFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
 				if (store.hasFileResults(child.getHashId())) {
 					HalsteadMetricFileResults results = (HalsteadMetricFileResults) store
@@ -128,7 +131,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 		return finalResults;
 	}
 
-	private HalsteadMetricResult combine(HashIdFileTree directory,
+	private HalsteadMetricResult combine(AnalysisFileTree directory,
 			HalsteadMetricResult results, HalsteadMetricResult result) {
 		if (result != null) {
 			if (results == null) {
@@ -150,7 +153,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 				.hasProjectResults(getAnalysisRun().getInformation().getUUID())) {
 			return;
 		}
-		HashIdFileTree directory = getAnalysisRun().getFileTree();
+		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		HalsteadMetricDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
 			store.storeDirectoryResults(directory.getHashId(), finalResults);

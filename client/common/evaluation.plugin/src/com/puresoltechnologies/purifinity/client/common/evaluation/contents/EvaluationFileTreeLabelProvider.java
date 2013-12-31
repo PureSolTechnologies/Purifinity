@@ -24,9 +24,9 @@ import com.puresoltechnologies.commons.math.MathUtils;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunContentTreeLabelProvider;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
@@ -104,11 +104,11 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		if (element instanceof String) {
 			return (String) element;
 		}
-		HashIdFileTree input = (HashIdFileTree) element;
+		AnalysisFileTree input = (AnalysisFileTree) element;
 		String text = input.getName();
 		File path = input.getPathFile(false);
-		AnalyzedCode analyzedFile = analysisRun
-				.findAnalyzedCode(path.getPath());
+		AnalysisInformation analyzedFile = analysisRun.findAnalyzedCode(path
+				.getPath());
 		FileStore fileStore = FileStoreFactory.getFactory().getInstance();
 		if ((fileStore != null) && (analyzedFile != null)) {
 			if (fileStore.wasAnalyzed(analyzedFile.getHashId())) {
@@ -133,7 +133,7 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		if (element instanceof String) {
 			qualityLevel = getDirectoryQuality(analysisRun.getFileTree());
 		} else {
-			HashIdFileTree node = (HashIdFileTree) element;
+			AnalysisFileTree node = (AnalysisFileTree) element;
 			if (node.isFile()) {
 				qualityLevel = getFileQuality(node);
 			} else {
@@ -155,7 +155,7 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 			if (element instanceof String) {
 				return createProjectImage();
 			}
-			HashIdFileTree input = (HashIdFileTree) element;
+			AnalysisFileTree input = (AnalysisFileTree) element;
 			if (!input.isFile()) {
 				return createFolderImage(input);
 			}
@@ -179,7 +179,7 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		return ClientImages.getImage(ClientImages.ANALYSIS_RUN_16x16);
 	}
 
-	protected Image createFileImage(HashIdFileTree node)
+	protected Image createFileImage(AnalysisFileTree node)
 			throws EvaluationStoreException {
 		Image documentImage = createBaseFileImage(node);
 		QualityLevel qualityLevel = getFileQuality(node);
@@ -214,10 +214,10 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 	 * @param analyzedFile
 	 * @return
 	 */
-	protected Image createBaseFileImage(HashIdFileTree node) {
+	protected Image createBaseFileImage(AnalysisFileTree node) {
 		File path = node.getPathFile(false);
-		AnalyzedCode analyzedFile = analysisRun
-				.findAnalyzedCode(path.getPath());
+		AnalysisInformation analyzedFile = analysisRun.findAnalyzedCode(path
+				.getPath());
 		Image documentImage = ClientImages
 				.getImage(ClientImages.DOCUMENT_EMPTY_16x16);
 		if (analyzedFile == null) {
@@ -236,7 +236,7 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		return documentImage;
 	}
 
-	private QualityLevel getFileQuality(HashIdFileTree node)
+	private QualityLevel getFileQuality(AnalysisFileTree node)
 			throws EvaluationStoreException {
 		Evaluators evaluators = Evaluators.createInstance();
 		try {
@@ -279,7 +279,7 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		}
 	}
 
-	protected Image createFolderImage(HashIdFileTree node)
+	protected Image createFolderImage(AnalysisFileTree node)
 			throws EvaluationStoreException {
 		Image folderImage = ClientImages.getImage(ClientImages.FOLDER_16x16);
 		QualityLevel qualityLevel = getDirectoryQuality(node);
@@ -307,7 +307,7 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		return folderImage;
 	}
 
-	private QualityLevel getDirectoryQuality(HashIdFileTree node)
+	private QualityLevel getDirectoryQuality(AnalysisFileTree node)
 			throws EvaluationStoreException {
 		Evaluators evaluators = Evaluators.createInstance();
 		try {

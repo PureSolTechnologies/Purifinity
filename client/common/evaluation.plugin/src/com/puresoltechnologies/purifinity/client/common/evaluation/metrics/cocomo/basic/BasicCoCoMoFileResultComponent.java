@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.metrics.coco
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.basic.BasicCoCoMoEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.basic.BasicCoCoMoResults;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
@@ -11,7 +11,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFact
 public class BasicCoCoMoFileResultComponent extends BasicCoCoMoResultComponent {
 
 	public BasicCoCoMoFileResultComponent(Composite parent,
-			AnalyzedCode analyzedSourceCode) {
+			AnalysisInformation analyzedSourceCode) {
 		super(parent);
 
 		EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()

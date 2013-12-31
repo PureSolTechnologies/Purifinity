@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.ISelection;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 
 /**
  * This class represents a global file analysis selection. This selection is
@@ -20,10 +20,10 @@ public class AnalysisSelection implements ISelection {
 
 	private final AnalysisProject analysis;
 	private final AnalysisRun analysisRun;
-	private final HashIdFileTree fileTreeNode;
+	private final AnalysisFileTree fileTreeNode;
 
 	public AnalysisSelection(AnalysisProject analysis, AnalysisRun analysisRun,
-			HashIdFileTree fileTreeNode) {
+			AnalysisFileTree fileTreeNode) {
 		super();
 		this.analysis = analysis;
 		this.analysisRun = analysisRun;
@@ -38,7 +38,7 @@ public class AnalysisSelection implements ISelection {
 		return analysisRun;
 	}
 
-	public HashIdFileTree getFileTreeNode() {
+	public AnalysisFileTree getFileTreeNode() {
 		return fileTreeNode;
 	}
 

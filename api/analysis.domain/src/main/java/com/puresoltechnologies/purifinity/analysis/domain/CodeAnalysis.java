@@ -33,12 +33,12 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 	private final long duration;
 	private final String languageName;
 	private final String languageVersion;
-	private final AnalyzedCode analyzedFile;
+	private final AnalysisInformation analyzedFile;
 	private final List<CodeRange> analyzableCodeRanges;
 	private final UniversalSyntaxTree universalSyntaxTree;
 
 	public CodeAnalysis(Date time, long duration, String languageName,
-			String languageVersion, AnalyzedCode analyzedFile,
+			String languageVersion, AnalysisInformation analyzedFile,
 			List<CodeRange> analyzableCodeRanges,
 			UniversalSyntaxTree universalSyntaxTree) {
 		super();
@@ -98,7 +98,7 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 	 * 
 	 * @return The analyzed file is returned.
 	 */
-	public AnalyzedCode getAnalyzedFile() {
+	public AnalysisInformation getAnalysisInformation() {
 		return analyzedFile;
 	}
 

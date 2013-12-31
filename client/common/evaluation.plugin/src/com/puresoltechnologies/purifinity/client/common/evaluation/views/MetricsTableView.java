@@ -20,7 +20,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.branding.Exportable;
 import com.puresoltechnologies.purifinity.client.common.branding.Printable;
@@ -170,12 +170,12 @@ public class MetricsTableView extends AbstractPureSolTechnologiesView implements
 	}
 
 	private void updateEvaluation() throws EvaluationStoreException {
-		HashIdFileTree path = analysisSelection.getFileTreeNode();
+		AnalysisFileTree path = analysisSelection.getFileTreeNode();
 		showEvaluation(path);
 	}
 
 	@Override
-	public void showEvaluation(HashIdFileTree path)
+	public void showEvaluation(AnalysisFileTree path)
 			throws EvaluationStoreException {
 		tableViewer = new MetricsTableViewer(table, selectedEvaluator);
 		tableViewer.setInput(path);

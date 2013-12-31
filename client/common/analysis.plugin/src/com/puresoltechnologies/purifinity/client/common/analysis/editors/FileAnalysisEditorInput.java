@@ -5,14 +5,14 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 
 public class FileAnalysisEditorInput implements IEditorInput {
 
-	private final AnalyzedCode analyzedCode;
+	private final AnalysisInformation analyzedCode;
 	private final AnalysisRun analysisRun;
 
-	public FileAnalysisEditorInput(AnalyzedCode analyzedCode,
+	public FileAnalysisEditorInput(AnalysisInformation analyzedCode,
 			AnalysisRun analysisRun) {
 		super();
 		this.analyzedCode = analyzedCode;
@@ -50,7 +50,7 @@ public class FileAnalysisEditorInput implements IEditorInput {
 				.getHumanReadableLocationString();
 	}
 
-	public final AnalyzedCode getAnalyzedCode() {
+	public final AnalysisInformation getAnalyzedCode() {
 		return analyzedCode;
 	}
 

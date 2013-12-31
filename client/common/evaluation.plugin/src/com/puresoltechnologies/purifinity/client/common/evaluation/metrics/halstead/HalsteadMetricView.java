@@ -18,9 +18,9 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.CodeRangeComboViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
@@ -43,7 +43,7 @@ public class HalsteadMetricView extends AbstractEvaluationView implements
 	private HalsteadOperatorsTableViewer operatorsViewer;
 	private HalsteadOperandsTableViewer operandsViewer;
 	private final List<CodeRange> codeRanges = new ArrayList<CodeRange>();
-	private HashIdFileTree path = null;
+	private AnalysisFileTree path = null;
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -106,12 +106,12 @@ public class HalsteadMetricView extends AbstractEvaluationView implements
 	}
 
 	@Override
-	public void showEvaluation(HashIdFileTree path)
+	public void showEvaluation(AnalysisFileTree path)
 			throws EvaluationStoreException {
 		showEvaluation(path, 0);
 	}
 
-	public void showEvaluation(HashIdFileTree path, int codeRangeId)
+	public void showEvaluation(AnalysisFileTree path, int codeRangeId)
 			throws EvaluationStoreException {
 		HalsteadResult halsteadResult = null;
 		if ((codeRangeId >= 0) && (codeRangeId < codeRanges.size())) {
@@ -141,7 +141,7 @@ public class HalsteadMetricView extends AbstractEvaluationView implements
 		setHalsteadResult(halsteadResult);
 	}
 
-	private void updateCodeRanges(HashIdFileTree path)
+	private void updateCodeRanges(AnalysisFileTree path)
 			throws EvaluationStoreException {
 		codeRanges.clear();
 		EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()

@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Tree;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.UniversalSyntaxTreeContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.UniversalSyntaxTreeLabelProvider;
@@ -74,7 +74,7 @@ public class ParserTreeControl extends Composite {
 	 * @throws FileStoreException
 	 * @throws AnalysisStoreException
 	 */
-	public void setContentAndUpdateContent(AnalyzedCode analyzedCode,
+	public void setContentAndUpdateContent(AnalysisInformation analyzedCode,
 			AnalysisRun analysisRun) throws IOException, FileStoreException,
 			AnalysisStoreException {
 		CodeAnalysis codeAnalysis = codeStore.loadAnalysis(analyzedCode

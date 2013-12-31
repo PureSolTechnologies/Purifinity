@@ -12,10 +12,10 @@ import org.junit.Test;
 import com.puresoltechnologies.commons.math.statistics.Statistics;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunnerImpl;
 import com.puresoltechnologies.purifinity.framework.analysis.test.TestFileSearchConfiguration;
@@ -41,7 +41,7 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 	@Test
 	public void test() throws Exception {
 		AnalysisRun analysisRun = performAnalysis();
-		HashIdFileTree slocTestSample = findSLOCTestSample(analysisRun);
+		AnalysisFileTree slocTestSample = findSLOCTestSample(analysisRun);
 		assertEquals("Sample file changed!", "ab48d201610fe5431600caee2240471d"
 				+ "902f517895af0d18492df69e92fc5148", slocTestSample
 				.getHashId().getHash());
@@ -57,24 +57,24 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 				analysisProject.getUUID());
 		assertTrue("Analysis run did not succeed.", analysisRunner.call());
 		AnalysisRun analysisRun = analysisRunner.getAnalysisRun();
-		List<AnalyzedCode> analyzedFiles = analysisRun.getAnalyzedFiles();
+		List<AnalysisInformation> analyzedFiles = analysisRun.getAnalyzedFiles();
 		assertEquals(1, analyzedFiles.size());
 		return analysisRun;
 	}
 
-	private HashIdFileTree findSLOCTestSample(AnalysisRun analysisRun) {
-		HashIdFileTree slocTestSample = findSample(analysisRun.getFileTree());
+	private AnalysisFileTree findSLOCTestSample(AnalysisRun analysisRun) {
+		AnalysisFileTree slocTestSample = findSample(analysisRun.getFileTree());
 		assertNotNull("SLOCTestSample not found.", slocTestSample);
 		return slocTestSample;
 	}
 
-	private HashIdFileTree findSample(HashIdFileTree node) {
-		for (HashIdFileTree child : node.getChildren()) {
+	private AnalysisFileTree findSample(AnalysisFileTree node) {
+		for (AnalysisFileTree child : node.getChildren()) {
 			if ("SLOCTestSample.java".equals(child.getName())) {
 				return child;
 			}
 			if (node.hasChildren()) {
-				HashIdFileTree sample = findSample(child);
+				AnalysisFileTree sample = findSample(child);
 				if (sample != null) {
 					return sample;
 				}
@@ -84,7 +84,7 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 	}
 
 	private SLOCFileResults performSLOCEvaluation(AnalysisRun analysisRun,
-			HashIdFileTree slocTestSample) throws InterruptedException,
+			AnalysisFileTree slocTestSample) throws InterruptedException,
 			EvaluationStoreException {
 		SLOCEvaluator evaluator = new SLOCEvaluator(analysisRun, slocTestSample);
 		assertTrue("Evaluator call did not succeed.", evaluator.call());

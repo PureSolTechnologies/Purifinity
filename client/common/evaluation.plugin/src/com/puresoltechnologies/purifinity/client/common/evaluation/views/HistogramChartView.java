@@ -25,8 +25,8 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.Axis;
 import com.puresoltechnologies.purifinity.client.common.chart.AxisDirection;
@@ -161,7 +161,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (metricSelection != null)
 				&& (parameterSelection != null)) {
-			HashIdFileTree path = analysisSelection.getFileTreeNode();
+			AnalysisFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
 				path = path.getParent();
 			}
@@ -170,13 +170,13 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	}
 
 	@Override
-	public void showEvaluation(HashIdFileTree path) {
+	public void showEvaluation(AnalysisFileTree path) {
 		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
 				.createInstance(metricSelection.getEvaluatorClass());
 		final List<Value<?>> histogramValues = new ArrayList<Value<?>>();
-		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
+		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
 			@Override
-			public WalkingAction visit(HashIdFileTree node) {
+			public WalkingAction visit(AnalysisFileTree node) {
 				try {
 					if (!node.isFile()) {
 						return WalkingAction.PROCEED;

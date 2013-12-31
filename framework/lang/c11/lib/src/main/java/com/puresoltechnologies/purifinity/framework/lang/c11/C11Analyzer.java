@@ -20,15 +20,15 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.parser.ParserException;
 import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.parser.packrat.PackratParser;
 import com.puresoltechnologies.parsers.impl.ust.CompilationUnit;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.AbstractCodeAnalyzer;
@@ -67,8 +67,8 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 					.create(parserTree);
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 			C11 c11 = C11.getInstance();
-			AnalyzedCode analyzedFile = new AnalyzedCode(
-					sourceCode.getHashId(), getSource(), date, timeEffort,
+			AnalysisInformation analyzedFile = new AnalysisInformation(
+					sourceCode.getHashId(), date, timeEffort, true,
 					c11.getName(), c11.getVersion());
 			fileAnalysis = new CodeAnalysis(date, timeEffort, c11.getName(),
 					c11.getVersion(), analyzedFile,

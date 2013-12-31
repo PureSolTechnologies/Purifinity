@@ -6,14 +6,15 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
@@ -29,7 +30,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 
 	private final EvaluatorStore store;
 
-	public McCabeMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
+	public McCabeMetricEvaluator(AnalysisRun analysisRun, AnalysisFileTree path) {
 		super(McCabeMetric.NAME, McCabeMetric.DESCRIPTION, analysisRun, path);
 		store = getEvaluatorStore();
 	}
@@ -46,18 +47,19 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 		McCabeMetricFileResults results = new McCabeMetricFileResults();
 		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 				.createInstance();
+		HashId hashId = analysis.getAnalysisInformation().getHashId();
 		try {
 			ProgrammingLanguage language = programmingLanguages.findByName(
 					analysis.getLanguageName(), analysis.getLanguageVersion());
-
+			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
+					.getSourceCodeLocation(hashId);
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 				McCabeMetric metric = new McCabeMetric(getAnalysisRun(),
 						language, codeRange);
 				execute(metric);
-				results.add(new McCabeMetricResult(analysis.getAnalyzedFile()
-						.getSourceLocation(), codeRange.getType(), codeRange
-						.getCanonicalName(), metric.getCyclomaticNumber(),
-						metric.getQuality()));
+				results.add(new McCabeMetricResult(sourceCodeLocation,
+						codeRange.getType(), codeRange.getCanonicalName(),
+						metric.getCyclomaticNumber(), metric.getQuality()));
 			}
 		} finally {
 			try {
@@ -66,7 +68,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 				// intentionally left blank
 			}
 		}
-		store.storeFileResults(analysis.getAnalyzedFile().getHashId(), results);
+		store.storeFileResults(hashId, results);
 	}
 
 	@Override
@@ -75,7 +77,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processDirectory(HashIdFileTree directory)
+	protected void processDirectory(AnalysisFileTree directory)
 			throws InterruptedException, EvaluationStoreException {
 		HashId hashId = directory.getHashId();
 		if (store.hasDirectoryResults(hashId)) {
@@ -88,10 +90,10 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 	}
 
 	private McCabeMetricDirectoryResults createDirectoryResults(
-			HashIdFileTree directory) throws EvaluationStoreException {
+			AnalysisFileTree directory) throws EvaluationStoreException {
 		QualityLevel qualityLevel = null;
 		McCabeMetricResult metricResults = null;
-		for (HashIdFileTree child : directory.getChildren()) {
+		for (AnalysisFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
 				if (store.hasFileResults(child.getHashId())) {
 					McCabeMetricFileResults results = (McCabeMetricFileResults) store
@@ -126,7 +128,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 		return finalResults;
 	}
 
-	private McCabeMetricResult combine(HashIdFileTree directory,
+	private McCabeMetricResult combine(AnalysisFileTree directory,
 			McCabeMetricResult results, McCabeMetricResult result) {
 		if (result != null) {
 			if (results == null) {
@@ -148,7 +150,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 				.hasProjectResults(getAnalysisRun().getInformation().getUUID())) {
 			return;
 		}
-		HashIdFileTree directory = getAnalysisRun().getFileTree();
+		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		McCabeMetricDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
 			store.storeDirectoryResults(directory.getHashId(), finalResults);

@@ -12,7 +12,7 @@ import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.widgets.Tree;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 
 /**
  * This viewer is used in {@link Tree}s to render the content of an analysis
@@ -33,7 +33,7 @@ public class AnalysisRunContentTreeViewer extends TreeViewer {
 			if (String.class.isAssignableFrom(e1.getClass())) {
 				left = (String) e1;
 			} else {
-				HashIdFileTree leftHashIdFileTree = (HashIdFileTree) e1;
+				AnalysisFileTree leftHashIdFileTree = (AnalysisFileTree) e1;
 				left = leftHashIdFileTree.getName().toLowerCase();
 				if (leftHashIdFileTree.isFile()) {
 					dirFileLeft = "file";
@@ -42,7 +42,7 @@ public class AnalysisRunContentTreeViewer extends TreeViewer {
 			if (String.class.isAssignableFrom(e2.getClass())) {
 				right = (String) e2;
 			} else {
-				HashIdFileTree rightHashIdFileTree = (HashIdFileTree) e2;
+				AnalysisFileTree rightHashIdFileTree = (AnalysisFileTree) e2;
 				right = rightHashIdFileTree.getName().toLowerCase();
 				if (rightHashIdFileTree.isFile()) {
 					dirFileRight = "file";
@@ -70,7 +70,7 @@ public class AnalysisRunContentTreeViewer extends TreeViewer {
 		super.setInput(analysisRun.getFileTree());
 	}
 
-	public void setSelection(HashIdFileTree node) {
+	public void setSelection(AnalysisFileTree node) {
 		List<Object> path = new ArrayList<>();
 		do {
 			if (node.getParent() != null) {

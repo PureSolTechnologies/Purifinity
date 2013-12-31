@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
@@ -56,8 +56,8 @@ public class MetricsTableViewer extends TableViewer implements
 		if (metric == null) {
 			return;
 		}
-		if (HashIdFileTree.class.isAssignableFrom(newInput.getClass())) {
-			HashIdFileTree path = (HashIdFileTree) newInput;
+		if (AnalysisFileTree.class.isAssignableFrom(newInput.getClass())) {
+			AnalysisFileTree path = (AnalysisFileTree) newInput;
 			HashId hashId = path.getHashId();
 			EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
 					.createInstance(metric.getEvaluatorClass());

@@ -10,7 +10,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Tree;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunContentTreeContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunContentTreeViewer;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
@@ -44,7 +44,7 @@ public class EvaluationFileTreeViewer extends TreeViewer {
 		refresh();
 	}
 
-	public void setSelection(HashIdFileTree node) {
+	public void setSelection(AnalysisFileTree node) {
 		List<Object> path = new ArrayList<>();
 		do {
 			if (node.getParent() != null) {

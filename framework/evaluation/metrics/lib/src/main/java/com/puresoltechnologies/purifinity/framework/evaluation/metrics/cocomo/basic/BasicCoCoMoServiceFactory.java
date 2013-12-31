@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluatorFactory;
@@ -36,7 +36,7 @@ public class BasicCoCoMoServiceFactory extends AbstractEvaluatorFactory {
 
 	@Override
 	public BasicCoCoMoEvaluator create(AnalysisRun analysisRun,
-			HashIdFileTree path) {
+			AnalysisFileTree path) {
 		return new BasicCoCoMoEvaluator(analysisRun, path);
 	}
 

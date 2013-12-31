@@ -10,13 +10,13 @@ import org.slf4j.LoggerFactory;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;
 
-public class AnalysisRunCallable implements Callable<AnalyzedCode> {
+public class AnalysisRunCallable implements Callable<AnalysisInformation> {
 
 	private final Logger logger = LoggerFactory
 			.getLogger(AnalysisRunCallable.class);
@@ -33,10 +33,10 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
 	}
 
 	@Override
-	public AnalyzedCode call() throws IOException, FileStoreException {
+	public AnalysisInformation call() throws IOException, FileStoreException {
 		logger.info("Starting analysis for '" + sourceFile + "'...");
 		HashId hashId = storeRawFile();
-		AnalyzedCode result = analyzeCode(hashId, sourceFile);
+		AnalysisInformation result = analyzeCode(hashId, sourceFile);
 		logger.info("Finished analysis for '" + sourceFile + "'.");
 		return result;
 	}
@@ -72,10 +72,11 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
 	 * @param file
 	 *            is the file to be analyzed.
 	 */
-	private AnalyzedCode analyzeCode(HashId hashId, SourceCodeLocation sourceFile) {
+	private AnalysisInformation analyzeCode(HashId hashId,
+			SourceCodeLocation sourceFile) {
 		try {
 			if (codeStore.wasAnalyzed(hashId)) {
-				return loadAnalysis(hashId, sourceFile);
+				return loadAnalysis(hashId);
 			} else {
 				return createNewAnalysis(hashId, sourceFile);
 			}
@@ -91,7 +92,7 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
 				t = t.getCause();
 				id++;
 			}
-			return new AnalyzedCode(hashId, sourceFile, null, 0, null, null,
+			return new AnalysisInformation(hashId, null, 0, false, null, null,
 					message.toString());
 		}
 	}
@@ -106,19 +107,19 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
 	 * @throws IOException
 	 * @throws FileStoreException
 	 */
-	private AnalyzedCode createNewAnalysis(HashId hashId,
-			SourceCodeLocation sourceFile) throws AnalyzerException, IOException,
-			FileStoreException {
+	private AnalysisInformation createNewAnalysis(HashId hashId,
+			SourceCodeLocation sourceFile) throws AnalyzerException,
+			IOException, FileStoreException {
 		CodeAnalyzerImpl fileAnalyzer = new CodeAnalyzerImpl(sourceFile, hashId);
 		fileAnalyzer.analyze();
 		if (fileAnalyzer.isAnalyzed()) {
 			codeStore.storeAnalysis(hashId, fileAnalyzer.getAnalyzer()
 					.getAnalysis());
-			return fileAnalyzer.getAnalysis().getAnalyzedFile();
+			return fileAnalyzer.getAnalysis().getAnalysisInformation();
 		} else {
 			logger.warn("File " + sourceFile.getHumanReadableLocationString()
 					+ " could be analyzed.");
-			return new AnalyzedCode(hashId, sourceFile, null, 0, null, null);
+			return new AnalysisInformation(hashId, null, 0, false, null, null);
 		}
 	}
 
@@ -130,11 +131,11 @@ public class AnalysisRunCallable implements Callable<AnalyzedCode> {
 	 * @return
 	 * @throws FileStoreException
 	 */
-	private AnalyzedCode loadAnalysis(HashId hashId, SourceCodeLocation sourceFile)
+	private AnalysisInformation loadAnalysis(HashId hashId)
 			throws FileStoreException {
 		CodeAnalysis analysis = codeStore.loadAnalysis(hashId);
-		AnalyzedCode analyzedCode = new AnalyzedCode(hashId, sourceFile,
-				analysis.getStartTime(), analysis.getDuration(),
+		AnalysisInformation analyzedCode = new AnalysisInformation(hashId,
+				analysis.getStartTime(), analysis.getDuration(), true,
 				analysis.getLanguageName(), analysis.getLanguageVersion());
 		return analyzedCode;
 	}

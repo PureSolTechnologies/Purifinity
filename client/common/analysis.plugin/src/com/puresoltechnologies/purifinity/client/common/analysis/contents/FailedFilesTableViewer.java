@@ -18,12 +18,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 
 public class FailedFilesTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 
-	private final List<AnalyzedCode> files = new ArrayList<AnalyzedCode>();
+	private final List<AnalysisInformation> files = new ArrayList<AnalysisInformation>();
 
 	private final FailedFilesViewerSorter comparator;
 
@@ -44,7 +44,7 @@ public class FailedFilesTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalyzedCode analysis = (AnalyzedCode) element;
+				AnalysisInformation analysis = (AnalysisInformation) element;
 				return analysis.getSourceLocation()
 						.getHumanReadableLocationString();
 			}
@@ -60,7 +60,7 @@ public class FailedFilesTableViewer extends TableViewer implements
 		timeColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalyzedCode analysis = (AnalyzedCode) element;
+				AnalysisInformation analysis = (AnalysisInformation) element;
 				SimpleDateFormat format = new SimpleDateFormat(
 						"yyyy-MM-dd HH:mm:ss");
 				Date startTime = analysis.getStartTime();
@@ -81,7 +81,7 @@ public class FailedFilesTableViewer extends TableViewer implements
 		messageColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalyzedCode analysis = (AnalyzedCode) element;
+				AnalysisInformation analysis = (AnalysisInformation) element;
 				if (analysis.wasError()) {
 					return analysis.getMessage();
 				}
@@ -120,20 +120,20 @@ public class FailedFilesTableViewer extends TableViewer implements
 		}
 		if (Collection.class.isAssignableFrom(newInput.getClass())) {
 			@SuppressWarnings("unchecked")
-			List<AnalyzedCode> collection = (List<AnalyzedCode>) newInput;
+			List<AnalysisInformation> collection = (List<AnalysisInformation>) newInput;
 			files.addAll(collection);
 		}
 		refresh();
 	}
 
 	@Override
-	public AnalyzedCode[] getElements(Object inputElement) {
-		return files.toArray(new AnalyzedCode[files.size()]);
+	public AnalysisInformation[] getElements(Object inputElement) {
+		return files.toArray(new AnalysisInformation[files.size()]);
 	}
 
-	public AnalyzedCode getSelectedAnalyzedCode() {
+	public AnalysisInformation getSelectedAnalyzedCode() {
 		IStructuredSelection selection = (IStructuredSelection) getSelection();
-		return (AnalyzedCode) selection.getFirstElement();
+		return (AnalysisInformation) selection.getFirstElement();
 	}
 
 }

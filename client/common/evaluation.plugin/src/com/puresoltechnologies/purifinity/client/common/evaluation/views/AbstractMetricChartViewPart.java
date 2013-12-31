@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.ChartCanvas;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ChartRenderer;
@@ -87,8 +87,8 @@ public abstract class AbstractMetricChartViewPart extends
 			if ((reference != null) && (selection != null)) {
 				AnalysisProject analysis = selection.getAnalysis();
 				AnalysisRun analysisRun = selection.getAnalysisRun();
-				if (reference instanceof HashIdFileTree) {
-					HashIdFileTree node = (HashIdFileTree) reference;
+				if (reference instanceof AnalysisFileTree) {
+					AnalysisFileTree node = (AnalysisFileTree) reference;
 					setSelection(new AnalysisSelection(analysis, analysisRun,
 							node));
 				}

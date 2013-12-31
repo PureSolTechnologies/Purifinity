@@ -2,14 +2,21 @@ package com.puresoltechnologies.purifinity.framework.analysis.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.trees.api.TreeVisitor;
+import com.puresoltechnologies.commons.trees.api.TreeWalker;
+import com.puresoltechnologies.commons.trees.api.WalkingAction;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
@@ -29,16 +36,20 @@ public class AnalysisRunImpl implements AnalysisRun {
 				.getInstance();
 		AnalysisRunInformation information = analysisStore.readAnalysisRun(
 				projectUUID, runUUID);
-		HashIdFileTree hashIdFileTree = analysisStore.readFileTree(projectUUID,
-				runUUID);
-		return new AnalysisRunImpl(information, hashIdFileTree, analyzedFiles,
-				failedSources);
+		AnalysisFileTree analysisFileTree = analysisStore.readAnalysisFileTree(
+				projectUUID, runUUID);
+		Map<HashId, SourceCodeLocation> sourceCodeLocation = analysisStore
+				.readAnalysisSourceLocations(projectUUID, runUUID);
+		return new AnalysisRunImpl(information, analysisFileTree,
+				sourceCodeLocation);
 	}
 
 	private final AnalysisRunInformation information;
-	private final HashIdFileTree fileTree;
-	private final List<AnalyzedCode> analyzedFiles = new ArrayList<>();
-	private final List<AnalyzedCode> failedSources = new ArrayList<>();
+	private final AnalysisFileTree fileTree;
+	private final List<AnalysisInformation> successfulFiles = new ArrayList<>();
+	private final List<AnalysisInformation> failedFiles = new ArrayList<>();
+	private final Map<String, AnalysisInformation> internalPaths = new HashMap<>();
+	private final Map<HashId, SourceCodeLocation> sourceCodeLocation = new HashMap<>();
 
 	/**
 	 * This constructor is used to create a new analysis run. All setup
@@ -49,12 +60,12 @@ public class AnalysisRunImpl implements AnalysisRun {
 	 * @param searchConfiguration
 	 */
 	public AnalysisRunImpl(UUID analysisProjectUUID, UUID uuid, Date startTime,
-			long duration, HashIdFileTree fileTree,
-			List<AnalyzedCode> analyzedFiles, List<AnalyzedCode> failedSources,
-			FileSearchConfiguration fileSearchConfiguration) {
+			long duration, AnalysisFileTree fileTree,
+			FileSearchConfiguration fileSearchConfiguration,
+			Map<HashId, SourceCodeLocation> sourceCodeLocation) {
 		this(new AnalysisRunInformation(analysisProjectUUID, uuid, startTime,
 				duration, "", fileSearchConfiguration), fileTree,
-				analyzedFiles, failedSources);
+				sourceCodeLocation);
 	}
 
 	/**
@@ -66,39 +77,55 @@ public class AnalysisRunImpl implements AnalysisRun {
 	 * @param searchConfiguration
 	 */
 	public AnalysisRunImpl(AnalysisRunInformation information,
-			HashIdFileTree fileTree, List<AnalyzedCode> analyzedFiles,
-			List<AnalyzedCode> failedSources) {
+			AnalysisFileTree fileTree,
+			Map<HashId, SourceCodeLocation> sourceCodeLocation) {
 		super();
 		this.information = information;
 		this.fileTree = fileTree;
-		this.analyzedFiles.addAll(analyzedFiles);
-		this.failedSources.addAll(failedSources);
+		populateFields();
+	}
+
+	private void populateFields() {
+		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
+			@Override
+			public WalkingAction visit(AnalysisFileTree tree) {
+				if (tree.isFile()) {
+					for (AnalysisInformation information : tree.getAnalyses()) {
+						if (information.isSuccessful()) {
+							successfulFiles.add(information);
+						} else {
+							failedFiles.add(information);
+						}
+						if (information.isSuccessful())
+							internalPaths.put(
+									tree.getPathFile(false).getPath(),
+									information);
+					}
+				}
+				return WalkingAction.PROCEED;
+			}
+		};
+		TreeWalker.walk(visitor, fileTree);
 	}
 
 	@Override
-	public List<AnalyzedCode> getAnalyzedFiles() {
-		return analyzedFiles;
+	public List<AnalysisInformation> getAnalyzedFiles() {
+		return successfulFiles;
 	}
 
 	@Override
-	public HashIdFileTree getFileTree() {
+	public AnalysisFileTree getFileTree() {
 		return fileTree;
 	}
 
 	@Override
-	public List<AnalyzedCode> getFailedFiles() {
-		return failedSources;
+	public List<AnalysisInformation> getFailedFiles() {
+		return failedFiles;
 	}
 
 	@Override
-	public AnalyzedCode findAnalyzedCode(String internalPath) {
-		for (AnalyzedCode analyzedFile : analyzedFiles) {
-			if (analyzedFile.getSourceLocation().getInternalLocation()
-					.equals(internalPath)) {
-				return analyzedFile;
-			}
-		}
-		return null;
+	public AnalysisInformation findAnalyzedCode(String internalPath) {
+		return internalPaths.get(internalPath);
 	}
 
 	@Override
@@ -106,4 +133,8 @@ public class AnalysisRunImpl implements AnalysisRun {
 		return information;
 	}
 
+	@Override
+	public SourceCodeLocation getSourceCodeLocation(HashId hashId) {
+		return sourceCodeLocation.get(hashId);
+	}
 }

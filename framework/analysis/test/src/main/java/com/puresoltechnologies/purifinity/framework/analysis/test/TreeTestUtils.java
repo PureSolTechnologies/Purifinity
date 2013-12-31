@@ -2,23 +2,25 @@ package com.puresoltechnologies.purifinity.framework.analysis.test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.puresoltechnologies.commons.misc.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.framework.commons.utils.FileTree;
 import com.puresoltechnologies.purifinity.framework.commons.utils.data.HashCodeGenerator;
 
-public class HashIdFileTreeUtils {
+public class TreeTestUtils {
 
-	public static HashIdFileTree convertToHashIdFileTree(FileTree fileTree)
+	public static AnalysisFileTree convertToHashIdFileTree(FileTree fileTree)
 			throws IOException {
 		Map<FileTree, HashId> hashes = new HashMap<>();
 		calculateHashes(hashes, fileTree);
-		return convertToHashIdFileTree(hashes, fileTree, null);
+		return convertToAnalysisFileTree(hashes, fileTree, null);
 	}
 
 	private static void calculateHashes(Map<FileTree, HashId> hashes,
@@ -54,16 +56,17 @@ public class HashIdFileTreeUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	private static HashIdFileTree convertToHashIdFileTree(
-			Map<FileTree, HashId> hashes, FileTree node,
-			HashIdFileTree parent) throws IOException {
+	private static AnalysisFileTree convertToAnalysisFileTree(
+			Map<FileTree, HashId> hashes, FileTree node, AnalysisFileTree parent)
+			throws IOException {
 		String name = node.getName();
 		HashId hashId = hashes.get(node);
 		File file = node.getPathFile(true);
-		HashIdFileTree currentNode = new HashIdFileTree(parent, name, hashId,
-				file.isFile());
+		boolean isFile = file.isFile();
+		AnalysisFileTree currentNode = new AnalysisFileTree(parent, name,
+				hashId, isFile, isFile ? new ArrayList<AnalysisInformation>() : null);
 		for (FileTree child : node.getChildren()) {
-			convertToHashIdFileTree(hashes, child, currentNode);
+			convertToAnalysisFileTree(hashes, child, currentNode);
 		}
 		return currentNode;
 	}

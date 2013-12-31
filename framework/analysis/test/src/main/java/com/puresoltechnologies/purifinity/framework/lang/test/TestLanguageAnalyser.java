@@ -21,8 +21,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.impl.lexer.Lexer;
 import com.puresoltechnologies.parsers.impl.lexer.LexerException;
@@ -33,7 +33,7 @@ import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.ust.CompilationUnit;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
@@ -75,8 +75,8 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 			TestLanguage language = TestLanguage.getInstance();
 			fileAnalysis = new CodeAnalysis(date, timeEffort,
 					language.getName(), language.getVersion(),
-					new AnalyzedCode(sourceCode.getHashId(), getSource(), date,
-							timeEffort, language.getName(), language
+					new AnalysisInformation(sourceCode.getHashId(), date,
+							timeEffort, true, language.getName(), language
 									.getVersion()),
 					getAnalyzableCodeRanges(compilationUnit), compilationUnit);
 

@@ -5,13 +5,14 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
@@ -54,7 +55,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	private final EvaluatorStore halsteadStore;
 
 	public MaintainabilityIndexEvaluator(AnalysisRun analysisRun,
-			HashIdFileTree path) {
+			AnalysisFileTree path) {
 		super(NAME, DESCRIPTION, analysisRun, path);
 		store = getEvaluatorStore();
 		EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
@@ -73,7 +74,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 			throws InterruptedException, EvaluationStoreException {
 		MaintainabilityIndexFileResults results = new MaintainabilityIndexFileResults();
 
-		AnalyzedCode analyzedFile = analysis.getAnalyzedFile();
+		AnalysisInformation analyzedFile = analysis.getAnalysisInformation();
 		HashId hashId = analyzedFile.getHashId();
 		SLOCFileResults slocFileResults = (SLOCFileResults) slocStore
 				.readFileResults(hashId);
@@ -81,6 +82,8 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 				.readFileResults(hashId);
 		HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
 				.readFileResults(hashId);
+		SourceCodeLocation sourceCodeLocation = getAnalysisRun()
+				.getSourceCodeLocation(hashId);
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			SLOCResult slocCodeRangeResult = findFileResult(slocFileResults,
@@ -101,10 +104,9 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 					/ sloc.getPhyLOC()));
 			MaintainabilityIndexResult result = new MaintainabilityIndexResult(
 					MIwoc, MIcw);
-			results.add(new MaintainabilityIndexFileResult(analyzedFile
-					.getSourceLocation(), codeRange.getType(), codeRange
-					.getCanonicalName(), result, MaintainabilityQuality.get(
-					codeRange.getType(), result)));
+			results.add(new MaintainabilityIndexFileResult(sourceCodeLocation,
+					codeRange.getType(), codeRange.getCanonicalName(), result,
+					MaintainabilityQuality.get(codeRange.getType(), result)));
 		}
 		store.storeFileResults(hashId, results);
 	}
@@ -155,7 +157,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processDirectory(HashIdFileTree directory)
+	protected void processDirectory(AnalysisFileTree directory)
 			throws InterruptedException, EvaluationStoreException {
 		MaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
@@ -164,9 +166,9 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	private MaintainabilityIndexDirectoryResults createDirectoryResults(
-			HashIdFileTree directory) throws EvaluationStoreException {
+			AnalysisFileTree directory) throws EvaluationStoreException {
 		QualityLevel qualityLevel = null;
-		for (HashIdFileTree child : directory.getChildren()) {
+		for (AnalysisFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
 				MaintainabilityIndexFileResults results = (MaintainabilityIndexFileResults) store
 						.readFileResults(child.getHashId());

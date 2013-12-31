@@ -5,14 +5,14 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 
 public class DirectoryAnalysisEditorInput implements IEditorInput {
 
-	private final HashIdFileTree directory;
+	private final AnalysisFileTree directory;
 	private final AnalysisRun analysisRun;
 
-	public DirectoryAnalysisEditorInput(HashIdFileTree directory,
+	public DirectoryAnalysisEditorInput(AnalysisFileTree directory,
 			AnalysisRun analysisRun) {
 		super();
 		this.directory = directory;
@@ -49,7 +49,7 @@ public class DirectoryAnalysisEditorInput implements IEditorInput {
 		return directory.getPathFile(false).getPath();
 	}
 
-	public final HashIdFileTree getDirectory() {
+	public final AnalysisFileTree getDirectory() {
 		return directory;
 	}
 

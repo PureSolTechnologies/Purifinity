@@ -6,12 +6,13 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
@@ -33,7 +34,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	private final EvaluatorStore store;
 	private final EvaluatorStore halsteadStore;
 
-	public EntropyMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
+	public EntropyMetricEvaluator(AnalysisRun analysisRun, AnalysisFileTree path) {
 		super(EntropyMetric.NAME, EntropyMetric.DESCRIPTION, analysisRun, path);
 		store = getEvaluatorStore();
 		halsteadStore = EvaluatorStoreFactory.getFactory().createInstance(
@@ -48,21 +49,22 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processFile(CodeAnalysis analysis)
 			throws InterruptedException, EvaluationStoreException {
-		HashId hashId = analysis.getAnalyzedFile().getHashId();
+		HashId hashId = analysis.getAnalysisInformation().getHashId();
 		HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
 				.readFileResults(hashId);
 
 		EntropyFileResults results = new EntropyFileResults();
+		SourceCodeLocation sourceCodeLocation = getAnalysisRun()
+				.getSourceCodeLocation(hashId);
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			HalsteadMetricResult halsteadFileResult = findFileResult(
 					halsteadFileResults, codeRange);
 			HalsteadResult halstead = halsteadFileResult.getHalsteadResult();
 			EntropyMetricResult result = calculateEntropyResult(halstead);
-			results.add(new EntropyResult(analysis.getAnalyzedFile()
-					.getSourceLocation(), codeRange.getType(), codeRange
-					.getCanonicalName(), result, EntropyQuality.get(
-					codeRange.getType(), result)));
+			results.add(new EntropyResult(sourceCodeLocation, codeRange
+					.getType(), codeRange.getCanonicalName(), result,
+					EntropyQuality.get(codeRange.getType(), result)));
 		}
 		store.storeFileResults(hashId, results);
 	}
@@ -120,7 +122,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processDirectory(HashIdFileTree directory)
+	protected void processDirectory(AnalysisFileTree directory)
 			throws InterruptedException, EvaluationStoreException {
 		EntropyDirectoryResults directoryResults = calculateDirectoryResults(directory);
 		if (directoryResults != null) {
@@ -129,7 +131,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	}
 
 	private EntropyDirectoryResults calculateDirectoryResults(
-			HashIdFileTree directory) throws EvaluationStoreException {
+			AnalysisFileTree directory) throws EvaluationStoreException {
 		EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
 		EvaluatorStore halsteadMetricResultStore = factory
 				.createInstance(HalsteadMetricEvaluator.class);
@@ -143,7 +145,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 		EntropyDirectoryResults directoryResults = new EntropyDirectoryResults(
 				new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
 				directory.getName());
-		for (HashIdFileTree child : directory.getChildren()) {
+		for (AnalysisFileTree child : directory.getChildren()) {
 			QualityLevel childLevel;
 			if (child.isFile()) {
 				EntropyFileResults fileResults = (EntropyFileResults) store
@@ -171,7 +173,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processProject() throws InterruptedException,
 			EvaluationStoreException {
-		HashIdFileTree directory = getAnalysisRun().getFileTree();
+		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		EntropyDirectoryResults directoryResults = calculateDirectoryResults(directory);
 		store.storeDirectoryResults(directory.getHashId(), directoryResults);
 	}

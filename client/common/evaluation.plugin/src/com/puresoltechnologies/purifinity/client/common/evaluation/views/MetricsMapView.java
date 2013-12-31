@@ -26,8 +26,8 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.puresoltechnologies.commons.math.Parameter;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.branding.Printable;
 import com.puresoltechnologies.purifinity.client.common.chart.AreaMapComponent;
@@ -209,7 +209,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (mapMetricSelection != null)
 				&& (mapValueSelection != null)) {
-			HashIdFileTree path = analysisSelection.getFileTreeNode();
+			AnalysisFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
 				path = path.getParent();
 			}
@@ -218,7 +218,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	}
 
 	@Override
-	public void showEvaluation(HashIdFileTree path)
+	public void showEvaluation(AnalysisFileTree path)
 			throws EvaluationStoreException {
 		label.setText(path.getPathFile(false).getPath());
 		EvaluatorStore mapStore = EvaluatorStoreFactory.getFactory()
@@ -270,7 +270,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	 * @throws EvaluationStoreException
 	 */
 	private AreaMapData calculateAreaData(EvaluatorStore mapStore,
-			EvaluatorStore colorStore, HashIdFileTree path)
+			EvaluatorStore colorStore, AnalysisFileTree path)
 			throws EvaluationStoreException {
 		List<AreaMapData> childAreas = calculateChildAreaMaps(mapStore,
 				colorStore, path);
@@ -325,9 +325,9 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	 * @throws EvaluationStoreException
 	 */
 	private List<AreaMapData> calculateChildAreaMaps(EvaluatorStore mapStore,
-			EvaluatorStore colorStore, HashIdFileTree path)
+			EvaluatorStore colorStore, AnalysisFileTree path)
 			throws EvaluationStoreException {
-		List<HashIdFileTree> children = path.getChildren();
+		List<AnalysisFileTree> children = path.getChildren();
 		List<AreaMapData> childAreas = new ArrayList<AreaMapData>();
 		for (int i = 0; i < children.size(); i++) {
 			AreaMapData areaData = calculateAreaData(mapStore, colorStore,
@@ -340,7 +340,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 		return childAreas;
 	}
 
-	private AreaMapData processAreaWithoutOwnValues(HashIdFileTree path,
+	private AreaMapData processAreaWithoutOwnValues(AnalysisFileTree path,
 			AreaMapData[] childAreas) {
 		double sum = 0.0;
 		for (AreaMapData childArea : childAreas) {

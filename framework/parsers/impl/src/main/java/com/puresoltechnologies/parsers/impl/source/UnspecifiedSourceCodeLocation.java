@@ -2,13 +2,22 @@ package com.puresoltechnologies.parsers.impl.source;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 
-public class UnspecifiedSourceCodeLocation extends AbstractCodeLocation {
+public class UnspecifiedSourceCodeLocation extends AbstractSourceCodeLocation {
 
 	private static final long serialVersionUID = 5446070531559019716L;
+
+	public UnspecifiedSourceCodeLocation() {
+		super();
+	}
+
+	public UnspecifiedSourceCodeLocation(Properties properties) {
+		super();
+	}
 
 	@Override
 	public String getHumanReadableLocationString() {
@@ -56,5 +65,15 @@ public class UnspecifiedSourceCodeLocation extends AbstractCodeLocation {
 	@Override
 	public boolean isAvailable() {
 		return false;
+	}
+
+	@Override
+	public Properties getSerialization() {
+		Properties properties = new Properties();
+		properties
+				.setProperty(SOURCE_CODE_LOCATION_CLASS, getClass().getName());
+		properties.setProperty(SOURCE_CODE_LOCATION_TYPE, "unspecified");
+		properties.setProperty(SOURCE_CODE_LOCATION_NAME, getName());
+		return properties;
 	}
 }

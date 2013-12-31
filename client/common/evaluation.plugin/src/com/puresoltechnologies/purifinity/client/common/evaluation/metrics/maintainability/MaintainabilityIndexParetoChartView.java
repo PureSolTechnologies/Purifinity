@@ -23,8 +23,8 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.Axis;
 import com.puresoltechnologies.purifinity.client.common.chart.AxisDirection;
@@ -105,7 +105,7 @@ public class MaintainabilityIndexParetoChartView extends
 	protected void updateEvaluation() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
-			HashIdFileTree path = analysisSelection.getFileTreeNode();
+			AnalysisFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
 				path = path.getParent();
 			}
@@ -114,15 +114,15 @@ public class MaintainabilityIndexParetoChartView extends
 	}
 
 	@Override
-	public void showEvaluation(HashIdFileTree path) {
+	public void showEvaluation(AnalysisFileTree path) {
 		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
 				.createInstance(MaintainabilityIndexEvaluator.class);
 		final List<Mark2D<String, Double>> paretoValuesMI = new ArrayList<>();
 		final Map<String, Mark2D<String, Double>> paretoValuesMIwoc = new HashMap<>();
 		final Map<String, Mark2D<String, Double>> paretoValuesMIcw = new HashMap<>();
-		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
+		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
 			@Override
-			public WalkingAction visit(HashIdFileTree node) {
+			public WalkingAction visit(AnalysisFileTree node) {
 				try {
 					if (!node.isFile()) {
 						return WalkingAction.PROCEED;

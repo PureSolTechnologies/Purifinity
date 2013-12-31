@@ -18,8 +18,8 @@ import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.trees.api.TreeUtils;
 import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
@@ -66,7 +66,7 @@ public abstract class AbstractEvaluator extends
 
 	private final EvaluatorInformation information;
 	private final AnalysisRun analysisRun;
-	private final HashIdFileTree path;
+	private final AnalysisFileTree path;
 	private final Date timeStamp;
 
 	private long timeOfRun;
@@ -74,7 +74,7 @@ public abstract class AbstractEvaluator extends
 	private boolean reEvaluation = false;
 
 	public AbstractEvaluator(String name, String description,
-			AnalysisRun analysisRun, HashIdFileTree path) {
+			AnalysisRun analysisRun, AnalysisFileTree path) {
 		super();
 		this.information = new EvaluatorInformation(name, description);
 		this.analysisRun = analysisRun;
@@ -160,7 +160,7 @@ public abstract class AbstractEvaluator extends
 	 *             is thrown if the evaluation was interrupted.
 	 * @throws EvaluationStoreException
 	 */
-	abstract protected void processDirectory(HashIdFileTree directory)
+	abstract protected void processDirectory(AnalysisFileTree directory)
 			throws InterruptedException, EvaluationStoreException;
 
 	/**
@@ -198,7 +198,7 @@ public abstract class AbstractEvaluator extends
 		return true;
 	}
 
-	private void processTree(HashIdFileTree tree) throws InterruptedException {
+	private void processTree(AnalysisFileTree tree) throws InterruptedException {
 		try {
 			processNode(tree);
 		} catch (FileStoreException | DirectoryStoreException
@@ -209,7 +209,7 @@ public abstract class AbstractEvaluator extends
 		}
 	}
 
-	private void processNode(HashIdFileTree node) throws FileStoreException,
+	private void processNode(AnalysisFileTree node) throws FileStoreException,
 			InterruptedException, UniversalSyntaxTreeEvaluationException,
 			EvaluationStoreException, DirectoryStoreException {
 		if (Thread.currentThread().isInterrupted()) {
@@ -237,7 +237,7 @@ public abstract class AbstractEvaluator extends
 	 *             is thrown if the evaluation had an exception.
 	 * @throws EvaluationStoreException
 	 */
-	private void processAsFile(HashIdFileTree fileNode)
+	private void processAsFile(AnalysisFileTree fileNode)
 			throws FileStoreException, InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 		if (fileStore.wasAnalyzed(fileNode.getHashId())) {
@@ -265,14 +265,14 @@ public abstract class AbstractEvaluator extends
 	 * @throws EvaluationStoreException
 	 * @throws DirectoryStoreException
 	 */
-	private void processAsDirectory(HashIdFileTree directoryNode)
+	private void processAsDirectory(AnalysisFileTree directoryNode)
 			throws FileStoreException, InterruptedException,
 			UniversalSyntaxTreeEvaluationException, DirectoryStoreException,
 			EvaluationStoreException {
 		if (directoryStore.isAvailable(directoryNode.getHashId())) {
 			if ((!evaluatorStore.hasDirectoryResults(directoryNode.getHashId()))
 					|| (reEvaluation)) {
-				for (HashIdFileTree child : directoryNode.getChildren()) {
+				for (AnalysisFileTree child : directoryNode.getChildren()) {
 					processNode(child);
 				}
 				processDirectory(directoryNode);

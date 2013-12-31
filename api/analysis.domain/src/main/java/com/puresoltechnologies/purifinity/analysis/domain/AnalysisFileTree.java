@@ -21,16 +21,24 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 	private final String name;
 	private final HashId hashId;
 	private final boolean file;
-	private final List<AnalyzedCode> analyzedCodes;
+	private final List<AnalysisInformation> analyzedCodes;
 
 	public AnalysisFileTree(AnalysisFileTree parent, String name,
-			HashId hashId, boolean file, List<AnalyzedCode> analyzedCodes) {
+			HashId hashId, boolean file, List<AnalysisInformation> analyzedCodes) {
 		super();
 		this.parent = parent;
 		this.name = name;
 		this.hashId = hashId;
 		this.file = file;
 		this.analyzedCodes = analyzedCodes;
+		if ((!file) && (analyzedCodes != null)) {
+			throw new IllegalArgumentException(
+					"Analyses are only allowed for files. Directories need to have null for analyses list.");
+		}
+		if ((file) && (analyzedCodes == null)) {
+			throw new IllegalArgumentException(
+					"Analyses are not allowed to be null for files. If there is no analysis, set an empty list.");
+		}
 		if (parent != null) {
 			parent.children.add(this);
 		}
@@ -64,7 +72,7 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 		return file;
 	}
 
-	public final List<AnalyzedCode> getAnalyses() {
+	public final List<AnalysisInformation> getAnalyses() {
 		return analyzedCodes;
 	}
 

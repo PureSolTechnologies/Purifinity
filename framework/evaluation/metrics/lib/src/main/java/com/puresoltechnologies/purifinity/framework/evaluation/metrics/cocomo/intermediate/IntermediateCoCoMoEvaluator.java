@@ -16,11 +16,12 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCEvaluator;
@@ -58,7 +59,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	private String currency = "USD";
 
 	public IntermediateCoCoMoEvaluator(AnalysisRun analysisRun,
-			HashIdFileTree path) {
+			AnalysisFileTree path) {
 		super(NAME, DESCRIPTION, analysisRun, path);
 		store = getEvaluatorStore();
 		slocStore = EvaluatorStoreFactory.getFactory().createInstance(
@@ -90,15 +91,17 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processFile(CodeAnalysis analysis)
 			throws EvaluationStoreException {
-		HashId hashId = analysis.getAnalyzedFile().getHashId();
+		HashId hashId = analysis.getAnalysisInformation().getHashId();
 		if (slocStore.hasFileResults(hashId)) {
 			SLOCFileResults slocResults = (SLOCFileResults) slocStore
 					.readFileResults(hashId);
+			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
+					.getSourceCodeLocation(hashId);
 			for (SLOCResult results : slocResults.getResults()) {
 				if (results.getCodeRangeType() == CodeRangeType.FILE) {
 					int phyLoc = results.getSLOCMetric().getPhyLOC();
 					IntermediateCoCoMoFileResults fileResults = new IntermediateCoCoMoFileResults(
-							analysis.getAnalyzedFile().getSourceLocation());
+							sourceCodeLocation);
 					fileResults.setAverageSalary(averageSalary, currency);
 					fileResults.setProject(project);
 					fileResults.setSloc(phyLoc);
@@ -110,16 +113,16 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processDirectory(HashIdFileTree directory)
+	protected void processDirectory(AnalysisFileTree directory)
 			throws InterruptedException, EvaluationStoreException {
 		IntermediateCoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
 		store.storeDirectoryResults(directory.getHashId(), directoryResults);
 	}
 
 	private IntermediateCoCoMoDirectoryResults createDirectoryResults(
-			HashIdFileTree directory) throws EvaluationStoreException {
+			AnalysisFileTree directory) throws EvaluationStoreException {
 		int phyLoc = 0;
-		for (HashIdFileTree child : directory.getChildren()) {
+		for (AnalysisFileTree child : directory.getChildren()) {
 			HashId hashId = child.getHashId();
 			if (child.isFile()) {
 				if (store.hasFileResults(hashId)) {
@@ -147,7 +150,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processProject() throws InterruptedException,
 			EvaluationStoreException {
-		HashIdFileTree directory = getAnalysisRun().getFileTree();
+		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		IntermediateCoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
 		store.storeDirectoryResults(directory.getHashId(), directoryResults);
 	}

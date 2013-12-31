@@ -3,10 +3,11 @@ package com.puresoltechnologies.parsers.impl.source;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
 
 /**
@@ -17,7 +18,7 @@ import com.puresoltechnologies.parsers.impl.lexer.TokenStream;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FixedCodeLocation extends AbstractCodeLocation {
+public class FixedCodeLocation extends AbstractSourceCodeLocation {
 
 	private static final long serialVersionUID = -694681290095697777L;
 
@@ -25,6 +26,10 @@ public class FixedCodeLocation extends AbstractCodeLocation {
 
 	public FixedCodeLocation(SourceCode sourceCode) {
 		this.sourceCode = sourceCode;
+	}
+
+	public FixedCodeLocation(Properties properties) {
+		throw new IllegalStateException("A fixed code cannot be serialized!");
 	}
 
 	public FixedCodeLocation(String... lines) {
@@ -104,5 +109,10 @@ public class FixedCodeLocation extends AbstractCodeLocation {
 	@Override
 	public boolean isAvailable() {
 		return true;
+	}
+
+	@Override
+	public Properties getSerialization() {
+		throw new IllegalStateException("A fixed code cannot be serialized!");
 	}
 }

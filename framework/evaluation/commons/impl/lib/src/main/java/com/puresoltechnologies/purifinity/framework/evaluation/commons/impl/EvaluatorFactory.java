@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 
@@ -78,7 +78,7 @@ public interface EvaluatorFactory {
 	 * @return An {@link Evaluator} is returned which runs the evaluation on the
 	 *         specified subtree.
 	 */
-	public Evaluator create(AnalysisRun analysisRun, HashIdFileTree path);
+	public Evaluator create(AnalysisRun analysisRun, AnalysisFileTree path);
 
 	/**
 	 * This method returns a list of Evaluator classes which are needed to be

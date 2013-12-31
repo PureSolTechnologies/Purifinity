@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotSame;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -18,8 +17,7 @@ import org.junit.Test;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
-import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
@@ -65,9 +63,8 @@ public class FileStoreImplIT extends AbstractDbStoreTest {
 					hashId.getAlgorithm());
 			assertNotNull(hashId.getHash());
 		}
-		AnalyzedCode analyzedFile = new AnalyzedCode(hashId,
-				new SourceFileLocation(new File("."), new File("test")),
-				new Date(), 12345l, "language", "1.2.3");
+		AnalysisInformation analyzedFile = new AnalysisInformation(hashId,
+				new Date(), 12345l, true, "language", "1.2.3");
 		CodeAnalysis fileAnalysis = new CodeAnalysis(new Date(), 12345l,
 				"language", "1.2.3", analyzedFile, new ArrayList<CodeRange>(),
 				(UniversalSyntaxTree) null);

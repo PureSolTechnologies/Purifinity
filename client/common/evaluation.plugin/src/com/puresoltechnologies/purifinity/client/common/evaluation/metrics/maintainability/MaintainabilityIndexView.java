@@ -15,9 +15,9 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.CodeRangeComboViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
@@ -40,7 +40,7 @@ public class MaintainabilityIndexView extends AbstractEvaluationView implements
 	private Combo codeRangeCombo;
 	private CodeRangeComboViewer comboViewer;
 	private final List<CodeRange> codeRanges = new ArrayList<CodeRange>();
-	private HashIdFileTree path = null;
+	private AnalysisFileTree path = null;
 	private MaintainabilityIndexResultPanel resultPanel;
 
 	@Override
@@ -85,12 +85,12 @@ public class MaintainabilityIndexView extends AbstractEvaluationView implements
 	}
 
 	@Override
-	public void showEvaluation(HashIdFileTree path)
+	public void showEvaluation(AnalysisFileTree path)
 			throws EvaluationStoreException {
 		showEvaluation(path, 0);
 	}
 
-	public void showEvaluation(HashIdFileTree path, int codeRangeId)
+	public void showEvaluation(AnalysisFileTree path, int codeRangeId)
 			throws EvaluationStoreException {
 		MaintainabilityIndexResult maintainabilityResult = null;
 		if ((codeRangeId >= 0) && (codeRangeId < codeRanges.size())) {
@@ -115,7 +115,7 @@ public class MaintainabilityIndexView extends AbstractEvaluationView implements
 		resultPanel.setResult(maintainabilityResult);
 	}
 
-	private void updateCodeRanges(HashIdFileTree path)
+	private void updateCodeRanges(AnalysisFileTree path)
 			throws EvaluationStoreException {
 		codeRanges.clear();
 		EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()

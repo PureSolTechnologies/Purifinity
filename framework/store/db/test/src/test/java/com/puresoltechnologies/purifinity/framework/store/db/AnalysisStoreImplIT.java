@@ -17,12 +17,12 @@ import org.junit.Test;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.trees.api.TreeUtils;
 import com.puresoltechnologies.parsers.api.source.RepositoryLocation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
-import com.puresoltechnologies.purifinity.framework.analysis.test.HashIdFileTreeUtils;
+import com.puresoltechnologies.purifinity.framework.analysis.test.TreeTestUtils;
 import com.puresoltechnologies.purifinity.framework.commons.utils.FileSearch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.FileTree;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
@@ -238,19 +238,19 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 		}
 		storeRawFileWatch.stop();
 
-		HashIdFileTree hashIdFileTree = HashIdFileTreeUtils
+		AnalysisFileTree hashIdFileTree = TreeTestUtils
 				.convertToHashIdFileTree(fileTree);
 
 		StopWatch storeFileTreeWatch = new StopWatch();
 		storeFileTreeWatch.start();
-		analysisStore.storeFileTree(projectUUID, analysisRun.getUUID(),
+		analysisStore.storeAnalysisFileTree(projectUUID, analysisRun.getUUID(),
 				hashIdFileTree);
 		storeFileTreeWatch.stop();
 
 		StopWatch readFileTreeWatch = new StopWatch();
 		readFileTreeWatch.start();
-		HashIdFileTree treeRead = analysisStore.readFileTree(projectUUID,
-				analysisRun.getUUID());
+		AnalysisFileTree treeRead = analysisStore.readAnalysisFileTree(
+				projectUUID, analysisRun.getUUID());
 		readFileTreeWatch.stop();
 
 		System.out.println("Storing raw files: "

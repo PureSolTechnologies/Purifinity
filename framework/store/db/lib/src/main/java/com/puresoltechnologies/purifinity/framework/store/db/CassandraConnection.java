@@ -31,7 +31,7 @@ public class CassandraConnection {
 	public static final String ANALYSIS_FILES_TABLE = "files";
 	public static final String ANALYSIS_DIRECTORIES_TABLE = "directories";
 	public static final String ANALYSIS_PROJECT_SETTINGS_TABLE = "project_settings";
-	public static final String ANALYSIS_RUN_FILE_TREE_NAMES = "analysis_run_file_tree_names";
+	public static final String ANALYSIS_RUN_FILE_TREE_INFORMATION = "analysis_run_file_tree_information";
 
 	public static final String RUN_SETTINGS_TABLE = "run_settings";
 	public static final String RUN_FILES_TABLE = "run_files";
@@ -184,10 +184,10 @@ public class CassandraConnection {
 				.checkAndCreateTable(
 						analysisSession,
 						analysisKeyspace,
-						ANALYSIS_RUN_FILE_TREE_NAMES,
+						ANALYSIS_RUN_FILE_TREE_INFORMATION,
 						"CREATE TABLE "
-								+ ANALYSIS_RUN_FILE_TREE_NAMES
-								+ " (uuid uuid, names map<text,text>, PRIMARY KEY(uuid));");
+								+ ANALYSIS_RUN_FILE_TREE_INFORMATION
+								+ " (uuid uuid, names map<text,text>, source_locations map<text,text>, PRIMARY KEY(uuid));");
 
 	}
 

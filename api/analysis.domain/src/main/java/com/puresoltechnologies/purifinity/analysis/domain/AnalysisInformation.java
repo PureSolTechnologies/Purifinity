@@ -5,7 +5,6 @@ import java.util.Date;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.TimeAwareness;
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 
 /**
  * This class is for keeping a list of analyzed files within ProjectAnalyzer.
@@ -15,33 +14,32 @@ import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
  * @author Rick-Rainer Ludwig
  * 
  */
-public final class AnalyzedCode implements Comparable<AnalyzedCode>,
-		Serializable, TimeAwareness {
+public final class AnalysisInformation implements Serializable, TimeAwareness {
 
 	private static final long serialVersionUID = 2030120585873480183L;
 
 	private final HashId hashId;
-	private final SourceCodeLocation source;
 	private final Date time;
 	private final long duration;
+	private final boolean successful;
 	private final String languageName;
 	private final String languageVersion;
 	private final String analyzerErrorMessage;
 
-	public AnalyzedCode(HashId hashId, SourceCodeLocation source, Date time,
-			long timeOfRun, String languageName, String languageVersion) {
-		this(hashId, source, time, timeOfRun, languageName, languageVersion,
+	public AnalysisInformation(HashId hashId, Date time, long duration,
+			boolean successful, String languageName, String languageVersion) {
+		this(hashId, time, duration, successful, languageName, languageVersion,
 				null);
 	}
 
-	public AnalyzedCode(HashId hashId, SourceCodeLocation source, Date time,
-			long timeOfRun, String languageName, String languageVersion,
+	public AnalysisInformation(HashId hashId, Date time, long duration,
+			boolean successful, String languageName, String languageVersion,
 			String analyzerErrorMessage) {
 		super();
 		this.hashId = hashId;
-		this.source = source;
 		this.time = time;
-		this.duration = timeOfRun;
+		this.duration = duration;
+		this.successful = successful;
 		this.languageName = languageName;
 		this.languageVersion = languageVersion;
 		this.analyzerErrorMessage = analyzerErrorMessage;
@@ -49,10 +47,6 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 
 	public final HashId getHashId() {
 		return hashId;
-	}
-
-	public final SourceCodeLocation getSourceLocation() {
-		return source;
 	}
 
 	@Override
@@ -63,6 +57,10 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 	@Override
 	public final long getDuration() {
 		return duration;
+	}
+
+	public final boolean isSuccessful() {
+		return successful;
 	}
 
 	public final String getLanguageName() {
@@ -77,14 +75,18 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((source == null) ? 0 : source.hashCode());
+		result = prime
+				* result
+				+ ((analyzerErrorMessage == null) ? 0 : analyzerErrorMessage
+						.hashCode());
+		result = prime * result + (int) (duration ^ (duration >>> 32));
 		result = prime * result + ((hashId == null) ? 0 : hashId.hashCode());
 		result = prime * result
 				+ ((languageName == null) ? 0 : languageName.hashCode());
 		result = prime * result
 				+ ((languageVersion == null) ? 0 : languageVersion.hashCode());
+		result = prime * result + (successful ? 1231 : 1237);
 		result = prime * result + ((time == null) ? 0 : time.hashCode());
-		result = prime * result + (int) (duration ^ (duration >>> 32));
 		return result;
 	}
 
@@ -96,11 +98,13 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AnalyzedCode other = (AnalyzedCode) obj;
-		if (source == null) {
-			if (other.source != null)
+		AnalysisInformation other = (AnalysisInformation) obj;
+		if (analyzerErrorMessage == null) {
+			if (other.analyzerErrorMessage != null)
 				return false;
-		} else if (!source.equals(other.source))
+		} else if (!analyzerErrorMessage.equals(other.analyzerErrorMessage))
+			return false;
+		if (duration != other.duration)
 			return false;
 		if (hashId == null) {
 			if (other.hashId != null)
@@ -117,20 +121,14 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 				return false;
 		} else if (!languageVersion.equals(other.languageVersion))
 			return false;
+		if (successful != other.successful)
+			return false;
 		if (time == null) {
 			if (other.time != null)
 				return false;
 		} else if (!time.equals(other.time))
 			return false;
-		if (duration != other.duration)
-			return false;
 		return true;
-	}
-
-	@Override
-	public int compareTo(AnalyzedCode other) {
-		return this.source.getHumanReadableLocationString().compareTo(
-				other.source.getHumanReadableLocationString());
 	}
 
 	public boolean wasAnalyzed() {
@@ -148,8 +146,8 @@ public final class AnalyzedCode implements Comparable<AnalyzedCode>,
 
 	@Override
 	public String toString() {
-		String string = source.toString() + ":" + languageName + " "
-				+ languageVersion + " " + time + "/" + duration + "ms";
+		String string = hashId + ":" + languageName + " " + languageVersion
+				+ " " + time + "/" + duration + "ms";
 		if (analyzerErrorMessage != null) {
 			string += " (message:'" + analyzerErrorMessage + "')";
 		}

@@ -5,12 +5,13 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
@@ -45,7 +46,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	private final EvaluatorStore maintainabilityStore;
 
 	public NormalizedMaintainabilityIndexEvaluator(AnalysisRun analysisRun,
-			HashIdFileTree path) {
+			AnalysisFileTree path) {
 		super(NAME, DESCRIPTION, analysisRun, path);
 		store = getEvaluatorStore();
 
@@ -63,9 +64,11 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 			throws InterruptedException, EvaluationStoreException {
 		NormalizedMaintainabilityIndexFileResults results = new NormalizedMaintainabilityIndexFileResults();
 
-		HashId hashId = analysis.getAnalyzedFile().getHashId();
+		HashId hashId = analysis.getAnalysisInformation().getHashId();
 		MaintainabilityIndexFileResults maintainabilityFileResults = (MaintainabilityIndexFileResults) maintainabilityStore
 				.readFileResults(hashId);
+		SourceCodeLocation sourceCodeLocation = getAnalysisRun()
+				.getSourceCodeLocation(hashId);
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 
@@ -78,9 +81,9 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 					maintainabilityIndex.getMIwoc(),
 					maintainabilityIndex.getMIcw());
 
-			results.add(new NormalizedMaintainabilityIndexFileResult(analysis
-					.getAnalyzedFile().getSourceLocation(),
-					codeRange.getType(), codeRange.getCanonicalName(), result,
+			results.add(new NormalizedMaintainabilityIndexFileResult(
+					sourceCodeLocation, codeRange.getType(), codeRange
+							.getCanonicalName(), result,
 					NormalizedMaintainabilityQuality.get(codeRange.getType(),
 							result)));
 		}
@@ -109,7 +112,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processDirectory(HashIdFileTree directory)
+	protected void processDirectory(AnalysisFileTree directory)
 			throws InterruptedException, EvaluationStoreException {
 		NormalizedMaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
@@ -118,9 +121,9 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	private NormalizedMaintainabilityIndexDirectoryResults createDirectoryResults(
-			HashIdFileTree directory) throws EvaluationStoreException {
+			AnalysisFileTree directory) throws EvaluationStoreException {
 		QualityLevel qualityLevel = null;
-		for (HashIdFileTree child : directory.getChildren()) {
+		for (AnalysisFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
 				NormalizedMaintainabilityIndexFileResults results = (NormalizedMaintainabilityIndexFileResults) store
 						.readFileResults(child.getHashId());

@@ -2,15 +2,17 @@ package com.puresoltechnologies.purifinity.framework.store.api;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 
 /**
  * This is the central interface to access the delivered analysis store. The
@@ -109,19 +111,22 @@ public interface AnalysisStore {
 	public FileSearchConfiguration readSearchConfiguration(UUID projectUUID,
 			UUID analysisRunUUID) throws AnalysisStoreException;
 
-	public void storeAnalysisInformation(UUID projectUUID,
-			UUID analysisRunUUID, List<AnalyzedCode> analyzedFiles,
-			List<AnalyzedCode> failedSources) throws AnalysisStoreException;
+	public void storeAnalysisFileTree(UUID projectUUID, UUID analysisRunUUID,
+			AnalysisFileTree fileTree) throws AnalysisStoreException;
 
-	public void storeFileTree(UUID projectUUID, UUID analysisRunUUID,
-			HashIdFileTree fileTree) throws AnalysisStoreException;
-
-	public HashIdFileTree readFileTree(UUID projectUUID, UUID runUUID)
+	public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException;
 
 	public AnalysisRunInformation createAnalysisRun(UUID analysisProjectUUID,
 			Date startTime, long duration, String description,
 			FileSearchConfiguration fileSearchConfiguration)
 			throws AnalysisStoreException;
+
+	public void storeAnalysisSourceLocations(UUID projectUUID, UUID runUUID,
+			Map<HashId, SourceCodeLocation> sourceLocations)
+			throws AnalysisStoreException;
+
+	public Map<HashId, SourceCodeLocation> readAnalysisSourceLocations(
+			UUID projectUUID, UUID runUUID) throws AnalysisStoreException;
 
 }

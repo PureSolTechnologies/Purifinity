@@ -23,8 +23,8 @@ import org.eclipse.ui.PartInitException;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunContentTreeViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.editors.DirectoryAnalysisEditor;
@@ -45,7 +45,7 @@ public class AnalysisRunContentView extends AbstractPureSolTechnologiesView
 	private AnalysisRunContentTreeViewer fileTreeViewer;
 	private AnalysisSelection analysisSelection;
 	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
-	private HashIdFileTree lastSelection;
+	private AnalysisFileTree lastSelection;
 
 	public AnalysisRunContentView() {
 		super(Activator.getDefault());
@@ -129,12 +129,12 @@ public class AnalysisRunContentView extends AbstractPureSolTechnologiesView
 
 	private void processDoubleClickOnFileTree(TreeSelection selection)
 			throws PartInitException {
-		HashIdFileTree firstElement = (HashIdFileTree) selection
+		AnalysisFileTree firstElement = (AnalysisFileTree) selection
 				.getFirstElement();
 		analysisSelection = new AnalysisSelection(analysis, analysisRun,
 				firstElement);
-		AnalyzedCode analyzedCode = analysisRun.findAnalyzedCode(firstElement
-				.getPathFile(false).getPath());
+		AnalysisInformation analyzedCode = analysisRun
+				.findAnalyzedCode(firstElement.getPathFile(false).getPath());
 		if (analyzedCode != null) {
 			FileAnalysisEditorInput fileAnalysisEditorInput = new FileAnalysisEditorInput(
 					analyzedCode, analysisRun);
@@ -186,8 +186,8 @@ public class AnalysisRunContentView extends AbstractPureSolTechnologiesView
 					.getSelection();
 			Object first = selection.getFirstElement();
 			if (first != null) {
-				if (first.getClass().equals(HashIdFileTree.class)) {
-					HashIdFileTree firstElement = (HashIdFileTree) first;
+				if (first.getClass().equals(AnalysisFileTree.class)) {
+					AnalysisFileTree firstElement = (AnalysisFileTree) first;
 					if (!firstElement.equals(lastSelection)) {
 						AnalysisSelection analysisSelection = new AnalysisSelection(
 								analysis, analysisRun, firstElement);
@@ -195,7 +195,7 @@ public class AnalysisRunContentView extends AbstractPureSolTechnologiesView
 						lastSelection = firstElement;
 					}
 				} else if (first.getClass().equals(String.class)) {
-					HashIdFileTree firstElement = analysisRun.getFileTree();
+					AnalysisFileTree firstElement = analysisRun.getFileTree();
 					AnalysisSelection analysisSelection = new AnalysisSelection(
 							analysis, analysisRun, firstElement);
 					setSelection(analysisSelection);

@@ -25,8 +25,8 @@ import com.puresoltechnologies.commons.trees.api.TreeException;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.impl.lexer.Lexer;
 import com.puresoltechnologies.parsers.impl.lexer.LexerException;
@@ -37,7 +37,7 @@ import com.puresoltechnologies.parsers.impl.parser.ParserTree;
 import com.puresoltechnologies.parsers.impl.ust.CompilationUnit;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
@@ -85,8 +85,8 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 					.create(parserTree);
 			long timeEffort = watch.getMilliseconds();
 			Java java = Java.getInstance();
-			AnalyzedCode analyzedFile = new AnalyzedCode(
-					sourceCode.getHashId(), getSource(), date, timeEffort,
+			AnalysisInformation analyzedFile = new AnalysisInformation(
+					sourceCode.getHashId(), date, timeEffort, true,
 					java.getName(), java.getVersion());
 			fileAnalysis = new CodeAnalysis(date, timeEffort, java.getName(),
 					java.getVersion(), analyzedFile,

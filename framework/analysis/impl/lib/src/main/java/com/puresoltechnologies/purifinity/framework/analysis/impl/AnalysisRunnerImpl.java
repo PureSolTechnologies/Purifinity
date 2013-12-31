@@ -31,10 +31,10 @@ import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.data.HashCodeGenerator;
 import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;
@@ -53,25 +53,24 @@ public class AnalysisRunnerImpl extends
 			.availableProcessors();
 	private static final int WAITTIME_IN_SECONDS_FOR_THREAD_POLL = 1000;
 
-	private HashIdFileTree fileTree = null;
+	private AnalysisFileTree fileTree = null;
 	private Date startTime = null;
-	private long timeOfRun = 0;
+	private long duration = 0;
 	private AnalysisRunInformation analysisRun = null;
+	private StopWatch stopWatch = null;
 
-	private final List<AnalyzedCode> analyzedFiles = new ArrayList<>();
-	private final List<AnalyzedCode> failedSources = new ArrayList<>();
+	private final Map<SourceCodeLocation, AnalysisInformation> analyzedFiles = new HashMap<>();
+	private final Map<HashId, SourceCodeLocation> sourceCodeLocations = new HashMap<>();
 
-	private final UUID analysisProjectUUID;
-	private final UUID uuid;
-	private final AnalysisStore analysisStore;
+	private final UUID projectUUID;
+	private final AnalysisStore analysisStore = AnalysisStoreFactory
+			.getFactory().getInstance();
 	private final FileSearchConfiguration searchConfig;
 
 	public AnalysisRunnerImpl(UUID analysisProjectUUID)
 			throws AnalysisStoreException {
 		super();
-		this.analysisProjectUUID = analysisProjectUUID;
-		uuid = UUID.randomUUID();
-		analysisStore = AnalysisStoreFactory.getFactory().getInstance();
+		this.projectUUID = analysisProjectUUID;
 		AnalysisProjectSettings settings = analysisStore
 				.readAnalysisProjectSettings(analysisProjectUUID);
 		searchConfig = settings.getFileSearchConfiguration();
@@ -80,23 +79,23 @@ public class AnalysisRunnerImpl extends
 	@Override
 	public Boolean call() throws Exception {
 		try {
-			reset();
-			StopWatch stopWatch = new StopWatch();
+			if (stopWatch != null) {
+				throw new IllegalStateException("Runner was run already.");
+			}
+			stopWatch = new StopWatch();
 			stopWatch.start();
 			boolean analysisSuccessful = analyzeFiles();
 			stopWatch.stop();
 			startTime = stopWatch.getStartTime();
-			timeOfRun = stopWatch.getMilliseconds();
+			duration = stopWatch.getMilliseconds();
 			if (analysisSuccessful) {
-				analysisRun = analysisStore.createAnalysisRun(
-						analysisProjectUUID, stopWatch.getStartTime(),
-						timeOfRun, "", searchConfig);
+				analysisRun = analysisStore.createAnalysisRun(projectUUID,
+						stopWatch.getStartTime(), duration, "", searchConfig);
 				buildCodeLocationTree();
-				analysisStore.storeFileTree(analysisProjectUUID,
+				analysisStore.storeAnalysisFileTree(projectUUID,
 						analysisRun.getUUID(), fileTree);
-				analysisStore
-						.storeAnalysisInformation(analysisProjectUUID,
-								uuid, analyzedFiles, failedSources);
+				analysisStore.storeAnalysisSourceLocations(projectUUID,
+						analysisRun.getUUID(), sourceCodeLocations);
 				fireDone("Finished successfully.", true);
 				return true;
 			} else {
@@ -114,14 +113,6 @@ public class AnalysisRunnerImpl extends
 	}
 
 	/**
-	 * This method resets the values for a reanalysis.
-	 */
-	private void reset() {
-		analyzedFiles.clear();
-		failedSources.clear();
-	}
-
-	/**
 	 * This method starts all evaluation threads and puts them into the thread
 	 * pool. Afterwards the finalization is awaited.
 	 * 
@@ -132,7 +123,7 @@ public class AnalysisRunnerImpl extends
 	 * @throws AnalysisStoreException
 	 */
 	private boolean analyzeFiles() throws AnalysisStoreException {
-		List<Future<AnalyzedCode>> futures = startAllAnalysisThreads();
+		Map<Future<AnalysisInformation>, SourceCodeLocation> futures = startAllAnalysisThreads();
 		return waitForAnalysisThreads(futures);
 	}
 
@@ -143,10 +134,10 @@ public class AnalysisRunnerImpl extends
 	 *         the running (or finished) analysis threads.
 	 * @throws AnalysisStoreException
 	 */
-	private List<Future<AnalyzedCode>> startAllAnalysisThreads()
+	private Map<Future<AnalysisInformation>, SourceCodeLocation> startAllAnalysisThreads()
 			throws AnalysisStoreException {
 		AnalysisProjectSettings analysisProjectSettings = analysisStore
-				.readAnalysisProjectSettings(analysisProjectUUID);
+				.readAnalysisProjectSettings(projectUUID);
 		RepositoryLocation repositoryLocation = RepositoryLocationCreator
 				.createFromSerialization(analysisProjectSettings
 						.getRepositoryLocation());
@@ -156,12 +147,12 @@ public class AnalysisRunnerImpl extends
 		ExecutorService threadPool = Executors
 				.newFixedThreadPool(NUMBER_OF_PARALLEL_THREADS);
 		fireStarted("Analyze files", sourceFiles.size());
-		List<Future<AnalyzedCode>> futures = new ArrayList<Future<AnalyzedCode>>();
+		Map<Future<AnalysisInformation>, SourceCodeLocation> futures = new HashMap<Future<AnalysisInformation>, SourceCodeLocation>();
 		for (int index = 0; index < sourceFiles.size(); index++) {
 			SourceCodeLocation sourceFile = sourceFiles.get(index);
-			Callable<AnalyzedCode> callable = new AnalysisRunCallable(
+			Callable<AnalysisInformation> callable = new AnalysisRunCallable(
 					sourceFile);
-			futures.add(threadPool.submit(callable));
+			futures.put(threadPool.submit(callable), sourceFile);
 		}
 		threadPool.shutdown();
 		return futures;
@@ -177,28 +168,29 @@ public class AnalysisRunnerImpl extends
 	 * @return True is returned if the analysis was successful. False is
 	 *         returned otherwise.
 	 */
-	private boolean waitForAnalysisThreads(List<Future<AnalyzedCode>> futures) {
+	private boolean waitForAnalysisThreads(
+			Map<Future<AnalysisInformation>, SourceCodeLocation> futures) {
 		boolean interrupted = false;
 		while (futures.size() > 0) {
 			try {
-				Iterator<Future<AnalyzedCode>> iterator = futures.iterator();
+				Iterator<Future<AnalysisInformation>> iterator = futures
+						.keySet().iterator();
 				while (iterator.hasNext()) {
-					Future<AnalyzedCode> future = iterator.next();
+					Future<AnalysisInformation> future = iterator.next();
 					if (future.isDone()) {
 						iterator.remove();
 						fireUpdateWork("Finished a file.", 1);
 						try {
 							if (!future.isCancelled()) {
-								AnalyzedCode result = future.get();
-								if (result.wasAnalyzed()) {
-									analyzedFiles.add(result);
-								} else {
-									failedSources.add(result);
-								}
+								AnalysisInformation result = future.get();
+								SourceCodeLocation sourceCodeLocation = futures
+										.get(future);
+								analyzedFiles.put(sourceCodeLocation, result);
+								sourceCodeLocations.put(result.getHashId(),
+										sourceCodeLocation);
 								fireUpdateWork(
 										"Finished '"
-												+ result.getSourceLocation()
-														.getHumanReadableLocationString()
+												+ sourceCodeLocation.getHumanReadableLocationString()
 												+ "'.", 0);
 							}
 						} catch (CancellationException e) {
@@ -214,7 +206,7 @@ public class AnalysisRunnerImpl extends
 			} catch (InterruptedException e) {
 				logger.warn("Job was interrupted.", e);
 				interrupted = true;
-				for (Future<AnalyzedCode> future : futures) {
+				for (Future<AnalysisInformation> future : futures.keySet()) {
 					future.cancel(true);
 				}
 			}
@@ -223,7 +215,7 @@ public class AnalysisRunnerImpl extends
 	}
 
 	private void buildCodeLocationTree() throws AnalysisStoreException {
-		HashIdFileTree intermediate = createIntermediateTree();
+		AnalysisFileTree intermediate = createIntermediateTree();
 		createFinalTree(intermediate);
 	}
 
@@ -234,62 +226,64 @@ public class AnalysisRunnerImpl extends
 	 * 
 	 * @throws AnalysisStoreException
 	 */
-	private HashIdFileTree createIntermediateTree()
+	private AnalysisFileTree createIntermediateTree()
 			throws AnalysisStoreException {
 		AnalysisProjectSettings analysisProjectSettings = analysisStore
-				.readAnalysisProjectSettings(analysisProjectUUID);
+				.readAnalysisProjectSettings(projectUUID);
 		RepositoryLocation repositoryLocation = RepositoryLocationCreator
 				.createFromSerialization(analysisProjectSettings
 						.getRepositoryLocation());
-		HashIdFileTree intermediate = new HashIdFileTree(null,
+		AnalysisFileTree intermediate = new AnalysisFileTree(null,
 				repositoryLocation.getHumanReadableLocationString(), null,
-				false);
-		for (AnalyzedCode analyzedFile : analyzedFiles) {
-			addToIntermediateTree(intermediate,
-					analyzedFile.getSourceLocation(), analyzedFile.getHashId());
-		}
-		for (AnalyzedCode failedFile : failedSources) {
-			addToIntermediateTree(intermediate, failedFile.getSourceLocation(),
-					failedFile.getHashId());
+				false, null);
+		for (SourceCodeLocation sourceCodeLocation : analyzedFiles.keySet()) {
+			addToIntermediateTree(intermediate, sourceCodeLocation);
 		}
 		return intermediate;
 	}
 
-	private void addToIntermediateTree(HashIdFileTree intermediate,
-			SourceCodeLocation location, HashId hashId) {
+	private void addToIntermediateTree(AnalysisFileTree intermediate,
+			SourceCodeLocation location) {
+		AnalysisInformation analysis = analyzedFiles.get(location);
+		HashId hashId = analysis.getHashId();
 		String internalLocation = location.getInternalLocation();
 		String[] directories = internalLocation.split("/");
-		HashIdFileTree node = intermediate;
+		AnalysisFileTree node = intermediate;
 		for (int i = 0; i < directories.length; i++) {
 			String directory = directories[i];
-			HashIdFileTree child = node.getChild(directory);
+			AnalysisFileTree child = node.getChild(directory);
 			if (child == null) {
 				boolean isFile = (i == directories.length - 1);
 				if (isFile) {
-					child = new HashIdFileTree(node, directory, hashId, isFile);
+					List<AnalysisInformation> analyses = new ArrayList<AnalysisInformation>();
+					analyses.add(analysis);
+					child = new AnalysisFileTree(node, directory, hashId,
+							isFile, analyses);
 				} else {
-					child = new HashIdFileTree(node, directory, null, isFile);
+					child = new AnalysisFileTree(node, directory, null, isFile,
+							null);
 				}
 			}
 			node = child;
 		}
 	}
 
-	private void createFinalTree(HashIdFileTree intermediate) {
+	private void createFinalTree(AnalysisFileTree intermediate) {
 		Map<File, HashId> hashes = generateModuleHashes(intermediate);
-		fileTree = new HashIdFileTree(null, intermediate.getName(),
-				hashes.get(intermediate.getPathFile(false)), false);
-		for (HashIdFileTree child : intermediate.getChildren()) {
+		fileTree = new AnalysisFileTree(null, intermediate.getName(),
+				hashes.get(intermediate.getPathFile(false)), false,
+				new ArrayList<AnalysisInformation>());
+		for (AnalysisFileTree child : intermediate.getChildren()) {
 			addToFinalTree(fileTree, child, hashes);
 		}
 	}
 
-	private void addToFinalTree(HashIdFileTree parentNode,
-			HashIdFileTree refNode, Map<File, HashId> hashes) {
-		HashIdFileTree newNode = new HashIdFileTree(parentNode,
+	private void addToFinalTree(AnalysisFileTree parentNode,
+			AnalysisFileTree refNode, Map<File, HashId> hashes) {
+		AnalysisFileTree newNode = new AnalysisFileTree(parentNode,
 				refNode.getName(), hashes.get(refNode.getPathFile(false)),
-				refNode.isFile());
-		for (HashIdFileTree child : refNode.getChildren()) {
+				refNode.isFile(), new ArrayList<AnalysisInformation>());
+		for (AnalysisFileTree child : refNode.getChildren()) {
 			addToFinalTree(newNode, child, hashes);
 		}
 	}
@@ -301,17 +295,17 @@ public class AnalysisRunnerImpl extends
 	 * @param intermediate
 	 * @return
 	 */
-	private Map<File, HashId> generateModuleHashes(HashIdFileTree intermediate) {
+	private Map<File, HashId> generateModuleHashes(AnalysisFileTree intermediate) {
 		final Map<File, HashId> hashes = new HashMap<File, HashId>();
-		TreeVisitor<HashIdFileTree> visitor = new TreeVisitor<HashIdFileTree>() {
+		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
 
 			@Override
-			public WalkingAction visit(HashIdFileTree tree) {
+			public WalkingAction visit(AnalysisFileTree tree) {
 				if (tree.getHashId() != null) {
 					hashes.put(tree.getPathFile(false), tree.getHashId());
 				} else {
 					List<String> hashList = new ArrayList<String>();
-					for (HashIdFileTree child : tree.getChildren()) {
+					for (AnalysisFileTree child : tree.getChildren()) {
 						hashList.add(hashes.get(child.getPathFile(false))
 								.toString());
 					}
@@ -339,8 +333,7 @@ public class AnalysisRunnerImpl extends
 
 	@Override
 	public AnalysisRun getAnalysisRun() throws AnalysisProjectException {
-		return new AnalysisRunImpl(analysisProjectUUID, uuid, startTime,
-				timeOfRun, fileTree, analyzedFiles, failedSources, searchConfig);
+		return new AnalysisRunImpl(analysisRun, fileTree, sourceCodeLocations);
 	}
 
 }

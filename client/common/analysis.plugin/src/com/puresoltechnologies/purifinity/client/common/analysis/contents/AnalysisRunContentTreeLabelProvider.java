@@ -13,9 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
@@ -43,11 +43,11 @@ public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
 		if (element instanceof String) {
 			return (String) element;
 		}
-		HashIdFileTree input = (HashIdFileTree) element;
+		AnalysisFileTree input = (AnalysisFileTree) element;
 		String text = input.getName();
 		File path = input.getPathFile(false);
-		AnalyzedCode analyzedFile = analysisRun
-				.findAnalyzedCode(path.getPath());
+		AnalysisInformation analyzedFile = analysisRun.findAnalyzedCode(path
+				.getPath());
 		FileStore fileStore = FileStoreFactory.getFactory().getInstance();
 		if ((fileStore != null) && (analyzedFile != null)) {
 			if (fileStore.wasAnalyzed(analyzedFile.getHashId())) {
@@ -71,7 +71,7 @@ public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
 		if (element instanceof String) {
 			return createProjectImage();
 		}
-		HashIdFileTree input = (HashIdFileTree) element;
+		AnalysisFileTree input = (AnalysisFileTree) element;
 		if (!input.isFile()) {
 			return createFolderImage(input);
 		}
@@ -87,7 +87,7 @@ public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
 		return ClientImages.getImage(ClientImages.ANALYSIS_RUN_16x16);
 	}
 
-	protected Image createFolderImage(HashIdFileTree node) {
+	protected Image createFolderImage(AnalysisFileTree node) {
 		return ClientImages.getImage(ClientImages.FOLDER_16x16);
 	}
 
@@ -98,10 +98,10 @@ public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
 	 * @param analyzedFile
 	 * @return
 	 */
-	protected Image createFileImage(HashIdFileTree node) {
+	protected Image createFileImage(AnalysisFileTree node) {
 		File path = node.getPathFile(false);
-		AnalyzedCode analyzedFile = analysisRun
-				.findAnalyzedCode(path.getPath());
+		AnalysisInformation analyzedFile = analysisRun.findAnalyzedCode(path
+				.getPath());
 		Image documentImage = ClientImages
 				.getImage(ClientImages.DOCUMENT_EMPTY_16x16);
 		if (analyzedFile == null) {

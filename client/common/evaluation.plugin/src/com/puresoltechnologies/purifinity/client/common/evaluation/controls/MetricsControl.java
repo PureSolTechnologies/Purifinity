@@ -19,7 +19,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.EvaluatorComboViewer;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
@@ -37,12 +37,12 @@ public class MetricsControl extends Composite implements
 	private final EvaluatorComboViewer comboViewer;
 	private final Text metricDescriptionLabel;
 	private final AnalysisRun analysisRun;
-	private final AnalyzedCode analyzedCode;
+	private final AnalysisInformation analyzedCode;
 
 	private Composite centerComposite = null;
 
 	public MetricsControl(Composite parent, int style, AnalysisRun analysisRun,
-			AnalyzedCode analyzedCode) {
+			AnalysisInformation analyzedCode) {
 		super(parent, style);
 		this.analysisRun = analysisRun;
 		this.analyzedCode = analyzedCode;

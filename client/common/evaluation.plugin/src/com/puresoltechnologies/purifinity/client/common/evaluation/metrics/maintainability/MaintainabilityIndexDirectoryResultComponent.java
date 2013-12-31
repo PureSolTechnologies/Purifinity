@@ -7,8 +7,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexFileResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexFileResults;
@@ -18,7 +18,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFact
 public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 
 	public MaintainabilityIndexDirectoryResultComponent(Composite parent,
-			int style, AnalysisRun analysisRun, HashIdFileTree directory) {
+			int style, AnalysisRun analysisRun, AnalysisFileTree directory) {
 		super(parent, style);
 
 		setLayout(new FillLayout());
@@ -27,7 +27,7 @@ public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 				.createInstance(MaintainabilityIndexEvaluator.class);
 
 		Map<Double, String> maintainability = new HashMap<Double, String>();
-		for (HashIdFileTree child : directory.getChildren()) {
+		for (AnalysisFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
 				MaintainabilityIndexFileResults childResults = (MaintainabilityIndexFileResults) evaluatorStore
 						.readFileResults(child.getHashId());

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URL;
+import java.util.Properties;
 
 /**
  * This is a central interface for storing the location of source code in
@@ -14,6 +15,10 @@ import java.net.URL;
  * @author Rick-Rainer Ludwig
  */
 public interface SourceCodeLocation extends Serializable {
+
+	public static final String SOURCE_CODE_LOCATION_CLASS = "source.code.location.class";
+	public static final String SOURCE_CODE_LOCATION_TYPE = "source.code.location.type";
+	public static final String SOURCE_CODE_LOCATION_NAME = "source.code.location.name";
 
 	/**
 	 * This method returns the name of the returned source code. This might be a
@@ -75,8 +80,9 @@ public interface SourceCodeLocation extends Serializable {
 	public SourceCode loadSourceCode() throws IOException;
 
 	/**
-	 * This method returns a new {@link SourceCodeLocation} which is pointing to a new
-	 * location specified by a relative path/location provided as parameter.
+	 * This method returns a new {@link SourceCodeLocation} which is pointing to
+	 * a new location specified by a relative path/location provided as
+	 * parameter.
 	 * 
 	 * This is used for preprocessor #include actions.
 	 * 
@@ -94,4 +100,13 @@ public interface SourceCodeLocation extends Serializable {
 	 *         otherwise.
 	 */
 	public boolean isAvailable();
+
+	/**
+	 * This method creates a representation of the repository location as
+	 * {@link Properties} object.
+	 * 
+	 * @return A {@link Properties} object is returned which represents this
+	 *         location.
+	 */
+	public Properties getSerialization();
 }

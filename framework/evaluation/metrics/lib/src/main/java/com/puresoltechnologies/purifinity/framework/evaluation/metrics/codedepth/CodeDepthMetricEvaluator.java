@@ -6,14 +6,15 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
@@ -37,7 +38,8 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
 	private final EvaluatorStore store;
 
-	public CodeDepthMetricEvaluator(AnalysisRun analysisRun, HashIdFileTree path) {
+	public CodeDepthMetricEvaluator(AnalysisRun analysisRun,
+			AnalysisFileTree path) {
 		super(CodeDepthMetric.NAME, CodeDepthMetric.DESCRIPTION, analysisRun,
 				path);
 		store = getEvaluatorStore();
@@ -59,17 +61,19 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 					analysis.getLanguageName(), analysis.getLanguageVersion());
 
 			CodeDepthFileResults results = new CodeDepthFileResults();
+			HashId hashId = analysis.getAnalysisInformation().getHashId();
+			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
+					.getSourceCodeLocation(hashId);
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 				CodeDepthMetric metric = new CodeDepthMetric(getAnalysisRun(),
 						language, codeRange);
 				execute(metric);
 				SourceCodeQuality quality = metric.getQuality();
-				results.add(new CodeDepthResult(analysis.getAnalyzedFile()
-						.getSourceLocation(), codeRange.getType(), codeRange
-						.getCanonicalName(), metric.getMaxDepth(), quality));
+				results.add(new CodeDepthResult(sourceCodeLocation, codeRange
+						.getType(), codeRange.getCanonicalName(), metric
+						.getMaxDepth(), quality));
 			}
-			store.storeFileResults(analysis.getAnalyzedFile().getHashId(),
-					results);
+			store.storeFileResults(hashId, results);
 		} finally {
 			try {
 				programmingLanguages.close();
@@ -85,7 +89,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processDirectory(HashIdFileTree directory)
+	protected void processDirectory(AnalysisFileTree directory)
 			throws InterruptedException, EvaluationStoreException {
 		HashId hashId = directory.getHashId();
 		if (store.hasDirectoryResults(hashId)) {
@@ -98,12 +102,12 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 	}
 
 	private CodeDepthDirectoryResults calculateDirectoryResults(
-			HashIdFileTree directory) throws EvaluationStoreException {
+			AnalysisFileTree directory) throws EvaluationStoreException {
 		CodeDepthDirectoryResults directoryResults = new CodeDepthDirectoryResults(
 				new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
 				directory.getName());
 		int maxDepth = 0;
-		for (HashIdFileTree child : directory.getChildren()) {
+		for (AnalysisFileTree child : directory.getChildren()) {
 			QualityLevel childLevel;
 			if (child.isFile()) {
 				CodeDepthFileResults fileResults = (CodeDepthFileResults) store
@@ -140,7 +144,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 				.hasProjectResults(getAnalysisRun().getInformation().getUUID())) {
 			return;
 		}
-		HashIdFileTree directory = getAnalysisRun().getFileTree();
+		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		CodeDepthDirectoryResults directoryResults = calculateDirectoryResults(directory);
 		if (directoryResults != null) {
 			store.storeDirectoryResults(directory.getHashId(), directoryResults);

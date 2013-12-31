@@ -3,15 +3,15 @@ package com.puresoltechnologies.purifinity.client.common.analysis.contents;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.client.common.ui.contents.AbstractViewerSorter;
 
 public class AnalyzedFilesViewerSorter extends AbstractViewerSorter {
 
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
-		AnalyzedCode code1 = (AnalyzedCode) e1;
-		AnalyzedCode code2 = (AnalyzedCode) e2;
+		AnalysisInformation code1 = (AnalysisInformation) e1;
+		AnalysisInformation code2 = (AnalysisInformation) e2;
 		int rc = 0;
 		switch (getColumn()) {
 		case 0:

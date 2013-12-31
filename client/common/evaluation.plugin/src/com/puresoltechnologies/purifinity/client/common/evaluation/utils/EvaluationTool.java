@@ -8,7 +8,7 @@ import org.eclipse.ui.progress.UIJob;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.client.common.ui.jobs.ObservedJob;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
@@ -44,7 +44,7 @@ public class EvaluationTool {
 	public static synchronized void showEvaluationAsynchronous(
 			final EvaluationsTarget target,
 			final EvaluatorFactory evaluatorFactory,
-			final AnalysisRun analysisRun, final HashIdFileTree path)
+			final AnalysisRun analysisRun, final AnalysisFileTree path)
 			throws EvaluationStoreException {
 		boolean hasResults = checkForResults(evaluatorFactory, path);
 		if (hasResults) {
@@ -64,7 +64,7 @@ public class EvaluationTool {
 	 * @throws EvaluationStoreException
 	 */
 	private static boolean checkForResults(EvaluatorFactory evaluatorFactory,
-			HashIdFileTree path) throws EvaluationStoreException {
+			AnalysisFileTree path) throws EvaluationStoreException {
 		EvaluatorStoreFactory evaluatorStoreFactory = EvaluatorStoreFactory
 				.getFactory();
 		Class<? extends Evaluator> evaluatorClass = evaluatorFactory
@@ -88,7 +88,7 @@ public class EvaluationTool {
 	private static void calculateMetricAndShowAsynchronous(
 			final EvaluationsTarget target,
 			final EvaluatorFactory evaluatorFactory,
-			final AnalysisRun analysisRun, final HashIdFileTree path) {
+			final AnalysisRun analysisRun, final AnalysisFileTree path) {
 		Job job = new Job("Calculate Evaluation...") {
 
 			@Override
@@ -130,7 +130,7 @@ public class EvaluationTool {
 	 * @throws EvaluationStoreException
 	 */
 	private static void showSynchronous(final EvaluationsTarget target,
-			final HashIdFileTree path) throws EvaluationStoreException {
+			final AnalysisFileTree path) throws EvaluationStoreException {
 		target.showEvaluation(path);
 	}
 }

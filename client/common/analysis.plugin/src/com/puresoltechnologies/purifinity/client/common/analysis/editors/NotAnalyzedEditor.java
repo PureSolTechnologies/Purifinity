@@ -9,7 +9,7 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
 import com.puresoltechnologies.parsers.api.source.SourceCode;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ScrollableFileViewer;
 import com.puresoltechnologies.purifinity.client.common.ui.editors.AbstractPureSolTechnologiesEditor;
@@ -60,8 +60,8 @@ public class NotAnalyzedEditor extends AbstractPureSolTechnologiesEditor {
 		parent.setLayout(new FillLayout(SWT.HORIZONTAL));
 		text = new ScrollableFileViewer(parent);
 		NotAnalyzedEditorInput editorInput = (NotAnalyzedEditorInput) getEditorInput();
-		HashIdFileTree hashIdFile = editorInput.getAnalysisRun().getFileTree()
-				.findFile(editorInput.getFile());
+		AnalysisFileTree hashIdFile = editorInput.getAnalysisRun()
+				.getFileTree().findFile(editorInput.getFile());
 		FileStore fileStore = FileStoreFactory.getFactory().getInstance();
 		try {
 			SourceCode sourceCode = fileStore.readSourceCode(hashIdFile

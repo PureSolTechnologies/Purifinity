@@ -4,13 +4,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Properties;
 
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 
-public class SourceFileLocation extends AbstractCodeLocation {
+public class SourceFileLocation extends AbstractSourceCodeLocation {
 
 	private static final long serialVersionUID = -4803348905641081874L;
+
+	private static final String SOURCE_CODE_LOCATION_REPOSITORY_DIRECTORY = "source.code.location.repository.directory";
+	private static final String SOURCE_CODE_LOCATION_INTERNAL_PATH = "source.code.location.internal.path";
 
 	private final File repositoryDirectory;
 	private final String internalPath;
@@ -31,6 +35,15 @@ public class SourceFileLocation extends AbstractCodeLocation {
 	public SourceFileLocation(File repositoryDirectory, File internalPath) {
 		this.repositoryDirectory = repositoryDirectory;
 		this.internalPath = internalPath.getPath();
+		file = new File(repositoryDirectory, this.internalPath);
+	}
+
+	public SourceFileLocation(Properties properties) {
+		this.repositoryDirectory = new File(
+				properties
+						.getProperty(SOURCE_CODE_LOCATION_REPOSITORY_DIRECTORY));
+		this.internalPath = properties
+				.getProperty(SOURCE_CODE_LOCATION_INTERNAL_PATH);
 		file = new File(repositoryDirectory, this.internalPath);
 	}
 
@@ -108,5 +121,19 @@ public class SourceFileLocation extends AbstractCodeLocation {
 	@Override
 	public boolean isAvailable() {
 		return file.exists();
+	}
+
+	@Override
+	public Properties getSerialization() {
+		Properties properties = new Properties();
+		properties
+				.setProperty(SOURCE_CODE_LOCATION_CLASS, getClass().getName());
+		properties.setProperty(SOURCE_CODE_LOCATION_TYPE, "unspecified");
+		properties.setProperty(SOURCE_CODE_LOCATION_NAME, getName());
+		properties.setProperty(SOURCE_CODE_LOCATION_REPOSITORY_DIRECTORY,
+				repositoryDirectory.getPath());
+		properties
+				.setProperty(SOURCE_CODE_LOCATION_INTERNAL_PATH, internalPath);
+		return properties;
 	}
 }

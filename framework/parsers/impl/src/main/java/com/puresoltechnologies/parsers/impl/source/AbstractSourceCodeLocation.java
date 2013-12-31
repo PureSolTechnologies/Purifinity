@@ -9,7 +9,7 @@ import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractCodeLocation implements SourceCodeLocation {
+public abstract class AbstractSourceCodeLocation implements SourceCodeLocation {
 
 	private static final long serialVersionUID = 5092730926716733775L;
 

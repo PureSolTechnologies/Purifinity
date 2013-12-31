@@ -5,7 +5,7 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractEvaluationView;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
@@ -36,7 +36,7 @@ public class IntermediateCoCoMoView extends AbstractEvaluationView {
 	}
 
 	@Override
-	public void showEvaluation(HashIdFileTree path)
+	public void showEvaluation(AnalysisFileTree path)
 			throws EvaluationStoreException {
 		EvaluatorStoreFactory evaluationStoreFactory = EvaluatorStoreFactory
 				.getFactory();

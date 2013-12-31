@@ -6,8 +6,8 @@ import java.util.Map;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 import com.puresoltechnologies.purifinity.client.common.branding.Exportable;
 import com.puresoltechnologies.purifinity.client.common.branding.Printable;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.PartSettingsCapability;
@@ -21,7 +21,7 @@ public abstract class AbstractMetricViewPart extends AbstractEvaluationView
 		implements Reproducable, PartSettingsCapability, Refreshable,
 		Exportable, Printable {
 
-	protected final Double findSuitableValue(HashIdFileTree path,
+	protected final Double findSuitableValue(AnalysisFileTree path,
 			MetricFileResults results, Parameter<?> parameter,
 			CodeRangeType codeRangeType) {
 		try {
@@ -37,7 +37,7 @@ public abstract class AbstractMetricViewPart extends AbstractEvaluationView
 		}
 	}
 
-	protected final Object findSuitableSecondaryValue(HashIdFileTree path,
+	protected final Object findSuitableSecondaryValue(AnalysisFileTree path,
 			MetricFileResults results, Parameter<?> parameter,
 			CodeRangeType codeRangeType) {
 		List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(path,
@@ -50,7 +50,7 @@ public abstract class AbstractMetricViewPart extends AbstractEvaluationView
 	}
 
 	protected List<Map<String, Value<?>>> findSuitableValueMaps(
-			HashIdFileTree path, MetricFileResults results,
+			AnalysisFileTree path, MetricFileResults results,
 			Parameter<?> parameter, CodeRangeType codeRangeType) {
 		List<Map<String, Value<?>>> valueMap = new ArrayList<Map<String, Value<?>>>();
 		List<Map<String, Value<?>>> values = results.getValues();
@@ -90,7 +90,7 @@ public abstract class AbstractMetricViewPart extends AbstractEvaluationView
 		}
 	}
 
-	protected final Object findSuitableSecondaryValue(HashIdFileTree path,
+	protected final Object findSuitableSecondaryValue(AnalysisFileTree path,
 			MetricDirectoryResults results, Parameter<?> parameter) {
 		Map<String, Value<?>> valueMap = results.getValues();
 		Value<?> value = valueMap.get(parameter.getName());

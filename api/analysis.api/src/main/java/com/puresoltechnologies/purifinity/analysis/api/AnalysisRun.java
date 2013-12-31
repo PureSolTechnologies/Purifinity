@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
+import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzedCode;
-import com.puresoltechnologies.purifinity.analysis.domain.HashIdFileTree;
 
 /**
  * This is the general interface for a single project analysis. This analysis
@@ -31,17 +33,17 @@ public interface AnalysisRun extends Serializable {
 	 * This method returns all analyzed file as a simple list.
 	 * 
 	 * @return A {@link List} is returned containing the files as
-	 *         {@link AnalyzedCode}.
+	 *         {@link AnalysisInformation}.
 	 */
-	public List<AnalyzedCode> getAnalyzedFiles();
+	public List<AnalysisInformation> getAnalyzedFiles();
 
 	/**
 	 * This method returns the whole source code tree as a {@link FileTree}.
 	 * This tree can be used for user output.
 	 * 
-	 * @return A {@link HashIdFileTree} object is returned.
+	 * @return A {@link AnalysisFileTree} object is returned.
 	 */
-	public HashIdFileTree getFileTree();
+	public AnalysisFileTree getFileTree();
 
 	/**
 	 * This method returns a list of all files which failed an analysis as flat
@@ -49,7 +51,7 @@ public interface AnalysisRun extends Serializable {
 	 * 
 	 * @return A {@link List} of {@link File} is returned.
 	 */
-	public List<AnalyzedCode> getFailedFiles();
+	public List<AnalysisInformation> getFailedFiles();
 
 	/**
 	 * This method performs a lookup of the file provided and find the
@@ -60,9 +62,18 @@ public interface AnalysisRun extends Serializable {
 	 * @param internalPath
 	 *            is the relative path of a file within the original project to
 	 *            lookup.
-	 * @return {@link AnalyzedCode} is returned for file. If no analyzed file
-	 *         was found, null is returned.
+	 * @return {@link AnalysisInformation} is returned for file. If no analyzed
+	 *         file was found, null is returned.
 	 */
-	public AnalyzedCode findAnalyzedCode(String internalPath);
+	public AnalysisInformation findAnalyzedCode(String internalPath);
+
+	/**
+	 * This method returns the source code location for the file tree element
+	 * specified by its {@link HashId}.
+	 * 
+	 * @param hashId
+	 * @return
+	 */
+	public SourceCodeLocation getSourceCodeLocation(HashId hashId);
 
 }

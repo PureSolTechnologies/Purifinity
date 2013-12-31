@@ -3,19 +3,32 @@ package com.puresoltechnologies.parsers.impl.source;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Properties;
 
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 
-public class URLSourceCodeLocation extends AbstractCodeLocation {
+public class URLSourceCodeLocation extends AbstractSourceCodeLocation {
 
 	private static final long serialVersionUID = 7938452623238399125L;
+
+	private static final String SOURCE_CODE_LOCATION_URL = "source.code.location.url";
 
 	private final URL url;
 
 	public URLSourceCodeLocation(URL url) {
 		this.url = url;
+	}
+
+	public URLSourceCodeLocation(Properties properties) {
+		try {
+			this.url = new URL(properties.getProperty(SOURCE_CODE_LOCATION_URL));
+		} catch (MalformedURLException e) {
+			throw new IllegalStateException(
+					"Could not de-serialize source code location.", e);
+		}
 	}
 
 	@Override
@@ -93,4 +106,14 @@ public class URLSourceCodeLocation extends AbstractCodeLocation {
 		}
 	}
 
+	@Override
+	public Properties getSerialization() {
+		Properties properties = new Properties();
+		properties
+				.setProperty(SOURCE_CODE_LOCATION_CLASS, getClass().getName());
+		properties.setProperty(SOURCE_CODE_LOCATION_TYPE, "unspecified");
+		properties.setProperty(SOURCE_CODE_LOCATION_NAME, getName());
+		properties.setProperty(SOURCE_CODE_LOCATION_URL, url.toExternalForm());
+		return properties;
+	}
 }
