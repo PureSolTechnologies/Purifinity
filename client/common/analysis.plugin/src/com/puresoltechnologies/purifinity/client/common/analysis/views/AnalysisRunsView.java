@@ -46,6 +46,7 @@ import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunImpl;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 
 public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
@@ -54,7 +55,7 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
-	private AnalysisProject analysis;
+	private AnalysisProject analysisProject;
 	private Table analysisRunsTable;
 	private TableViewer analysisRunsViewer;
 	private ToolItem addAnalysisRun;
@@ -192,7 +193,7 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	}
 
 	private void addAnalysisRun() {
-		AnalysisJob job = new AnalysisJob(analysis);
+		AnalysisJob job = new AnalysisJob(analysisProject);
 		job.schedule();
 	}
 
@@ -214,7 +215,8 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 							.iterator();
 					while (iterator.hasNext()) {
 						AnalysisRunInformation analysisRun = iterator.next();
-						analysis.removeAnalysisRun(analysisRun.getUUID());
+						analysisProject
+								.removeAnalysisRun(analysisRun.getUUID());
 					}
 					refreshAnalysisRunList();
 				}
@@ -227,8 +229,8 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 
 	private void refreshAnalysisRunList() {
 		try {
-			if (analysis != null) {
-				List<AnalysisRunInformation> allRunInformation = analysis
+			if (analysisProject != null) {
+				List<AnalysisRunInformation> allRunInformation = analysisProject
 						.getAllRunInformation();
 				analysisRunsViewer.setInput(allRunInformation);
 			}
@@ -244,9 +246,10 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 					.getSelection();
 			AnalysisRunInformation information = (AnalysisRunInformation) selection
 					.getFirstElement();
-			AnalysisRun analysisRun = analysis.loadAnalysisRun(information
-					.getUUID());
-			setSelection(new AnalysisRunSelection(analysisRun));
+			AnalysisRun analysisRun = AnalysisRunImpl.readFromStore(
+					analysisProject.getInformation().getUUID(),
+					information.getUUID());
+			setSelection(new AnalysisRunSelection(analysisProject, analysisRun));
 		} catch (AnalysisStoreException e) {
 			logger.log(new Status(Status.ERROR, ParserTreeControl.class
 					.getName(), "Can not read analysis runs from store!", e));
@@ -268,8 +271,8 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	private void processAnalysisProjectSelection(ISelection selection) {
 		try {
 			AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
-			analysis = analysisSelection.getAnalysisProject();
-			analysisRunsViewer.setInput(analysis.getAllRunInformation());
+			analysisProject = analysisSelection.getAnalysisProject();
+			analysisRunsViewer.setInput(analysisProject.getAllRunInformation());
 		} catch (AnalysisProjectException e) {
 			logger.log(new Status(Status.ERROR, ParserTreeControl.class
 					.getName(), "Can not read analysis store!", e));

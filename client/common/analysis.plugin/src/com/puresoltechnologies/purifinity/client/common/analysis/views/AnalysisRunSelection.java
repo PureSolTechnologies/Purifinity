@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.client.common.analysis.views;
 
 import org.eclipse.jface.viewers.ISelection;
 
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 
 /**
@@ -12,20 +13,27 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
  */
 public class AnalysisRunSelection implements ISelection {
 
-    private final AnalysisRun analysisRun;
+	private final AnalysisProject analysisProject;
+	private final AnalysisRun analysisRun;
 
-    public AnalysisRunSelection(AnalysisRun analysisRun) {
-	super();
-	this.analysisRun = analysisRun;
-    }
+	public AnalysisRunSelection(AnalysisProject analysisProject,
+			AnalysisRun analysisRun) {
+		super();
+		this.analysisProject = analysisProject;
+		this.analysisRun = analysisRun;
+	}
 
-    public AnalysisRun getAnalysisRun() {
-	return analysisRun;
-    }
+	public AnalysisProject getAnalysisProject() {
+		return analysisProject;
+	}
 
-    @Override
-    public boolean isEmpty() {
-	return false;
-    }
+	public AnalysisRun getAnalysisRun() {
+		return analysisRun;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return false;
+	}
 
 }

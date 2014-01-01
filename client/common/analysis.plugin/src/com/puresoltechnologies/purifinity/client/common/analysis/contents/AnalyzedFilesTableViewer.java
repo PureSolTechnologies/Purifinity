@@ -1,8 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.contents;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -18,24 +16,30 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 
 public class AnalyzedFilesTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 
-	private final List<AnalysisInformation> files = new ArrayList<AnalysisInformation>();
+	private AnalysisRun analysisRun = null;
 
 	private final AnalyzedFilesViewerSorter comparator;
 
 	public AnalyzedFilesTableViewer(Table table) {
 		super(table);
 		setContentProvider(this);
-		comparator = new AnalyzedFilesViewerSorter();
+		comparator = new AnalyzedFilesViewerSorter(this);
 		setSorter(comparator);
 		setupNameColumn();
 		setupTimeColumn();
 		setupLanguageColumn();
 		setupDurationColumn();
+	}
+
+	AnalysisRun getAnalysisRun() {
+		return analysisRun;
 	}
 
 	private void setupNameColumn() {
@@ -46,8 +50,9 @@ public class AnalyzedFilesTableViewer extends TableViewer implements
 			@Override
 			public String getText(Object element) {
 				AnalysisInformation analysis = (AnalysisInformation) element;
-				return analysis.getSourceLocation()
-						.getHumanReadableLocationString();
+				SourceCodeLocation sourceCodeLocation = analysisRun
+						.getSourceCodeLocation(analysis.getHashId());
+				return sourceCodeLocation.getHumanReadableLocationString();
 			}
 		});
 		nameColumn.getColumn().addSelectionListener(
@@ -129,20 +134,19 @@ public class AnalyzedFilesTableViewer extends TableViewer implements
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		files.clear();
 		if (newInput == null) {
+			analysisRun = null;
 			return;
 		}
-		if (Collection.class.isAssignableFrom(newInput.getClass())) {
-			@SuppressWarnings("unchecked")
-			List<AnalysisInformation> collection = (List<AnalysisInformation>) newInput;
-			files.addAll(collection);
+		if (AnalysisRun.class.isAssignableFrom(newInput.getClass())) {
+			analysisRun = (AnalysisRun) newInput;
 		}
 		refresh();
 	}
 
 	@Override
 	public AnalysisInformation[] getElements(Object inputElement) {
+		List<AnalysisInformation> files = analysisRun.getAnalyzedFiles();
 		return files.toArray(new AnalysisInformation[files.size()]);
 	}
 

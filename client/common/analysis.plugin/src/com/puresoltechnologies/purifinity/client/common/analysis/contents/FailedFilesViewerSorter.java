@@ -3,10 +3,17 @@ package com.puresoltechnologies.purifinity.client.common.analysis.contents;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.client.common.ui.contents.AbstractViewerSorter;
 
 public class FailedFilesViewerSorter extends AbstractViewerSorter {
+
+	private final FailedFilesTableViewer failedFilesTableViewer;
+
+	public FailedFilesViewerSorter(FailedFilesTableViewer failedFilesTableViewer) {
+		this.failedFilesTableViewer = failedFilesTableViewer;
+	}
 
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
@@ -15,9 +22,10 @@ public class FailedFilesViewerSorter extends AbstractViewerSorter {
 		int rc = 0;
 		switch (getColumn()) {
 		case 0:
-			String name1 = code1.getSourceLocation()
+			AnalysisRun analysisRun = failedFilesTableViewer.getAnalysisRun();
+			String name1 = analysisRun.getSourceCodeLocation(code1.getHashId())
 					.getHumanReadableLocationString().toLowerCase();
-			String name2 = code2.getSourceLocation()
+			String name2 = analysisRun.getSourceCodeLocation(code2.getHashId())
 					.getHumanReadableLocationString().toLowerCase();
 			rc = name1.compareTo(name2);
 			break;
@@ -35,5 +43,4 @@ public class FailedFilesViewerSorter extends AbstractViewerSorter {
 		}
 		return rc;
 	}
-
 }
