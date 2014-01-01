@@ -113,8 +113,9 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		if ((fileStore != null) && (analyzedFile != null)) {
 			if (fileStore.wasAnalyzed(analyzedFile.getHashId())) {
 				try {
-					CodeAnalysis analysisResult = fileStore
-							.loadAnalysis(analyzedFile.getHashId());
+					CodeAnalysis analysisResult = fileStore.loadAnalysis(
+							analyzedFile.getHashId(), Thread.currentThread()
+									.getContextClassLoader());
 					text += " (" + analysisResult.getLanguageName() + " "
 							+ analysisResult.getLanguageVersion() + ")";
 				} catch (FileStoreException e) {

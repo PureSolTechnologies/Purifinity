@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
@@ -123,7 +124,7 @@ public class AnalysisRunnerImpl extends
 	 * @throws AnalysisStoreException
 	 */
 	private boolean analyzeFiles() throws AnalysisStoreException {
-		Map<Future<AnalysisInformation>, SourceCodeLocation> futures = startAllAnalysisThreads();
+		Map<SourceCodeLocation, Future<AnalysisInformation>> futures = startAllAnalysisThreads();
 		return waitForAnalysisThreads(futures);
 	}
 
@@ -134,7 +135,7 @@ public class AnalysisRunnerImpl extends
 	 *         the running (or finished) analysis threads.
 	 * @throws AnalysisStoreException
 	 */
-	private Map<Future<AnalysisInformation>, SourceCodeLocation> startAllAnalysisThreads()
+	private Map<SourceCodeLocation, Future<AnalysisInformation>> startAllAnalysisThreads()
 			throws AnalysisStoreException {
 		AnalysisProjectSettings analysisProjectSettings = analysisStore
 				.readAnalysisProjectSettings(projectUUID);
@@ -147,12 +148,13 @@ public class AnalysisRunnerImpl extends
 		ExecutorService threadPool = Executors
 				.newFixedThreadPool(NUMBER_OF_PARALLEL_THREADS);
 		fireStarted("Analyze files", sourceFiles.size());
-		Map<Future<AnalysisInformation>, SourceCodeLocation> futures = new HashMap<Future<AnalysisInformation>, SourceCodeLocation>();
+		Map<SourceCodeLocation, Future<AnalysisInformation>> futures = new HashMap<SourceCodeLocation, Future<AnalysisInformation>>();
 		for (int index = 0; index < sourceFiles.size(); index++) {
 			SourceCodeLocation sourceFile = sourceFiles.get(index);
 			Callable<AnalysisInformation> callable = new AnalysisRunCallable(
 					sourceFile);
-			futures.put(threadPool.submit(callable), sourceFile);
+			Future<AnalysisInformation> future = threadPool.submit(callable);
+			futures.put(sourceFile, future);
 		}
 		threadPool.shutdown();
 		return futures;
@@ -169,22 +171,22 @@ public class AnalysisRunnerImpl extends
 	 *         returned otherwise.
 	 */
 	private boolean waitForAnalysisThreads(
-			Map<Future<AnalysisInformation>, SourceCodeLocation> futures) {
+			Map<SourceCodeLocation, Future<AnalysisInformation>> futures) {
 		boolean interrupted = false;
 		while (futures.size() > 0) {
 			try {
-				Iterator<Future<AnalysisInformation>> iterator = futures
-						.keySet().iterator();
+				Iterator<SourceCodeLocation> iterator = futures.keySet()
+						.iterator();
 				while (iterator.hasNext()) {
-					Future<AnalysisInformation> future = iterator.next();
+					SourceCodeLocation sourceCodeLocation = iterator.next();
+					Future<AnalysisInformation> future = futures
+							.get(sourceCodeLocation);
 					if (future.isDone()) {
 						iterator.remove();
 						fireUpdateWork("Finished a file.", 1);
 						try {
 							if (!future.isCancelled()) {
 								AnalysisInformation result = future.get();
-								SourceCodeLocation sourceCodeLocation = futures
-										.get(future);
 								analyzedFiles.put(sourceCodeLocation, result);
 								sourceCodeLocations.put(result.getHashId(),
 										sourceCodeLocation);
@@ -206,8 +208,9 @@ public class AnalysisRunnerImpl extends
 			} catch (InterruptedException e) {
 				logger.warn("Job was interrupted.", e);
 				interrupted = true;
-				for (Future<AnalysisInformation> future : futures.keySet()) {
-					future.cancel(true);
+				for (Entry<SourceCodeLocation, Future<AnalysisInformation>> futureEntries : futures
+						.entrySet()) {
+					futureEntries.getValue().cancel(true);
 				}
 			}
 		}

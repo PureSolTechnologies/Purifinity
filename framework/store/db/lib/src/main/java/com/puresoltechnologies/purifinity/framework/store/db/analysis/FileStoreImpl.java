@@ -4,12 +4,12 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.security.DigestInputStream;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.input.ClassLoaderObjectInputStream;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -87,7 +87,8 @@ public final class FileStoreImpl implements FileStore {
 	}
 
 	@Override
-	public CodeAnalysis loadAnalysis(HashId hashId) throws FileStoreException {
+	public CodeAnalysis loadAnalysis(HashId hashId, ClassLoader classLoader)
+			throws FileStoreException {
 		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session.execute("SELECT analysis FROM "
 				+ CassandraConnection.ANALYSIS_FILES_TABLE + " WHERE hashid='"
@@ -101,9 +102,10 @@ public final class FileStoreImpl implements FileStore {
 		ByteBuffer byteBuffer = result.getBytes("analysis");
 		try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
 				byteBuffer.array(), byteBuffer.position(), byteBuffer.limit())) {
-			try (ObjectInputStream inStream = new ObjectInputStream(
-					byteArrayInputStream)) {
-				return (CodeAnalysis) inStream.readObject();
+			try (ClassLoaderObjectInputStream inStream = new ClassLoaderObjectInputStream(
+					classLoader, byteArrayInputStream)) {
+				Object object = inStream.readObject();
+				return (CodeAnalysis) object;
 			}
 		} catch (ClassNotFoundException | IOException e) {
 			throw new FileStoreException(

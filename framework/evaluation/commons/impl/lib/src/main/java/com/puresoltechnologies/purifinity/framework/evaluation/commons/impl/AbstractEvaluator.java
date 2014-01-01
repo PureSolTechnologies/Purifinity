@@ -244,7 +244,8 @@ public abstract class AbstractEvaluator extends
 			if ((!evaluatorStore.hasFileResults(fileNode.getHashId()))
 					|| (reEvaluation)) {
 				CodeAnalysis fileAnalysis = fileStore.loadAnalysis(fileNode
-						.getHashId());
+						.getHashId(), Thread.currentThread()
+						.getContextClassLoader());
 				processFile(fileAnalysis);
 			}
 		}

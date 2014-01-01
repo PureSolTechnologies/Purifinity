@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.jobs;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -70,8 +71,17 @@ public class AnalysisJob extends Job implements
 			future = executor.submit(analysisRunner);
 			executor.shutdown();
 			executor.awaitTermination(RUN_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
-			analysisRun = analysisRunner.getAnalysisRun();
-			return Status.OK_STATUS;
+			try {
+				Boolean result = future.get();
+				if ((result != null) && (result)) {
+					analysisRun = analysisRunner.getAnalysisRun();
+					return Status.OK_STATUS;
+				} else {
+					return Status.CANCEL_STATUS;
+				}
+			} catch (ExecutionException e) {
+				throw new RuntimeException(e);
+			}
 		} catch (OperationCanceledException e) {
 			logger.log(new Status(Status.INFO, AnalysisJob.class.getName(),
 					"Analysis was cancelled!", e));

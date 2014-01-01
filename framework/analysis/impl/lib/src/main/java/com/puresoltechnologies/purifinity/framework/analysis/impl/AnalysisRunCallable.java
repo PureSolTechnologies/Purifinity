@@ -21,15 +21,14 @@ public class AnalysisRunCallable implements Callable<AnalysisInformation> {
 	private final Logger logger = LoggerFactory
 			.getLogger(AnalysisRunCallable.class);
 
-	private static final FileStoreFactory codeStoreFactory = FileStoreFactory
-			.getFactory();
-
 	private final SourceCodeLocation sourceFile;
-	private final FileStore codeStore = codeStoreFactory.getInstance();
+	private final FileStore codeStore;
 
 	public AnalysisRunCallable(SourceCodeLocation sourceFile) {
 		super();
 		this.sourceFile = sourceFile;
+		FileStoreFactory codeStoreFactory = FileStoreFactory.getFactory();
+		codeStore = codeStoreFactory.getInstance();
 	}
 
 	@Override
@@ -133,11 +132,11 @@ public class AnalysisRunCallable implements Callable<AnalysisInformation> {
 	 */
 	private AnalysisInformation loadAnalysis(HashId hashId)
 			throws FileStoreException {
-		CodeAnalysis analysis = codeStore.loadAnalysis(hashId);
+		CodeAnalysis analysis = codeStore.loadAnalysis(hashId, Thread
+				.currentThread().getContextClassLoader());
 		AnalysisInformation analyzedCode = new AnalysisInformation(hashId,
 				analysis.getStartTime(), analysis.getDuration(), true,
 				analysis.getLanguageName(), analysis.getLanguageVersion());
 		return analyzedCode;
 	}
-
 }

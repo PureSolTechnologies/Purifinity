@@ -69,7 +69,8 @@ public class FileStoreImplIT extends AbstractDbStoreTest {
 				"language", "1.2.3", analyzedFile, new ArrayList<CodeRange>(),
 				(UniversalSyntaxTree) null);
 		fileStore.storeAnalysis(hashId, fileAnalysis);
-		CodeAnalysis fileAnalysisRead = fileStore.loadAnalysis(hashId);
+		CodeAnalysis fileAnalysisRead = fileStore.loadAnalysis(hashId, Thread
+				.currentThread().getContextClassLoader());
 		assertNotSame(fileAnalysis, fileAnalysisRead);
 		assertEquals(fileAnalysis, fileAnalysisRead);
 	}

@@ -79,7 +79,7 @@ public class ParserTreeControl extends Composite {
 			AnalysisRun analysisRun) throws IOException, FileStoreException,
 			AnalysisStoreException {
 		CodeAnalysis codeAnalysis = codeStore.loadAnalysis(analyzedCode
-				.getHashId());
+				.getHashId(), Thread.currentThread().getContextClassLoader());
 		if (codeAnalysis != null) {
 			UUID projectUUID = analysisRun.getInformation().getProjectUUID();
 			AnalysisProjectSettings settings = analysisStore
