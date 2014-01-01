@@ -22,8 +22,8 @@
 			<artifactId>commons.utils</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.core</artifactId>
+			<groupId>org.eclipse</groupId>
+			<artifactId>osgi</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

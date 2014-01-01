@@ -25,10 +25,11 @@ public class FileStoreFactoryOSGi extends FileStoreFactory {
 	private synchronized void createInstance() {
 		if (fileStore == null) {
 			BundleContext bundleContext = Activator.getBundleContext();
-			ServiceReference<FileStore> serviceReference = bundleContext
-					.getServiceReference(FileStore.class);
+			ServiceReference serviceReference = bundleContext
+					.getServiceReference(FileStore.class.getName());
 			if (serviceReference != null) {
-				fileStore = bundleContext.getService(serviceReference);
+				fileStore = (FileStore) bundleContext
+						.getService(serviceReference);
 			}
 		}
 	}

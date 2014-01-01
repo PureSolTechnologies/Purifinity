@@ -10,11 +10,11 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
+import java.util.ServiceLoader;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.felix.framework.Felix;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.osgi.framework.Bundle;
@@ -22,21 +22,23 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.Framework;
+import org.osgi.framework.launch.FrameworkFactory;
 
 public abstract class AbstractBundleTest {
 
-	private static final String STORAGE_DIRECTORY = "target/felix.cache";
+	private static final String STORAGE_DIRECTORY = "target/osgi.cache";
 
 	private static Framework osgiFramework = null;
 
 	@BeforeClass
-	public static void startFelix() throws BundleException, IOException {
+	public static void startOSGiContainer() throws BundleException, IOException {
 		assertNull("OSGi framework is expected to be stopped.", osgiFramework);
 		removeStorageDirectory();
-		Map<Object, Object> map = new Properties();
+		Map<String, String> map = new HashMap<>();
 		map.put(Constants.FRAMEWORK_STORAGE, STORAGE_DIRECTORY);
-		osgiFramework = new Felix(map);
-		osgiFramework.init();
+		ServiceLoader<FrameworkFactory> frameworkFactory = ServiceLoader
+				.load(FrameworkFactory.class);
+		osgiFramework = frameworkFactory.iterator().next().newFramework(map);
 		osgiFramework.start();
 	}
 
@@ -56,7 +58,8 @@ public abstract class AbstractBundleTest {
 	}
 
 	@AfterClass
-	public static void stopFelix() throws BundleException, InterruptedException {
+	public static void stopOSGiContainer() throws BundleException,
+			InterruptedException {
 		assertNotNull("OSGi framework is expected to be started!",
 				osgiFramework);
 		osgiFramework.stop();
@@ -104,10 +107,10 @@ public abstract class AbstractBundleTest {
 
 	/**
 	 * This method returns the current bundle context which is the context of
-	 * the current Felix framework.
+	 * the current OSGi framework.
 	 * 
-	 * @return A {@link BundleContext} is returned containing the Felix
-	 *         framework context.
+	 * @return A {@link BundleContext} is returned containing the OSGi framework
+	 *         context.
 	 */
 	public static BundleContext getBundleContext() {
 		return osgiFramework.getBundleContext();

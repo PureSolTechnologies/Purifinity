@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.framework.store.db.analysis;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -9,7 +10,6 @@ import java.nio.ByteBuffer;
 import java.security.DigestInputStream;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.ByteArrayOutputStream;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;

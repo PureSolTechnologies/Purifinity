@@ -13,6 +13,7 @@ import org.osgi.framework.Bundle;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.ui.jobs.ObservedJob;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
@@ -39,7 +40,8 @@ public class EvaluationJob extends Job {
 		this.analysisRun = analysisRun;
 		this.reEvaluation = reEvaluation;
 		try {
-			UUID projectUUID = analysisRun.getInformation().getProjectUUID();
+			AnalysisRunInformation information = analysisRun.getInformation();
+			UUID projectUUID = information.getProjectUUID();
 			AnalysisProjectSettings analysisProjectSettings = AnalysisStoreFactory
 					.getFactory().getInstance()
 					.readAnalysisProjectSettings(projectUUID);

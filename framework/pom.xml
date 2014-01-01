@@ -273,11 +273,6 @@
 				<version>2.4</version>
 			</dependency>
 			<dependency>
-				<groupId>joda-time</groupId>
-				<artifactId>joda-time</artifactId>
-				<version>2.3</version>
-			</dependency>
-			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-math3</artifactId>
 				<version>3.2</version>
@@ -288,9 +283,9 @@
 				<version>1.9.2</version>
 			</dependency>
 			<dependency>
-				<groupId>org.osgi</groupId>
-				<artifactId>org.osgi.core</artifactId>
-				<version>4.3.1</version>
+				<groupId>org.eclipse</groupId>
+				<artifactId>osgi</artifactId>
+				<version>3.9.1-v20130814-1242</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -317,13 +312,6 @@
 				<artifactId>mockito-all</artifactId>
 				<version>1.9.0</version>
 			</dependency>
-			<dependency>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>org.apache.felix.framework</artifactId>
-				<version>4.0.3</version>
-				<scope>test</scope>
-			</dependency>
-
 		</dependencies>
 	</dependencyManagement>
 

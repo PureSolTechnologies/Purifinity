@@ -97,8 +97,9 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		Iterator<Vertex> vertexIterator = vertices.iterator();
 		while (vertexIterator.hasNext()) {
 			Vertex vertex = vertexIterator.next();
-			UUID uuid = (UUID) vertex
-					.getProperty(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY);
+			UUID uuid = UUID
+					.fromString((String) vertex
+							.getProperty(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY));
 			Date creationTime = (Date) vertex
 					.getProperty(TitanConnection.CREATION_TIME_PROPERTY);
 			projects.add(new AnalysisProjectInformation(uuid, creationTime));

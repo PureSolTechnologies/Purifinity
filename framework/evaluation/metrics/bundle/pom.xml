@@ -21,14 +21,12 @@
 			<artifactId>osgi</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.core</artifactId>
-			<scope>provided</scope>
+			<groupId>org.eclipse</groupId>
+			<artifactId>osgi</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jibx.config.3rdparty.org.eclipse</groupId>

@@ -21,9 +21,8 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.felix</groupId>
-			<artifactId>org.apache.felix.framework</artifactId>
-			<scope>compile</scope>
+			<groupId>org.eclipse</groupId>
+			<artifactId>osgi</artifactId>
 		</dependency>
 	</dependencies>
 

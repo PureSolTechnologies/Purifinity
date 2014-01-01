@@ -115,7 +115,7 @@ public abstract class AbstractActivator implements BundleActivator {
 	 * @return A {@link ServiceRegistration} is returned of the newly registered
 	 *         service.
 	 */
-	public <T> ServiceRegistration<T> registerService(Class<T> iface, T instance) {
+	public <T> ServiceRegistration<?> registerService(Class<T> iface, T instance) {
 		Hashtable<String, String> properties = new Hashtable<String, String>();
 		return registerService(iface, instance, properties);
 	}
@@ -136,12 +136,12 @@ public abstract class AbstractActivator implements BundleActivator {
 	 * @return A {@link ServiceRegistration} is returned of the newly registered
 	 *         service.
 	 */
-	public <T> ServiceRegistration<T> registerService(Class<T> iface,
+	public <T> ServiceRegistration<?> registerService(Class<T> iface,
 			T instance, Dictionary<String, String> dictionary) {
 		logger.info("Register service '{}' for interface '{}' (context='"
 				+ context.getBundle().getSymbolicName() + "').", instance
 				.getClass().getName(), iface.getName());
-		ServiceRegistration<T> serviceRegistration = context.registerService(
+		ServiceRegistration<?> serviceRegistration = context.registerService(
 				iface, instance, dictionary);
 		serviceRegistrations.add(serviceRegistration);
 		return serviceRegistration;

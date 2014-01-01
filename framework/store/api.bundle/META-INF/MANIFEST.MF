@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1388582844439
+Bnd-LastModified: 1388599096543
 Build-Jdk: 1.7.0_25
 Built-By: Rick-Rainer Ludwig
 Bundle-ActivationPolicy: lazy
@@ -32,6 +32,6 @@ Export-Package: com.puresoltechnologies.purifinity.framework.store.api;u
 Import-Package: com.puresoltechnologies.commons.misc,com.puresoltechnolo
  gies.parsers.api.source,com.puresoltechnologies.purifinity.analysis.dom
  ain,com.puresoltechnologies.purifinity.evaluation.api,com.puresoltechno
- logies.purifinity.evaluation.domain,org.osgi.framework;version="[1.6,2)
+ logies.purifinity.evaluation.domain,org.osgi.framework;version="[1.7,2)
  ",org.slf4j;version="[1.6,2)"
 Tool: Bnd-1.50.0

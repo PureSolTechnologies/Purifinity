@@ -3,9 +3,6 @@ package com.puresoltechnologies.purifinity.framework.store.api;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
-
 /**
  * This is the central factory for a analysis store.
  * 
@@ -27,10 +24,11 @@ public class AnalysisStoreFactoryOSGi extends AnalysisStoreFactory {
 	private synchronized void createInstance() {
 		if (analysisStore == null) {
 			BundleContext bundleContext = Activator.getBundleContext();
-			ServiceReference<AnalysisStore> serviceReference = bundleContext
-					.getServiceReference(AnalysisStore.class);
+			ServiceReference serviceReference = bundleContext
+					.getServiceReference(AnalysisStore.class.getName());
 			if (serviceReference != null) {
-				analysisStore = bundleContext.getService(serviceReference);
+				analysisStore = (AnalysisStore) bundleContext
+						.getService(serviceReference);
 			}
 		}
 	}

@@ -12,7 +12,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>org.joda.time.bundle</module>
 		<module>org.apache.commons.commons-math.bundle</module>
 		<module>org.reflections.reflections.external.bundle</module>
 		<module>org.codehaus.jackson.jackson-jaxrs.external.bundle</module>
