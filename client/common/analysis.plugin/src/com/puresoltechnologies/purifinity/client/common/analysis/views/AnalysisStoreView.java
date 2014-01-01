@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
@@ -27,6 +28,8 @@ import com.puresoltechnologies.purifinity.client.common.analysis.contents.Analys
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListLabelProvider;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisProjectImpl;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunImpl;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
@@ -172,7 +175,8 @@ public class AnalysisStoreView extends AbstractPureSolTechnologiesView
 		try {
 			selectedAnalysis = null;
 			updateAnalysisRunList(null);
-			analysisViewer.setInput(analysisStore.getAnalysisProjects());
+			analysisViewer.setInput(analysisStore
+					.readAllAnalysisProjectInformation());
 		} catch (AnalysisStoreException e) {
 			logger.log(new Status(
 					Status.ERROR,
@@ -186,17 +190,16 @@ public class AnalysisStoreView extends AbstractPureSolTechnologiesView
 		try {
 			updateRunInformation(null);
 			if (information != null) {
-				selectedAnalysis = analysisStore.loadAnalysis(information
-						.getUUID());
+				selectedAnalysis = AnalysisProjectImpl
+						.readFromStore(information.getUUID());
 				selectedAnalysisRun = null;
-				AnalysisProject analysis = analysisStore
-						.loadAnalysis(information.getUUID());
-				analysisRunViewer.setInput(analysis.getAllRunInformation());
+				analysisRunViewer.setInput(selectedAnalysis
+						.getAllRunInformation());
 			} else {
 				selectedAnalysis = null;
 				analysisRunList.removeAll();
 			}
-		} catch (AnalysisStoreException e) {
+		} catch (AnalysisStoreException | AnalysisProjectException e) {
 			logger.log(new Status(
 					Status.ERROR,
 					AnalysisProjectsView.class.getName(),
@@ -209,8 +212,9 @@ public class AnalysisStoreView extends AbstractPureSolTechnologiesView
 			AnalysisRunInformation analysisRunInformation) {
 		try {
 			if (analysisRunInformation != null) {
-				selectedAnalysisRun = selectedAnalysis
-						.loadAnalysisRun(analysisRunInformation.getUUID());
+				selectedAnalysisRun = AnalysisRunImpl.readFromStore(
+						selectedAnalysis.getInformation().getUUID(),
+						analysisRunInformation.getUUID());
 				runName.setText(selectedAnalysis.getSettings().getName());
 				runDescription.setText(analysisRunInformation.getDescription());
 			} else {

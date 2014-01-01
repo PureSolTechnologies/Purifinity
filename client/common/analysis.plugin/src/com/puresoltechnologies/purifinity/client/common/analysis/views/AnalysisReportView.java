@@ -23,9 +23,10 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalyzedFilesTableViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.FailedFilesTableViewer;
@@ -52,6 +53,9 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 	private Text analyzedFiles;
 	private Text unanalyzedFiles;
 	private Text errorFiles;
+
+	private AnalysisRun analysisRun = null;
+	private AnalysisProject analysis = null;
 
 	private final AnalysisStore analysisStore = AnalysisStoreFactory
 			.getFactory().getInstance();
@@ -151,22 +155,18 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
 		try {
-			AnalysisRun analysisRun = null;
-			AnalysisProject analysis = null;
 			if (selection instanceof AnalysisProjectSelection) {
 				AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
 				analysis = analysisSelection.getAnalysisProject();
-				AnalysisRunInformation runInformation = analysisStore
-						.readLastAnalysisRun(analysis.getInformation()
-								.getUUID());
-				analysisRun = new AnalysisRunImpl(analysis.getInformation()
-						.getUUID(), runInformation, fileTree, analyzedFiles,
-						failedSources);
+				AnalysisRunInformation analysisRunInformation = analysis
+						.loadLastAnalysisRun();
+				analysisRun = AnalysisRunImpl.readFromStore(analysis
+						.getInformation().getUUID(), analysisRunInformation
+						.getUUID());
 			} else if (selection instanceof AnalysisRunSelection) {
 				AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
+				analysis = analysisRunSelection.getAnalysisProject();
 				analysisRun = analysisRunSelection.getAnalysisRun();
-				analysis = analysisStore.ranalysisRun.getInformation()
-						.getProjectUUID();
 			}
 			if (analysis != null) {
 				name.setText(analysis.getSettings().getName());
@@ -191,7 +191,7 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 					errorFiles.setText(String.valueOf(errors));
 				}
 			}
-		} catch (AnalysisStoreException e) {
+		} catch (AnalysisStoreException | AnalysisProjectException e) {
 			logger.log(new Status(Status.ERROR, ParserTreeControl.class
 					.getName(), "Can not read analysis store!", e));
 		}
@@ -208,11 +208,11 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 		if (analyzedCode != null) {
 			if (informationDialog == null) {
 				informationDialog = new AnalysisInformationDialog(this,
-						analyzedCode);
+						analysisRun, analyzedCode);
 				informationDialog.addCloseListener(this);
 				informationDialog.open();
 			} else {
-				informationDialog.setAnalyzedCode(analyzedCode);
+				informationDialog.setAnalyzedCode(analysisRun, analyzedCode);
 			}
 
 		}

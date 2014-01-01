@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.metrics.sloc;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -10,14 +11,17 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.osgi.framework.Bundle;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.utils.ColorUtils;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -29,32 +33,39 @@ public class SLOCResultComponent extends Composite {
 	public SLOCResultComponent(Composite parent, int style,
 			AnalysisRun analysisRun, AnalysisInformation analyzedCode) {
 		super(parent, style);
-
 		this.analysisRun = analysisRun;
 		this.analyzedCode = analyzedCode;
+		try {
 
-		setLayout(new FillLayout());
+			setLayout(new FillLayout());
 
-		EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
-				.createInstance(SLOCEvaluator.class);
+			EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
+					.createInstance(SLOCEvaluator.class);
 
-		SLOCFileResults fileResults = (SLOCFileResults) evaluatorStore
-				.readFileResults(analyzedCode.getHashId());
+			SLOCFileResults fileResults = (SLOCFileResults) evaluatorStore
+					.readFileResults(analyzedCode.getHashId());
 
-		Table table = new Table(this, SWT.BORDER | SWT.V_SCROLL
-				| SWT.FULL_SELECTION);
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+			Table table = new Table(this, SWT.BORDER | SWT.V_SCROLL
+					| SWT.FULL_SELECTION);
+			table.setHeaderVisible(true);
+			table.setLinesVisible(true);
 
-		TableViewer tableViewer = new TableViewer(table);
-		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
-		ColumnViewerToolTipSupport.enableFor(tableViewer);
+			TableViewer tableViewer = new TableViewer(table);
+			tableViewer.setContentProvider(ArrayContentProvider.getInstance());
+			ColumnViewerToolTipSupport.enableFor(tableViewer);
 
-		addCodeRangeTypeColumn(tableViewer);
-		addCodeRangeNameColumn(tableViewer);
-		addQualityColumn(tableViewer);
+			addCodeRangeTypeColumn(tableViewer);
+			addCodeRangeNameColumn(tableViewer);
+			addQualityColumn(tableViewer);
 
-		tableViewer.setInput(fileResults);
+			tableViewer.setInput(fileResults);
+		} catch (EvaluationStoreException e) {
+			Activator activator = Activator.getDefault();
+			Bundle bundle = activator.getBundle();
+			activator.getLog().log(
+					new Status(Status.ERROR, bundle.getSymbolicName(),
+							"Could not read results.", e));
+		}
 	}
 
 	private void addCodeRangeTypeColumn(TableViewer tableViewer) {

@@ -4,19 +4,20 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 
 public class FileAnalysisEditorInput implements IEditorInput {
 
-	private final AnalysisInformation analyzedCode;
 	private final AnalysisRun analysisRun;
+	private final AnalysisInformation analyzedCode;
 
-	public FileAnalysisEditorInput(AnalysisInformation analyzedCode,
-			AnalysisRun analysisRun) {
+	public FileAnalysisEditorInput(AnalysisRun analysisRun,
+			AnalysisInformation analyzedCode) {
 		super();
-		this.analyzedCode = analyzedCode;
 		this.analysisRun = analysisRun;
+		this.analyzedCode = analyzedCode;
 	}
 
 	@Override
@@ -36,7 +37,9 @@ public class FileAnalysisEditorInput implements IEditorInput {
 
 	@Override
 	public String getName() {
-		return analyzedCode.getSourceLocation().getName();
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.getSourceCodeLocation(analyzedCode.getHashId());
+		return sourceCodeLocation.getName();
 	}
 
 	@Override
@@ -46,11 +49,12 @@ public class FileAnalysisEditorInput implements IEditorInput {
 
 	@Override
 	public String getToolTipText() {
-		return analyzedCode.getSourceLocation()
-				.getHumanReadableLocationString();
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.getSourceCodeLocation(analyzedCode.getHashId());
+		return sourceCodeLocation.getHumanReadableLocationString();
 	}
 
-	public final AnalysisInformation getAnalyzedCode() {
+	public final AnalysisInformation getAnalysisInformation() {
 		return analyzedCode;
 	}
 

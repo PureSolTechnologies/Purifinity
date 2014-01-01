@@ -193,7 +193,8 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	}
 
 	private void addAnalysisRun() {
-		AnalysisJob job = new AnalysisJob(analysisProject);
+		AnalysisJob job = new AnalysisJob(analysisProject.getInformation(),
+				analysisProject.getSettings());
 		job.schedule();
 	}
 

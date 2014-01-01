@@ -12,9 +12,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.UniversalSyntaxTreeContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.UniversalSyntaxTreeLabelProvider;
@@ -83,10 +84,10 @@ public class ParserTreeControl extends Composite {
 			UUID projectUUID = analysisRun.getInformation().getProjectUUID();
 			AnalysisProjectSettings settings = analysisStore
 					.readAnalysisProjectSettings(projectUUID);
-			lblNewLabel.setText(settings.getName()
-					+ ": "
-					+ analyzedCode.getSourceLocation()
-							.getHumanReadableLocationString());
+			SourceCodeLocation sourceCodeLocation = analysisRun
+					.getSourceCodeLocation(analyzedCode.getHashId());
+			lblNewLabel.setText(settings.getName() + ": "
+					+ sourceCodeLocation.getHumanReadableLocationString());
 			treeViewer.setInput(codeAnalysis.getUniversalSyntaxTree());
 		} else {
 			lblNewLabel.setText("");

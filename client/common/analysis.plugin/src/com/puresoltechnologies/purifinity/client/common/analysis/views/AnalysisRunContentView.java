@@ -137,7 +137,7 @@ public class AnalysisRunContentView extends AbstractPureSolTechnologiesView
 				.findAnalyzedCode(firstElement.getPathFile(false).getPath());
 		if (analyzedCode != null) {
 			FileAnalysisEditorInput fileAnalysisEditorInput = new FileAnalysisEditorInput(
-					analyzedCode, analysisRun);
+					analysisRun, analyzedCode);
 			getSite().getPage().openEditor(fileAnalysisEditorInput,
 					FileAnalysisEditor.class.getName());
 		} else if (!analysisRun.getFailedFiles().contains(

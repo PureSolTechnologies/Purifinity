@@ -108,8 +108,8 @@ public interface AnalysisStore {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	public FileSearchConfiguration readSearchConfiguration(UUID projectUUID,
-			UUID analysisRunUUID) throws AnalysisStoreException;
+	public FileSearchConfiguration readSearchConfiguration(UUID analysisRunUUID)
+			throws AnalysisStoreException;
 
 	public void storeAnalysisFileTree(UUID projectUUID, UUID analysisRunUUID,
 			AnalysisFileTree fileTree) throws AnalysisStoreException;

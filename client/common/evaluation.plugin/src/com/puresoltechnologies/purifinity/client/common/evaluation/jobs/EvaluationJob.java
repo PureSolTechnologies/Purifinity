@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.jobs;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.ILog;
@@ -8,21 +9,22 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.osgi.framework.Bundle;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.ui.jobs.ObservedJob;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
 
 public class EvaluationJob extends Job {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
-	private final AnalysisProject analysisProject;
-	private final String projectName;
 	private final AnalysisRun analysisRun;
 	private final boolean reEvaluation;
 
@@ -36,9 +38,20 @@ public class EvaluationJob extends Job {
 		super("");
 		this.analysisRun = analysisRun;
 		this.reEvaluation = reEvaluation;
-		analysisProject = analysisRun.getInformation().getAnalysisProjectUUID();
-		projectName = analysisProject.getSettings().getName();
-		setName("Evaluation of project '" + projectName + "'");
+		try {
+			UUID projectUUID = analysisRun.getInformation().getProjectUUID();
+			AnalysisProjectSettings analysisProjectSettings = AnalysisStoreFactory
+					.getFactory().getInstance()
+					.readAnalysisProjectSettings(projectUUID);
+			String projectName = analysisProjectSettings.getName();
+			setName("Evaluation of project '" + projectName + "'");
+		} catch (AnalysisStoreException e) {
+			Activator activator = Activator.getDefault();
+			Bundle bundle = activator.getBundle();
+			activator.getLog().log(
+					new Status(Status.ERROR, bundle.getSymbolicName(),
+							"Could not read results.", e));
+		}
 	}
 
 	@Override

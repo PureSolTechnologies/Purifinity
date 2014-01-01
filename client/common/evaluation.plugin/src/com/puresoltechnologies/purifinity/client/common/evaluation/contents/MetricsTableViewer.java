@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -15,14 +16,17 @@ import org.eclipse.jface.window.ToolTip;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.osgi.framework.Bundle;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -56,30 +60,39 @@ public class MetricsTableViewer extends TableViewer implements
 		if (metric == null) {
 			return;
 		}
-		if (AnalysisFileTree.class.isAssignableFrom(newInput.getClass())) {
-			AnalysisFileTree path = (AnalysisFileTree) newInput;
-			HashId hashId = path.getHashId();
-			EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
-					.createInstance(metric.getEvaluatorClass());
-			if (path.isFile()) {
-				if (evaluatorStore.hasFileResults(hashId)) {
-					MetricFileResults results = evaluatorStore
-							.readFileResults(hashId);
-					if (results != null) {
-						setResults(results.getParameters());
-						values.addAll(results.getValues());
+		try {
+			if (AnalysisFileTree.class.isAssignableFrom(newInput.getClass())) {
+				AnalysisFileTree path = (AnalysisFileTree) newInput;
+				HashId hashId = path.getHashId();
+				EvaluatorStore evaluatorStore = EvaluatorStoreFactory
+						.getFactory()
+						.createInstance(metric.getEvaluatorClass());
+				if (path.isFile()) {
+					if (evaluatorStore.hasFileResults(hashId)) {
+						MetricFileResults results = evaluatorStore
+								.readFileResults(hashId);
+						if (results != null) {
+							setResults(results.getParameters());
+							values.addAll(results.getValues());
+						}
 					}
-				}
-			} else {
-				if (evaluatorStore.hasDirectoryResults(hashId)) {
-					MetricDirectoryResults results = evaluatorStore
-							.readDirectoryResults(hashId);
-					if (results != null) {
-						setResults(results.getParameters());
-						values.add(results.getValues());
+				} else {
+					if (evaluatorStore.hasDirectoryResults(hashId)) {
+						MetricDirectoryResults results = evaluatorStore
+								.readDirectoryResults(hashId);
+						if (results != null) {
+							setResults(results.getParameters());
+							values.add(results.getValues());
+						}
 					}
 				}
 			}
+		} catch (EvaluationStoreException e) {
+			Activator activator = Activator.getDefault();
+			Bundle bundle = activator.getBundle();
+			activator.getLog().log(
+					new Status(Status.ERROR, bundle.getSymbolicName(),
+							"Could not read results.", e));
 		}
 		refresh();
 	}

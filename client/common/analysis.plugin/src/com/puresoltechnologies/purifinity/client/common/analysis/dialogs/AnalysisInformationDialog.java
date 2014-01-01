@@ -19,19 +19,24 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 
 public class AnalysisInformationDialog extends Dialog {
 
+	private AnalysisRun analyzedRun;
 	private AnalysisInformation analyzedCode;
 	private Text fileName;
 	private Text filePath;
 	private Text message;
 	private final List<WeakReference<CloseWindowListener>> closeListeners = new ArrayList<WeakReference<CloseWindowListener>>();
 
-	public AnalysisInformationDialog(ViewPart part, AnalysisInformation analyzedCode) {
+	public AnalysisInformationDialog(ViewPart part, AnalysisRun analyzedRun,
+			AnalysisInformation analyzedCode) {
 		super(part.getSite());
 		setShellStyle(SWT.TITLE);
+		this.analyzedRun = analyzedRun;
 		this.analyzedCode = analyzedCode;
 	}
 
@@ -76,14 +81,18 @@ public class AnalysisInformationDialog extends Dialog {
 		newShell.setText("Analysis Information");
 	}
 
-	public void setAnalyzedCode(AnalysisInformation analyzedCode) {
+	public void setAnalyzedCode(AnalysisRun analyzedRun,
+			AnalysisInformation analyzedCode) {
+		this.analyzedRun = analyzedRun;
 		this.analyzedCode = analyzedCode;
 		refresh();
 	}
 
 	private void refresh() {
-		filePath.setText(analyzedCode.getSourceLocation().getInternalLocation());
-		fileName.setText(analyzedCode.getSourceLocation().getName());
+		SourceCodeLocation sourceCodeLocation = analyzedRun
+				.getSourceCodeLocation(analyzedCode.getHashId());
+		filePath.setText(sourceCodeLocation.getInternalLocation());
+		fileName.setText(sourceCodeLocation.getName());
 		String messageText = analyzedCode.getMessage();
 		if (messageText != null) {
 			message.setText(messageText);

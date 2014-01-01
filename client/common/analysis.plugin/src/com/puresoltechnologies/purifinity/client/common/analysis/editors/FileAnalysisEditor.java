@@ -18,6 +18,9 @@ import org.eclipse.ui.PartInitException;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.api.source.SourceCode;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ParserTreeControl;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ScrollableFileViewer;
@@ -54,8 +57,12 @@ public class FileAnalysisEditor extends AbstractPureSolTechnologiesEditor {
 		setSite(site);
 		setInput(input);
 		FileAnalysisEditorInput fileAnalysisInput = (FileAnalysisEditorInput) input;
-		setPartName(fileAnalysisInput.getAnalyzedCode().getSourceLocation()
-				.getName());
+		AnalysisRun analysisRun = fileAnalysisInput.getAnalysisRun();
+		AnalysisInformation information = fileAnalysisInput
+				.getAnalysisInformation();
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.getSourceCodeLocation(information.getHashId());
+		setPartName(sourceCodeLocation.getName());
 	}
 
 	@Override
@@ -102,11 +109,11 @@ public class FileAnalysisEditor extends AbstractPureSolTechnologiesEditor {
 			fd_treeViewer.left = new FormAttachment(0);
 			FileAnalysisEditorInput editorInput = (FileAnalysisEditorInput) getEditorInput();
 			treeViewer.setLayoutData(fd_treeViewer);
-			treeViewer
-					.setContentAndUpdateContent(editorInput.getAnalyzedCode(),
-							editorInput.getAnalysisRun());
+			treeViewer.setContentAndUpdateContent(
+					editorInput.getAnalysisInformation(),
+					editorInput.getAnalysisRun());
 
-			HashId hashId = editorInput.getAnalyzedCode().getHashId();
+			HashId hashId = editorInput.getAnalysisInformation().getHashId();
 			FileStore codeStore = FileStoreFactory.getFactory().getInstance();
 			SourceCode sourceCode = codeStore.readSourceCode(hashId);
 			fileViewer.setStreamAndUpdateContent(sourceCode);

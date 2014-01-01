@@ -198,8 +198,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					.getProperty(TitanConnection.ANALYSIS_RUN_DURATION_PROPERTY);
 			String description = (String) run
 					.getProperty(TitanConnection.ANALYSIS_RUN_DESCRIPTION_PROPERTY);
-			FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(
-					projectUUID, uuid);
+			FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(uuid);
 			allRunInformation.add(new AnalysisRunInformation(projectUUID, uuid,
 					startTime, duration, description, fileSearchConfiguration));
 		}
@@ -280,8 +279,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 				.getProperty(TitanConnection.ANALYSIS_RUN_DURATION_PROPERTY);
 		String description = (String) run
 				.getProperty(TitanConnection.ANALYSIS_RUN_DESCRIPTION_PROPERTY);
-		FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(
-				projectUUID, runUUID);
+		FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(runUUID);
 		return new AnalysisRunInformation(projectUUID, runUUID, startTime,
 				duration, description, fileSearchConfiguration);
 	}
@@ -334,8 +332,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public FileSearchConfiguration readSearchConfiguration(
-			UUID analysisProjectUUID, UUID analysisRunUUID)
+	public FileSearchConfiguration readSearchConfiguration(UUID analysisRunUUID)
 			throws AnalysisStoreException {
 		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session
