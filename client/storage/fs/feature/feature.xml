@@ -36,6 +36,7 @@
       <import plugin="com.puresoltechnologies.parsers.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.domain.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.evaluation.domain.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.analysis.impl.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.metrics.bundle"/>
       <import plugin="org.eclipse.osgi"/>
       <import plugin="javax.inject"/>
@@ -73,6 +74,20 @@
 
    <plugin
          id="com.thinkaurelius.titan.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.joda.time.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.io"
          download-size="0"
          install-size="0"
          version="0.0.0"

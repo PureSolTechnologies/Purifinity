@@ -8,8 +8,8 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.thinkaurelius</groupId>
-	<artifactId>titan.bundle</artifactId>
+	<groupId>org.joda</groupId>
+	<artifactId>time.bundle</artifactId>
 	<name>${project.groupId}.${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
@@ -19,16 +19,8 @@
 			<artifactId>osgi</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>commons.test</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.thinkaurelius.titan</groupId>
-			<artifactId>titan-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.thinkaurelius.titan</groupId>
-			<artifactId>titan-cassandra</artifactId>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
@@ -41,7 +33,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.thinkaurelius.titan</bundle.namespace>
+		<bundle.namespace>org.joda.time</bundle.namespace>
 	</properties>
 
 	<build>
@@ -61,8 +53,7 @@
 						<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
 						<!-- assume public classes are in the top package, and private classes 
 							are under ".internal" -->
-						<Export-Package>${bundle.namespace}*;version="${project.version}",com.tinkerpop.blueprint*"</Export-Package>
-						<Import-Package>com.sun.jdmk.comm.*;resolution:=optional,com.sun.jna.*;resolution:=optional,com.sun.tools.apt.*;resolution:=optional,com.sun.tools.javac.*;resolution:=optional,com.sun.tools.javah.*;resolution:=optional,com.thoughtworks.paranamer.*;resolution:=optional,com.tinkerpop.blueprints.impls.sail.*;resolution:=optional,com.vividsolutions.*;resolution:=optional,edu.emory.*;resolution:=optional,gnu.gcj.*;resolution:=optional,com.mysql.*;resolution:=optional,COM.*;resolution:=optional,com.google.protobuf.*;resolution:=optional,com.ibm.uvm.tools.*;resolution:=optional,org.apache.hadoop.*;resolution:=optional,org.apache.harmony.*;resolution:=optional,org.apache.log.*;resolution:=optional,org.apache.pig.*;resolution:=optional,org.bouncycastle.*;resolution:=optional,kaffe.util.*;resolution:=optional,org.acplt.*;resolution:=optional,org.apache.avalon.*;resolution:=optional,org.apache.bsf.*;resolution:=optional,org.apache.commons.vfs.*;resolution:=optional,joptsimple.*;resolution:=optional,jrockit.vm.*;resolution:=optional,javax.jmdns.*;resolution:=optional,sun.*;resolution:=optional,weblogic.*;resolution:=optional,org.jboss.*;resolution:=optional,*</Import-Package>
+						<Export-Package>${bundle.namespace}*;version="${project.version}"</Export-Package>
 						<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
 						<!-- embed compile/runtime dependencies using path that matches the 
 							copied dependency folder -->

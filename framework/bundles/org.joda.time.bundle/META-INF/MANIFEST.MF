@@ -1,0 +1,50 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1388586658058
+Build-Jdk: 1.7.0_25
+Built-By: Rick-Rainer Ludwig
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.joda.time.Activator
+Bundle-ClassPath: .,lib/osgi-0.1.1-SNAPSHOT.jar,lib/joda-time-2.3.jar
+Bundle-Description: This is the functional framework for Purifinity.
+Bundle-DocURL: http://puresol-technologies.com
+Bundle-ManifestVersion: 2
+Bundle-Name: org.joda.time.bundle
+Bundle-SymbolicName: org.joda.time.bundle
+Bundle-Vendor: PureSol Technologies
+Bundle-Version: 0.1.1.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Embed-Dependency: *;scope=compile|runtime;inline=false
+Embed-Directory: lib
+Embed-StripGroup: true
+Embed-Transitive: true
+Embedded-Artifacts: lib/osgi-0.1.1-SNAPSHOT.jar;g="com.puresoltechnologi
+ es.commons";a="osgi";v="0.1.1-SNAPSHOT",lib/joda-time-2.3.jar;g="joda-t
+ ime";a="joda-time";v="2.3"
+Export-Package: org.joda.time.tz.data.Pacific;version="0.1.1.SNAPSHOT",o
+ rg.joda.time.tz.data.Etc;version="0.1.1.SNAPSHOT",org.joda.time.base;us
+ es:="org.joda.time,org.joda.time.format,org.joda.convert,org.joda.time.
+ field,org.joda.time.chrono,org.joda.time.convert";version="0.1.1.SNAPSH
+ OT",org.joda.time.tz.data.America.Argentina;version="0.1.1.SNAPSHOT",or
+ g.joda.time.chrono;uses:="org.joda.time,org.joda.time.field,org.joda.ti
+ me.format";version="0.1.1.SNAPSHOT",org.joda.time.tz.data.Antarctica;ve
+ rsion="0.1.1.SNAPSHOT",org.joda.time.tz.data.Europe;version="0.1.1.SNAP
+ SHOT",org.joda.time.tz.data.America.North_Dakota;version="0.1.1.SNAPSHO
+ T",org.joda.time.convert;uses:="org.joda.time.chrono,org.joda.time,org.
+ joda.time.format,org.joda.time.field";version="0.1.1.SNAPSHOT",org.joda
+ .time.tz.data.Indian;version="0.1.1.SNAPSHOT",org.joda.time;uses:="org.
+ joda.time.field,org.joda.convert,org.joda.time.base,org.joda.time.forma
+ t,org.joda.time.chrono,org.joda.time.convert,org.joda.time.tz";version=
+ "0.1.1.SNAPSHOT",org.joda.time.tz.data.Africa;version="0.1.1.SNAPSHOT",
+ org.joda.time.tz.data.Australia;version="0.1.1.SNAPSHOT",org.joda.time.
+ tz.data.America.Kentucky;version="0.1.1.SNAPSHOT",org.joda.time.tz.data
+ ;version="0.1.1.SNAPSHOT",org.joda.time.tz;uses:="org.joda.time,org.jod
+ a.time.chrono,org.joda.time.format";version="0.1.1.SNAPSHOT",org.joda.t
+ ime.tz.data.America.Indiana;version="0.1.1.SNAPSHOT",org.joda.time.tz.d
+ ata.Asia;version="0.1.1.SNAPSHOT",org.joda.time.field;uses:="org.joda.t
+ ime";version="0.1.1.SNAPSHOT",org.joda.time.format;uses:="org.joda.time
+ ,org.joda.time.field";version="0.1.1.SNAPSHOT",org.joda.time.tz.data.At
+ lantic;version="0.1.1.SNAPSHOT",org.joda.time.tz.data.America;version="
+ 0.1.1.SNAPSHOT"
+Import-Package: org.joda.convert,org.osgi.framework;version="[1.6,2)",or
+ g.slf4j;version="[1.6,2)"
+Tool: Bnd-1.50.0
