@@ -24,7 +24,7 @@ public class AnalysisStoreFactoryOSGi extends AnalysisStoreFactory {
 	private synchronized void createInstance() {
 		if (analysisStore == null) {
 			BundleContext bundleContext = Activator.getBundleContext();
-			ServiceReference serviceReference = bundleContext
+			ServiceReference<?> serviceReference = bundleContext
 					.getServiceReference(AnalysisStore.class.getName());
 			if (serviceReference != null) {
 				analysisStore = (AnalysisStore) bundleContext
