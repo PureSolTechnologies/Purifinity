@@ -274,8 +274,7 @@ public class AnalysisRunnerImpl extends
 	private void createFinalTree(AnalysisFileTree intermediate) {
 		Map<File, HashId> hashes = generateModuleHashes(intermediate);
 		fileTree = new AnalysisFileTree(null, intermediate.getName(),
-				hashes.get(intermediate.getPathFile(false)), false,
-				new ArrayList<AnalysisInformation>());
+				hashes.get(intermediate.getPathFile(false)), false, null);
 		for (AnalysisFileTree child : intermediate.getChildren()) {
 			addToFinalTree(fileTree, child, hashes);
 		}
@@ -285,7 +284,8 @@ public class AnalysisRunnerImpl extends
 			AnalysisFileTree refNode, Map<File, HashId> hashes) {
 		AnalysisFileTree newNode = new AnalysisFileTree(parentNode,
 				refNode.getName(), hashes.get(refNode.getPathFile(false)),
-				refNode.isFile(), new ArrayList<AnalysisInformation>());
+				refNode.isFile(),
+				refNode.isFile() ? new ArrayList<AnalysisInformation>() : null);
 		for (AnalysisFileTree child : refNode.getChildren()) {
 			addToFinalTree(newNode, child, hashes);
 		}
