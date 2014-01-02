@@ -46,6 +46,22 @@
 
 	<properties>
 		<bundle.namespace>com.puresoltechnologies.purifinity.framework.store.db</bundle.namespace>
+		<package.imports><![CDATA[
+		com.puresoltechnologies.parsers.api.ust,
+		com.puresoltechnologies.parsers.impl.ust,
+		com.puresoltechnologies.parsers.impl.ust.declarations,
+		com.puresoltechnologies.parsers.impl.ust.modifiers,
+		com.puresoltechnologies.parsers.impl.ust.types,
+		com.puresoltechnologies.parsers.impl.ust.arrays,
+		com.puresoltechnologies.parsers.impl.ust.facilities,
+		com.puresoltechnologies.parsers.impl.ust.comments,
+		com.puresoltechnologies.parsers.impl.ust.eval,
+		com.puresoltechnologies.parsers.impl.ust.literals,
+		com.puresoltechnologies.parsers.impl.ust.expressions,
+		com.puresoltechnologies.parsers.impl.ust.packages,
+		com.puresoltechnologies.parsers.impl.ust.terminal,
+		com.puresoltechnologies.parsers.impl.ust.statements
+		]]></package.imports>
 	</properties>
 
 	<build>
@@ -53,6 +69,11 @@
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
+				<configuration>
+					<instructions>
+						<Import-Package>*,${package.imports}</Import-Package>
+					</instructions>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -14,25 +14,24 @@ public class StopWatch implements Serializable {
 
 	private static final long serialVersionUID = -8824942249939423671L;
 
-	private Date startTime;
-	private Date stopTime;
+	private Date startTime = null;
+	private Date stopTime = null;
 	private long start = 0;
 	private long stop = 0;
 
 	public void start() {
+		stopTime = null;
 		stop = 0;
+		startTime = new Date();
 		start = System.nanoTime();
 	}
 
 	public void stop() {
 		stop = System.nanoTime();
-
+		stopTime = new Date();
 	}
 
 	public double getSeconds() {
-		if (stop == 0) {
-			stop();
-		}
 		return (stop - start) / 1000000000.0;
 	}
 
