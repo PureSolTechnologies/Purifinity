@@ -48,14 +48,10 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		session = cluster.connect(getStoreName());
 		KeyspaceMetadata keyspace = cluster.getMetadata().getKeyspace(
 				getStoreName());
-		CassandraUtils
-				.checkAndCreateTable(
-						session,
-						keyspace,
-						CassandraConnection.EVALUATION_PROJECTS_TABLE,
-						"CREATE TABLE "
-								+ CassandraConnection.EVALUATION_PROJECTS_TABLE
-								+ " (run_uuid uuid, results blob, PRIMARY KEY(run_uuid));");
+		CassandraUtils.checkAndCreateTable(session, keyspace,
+				CassandraConnection.EVALUATION_PROJECTS_TABLE, "CREATE TABLE "
+						+ CassandraConnection.EVALUATION_PROJECTS_TABLE
+						+ " (uuid uuid, results blob, PRIMARY KEY(uuid));");
 		CassandraUtils
 				.checkAndCreateTable(
 						session,
@@ -110,9 +106,9 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final boolean hasProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException {
-		ResultSet resultSet = session.execute("SELECT run_uuid FROM "
+		ResultSet resultSet = session.execute("SELECT uuid FROM "
 				+ CassandraConnection.EVALUATION_DIRECTORIES_TABLE
-				+ " WHERE run_uuid='" + analysisRunUUID + "'");
+				+ " WHERE uuid='" + analysisRunUUID + "'");
 		Row result = resultSet.one();
 		if (resultSet.one() != null) {
 			throw new EvaluationStoreException("Multiple files for run uuid '"
@@ -178,7 +174,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 				.getPreparedStatement(session, "storeFileResults:"
 						+ getStoreName(), "INSERT INTO "
 						+ CassandraConnection.EVALUATION_PROJECTS_TABLE
-						+ "(run_uuid, results) VALUES (?,?)");
+						+ "(uuid, results) VALUES (?,?)");
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 			try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
 					byteArrayOutputStream)) {
@@ -262,7 +258,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 			throws EvaluationStoreException {
 		ResultSet resultSet = session.execute("SELECT results FROM "
 				+ CassandraConnection.EVALUATION_PROJECTS_TABLE
-				+ " WHERE run_uuid='" + analysisRunUUID + "'");
+				+ " WHERE uuid='" + analysisRunUUID + "'");
 		Row result = resultSet.one();
 		if (result == null) {
 			return null;

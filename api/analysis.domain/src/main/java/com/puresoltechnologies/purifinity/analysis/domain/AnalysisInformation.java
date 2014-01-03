@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.analysis.domain;
 
+import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -36,6 +38,10 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 			boolean successful, String languageName, String languageVersion,
 			String analyzerErrorMessage) {
 		super();
+		checkNotNull("hashId", hashId);
+		checkNotNull("time", time);
+		checkNotNull("languageName", languageName);
+		checkNotNull("languageVersion", languageVersion);
 		this.hashId = hashId;
 		this.time = time;
 		this.duration = duration;

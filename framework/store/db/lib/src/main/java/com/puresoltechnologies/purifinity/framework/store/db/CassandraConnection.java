@@ -192,6 +192,28 @@ public class CassandraConnection {
 	}
 
 	private static void checkAndCreateEvaluationTables() {
+		KeyspaceMetadata evaluationKeyspace = cluster.getMetadata()
+				.getKeyspace(EVALUATION_KEYSPACE);
+		CassandraUtils
+				.checkAndCreateTable(
+						evaluationSession,
+						evaluationKeyspace,
+						EVALUATION_FILES_TABLE,
+						"CREATE TABLE "
+								+ EVALUATION_FILES_TABLE
+								+ " (hashid varchar, results blob, PRIMARY KEY(hashid));");
+		CassandraUtils
+				.checkAndCreateTable(
+						evaluationSession,
+						evaluationKeyspace,
+						EVALUATION_DIRECTORIES_TABLE,
+						"CREATE TABLE "
+								+ EVALUATION_DIRECTORIES_TABLE
+								+ " (hashid varchar, results blob, PRIMARY KEY(hashid));");
+		CassandraUtils.checkAndCreateTable(evaluationSession,
+				evaluationKeyspace, EVALUATION_PROJECTS_TABLE, "CREATE TABLE "
+						+ EVALUATION_PROJECTS_TABLE
+						+ " (uuid uuid, results blob, PRIMARY KEY(uuid));");
 	}
 
 }

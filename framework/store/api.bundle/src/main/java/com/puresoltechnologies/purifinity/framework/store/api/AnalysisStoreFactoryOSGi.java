@@ -25,7 +25,7 @@ public class AnalysisStoreFactoryOSGi extends AnalysisStoreFactory {
 		if (analysisStore == null) {
 			BundleContext bundleContext = Activator.getBundleContext();
 			ServiceReference<?> serviceReference = bundleContext
-					.getServiceReference(AnalysisStore.class.getName());
+					.getServiceReference(AnalysisStore.class);
 			if (serviceReference != null) {
 				analysisStore = (AnalysisStore) bundleContext
 						.getService(serviceReference);

@@ -120,4 +120,8 @@ public class DirectoryRepositoryLocation extends AbstractRepositoryLocation {
 		return properties;
 	}
 
+	@Override
+	public String toString() {
+		return "Directory repository: " + repositoryDirectory;
+	}
 }

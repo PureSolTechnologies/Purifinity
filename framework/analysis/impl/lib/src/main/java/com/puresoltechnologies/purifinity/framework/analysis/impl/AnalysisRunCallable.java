@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.framework.analysis.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
@@ -23,6 +24,7 @@ public class AnalysisRunCallable implements Callable<AnalysisInformation> {
 
 	private final SourceCodeLocation sourceFile;
 	private final FileStore codeStore;
+	private Date startTime = null;
 
 	public AnalysisRunCallable(SourceCodeLocation sourceFile) {
 		super();
@@ -34,6 +36,7 @@ public class AnalysisRunCallable implements Callable<AnalysisInformation> {
 	@Override
 	public AnalysisInformation call() throws IOException, FileStoreException {
 		logger.info("Starting analysis for '" + sourceFile + "'...");
+		startTime = new Date();
 		HashId hashId = storeRawFile();
 		AnalysisInformation result = analyzeCode(hashId, sourceFile);
 		logger.info("Finished analysis for '" + sourceFile + "'.");
@@ -91,8 +94,8 @@ public class AnalysisRunCallable implements Callable<AnalysisInformation> {
 				t = t.getCause();
 				id++;
 			}
-			return new AnalysisInformation(hashId, null, 0, false, null, null,
-					message.toString());
+			return new AnalysisInformation(hashId, startTime, 0, false, "n/a",
+					"n/a", message.toString());
 		}
 	}
 
@@ -118,7 +121,8 @@ public class AnalysisRunCallable implements Callable<AnalysisInformation> {
 		} else {
 			logger.warn("File " + sourceFile.getHumanReadableLocationString()
 					+ " could be analyzed.");
-			return new AnalysisInformation(hashId, null, 0, false, null, null);
+			return new AnalysisInformation(hashId, startTime, 0, false, "n/a",
+					"n/a", "No analyzer found.");
 		}
 	}
 

@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.analysis.domain;
 
+import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.Properties;
@@ -55,6 +57,9 @@ public final class AnalysisProjectSettings implements Serializable {
 			FileSearchConfiguration fileSearchConfiguration,
 			Properties repositoryLocation) {
 		super();
+		checkNotNull("name", name);
+		checkNotNull("fileSearchConfiguration", fileSearchConfiguration);
+		checkNotNull("repositoryLocation", repositoryLocation);
 		this.name = name;
 		this.description = description;
 		this.fileSearchConfiguration = fileSearchConfiguration;

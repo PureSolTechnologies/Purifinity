@@ -175,8 +175,9 @@ public class AnalysisStoreView extends AbstractPureSolTechnologiesView
 		try {
 			selectedAnalysis = null;
 			updateAnalysisRunList(null);
-			analysisViewer.setInput(analysisStore
-					.readAllAnalysisProjectInformation());
+			java.util.List<AnalysisProjectInformation> allAnalysisProjectInformation = analysisStore
+					.readAllAnalysisProjectInformation();
+			analysisViewer.setInput(allAnalysisProjectInformation);
 		} catch (AnalysisStoreException e) {
 			logger.log(new Status(
 					Status.ERROR,

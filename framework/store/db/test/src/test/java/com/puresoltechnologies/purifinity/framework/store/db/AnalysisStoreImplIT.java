@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -22,6 +23,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInforma
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
+import com.puresoltechnologies.purifinity.framework.analysis.impl.RepositoryLocationCreator;
 import com.puresoltechnologies.purifinity.framework.analysis.test.TreeTestUtils;
 import com.puresoltechnologies.purifinity.framework.commons.utils.FileSearch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.FileTree;
@@ -87,7 +89,7 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 	@Test
 	public void testCreateAndReadAnalysisProjectSettings()
 			throws AnalysisStoreException {
-		RepositoryLocation location = new DirectoryRepositoryLocation(
+		RepositoryLocation repositoryLocation = new DirectoryRepositoryLocation(
 				"DirRepo", new File("/home/ludwig"));
 		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration();
 		fileSearchConfiguration.getFileExcludes().add("*.bak");
@@ -96,7 +98,7 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 		fileSearchConfiguration.getLocationExcludes().add(".*");
 		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
 				"Description", fileSearchConfiguration,
-				location.getSerialization());
+				repositoryLocation.getSerialization());
 		AnalysisProjectInformation information = analysisStore
 				.createAnalysisProject(settings);
 		assertNotNull(information);
@@ -106,6 +108,14 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 				.readAnalysisProjectSettings(projectUUID);
 		assertNotSame(settings, analysisProjectSettings);
 		assertEquals(settings, analysisProjectSettings);
+
+		Properties readRepositoryLocationSerialized = analysisProjectSettings
+				.getRepositoryLocation();
+		assertNotNull(readRepositoryLocationSerialized);
+		RepositoryLocation readRepositoryLocation = RepositoryLocationCreator
+				.createFromSerialization(readRepositoryLocationSerialized);
+		assertNotNull(readRepositoryLocation);
+		assertEquals(repositoryLocation, readRepositoryLocation);
 	}
 
 	@Test

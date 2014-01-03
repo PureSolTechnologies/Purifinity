@@ -25,6 +25,10 @@ public class TitanConnection {
 	private static TitanGraph graph = null;
 
 	/*
+	 * VERTEX TYPES
+	 */
+	public static final String VERTEX_TYPE = "vertex.type";
+	/*
 	 * ANALYSIS PROJECTS
 	 */
 	public static final String ANALYSIS_PROJECT_UUID_PROPERTY = "analysis.project.uuid";
@@ -81,6 +85,14 @@ public class TitanConnection {
 	}
 
 	private static void checkLabelAndKeySettings() {
+
+		if (graph.getType(VERTEX_TYPE) == null) {
+			KeyMaker keyMaker = graph.makeKey(VERTEX_TYPE);
+			keyMaker.dataType(String.class);
+			keyMaker.indexed(Vertex.class);
+			keyMaker.make();
+		}
+
 		if (graph.getType(CREATION_TIME_PROPERTY) == null) {
 			KeyMaker keyMaker = graph.makeKey(CREATION_TIME_PROPERTY);
 			keyMaker.dataType(Date.class);
@@ -274,6 +286,7 @@ public class TitanConnection {
 			makeLabel.oneToMany(UniquenessConsistency.LOCK);
 			makeLabel.make();
 		}
+		graph.commit();
 	}
 
 	private static Configuration getConfigurationForCassandraBackend() {

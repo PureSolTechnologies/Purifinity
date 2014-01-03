@@ -10,6 +10,8 @@
 
 package com.puresoltechnologies.purifinity.analysis.domain;
 
+import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
@@ -42,6 +44,12 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 			List<CodeRange> analyzableCodeRanges,
 			UniversalSyntaxTree universalSyntaxTree) {
 		super();
+		checkNotNull("time", time);
+		checkNotNull("languageName", languageName);
+		checkNotNull("languageVersion", languageVersion);
+		checkNotNull("analyzedFile", analyzedFile);
+		checkNotNull("analyzableCodeRanges", analyzableCodeRanges);
+		checkNotNull("universalSyntaxTree", universalSyntaxTree);
 		this.time = time;
 		this.duration = duration;
 		this.languageName = languageName;

@@ -80,7 +80,10 @@ public class AnalysisJob extends Job implements
 					return Status.CANCEL_STATUS;
 				}
 			} catch (ExecutionException e) {
-				throw new RuntimeException(e);
+				logger.log(new Status(Status.ERROR,
+						AnalysisJob.class.getName(),
+						"Analysis finished with an exception!", e));
+				throw new RuntimeException("Analysis was not successful.");
 			}
 		} catch (OperationCanceledException e) {
 			logger.log(new Status(Status.INFO, AnalysisJob.class.getName(),
@@ -119,7 +122,6 @@ public class AnalysisJob extends Job implements
 	public void done(AnalysisRunner observable, String message,
 			boolean successful) {
 		monitor.subTask(message);
-		monitor.setCanceled(successful);
 		monitor.done();
 	}
 

@@ -26,7 +26,7 @@ public class FileStoreFactoryOSGi extends FileStoreFactory {
 		if (fileStore == null) {
 			BundleContext bundleContext = Activator.getBundleContext();
 			ServiceReference<?> serviceReference = bundleContext
-					.getServiceReference(FileStore.class.getName());
+					.getServiceReference(FileStore.class);
 			if (serviceReference != null) {
 				fileStore = (FileStore) bundleContext
 						.getService(serviceReference);

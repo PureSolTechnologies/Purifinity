@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.analysis.domain;
 
+import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
@@ -19,6 +21,8 @@ public final class AnalysisProjectInformation implements Serializable {
 
 	public AnalysisProjectInformation(UUID uuid, Date creationTime) {
 		super();
+		checkNotNull("uuid", uuid);
+		checkNotNull("creationTime", creationTime);
 		this.uuid = uuid;
 		this.creationTime = creationTime;
 	}

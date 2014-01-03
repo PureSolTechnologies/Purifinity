@@ -26,7 +26,7 @@ public class DirectoryStoreFactoryOSGi extends DirectoryStoreFactory {
 		if (directoryStore == null) {
 			BundleContext bundleContext = Activator.getBundleContext();
 			ServiceReference<?> serviceReference = bundleContext
-					.getServiceReference(DirectoryStore.class.getName());
+					.getServiceReference(DirectoryStore.class);
 			if (serviceReference != null) {
 				directoryStore = (DirectoryStore) bundleContext
 						.getService(serviceReference);

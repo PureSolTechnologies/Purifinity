@@ -29,6 +29,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
+import com.puresoltechnologies.purifinity.framework.store.db.VertexType;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
@@ -52,6 +53,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	private void createAnalysisProjectVertex(UUID uuid, Date creationTime) {
 		TitanGraph graph = TitanConnection.getGraph();
 		Vertex vertex = graph.addVertex(null);
+		vertex.setProperty(TitanConnection.VERTEX_TYPE,
+				VertexType.ANALYSIS_PROJECT.name());
 		vertex.setProperty(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY,
 				uuid.toString());
 		vertex.setProperty(TitanConnection.CREATION_TIME_PROPERTY, creationTime);
@@ -92,8 +95,10 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		List<AnalysisProjectInformation> projects = new ArrayList<>();
-		Iterable<Vertex> vertices = graph.query()
-				.has(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY).vertices();
+		Iterable<Vertex> vertices = graph
+				.query()
+				.has(TitanConnection.VERTEX_TYPE,
+						VertexType.ANALYSIS_PROJECT.name()).vertices();
 		Iterator<Vertex> vertexIterator = vertices.iterator();
 		while (vertexIterator.hasNext()) {
 			Vertex vertex = vertexIterator.next();
@@ -119,8 +124,10 @@ public class AnalysisStoreImpl implements AnalysisStore {
 
 	private Vertex findAnalysisProjectVertex(TitanGraph graph, UUID uuid)
 			throws AnalysisStoreException {
-		Iterable<Vertex> vertices = graph.getVertices(
-				TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY, uuid);
+		Iterable<Vertex> vertices = graph
+				.query()
+				.has(TitanConnection.ANALYSIS_PROJECT_UUID_PROPERTY,
+						uuid.toString()).vertices();
 		Iterator<Vertex> vertexIterator = vertices.iterator();
 		if (!vertexIterator.hasNext()) {
 			throw new AnalysisStoreException(
@@ -133,7 +140,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	public void removeAnalysisProject(UUID uuid) throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		Vertex vertex = findAnalysisProjectVertex(graph, uuid);
-		vertex.remove();
+		graph.removeVertex(vertex);
+		graph.commit();
 	}
 
 	@Override
@@ -218,7 +226,9 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		Vertex projectVertex = findAnalysisProjectVertex(graph,
 				analysisProjectUUID);
 
-		Vertex runVertex = graph.addVertex(uuid);
+		Vertex runVertex = graph.addVertex(null);
+		runVertex.setProperty(TitanConnection.VERTEX_TYPE,
+				VertexType.ANALYSIS_RUN.name());
 		runVertex.setProperty(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY,
 				uuid.toString());
 		runVertex.setProperty(TitanConnection.CREATION_TIME_PROPERTY,
@@ -237,8 +247,6 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		hasAnalysisRunEdge.setProperty(
 				TitanConnection.ANALYSIS_RUN_START_TIME_PROPERTY, startTime);
 
-		graph.commit();
-
 		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "createAnalysisRun",
@@ -254,6 +262,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 				fileSearchConfiguration.getLocationExcludes(),
 				fileSearchConfiguration.isIgnoreHidden());
 		session.execute(bound);
+
+		graph.commit();
 
 		return new AnalysisRunInformation(analysisProjectUUID, uuid, startTime,
 				duration, description, fileSearchConfiguration);
@@ -288,11 +298,12 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	private Vertex findAnalysisRunVertex(TitanGraph graph, UUID projectUUID,
 			UUID runUUID) throws AnalysisStoreException {
 		Vertex projectVertex = findAnalysisProjectVertex(graph, projectUUID);
-		Iterable<Vertex> analysisRuns = projectVertex.query()
+		Iterable<Vertex> analysisRuns = projectVertex
+				.query()
 				.direction(Direction.OUT)
 				.labels(TitanConnection.HAS_ANALYSIS_RUN_LABEL)
-				.has(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY, runUUID)
-				.vertices();
+				.has(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY,
+						runUUID.toString()).vertices();
 		Iterator<Vertex> runIterator = analysisRuns.iterator();
 		if (!runIterator.hasNext()) {
 			return null;
@@ -369,6 +380,9 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		analysisEdge.setProperty(TitanConnection.ANALYSIS_START_TIME_PROPERTY,
 				analysis.getStartTime());
 
+		analysisVertex.setProperty(TitanConnection.VERTEX_TYPE,
+				VertexType.ANALYSIS.name());
+
 		analysisVertex.setProperty(TitanConnection.ANALYSIS_NAME_PROPERTY,
 				"n/a");
 		analysisVertex.setProperty(TitanConnection.ANALYSIS_VERSION_PROPERTY,
@@ -401,6 +415,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		addFileTreeVertex(graph, fileTree, run,
 				TitanConnection.ANALYZED_FILE_TREE_LABEL, names);
 		storeFileTreeNames(projectUUID, runUUID, names);
+		graph.commit();
 	}
 
 	private void addFileTreeVertex(TitanGraph graph, AnalysisFileTree fileTree,
@@ -423,6 +438,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			graph.commit();
 		} else {
 			vertex = graph.addVertex(null);
+			vertex.setProperty(TitanConnection.VERTEX_TYPE,
+					VertexType.TREE_ELEMENT.name());
 			vertex.setProperty(TitanConnection.TREE_ELEMENT_HASH, fileTree
 					.getHashId().toString());
 			vertex.setProperty(TitanConnection.TREE_ELEMENT_IS_FILE,
@@ -432,7 +449,6 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					.getHashId().toString());
 			edge.setProperty(TitanConnection.TREE_ELEMENT_IS_FILE,
 					fileTree.isFile());
-			graph.commit();
 			for (AnalysisFileTree child : fileTree.getChildren()) {
 				if (child.isFile()) {
 					addFileTreeVertex(graph, child, vertex,
@@ -442,7 +458,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 							TitanConnection.CONTAINS_DIRECTORY_LABEL, names);
 				}
 			}
-			addMetadata(graph, vertex, fileTree);
+			addMetadata(vertex, fileTree);
+			graph.commit();
 			if (fileTree.isFile()) {
 				for (AnalysisInformation analyzedCode : fileTree.getAnalyses()) {
 					storeAnalysisInformation(graph, vertex, analyzedCode);
@@ -516,12 +533,11 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		return sourceLocations;
 	}
 
-	private void addMetadata(TitanGraph graph, Vertex vertex,
-			AnalysisFileTree fileTreeNode) throws AnalysisStoreException {
+	private void addMetadata(Vertex vertex, AnalysisFileTree fileTreeNode)
+			throws AnalysisStoreException {
 		if (fileTreeNode.isFile()) {
 			long size = AnalysisStoreDAO.getFileSize(fileTreeNode.getHashId());
 			vertex.setProperty(TitanConnection.TREE_ELEMENT_SIZE, size);
-			graph.commit();
 		} else {
 			Iterable<Vertex> childVertexes = vertex
 					.query()
@@ -574,7 +590,6 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			vertex.setProperty(TitanConnection.TREE_ELEMENT_SIZE, size);
 			vertex.setProperty(TitanConnection.TREE_ELEMENT_SIZE_RECURSIVE,
 					sizeRecursive);
-			graph.commit();
 		}
 	}
 
