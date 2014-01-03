@@ -262,7 +262,7 @@ public class TitanConnection {
 		}
 		if (graph.getType(ANALYZED_FILE_TREE_LABEL) == null) {
 			LabelMaker makeLabel = graph.makeLabel(ANALYZED_FILE_TREE_LABEL);
-			makeLabel.oneToOne();
+			makeLabel.manyToOne();
 			makeLabel.signature(graph.getType(TREE_ELEMENT_HASH),
 					graph.getType(TREE_ELEMENT_IS_FILE));
 			makeLabel.make();

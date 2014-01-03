@@ -410,9 +410,10 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	public void storeAnalysisFileTree(UUID projectUUID, UUID runUUID,
 			AnalysisFileTree fileTree) throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
-		Vertex run = findAnalysisRunVertex(graph, projectUUID, runUUID);
+		Vertex analysisRunVertex = findAnalysisRunVertex(graph, projectUUID,
+				runUUID);
 		Map<String, String> names = new HashMap<>();
-		addFileTreeVertex(graph, fileTree, run,
+		addFileTreeVertex(graph, fileTree, analysisRunVertex,
 				TitanConnection.ANALYZED_FILE_TREE_LABEL, names);
 		storeFileTreeNames(projectUUID, runUUID, names);
 		graph.commit();
@@ -427,17 +428,19 @@ public class AnalysisStoreImpl implements AnalysisStore {
 				.has(TitanConnection.TREE_ELEMENT_HASH,
 						fileTree.getHashId().toString()).vertices();
 		Iterator<Vertex> iterator = vertices.iterator();
-		final Vertex vertex;
 		if (iterator.hasNext()) {
-			vertex = iterator.next();
-			Edge edge = parentVertex.addEdge(edgeLabel, vertex);
+			Vertex exstingTreeElementVertex = iterator.next();
+			Edge edge = parentVertex.addEdge(edgeLabel,
+					exstingTreeElementVertex);
 			edge.setProperty(TitanConnection.TREE_ELEMENT_HASH,
-					vertex.getProperty(TitanConnection.TREE_ELEMENT_HASH));
+					exstingTreeElementVertex
+							.getProperty(TitanConnection.TREE_ELEMENT_HASH));
 			edge.setProperty(TitanConnection.TREE_ELEMENT_IS_FILE,
-					vertex.getProperty(TitanConnection.TREE_ELEMENT_IS_FILE));
+					exstingTreeElementVertex
+							.getProperty(TitanConnection.TREE_ELEMENT_IS_FILE));
 			graph.commit();
 		} else {
-			vertex = graph.addVertex(null);
+			Vertex vertex = graph.addVertex(null);
 			vertex.setProperty(TitanConnection.VERTEX_TYPE,
 					VertexType.TREE_ELEMENT.name());
 			vertex.setProperty(TitanConnection.TREE_ELEMENT_HASH, fileTree

@@ -12,7 +12,7 @@ public class SourceCodeLocationCreator {
 	public static SourceCodeLocation createFromSerialization(
 			Properties properties) throws IllegalArgumentException {
 		String repositoryLocationClass = properties
-				.getProperty(RepositoryLocation.REPOSITORY_LOCATION_CLASS);
+				.getProperty(SourceCodeLocation.SOURCE_CODE_LOCATION_CLASS);
 		try {
 			Class<?> repositoryClass = Class.forName(repositoryLocationClass);
 			Constructor<?> repositoryConstructor = repositoryClass

@@ -9,8 +9,6 @@ import java.nio.ByteBuffer;
 import java.util.UUID;
 
 import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -18,8 +16,6 @@ import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraUtils;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
@@ -41,38 +37,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 
 	public AbstractEvaluatorStore() {
 		super();
-
-		Cluster cluster = CassandraConnection.getCluster();
-		CassandraUtils.checkAndCreateKeyspace(cluster, getStoreName(),
-				ReplicationStrategy.SIMPLE_STRATEGY, 1);
-		session = cluster.connect(getStoreName());
-		KeyspaceMetadata keyspace = cluster.getMetadata().getKeyspace(
-				getStoreName());
-		CassandraUtils.checkAndCreateTable(session, keyspace,
-				CassandraConnection.EVALUATION_PROJECTS_TABLE, "CREATE TABLE "
-						+ CassandraConnection.EVALUATION_PROJECTS_TABLE
-						+ " (uuid uuid, results blob, PRIMARY KEY(uuid));");
-		CassandraUtils
-				.checkAndCreateTable(
-						session,
-						keyspace,
-						CassandraConnection.EVALUATION_DIRECTORIES_TABLE,
-						"CREATE TABLE "
-								+ CassandraConnection.EVALUATION_DIRECTORIES_TABLE
-								+ " (hashid varchar, results blob, PRIMARY KEY(hashid));");
-		CassandraUtils
-				.checkAndCreateTable(
-						session,
-						keyspace,
-						CassandraConnection.EVALUATION_FILES_TABLE,
-						"CREATE TABLE "
-								+ CassandraConnection.EVALUATION_FILES_TABLE
-								+ " (hashid varchar, results blob, PRIMARY KEY(hashid));");
-
-	}
-
-	public final void shutdown() {
-		session.shutdown();
+		session = CassandraConnection.getEvaluationSession();
 	}
 
 	@Override
@@ -107,8 +72,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final boolean hasProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException {
 		ResultSet resultSet = session.execute("SELECT uuid FROM "
-				+ CassandraConnection.EVALUATION_DIRECTORIES_TABLE
-				+ " WHERE uuid='" + analysisRunUUID + "'");
+				+ CassandraConnection.EVALUATION_PROJECTS_TABLE
+				+ " WHERE uuid=" + analysisRunUUID);
 		Row result = resultSet.one();
 		if (resultSet.one() != null) {
 			throw new EvaluationStoreException("Multiple files for run uuid '"

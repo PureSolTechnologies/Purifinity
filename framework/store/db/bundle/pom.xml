@@ -47,6 +47,7 @@
 	<properties>
 		<bundle.namespace>com.puresoltechnologies.purifinity.framework.store.db</bundle.namespace>
 		<package.imports><![CDATA[
+		com.puresoltechnologies.commons.math.statistics,
 		com.puresoltechnologies.parsers.api.ust,
 		com.puresoltechnologies.parsers.impl.ust,
 		com.puresoltechnologies.parsers.impl.ust.declarations,
@@ -60,7 +61,8 @@
 		com.puresoltechnologies.parsers.impl.ust.expressions,
 		com.puresoltechnologies.parsers.impl.ust.packages,
 		com.puresoltechnologies.parsers.impl.ust.terminal,
-		com.puresoltechnologies.parsers.impl.ust.statements
+		com.puresoltechnologies.parsers.impl.ust.statements,
+		com.puresoltechnologies.purifinity.framework.evaluation.commons.impl
 		]]></package.imports>
 	</properties>
 
