@@ -12,8 +12,7 @@ import com.puresoltechnologies.purifinity.client.common.chart.AxisDirection;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TransformationMatrix2D extends BlockRealMatrix {
-	private static final long serialVersionUID = -967323828848599371L;
+public class TransformationMatrix2D {
 
 	public static TransformationMatrix2D createRotationMatrixRad2D(double rad) {
 		TransformationMatrix2D rotationMatrix = new TransformationMatrix2D(
@@ -29,6 +28,8 @@ public class TransformationMatrix2D extends BlockRealMatrix {
 
 	private static final int DIMENSIONS = 3;
 
+	private final BlockRealMatrix matrix;
+
 	/**
 	 * This constructor creates a new transformation matrix with the given data.
 	 * This constructor is to be used internally and is set to private.
@@ -40,7 +41,7 @@ public class TransformationMatrix2D extends BlockRealMatrix {
 	 */
 	private TransformationMatrix2D(double[][] rawData)
 			throws DimensionMismatchException, NotStrictlyPositiveException {
-		super(rawData);
+		matrix = new BlockRealMatrix(rawData);
 	}
 
 	/**
@@ -60,13 +61,13 @@ public class TransformationMatrix2D extends BlockRealMatrix {
 	 */
 	public void scale(double scaleX, double scaleY) {
 		for (int i = 0; i < DIMENSIONS; i++) {
-			setEntry(i, 0, getEntry(i, 0) * scaleX);
-			setEntry(i, 1, getEntry(i, 1) * scaleY);
+			matrix.setEntry(i, 0, matrix.getEntry(i, 0) * scaleX);
+			matrix.setEntry(i, 1, matrix.getEntry(i, 1) * scaleY);
 		}
 	}
 
 	public Point2D transform(Point2D point) {
-		return new Point2D(operate(point.getData()));
+		return new Point2D(matrix.operate(point.getData()));
 	}
 
 	public void mirror(AxisDirection axis) {
@@ -85,8 +86,9 @@ public class TransformationMatrix2D extends BlockRealMatrix {
 
 	public void translate(double x, double y) {
 		for (int i = 0; i < DIMENSIONS; i++) {
-			setEntry(i, 2,
-					getEntry(i, 0) * x + getEntry(i, 1) * y + getEntry(i, 2));
+			matrix.setEntry(i, 2,
+					matrix.getEntry(i, 0) * x + matrix.getEntry(i, 1) * y
+							+ matrix.getEntry(i, 2));
 		}
 	}
 
@@ -96,7 +98,14 @@ public class TransformationMatrix2D extends BlockRealMatrix {
 
 	public void rotateRad(double rad) {
 		TransformationMatrix2D rotationMatrix = createRotationMatrixRad2D(rad);
-		BlockRealMatrix newMatrix = multiply(rotationMatrix);
-		setSubMatrix(newMatrix.getData(), 0, 0);
+		BlockRealMatrix newMatrix = matrix.multiply(rotationMatrix.matrix);
+		matrix.setSubMatrix(newMatrix.getData(), 0, 0);
+	}
+
+	public TransformationMatrix2D multiply(
+			TransformationMatrix2D createRotationMatrixDeg2D) {
+		BlockRealMatrix multipliedMatrix = matrix
+				.multiply(createRotationMatrixDeg2D.matrix);
+		return new TransformationMatrix2D(multipliedMatrix.getData());
 	}
 }
