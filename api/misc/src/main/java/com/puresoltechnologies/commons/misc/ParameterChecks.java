@@ -17,11 +17,12 @@ public class ParameterChecks {
 	 * @throws IllegalArgumentException
 	 *             is thrown in case the parameter is <code>null</code>.
 	 */
-	public static void checkNotNull(String parameterName, Object parameter) {
+	public static <T> T checkNotNull(String parameterName, T parameter) {
 		if (parameter == null) {
 			throw new IllegalArgumentException(parameterName
 					+ " must not be null!");
 		}
+		return parameter;
 	}
 
 }

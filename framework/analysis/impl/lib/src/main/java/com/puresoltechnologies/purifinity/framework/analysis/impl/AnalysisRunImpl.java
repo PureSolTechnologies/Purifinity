@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.framework.analysis.impl;
 
+import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -49,7 +51,7 @@ public class AnalysisRunImpl implements AnalysisRun {
 	private final List<AnalysisInformation> successfulFiles = new ArrayList<>();
 	private final List<AnalysisInformation> failedFiles = new ArrayList<>();
 	private final Map<String, AnalysisInformation> internalPaths = new HashMap<>();
-	private final Map<HashId, SourceCodeLocation> sourceCodeLocation = new HashMap<>();
+	private final Map<HashId, SourceCodeLocation> sourceCodeLocations = new HashMap<>();
 
 	/**
 	 * This constructor is used to create a new analysis run. All setup
@@ -62,10 +64,10 @@ public class AnalysisRunImpl implements AnalysisRun {
 	public AnalysisRunImpl(UUID analysisProjectUUID, UUID uuid, Date startTime,
 			long duration, AnalysisFileTree fileTree,
 			FileSearchConfiguration fileSearchConfiguration,
-			Map<HashId, SourceCodeLocation> sourceCodeLocation) {
+			Map<HashId, SourceCodeLocation> sourceCodeLocations) {
 		this(new AnalysisRunInformation(analysisProjectUUID, uuid, startTime,
 				duration, "", fileSearchConfiguration), fileTree,
-				sourceCodeLocation);
+				sourceCodeLocations);
 	}
 
 	/**
@@ -78,10 +80,14 @@ public class AnalysisRunImpl implements AnalysisRun {
 	 */
 	public AnalysisRunImpl(AnalysisRunInformation information,
 			AnalysisFileTree fileTree,
-			Map<HashId, SourceCodeLocation> sourceCodeLocation) {
+			Map<HashId, SourceCodeLocation> sourceCodeLocations) {
 		super();
+		checkNotNull("information", information);
+		checkNotNull("fileTree", fileTree);
+		checkNotNull("sourceCodeLocations", sourceCodeLocations);
 		this.information = information;
 		this.fileTree = fileTree;
+		this.sourceCodeLocations.putAll(sourceCodeLocations);
 		populateFields();
 	}
 
@@ -135,6 +141,6 @@ public class AnalysisRunImpl implements AnalysisRun {
 
 	@Override
 	public SourceCodeLocation getSourceCodeLocation(HashId hashId) {
-		return sourceCodeLocation.get(hashId);
+		return sourceCodeLocations.get(hashId);
 	}
 }

@@ -1,5 +1,7 @@
 package com.puresoltechnologies.parsers.impl.source;
 
+import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,21 +23,19 @@ public class SourceFileLocation extends AbstractSourceCodeLocation {
 	private final File file;
 
 	public SourceFileLocation(String repositoryDirectory, String internalPath) {
-		this.repositoryDirectory = new File(repositoryDirectory);
-		this.internalPath = internalPath;
-		file = new File(repositoryDirectory, internalPath);
+		this(new File(repositoryDirectory), internalPath);
 	}
 
 	public SourceFileLocation(File repositoryDirectory, String internalPath) {
+		checkNotNull("repositoryDirectory", repositoryDirectory);
+		checkNotNull("internalPath", internalPath);
 		this.repositoryDirectory = repositoryDirectory;
 		this.internalPath = internalPath;
 		file = new File(repositoryDirectory, internalPath);
 	}
 
 	public SourceFileLocation(File repositoryDirectory, File internalPath) {
-		this.repositoryDirectory = repositoryDirectory;
-		this.internalPath = internalPath.getPath();
-		file = new File(repositoryDirectory, this.internalPath);
+		this(repositoryDirectory, internalPath.getPath());
 	}
 
 	public SourceFileLocation(Properties properties) {
@@ -44,6 +44,10 @@ public class SourceFileLocation extends AbstractSourceCodeLocation {
 						.getProperty(SOURCE_CODE_LOCATION_REPOSITORY_DIRECTORY));
 		this.internalPath = properties
 				.getProperty(SOURCE_CODE_LOCATION_INTERNAL_PATH);
+		if (internalPath == null) {
+			throw new IllegalStateException("The property "
+					+ SOURCE_CODE_LOCATION_INTERNAL_PATH + " was not set.");
+		}
 		file = new File(repositoryDirectory, this.internalPath);
 	}
 
@@ -54,11 +58,8 @@ public class SourceFileLocation extends AbstractSourceCodeLocation {
 
 	@Override
 	public SourceCode loadSourceCode() throws IOException {
-		FileInputStream stream = new FileInputStream(file);
-		try {
+		try (FileInputStream stream = new FileInputStream(file)) {
 			return SourceCodeImpl.read(stream, this);
-		} finally {
-			stream.close();
 		}
 	}
 

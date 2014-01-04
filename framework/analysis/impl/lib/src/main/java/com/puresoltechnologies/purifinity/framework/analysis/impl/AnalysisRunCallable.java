@@ -52,11 +52,8 @@ public class AnalysisRunCallable implements Callable<AnalysisInformation> {
 	 * @throws FileStoreException
 	 */
 	private HashId storeRawFile() throws IOException, FileStoreException {
-		InputStream stream = sourceFile.openStream();
-		try {
+		try (InputStream stream = sourceFile.openStream()) {
 			return codeStore.storeRawFile(stream);
-		} finally {
-			stream.close();
 		}
 	}
 

@@ -10,6 +10,8 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
@@ -36,9 +38,6 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 public class AnalysisStoreImpl implements AnalysisStore {
-
-	public AnalysisStoreImpl() {
-	}
 
 	@Override
 	public AnalysisProjectInformation createAnalysisProject(
@@ -401,8 +400,11 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		analysisVertex.setProperty(
 				TitanConnection.ANALYSIS_SUCCESSFUL_PROPERTY,
 				analysis.isSuccessful());
-		analysisVertex.setProperty(TitanConnection.ANALYSIS_MESSAGE_PROPERTY,
-				analysis.getMessage());
+		String message = analysis.getMessage();
+		if (!StringUtils.isEmpty(message)) {
+			analysisVertex.setProperty(
+					TitanConnection.ANALYSIS_MESSAGE_PROPERTY, message);
+		}
 		graph.commit();
 	}
 
@@ -412,17 +414,30 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		TitanGraph graph = TitanConnection.getGraph();
 		Vertex analysisRunVertex = findAnalysisRunVertex(graph, projectUUID,
 				runUUID);
-		Map<String, String> names = new HashMap<>();
 		addFileTreeVertex(graph, fileTree, analysisRunVertex,
-				TitanConnection.ANALYZED_FILE_TREE_LABEL, names);
+				TitanConnection.ANALYZED_FILE_TREE_LABEL);
+		Map<String, String> names = collectFileTreeNames(fileTree);
 		storeFileTreeNames(projectUUID, runUUID, names);
 		graph.commit();
 	}
 
-	private void addFileTreeVertex(TitanGraph graph, AnalysisFileTree fileTree,
-			Vertex parentVertex, String edgeLabel, Map<String, String> names)
-			throws AnalysisStoreException {
+	private Map<String, String> collectFileTreeNames(AnalysisFileTree fileTree) {
+		Map<String, String> names = new HashMap<>();
+		collectFileTreeNames(fileTree, names);
+		return names;
+	}
+
+	private void collectFileTreeNames(AnalysisFileTree fileTree,
+			Map<String, String> names) {
 		names.put(fileTree.getHashId().toString(), fileTree.getName());
+		for (AnalysisFileTree child : fileTree.getChildren()) {
+			collectFileTreeNames(child, names);
+		}
+	}
+
+	private void addFileTreeVertex(TitanGraph graph, AnalysisFileTree fileTree,
+			Vertex parentVertex, String edgeLabel)
+			throws AnalysisStoreException {
 		Iterable<Vertex> vertices = graph
 				.query()
 				.has(TitanConnection.TREE_ELEMENT_HASH,
@@ -455,10 +470,10 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			for (AnalysisFileTree child : fileTree.getChildren()) {
 				if (child.isFile()) {
 					addFileTreeVertex(graph, child, vertex,
-							TitanConnection.CONTAINS_FILE_LABEL, names);
+							TitanConnection.CONTAINS_FILE_LABEL);
 				} else {
 					addFileTreeVertex(graph, child, vertex,
-							TitanConnection.CONTAINS_DIRECTORY_LABEL, names);
+							TitanConnection.CONTAINS_DIRECTORY_LABEL);
 				}
 			}
 			addMetadata(vertex, fileTree);
@@ -636,6 +651,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			AnalysisFileTree parent, Map<String, String> names) {
 		String hash = (String) treeVertex
 				.getProperty(TitanConnection.TREE_ELEMENT_HASH);
+		String name = names.get(hash);
 		boolean isFile = (boolean) treeVertex
 				.getProperty(TitanConnection.TREE_ELEMENT_IS_FILE);
 		final List<AnalysisInformation> analyses;
@@ -655,8 +671,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		} else {
 			analyses = null;
 		}
-		AnalysisFileTree hashIdFileTree = new AnalysisFileTree(parent,
-				names.get(hash), HashId.fromString(hash), isFile, analyses);
+		AnalysisFileTree hashIdFileTree = new AnalysisFileTree(parent, name,
+				HashId.fromString(hash), isFile, analyses);
 		Iterable<Vertex> vertices = treeVertex
 				.query()
 				.direction(Direction.OUT)

@@ -1,5 +1,7 @@
 package com.puresoltechnologies.parsers.impl.source;
 
+import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +21,7 @@ public class URLSourceCodeLocation extends AbstractSourceCodeLocation {
 	private final URL url;
 
 	public URLSourceCodeLocation(URL url) {
+		checkNotNull("url", url);
 		this.url = url;
 	}
 
@@ -38,11 +41,8 @@ public class URLSourceCodeLocation extends AbstractSourceCodeLocation {
 
 	@Override
 	public SourceCode loadSourceCode() throws IOException {
-		InputStream stream = url.openStream();
-		try {
+		try (InputStream stream = url.openStream()) {
 			return SourceCodeImpl.read(stream, this);
-		} finally {
-			stream.close();
 		}
 	}
 
@@ -94,13 +94,8 @@ public class URLSourceCodeLocation extends AbstractSourceCodeLocation {
 
 	@Override
 	public boolean isAvailable() {
-		try {
-			InputStream stream = url.openStream();
-			try {
-				return stream != null;
-			} finally {
-				stream.close();
-			}
+		try (InputStream stream = url.openStream()) {
+			return stream != null;
 		} catch (IOException e) {
 			return false;
 		}

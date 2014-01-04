@@ -245,13 +245,13 @@ public class AnalysisRunnerImpl extends
 		return intermediate;
 	}
 
-	private void addToIntermediateTree(AnalysisFileTree intermediate,
+	private void addToIntermediateTree(AnalysisFileTree rootNode,
 			SourceCodeLocation location) {
 		AnalysisInformation analysis = analyzedFiles.get(location);
 		HashId hashId = analysis.getHashId();
 		String internalLocation = location.getInternalLocation();
-		String[] directories = internalLocation.split("/");
-		AnalysisFileTree node = intermediate;
+		String[] directories = internalLocation.split(File.separator);
+		AnalysisFileTree node = rootNode;
 		for (int i = 0; i < directories.length; i++) {
 			String directory = directories[i];
 			AnalysisFileTree child = node.getChild(directory);
@@ -284,8 +284,8 @@ public class AnalysisRunnerImpl extends
 			AnalysisFileTree refNode, Map<File, HashId> hashes) {
 		AnalysisFileTree newNode = new AnalysisFileTree(parentNode,
 				refNode.getName(), hashes.get(refNode.getPathFile(false)),
-				refNode.isFile(),
-				refNode.isFile() ? new ArrayList<AnalysisInformation>() : null);
+				refNode.isFile(), refNode.isFile() ? refNode.getAnalyses()
+						: null);
 		for (AnalysisFileTree child : refNode.getChildren()) {
 			addToFinalTree(newNode, child, hashes);
 		}
