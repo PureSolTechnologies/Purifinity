@@ -3,6 +3,7 @@ package com.puresoltechnologies.purifinity.client.common.analysis.controls;
 import java.awt.Dimension;
 import java.io.IOException;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
@@ -28,7 +29,7 @@ public class GrammarCanvas extends Canvas implements PaintListener {
 	private Dimension preferredSize = new Dimension();
 
 	public GrammarCanvas(Composite parent, int style) {
-		super(parent, style);
+		super(parent, style | SWT.DOUBLE_BUFFERED);
 		FillLayout layout = new FillLayout();
 		layout.marginHeight = 5;
 		layout.marginWidth = 5;

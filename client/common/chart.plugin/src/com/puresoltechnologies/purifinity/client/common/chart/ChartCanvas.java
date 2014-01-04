@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.client.common.chart;
 
 import org.eclipse.jface.window.DefaultToolTip;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
@@ -29,7 +30,7 @@ public class ChartCanvas extends Canvas implements PaintListener {
 	private final ChartRenderer chartRenderer = new ChartRenderer();
 
 	public ChartCanvas(Composite parent, int style) {
-		super(parent, style);
+		super(parent, style | SWT.DOUBLE_BUFFERED);
 
 		setBackground(new Color(getDisplay(), new RGB(255, 255, 255)));
 

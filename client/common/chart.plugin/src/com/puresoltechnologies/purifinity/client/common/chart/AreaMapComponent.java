@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.jface.window.DefaultToolTip;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
@@ -34,7 +35,7 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 	private final AreaMapRenderer renderer = new AreaMapRenderer();
 
 	public AreaMapComponent(Composite parent, int style) {
-		super(parent, style);
+		super(parent, style | SWT.DOUBLE_BUFFERED);
 		Color color = new Color(getDisplay(), 255, 255, 255);
 		try {
 			setBackground(color);
@@ -45,19 +46,7 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 		DefaultToolTip toolTip = new DefaultToolTip(this) {
 			@Override
 			protected String getText(Event event) {
-				int x = event.x;
-				int y = event.y;
-				AreaMapData data = null;
-				int size = Integer.MAX_VALUE;
-				for (Rectangle r : tooltipAreas.keySet()) {
-					if (r.contains(x, y)) {
-						int newSize = r.height * r.width;
-						if (size > newSize) {
-							data = tooltipAreas.get(r);
-							size = newSize;
-						}
-					}
-				}
+				AreaMapData data = findData(event.x, event.y);
 				if (data == null) {
 					return super.getText(event);
 				} else {
@@ -69,10 +58,26 @@ public class AreaMapComponent extends Canvas implements PaintListener {
 					}
 				}
 			}
+
 		};
 		toolTip.setHideDelay(0);
 		toolTip.setPopupDelay(0);
 		toolTip.setShift(new Point(10, 10));
+	}
+
+	private AreaMapData findData(int x, int y) {
+		AreaMapData data = null;
+		int size = Integer.MAX_VALUE;
+		for (Rectangle r : tooltipAreas.keySet()) {
+			if (r.contains(x, y)) {
+				int newSize = r.height * r.width;
+				if (size > newSize) {
+					data = tooltipAreas.get(r);
+					size = newSize;
+				}
+			}
+		}
+		return data;
 	}
 
 	public void setData(AreaMapData data) {
