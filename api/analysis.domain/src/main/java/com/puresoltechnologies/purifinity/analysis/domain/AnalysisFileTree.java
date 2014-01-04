@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.analysis.domain;
 
+import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,16 +23,12 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 	private final String name;
 	private final HashId hashId;
 	private final boolean file;
-	private final List<AnalysisInformation> analyzedCodes;
+	private final List<AnalysisInformation> analyzedCodes = new ArrayList<>();
 
 	public AnalysisFileTree(AnalysisFileTree parent, String name,
 			HashId hashId, boolean file, List<AnalysisInformation> analyzedCodes) {
 		super();
-		this.parent = parent;
-		this.name = name;
-		this.hashId = hashId;
-		this.file = file;
-		this.analyzedCodes = analyzedCodes;
+		checkNotNull("name", name);
 		if ((!file) && (analyzedCodes != null)) {
 			throw new IllegalArgumentException(
 					"Analyses are only allowed for files. Directories need to have null for analyses list.");
@@ -38,6 +36,13 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 		if ((file) && (analyzedCodes == null)) {
 			throw new IllegalArgumentException(
 					"Analyses are not allowed to be null for files. If there is no analysis, set an empty list.");
+		}
+		this.parent = parent;
+		this.name = name;
+		this.hashId = hashId;
+		this.file = file;
+		if (analyzedCodes != null) {
+			this.analyzedCodes.addAll(analyzedCodes);
 		}
 		if (parent != null) {
 			parent.children.add(this);

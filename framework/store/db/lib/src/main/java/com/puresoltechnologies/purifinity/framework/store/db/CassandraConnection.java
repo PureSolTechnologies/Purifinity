@@ -201,7 +201,7 @@ public class CassandraConnection {
 						EVALUATION_FILES_TABLE,
 						"CREATE TABLE "
 								+ EVALUATION_FILES_TABLE
-								+ " (hashid varchar, results blob, PRIMARY KEY(hashid));");
+								+ " (hashid varchar, resultsClass varchar, results blob, PRIMARY KEY(hashid, resultsClass));");
 		CassandraUtils
 				.checkAndCreateTable(
 						evaluationSession,
@@ -209,11 +209,15 @@ public class CassandraConnection {
 						EVALUATION_DIRECTORIES_TABLE,
 						"CREATE TABLE "
 								+ EVALUATION_DIRECTORIES_TABLE
-								+ " (hashid varchar, results blob, PRIMARY KEY(hashid));");
-		CassandraUtils.checkAndCreateTable(evaluationSession,
-				evaluationKeyspace, EVALUATION_PROJECTS_TABLE, "CREATE TABLE "
-						+ EVALUATION_PROJECTS_TABLE
-						+ " (uuid uuid, results blob, PRIMARY KEY(uuid));");
+								+ " (hashid varchar, resultsClass varchar, results blob, PRIMARY KEY(hashid, resultsClass));");
+		CassandraUtils
+				.checkAndCreateTable(
+						evaluationSession,
+						evaluationKeyspace,
+						EVALUATION_PROJECTS_TABLE,
+						"CREATE TABLE "
+								+ EVALUATION_PROJECTS_TABLE
+								+ " (uuid uuid, resultsClass varchar, results blob, PRIMARY KEY(uuid, resultsClass));");
 	}
 
 }

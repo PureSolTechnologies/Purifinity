@@ -171,9 +171,8 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 			if (analysis != null) {
 				name.setText(analysis.getSettings().getName());
 				if (analysisRun != null) {
-					analyzedTableViewer
-							.setInput(analysisRun.getAnalyzedFiles());
-					failedTableViewer.setInput(analysisRun.getFailedFiles());
+					analyzedTableViewer.setInput(analysisRun);
+					failedTableViewer.setInput(analysisRun);
 					int analyzedCodesSize = analysisRun.getAnalyzedFiles()
 							.size();
 					int failedCodesSize = analysisRun.getFailedFiles().size();

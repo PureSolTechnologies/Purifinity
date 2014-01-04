@@ -146,6 +146,9 @@ public class AnalyzedFilesTableViewer extends TableViewer implements
 
 	@Override
 	public AnalysisInformation[] getElements(Object inputElement) {
+		if (analysisRun == null) {
+			return new AnalysisInformation[0];
+		}
 		List<AnalysisInformation> files = analysisRun.getAnalyzedFiles();
 		return files.toArray(new AnalysisInformation[files.size()]);
 	}
