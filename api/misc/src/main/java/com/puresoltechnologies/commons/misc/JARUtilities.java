@@ -13,36 +13,32 @@ import java.util.regex.Pattern;
  * This class provides some utilities for handling jar files and their content.
  * 
  * @author Rick-Rainer Ludwig
- * 
  */
 public class JARUtilities {
 
 	public static void copyResource(URL resource, File destination)
 			throws IOException {
-		InputStream inStream = resource.openStream();
-		if (inStream == null) {
-			throw new IOException("No resource with the name '"
-					+ resource.toString() + "' found!");
+		if (resource == null) {
+			throw new IllegalArgumentException("URL must not be null.");
 		}
-		try {
+		if (destination == null) {
+			throw new IllegalArgumentException("URL must not be null.");
+		}
+		try (InputStream inStream = resource.openStream()) {
 			File parent = destination.getParentFile();
-			if (parent != null) {
-				if (!parent.exists()) {
-					parent.mkdirs();
+			if ((parent != null) && (!parent.exists())) {
+				if (!parent.mkdirs()) {
+					throw new IOException("Could not create target directory '"
+							+ parent + "'.");
 				}
 			}
-			FileOutputStream outStream = new FileOutputStream(destination);
-			try {
+			try (FileOutputStream outStream = new FileOutputStream(destination)) {
 				byte[] buffer = new byte[1024];
 				int amount;
 				while ((amount = inStream.read(buffer)) >= 0) {
 					outStream.write(buffer, 0, amount);
 				}
-			} finally {
-				outStream.close();
 			}
-		} finally {
-			inStream.close();
 		}
 	}
 
@@ -60,14 +56,9 @@ public class JARUtilities {
 	 */
 	public static Properties readPropertyFile(URL url) throws IOException {
 		if (url == null) {
-			return new Properties();
+			throw new IllegalArgumentException("URL must not be null.");
 		}
-		InputStream inputStream = url.openStream();
-		if (inputStream == null) {
-			throw new IOException("No resource with the name '"
-					+ url.toString() + "' found!");
-		}
-		try {
+		try (InputStream inputStream = url.openStream()) {
 			Properties properties = new Properties();
 			properties.load(inputStream);
 			Pattern pattern = Pattern.compile("\\$\\{([\\w.]+)\\}");
@@ -86,29 +77,22 @@ public class JARUtilities {
 				properties.put(key, value);
 			}
 			return properties;
-		} finally {
-			inputStream.close();
 		}
 	}
 
 	public static String readResourceFileToString(URL url) throws IOException {
-		InputStream inStream = url.openStream();
-		if (inStream == null) {
-			throw new IOException("No resource with the name '"
-					+ url.toString() + "' found!");
+		if (url == null) {
+			throw new IllegalArgumentException("URL must not be null.");
 		}
-		try {
+		try (InputStream inStream = url.openStream()) {
 			byte buffer[] = new byte[1024];
 			StringBuffer stringBuffer = new StringBuffer();
-			int length;
-			length = inStream.read(buffer);
+			int length = inStream.read(buffer);
 			while (length > 0) {
 				stringBuffer.append(buffer);
 				length = inStream.read(buffer);
 			}
 			return stringBuffer.toString();
-		} finally {
-			inStream.close();
 		}
 	}
 }

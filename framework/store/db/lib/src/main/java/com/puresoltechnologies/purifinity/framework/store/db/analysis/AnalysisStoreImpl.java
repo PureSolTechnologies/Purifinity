@@ -1,5 +1,11 @@
 package com.puresoltechnologies.purifinity.framework.store.db.analysis;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,6 +17,8 @@ import java.util.Properties;
 import java.util.UUID;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -38,6 +46,9 @@ import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 public class AnalysisStoreImpl implements AnalysisStore {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(AnalysisStoreImpl.class);
 
 	@Override
 	public AnalysisProjectInformation createAnalysisProject(
@@ -614,6 +625,44 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	@Override
 	public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException {
+		AnalysisFileTree analysisFileTree = readCachedAnalysisFileTree(
+				projectUUID, runUUID);
+		if (analysisFileTree != null) {
+			return analysisFileTree;
+		}
+		analysisFileTree = createAnalysisFileTree(projectUUID, runUUID);
+		cacheAnalysisFileTree(projectUUID, runUUID, analysisFileTree);
+		return analysisFileTree;
+	}
+
+	private AnalysisFileTree readCachedAnalysisFileTree(UUID projectUUID,
+			UUID runUUID) {
+		Session session = CassandraConnection.getAnalysisSession();
+		ResultSet resultSet = session.execute("SELECT persisted_tree FROM "
+				+ CassandraConnection.ANALYSIS_FILE_TREE_CACHE + " WHERE uuid="
+				+ runUUID);
+		Row result = resultSet.one();
+		if (result == null) {
+			return null;
+		}
+		ByteBuffer byteBuffer = result.getBytes("persisted_tree");
+		try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
+				byteBuffer.array(), byteBuffer.position(), byteBuffer.limit())) {
+			try (ObjectInputStream objectInputStream = new ObjectInputStream(
+					byteArrayInputStream)) {
+				AnalysisFileTree object = (AnalysisFileTree) objectInputStream
+						.readObject();
+				return object;
+			}
+		} catch (IOException | ClassNotFoundException e) {
+			logger.warn("Could not read already cached file tree with uuid '"
+					+ runUUID + "'.", e);
+			return null;
+		}
+	}
+
+	private AnalysisFileTree createAnalysisFileTree(UUID projectUUID,
+			UUID runUUID) {
 		Map<String, String> names = readFileTreeNames(projectUUID, runUUID);
 		TitanGraph graph = TitanConnection.getGraph();
 		Iterable<Vertex> runVertices = graph.query()
@@ -704,5 +753,28 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		return new AnalysisInformation(HashId.fromString(hashId), startTime,
 				duration, successful, languageName, languageVersion,
 				analyzerMessage);
+	}
+
+	private void cacheAnalysisFileTree(UUID projectUUID, UUID runUUID,
+			AnalysisFileTree analysisFileTree) {
+		Session session = CassandraConnection.getAnalysisSession();
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(session, "cacheAnalysisFileTree",
+						"INSERT INTO "
+								+ CassandraConnection.ANALYSIS_FILE_TREE_CACHE
+								+ " (uuid, persisted_tree) VALUES (?, ?)");
+		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+			try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+					byteArrayOutputStream)) {
+				objectOutputStream.writeObject(analysisFileTree);
+				BoundStatement boundStatement = preparedStatement.bind(runUUID);
+				boundStatement.setBytes("persisted_tree",
+						ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
+				session.execute(boundStatement);
+			}
+		} catch (IOException e) {
+			logger.warn("Could not cache analysis file tree with uuid '"
+					+ runUUID + "'.", e);
+		}
 	}
 }

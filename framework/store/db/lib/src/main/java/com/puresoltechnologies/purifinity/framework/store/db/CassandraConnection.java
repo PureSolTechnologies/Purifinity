@@ -35,6 +35,9 @@ public class CassandraConnection {
 
 	public static final String RUN_SETTINGS_TABLE = "run_settings";
 	public static final String RUN_FILES_TABLE = "run_files";
+
+	public static final String ANALYSIS_FILE_TREE_CACHE = "file_tree_cache";
+
 	public static final String EVALUATION_FILES_TABLE = "files";
 	public static final String EVALUATION_DIRECTORIES_TABLE = "directories";
 	public static final String EVALUATION_PROJECTS_TABLE = "projects";
@@ -188,6 +191,15 @@ public class CassandraConnection {
 						"CREATE TABLE "
 								+ ANALYSIS_RUN_FILE_TREE_INFORMATION
 								+ " (uuid uuid, names map<text,text>, source_locations map<text,text>, PRIMARY KEY(uuid));");
+
+		CassandraUtils
+				.checkAndCreateTable(
+						analysisSession,
+						analysisKeyspace,
+						ANALYSIS_FILE_TREE_CACHE,
+						"CREATE TABLE "
+								+ ANALYSIS_FILE_TREE_CACHE
+								+ " (uuid uuid, persisted_tree blob, PRIMARY KEY(uuid));");
 
 	}
 
