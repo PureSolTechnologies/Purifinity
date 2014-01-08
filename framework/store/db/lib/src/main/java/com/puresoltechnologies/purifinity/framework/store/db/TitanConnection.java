@@ -41,12 +41,16 @@ public class TitanConnection {
 	public static final String ANALYSIS_RUN_START_TIME_PROPERTY = "analysis.run.time.start";
 	public static final String ANALYSIS_RUN_DURATION_PROPERTY = "analysis.run.time.duration";
 	public static final String ANALYSIS_RUN_DESCRIPTION_PROPERTY = "analysis.run.description";
+	public static final String ANALYZED_CONTENT_TREE_LABEL = "analyzedContentTree";
 	public static final String ANALYZED_FILE_TREE_LABEL = "analyzedFileTree";
 	public static final String HAS_ANALYSIS_RUN_LABEL = "hasAnalysisRun";
 	public static final String HAS_ANALYSIS_LABEL = "hasAnalysis";
+	public static final String HAS_CONTENT_LABEL = "hasContent";
+
 	/*
 	 * FILE TREE
 	 */
+	public static final String TREE_ELEMENT_NAME = "tree.element.name";
 	public static final String TREE_ELEMENT_HASH = "tree.element.hashid";
 	public static final String TREE_ELEMENT_IS_FILE = "tree.element.isFile";
 	public static final String TREE_ELEMENT_CONTAINS_FILES = "tree.element.contains.files";

@@ -425,29 +425,14 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		TitanGraph graph = TitanConnection.getGraph();
 		Vertex analysisRunVertex = findAnalysisRunVertex(graph, projectUUID,
 				runUUID);
+		addContentTreeVertex(graph, fileTree, analysisRunVertex,
+				TitanConnection.ANALYZED_CONTENT_TREE_LABEL);
 		addFileTreeVertex(graph, fileTree, analysisRunVertex,
 				TitanConnection.ANALYZED_FILE_TREE_LABEL);
-		Map<String, String> names = collectFileTreeNames(fileTree);
-		storeFileTreeNames(projectUUID, runUUID, names);
-		graph.commit();
 	}
 
-	private Map<String, String> collectFileTreeNames(AnalysisFileTree fileTree) {
-		Map<String, String> names = new HashMap<>();
-		collectFileTreeNames(fileTree, names);
-		return names;
-	}
-
-	private void collectFileTreeNames(AnalysisFileTree fileTree,
-			Map<String, String> names) {
-		names.put(fileTree.getHashId().toString(), fileTree.getName());
-		for (AnalysisFileTree child : fileTree.getChildren()) {
-			collectFileTreeNames(child, names);
-		}
-	}
-
-	private void addFileTreeVertex(TitanGraph graph, AnalysisFileTree fileTree,
-			Vertex parentVertex, String edgeLabel)
+	private Vertex addContentTreeVertex(TitanGraph graph,
+			AnalysisFileTree fileTree, Vertex parentVertex, String edgeLabel)
 			throws AnalysisStoreException {
 		Iterable<Vertex> vertices = graph
 				.query()
@@ -465,6 +450,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					exstingTreeElementVertex
 							.getProperty(TitanConnection.TREE_ELEMENT_IS_FILE));
 			graph.commit();
+			return exstingTreeElementVertex;
 		} else {
 			Vertex vertex = graph.addVertex(null);
 			vertex.setProperty(TitanConnection.VERTEX_TYPE,
@@ -480,10 +466,10 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					fileTree.isFile());
 			for (AnalysisFileTree child : fileTree.getChildren()) {
 				if (child.isFile()) {
-					addFileTreeVertex(graph, child, vertex,
+					addContentTreeVertex(graph, child, vertex,
 							TitanConnection.CONTAINS_FILE_LABEL);
 				} else {
-					addFileTreeVertex(graph, child, vertex,
+					addContentTreeVertex(graph, child, vertex,
 							TitanConnection.CONTAINS_DIRECTORY_LABEL);
 				}
 			}
@@ -494,22 +480,63 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					storeAnalysisInformation(graph, vertex, analyzedCode);
 				}
 			}
+			return vertex;
 		}
 	}
 
-	private void storeFileTreeNames(UUID projectUUID, UUID runUUID,
-			Map<String, String> names) {
-		Session session = CassandraConnection.getAnalysisSession();
-		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(
-						session,
-						"storeFileTreeNames",
-						"INSERT INTO "
-								+ CassandraConnection.ANALYSIS_RUN_FILE_TREE_INFORMATION
-								+ " (uuid, names) VALUES (?,?)");
-		BoundStatement boundStatement = preparedStatement.bind(runUUID);
-		boundStatement.setMap("names", names);
-		session.execute(boundStatement);
+	private Vertex addFileTreeVertex(TitanGraph graph,
+			AnalysisFileTree fileTree, Vertex parentVertex, String edgeLabel)
+			throws AnalysisStoreException {
+		Vertex vertex = graph.addVertex(null);
+		vertex.setProperty(TitanConnection.VERTEX_TYPE,
+				VertexType.TREE_ELEMENT.name());
+		vertex.setProperty(TitanConnection.TREE_ELEMENT_NAME,
+				fileTree.getName());
+		vertex.setProperty(TitanConnection.TREE_ELEMENT_IS_FILE,
+				fileTree.isFile());
+
+		Edge edge = parentVertex.addEdge(edgeLabel, vertex);
+		edge.setProperty(TitanConnection.TREE_ELEMENT_HASH, fileTree
+				.getHashId().toString());
+		edge.setProperty(TitanConnection.TREE_ELEMENT_IS_FILE,
+				fileTree.isFile());
+
+		addMetadata(vertex, fileTree);
+		graph.commit();
+
+		Iterable<Vertex> vertices = graph
+				.query()
+				.has(TitanConnection.TREE_ELEMENT_HASH,
+						fileTree.getHashId().toString()).vertices();
+		Iterator<Vertex> vertexIterator = vertices.iterator();
+		if (!vertexIterator.hasNext()) {
+			throw new AnalysisStoreException(
+					"Could not find content node for file tree node '"
+							+ fileTree.toString() + "'.");
+		}
+		Vertex contentVertex = vertexIterator.next();
+		Edge contentEdge = vertex.addEdge(TitanConnection.HAS_CONTENT_LABEL,
+				contentVertex);
+		// XXX
+		graph.commit();
+
+		if (fileTree.isFile()) {
+			for (AnalysisInformation analyzedCode : fileTree.getAnalyses()) {
+				storeAnalysisInformation(graph, vertex, analyzedCode);
+			}
+		}
+
+		for (AnalysisFileTree child : fileTree.getChildren()) {
+			if (child.isFile()) {
+				addFileTreeVertex(graph, child, vertex,
+						TitanConnection.CONTAINS_FILE_LABEL);
+			} else {
+				addFileTreeVertex(graph, child, vertex,
+						TitanConnection.CONTAINS_DIRECTORY_LABEL);
+			}
+		}
+
+		return vertex;
 	}
 
 	@Override
@@ -662,8 +689,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	private AnalysisFileTree createAnalysisFileTree(UUID projectUUID,
-			UUID runUUID) {
-		Map<String, String> names = readFileTreeNames(projectUUID, runUUID);
+			UUID runUUID) throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		Iterable<Vertex> runVertices = graph.query()
 				.has(TitanConnection.ANALYSIS_RUN_UUID_PROPERTY, runUUID)
@@ -680,29 +706,27 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			return null;
 		}
 		Vertex treeVertex = analysisVertexIterator.next();
-		AnalysisFileTree tree = convertToAnalysisFileTree(treeVertex, null,
-				names);
+		AnalysisFileTree tree = convertToAnalysisFileTree(treeVertex, null);
 		return tree;
 	}
 
-	private Map<String, String> readFileTreeNames(UUID projectUUID, UUID runUUID) {
-		Session session = CassandraConnection.getAnalysisSession();
-		ResultSet resultSet = session.execute("SELECT names FROM "
-				+ CassandraConnection.ANALYSIS_RUN_FILE_TREE_INFORMATION
-				+ " WHERE uuid=" + runUUID);
-		Row result = resultSet.one();
-		Map<String, String> names = result.getMap("names", String.class,
-				String.class);
-		return names;
-	}
-
 	private AnalysisFileTree convertToAnalysisFileTree(Vertex treeVertex,
-			AnalysisFileTree parent, Map<String, String> names) {
-		String hash = (String) treeVertex
-				.getProperty(TitanConnection.TREE_ELEMENT_HASH);
-		String name = names.get(hash);
+			AnalysisFileTree parent) throws AnalysisStoreException {
+		String name = (String) treeVertex
+				.getProperty(TitanConnection.TREE_ELEMENT_NAME);
 		boolean isFile = (boolean) treeVertex
 				.getProperty(TitanConnection.TREE_ELEMENT_IS_FILE);
+		Iterable<Vertex> contentVertices = treeVertex.query()
+				.labels(TitanConnection.HAS_CONTENT_LABEL).vertices();
+		Iterator<Vertex> contextVertexIterator = contentVertices.iterator();
+		if (!contextVertexIterator.hasNext()) {
+			throw new AnalysisStoreException(
+					"Could not find content node for file tree node '"
+							+ parent.toString() + "'.");
+		}
+		Vertex contentVertex = contextVertexIterator.next();
+		String hash = contentVertex
+				.getProperty(TitanConnection.TREE_ELEMENT_HASH);
 		final List<AnalysisInformation> analyses;
 		if (isFile) {
 			analyses = new ArrayList<AnalysisInformation>();
@@ -724,13 +748,12 @@ public class AnalysisStoreImpl implements AnalysisStore {
 				HashId.fromString(hash), isFile, analyses);
 		Iterable<Vertex> vertices = treeVertex
 				.query()
-				.direction(Direction.OUT)
 				.labels(TitanConnection.CONTAINS_DIRECTORY_LABEL,
-						TitanConnection.CONTAINS_FILE_LABEL).vertices();
+						TitanConnection.CONTAINS_FILE_LABEL)
+				.direction(Direction.OUT).vertices();
 		Iterator<Vertex> vertexIterator = vertices.iterator();
 		while (vertexIterator.hasNext()) {
-			convertToAnalysisFileTree(vertexIterator.next(), hashIdFileTree,
-					names);
+			convertToAnalysisFileTree(vertexIterator.next(), hashIdFileTree);
 		}
 		return hashIdFileTree;
 	}

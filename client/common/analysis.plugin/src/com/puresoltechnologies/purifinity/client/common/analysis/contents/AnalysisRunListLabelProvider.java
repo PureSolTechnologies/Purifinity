@@ -16,16 +16,17 @@ import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
  */
 public class AnalysisRunListLabelProvider extends LabelProvider {
 
-    @Override
-    public String getText(Object element) {
-	AnalysisRunInformation information = (AnalysisRunInformation) element;
-	SimpleDateFormat format = new SimpleDateFormat();
-	return format.format(information.getStartTime());
-    }
+	@Override
+	public String getText(Object element) {
+		AnalysisRunInformation information = (AnalysisRunInformation) element;
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
+		return simpleDateFormat.format(information.getStartTime());
+	}
 
-    @Override
-    public Image getImage(Object element) {
-	return ClientImages.getImage(ClientImages.ANALYSIS_RUN_16x16);
-    }
+	@Override
+	public Image getImage(Object element) {
+		return ClientImages.getImage(ClientImages.ANALYSIS_RUN_16x16);
+	}
 
 }

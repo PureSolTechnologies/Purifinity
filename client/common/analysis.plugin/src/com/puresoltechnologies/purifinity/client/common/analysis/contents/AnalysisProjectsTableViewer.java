@@ -80,7 +80,7 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 			public String getText(Object element) {
 				AnalysisProject analysisProject = (AnalysisProject) element;
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
-						"yyyy-mm-dd HH:MM:ss");
+						"yyyy-MM-dd HH:mm:ss");
 				return simpleDateFormat.format(analysisProject.getInformation()
 						.getCreationTime());
 			}

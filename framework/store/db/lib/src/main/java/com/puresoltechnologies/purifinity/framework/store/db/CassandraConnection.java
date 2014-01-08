@@ -190,7 +190,7 @@ public class CassandraConnection {
 						ANALYSIS_RUN_FILE_TREE_INFORMATION,
 						"CREATE TABLE "
 								+ ANALYSIS_RUN_FILE_TREE_INFORMATION
-								+ " (uuid uuid, names map<text,text>, source_locations map<text,text>, PRIMARY KEY(uuid));");
+								+ " (uuid uuid, source_locations map<text,text>, PRIMARY KEY(uuid));");
 
 		CassandraUtils
 				.checkAndCreateTable(
