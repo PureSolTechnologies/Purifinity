@@ -1,10 +1,10 @@
 package com.puresoltechnologies.commons.math;
 
 /**
- * This enum contains all SI units plus currency to have a concise list of all
- * of these units.
+ * This enum contains all SI units to have a concise list of all of these units.
  * 
- * Additionally, the units are enhanced by information about the unit sign.
+ * Additionally, the units are enhanced by information about the unit sign and a
+ * dimension information.
  * 
  * The "International System of Units" is described in <a
  * href="http://en.wikipedia.org/wiki/SI_Units">
@@ -33,14 +33,29 @@ public enum SIUnit {
 		this.dimension = dimension;
 	}
 
+	/**
+	 * Returns the name of the unit.
+	 * 
+	 * @return A {@link String} is returned.
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Returns the unit of the unit.
+	 * 
+	 * @return A {@link String} is returned.
+	 */
 	public String getSign() {
 		return sign;
 	}
 
+	/**
+	 * Returns the dimension of the unit.
+	 * 
+	 * @return A {@link String} is returned.
+	 */
 	public String getDimension() {
 		return dimension;
 	}

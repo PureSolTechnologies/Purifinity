@@ -120,6 +120,10 @@ public abstract class AbstractEvaluator extends
 	@Override
 	public final <T> T getConfigurationParameter(
 			ConfigurationParameter<T> parameter) {
+		if (!getAvailableConfigurationParameters().contains(parameter)) {
+			throw new IllegalArgumentException("The parameter '" + parameter
+					+ "' is not known.");
+		}
 		@SuppressWarnings("unchecked")
 		T t = (T) properties.get(parameter.getPropertyKey());
 		return t != null ? t : parameter.getDefaultValue();
@@ -128,6 +132,10 @@ public abstract class AbstractEvaluator extends
 	@Override
 	public final <T> void setConfigurationParameter(
 			ConfigurationParameter<T> parameter, T value) {
+		if (!getAvailableConfigurationParameters().contains(parameter)) {
+			throw new IllegalArgumentException("The parameter '" + parameter
+					+ "' is not known.");
+		}
 		properties.put(parameter.getPropertyKey(), value);
 	}
 

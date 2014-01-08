@@ -7,8 +7,6 @@ import java.security.NoSuchAlgorithmException;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.HashAlgorithm;
-
 public class HashAlgorithmsTest {
 
 	@Test
@@ -18,6 +16,19 @@ public class HashAlgorithmsTest {
 			assertNotNull(MessageDigest.getInstance(algorithm
 					.getAlgorithmName()));
 		}
+	}
+
+	@Test
+	public void testFormName() throws NoSuchAlgorithmException {
+		for (HashAlgorithm algorithm : HashAlgorithm.values()) {
+			assertNotNull(HashAlgorithm.fromAlgorithmName(algorithm
+					.getAlgorithmName()));
+		}
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testIllegalFormName() throws NoSuchAlgorithmException {
+		HashAlgorithm.fromAlgorithmName("UnkownAlgorithm");
 	}
 
 }

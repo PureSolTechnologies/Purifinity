@@ -5,11 +5,8 @@ import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 
 /**
- * This class is for describing physical values. This can be used to store
- * additional information about a certain date.
- * 
- * Several information are added beside the name like a unit, the level of
- * measurement and a description.
+ * This class is for describing physical values. Additionally, this object takes
+ * a money dimension.
  * 
  * @author Rick-Rainer Ludwig
  */

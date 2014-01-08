@@ -20,9 +20,10 @@ import java.util.List;
 public interface Tree<T> {
 
 	/**
-	 * This mehtod returns the parent node.
+	 * This method returns the parent node.
 	 * 
-	 * @return
+	 * @return A {@link Tree} of T is returned. <code>null</code> is returned if
+	 *         no parent is present and the current node is the root node.
 	 */
 	public T getParent();
 
@@ -38,15 +39,16 @@ public interface Tree<T> {
 	 * This method returns the children which are contained in the node.
 	 * 
 	 * @return A {@link List} of T is returned. If not child is found this list
-	 *         is empty.
+	 *         is empty. The return value <b<must not</b> be <code>null</code>.
 	 */
 	public List<T> getChildren();
 
 	/**
 	 * This method returns the node identifier. Each node in a tree should have
-	 * an identifying name.
+	 * an identifying name. This is the most basic information. Implementation
+	 * of this interface {@link Tree} may have other values, too.
 	 * 
-	 * @return
+	 * @return A {@link String} is returned containing the name.
 	 */
 	public String getName();
 }

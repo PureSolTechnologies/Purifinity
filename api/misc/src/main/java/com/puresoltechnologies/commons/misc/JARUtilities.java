@@ -95,4 +95,10 @@ public class JARUtilities {
 			return stringBuffer.toString();
 		}
 	}
+
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
+	private JARUtilities() {
+	}
 }

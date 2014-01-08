@@ -3,7 +3,9 @@ package com.puresoltechnologies.commons.trees.api;
 import java.util.Iterator;
 
 /**
- * This is a simple tree walker for all trees implementing the tree interface.
+ * This is a simple tree iterator for all trees implementing the tree interface.
+ * If a {@link Tree} implementation wants to provide a iterator() method, this
+ * class is used to instantiate a suitable iterator.
  * 
  * @author Rick-Rainer Ludwig
  * 
@@ -15,20 +17,43 @@ public class TreeIterator<T extends Tree<T>> implements Iterator<T> {
 	private final T tree;
 	private T currentNode;
 
+	/**
+	 * This constructor instantiates the object.
+	 * 
+	 * @param tree
+	 *            is a {@link Tree} which is to be iterated over.
+	 */
 	public TreeIterator(T tree) {
 		super();
+		if (tree == null) {
+			throw new IllegalArgumentException(
+					"The tree object must not be null. There is nothing to iterate if it is.");
+		}
 		this.tree = tree;
 		currentNode = tree;
 	}
 
+	/**
+	 * This method returns the current node where the iterator is at the very
+	 * moment.
+	 * 
+	 * @return A {@link Tree} of T is returned.
+	 */
 	public T getCurrentNode() {
 		return currentNode;
 	}
 
+	/**
+	 * This method resets the iterator and put the current node to the
+	 * beginning.
+	 */
 	public void gotoStart() {
 		currentNode = tree;
 	}
 
+	/**
+	 * This method sets the iterator onto the last tree element.
+	 */
 	public void gotoEnd() {
 		currentNode = tree;
 		while (currentNode.hasChildren()) {
@@ -37,6 +62,13 @@ public class TreeIterator<T extends Tree<T>> implements Iterator<T> {
 		}
 	}
 
+	/**
+	 * This method walks forward one node.
+	 * 
+	 * @return <code>true</code> is returned if this was successful.
+	 *         <code>false</code> is returned otherwise, when the current node
+	 *         is the last node reachable.
+	 */
 	public boolean goForward() {
 		if (currentNode.hasChildren()) {
 			currentNode = currentNode.getChildren().get(0);
@@ -59,6 +91,13 @@ public class TreeIterator<T extends Tree<T>> implements Iterator<T> {
 		}
 	}
 
+	/**
+	 * This method walks backward one node.
+	 * 
+	 * @return <code>true</code> is returned if this was successful.
+	 *         <code>false</code> is returned otherwise, when the current node
+	 *         is the root node.
+	 */
 	public boolean goBackward() {
 		T parent = currentNode.getParent();
 		if ((parent == null) || (currentNode == tree)) {

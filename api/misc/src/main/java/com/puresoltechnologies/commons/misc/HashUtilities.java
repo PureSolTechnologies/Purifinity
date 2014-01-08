@@ -83,4 +83,10 @@ public class HashUtilities {
 		}
 		return hexString.toString();
 	}
+
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
+	private HashUtilities() {
+	}
 }

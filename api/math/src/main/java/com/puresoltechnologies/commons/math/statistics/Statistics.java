@@ -14,6 +14,11 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * This is a simple statistics class for calculating some basic statistics.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public class Statistics implements Serializable {
 
 	private static final long serialVersionUID = 951111394731975571L;

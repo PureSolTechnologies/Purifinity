@@ -14,6 +14,24 @@ public class ParameterWithArbitraryUnit<T> implements Parameter<T> {
 			LevelOfMeasurement levelOfMeasurement, String description,
 			Class<T> type) {
 		super();
+		if ((name == null) || (name.isEmpty())) {
+			throw new IllegalArgumentException(
+					"The name must not be null or empty. No identification is possible otherwise.");
+		}
+		if (unit == null) {
+			throw new IllegalArgumentException("The unit must not be null.");
+		}
+		if (levelOfMeasurement == null) {
+			throw new IllegalArgumentException(
+					"The levelOfMeasurement must not be null.");
+		}
+		if (description == null) {
+			throw new IllegalArgumentException(
+					"The description must not be null.");
+		}
+		if (type == null) {
+			throw new IllegalArgumentException("The type must not be null.");
+		}
 		this.name = name;
 		this.unit = unit;
 		this.levelOfMeasurement = levelOfMeasurement;

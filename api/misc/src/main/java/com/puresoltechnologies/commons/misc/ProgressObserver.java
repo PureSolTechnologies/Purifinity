@@ -2,10 +2,11 @@ package com.puresoltechnologies.commons.misc;
 
 /**
  * This interface is used for all classes which are interested in the progress
- * of an evaluation.
+ * of an object.
  * 
  * @param <Observable>
- *            is the type of class which is to be observed.
+ *            is the type of class which is to be observed. This type needs to
+ *            implement {@link ProgressObservable} interface.
  * 
  * @author Rick-Rainer Ludwig
  */

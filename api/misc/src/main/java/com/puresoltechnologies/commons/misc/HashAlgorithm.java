@@ -1,6 +1,11 @@
 package com.puresoltechnologies.commons.misc;
 
-
+/**
+ * This enum contains a list of all supported hash algorithms.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public enum HashAlgorithm {
 
 	MD5("MD5"), SHA1("SHA-1"), SHA256("SHA-256"), SHA384("SHA-384"), SHA512(
@@ -12,7 +17,12 @@ public enum HashAlgorithm {
 		this.algorithmName = algorithmName;
 	}
 
-	public String getAlgorithmName() {
+	/**
+	 * This method returns a human readable name of the algorithm.
+	 * 
+	 * @return A {@link String} is returned.
+	 */
+	public final String getAlgorithmName() {
 		return algorithmName;
 	}
 
@@ -24,7 +34,8 @@ public enum HashAlgorithm {
 	 *            is the name of the algorithm to be checked for a valid
 	 *            algorithm name.
 	 * @return Contains the {@link HashAlgorithm} value for the specified value.
-	 *         If the hash algorithm is not found, null is returned.
+	 *         If the hash algorithm is not found, <code>null</code> is
+	 *         returned.
 	 */
 	public static HashAlgorithm fromAlgorithmName(String algorithmName) {
 		for (HashAlgorithm algorithm : values()) {
@@ -32,6 +43,12 @@ public enum HashAlgorithm {
 				return algorithm;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException("Algorithm '" + algorithmName
+				+ "' is unknown.");
+	}
+
+	@Override
+	public String toString() {
+		return getAlgorithmName();
 	}
 }

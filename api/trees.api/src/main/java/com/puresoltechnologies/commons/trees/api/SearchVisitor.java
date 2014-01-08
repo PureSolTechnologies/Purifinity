@@ -5,7 +5,8 @@ import java.util.List;
 
 /**
  * This {@link TreeVisitor} implementation is for searching a whole tree for a
- * special {@link TreeSearchCriterion}.
+ * special {@link TreeSearchCriterion}. This implementation looks through the
+ * whole tree and returns a list of all node matching the criterion.
  * 
  * @author Rick-Rainer Ludwig
  * 

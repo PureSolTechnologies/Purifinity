@@ -32,6 +32,9 @@ public class Money {
 	private final int fraction;
 
 	public Money(String currency, int fraction, long amount) {
+		if (currency == null) {
+			throw new IllegalArgumentException("Currency must not be null");
+		}
 		this.currency = currency;
 		this.fraction = fraction;
 		this.amount = amount;

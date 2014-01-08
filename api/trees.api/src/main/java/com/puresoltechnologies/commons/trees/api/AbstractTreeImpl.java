@@ -29,6 +29,10 @@ public class AbstractTreeImpl<T extends AbstractTreeImpl<T>> implements
 	 */
 	public AbstractTreeImpl(T parent, String name) {
 		super();
+		if (name == null) {
+			throw new IllegalArgumentException(
+					"The name of the node must not be null to avoid ambiguities.");
+		}
 		this.parent = parent;
 		if (parent != null) {
 			@SuppressWarnings("unchecked")
@@ -38,6 +42,13 @@ public class AbstractTreeImpl<T extends AbstractTreeImpl<T>> implements
 		this.name = name;
 	}
 
+	/**
+	 * This method is used to add children to a parent node in the constructor.
+	 * This method should never be called from outside the constructor.
+	 * 
+	 * @param child
+	 *            is the child to be added to the {@link #children} list.
+	 */
 	protected void addChild(T child) {
 		children.add(child);
 	}

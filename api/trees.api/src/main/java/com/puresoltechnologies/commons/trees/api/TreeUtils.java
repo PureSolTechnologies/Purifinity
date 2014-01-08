@@ -3,7 +3,7 @@ package com.puresoltechnologies.commons.trees.api;
 import java.util.List;
 
 /**
- * This method contains helpers to work with trees.
+ * This class contains helper method to work with trees.
  * 
  * @author Rick-Rainer Ludwig
  * 
@@ -11,10 +11,12 @@ import java.util.List;
 public class TreeUtils {
 
 	/**
-	 * This method counts all nodes within a tree
+	 * This method counts all nodes within a tree.
 	 * 
-	 * @param fileTree
-	 * @return
+	 * @param tree
+	 *            is a {@link Tree} object which nodes are to be calculated.
+	 * @return An integer is returned containing the number of nodes. If tree is
+	 *         <code>null</code> 0 is returned.
 	 */
 	public static <T extends Tree<T>> int countNodes(T tree) {
 		int result = 0;
@@ -28,9 +30,20 @@ public class TreeUtils {
 		return result + 1; // + 1 for self!
 	}
 
+	/**
+	 * This method checks to trees for equality. Equality is only checked on
+	 * name basis and the order of the children is neglected.
+	 * 
+	 * @param tree1
+	 *            is the first tree to be compared to the second.
+	 * @param tree2
+	 *            is the second tree to be compared to the first.
+	 * @return <code>true</code> is returned if the trees are equals.
+	 *         <code>false</code> is returned otherwise.
+	 */
 	public static <T extends Tree<T>> boolean equalsWithoutOrder(T tree1,
 			T tree2) {
-		if (!tree1.getName().equals(tree2)) {
+		if (!tree1.getName().equals(tree2.getName())) {
 			return false;
 		}
 		List<T> children1 = tree1.getChildren();
@@ -49,5 +62,11 @@ public class TreeUtils {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
+	private TreeUtils() {
 	}
 }

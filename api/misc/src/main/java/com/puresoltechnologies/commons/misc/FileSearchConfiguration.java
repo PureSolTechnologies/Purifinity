@@ -21,38 +21,34 @@ public class FileSearchConfiguration implements Serializable, Cloneable {
 	 * Contains FS patterns which specify directory names which are to be
 	 * included no matter what is specified in directoryExcludes.
 	 */
-	private final List<String> locationIncludes = new ArrayList<String>();
+	private final List<String> locationIncludes = new ArrayList<>();
 	/**
 	 * These list contains FS pattern for directories which are to be ignored.
 	 * An exception is the definition within directoryIncludes which overrides
 	 * the excludes list.
 	 */
-	private final List<String> locationExcludes = new ArrayList<String>();
+	private final List<String> locationExcludes = new ArrayList<>();
 	/**
 	 * Contains FS patterns which specify file names which are to be included no
 	 * matter what is specified in fileExcludes.
 	 */
-	private final List<String> fileIncludes = new ArrayList<String>();
+	private final List<String> fileIncludes = new ArrayList<>();
 	/**
 	 * These list contains FS pattern for files which are to be ignored. An
 	 * exception is the definition within fileIncludes which overrides the
 	 * excludes list.
 	 */
-	private final List<String> fileExcludes = new ArrayList<String>();
+	private final List<String> fileExcludes = new ArrayList<>();
 	/**
 	 * This flag specifies whether hidden file should be ignored by defaults.
 	 * This flag is used when neither in includeXXX nor in excludeXXX a matching
 	 * FS pattern is defined.
 	 */
-	private boolean ignoreHidden = true;
-
+	private final boolean ignoreHidden;
 	/**
-	 * This is the default constructor. No includes and excludes are defined and
-	 * ignoreHidden is set to true.
+	 * Contains the hashCode.
 	 */
-	public FileSearchConfiguration() {
-		super();
-	}
+	private final int hashCode;
 
 	/**
 	 * This constructor sets the initial value for this class.
@@ -67,51 +63,29 @@ public class FileSearchConfiguration implements Serializable, Cloneable {
 			List<String> dirExcludes, List<String> fileIncludes,
 			List<String> fileExcludes, boolean ignoreHidden) {
 		super();
-		setLocationIncludes(dirIncludes);
-		setLocationExcludes(dirExcludes);
-		setFileIncludes(fileIncludes);
-		setFileExcludes(fileExcludes);
-		setIgnoreHidden(ignoreHidden);
-	}
-
-	public final void setLocationIncludes(List<String> locationIncludes) {
-		this.locationIncludes.clear();
-		this.locationIncludes.addAll(locationIncludes);
+		this.fileIncludes.addAll(fileIncludes);
+		this.fileExcludes.addAll(fileExcludes);
+		this.locationIncludes.addAll(dirIncludes);
+		this.locationExcludes.addAll(dirExcludes);
+		this.ignoreHidden = ignoreHidden;
+		hashCode = ObjectUtilities.calculateConstantHashCode(locationIncludes,
+				locationExcludes, fileIncludes, fileExcludes, ignoreHidden);
 	}
 
 	public final List<String> getLocationIncludes() {
 		return locationIncludes;
 	}
 
-	public final void setLocationExcludes(List<String> locationExcludes) {
-		this.locationExcludes.clear();
-		this.locationExcludes.addAll(locationExcludes);
-	}
-
 	public final List<String> getLocationExcludes() {
 		return locationExcludes;
-	}
-
-	public final void setFileIncludes(List<String> fileIncludes) {
-		this.fileIncludes.clear();
-		this.fileIncludes.addAll(fileIncludes);
 	}
 
 	public final List<String> getFileIncludes() {
 		return fileIncludes;
 	}
 
-	public final void setFileExcludes(List<String> fileExcludes) {
-		this.fileExcludes.clear();
-		this.fileExcludes.addAll(fileExcludes);
-	}
-
 	public final List<String> getFileExcludes() {
 		return fileExcludes;
-	}
-
-	public final void setIgnoreHidden(boolean ignoreHidden) {
-		this.ignoreHidden = ignoreHidden;
 	}
 
 	public final boolean isIgnoreHidden() {
@@ -120,20 +94,7 @@ public class FileSearchConfiguration implements Serializable, Cloneable {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime
-				* result
-				+ ((locationExcludes == null) ? 0 : locationExcludes.hashCode());
-		result = prime
-				* result
-				+ ((locationIncludes == null) ? 0 : locationIncludes.hashCode());
-		result = prime * result
-				+ ((fileExcludes == null) ? 0 : fileExcludes.hashCode());
-		result = prime * result
-				+ ((fileIncludes == null) ? 0 : fileIncludes.hashCode());
-		result = prime * result + (ignoreHidden ? 1231 : 1237);
-		return result;
+		return hashCode;
 	}
 
 	@Override
@@ -175,23 +136,15 @@ public class FileSearchConfiguration implements Serializable, Cloneable {
 		try {
 			FileSearchConfiguration cloned = (FileSearchConfiguration) super
 					.clone();
-
-			cloned.ignoreHidden = ignoreHidden;
+			setFinal(cloned, "ignoreHidden", ignoreHidden);
 			setFinal(cloned, "locationIncludes", locationIncludes);
 			setFinal(cloned, "locationExcludes", locationExcludes);
 			setFinal(cloned, "fileIncludes", fileIncludes);
 			setFinal(cloned, "fileExcludes", fileExcludes);
-
 			return cloned;
-		} catch (CloneNotSupportedException e) {
-			throw new RuntimeException(e);
-		} catch (SecurityException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalArgumentException e) {
-			throw new RuntimeException(e);
-		} catch (NoSuchFieldException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
+		} catch (CloneNotSupportedException | SecurityException
+				| IllegalArgumentException | NoSuchFieldException
+				| IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -200,13 +153,10 @@ public class FileSearchConfiguration implements Serializable, Cloneable {
 			T value) throws SecurityException, NoSuchFieldException,
 			IllegalArgumentException, IllegalAccessException {
 		Class<FileSearchConfiguration> clazz = FileSearchConfiguration.class;
-		for (Field field : clazz.getDeclaredFields()) {
-			System.out.println(field.toString());
-			if (field.getName().equals(fieldName)) {
-				field.setAccessible(true);
-				field.set(cloned, value);
-				field.setAccessible(false);
-			}
-		}
+		Field field = clazz.getDeclaredField(fieldName);
+		System.out.println(field.toString());
+		field.setAccessible(true);
+		field.set(cloned, value);
+		field.setAccessible(false);
 	}
 }

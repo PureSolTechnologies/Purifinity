@@ -25,10 +25,10 @@ public class MathUtils {
 	 * original value, but are splitted into amounts given by ratios.
 	 * 
 	 * @param amount
-	 *            is the total amount to be splitted.
+	 *            is the total amount to be split.
 	 * @param ratios
 	 *            are the ratios for all shares.
-	 * @return An array of long is returned containing the splitted amounts.
+	 * @return An array of long is returned containing the split amounts.
 	 */
 	public static long[] allocate(long amount, double... ratios) {
 		if ((ratios == null) || (ratios.length == 0)) {

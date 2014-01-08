@@ -3,13 +3,12 @@ package com.puresoltechnologies.purifinity.framework.commons.utils;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.purifinity.framework.commons.utils.FileSearch;
-import com.puresoltechnologies.purifinity.framework.commons.utils.FileTree;
 
 /**
  * This class checks the FileSearch class.
@@ -22,7 +21,9 @@ public class FileSearchTest {
 	@Test
 	public void testFileSearch() {
 		FileTree fileTree = FileSearch.getFileTree(new File("."),
-				new FileSearchConfiguration());
+				new FileSearchConfiguration(new ArrayList<String>(),
+						new ArrayList<String>(), new ArrayList<String>(),
+						new ArrayList<String>(), true));
 
 		final List<File> fileList = FileSearch.find(new File("."), "*");
 

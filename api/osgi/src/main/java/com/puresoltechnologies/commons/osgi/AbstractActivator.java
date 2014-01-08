@@ -13,11 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This is an abstract Activator implementation which can be used by all OSGi
- * bundles. This Activator logs the start and stop and provides simple
- * functionality like {@link BundleContext} retrieval and automated
- * de-registration of registered services.
- * 
+ * This is an abstract Activator implementation which should be used by all
+ * PureSol Technologies' OSGi bundles. This Activator logs the start and stop
+ * and provides some simple functionality like {@link BundleContext} retrieval
+ * and automated de-registration of registered services.
  * 
  * @author Rick-Rainer Ludwig
  */
@@ -38,7 +37,7 @@ public abstract class AbstractActivator implements BundleActivator {
 
 	/**
 	 * This field keeps the registered services. This field is needed for
-	 * automated deregistration on bundle stop.
+	 * automated de-registration on bundle stop.
 	 */
 	private final List<ServiceRegistration<?>> serviceRegistrations = new ArrayList<ServiceRegistration<?>>();
 
@@ -47,15 +46,14 @@ public abstract class AbstractActivator implements BundleActivator {
 	 */
 	public AbstractActivator() {
 		super();
-		logger.debug("Bundle " + getClass().getPackage().getName()
-				+ " was initialized.");
+		logger.debug("Bundle with base package "
+				+ getClass().getPackage().getName() + " was initialized.");
 	}
 
 	@Override
 	public void start(BundleContext context) throws Exception {
-		logger.info("Starting bundle " + getClass().getPackage().getName()
-				+ " (context='" + context.getBundle().getSymbolicName()
-				+ "')...");
+		logger.info("Starting bundle '" + context.getBundle().getSymbolicName()
+				+ "' " + context.getBundle().getSymbolicName() + "...");
 		if (AbstractActivator.context != null) {
 			throw new RuntimeException("Bundle was already started.");
 
@@ -65,8 +63,8 @@ public abstract class AbstractActivator implements BundleActivator {
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
-		logger.info("Stopping bundle " + getClass().getPackage().getName()
-				+ "...");
+		logger.info("Stopping bundle '" + context.getBundle().getSymbolicName()
+				+ "' " + context.getBundle().getSymbolicName() + "...");
 		if (AbstractActivator.context == null) {
 			throw new RuntimeException("Bundle was not started, yet.");
 		}
@@ -97,7 +95,7 @@ public abstract class AbstractActivator implements BundleActivator {
 	 */
 	public static final BundleContext getBundleContext() {
 		if (context == null) {
-			throw new RuntimeException("Bundle was not activated!");
+			throw new RuntimeException("Bundle was not activated, yet.");
 		}
 		return context;
 	}
@@ -115,7 +113,8 @@ public abstract class AbstractActivator implements BundleActivator {
 	 * @return A {@link ServiceRegistration} is returned of the newly registered
 	 *         service.
 	 */
-	public <T> ServiceRegistration<?> registerService(Class<T> iface, T instance) {
+	public final <T> ServiceRegistration<?> registerService(Class<T> iface,
+			T instance) {
 		Hashtable<String, String> properties = new Hashtable<String, String>();
 		return registerService(iface, instance, properties);
 	}
@@ -136,7 +135,7 @@ public abstract class AbstractActivator implements BundleActivator {
 	 * @return A {@link ServiceRegistration} is returned of the newly registered
 	 *         service.
 	 */
-	public <T> ServiceRegistration<?> registerService(Class<T> iface,
+	public final <T> ServiceRegistration<?> registerService(Class<T> iface,
 			T instance, Dictionary<String, String> dictionary) {
 		logger.info("Register service '{}' for interface '{}' (context='"
 				+ context.getBundle().getSymbolicName() + "').", instance

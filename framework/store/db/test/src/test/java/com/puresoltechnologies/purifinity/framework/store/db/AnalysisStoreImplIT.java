@@ -8,6 +8,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -43,11 +45,9 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 	public void testCreateAnalysisProject() throws AnalysisStoreException {
 		RepositoryLocation location = new DirectoryRepositoryLocation(
 				"DirRepo", new File("/home/ludwig"));
-		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration();
-		fileSearchConfiguration.getFileExcludes().add("*.bak");
-		fileSearchConfiguration.getFileIncludes().add("*.java");
-		fileSearchConfiguration.getFileIncludes().add("*.xml");
-		fileSearchConfiguration.getLocationExcludes().add(".*");
+		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
+				new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
+						"*.java", "*.xml"), Arrays.asList("*.bak"), true);
 		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
 				"Description", fileSearchConfiguration,
 				location.getSerialization());
@@ -67,11 +67,9 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 			throws AnalysisStoreException {
 		RepositoryLocation location = new DirectoryRepositoryLocation(
 				"DirRepo", new File("/home/ludwig"));
-		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration();
-		fileSearchConfiguration.getFileExcludes().add("*.bak");
-		fileSearchConfiguration.getFileIncludes().add("*.java");
-		fileSearchConfiguration.getFileIncludes().add("*.xml");
-		fileSearchConfiguration.getLocationExcludes().add(".*");
+		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
+				new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
+						"*.java", "*.xml"), Arrays.asList("*.bak"), true);
 		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
 				"Description", fileSearchConfiguration,
 				location.getSerialization());
@@ -89,13 +87,11 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 	@Test
 	public void testCreateAndReadAnalysisProjectSettings()
 			throws AnalysisStoreException {
+		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
+				new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
+						"*.java", "*.xml"), Arrays.asList("*.bak"), true);
 		RepositoryLocation repositoryLocation = new DirectoryRepositoryLocation(
 				"DirRepo", new File("/home/ludwig"));
-		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration();
-		fileSearchConfiguration.getFileExcludes().add("*.bak");
-		fileSearchConfiguration.getFileIncludes().add("*.java");
-		fileSearchConfiguration.getFileIncludes().add("*.xml");
-		fileSearchConfiguration.getLocationExcludes().add(".*");
 		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
 				"Description", fileSearchConfiguration,
 				repositoryLocation.getSerialization());
@@ -121,13 +117,11 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 	@Test
 	public void testCreateUpdateAndReadAnalysisProjectInformationAndSettings()
 			throws AnalysisStoreException {
+		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
+				new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
+						"*.java", "*.xml"), Arrays.asList("*.bak"), true);
 		RepositoryLocation location = new DirectoryRepositoryLocation(
 				"DirRepo", new File("/home/ludwig"));
-		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration();
-		fileSearchConfiguration.getFileExcludes().add("*.bak");
-		fileSearchConfiguration.getFileIncludes().add("*.java");
-		fileSearchConfiguration.getFileIncludes().add("*.xml");
-		fileSearchConfiguration.getLocationExcludes().add(".*");
 		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
 				"Description", fileSearchConfiguration,
 				location.getSerialization());
@@ -137,13 +131,11 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 
 		UUID projectUUID = information.getUUID();
 
+		FileSearchConfiguration fileSearchConfiguration2 = new FileSearchConfiguration(
+				new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
+						"*.java2", "*.xml2"), Arrays.asList("*.bak2"), true);
 		RepositoryLocation location2 = new DirectoryRepositoryLocation(
 				"DirRepo", new File("/home/ludwig2"));
-		FileSearchConfiguration fileSearchConfiguration2 = new FileSearchConfiguration();
-		fileSearchConfiguration2.getFileExcludes().add("*.bak2");
-		fileSearchConfiguration2.getFileIncludes().add("*.java2");
-		fileSearchConfiguration2.getFileIncludes().add("*.xml2");
-		fileSearchConfiguration2.getLocationExcludes().add(".*");
 		AnalysisProjectSettings settings2 = new AnalysisProjectSettings(
 				"Name2", "Description2", fileSearchConfiguration2,
 				location2.getSerialization());
@@ -164,13 +156,11 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 	public void testCreateAndReadAnalysisRun() throws AnalysisStoreException {
 		Date startTime = new Date();
 
+		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
+				new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
+						"*.java", "*.xml"), Arrays.asList("*.bak"), true);
 		RepositoryLocation location = new DirectoryRepositoryLocation(
 				"DirRepo", new File("/home/ludwig"));
-		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration();
-		fileSearchConfiguration.getFileExcludes().add("*.bak");
-		fileSearchConfiguration.getFileIncludes().add("*.java");
-		fileSearchConfiguration.getFileIncludes().add("*.xml");
-		fileSearchConfiguration.getLocationExcludes().add(".*");
 		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
 				"Description", fileSearchConfiguration,
 				location.getSerialization());
@@ -209,13 +199,11 @@ public class AnalysisStoreImplIT extends AbstractDbStoreTest {
 			throws AnalysisStoreException, IOException, FileStoreException {
 		Date startTime = new Date();
 
+		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
+				new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
+						"*.java", "*.xml"), Arrays.asList("*.bak"), true);
 		RepositoryLocation location = new DirectoryRepositoryLocation(
 				"DirRepo", new File("/home/ludwig"));
-		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration();
-		fileSearchConfiguration.getFileExcludes().add("*.bak");
-		fileSearchConfiguration.getFileIncludes().add("*.java");
-		fileSearchConfiguration.getFileIncludes().add("*.xml");
-		fileSearchConfiguration.getLocationExcludes().add(".*");
 		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
 				"Description", fileSearchConfiguration,
 				location.getSerialization());

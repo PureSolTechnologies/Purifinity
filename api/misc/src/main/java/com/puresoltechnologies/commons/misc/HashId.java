@@ -1,5 +1,8 @@
 package com.puresoltechnologies.commons.misc;
 
+import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
+import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNullOrEmpty;
+
 import java.io.Serializable;
 import java.util.IllegalFormatException;
 
@@ -54,6 +57,8 @@ public class HashId implements Serializable, Comparable<HashId> {
 	 */
 	public HashId(HashAlgorithm algorithm, String hash) {
 		super();
+		checkNotNull("algorithm", algorithm);
+		checkNotNullOrEmpty("hash", hash);
 		this.algorithm = algorithm;
 		this.hash = hash;
 	}

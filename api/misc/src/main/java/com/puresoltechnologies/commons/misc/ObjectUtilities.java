@@ -12,10 +12,12 @@ public class ObjectUtilities {
 
 	/**
 	 * This method can be used to calculate a constant hash code for value
-	 * objects.
+	 * objects which have final fields and therefore a final hashCode. This
+	 * speeds up processing.
 	 * 
 	 * @param fields
-	 * @return
+	 *            are a list of field objects to calculate the hash code with.
+	 * @return An integer is returned containing the hash result.
 	 */
 	public static int calculateConstantHashCode(Object... fields) {
 		int result = 1;
@@ -25,4 +27,9 @@ public class ObjectUtilities {
 		return result;
 	}
 
+	/**
+	 * Private constructor to avoid instantiation.
+	 */
+	private ObjectUtilities() {
+	}
 }

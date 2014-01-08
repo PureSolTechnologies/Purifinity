@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 /**
  * This {@link Parameter} class is a representation of a single date value type.
- * This class does not provide a value (like measurement) itself, but contains
+ * This class does not provide a value (like a measurement) itself, but contains
  * all meta information about it.
  * 
- * For handling values the {@link Value} class is used. Have a look there for
- * more information.
+ * For handling values an object which extends {@link Value} is used. Have a
+ * look there for more information.
  * 
  * @author Rick-Rainer Ludwig
  * 
