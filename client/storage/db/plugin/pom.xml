@@ -4,11 +4,11 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.client</groupId>
-		<artifactId>com.puresoltechnologies.purifinity.client.storage.fs</artifactId>
+		<artifactId>com.puresoltechnologies.purifinity.client.storage.db</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresoltechnologies.purifinity.client.storage.fs.plugin</artifactId>
+	<artifactId>com.puresoltechnologies.purifinity.client.storage.db.plugin</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
 	<build>

@@ -12,7 +12,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>fs</module>
+		<module>db</module>
 	</modules>
 
 </project>

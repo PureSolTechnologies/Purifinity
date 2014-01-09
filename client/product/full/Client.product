@@ -70,7 +70,7 @@ Apache Software Foundation http://apache.org
       <feature id="com.puresoltechnologies.purifinity.client.lang.fortran2008.feature" version="0.1.1.qualifier"/>
       <feature id="com.puresoltechnologies.purifinity.client.lang.java7.feature" version="0.1.1.qualifier"/>
       <feature id="com.puresoltechnologies.purifinity.client.features.cleancode.feature" version="0.1.1.qualifier"/>
-      <feature id="com.puresoltechnologies.purifinity.client.storage.fs.feature" version="0.1.1.qualifier"/>
+      <feature id="com.puresoltechnologies.purifinity.client.storage.db.feature" version="0.1.1.qualifier"/>
    </features>
 
    <configurations>
