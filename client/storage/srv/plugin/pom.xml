@@ -4,16 +4,15 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.client</groupId>
-		<artifactId>com.puresoltechnologies.purifinity.client</artifactId>
+		<artifactId>com.puresoltechnologies.purifinity.client.storage.srv</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>com.puresoltechnologies.purifinity.client.storage</artifactId>
-	<packaging>pom</packaging>
+	<artifactId>com.puresoltechnologies.purifinity.client.storage.srv.plugin</artifactId>
+	<packaging>eclipse-plugin</packaging>
 
-	<modules>
-		<module>db</module>
-		<module>srv</module>
-	</modules>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+	</build>
 
 </project>

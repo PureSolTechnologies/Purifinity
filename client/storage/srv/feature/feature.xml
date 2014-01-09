@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="com.puresoltechnologies.purifinity.client.storage.srv.feature"
+      label="com.puresoltechnologies.purifinity.client.storage.srv.feature"
+      version="0.1.1.qualifier"
+      provider-name="PureSol Techologies"
+      plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin"
+      os="linux,macosx,win32"
+      ws="carbon,cocoa,gtk,win32"
+      arch="x86,x86_64">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <requires>
+      <import plugin="com.puresoltechnologies.commons.misc.bundle"/>
+      <import plugin="com.puresoltechnologies.parsers.api.bundle"/>
+      <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.analysis.domain.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.evaluation.domain.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.analysis.impl.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.commons.utils.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.metrics.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.store.api.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
+      <import plugin="org.apache.log4j"/>
+      <import plugin="org.apache.commons.logging"/>
+      <import plugin="javax.servlet"/>
+      <import plugin="javax.inject"/>
+      <import plugin="org.junit"/>
+      <import plugin="org.apache.xml.resolver"/>
+      <import plugin="org.apache.commons.httpclient"/>
+      <import plugin="javax.servlet.jsp"/>
+      <import plugin="org.eclipse.jdt.debug"/>
+      <import plugin="com.jcraft.jsch"/>
+      <import plugin="org.eclipse.core.runtime" version="3.8.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.datastax.cassandra.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.thinkaurelius.titan.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.store.db.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.math.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.evaluation.api.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.bundle"/>
+      <import plugin="org.apache.commons.lang"/>
+      <import plugin="javax.mail"/>
+   </requires>
+
+   <plugin
+         id="com.puresoltechnologies.purifinity.client.storage.srv.plugin"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

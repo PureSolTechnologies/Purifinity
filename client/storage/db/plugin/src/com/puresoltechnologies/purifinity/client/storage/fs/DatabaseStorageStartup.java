@@ -6,15 +6,15 @@ import org.slf4j.LoggerFactory;
 import com.puresoltechnologies.purifinity.client.common.osgi.AbstractStartup;
 import com.puresoltechnologies.purifinity.framework.store.db.Activator;
 
-public class FileSystemStorageStartup extends AbstractStartup {
+public class DatabaseStorageStartup extends AbstractStartup {
 
 	/**
 	 * Is the logger used to log.
 	 */
 	private static final Logger logger = LoggerFactory
-			.getLogger(FileSystemStorageStartup.class);
+			.getLogger(DatabaseStorageStartup.class);
 
-	public FileSystemStorageStartup() {
+	public DatabaseStorageStartup() {
 		super(Activator.class);
 		logger.debug("Trigger activation of '"
 				+ com.datastax.driver.Activator.class.getPackage().getName()
