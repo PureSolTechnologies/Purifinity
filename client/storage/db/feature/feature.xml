@@ -22,25 +22,22 @@
    </license>
 
    <requires>
-      <import plugin="com.puresoltechnologies.commons.math.bundle"/>
       <import plugin="com.puresoltechnologies.commons.misc.bundle"/>
       <import plugin="com.puresoltechnologies.parsers.api.bundle"/>
       <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.domain.bundle"/>
-      <import plugin="com.puresoltechnologies.purifinity.evaluation.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.evaluation.domain.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.analysis.impl.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.commons.utils.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.metrics.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.store.api.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="org.apache.commons.lang"/>
       <import plugin="org.eclipse.osgi"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
-      <import plugin="javax.mail"/>
-      <import plugin="org.junit"/>
+      <import plugin="org.apache.log4j"/>
+      <import plugin="org.apache.commons.logging"/>
       <import plugin="javax.servlet"/>
       <import plugin="javax.inject"/>
+      <import plugin="org.junit"/>
       <import plugin="org.apache.xml.resolver"/>
       <import plugin="org.apache.commons.httpclient"/>
       <import plugin="javax.servlet.jsp"/>
@@ -52,7 +49,11 @@
       <import plugin="com.datastax.cassandra.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.thinkaurelius.titan.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.store.db.bundle" version="0.1.1" match="greaterOrEqual"/>
-      <import plugin="org.jsoup"/>
+      <import plugin="com.puresoltechnologies.commons.math.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.evaluation.api.bundle"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.bundle"/>
+      <import plugin="org.apache.commons.lang"/>
+      <import plugin="javax.mail"/>
    </requires>
 
    <plugin

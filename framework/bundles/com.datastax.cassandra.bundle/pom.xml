@@ -27,14 +27,9 @@
 			<artifactId>cassandra-driver-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.cassandra</groupId>
-			<artifactId>cassandra-all</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
 			<groupId>net.jpountz.lz4</groupId>
 			<artifactId>lz4</artifactId>
-			<scope>runtime</scope>
+			<version>1.2.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse</groupId>
@@ -71,8 +66,8 @@
 						<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
 						<!-- assume public classes are in the top package, and private classes 
 							are under ".internal" -->
-						<Export-Package>${bundle.namespace}*;version="2.0.0-rc2",org.apache.cassandra*;version="2.0.3"</Export-Package>
-						<Import-Package>com.google.protobuf.*;resolution:=optional,org.jboss.*;resolution:=optional,sun.misc.*;resolution:=optional,javax.inject.*;resolution:=optional,javax.servlet.*;resolution:=optional,org.apache.commons.logging.*;resolution:=optional,org.apache.log4j.*;resolution:=optional,org.joda.time.*;resolution:=optional,org.osgi.service.log.*;resolution:=optional,org.slf4j.impl.*;resolution:=optional,org.xerial.snappy.*;resolution:=optional,com.ibm.*;resolution:=optional,com.sun.*;resolution:=optional,org.apache.pig.*;resolution:=optional,org.apache.hadoop.*;resolution:=optional,javax.jmdns.*;resolution:=optional,org.apache.avalon.*;resolution:=optional,org.apache.log.*;resolution:=optional,*</Import-Package>
+						<Export-Package>${bundle.namespace}*;version="2.0.0-rc2"</Export-Package>
+						<Import-Package>com.google.protobuf.*;resolution:=optional,org.jboss.*;resolution:=optional,sun.misc.*;resolution:=optional,javax.inject.*;resolution:=optional,javax.servlet.*;resolution:=optional,org.apache.commons.logging.*;resolution:=optional,org.apache.log4j.*;resolution:=optional,org.joda.time.*;resolution:=optional,org.osgi.service.log.*;resolution:=optional,org.slf4j.impl.*;resolution:=optional,org.xerial.snappy.*;resolution:=optional,*</Import-Package>
 						<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
 						<!-- embed compile/runtime dependencies using path that matches the 
 							copied dependency folder -->
