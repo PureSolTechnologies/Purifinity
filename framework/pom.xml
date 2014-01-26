@@ -8,6 +8,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<cassandra.version>2.0.3</cassandra.version>
+		<cassandra.driver.version>2.0.0-rc2</cassandra.driver.version>
+		<titan.version>0.4.2</titan.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity.framework</groupId>
@@ -255,17 +258,22 @@
 			<dependency>
 				<groupId>com.datastax.cassandra</groupId>
 				<artifactId>cassandra-driver-core</artifactId>
-				<version>2.0.0-rc2</version>
+				<version>${cassandra.driver.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.jpountz.lz4</groupId>
+				<artifactId>lz4</artifactId>
+				<version>1.2.0</version>
 			</dependency>
 			<dependency>
 				<groupId>com.thinkaurelius.titan</groupId>
 				<artifactId>titan-core</artifactId>
-				<version>0.4.1</version>
+				<version>${titan.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.thinkaurelius.titan</groupId>
 				<artifactId>titan-cassandra</artifactId>
-				<version>0.4.1</version>
+				<version>${titan.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-io</groupId>

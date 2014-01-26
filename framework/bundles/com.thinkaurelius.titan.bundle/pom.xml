@@ -57,7 +57,7 @@
 							will not find the bundle. -->
 						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Name>${project.groupId}.${project.artifactId}</Bundle-Name>
-						<Bundle-Version>0.4.1</Bundle-Version>
+						<Bundle-Version>${titan.version}</Bundle-Version>
 						<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
 						<!-- assume public classes are in the top package, and private classes 
 							are under ".internal" -->
