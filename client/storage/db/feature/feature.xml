@@ -37,8 +37,8 @@
       <import plugin="org.apache.commons.lang"/>
       <import plugin="org.eclipse.osgi"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
+      <import plugin="javax.mail"/>
       <import plugin="org.junit"/>
-      <import plugin="org.jsoup"/>
       <import plugin="javax.servlet"/>
       <import plugin="javax.inject"/>
       <import plugin="org.apache.xml.resolver"/>
@@ -52,6 +52,7 @@
       <import plugin="com.datastax.cassandra.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.thinkaurelius.titan.bundle" version="0.1.1" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.store.db.bundle" version="0.1.1" match="greaterOrEqual"/>
+      <import plugin="org.jsoup"/>
    </requires>
 
    <plugin

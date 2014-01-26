@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.client.storage.db;
 
 import java.io.IOException;
 
+import org.apache.cassandra.service.CassandraDaemon;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.slf4j.Logger;
@@ -15,7 +16,7 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin = null;
 
-	// private CassandraDaemon daemon = null;
+	private CassandraDaemon daemon = null;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -40,23 +41,23 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	private void startCassandra() throws IOException {
-		// if (daemon != null) {
-		// throw new RuntimeException("Cassandra was already initialized.");
-		// }
-		// daemon = new CassandraDaemon();
+		if (daemon != null) {
+			throw new RuntimeException("Cassandra was already initialized.");
+		}
+		daemon = new CassandraDaemon();
 		logger.info("Cassandra is about to start...");
-		// daemon.init(null);
+		daemon.init(null);
 		// daemon.start();
 		logger.info("Cassandra started.");
 	}
 
 	private void stopCassandra() {
-		// if (daemon == null) {
-		// throw new RuntimeException("Cassandra was never initialized.");
-		// }
+		if (daemon == null) {
+			throw new RuntimeException("Cassandra was never initialized.");
+		}
 		logger.info("Cassandra is about to stop...");
 		// daemon.stop();
-		// daemon = null;
+		daemon = null;
 		logger.info("Cassandra was stopped.");
 	}
 
