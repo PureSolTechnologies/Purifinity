@@ -17,3 +17,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: PureSol Technologies
 Bundle-ClassPath: .
 Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.puresoltechnologies.purifinity.client.storage.db.Activator

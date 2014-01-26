@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.client.storage.fs;
+package com.puresoltechnologies.purifinity.client.storage.db;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

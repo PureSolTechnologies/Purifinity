@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.startup">
       <startup
-            class="com.puresoltechnologies.purifinity.client.storage.fs.DatabaseStorageStartup">
+            class="com.puresoltechnologies.purifinity.client.storage.db.DatabaseStorageStartup">
       </startup>
    </extension>
 
