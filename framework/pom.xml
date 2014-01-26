@@ -8,7 +8,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<cassandra.version>2.0.3</cassandra.version>
+		<cassandra.version>2.0.4</cassandra.version>
 		<cassandra.driver.version>2.0.0-rc2</cassandra.driver.version>
 		<titan.version>0.4.2</titan.version>
 	</properties>
@@ -255,6 +255,11 @@
 				<version>${project.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
+			<dependency>
+				<groupId>org.apache.cassandra</groupId>
+				<artifactId>cassandra-all</artifactId>
+				<version>${cassandra.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.datastax.cassandra</groupId>
 				<artifactId>cassandra-driver-core</artifactId>
