@@ -179,6 +179,11 @@
 		</dependency>
 		<!-- External bundles -->
 		<dependency>
+			<groupId>org.apache</groupId>
+			<artifactId>cassandra.server.bundle</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.datastax</groupId>
 			<artifactId>cassandra.bundle</artifactId>
 			<version>${project.version}</version>
