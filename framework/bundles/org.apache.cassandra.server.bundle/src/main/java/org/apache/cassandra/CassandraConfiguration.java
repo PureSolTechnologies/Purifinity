@@ -46,7 +46,7 @@ public class CassandraConfiguration {
 				while (matcher.find()) {
 					String propertyName = matcher.group(1);
 					line = line.replaceAll("\\$\\{" + propertyName + "\\}",
-							System.getProperty(propertyName));
+							Matcher.quoteReplacement(System.getProperty(propertyName)));
 				}
 				writer.write(line);
 				writer.write("\n");

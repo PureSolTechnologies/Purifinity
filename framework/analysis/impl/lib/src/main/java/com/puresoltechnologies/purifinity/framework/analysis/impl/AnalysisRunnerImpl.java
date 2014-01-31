@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.regex.Matcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -250,7 +251,7 @@ public class AnalysisRunnerImpl extends
 		AnalysisInformation analysis = analyzedFiles.get(location);
 		HashId hashId = analysis.getHashId();
 		String internalLocation = location.getInternalLocation();
-		String[] directories = internalLocation.split(File.separator);
+		String[] directories = internalLocation.split(Matcher.quoteReplacement(File.separator));
 		AnalysisFileTree node = rootNode;
 		for (int i = 0; i < directories.length; i++) {
 			String directory = directories[i];

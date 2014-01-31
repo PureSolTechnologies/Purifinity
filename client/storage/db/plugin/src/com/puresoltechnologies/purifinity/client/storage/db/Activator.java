@@ -61,7 +61,8 @@ public class Activator extends AbstractUIPlugin {
 		}
 		URL eclipseHomeLocationURL = new URL(eclipseHomeLocation);
 		File dataDirectory = new File(eclipseHomeLocationURL.getFile(), "db");
-		System.setProperty("cassandra.data.directory", dataDirectory.getPath());
+		String dataDirectoryString = dataDirectory.getPath();
+		System.setProperty("cassandra.data.directory", dataDirectoryString);
 		File configurationDirectory = new File(
 				eclipseHomeLocationURL.getFile(), "configuration");
 		File configurationFile = CassandraConfiguration
