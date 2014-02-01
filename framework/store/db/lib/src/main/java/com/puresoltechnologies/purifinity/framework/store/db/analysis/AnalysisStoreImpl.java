@@ -8,11 +8,9 @@ import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -34,7 +32,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInforma
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.SourceCodeLocationCreator;
-import com.puresoltechnologies.purifinity.framework.commons.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
@@ -494,7 +491,13 @@ public class AnalysisStoreImpl implements AnalysisStore {
 				fileTree.getName());
 		vertex.setProperty(TitanConnection.TREE_ELEMENT_IS_FILE,
 				fileTree.isFile());
-
+		SourceCodeLocation sourceCodeLocation = fileTree
+				.getSourceCodeLocation();
+		if (sourceCodeLocation != null) {
+			vertex.setProperty(
+					TitanConnection.TREE_ELEMENT_SOURCE_CODE_LOCATION,
+					sourceCodeLocation.getSerialization());
+		}
 		Edge edge = parentVertex.addEdge(edgeLabel, vertex);
 		edge.setProperty(TitanConnection.TREE_ELEMENT_HASH, fileTree
 				.getHashId().toString());
@@ -537,56 +540,6 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		}
 
 		return vertex;
-	}
-
-	@Override
-	public void storeAnalysisSourceLocations(UUID projectUUID, UUID runUUID,
-			Map<HashId, SourceCodeLocation> sourceLocations)
-			throws AnalysisStoreException {
-		Session session = CassandraConnection.getAnalysisSession();
-		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(
-						session,
-						"storeAnalysisSourceLocations",
-						"INSERT INTO "
-								+ CassandraConnection.ANALYSIS_RUN_SOURCE_CODE_LOCATIONS
-								+ " (uuid, source_locations) VALUES (?,?)");
-		BoundStatement boundStatement = preparedStatement.bind(runUUID);
-		Map<String, String> locations = new HashMap<>();
-		for (Entry<HashId, SourceCodeLocation> entry : sourceLocations
-				.entrySet()) {
-			locations.put(entry.getKey().toString(), PropertiesUtils
-					.toString(entry.getValue().getSerialization()));
-		}
-		boundStatement.setMap("source_locations", locations);
-		session.execute(boundStatement);
-	}
-
-	@Override
-	public Map<HashId, SourceCodeLocation> readAnalysisSourceLocations(
-			UUID projectUUID, UUID runUUID) throws AnalysisStoreException {
-		Session session = CassandraConnection.getAnalysisSession();
-		ResultSet resultSet = session.execute("SELECT source_locations FROM "
-				+ CassandraConnection.ANALYSIS_RUN_SOURCE_CODE_LOCATIONS
-				+ " WHERE uuid=" + runUUID);
-		Row result = resultSet.one();
-		if (result == null) {
-			throw new AnalysisStoreException(
-					"Could not find source code locations for UUID '" + runUUID
-							+ "'.");
-		}
-		Map<String, String> locations = result.getMap("source_locations",
-				String.class, String.class);
-		Map<HashId, SourceCodeLocation> sourceLocations = new HashMap<>();
-		for (Entry<String, String> entry : locations.entrySet()) {
-			HashId hashId = HashId.fromString(entry.getKey());
-			Properties locationProperties = PropertiesUtils.fromString(entry
-					.getValue());
-			SourceCodeLocation sourceCodeLocation = SourceCodeLocationCreator
-					.createFromSerialization(locationProperties);
-			sourceLocations.put(hashId, sourceCodeLocation);
-		}
-		return sourceLocations;
 	}
 
 	private void addMetadata(Vertex vertex, AnalysisFileTree fileTreeNode)
@@ -716,6 +669,11 @@ public class AnalysisStoreImpl implements AnalysisStore {
 				.getProperty(TitanConnection.TREE_ELEMENT_NAME);
 		boolean isFile = (boolean) treeVertex
 				.getProperty(TitanConnection.TREE_ELEMENT_IS_FILE);
+		Object serializedSourceCodeLocation = treeVertex
+				.getProperty(TitanConnection.TREE_ELEMENT_SOURCE_CODE_LOCATION);
+		SourceCodeLocation sourceCodeLocation = serializedSourceCodeLocation != null ? SourceCodeLocationCreator
+				.createFromSerialization((Properties) serializedSourceCodeLocation)
+				: null;
 		Iterable<Vertex> contentVertices = treeVertex.query()
 				.labels(TitanConnection.HAS_CONTENT_LABEL).vertices();
 		Iterator<Vertex> contextVertexIterator = contentVertices.iterator();
@@ -745,7 +703,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			analyses = null;
 		}
 		AnalysisFileTree hashIdFileTree = new AnalysisFileTree(parent, name,
-				HashId.fromString(hash), isFile, analyses);
+				HashId.fromString(hash), isFile, sourceCodeLocation, analyses);
 		Iterable<Vertex> vertices = treeVertex
 				.query()
 				.labels(TitanConnection.CONTAINS_DIRECTORY_LABEL,

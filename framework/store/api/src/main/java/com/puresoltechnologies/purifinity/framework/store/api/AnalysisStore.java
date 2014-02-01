@@ -2,12 +2,9 @@ package com.puresoltechnologies.purifinity.framework.store.api;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
@@ -121,12 +118,5 @@ public interface AnalysisStore {
 			Date startTime, long duration, String description,
 			FileSearchConfiguration fileSearchConfiguration)
 			throws AnalysisStoreException;
-
-	public void storeAnalysisSourceLocations(UUID projectUUID, UUID runUUID,
-			Map<HashId, SourceCodeLocation> sourceLocations)
-			throws AnalysisStoreException;
-
-	public Map<HashId, SourceCodeLocation> readAnalysisSourceLocations(
-			UUID projectUUID, UUID runUUID) throws AnalysisStoreException;
 
 }

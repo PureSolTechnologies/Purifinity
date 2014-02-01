@@ -40,10 +40,7 @@ public class AnalysisRunImpl implements AnalysisRun {
 				projectUUID, runUUID);
 		AnalysisFileTree analysisFileTree = analysisStore.readAnalysisFileTree(
 				projectUUID, runUUID);
-		Map<HashId, SourceCodeLocation> sourceCodeLocation = analysisStore
-				.readAnalysisSourceLocations(projectUUID, runUUID);
-		return new AnalysisRunImpl(information, analysisFileTree,
-				sourceCodeLocation);
+		return new AnalysisRunImpl(information, analysisFileTree);
 	}
 
 	private final AnalysisRunInformation information;
@@ -66,8 +63,7 @@ public class AnalysisRunImpl implements AnalysisRun {
 			FileSearchConfiguration fileSearchConfiguration,
 			Map<HashId, SourceCodeLocation> sourceCodeLocations) {
 		this(new AnalysisRunInformation(analysisProjectUUID, uuid, startTime,
-				duration, "", fileSearchConfiguration), fileTree,
-				sourceCodeLocations);
+				duration, "", fileSearchConfiguration), fileTree);
 	}
 
 	/**
@@ -79,15 +75,13 @@ public class AnalysisRunImpl implements AnalysisRun {
 	 * @param searchConfiguration
 	 */
 	public AnalysisRunImpl(AnalysisRunInformation information,
-			AnalysisFileTree fileTree,
-			Map<HashId, SourceCodeLocation> sourceCodeLocations) {
+			AnalysisFileTree fileTree) {
 		super();
 		checkNotNull("information", information);
 		checkNotNull("fileTree", fileTree);
 		checkNotNull("sourceCodeLocations", sourceCodeLocations);
 		this.information = information;
 		this.fileTree = fileTree;
-		this.sourceCodeLocations.putAll(sourceCodeLocations);
 		populateFields();
 	}
 

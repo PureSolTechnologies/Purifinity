@@ -59,6 +59,7 @@ public class TitanConnection {
 	public static final String TREE_ELEMENT_CONTAINS_DIRECTORIES_RECURSIVE = "tree.element.contains.directories.recursive";
 	public static final String TREE_ELEMENT_SIZE = "tree.element.size";
 	public static final String TREE_ELEMENT_SIZE_RECURSIVE = "tree.element.size.recursive";
+	public static final String TREE_ELEMENT_SOURCE_CODE_LOCATION = "tree.element.source.location";
 	public static final String CONTAINS_FILE_LABEL = "containsFile";
 	public static final String CONTAINS_DIRECTORY_LABEL = "containsDirectory";
 	/*

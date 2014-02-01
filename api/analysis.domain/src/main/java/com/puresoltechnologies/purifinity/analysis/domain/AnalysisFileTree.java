@@ -12,6 +12,7 @@ import com.puresoltechnologies.commons.trees.api.Tree;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
+import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 
 public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 
@@ -23,10 +24,12 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 	private final String name;
 	private final HashId hashId;
 	private final boolean file;
+	private final SourceCodeLocation sourceCodeLocation;
 	private final List<AnalysisInformation> analyzedCodes = new ArrayList<>();
 
 	public AnalysisFileTree(AnalysisFileTree parent, String name,
-			HashId hashId, boolean file, List<AnalysisInformation> analyzedCodes) {
+			HashId hashId, boolean file, SourceCodeLocation sourceCodeLocation,
+			List<AnalysisInformation> analyzedCodes) {
 		super();
 		checkNotNull("name", name);
 		if ((!file) && (analyzedCodes != null)) {
@@ -41,6 +44,7 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 		this.name = name;
 		this.hashId = hashId;
 		this.file = file;
+		this.sourceCodeLocation = sourceCodeLocation;
 		if (analyzedCodes != null) {
 			this.analyzedCodes.addAll(analyzedCodes);
 		}
@@ -75,6 +79,10 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 
 	public final boolean isFile() {
 		return file;
+	}
+
+	public final SourceCodeLocation getSourceCodeLocation() {
+		return sourceCodeLocation;
 	}
 
 	public final List<AnalysisInformation> getAnalyses() {

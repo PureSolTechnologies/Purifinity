@@ -3,7 +3,6 @@ package com.puresoltechnologies.purifinity.framework.analysis.impl;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -56,8 +55,6 @@ public class AnalysisRunnerImpl extends
 	private static final int WAITTIME_IN_SECONDS_FOR_THREAD_POLL = 1000;
 
 	private AnalysisFileTree fileTree = null;
-	private Date startTime = null;
-	private long duration = 0;
 	private AnalysisRunInformation analysisRun = null;
 	private StopWatch stopWatch = null;
 
@@ -88,16 +85,13 @@ public class AnalysisRunnerImpl extends
 			stopWatch.start();
 			boolean analysisSuccessful = analyzeFiles();
 			stopWatch.stop();
-			startTime = stopWatch.getStartTime();
-			duration = stopWatch.getMilliseconds();
 			if (analysisSuccessful) {
 				analysisRun = analysisStore.createAnalysisRun(projectUUID,
-						stopWatch.getStartTime(), duration, "", searchConfig);
+						stopWatch.getStartTime(), stopWatch.getMilliseconds(),
+						"", searchConfig);
 				buildCodeLocationTree();
 				analysisStore.storeAnalysisFileTree(projectUUID,
 						analysisRun.getUUID(), fileTree);
-				analysisStore.storeAnalysisSourceLocations(projectUUID,
-						analysisRun.getUUID(), sourceCodeLocations);
 				fireDone("Finished successfully.", true);
 				return true;
 			} else {
@@ -239,7 +233,7 @@ public class AnalysisRunnerImpl extends
 						.getRepositoryLocation());
 		AnalysisFileTree intermediate = new AnalysisFileTree(null,
 				repositoryLocation.getHumanReadableLocationString(), null,
-				false, null);
+				false, null, null);
 		for (SourceCodeLocation sourceCodeLocation : analyzedFiles.keySet()) {
 			addToIntermediateTree(intermediate, sourceCodeLocation);
 		}
@@ -251,7 +245,8 @@ public class AnalysisRunnerImpl extends
 		AnalysisInformation analysis = analyzedFiles.get(location);
 		HashId hashId = analysis.getHashId();
 		String internalLocation = location.getInternalLocation();
-		String[] directories = internalLocation.split(Matcher.quoteReplacement(File.separator));
+		String[] directories = internalLocation.split(Matcher
+				.quoteReplacement(File.separator));
 		AnalysisFileTree node = rootNode;
 		for (int i = 0; i < directories.length; i++) {
 			String directory = directories[i];
@@ -262,10 +257,10 @@ public class AnalysisRunnerImpl extends
 					List<AnalysisInformation> analyses = new ArrayList<AnalysisInformation>();
 					analyses.add(analysis);
 					child = new AnalysisFileTree(node, directory, hashId,
-							isFile, analyses);
+							isFile, location, analyses);
 				} else {
 					child = new AnalysisFileTree(node, directory, null, isFile,
-							null);
+							location, null);
 				}
 			}
 			node = child;
@@ -275,7 +270,8 @@ public class AnalysisRunnerImpl extends
 	private void createFinalTree(AnalysisFileTree intermediate) {
 		Map<File, HashId> hashes = generateModuleHashes(intermediate);
 		fileTree = new AnalysisFileTree(null, intermediate.getName(),
-				hashes.get(intermediate.getPathFile(false)), false, null);
+				hashes.get(intermediate.getPathFile(false)), false,
+				intermediate.getSourceCodeLocation(), null);
 		for (AnalysisFileTree child : intermediate.getChildren()) {
 			addToFinalTree(fileTree, child, hashes);
 		}
@@ -285,8 +281,8 @@ public class AnalysisRunnerImpl extends
 			AnalysisFileTree refNode, Map<File, HashId> hashes) {
 		AnalysisFileTree newNode = new AnalysisFileTree(parentNode,
 				refNode.getName(), hashes.get(refNode.getPathFile(false)),
-				refNode.isFile(), refNode.isFile() ? refNode.getAnalyses()
-						: null);
+				refNode.isFile(), refNode.getSourceCodeLocation(),
+				refNode.isFile() ? refNode.getAnalyses() : null);
 		for (AnalysisFileTree child : refNode.getChildren()) {
 			addToFinalTree(newNode, child, hashes);
 		}
@@ -337,7 +333,7 @@ public class AnalysisRunnerImpl extends
 
 	@Override
 	public AnalysisRun getAnalysisRun() throws AnalysisProjectException {
-		return new AnalysisRunImpl(analysisRun, fileTree, sourceCodeLocations);
+		return new AnalysisRunImpl(analysisRun, fileTree);
 	}
 
 }
