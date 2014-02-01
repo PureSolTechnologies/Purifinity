@@ -549,7 +549,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 						session,
 						"storeAnalysisSourceLocations",
 						"INSERT INTO "
-								+ CassandraConnection.ANALYSIS_RUN_FILE_TREE_INFORMATION
+								+ CassandraConnection.ANALYSIS_RUN_SOURCE_CODE_LOCATIONS
 								+ " (uuid, source_locations) VALUES (?,?)");
 		BoundStatement boundStatement = preparedStatement.bind(runUUID);
 		Map<String, String> locations = new HashMap<>();
@@ -567,7 +567,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			UUID projectUUID, UUID runUUID) throws AnalysisStoreException {
 		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session.execute("SELECT source_locations FROM "
-				+ CassandraConnection.ANALYSIS_RUN_FILE_TREE_INFORMATION
+				+ CassandraConnection.ANALYSIS_RUN_SOURCE_CODE_LOCATIONS
 				+ " WHERE uuid=" + runUUID);
 		Row result = resultSet.one();
 		if (result == null) {

@@ -29,12 +29,10 @@ public class CassandraConnection {
 	private static final String CHANGELOG_TABLE = "changelog";
 
 	public static final String ANALYSIS_FILES_TABLE = "files";
-	public static final String ANALYSIS_DIRECTORIES_TABLE = "directories";
 	public static final String ANALYSIS_PROJECT_SETTINGS_TABLE = "project_settings";
-	public static final String ANALYSIS_RUN_FILE_TREE_INFORMATION = "analysis_run_file_tree_information";
+	public static final String ANALYSIS_RUN_SOURCE_CODE_LOCATIONS = "analysis_run_source_code_locations";
 
 	public static final String RUN_SETTINGS_TABLE = "run_settings";
-	public static final String RUN_FILES_TABLE = "run_files";
 
 	public static final String ANALYSIS_FILE_TREE_CACHE = "file_tree_cache";
 
@@ -145,6 +143,7 @@ public class CassandraConnection {
 						"INSERT INTO " + CHANGELOG_TABLE
 								+ " (version, utc) VALUES (1, "
 								+ new Date().getTime() + ");");
+
 		CassandraUtils
 				.checkAndCreateTable(
 						analysisSession,
@@ -153,10 +152,7 @@ public class CassandraConnection {
 						"CREATE TABLE "
 								+ ANALYSIS_FILES_TABLE
 								+ " (hashid varchar, raw blob, size int, analysis blob, PRIMARY KEY(hashid));");
-		CassandraUtils.checkAndCreateTable(analysisSession, analysisKeyspace,
-				ANALYSIS_DIRECTORIES_TABLE, "CREATE TABLE "
-						+ ANALYSIS_DIRECTORIES_TABLE
-						+ " (hashid varchar, PRIMARY KEY(hashid));");
+		
 		CassandraUtils
 				.checkAndCreateTable(
 						analysisSession,
@@ -174,22 +170,14 @@ public class CassandraConnection {
 						"CREATE TABLE "
 								+ RUN_SETTINGS_TABLE
 								+ " (uuid uuid, file_includes list<text>, file_excludes list<text>, location_includes list<text>, location_excludes list<text>, ignore_hidden boolean, PRIMARY KEY(uuid));");
-		CassandraUtils
-				.checkAndCreateTable(
-						analysisSession,
-						analysisKeyspace,
-						RUN_FILES_TABLE,
-						"CREATE TABLE "
-								+ RUN_FILES_TABLE
-								+ " (uuid uuid, analyzed_files list<text>, failed_files list<text>, PRIMARY KEY(uuid));");
 
 		CassandraUtils
 				.checkAndCreateTable(
 						analysisSession,
 						analysisKeyspace,
-						ANALYSIS_RUN_FILE_TREE_INFORMATION,
+						ANALYSIS_RUN_SOURCE_CODE_LOCATIONS,
 						"CREATE TABLE "
-								+ ANALYSIS_RUN_FILE_TREE_INFORMATION
+								+ ANALYSIS_RUN_SOURCE_CODE_LOCATIONS
 								+ " (uuid uuid, source_locations map<text,text>, PRIMARY KEY(uuid));");
 
 		CassandraUtils
@@ -206,6 +194,19 @@ public class CassandraConnection {
 	private static void checkAndCreateEvaluationTables() {
 		KeyspaceMetadata evaluationKeyspace = cluster.getMetadata()
 				.getKeyspace(EVALUATION_KEYSPACE);
+
+		CassandraUtils
+		.checkAndCreateTable(
+				evaluationSession,
+				evaluationKeyspace,
+				CHANGELOG_TABLE,
+				"CREATE TABLE "
+						+ CHANGELOG_TABLE
+						+ " (version int, utc timestamp, PRIMARY KEY(version));",
+				"INSERT INTO " + CHANGELOG_TABLE
+						+ " (version, utc) VALUES (1, "
+						+ new Date().getTime() + ");");
+
 		CassandraUtils
 				.checkAndCreateTable(
 						evaluationSession,
