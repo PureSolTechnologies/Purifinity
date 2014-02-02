@@ -1,13 +1,16 @@
 package org.apache.cassandra.server;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import org.apache.cassandra.service.CassandraDaemon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,36 +19,90 @@ public class CassandraServer {
 	private static final Logger logger = LoggerFactory
 			.getLogger(CassandraServer.class);
 
-	private static CassandraDaemon daemon = null;
+	private static final int THRIFT_PORT = 9042;
+
+	private static Process cassandraProcess = null;
 
 	public static void start() throws IOException {
-		if (daemon != null) {
+		if (cassandraProcess != null) {
 			throw new RuntimeException("Cassandra was already started.");
 		}
 		logger.info("Cassandra is about to start...");
-		setRequiredSystemProperties();
-		daemon = new CassandraDaemon();
-		Thread serverThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				daemon.activate();
-			}
-		}, "CassandraServerThread");
-		serverThread.setDaemon(true);
-		serverThread.start();
-		logger.info("Cassandra started.");
-	}
 
-	private static void setRequiredSystemProperties()
-			throws MalformedURLException, FileNotFoundException, IOException {
+		if (cassandraProcess != null) {
+			throw new RuntimeException("Cassandra was already started.");
+		}
+
 		File eclipseHome = getEclipseHome();
-		// Set data directory
-		File dataDirectory = getDataDirectory(eclipseHome);
-		System.setProperty("cassandra.data.directory", dataDirectory.getPath());
-		// Set configuration file
-		File configurationFile = getConfigurationFile(eclipseHome);
-		System.setProperty("cassandra.config",
-				"file:" + configurationFile.getPath());
+		File databaseDirectory = getDatabaseDirectory(eclipseHome);
+		CassandraDistribution.extract(databaseDirectory);
+
+		File cassandraConfiguration = new File(databaseDirectory, "conf");
+		System.setProperty("cassandra.data.directory",
+				databaseDirectory.getPath());
+		CassandraConfiguration.createConfigurationFile(cassandraConfiguration);
+
+		File cassandraLib = new File(databaseDirectory, "lib");
+
+		String javaAgent = "-javaagent:"
+				+ new File(cassandraLib, "jamm-0.2.5.jar").getPath();
+
+		String[] jarFiles = cassandraLib.list(new FilenameFilter() {
+
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.endsWith(".jar");
+			}
+		});
+		StringBuilder classPath = new StringBuilder(
+				cassandraConfiguration.getPath());
+		for (String jarFile : jarFiles) {
+			classPath.append(":");
+			classPath.append(new File(cassandraLib, jarFile).getPath());
+		}
+
+		List<String> jvmParams = new ArrayList<>();
+		jvmParams.add("-XX:+UseThreadPriorities");
+		jvmParams.add("-XX:ThreadPriorityPolicy=42");
+		jvmParams.add("-Xms1024M");
+		jvmParams.add("-Xmx1024M");
+		jvmParams.add("-Xmn256M");
+		jvmParams.add("-XX:+HeapDumpOnOutOfMemoryError");
+		jvmParams.add("-Xss256k");
+		jvmParams.add("-XX:StringTableSize=1000003");
+		jvmParams.add("-XX:+UseParNewGC");
+		jvmParams.add("-XX:+UseConcMarkSweepGC");
+		jvmParams.add("-XX:+CMSParallelRemarkEnabled");
+		jvmParams.add("-XX:SurvivorRatio=8");
+		jvmParams.add("-XX:MaxTenuringThreshold=1");
+		jvmParams.add("-XX:CMSInitiatingOccupancyFraction=75");
+		jvmParams.add("-XX:+UseCMSInitiatingOccupancyOnly");
+		jvmParams.add("-XX:+UseTLAB");
+		jvmParams.add("-XX:+UseCondCardMark");
+
+		List<String> properties = new ArrayList<>();
+		properties.add("-Djava.net.preferIPv4Stack=true");
+		properties.add("-Dcom.sun.management.jmxremote.port=7199");
+		properties.add("-Dcom.sun.management.jmxremote.ssl=false");
+		properties.add("-Dcom.sun.management.jmxremote.authenticate=false");
+		properties.add("-Dlog4j.configuration=log4j-server.properties");
+		properties.add("-Dlog4j.defaultInitOverride=true");
+
+		String mainClass = "org.apache.cassandra.service.CassandraDaemon";
+
+		List<String> command = new ArrayList<>();
+		command.add("java");
+		command.add("-ea");
+		command.add(javaAgent);
+		command.addAll(jvmParams);
+		command.addAll(properties);
+		command.add("-cp");
+		command.add(classPath.toString());
+		command.add(mainClass);
+		ProcessBuilder processBuilder = new ProcessBuilder(command);
+		processBuilder.inheritIO();
+		cassandraProcess = processBuilder.start();
+		logger.info("Cassandra started.");
 	}
 
 	private static File getEclipseHome() throws MalformedURLException {
@@ -60,75 +117,26 @@ public class CassandraServer {
 		return eclipseHomeDirectory;
 	}
 
-	private static File getDataDirectory(File eclipseHome) {
+	private static File getDatabaseDirectory(File eclipseHome) {
 		File dataDirectory = new File(eclipseHome, "db");
 		return dataDirectory;
 	}
 
-	private static File getConfigurationFile(File eclipseHome)
-			throws FileNotFoundException, IOException {
-		File configurationDirectory = new File(eclipseHome, "configuration");
-		File configurationFile = CassandraConfiguration
-				.createConfigurationFile(configurationDirectory);
-		return configurationFile;
-	}
-
 	public static void stop() {
-		if (daemon == null) {
-			throw new RuntimeException("Cassandra was not started, yet.");
+		if (cassandraProcess != null) {
+			logger.info("Cassandra is about to stop...");
+			cassandraProcess.destroy();
+			cassandraProcess = null;
+			logger.info("Cassandra stopped.");
 		}
-		logger.info("Cassandra is about to stop...");
-		daemon.deactivate();
-		daemon = null;
-		logger.info("Cassandra stopped.");
 	}
 
-	public static boolean isNativeServerRunning() {
-		if (daemon == null) {
-			return false;
-		}
-		return daemon.nativeServer == null ? false : daemon.nativeServer
-				.isRunning();
-	}
-
-	public static boolean isThriftServerRunning() {
-		if (daemon == null) {
-			return false;
-		}
-		return daemon.thriftServer == null ? false : daemon.thriftServer
-				.isRunning();
-	}
-
-	/**
-	 * This method blocks until the Cassandra server is started or a cefined
-	 * timeout occurs.
-	 * 
-	 * @param timeout
-	 *            is the maximum time to wait for the server to start in
-	 *            milliseconds.
-	 * @return <code>true</code> is returned if the server was started
-	 *         successfully. False is returned otherwise.
-	 */
 	public static boolean waitForStartup(long timeout) {
 		Date start = new Date();
-		while ((!CassandraServer.isNativeServerRunning())
-				|| (!CassandraServer.isThriftServerRunning())) {
+		while (!isStarted()) {
 			Date current = new Date();
 			if (current.getTime() - start.getTime() >= timeout) {
-				break;
-			}
-			if (logger.isInfoEnabled()) {
-				StringBuilder builder = new StringBuilder();
-				builder.append("Wait for Cassandra startup... (time: ");
-				builder.append((current.getTime() - start.getTime()) / 1000.0);
-				builder.append("s; ");
-				builder.append("native server: ");
-				builder.append(CassandraServer.isNativeServerRunning());
-				builder.append("; ");
-				builder.append("thrift server: ");
-				builder.append(CassandraServer.isThriftServerRunning());
-				builder.append(")...");
-				logger.info(builder.toString());
+				return false;
 			}
 			try {
 				Thread.sleep(1000);
@@ -136,13 +144,15 @@ public class CassandraServer {
 				break;
 			}
 		}
-		if ((!isNativeServerRunning()) || (!isThriftServerRunning())) {
-			logger.warn("Cassandra not started within " + timeout + "ms.");
+		return isStarted();
+	}
+
+	private static boolean isStarted() {
+		try (Socket socket = new Socket()) {
+			socket.connect(new InetSocketAddress("localhost", THRIFT_PORT));
+		} catch (IOException e) {
 			return false;
 		}
-		Date current = new Date();
-		logger.info("Cassandra started. (time: "
-				+ (current.getTime() - start.getTime()) / 1000.0 + "s)");
 		return true;
 	}
 }

@@ -14,4 +14,5 @@ public class CassandraServerIT {
 		assertTrue(CassandraServer.waitForStartup(15000));
 		CassandraServer.stop();
 	}
+
 }

@@ -21,12 +21,7 @@ public class Activator extends AbstractUIPlugin {
 		}
 		plugin = this;
 		CassandraServer.start();
-		long timeout = 60000;
-		boolean started = CassandraServer.waitForStartup(timeout);
-		if (!started) {
-			throw new RuntimeException("Cassandra could not be started within "
-					+ timeout + "ms.");
-		}
+		CassandraServer.waitForStartup(15000);
 	}
 
 	@Override

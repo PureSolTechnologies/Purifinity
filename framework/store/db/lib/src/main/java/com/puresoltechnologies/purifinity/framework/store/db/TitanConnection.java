@@ -24,6 +24,12 @@ public class TitanConnection {
 
 	private static TitanGraph graph = null;
 
+	/**
+	 * Timeout for connection establishment in milliseconds.
+	 */
+	private static final long TIMEOUT = 15000;
+	private static final long WAIT_TIME = 1000;
+
 	/*
 	 * VERTEX TYPES
 	 */

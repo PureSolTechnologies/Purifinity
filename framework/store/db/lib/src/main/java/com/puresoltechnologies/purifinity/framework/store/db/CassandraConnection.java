@@ -8,6 +8,7 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.exceptions.NoHostAvailableException;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraUtils;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
 
@@ -22,6 +23,12 @@ public class CassandraConnection {
 
 	private static final String CASSANDRA_HOST = "localhost";
 	private static final int CASSANDRA_CQL_PORT = 9042;
+
+	/**
+	 * Timeout for connection establishment in milliseconds.
+	 */
+	private static final long TIMEOUT = 15000;
+	private static final long WAIT_TIME = 1000;
 
 	public static final String ANALYSIS_KEYSPACE = "analysis_store";
 	public static final String EVALUATION_KEYSPACE = "evaluation_store";
@@ -61,9 +68,9 @@ public class CassandraConnection {
 		cluster = Cluster.builder().addContactPoints(CASSANDRA_HOST)
 				.withPort(CASSANDRA_CQL_PORT).build();
 		checkAndCreateKeyspaces();
-		analysisSession = cluster.connect(ANALYSIS_KEYSPACE);
+		analysisSession = connectToCluster(ANALYSIS_KEYSPACE);
 		checkAndCreateAnalysisTables();
-		evaluationSession = cluster.connect(EVALUATION_KEYSPACE);
+		evaluationSession = connectToCluster(EVALUATION_KEYSPACE);
 		checkAndCreateEvaluationTables();
 	}
 
@@ -111,7 +118,7 @@ public class CassandraConnection {
 	}
 
 	private static void checkAndCreateKeyspaces() {
-		Session session = cluster.connect();
+		Session session = connectToCluster();
 		try {
 			if (cluster.getMetadata().getKeyspace(ANALYSIS_KEYSPACE) == null) {
 				CassandraUtils.createKeyspace(cluster, ANALYSIS_KEYSPACE,
@@ -124,6 +131,38 @@ public class CassandraConnection {
 		} finally {
 			session.shutdown();
 		}
+	}
+
+	private static Session connectToCluster() {
+		Date start = new Date();
+		while (new Date().getTime() - start.getTime() < TIMEOUT) {
+			try {
+				return cluster.connect();
+			} catch (NoHostAvailableException e) {
+				try {
+					Thread.sleep(WAIT_TIME);
+				} catch (InterruptedException e1) {
+					break;
+				}
+			}
+		}
+		return cluster.connect();
+	}
+
+	private static Session connectToCluster(String keyspace) {
+		Date start = new Date();
+		while (new Date().getTime() - start.getTime() < TIMEOUT) {
+			try {
+				return cluster.connect(keyspace);
+			} catch (NoHostAvailableException e) {
+				try {
+					Thread.sleep(WAIT_TIME);
+				} catch (InterruptedException e1) {
+					break;
+				}
+			}
+		}
+		return cluster.connect(keyspace);
 	}
 
 	private static void checkAndCreateAnalysisTables() {
