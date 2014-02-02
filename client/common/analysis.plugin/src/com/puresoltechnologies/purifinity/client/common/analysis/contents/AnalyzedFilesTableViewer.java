@@ -16,8 +16,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 
 public class AnalyzedFilesTableViewer extends TableViewer implements
@@ -50,9 +50,10 @@ public class AnalyzedFilesTableViewer extends TableViewer implements
 			@Override
 			public String getText(Object element) {
 				AnalysisInformation analysis = (AnalysisInformation) element;
-				SourceCodeLocation sourceCodeLocation = analysisRun
-						.getSourceCodeLocation(analysis.getHashId());
-				return sourceCodeLocation.getHumanReadableLocationString();
+				AnalysisFileTree tree = analysisRun.findTreeNode(analysis
+						.getHashId());
+				return tree.getSourceCodeLocation()
+						.getHumanReadableLocationString();
 			}
 		});
 		nameColumn.getColumn().addSelectionListener(

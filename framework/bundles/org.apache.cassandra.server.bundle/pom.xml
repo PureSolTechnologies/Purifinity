@@ -22,7 +22,6 @@
 			<groupId>org.apache.cassandra</groupId>
 			<artifactId>cassandra-all</artifactId>
 			<version>${cassandra.version}</version>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.jpountz.lz4</groupId>
@@ -31,6 +30,10 @@
 		<dependency>
 			<groupId>org.eclipse</groupId>
 			<artifactId>osgi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -43,7 +46,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>org.apache.cassandra</bundle.namespace>
+		<bundle.namespace>org.apache.cassandra.server</bundle.namespace>
 	</properties>
 
 	<build>

@@ -37,8 +37,8 @@ public class FileAnalysisEditorInput implements IEditorInput {
 
 	@Override
 	public String getName() {
-		SourceCodeLocation sourceCodeLocation = analysisRun
-				.getSourceCodeLocation(analyzedCode.getHashId());
+		SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
+				analyzedCode.getHashId()).getSourceCodeLocation();
 		return sourceCodeLocation.getName();
 	}
 
@@ -49,8 +49,8 @@ public class FileAnalysisEditorInput implements IEditorInput {
 
 	@Override
 	public String getToolTipText() {
-		SourceCodeLocation sourceCodeLocation = analysisRun
-				.getSourceCodeLocation(analyzedCode.getHashId());
+		SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
+				analyzedCode.getHashId()).getSourceCodeLocation();
 		return sourceCodeLocation.getHumanReadableLocationString();
 	}
 

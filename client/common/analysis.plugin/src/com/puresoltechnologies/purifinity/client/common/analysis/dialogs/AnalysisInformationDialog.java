@@ -89,8 +89,8 @@ public class AnalysisInformationDialog extends Dialog {
 	}
 
 	private void refresh() {
-		SourceCodeLocation sourceCodeLocation = analyzedRun
-				.getSourceCodeLocation(analyzedCode.getHashId());
+		SourceCodeLocation sourceCodeLocation = analyzedRun.findTreeNode(
+				analyzedCode.getHashId()).getSourceCodeLocation();
 		filePath.setText(sourceCodeLocation.getInternalLocation());
 		fileName.setText(sourceCodeLocation.getName());
 		String messageText = analyzedCode.getMessage();

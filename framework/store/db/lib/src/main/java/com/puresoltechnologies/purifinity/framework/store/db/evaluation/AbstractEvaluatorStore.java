@@ -96,16 +96,23 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 						+ getStoreName(), "INSERT INTO "
 						+ CassandraConnection.EVALUATION_FILES_TABLE
 						+ "(hashId, resultsClass, results) VALUES (?, ?, ?)");
-		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-			try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-					byteArrayOutputStream)) {
-				objectOutputStream.writeObject(results);
-				BoundStatement boundStatement = preparedStatement.bind(
-						hashId.toString(), getFileResultClass().getName());
-				boundStatement.setBytes("results",
-						ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
-				session.execute(boundStatement);
-			}
+		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+						byteArrayOutputStream)) {
+			objectOutputStream.writeObject(results);
+			BoundStatement boundStatement = preparedStatement.bind(
+					hashId.toString(), getFileResultClass().getName());
+			boundStatement.setBytes("results",
+					ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
+			session.execute(boundStatement);
+			//
+			// for (Map<String, Value<?>> row : results.getValues()) {
+			// for (String column : row.keySet()) {
+			// Value<?> value = row.get(column);
+			// value.getParameter().get
+			// }
+			// }
+
 		} catch (IOException e) {
 			throw new EvaluationStoreException(
 					"Could not store results for hashId '" + hashId

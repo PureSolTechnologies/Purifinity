@@ -260,7 +260,7 @@ public class AnalysisRunnerImpl extends
 							isFile, location, analyses);
 				} else {
 					child = new AnalysisFileTree(node, directory, null, isFile,
-							location, null);
+							null, null);
 				}
 			}
 			node = child;
@@ -271,7 +271,7 @@ public class AnalysisRunnerImpl extends
 		Map<File, HashId> hashes = generateModuleHashes(intermediate);
 		fileTree = new AnalysisFileTree(null, intermediate.getName(),
 				hashes.get(intermediate.getPathFile(false)), false,
-				intermediate.getSourceCodeLocation(), null);
+				sourceCodeLocations.get(intermediate.getHashId()), null);
 		for (AnalysisFileTree child : intermediate.getChildren()) {
 			addToFinalTree(fileTree, child, hashes);
 		}
@@ -281,7 +281,7 @@ public class AnalysisRunnerImpl extends
 			AnalysisFileTree refNode, Map<File, HashId> hashes) {
 		AnalysisFileTree newNode = new AnalysisFileTree(parentNode,
 				refNode.getName(), hashes.get(refNode.getPathFile(false)),
-				refNode.isFile(), refNode.getSourceCodeLocation(),
+				refNode.isFile(), sourceCodeLocations.get(refNode.getHashId()),
 				refNode.isFile() ? refNode.getAnalyses() : null);
 		for (AnalysisFileTree child : refNode.getChildren()) {
 			addToFinalTree(newNode, child, hashes);

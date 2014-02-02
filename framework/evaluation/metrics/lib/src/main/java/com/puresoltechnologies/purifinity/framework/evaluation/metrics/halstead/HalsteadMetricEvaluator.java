@@ -55,7 +55,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 			HalsteadMetricFileResults results = new HalsteadMetricFileResults();
 			HashId hashId = analysis.getAnalysisInformation().getHashId();
 			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
-					.getSourceCodeLocation(hashId);
+					.findTreeNode(hashId).getSourceCodeLocation();
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 				HalsteadMetric metric = new HalsteadMetric(getAnalysisRun(),
 						language, codeRange);

@@ -54,8 +54,8 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 				.readFileResults(hashId);
 
 		EntropyFileResults results = new EntropyFileResults();
-		SourceCodeLocation sourceCodeLocation = getAnalysisRun()
-				.getSourceCodeLocation(hashId);
+		SourceCodeLocation sourceCodeLocation = getAnalysisRun().findTreeNode(
+				hashId).getSourceCodeLocation();
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			HalsteadMetricResult halsteadFileResult = findFileResult(

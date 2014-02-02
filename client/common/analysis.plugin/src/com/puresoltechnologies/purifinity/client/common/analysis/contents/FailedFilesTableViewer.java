@@ -50,7 +50,8 @@ public class FailedFilesTableViewer extends TableViewer implements
 			public String getText(Object element) {
 				AnalysisInformation analysis = (AnalysisInformation) element;
 				SourceCodeLocation sourceCodeLocation = analysisRun
-						.getSourceCodeLocation(analysis.getHashId());
+						.findTreeNode(analysis.getHashId())
+						.getSourceCodeLocation();
 				return sourceCodeLocation.getHumanReadableLocationString();
 			}
 		});

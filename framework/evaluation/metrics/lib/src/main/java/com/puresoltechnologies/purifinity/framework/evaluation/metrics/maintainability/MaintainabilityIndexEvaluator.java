@@ -82,8 +82,8 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 				.readFileResults(hashId);
 		HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
 				.readFileResults(hashId);
-		SourceCodeLocation sourceCodeLocation = getAnalysisRun()
-				.getSourceCodeLocation(hashId);
+		SourceCodeLocation sourceCodeLocation = getAnalysisRun().findTreeNode(
+				hashId).getSourceCodeLocation();
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			SLOCResult slocCodeRangeResult = findFileResult(slocFileResults,

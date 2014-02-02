@@ -32,6 +32,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInforma
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.SourceCodeLocationCreator;
+import com.puresoltechnologies.purifinity.framework.commons.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
@@ -496,7 +497,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		if (sourceCodeLocation != null) {
 			vertex.setProperty(
 					TitanConnection.TREE_ELEMENT_SOURCE_CODE_LOCATION,
-					sourceCodeLocation.getSerialization());
+					PropertiesUtils.toString(sourceCodeLocation
+							.getSerialization()));
 		}
 		Edge edge = parentVertex.addEdge(edgeLabel, vertex);
 		edge.setProperty(TitanConnection.TREE_ELEMENT_HASH, fileTree
@@ -672,7 +674,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		Object serializedSourceCodeLocation = treeVertex
 				.getProperty(TitanConnection.TREE_ELEMENT_SOURCE_CODE_LOCATION);
 		SourceCodeLocation sourceCodeLocation = serializedSourceCodeLocation != null ? SourceCodeLocationCreator
-				.createFromSerialization((Properties) serializedSourceCodeLocation)
+				.createFromSerialization(PropertiesUtils
+						.fromString(serializedSourceCodeLocation.toString()))
 				: null;
 		Iterable<Vertex> contentVertices = treeVertex.query()
 				.labels(TitanConnection.HAS_CONTENT_LABEL).vertices();

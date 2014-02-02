@@ -23,10 +23,12 @@ public class FailedFilesViewerSorter extends AbstractViewerSorter {
 		switch (getColumn()) {
 		case 0:
 			AnalysisRun analysisRun = failedFilesTableViewer.getAnalysisRun();
-			String name1 = analysisRun.getSourceCodeLocation(code1.getHashId())
-					.getHumanReadableLocationString().toLowerCase();
-			String name2 = analysisRun.getSourceCodeLocation(code2.getHashId())
-					.getHumanReadableLocationString().toLowerCase();
+			String name1 = analysisRun.findTreeNode(code1.getHashId())
+					.getSourceCodeLocation().getHumanReadableLocationString()
+					.toLowerCase();
+			String name2 = analysisRun.findTreeNode(code2.getHashId())
+					.getSourceCodeLocation().getHumanReadableLocationString()
+					.toLowerCase();
 			rc = name1.compareTo(name2);
 			break;
 		case 1:

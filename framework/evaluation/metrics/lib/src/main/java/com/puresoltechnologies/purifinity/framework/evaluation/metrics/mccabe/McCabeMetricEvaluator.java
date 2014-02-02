@@ -52,7 +52,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 			ProgrammingLanguage language = programmingLanguages.findByName(
 					analysis.getLanguageName(), analysis.getLanguageVersion());
 			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
-					.getSourceCodeLocation(hashId);
+					.findTreeNode(hashId).getSourceCodeLocation();
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 				McCabeMetric metric = new McCabeMetric(getAnalysisRun(),
 						language, codeRange);

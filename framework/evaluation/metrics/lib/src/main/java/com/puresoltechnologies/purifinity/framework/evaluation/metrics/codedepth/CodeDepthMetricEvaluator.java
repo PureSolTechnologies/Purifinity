@@ -63,7 +63,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 			CodeDepthFileResults results = new CodeDepthFileResults();
 			HashId hashId = analysis.getAnalysisInformation().getHashId();
 			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
-					.getSourceCodeLocation(hashId);
+					.findTreeNode(hashId).getSourceCodeLocation();
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 				CodeDepthMetric metric = new CodeDepthMetric(getAnalysisRun(),
 						language, codeRange);

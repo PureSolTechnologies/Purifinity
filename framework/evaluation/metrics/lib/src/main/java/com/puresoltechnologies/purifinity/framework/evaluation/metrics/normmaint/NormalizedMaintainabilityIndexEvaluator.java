@@ -67,8 +67,8 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 		HashId hashId = analysis.getAnalysisInformation().getHashId();
 		MaintainabilityIndexFileResults maintainabilityFileResults = (MaintainabilityIndexFileResults) maintainabilityStore
 				.readFileResults(hashId);
-		SourceCodeLocation sourceCodeLocation = getAnalysisRun()
-				.getSourceCodeLocation(hashId);
+		SourceCodeLocation sourceCodeLocation = getAnalysisRun().findTreeNode(
+				hashId).getSourceCodeLocation();
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 

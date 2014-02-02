@@ -1,4 +1,4 @@
-package org.apache.cassandra;
+package org.apache.cassandra.server;
 
 import com.puresoltechnologies.commons.osgi.AbstractActivator;
 

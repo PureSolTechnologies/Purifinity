@@ -84,8 +84,8 @@ public class ParserTreeControl extends Composite {
 			UUID projectUUID = analysisRun.getInformation().getProjectUUID();
 			AnalysisProjectSettings settings = analysisStore
 					.readAnalysisProjectSettings(projectUUID);
-			SourceCodeLocation sourceCodeLocation = analysisRun
-					.getSourceCodeLocation(analyzedCode.getHashId());
+			SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
+					analyzedCode.getHashId()).getSourceCodeLocation();
 			lblNewLabel.setText(settings.getName() + ": "
 					+ sourceCodeLocation.getHumanReadableLocationString());
 			treeViewer.setInput(codeAnalysis.getUniversalSyntaxTree());

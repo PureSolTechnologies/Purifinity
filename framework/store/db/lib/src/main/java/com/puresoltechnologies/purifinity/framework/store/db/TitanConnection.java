@@ -302,12 +302,10 @@ public class TitanConnection {
 	}
 
 	public static void disconnect() throws TitanConnectionException {
-		if (graph == null) {
-			throw new TitanConnectionException(
-					"Titan graph database has not been connected, yet.");
+		if (graph != null) {
+			graph.shutdown();
+			graph = null;
 		}
-		graph.shutdown();
-		graph = null;
 	}
 
 	public static boolean isConnected() {

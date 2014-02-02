@@ -48,7 +48,7 @@ public class AnalysisRunImpl implements AnalysisRun {
 	private final List<AnalysisInformation> successfulFiles = new ArrayList<>();
 	private final List<AnalysisInformation> failedFiles = new ArrayList<>();
 	private final Map<String, AnalysisInformation> internalPaths = new HashMap<>();
-	private final Map<HashId, SourceCodeLocation> sourceCodeLocations = new HashMap<>();
+	private final Map<HashId, AnalysisFileTree> hashIds = new HashMap<>();
 
 	/**
 	 * This constructor is used to create a new analysis run. All setup
@@ -79,7 +79,6 @@ public class AnalysisRunImpl implements AnalysisRun {
 		super();
 		checkNotNull("information", information);
 		checkNotNull("fileTree", fileTree);
-		checkNotNull("sourceCodeLocations", sourceCodeLocations);
 		this.information = information;
 		this.fileTree = fileTree;
 		populateFields();
@@ -89,17 +88,17 @@ public class AnalysisRunImpl implements AnalysisRun {
 		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
 			@Override
 			public WalkingAction visit(AnalysisFileTree tree) {
+				hashIds.put(tree.getHashId(), tree);
 				if (tree.isFile()) {
 					for (AnalysisInformation information : tree.getAnalyses()) {
 						if (information.isSuccessful()) {
 							successfulFiles.add(information);
-						} else {
-							failedFiles.add(information);
-						}
-						if (information.isSuccessful())
 							internalPaths.put(
 									tree.getPathFile(false).getPath(),
 									information);
+						} else {
+							failedFiles.add(information);
+						}
 					}
 				}
 				return WalkingAction.PROCEED;
@@ -134,7 +133,7 @@ public class AnalysisRunImpl implements AnalysisRun {
 	}
 
 	@Override
-	public SourceCodeLocation getSourceCodeLocation(HashId hashId) {
-		return sourceCodeLocations.get(hashId);
+	public AnalysisFileTree findTreeNode(HashId hashId) {
+		return hashIds.get(hashId);
 	}
 }

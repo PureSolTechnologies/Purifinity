@@ -72,7 +72,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
 			SLOCFileResults results = new SLOCFileResults();
 			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
-					.getSourceCodeLocation(hashId);
+					.findTreeNode(hashId).getSourceCodeLocation();
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 				SLOCMetricCalculator metric = new SLOCMetricCalculator(
 						getAnalysisRun(), language, codeRange);

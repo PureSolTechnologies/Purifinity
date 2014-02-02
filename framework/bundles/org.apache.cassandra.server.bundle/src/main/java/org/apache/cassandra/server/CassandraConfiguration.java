@@ -1,4 +1,4 @@
-package org.apache.cassandra;
+package org.apache.cassandra.server;
 
 import java.io.BufferedReader;
 import java.io.File;

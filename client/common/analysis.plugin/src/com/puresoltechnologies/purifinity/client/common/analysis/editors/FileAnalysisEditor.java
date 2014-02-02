@@ -60,8 +60,8 @@ public class FileAnalysisEditor extends AbstractPureSolTechnologiesEditor {
 		AnalysisRun analysisRun = fileAnalysisInput.getAnalysisRun();
 		AnalysisInformation information = fileAnalysisInput
 				.getAnalysisInformation();
-		SourceCodeLocation sourceCodeLocation = analysisRun
-				.getSourceCodeLocation(information.getHashId());
+		SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
+				information.getHashId()).getSourceCodeLocation();
 		setPartName(sourceCodeLocation.getName());
 	}
 

@@ -68,17 +68,15 @@ public class CassandraConnection {
 	}
 
 	public static void disconnect() throws CassandraConnectionException {
-		if (cluster == null) {
-			throw new CassandraConnectionException(
-					"Cassandra database has not been connected, yet.");
+		if (cluster != null) {
+			preparedStatements.clear();
+			evaluationSession.shutdown();
+			evaluationSession = null;
+			analysisSession.shutdown();
+			analysisSession = null;
+			cluster.shutdown();
+			cluster = null;
 		}
-		preparedStatements.clear();
-		evaluationSession.shutdown();
-		evaluationSession = null;
-		analysisSession.shutdown();
-		analysisSession = null;
-		cluster.shutdown();
-		cluster = null;
 	}
 
 	public static boolean isConnected() {
@@ -221,6 +219,16 @@ public class CassandraConnection {
 						"CREATE TABLE "
 								+ EVALUATION_PROJECTS_TABLE
 								+ " (uuid uuid, resultsClass varchar, results blob, PRIMARY KEY(uuid, resultsClass));");
+		//
+		// CassandraUtils
+		// .checkAndCreateTable(
+		// evaluationSession,
+		// evaluationKeyspace,
+		// EVALUATION_PROJECTS_TABLE,
+		// "CREATE TABLE "
+		// + EVALUATION_PROJECTS_TABLE
+		// +
+		// " (uuid uuid, hashid varchar, name varchar, value double, PRIMARY KEY(uuid, hashid, name));");
 	}
 
 }

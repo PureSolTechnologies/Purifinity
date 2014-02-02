@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
@@ -68,12 +67,14 @@ public interface AnalysisRun extends Serializable {
 	public AnalysisInformation findAnalyzedCode(String internalPath);
 
 	/**
-	 * This method returns the source code location for the file tree element
-	 * specified by its {@link HashId}.
+	 * This method looks a {@link AnalysisFileTree} node up for a given
+	 * {@link HashId}.
 	 * 
 	 * @param hashId
-	 * @return
+	 *            is the hash id if the node to be found.
+	 * @return An {@link AnalysisFileTree} object is returned pointing to the
+	 *         correct node inte analysis tree.
 	 */
-	public SourceCodeLocation getSourceCodeLocation(HashId hashId);
+	public AnalysisFileTree findTreeNode(HashId hashId);
 
 }

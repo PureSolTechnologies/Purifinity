@@ -96,7 +96,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 			SLOCFileResults slocResults = (SLOCFileResults) slocStore
 					.readFileResults(hashId);
 			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
-					.getSourceCodeLocation(hashId);
+					.findTreeNode(hashId).getSourceCodeLocation();
 			for (SLOCResult results : slocResults.getResults()) {
 				if (results.getCodeRangeType() == CodeRangeType.FILE) {
 					int phyLoc = results.getSLOCMetric().getPhyLOC();
