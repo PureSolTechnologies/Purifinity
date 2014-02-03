@@ -5,6 +5,8 @@ import java.util.Date;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.KeyspaceMetadata;
+import com.datastax.driver.core.Metadata;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
@@ -18,7 +20,6 @@ public class CassandraMigration {
 
 	public static final String CHANGELOG_TABLE = "changelog";
 
-	private static PreparedStatement preparedWasMigratedQuery = null;
 	private static PreparedStatement preparedInsertStatement = null;
 
 	/**
@@ -29,18 +30,33 @@ public class CassandraMigration {
 	 * @throws MigrationException
 	 */
 	public static void initialize(Cluster cluster) throws MigrationException {
-		String version = "0.0.0";
-		String user = CassandraMigration.class.getName();
-		createKeyspace(cluster, KEYSPACE_NAME, version, user,
-				"Migration log keyspace", ReplicationStrategy.SIMPLE_STRATEGY,
-				1);
-		createTable(cluster, KEYSPACE_NAME, version, user, "Change log table",
-				CHANGELOG_TABLE, "CREATE TABLE " + CHANGELOG_TABLE
-						+ " (time timestamp, " + "version varchar, "
-						+ "developer varchar, " + "keyspace varchar, "
-						+ "command varchar, " + "hashid varchar, "
-						+ "comment varchar, "
-						+ "PRIMARY KEY(version, keyspace, command));");
+		Session session = CassandraUtils.connectToCluster(cluster);
+		try {
+			Metadata clusterMetadata = cluster.getMetadata();
+			KeyspaceMetadata keyspaceMetadata = clusterMetadata
+					.getKeyspace(KEYSPACE_NAME);
+			if (keyspaceMetadata == null) {
+				session.execute("CREATE KEYSPACE " + KEYSPACE_NAME
+						+ " WITH replication " + "= {'class':'"
+						+ ReplicationStrategy.SIMPLE_STRATEGY.getStrategyName()
+						+ "', 'replication_factor':1};");
+				keyspaceMetadata = clusterMetadata.getKeyspace(KEYSPACE_NAME);
+			}
+			if (keyspaceMetadata == null) {
+				throw new MigrationException("Could not create keyspace '"
+						+ KEYSPACE_NAME + "'.");
+			}
+			if (keyspaceMetadata.getTable(CHANGELOG_TABLE) == null) {
+				session.execute("CREATE TABLE " + KEYSPACE_NAME + "."
+						+ CHANGELOG_TABLE + " (time timestamp, "
+						+ "version varchar, " + "developer varchar, "
+						+ "keyspace_name varchar, " + "command varchar, "
+						+ "hashid varchar, " + "comment varchar, "
+						+ "PRIMARY KEY(version, keyspace_name, command));");
+			}
+		} finally {
+			session.shutdown();
+		}
 	}
 
 	public static void createKeyspace(Cluster cluster, String keyspace,
@@ -65,21 +81,28 @@ public class CassandraMigration {
 			String version, String developer, String comment,
 			String creationStatement, String... additionalStatements)
 			throws MigrationException {
-		migrate(cluster, null, version, developer, creationStatement, comment);
+		migrate(cluster, keyspace, version, developer, creationStatement,
+				comment);
 		for (String statement : additionalStatements) {
-			migrate(cluster, null, version, developer, statement, comment);
+			migrate(cluster, keyspace, version, developer, statement, comment);
 		}
 	}
 
 	public static void migrate(Cluster cluster, String keyspace,
 			String version, String developer, String command, String comment)
 			throws MigrationException {
-		Session session = CassandraUtils.connectToCluster(cluster, keyspace);
+		Session session = CassandraUtils.connectToCluster(cluster);
 		try {
-			if (!wasMigrated(session, version, keyspace, command)) {
-				session.execute(command);
-				writeLog(session, version, developer, keyspace, command,
-						comment);
+			Session keyspaceSession = CassandraUtils.connectToCluster(cluster,
+					keyspace);
+			try {
+				if (!wasMigrated(session, version, keyspace, command)) {
+					keyspaceSession.execute(command);
+					writeLog(session, version, developer, keyspace, command,
+							comment);
+				}
+			} finally {
+				keyspaceSession.shutdown();
 			}
 		} finally {
 			session.shutdown();
@@ -118,23 +141,13 @@ public class CassandraMigration {
 	 */
 	private static boolean wasMigrated(Session session, String version,
 			String keyspace, String command) {
-		if (preparedWasMigratedQuery == null) {
-			createPreparedWasMigratedQuery(session);
-		}
-		BoundStatement boundStatement = preparedWasMigratedQuery.bind(version,
-				keyspace, command);
-		ResultSet result = session.execute(boundStatement);
+		String keyspaceName = keyspace == null ? "" : keyspace;
+		String statement = "SELECT version, keyspace_name, command FROM "
+				+ KEYSPACE_NAME + "." + CHANGELOG_TABLE + " WHERE version='"
+				+ version + "' AND keyspace_name='" + keyspaceName
+				+ "' AND command='" + command.replaceAll("'", "''") + "';";
+		ResultSet result = session.execute(statement);
 		return result.iterator().hasNext();
-	}
-
-	private static void createPreparedWasMigratedQuery(Session session) {
-		if (preparedWasMigratedQuery == null) {
-			preparedWasMigratedQuery = session
-					.prepare(new SimpleStatement(
-							"SELECT version, keyspace, command FROM "
-									+ CHANGELOG_TABLE
-									+ " WHERE version=?, keyspace=\"?\", command=\"?\";"));
-		}
 	}
 
 	private static void writeLog(Session session, String version,
@@ -146,8 +159,8 @@ public class CassandraMigration {
 		try {
 			HashId hashId = HashUtilities.createHashId(command);
 			BoundStatement boundStatement = preparedInsertStatement.bind(
-					new Date(), version, developer, keyspace, command,
-					hashId.toString(), comment);
+					new Date(), version, developer, keyspace == null ? ""
+							: keyspace, command, hashId.toString(), comment);
 			session.execute(boundStatement);
 		} catch (IOException e) {
 			throw new MigrationException(
@@ -161,8 +174,10 @@ public class CassandraMigration {
 			preparedInsertStatement = session
 					.prepare(new SimpleStatement(
 							"INSERT INTO "
+									+ KEYSPACE_NAME
+									+ "."
 									+ CHANGELOG_TABLE
-									+ " (time, version, developer, keyspace, command, sha2, comment) VALUES (?, ?, ?, ?, ?, ?, ?)"));
+									+ " (time, version, developer, keyspace_name, command, hashid, comment) VALUES (?, ?, ?, ?, ?, ?, ?)"));
 		}
 	}
 
