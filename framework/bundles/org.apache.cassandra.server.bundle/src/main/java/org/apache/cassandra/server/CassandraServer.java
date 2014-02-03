@@ -57,7 +57,7 @@ public class CassandraServer {
 		StringBuilder classPath = new StringBuilder(
 				cassandraConfiguration.getPath());
 		for (String jarFile : jarFiles) {
-			classPath.append(":");
+			classPath.append(File.pathSeparatorChar);
 			classPath.append(new File(cassandraLib, jarFile).getPath());
 		}
 
