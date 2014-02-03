@@ -19,6 +19,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
+import com.puresoltechnologies.purifinity.framework.store.db.CassandraElementNames;
 
 /**
  * This is an abstract implementation of an evaluator store.
@@ -45,7 +46,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 			throws EvaluationStoreException {
 		ResultSet resultSet = session
 				.execute("SELECT hashid FROM "
-						+ CassandraConnection.EVALUATION_FILES_TABLE
+						+ CassandraElementNames.EVALUATION_FILES_TABLE
 						+ " WHERE hashid='" + hashId.toString()
 						+ "' AND resultsClass='"
 						+ getFileResultClass().getName() + "'");
@@ -61,7 +62,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final boolean hasDirectoryResults(HashId hashId)
 			throws EvaluationStoreException {
 		ResultSet resultSet = session.execute("SELECT hashid FROM "
-				+ CassandraConnection.EVALUATION_DIRECTORIES_TABLE
+				+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
 				+ " WHERE hashid='" + hashId.toString()
 				+ "' AND resultsClass='" + getDirectoryResultClass().getName()
 				+ "'");
@@ -77,7 +78,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final boolean hasProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException {
 		ResultSet resultSet = session.execute("SELECT uuid FROM "
-				+ CassandraConnection.EVALUATION_PROJECTS_TABLE
+				+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
 				+ " WHERE uuid=" + analysisRunUUID + " AND resultsClass='"
 				+ getProjectResultClass().getName() + "'");
 		Row result = resultSet.one();
@@ -94,7 +95,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "storeFileResults:"
 						+ getStoreName(), "INSERT INTO "
-						+ CassandraConnection.EVALUATION_FILES_TABLE
+						+ CassandraElementNames.EVALUATION_FILES_TABLE
 						+ "(hashId, resultsClass, results) VALUES (?, ?, ?)");
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 				ObjectOutputStream objectOutputStream = new ObjectOutputStream(
@@ -126,7 +127,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "storeDirectoryResults:"
 						+ getStoreName(), "INSERT INTO "
-						+ CassandraConnection.EVALUATION_DIRECTORIES_TABLE
+						+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
 						+ "(hashId, resultsClass, results) VALUES (?, ?, ?)");
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 			try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
@@ -151,7 +152,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "storeProjectResults:"
 						+ getStoreName(), "INSERT INTO "
-						+ CassandraConnection.EVALUATION_PROJECTS_TABLE
+						+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
 						+ "(uuid, resultsClass, results) VALUES (?, ?, ?)");
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 			try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
@@ -176,7 +177,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 			throws EvaluationStoreException {
 		ResultSet resultSet = session
 				.execute("SELECT results FROM "
-						+ CassandraConnection.EVALUATION_FILES_TABLE
+						+ CassandraElementNames.EVALUATION_FILES_TABLE
 						+ " WHERE hashid='" + hashId.toString()
 						+ "' AND resultsClass='"
 						+ getFileResultClass().getName() + "'");
@@ -208,7 +209,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final MetricDirectoryResults readDirectoryResults(HashId hashId)
 			throws EvaluationStoreException {
 		ResultSet resultSet = session.execute("SELECT results FROM "
-				+ CassandraConnection.EVALUATION_DIRECTORIES_TABLE
+				+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
 				+ " WHERE hashid='" + hashId.toString()
 				+ "' AND resultsClass='" + getDirectoryResultClass().getName()
 				+ "'");
@@ -240,7 +241,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final MetricDirectoryResults readProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException {
 		ResultSet resultSet = session.execute("SELECT results FROM "
-				+ CassandraConnection.EVALUATION_PROJECTS_TABLE
+				+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
 				+ " WHERE uuid='" + analysisRunUUID + "' AND resultsClass='"
 				+ getProjectResultClass().getName() + "'");
 		Row result = resultSet.one();

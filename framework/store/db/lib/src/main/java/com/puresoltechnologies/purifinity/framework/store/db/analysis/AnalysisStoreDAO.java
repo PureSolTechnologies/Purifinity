@@ -6,14 +6,15 @@ import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
+import com.puresoltechnologies.purifinity.framework.store.db.CassandraElementNames;
 
 public class AnalysisStoreDAO {
 
 	public static int getFileSize(HashId hashId) throws AnalysisStoreException {
 		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session.execute("SELECT size FROM "
-				+ CassandraConnection.ANALYSIS_FILES_TABLE + " WHERE hashId='"
-				+ hashId.toString() + "'");
+				+ CassandraElementNames.ANALYSIS_FILES_TABLE
+				+ " WHERE hashId='" + hashId.toString() + "'");
 		Row result = resultSet.one();
 		if (result == null) {
 			throw new AnalysisStoreException(

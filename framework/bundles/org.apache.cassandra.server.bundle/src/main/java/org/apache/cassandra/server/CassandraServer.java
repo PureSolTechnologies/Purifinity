@@ -24,9 +24,6 @@ public class CassandraServer {
 	private static Process cassandraProcess = null;
 
 	public static void start() throws IOException {
-		if (cassandraProcess != null) {
-			throw new RuntimeException("Cassandra was already started.");
-		}
 		logger.info("Cassandra is about to start...");
 
 		if (cassandraProcess != null) {

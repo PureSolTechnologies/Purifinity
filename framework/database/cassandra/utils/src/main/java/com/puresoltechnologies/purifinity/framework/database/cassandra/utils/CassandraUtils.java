@@ -1,53 +1,44 @@
 package com.puresoltechnologies.purifinity.framework.database.cassandra.utils;
 
+import java.util.Date;
+
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.TableMetadata;
+import com.datastax.driver.core.exceptions.NoHostAvailableException;
 
 public final class CassandraUtils {
 
-	public static void checkAndCreateKeyspace(Cluster cluster,
-			String keyspaceName, ReplicationStrategy replicationStrategy,
-			int replicationFactor) {
-		if (cluster.getMetadata().getKeyspace(keyspaceName) == null) {
-			createKeyspace(cluster, keyspaceName, replicationStrategy,
-					replicationFactor);
-		}
+	/**
+	 * Timeout for connection establishment in milliseconds.
+	 */
+	private static final long TIMEOUT = 15000;
+	private static final long WAIT_TIME = 1000;
+
+	public static Session connectToCluster(Cluster cluster) {
+		return connectToCluster(cluster, null);
 	}
 
-	public static void createKeyspace(Cluster cluster, String keyspaceName,
-			ReplicationStrategy replicationStrategy, int replicationFactor) {
-		Session session = cluster.connect();
-		try {
-			createKeyspace(session, keyspaceName, replicationStrategy,
-					replicationFactor);
-		} finally {
-			session.shutdown();
-		}
-	}
-
-	public static void createKeyspace(Session session, String keyspaceName,
-			ReplicationStrategy replicationStrategy, int replicationFactor) {
-		session.execute("CREATE KEYSPACE " + keyspaceName
-				+ " WITH replication " + "= {'class':'"
-				+ replicationStrategy.getStrategyName()
-				+ "', 'replication_factor':" + replicationFactor + "};");
-	}
-
-	public static void dropKeyspace(Session session, String keyspaceName) {
-		session.execute("DROP KEYSPACE " + keyspaceName + ";");
-	}
-
-	public static void checkAndCreateTable(Session session,
-			KeyspaceMetadata keyspace, String tableName,
-			String creationStatement, String... additionalStatements) {
-		TableMetadata runSettingsTable = keyspace.getTable(tableName);
-		if (runSettingsTable == null) {
-			session.execute(creationStatement);
-			for (String statement : additionalStatements) {
-				session.execute(statement);
+	public static Session connectToCluster(Cluster cluster, String keyspace) {
+		Date start = new Date();
+		while (new Date().getTime() - start.getTime() < TIMEOUT) {
+			try {
+				return connect(cluster, keyspace);
+			} catch (NoHostAvailableException e) {
+				try {
+					Thread.sleep(WAIT_TIME);
+				} catch (InterruptedException e1) {
+					break;
+				}
 			}
+		}
+		return connect(cluster, keyspace);
+	}
+
+	private static Session connect(Cluster cluster, String keyspace) {
+		if (keyspace != null) {
+			return cluster.connect(keyspace);
+		} else {
+			return cluster.connect();
 		}
 	}
 

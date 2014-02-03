@@ -1,16 +1,14 @@
 package com.puresoltechnologies.purifinity.framework.store.db;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.KeyspaceMetadata;
+import com.datastax.driver.core.Cluster.Builder;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.exceptions.NoHostAvailableException;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraUtils;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.MigrationException;
 
 /**
  * Manages the actual connection to Cassandra. The methods connect and
@@ -24,27 +22,7 @@ public class CassandraConnection {
 	private static final String CASSANDRA_HOST = "localhost";
 	private static final int CASSANDRA_CQL_PORT = 9042;
 
-	/**
-	 * Timeout for connection establishment in milliseconds.
-	 */
-	private static final long TIMEOUT = 15000;
-	private static final long WAIT_TIME = 1000;
-
-	public static final String ANALYSIS_KEYSPACE = "analysis_store";
-	public static final String EVALUATION_KEYSPACE = "evaluation_store";
-
-	private static final String CHANGELOG_TABLE = "changelog";
-
-	public static final String ANALYSIS_FILES_TABLE = "files";
-	public static final String ANALYSIS_PROJECT_SETTINGS_TABLE = "project_settings";
-
-	public static final String RUN_SETTINGS_TABLE = "run_settings";
-
-	public static final String ANALYSIS_FILE_TREE_CACHE = "file_tree_cache";
-
-	public static final String EVALUATION_FILES_TABLE = "files";
-	public static final String EVALUATION_DIRECTORIES_TABLE = "directories";
-	public static final String EVALUATION_PROJECTS_TABLE = "projects";
+	private static final Builder clusterBuilder = Cluster.builder();
 
 	private static Cluster cluster = null;
 	private static Session analysisSession = null;
@@ -65,13 +43,18 @@ public class CassandraConnection {
 			throw new CassandraConnectionException(
 					"Cassandra database was already connected.");
 		}
-		cluster = Cluster.builder().addContactPoints(CASSANDRA_HOST)
+		cluster = clusterBuilder.addContactPoints(CASSANDRA_HOST)
 				.withPort(CASSANDRA_CQL_PORT).build();
-		checkAndCreateKeyspaces();
-		analysisSession = connectToCluster(ANALYSIS_KEYSPACE);
-		checkAndCreateAnalysisTables();
-		evaluationSession = connectToCluster(EVALUATION_KEYSPACE);
-		checkAndCreateEvaluationTables();
+		try {
+			CassandraSchema.migrate(cluster);
+		} catch (MigrationException e) {
+			throw new CassandraConnectionException(
+					"Could not migrate Cassandra.", e);
+		}
+		analysisSession = CassandraUtils.connectToCluster(cluster,
+				CassandraElementNames.ANALYSIS_KEYSPACE);
+		evaluationSession = CassandraUtils.connectToCluster(cluster,
+				CassandraElementNames.EVALUATION_KEYSPACE);
 	}
 
 	public static void disconnect() throws CassandraConnectionException {
@@ -115,159 +98,6 @@ public class CassandraConnection {
 
 	public static Session getEvaluationSession() {
 		return evaluationSession;
-	}
-
-	private static void checkAndCreateKeyspaces() {
-		Session session = connectToCluster();
-		try {
-			if (cluster.getMetadata().getKeyspace(ANALYSIS_KEYSPACE) == null) {
-				CassandraUtils.createKeyspace(cluster, ANALYSIS_KEYSPACE,
-						ReplicationStrategy.SIMPLE_STRATEGY, 1);
-			}
-			if (cluster.getMetadata().getKeyspace(EVALUATION_KEYSPACE) == null) {
-				CassandraUtils.createKeyspace(cluster, EVALUATION_KEYSPACE,
-						ReplicationStrategy.SIMPLE_STRATEGY, 1);
-			}
-		} finally {
-			session.shutdown();
-		}
-	}
-
-	private static Session connectToCluster() {
-		Date start = new Date();
-		while (new Date().getTime() - start.getTime() < TIMEOUT) {
-			try {
-				return cluster.connect();
-			} catch (NoHostAvailableException e) {
-				try {
-					Thread.sleep(WAIT_TIME);
-				} catch (InterruptedException e1) {
-					break;
-				}
-			}
-		}
-		return cluster.connect();
-	}
-
-	private static Session connectToCluster(String keyspace) {
-		Date start = new Date();
-		while (new Date().getTime() - start.getTime() < TIMEOUT) {
-			try {
-				return cluster.connect(keyspace);
-			} catch (NoHostAvailableException e) {
-				try {
-					Thread.sleep(WAIT_TIME);
-				} catch (InterruptedException e1) {
-					break;
-				}
-			}
-		}
-		return cluster.connect(keyspace);
-	}
-
-	private static void checkAndCreateAnalysisTables() {
-		KeyspaceMetadata analysisKeyspace = cluster.getMetadata().getKeyspace(
-				ANALYSIS_KEYSPACE);
-		CassandraUtils
-				.checkAndCreateTable(
-						analysisSession,
-						analysisKeyspace,
-						CHANGELOG_TABLE,
-						"CREATE TABLE "
-								+ CHANGELOG_TABLE
-								+ " (version int, utc timestamp, PRIMARY KEY(version));",
-						"INSERT INTO " + CHANGELOG_TABLE
-								+ " (version, utc) VALUES (1, "
-								+ new Date().getTime() + ");");
-
-		CassandraUtils
-				.checkAndCreateTable(
-						analysisSession,
-						analysisKeyspace,
-						ANALYSIS_FILES_TABLE,
-						"CREATE TABLE "
-								+ ANALYSIS_FILES_TABLE
-								+ " (hashid varchar, raw blob, size int, analysis blob, PRIMARY KEY(hashid));");
-
-		CassandraUtils
-				.checkAndCreateTable(
-						analysisSession,
-						analysisKeyspace,
-						ANALYSIS_PROJECT_SETTINGS_TABLE,
-						"CREATE TABLE "
-								+ ANALYSIS_PROJECT_SETTINGS_TABLE
-								+ " (uuid uuid, name varchar, description varchar, file_includes list<text>, file_excludes list<text>, location_includes list<text>, location_excludes list<text>, ignore_hidden boolean, repository_location map<text,text>, PRIMARY KEY(uuid));");
-
-		CassandraUtils
-				.checkAndCreateTable(
-						analysisSession,
-						analysisKeyspace,
-						RUN_SETTINGS_TABLE,
-						"CREATE TABLE "
-								+ RUN_SETTINGS_TABLE
-								+ " (uuid uuid, file_includes list<text>, file_excludes list<text>, location_includes list<text>, location_excludes list<text>, ignore_hidden boolean, PRIMARY KEY(uuid));");
-
-		CassandraUtils
-				.checkAndCreateTable(
-						analysisSession,
-						analysisKeyspace,
-						ANALYSIS_FILE_TREE_CACHE,
-						"CREATE TABLE "
-								+ ANALYSIS_FILE_TREE_CACHE
-								+ " (uuid uuid, persisted_tree blob, PRIMARY KEY(uuid));");
-
-	}
-
-	private static void checkAndCreateEvaluationTables() {
-		KeyspaceMetadata evaluationKeyspace = cluster.getMetadata()
-				.getKeyspace(EVALUATION_KEYSPACE);
-
-		CassandraUtils
-				.checkAndCreateTable(
-						evaluationSession,
-						evaluationKeyspace,
-						CHANGELOG_TABLE,
-						"CREATE TABLE "
-								+ CHANGELOG_TABLE
-								+ " (version int, utc timestamp, PRIMARY KEY(version));",
-						"INSERT INTO " + CHANGELOG_TABLE
-								+ " (version, utc) VALUES (1, "
-								+ new Date().getTime() + ");");
-
-		CassandraUtils
-				.checkAndCreateTable(
-						evaluationSession,
-						evaluationKeyspace,
-						EVALUATION_FILES_TABLE,
-						"CREATE TABLE "
-								+ EVALUATION_FILES_TABLE
-								+ " (hashid varchar, resultsClass varchar, results blob, PRIMARY KEY(hashid, resultsClass));");
-		CassandraUtils
-				.checkAndCreateTable(
-						evaluationSession,
-						evaluationKeyspace,
-						EVALUATION_DIRECTORIES_TABLE,
-						"CREATE TABLE "
-								+ EVALUATION_DIRECTORIES_TABLE
-								+ " (hashid varchar, resultsClass varchar, results blob, PRIMARY KEY(hashid, resultsClass));");
-		CassandraUtils
-				.checkAndCreateTable(
-						evaluationSession,
-						evaluationKeyspace,
-						EVALUATION_PROJECTS_TABLE,
-						"CREATE TABLE "
-								+ EVALUATION_PROJECTS_TABLE
-								+ " (uuid uuid, resultsClass varchar, results blob, PRIMARY KEY(uuid, resultsClass));");
-		//
-		// CassandraUtils
-		// .checkAndCreateTable(
-		// evaluationSession,
-		// evaluationKeyspace,
-		// EVALUATION_PROJECTS_TABLE,
-		// "CREATE TABLE "
-		// + EVALUATION_PROJECTS_TABLE
-		// +
-		// " (uuid uuid, hashid varchar, name varchar, value double, PRIMARY KEY(uuid, hashid, name));");
 	}
 
 }

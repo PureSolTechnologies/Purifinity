@@ -1,5 +1,6 @@
 package com.puresoltechnologies.commons.misc;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,16 +35,30 @@ public class HashUtilities {
 	}
 
 	/**
-	 * This method creates a {@link HashId}
+	 * This method creates a {@link HashId} from a {@link File}.
 	 * 
 	 * @param file
 	 *            the file to be read to calculate the {@link HashId}.
-	 * @return
+	 * @return A {@link HashId} object is returned.
 	 * @throws FileStoreException
 	 */
 	public static HashId createHashId(File file) throws IOException {
 		try (FileInputStream stream = new FileInputStream(file)) {
 			return createHashId(stream);
+		}
+	}
+
+	/**
+	 * This method creates a {@link HashId} from a {@link String}.
+	 * 
+	 * @param string
+	 * @return
+	 * @throws IOException
+	 */
+	public static HashId createHashId(String string) throws IOException {
+		try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
+				string.getBytes())) {
+			return createHashId(byteArrayInputStream);
 		}
 	}
 

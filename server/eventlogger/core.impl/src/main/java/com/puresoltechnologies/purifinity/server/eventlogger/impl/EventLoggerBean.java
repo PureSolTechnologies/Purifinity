@@ -19,7 +19,8 @@ import com.datastax.driver.core.Host;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.Metadata;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraUtils;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraMigration;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.MigrationException;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
 import com.puresoltechnologies.purifinity.server.eventlogger.EventLogger;
 import com.puresoltechnologies.purifinity.server.eventlogger.EventLoggerRemote;
@@ -53,46 +54,35 @@ public class EventLoggerBean implements EventLoggerRemote {
 		logger.info("Connect EventLogger to Cassandra...");
 		cluster = Cluster.builder().addContactPoints(CASSANDRA_HOST)
 				.withPort(CASSANDRA_CQL_PORT).build();
-		checkAndCreateKeyspace();
+		try {
+			checkAndCreateKeyspace();
+		} catch (MigrationException e) {
+			throw new RuntimeException("Cassandra could not be migrated.", e);
+		}
 		session = cluster.connect(EVENT_LOGGER_KEYSPACE_NAME);
 		checkAndCreateTables();
 		logger.info("EventLogger connected.");
 	}
 
-	private void checkAndCreateKeyspace() {
-		Session noKeyspaceSession = cluster.connect();
-		try {
-			Metadata metadata = cluster.getMetadata();
-			logger.info("Cassandra cluster name: '" + metadata.getClusterName()
-					+ "'.");
-			int hostId = 0;
-			for (Host host : metadata.getAllHosts()) {
-				hostId++;
-				logger.info("Host " + hostId + ": " + host.getDatacenter()
-						+ "/" + host.getRack() + "/"
-						+ host.getAddress().toString());
-			}
-			int keyspaceId = 0;
-			for (KeyspaceMetadata keyspaceMetadata : metadata.getKeyspaces()) {
-				keyspaceId++;
-				logger.info("Keyspace " + keyspaceId + ": "
-						+ keyspaceMetadata.getName());
-			}
-			KeyspaceMetadata keyspace = metadata
-					.getKeyspace(EVENT_LOGGER_KEYSPACE_NAME);
-			if (keyspace == null) {
-				logger.info("Keyspace for EventLogger '"
-						+ EVENT_LOGGER_KEYSPACE_NAME
-						+ "' was not found. Need to be created now...");
-				CassandraUtils.createKeyspace(noKeyspaceSession,
-						EVENT_LOGGER_KEYSPACE_NAME,
-						ReplicationStrategy.SIMPLE_STRATEGY, 3);
-				logger.info("Keyspace  '" + EVENT_LOGGER_KEYSPACE_NAME
-						+ "' created.");
-			}
-		} finally {
-			noKeyspaceSession.shutdown();
+	private void checkAndCreateKeyspace() throws MigrationException {
+		Metadata metadata = cluster.getMetadata();
+		logger.info("Cassandra cluster name: '" + metadata.getClusterName()
+				+ "'.");
+		int hostId = 0;
+		for (Host host : metadata.getAllHosts()) {
+			hostId++;
+			logger.info("Host " + hostId + ": " + host.getDatacenter() + "/"
+					+ host.getRack() + "/" + host.getAddress().toString());
 		}
+		int keyspaceId = 0;
+		for (KeyspaceMetadata keyspaceMetadata : metadata.getKeyspaces()) {
+			keyspaceId++;
+			logger.info("Keyspace " + keyspaceId + ": "
+					+ keyspaceMetadata.getName());
+		}
+		CassandraMigration.createKeyspace(cluster, EVENT_LOGGER_KEYSPACE_NAME,
+				"1.0.0", "Rick-Rainer Ludwig", "Keeps the event log.",
+				ReplicationStrategy.SIMPLE_STRATEGY, 3);
 	}
 
 	private void checkAndCreateTables() {

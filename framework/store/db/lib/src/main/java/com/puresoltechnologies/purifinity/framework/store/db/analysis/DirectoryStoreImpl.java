@@ -8,6 +8,7 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
+import com.puresoltechnologies.purifinity.framework.store.db.TitanElementNames;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Vertex;
 
@@ -25,13 +26,13 @@ public class DirectoryStoreImpl implements DirectoryStore {
 		TitanGraph graph = TitanConnection.getGraph();
 		Vertex vertex = findDirectory(graph, hashId);
 		Iterable<Vertex> vertices = vertex.query()
-				.has(TitanConnection.TREE_ELEMENT_IS_FILE, true).vertices();
+				.has(TitanElementNames.TREE_ELEMENT_IS_FILE, true).vertices();
 		Iterator<Vertex> vertexIterator = vertices.iterator();
 		List<HashId> hashIds = new ArrayList<>();
 		while (vertexIterator.hasNext()) {
 			Vertex fileVertex = vertexIterator.next();
 			hashIds.add(HashId.fromString((String) fileVertex
-					.getProperty(TitanConnection.TREE_ELEMENT_HASH)));
+					.getProperty(TitanElementNames.TREE_ELEMENT_HASH)));
 		}
 		return hashIds;
 	}
@@ -39,8 +40,8 @@ public class DirectoryStoreImpl implements DirectoryStore {
 	private Vertex findDirectory(TitanGraph graph, HashId hashId)
 			throws DirectoryStoreException {
 		Iterable<Vertex> vertices = graph.query()
-				.has(TitanConnection.TREE_ELEMENT_IS_FILE, false)
-				.has(TitanConnection.TREE_ELEMENT_HASH, hashId.toString())
+				.has(TitanElementNames.TREE_ELEMENT_IS_FILE, false)
+				.has(TitanElementNames.TREE_ELEMENT_HASH, hashId.toString())
 				.vertices();
 		Iterator<Vertex> vertexIterator = vertices.iterator();
 		if (!vertexIterator.hasNext()) {
@@ -62,13 +63,13 @@ public class DirectoryStoreImpl implements DirectoryStore {
 		TitanGraph graph = TitanConnection.getGraph();
 		Vertex vertex = findDirectory(graph, hashId);
 		Iterable<Vertex> vertices = vertex.query()
-				.has(TitanConnection.TREE_ELEMENT_IS_FILE, false).vertices();
+				.has(TitanElementNames.TREE_ELEMENT_IS_FILE, false).vertices();
 		Iterator<Vertex> vertexIterator = vertices.iterator();
 		List<HashId> hashIds = new ArrayList<>();
 		while (vertexIterator.hasNext()) {
 			Vertex fileVertex = vertexIterator.next();
 			hashIds.add(HashId.fromString((String) fileVertex
-					.getProperty(TitanConnection.TREE_ELEMENT_HASH)));
+					.getProperty(TitanElementNames.TREE_ELEMENT_HASH)));
 		}
 		return hashIds;
 	}
