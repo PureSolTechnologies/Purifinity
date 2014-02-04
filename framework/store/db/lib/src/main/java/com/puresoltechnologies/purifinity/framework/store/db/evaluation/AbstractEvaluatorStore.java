@@ -119,6 +119,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 			boundStatement.setBytes("results",
 					ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
 			session.execute(boundStatement);
+
 			//
 			// for (Map<String, Value<?>> row : results.getValues()) {
 			// for (String column : row.keySet()) {

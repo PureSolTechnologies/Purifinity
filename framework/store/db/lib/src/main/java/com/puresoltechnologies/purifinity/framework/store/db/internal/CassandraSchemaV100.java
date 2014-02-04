@@ -106,6 +106,29 @@ public class CassandraSchemaV100 {
 						"CREATE TABLE "
 								+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
 								+ " (uuid uuid, resultsClass varchar, results blob, PRIMARY KEY(uuid, resultsClass));");
+		CassandraMigration
+				.createTable(
+						cluster,
+						CassandraElementNames.EVALUATION_KEYSPACE,
+						"1.0.0",
+						"Rick-Rainer Ludwig",
+						"Keeps the metrics in a big table for efficient retrieval.",
+						"CREATE TABLE "
+								+ CassandraElementNames.EVALUATION_METRICS_TABLE
+								+ " (time timestamp, "
+								+ "project uuid, "
+								+ "analysis_run uuid, "
+								+ "internal_directory varchar, "
+								+ "file_name varchar, "
+								+ "source_code_location varchar, "
+								+ "code_range_name varchar, "
+								+ "code_range_type varchar, "
+								+ "quality varchar, "
+								+ "quality_level float, "
+								+ "name varchar, "
+								+ "unit varchar, "
+								+ "metric double, "
+								+ "PRIMARY KEY(analysis_run, internal_directory, file_name, code_range_name, code_range_type, name));");
 	}
 
 }

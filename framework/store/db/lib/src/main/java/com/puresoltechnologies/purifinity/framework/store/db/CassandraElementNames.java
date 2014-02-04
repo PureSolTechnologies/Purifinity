@@ -15,5 +15,6 @@ public class CassandraElementNames {
 	public static final String EVALUATION_FILES_TABLE = "files";
 	public static final String EVALUATION_DIRECTORIES_TABLE = "directories";
 	public static final String EVALUATION_PROJECTS_TABLE = "projects";
+	public static final String EVALUATION_METRICS_TABLE = "metrics";
 
 }
