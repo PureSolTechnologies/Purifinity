@@ -44,12 +44,14 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final boolean hasFileResults(HashId hashId)
 			throws EvaluationStoreException {
-		ResultSet resultSet = session
-				.execute("SELECT hashid FROM "
-						+ CassandraElementNames.EVALUATION_FILES_TABLE
-						+ " WHERE hashid='" + hashId.toString()
-						+ "' AND resultsClass='"
-						+ getFileResultClass().getName() + "'");
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(session, "hasFileResults",
+						"SELECT hashid FROM "
+								+ CassandraElementNames.EVALUATION_FILES_TABLE
+								+ " WHERE hashid=? AND resultsClass=?");
+		BoundStatement boundStatement = preparedStatement.bind(
+				hashId.toString(), getFileResultClass().getName());
+		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (resultSet.one() != null) {
 			throw new EvaluationStoreException("Multiple files for hashid '"
@@ -61,11 +63,16 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final boolean hasDirectoryResults(HashId hashId)
 			throws EvaluationStoreException {
-		ResultSet resultSet = session.execute("SELECT hashid FROM "
-				+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
-				+ " WHERE hashid='" + hashId.toString()
-				+ "' AND resultsClass='" + getDirectoryResultClass().getName()
-				+ "'");
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(
+						session,
+						"hasDirectoryResults",
+						"SELECT hashid FROM "
+								+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
+								+ " WHERE hashid=? AND resultsClass=?");
+		BoundStatement boundStatement = preparedStatement.bind(
+				hashId.toString(), getDirectoryResultClass().getName());
+		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (resultSet.one() != null) {
 			throw new EvaluationStoreException("Multiple files for hashid '"
@@ -77,10 +84,16 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final boolean hasProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException {
-		ResultSet resultSet = session.execute("SELECT uuid FROM "
-				+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
-				+ " WHERE uuid=" + analysisRunUUID + " AND resultsClass='"
-				+ getProjectResultClass().getName() + "'");
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(
+						session,
+						"hasProjectResults",
+						"SELECT uuid FROM "
+								+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
+								+ " WHERE uuid=? AND resultsClass=?");
+		BoundStatement boundStatement = preparedStatement.bind(analysisRunUUID,
+				getProjectResultClass().getName());
+		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (resultSet.one() != null) {
 			throw new EvaluationStoreException("Multiple files for run uuid '"
@@ -175,12 +188,14 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final MetricFileResults readFileResults(HashId hashId)
 			throws EvaluationStoreException {
-		ResultSet resultSet = session
-				.execute("SELECT results FROM "
-						+ CassandraElementNames.EVALUATION_FILES_TABLE
-						+ " WHERE hashid='" + hashId.toString()
-						+ "' AND resultsClass='"
-						+ getFileResultClass().getName() + "'");
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(session, "readFileResults",
+						"SELECT results FROM "
+								+ CassandraElementNames.EVALUATION_FILES_TABLE
+								+ " WHERE hashid=? AND resultsClass=?");
+		BoundStatement boundStatement = preparedStatement.bind(
+				hashId.toString(), getFileResultClass().getName());
+		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
 			return null;
@@ -208,11 +223,16 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final MetricDirectoryResults readDirectoryResults(HashId hashId)
 			throws EvaluationStoreException {
-		ResultSet resultSet = session.execute("SELECT results FROM "
-				+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
-				+ " WHERE hashid='" + hashId.toString()
-				+ "' AND resultsClass='" + getDirectoryResultClass().getName()
-				+ "'");
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(
+						session,
+						"readDirectoryResults",
+						"SELECT results FROM "
+								+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
+								+ " WHERE hashid=? AND resultsClass=?");
+		BoundStatement boundStatement = preparedStatement.bind(
+				hashId.toString(), getDirectoryResultClass().getName());
+		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
 			return null;
@@ -240,10 +260,16 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final MetricDirectoryResults readProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException {
-		ResultSet resultSet = session.execute("SELECT results FROM "
-				+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
-				+ " WHERE uuid='" + analysisRunUUID + "' AND resultsClass='"
-				+ getProjectResultClass().getName() + "'");
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(
+						session,
+						"readProjectResults",
+						"SELECT results FROM "
+								+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
+								+ " WHERE uuid=? AND resultsClass=?");
+		BoundStatement boundStatement = preparedStatement.bind(analysisRunUUID,
+				getProjectResultClass().getName());
+		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
 			return null;

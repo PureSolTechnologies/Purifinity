@@ -159,10 +159,16 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	public AnalysisProjectSettings readAnalysisProjectSettings(
 			UUID analysisProjectUUID) throws AnalysisStoreException {
 		Session session = CassandraConnection.getAnalysisSession();
-		ResultSet resultSet = session
-				.execute("SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location FROM "
-						+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
-						+ " WHERE uuid=" + analysisProjectUUID.toString());
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(
+						session,
+						"readAnalysisProjectSettings",
+						"SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location FROM "
+								+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
+								+ " WHERE uuid=?");
+		BoundStatement boundStatement = preparedStatement
+				.bind(analysisProjectUUID);
+		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
 			return null;
@@ -360,10 +366,15 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	public FileSearchConfiguration readSearchConfiguration(UUID analysisRunUUID)
 			throws AnalysisStoreException {
 		Session session = CassandraConnection.getAnalysisSession();
-		ResultSet resultSet = session
-				.execute("SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
-						+ CassandraElementNames.RUN_SETTINGS_TABLE
-						+ " WHERE uuid=" + analysisRunUUID.toString());
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(
+						session,
+						"readSearchConfiguration",
+						"SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
+								+ CassandraElementNames.RUN_SETTINGS_TABLE
+								+ " WHERE uuid=?");
+		BoundStatement boundStatement = preparedStatement.bind(analysisRunUUID);
+		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
 			return null;
@@ -629,9 +640,15 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	private AnalysisFileTree readCachedAnalysisFileTree(UUID projectUUID,
 			UUID runUUID) {
 		Session session = CassandraConnection.getAnalysisSession();
-		ResultSet resultSet = session.execute("SELECT persisted_tree FROM "
-				+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
-				+ " WHERE uuid=" + runUUID);
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(
+						session,
+						"readCachedAnalysisFileTree",
+						"SELECT persisted_tree FROM "
+								+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
+								+ " WHERE uuid=?");
+		BoundStatement boundStatement = preparedStatement.bind(runUUID);
+		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
 			return null;
