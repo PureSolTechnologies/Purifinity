@@ -12,7 +12,9 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.8.0",
  com.datastax.cassandra.bundle;bundle-version="0.1.1",
  com.thinkaurelius.titan.bundle;bundle-version="0.1.1",
  com.puresoltechnologies.purifinity.framework.store.db.bundle;bundle-version="0.1.1",
- org.apache.cassandra.server.bundle;bundle-version="2.0.4"
+ org.apache.cassandra.server.bundle;bundle-version="2.0.4",
+ com.puresoltechnologies.purifinity.client.common.analysis.plugin;bundle-version="0.1.1",
+ com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.1.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-Vendor: PureSol Technologies
 Bundle-ClassPath: .

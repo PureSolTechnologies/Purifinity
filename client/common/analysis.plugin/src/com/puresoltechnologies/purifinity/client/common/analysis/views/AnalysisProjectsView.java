@@ -68,13 +68,16 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	private Table analysisProjectsTable;
 	private TableViewer analysisProjectsViewer;
 	private ISelection selection = null;
-	private ToolItem addAnalysis;
-	private ToolItem editAnalysis;
-	private ToolItem deleteAnalysis;
+	private ToolItem addProject;
+	private ToolItem editProject;
+	private ToolItem deleteProject;
 
 	private final java.util.List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
 	private Composite parent = null;
+	private RefreshAction refreshAction = null;
+
+	private boolean enabled = true;
 
 	public AnalysisProjectsView() {
 		super(Activator.getDefault());
@@ -108,23 +111,23 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 		toolBar.setLayoutData(fd_toolBar);
 		toolBar.setToolTipText("Refreshs the list of available analyzes.");
 
-		addAnalysis = new ToolItem(toolBar, SWT.NONE);
-		addAnalysis.setText("Add...");
-		addAnalysis.setImage(ClientImages
+		addProject = new ToolItem(toolBar, SWT.NONE);
+		addProject.setText("Add...");
+		addProject.setImage(ClientImages
 				.getImage(ClientImages.ANALYSIS_ADD_16x16));
-		addAnalysis.addSelectionListener(this);
+		addProject.addSelectionListener(this);
 
-		editAnalysis = new ToolItem(toolBar, SWT.NONE);
-		editAnalysis.setText("Edit...");
-		editAnalysis.setImage(ClientImages
+		editProject = new ToolItem(toolBar, SWT.NONE);
+		editProject.setText("Edit...");
+		editProject.setImage(ClientImages
 				.getImage(ClientImages.ANALYSIS_EDIT_16x16));
-		editAnalysis.addSelectionListener(this);
+		editProject.addSelectionListener(this);
 
-		deleteAnalysis = new ToolItem(toolBar, SWT.NONE);
-		deleteAnalysis.setText("Delete...");
-		deleteAnalysis.setImage(ClientImages
+		deleteProject = new ToolItem(toolBar, SWT.NONE);
+		deleteProject.setText("Delete...");
+		deleteProject.setImage(ClientImages
 				.getImage(ClientImages.ANALYSIS_DELETE_16x16));
-		deleteAnalysis.addSelectionListener(this);
+		deleteProject.addSelectionListener(this);
 
 		Job.getJobManager().addJobChangeListener(this);
 		getSite().setSelectionProvider(this);
@@ -140,7 +143,8 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	private void initializeToolBar() {
 		IToolBarManager toolbarManager = getViewSite().getActionBars()
 				.getToolBarManager();
-		toolbarManager.add(new RefreshAction(this));
+		refreshAction = new RefreshAction(this);
+		toolbarManager.add(refreshAction);
 	}
 
 	@Override
@@ -214,6 +218,7 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	@Override
 	public void setSelection(ISelection selection) {
 		this.selection = selection;
+		updateButtonsEnabledState();
 		for (ISelectionChangedListener listener : listeners) {
 			listener.selectionChanged(new SelectionChangedEvent(this,
 					getSelection()));
@@ -224,11 +229,11 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	public void widgetSelected(SelectionEvent event) {
 		if (event.getSource() == analysisProjectsTable) {
 			processAnalysisProjectSelection();
-		} else if (event.getSource() == addAnalysis) {
+		} else if (event.getSource() == addProject) {
 			addAnalysisProject();
-		} else if (event.getSource() == editAnalysis) {
+		} else if (event.getSource() == editProject) {
 			editAnalysisProject();
-		} else if (event.getSource() == deleteAnalysis) {
+		} else if (event.getSource() == deleteProject) {
 			deleteAnalysisProject();
 		}
 	}
@@ -244,16 +249,8 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 					.getService(IHandlerService.class);
 			handlerService.executeCommand(
 					NewAnalysisProjectHandler.class.getName(), null);
-		} catch (ExecutionException e) {
-			logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
-					.getName(), "Could not run new analysis!", e));
-		} catch (NotDefinedException e) {
-			logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
-					.getName(), "Could not run new analysis!", e));
-		} catch (NotEnabledException e) {
-			logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
-					.getName(), "Could not run new analysis!", e));
-		} catch (NotHandledException e) {
+		} catch (ExecutionException | NotDefinedException | NotEnabledException
+				| NotHandledException e) {
 			logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
 					.getName(), "Could not run new analysis!", e));
 		}
@@ -325,5 +322,17 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	@Override
 	public void widgetDefaultSelected(SelectionEvent e) {
 		// intentionally left blank.
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+		refreshAction.setEnabled(enabled);
+		addProject.setEnabled(enabled);
+		updateButtonsEnabledState();
+	}
+
+	private void updateButtonsEnabledState() {
+		editProject.setEnabled(enabled && (selection != null));
+		deleteProject.setEnabled(enabled && (selection != null));
 	}
 }
