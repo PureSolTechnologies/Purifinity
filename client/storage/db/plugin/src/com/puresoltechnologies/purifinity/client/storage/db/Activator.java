@@ -7,14 +7,16 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.progress.UIJob;
 import org.osgi.framework.BundleContext;
 
-import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisProjectsView;
+import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseUserInterface;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
 
@@ -77,9 +79,16 @@ public class Activator extends AbstractUIPlugin {
 						.getWorkbench().getWorkbenchWindows()) {
 					for (IWorkbenchPage workbenchPage : workbenchWindow
 							.getPages()) {
-						AnalysisProjectsView view = (AnalysisProjectsView) workbenchPage
-								.findView(AnalysisProjectsView.class.getName());
-						view.setEnabled(enabled);
+						for (IViewReference viewReference : workbenchPage
+								.getViewReferences()) {
+							IWorkbenchPart part = viewReference.getPart(true);
+							if (DatabaseUserInterface.class
+									.isAssignableFrom(part.getClass())) {
+								DatabaseUserInterface databaseUserInterface = (DatabaseUserInterface) part;
+								databaseUserInterface
+										.setDatabaseAvailable(enabled);
+							}
+						}
 					}
 				}
 				return Status.OK_STATUS;

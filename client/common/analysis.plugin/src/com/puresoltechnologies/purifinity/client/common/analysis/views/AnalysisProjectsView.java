@@ -46,6 +46,7 @@ import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJo
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
+import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseUserInterface;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisProjectImpl;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
@@ -61,7 +62,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFacto
  */
 public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 		implements IJobChangeListener, ISelectionProvider, SelectionListener,
-		Refreshable {
+		Refreshable, DatabaseUserInterface {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
@@ -78,6 +79,7 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	private RefreshAction refreshAction = null;
 
 	private boolean enabled = true;
+	private boolean availableDatabase = true;
 
 	public AnalysisProjectsView() {
 		super(Activator.getDefault());
@@ -218,7 +220,7 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	@Override
 	public void setSelection(ISelection selection) {
 		this.selection = selection;
-		updateButtonsEnabledState();
+		updateEnabledState();
 		for (ISelectionChangedListener listener : listeners) {
 			listener.selectionChanged(new SelectionChangedEvent(this,
 					getSelection()));
@@ -326,13 +328,22 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
-		refreshAction.setEnabled(enabled);
-		addProject.setEnabled(enabled);
-		updateButtonsEnabledState();
+		updateEnabledState();
 	}
 
-	private void updateButtonsEnabledState() {
-		editProject.setEnabled(enabled && (selection != null));
-		deleteProject.setEnabled(enabled && (selection != null));
+	private void updateEnabledState() {
+		analysisProjectsTable.setEnabled(enabled && availableDatabase);
+		refreshAction.setEnabled(enabled && availableDatabase);
+		addProject.setEnabled(enabled && availableDatabase);
+		editProject.setEnabled(enabled && availableDatabase
+				&& (selection != null));
+		deleteProject.setEnabled(enabled && availableDatabase
+				&& (selection != null));
+	}
+
+	@Override
+	public void setDatabaseAvailable(boolean available) {
+		availableDatabase = available;
+		updateEnabledState();
 	}
 }

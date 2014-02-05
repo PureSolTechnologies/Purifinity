@@ -45,13 +45,14 @@ import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJo
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
+import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseUserInterface;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunImpl;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 
 public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 		SelectionListener, ISelectionProvider, ISelectionListener,
-		IJobChangeListener, Refreshable {
+		IJobChangeListener, Refreshable, DatabaseUserInterface {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
@@ -61,8 +62,11 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	private ToolItem addAnalysisRun;
 	private ToolItem editAnalysisRun;
 	private ToolItem deleteAnalysisRun;
+	private RefreshAction refreshAction;
 
 	private ISelection selection = null;
+	private boolean enabled = true;
+	private boolean availableDatabase = true;
 
 	private final java.util.List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
@@ -146,7 +150,8 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	private void initializeToolBar() {
 		IToolBarManager toolbarManager = getViewSite().getActionBars()
 				.getToolBarManager();
-		toolbarManager.add(new RefreshAction(this));
+		refreshAction = new RefreshAction(this);
+		toolbarManager.add(refreshAction);
 	}
 
 	@Override
@@ -173,6 +178,7 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	@Override
 	public void setSelection(ISelection selection) {
 		this.selection = selection;
+		updateEnabledState();
 		for (ISelectionChangedListener listener : listeners) {
 			listener.selectionChanged(new SelectionChangedEvent(this,
 					getSelection()));
@@ -273,6 +279,7 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 		try {
 			AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
 			analysisProject = analysisSelection.getAnalysisProject();
+			updateEnabledState();
 			analysisRunsViewer.setInput(analysisProject.getAllRunInformation());
 		} catch (AnalysisProjectException e) {
 			logger.log(new Status(Status.ERROR, ParserTreeControl.class
@@ -323,5 +330,29 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	@Override
 	public void sleeping(IJobChangeEvent event) {
 		// intentionally left empty
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+		updateEnabledState();
+	}
+
+	@Override
+	public void setDatabaseAvailable(boolean available) {
+		availableDatabase = available;
+		updateEnabledState();
+	}
+
+	private void updateEnabledState() {
+		analysisRunsTable.setEnabled(enabled && availableDatabase
+				&& (analysisProject != null));
+		refreshAction.setEnabled(enabled && availableDatabase
+				&& (analysisProject != null));
+		addAnalysisRun.setEnabled(enabled && availableDatabase
+				&& (analysisProject != null));
+		editAnalysisRun.setEnabled(enabled && availableDatabase
+				&& (analysisProject != null) && (selection != null));
+		deleteAnalysisRun.setEnabled(enabled && availableDatabase
+				&& (analysisProject != null) && (selection != null));
 	}
 }
