@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.contents;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -54,12 +53,9 @@ public class ProgrammingLanguageViewer extends ComboViewer {
 	@Override
 	public void refresh() {
 		super.refresh();
-		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-				.createInstance();
-		try {
+		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
+				.createInstance()) {
 			setInput(programmingLanguages.getAll());
-		} finally {
-			IOUtils.closeQuietly(programmingLanguages);
 		}
 	}
 }

@@ -38,11 +38,11 @@ public class Activator extends AbstractUIPlugin {
 
 	private void startCassandra() throws InterruptedException {
 		setDBUIEnabled(false);
-		Job job = new Job("Cassandra database startup") {
+		Job job = new Job("Database startup") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					monitor.beginTask("Starting Cassandra", 2);
+					monitor.beginTask("Cassandra", 2);
 					monitor.subTask("Start process");
 					CassandraServer.start();
 					monitor.worked(1);

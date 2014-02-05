@@ -66,7 +66,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 					.getType(), codeRange.getCanonicalName(), result,
 					EntropyQuality.get(codeRange.getType(), result)));
 		}
-		store.storeFileResults(hashId, results);
+		store.storeFileResults(hashId, this, analysis, results);
 	}
 
 	/**

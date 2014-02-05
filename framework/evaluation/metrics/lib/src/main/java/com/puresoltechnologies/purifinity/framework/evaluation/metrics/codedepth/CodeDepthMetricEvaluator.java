@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.framework.evaluation.metrics.codedepth;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -54,9 +53,8 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 	protected void processFile(CodeAnalysis analysis)
 			throws InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-				.createInstance();
-		try {
+		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
+				.createInstance()) {
 			ProgrammingLanguage language = programmingLanguages.findByName(
 					analysis.getLanguageName(), analysis.getLanguageVersion());
 
@@ -73,13 +71,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 						.getType(), codeRange.getCanonicalName(), metric
 						.getMaxDepth(), quality));
 			}
-			store.storeFileResults(hashId, results);
-		} finally {
-			try {
-				programmingLanguages.close();
-			} catch (IOException e) {
-				// intentionally left blank
-			}
+			store.storeFileResults(hashId, this, analysis, results);
 		}
 	}
 

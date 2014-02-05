@@ -39,7 +39,7 @@ public class AnalysisJob extends Job implements
 
 	public AnalysisJob(AnalysisProjectInformation analysisProjectInformation,
 			AnalysisProjectSettings analysisProjectSettings) {
-		super(analysisProjectSettings.getName());
+		super("Project Analysis");
 		this.analysisProjectInformation = analysisProjectInformation;
 		this.analysisProjectSettings = analysisProjectSettings;
 	}

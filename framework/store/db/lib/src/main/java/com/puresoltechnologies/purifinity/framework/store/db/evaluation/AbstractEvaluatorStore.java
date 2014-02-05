@@ -2,10 +2,14 @@ package com.puresoltechnologies.purifinity.framework.store.db.evaluation;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
+import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import com.datastax.driver.core.BoundStatement;
@@ -13,9 +17,22 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.puresoltechnologies.commons.math.Parameter;
+import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
+import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.evaluation.api.QualityLevelParameter;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
+import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
+import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
@@ -103,7 +120,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	}
 
 	@Override
-	public final void storeFileResults(HashId hashId, MetricFileResults results)
+	public final void storeFileResults(HashId hashId, Evaluator evaluator,
+			CodeAnalysis codeAnalysis, MetricFileResults results)
 			throws EvaluationStoreException {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "storeFileResults:"
@@ -120,13 +138,82 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 					ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
 			session.execute(boundStatement);
 
-			//
-			// for (Map<String, Value<?>> row : results.getValues()) {
-			// for (String column : row.keySet()) {
-			// Value<?> value = row.get(column);
-			// value.getParameter().get
-			// }
-			// }
+			preparedStatement = CassandraConnection
+					.getPreparedStatement(
+							session,
+							"storeFileResultsBigTable:" + getStoreName(),
+							"INSERT INTO "
+									+ CassandraElementNames.EVALUATION_METRICS_TABLE
+									+ " (time, duration, "
+									+ "project, "
+									+ "analysis_run, "
+									+ "internal_directory, "
+									+ "file_name, "
+									+ "source_code_location, "
+									+ "language_name, "
+									+ "language_version, "
+									+ "evaluator_name, "
+									+ "code_range_name, "
+									+ "code_range_type, "
+									+ "quality, "
+									+ "quality_level, "
+									+ "name, "
+									+ "unit, "
+									+ "metric) VALUES "
+									+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+
+			Date time = evaluator.getStartTime();
+			long duration = evaluator.getDuration();
+			AnalysisRun analysisRun = evaluator.getAnalysisRun();
+			UUID analysisProjectUUID = analysisRun.getInformation()
+					.getProjectUUID();
+			UUID analysisRunUUID = analysisRun.getInformation().getUUID();
+			AnalysisFileTree analysisTreeNode = evaluator.getAnalysisRun()
+					.findTreeNode(
+							codeAnalysis.getAnalysisInformation().getHashId());
+			File pathFile = analysisTreeNode.getPathFile(false);
+			String internalPath = pathFile.getParent();
+			String fileName = pathFile.getName();
+			String sourceCodeLocation = analysisTreeNode
+					.getSourceCodeLocation().getHumanReadableLocationString();
+			String languageName = codeAnalysis.getLanguageName();
+			String languageVersion = codeAnalysis.getLanguageVersion();
+			String evaluatorName = evaluator.getInformation().getName();
+			for (Map<String, Value<?>> row : results.getValues()) {
+				String codeRangeName = (String) row.get(
+						CodeRangeNameParameter.getInstance().getName())
+						.getValue();
+				CodeRangeType codeRangeType = (CodeRangeType) row.get(
+						CodeRangeTypeParameter.getInstance().getName())
+						.getValue();
+				Value<?> sourceCodeQualityValue = row
+						.get(SourceCodeQualityParameter.getInstance().getName());
+				SourceCodeQuality quality = (SourceCodeQuality) (sourceCodeQualityValue != null ? sourceCodeQualityValue
+						.getValue() : SourceCodeQuality.UNSPECIFIED);
+				Value<?> qualityLevelValue = row.get(QualityLevelParameter
+						.getInstance().getName());
+				Double qualityLevelDouble = (qualityLevelValue != null ? ((QualityLevel) qualityLevelValue
+						.getValue()).getLevel() : null);
+				Float qualityLevel = qualityLevelDouble != null ? qualityLevelDouble
+						.floatValue() : null;
+				Set<Parameter<?>> parameters = results.getParameters();
+				for (Parameter<?> parameter : parameters) {
+					String name = parameter.getName();
+					String unit = parameter.getUnit();
+					Object value = row.get(name).getValue();
+					if (Number.class.isAssignableFrom(value.getClass())) {
+						double val = ((Number) value).doubleValue();
+						boundStatement = preparedStatement.bind(time, duration,
+								analysisProjectUUID, analysisRunUUID,
+								internalPath, fileName, sourceCodeLocation,
+								languageName, languageVersion, evaluatorName,
+								codeRangeName, codeRangeType.getName(),
+								quality.toString(), qualityLevel, name, unit,
+								val);
+						session.execute(boundStatement);
+					}
+				}
+			}
 
 		} catch (IOException e) {
 			throw new EvaluationStoreException(

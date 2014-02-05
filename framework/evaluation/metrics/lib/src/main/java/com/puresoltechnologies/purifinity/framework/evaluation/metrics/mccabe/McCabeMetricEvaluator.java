@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.framework.evaluation.metrics.mccabe;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,11 +43,10 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 	protected void processFile(CodeAnalysis analysis)
 			throws InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-		McCabeMetricFileResults results = new McCabeMetricFileResults();
-		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-				.createInstance();
-		HashId hashId = analysis.getAnalysisInformation().getHashId();
-		try {
+		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
+				.createInstance()) {
+			McCabeMetricFileResults results = new McCabeMetricFileResults();
+			HashId hashId = analysis.getAnalysisInformation().getHashId();
 			ProgrammingLanguage language = programmingLanguages.findByName(
 					analysis.getLanguageName(), analysis.getLanguageVersion());
 			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
@@ -61,14 +59,8 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 						codeRange.getType(), codeRange.getCanonicalName(),
 						metric.getCyclomaticNumber(), metric.getQuality()));
 			}
-		} finally {
-			try {
-				programmingLanguages.close();
-			} catch (IOException e) {
-				// intentionally left blank
-			}
+			store.storeFileResults(hashId, this, analysis, results);
 		}
-		store.storeFileResults(hashId, results);
 	}
 
 	@Override

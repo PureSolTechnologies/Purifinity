@@ -108,7 +108,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 					codeRange.getType(), codeRange.getCanonicalName(), result,
 					MaintainabilityQuality.get(codeRange.getType(), result)));
 		}
-		store.storeFileResults(hashId, results);
+		store.storeFileResults(hashId, this, analysis, results);
 	}
 
 	private McCabeMetricResult findFileResult(

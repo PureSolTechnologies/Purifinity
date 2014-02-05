@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 
@@ -70,12 +72,17 @@ public interface EvaluatorStore {
 	 * 
 	 * @param hashId
 	 *            is the id of the file the results belong to.
+	 * @param evaluator
+	 *            is the evaluator which produced the results.
+	 * @param codeAnalysis
+	 *            is the analysis which was used as basis for the evaluation.
 	 * @param results
 	 *            is the {@link MetricFileResults} object containing the results
 	 *            to be stored.
 	 * @throws EvaluationStoreException
 	 */
-	public void storeFileResults(HashId hashId, MetricFileResults results)
+	public void storeFileResults(HashId hashId, Evaluator evaluator,
+			CodeAnalysis codeAnalysis, MetricFileResults results)
 			throws EvaluationStoreException;
 
 	/**

@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.framework.analysis.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
 
 /**
  * This class is used to manage the ProgrammingLanguage services. This is the
@@ -78,7 +76,7 @@ public class ProgrammingLanguagesOSGi extends ProgrammingLanguages {
 	}
 
 	@Override
-	public void close() throws IOException {
+	public void close() {
 		for (ServiceReference<ProgrammingLanguageAnalyzer> serviceReference : serviceReferences) {
 			context.ungetService(serviceReference);
 		}

@@ -116,11 +116,15 @@ public class CassandraSchemaV100 {
 						"CREATE TABLE "
 								+ CassandraElementNames.EVALUATION_METRICS_TABLE
 								+ " (time timestamp, "
+								+ "duration bigint, "
 								+ "project uuid, "
 								+ "analysis_run uuid, "
 								+ "internal_directory varchar, "
 								+ "file_name varchar, "
 								+ "source_code_location varchar, "
+								+ "language_name varchar, "
+								+ "language_version varchar, "
+								+ "evaluator_name varchar, "
 								+ "code_range_name varchar, "
 								+ "code_range_type varchar, "
 								+ "quality varchar, "
@@ -128,7 +132,7 @@ public class CassandraSchemaV100 {
 								+ "name varchar, "
 								+ "unit varchar, "
 								+ "metric double, "
-								+ "PRIMARY KEY(analysis_run, internal_directory, file_name, code_range_name, code_range_type, name));");
+								+ "PRIMARY KEY(project, analysis_run, internal_directory, file_name, code_range_name, code_range_type, evaluator_name, name));");
 	}
 
 }

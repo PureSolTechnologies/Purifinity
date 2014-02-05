@@ -63,9 +63,8 @@ public class CodeAnalyzerFactory {
 
 	private CodeAnalyzer createAnalyser(SourceCodeLocation source)
 			throws LanguageNotSupportedException {
-		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-				.createInstance();
-		try {
+		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
+				.createInstance()) {
 			for (ProgrammingLanguageAnalyzer language : programmingLanguages
 					.getAll()) {
 				CodeAnalyzer analyser = checkAndCreate(language, source);
@@ -78,12 +77,6 @@ public class CodeAnalyzerFactory {
 			throw new LanguageNotSupportedException(
 					"No coding language found for file "
 							+ source.getHumanReadableLocationString());
-		} finally {
-			try {
-				programmingLanguages.close();
-			} catch (IOException e) {
-				logger.warn("Could not close programming languages.", e);
-			}
 		}
 	}
 

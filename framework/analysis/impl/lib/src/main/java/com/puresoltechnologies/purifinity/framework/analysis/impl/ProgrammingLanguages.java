@@ -15,7 +15,7 @@ import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyz
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class ProgrammingLanguages implements Closeable {
+public abstract class ProgrammingLanguages implements Closeable, AutoCloseable {
 
 	public static ProgrammingLanguages createInstance() {
 		ServiceLoader<ProgrammingLanguages> loader = ServiceLoader
@@ -59,4 +59,7 @@ public abstract class ProgrammingLanguages implements Closeable {
 		}
 		return null;
 	}
+
+	@Override
+	abstract public void close();
 }

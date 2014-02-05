@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.framework.evaluation.metrics;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +15,8 @@ public class TestProgrammingLanguages extends ProgrammingLanguages {
 	}
 
 	@Override
-	public void close() throws IOException {
-
+	public void close() {
+		// intentionally left blanks
 	}
 
 	@Override

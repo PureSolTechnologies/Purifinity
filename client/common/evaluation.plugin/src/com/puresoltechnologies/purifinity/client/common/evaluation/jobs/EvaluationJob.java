@@ -28,6 +28,7 @@ public class EvaluationJob extends Job {
 
 	private final AnalysisRun analysisRun;
 	private final boolean reEvaluation;
+	private final String projectName;
 
 	private ObservedJob<Evaluator, Boolean> currentJob = null;
 
@@ -36,17 +37,15 @@ public class EvaluationJob extends Job {
 	}
 
 	public EvaluationJob(AnalysisRun analysisRun, boolean reEvaluation) {
-		super("");
+		super("Project Evaluation");
 		this.analysisRun = analysisRun;
 		this.reEvaluation = reEvaluation;
+		AnalysisProjectSettings analysisProjectSettings = null;
 		try {
 			AnalysisRunInformation information = analysisRun.getInformation();
 			UUID projectUUID = information.getProjectUUID();
-			AnalysisProjectSettings analysisProjectSettings = AnalysisStoreFactory
-					.getFactory().getInstance()
-					.readAnalysisProjectSettings(projectUUID);
-			String projectName = analysisProjectSettings.getName();
-			setName("Evaluation of project '" + projectName + "'");
+			analysisProjectSettings = AnalysisStoreFactory.getFactory()
+					.getInstance().readAnalysisProjectSettings(projectUUID);
 		} catch (AnalysisStoreException e) {
 			Activator activator = Activator.getDefault();
 			Bundle bundle = activator.getBundle();
@@ -54,6 +53,8 @@ public class EvaluationJob extends Job {
 					new Status(Status.ERROR, bundle.getSymbolicName(),
 							"Could not read results.", e));
 		}
+		projectName = analysisProjectSettings != null ? analysisProjectSettings
+				.getName() : "<no name>";
 	}
 
 	@Override
@@ -79,7 +80,7 @@ public class EvaluationJob extends Job {
 		List<EvaluatorFactory> evaluatorFactories = evaluators
 				.getAllSortedByDependency();
 		try {
-			monitor.beginTask("Running " + evaluatorFactories.size()
+			monitor.beginTask(projectName + " / " + evaluatorFactories.size()
 					+ " evaluation(s)", evaluatorFactories.size());
 			for (EvaluatorFactory factory : evaluatorFactories) {
 				monitor.subTask("'" + factory.getName() + "' running");

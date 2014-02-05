@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,9 +45,8 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 	protected void processFile(CodeAnalysis analysis)
 			throws InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-				.createInstance();
-		try {
+		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
+				.createInstance()) {
 			ProgrammingLanguage language = programmingLanguages.findByName(
 					analysis.getLanguageName(), analysis.getLanguageVersion());
 
@@ -64,13 +62,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 						codeRange.getType(), codeRange.getCanonicalName(),
 						metric.getHalsteadResults(), metric.getQuality()));
 			}
-			store.storeFileResults(hashId, results);
-		} finally {
-			try {
-				programmingLanguages.close();
-			} catch (IOException e) {
-				// intentionally left blank
-			}
+			store.storeFileResults(hashId, this, analysis, results);
 		}
 	}
 

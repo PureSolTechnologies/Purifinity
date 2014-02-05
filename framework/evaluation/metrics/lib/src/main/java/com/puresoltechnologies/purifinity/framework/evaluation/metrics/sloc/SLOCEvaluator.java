@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -64,9 +63,9 @@ public class SLOCEvaluator extends AbstractEvaluator {
 		if (store.hasFileResults(hashId)) {
 			return;
 		}
-		ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-				.createInstance();
-		try {
+
+		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
+				.createInstance()) {
 			ProgrammingLanguage language = programmingLanguages.findByName(
 					analysis.getLanguageName(), analysis.getLanguageVersion());
 
@@ -82,13 +81,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 						.getType(), codeRange.getCanonicalName(), metric
 						.getSLOCResult(), metric.getQuality()));
 			}
-			store.storeFileResults(hashId, results);
-		} finally {
-			try {
-				programmingLanguages.close();
-			} catch (IOException e) {
-				// intentionally left blank
-			}
+			store.storeFileResults(hashId, this, analysis, results);
 		}
 	}
 

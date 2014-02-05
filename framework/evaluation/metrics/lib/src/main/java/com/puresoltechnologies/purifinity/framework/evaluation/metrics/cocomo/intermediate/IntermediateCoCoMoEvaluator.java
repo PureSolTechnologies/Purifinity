@@ -105,7 +105,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 					fileResults.setAverageSalary(averageSalary, currency);
 					fileResults.setProject(project);
 					fileResults.setSloc(phyLoc);
-					store.storeFileResults(hashId, fileResults);
+					store.storeFileResults(hashId, this, analysis, fileResults);
 					break;
 				}
 			}

@@ -88,7 +88,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 							result)));
 		}
 		if (results != null) {
-			store.storeFileResults(hashId, results);
+			store.storeFileResults(hashId, this, analysis, results);
 		}
 	}
 
