@@ -126,7 +126,8 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 			throws InterruptedException, EvaluationStoreException {
 		EntropyDirectoryResults directoryResults = calculateDirectoryResults(directory);
 		if (directoryResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), directoryResults);
+			store.storeDirectoryResults(directory.getHashId(), this, directory,
+					directoryResults);
 		}
 	}
 
@@ -175,6 +176,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 			EvaluationStoreException {
 		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		EntropyDirectoryResults directoryResults = calculateDirectoryResults(directory);
-		store.storeDirectoryResults(directory.getHashId(), directoryResults);
+		store.storeDirectoryResults(directory.getHashId(), this, directory,
+				directoryResults);
 	}
 }

@@ -89,7 +89,8 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 		}
 		CodeDepthDirectoryResults directoryResults = calculateDirectoryResults(directory);
 		if (directoryResults != null) {
-			store.storeDirectoryResults(hashId, directoryResults);
+			store.storeDirectoryResults(hashId, this, directory,
+					directoryResults);
 		}
 	}
 
@@ -139,7 +140,8 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		CodeDepthDirectoryResults directoryResults = calculateDirectoryResults(directory);
 		if (directoryResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), directoryResults);
+			store.storeDirectoryResults(directory.getHashId(), this, directory,
+					directoryResults);
 		}
 	}
 }

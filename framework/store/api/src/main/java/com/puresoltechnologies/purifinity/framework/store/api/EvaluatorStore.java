@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
@@ -95,8 +96,9 @@ public interface EvaluatorStore {
 	 *            results to be stored.
 	 * @throws EvaluationStoreException
 	 */
-	public void storeDirectoryResults(HashId hashId,
-			MetricDirectoryResults results) throws EvaluationStoreException;
+	public void storeDirectoryResults(HashId hashId, Evaluator evaluator,
+			AnalysisFileTree directory, MetricDirectoryResults results)
+			throws EvaluationStoreException;
 
 	/**
 	 * This method stores the results for a whole project.
@@ -109,8 +111,9 @@ public interface EvaluatorStore {
 	 *            results to be stored.
 	 * @throws EvaluationStoreException
 	 */
-	public void storeProjectResults(UUID analysisRunUUID,
-			MetricDirectoryResults results) throws EvaluationStoreException;
+	public void storeProjectResults(UUID analysisRunUUID, Evaluator evaluator,
+			AnalysisFileTree directory, MetricDirectoryResults results)
+			throws EvaluationStoreException;
 
 	/**
 	 * This method reads the results for a single file.

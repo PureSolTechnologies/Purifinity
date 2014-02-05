@@ -116,7 +116,8 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 			throws InterruptedException, EvaluationStoreException {
 		NormalizedMaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), finalResults);
+			store.storeDirectoryResults(directory.getHashId(), this, directory,
+					finalResults);
 		}
 	}
 
@@ -153,15 +154,15 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processProject() throws InterruptedException,
 			EvaluationStoreException {
-		if (store
-				.hasProjectResults(getAnalysisRun().getInformation().getUUID())) {
+		AnalysisRun analysisRun = getAnalysisRun();
+		if (store.hasProjectResults(analysisRun.getInformation().getUUID())) {
 			return;
 		}
-		NormalizedMaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(getAnalysisRun()
+		NormalizedMaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(analysisRun
 				.getFileTree());
 		if (finalResults != null) {
-			store.storeProjectResults(getAnalysisRun().getInformation()
-					.getUUID(), finalResults);
+			store.storeProjectResults(analysisRun.getInformation().getUUID(),
+					this, analysisRun.getFileTree(), finalResults);
 		}
 	}
 }

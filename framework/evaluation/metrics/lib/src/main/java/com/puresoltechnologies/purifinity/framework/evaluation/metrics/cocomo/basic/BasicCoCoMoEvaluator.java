@@ -115,7 +115,8 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
 	protected void processDirectory(AnalysisFileTree directory)
 			throws InterruptedException, EvaluationStoreException {
 		BasicCoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
-		store.storeDirectoryResults(directory.getHashId(), directoryResults);
+		store.storeDirectoryResults(directory.getHashId(), this, directory,
+				directoryResults);
 	}
 
 	private BasicCoCoMoDirectoryResults createDirectoryResults(
@@ -151,7 +152,8 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
 			EvaluationStoreException {
 		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		BasicCoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
-		store.storeDirectoryResults(directory.getHashId(), directoryResults);
+		store.storeDirectoryResults(directory.getHashId(), this, directory,
+				directoryResults);
 	}
 
 }

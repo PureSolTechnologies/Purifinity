@@ -223,8 +223,9 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	}
 
 	@Override
-	public final void storeDirectoryResults(HashId hashId,
-			MetricDirectoryResults results) throws EvaluationStoreException {
+	public final void storeDirectoryResults(HashId hashId, Evaluator evaluator,
+			AnalysisFileTree directory, MetricDirectoryResults results)
+			throws EvaluationStoreException {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "storeDirectoryResults:"
 						+ getStoreName(), "INSERT INTO "
@@ -245,10 +246,67 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 					"Could not store results for hashId '" + hashId
 							+ "' into '" + getStoreName() + "'.", e);
 		}
+
+		preparedStatement = CassandraConnection.getPreparedStatement(session,
+				"storeDirectoryResultsBigTable:" + getStoreName(),
+				"INSERT INTO " + CassandraElementNames.EVALUATION_METRICS_TABLE
+						+ " (time, " + "duration, " + "project, "
+						+ "analysis_run, " + "internal_directory, "
+						+ "file_name, " + "evaluator_name, "
+						+ "code_range_name, " + "code_range_type, "
+						+ "quality, " + "quality_level, " + "name, " + "unit, "
+						+ "metric) VALUES "
+						+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+
+		Date time = evaluator.getStartTime();
+		long duration = evaluator.getDuration();
+		AnalysisRun analysisRun = evaluator.getAnalysisRun();
+		UUID analysisProjectUUID = analysisRun.getInformation()
+				.getProjectUUID();
+		UUID analysisRunUUID = analysisRun.getInformation().getUUID();
+		File pathFile = directory.getPathFile(false);
+		String internalPath = pathFile.getParent();
+		if (internalPath == null) {
+			internalPath = "";
+		}
+		String fileName = pathFile.getName();
+		String evaluatorName = evaluator.getInformation().getName();
+
+		Map<String, Value<?>> row = results.getValues();
+		String codeRangeName = (String) row.get(
+				CodeRangeNameParameter.getInstance().getName()).getValue();
+		CodeRangeType codeRangeType = (CodeRangeType) row.get(
+				CodeRangeTypeParameter.getInstance().getName()).getValue();
+		Value<?> sourceCodeQualityValue = row.get(SourceCodeQualityParameter
+				.getInstance().getName());
+		SourceCodeQuality quality = (SourceCodeQuality) (sourceCodeQualityValue != null ? sourceCodeQualityValue
+				.getValue() : SourceCodeQuality.UNSPECIFIED);
+		Value<?> qualityLevelValue = row.get(QualityLevelParameter
+				.getInstance().getName());
+		Double qualityLevelDouble = (qualityLevelValue != null ? ((QualityLevel) qualityLevelValue
+				.getValue()).getLevel() : null);
+		Float qualityLevel = qualityLevelDouble != null ? qualityLevelDouble
+				.floatValue() : null;
+		Set<Parameter<?>> parameters = results.getParameters();
+		for (Parameter<?> parameter : parameters) {
+			String name = parameter.getName();
+			String unit = parameter.getUnit();
+			Object value = row.get(name).getValue();
+			if (Number.class.isAssignableFrom(value.getClass())) {
+				double val = ((Number) value).doubleValue();
+				BoundStatement boundStatement = preparedStatement.bind(time,
+						duration, analysisProjectUUID, analysisRunUUID,
+						internalPath, fileName, evaluatorName, codeRangeName,
+						codeRangeType.getName(), quality.toString(),
+						qualityLevel, name, unit, val);
+				session.execute(boundStatement);
+			}
+		}
 	}
 
 	@Override
 	public final void storeProjectResults(UUID analysisRunUUID,
+			Evaluator evaluator, AnalysisFileTree directory,
 			MetricDirectoryResults results) throws EvaluationStoreException {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "storeProjectResults:"
@@ -270,6 +328,60 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 					"Could not store results for analysis run UUID '"
 							+ analysisRunUUID + "' into '" + getStoreName()
 							+ "'.", e);
+		}
+
+		preparedStatement = CassandraConnection.getPreparedStatement(session,
+				"storeDirectoryResultsBigTable:" + getStoreName(),
+				"INSERT INTO " + CassandraElementNames.EVALUATION_METRICS_TABLE
+						+ " (time, duration, " + "project, " + "analysis_run, "
+						+ "internal_directory, " + "file_name, "
+						+ "evaluator_name, " + "code_range_name, "
+						+ "code_range_type, " + "quality, " + "quality_level, "
+						+ "name, " + "unit, " + "metric) VALUES "
+						+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+
+		Date time = evaluator.getStartTime();
+		long duration = evaluator.getDuration();
+		AnalysisRun analysisRun = evaluator.getAnalysisRun();
+		UUID analysisProjectUUID = analysisRun.getInformation()
+				.getProjectUUID();
+		File pathFile = directory.getPathFile(false);
+		String internalPath = pathFile.getParent();
+		if (internalPath == null) {
+			internalPath = "";
+		}
+		String fileName = pathFile.getName();
+		String evaluatorName = evaluator.getInformation().getName();
+
+		Map<String, Value<?>> row = results.getValues();
+		String codeRangeName = (String) row.get(
+				CodeRangeNameParameter.getInstance().getName()).getValue();
+		CodeRangeType codeRangeType = (CodeRangeType) row.get(
+				CodeRangeTypeParameter.getInstance().getName()).getValue();
+		Value<?> sourceCodeQualityValue = row.get(SourceCodeQualityParameter
+				.getInstance().getName());
+		SourceCodeQuality quality = (SourceCodeQuality) (sourceCodeQualityValue != null ? sourceCodeQualityValue
+				.getValue() : SourceCodeQuality.UNSPECIFIED);
+		Value<?> qualityLevelValue = row.get(QualityLevelParameter
+				.getInstance().getName());
+		Double qualityLevelDouble = (qualityLevelValue != null ? ((QualityLevel) qualityLevelValue
+				.getValue()).getLevel() : null);
+		Float qualityLevel = qualityLevelDouble != null ? qualityLevelDouble
+				.floatValue() : null;
+		Set<Parameter<?>> parameters = results.getParameters();
+		for (Parameter<?> parameter : parameters) {
+			String name = parameter.getName();
+			String unit = parameter.getUnit();
+			Object value = row.get(name).getValue();
+			if (Number.class.isAssignableFrom(value.getClass())) {
+				double val = ((Number) value).doubleValue();
+				BoundStatement boundStatement = preparedStatement.bind(time,
+						duration, analysisProjectUUID, analysisRunUUID,
+						internalPath, fileName, evaluatorName, codeRangeName,
+						codeRangeType.getName(), quality.toString(),
+						qualityLevel, name, unit, val);
+				session.execute(boundStatement);
+			}
 		}
 	}
 

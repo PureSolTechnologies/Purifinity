@@ -80,7 +80,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 		}
 		HalsteadMetricDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(hashId, finalResults);
+			store.storeDirectoryResults(hashId, this, directory, finalResults);
 		}
 	}
 
@@ -148,7 +148,8 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		HalsteadMetricDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), finalResults);
+			store.storeDirectoryResults(directory.getHashId(), this, directory,
+					finalResults);
 		}
 	}
 }

@@ -161,7 +161,8 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 			throws InterruptedException, EvaluationStoreException {
 		MaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), finalResults);
+			store.storeDirectoryResults(directory.getHashId(), this, directory,
+					finalResults);
 		}
 	}
 
@@ -198,15 +199,17 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processProject() throws InterruptedException,
 			EvaluationStoreException {
+		AnalysisRun analysisRun = getAnalysisRun();
 		if (store
-				.hasProjectResults(getAnalysisRun().getInformation().getUUID())) {
+				.hasProjectResults(analysisRun.getInformation().getUUID())) {
 			return;
 		}
-		MaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(getAnalysisRun()
+		MaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(analysisRun
 				.getFileTree());
 		if (finalResults != null) {
-			store.storeProjectResults(getAnalysisRun().getInformation()
-					.getUUID(), finalResults);
+			store.storeProjectResults(analysisRun.getInformation()
+					.getUUID(), this, analysisRun.getFileTree(),
+					finalResults);
 		}
 	}
 }

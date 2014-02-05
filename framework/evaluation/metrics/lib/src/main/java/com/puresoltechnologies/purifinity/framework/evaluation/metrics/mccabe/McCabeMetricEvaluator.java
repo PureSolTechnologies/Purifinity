@@ -77,7 +77,8 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 		}
 		McCabeMetricDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), finalResults);
+			store.storeDirectoryResults(directory.getHashId(), this, directory,
+					finalResults);
 		}
 	}
 
@@ -145,7 +146,8 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		McCabeMetricDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), finalResults);
+			store.storeDirectoryResults(directory.getHashId(), this, directory,
+					finalResults);
 		}
 	}
 }

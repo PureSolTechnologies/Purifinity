@@ -99,7 +99,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 		}
 		SLOCDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(hashId, finalResults);
+			store.storeDirectoryResults(hashId, this, directory, finalResults);
 		}
 	}
 
@@ -159,15 +159,15 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	@Override
 	protected void processProject() throws InterruptedException,
 			EvaluationStoreException {
-		if (store
-				.hasProjectResults(getAnalysisRun().getInformation().getUUID())) {
+		AnalysisRun analysisRun = getAnalysisRun();
+		if (store.hasProjectResults(analysisRun.getInformation().getUUID())) {
 			return;
 		}
-		AnalysisFileTree directory = getAnalysisRun().getFileTree();
+		AnalysisFileTree directory = analysisRun.getFileTree();
 		SLOCDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeProjectResults(getAnalysisRun().getInformation()
-					.getUUID(), finalResults);
+			store.storeProjectResults(analysisRun.getInformation().getUUID(),
+					this, analysisRun.getFileTree(), finalResults);
 		}
 	}
 }
