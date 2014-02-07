@@ -154,7 +154,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 		metricSelection = settingsDialog.getMetric();
 		parameterSelection = settingsDialog.getParameter();
 		codeRangeTypeSelection = settingsDialog.getCodeRangeType();
-		updateEvaluation();
+		handleChangedAnalysisSelection();
 	}
 
 	@Override
@@ -170,7 +170,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	}
 
 	@Override
-	protected void updateEvaluation() {
+	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (metricSelection != null)
 				&& (parameterSelection != null)) {

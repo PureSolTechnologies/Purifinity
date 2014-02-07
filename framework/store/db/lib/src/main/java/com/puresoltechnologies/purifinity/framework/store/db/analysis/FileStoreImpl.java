@@ -46,12 +46,9 @@ public final class FileStoreImpl implements FileStore {
 
 				Session session = CassandraConnection.getAnalysisSession();
 				PreparedStatement preparedStmt = CassandraConnection
-						.getPreparedStatement(
-								session,
-								"storeRawFile",
-								"INSERT INTO "
-										+ CassandraElementNames.ANALYSIS_FILES_TABLE
-										+ " (hashid, raw, size) VALUES (?,?,?)");
+						.getPreparedStatement(session, "INSERT INTO "
+								+ CassandraElementNames.ANALYSIS_FILES_TABLE
+								+ " (hashid, raw, size) VALUES (?,?,?)");
 				byte[] array = buffer.toByteArray();
 				ByteBuffer byteBuffer = ByteBuffer.wrap(array);
 				BoundStatement boundStatement = preparedStmt.bind(hashId
@@ -120,7 +117,7 @@ public final class FileStoreImpl implements FileStore {
 			throws FileStoreException {
 		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(session, "storeAnalysis", "INSERT INTO "
+				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.ANALYSIS_FILES_TABLE
 						+ " (hashid, analysis) VALUES (?,?)");
 		BoundStatement boundStatement = preparedStatement.bind(hashId

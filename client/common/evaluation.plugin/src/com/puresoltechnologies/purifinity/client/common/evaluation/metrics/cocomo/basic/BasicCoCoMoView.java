@@ -57,7 +57,7 @@ public class BasicCoCoMoView extends AbstractEvaluationView {
 	}
 
 	@Override
-	protected void updateEvaluation() throws EvaluationStoreException {
+	protected void handleChangedAnalysisSelection() throws EvaluationStoreException {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
 			showEvaluation(analysisSelection.getFileTreeNode());

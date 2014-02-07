@@ -18,20 +18,20 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
  */
 public class AnalysisSelection implements ISelection {
 
-	private final AnalysisProject analysis;
+	private final AnalysisProject analysisProject;
 	private final AnalysisRun analysisRun;
 	private final AnalysisFileTree fileTreeNode;
 
-	public AnalysisSelection(AnalysisProject analysis, AnalysisRun analysisRun,
+	public AnalysisSelection(AnalysisProject analysisProject, AnalysisRun analysisRun,
 			AnalysisFileTree fileTreeNode) {
 		super();
-		this.analysis = analysis;
+		this.analysisProject = analysisProject;
 		this.analysisRun = analysisRun;
 		this.fileTreeNode = fileTreeNode;
 	}
 
-	public AnalysisProject getAnalysis() {
-		return analysis;
+	public AnalysisProject getAnalysisProject() {
+		return analysisProject;
 	}
 
 	public AnalysisRun getAnalysisRun() {

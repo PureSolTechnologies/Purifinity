@@ -7,7 +7,7 @@ package com.puresoltechnologies.purifinity.client.common.ui.parts;
  * 
  * @author Rick-Rainer Ludwig
  */
-public interface DatabaseUserInterface {
+public interface DatabaseTarget {
 
 	/**
 	 * Tells the part whether the database is available or not.

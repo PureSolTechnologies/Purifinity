@@ -88,6 +88,14 @@ public class CassandraMigration {
 		}
 	}
 
+	public static void createIndex(Cluster cluster, String keyspace,
+			String version, String developer, String comment, String table,
+			String column) throws MigrationException {
+		migrate(cluster, keyspace, version, developer, "CREATE INDEX idx_"
+				+ table + "_" + column + " ON " + table + " (" + column + ");",
+				comment);
+	}
+
 	public static void migrate(Cluster cluster, String keyspace,
 			String version, String developer, String command, String comment)
 			throws MigrationException {
@@ -180,5 +188,4 @@ public class CassandraMigration {
 									+ " (time, version, developer, keyspace_name, command, hashid, comment) VALUES (?, ?, ?, ?, ?, ?, ?)"));
 		}
 	}
-
 }

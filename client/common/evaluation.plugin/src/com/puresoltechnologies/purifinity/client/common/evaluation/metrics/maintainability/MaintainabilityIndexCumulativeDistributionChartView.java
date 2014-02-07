@@ -99,7 +99,7 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 	}
 
 	@Override
-	protected void updateEvaluation() {
+	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
 			AnalysisFileTree path = analysisSelection.getFileTreeNode();

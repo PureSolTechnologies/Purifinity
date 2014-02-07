@@ -154,4 +154,17 @@ public interface EvaluatorStore {
 	public MetricDirectoryResults readProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException;
 
+	/**
+	 * This method reads metrics out of the big table.
+	 * 
+	 * @param analysisProject
+	 *            is the project's {@link UUID}.
+	 * @param analysisRun
+	 *            is the analysis run's {@link UUID}.
+	 * @param evaluatorName
+	 * @param parameterName
+	 * @return
+	 */
+	public MetricsResultsIterator readMetrics(UUID analysisProject,
+			UUID analysisRun, String evaluatorName, String parameterName);
 }

@@ -46,7 +46,7 @@ import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJo
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
-import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseUserInterface;
+import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseTarget;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisProjectImpl;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
@@ -62,7 +62,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFacto
  */
 public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 		implements IJobChangeListener, ISelectionProvider, SelectionListener,
-		Refreshable, DatabaseUserInterface {
+		Refreshable, DatabaseTarget {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 

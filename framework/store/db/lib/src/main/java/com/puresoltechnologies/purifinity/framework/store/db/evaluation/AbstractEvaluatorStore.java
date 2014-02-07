@@ -33,8 +33,12 @@ import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResul
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.query.CassandraQuery;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.query.filter.And;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.query.filter.Equals;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.framework.store.api.MetricsResultsIterator;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraElementNames;
 
@@ -62,10 +66,9 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final boolean hasFileResults(HashId hashId)
 			throws EvaluationStoreException {
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(session, "hasFileResults",
-						"SELECT hashid FROM "
-								+ CassandraElementNames.EVALUATION_FILES_TABLE
-								+ " WHERE hashid=? AND resultsClass=?");
+				.getPreparedStatement(session, "SELECT hashid FROM "
+						+ CassandraElementNames.EVALUATION_FILES_TABLE
+						+ " WHERE hashid=? AND resultsClass=?");
 		BoundStatement boundStatement = preparedStatement.bind(
 				hashId.toString(), getFileResultClass().getName());
 		ResultSet resultSet = session.execute(boundStatement);
@@ -81,12 +84,9 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final boolean hasDirectoryResults(HashId hashId)
 			throws EvaluationStoreException {
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(
-						session,
-						"hasDirectoryResults",
-						"SELECT hashid FROM "
-								+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
-								+ " WHERE hashid=? AND resultsClass=?");
+				.getPreparedStatement(session, "SELECT hashid FROM "
+						+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
+						+ " WHERE hashid=? AND resultsClass=?");
 		BoundStatement boundStatement = preparedStatement.bind(
 				hashId.toString(), getDirectoryResultClass().getName());
 		ResultSet resultSet = session.execute(boundStatement);
@@ -102,12 +102,9 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final boolean hasProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException {
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(
-						session,
-						"hasProjectResults",
-						"SELECT uuid FROM "
-								+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
-								+ " WHERE uuid=? AND resultsClass=?");
+				.getPreparedStatement(session, "SELECT uuid FROM "
+						+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
+						+ " WHERE uuid=? AND resultsClass=?");
 		BoundStatement boundStatement = preparedStatement.bind(analysisRunUUID,
 				getProjectResultClass().getName());
 		ResultSet resultSet = session.execute(boundStatement);
@@ -124,8 +121,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 			CodeAnalysis codeAnalysis, MetricFileResults results)
 			throws EvaluationStoreException {
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(session, "storeFileResults:"
-						+ getStoreName(), "INSERT INTO "
+				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.EVALUATION_FILES_TABLE
 						+ "(hashId, resultsClass, results) VALUES (?, ?, ?)");
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -141,12 +137,12 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 			preparedStatement = CassandraConnection
 					.getPreparedStatement(
 							session,
-							"storeFileResultsBigTable:" + getStoreName(),
 							"INSERT INTO "
 									+ CassandraElementNames.EVALUATION_METRICS_TABLE
 									+ " (time, duration, "
-									+ "project, "
+									+ "analysis_project, "
 									+ "analysis_run, "
+									+ "hashid, "
 									+ "internal_directory, "
 									+ "file_name, "
 									+ "source_code_location, "
@@ -159,8 +155,10 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 									+ "quality_level, "
 									+ "name, "
 									+ "unit, "
-									+ "metric) VALUES "
-									+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+									+ "metric, "
+									+ "level_of_measurement, "
+									+ "description ) VALUES "
+									+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 			Date time = evaluator.getStartTime();
 			long duration = evaluator.getDuration();
@@ -204,12 +202,14 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 					if (Number.class.isAssignableFrom(value.getClass())) {
 						double val = ((Number) value).doubleValue();
 						boundStatement = preparedStatement.bind(time, duration,
-								analysisProjectUUID, analysisRunUUID,
-								internalPath, fileName, sourceCodeLocation,
-								languageName, languageVersion, evaluatorName,
-								codeRangeName, codeRangeType.getName(),
-								quality.toString(), qualityLevel, name, unit,
-								val);
+								analysisProjectUUID, analysisRunUUID, hashId
+										.toString(), internalPath, fileName,
+								sourceCodeLocation, languageName,
+								languageVersion, evaluatorName, codeRangeName,
+								codeRangeType.name(), quality.name(),
+								qualityLevel, name, unit, val, parameter
+										.getLevelOfMeasurement().name(),
+								parameter.getDescription());
 						session.execute(boundStatement);
 					}
 				}
@@ -227,8 +227,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 			AnalysisFileTree directory, MetricDirectoryResults results)
 			throws EvaluationStoreException {
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(session, "storeDirectoryResults:"
-						+ getStoreName(), "INSERT INTO "
+				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
 						+ "(hashId, resultsClass, results) VALUES (?, ?, ?)");
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
@@ -247,16 +246,29 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 							+ "' into '" + getStoreName() + "'.", e);
 		}
 
-		preparedStatement = CassandraConnection.getPreparedStatement(session,
-				"storeDirectoryResultsBigTable:" + getStoreName(),
-				"INSERT INTO " + CassandraElementNames.EVALUATION_METRICS_TABLE
-						+ " (time, " + "duration, " + "project, "
-						+ "analysis_run, " + "internal_directory, "
-						+ "file_name, " + "evaluator_name, "
-						+ "code_range_name, " + "code_range_type, "
-						+ "quality, " + "quality_level, " + "name, " + "unit, "
-						+ "metric) VALUES "
-						+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		preparedStatement = CassandraConnection
+				.getPreparedStatement(
+						session,
+						"INSERT INTO "
+								+ CassandraElementNames.EVALUATION_METRICS_TABLE
+								+ " (time, "
+								+ "duration, "
+								+ "analysis_project, "
+								+ "analysis_run, "
+								+ "hashid, "
+								+ "internal_directory, "
+								+ "file_name, "
+								+ "evaluator_name, "
+								+ "code_range_name, "
+								+ "code_range_type, "
+								+ "quality, "
+								+ "quality_level, "
+								+ "name, "
+								+ "unit, "
+								+ "metric, "
+								+ "level_of_measurement, "
+								+ "description) VALUES "
+								+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 		Date time = evaluator.getStartTime();
 		long duration = evaluator.getDuration();
@@ -291,15 +303,20 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		for (Parameter<?> parameter : parameters) {
 			String name = parameter.getName();
 			String unit = parameter.getUnit();
-			Object value = row.get(name).getValue();
-			if (Number.class.isAssignableFrom(value.getClass())) {
-				double val = ((Number) value).doubleValue();
-				BoundStatement boundStatement = preparedStatement.bind(time,
-						duration, analysisProjectUUID, analysisRunUUID,
-						internalPath, fileName, evaluatorName, codeRangeName,
-						codeRangeType.getName(), quality.toString(),
-						qualityLevel, name, unit, val);
-				session.execute(boundStatement);
+			Value<?> valueObject = row.get(name);
+			if (valueObject != null) {
+				Object value = valueObject.getValue();
+				if (Number.class.isAssignableFrom(value.getClass())) {
+					double val = ((Number) value).doubleValue();
+					BoundStatement boundStatement = preparedStatement.bind(
+							time, duration, analysisProjectUUID,
+							analysisRunUUID, hashId.toString(), internalPath,
+							fileName, evaluatorName, codeRangeName,
+							codeRangeType.name(), quality.name(), qualityLevel,
+							name, unit, val, parameter.getLevelOfMeasurement()
+									.name(), parameter.getDescription());
+					session.execute(boundStatement);
+				}
 			}
 		}
 	}
@@ -309,8 +326,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 			Evaluator evaluator, AnalysisFileTree directory,
 			MetricDirectoryResults results) throws EvaluationStoreException {
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(session, "storeProjectResults:"
-						+ getStoreName(), "INSERT INTO "
+				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
 						+ "(uuid, resultsClass, results) VALUES (?, ?, ?)");
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
@@ -330,15 +346,28 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 							+ "'.", e);
 		}
 
-		preparedStatement = CassandraConnection.getPreparedStatement(session,
-				"storeDirectoryResultsBigTable:" + getStoreName(),
-				"INSERT INTO " + CassandraElementNames.EVALUATION_METRICS_TABLE
-						+ " (time, duration, " + "project, " + "analysis_run, "
-						+ "internal_directory, " + "file_name, "
-						+ "evaluator_name, " + "code_range_name, "
-						+ "code_range_type, " + "quality, " + "quality_level, "
-						+ "name, " + "unit, " + "metric) VALUES "
-						+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		preparedStatement = CassandraConnection
+				.getPreparedStatement(
+						session,
+						"INSERT INTO "
+								+ CassandraElementNames.EVALUATION_METRICS_TABLE
+								+ " (time, duration, "
+								+ "analysis_project, "
+								+ "analysis_run, "
+								+ "hashid, "
+								+ "internal_directory, "
+								+ "file_name, "
+								+ "evaluator_name, "
+								+ "code_range_name, "
+								+ "code_range_type, "
+								+ "quality, "
+								+ "quality_level, "
+								+ "name, "
+								+ "unit, "
+								+ "metric, "
+								+ "level_of_measurement, "
+								+ "description) VALUES "
+								+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 		Date time = evaluator.getStartTime();
 		long duration = evaluator.getDuration();
@@ -372,15 +401,21 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		for (Parameter<?> parameter : parameters) {
 			String name = parameter.getName();
 			String unit = parameter.getUnit();
-			Object value = row.get(name).getValue();
-			if (Number.class.isAssignableFrom(value.getClass())) {
-				double val = ((Number) value).doubleValue();
-				BoundStatement boundStatement = preparedStatement.bind(time,
-						duration, analysisProjectUUID, analysisRunUUID,
-						internalPath, fileName, evaluatorName, codeRangeName,
-						codeRangeType.getName(), quality.toString(),
-						qualityLevel, name, unit, val);
-				session.execute(boundStatement);
+			Value<?> valueObject = row.get(name);
+			if (valueObject != null) {
+				Object value = valueObject.getValue();
+				if (Number.class.isAssignableFrom(value.getClass())) {
+					double val = ((Number) value).doubleValue();
+					BoundStatement boundStatement = preparedStatement.bind(
+							time, duration, analysisProjectUUID,
+							analysisRunUUID, directory.getHashId().toString(),
+							internalPath, fileName, evaluatorName,
+							codeRangeName, codeRangeType.name(),
+							quality.name(), qualityLevel, name, unit, val,
+							parameter.getLevelOfMeasurement().name(),
+							parameter.getDescription());
+					session.execute(boundStatement);
+				}
 			}
 		}
 	}
@@ -389,10 +424,9 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final MetricFileResults readFileResults(HashId hashId)
 			throws EvaluationStoreException {
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(session, "readFileResults",
-						"SELECT results FROM "
-								+ CassandraElementNames.EVALUATION_FILES_TABLE
-								+ " WHERE hashid=? AND resultsClass=?");
+				.getPreparedStatement(session, "SELECT results FROM "
+						+ CassandraElementNames.EVALUATION_FILES_TABLE
+						+ " WHERE hashid=? AND resultsClass=?");
 		BoundStatement boundStatement = preparedStatement.bind(
 				hashId.toString(), getFileResultClass().getName());
 		ResultSet resultSet = session.execute(boundStatement);
@@ -424,12 +458,9 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final MetricDirectoryResults readDirectoryResults(HashId hashId)
 			throws EvaluationStoreException {
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(
-						session,
-						"readDirectoryResults",
-						"SELECT results FROM "
-								+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
-								+ " WHERE hashid=? AND resultsClass=?");
+				.getPreparedStatement(session, "SELECT results FROM "
+						+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
+						+ " WHERE hashid=? AND resultsClass=?");
 		BoundStatement boundStatement = preparedStatement.bind(
 				hashId.toString(), getDirectoryResultClass().getName());
 		ResultSet resultSet = session.execute(boundStatement);
@@ -461,12 +492,9 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final MetricDirectoryResults readProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException {
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(
-						session,
-						"readProjectResults",
-						"SELECT results FROM "
-								+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
-								+ " WHERE uuid=? AND resultsClass=?");
+				.getPreparedStatement(session, "SELECT results FROM "
+						+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
+						+ " WHERE uuid=? AND resultsClass=?");
 		BoundStatement boundStatement = preparedStatement.bind(analysisRunUUID,
 				getProjectResultClass().getName());
 		ResultSet resultSet = session.execute(boundStatement);
@@ -493,5 +521,30 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 					"Could not read object with analysis run UUID '"
 							+ analysisRunUUID + "'.", e);
 		}
+	}
+
+	@Override
+	public MetricsResultsIterator readMetrics(UUID analysisProject,
+			UUID analysisRun, String evaluatorName, String parameterName) {
+		CassandraQuery query = new CassandraQuery(session);
+		Equals<UUID> analysisProjectCriterion = new Equals<UUID>(
+				"analysis_project", analysisProject);
+		Equals<UUID> analysisRunCriterion = new Equals<UUID>("analysis_run",
+				analysisRun);
+		Equals<String> evaluatorNameCriterion = new Equals<String>(
+				"evaluator_name", evaluatorName);
+		Equals<String> parameterNameCriterion = new Equals<String>("name",
+				parameterName);
+		And and = new And(evaluatorNameCriterion, parameterNameCriterion);
+		// And and = new And(analysisRunCriterion, parameterNameCriterion,
+		// evaluatorNameCriterion, analysisProjectCriterion);
+		ResultSet resultSet = query.query("metrics", and, true, "time",
+				"duration", "analysis_project", "analysis_run", "hashid",
+				"internal_directory", "file_name", "source_code_location",
+				"language_name", "language_version", "evaluator_name",
+				"code_range_name", "code_range_type", "quality",
+				"quality_level", "name", "unit", "metric",
+				"level_of_measurement", "description");
+		return new MetricsResultsIterator(resultSet);
 	}
 }

@@ -20,18 +20,8 @@ public enum LevelOfMeasurement {
 	};
 
 	public boolean isAtLeast(LevelOfMeasurement level) {
-		LevelOfMeasurement[] values = values();
-		int me = 0;
-		int other = values.length - 1;
-		for (int i = 0; i < values.length; i++) {
-			LevelOfMeasurement value = values[i];
-			if (this == value) {
-				me = i;
-			}
-			if (level == value) {
-				other = i;
-			}
-		}
+		int me = ordinal();
+		int other = level.ordinal();
 		return (me >= other);
 	}
 }

@@ -32,6 +32,7 @@ public abstract class AbstractEvaluationView extends
 	 * This field contains the selection service which is used for subscription.
 	 */
 	private ISelectionService selectionService;
+
 	/**
 	 * This field contains the analysis which was selected throught the service.
 	 * This analysis is the basis to load evaluations from.
@@ -68,7 +69,7 @@ public abstract class AbstractEvaluationView extends
 		if (selection instanceof AnalysisSelection) {
 			analysisSelection = (AnalysisSelection) selection;
 			try {
-				updateEvaluation();
+				handleChangedAnalysisSelection();
 			} catch (EvaluationStoreException e) {
 				Activator activator = Activator.getDefault();
 				activator.getLog().log(
@@ -90,14 +91,16 @@ public abstract class AbstractEvaluationView extends
 
 	/**
 	 * This method is called every time the evaluation needs an update due to a
-	 * new selection.
+	 * new analysis selection.
 	 * 
 	 * {@link AbstractEvaluationView#getAnalysisSelection()} is used to retrieve
 	 * the current selection.
 	 * 
 	 * @throws EvaluationStoreException
+	 *             is thrown in cases the evaluation store has issues.
 	 */
-	protected abstract void updateEvaluation() throws EvaluationStoreException;
+	protected abstract void handleChangedAnalysisSelection()
+			throws EvaluationStoreException;
 
 	/**
 	 * This method returns the current selection.

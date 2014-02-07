@@ -78,14 +78,14 @@ public class CassandraConnection {
 	}
 
 	public static PreparedStatement getPreparedStatement(Session session,
-			String id, String statement) {
-		PreparedStatement preparedStatement = preparedStatements.get(id);
+			String statement) {
+		PreparedStatement preparedStatement = preparedStatements.get(statement);
 		if (preparedStatement == null) {
 			synchronized (preparedStatements) {
-				preparedStatement = preparedStatements.get(id);
+				preparedStatement = preparedStatements.get(statement);
 				if (preparedStatement == null) {
 					preparedStatement = session.prepare(statement);
-					preparedStatements.put(id, preparedStatement);
+					preparedStatements.put(statement, preparedStatement);
 				}
 			}
 		}

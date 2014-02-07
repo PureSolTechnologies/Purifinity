@@ -205,7 +205,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	}
 
 	@Override
-	protected void updateEvaluation() throws EvaluationStoreException {
+	protected void handleChangedAnalysisSelection() throws EvaluationStoreException {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (mapMetricSelection != null)
 				&& (mapValueSelection != null)) {
@@ -374,12 +374,12 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 
 	@Override
 	public void applySettings() {
-		mapMetricSelection = settingsDialog.getMapMetric();
-		mapValueSelection = settingsDialog.getMapValue();
-		colorMetricSelection = settingsDialog.getColorMetric();
-		colorValueSelection = settingsDialog.getColorValue();
 		try {
-			updateEvaluation();
+			mapMetricSelection = settingsDialog.getMapMetric();
+			mapValueSelection = settingsDialog.getMapValue();
+			colorMetricSelection = settingsDialog.getColorMetric();
+			colorValueSelection = settingsDialog.getColorValue();
+			handleChangedAnalysisSelection();
 		} catch (EvaluationStoreException e) {
 			Activator activator = Activator.getDefault();
 			activator.getLog().log(

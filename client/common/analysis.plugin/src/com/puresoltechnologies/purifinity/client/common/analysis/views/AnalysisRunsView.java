@@ -45,14 +45,14 @@ import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJo
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
-import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseUserInterface;
+import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseTarget;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunImpl;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 
 public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 		SelectionListener, ISelectionProvider, ISelectionListener,
-		IJobChangeListener, Refreshable, DatabaseUserInterface {
+		IJobChangeListener, Refreshable, DatabaseTarget {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 

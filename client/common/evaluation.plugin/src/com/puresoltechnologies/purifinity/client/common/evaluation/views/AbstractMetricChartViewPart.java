@@ -85,7 +85,7 @@ public abstract class AbstractMetricChartViewPart extends
 			Object reference = chartCanvas.getReference(x, y);
 			AnalysisSelection selection = getAnalysisSelection();
 			if ((reference != null) && (selection != null)) {
-				AnalysisProject analysis = selection.getAnalysis();
+				AnalysisProject analysis = selection.getAnalysisProject();
 				AnalysisRun analysisRun = selection.getAnalysisRun();
 				if (reference instanceof AnalysisFileTree) {
 					AnalysisFileTree node = (AnalysisFileTree) reference;

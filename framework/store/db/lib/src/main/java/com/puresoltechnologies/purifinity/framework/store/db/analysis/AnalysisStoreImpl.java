@@ -81,16 +81,13 @@ public class AnalysisStoreImpl implements AnalysisStore {
 
 		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(
-						session,
-						"storeProjectAnalysisSettings",
-						"INSERT INTO "
-								+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
-								+ " (uuid, name, description, "
-								+ "file_includes, file_excludes, "
-								+ "location_includes, location_excludes, "
-								+ "ignore_hidden, repository_location) "
-								+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+				.getPreparedStatement(session, "INSERT INTO "
+						+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
+						+ " (uuid, name, description, "
+						+ "file_includes, file_excludes, "
+						+ "location_includes, location_excludes, "
+						+ "ignore_hidden, repository_location) "
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		BoundStatement bound = preparedStatement.bind(uuid, name, description,
 				fileSearchConfiguration.getFileIncludes(),
 				fileSearchConfiguration.getFileExcludes(),
@@ -162,7 +159,6 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(
 						session,
-						"readAnalysisProjectSettings",
 						"SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location FROM "
 								+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
 								+ " WHERE uuid=?");
@@ -267,13 +263,11 @@ public class AnalysisStoreImpl implements AnalysisStore {
 
 		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(session, "createAnalysisRun",
-						"INSERT INTO "
-								+ CassandraElementNames.RUN_SETTINGS_TABLE
-								+ " (uuid, " + "file_includes, file_excludes, "
-								+ "location_includes, location_excludes, "
-								+ "ignore_hidden) "
-								+ "VALUES (?, ?, ?, ?, ?, ?)");
+				.getPreparedStatement(session, "INSERT INTO "
+						+ CassandraElementNames.RUN_SETTINGS_TABLE + " (uuid, "
+						+ "file_includes, file_excludes, "
+						+ "location_includes, location_excludes, "
+						+ "ignore_hidden) " + "VALUES (?, ?, ?, ?, ?, ?)");
 		BoundStatement bound = preparedStatement.bind(uuid,
 				fileSearchConfiguration.getFileIncludes(),
 				fileSearchConfiguration.getFileExcludes(),
@@ -369,7 +363,6 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(
 						session,
-						"readSearchConfiguration",
 						"SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
 								+ CassandraElementNames.RUN_SETTINGS_TABLE
 								+ " WHERE uuid=?");
@@ -641,12 +634,9 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			UUID runUUID) {
 		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(
-						session,
-						"readCachedAnalysisFileTree",
-						"SELECT persisted_tree FROM "
-								+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
-								+ " WHERE uuid=?");
+				.getPreparedStatement(session, "SELECT persisted_tree FROM "
+						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
+						+ " WHERE uuid=?");
 		BoundStatement boundStatement = preparedStatement.bind(runUUID);
 		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
@@ -769,12 +759,9 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			AnalysisFileTree analysisFileTree) {
 		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(
-						session,
-						"cacheAnalysisFileTree",
-						"INSERT INTO "
-								+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
-								+ " (uuid, persisted_tree) VALUES (?, ?)");
+				.getPreparedStatement(session, "INSERT INTO "
+						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
+						+ " (uuid, persisted_tree) VALUES (?, ?)");
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 			try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
 					byteArrayOutputStream)) {

@@ -3,9 +3,25 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.utils;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 
+/**
+ * This interface is used to mark a class as evaluations part.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public interface EvaluationsTarget {
 
-	public void showEvaluation(AnalysisFileTree path)
+	/**
+	 * This method is used to force a part to show a new evaluation for another
+	 * part of the {@link AnalysisFileTree}.
+	 * 
+	 * @param node
+	 *            is the new {@link AnalysisFileTree} root node to be shown in
+	 *            the UI.
+	 * @throws EvaluationStoreException
+	 *             is thrown in case of a store issue.
+	 */
+	public void showEvaluation(AnalysisFileTree node)
 			throws EvaluationStoreException;
 
 }

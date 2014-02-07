@@ -117,8 +117,9 @@ public class CassandraSchemaV100 {
 								+ CassandraElementNames.EVALUATION_METRICS_TABLE
 								+ " (time timestamp, "
 								+ "duration bigint, "
-								+ "project uuid, "
+								+ "analysis_project uuid, "
 								+ "analysis_run uuid, "
+								+ "hashid varchar, "
 								+ "internal_directory varchar, "
 								+ "file_name varchar, "
 								+ "source_code_location varchar, "
@@ -132,7 +133,24 @@ public class CassandraSchemaV100 {
 								+ "name varchar, "
 								+ "unit varchar, "
 								+ "metric double, "
-								+ "PRIMARY KEY(project, analysis_run, internal_directory, file_name, code_range_name, code_range_type, evaluator_name, name));");
+								+ "level_of_measurement varchar, "
+								+ "description varchar, "
+								+ "PRIMARY KEY(analysis_project, analysis_run, hashid, code_range_name, code_range_type, evaluator_name, name));");
+		CassandraMigration.createIndex(cluster,
+				CassandraElementNames.EVALUATION_KEYSPACE, "1.0.0",
+				"Rick-Rainer Ludwig",
+				"Keeps the metrics in a big table for efficient retrieval.",
+				CassandraElementNames.EVALUATION_METRICS_TABLE, "analysis_run");
+		CassandraMigration.createIndex(cluster,
+				CassandraElementNames.EVALUATION_KEYSPACE, "1.0.0",
+				"Rick-Rainer Ludwig",
+				"Keeps the metrics in a big table for efficient retrieval.",
+				CassandraElementNames.EVALUATION_METRICS_TABLE,
+				"evaluator_name");
+		CassandraMigration.createIndex(cluster,
+				CassandraElementNames.EVALUATION_KEYSPACE, "1.0.0",
+				"Rick-Rainer Ludwig",
+				"Keeps the metrics in a big table for efficient retrieval.",
+				CassandraElementNames.EVALUATION_METRICS_TABLE, "name");
 	}
-
 }

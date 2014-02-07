@@ -16,7 +16,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.progress.UIJob;
 import org.osgi.framework.BundleContext;
 
-import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseUserInterface;
+import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseTarget;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
 
@@ -82,9 +82,9 @@ public class Activator extends AbstractUIPlugin {
 						for (IViewReference viewReference : workbenchPage
 								.getViewReferences()) {
 							IWorkbenchPart part = viewReference.getPart(true);
-							if (DatabaseUserInterface.class
+							if (DatabaseTarget.class
 									.isAssignableFrom(part.getClass())) {
-								DatabaseUserInterface databaseUserInterface = (DatabaseUserInterface) part;
+								DatabaseTarget databaseUserInterface = (DatabaseTarget) part;
 								databaseUserInterface
 										.setDatabaseAvailable(enabled);
 							}

@@ -167,7 +167,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		xParameterSelection = settingsDialog.getXParameter();
 		yMetricSelection = settingsDialog.getYMetric();
 		yParameterSelection = settingsDialog.getYParameter();
-		updateEvaluation();
+		handleChangedAnalysisSelection();
 	}
 
 	@Override
@@ -183,7 +183,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 	}
 
 	@Override
-	protected void updateEvaluation() {
+	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (xMetricSelection != null)
 				&& (xParameterSelection != null) && (yMetricSelection != null)
