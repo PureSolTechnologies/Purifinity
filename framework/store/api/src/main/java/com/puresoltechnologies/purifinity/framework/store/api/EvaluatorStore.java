@@ -6,6 +6,7 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
@@ -166,5 +167,6 @@ public interface EvaluatorStore {
 	 * @return
 	 */
 	public MetricsResultsIterator readMetrics(UUID analysisProject,
-			UUID analysisRun, String evaluatorName, String parameterName);
+			UUID analysisRun, String evaluatorName, String parameterName,
+			CodeRangeType codeRangeType);
 }

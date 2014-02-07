@@ -81,7 +81,8 @@ public class CodeDepthDirectoryResults extends AbstractEvaluatorResult
 		values.put(QUALITY_LEVEL.getName(), new GeneralValue<QualityLevel>(
 				qualityLevel, QUALITY_LEVEL));
 		values.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
-				qualityLevel.getQuality(), QUALITY));
+				qualityLevel != null ? qualityLevel.getQuality()
+						: SourceCodeQuality.UNSPECIFIED, QUALITY));
 		return values;
 	}
 

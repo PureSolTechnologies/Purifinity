@@ -22,8 +22,8 @@ public class AnalysisSelection implements ISelection {
 	private final AnalysisRun analysisRun;
 	private final AnalysisFileTree fileTreeNode;
 
-	public AnalysisSelection(AnalysisProject analysisProject, AnalysisRun analysisRun,
-			AnalysisFileTree fileTreeNode) {
+	public AnalysisSelection(AnalysisProject analysisProject,
+			AnalysisRun analysisRun, AnalysisFileTree fileTreeNode) {
 		super();
 		this.analysisProject = analysisProject;
 		this.analysisRun = analysisRun;
@@ -45,6 +45,46 @@ public class AnalysisSelection implements ISelection {
 	@Override
 	public boolean isEmpty() {
 		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((analysisProject == null) ? 0 : analysisProject.hashCode());
+		result = prime * result
+				+ ((analysisRun == null) ? 0 : analysisRun.hashCode());
+		result = prime * result
+				+ ((fileTreeNode == null) ? 0 : fileTreeNode.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AnalysisSelection other = (AnalysisSelection) obj;
+		if (analysisProject == null) {
+			if (other.analysisProject != null)
+				return false;
+		} else if (!analysisProject.equals(other.analysisProject))
+			return false;
+		if (analysisRun == null) {
+			if (other.analysisRun != null)
+				return false;
+		} else if (!analysisRun.equals(other.analysisRun))
+			return false;
+		if (fileTreeNode == null) {
+			if (other.fileTreeNode != null)
+				return false;
+		} else if (!fileTreeNode.equals(other.fileTreeNode))
+			return false;
+		return true;
 	}
 
 }

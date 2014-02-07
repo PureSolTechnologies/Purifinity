@@ -56,6 +56,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	protected abstract Class<? extends MetricDirectoryResults> getProjectResultClass();
 
 	private final Session session;
+	private final AnalysisFileTree oldTreeSelection = null;
 
 	public AbstractEvaluatorStore() {
 		super();
@@ -295,8 +296,13 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 				.getValue() : SourceCodeQuality.UNSPECIFIED);
 		Value<?> qualityLevelValue = row.get(QualityLevelParameter
 				.getInstance().getName());
-		Double qualityLevelDouble = (qualityLevelValue != null ? ((QualityLevel) qualityLevelValue
-				.getValue()).getLevel() : null);
+		Double qualityLevelDouble = null;
+		if (qualityLevelValue != null) {
+			QualityLevel l = (QualityLevel) qualityLevelValue.getValue();
+			if (l != null) {
+				qualityLevelDouble = l.getLevel();
+			}
+		}
 		Float qualityLevel = qualityLevelDouble != null ? qualityLevelDouble
 				.floatValue() : null;
 		Set<Parameter<?>> parameters = results.getParameters();
@@ -306,7 +312,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 			Value<?> valueObject = row.get(name);
 			if (valueObject != null) {
 				Object value = valueObject.getValue();
-				if (Number.class.isAssignableFrom(value.getClass())) {
+				if ((value != null)
+						&& (Number.class.isAssignableFrom(value.getClass()))) {
 					double val = ((Number) value).doubleValue();
 					BoundStatement boundStatement = preparedStatement.bind(
 							time, duration, analysisProjectUUID,
@@ -525,7 +532,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 
 	@Override
 	public MetricsResultsIterator readMetrics(UUID analysisProject,
-			UUID analysisRun, String evaluatorName, String parameterName) {
+			UUID analysisRun, String evaluatorName, String parameterName,
+			CodeRangeType codeRangeType) {
 		CassandraQuery query = new CassandraQuery(session);
 		Equals<UUID> analysisProjectCriterion = new Equals<UUID>(
 				"analysis_project", analysisProject);
@@ -535,9 +543,11 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 				"evaluator_name", evaluatorName);
 		Equals<String> parameterNameCriterion = new Equals<String>("name",
 				parameterName);
-		And and = new And(evaluatorNameCriterion, parameterNameCriterion);
-		// And and = new And(analysisRunCriterion, parameterNameCriterion,
-		// evaluatorNameCriterion, analysisProjectCriterion);
+		Equals<String> codeRangeTypeCriterion = new Equals<String>(
+				"code_range_type", codeRangeType.name());
+		And and = new And(analysisProjectCriterion, analysisRunCriterion,
+				evaluatorNameCriterion, parameterNameCriterion,
+				codeRangeTypeCriterion);
 		ResultSet resultSet = query.query("metrics", and, true, "time",
 				"duration", "analysis_project", "analysis_run", "hashid",
 				"internal_directory", "file_name", "source_code_location",

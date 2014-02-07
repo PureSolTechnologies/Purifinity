@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
@@ -26,7 +25,6 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
@@ -39,16 +37,13 @@ import com.puresoltechnologies.purifinity.client.common.chart.GenericMark2D;
 import com.puresoltechnologies.purifinity.client.common.chart.Plot;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.BarMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
-import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.HistogramChartViewSettingsDialog;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.framework.store.api.MetricsResult;
@@ -60,14 +55,18 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	private HistogramChartViewSettingsDialog settingsDialog;
 
-	private EvaluatorFactory metricSelection = null;
+	private EvaluatorFactory evaluatorSelection = null;
 	private Parameter<?> parameterSelection = null;
+	private final EvaluatorFactory oldEvaluatorSelection = null;
+	private final Parameter<?> oldParameterSelection = null;
 	private UUID analysisProjectSelectionUUID = null;
 	private UUID analysisRunSelectionUUID = null;
+	private UUID oldAnalysisProjectSelectionUUID = null;
+	private UUID oldAnalysisRunSelectionUUID = null;
 
 	private Chart2D chart;
 
-	private final Map<HashId, MetricsResult> projectMetrics = new HashMap<>();
+	private final List<MetricsResult> projectMetrics = new ArrayList<>();
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -89,9 +88,9 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 		String parameterSelectionName = memento.getString("parameter");
 		for (EvaluatorFactory metric : allMetrics) {
 			if (metric.getName().equals(metricSelectionName)) {
-				metricSelection = metric;
+				evaluatorSelection = metric;
 				if (parameterSelectionName != null) {
-					for (Parameter<?> parameter : metricSelection
+					for (Parameter<?> parameter : evaluatorSelection
 							.getParameters()) {
 						if (parameter.getName().equals(parameterSelectionName)) {
 							parameterSelection = parameter;
@@ -106,8 +105,9 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	public void saveState(IMemento memento) {
-		memento.putString("metric.class", metricSelection.getClass().getName());
-		memento.putString("metric", metricSelection.getName());
+		memento.putString("metric.class", evaluatorSelection.getClass()
+				.getName());
+		memento.putString("metric", evaluatorSelection.getName());
 		memento.putString("parameter", parameterSelection.getName());
 
 		super.saveState(memento);
@@ -137,7 +137,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	public void showSettings() {
 		if (settingsDialog == null) {
 			settingsDialog = new HistogramChartViewSettingsDialog(this,
-					metricSelection, parameterSelection);
+					evaluatorSelection, parameterSelection);
 			settingsDialog.open();
 		} else {
 			settingsDialog.close();
@@ -152,9 +152,11 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	public void applySettings() {
-		metricSelection = settingsDialog.getMetric();
+		evaluatorSelection = settingsDialog.getMetric();
 		parameterSelection = settingsDialog.getParameter();
-		handleChangedAnalysisSelection();
+		if ((evaluatorSelection != null) && (parameterSelection != null)) {
+			handleChangedAnalysisSelection();
+		}
 	}
 
 	@Override
@@ -167,18 +169,23 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	@Override
 	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
-		if ((analysisSelection != null) && (metricSelection != null)
+		if ((analysisSelection != null) && (evaluatorSelection != null)
 				&& (parameterSelection != null)) {
-			UUID analysisProjectUUID = analysisSelection.getAnalysisProject()
+			analysisProjectSelectionUUID = analysisSelection
+					.getAnalysisProject().getInformation().getUUID();
+			analysisRunSelectionUUID = analysisSelection.getAnalysisRun()
 					.getInformation().getUUID();
-			UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-					.getInformation().getUUID();
-			if ((!analysisRunUUID.equals(analysisRunSelectionUUID))
-					|| (!analysisProjectUUID
-							.equals(analysisProjectSelectionUUID))) {
-				analysisProjectSelectionUUID = analysisProjectUUID;
-				analysisRunSelectionUUID = analysisRunUUID;
-				loadData(analysisSelection.getAnalysisRun());
+			if ((!analysisProjectSelectionUUID
+					.equals(oldAnalysisProjectSelectionUUID))
+					|| (!analysisRunSelectionUUID
+							.equals(oldAnalysisRunSelectionUUID))
+					|| ((oldEvaluatorSelection == null) || (!evaluatorSelection
+							.getClass()
+							.equals(oldEvaluatorSelection.getClass())))
+					|| (!oldParameterSelection.equals(parameterSelection))) {
+				oldAnalysisProjectSelectionUUID = analysisProjectSelectionUUID;
+				oldAnalysisRunSelectionUUID = analysisRunSelectionUUID;
+				loadData();
 			}
 			AnalysisFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
@@ -188,51 +195,37 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 		}
 	}
 
-	private void loadData(AnalysisRun analysisRun) {
+	private void loadData() {
 		projectMetrics.clear();
 		EvaluatorStore store = EvaluatorStoreFactory.getFactory()
-				.createInstance(metricSelection.getEvaluatorClass());
+				.createInstance(evaluatorSelection.getEvaluatorClass());
 		MetricsResultsIterator results = store.readMetrics(
 				analysisProjectSelectionUUID, analysisRunSelectionUUID,
-				metricSelection.getName(), parameterSelection.getName());
+				evaluatorSelection.getName(), parameterSelection.getName(),
+				CodeRangeType.FILE);
 		for (MetricsResult result : results) {
-			projectMetrics.put(result.getHashId(), result);
+			projectMetrics.add(result);
 		}
 	}
 
 	@Override
 	public void showEvaluation(AnalysisFileTree path) {
-		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
-				.createInstance(metricSelection.getEvaluatorClass());
 		final List<Value<?>> histogramValues = new ArrayList<Value<?>>();
 		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
 			@Override
 			public WalkingAction visit(AnalysisFileTree node) {
-				try {
-					if (!node.isFile()) {
-						return WalkingAction.PROCEED;
-					}
-					HashId hashId = node.getHashId();
-					MetricFileResults results = store.readFileResults(hashId);
-					if (results == null) {
-						return WalkingAction.PROCEED;
-					}
-					List<Map<String, Value<?>>> values = findSuitableValueMaps(
-							node, results, parameterSelection,
-							CodeRangeType.FILE);
-					for (Map<String, Value<?>> value : values) {
-						histogramValues.add(value.get(parameterSelection
-								.getName()));
-					}
+				if (!node.isFile()) {
 					return WalkingAction.PROCEED;
-				} catch (EvaluationStoreException e) {
-					Activator activator = Activator.getDefault();
-					activator.getLog().log(
-							new Status(Status.ERROR, activator.getBundle()
-									.getSymbolicName(),
-									"Could not handle new selection.", e));
-					return WalkingAction.ABORT;
 				}
+				HashId hashId = node.getHashId();
+				for (MetricsResult metricsResult : projectMetrics) {
+					if ((hashId.equals(metricsResult.getHashId()))
+							&& (metricsResult.getCodeRangeType()
+									.equals(CodeRangeType.FILE))) {
+						histogramValues.add(metricsResult.getValue());
+					}
+				}
+				return WalkingAction.PROCEED;
 			}
 		};
 		TreeWalker.walk(visitor, path);
@@ -242,7 +235,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	private void setupChart(List<Value<?>> histogramValues) {
 		chart.removeAllPlots();
 
-		chart.setTitle("Histogram Chart for " + metricSelection.getName());
+		chart.setTitle("Histogram Chart for " + evaluatorSelection.getName());
 		chart.setSubTitle(parameterSelection.getName());
 
 		if (parameterSelection.isNumeric()) {
