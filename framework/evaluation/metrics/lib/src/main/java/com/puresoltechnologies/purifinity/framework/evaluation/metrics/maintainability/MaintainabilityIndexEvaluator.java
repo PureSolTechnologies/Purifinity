@@ -108,7 +108,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 					codeRange.getType(), codeRange.getCanonicalName(), result,
 					MaintainabilityQuality.get(codeRange.getType(), result)));
 		}
-		store.storeFileResults(hashId, this, analysis, results);
+		store.storeFileResults(analysis, this, results);
 	}
 
 	private McCabeMetricResult findFileResult(
@@ -161,8 +161,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 			throws InterruptedException, EvaluationStoreException {
 		MaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), this, directory,
-					finalResults);
+			store.storeDirectoryResults(directory, this, finalResults);
 		}
 	}
 
@@ -200,16 +199,14 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	protected void processProject() throws InterruptedException,
 			EvaluationStoreException {
 		AnalysisRun analysisRun = getAnalysisRun();
-		if (store
-				.hasProjectResults(analysisRun.getInformation().getUUID())) {
+		if (store.hasProjectResults(analysisRun.getInformation().getUUID())) {
 			return;
 		}
 		MaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(analysisRun
 				.getFileTree());
 		if (finalResults != null) {
-			store.storeProjectResults(analysisRun.getInformation()
-					.getUUID(), this, analysisRun.getFileTree(),
-					finalResults);
+			store.storeProjectResults(analysisRun.getInformation().getUUID(),
+					this, analysisRun.getFileTree(), finalResults);
 		}
 	}
 }

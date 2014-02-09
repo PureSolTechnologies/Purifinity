@@ -88,7 +88,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 							result)));
 		}
 		if (results != null) {
-			store.storeFileResults(hashId, this, analysis, results);
+			store.storeFileResults(analysis, this, results);
 		}
 	}
 
@@ -116,8 +116,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 			throws InterruptedException, EvaluationStoreException {
 		NormalizedMaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), this, directory,
-					finalResults);
+			store.storeDirectoryResults(directory, this, finalResults);
 		}
 	}
 

@@ -105,7 +105,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 					fileResults.setAverageSalary(averageSalary, currency);
 					fileResults.setProject(project);
 					fileResults.setSloc(phyLoc);
-					store.storeFileResults(hashId, this, analysis, fileResults);
+					store.storeFileResults(analysis, this, fileResults);
 					break;
 				}
 			}
@@ -116,8 +116,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	protected void processDirectory(AnalysisFileTree directory)
 			throws InterruptedException, EvaluationStoreException {
 		IntermediateCoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
-		store.storeDirectoryResults(directory.getHashId(), this, directory,
-				directoryResults);
+		store.storeDirectoryResults(directory, this, directoryResults);
 	}
 
 	private IntermediateCoCoMoDirectoryResults createDirectoryResults(
@@ -153,8 +152,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 			EvaluationStoreException {
 		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		IntermediateCoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
-		store.storeDirectoryResults(directory.getHashId(), this, directory,
-				directoryResults);
+		store.storeDirectoryResults(directory, this, directoryResults);
 	}
 
 }

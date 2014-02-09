@@ -62,7 +62,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 						codeRange.getType(), codeRange.getCanonicalName(),
 						metric.getHalsteadResults(), metric.getQuality()));
 			}
-			store.storeFileResults(hashId, this, analysis, results);
+			store.storeFileResults(analysis, this, results);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 		}
 		HalsteadMetricDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(hashId, this, directory, finalResults);
+			store.storeDirectoryResults(directory, this, finalResults);
 		}
 	}
 
@@ -148,8 +148,7 @@ public class HalsteadMetricEvaluator extends AbstractEvaluator {
 		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		HalsteadMetricDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), this, directory,
-					finalResults);
+			store.storeDirectoryResults(directory, this, finalResults);
 		}
 	}
 }

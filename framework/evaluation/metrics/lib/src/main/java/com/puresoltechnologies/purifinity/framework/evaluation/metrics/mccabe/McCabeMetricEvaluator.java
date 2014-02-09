@@ -59,7 +59,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 						codeRange.getType(), codeRange.getCanonicalName(),
 						metric.getCyclomaticNumber(), metric.getQuality()));
 			}
-			store.storeFileResults(hashId, this, analysis, results);
+			store.storeFileResults(analysis, this, results);
 		}
 	}
 
@@ -77,8 +77,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 		}
 		McCabeMetricDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), this, directory,
-					finalResults);
+			store.storeDirectoryResults(directory, this, finalResults);
 		}
 	}
 
@@ -146,8 +145,7 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		McCabeMetricDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), this, directory,
-					finalResults);
+			store.storeDirectoryResults(directory, this, finalResults);
 		}
 	}
 }

@@ -71,7 +71,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 						.getType(), codeRange.getCanonicalName(), metric
 						.getMaxDepth(), quality));
 			}
-			store.storeFileResults(hashId, this, analysis, results);
+			store.storeFileResults(analysis, this, results);
 		}
 	}
 
@@ -89,8 +89,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 		}
 		CodeDepthDirectoryResults directoryResults = calculateDirectoryResults(directory);
 		if (directoryResults != null) {
-			store.storeDirectoryResults(hashId, this, directory,
-					directoryResults);
+			store.storeDirectoryResults(directory, this, directoryResults);
 		}
 	}
 
@@ -140,8 +139,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		CodeDepthDirectoryResults directoryResults = calculateDirectoryResults(directory);
 		if (directoryResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), this, directory,
-					directoryResults);
+			store.storeDirectoryResults(directory, this, directoryResults);
 		}
 	}
 }

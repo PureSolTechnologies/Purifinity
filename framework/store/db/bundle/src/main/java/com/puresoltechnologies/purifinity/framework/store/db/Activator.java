@@ -41,9 +41,6 @@ public class Activator extends AbstractActivator {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 
-		CassandraConnection.connect();
-		TitanConnection.connect();
-
 		registerService(AnalysisStore.class, new AnalysisStoreImpl());
 		registerService(DirectoryStore.class, new DirectoryStoreImpl());
 		registerService(FileStore.class, new FileStoreImpl());

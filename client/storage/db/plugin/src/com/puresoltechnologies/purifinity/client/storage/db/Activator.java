@@ -18,7 +18,9 @@ import org.osgi.framework.BundleContext;
 
 import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseTarget;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
+import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnectionException;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
+import com.puresoltechnologies.purifinity.framework.store.db.TitanConnectionException;
 
 public class Activator extends AbstractUIPlugin {
 
@@ -42,16 +44,23 @@ public class Activator extends AbstractUIPlugin {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					monitor.beginTask("Cassandra", 2);
-					monitor.subTask("Start process");
+					monitor.beginTask("Starting", 4);
+					monitor.subTask("Cassandra process");
 					CassandraServer.start();
 					monitor.worked(1);
-					monitor.subTask("Wait for availability");
+					monitor.subTask("Wait for Cassandra");
 					CassandraServer.waitForStartup(15000);
+					monitor.worked(1);
+					monitor.subTask("Connect to Cassandra");
+					CassandraConnection.connect();
+					monitor.worked(1);
+					monitor.subTask("Connect Titan to Cassandra");
+					TitanConnection.connect();
 					monitor.worked(1);
 					monitor.done();
 					return Status.OK_STATUS;
-				} catch (IOException e) {
+				} catch (IOException | CassandraConnectionException
+						| TitanConnectionException e) {
 					monitor.done();
 					return new Status(Status.ERROR, getBundle()
 							.getSymbolicName(),
@@ -82,8 +91,8 @@ public class Activator extends AbstractUIPlugin {
 						for (IViewReference viewReference : workbenchPage
 								.getViewReferences()) {
 							IWorkbenchPart part = viewReference.getPart(true);
-							if (DatabaseTarget.class
-									.isAssignableFrom(part.getClass())) {
+							if (DatabaseTarget.class.isAssignableFrom(part
+									.getClass())) {
 								DatabaseTarget databaseUserInterface = (DatabaseTarget) part;
 								databaseUserInterface
 										.setDatabaseAvailable(enabled);

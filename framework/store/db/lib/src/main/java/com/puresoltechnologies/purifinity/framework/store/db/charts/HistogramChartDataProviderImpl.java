@@ -33,7 +33,7 @@ public class HistogramChartDataProviderImpl implements
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(
 						session,
-						"SELECT hashid, metric FROM "
+						"SELECT hashid, type, metric FROM "
 								+ CassandraElementNames.EVALUATION_METRICS_TABLE
 								+ " WHERE analysis_project=? AND analysis_run=? AND evaluator_name=? AND name=? AND code_range_type=? ALLOW FILTERING");
 		BoundStatement boundStatement = preparedStatement.bind(analysisProject,

@@ -66,7 +66,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 					.getType(), codeRange.getCanonicalName(), result,
 					EntropyQuality.get(codeRange.getType(), result)));
 		}
-		store.storeFileResults(hashId, this, analysis, results);
+		store.storeFileResults(analysis, this, results);
 	}
 
 	/**
@@ -126,8 +126,7 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 			throws InterruptedException, EvaluationStoreException {
 		EntropyDirectoryResults directoryResults = calculateDirectoryResults(directory);
 		if (directoryResults != null) {
-			store.storeDirectoryResults(directory.getHashId(), this, directory,
-					directoryResults);
+			store.storeDirectoryResults(directory, this, directoryResults);
 		}
 	}
 
@@ -176,7 +175,6 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 			EvaluationStoreException {
 		AnalysisFileTree directory = getAnalysisRun().getFileTree();
 		EntropyDirectoryResults directoryResults = calculateDirectoryResults(directory);
-		store.storeDirectoryResults(directory.getHashId(), this, directory,
-				directoryResults);
+		store.storeDirectoryResults(directory, this, directoryResults);
 	}
 }

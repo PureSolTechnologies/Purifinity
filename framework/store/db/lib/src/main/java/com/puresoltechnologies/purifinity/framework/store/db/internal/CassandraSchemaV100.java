@@ -132,6 +132,8 @@ public class CassandraSchemaV100 {
 								+ "quality_level float, "
 								+ "name varchar, "
 								+ "unit varchar, "
+								+ "numeric boolean, "
+								+ "type varchar, "
 								+ "metric double, "
 								+ "level_of_measurement varchar, "
 								+ "description varchar, "

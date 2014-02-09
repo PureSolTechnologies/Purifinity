@@ -81,7 +81,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 						.getType(), codeRange.getCanonicalName(), metric
 						.getSLOCResult(), metric.getQuality()));
 			}
-			store.storeFileResults(hashId, this, analysis, results);
+			store.storeFileResults(analysis, this, results);
 		}
 	}
 
@@ -99,7 +99,7 @@ public class SLOCEvaluator extends AbstractEvaluator {
 		}
 		SLOCDirectoryResults finalResults = createDirectoryResults(directory);
 		if (finalResults != null) {
-			store.storeDirectoryResults(hashId, this, directory, finalResults);
+			store.storeDirectoryResults(directory, this, finalResults);
 		}
 	}
 

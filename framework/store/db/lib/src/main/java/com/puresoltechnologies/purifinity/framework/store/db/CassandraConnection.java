@@ -3,6 +3,9 @@ package com.puresoltechnologies.purifinity.framework.store.db;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Cluster.Builder;
 import com.datastax.driver.core.PreparedStatement;
@@ -18,6 +21,9 @@ import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.Mig
  * @author Rick-Rainer Ludwig
  */
 public class CassandraConnection {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(CassandraConnection.class);
 
 	private static final String CASSANDRA_HOST = "localhost";
 	private static final int CASSANDRA_CQL_PORT = 9042;
@@ -40,21 +46,26 @@ public class CassandraConnection {
 
 	public static void connect() throws CassandraConnectionException {
 		if (cluster != null) {
-			throw new CassandraConnectionException(
-					"Cassandra database was already connected.");
+			return;
 		}
+		logger.info("Connect to Cassandra database...");
 		cluster = clusterBuilder.addContactPoints(CASSANDRA_HOST)
 				.withPort(CASSANDRA_CQL_PORT).build();
+		migrate();
+		analysisSession = CassandraUtils.connectToCluster(cluster,
+				CassandraElementNames.ANALYSIS_KEYSPACE);
+		evaluationSession = CassandraUtils.connectToCluster(cluster,
+				CassandraElementNames.EVALUATION_KEYSPACE);
+		logger.info("Cassandra database connected.");
+	}
+
+	private static void migrate() throws CassandraConnectionException {
 		try {
 			CassandraSchema.migrate(cluster);
 		} catch (MigrationException e) {
 			throw new CassandraConnectionException(
 					"Could not migrate Cassandra.", e);
 		}
-		analysisSession = CassandraUtils.connectToCluster(cluster,
-				CassandraElementNames.ANALYSIS_KEYSPACE);
-		evaluationSession = CassandraUtils.connectToCluster(cluster,
-				CassandraElementNames.EVALUATION_KEYSPACE);
 	}
 
 	public static void disconnect() throws CassandraConnectionException {
@@ -70,7 +81,8 @@ public class CassandraConnection {
 	}
 
 	public static boolean isConnected() {
-		return cluster != null;
+		return (cluster != null) && (analysisSession != null)
+				&& (evaluationSession != null);
 	}
 
 	public static Cluster getCluster() {

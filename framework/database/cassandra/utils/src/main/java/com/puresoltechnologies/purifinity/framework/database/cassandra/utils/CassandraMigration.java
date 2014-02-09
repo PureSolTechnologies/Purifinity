@@ -3,6 +3,9 @@ package com.puresoltechnologies.purifinity.framework.database.cassandra.utils;
 import java.io.IOException;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
@@ -16,8 +19,10 @@ import com.puresoltechnologies.commons.misc.HashUtilities;
 
 public class CassandraMigration {
 
-	private static final String KEYSPACE_NAME = "cluster_migration";
+	private static final Logger logger = LoggerFactory
+			.getLogger(CassandraMigration.class);
 
+	private static final String KEYSPACE_NAME = "cluster_migration";
 	public static final String CHANGELOG_TABLE = "changelog";
 
 	private static PreparedStatement preparedInsertStatement = null;
@@ -36,23 +41,27 @@ public class CassandraMigration {
 			KeyspaceMetadata keyspaceMetadata = clusterMetadata
 					.getKeyspace(KEYSPACE_NAME);
 			if (keyspaceMetadata == null) {
+				logger.info("Keyspace for Cassandra migration is missing. Needs to be created...");
 				session.execute("CREATE KEYSPACE " + KEYSPACE_NAME
 						+ " WITH replication " + "= {'class':'"
 						+ ReplicationStrategy.SIMPLE_STRATEGY.getStrategyName()
 						+ "', 'replication_factor':1};");
 				keyspaceMetadata = clusterMetadata.getKeyspace(KEYSPACE_NAME);
-			}
-			if (keyspaceMetadata == null) {
-				throw new MigrationException("Could not create keyspace '"
-						+ KEYSPACE_NAME + "'.");
+				if (keyspaceMetadata == null) {
+					throw new MigrationException("Could not create keyspace '"
+							+ KEYSPACE_NAME + "'.");
+				}
+				logger.info("Keyspace for Cassandra migration created.");
 			}
 			if (keyspaceMetadata.getTable(CHANGELOG_TABLE) == null) {
+				logger.info("ChangeLog table for Cassandra migration is missing. Needs to be created...");
 				session.execute("CREATE TABLE " + KEYSPACE_NAME + "."
 						+ CHANGELOG_TABLE + " (time timestamp, "
 						+ "version varchar, " + "developer varchar, "
 						+ "keyspace_name varchar, " + "command varchar, "
 						+ "hashid varchar, " + "comment varchar, "
 						+ "PRIMARY KEY(version, keyspace_name, command));");
+				logger.info("ChangeLog table for Cassandra migration created.");
 			}
 		} finally {
 			session.shutdown();
@@ -105,9 +114,12 @@ public class CassandraMigration {
 					keyspace);
 			try {
 				if (!wasMigrated(session, version, keyspace, command)) {
+					logger.info("Cassandra migration is needed:\n\"" + command
+							+ "\"");
 					keyspaceSession.execute(command);
 					writeLog(session, version, developer, keyspace, command,
 							comment);
+					logger.info("Cassandra migration performed successfully.");
 				}
 			} finally {
 				keyspaceSession.shutdown();
@@ -125,9 +137,12 @@ public class CassandraMigration {
 		try {
 			String command = migrationProcedure.getClass().getCanonicalName();
 			if (!wasMigrated(session, version, keyspace, command)) {
+				logger.info("Cassandra migration is needed:\n\"" + command
+						+ "\"");
 				migrationProcedure.perform(cluster);
 				writeLog(session, version, developer, keyspace, command,
 						comment);
+				logger.info("Cassandra migration performed successfully.");
 			}
 		} finally {
 			session.shutdown();
