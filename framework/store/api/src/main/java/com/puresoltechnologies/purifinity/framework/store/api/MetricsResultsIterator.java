@@ -49,7 +49,7 @@ public class MetricsResultsIterator implements Iterable<MetricsResult>,
 		long duration = next.getLong("duration");
 		UUID project = next.getUUID("analysis_project");
 		UUID analysisRun = next.getUUID("analysis_run");
-		HashId hashId = HashId.fromString(next.getString("hashid"));
+		HashId hashId = HashId.valueOf(next.getString("hashid"));
 		String internalDirectory = next.getString("internal_directory");
 		String fileName = next.getString("file_name");
 		String sourceCodeLocation = next.getString("source_code_location");

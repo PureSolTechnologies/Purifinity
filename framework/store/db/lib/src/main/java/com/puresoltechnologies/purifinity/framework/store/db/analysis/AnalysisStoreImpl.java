@@ -722,7 +722,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			analyses = null;
 		}
 		AnalysisFileTree hashIdFileTree = new AnalysisFileTree(parent, name,
-				HashId.fromString(hash), isFile, sourceCodeLocation, analyses);
+				HashId.valueOf(hash), isFile, sourceCodeLocation, analyses);
 		Iterable<Vertex> vertices = treeVertex
 				.query()
 				.labels(TitanElementNames.CONTAINS_DIRECTORY_LABEL,
@@ -750,7 +750,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		String analyzerMessage = analysisVertex
 				.getProperty(TitanElementNames.ANALYSIS_MESSAGE_PROPERTY);
 
-		return new AnalysisInformation(HashId.fromString(hashId), startTime,
+		return new AnalysisInformation(HashId.valueOf(hashId), startTime,
 				duration, successful, languageName, languageVersion,
 				analyzerMessage);
 	}

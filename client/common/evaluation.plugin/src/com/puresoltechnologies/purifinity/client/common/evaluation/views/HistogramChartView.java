@@ -44,10 +44,8 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsA
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
-import com.puresoltechnologies.purifinity.framework.store.api.MetricsResult;
-import com.puresoltechnologies.purifinity.framework.store.api.MetricsResultsIterator;
+import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProvider;
+import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProviderFactory;
 
 public class HistogramChartView extends AbstractMetricChartViewPart {
 
@@ -57,16 +55,18 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	private EvaluatorFactory evaluatorSelection = null;
 	private Parameter<?> parameterSelection = null;
-	private final EvaluatorFactory oldEvaluatorSelection = null;
-	private final Parameter<?> oldParameterSelection = null;
+	private EvaluatorFactory oldEvaluatorSelection = null;
+	private Parameter<?> oldParameterSelection = null;
 	private UUID analysisProjectSelectionUUID = null;
 	private UUID analysisRunSelectionUUID = null;
 	private UUID oldAnalysisProjectSelectionUUID = null;
 	private UUID oldAnalysisRunSelectionUUID = null;
+	private AnalysisFileTree pathSelection = null;
+	private final AnalysisFileTree oldPathSelection = null;
 
 	private Chart2D chart;
 
-	private final List<MetricsResult> projectMetrics = new ArrayList<>();
+	private final Map<HashId, List<Value<Double>>> values = new HashMap<>();
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -185,27 +185,24 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 					|| (!oldParameterSelection.equals(parameterSelection))) {
 				oldAnalysisProjectSelectionUUID = analysisProjectSelectionUUID;
 				oldAnalysisRunSelectionUUID = analysisRunSelectionUUID;
+				oldEvaluatorSelection = evaluatorSelection;
+				oldParameterSelection = parameterSelection;
 				loadData();
 			}
-			AnalysisFileTree path = analysisSelection.getFileTreeNode();
-			if (path.isFile()) {
-				path = path.getParent();
-			}
-			showEvaluation(path);
+			pathSelection = analysisSelection.getFileTreeNode();
+			showEvaluation(pathSelection);
 		}
 	}
 
 	private void loadData() {
-		projectMetrics.clear();
-		EvaluatorStore store = EvaluatorStoreFactory.getFactory()
-				.createInstance(evaluatorSelection.getEvaluatorClass());
-		MetricsResultsIterator results = store.readMetrics(
-				analysisProjectSelectionUUID, analysisRunSelectionUUID,
-				evaluatorSelection.getName(), parameterSelection.getName(),
-				CodeRangeType.FILE);
-		for (MetricsResult result : results) {
-			projectMetrics.add(result);
-		}
+		values.clear();
+		HistogramChartDataProvider dataProvider = HistogramChartDataProviderFactory
+				.getFactory().getInstance();
+		Map<HashId, List<Value<Double>>> loadedValues = dataProvider
+				.loadValues(analysisProjectSelectionUUID,
+						analysisRunSelectionUUID, evaluatorSelection.getName(),
+						parameterSelection, CodeRangeType.FILE);
+		values.putAll(loadedValues);
 	}
 
 	@Override
@@ -218,11 +215,10 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 					return WalkingAction.PROCEED;
 				}
 				HashId hashId = node.getHashId();
-				for (MetricsResult metricsResult : projectMetrics) {
-					if ((hashId.equals(metricsResult.getHashId()))
-							&& (metricsResult.getCodeRangeType()
-									.equals(CodeRangeType.FILE))) {
-						histogramValues.add(metricsResult.getValue());
+				List<Value<Double>> valueList = values.get(hashId);
+				if (valueList != null) {
+					for (Value<Double> value : valueList) {
+						histogramValues.add(value);
 					}
 				}
 				return WalkingAction.PROCEED;
@@ -253,8 +249,11 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 		}
 		List<Double> values = new ArrayList<Double>();
 		for (Value<?> value : histogramValues) {
-			double d = ((Number) value.getValue()).doubleValue();
-			values.add(d);
+			Object valueObject = value.getValue();
+			if (valueObject != null) {
+				double d = ((Number) valueObject).doubleValue();
+				values.add(d);
+			}
 		}
 		Collections.sort(values);
 		double minValue = values.get(0);

@@ -31,7 +31,7 @@ public class DirectoryStoreImpl implements DirectoryStore {
 		List<HashId> hashIds = new ArrayList<>();
 		while (vertexIterator.hasNext()) {
 			Vertex fileVertex = vertexIterator.next();
-			hashIds.add(HashId.fromString((String) fileVertex
+			hashIds.add(HashId.valueOf((String) fileVertex
 					.getProperty(TitanElementNames.TREE_ELEMENT_HASH)));
 		}
 		return hashIds;
@@ -68,7 +68,7 @@ public class DirectoryStoreImpl implements DirectoryStore {
 		List<HashId> hashIds = new ArrayList<>();
 		while (vertexIterator.hasNext()) {
 			Vertex fileVertex = vertexIterator.next();
-			hashIds.add(HashId.fromString((String) fileVertex
+			hashIds.add(HashId.valueOf((String) fileVertex
 					.getProperty(TitanElementNames.TREE_ELEMENT_HASH)));
 		}
 		return hashIds;

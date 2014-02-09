@@ -15,7 +15,7 @@ public class HashId implements Serializable, Comparable<HashId> {
 
 	private static final long serialVersionUID = 1219606473615058203L;
 
-	public static final HashId fromString(String hashIdString)
+	public static final HashId valueOf(String hashIdString)
 			throws IllegalFormatException {
 		String[] splits = hashIdString.split(":");
 		if (splits.length != 2) {
