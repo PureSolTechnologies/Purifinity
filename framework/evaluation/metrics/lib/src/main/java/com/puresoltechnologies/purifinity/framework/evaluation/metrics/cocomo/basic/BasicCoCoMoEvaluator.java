@@ -23,6 +23,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCFileResults;
@@ -88,7 +90,7 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processFile(CodeAnalysis analysis)
+	protected MetricFileResults processFile(CodeAnalysis analysis)
 			throws EvaluationStoreException {
 		HashId hashId = analysis.getAnalysisInformation().getHashId();
 		if (slocStore.hasFileResults(hashId)) {
@@ -104,22 +106,16 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
 					fileResults.setAverageSalary(averageSalary, currency);
 					fileResults.setComplexity(complexity);
 					fileResults.setSloc(phyLoc);
-					store.storeFileResults(analysis, this, fileResults);
-					break;
+					return fileResults;
 				}
 			}
 		}
+		return null;
 	}
 
 	@Override
-	protected void processDirectory(AnalysisFileTree directory)
+	protected MetricDirectoryResults processDirectory(AnalysisFileTree directory)
 			throws InterruptedException, EvaluationStoreException {
-		BasicCoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
-		store.storeDirectoryResults(directory, this, directoryResults);
-	}
-
-	private BasicCoCoMoDirectoryResults createDirectoryResults(
-			AnalysisFileTree directory) throws EvaluationStoreException {
 		int phyLoc = 0;
 		for (AnalysisFileTree child : directory.getChildren()) {
 			HashId hashId = child.getHashId();
@@ -147,11 +143,10 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processProject() throws InterruptedException,
-			EvaluationStoreException {
+	protected MetricDirectoryResults processProject()
+			throws InterruptedException, EvaluationStoreException {
 		AnalysisFileTree directory = getAnalysisRun().getFileTree();
-		BasicCoCoMoDirectoryResults directoryResults = createDirectoryResults(directory);
-		store.storeDirectoryResults(directory, this, directoryResults);
+		return processDirectory(directory);
 	}
 
 }

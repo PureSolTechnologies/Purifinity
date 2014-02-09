@@ -43,7 +43,7 @@ public interface HistogramChartDataProvider {
 	 *         or directory and the value is the {@link Value} of the value to
 	 *         be used for the chart.
 	 */
-	public Map<HashId, List<Value<Double>>> loadValues(UUID analysisProject,
+	public Map<HashId, List<Value<?>>> loadValues(UUID analysisProject,
 			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType);
 

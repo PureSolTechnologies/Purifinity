@@ -38,6 +38,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreExc
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraElementNames;
+import com.puresoltechnologies.purifinity.framework.store.db.ValueSerializer;
 
 /**
  * This is an abstract implementation of an evaluator store.
@@ -145,7 +146,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 						session,
 						"INSERT INTO "
 								+ CassandraElementNames.EVALUATION_METRICS_TABLE
-								+ " (time, duration, "
+								+ " (time,"
+								+ " duration, "
 								+ "analysis_project, "
 								+ "analysis_run, "
 								+ "hashid, "
@@ -159,14 +161,15 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 								+ "code_range_type, "
 								+ "quality, "
 								+ "quality_level, "
-								+ "name, "
-								+ "unit, "
+								+ "parameter_name, "
+								+ "parameter_unit, "
 								+ "numeric, "
-								+ "type, "
-								+ "metric, "
+								+ "parameter_type, "
+								+ "numeric_value, "
+								+ "string_value, "
 								+ "level_of_measurement, "
-								+ "description ) VALUES "
-								+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+								+ "parameter_description ) VALUES "
+								+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 		Date time = evaluator.getStartTime();
 		long duration = evaluator.getDuration();
@@ -210,28 +213,33 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 					.floatValue() : null;
 			Set<Parameter<?>> parameters = results.getParameters();
 			for (Parameter<?> parameter : parameters) {
-				String name = parameter.getName();
-				if (name.equals(codeRangeNameParameterName)
-						|| name.equals(codeRangeTypeParameterName)) {
+				String parameterName = parameter.getName();
+				if (parameterName.equals(codeRangeNameParameterName)
+						|| parameterName.equals(codeRangeTypeParameterName)) {
 					continue;
 				}
-				if (parameter.isNumeric()) {
-					String unit = parameter.getUnit();
-					boolean numeric = parameter.isNumeric();
-					String type = parameter.getType().getName();
-					Object value = row.get(name).getValue();
-					double val = ((Number) value).doubleValue();
-					BoundStatement boundStatement = preparedStatement.bind(
-							time, duration, analysisProjectUUID,
-							analysisRunUUID, hashId.toString(), internalPath,
-							fileName, sourceCodeLocation, languageName,
-							languageVersion, evaluatorName, codeRangeName,
-							codeRangeType.name(), quality.name(), qualityLevel,
-							name, unit, numeric, type, val, parameter
-									.getLevelOfMeasurement().name(), parameter
-									.getDescription());
-					session.execute(boundStatement);
+				String parameterUnit = parameter.getUnit();
+				boolean numeric = parameter.isNumeric();
+				String parameterType = parameter.getType().getName();
+				Value<?> value = row.get(parameterName);
+				Object valueObject = value.getValue();
+				Double numericValue = null;
+				String stringValue = null;
+				if (numeric) {
+					numericValue = ((Number) valueObject).doubleValue();
+				} else {
+					stringValue = ValueSerializer.toString(value);
 				}
+				BoundStatement boundStatement = preparedStatement.bind(time,
+						duration, analysisProjectUUID, analysisRunUUID,
+						hashId.toString(), internalPath, fileName,
+						sourceCodeLocation, languageName, languageVersion,
+						evaluatorName, codeRangeName, codeRangeType.name(),
+						quality.name(), qualityLevel, parameterName,
+						parameterUnit, numeric, parameterType, numericValue,
+						stringValue, parameter.getLevelOfMeasurement().name(),
+						parameter.getDescription());
+				session.execute(boundStatement);
 			}
 		}
 	}
@@ -287,14 +295,15 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 								+ "code_range_type, "
 								+ "quality, "
 								+ "quality_level, "
-								+ "name, "
-								+ "unit, "
+								+ "parameter_name, "
+								+ "parameter_unit, "
 								+ "numeric, "
-								+ "type, "
-								+ "metric, "
+								+ "parameter_type, "
+								+ "numeric_value, "
+								+ "string_value, "
 								+ "level_of_measurement, "
-								+ "description) VALUES "
-								+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+								+ "parameter_description) VALUES "
+								+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 		Date time = evaluator.getStartTime();
 		long duration = evaluator.getDuration();
@@ -332,27 +341,30 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 				.floatValue() : null;
 		Set<Parameter<?>> parameters = results.getParameters();
 		for (Parameter<?> parameter : parameters) {
-			String name = parameter.getName();
-			Value<?> valueObject = row.get(name);
-			if (valueObject != null) {
-				String unit = parameter.getUnit();
+			String parameterName = parameter.getName();
+			Value<?> value = row.get(parameterName);
+			if (value != null) {
+				String parameterUnit = parameter.getUnit();
 				boolean numeric = parameter.isNumeric();
-				String type = parameter.getType().getName();
-				Object value = valueObject.getValue();
-				if ((value != null)
-						&& (Number.class.isAssignableFrom(value.getClass()))) {
-					double val = ((Number) value).doubleValue();
-					BoundStatement boundStatement = preparedStatement.bind(
-							time, duration, analysisProjectUUID,
-							analysisRunUUID, directory.getHashId().toString(),
-							internalPath, fileName, evaluatorName,
-							codeRangeName, codeRangeType.name(),
-							quality.name(), qualityLevel, name, unit, numeric,
-							type, val,
-							parameter.getLevelOfMeasurement().name(),
-							parameter.getDescription());
-					session.execute(boundStatement);
+				String parameterType = parameter.getType().getName();
+				Double numericValue = null;
+				String stringValue = null;
+				if (numeric) {
+					Object valueObject = value.getValue();
+					numericValue = ((Number) valueObject).doubleValue();
+				} else {
+					stringValue = ValueSerializer.toString(value);
 				}
+				BoundStatement boundStatement = preparedStatement.bind(time,
+						duration, analysisProjectUUID, analysisRunUUID,
+						directory.getHashId().toString(), internalPath,
+						fileName, evaluatorName, codeRangeName, codeRangeType
+								.name(), quality.name(), qualityLevel,
+						parameterName, parameterUnit, numeric, parameterType,
+						numericValue, stringValue, parameter
+								.getLevelOfMeasurement().name(), parameter
+								.getDescription());
+				session.execute(boundStatement);
 			}
 		}
 	}
@@ -382,7 +394,6 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 							+ analysisRunUUID + "' into '" + getStoreName()
 							+ "'.", e);
 		}
-
 		storeMetricsInBigTable(directory, evaluator, results);
 	}
 

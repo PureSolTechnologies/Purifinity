@@ -14,6 +14,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricEvaluator;
@@ -70,7 +72,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processFile(CodeAnalysis analysis)
+	protected MetricFileResults processFile(CodeAnalysis analysis)
 			throws InterruptedException, EvaluationStoreException {
 		MaintainabilityIndexFileResults results = new MaintainabilityIndexFileResults();
 
@@ -108,7 +110,7 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 					codeRange.getType(), codeRange.getCanonicalName(), result,
 					MaintainabilityQuality.get(codeRange.getType(), result)));
 		}
-		store.storeFileResults(analysis, this, results);
+		return results;
 	}
 
 	private McCabeMetricResult findFileResult(
@@ -157,16 +159,8 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processDirectory(AnalysisFileTree directory)
+	protected MetricDirectoryResults processDirectory(AnalysisFileTree directory)
 			throws InterruptedException, EvaluationStoreException {
-		MaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(directory);
-		if (finalResults != null) {
-			store.storeDirectoryResults(directory, this, finalResults);
-		}
-	}
-
-	private MaintainabilityIndexDirectoryResults createDirectoryResults(
-			AnalysisFileTree directory) throws EvaluationStoreException {
 		QualityLevel qualityLevel = null;
 		for (AnalysisFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
@@ -196,17 +190,9 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected void processProject() throws InterruptedException,
-			EvaluationStoreException {
+	protected MetricDirectoryResults processProject()
+			throws InterruptedException, EvaluationStoreException {
 		AnalysisRun analysisRun = getAnalysisRun();
-		if (store.hasProjectResults(analysisRun.getInformation().getUUID())) {
-			return;
-		}
-		MaintainabilityIndexDirectoryResults finalResults = createDirectoryResults(analysisRun
-				.getFileTree());
-		if (finalResults != null) {
-			store.storeProjectResults(analysisRun.getInformation().getUUID(),
-					this, analysisRun.getFileTree(), finalResults);
-		}
+		return processDirectory(analysisRun.getFileTree());
 	}
 }

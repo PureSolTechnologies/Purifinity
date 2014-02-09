@@ -62,11 +62,10 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	private UUID oldAnalysisProjectSelectionUUID = null;
 	private UUID oldAnalysisRunSelectionUUID = null;
 	private AnalysisFileTree pathSelection = null;
-	private final AnalysisFileTree oldPathSelection = null;
 
 	private Chart2D chart;
 
-	private final Map<HashId, List<Value<Double>>> values = new HashMap<>();
+	private final Map<HashId, List<Value<?>>> values = new HashMap<>();
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -198,10 +197,10 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 		values.clear();
 		HistogramChartDataProvider dataProvider = HistogramChartDataProviderFactory
 				.getFactory().getInstance();
-		Map<HashId, List<Value<Double>>> loadedValues = dataProvider
-				.loadValues(analysisProjectSelectionUUID,
-						analysisRunSelectionUUID, evaluatorSelection.getName(),
-						parameterSelection, CodeRangeType.FILE);
+		Map<HashId, List<Value<?>>> loadedValues = dataProvider.loadValues(
+				analysisProjectSelectionUUID, analysisRunSelectionUUID,
+				evaluatorSelection.getName(), parameterSelection,
+				CodeRangeType.FILE);
 		values.putAll(loadedValues);
 	}
 
@@ -215,9 +214,9 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 					return WalkingAction.PROCEED;
 				}
 				HashId hashId = node.getHashId();
-				List<Value<Double>> valueList = values.get(hashId);
+				List<Value<?>> valueList = values.get(hashId);
 				if (valueList != null) {
-					for (Value<Double> value : valueList) {
+					for (Value<?> value : valueList) {
 						histogramValues.add(value);
 					}
 				}

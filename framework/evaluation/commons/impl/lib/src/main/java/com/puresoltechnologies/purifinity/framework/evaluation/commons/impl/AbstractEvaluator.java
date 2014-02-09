@@ -156,7 +156,7 @@ public abstract class AbstractEvaluator extends
 	 *             event.
 	 * @throws EvaluationStoreException
 	 */
-	abstract protected void processFile(CodeAnalysis analysis)
+	abstract protected MetricFileResults processFile(CodeAnalysis analysis)
 			throws InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException;
 
@@ -171,8 +171,9 @@ public abstract class AbstractEvaluator extends
 	 *             is thrown if the evaluation was interrupted.
 	 * @throws EvaluationStoreException
 	 */
-	abstract protected void processDirectory(AnalysisFileTree directory)
-			throws InterruptedException, EvaluationStoreException;
+	abstract protected MetricDirectoryResults processDirectory(
+			AnalysisFileTree directory) throws InterruptedException,
+			EvaluationStoreException;
 
 	/**
 	 * This method is used to run an evaluation of the entire project. This
@@ -182,8 +183,8 @@ public abstract class AbstractEvaluator extends
 	 *             is thrown if the evaluation was interrupted.
 	 * @throws EvaluationStoreException
 	 */
-	abstract protected void processProject() throws InterruptedException,
-			EvaluationStoreException;
+	abstract protected MetricDirectoryResults processProject()
+			throws InterruptedException, EvaluationStoreException;
 
 	@Override
 	public final Boolean call() throws InterruptedException,
@@ -256,12 +257,18 @@ public abstract class AbstractEvaluator extends
 			CodeAnalysis fileAnalysis = fileStore.loadAnalysis(hashId, Thread
 					.currentThread().getContextClassLoader());
 			if ((!evaluatorStore.hasFileResults(hashId)) || (reEvaluation)) {
-				processFile(fileAnalysis);
+				MetricFileResults fileResults = processFile(fileAnalysis);
+				if (fileResults != null) {
+					evaluatorStore.storeFileResults(fileAnalysis, this,
+							fileResults);
+				}
 			} else {
 				MetricFileResults fileResults = evaluatorStore
 						.readFileResults(hashId);
-				evaluatorStore.storeMetricsInBigTable(fileAnalysis, this,
-						fileResults);
+				if (fileResults != null) {
+					evaluatorStore.storeMetricsInBigTable(fileAnalysis, this,
+							fileResults);
+				}
 			}
 		}
 	}
@@ -291,12 +298,18 @@ public abstract class AbstractEvaluator extends
 				processNode(child);
 			}
 			if ((!evaluatorStore.hasDirectoryResults(hashId)) || (reEvaluation)) {
-				processDirectory(directoryNode);
+				MetricDirectoryResults directoryResults = processDirectory(directoryNode);
+				if (directoryResults != null) {
+					evaluatorStore.storeDirectoryResults(directoryNode, this,
+							directoryResults);
+				}
 			} else {
 				MetricDirectoryResults directoryResults = evaluatorStore
 						.readDirectoryResults(hashId);
-				evaluatorStore.storeMetricsInBigTable(directoryNode, this,
-						directoryResults);
+				if (directoryResults != null) {
+					evaluatorStore.storeMetricsInBigTable(directoryNode, this,
+							directoryResults);
+				}
 			}
 		}
 	}

@@ -20,22 +20,24 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProvider;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraElementNames;
+import com.puresoltechnologies.purifinity.framework.store.db.ValueSerializer;
 
 public class HistogramChartDataProviderImpl implements
 		HistogramChartDataProvider {
 
 	@Override
-	public Map<HashId, List<Value<Double>>> loadValues(UUID analysisProject,
+	public Map<HashId, List<Value<?>>> loadValues(UUID analysisProject,
 			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType) {
 		Session session = CassandraConnection.getEvaluationSession();
-		Map<HashId, List<Value<Double>>> values = new HashMap<>();
+		Map<HashId, List<Value<?>>> values = new HashMap<>();
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(
 						session,
-						"SELECT hashid, numeric, type, metric FROM "
+						"SELECT hashid, numeric, numeric_value, string_value FROM "
 								+ CassandraElementNames.EVALUATION_METRICS_TABLE
-								+ " WHERE analysis_project=? AND analysis_run=? AND evaluator_name=? AND name=? AND code_range_type=? ALLOW FILTERING");
+								+ " WHERE analysis_project=? AND analysis_run=? AND evaluator_name=? AND parameter_name=? AND code_range_type=? "
+								+ "ALLOW FILTERING");
 		BoundStatement boundStatement = preparedStatement.bind(analysisProject,
 				analysisRun, evaluatorName, parameter.getName(),
 				codeRangeType.name());
@@ -43,18 +45,31 @@ public class HistogramChartDataProviderImpl implements
 		while (!result.isExhausted()) {
 			Row row = result.one();
 			HashId hashId = HashId.valueOf(row.getString(0));
-			Double value = row.getDouble(3);
-			ParameterWithArbitraryUnit<Double> metricParameter = new ParameterWithArbitraryUnit<>(
-					parameter.getName(), parameter.getUnit(),
-					parameter.getLevelOfMeasurement(),
-					parameter.getDescription(), Double.class);
-			List<Value<Double>> valueList = values.get(hashId);
-			if (valueList == null) {
-				valueList = new ArrayList<>();
-				values.put(hashId, valueList);
+			boolean numeric = row.getBool(1);
+			if (numeric) {
+				Double value = row.getDouble(2);
 
+				ParameterWithArbitraryUnit<Double> metricParameter = new ParameterWithArbitraryUnit<>(
+						parameter.getName(), parameter.getUnit(),
+						parameter.getLevelOfMeasurement(),
+						parameter.getDescription(), Double.class);
+				List<Value<?>> valueList = values.get(hashId);
+				if (valueList == null) {
+					valueList = new ArrayList<>();
+					values.put(hashId, valueList);
+				}
+				valueList.add(new GeneralValue<>(value, metricParameter));
+			} else {
+				String stringValue = row.getString(3);
+				Value<?> value = ValueSerializer.fromString(stringValue);
+
+				List<Value<?>> valueList = values.get(hashId);
+				if (valueList == null) {
+					valueList = new ArrayList<>();
+					values.put(hashId, valueList);
+				}
+				valueList.add(value);
 			}
-			valueList.add(new GeneralValue<>(value, metricParameter));
 		}
 		return values;
 	}
