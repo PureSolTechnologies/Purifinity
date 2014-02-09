@@ -33,7 +33,7 @@ public class HistogramChartDataProviderImpl implements
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(
 						session,
-						"SELECT hashid, type, metric FROM "
+						"SELECT hashid, numeric, type, metric FROM "
 								+ CassandraElementNames.EVALUATION_METRICS_TABLE
 								+ " WHERE analysis_project=? AND analysis_run=? AND evaluator_name=? AND name=? AND code_range_type=? ALLOW FILTERING");
 		BoundStatement boundStatement = preparedStatement.bind(analysisProject,
@@ -43,7 +43,7 @@ public class HistogramChartDataProviderImpl implements
 		while (!result.isExhausted()) {
 			Row row = result.one();
 			HashId hashId = HashId.valueOf(row.getString(0));
-			Double value = row.getDouble(1);
+			Double value = row.getDouble(3);
 			ParameterWithArbitraryUnit<Double> metricParameter = new ParameterWithArbitraryUnit<>(
 					parameter.getName(), parameter.getUnit(),
 					parameter.getLevelOfMeasurement(),

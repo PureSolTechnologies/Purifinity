@@ -153,4 +153,10 @@ public interface EvaluatorStore {
 	 */
 	public MetricDirectoryResults readProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException;
+
+	public void storeMetricsInBigTable(CodeAnalysis codeAnalysis,
+			Evaluator evaluator, MetricFileResults results);
+
+	void storeMetricsInBigTable(AnalysisFileTree directory,
+			Evaluator evaluator, MetricDirectoryResults results);
 }

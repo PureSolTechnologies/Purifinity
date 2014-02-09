@@ -136,7 +136,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		storeMetricsInBigTable(codeAnalysis, evaluator, results);
 	}
 
-	private void storeMetricsInBigTable(CodeAnalysis codeAnalysis,
+	@Override
+	public void storeMetricsInBigTable(CodeAnalysis codeAnalysis,
 			Evaluator evaluator, MetricFileResults results) {
 		Session session = CassandraConnection.getEvaluationSession();
 		PreparedStatement preparedStatement = CassandraConnection
@@ -265,7 +266,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		storeMetricsInBigTable(directory, evaluator, results);
 	}
 
-	private void storeMetricsInBigTable(AnalysisFileTree directory,
+	@Override
+	public void storeMetricsInBigTable(AnalysisFileTree directory,
 			Evaluator evaluator, MetricDirectoryResults results) {
 		Session session = CassandraConnection.getEvaluationSession();
 		PreparedStatement preparedStatement = CassandraConnection

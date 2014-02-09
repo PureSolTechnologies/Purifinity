@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.trees.api.TreeUtils;
 import com.puresoltechnologies.parsers.impl.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
@@ -22,6 +23,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
+import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
@@ -248,13 +251,17 @@ public abstract class AbstractEvaluator extends
 	private void processAsFile(AnalysisFileTree fileNode)
 			throws FileStoreException, InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-		if (fileStore.wasAnalyzed(fileNode.getHashId())) {
-			if ((!evaluatorStore.hasFileResults(fileNode.getHashId()))
-					|| (reEvaluation)) {
-				CodeAnalysis fileAnalysis = fileStore.loadAnalysis(fileNode
-						.getHashId(), Thread.currentThread()
-						.getContextClassLoader());
+		HashId hashId = fileNode.getHashId();
+		if (fileStore.wasAnalyzed(hashId)) {
+			CodeAnalysis fileAnalysis = fileStore.loadAnalysis(hashId, Thread
+					.currentThread().getContextClassLoader());
+			if ((!evaluatorStore.hasFileResults(hashId)) || (reEvaluation)) {
 				processFile(fileAnalysis);
+			} else {
+				MetricFileResults fileResults = evaluatorStore
+						.readFileResults(hashId);
+				evaluatorStore.storeMetricsInBigTable(fileAnalysis, this,
+						fileResults);
 			}
 		}
 	}
@@ -278,13 +285,18 @@ public abstract class AbstractEvaluator extends
 			throws FileStoreException, InterruptedException,
 			UniversalSyntaxTreeEvaluationException, DirectoryStoreException,
 			EvaluationStoreException {
-		if (directoryStore.isAvailable(directoryNode.getHashId())) {
-			if ((!evaluatorStore.hasDirectoryResults(directoryNode.getHashId()))
-					|| (reEvaluation)) {
-				for (AnalysisFileTree child : directoryNode.getChildren()) {
-					processNode(child);
-				}
+		HashId hashId = directoryNode.getHashId();
+		if (directoryStore.isAvailable(hashId)) {
+			for (AnalysisFileTree child : directoryNode.getChildren()) {
+				processNode(child);
+			}
+			if ((!evaluatorStore.hasDirectoryResults(hashId)) || (reEvaluation)) {
 				processDirectory(directoryNode);
+			} else {
+				MetricDirectoryResults directoryResults = evaluatorStore
+						.readDirectoryResults(hashId);
+				evaluatorStore.storeMetricsInBigTable(directoryNode, this,
+						directoryResults);
 			}
 		}
 	}
