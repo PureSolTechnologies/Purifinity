@@ -10,6 +10,7 @@ import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 
 public class ValueSerializerTest {
@@ -60,6 +61,20 @@ public class ValueSerializerTest {
 				SourceCodeQuality.class);
 		Value<SourceCodeQuality> value = new GeneralValue<SourceCodeQuality>(
 				SourceCodeQuality.MEDIUM, parameter);
+		String serializedValue = ValueSerializer.toString(value);
+		Value<?> deserializedValue = ValueSerializer
+				.fromString(serializedValue);
+		assertEquals(value.getParameter(), deserializedValue.getParameter());
+		assertEquals(value.getValue(), deserializedValue.getValue());
+	}
+
+	@Test
+	public void testQualityLevelNullValue() {
+		ParameterWithArbitraryUnit<QualityLevel> parameter = new ParameterWithArbitraryUnit<>(
+				"name", "unit", LevelOfMeasurement.ORDINAL, "description",
+				QualityLevel.class);
+		Value<QualityLevel> value = new GeneralValue<QualityLevel>(null,
+				parameter);
 		String serializedValue = ValueSerializer.toString(value);
 		Value<?> deserializedValue = ValueSerializer
 				.fromString(serializedValue);

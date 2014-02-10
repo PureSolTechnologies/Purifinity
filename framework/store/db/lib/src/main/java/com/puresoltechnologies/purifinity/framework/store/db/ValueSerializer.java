@@ -28,7 +28,9 @@ public class ValueSerializer {
 		properties.setProperty("description", description);
 		properties.setProperty("type", type.getName());
 		properties.setProperty("levelOfMeasurement", levelOfMeasurement.name());
-		properties.setProperty("value", valueObject.toString());
+		if (valueObject != null) {
+			properties.setProperty("value", valueObject.toString());
+		}
 		return PropertiesUtils.toString(properties);
 	}
 

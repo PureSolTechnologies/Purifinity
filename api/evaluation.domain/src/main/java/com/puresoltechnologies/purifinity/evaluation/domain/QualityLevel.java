@@ -56,6 +56,24 @@ public class QualityLevel implements Serializable {
 		return overallQualityLevel;
 	}
 
+	public static QualityLevel valueOf(String value) {
+		if (value == null) {
+			return null;
+		}
+		return new QualityLevel(Double.valueOf(value));
+	}
+
+	private final List<Double> levels = new ArrayList<>();
+	private Statistics statistics = null;
+
+	public QualityLevel(SourceCodeQuality quality) {
+		levels.add(getLevel(quality));
+	}
+
+	public QualityLevel(double level) {
+		levels.add(level);
+	}
+
 	private SourceCodeQuality getQuality(double level) {
 		if (level < 0.0) {
 			throw new IllegalArgumentException(
@@ -72,17 +90,6 @@ public class QualityLevel implements Serializable {
 		}
 		throw new IllegalArgumentException(
 				"Level needs to be between (and including) 0.0 and 1.0!");
-	}
-
-	private final List<Double> levels = new ArrayList<>();
-	private Statistics statistics = null;
-
-	public QualityLevel(SourceCodeQuality quality) {
-		levels.add(getLevel(quality));
-	}
-
-	public QualityLevel(double level) {
-		levels.add(level);
 	}
 
 	public double getLevel() {
@@ -134,4 +141,5 @@ public class QualityLevel implements Serializable {
 	public QualityLevel combine(QualityLevel qualityLevel) {
 		return combine(this, qualityLevel);
 	}
+
 }

@@ -30,7 +30,6 @@ public class HistogramChartDataProviderImpl implements
 			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType) {
 		Session session = CassandraConnection.getEvaluationSession();
-		Map<HashId, List<Value<?>>> values = new HashMap<>();
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(
 						session,
@@ -42,6 +41,7 @@ public class HistogramChartDataProviderImpl implements
 				analysisRun, evaluatorName, parameter.getName(),
 				codeRangeType.name());
 		ResultSet result = session.execute(boundStatement);
+		Map<HashId, List<Value<?>>> values = new HashMap<>();
 		while (!result.isExhausted()) {
 			Row row = result.one();
 			HashId hashId = HashId.valueOf(row.getString(0));

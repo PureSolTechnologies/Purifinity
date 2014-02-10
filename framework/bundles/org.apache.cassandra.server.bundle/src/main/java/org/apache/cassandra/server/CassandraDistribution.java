@@ -113,8 +113,8 @@ public class CassandraDistribution {
 		logger.info("Extract file '" + targetFile + "'.");
 		if (!targetFile.exists()) {
 			if (!targetFile.createNewFile()) {
-				throw new IOException("Could not create file '"
-						+ targetFile + "'.");
+				throw new IOException("Could not create file '" + targetFile
+						+ "'.");
 			}
 			try (FileOutputStream fileOutputStream = new FileOutputStream(
 					targetFile)) {
