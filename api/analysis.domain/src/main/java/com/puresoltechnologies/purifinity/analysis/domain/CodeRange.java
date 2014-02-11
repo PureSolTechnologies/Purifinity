@@ -49,7 +49,9 @@ public final class CodeRange implements Serializable, Comparable<CodeRange> {
 		checkNotNull("simpleName", simpleName);
 		checkNotNull("canonicalName", canonicalName);
 		checkNotNull("type", type);
-		checkNotNull("ust", ust);
+		if (type != CodeRangeType.DIRECTORY) {
+			checkNotNull("ust", ust);
+		}
 		this.simpleName = simpleName;
 		this.canonicalName = canonicalName;
 		this.type = type;

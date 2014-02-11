@@ -53,15 +53,14 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	private HistogramChartViewSettingsDialog settingsDialog;
 
-	private EvaluatorFactory evaluatorSelection = null;
-	private Parameter<?> parameterSelection = null;
-	private EvaluatorFactory oldEvaluatorSelection = null;
-	private Parameter<?> oldParameterSelection = null;
 	private UUID analysisProjectSelectionUUID = null;
-	private UUID analysisRunSelectionUUID = null;
 	private UUID oldAnalysisProjectSelectionUUID = null;
+	private UUID analysisRunSelectionUUID = null;
 	private UUID oldAnalysisRunSelectionUUID = null;
-	private AnalysisFileTree pathSelection = null;
+	private EvaluatorFactory evaluatorSelection = null;
+	private EvaluatorFactory oldEvaluatorSelection = null;
+	private Parameter<?> parameterSelection = null;
+	private Parameter<?> oldParameterSelection = null;
 
 	private Chart2D chart;
 
@@ -174,23 +173,34 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 					.getAnalysisProject().getInformation().getUUID();
 			analysisRunSelectionUUID = analysisSelection.getAnalysisRun()
 					.getInformation().getUUID();
-			if ((!analysisProjectSelectionUUID
-					.equals(oldAnalysisProjectSelectionUUID))
-					|| (!analysisRunSelectionUUID
-							.equals(oldAnalysisRunSelectionUUID))
-					|| ((oldEvaluatorSelection == null) || (!evaluatorSelection
-							.getClass()
-							.equals(oldEvaluatorSelection.getClass())))
-					|| (!oldParameterSelection.equals(parameterSelection))) {
+			if (wasSelectionChanged()) {
 				oldAnalysisProjectSelectionUUID = analysisProjectSelectionUUID;
 				oldAnalysisRunSelectionUUID = analysisRunSelectionUUID;
 				oldEvaluatorSelection = evaluatorSelection;
 				oldParameterSelection = parameterSelection;
 				loadData();
 			}
-			pathSelection = analysisSelection.getFileTreeNode();
-			showEvaluation(pathSelection);
+			showEvaluation(analysisSelection.getFileTreeNode());
 		}
+	}
+
+	private boolean wasSelectionChanged() {
+		if (analysisProjectSelectionUUID
+				.equals(oldAnalysisProjectSelectionUUID)) {
+			return true;
+		}
+		if (!analysisRunSelectionUUID.equals(oldAnalysisRunSelectionUUID)) {
+			return true;
+		}
+		if ((oldEvaluatorSelection == null)
+				|| (!evaluatorSelection.getClass().equals(
+						oldEvaluatorSelection.getClass()))) {
+			return true;
+		}
+		if (!oldParameterSelection.equals(parameterSelection)) {
+			return true;
+		}
+		return false;
 	}
 
 	private void loadData() {

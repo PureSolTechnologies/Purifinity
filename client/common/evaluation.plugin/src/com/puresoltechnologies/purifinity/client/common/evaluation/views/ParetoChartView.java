@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
@@ -55,16 +57,27 @@ import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Eval
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProvider;
+import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProviderFactory;
 
 public class ParetoChartView extends AbstractMetricChartViewPart {
 
 	private ParetoChartViewSettingsDialog settingsDialog;
 
-	private EvaluatorFactory metricSelection = null;
+	private UUID analysisProjectSelectionUUID = null;
+	private UUID oldAnalysisProjectSelectionUUID = null;
+	private UUID analysisRunSelectionUUID = null;
+	private UUID oldAnalysisRunSelectionUUID = null;
+	private EvaluatorFactory evaluatorSelection = null;
+	private EvaluatorFactory oldEvaluatorSelection = null;
 	private Parameter<?> parameterSelection = null;
+	private Parameter<?> oldParameterSelection = null;
 	private CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
+	private CodeRangeType oldCodeRangeTypeSelection = CodeRangeType.FILE;
 
 	private Chart2D chart;
+
+	private final Map<HashId, List<Value<?>>> values = new HashMap<>();
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -86,9 +99,9 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 		String parameterSelectionName = memento.getString("parameter");
 		for (EvaluatorFactory metric : allMetrics) {
 			if (metric.getName().equals(metricSelectionName)) {
-				metricSelection = metric;
+				evaluatorSelection = metric;
 				if (parameterSelectionName != null) {
-					for (Parameter<?> parameter : metricSelection
+					for (Parameter<?> parameter : evaluatorSelection
 							.getParameters()) {
 						if (parameter.getName().equals(parameterSelectionName)) {
 							parameterSelection = parameter;
@@ -108,8 +121,9 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	public void saveState(IMemento memento) {
-		memento.putString("metric.class", metricSelection.getClass().getName());
-		memento.putString("metric", metricSelection.getName());
+		memento.putString("metric.class", evaluatorSelection.getClass()
+				.getName());
+		memento.putString("metric", evaluatorSelection.getName());
 		memento.putString("parameter", parameterSelection.getName());
 		memento.putString("coderangetype", codeRangeTypeSelection.name());
 
@@ -141,7 +155,8 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	public void showSettings() {
 		if (settingsDialog == null) {
 			settingsDialog = new ParetoChartViewSettingsDialog(this,
-					metricSelection, parameterSelection, codeRangeTypeSelection);
+					evaluatorSelection, parameterSelection,
+					codeRangeTypeSelection);
 			settingsDialog.open();
 		} else {
 			settingsDialog.close();
@@ -151,10 +166,13 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	public void applySettings() {
-		metricSelection = settingsDialog.getMetric();
+		evaluatorSelection = settingsDialog.getMetric();
 		parameterSelection = settingsDialog.getParameter();
 		codeRangeTypeSelection = settingsDialog.getCodeRangeType();
-		handleChangedAnalysisSelection();
+		if ((evaluatorSelection != null) && (parameterSelection != null)
+				&& (codeRangeTypeSelection != null)) {
+			handleChangedAnalysisSelection();
+		}
 	}
 
 	@Override
@@ -172,20 +190,61 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	@Override
 	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
-		if ((analysisSelection != null) && (metricSelection != null)
+		if ((analysisSelection != null) && (evaluatorSelection != null)
 				&& (parameterSelection != null)) {
-			AnalysisFileTree path = analysisSelection.getFileTreeNode();
-			if (path.isFile()) {
-				path = path.getParent();
+			analysisProjectSelectionUUID = analysisSelection
+					.getAnalysisProject().getInformation().getUUID();
+			analysisRunSelectionUUID = analysisSelection.getAnalysisRun()
+					.getInformation().getUUID();
+			if (wasSelectionChanged()) {
+				oldAnalysisProjectSelectionUUID = analysisProjectSelectionUUID;
+				oldAnalysisRunSelectionUUID = analysisRunSelectionUUID;
+				oldEvaluatorSelection = evaluatorSelection;
+				oldParameterSelection = parameterSelection;
+				oldCodeRangeTypeSelection = codeRangeTypeSelection;
+				loadData();
 			}
-			showEvaluation(path);
+			showEvaluation(analysisSelection.getFileTreeNode());
 		}
+	}
+
+	private boolean wasSelectionChanged() {
+		if (analysisProjectSelectionUUID
+				.equals(oldAnalysisProjectSelectionUUID)) {
+			return true;
+		}
+		if (!analysisRunSelectionUUID.equals(oldAnalysisRunSelectionUUID)) {
+			return true;
+		}
+		if ((oldEvaluatorSelection == null)
+				|| (!evaluatorSelection.getClass().equals(
+						oldEvaluatorSelection.getClass()))) {
+			return true;
+		}
+		if (!oldParameterSelection.equals(parameterSelection)) {
+			return true;
+		}
+		if (!oldCodeRangeTypeSelection.equals(codeRangeTypeSelection)) {
+			return true;
+		}
+		return false;
+	}
+
+	private void loadData() {
+		values.clear();
+		HistogramChartDataProvider dataProvider = HistogramChartDataProviderFactory
+				.getFactory().getInstance();
+		Map<HashId, List<Value<?>>> loadedValues = dataProvider.loadValues(
+				analysisProjectSelectionUUID, analysisRunSelectionUUID,
+				evaluatorSelection.getName(), parameterSelection,
+				codeRangeTypeSelection);
+		values.putAll(loadedValues);
 	}
 
 	@Override
 	public void showEvaluation(AnalysisFileTree path) {
 		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
-				.createInstance(metricSelection.getEvaluatorClass());
+				.createInstance(evaluatorSelection.getEvaluatorClass());
 		final List<Mark2D<String, Double>> paretoValues = new ArrayList<Mark2D<String, Double>>();
 		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
 			@Override
@@ -239,7 +298,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	private void setupChart(final List<Mark2D<String, Double>> paretoValues) {
 		chart.removeAllPlots();
 
-		chart.setTitle("Pareto Chart for " + metricSelection.getName());
+		chart.setTitle("Pareto Chart for " + evaluatorSelection.getName());
 		chart.setSubTitle(parameterSelection.getName());
 
 		Collections.sort(paretoValues,

@@ -10,16 +10,16 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 
 /**
- * This is the interface for the data backend for Histogram Chart.
+ * This is the interface for the data backend for Metric Chart.
  * 
  * @author Rick-Rainer Ludwig
  */
 public interface HistogramChartDataProvider {
 
 	/**
-	 * This method reads the values needed for Histogram Charts. The data
-	 * returned contains only the value for each code range in the file tree for
-	 * each run.
+	 * This method reads the values needed for Metric Charts. The data returned
+	 * contains only the value for each code range in the file tree for each
+	 * run.
 	 * 
 	 * <b>The idea behind this:</b> The values loaded are for the whole analysis
 	 * file tree. The selection of a new file must not have a new data load to
