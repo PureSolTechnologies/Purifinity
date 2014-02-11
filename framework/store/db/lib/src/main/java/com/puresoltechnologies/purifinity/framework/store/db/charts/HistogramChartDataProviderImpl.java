@@ -29,25 +29,23 @@ public class HistogramChartDataProviderImpl implements
 	public Map<HashId, List<Value<?>>> loadValues(UUID analysisProject,
 			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType) {
-		Session session = CassandraConnection.getEvaluationSession();
-		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(
-						session,
-						"SELECT hashid, numeric, numeric_value, string_value FROM "
-								+ CassandraElementNames.EVALUATION_METRICS_TABLE
-								+ " WHERE analysis_project=? AND analysis_run=? AND evaluator_name=? AND parameter_name=? AND code_range_type=? "
-								+ "ALLOW FILTERING");
-		BoundStatement boundStatement = preparedStatement.bind(analysisProject,
-				analysisRun, evaluatorName, parameter.getName(),
-				codeRangeType.name());
-		ResultSet result = session.execute(boundStatement);
 		Map<HashId, List<Value<?>>> values = new HashMap<>();
-		while (!result.isExhausted()) {
-			Row row = result.one();
-			HashId hashId = HashId.valueOf(row.getString(0));
-			boolean numeric = row.getBool(1);
-			if (numeric) {
-				Double value = row.getDouble(2);
+		Session session = CassandraConnection.getEvaluationSession();
+		if (parameter.isNumeric()) {
+			PreparedStatement preparedStatement = CassandraConnection
+					.getPreparedStatement(
+							session,
+							"SELECT hashid, numeric_value FROM "
+									+ CassandraElementNames.EVALUATION_METRICS_TABLE
+									+ " WHERE analysis_project=? AND analysis_run=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
+			BoundStatement boundStatement = preparedStatement.bind(
+					analysisProject, analysisRun, evaluatorName,
+					parameter.getName(), codeRangeType.name());
+			ResultSet result = session.execute(boundStatement);
+			while (!result.isExhausted()) {
+				Row row = result.one();
+				HashId hashId = HashId.valueOf(row.getString(0));
+				Double value = row.getDouble(1);
 
 				ParameterWithArbitraryUnit<Double> metricParameter = new ParameterWithArbitraryUnit<>(
 						parameter.getName(), parameter.getUnit(),
@@ -59,8 +57,22 @@ public class HistogramChartDataProviderImpl implements
 					values.put(hashId, valueList);
 				}
 				valueList.add(new GeneralValue<>(value, metricParameter));
-			} else {
-				String stringValue = row.getString(3);
+			}
+		} else {
+			PreparedStatement preparedStatement = CassandraConnection
+					.getPreparedStatement(
+							session,
+							"SELECT hashid, string_value FROM "
+									+ CassandraElementNames.EVALUATION_METRICS_TABLE
+									+ " WHERE analysis_project=? AND analysis_run=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
+			BoundStatement boundStatement = preparedStatement.bind(
+					analysisProject, analysisRun, evaluatorName,
+					parameter.getName(), codeRangeType.name());
+			ResultSet result = session.execute(boundStatement);
+			while (!result.isExhausted()) {
+				Row row = result.one();
+				HashId hashId = HashId.valueOf(row.getString(0));
+				String stringValue = row.getString(1);
 				Value<?> value = ValueSerializer.fromString(stringValue);
 
 				List<Value<?>> valueList = values.get(hashId);

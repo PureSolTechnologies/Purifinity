@@ -138,23 +138,6 @@ public class CassandraSchemaV100 {
 								+ "string_value varchar, "
 								+ "level_of_measurement varchar, "
 								+ "parameter_description varchar, "
-								+ "PRIMARY KEY(analysis_project, analysis_run, hashid, code_range_name, code_range_type, evaluator_name, parameter_name));");
-		CassandraMigration.createIndex(cluster,
-				CassandraElementNames.EVALUATION_KEYSPACE, "1.0.0",
-				"Rick-Rainer Ludwig",
-				"Keeps the metrics in a big table for efficient retrieval.",
-				CassandraElementNames.EVALUATION_METRICS_TABLE, "analysis_run");
-		CassandraMigration.createIndex(cluster,
-				CassandraElementNames.EVALUATION_KEYSPACE, "1.0.0",
-				"Rick-Rainer Ludwig",
-				"Keeps the metrics in a big table for efficient retrieval.",
-				CassandraElementNames.EVALUATION_METRICS_TABLE,
-				"evaluator_name");
-		CassandraMigration.createIndex(cluster,
-				CassandraElementNames.EVALUATION_KEYSPACE, "1.0.0",
-				"Rick-Rainer Ludwig",
-				"Keeps the metrics in a big table for efficient retrieval.",
-				CassandraElementNames.EVALUATION_METRICS_TABLE,
-				"parameter_name");
+								+ "PRIMARY KEY(analysis_project, analysis_run, evaluator_name, parameter_name, code_range_type, hashid, code_range_name));");
 	}
 }
