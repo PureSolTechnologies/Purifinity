@@ -123,14 +123,6 @@ public class MaintainabilityIndexParetoChartView extends
 			}
 			showEvaluation(analysisSelection.getFileTreeNode());
 		}
-
-		if (analysisSelection != null) {
-			AnalysisFileTree path = analysisSelection.getFileTreeNode();
-			if (path.isFile()) {
-				path = path.getParent();
-			}
-			showEvaluation(path);
-		}
 	}
 
 	private boolean wasSelectionChanged() {
