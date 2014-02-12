@@ -186,7 +186,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	}
 
 	private boolean wasSelectionChanged() {
-		if (analysisProjectSelectionUUID
+		if (!analysisProjectSelectionUUID
 				.equals(oldAnalysisProjectSelectionUUID)) {
 			return true;
 		}

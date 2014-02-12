@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.UUID;
 
 import org.eclipse.jface.action.IToolBarManager;
@@ -204,7 +202,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	}
 
 	private boolean wasSelectionChanged() {
-		if (analysisProjectSelectionUUID
+		if (!analysisProjectSelectionUUID
 				.equals(oldAnalysisProjectSelectionUUID)) {
 			return true;
 		}
@@ -250,7 +248,6 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 					return WalkingAction.PROCEED;
 				}
 
-				Set<String> usedCategories = new HashSet<String>();
 				for (Entry<String, Value<? extends Number>> entry : valueList
 						.entrySet()) {
 					String codeRangeName = entry.getKey();
@@ -261,7 +258,6 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 							category, value.doubleValue(),
 							codeRangeTypeSelection.getName() + " "
 									+ codeRangeName, node));
-					usedCategories.add(category);
 				}
 				return WalkingAction.PROCEED;
 			}

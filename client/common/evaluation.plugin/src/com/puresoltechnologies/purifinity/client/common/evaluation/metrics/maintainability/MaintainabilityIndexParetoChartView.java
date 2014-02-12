@@ -1,17 +1,18 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.metrics.maintainability;
 
 import static com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI;
-import static com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI_CW;
-import static com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI_WOC;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.UUID;
 
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
@@ -37,25 +38,31 @@ import com.puresoltechnologies.purifinity.client.common.chart.Mark2D;
 import com.puresoltechnologies.purifinity.client.common.chart.Plot;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
-import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractMetricChartViewPart;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ExportAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
-import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluator;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
+import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartData;
+import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProvider;
+import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProviderFactory;
 
 public class MaintainabilityIndexParetoChartView extends
 		AbstractMetricChartViewPart {
 
+	private UUID analysisProjectSelectionUUID = null;
+	private UUID oldAnalysisProjectSelectionUUID = null;
+	private UUID analysisRunSelectionUUID = null;
+	private UUID oldAnalysisRunSelectionUUID = null;
+
 	private final CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
 	private Chart2D chart;
+	private ParetoChartData miWoc = new ParetoChartData();
+	private ParetoChartData miCw = new ParetoChartData();
+	private ParetoChartData mi = new ParetoChartData();
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -105,6 +112,19 @@ public class MaintainabilityIndexParetoChartView extends
 	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
+			analysisProjectSelectionUUID = analysisSelection
+					.getAnalysisProject().getInformation().getUUID();
+			analysisRunSelectionUUID = analysisSelection.getAnalysisRun()
+					.getInformation().getUUID();
+			if (wasSelectionChanged()) {
+				oldAnalysisProjectSelectionUUID = analysisProjectSelectionUUID;
+				oldAnalysisRunSelectionUUID = analysisRunSelectionUUID;
+				loadData();
+			}
+			showEvaluation(analysisSelection.getFileTreeNode());
+		}
+
+		if (analysisSelection != null) {
 			AnalysisFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
 				path = path.getParent();
@@ -113,61 +133,108 @@ public class MaintainabilityIndexParetoChartView extends
 		}
 	}
 
+	private boolean wasSelectionChanged() {
+		if (!analysisProjectSelectionUUID
+				.equals(oldAnalysisProjectSelectionUUID)) {
+			return true;
+		}
+		if (!analysisRunSelectionUUID.equals(oldAnalysisRunSelectionUUID)) {
+			return true;
+		}
+		return false;
+	}
+
+	private void loadData() {
+		ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
+				.getFactory().getInstance();
+		mi = dataProvider.loadValues(analysisProjectSelectionUUID,
+				analysisRunSelectionUUID, MaintainabilityIndexEvaluator.NAME,
+				MaintainabilityIndexEvaluatorParameter.MI,
+				codeRangeTypeSelection);
+		miWoc = dataProvider.loadValues(analysisProjectSelectionUUID,
+				analysisRunSelectionUUID, MaintainabilityIndexEvaluator.NAME,
+				MaintainabilityIndexEvaluatorParameter.MI_WOC,
+				codeRangeTypeSelection);
+		miCw = dataProvider.loadValues(analysisProjectSelectionUUID,
+				analysisRunSelectionUUID, MaintainabilityIndexEvaluator.NAME,
+				MaintainabilityIndexEvaluatorParameter.MI_CW,
+				codeRangeTypeSelection);
+	}
+
 	@Override
 	public void showEvaluation(AnalysisFileTree path) {
-		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
-				.createInstance(MaintainabilityIndexEvaluator.class);
 		final List<Mark2D<String, Double>> paretoValuesMI = new ArrayList<>();
 		final Map<String, Mark2D<String, Double>> paretoValuesMIwoc = new HashMap<>();
 		final Map<String, Mark2D<String, Double>> paretoValuesMIcw = new HashMap<>();
 		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
 			@Override
 			public WalkingAction visit(AnalysisFileTree node) {
-				try {
-					if (!node.isFile()) {
-						return WalkingAction.PROCEED;
-					}
-					HashId hashId = node.getHashId();
-					MetricFileResults results = store.readFileResults(hashId);
-					if (results == null) {
-						return WalkingAction.PROCEED;
-					}
-					List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(
-							node, results, MI, codeRangeTypeSelection);
-					for (Map<String, Value<?>> valueMap : valueMaps) {
-						String codeRangeName = (String) valueMap.get(
-								CodeRangeNameParameter.getInstance().getName())
-								.getValue();
-						double value = convertToDouble(valueMap, MI);
-						String name = node.getPathFile(false).getPath() + "."
-								+ codeRangeName;
-						String remark = codeRangeTypeSelection.getName() + " "
-								+ codeRangeName;
-						paretoValuesMI.add(new GenericMark2D<>(name, value,
-								remark, node));
-						value = convertToDouble(valueMap, MI_WOC);
-						paretoValuesMIwoc.put(name,
-								new GenericMark2D<String, Double>(name, value,
-										remark, node));
-						value = convertToDouble(valueMap, MI_CW);
-						paretoValuesMIcw.put(name,
-								new GenericMark2D<String, Double>(name, value,
-										remark, node));
-					}
+				if (!node.isFile()) {
 					return WalkingAction.PROCEED;
-				} catch (EvaluationStoreException e) {
-					Activator activator = Activator.getDefault();
-					activator.getLog().log(
-							new Status(Status.ERROR, activator.getBundle()
-									.getSymbolicName(),
-									"Could not handle new selection.", e));
-					return WalkingAction.ABORT;
 				}
+				HashId hashId = node.getHashId();
+
+				Map<String, Value<? extends Number>> miList = mi
+						.getValues(hashId);
+				if (miList == null) {
+					return WalkingAction.PROCEED;
+				}
+				Map<String, Value<? extends Number>> miWocList = miWoc
+						.getValues(hashId);
+				if (miWocList == null) {
+					return WalkingAction.PROCEED;
+				}
+				Map<String, Value<? extends Number>> miCwList = miCw
+						.getValues(hashId);
+				if (miCwList == null) {
+					return WalkingAction.PROCEED;
+				}
+
+				extractValues(paretoValuesMI, node, miList);
+				extractValues(paretoValuesMIcw, node, miCwList);
+				extractValues(paretoValuesMIwoc, node, miWocList);
+
+				return WalkingAction.PROCEED;
 			}
+
 		};
 		TreeWalker.walk(visitor, path);
 
 		setupChart(paretoValuesMI, paretoValuesMIwoc, paretoValuesMIcw);
+	}
+
+	private void extractValues(
+			final List<Mark2D<String, Double>> paretoValuesMI,
+			AnalysisFileTree node, Map<String, Value<? extends Number>> miList) {
+		Set<String> usedCategories = new HashSet<String>();
+		for (Entry<String, Value<? extends Number>> entry : miList.entrySet()) {
+			String codeRangeName = entry.getKey();
+			Number value = entry.getValue().getValue();
+			String category = node.getPathFile(false).getPath() + "."
+					+ codeRangeName;
+			paretoValuesMI.add(new GenericMark2D<String, Double>(category,
+					value.doubleValue(), codeRangeTypeSelection.getName() + " "
+							+ codeRangeName, node));
+			usedCategories.add(category);
+		}
+	}
+
+	private void extractValues(
+			final Map<String, Mark2D<String, Double>> paretoValuesMI,
+			AnalysisFileTree node, Map<String, Value<? extends Number>> miList) {
+		Set<String> usedCategories = new HashSet<String>();
+		for (Entry<String, Value<? extends Number>> entry : miList.entrySet()) {
+			String codeRangeName = entry.getKey();
+			Number value = entry.getValue().getValue();
+			String category = node.getPathFile(false).getPath() + "."
+					+ codeRangeName;
+			paretoValuesMI.put(
+					category,
+					new GenericMark2D<String, Double>(category, value
+							.doubleValue(), codeRangeTypeSelection.getName()
+							+ " " + codeRangeName, node));
+			usedCategories.add(category);
+		}
 	}
 
 	private void setupChart(List<Mark2D<String, Double>> paretoValuesMI,
