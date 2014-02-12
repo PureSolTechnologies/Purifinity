@@ -1,8 +1,6 @@
 package com.puresoltechnologies.purifinity.framework.store.db.charts;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -17,26 +15,24 @@ import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartData;
-import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProvider;
+import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartData;
+import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProvider;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraElementNames;
-import com.puresoltechnologies.purifinity.framework.store.db.ValueSerializer;
 
-public class HistogramChartDataProviderImpl implements
-		HistogramChartDataProvider {
+public class ParetoChartDataProviderImpl implements ParetoChartDataProvider {
 
 	@Override
-	public HistogramChartData loadValues(UUID analysisProject,
-			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
+	public ParetoChartData loadValues(UUID analysisProject, UUID analysisRun,
+			String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType) {
-		Map<HashId, List<Value<?>>> values = new HashMap<>();
+		Map<HashId, Map<String, Value<? extends Number>>> values = new HashMap<>();
 		Session session = CassandraConnection.getEvaluationSession();
 		if (parameter.isNumeric()) {
 			PreparedStatement preparedStatement = CassandraConnection
 					.getPreparedStatement(
 							session,
-							"SELECT hashid, numeric_value FROM "
+							"SELECT hashid, code_range_name, numeric_value FROM "
 									+ CassandraElementNames.EVALUATION_METRICS_TABLE
 									+ " WHERE analysis_project=? AND analysis_run=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
 			BoundStatement boundStatement = preparedStatement.bind(
@@ -46,44 +42,23 @@ public class HistogramChartDataProviderImpl implements
 			while (!result.isExhausted()) {
 				Row row = result.one();
 				HashId hashId = HashId.valueOf(row.getString(0));
-				Double value = row.getDouble(1);
+				String codeRangeName = row.getString(1);
+				Double value = row.getDouble(2);
 
 				ParameterWithArbitraryUnit<Double> metricParameter = new ParameterWithArbitraryUnit<>(
 						parameter.getName(), parameter.getUnit(),
 						parameter.getLevelOfMeasurement(),
 						parameter.getDescription(), Double.class);
-				List<Value<?>> valueList = values.get(hashId);
+				Map<String, Value<? extends Number>> valueList = values
+						.get(hashId);
 				if (valueList == null) {
-					valueList = new ArrayList<>();
+					valueList = new HashMap<>();
 					values.put(hashId, valueList);
 				}
-				valueList.add(new GeneralValue<>(value, metricParameter));
-			}
-		} else {
-			PreparedStatement preparedStatement = CassandraConnection
-					.getPreparedStatement(
-							session,
-							"SELECT hashid, string_value FROM "
-									+ CassandraElementNames.EVALUATION_METRICS_TABLE
-									+ " WHERE analysis_project=? AND analysis_run=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
-			BoundStatement boundStatement = preparedStatement.bind(
-					analysisProject, analysisRun, evaluatorName,
-					parameter.getName(), codeRangeType.name());
-			ResultSet result = session.execute(boundStatement);
-			while (!result.isExhausted()) {
-				Row row = result.one();
-				HashId hashId = HashId.valueOf(row.getString(0));
-				String stringValue = row.getString(1);
-				Value<?> value = ValueSerializer.fromString(stringValue);
-
-				List<Value<?>> valueList = values.get(hashId);
-				if (valueList == null) {
-					valueList = new ArrayList<>();
-					values.put(hashId, valueList);
-				}
-				valueList.add(value);
+				valueList.put(codeRangeName, new GeneralValue<>(value,
+						metricParameter));
 			}
 		}
-		return new HistogramChartData(values);
+		return new ParetoChartData(values);
 	}
 }

@@ -35,7 +35,13 @@ public class BarMarkRenderer implements MarkRenderer {
 		point1 = transformation.transform(point1);
 		point2 = transformation.transform(point2);
 		int pixelWidth = (int) Math.abs(point1.getX() - point2.getX());
+		if (pixelWidth <= 0) {
+			pixelWidth = 1;
+		}
 		int pixelHeight = (int) Math.abs(point1.getY() - point2.getY());
+		if (pixelHeight <= 0) {
+			pixelHeight = 1;
+		}
 		int pixelX = (int) point1.getX();
 		int pixelY;
 		if (point.getY() > 0) {

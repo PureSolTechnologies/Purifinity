@@ -8,14 +8,14 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 
 /**
- * This is the interface for the data backend for Metric Chart.
+ * This is the interface for the data backend for Pareto Charts.
  * 
  * @author Rick-Rainer Ludwig
  */
-public interface HistogramChartDataProvider {
+public interface ParetoChartDataProvider {
 
 	/**
-	 * This method reads the values needed for Metric Charts. The data returned
+	 * This method reads the values needed for Pareto Charts. The data returned
 	 * contains only the value for each code range in the file tree for each
 	 * run.
 	 * 
@@ -36,13 +36,13 @@ public interface HistogramChartDataProvider {
 	 *            is the type of the code range. Only the code ranges defined
 	 *            here are loaded. A mixture of different code ranges is not
 	 *            meaningful.
-	 * @return A {@link HistogramChartData} object is returned containing the
+	 * @return A {@link ParetoChartData} object is returned containing the
 	 *         values. The key is the {@link HashId} of the file or directory
 	 *         and the value is the {@link Value} of the value to be used for
 	 *         the chart.
 	 */
-	public HistogramChartData loadValues(UUID analysisProject,
-			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
+	public ParetoChartData loadValues(UUID analysisProject, UUID analysisRun,
+			String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType);
 
 }

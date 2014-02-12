@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
@@ -50,15 +49,11 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.ExportAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
-import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
-import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProvider;
-import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProviderFactory;
+import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartData;
+import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProvider;
+import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProviderFactory;
 
 public class ParetoChartView extends AbstractMetricChartViewPart {
 
@@ -77,7 +72,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 
 	private Chart2D chart;
 
-	private final Map<HashId, List<Value<?>>> values = new HashMap<>();
+	private ParetoChartData values = new ParetoChartData();
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -231,63 +226,44 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	}
 
 	private void loadData() {
-		values.clear();
-		HistogramChartDataProvider dataProvider = HistogramChartDataProviderFactory
+		ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
 				.getFactory().getInstance();
-		Map<HashId, List<Value<?>>> loadedValues = dataProvider.loadValues(
-				analysisProjectSelectionUUID, analysisRunSelectionUUID,
-				evaluatorSelection.getName(), parameterSelection,
-				codeRangeTypeSelection);
-		values.putAll(loadedValues);
+		values = dataProvider.loadValues(analysisProjectSelectionUUID,
+				analysisRunSelectionUUID, evaluatorSelection.getName(),
+				parameterSelection, codeRangeTypeSelection);
 	}
 
 	@Override
 	public void showEvaluation(AnalysisFileTree path) {
-		final EvaluatorStore store = EvaluatorStoreFactory.getFactory()
-				.createInstance(evaluatorSelection.getEvaluatorClass());
-		final List<Mark2D<String, Double>> paretoValues = new ArrayList<Mark2D<String, Double>>();
+		final List<Mark2D<String, Double>> paretoValues = new ArrayList<>();
 		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
 			@Override
 			public WalkingAction visit(AnalysisFileTree node) {
-				try {
-					if (!node.isFile()) {
-						return WalkingAction.PROCEED;
-					}
-					HashId hashId = node.getHashId();
-					MetricFileResults results = store.readFileResults(hashId);
-					if (results == null) {
-						return WalkingAction.PROCEED;
-					}
-					List<Map<String, Value<?>>> valueMaps = findSuitableValueMaps(
-							node, results, parameterSelection,
-							codeRangeTypeSelection);
-					String codeRangeNameParameterName = CodeRangeNameParameter
-							.getInstance().getName();
-					Set<String> usedCategories = new HashSet<String>();
-					for (Map<String, Value<?>> valueMap : valueMaps) {
-						String codeRangeName = (String) valueMap.get(
-								codeRangeNameParameterName).getValue();
-						double value = convertToDouble(valueMap,
-								parameterSelection);
-						String category = node.getPathFile(false).getPath()
-								+ "." + codeRangeName;
-						paretoValues
-								.add(new GenericMark2D<String, Double>(
-										category, value, codeRangeTypeSelection
-												.getName()
-												+ " "
-												+ codeRangeName, node));
-						usedCategories.add(category);
-					}
+				if (!node.isFile()) {
 					return WalkingAction.PROCEED;
-				} catch (EvaluationStoreException e) {
-					Activator activator = Activator.getDefault();
-					activator.getLog().log(
-							new Status(Status.ERROR, activator.getBundle()
-									.getSymbolicName(),
-									"Could not handle new selection.", e));
-					return WalkingAction.ABORT;
 				}
+				HashId hashId = node.getHashId();
+
+				Map<String, Value<? extends Number>> valueList = values
+						.getValues(hashId);
+				if (valueList == null) {
+					return WalkingAction.PROCEED;
+				}
+
+				Set<String> usedCategories = new HashSet<String>();
+				for (Entry<String, Value<? extends Number>> entry : valueList
+						.entrySet()) {
+					String codeRangeName = entry.getKey();
+					Number value = entry.getValue().getValue();
+					String category = node.getPathFile(false).getPath() + "."
+							+ codeRangeName;
+					paretoValues.add(new GenericMark2D<String, Double>(
+							category, value.doubleValue(),
+							codeRangeTypeSelection.getName() + " "
+									+ codeRangeName, node));
+					usedCategories.add(category);
+				}
+				return WalkingAction.PROCEED;
 			}
 		};
 		TreeWalker.walk(visitor, path);
@@ -310,7 +286,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 					}
 				});
 
-		List<String> categories = new ArrayList<String>();
+		List<String> categories = new ArrayList<>();
 		double min = 0.0;
 		double max = 0.0;
 		for (Mark2D<String, Double> value : paretoValues) {

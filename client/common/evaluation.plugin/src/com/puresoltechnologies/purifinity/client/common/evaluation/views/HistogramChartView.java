@@ -44,6 +44,7 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsA
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
+import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartData;
 import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProvider;
 import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProviderFactory;
 
@@ -64,7 +65,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	private Chart2D chart;
 
-	private final Map<HashId, List<Value<?>>> values = new HashMap<>();
+	private HistogramChartData values = new HistogramChartData();
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -204,14 +205,11 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	}
 
 	private void loadData() {
-		values.clear();
 		HistogramChartDataProvider dataProvider = HistogramChartDataProviderFactory
 				.getFactory().getInstance();
-		Map<HashId, List<Value<?>>> loadedValues = dataProvider.loadValues(
-				analysisProjectSelectionUUID, analysisRunSelectionUUID,
-				evaluatorSelection.getName(), parameterSelection,
-				CodeRangeType.FILE);
-		values.putAll(loadedValues);
+		values = dataProvider.loadValues(analysisProjectSelectionUUID,
+				analysisRunSelectionUUID, evaluatorSelection.getName(),
+				parameterSelection, CodeRangeType.FILE);
 	}
 
 	@Override
@@ -224,7 +222,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 					return WalkingAction.PROCEED;
 				}
 				HashId hashId = node.getHashId();
-				List<Value<?>> valueList = values.get(hashId);
+				List<Value<?>> valueList = values.getValues(hashId);
 				if (valueList != null) {
 					for (Value<?> value : valueList) {
 						histogramValues.add(value);
