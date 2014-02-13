@@ -2,8 +2,9 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.views;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
@@ -12,6 +13,7 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 
 import com.puresoltechnologies.commons.math.Parameter;
+import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
@@ -29,29 +31,39 @@ import com.puresoltechnologies.purifinity.client.common.chart.Mark2D;
 import com.puresoltechnologies.purifinity.client.common.chart.Plot;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
-import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.CorrelationChartViewSettingsDialog;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartData;
+import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProvider;
+import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProviderFactory;
 
 public class CorrelationChartView extends AbstractMetricChartViewPart {
 
-	private CorrelationChartViewSettingsDialog settingsDialog = null;
+	private UUID analysisProjectSelectionUUID = null;
+	private UUID oldAnalysisProjectSelectionUUID = null;
+	private UUID analysisRunSelectionUUID = null;
+	private UUID oldAnalysisRunSelectionUUID = null;
 
 	private EvaluatorFactory xMetricSelection = null;
+	private EvaluatorFactory oldXMetricSelection = null;
 	private Parameter<?> xParameterSelection = null;
+	private Parameter<?> oldXParameterSelection = null;
 	private EvaluatorFactory yMetricSelection = null;
+	private EvaluatorFactory oldYMetricSelection = null;
 	private Parameter<?> yParameterSelection = null;
+	private Parameter<?> oldYParameterSelection = null;
+
+	private CorrelationChartViewSettingsDialog settingsDialog = null;
 
 	private Chart2D chart;
+
+	private ParetoChartData xValues = new ParetoChartData();
+	private ParetoChartData yValues = new ParetoChartData();
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -188,6 +200,19 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		if ((analysisSelection != null) && (xMetricSelection != null)
 				&& (xParameterSelection != null) && (yMetricSelection != null)
 				&& (yParameterSelection != null)) {
+			analysisProjectSelectionUUID = analysisSelection
+					.getAnalysisProject().getInformation().getUUID();
+			analysisRunSelectionUUID = analysisSelection.getAnalysisRun()
+					.getInformation().getUUID();
+			if (wasSelectionChanged()) {
+				oldAnalysisProjectSelectionUUID = analysisProjectSelectionUUID;
+				oldAnalysisRunSelectionUUID = analysisRunSelectionUUID;
+				oldXMetricSelection = xMetricSelection;
+				oldXParameterSelection = xParameterSelection;
+				oldYMetricSelection = yMetricSelection;
+				oldYParameterSelection = yParameterSelection;
+				loadData();
+			}
 			AnalysisFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
 				path = path.getParent();
@@ -196,48 +221,80 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		}
 	}
 
+	private boolean wasSelectionChanged() {
+		if (!analysisProjectSelectionUUID
+				.equals(oldAnalysisProjectSelectionUUID)) {
+			return true;
+		}
+		if (!analysisRunSelectionUUID.equals(oldAnalysisRunSelectionUUID)) {
+			return true;
+		}
+		if ((oldXMetricSelection == null)
+				|| (!xMetricSelection.getClass().equals(
+						oldXMetricSelection.getClass()))) {
+			return true;
+		}
+		if (!oldXParameterSelection.equals(xParameterSelection)) {
+			return true;
+		}
+		if ((oldYMetricSelection == null)
+				|| (!yMetricSelection.getClass().equals(
+						oldYMetricSelection.getClass()))) {
+			return true;
+		}
+		if (!oldYParameterSelection.equals(yParameterSelection)) {
+			return true;
+		}
+		return false;
+	}
+
+	private void loadData() {
+		ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
+				.getFactory().getInstance();
+		xValues = dataProvider.loadValues(analysisProjectSelectionUUID,
+				analysisRunSelectionUUID, xMetricSelection.getName(),
+				xParameterSelection, CodeRangeType.FILE);
+		yValues = dataProvider.loadValues(analysisProjectSelectionUUID,
+				analysisRunSelectionUUID, yMetricSelection.getName(),
+				yParameterSelection, CodeRangeType.FILE);
+	}
+
 	@Override
 	public void showEvaluation(AnalysisFileTree path) {
-		final EvaluatorStore xStore = EvaluatorStoreFactory.getFactory()
-				.createInstance(xMetricSelection.getEvaluatorClass());
-		final EvaluatorStore yStore = EvaluatorStoreFactory.getFactory()
-				.createInstance(yMetricSelection.getEvaluatorClass());
 		final List<Mark2D<Double, Double>> correlationValues = new ArrayList<Mark2D<Double, Double>>();
 		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
 			@Override
 			public WalkingAction visit(AnalysisFileTree node) {
-				try {
-					if (!node.isFile()) {
-						return WalkingAction.PROCEED;
-					}
-					HashId hashId = node.getHashId();
-					MetricFileResults xResults = xStore.readFileResults(hashId);
-					if (xResults == null) {
-						return WalkingAction.PROCEED;
-					}
-					MetricFileResults yResults = yStore.readFileResults(hashId);
-					if (yResults == null) {
-						return WalkingAction.PROCEED;
-					}
-					Double xValue = findSuitableValue(node, xResults,
-							xParameterSelection, CodeRangeType.FILE);
-					Double yValue = findSuitableValue(node, yResults,
-							yParameterSelection, CodeRangeType.FILE);
+				if (!node.isFile()) {
+					return WalkingAction.PROCEED;
+				}
+				HashId hashId = node.getHashId();
+
+				Map<String, Value<? extends Number>> xValueList = xValues
+						.getValues(hashId);
+				if (xValueList == null) {
+					return WalkingAction.PROCEED;
+				}
+				Map<String, Value<? extends Number>> yValueList = yValues
+						.getValues(hashId);
+				if (yValueList == null) {
+					return WalkingAction.PROCEED;
+				}
+
+				for (String codeRangeName : xValueList.keySet()) {
+
+					Double xValue = xValueList.get(codeRangeName).getValue()
+							.doubleValue();
+					Double yValue = yValueList.get(codeRangeName).getValue()
+							.doubleValue();
 					if ((xValue != null) && (yValue != null)) {
 						Mark2D<Double, Double> value = new GenericMark2D<Double, Double>(
 								xValue, yValue, node.getPathFile(false)
 										.toString(), node);
 						correlationValues.add(value);
 					}
-					return WalkingAction.PROCEED;
-				} catch (EvaluationStoreException e) {
-					Activator activator = Activator.getDefault();
-					activator.getLog().log(
-							new Status(Status.ERROR, activator.getBundle()
-									.getSymbolicName(),
-									"Could not handle new selection.", e));
-					return WalkingAction.ABORT;
 				}
+				return WalkingAction.PROCEED;
 			}
 		};
 		TreeWalker.walk(visitor, path);
