@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -26,8 +27,9 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import com.puresoltechnologies.commons.math.Parameter;
+import com.puresoltechnologies.commons.math.Value;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.branding.Printable;
 import com.puresoltechnologies.purifinity.client.common.chart.AreaMapComponent;
@@ -39,15 +41,29 @@ import com.puresoltechnologies.purifinity.client.common.evaluation.MetricsMapVie
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
-import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
+import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapData;
+import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapDataProvider;
+import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapDataProviderFactory;
 
 public class MetricsMapView extends AbstractMetricViewPart implements Printable {
+
+	private UUID analysisProjectSelectionUUID = null;
+	private UUID oldAnalysisProjectSelectionUUID = null;
+	private UUID analysisRunSelectionUUID = null;
+	private UUID oldAnalysisRunSelectionUUID = null;
+
+	private EvaluatorFactory mapMetricSelection = null;
+	private EvaluatorFactory oldMapMetricSelection = null;
+	private Parameter<?> mapParameterSelection = null;
+	private Parameter<?> oldMapParameterSelection = null;
+	private EvaluatorFactory colorMetricSelection = null;
+	private EvaluatorFactory oldColorMetricSelection = null;
+	private Parameter<?> colorParameterSelection = null;
+	private Parameter<?> oldColorParameterSelection = null;
 
 	private Label label;
 
@@ -56,14 +72,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 
 	private MetricsMapViewSettingsDialog settingsDialog;
 
-	private EvaluatorFactory mapMetricSelection = null;
-	private Parameter<?> mapValueSelection = null;
-	private EvaluatorFactory colorMetricSelection = null;
-	private Parameter<?> colorValueSelection = null;
-
-	public MetricsMapView() {
-		super();
-	}
+	private MetricsMapData mapValues = new MetricsMapData();
 
 	/**
 	 * Create contents of the view part.
@@ -151,7 +160,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 					for (Parameter<?> parameter : mapMetricSelection
 							.getParameters()) {
 						if (parameter.getName().equals(mapValueSelectionName)) {
-							mapValueSelection = parameter;
+							mapParameterSelection = parameter;
 							break;
 						}
 					}
@@ -168,7 +177,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 					for (Parameter<?> parameter : colorMetricSelection
 							.getParameters()) {
 						if (parameter.getName().equals(colorValueSelectionName)) {
-							colorValueSelection = parameter;
+							colorParameterSelection = parameter;
 							break;
 						}
 					}
@@ -183,11 +192,11 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 		memento.putString("map.metric.class", mapMetricSelection.getClass()
 				.getName());
 		memento.putString("map.metric", mapMetricSelection.getName());
-		memento.putString("map.value", mapValueSelection.getName());
+		memento.putString("map.value", mapParameterSelection.getName());
 		memento.putString("color.metric.class", colorMetricSelection.getClass()
 				.getName());
 		memento.putString("color.metric", colorMetricSelection.getName());
-		memento.putString("color.value", colorValueSelection.getName());
+		memento.putString("color.value", colorParameterSelection.getName());
 
 		super.saveState(memento);
 	}
@@ -205,10 +214,25 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	}
 
 	@Override
-	protected void handleChangedAnalysisSelection() throws EvaluationStoreException {
+	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (mapMetricSelection != null)
-				&& (mapValueSelection != null)) {
+				&& (mapParameterSelection != null)
+				&& (colorMetricSelection != null)
+				&& (colorParameterSelection != null)) {
+			analysisProjectSelectionUUID = analysisSelection
+					.getAnalysisProject().getInformation().getUUID();
+			analysisRunSelectionUUID = analysisSelection.getAnalysisRun()
+					.getInformation().getUUID();
+			if (wasSelectionChanged()) {
+				oldAnalysisProjectSelectionUUID = analysisProjectSelectionUUID;
+				oldAnalysisRunSelectionUUID = analysisRunSelectionUUID;
+				oldMapMetricSelection = mapMetricSelection;
+				oldMapParameterSelection = mapParameterSelection;
+				oldColorMetricSelection = colorMetricSelection;
+				oldColorParameterSelection = colorParameterSelection;
+				loadData();
+			}
 			AnalysisFileTree path = analysisSelection.getFileTreeNode();
 			if (path.isFile()) {
 				path = path.getParent();
@@ -217,24 +241,55 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 		}
 	}
 
+	private boolean wasSelectionChanged() {
+		if (!analysisProjectSelectionUUID
+				.equals(oldAnalysisProjectSelectionUUID)) {
+			return true;
+		}
+		if (!analysisRunSelectionUUID.equals(oldAnalysisRunSelectionUUID)) {
+			return true;
+		}
+		if ((oldMapMetricSelection == null)
+				|| (!mapMetricSelection.getClass().equals(
+						oldMapMetricSelection.getClass()))) {
+			return true;
+		}
+		if (!oldMapParameterSelection.equals(mapParameterSelection)) {
+			return true;
+		}
+		if ((oldColorMetricSelection == null)
+				|| (!colorMetricSelection.getClass().equals(
+						oldColorMetricSelection.getClass()))) {
+			return true;
+		}
+		if (!oldColorParameterSelection.equals(colorParameterSelection)) {
+			return true;
+		}
+		return false;
+	}
+
+	private void loadData() {
+		MetricsMapDataProvider dataProvider = MetricsMapDataProviderFactory
+				.getFactory().getInstance();
+		mapValues = dataProvider.loadMapValues(analysisProjectSelectionUUID,
+				analysisRunSelectionUUID, mapMetricSelection.getName(),
+				mapParameterSelection, colorMetricSelection.getName(),
+				colorParameterSelection);
+	}
+
 	@Override
-	public void showEvaluation(AnalysisFileTree path)
-			throws EvaluationStoreException {
+	public void showEvaluation(AnalysisFileTree path) {
 		label.setText(path.getPathFile(false).getPath());
-		EvaluatorStore mapStore = EvaluatorStoreFactory.getFactory()
-				.createInstance(mapMetricSelection.getEvaluatorClass());
-		EvaluatorStore colorStore = EvaluatorStoreFactory.getFactory()
-				.createInstance(colorMetricSelection.getEvaluatorClass());
-		AreaMapData data = calculateAreaData(mapStore, colorStore, path);
+		AreaMapData data = calculateAreaData(path);
 		setColorProvider();
-		areaMap.setData(data, mapValueSelection.getUnit());
+		areaMap.setData(data, mapParameterSelection.getUnit());
 	}
 
 	private void setColorProvider() {
 		try {
 			BundleContext bundleContext = Activator.getDefault().getBundle()
 					.getBundleContext();
-			String parameterName = colorValueSelection.getName();
+			String parameterName = colorParameterSelection.getName();
 			String filter = "(parameterName=" + parameterName + ")";
 			Collection<ServiceReference<ColorProvider>> serviceReferences = bundleContext
 					.getServiceReferences(ColorProvider.class, filter);
@@ -269,45 +324,25 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	 * @return
 	 * @throws EvaluationStoreException
 	 */
-	private AreaMapData calculateAreaData(EvaluatorStore mapStore,
-			EvaluatorStore colorStore, AnalysisFileTree path)
-			throws EvaluationStoreException {
-		List<AreaMapData> childAreas = calculateChildAreaMaps(mapStore,
-				colorStore, path);
-		Object secondaryValue = null;
-		Double sum;
-		if (path.isFile()) {
-			MetricFileResults mapResults = mapStore.readFileResults(path
-					.getHashId());
-			MetricFileResults colorResults = colorStore.readFileResults(path
-					.getHashId());
-			if ((mapResults == null) || (mapResults.getValues().size() == 0)) {
-				return processAreaWithoutOwnValues(path,
-						childAreas.toArray(new AreaMapData[childAreas.size()]));
-			}
-			sum = findSuitableValue(path, mapResults, mapValueSelection,
-					CodeRangeType.FILE);
-			if ((colorResults != null) && (colorResults.getValues().size() > 0)) {
-				secondaryValue = findSuitableSecondaryValue(path, colorResults,
-						colorValueSelection, CodeRangeType.FILE);
-			}
-		} else {
-			MetricDirectoryResults mapResults = mapStore
-					.readDirectoryResults(path.getHashId());
-			MetricDirectoryResults colorResults = colorStore
-					.readDirectoryResults(path.getHashId());
-			if ((mapResults == null) || (mapResults.getValues().size() == 0)) {
-				return processAreaWithoutOwnValues(path,
-						childAreas.toArray(new AreaMapData[childAreas.size()]));
-			}
-			sum = findSuitableValue(mapResults, mapValueSelection);
-			if ((colorResults != null) && (colorResults.getValues().size() > 0)) {
-				secondaryValue = findSuitableSecondaryValue(path, colorResults,
-						colorValueSelection);
-			}
+	private AreaMapData calculateAreaData(AnalysisFileTree path) {
+		List<AreaMapData> childAreas = calculateChildAreaMaps(path);
+		HashId hashId = path.getHashId();
+		Map<String, Value<? extends Number>> mapResults = mapValues
+				.getMapValues(hashId);
+		Map<String, Value<?>> colorResults = mapValues.getColorValues(hashId);
+		if ((mapResults == null) || (mapResults.size() == 0)) {
+			return processAreaWithoutOwnValues(path,
+					childAreas.toArray(new AreaMapData[childAreas.size()]));
 		}
-		if (sum == null) {
-			sum = 0.0;
+		Double sum = 0.0;
+		Object secondaryValue = null;
+		for (String codeRangeName : mapResults.keySet()) {
+			sum += mapResults.get(codeRangeName).getValue().doubleValue();
+			if ((colorResults != null) && (colorResults.size() > 0)) {
+				if (secondaryValue == null) {
+					secondaryValue = colorResults.get(codeRangeName).getValue();
+				}
+			}
 		}
 		return new AreaMapData(path.getPathFile(false).toString(), sum,
 				secondaryValue, childAreas.toArray(new AreaMapData[childAreas
@@ -324,14 +359,11 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	 * @return
 	 * @throws EvaluationStoreException
 	 */
-	private List<AreaMapData> calculateChildAreaMaps(EvaluatorStore mapStore,
-			EvaluatorStore colorStore, AnalysisFileTree path)
-			throws EvaluationStoreException {
+	private List<AreaMapData> calculateChildAreaMaps(AnalysisFileTree path) {
 		List<AnalysisFileTree> children = path.getChildren();
 		List<AreaMapData> childAreas = new ArrayList<AreaMapData>();
 		for (int i = 0; i < children.size(); i++) {
-			AreaMapData areaData = calculateAreaData(mapStore, colorStore,
-					children.get(i));
+			AreaMapData areaData = calculateAreaData(children.get(i));
 			if (areaData != null) {
 				childAreas.add(areaData);
 			}
@@ -358,8 +390,8 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	public void showSettings() {
 		if (settingsDialog == null) {
 			settingsDialog = new MetricsMapViewSettingsDialog(this,
-					mapMetricSelection, mapValueSelection,
-					colorMetricSelection, colorValueSelection);
+					mapMetricSelection, mapParameterSelection,
+					colorMetricSelection, colorParameterSelection);
 			settingsDialog.open();
 		} else {
 			settingsDialog.close();
@@ -374,18 +406,11 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 
 	@Override
 	public void applySettings() {
-		try {
-			mapMetricSelection = settingsDialog.getMapMetric();
-			mapValueSelection = settingsDialog.getMapValue();
-			colorMetricSelection = settingsDialog.getColorMetric();
-			colorValueSelection = settingsDialog.getColorValue();
-			handleChangedAnalysisSelection();
-		} catch (EvaluationStoreException e) {
-			Activator activator = Activator.getDefault();
-			activator.getLog().log(
-					new Status(Status.ERROR, activator.getBundle()
-							.getSymbolicName(), "Could not update view.", e));
-		}
+		mapMetricSelection = settingsDialog.getMapMetric();
+		mapParameterSelection = settingsDialog.getMapValue();
+		colorMetricSelection = settingsDialog.getColorMetric();
+		colorParameterSelection = settingsDialog.getColorValue();
+		handleChangedAnalysisSelection();
 	}
 
 	@Override
