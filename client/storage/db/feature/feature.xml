@@ -45,7 +45,6 @@
       <import plugin="org.apache.xml.resolver"/>
       <import plugin="org.apache.commons.httpclient"/>
       <import plugin="javax.servlet.jsp"/>
-      <import plugin="javax.mail"/>
       <import plugin="org.eclipse.jdt.debug"/>
       <import plugin="com.jcraft.jsch"/>
       <import plugin="org.eclipse.core.runtime" version="3.8.0" match="greaterOrEqual"/>

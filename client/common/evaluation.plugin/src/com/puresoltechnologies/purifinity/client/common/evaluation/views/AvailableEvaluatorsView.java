@@ -16,8 +16,6 @@ import org.eclipse.swt.widgets.Table;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.EvaluatorInformationDialog;
@@ -31,9 +29,6 @@ import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Eval
 
 public class AvailableEvaluatorsView extends AbstractPureSolTechnologiesView
 		implements Refreshable, InformationProvider, ISelectionChangedListener {
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(AvailableEvaluatorsView.class);
 
 	private Table table;
 	private TableViewer viewer;

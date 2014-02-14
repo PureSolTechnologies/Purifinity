@@ -53,7 +53,6 @@
       <import plugin="com.puresoltechnologies.purifinity.evaluation.api.bundle"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.bundle"/>
       <import plugin="org.apache.commons.lang"/>
-      <import plugin="javax.mail"/>
    </requires>
 
    <plugin
