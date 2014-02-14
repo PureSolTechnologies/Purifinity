@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
@@ -15,6 +16,7 @@ import org.osgi.framework.BundleException;
 
 import com.puresoltechnologies.purifinity.commons.test.AbstractBundleTest;
 
+@Ignore("A clear strategy is needed how to handle bundle tests.")
 public class CassandraBundleIT extends AbstractBundleTest {
 
 	private static File bundleJar = null;

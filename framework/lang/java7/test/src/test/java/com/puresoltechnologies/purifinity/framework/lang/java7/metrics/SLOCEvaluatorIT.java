@@ -7,14 +7,15 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.math.statistics.Statistics;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunnerImpl;
@@ -29,6 +30,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreExc
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
+@Ignore("Storage is not available during test, yet.")
 public class SLOCEvaluatorIT extends AbstractMetricTest {
 
 	private static final File testProjectDir = new File(
@@ -57,7 +59,8 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 				analysisProject.getUUID());
 		assertTrue("Analysis run did not succeed.", analysisRunner.call());
 		AnalysisRun analysisRun = analysisRunner.getAnalysisRun();
-		List<AnalysisInformation> analyzedFiles = analysisRun.getAnalyzedFiles();
+		List<AnalysisInformation> analyzedFiles = analysisRun
+				.getAnalyzedFiles();
 		assertEquals(1, analyzedFiles.size());
 		return analysisRun;
 	}

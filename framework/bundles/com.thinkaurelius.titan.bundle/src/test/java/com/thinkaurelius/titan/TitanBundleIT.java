@@ -7,12 +7,14 @@ import java.io.File;
 import java.io.IOException;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 
 import com.puresoltechnologies.purifinity.commons.test.AbstractBundleTest;
 
+@Ignore("A strategy for bundle tests are needed.")
 public class TitanBundleIT extends AbstractBundleTest {
 
 	private static File bundleJar = null;

@@ -7,8 +7,6 @@ import javax.crypto.SecretKey;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.framework.commons.utils.crypt.AESUtilities;
-
 public class AESUtilitiesTest {
 
 	@Test
@@ -38,7 +36,7 @@ public class AESUtilitiesTest {
 
 	@Test
 	public void testEncryptAndDecrypt() throws Exception {
-		SecretKey secretKey = AESUtilities.generateSecretKey(256);
+		SecretKey secretKey = AESUtilities.generateSecretKey(128);
 
 		String message = "This is the secret message! ;-)";
 		System.out.println(message);

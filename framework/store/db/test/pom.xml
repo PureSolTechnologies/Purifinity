@@ -50,9 +50,11 @@
 						<executions>
 							<execution>
 								<id>startCassandra</id>
+								<phase>pre-integration-test</phase>
 							</execution>
 							<execution>
 								<id>stopCassandra</id>
+								<phase>post-integration-test</phase>
 							</execution>
 						</executions>
 					</plugin>

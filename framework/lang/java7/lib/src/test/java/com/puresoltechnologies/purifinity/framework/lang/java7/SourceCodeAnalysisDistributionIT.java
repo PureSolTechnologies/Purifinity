@@ -18,7 +18,6 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.framework.commons.utils.FileSearch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.FileTree;
-import com.puresoltechnologies.purifinity.framework.lang.java7.Java;
 import com.puresoltechnologies.purifinity.framework.lang.java7.grammar.JavaGrammar;
 
 /**
@@ -49,10 +48,7 @@ public class SourceCodeAnalysisDistributionIT {
 		directory = directory.getParentFile();
 		assertEquals("lang", directory.getName());
 		directory = directory.getParentFile();
-		assertEquals("coding", directory.getName());
-		directory = directory.getParentFile();
 		assertEquals("framework", directory.getName());
-		directory = directory.getParentFile();
 	}
 
 	@Test
