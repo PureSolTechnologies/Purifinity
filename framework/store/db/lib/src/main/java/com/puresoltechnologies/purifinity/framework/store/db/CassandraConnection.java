@@ -34,7 +34,7 @@ public class CassandraConnection {
 	private static Session analysisSession = null;
 	private static Session evaluationSession = null;
 
-	private static Map<String, PreparedStatement> preparedStatements = new HashMap<>();
+	private static Map<Session, Map<String, PreparedStatement>> preparedStatements = new HashMap<>();
 
 	public static String getHost() {
 		return CASSANDRA_HOST;
@@ -45,18 +45,17 @@ public class CassandraConnection {
 	}
 
 	public static void connect() throws CassandraConnectionException {
-		if (cluster != null) {
-			return;
+		if (cluster == null) {
+			logger.info("Connect to Cassandra database...");
+			cluster = clusterBuilder.addContactPoints(CASSANDRA_HOST)
+					.withPort(CASSANDRA_CQL_PORT).build();
+			migrate();
+			analysisSession = CassandraUtils.connectToCluster(cluster,
+					CassandraElementNames.ANALYSIS_KEYSPACE);
+			evaluationSession = CassandraUtils.connectToCluster(cluster,
+					CassandraElementNames.EVALUATION_KEYSPACE);
+			logger.info("Cassandra database connected.");
 		}
-		logger.info("Connect to Cassandra database...");
-		cluster = clusterBuilder.addContactPoints(CASSANDRA_HOST)
-				.withPort(CASSANDRA_CQL_PORT).build();
-		migrate();
-		analysisSession = CassandraUtils.connectToCluster(cluster,
-				CassandraElementNames.ANALYSIS_KEYSPACE);
-		evaluationSession = CassandraUtils.connectToCluster(cluster,
-				CassandraElementNames.EVALUATION_KEYSPACE);
-		logger.info("Cassandra database connected.");
 	}
 
 	private static void migrate() throws CassandraConnectionException {
@@ -68,13 +67,17 @@ public class CassandraConnection {
 		}
 	}
 
-	public static void disconnect() throws CassandraConnectionException {
-		if (cluster != null) {
-			preparedStatements.clear();
+	public static void disconnect() {
+		preparedStatements.clear();
+		if (evaluationSession != null) {
 			evaluationSession.shutdown();
 			evaluationSession = null;
+		}
+		if (analysisSession != null) {
 			analysisSession.shutdown();
 			analysisSession = null;
+		}
+		if (cluster != null) {
 			cluster.shutdown();
 			cluster = null;
 		}
@@ -91,15 +94,36 @@ public class CassandraConnection {
 
 	public static PreparedStatement getPreparedStatement(Session session,
 			String statement) {
-		PreparedStatement preparedStatement = preparedStatements.get(statement);
+		if (session == null) {
+			throw new IllegalArgumentException("Session must no be null");
+		}
+		if (statement == null) {
+			throw new IllegalArgumentException("Statement must no be null");
+		}
+		PreparedStatement preparedStatement = null;
+		Map<String, PreparedStatement> sessionStatements = preparedStatements
+				.get(session);
+		if (sessionStatements != null) {
+			preparedStatement = sessionStatements.get(preparedStatement);
+		}
 		if (preparedStatement == null) {
-			synchronized (preparedStatements) {
-				preparedStatement = preparedStatements.get(statement);
-				if (preparedStatement == null) {
-					preparedStatement = session.prepare(statement);
-					preparedStatements.put(statement, preparedStatement);
-				}
-			}
+			preparedStatement = prepareStatement(session, statement);
+		}
+		return preparedStatement;
+	}
+
+	private static synchronized PreparedStatement prepareStatement(
+			Session session, String statement) {
+		Map<String, PreparedStatement> sessionStatements = preparedStatements
+				.get(session);
+		if (sessionStatements == null) {
+			sessionStatements = new HashMap<>();
+			preparedStatements.put(session, sessionStatements);
+		}
+		PreparedStatement preparedStatement = sessionStatements.get(statement);
+		if (preparedStatement == null) {
+			preparedStatement = session.prepare(statement);
+			sessionStatements.put(statement, preparedStatement);
 		}
 		return preparedStatement;
 	}

@@ -1,9 +1,13 @@
 package com.puresoltechnologies.purifinity.framework.store.db;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore("Check this test!")
+/**
+ * This is the most simple store test for checking.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
 public class StoreStartStopIT extends AbstractDbStoreTest {
 
 	@Test

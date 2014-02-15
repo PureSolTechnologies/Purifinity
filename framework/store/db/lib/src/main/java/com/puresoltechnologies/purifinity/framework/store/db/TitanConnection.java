@@ -24,14 +24,17 @@ public class TitanConnection {
 
 	private static TitanGraph graph = null;
 
-	public static void connect() throws TitanConnectionException {
-		if (graph != null) {
-			throw new TitanConnectionException(
-					"Titan graph database was already connected.");
+	/**
+	 * This method opens a connection to Titan. This method is idempotent due to
+	 * the connection pool which was already opened. Once the connection is
+	 * open, the already opened connection is returned.
+	 */
+	public static void connect() {
+		if (graph == null) {
+			Configuration conf = getConfigurationForCassandraBackend();
+			graph = TitanFactory.open(conf);
+			checkLabelAndKeySettings();
 		}
-		Configuration conf = getConfigurationForCassandraBackend();
-		graph = TitanFactory.open(conf);
-		checkLabelAndKeySettings();
 	}
 
 	private static void checkLabelAndKeySettings() {
@@ -277,7 +280,11 @@ public class TitanConnection {
 		return conf;
 	}
 
-	public static void disconnect() throws TitanConnectionException {
+	/**
+	 * Disconnection is idempotent. Once disconnected, each additional
+	 * disconnection will result into the same result.
+	 */
+	public static void disconnect() {
 		if (graph != null) {
 			graph.shutdown();
 			graph = null;

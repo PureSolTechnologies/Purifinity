@@ -1,14 +1,14 @@
 package com.puresoltechnologies.purifinity.framework.store.db;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-@Ignore("Check this test!")
-public class CassandraConnectionIT {
+import com.puresoltechnologies.purifinity.commons.test.AbstractCassandraTest;
+
+public class CassandraConnectionIT extends AbstractCassandraTest {
 
 	@Before
-	public void checkForDisconnected() throws CassandraConnectionException {
+	public void checkForDisconnected() {
 		if (CassandraConnection.isConnected()) {
 			CassandraConnection.disconnect();
 		}
@@ -21,13 +21,13 @@ public class CassandraConnectionIT {
 		CassandraConnection.disconnect();
 	}
 
-	@Test(expected = CassandraConnectionException.class)
+	@Test
 	public void testDoubleConnect() throws CassandraConnectionException {
 		CassandraConnection.connect();
 		CassandraConnection.connect();
 	}
 
-	@Test(expected = CassandraConnectionException.class)
+	@Test
 	public void testDoubleDisconnect() throws CassandraConnectionException {
 		CassandraConnection.connect();
 		CassandraConnection.disconnect();

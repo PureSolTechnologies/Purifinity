@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.apache.commons.io.IOUtils;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -24,10 +25,14 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.FileStoreImpl;
 
-@Ignore("Check this test!")
 public class FileStoreImplIT extends AbstractDbStoreTest {
 
-	private final FileStoreImpl fileStore = new FileStoreImpl();
+	private static FileStoreImpl fileStore;
+
+	@BeforeClass
+	public static void openFileStore() {
+		fileStore = new FileStoreImpl();
+	}
 
 	@Test
 	public void testStoreAndReadRawFile() throws FileStoreException,
@@ -52,6 +57,7 @@ public class FileStoreImplIT extends AbstractDbStoreTest {
 		}
 	}
 
+	@Ignore("No correct analysis available. Create one!")
 	@Test
 	public void testStoreAndReadAnalysis() throws FileStoreException,
 			IOException {

@@ -85,29 +85,6 @@
 		<profile>
 			<id>it</id>
 			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.codehaus.mojo</groupId>
-							<artifactId>cassandra-maven-plugin</artifactId>
-							<version>2.0.0-1</version>
-							<executions>
-								<execution>
-									<id>startCassandra</id>
-									<goals>
-										<goal>start</goal>
-									</goals>
-								</execution>
-								<execution>
-									<id>stopCassandra</id>
-									<goals>
-										<goal>stop</goal>
-									</goals>
-								</execution>
-							</executions>
-						</plugin>
-					</plugins>
-				</pluginManagement>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -122,7 +99,7 @@
 							</execution>
 						</executions>
 						<configuration>
-							<forkCount>1C</forkCount>
+							<forkCount>1</forkCount>
 							<reuseForks>true</reuseForks>
 						</configuration>
 					</plugin>
@@ -280,6 +257,11 @@
 				<version>${project.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
+			<dependency>
+				<groupId>org.apache</groupId>
+				<artifactId>cassandra.server.bundle</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.datastax.cassandra</groupId>
 				<artifactId>cassandra-driver-core</artifactId>

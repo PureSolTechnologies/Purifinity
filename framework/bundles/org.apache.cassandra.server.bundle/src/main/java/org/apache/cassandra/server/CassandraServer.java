@@ -19,6 +19,7 @@ public class CassandraServer {
 	private static final Logger logger = LoggerFactory
 			.getLogger(CassandraServer.class);
 
+	private static final int WAIT_TIME = 1000;
 	private static final int THRIFT_PORT = 9042;
 
 	private static Process cassandraProcess = null;
@@ -34,11 +35,22 @@ public class CassandraServer {
 		File databaseDirectory = getDatabaseDirectory(eclipseHome);
 		CassandraDistribution.extract(databaseDirectory);
 
-		File cassandraConfiguration = new File(databaseDirectory, "conf");
+		File databaseDataDirectory = getDatabaseDataDirectory(eclipseHome);
 		System.setProperty("cassandra.data.directory",
-				databaseDirectory.getPath());
-		CassandraConfiguration.createConfigurationFile(cassandraConfiguration);
+				databaseDataDirectory.getPath());
+		System.setProperty("cassandra.log.directory", new File(
+				databaseDataDirectory, "log").getPath());
 
+		File cassandraConfiguration = new File(databaseDirectory, "conf");
+		CassandraConfiguration.createConfigurationFile(cassandraConfiguration);
+		CassandraConfiguration.createLogSettingsFile(cassandraConfiguration);
+
+		startCassandraProcess(databaseDirectory, cassandraConfiguration);
+		logger.info("Cassandra started.");
+	}
+
+	private static void startCassandraProcess(File databaseDirectory,
+			File cassandraConfiguration) throws IOException {
 		File cassandraLib = new File(databaseDirectory, "lib");
 
 		String javaAgent = "-javaagent:"
@@ -99,7 +111,6 @@ public class CassandraServer {
 		ProcessBuilder processBuilder = new ProcessBuilder(command);
 		processBuilder.inheritIO();
 		cassandraProcess = processBuilder.start();
-		logger.info("Cassandra started.");
 	}
 
 	private static File getEclipseHome() throws MalformedURLException {
@@ -110,38 +121,63 @@ public class CassandraServer {
 					"Eclipse home location (eclipse.home.location) was not set.");
 		}
 		URL eclipseHomeLocationURL = new URL(eclipseHomeLocation);
-		File eclipseHomeDirectory = new File(eclipseHomeLocationURL.getFile());
-		return eclipseHomeDirectory;
+		return new File(eclipseHomeLocationURL.getFile());
 	}
 
 	private static File getDatabaseDirectory(File eclipseHome) {
-		File dataDirectory = new File(eclipseHome, "db");
-		return dataDirectory;
+		return new File(eclipseHome, "db");
+	}
+
+	private static File getDatabaseDataDirectory(File eclipseHome) {
+		return new File(eclipseHome, "dbdata");
 	}
 
 	public static void stop() {
 		if (cassandraProcess != null) {
-			logger.info("Cassandra is about to stop...");
-			cassandraProcess.destroy();
-			cassandraProcess = null;
-			logger.info("Cassandra stopped.");
+			try {
+				logger.info("Cassandra is about to stop...");
+				cassandraProcess.destroy();
+				cassandraProcess.waitFor();
+				cassandraProcess = null;
+				logger.info("Cassandra stopped.");
+			} catch (InterruptedException e) {
+				logger.warn("cassandra shutdown was interrupted...");
+			}
 		}
 	}
 
 	public static boolean waitForStartup(long timeout) {
 		Date start = new Date();
 		while (!isStarted()) {
+			logger.info("Wait for cassandra to start...");
 			Date current = new Date();
 			if (current.getTime() - start.getTime() >= timeout) {
-				return false;
+				break;
 			}
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(WAIT_TIME);
 			} catch (InterruptedException e) {
 				break;
 			}
 		}
 		return isStarted();
+	}
+
+	public static boolean waitForShutdown(long timeout) {
+		Date start = new Date();
+		while (isStarted()) {
+			logger.info("Wait for cassandra to stop...");
+			Date current = new Date();
+			if (current.getTime() - start.getTime() >= timeout) {
+				return false;
+			}
+			try {
+				Thread.sleep(WAIT_TIME);
+			} catch (InterruptedException e) {
+				break;
+			}
+		}
+		return !isStarted();
 	}
 
 	private static boolean isStarted() {
