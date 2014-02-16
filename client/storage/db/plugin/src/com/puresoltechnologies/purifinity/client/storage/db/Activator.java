@@ -20,7 +20,6 @@ import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseTarget;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnectionException;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
-import com.puresoltechnologies.purifinity.framework.store.db.TitanConnectionException;
 
 public class Activator extends AbstractUIPlugin {
 
@@ -59,8 +58,7 @@ public class Activator extends AbstractUIPlugin {
 					monitor.worked(1);
 					monitor.done();
 					return Status.OK_STATUS;
-				} catch (IOException | CassandraConnectionException
-						| TitanConnectionException e) {
+				} catch (IOException | CassandraConnectionException e) {
 					monitor.done();
 					return new Status(Status.ERROR, getBundle()
 							.getSymbolicName(),
