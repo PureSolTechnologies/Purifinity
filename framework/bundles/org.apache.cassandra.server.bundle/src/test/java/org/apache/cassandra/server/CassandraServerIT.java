@@ -25,7 +25,7 @@ public class CassandraServerIT {
 	@Test
 	public void test() throws Exception {
 		CassandraServer.start(targetDirectory);
-		assertTrue(CassandraServer.waitForStartup(15000));
+		assertTrue(CassandraServer.waitForStartup(600000));
 		CassandraServer.stop();
 	}
 
