@@ -1,6 +1,9 @@
 package com.puresoltechnologies.purifinity.client.storage.db;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.apache.cassandra.server.CassandraServer;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -45,7 +48,7 @@ public class Activator extends AbstractUIPlugin {
 				try {
 					monitor.beginTask("Starting", 4);
 					monitor.subTask("Cassandra process");
-					CassandraServer.start();
+					CassandraServer.start(getEclipseHome());
 					monitor.worked(1);
 					monitor.subTask("Wait for Cassandra");
 					CassandraServer.waitForStartup(15000);
@@ -75,6 +78,17 @@ public class Activator extends AbstractUIPlugin {
 			throw new RuntimeException(result.getMessage(),
 					result.getException());
 		}
+	}
+
+	private static File getEclipseHome() throws MalformedURLException {
+		String eclipseHomeLocation = System
+				.getProperty("eclipse.home.location");
+		if (eclipseHomeLocation == null) {
+			throw new RuntimeException(
+					"Eclipse home location (eclipse.home.location) was not set.");
+		}
+		URL eclipseHomeLocationURL = new URL(eclipseHomeLocation);
+		return new File(eclipseHomeLocationURL.getFile());
 	}
 
 	private void setDBUIEnabled(final boolean enabled) {

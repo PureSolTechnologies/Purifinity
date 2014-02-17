@@ -9,6 +9,8 @@ import org.junit.Test;
 
 public class CassandraServerIT {
 
+	private static File targetDirectory;
+
 	@BeforeClass
 	public static void setEclipseHomeLocationForCassandraServer() {
 		File userDirectory = new File(System.getProperty("user.dir"));
@@ -18,13 +20,11 @@ public class CassandraServerIT {
 		assertTrue(
 				"Target directory '" + targetDirectory + "' does not exsit.",
 				targetDirectory.exists());
-		System.setProperty("eclipse.home.location",
-				"file:" + targetDirectory.getPath());
 	}
 
 	@Test
 	public void test() throws Exception {
-		CassandraServer.start();
+		CassandraServer.start(targetDirectory);
 		assertTrue(CassandraServer.waitForStartup(15000));
 		CassandraServer.stop();
 	}

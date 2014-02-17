@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
 import java.net.Socket;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,22 +22,33 @@ public class CassandraServer {
 
 	private static Process cassandraProcess = null;
 
-	public static void start() throws IOException {
+	public static void start(File baseDirectory) throws IOException {
+		File databaseDirectory = new File(baseDirectory, "db");
+		File databaseDataDirectory = new File(baseDirectory, "dbdata");
+		start(databaseDirectory, databaseDataDirectory);
+	}
+
+	public static void start(File databaseDirectory, File databaseDataDirectory)
+			throws IOException {
+		File databaseLogDirectory = new File(databaseDataDirectory, "log");
+		start(databaseDirectory, databaseDataDirectory, databaseLogDirectory);
+	}
+
+	public static void start(File databaseDirectory,
+			File databaseDataDirectory, File databaseLogDirectory)
+			throws IOException {
 		logger.info("Cassandra is about to start...");
 
 		if (cassandraProcess != null) {
 			throw new RuntimeException("Cassandra was already started.");
 		}
 
-		File eclipseHome = getEclipseHome();
-		File databaseDirectory = getDatabaseDirectory(eclipseHome);
 		CassandraDistribution.extract(databaseDirectory);
 
-		File databaseDataDirectory = getDatabaseDataDirectory(eclipseHome);
 		System.setProperty("cassandra.data.directory",
 				databaseDataDirectory.getPath());
-		System.setProperty("cassandra.log.directory", new File(
-				databaseDataDirectory, "log").getPath());
+		System.setProperty("cassandra.log.directory",
+				databaseLogDirectory.getPath());
 
 		File cassandraConfiguration = new File(databaseDirectory, "conf");
 		CassandraConfiguration.createConfigurationFile(cassandraConfiguration);
@@ -111,25 +120,6 @@ public class CassandraServer {
 		ProcessBuilder processBuilder = new ProcessBuilder(command);
 		processBuilder.inheritIO();
 		cassandraProcess = processBuilder.start();
-	}
-
-	private static File getEclipseHome() throws MalformedURLException {
-		String eclipseHomeLocation = System
-				.getProperty("eclipse.home.location");
-		if (eclipseHomeLocation == null) {
-			throw new RuntimeException(
-					"Eclipse home location (eclipse.home.location) was not set.");
-		}
-		URL eclipseHomeLocationURL = new URL(eclipseHomeLocation);
-		return new File(eclipseHomeLocationURL.getFile());
-	}
-
-	private static File getDatabaseDirectory(File eclipseHome) {
-		return new File(eclipseHome, "db");
-	}
-
-	private static File getDatabaseDataDirectory(File eclipseHome) {
-		return new File(eclipseHome, "dbdata");
 	}
 
 	public static void stop() {

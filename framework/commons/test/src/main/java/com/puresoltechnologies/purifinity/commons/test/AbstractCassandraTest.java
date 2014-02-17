@@ -23,17 +23,16 @@ public class AbstractCassandraTest {
 	/**
 	 * Wait time out for Cassandra to be available in [ms].
 	 */
-	private static final long DEFAULT_TIMEOUT = 15000;
+	private static final long DEFAULT_TIMEOUT = 600000;
 
 	@BeforeClass
 	public static void startCassandra() throws IOException {
-		setEclipseHomeLocationForCassandraServer();
-		CassandraServer.start();
+		CassandraServer.start(getEclipseHomeLocationForCassandraServer());
 		assertTrue("Waiting for Cassandra startup was not successful.",
 				CassandraServer.waitForStartup(DEFAULT_TIMEOUT));
 	}
 
-	private static void setEclipseHomeLocationForCassandraServer() {
+	private static File getEclipseHomeLocationForCassandraServer() {
 		File userDirectory = new File(System.getProperty("user.dir"));
 		assertTrue("User directory '" + userDirectory + "' does not exsit.",
 				userDirectory.exists());
@@ -41,8 +40,7 @@ public class AbstractCassandraTest {
 		assertTrue(
 				"Target directory '" + targetDirectory + "' does not exsit.",
 				targetDirectory.exists());
-		System.setProperty("eclipse.home.location",
-				"file:" + targetDirectory.getPath());
+		return targetDirectory;
 	}
 
 	@AfterClass
