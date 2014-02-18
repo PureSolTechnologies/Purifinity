@@ -20,6 +20,7 @@ import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.client.common.analysis.AnalysisSelections;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.Axis;
 import com.puresoltechnologies.purifinity.client.common.chart.AxisDirection;
@@ -44,10 +45,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataPro
 
 public class CorrelationChartView extends AbstractMetricChartViewPart {
 
-	private UUID analysisProjectSelectionUUID = null;
-	private UUID oldAnalysisProjectSelectionUUID = null;
-	private UUID analysisRunSelectionUUID = null;
-	private UUID oldAnalysisRunSelectionUUID = null;
+	private AnalysisSelection oldAnalysisSelection = null;
 
 	private EvaluatorFactory xMetricSelection = null;
 	private EvaluatorFactory oldXMetricSelection = null;
@@ -77,6 +75,8 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 			try {
 				Class.forName(xMetricClass);
 			} catch (ClassNotFoundException e) {
+				throw new RuntimeException("Could not find class '"
+						+ xMetricClass + "'.", e);
 			}
 		}
 		String yMetricClass = memento.getString("y.metric.class");
@@ -84,6 +84,8 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 			try {
 				Class.forName(yMetricClass);
 			} catch (ClassNotFoundException e) {
+				throw new RuntimeException("Could not find class '"
+						+ yMetricClass + "'.", e);
 			}
 		}
 
@@ -154,6 +156,8 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		getChartCanvas().setChart2D(chart);
 
 		initializeToolBar();
+
+		setSelection(AnalysisSelections.getInstance().getAnalysisSelection());
 	}
 
 	/**
@@ -206,13 +210,8 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		if ((analysisSelection != null) && (xMetricSelection != null)
 				&& (xParameterSelection != null) && (yMetricSelection != null)
 				&& (yParameterSelection != null)) {
-			analysisProjectSelectionUUID = analysisSelection
-					.getAnalysisProject().getInformation().getUUID();
-			analysisRunSelectionUUID = analysisSelection.getAnalysisRun()
-					.getInformation().getUUID();
 			if (wasSelectionChanged()) {
-				oldAnalysisProjectSelectionUUID = analysisProjectSelectionUUID;
-				oldAnalysisRunSelectionUUID = analysisRunSelectionUUID;
+				oldAnalysisSelection = analysisSelection;
 				oldXMetricSelection = xMetricSelection;
 				oldXParameterSelection = xParameterSelection;
 				oldYMetricSelection = yMetricSelection;
@@ -228,11 +227,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 	}
 
 	private boolean wasSelectionChanged() {
-		if (!analysisProjectSelectionUUID
-				.equals(oldAnalysisProjectSelectionUUID)) {
-			return true;
-		}
-		if (!analysisRunSelectionUUID.equals(oldAnalysisRunSelectionUUID)) {
+		if (getAnalysisSelection() != oldAnalysisSelection) {
 			return true;
 		}
 		if ((oldXMetricSelection == null)
@@ -257,12 +252,17 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 	private void loadData() {
 		ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
 				.getFactory().getInstance();
-		xValues = dataProvider.loadValues(analysisProjectSelectionUUID,
-				analysisRunSelectionUUID, xMetricSelection.getName(),
-				xParameterSelection, CodeRangeType.FILE);
-		yValues = dataProvider.loadValues(analysisProjectSelectionUUID,
-				analysisRunSelectionUUID, yMetricSelection.getName(),
-				yParameterSelection, CodeRangeType.FILE);
+		AnalysisSelection analysisSelection = getAnalysisSelection();
+		UUID analysisProjectUUID = analysisSelection.getAnalysisProject()
+				.getInformation().getUUID();
+		UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+				.getInformation().getUUID();
+		xValues = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
+				xMetricSelection.getName(), xParameterSelection,
+				CodeRangeType.FILE);
+		yValues = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
+				yMetricSelection.getName(), yParameterSelection,
+				CodeRangeType.FILE);
 	}
 
 	@Override

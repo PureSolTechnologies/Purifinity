@@ -26,6 +26,7 @@ import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.client.common.analysis.AnalysisSelections;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.Axis;
 import com.puresoltechnologies.purifinity.client.common.chart.AxisDirection;
@@ -53,10 +54,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataPro
 public class MaintainabilityIndexParetoChartView extends
 		AbstractMetricChartViewPart {
 
-	private UUID analysisProjectSelectionUUID = null;
-	private UUID oldAnalysisProjectSelectionUUID = null;
-	private UUID analysisRunSelectionUUID = null;
-	private UUID oldAnalysisRunSelectionUUID = null;
+	private AnalysisSelection oldAnalysisSelection = null;
 
 	private final CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
 	private Chart2D chart;
@@ -72,6 +70,8 @@ public class MaintainabilityIndexParetoChartView extends
 		getChartCanvas().setChart2D(chart);
 
 		initializeToolBar();
+
+		setSelection(AnalysisSelections.getInstance().getAnalysisSelection());
 	}
 
 	/**
@@ -112,13 +112,8 @@ public class MaintainabilityIndexParetoChartView extends
 	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
-			analysisProjectSelectionUUID = analysisSelection
-					.getAnalysisProject().getInformation().getUUID();
-			analysisRunSelectionUUID = analysisSelection.getAnalysisRun()
-					.getInformation().getUUID();
 			if (wasSelectionChanged()) {
-				oldAnalysisProjectSelectionUUID = analysisProjectSelectionUUID;
-				oldAnalysisRunSelectionUUID = analysisRunSelectionUUID;
+				oldAnalysisSelection = analysisSelection;
 				loadData();
 			}
 			showEvaluation(analysisSelection.getFileTreeNode());
@@ -126,11 +121,7 @@ public class MaintainabilityIndexParetoChartView extends
 	}
 
 	private boolean wasSelectionChanged() {
-		if (!analysisProjectSelectionUUID
-				.equals(oldAnalysisProjectSelectionUUID)) {
-			return true;
-		}
-		if (!analysisRunSelectionUUID.equals(oldAnalysisRunSelectionUUID)) {
+		if (getAnalysisSelection() != oldAnalysisSelection) {
 			return true;
 		}
 		return false;
@@ -139,16 +130,21 @@ public class MaintainabilityIndexParetoChartView extends
 	private void loadData() {
 		ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
 				.getFactory().getInstance();
-		mi = dataProvider.loadValues(analysisProjectSelectionUUID,
-				analysisRunSelectionUUID, MaintainabilityIndexEvaluator.NAME,
+		AnalysisSelection analysisSelection = getAnalysisSelection();
+		UUID analysisProjectUUID = analysisSelection.getAnalysisProject()
+				.getInformation().getUUID();
+		UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+				.getInformation().getUUID();
+		mi = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
+				MaintainabilityIndexEvaluator.NAME,
 				MaintainabilityIndexEvaluatorParameter.MI,
 				codeRangeTypeSelection);
-		miWoc = dataProvider.loadValues(analysisProjectSelectionUUID,
-				analysisRunSelectionUUID, MaintainabilityIndexEvaluator.NAME,
+		miWoc = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
+				MaintainabilityIndexEvaluator.NAME,
 				MaintainabilityIndexEvaluatorParameter.MI_WOC,
 				codeRangeTypeSelection);
-		miCw = dataProvider.loadValues(analysisProjectSelectionUUID,
-				analysisRunSelectionUUID, MaintainabilityIndexEvaluator.NAME,
+		miCw = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
+				MaintainabilityIndexEvaluator.NAME,
 				MaintainabilityIndexEvaluatorParameter.MI_CW,
 				codeRangeTypeSelection);
 	}

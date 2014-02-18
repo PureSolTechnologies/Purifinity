@@ -8,11 +8,25 @@ import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisP
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisRunSelection;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 
-public class GlobalSelections implements ISelectionListener {
+/**
+ * This class is used to capture the selection of analyses globally to provide a
+ * facility to get the latest selection if needed (as it is used for newly
+ * opened views).
+ * 
+ * This class is implemented as singleton and initialized in a startup class.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
+public class AnalysisSelections implements ISelectionListener {
 
-	private static final GlobalSelections INSTANCE = new GlobalSelections();
+	private static final AnalysisSelections INSTANCE = new AnalysisSelections();
 
-	public static GlobalSelections getInstance() {
+	/**
+	 * This method returns the singleton instance.
+	 * 
+	 * @return An {@link AnalysisSelections} object is returned.
+	 */
+	public static AnalysisSelections getInstance() {
 		return INSTANCE;
 	}
 
@@ -37,14 +51,29 @@ public class GlobalSelections implements ISelectionListener {
 		}
 	}
 
+	/**
+	 * Returns the last {@link AnalysisProjectSelection}.
+	 * 
+	 * @return An {@link AnalysisProjectSelection} object is returned.
+	 */
 	public AnalysisProjectSelection getAnalysisProjectSelection() {
 		return analysisProjectSelection;
 	}
 
+	/**
+	 * Returns the last {@link AnalysisRunSelection}.
+	 * 
+	 * @return An {@link AnalysisRunSelection} object is returned.
+	 */
 	public AnalysisRunSelection getAnalysisRunSelection() {
 		return analysisRunSelection;
 	}
 
+	/**
+	 * Returns the last {@link AnalysisSelection}.
+	 * 
+	 * @return An {@link AnalysisSelection} object is returned.
+	 */
 	public AnalysisSelection getAnalysisSelection() {
 		return analysisSelection;
 	}

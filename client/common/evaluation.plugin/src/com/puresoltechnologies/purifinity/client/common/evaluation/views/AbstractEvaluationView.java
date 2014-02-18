@@ -67,16 +67,20 @@ public abstract class AbstractEvaluationView extends
 			return;
 		}
 		if (selection instanceof AnalysisSelection) {
-			analysisSelection = (AnalysisSelection) selection;
-			try {
-				handleChangedAnalysisSelection();
-			} catch (EvaluationStoreException e) {
-				Activator activator = Activator.getDefault();
-				activator.getLog().log(
-						new Status(Status.ERROR, activator.getBundle()
-								.getSymbolicName(),
-								"Could not handle new selection."));
-			}
+			setSelection((AnalysisSelection) selection);
+		}
+	}
+
+	protected final void setSelection(AnalysisSelection selection) {
+		try {
+			analysisSelection = selection;
+			handleChangedAnalysisSelection();
+		} catch (EvaluationStoreException e) {
+			Activator activator = Activator.getDefault();
+			activator.getLog().log(
+					new Status(Status.ERROR, activator.getBundle()
+							.getSymbolicName(),
+							"Could not handle new selection."));
 		}
 	}
 

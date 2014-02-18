@@ -29,6 +29,7 @@ import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.client.common.analysis.AnalysisSelections;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.Axis;
 import com.puresoltechnologies.purifinity.client.common.chart.AxisDirection;
@@ -57,10 +58,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 
 	private ParetoChartViewSettingsDialog settingsDialog;
 
-	private UUID analysisProjectSelectionUUID = null;
-	private UUID oldAnalysisProjectSelectionUUID = null;
-	private UUID analysisRunSelectionUUID = null;
-	private UUID oldAnalysisRunSelectionUUID = null;
+	private AnalysisSelection oldAnalysisSelection = null;
 	private EvaluatorFactory evaluatorSelection = null;
 	private EvaluatorFactory oldEvaluatorSelection = null;
 	private Parameter<?> parameterSelection = null;
@@ -136,6 +134,8 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 		getChartCanvas().setChart2D(chart);
 
 		initializeToolBar();
+
+		setSelection(AnalysisSelections.getInstance().getAnalysisSelection());
 	}
 
 	/**
@@ -190,13 +190,8 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if ((analysisSelection != null) && (evaluatorSelection != null)
 				&& (parameterSelection != null)) {
-			analysisProjectSelectionUUID = analysisSelection
-					.getAnalysisProject().getInformation().getUUID();
-			analysisRunSelectionUUID = analysisSelection.getAnalysisRun()
-					.getInformation().getUUID();
 			if (wasSelectionChanged()) {
-				oldAnalysisProjectSelectionUUID = analysisProjectSelectionUUID;
-				oldAnalysisRunSelectionUUID = analysisRunSelectionUUID;
+				oldAnalysisSelection = analysisSelection;
 				oldEvaluatorSelection = evaluatorSelection;
 				oldParameterSelection = parameterSelection;
 				oldCodeRangeTypeSelection = codeRangeTypeSelection;
@@ -207,11 +202,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	}
 
 	private boolean wasSelectionChanged() {
-		if (!analysisProjectSelectionUUID
-				.equals(oldAnalysisProjectSelectionUUID)) {
-			return true;
-		}
-		if (!analysisRunSelectionUUID.equals(oldAnalysisRunSelectionUUID)) {
+		if (getAnalysisSelection() != oldAnalysisSelection) {
 			return true;
 		}
 		if ((oldEvaluatorSelection == null)
@@ -231,9 +222,14 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	private void loadData() {
 		ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
 				.getFactory().getInstance();
-		values = dataProvider.loadValues(analysisProjectSelectionUUID,
-				analysisRunSelectionUUID, evaluatorSelection.getName(),
-				parameterSelection, codeRangeTypeSelection);
+		AnalysisSelection analysisSelection = getAnalysisSelection();
+		UUID analysisProjectUUID = analysisSelection.getAnalysisProject()
+				.getInformation().getUUID();
+		UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+				.getInformation().getUUID();
+		values = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
+				evaluatorSelection.getName(), parameterSelection,
+				codeRangeTypeSelection);
 	}
 
 	@Override

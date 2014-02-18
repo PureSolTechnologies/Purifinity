@@ -30,6 +30,7 @@ import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.client.common.analysis.AnalysisSelections;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.branding.Printable;
 import com.puresoltechnologies.purifinity.client.common.chart.AreaMapComponent;
@@ -51,10 +52,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapDataProv
 
 public class MetricsMapView extends AbstractMetricViewPart implements Printable {
 
-	private UUID analysisProjectSelectionUUID = null;
-	private UUID oldAnalysisProjectSelectionUUID = null;
-	private UUID analysisRunSelectionUUID = null;
-	private UUID oldAnalysisRunSelectionUUID = null;
+	private AnalysisSelection oldAnalysisSelection = null;
 
 	private EvaluatorFactory mapMetricSelection = null;
 	private EvaluatorFactory oldMapMetricSelection = null;
@@ -106,6 +104,8 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 		initializeToolBar();
 		initializeMenu();
 		super.createPartControl(parent);
+
+		setSelection(AnalysisSelections.getInstance().getAnalysisSelection());
 	}
 
 	/**
@@ -227,13 +227,8 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 				&& (mapParameterSelection != null)
 				&& (colorMetricSelection != null)
 				&& (colorParameterSelection != null)) {
-			analysisProjectSelectionUUID = analysisSelection
-					.getAnalysisProject().getInformation().getUUID();
-			analysisRunSelectionUUID = analysisSelection.getAnalysisRun()
-					.getInformation().getUUID();
 			if (wasSelectionChanged()) {
-				oldAnalysisProjectSelectionUUID = analysisProjectSelectionUUID;
-				oldAnalysisRunSelectionUUID = analysisRunSelectionUUID;
+				oldAnalysisSelection = analysisSelection;
 				oldMapMetricSelection = mapMetricSelection;
 				oldMapParameterSelection = mapParameterSelection;
 				oldColorMetricSelection = colorMetricSelection;
@@ -249,11 +244,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	}
 
 	private boolean wasSelectionChanged() {
-		if (!analysisProjectSelectionUUID
-				.equals(oldAnalysisProjectSelectionUUID)) {
-			return true;
-		}
-		if (!analysisRunSelectionUUID.equals(oldAnalysisRunSelectionUUID)) {
+		if (getAnalysisSelection() != oldAnalysisSelection) {
 			return true;
 		}
 		if ((oldMapMetricSelection == null)
@@ -278,8 +269,13 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	private void loadData() {
 		MetricsMapDataProvider dataProvider = MetricsMapDataProviderFactory
 				.getFactory().getInstance();
-		mapValues = dataProvider.loadMapValues(analysisProjectSelectionUUID,
-				analysisRunSelectionUUID, mapMetricSelection.getName(),
+		AnalysisSelection analysisSelection = getAnalysisSelection();
+		UUID analysisProjectUUID = analysisSelection.getAnalysisProject()
+				.getInformation().getUUID();
+		UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+				.getInformation().getUUID();
+		mapValues = dataProvider.loadMapValues(analysisProjectUUID,
+				analysisRunUUID, mapMetricSelection.getName(),
 				mapParameterSelection, colorMetricSelection.getName(),
 				colorParameterSelection);
 	}

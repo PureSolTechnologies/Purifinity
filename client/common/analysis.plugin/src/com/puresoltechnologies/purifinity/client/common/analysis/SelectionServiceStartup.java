@@ -16,7 +16,7 @@ public class SelectionServiceStartup implements IStartup {
 				IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
 				if (window != null) {
 					window.getSelectionService().addSelectionListener(
-							GlobalSelections.getInstance());
+							AnalysisSelections.getInstance());
 				}
 			}
 		});
