@@ -27,6 +27,7 @@ import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.client.common.analysis.GlobalSelections;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.Axis;
 import com.puresoltechnologies.purifinity.client.common.chart.AxisDirection;
@@ -100,6 +101,8 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 				break;
 			}
 		}
+		selectionChanged(site.getPart(), GlobalSelections.getInstance()
+				.getAnalysisSelection());
 	}
 
 	@Override

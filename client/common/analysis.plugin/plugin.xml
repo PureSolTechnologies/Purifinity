@@ -6,6 +6,12 @@
       <startup
             class="com.puresoltechnologies.purifinity.client.common.analysis.AnalysisAPIStartup">
       </startup>
+      <startup
+            class="com.puresoltechnologies.purifinity.client.common.analysis.AnalysisImplStartup">
+      </startup>
+      <startup
+            class="com.puresoltechnologies.purifinity.client.common.analysis.SelectionServiceStartup">
+      </startup>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">

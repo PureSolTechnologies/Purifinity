@@ -5,39 +5,39 @@ import org.osgi.framework.BundleContext;
 
 public class Activator extends AbstractUIPlugin {
 
-    // The shared instance
-    private static Activator plugin = null;
+	// The shared instance
+	private static Activator plugin = null;
 
-    @Override
-    public void start(BundleContext context) throws Exception {
-	super.start(context);
-	if (plugin != null) {
-	    throw new RuntimeException("A " + getClass().getName()
-		    + " plugin was already started!");
+	@Override
+	public void start(BundleContext context) throws Exception {
+		super.start(context);
+		if (plugin != null) {
+			throw new RuntimeException("A " + getClass().getName()
+					+ " plugin was already started!");
+		}
+		plugin = this;
 	}
-	plugin = this;
-    }
 
-    @Override
-    public void stop(BundleContext context) throws Exception {
-	super.stop(context);
-	if (plugin == null) {
-	    throw new RuntimeException("A " + getClass().getName()
-		    + " plugin was never started!");
+	@Override
+	public void stop(BundleContext context) throws Exception {
+		super.stop(context);
+		if (plugin == null) {
+			throw new RuntimeException("A " + getClass().getName()
+					+ " plugin was never started!");
+		}
+		plugin = null;
 	}
-	plugin = null;
-    }
 
-    /**
-     * Returns the shared instance
-     * 
-     * @return the shared instance
-     */
-    public static Activator getDefault() {
-	if (plugin == null) {
-	    throw new RuntimeException("A " + Activator.class.getName()
-		    + " plugin was never started!");
+	/**
+	 * Returns the shared instance
+	 * 
+	 * @return the shared instance
+	 */
+	public static Activator getDefault() {
+		if (plugin == null) {
+			throw new RuntimeException("A " + Activator.class.getName()
+					+ " plugin was never started!");
+		}
+		return plugin;
 	}
-	return plugin;
-    }
 }
