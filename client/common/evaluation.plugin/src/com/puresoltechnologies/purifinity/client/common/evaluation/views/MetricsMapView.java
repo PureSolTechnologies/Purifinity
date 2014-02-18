@@ -189,15 +189,22 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 
 	@Override
 	public void saveState(IMemento memento) {
-		memento.putString("map.metric.class", mapMetricSelection.getClass()
-				.getName());
-		memento.putString("map.metric", mapMetricSelection.getName());
-		memento.putString("map.value", mapParameterSelection.getName());
-		memento.putString("color.metric.class", colorMetricSelection.getClass()
-				.getName());
-		memento.putString("color.metric", colorMetricSelection.getName());
-		memento.putString("color.value", colorParameterSelection.getName());
-
+		if (mapMetricSelection != null) {
+			memento.putString("map.metric.class", mapMetricSelection.getClass()
+					.getName());
+			memento.putString("map.metric", mapMetricSelection.getName());
+		}
+		if (mapParameterSelection != null) {
+			memento.putString("map.value", mapParameterSelection.getName());
+		}
+		if (colorMetricSelection != null) {
+			memento.putString("color.metric.class", colorMetricSelection
+					.getClass().getName());
+			memento.putString("color.metric", colorMetricSelection.getName());
+		}
+		if (colorParameterSelection != null) {
+			memento.putString("color.value", colorParameterSelection.getName());
+		}
 		super.saveState(memento);
 	}
 

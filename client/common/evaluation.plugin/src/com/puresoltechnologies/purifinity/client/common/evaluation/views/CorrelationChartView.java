@@ -128,16 +128,22 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	public void saveState(IMemento memento) {
-		memento.putString("x.metric.class", xMetricSelection.getClass()
-				.getName());
-		memento.putString("x.metric", xMetricSelection.getName());
-		memento.putString("x.parameter", xParameterSelection.getName());
-
-		memento.putString("y.metric.class", yMetricSelection.getClass()
-				.getName());
-		memento.putString("y.metric", yMetricSelection.getName());
-		memento.putString("y.parameter", yParameterSelection.getName());
-
+		if (xMetricSelection != null) {
+			memento.putString("x.metric.class", xMetricSelection.getClass()
+					.getName());
+			memento.putString("x.metric", xMetricSelection.getName());
+		}
+		if (xParameterSelection != null) {
+			memento.putString("x.parameter", xParameterSelection.getName());
+		}
+		if (yMetricSelection != null) {
+			memento.putString("y.metric.class", yMetricSelection.getClass()
+					.getName());
+			memento.putString("y.metric", yMetricSelection.getName());
+		}
+		if (yParameterSelection != null) {
+			memento.putString("y.parameter", yParameterSelection.getName());
+		}
 		super.saveState(memento);
 	}
 

@@ -104,11 +104,14 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	public void saveState(IMemento memento) {
-		memento.putString("metric.class", evaluatorSelection.getClass()
-				.getName());
-		memento.putString("metric", evaluatorSelection.getName());
-		memento.putString("parameter", parameterSelection.getName());
-
+		if (evaluatorSelection != null) {
+			memento.putString("metric.class", evaluatorSelection.getClass()
+					.getName());
+			memento.putString("metric", evaluatorSelection.getName());
+		}
+		if (parameterSelection != null) {
+			memento.putString("parameter", parameterSelection.getName());
+		}
 		super.saveState(memento);
 	}
 
