@@ -13,9 +13,14 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.progress.UIJob;
 
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
@@ -115,38 +120,64 @@ public class MaintainabilityIndexParetoChartView extends
 			if (wasSelectionChanged()) {
 				oldAnalysisSelection = analysisSelection;
 				loadData();
+			} else {
+				showEvaluation(analysisSelection.getFileTreeNode());
 			}
-			showEvaluation(analysisSelection.getFileTreeNode());
 		}
 	}
 
 	private boolean wasSelectionChanged() {
-		if (getAnalysisSelection() != oldAnalysisSelection) {
+		if ((oldAnalysisSelection == null)
+				|| (oldAnalysisSelection.equals(getAnalysisSelection()))) {
 			return true;
 		}
 		return false;
 	}
 
 	private void loadData() {
-		ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
-				.getFactory().getInstance();
-		AnalysisSelection analysisSelection = getAnalysisSelection();
-		UUID analysisProjectUUID = analysisSelection.getAnalysisProject()
-				.getInformation().getUUID();
-		UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-				.getInformation().getUUID();
-		mi = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
-				MaintainabilityIndexEvaluator.NAME,
-				MaintainabilityIndexEvaluatorParameter.MI,
-				codeRangeTypeSelection);
-		miWoc = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
-				MaintainabilityIndexEvaluator.NAME,
-				MaintainabilityIndexEvaluatorParameter.MI_WOC,
-				codeRangeTypeSelection);
-		miCw = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
-				MaintainabilityIndexEvaluator.NAME,
-				MaintainabilityIndexEvaluatorParameter.MI_CW,
-				codeRangeTypeSelection);
+		Job job = new Job("Load maintainability index pareto chart data...") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("Load data", 7);
+				ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
+						.getFactory().getInstance();
+				monitor.worked(1);
+				final AnalysisSelection analysisSelection = getAnalysisSelection();
+				monitor.worked(1);
+				UUID analysisProjectUUID = analysisSelection
+						.getAnalysisProject().getInformation().getUUID();
+				monitor.worked(1);
+				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+						.getInformation().getUUID();
+				monitor.worked(1);
+				mi = dataProvider.loadValues(analysisProjectUUID,
+						analysisRunUUID, MaintainabilityIndexEvaluator.NAME,
+						MaintainabilityIndexEvaluatorParameter.MI,
+						codeRangeTypeSelection);
+				monitor.worked(1);
+				miWoc = dataProvider.loadValues(analysisProjectUUID,
+						analysisRunUUID, MaintainabilityIndexEvaluator.NAME,
+						MaintainabilityIndexEvaluatorParameter.MI_WOC,
+						codeRangeTypeSelection);
+				monitor.worked(1);
+				miCw = dataProvider.loadValues(analysisProjectUUID,
+						analysisRunUUID, MaintainabilityIndexEvaluator.NAME,
+						MaintainabilityIndexEvaluatorParameter.MI_CW,
+						codeRangeTypeSelection);
+				monitor.worked(1);
+				monitor.done();
+				new UIJob("Draw Maintainability Index Pareto Chart") {
+
+					@Override
+					public IStatus runInUIThread(IProgressMonitor monitor) {
+						showEvaluation(analysisSelection.getFileTreeNode());
+						return Status.OK_STATUS;
+					}
+				}.schedule();
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
 	}
 
 	@Override

@@ -9,12 +9,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.progress.UIJob;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -196,13 +201,15 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 				oldParameterSelection = parameterSelection;
 				oldCodeRangeTypeSelection = codeRangeTypeSelection;
 				loadData();
+			} else {
+				showEvaluation(analysisSelection.getFileTreeNode());
 			}
-			showEvaluation(analysisSelection.getFileTreeNode());
 		}
 	}
 
 	private boolean wasSelectionChanged() {
-		if (getAnalysisSelection() != oldAnalysisSelection) {
+		if ((oldAnalysisSelection == null)
+				|| (oldAnalysisSelection.equals(getAnalysisSelection()))) {
 			return true;
 		}
 		if ((oldEvaluatorSelection == null)
@@ -220,16 +227,38 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	}
 
 	private void loadData() {
-		ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
-				.getFactory().getInstance();
-		AnalysisSelection analysisSelection = getAnalysisSelection();
-		UUID analysisProjectUUID = analysisSelection.getAnalysisProject()
-				.getInformation().getUUID();
-		UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-				.getInformation().getUUID();
-		values = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
-				evaluatorSelection.getName(), parameterSelection,
-				codeRangeTypeSelection);
+		Job job = new Job("Pareto Chart") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("Load data", 5);
+				ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
+						.getFactory().getInstance();
+				monitor.worked(1);
+				final AnalysisSelection analysisSelection = getAnalysisSelection();
+				monitor.worked(1);
+				UUID analysisProjectUUID = analysisSelection
+						.getAnalysisProject().getInformation().getUUID();
+				monitor.worked(1);
+				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+						.getInformation().getUUID();
+				monitor.worked(1);
+				values = dataProvider.loadValues(analysisProjectUUID,
+						analysisRunUUID, evaluatorSelection.getName(),
+						parameterSelection, codeRangeTypeSelection);
+				monitor.worked(1);
+				monitor.done();
+				new UIJob("Draw Pareto Chart") {
+
+					@Override
+					public IStatus runInUIThread(IProgressMonitor monitor) {
+						showEvaluation(analysisSelection.getFileTreeNode());
+						return Status.OK_STATUS;
+					}
+				}.schedule();
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
 	}
 
 	@Override

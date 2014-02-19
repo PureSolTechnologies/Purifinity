@@ -10,12 +10,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.progress.UIJob;
 
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
@@ -180,13 +185,15 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 				oldEvaluatorSelection = evaluatorSelection;
 				oldParameterSelection = parameterSelection;
 				loadData();
+			} else {
+				showEvaluation(analysisSelection.getFileTreeNode());
 			}
-			showEvaluation(analysisSelection.getFileTreeNode());
 		}
 	}
 
 	private boolean wasSelectionChanged() {
-		if (getAnalysisSelection() != oldAnalysisSelection) {
+		if ((oldAnalysisSelection == null)
+				|| (oldAnalysisSelection.equals(getAnalysisSelection()))) {
 			return true;
 		}
 		if ((oldEvaluatorSelection == null)
@@ -201,17 +208,41 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	}
 
 	private void loadData() {
-		HistogramChartDataProvider dataProvider = HistogramChartDataProviderFactory
-				.getFactory().getInstance();
-		AnalysisSelection analysisSelection = getAnalysisSelection();
-		AnalysisProject analysisProject = analysisSelection
-				.getAnalysisProject();
-		UUID analysisProjectUUID = analysisProject.getInformation().getUUID();
-		UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-				.getInformation().getUUID();
-		values = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
-				evaluatorSelection.getName(), parameterSelection,
-				CodeRangeType.FILE);
+		Job job = new Job("Histogram Chart") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("Load data", 6);
+				HistogramChartDataProvider dataProvider = HistogramChartDataProviderFactory
+						.getFactory().getInstance();
+				monitor.worked(1);
+				final AnalysisSelection analysisSelection = getAnalysisSelection();
+				monitor.worked(1);
+				AnalysisProject analysisProject = analysisSelection
+						.getAnalysisProject();
+				monitor.worked(1);
+				UUID analysisProjectUUID = analysisProject.getInformation()
+						.getUUID();
+				monitor.worked(1);
+				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+						.getInformation().getUUID();
+				monitor.worked(1);
+				values = dataProvider.loadValues(analysisProjectUUID,
+						analysisRunUUID, evaluatorSelection.getName(),
+						parameterSelection, CodeRangeType.FILE);
+				monitor.worked(1);
+				monitor.done();
+				new UIJob("Draw Histogram Chart") {
+
+					@Override
+					public IStatus runInUIThread(IProgressMonitor monitor) {
+						showEvaluation(analysisSelection.getFileTreeNode());
+						return Status.OK_STATUS;
+					}
+				}.schedule();
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
 	}
 
 	@Override

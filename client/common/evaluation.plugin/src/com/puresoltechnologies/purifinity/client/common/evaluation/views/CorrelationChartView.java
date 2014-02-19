@@ -5,12 +5,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.progress.UIJob;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
@@ -217,17 +222,19 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 				oldYMetricSelection = yMetricSelection;
 				oldYParameterSelection = yParameterSelection;
 				loadData();
+			} else {
+				AnalysisFileTree path = analysisSelection.getFileTreeNode();
+				if (path.isFile()) {
+					path = path.getParent();
+				}
+				showEvaluation(path);
 			}
-			AnalysisFileTree path = analysisSelection.getFileTreeNode();
-			if (path.isFile()) {
-				path = path.getParent();
-			}
-			showEvaluation(path);
 		}
 	}
 
 	private boolean wasSelectionChanged() {
-		if (getAnalysisSelection() != oldAnalysisSelection) {
+		if ((oldAnalysisSelection == null)
+				|| (oldAnalysisSelection.equals(getAnalysisSelection()))) {
 			return true;
 		}
 		if ((oldXMetricSelection == null)
@@ -250,19 +257,46 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 	}
 
 	private void loadData() {
-		ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
-				.getFactory().getInstance();
-		AnalysisSelection analysisSelection = getAnalysisSelection();
-		UUID analysisProjectUUID = analysisSelection.getAnalysisProject()
-				.getInformation().getUUID();
-		UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-				.getInformation().getUUID();
-		xValues = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
-				xMetricSelection.getName(), xParameterSelection,
-				CodeRangeType.FILE);
-		yValues = dataProvider.loadValues(analysisProjectUUID, analysisRunUUID,
-				yMetricSelection.getName(), yParameterSelection,
-				CodeRangeType.FILE);
+		Job job = new Job("Correlation Chart") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("Load data", 6);
+				ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
+						.getFactory().getInstance();
+				monitor.worked(1);
+				final AnalysisSelection analysisSelection = getAnalysisSelection();
+				monitor.worked(1);
+				UUID analysisProjectUUID = analysisSelection
+						.getAnalysisProject().getInformation().getUUID();
+				monitor.worked(1);
+				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+						.getInformation().getUUID();
+				monitor.worked(1);
+				xValues = dataProvider.loadValues(analysisProjectUUID,
+						analysisRunUUID, xMetricSelection.getName(),
+						xParameterSelection, CodeRangeType.FILE);
+				monitor.worked(1);
+				yValues = dataProvider.loadValues(analysisProjectUUID,
+						analysisRunUUID, yMetricSelection.getName(),
+						yParameterSelection, CodeRangeType.FILE);
+				monitor.worked(1);
+				monitor.done();
+				new UIJob("Draw Correlation Chart") {
+					@Override
+					public IStatus runInUIThread(IProgressMonitor monitor) {
+						AnalysisFileTree path = analysisSelection
+								.getFileTreeNode();
+						if (path.isFile()) {
+							path = path.getParent();
+						}
+						showEvaluation(path);
+						return Status.OK_STATUS;
+					}
+				}.schedule();
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
 	}
 
 	@Override

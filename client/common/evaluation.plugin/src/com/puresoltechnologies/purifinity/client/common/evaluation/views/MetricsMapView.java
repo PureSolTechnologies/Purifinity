@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -22,6 +26,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.progress.UIJob;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -234,17 +239,19 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 				oldColorMetricSelection = colorMetricSelection;
 				oldColorParameterSelection = colorParameterSelection;
 				loadData();
+			} else {
+				AnalysisFileTree path = analysisSelection.getFileTreeNode();
+				if (path.isFile()) {
+					path = path.getParent();
+				}
+				showEvaluation(path);
 			}
-			AnalysisFileTree path = analysisSelection.getFileTreeNode();
-			if (path.isFile()) {
-				path = path.getParent();
-			}
-			showEvaluation(path);
 		}
 	}
 
 	private boolean wasSelectionChanged() {
-		if (getAnalysisSelection() != oldAnalysisSelection) {
+		if ((oldAnalysisSelection == null)
+				|| (oldAnalysisSelection.equals(getAnalysisSelection()))) {
 			return true;
 		}
 		if ((oldMapMetricSelection == null)
@@ -267,17 +274,45 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	}
 
 	private void loadData() {
-		MetricsMapDataProvider dataProvider = MetricsMapDataProviderFactory
-				.getFactory().getInstance();
-		AnalysisSelection analysisSelection = getAnalysisSelection();
-		UUID analysisProjectUUID = analysisSelection.getAnalysisProject()
-				.getInformation().getUUID();
-		UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-				.getInformation().getUUID();
-		mapValues = dataProvider.loadMapValues(analysisProjectUUID,
-				analysisRunUUID, mapMetricSelection.getName(),
-				mapParameterSelection, colorMetricSelection.getName(),
-				colorParameterSelection);
+		Job job = new Job("Metrics Map") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				monitor.beginTask("Load data", 5);
+				MetricsMapDataProvider dataProvider = MetricsMapDataProviderFactory
+						.getFactory().getInstance();
+				monitor.worked(1);
+				final AnalysisSelection analysisSelection = getAnalysisSelection();
+				monitor.worked(1);
+				UUID analysisProjectUUID = analysisSelection
+						.getAnalysisProject().getInformation().getUUID();
+				monitor.worked(1);
+				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+						.getInformation().getUUID();
+				monitor.worked(1);
+				mapValues = dataProvider.loadMapValues(analysisProjectUUID,
+						analysisRunUUID, mapMetricSelection.getName(),
+						mapParameterSelection, colorMetricSelection.getName(),
+						colorParameterSelection);
+				monitor.worked(1);
+				monitor.done();
+				new UIJob("Draw Metric Map") {
+
+					@Override
+					public IStatus runInUIThread(IProgressMonitor monitor) {
+						AnalysisFileTree path = analysisSelection
+								.getFileTreeNode();
+						if (path.isFile()) {
+							path = path.getParent();
+						}
+						showEvaluation(path);
+						return Status.OK_STATUS;
+					}
+				}.schedule();
+				;
+				return Status.OK_STATUS;
+			}
+		};
+		job.schedule();
 	}
 
 	@Override
