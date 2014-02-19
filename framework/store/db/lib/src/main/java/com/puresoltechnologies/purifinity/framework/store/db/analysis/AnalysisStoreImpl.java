@@ -25,6 +25,8 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.ProgressObserver;
+import com.puresoltechnologies.commons.trees.api.TreeUtils;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
@@ -479,24 +481,52 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public void storeAnalysisFileTree(UUID projectUUID, UUID runUUID,
+	public final void storeAnalysisFileTree(UUID projectUUID, UUID runUUID,
 			AnalysisFileTree fileTree) throws AnalysisStoreException {
+		storeAnalysisFileTree(null, projectUUID, runUUID, fileTree);
+	}
+
+	@Override
+	public void storeAnalysisFileTree(
+			ProgressObserver<AnalysisStore> progressObserver, UUID projectUUID,
+			UUID runUUID, AnalysisFileTree fileTree)
+			throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		try {
+			if (progressObserver != null) {
+				int nodeCount = TreeUtils.countNodes(fileTree);
+				/*
+				 * Node count 2x because of creation of content tree and file
+				 * tree.
+				 */
+				progressObserver.started(this, "DB file tree creation",
+						2 * nodeCount);
+			}
 			Vertex analysisRunVertex = findAnalysisRunVertex(graph,
 					projectUUID, runUUID);
-			addContentTreeVertex(graph, fileTree, analysisRunVertex,
+			addContentTreeVertex(progressObserver, graph, fileTree,
+					analysisRunVertex,
 					TitanElementNames.ANALYZED_CONTENT_TREE_LABEL);
-			addFileTreeVertex(graph, fileTree, analysisRunVertex,
+			addFileTreeVertex(progressObserver, graph, fileTree,
+					analysisRunVertex,
 					TitanElementNames.ANALYZED_FILE_TREE_LABEL);
 			graph.commit();
+			if (progressObserver != null) {
+				progressObserver
+						.done(this, "Finished file tree storage.", true);
+			}
 		} catch (AnalysisStoreException e) {
 			graph.rollback();
+			if (progressObserver != null) {
+				progressObserver
+						.done(this, "Failed to store file tree.", false);
+			}
 			throw e;
 		}
 	}
 
-	private Vertex addContentTreeVertex(TitanGraph graph,
+	private Vertex addContentTreeVertex(
+			ProgressObserver<AnalysisStore> progressObserver, TitanGraph graph,
 			AnalysisFileTree fileTree, Vertex parentVertex, String edgeLabel)
 			throws AnalysisStoreException {
 		Iterable<Vertex> vertices = graph
@@ -506,6 +536,12 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		Iterator<Vertex> iterator = vertices.iterator();
 		if (iterator.hasNext()) {
 			Vertex exstingTreeElementVertex = iterator.next();
+			if (iterator.hasNext()) {
+				throw new AnalysisStoreException(
+						"Content tree vertex for '"
+								+ fileTree.getHashId()
+								+ "' was found multiple times. Database is inconsistent.");
+			}
 			Edge edge = parentVertex.addEdge(edgeLabel,
 					exstingTreeElementVertex);
 			edge.setProperty(TitanElementNames.TREE_ELEMENT_HASH,
@@ -515,6 +551,11 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					TitanElementNames.TREE_ELEMENT_IS_FILE,
 					exstingTreeElementVertex
 							.getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE));
+			if (progressObserver != null) {
+				progressObserver.updateWork(this, "Content found for '"
+						+ fileTree.getName() + "'.",
+						TreeUtils.countNodes(fileTree));
+			}
 			return exstingTreeElementVertex;
 		} else {
 			Vertex vertex = graph.addVertex(null);
@@ -531,11 +572,11 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					fileTree.isFile());
 			for (AnalysisFileTree child : fileTree.getChildren()) {
 				if (child.isFile()) {
-					addContentTreeVertex(graph, child, vertex,
-							TitanElementNames.CONTAINS_FILE_LABEL);
+					addContentTreeVertex(progressObserver, graph, child,
+							vertex, TitanElementNames.CONTAINS_FILE_LABEL);
 				} else {
-					addContentTreeVertex(graph, child, vertex,
-							TitanElementNames.CONTAINS_DIRECTORY_LABEL);
+					addContentTreeVertex(progressObserver, graph, child,
+							vertex, TitanElementNames.CONTAINS_DIRECTORY_LABEL);
 				}
 			}
 			addMetadata(vertex, fileTree);
@@ -544,11 +585,16 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					storeAnalysisInformation(graph, vertex, analyzedCode);
 				}
 			}
+			if (progressObserver != null) {
+				progressObserver.updateWork(this, "Created content for '"
+						+ fileTree.getName() + "'.", 1);
+			}
 			return vertex;
 		}
 	}
 
-	private Vertex addFileTreeVertex(TitanGraph graph,
+	private Vertex addFileTreeVertex(
+			ProgressObserver<AnalysisStore> progressObserver, TitanGraph graph,
 			AnalysisFileTree fileTree, Vertex parentVertex, String edgeLabel)
 			throws AnalysisStoreException {
 		Vertex vertex = graph.addVertex(null);
@@ -597,12 +643,17 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			}
 		}
 
+		if (progressObserver != null) {
+			progressObserver.updateWork(this, "Created file tree node for '"
+					+ fileTree.getName() + "'.", 1);
+		}
+
 		for (AnalysisFileTree child : fileTree.getChildren()) {
 			if (child.isFile()) {
-				addFileTreeVertex(graph, child, vertex,
+				addFileTreeVertex(progressObserver, graph, child, vertex,
 						TitanElementNames.CONTAINS_FILE_LABEL);
 			} else {
-				addFileTreeVertex(graph, child, vertex,
+				addFileTreeVertex(progressObserver, graph, child, vertex,
 						TitanElementNames.CONTAINS_DIRECTORY_LABEL);
 			}
 		}

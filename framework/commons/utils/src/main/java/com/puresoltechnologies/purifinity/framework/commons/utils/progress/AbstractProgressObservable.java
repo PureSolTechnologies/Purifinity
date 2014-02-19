@@ -51,7 +51,7 @@ public class AbstractProgressObservable<Observable> implements
 		}
 	}
 
-	protected void fireStarted(String message, int totalAmount) {
+	protected void fireStarted(String message, long totalAmount) {
 		started = true;
 		this.totalAmount = totalAmount;
 		Iterator<WeakReference<ProgressObserver<Observable>>> iterator = observers

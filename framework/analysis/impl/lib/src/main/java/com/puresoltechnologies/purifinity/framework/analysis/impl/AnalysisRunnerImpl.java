@@ -24,6 +24,7 @@ import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
+import com.puresoltechnologies.commons.misc.ProgressObserver;
 import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
@@ -45,7 +46,8 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFacto
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 
 public class AnalysisRunnerImpl extends
-		AbstractProgressObservable<AnalysisRunner> implements AnalysisRunner {
+		AbstractProgressObservable<AnalysisRunner> implements AnalysisRunner,
+		ProgressObserver<AnalysisStore> {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(AnalysisRunnerImpl.class);
@@ -90,9 +92,9 @@ public class AnalysisRunnerImpl extends
 						stopWatch.getStartTime(), stopWatch.getMilliseconds(),
 						"", searchConfig);
 				buildCodeLocationTree();
-				analysisStore.storeAnalysisFileTree(projectUUID,
-						analysisRun.getUUID(), fileTree);
 				fireDone("Finished successfully.", true);
+				analysisStore.storeAnalysisFileTree(this, projectUUID,
+						analysisRun.getUUID(), fileTree);
 				return true;
 			} else {
 				fireDone("Run aborted.", false);
@@ -334,6 +336,23 @@ public class AnalysisRunnerImpl extends
 	@Override
 	public AnalysisRun getAnalysisRun() throws AnalysisProjectException {
 		return new AnalysisRunImpl(analysisRun, fileTree);
+	}
+
+	@Override
+	public void started(AnalysisStore observable, String message, long total) {
+		fireStarted(message, total);
+	}
+
+	@Override
+	public void done(AnalysisStore observable, String message,
+			boolean successful) {
+		fireDone(message, successful);
+	}
+
+	@Override
+	public void updateWork(AnalysisStore observable, String message,
+			long finished) {
+		fireUpdateWork(message, finished);
 	}
 
 }
