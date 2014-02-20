@@ -1,7 +1,10 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.views;
 
 import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -21,6 +24,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.progress.UIJob;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
@@ -158,41 +162,68 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 			if (selection instanceof AnalysisProjectSelection) {
 				AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
 				analysis = analysisSelection.getAnalysisProject();
-				AnalysisRunInformation analysisRunInformation = analysis
-						.loadLastAnalysisRun();
-				analysisRun = AnalysisRunImpl.readFromStore(analysis
-						.getInformation().getUUID(), analysisRunInformation
-						.getUUID());
+				readLastAnalysisRun();
 			} else if (selection instanceof AnalysisRunSelection) {
 				AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
 				analysis = analysisRunSelection.getAnalysisProject();
 				analysisRun = analysisRunSelection.getAnalysisRun();
+				refresh();
 			}
-			if (analysis != null) {
-				name.setText(analysis.getSettings().getName());
-				if (analysisRun != null) {
-					analyzedTableViewer.setInput(analysisRun);
-					failedTableViewer.setInput(analysisRun);
-					int analyzedCodesSize = analysisRun.getAnalyzedFiles()
-							.size();
-					int failedCodesSize = analysisRun.getFailedFiles().size();
-					totalFiles.setText(String.valueOf(analyzedCodesSize
-							+ failedCodesSize));
-					analyzedFiles.setText(String.valueOf(analyzedCodesSize));
-					unanalyzedFiles.setText(String.valueOf(failedCodesSize));
-					int errors = 0;
-					for (AnalysisInformation analyzedCode : analysisRun
-							.getFailedFiles()) {
-						if (analyzedCode.wasError()) {
-							errors++;
-						}
-					}
-					errorFiles.setText(String.valueOf(errors));
-				}
-			}
-		} catch (AnalysisStoreException | AnalysisProjectException e) {
+		} catch (AnalysisProjectException e) {
 			logger.log(new Status(Status.ERROR, ParserTreeControl.class
 					.getName(), "Can not read analysis store!", e));
+		}
+	}
+
+	private void readLastAnalysisRun() throws AnalysisProjectException {
+		final AnalysisRunInformation analysisRunInformation = analysis
+				.loadLastAnalysisRun();
+		new Job("Read Analysis Run") {
+			@Override
+			protected IStatus run(IProgressMonitor monitor) {
+				try {
+					analysisRun = AnalysisRunImpl.readFromStore(
+							analysis.getInformation().getUUID(),
+							analysisRunInformation.getUUID());
+				} catch (AnalysisStoreException e) {
+					logger.log(new Status(Status.ERROR,
+							ParserTreeControl.class.getName(),
+							"Can not read analysis store!", e));
+				}
+				new UIJob("Refresh Analysis Report") {
+					@Override
+					public IStatus runInUIThread(
+							IProgressMonitor monitor) {
+						refresh();
+						return Status.OK_STATUS;
+					}
+				}.schedule();
+				return Status.OK_STATUS;
+			}
+		};
+	}
+
+	private void refresh() {
+		if (analysis != null) {
+			name.setText(analysis.getSettings().getName());
+			if (analysisRun != null) {
+				analyzedTableViewer.setInput(analysisRun);
+				failedTableViewer.setInput(analysisRun);
+				int analyzedCodesSize = analysisRun.getAnalyzedFiles().size();
+				int failedCodesSize = analysisRun.getFailedFiles().size();
+				totalFiles.setText(String.valueOf(analyzedCodesSize
+						+ failedCodesSize));
+				analyzedFiles.setText(String.valueOf(analyzedCodesSize));
+				unanalyzedFiles.setText(String.valueOf(failedCodesSize));
+				int errors = 0;
+				for (AnalysisInformation analyzedCode : analysisRun
+						.getFailedFiles()) {
+					if (analyzedCode.wasError()) {
+						errors++;
+					}
+				}
+				errorFiles.setText(String.valueOf(errors));
+			}
 		}
 	}
 
