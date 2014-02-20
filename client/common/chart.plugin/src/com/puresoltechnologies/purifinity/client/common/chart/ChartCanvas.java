@@ -27,12 +27,14 @@ public class ChartCanvas extends Canvas implements PaintListener {
 
 	private static final int MARGIN = 5;
 
-	private final ChartRenderer chartRenderer = new ChartRenderer();
+	private final Color backgroundColor;
+	private final ChartRenderer chartRenderer;
 
 	public ChartCanvas(Composite parent, int style) {
 		super(parent, style | SWT.DOUBLE_BUFFERED);
 
-		setBackground(new Color(getDisplay(), new RGB(255, 255, 255)));
+		backgroundColor = new Color(getDisplay(), new RGB(255, 255, 255));
+		chartRenderer = new ChartRenderer(getDisplay());
 
 		addPaintListener(this);
 		DefaultToolTip toolTip = new DefaultToolTip(this) {
@@ -49,7 +51,13 @@ public class ChartCanvas extends Canvas implements PaintListener {
 		toolTip.setHideDelay(0);
 		toolTip.setPopupDelay(0);
 		toolTip.setShift(new Point(10, 10));
+	}
 
+	@Override
+	public void dispose() {
+		chartRenderer.dispose();
+		backgroundColor.dispose();
+		super.dispose();
 	}
 
 	public Chart2D getChart2D() {

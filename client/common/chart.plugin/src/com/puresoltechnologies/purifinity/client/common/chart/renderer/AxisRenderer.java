@@ -32,10 +32,17 @@ public class AxisRenderer {
 	private final Axis<?> axis;
 	private final double drawingPosition;
 
+	private final Font labelFont;
+
 	public AxisRenderer(GC gc, Axis<?> axis, double drawingPosition) {
 		this.gc = gc;
 		this.axis = axis;
 		this.drawingPosition = drawingPosition;
+		labelFont = new Font(gc.getDevice(), "Arial", 10, SWT.BOLD);
+	}
+
+	public void dispose() {
+		labelFont.dispose();
 	}
 
 	public void render(TransformationMatrix2D transformation) {
@@ -113,9 +120,8 @@ public class AxisRenderer {
 			// Now we can paint... :-)
 			String text = getAxisText(axis);
 			Font currentFont = gc.getFont();
-			Font font = new Font(gc.getDevice(), "Arial", 10, SWT.BOLD);
 			try {
-				gc.setFont(font);
+				gc.setFont(labelFont);
 				FontMetrics fontMetrics = gc.getFontMetrics();
 				int averageCharWidth = fontMetrics.getAverageCharWidth();
 				int height = fontMetrics.getHeight();
@@ -128,7 +134,6 @@ public class AxisRenderer {
 				gc.drawText(text, (int) pos.getX(), (int) pos.getY(), true);
 			} finally {
 				gc.setFont(currentFont);
-				font.dispose();
 			}
 		} finally {
 			// Reset the GC transformation...
