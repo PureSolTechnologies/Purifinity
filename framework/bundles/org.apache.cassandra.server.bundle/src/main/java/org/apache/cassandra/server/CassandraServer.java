@@ -25,12 +25,7 @@ public class CassandraServer {
 	public static void start(File baseDirectory) throws IOException {
 		File databaseDirectory = new File(baseDirectory, "db");
 		File databaseDataDirectory = new File(baseDirectory, "dbdata");
-		start(databaseDirectory, databaseDataDirectory);
-	}
-
-	public static void start(File databaseDirectory, File databaseDataDirectory)
-			throws IOException {
-		File databaseLogDirectory = new File(databaseDataDirectory, "log");
+		File databaseLogDirectory = new File(baseDirectory, "log");
 		start(databaseDirectory, databaseDataDirectory, databaseLogDirectory);
 	}
 
@@ -45,10 +40,10 @@ public class CassandraServer {
 
 		CassandraDistribution.extract(databaseDirectory);
 
-		System.setProperty("cassandra.data.directory",
-				databaseDataDirectory.getPath());
-		System.setProperty("cassandra.log.directory",
-				databaseLogDirectory.getPath());
+		System.setProperty("cassandra.data.directory", databaseDataDirectory
+				.getPath().replaceAll("\\\\", "/"));
+		System.setProperty("cassandra.log.directory", databaseLogDirectory
+				.getPath().replaceAll("\\\\", "/"));
 
 		File cassandraConfiguration = new File(databaseDirectory, "conf");
 		CassandraConfiguration.createConfigurationFile(cassandraConfiguration);
