@@ -193,7 +193,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	private boolean wasSelectionChanged() {
 		if ((oldAnalysisSelection == null)
-				|| (oldAnalysisSelection.equals(getAnalysisSelection()))) {
+				|| (!oldAnalysisSelection.isSameRun(getAnalysisSelection()))) {
 			return true;
 		}
 		if ((oldEvaluatorSelection == null)

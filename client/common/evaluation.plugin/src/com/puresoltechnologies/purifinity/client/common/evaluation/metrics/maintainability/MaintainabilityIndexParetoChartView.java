@@ -128,7 +128,7 @@ public class MaintainabilityIndexParetoChartView extends
 
 	private boolean wasSelectionChanged() {
 		if ((oldAnalysisSelection == null)
-				|| (oldAnalysisSelection.equals(getAnalysisSelection()))) {
+				|| (!oldAnalysisSelection.isSameRun(getAnalysisSelection()))) {
 			return true;
 		}
 		return false;

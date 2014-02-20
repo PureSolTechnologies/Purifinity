@@ -1,7 +1,10 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.views;
 
+import java.util.UUID;
+
 import org.eclipse.jface.viewers.ISelection;
 
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
@@ -21,6 +24,9 @@ public class AnalysisSelection implements ISelection {
 	private final AnalysisProject analysisProject;
 	private final AnalysisRun analysisRun;
 	private final AnalysisFileTree fileTreeNode;
+	private final UUID projectUUID;
+	private final UUID runUUID;
+	private final HashId parentTreeNode;
 
 	public AnalysisSelection(AnalysisProject analysisProject,
 			AnalysisRun analysisRun, AnalysisFileTree fileTreeNode) {
@@ -28,6 +34,9 @@ public class AnalysisSelection implements ISelection {
 		this.analysisProject = analysisProject;
 		this.analysisRun = analysisRun;
 		this.fileTreeNode = fileTreeNode;
+		projectUUID = analysisProject.getInformation().getUUID();
+		runUUID = analysisRun.getInformation().getUUID();
+		parentTreeNode = fileTreeNode.getHashId();
 	}
 
 	public AnalysisProject getAnalysisProject() {
@@ -52,11 +61,10 @@ public class AnalysisSelection implements ISelection {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((analysisProject == null) ? 0 : analysisProject.hashCode());
+				+ ((parentTreeNode == null) ? 0 : parentTreeNode.hashCode());
 		result = prime * result
-				+ ((analysisRun == null) ? 0 : analysisRun.hashCode());
-		result = prime * result
-				+ ((fileTreeNode == null) ? 0 : fileTreeNode.hashCode());
+				+ ((projectUUID == null) ? 0 : projectUUID.hashCode());
+		result = prime * result + ((runUUID == null) ? 0 : runUUID.hashCode());
 		return result;
 	}
 
@@ -69,20 +77,41 @@ public class AnalysisSelection implements ISelection {
 		if (getClass() != obj.getClass())
 			return false;
 		AnalysisSelection other = (AnalysisSelection) obj;
-		if (analysisProject == null) {
-			if (other.analysisProject != null)
+		if (parentTreeNode == null) {
+			if (other.parentTreeNode != null)
 				return false;
-		} else if (!analysisProject.equals(other.analysisProject))
+		} else if (!parentTreeNode.equals(other.parentTreeNode))
 			return false;
-		if (analysisRun == null) {
-			if (other.analysisRun != null)
+		if (projectUUID == null) {
+			if (other.projectUUID != null)
 				return false;
-		} else if (!analysisRun.equals(other.analysisRun))
+		} else if (!projectUUID.equals(other.projectUUID))
 			return false;
-		if (fileTreeNode == null) {
-			if (other.fileTreeNode != null)
+		if (runUUID == null) {
+			if (other.runUUID != null)
 				return false;
-		} else if (!fileTreeNode.equals(other.fileTreeNode))
+		} else if (!runUUID.equals(other.runUUID))
+			return false;
+		return true;
+	}
+
+	public boolean isSameRun(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AnalysisSelection other = (AnalysisSelection) obj;
+		if (projectUUID == null) {
+			if (other.projectUUID != null)
+				return false;
+		} else if (!projectUUID.equals(other.projectUUID))
+			return false;
+		if (runUUID == null) {
+			if (other.runUUID != null)
+				return false;
+		} else if (!runUUID.equals(other.runUUID))
 			return false;
 		return true;
 	}

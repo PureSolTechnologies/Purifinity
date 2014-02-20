@@ -251,7 +251,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 
 	private boolean wasSelectionChanged() {
 		if ((oldAnalysisSelection == null)
-				|| (oldAnalysisSelection.equals(getAnalysisSelection()))) {
+				|| (!oldAnalysisSelection.isSameRun(getAnalysisSelection()))) {
 			return true;
 		}
 		if ((oldMapMetricSelection == null)
