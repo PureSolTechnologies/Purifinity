@@ -3,11 +3,9 @@
       id="com.puresoltechnologies.purifinity.client.application.feature"
       label="Purifinity Application Feature"
       version="0.1.1.qualifier"
-      provider-name="PureSol Technologies"
       plugin="com.puresoltechnologies.purifinity.client.application.plugin"
       os="linux,macosx,win32"
       ws="carbon,cocoa,gtk,win32"
-      nl="en_US"
       arch="x86,x86_64">
 
    <description url="http://www.example.com/description">
@@ -105,6 +103,28 @@
          download-size="0"
          install-size="0"
          version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.qos.logback.classic"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.qos.logback.core"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="ch.qos.logback.slf4j"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
          unpack="false"/>
 
 </feature>
