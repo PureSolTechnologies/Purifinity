@@ -35,6 +35,7 @@ import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.Anal
 import com.puresoltechnologies.purifinity.framework.store.db.evaluation.EvaluatorStoreUtils;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 public class AnalysisStoreImpl implements AnalysisStore {
@@ -132,12 +133,23 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public void removeAnalysisProject(UUID analysisUUID)
+	public void removeAnalysisProject(UUID projectUUID)
 			throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		try {
 			Vertex vertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(
-					graph, analysisUUID);
+					graph, projectUUID);
+			List<AnalysisRunInformation> runs = readAllRunInformation(projectUUID);
+			for (AnalysisRunInformation run : runs) {
+				removeAnalysisRun(projectUUID, run.getUUID());
+			}
+			Iterable<Edge> edges = vertex.query().edges();
+			if (edges.iterator().hasNext()) {
+				// We do not expect incoming edges (never!) and also no outgoing
+				// edges.
+				throw new AnalysisStoreException(
+						"Analysis project has still edges connected. Database is inconsistent!");
+			}
 			graph.removeVertex(vertex);
 			graph.commit();
 		} catch (AnalysisStoreException e) {
