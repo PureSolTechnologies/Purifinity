@@ -148,8 +148,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 								+ CassandraElementNames.EVALUATION_METRICS_TABLE
 								+ " (time,"
 								+ " duration, "
-								+ "analysis_project, "
-								+ "analysis_run, "
+								+ "project_uuid, "
+								+ "run_uuid, "
 								+ "hashid, "
 								+ "internal_directory, "
 								+ "file_name, "
@@ -285,8 +285,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 								+ CassandraElementNames.EVALUATION_METRICS_TABLE
 								+ " (time, "
 								+ "duration, "
-								+ "analysis_project, "
-								+ "analysis_run, "
+								+ "project_uuid, "
+								+ "run_uuid, "
 								+ "hashid, "
 								+ "internal_directory, "
 								+ "file_name, "

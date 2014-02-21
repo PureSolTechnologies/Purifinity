@@ -38,7 +38,7 @@ public class HistogramChartDataProviderImpl implements
 							session,
 							"SELECT hashid, numeric_value FROM "
 									+ CassandraElementNames.EVALUATION_METRICS_TABLE
-									+ " WHERE analysis_project=? AND analysis_run=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
+									+ " WHERE project_uuid=? AND run_uuid=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
 			BoundStatement boundStatement = preparedStatement.bind(
 					analysisProject, analysisRun, evaluatorName,
 					parameter.getName(), codeRangeType.name());

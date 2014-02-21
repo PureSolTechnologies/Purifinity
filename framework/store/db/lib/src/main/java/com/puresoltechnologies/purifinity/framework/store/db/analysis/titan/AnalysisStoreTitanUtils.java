@@ -1,12 +1,15 @@
 package com.puresoltechnologies.purifinity.framework.store.db.analysis.titan;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
 
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanElementNames;
+import com.puresoltechnologies.purifinity.framework.store.db.VertexType;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Direction;
+import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 /**
@@ -42,6 +45,43 @@ public class AnalysisStoreTitanUtils {
 					+ uuid + "' were found. Database is inconsistent.");
 		}
 		return projectVertext;
+	}
+
+	/**
+	 * Creates a new Analysis Run vertex.
+	 * 
+	 * @param graph
+	 * @param projectVertex
+	 * @param uuid
+	 * @param creationTime
+	 * @param startTime
+	 * @param duration
+	 * @param description
+	 */
+	public static void createAnalysisRunVertex(TitanGraph graph,
+			Vertex projectVertex, UUID uuid, Date creationTime, Date startTime,
+			long duration, String description) {
+		Vertex runVertex = graph.addVertex(null);
+		runVertex.setProperty(TitanElementNames.VERTEX_TYPE,
+				VertexType.ANALYSIS_RUN.name());
+		runVertex.setProperty(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY,
+				uuid.toString());
+		runVertex.setProperty(TitanElementNames.CREATION_TIME_PROPERTY,
+				creationTime);
+		runVertex.setProperty(
+				TitanElementNames.ANALYSIS_RUN_START_TIME_PROPERTY, startTime);
+		runVertex.setProperty(TitanElementNames.ANALYSIS_RUN_DURATION_PROPERTY,
+				duration);
+		runVertex.setProperty(
+				TitanElementNames.ANALYSIS_RUN_DESCRIPTION_PROPERTY,
+				description);
+
+		Edge hasAnalysisRunEdge = projectVertex.addEdge(
+				TitanElementNames.HAS_ANALYSIS_RUN_LABEL, runVertex);
+		hasAnalysisRunEdge.setProperty(
+				TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY, uuid.toString());
+		hasAnalysisRunEdge.setProperty(
+				TitanElementNames.ANALYSIS_RUN_START_TIME_PROPERTY, startTime);
 	}
 
 	/**

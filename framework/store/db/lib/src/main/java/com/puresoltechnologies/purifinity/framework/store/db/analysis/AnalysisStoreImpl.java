@@ -28,12 +28,12 @@ import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanElementNames;
 import com.puresoltechnologies.purifinity.framework.store.db.VertexType;
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.cassandra.AnalysisStoreCacheUtils;
+import com.puresoltechnologies.purifinity.framework.store.db.analysis.cassandra.AnalysisStoreCassandraUtils;
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.AnalysisStoreContentTreeUtils;
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.AnalysisStoreFileTreeUtils;
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.AnalysisStoreTitanUtils;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 public class AnalysisStoreImpl implements AnalysisStore {
@@ -41,27 +41,27 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	@Override
 	public AnalysisProjectInformation createAnalysisProject(
 			AnalysisProjectSettings settings) throws AnalysisStoreException {
-		UUID uuid = UUID.randomUUID();
+		UUID projectUUID = UUID.randomUUID();
 		Date creationTime = new Date();
-		createAnalysisProjectVertex(uuid, creationTime);
-		storeProjectAnalysisSettings(settings, uuid);
-		return new AnalysisProjectInformation(uuid, creationTime);
+		createAnalysisProjectVertex(projectUUID, creationTime);
+		storeProjectAnalysisSettings(projectUUID, settings);
+		return new AnalysisProjectInformation(projectUUID, creationTime);
 	}
 
-	private void createAnalysisProjectVertex(UUID uuid, Date creationTime) {
+	private void createAnalysisProjectVertex(UUID projectUUID, Date creationTime) {
 		TitanGraph graph = TitanConnection.getGraph();
 		Vertex vertex = graph.addVertex(null);
 		vertex.setProperty(TitanElementNames.VERTEX_TYPE,
 				VertexType.ANALYSIS_PROJECT.name());
 		vertex.setProperty(TitanElementNames.ANALYSIS_PROJECT_UUID_PROPERTY,
-				uuid.toString());
+				projectUUID.toString());
 		vertex.setProperty(TitanElementNames.CREATION_TIME_PROPERTY,
 				creationTime);
 		graph.commit();
 	}
 
-	private void storeProjectAnalysisSettings(AnalysisProjectSettings settings,
-			UUID uuid) {
+	private void storeProjectAnalysisSettings(UUID projectUUID,
+			AnalysisProjectSettings settings) {
 		String name = settings.getName();
 		String description = settings.getDescription();
 		FileSearchConfiguration fileSearchConfiguration = settings
@@ -71,13 +71,13 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
-						+ " (uuid, name, description, "
+						+ " (project_uuid, name, description, "
 						+ "file_includes, file_excludes, "
 						+ "location_includes, location_excludes, "
 						+ "ignore_hidden, repository_location) "
 						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-		BoundStatement bound = preparedStatement.bind(uuid, name, description,
-				fileSearchConfiguration.getFileIncludes(),
+		BoundStatement bound = preparedStatement.bind(projectUUID, name,
+				description, fileSearchConfiguration.getFileIncludes(),
 				fileSearchConfiguration.getFileExcludes(),
 				fileSearchConfiguration.getLocationIncludes(),
 				fileSearchConfiguration.getLocationExcludes(),
@@ -116,26 +116,27 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public AnalysisProjectInformation readAnalysisProjectInformation(UUID uuid)
-			throws AnalysisStoreException {
+	public AnalysisProjectInformation readAnalysisProjectInformation(
+			UUID projectUUID) throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		try {
 			Vertex vertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(
-					graph, uuid);
+					graph, projectUUID);
 			Date creationTime = (Date) vertex
 					.getProperty(TitanElementNames.CREATION_TIME_PROPERTY);
-			return new AnalysisProjectInformation(uuid, creationTime);
+			return new AnalysisProjectInformation(projectUUID, creationTime);
 		} finally {
 			graph.rollback();
 		}
 	}
 
 	@Override
-	public void removeAnalysisProject(UUID uuid) throws AnalysisStoreException {
+	public void removeAnalysisProject(UUID analysisUUID)
+			throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		try {
 			Vertex vertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(
-					graph, uuid);
+					graph, analysisUUID);
 			graph.removeVertex(vertex);
 			graph.commit();
 		} catch (AnalysisStoreException e) {
@@ -145,17 +146,16 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public AnalysisProjectSettings readAnalysisProjectSettings(
-			UUID analysisProjectUUID) throws AnalysisStoreException {
+	public AnalysisProjectSettings readAnalysisProjectSettings(UUID projectUUID)
+			throws AnalysisStoreException {
 		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(
 						session,
 						"SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location FROM "
 								+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
-								+ " WHERE uuid=?");
-		BoundStatement boundStatement = preparedStatement
-				.bind(analysisProjectUUID);
+								+ " WHERE project_uuid=?");
+		BoundStatement boundStatement = preparedStatement.bind(projectUUID);
 		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
@@ -187,9 +187,9 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public void updateAnalysisProjectSettings(UUID uuid,
+	public void updateAnalysisProjectSettings(UUID projectUUID,
 			AnalysisProjectSettings settings) throws AnalysisStoreException {
-		storeProjectAnalysisSettings(settings, uuid);
+		storeProjectAnalysisSettings(projectUUID, settings);
 	}
 
 	@Override
@@ -207,7 +207,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			List<AnalysisRunInformation> allRunInformation = new ArrayList<>();
 			while (runIterator.hasNext()) {
 				Vertex run = runIterator.next();
-				UUID uuid = UUID
+				UUID runUUID = UUID
 						.fromString((String) run
 								.getProperty(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY));
 				Date startTime = (Date) run
@@ -216,9 +216,9 @@ public class AnalysisStoreImpl implements AnalysisStore {
 						.getProperty(TitanElementNames.ANALYSIS_RUN_DURATION_PROPERTY);
 				String description = (String) run
 						.getProperty(TitanElementNames.ANALYSIS_RUN_DESCRIPTION_PROPERTY);
-				FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(uuid);
+				FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(runUUID);
 				allRunInformation.add(new AnalysisRunInformation(projectUUID,
-						uuid, startTime, duration, description,
+						runUUID, startTime, duration, description,
 						fileSearchConfiguration));
 			}
 			return allRunInformation;
@@ -235,54 +235,21 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		TitanGraph graph = TitanConnection.getGraph();
 		try {
 			Date creationTime = new Date();
-			UUID uuid = UUID.randomUUID();
+			UUID runUUID = UUID.randomUUID();
 
 			Vertex projectVertex = AnalysisStoreTitanUtils
 					.findAnalysisProjectVertex(graph, analysisProjectUUID);
 
-			Vertex runVertex = graph.addVertex(null);
-			runVertex.setProperty(TitanElementNames.VERTEX_TYPE,
-					VertexType.ANALYSIS_RUN.name());
-			runVertex.setProperty(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY,
-					uuid.toString());
-			runVertex.setProperty(TitanElementNames.CREATION_TIME_PROPERTY,
-					creationTime);
-			runVertex.setProperty(
-					TitanElementNames.ANALYSIS_RUN_START_TIME_PROPERTY,
-					startTime);
-			runVertex.setProperty(
-					TitanElementNames.ANALYSIS_RUN_DURATION_PROPERTY, duration);
-			runVertex.setProperty(
-					TitanElementNames.ANALYSIS_RUN_DESCRIPTION_PROPERTY,
+			AnalysisStoreTitanUtils.createAnalysisRunVertex(graph,
+					projectVertex, runUUID, creationTime, startTime, duration,
 					description);
 
-			Edge hasAnalysisRunEdge = projectVertex.addEdge(
-					TitanElementNames.HAS_ANALYSIS_RUN_LABEL, runVertex);
-			hasAnalysisRunEdge.setProperty(
-					TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY,
-					uuid.toString());
-			hasAnalysisRunEdge.setProperty(
-					TitanElementNames.ANALYSIS_RUN_START_TIME_PROPERTY,
-					startTime);
-
-			Session session = CassandraConnection.getAnalysisSession();
-			PreparedStatement preparedStatement = CassandraConnection
-					.getPreparedStatement(session, "INSERT INTO "
-							+ CassandraElementNames.RUN_SETTINGS_TABLE
-							+ " (uuid, " + "file_includes, file_excludes, "
-							+ "location_includes, location_excludes, "
-							+ "ignore_hidden) " + "VALUES (?, ?, ?, ?, ?, ?)");
-			BoundStatement bound = preparedStatement.bind(uuid,
-					fileSearchConfiguration.getFileIncludes(),
-					fileSearchConfiguration.getFileExcludes(),
-					fileSearchConfiguration.getLocationIncludes(),
-					fileSearchConfiguration.getLocationExcludes(),
-					fileSearchConfiguration.isIgnoreHidden());
-			session.execute(bound);
+			AnalysisStoreCassandraUtils.writeAnalysisRunSettings(runUUID,
+					fileSearchConfiguration);
 
 			graph.commit();
 
-			return new AnalysisRunInformation(analysisProjectUUID, uuid,
+			return new AnalysisRunInformation(analysisProjectUUID, runUUID,
 					startTime, duration, description, fileSearchConfiguration);
 		} catch (AnalysisStoreException e) {
 			graph.rollback();
@@ -304,7 +271,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					.getProperty(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY));
 			if (!runUUID.equals(uuidRead)) {
 				throw new AnalysisStoreException("Anaysis run for '" + runUUID
-						+ "' was not found, but a vertex with uuid='"
+						+ "' was not found, but a vertex with run_uuid='"
 						+ uuidRead + "'. Database is inconsistent!");
 			}
 			Date startTime = (Date) run
@@ -353,6 +320,10 @@ public class AnalysisStoreImpl implements AnalysisStore {
 				AnalysisStoreFileTreeUtils.deleteFileTree(fileTreeVertex);
 			}
 			runVertex.remove();
+			AnalysisStoreCassandraUtils.removeAnalysisRunSettings(projectUUID,
+					runUUID);
+			AnalysisStoreCacheUtils.removeAnalysisRunCaches(projectUUID,
+					runUUID);
 			graph.commit();
 		} catch (AnalysisStoreException e) {
 			graph.rollback();
@@ -361,7 +332,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	public FileSearchConfiguration readSearchConfiguration(UUID analysisRunUUID)
+	public FileSearchConfiguration readSearchConfiguration(UUID runUUID)
 			throws AnalysisStoreException {
 		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
@@ -369,8 +340,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 						session,
 						"SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
 								+ CassandraElementNames.RUN_SETTINGS_TABLE
-								+ " WHERE uuid=?");
-		BoundStatement boundStatement = preparedStatement.bind(analysisRunUUID);
+								+ " WHERE run_uuid=?");
+		BoundStatement boundStatement = preparedStatement.bind(runUUID);
 		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {

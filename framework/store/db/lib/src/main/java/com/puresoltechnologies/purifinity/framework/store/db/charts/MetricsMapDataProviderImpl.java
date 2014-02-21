@@ -53,7 +53,7 @@ public class MetricsMapDataProviderImpl implements MetricsMapDataProvider {
 							session,
 							"SELECT hashid, code_range_name, numeric_value FROM "
 									+ CassandraElementNames.EVALUATION_METRICS_TABLE
-									+ " WHERE analysis_project=? AND analysis_run=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
+									+ " WHERE project_uuid=? AND run_uuid=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
 			BoundStatement boundStatement = preparedStatement.bind(
 					analysisProject, analysisRun, mapEvaluatorName,
 					mapParameter.getName(), codeRangeType.name());
@@ -120,7 +120,7 @@ public class MetricsMapDataProviderImpl implements MetricsMapDataProvider {
 							session,
 							"SELECT hashid, code_range_name, string_value FROM "
 									+ CassandraElementNames.EVALUATION_METRICS_TABLE
-									+ " WHERE analysis_project=? AND analysis_run=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
+									+ " WHERE project_uuid=? AND run_uuid=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
 			BoundStatement boundStatement = preparedStatement.bind(
 					analysisProject, analysisRun, colorEvaluatorName,
 					colorParameter.getName(), codeRangeType.name());
