@@ -50,6 +50,12 @@ import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSol
 import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunImpl;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 
+/**
+ * This view contains a list of all analysis runs. Additionally, it allows the
+ * triggering of new runs, editing of run (comments) and deleting them.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 		SelectionListener, ISelectionProvider, ISelectionListener,
 		IJobChangeListener, Refreshable, DatabaseTarget {

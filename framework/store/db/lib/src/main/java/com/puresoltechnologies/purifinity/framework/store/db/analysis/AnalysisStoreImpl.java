@@ -1,11 +1,5 @@
 package com.puresoltechnologies.purifinity.framework.store.db.analysis;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -14,27 +8,18 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.ProgressObserver;
 import com.puresoltechnologies.commons.trees.api.TreeUtils;
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.SourceCodeLocationCreator;
-import com.puresoltechnologies.purifinity.framework.commons.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
@@ -42,15 +27,16 @@ import com.puresoltechnologies.purifinity.framework.store.db.CassandraElementNam
 import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanElementNames;
 import com.puresoltechnologies.purifinity.framework.store.db.VertexType;
+import com.puresoltechnologies.purifinity.framework.store.db.analysis.cassandra.AnalysisStoreCacheUtils;
+import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.AnalysisStoreContentTreeUtils;
+import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.AnalysisStoreFileTreeUtils;
+import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.AnalysisStoreTitanUtils;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 public class AnalysisStoreImpl implements AnalysisStore {
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(AnalysisStoreImpl.class);
 
 	@Override
 	public AnalysisProjectInformation createAnalysisProject(
@@ -134,7 +120,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		try {
-			Vertex vertex = findAnalysisProjectVertex(graph, uuid);
+			Vertex vertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(
+					graph, uuid);
 			Date creationTime = (Date) vertex
 					.getProperty(TitanElementNames.CREATION_TIME_PROPERTY);
 			return new AnalysisProjectInformation(uuid, creationTime);
@@ -143,30 +130,12 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		}
 	}
 
-	private Vertex findAnalysisProjectVertex(TitanGraph graph, UUID uuid)
-			throws AnalysisStoreException {
-		Iterable<Vertex> vertices = graph
-				.query()
-				.has(TitanElementNames.ANALYSIS_PROJECT_UUID_PROPERTY,
-						uuid.toString()).vertices();
-		Iterator<Vertex> vertexIterator = vertices.iterator();
-		if (!vertexIterator.hasNext()) {
-			throw new AnalysisStoreException(
-					"Could not find a project with UUID '" + uuid + "'.");
-		}
-		Vertex projectVertext = vertexIterator.next();
-		if (vertexIterator.hasNext()) {
-			throw new AnalysisStoreException("Multiple projects with UUID '"
-					+ uuid + "' were found. Database is inconsistent.");
-		}
-		return projectVertext;
-	}
-
 	@Override
 	public void removeAnalysisProject(UUID uuid) throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		try {
-			Vertex vertex = findAnalysisProjectVertex(graph, uuid);
+			Vertex vertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(
+					graph, uuid);
 			graph.removeVertex(vertex);
 			graph.commit();
 		} catch (AnalysisStoreException e) {
@@ -228,7 +197,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		try {
-			Vertex projectVertex = findAnalysisProjectVertex(graph, projectUUID);
+			Vertex projectVertex = AnalysisStoreTitanUtils
+					.findAnalysisProjectVertex(graph, projectUUID);
 			Iterable<Vertex> analysisRuns = projectVertex.query()
 					.direction(Direction.OUT)
 					.labels(TitanElementNames.HAS_ANALYSIS_RUN_LABEL)
@@ -267,8 +237,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			Date creationTime = new Date();
 			UUID uuid = UUID.randomUUID();
 
-			Vertex projectVertex = findAnalysisProjectVertex(graph,
-					analysisProjectUUID);
+			Vertex projectVertex = AnalysisStoreTitanUtils
+					.findAnalysisProjectVertex(graph, analysisProjectUUID);
 
 			Vertex runVertex = graph.addVertex(null);
 			runVertex.setProperty(TitanElementNames.VERTEX_TYPE,
@@ -325,7 +295,8 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		try {
-			Vertex run = findAnalysisRunVertex(graph, projectUUID, runUUID);
+			Vertex run = AnalysisStoreTitanUtils.findAnalysisRunVertex(graph,
+					projectUUID, runUUID);
 			if (run == null) {
 				return null;
 			}
@@ -353,28 +324,6 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		}
 	}
 
-	private Vertex findAnalysisRunVertex(TitanGraph graph, UUID projectUUID,
-			UUID runUUID) throws AnalysisStoreException {
-		Vertex projectVertex = findAnalysisProjectVertex(graph, projectUUID);
-		Iterable<Vertex> analysisRuns = projectVertex
-				.query()
-				.direction(Direction.OUT)
-				.labels(TitanElementNames.HAS_ANALYSIS_RUN_LABEL)
-				.has(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY,
-						runUUID.toString()).vertices();
-		Iterator<Vertex> runIterator = analysisRuns.iterator();
-		if (!runIterator.hasNext()) {
-			return null;
-		}
-		Vertex runVertex = runIterator.next();
-		if (runIterator.hasNext()) {
-			throw new AnalysisStoreException(
-					"Multiple analysis run vertices for '" + runUUID
-							+ "' were found. Database is inconsistent.");
-		}
-		return runVertex;
-	}
-
 	@Override
 	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)
 			throws AnalysisStoreException {
@@ -392,19 +341,23 @@ public class AnalysisStoreImpl implements AnalysisStore {
 	}
 
 	@Override
-	@Deprecated
-	public void removeAnalysisRun(UUID projectUUID, UUID uuid)
+	public void removeAnalysisRun(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException {
-		// try {
-		// File analysisRunDirectory = getAnalysisRunDirectory(projectUUID,
-		// uuid);
-		// FileUtilities.deleteFileOrDir(analysisRunDirectory);
-		// } catch (IOException e) {
-		// throw new AnalysisStoreException(
-		// "Could not delete analysis run with UUID '"
-		// + uuid.toString() + "' for analysis with UUID '"
-		// + projectUUID.toString() + "'!", e);
-		// }
+		TitanGraph graph = TitanConnection.getGraph();
+		try {
+			Vertex runVertex = AnalysisStoreTitanUtils.findAnalysisRunVertex(
+					graph, projectUUID, runUUID);
+			Vertex fileTreeVertex = AnalysisStoreTitanUtils.findFileTreeVertex(
+					projectUUID, runUUID, runVertex);
+			if (fileTreeVertex != null) {
+				AnalysisStoreFileTreeUtils.deleteFileTree(fileTreeVertex);
+			}
+			runVertex.remove();
+			graph.commit();
+		} catch (AnalysisStoreException e) {
+			graph.rollback();
+			throw e;
+		}
 	}
 
 	@Override
@@ -436,50 +389,6 @@ public class AnalysisStoreImpl implements AnalysisStore {
 				fileIncludes, fileExcludes, ignoreHidden);
 	}
 
-	private void storeAnalysisInformation(TitanGraph graph, Vertex treeNode,
-			AnalysisInformation analysis) throws AnalysisStoreException {
-		Vertex analysisVertex = graph.addVertex(null);
-
-		Edge analysisEdge = treeNode.addEdge(
-				TitanElementNames.HAS_ANALYSIS_LABEL, analysisVertex);
-		analysisEdge.setProperty(TitanElementNames.ANALYSIS_NAME_PROPERTY,
-				"n/a");
-		analysisEdge.setProperty(TitanElementNames.ANALYSIS_VERSION_PROPERTY,
-				"n/a");
-		analysisEdge.setProperty(
-				TitanElementNames.ANALYSIS_START_TIME_PROPERTY,
-				analysis.getStartTime());
-
-		analysisVertex.setProperty(TitanElementNames.VERTEX_TYPE,
-				VertexType.ANALYSIS.name());
-
-		analysisVertex.setProperty(TitanElementNames.ANALYSIS_NAME_PROPERTY,
-				"n/a");
-		analysisVertex.setProperty(TitanElementNames.ANALYSIS_VERSION_PROPERTY,
-				"n/a");
-		analysisVertex.setProperty(
-				TitanElementNames.ANALYSIS_START_TIME_PROPERTY,
-				analysis.getStartTime());
-		analysisVertex.setProperty(
-				TitanElementNames.ANALYSIS_DURATION_PROPERTY,
-				analysis.getDuration());
-		analysisVertex.setProperty(
-				TitanElementNames.ANALYSIS_LANGUAGE_NAME_PROPERTY,
-				analysis.getLanguageName());
-		analysisVertex.setProperty(
-				TitanElementNames.ANALYSIS_LANGUAGE_VERSION_PROPERTY,
-				analysis.getLanguageVersion());
-		analysisVertex.setProperty(
-				TitanElementNames.ANALYSIS_SUCCESSFUL_PROPERTY,
-				analysis.isSuccessful());
-		String message = analysis.getMessage();
-		if (!StringUtils.isEmpty(message)) {
-			analysisVertex.setProperty(
-					TitanElementNames.ANALYSIS_MESSAGE_PROPERTY, message);
-		}
-		graph.commit();
-	}
-
 	@Override
 	public final void storeAnalysisFileTree(UUID projectUUID, UUID runUUID,
 			AnalysisFileTree fileTree) throws AnalysisStoreException {
@@ -502,14 +411,12 @@ public class AnalysisStoreImpl implements AnalysisStore {
 				progressObserver.started(this, "DB file tree creation",
 						2 * nodeCount);
 			}
-			Vertex analysisRunVertex = findAnalysisRunVertex(graph,
-					projectUUID, runUUID);
-			addContentTreeVertex(progressObserver, graph, fileTree,
-					analysisRunVertex,
-					TitanElementNames.ANALYZED_CONTENT_TREE_LABEL);
-			addFileTreeVertex(progressObserver, graph, fileTree,
-					analysisRunVertex,
-					TitanElementNames.ANALYZED_FILE_TREE_LABEL);
+			Vertex analysisRunVertex = AnalysisStoreTitanUtils
+					.findAnalysisRunVertex(graph, projectUUID, runUUID);
+			AnalysisStoreContentTreeUtils.addContentTree(this,
+					progressObserver, graph, fileTree, analysisRunVertex);
+			AnalysisStoreFileTreeUtils.addFileTree(this, progressObserver,
+					graph, fileTree, analysisRunVertex);
 			graph.commit();
 			if (progressObserver != null) {
 				progressObserver
@@ -525,370 +432,19 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		}
 	}
 
-	private Vertex addContentTreeVertex(
-			ProgressObserver<AnalysisStore> progressObserver, TitanGraph graph,
-			AnalysisFileTree fileTree, Vertex parentVertex, String edgeLabel)
-			throws AnalysisStoreException {
-		Iterable<Vertex> vertices = graph
-				.query()
-				.has(TitanElementNames.TREE_ELEMENT_HASH,
-						fileTree.getHashId().toString()).vertices();
-		Iterator<Vertex> iterator = vertices.iterator();
-		if (iterator.hasNext()) {
-			Vertex exstingTreeElementVertex = iterator.next();
-			if (iterator.hasNext()) {
-				throw new AnalysisStoreException(
-						"Content tree vertex for '"
-								+ fileTree.getHashId()
-								+ "' was found multiple times. Database is inconsistent.");
-			}
-			Edge edge = parentVertex.addEdge(edgeLabel,
-					exstingTreeElementVertex);
-			edge.setProperty(TitanElementNames.TREE_ELEMENT_HASH,
-					exstingTreeElementVertex
-							.getProperty(TitanElementNames.TREE_ELEMENT_HASH));
-			edge.setProperty(
-					TitanElementNames.TREE_ELEMENT_IS_FILE,
-					exstingTreeElementVertex
-							.getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE));
-			if (progressObserver != null) {
-				progressObserver.updateWork(this, "Content found for '"
-						+ fileTree.getName() + "'.",
-						TreeUtils.countNodes(fileTree));
-			}
-			return exstingTreeElementVertex;
-		} else {
-			Vertex vertex = graph.addVertex(null);
-			vertex.setProperty(TitanElementNames.VERTEX_TYPE,
-					VertexType.TREE_ELEMENT.name());
-			vertex.setProperty(TitanElementNames.TREE_ELEMENT_HASH, fileTree
-					.getHashId().toString());
-			vertex.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
-					fileTree.isFile());
-			Edge edge = parentVertex.addEdge(edgeLabel, vertex);
-			edge.setProperty(TitanElementNames.TREE_ELEMENT_HASH, fileTree
-					.getHashId().toString());
-			edge.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
-					fileTree.isFile());
-			for (AnalysisFileTree child : fileTree.getChildren()) {
-				if (child.isFile()) {
-					addContentTreeVertex(progressObserver, graph, child,
-							vertex, TitanElementNames.CONTAINS_FILE_LABEL);
-				} else {
-					addContentTreeVertex(progressObserver, graph, child,
-							vertex, TitanElementNames.CONTAINS_DIRECTORY_LABEL);
-				}
-			}
-			addMetadata(vertex, fileTree);
-			if (fileTree.isFile()) {
-				for (AnalysisInformation analyzedCode : fileTree.getAnalyses()) {
-					storeAnalysisInformation(graph, vertex, analyzedCode);
-				}
-			}
-			if (progressObserver != null) {
-				progressObserver.updateWork(this, "Created content for '"
-						+ fileTree.getName() + "'.", 1);
-			}
-			return vertex;
-		}
-	}
-
-	private Vertex addFileTreeVertex(
-			ProgressObserver<AnalysisStore> progressObserver, TitanGraph graph,
-			AnalysisFileTree fileTree, Vertex parentVertex, String edgeLabel)
-			throws AnalysisStoreException {
-		Vertex vertex = graph.addVertex(null);
-		vertex.setProperty(TitanElementNames.VERTEX_TYPE,
-				VertexType.TREE_ELEMENT.name());
-		vertex.setProperty(TitanElementNames.TREE_ELEMENT_NAME,
-				fileTree.getName());
-		vertex.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
-				fileTree.isFile());
-		SourceCodeLocation sourceCodeLocation = fileTree
-				.getSourceCodeLocation();
-		if (sourceCodeLocation != null) {
-			vertex.setProperty(
-					TitanElementNames.TREE_ELEMENT_SOURCE_CODE_LOCATION,
-					PropertiesUtils.toString(sourceCodeLocation
-							.getSerialization()));
-		}
-		Edge edge = parentVertex.addEdge(edgeLabel, vertex);
-		edge.setProperty(TitanElementNames.TREE_ELEMENT_HASH, fileTree
-				.getHashId().toString());
-		edge.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
-				fileTree.isFile());
-
-		addMetadata(vertex, fileTree);
-		graph.commit();
-
-		Iterable<Vertex> vertices = graph
-				.query()
-				.has(TitanElementNames.TREE_ELEMENT_HASH,
-						fileTree.getHashId().toString()).vertices();
-		Iterator<Vertex> vertexIterator = vertices.iterator();
-		if (!vertexIterator.hasNext()) {
-			throw new AnalysisStoreException(
-					"Could not find content node for file tree node '"
-							+ fileTree.toString() + "'.");
-		}
-		Vertex contentVertex = vertexIterator.next();
-		Edge contentEdge = vertex.addEdge(TitanElementNames.HAS_CONTENT_LABEL,
-				contentVertex);
-		// XXX
-		graph.commit();
-
-		if (fileTree.isFile()) {
-			for (AnalysisInformation analyzedCode : fileTree.getAnalyses()) {
-				storeAnalysisInformation(graph, vertex, analyzedCode);
-			}
-		}
-
-		if (progressObserver != null) {
-			progressObserver.updateWork(this, "Created file tree node for '"
-					+ fileTree.getName() + "'.", 1);
-		}
-
-		for (AnalysisFileTree child : fileTree.getChildren()) {
-			if (child.isFile()) {
-				addFileTreeVertex(progressObserver, graph, child, vertex,
-						TitanElementNames.CONTAINS_FILE_LABEL);
-			} else {
-				addFileTreeVertex(progressObserver, graph, child, vertex,
-						TitanElementNames.CONTAINS_DIRECTORY_LABEL);
-			}
-		}
-
-		return vertex;
-	}
-
-	private void addMetadata(Vertex vertex, AnalysisFileTree fileTreeNode)
-			throws AnalysisStoreException {
-		if (fileTreeNode.isFile()) {
-			long size = AnalysisStoreDAO.getFileSize(fileTreeNode.getHashId());
-			vertex.setProperty(TitanElementNames.TREE_ELEMENT_SIZE, size);
-		} else {
-			Iterable<Vertex> childVertexes = vertex
-					.query()
-					.direction(Direction.OUT)
-					.labels(TitanElementNames.CONTAINS_DIRECTORY_LABEL,
-							TitanElementNames.CONTAINS_FILE_LABEL).vertices();
-			Iterator<Vertex> childVertexIterator = childVertexes.iterator();
-			long files = 0;
-			long directories = 0;
-			long filesRecursive = 0;
-			long directoriesRecursive = 0;
-			long size = 0;
-			long sizeRecursive = 0;
-			while (childVertexIterator.hasNext()) {
-				Vertex childVertex = childVertexIterator.next();
-				boolean isFile = (boolean) childVertex
-						.getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE);
-				if (isFile) {
-					files++;
-					filesRecursive++;
-					long fileSize = (long) childVertex
-							.getProperty(TitanElementNames.TREE_ELEMENT_SIZE);
-					size += fileSize;
-					sizeRecursive += fileSize;
-				} else {
-					directories++;
-					directoriesRecursive++;
-					Long dr = (Long) childVertex
-							.getProperty(TitanElementNames.TREE_ELEMENT_CONTAINS_DIRECTORIES_RECURSIVE);
-					directoriesRecursive += dr != null ? dr : 0;
-					Long fr = (Long) childVertex
-							.getProperty(TitanElementNames.TREE_ELEMENT_CONTAINS_FILES_RECURSIVE);
-					filesRecursive += fr != null ? fr : 0;
-					Long sr = (Long) childVertex
-							.getProperty(TitanElementNames.TREE_ELEMENT_SIZE_RECURSIVE);
-					sizeRecursive += sr != null ? sr : 0;
-				}
-			}
-			vertex.setProperty(TitanElementNames.TREE_ELEMENT_CONTAINS_FILES,
-					files);
-			vertex.setProperty(
-					TitanElementNames.TREE_ELEMENT_CONTAINS_FILES_RECURSIVE,
-					filesRecursive);
-			vertex.setProperty(
-					TitanElementNames.TREE_ELEMENT_CONTAINS_DIRECTORIES,
-					directories);
-			vertex.setProperty(
-					TitanElementNames.TREE_ELEMENT_CONTAINS_DIRECTORIES_RECURSIVE,
-					directoriesRecursive);
-			vertex.setProperty(TitanElementNames.TREE_ELEMENT_SIZE, size);
-			vertex.setProperty(TitanElementNames.TREE_ELEMENT_SIZE_RECURSIVE,
-					sizeRecursive);
-		}
-	}
-
 	@Override
 	public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException {
-		AnalysisFileTree analysisFileTree = readCachedAnalysisFileTree(
-				projectUUID, runUUID);
+		AnalysisFileTree analysisFileTree = AnalysisStoreCacheUtils
+				.readCachedAnalysisFileTree(projectUUID, runUUID);
 		if (analysisFileTree != null) {
 			return analysisFileTree;
 		}
-		analysisFileTree = createAnalysisFileTree(projectUUID, runUUID);
-		cacheAnalysisFileTree(projectUUID, runUUID, analysisFileTree);
+		analysisFileTree = AnalysisStoreFileTreeUtils.createAnalysisFileTree(
+				projectUUID, runUUID);
+		AnalysisStoreCacheUtils.cacheAnalysisFileTree(projectUUID, runUUID,
+				analysisFileTree);
 		return analysisFileTree;
 	}
 
-	private AnalysisFileTree readCachedAnalysisFileTree(UUID projectUUID,
-			UUID runUUID) {
-		Session session = CassandraConnection.getAnalysisSession();
-		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(session, "SELECT persisted_tree FROM "
-						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
-						+ " WHERE uuid=?");
-		BoundStatement boundStatement = preparedStatement.bind(runUUID);
-		ResultSet resultSet = session.execute(boundStatement);
-		Row result = resultSet.one();
-		if (result == null) {
-			return null;
-		}
-		ByteBuffer byteBuffer = result.getBytes("persisted_tree");
-		try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
-				byteBuffer.array(), byteBuffer.position(), byteBuffer.limit())) {
-			try (ObjectInputStream objectInputStream = new ObjectInputStream(
-					byteArrayInputStream)) {
-				AnalysisFileTree object = (AnalysisFileTree) objectInputStream
-						.readObject();
-				return object;
-			}
-		} catch (IOException | ClassNotFoundException e) {
-			logger.warn("Could not read already cached file tree with uuid '"
-					+ runUUID + "'.", e);
-			return null;
-		}
-	}
-
-	private AnalysisFileTree createAnalysisFileTree(UUID projectUUID,
-			UUID runUUID) throws AnalysisStoreException {
-		TitanGraph graph = TitanConnection.getGraph();
-		try {
-			Iterable<Vertex> runVertices = graph.query()
-					.has(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY, runUUID)
-					.vertices();
-			Iterator<Vertex> runVertexIterator = runVertices.iterator();
-			if (!runVertexIterator.hasNext()) {
-				return null;
-			}
-			Vertex runVertex = runVertexIterator.next();
-			Iterable<Vertex> analysisVertices = runVertex.query()
-					.labels(TitanElementNames.ANALYZED_FILE_TREE_LABEL)
-					.vertices();
-			Iterator<Vertex> analysisVertexIterator = analysisVertices
-					.iterator();
-			if (!analysisVertexIterator.hasNext()) {
-				return null;
-			}
-			Vertex treeVertex = analysisVertexIterator.next();
-			if (analysisVertexIterator.hasNext()) {
-				throw new AnalysisStoreException(
-						"Multiple file trees for project='" + projectUUID
-								+ "' and run='" + runUUID
-								+ "' were found. Database is inconsistent.");
-			}
-			return convertToAnalysisFileTree(treeVertex, null);
-		} finally {
-			graph.rollback();
-		}
-	}
-
-	private AnalysisFileTree convertToAnalysisFileTree(Vertex treeVertex,
-			AnalysisFileTree parent) throws AnalysisStoreException {
-		String name = (String) treeVertex
-				.getProperty(TitanElementNames.TREE_ELEMENT_NAME);
-		boolean isFile = (boolean) treeVertex
-				.getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE);
-		Object serializedSourceCodeLocation = treeVertex
-				.getProperty(TitanElementNames.TREE_ELEMENT_SOURCE_CODE_LOCATION);
-		SourceCodeLocation sourceCodeLocation = serializedSourceCodeLocation != null ? SourceCodeLocationCreator
-				.createFromSerialization(PropertiesUtils
-						.fromString(serializedSourceCodeLocation.toString()))
-				: null;
-		Iterable<Vertex> contentVertices = treeVertex.query()
-				.labels(TitanElementNames.HAS_CONTENT_LABEL).vertices();
-		Iterator<Vertex> contextVertexIterator = contentVertices.iterator();
-		if (!contextVertexIterator.hasNext()) {
-			throw new AnalysisStoreException(
-					"Could not find content node for file tree node '"
-							+ parent.toString() + "'.");
-		}
-		Vertex contentVertex = contextVertexIterator.next();
-		String hash = contentVertex
-				.getProperty(TitanElementNames.TREE_ELEMENT_HASH);
-		final List<AnalysisInformation> analyses;
-		if (isFile) {
-			analyses = new ArrayList<AnalysisInformation>();
-			Iterable<Vertex> analysisVertices = treeVertex.query()
-					.direction(Direction.OUT)
-					.labels(TitanElementNames.HAS_ANALYSIS_LABEL).vertices();
-			Iterator<Vertex> analysisVertexIterator = analysisVertices
-					.iterator();
-			while (analysisVertexIterator.hasNext()) {
-				Vertex analysisVertex = analysisVertexIterator.next();
-				AnalysisInformation analysis = readAnalysisInformation(hash,
-						analysisVertex);
-				analyses.add(analysis);
-			}
-		} else {
-			analyses = null;
-		}
-		AnalysisFileTree hashIdFileTree = new AnalysisFileTree(parent, name,
-				HashId.valueOf(hash), isFile, sourceCodeLocation, analyses);
-		Iterable<Vertex> vertices = treeVertex
-				.query()
-				.labels(TitanElementNames.CONTAINS_DIRECTORY_LABEL,
-						TitanElementNames.CONTAINS_FILE_LABEL)
-				.direction(Direction.OUT).vertices();
-		Iterator<Vertex> vertexIterator = vertices.iterator();
-		while (vertexIterator.hasNext()) {
-			convertToAnalysisFileTree(vertexIterator.next(), hashIdFileTree);
-		}
-		return hashIdFileTree;
-	}
-
-	private AnalysisInformation readAnalysisInformation(String hashId,
-			Vertex analysisVertex) {
-		Date startTime = analysisVertex
-				.getProperty(TitanElementNames.ANALYSIS_START_TIME_PROPERTY);
-		long duration = analysisVertex
-				.getProperty(TitanElementNames.ANALYSIS_DURATION_PROPERTY);
-		String languageName = analysisVertex
-				.getProperty(TitanElementNames.ANALYSIS_LANGUAGE_NAME_PROPERTY);
-		String languageVersion = analysisVertex
-				.getProperty(TitanElementNames.ANALYSIS_LANGUAGE_VERSION_PROPERTY);
-		boolean successful = analysisVertex
-				.getProperty(TitanElementNames.ANALYSIS_SUCCESSFUL_PROPERTY);
-		String analyzerMessage = analysisVertex
-				.getProperty(TitanElementNames.ANALYSIS_MESSAGE_PROPERTY);
-
-		return new AnalysisInformation(HashId.valueOf(hashId), startTime,
-				duration, successful, languageName, languageVersion,
-				analyzerMessage);
-	}
-
-	private void cacheAnalysisFileTree(UUID projectUUID, UUID runUUID,
-			AnalysisFileTree analysisFileTree) {
-		Session session = CassandraConnection.getAnalysisSession();
-		PreparedStatement preparedStatement = CassandraConnection
-				.getPreparedStatement(session, "INSERT INTO "
-						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
-						+ " (uuid, persisted_tree) VALUES (?, ?)");
-		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-			try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-					byteArrayOutputStream)) {
-				objectOutputStream.writeObject(analysisFileTree);
-				BoundStatement boundStatement = preparedStatement.bind(runUUID);
-				boundStatement.setBytes("persisted_tree",
-						ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
-				session.execute(boundStatement);
-			}
-		} catch (IOException e) {
-			logger.warn("Could not cache analysis file tree with uuid '"
-					+ runUUID + "'.", e);
-		}
-	}
 }
