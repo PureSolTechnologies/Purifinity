@@ -71,7 +71,7 @@ public class AnalysisStoreFileTreeUtils {
 			throws AnalysisStoreException {
 		Vertex vertex = graph.addVertex(null);
 		vertex.setProperty(TitanElementNames.VERTEX_TYPE,
-				VertexType.TREE_ELEMENT.name());
+				VertexType.FILE_TREE_ELEMENT.name());
 		vertex.setProperty(TitanElementNames.TREE_ELEMENT_NAME,
 				fileTree.getName());
 		vertex.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
@@ -379,17 +379,18 @@ public class AnalysisStoreFileTreeUtils {
 		while (edgeIterator.hasNext()) {
 			Edge edge = edgeIterator.next();
 			String edgeLabel = edge.getLabel();
+			Vertex childVertex = edge.getVertex(Direction.IN);
+			edge.remove();
 			if (TitanElementNames.CONTAINS_FILE_LABEL.equals(edgeLabel)) {
-				deleteFileTree(edge.getVertex(Direction.IN));
+				deleteFileTree(childVertex);
 			} else if (TitanElementNames.CONTAINS_DIRECTORY_LABEL
 					.equals(edgeLabel)) {
-				deleteFileTree(edge.getVertex(Direction.IN));
-			} else if (TitanElementNames.HAS_CONTENT_LABEL.equals(edgeLabel)) {
-				// FIXME Add content deletion here for content nodes which do
-				// not have other incoming edges.
-				edge.remove();
+				deleteFileTree(childVertex);
 			} else if (TitanElementNames.HAS_ANALYSIS_LABEL.equals(edgeLabel)) {
-				edge.getVertex(Direction.IN).remove();
+				AnalysisStoreContentTreeUtils.removeAnalysis(childVertex);
+			} else if (TitanElementNames.HAS_CONTENT_LABEL.equals(edgeLabel)) {
+				// intentionally left blank, content is deleted in another step
+				// in analysis run deletion
 			} else {
 				throw new AnalysisStoreException("Unknown edge label '"
 						+ edgeLabel

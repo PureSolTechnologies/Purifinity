@@ -105,7 +105,7 @@ public class AnalysisStoreCacheUtils {
 	 * @param projectUUID
 	 * @param runUUID
 	 */
-	public static void removeAnalysisRunCaches(UUID projectUUID, UUID runUUID) {
+	public static void clearAnalysisRunCaches(UUID projectUUID, UUID runUUID) {
 		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "DELETE FROM "

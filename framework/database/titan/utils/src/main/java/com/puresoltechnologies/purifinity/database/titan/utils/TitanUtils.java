@@ -24,4 +24,18 @@ public class TitanUtils {
 			}
 		}
 	}
+
+	public static void printEdgeInformation(PrintStream printStream, Edge edge) {
+		printStream.println("Edge: id=" + edge.getId());
+		printStream.println("==========================");
+		printStream.println("Properties:");
+		for (String key : edge.getPropertyKeys()) {
+			printStream.println("\t" + key + "=" + edge.getProperty(key));
+		}
+		printStream.println("Vertices:");
+		printStream.println("FROM/OUT:");
+		printVertexInformation(printStream, edge.getVertex(Direction.OUT));
+		printStream.println("TO/IN:");
+		printVertexInformation(printStream, edge.getVertex(Direction.IN));
+	}
 }

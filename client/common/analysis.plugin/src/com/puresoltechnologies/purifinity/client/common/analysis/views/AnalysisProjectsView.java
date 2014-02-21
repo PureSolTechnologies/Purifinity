@@ -66,7 +66,7 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
-	private Table analysisProjectsTable;
+	private Table projectsTable;
 	private TableViewer analysisProjectsViewer;
 	private ISelection selection = null;
 	private ToolItem addProject;
@@ -91,16 +91,15 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 
 		this.parent = parent;
 		parent.setLayout(new FormLayout());
-		analysisProjectsTable = new Table(parent, SWT.BORDER);
-		analysisProjectsTable.addSelectionListener(this);
+		projectsTable = new Table(parent, SWT.BORDER);
+		projectsTable.addSelectionListener(this);
 		FormData fd_analyzesList = new FormData();
 		fd_analyzesList.bottom = new FormAttachment(100);
 		fd_analyzesList.left = new FormAttachment(0);
-		analysisProjectsTable.setLayoutData(fd_analyzesList);
-		analysisProjectsTable.setHeaderVisible(true);
-		analysisProjectsTable.setLinesVisible(true);
-		analysisProjectsViewer = new AnalysisProjectsTableViewer(
-				analysisProjectsTable);
+		projectsTable.setLayoutData(fd_analyzesList);
+		projectsTable.setHeaderVisible(true);
+		projectsTable.setLinesVisible(true);
+		analysisProjectsViewer = new AnalysisProjectsTableViewer(projectsTable);
 
 		ToolBar toolBar = new ToolBar(parent, SWT.FLAT | SWT.RIGHT);
 		fd_analyzesList.top = new FormAttachment(toolBar, 6);
@@ -229,23 +228,23 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 
 	@Override
 	public void widgetSelected(SelectionEvent event) {
-		if (event.getSource() == analysisProjectsTable) {
-			processAnalysisProjectSelection();
+		if (event.getSource() == projectsTable) {
+			processProjectSelection();
 		} else if (event.getSource() == addProject) {
-			addAnalysisProject();
+			addProject();
 		} else if (event.getSource() == editProject) {
-			editAnalysisProject();
+			editProject();
 		} else if (event.getSource() == deleteProject) {
-			deleteAnalysisProject();
+			deleteProject();
 		}
 	}
 
-	private void editAnalysisProject() {
+	private void editProject() {
 		MessageDialog.openInformation(getSite().getShell(), "Not implemented",
 				"This functionality is not implemented, yet!");
 	}
 
-	private void addAnalysisProject() {
+	private void addProject() {
 		try {
 			IHandlerService handlerService = (IHandlerService) getSite()
 					.getService(IHandlerService.class);
@@ -258,36 +257,49 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 		}
 	}
 
-	private void deleteAnalysisProject() {
-		try {
-			StructuredSelection selection = (StructuredSelection) analysisProjectsViewer
-					.getSelection();
-			if (MessageDialog
-					.openQuestion(getSite().getShell(), "Delete?",
-							"Do you really want to delete analysis the selected analysis project(s)?")) {
-				Iterator<?> iterator = selection.iterator();
-				while (iterator.hasNext()) {
-					AnalysisProject information = (AnalysisProject) iterator
-							.next();
-					AnalysisStore store = AnalysisStoreFactory.getFactory()
-							.getInstance();
-					if (store != null) {
-						store.removeAnalysisProject(information
-								.getInformation().getUUID());
-						refreshAnalysisProjectList();
+	private void deleteProject() {
+		final StructuredSelection selection = (StructuredSelection) analysisProjectsViewer
+				.getSelection();
+		if (MessageDialog
+				.openQuestion(getSite().getShell(), "Delete?",
+						"Do you really want to delete analysis the selected analysis project(s)?")) {
+			Job job = new Job("Analysis Project Removal") {
+
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					try {
+						Iterator<?> iterator = selection.iterator();
+						while (iterator.hasNext()) {
+							AnalysisProject information = (AnalysisProject) iterator
+									.next();
+							AnalysisStore store = AnalysisStoreFactory
+									.getFactory().getInstance();
+							if (store != null) {
+								store.removeAnalysisProject(information
+										.getInformation().getUUID());
+								refresh();
+							}
+						}
+						return Status.OK_STATUS;
+					} catch (AnalysisStoreException e) {
+						logger.log(new Status(
+								Status.ERROR,
+								AnalysisProjectsView.class.getName(),
+								"Could not retrieve analysis from analysis store!",
+								e));
+						return new Status(Status.ERROR, Activator.getDefault()
+								.getBundle().getSymbolicName(),
+								"Could not delete projects.");
 					}
 				}
-			}
-		} catch (AnalysisStoreException e) {
-			logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
-					.getName(),
-					"Could not retrieve analysis from analysis store!", e));
+			};
+			job.schedule();
 		}
 	}
 
 	private void refreshAnalysisProjectList() {
 		try {
-			if (!analysisProjectsTable.isDisposed()) {
+			if (!projectsTable.isDisposed()) {
 				AnalysisStore store = AnalysisStoreFactory.getFactory()
 						.getInstance();
 				if (store != null) {
@@ -302,7 +314,9 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 								information.getUUID(), information
 										.getCreationTime(), settings));
 					}
+
 					analysisProjectsViewer.setInput(analysisProjects);
+					updateEnabledState();
 				}
 			}
 		} catch (AnalysisStoreException e) {
@@ -313,7 +327,7 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 		}
 	}
 
-	private void processAnalysisProjectSelection() {
+	private void processProjectSelection() {
 		StructuredSelection selection = (StructuredSelection) analysisProjectsViewer
 				.getSelection();
 		AnalysisProject analysisProject = (AnalysisProject) selection
@@ -332,7 +346,7 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	}
 
 	private void updateEnabledState() {
-		analysisProjectsTable.setEnabled(enabled && availableDatabase);
+		projectsTable.setEnabled(enabled && availableDatabase);
 		refreshAction.setEnabled(enabled && availableDatabase);
 		addProject.setEnabled(enabled && availableDatabase);
 		editProject.setEnabled(enabled && availableDatabase

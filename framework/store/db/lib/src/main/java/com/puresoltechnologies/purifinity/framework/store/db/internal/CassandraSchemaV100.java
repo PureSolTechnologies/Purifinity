@@ -77,10 +77,10 @@ public class CassandraSchemaV100 {
 
 	private static void checkAndCreateEvaluationTables(Cluster cluster)
 			throws MigrationException {
-		CassandraMigration.createTable(cluster,
-				CassandraElementNames.EVALUATION_KEYSPACE, "1.0.0",
-				"Rick-Rainer Ludwig", "Keeps settings of analysis projects.",
-				"CREATE TABLE " + CassandraElementNames.EVALUATION_FILES_TABLE
+		createTable(cluster, CassandraElementNames.EVALUATION_KEYSPACE,
+				"1.0.0", "Rick-Rainer Ludwig",
+				"Keeps settings of analysis projects.", "CREATE TABLE "
+						+ CassandraElementNames.EVALUATION_FILES_TABLE
 						+ " (hashid varchar, " + "resultsClass varchar, "
 						+ "results blob, "
 						+ "PRIMARY KEY(hashid, resultsClass));");

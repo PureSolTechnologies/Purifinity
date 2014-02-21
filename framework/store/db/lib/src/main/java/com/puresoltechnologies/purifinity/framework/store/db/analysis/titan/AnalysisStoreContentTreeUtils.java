@@ -4,15 +4,20 @@ import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.ProgressObserver;
 import com.puresoltechnologies.commons.trees.api.TreeUtils;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.purifinity.database.titan.utils.TitanUtils;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.db.TitanElementNames;
 import com.puresoltechnologies.purifinity.framework.store.db.VertexType;
+import com.puresoltechnologies.purifinity.framework.store.db.analysis.cassandra.AnalysisStoreCassandraUtils;
+import com.puresoltechnologies.purifinity.framework.store.db.evaluation.cassandra.EvaluatorStoreCassandraUtils;
 import com.thinkaurelius.titan.core.TitanGraph;
+import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
@@ -97,7 +102,7 @@ public class AnalysisStoreContentTreeUtils {
 		} else {
 			Vertex vertex = graph.addVertex(null);
 			vertex.setProperty(TitanElementNames.VERTEX_TYPE,
-					VertexType.TREE_ELEMENT.name());
+					VertexType.CONTENT_TREE_ELEMENT.name());
 			vertex.setProperty(TitanElementNames.TREE_ELEMENT_HASH, fileTree
 					.getHashId().toString());
 			vertex.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
@@ -185,4 +190,89 @@ public class AnalysisStoreContentTreeUtils {
 		graph.commit();
 	}
 
+	public static void checkAndRemoveAnalysisRunContent(Vertex runVertex)
+			throws AnalysisStoreException {
+		Iterable<Edge> edges = runVertex.query().direction(Direction.OUT)
+				.labels(TitanElementNames.ANALYZED_CONTENT_TREE_LABEL).edges();
+		Iterator<Edge> edgeIterator = edges.iterator();
+		if (!edgeIterator.hasNext()) {
+			return;
+		}
+		Edge contentEdge = edgeIterator.next();
+		if (edgeIterator.hasNext()) {
+			throw new AnalysisStoreException(
+					"Analysis run '"
+							+ runVertex
+									.getProperty(TitanElementNames.ANALYSIS_NAME_PROPERTY)
+							+ "'contains multiple content nodes. Database is inconsistent!");
+		}
+		Vertex contentVertex = contentEdge.getVertex(Direction.IN);
+		contentEdge.remove();
+		checkAndRemoveContentNode(contentVertex);
+	}
+
+	private static void checkAndRemoveContentNode(Vertex contentVertex)
+			throws AnalysisStoreException {
+		if (!VertexType.CONTENT_TREE_ELEMENT.name().equals(
+				contentVertex.getProperty(TitanElementNames.VERTEX_TYPE))) {
+			throw new IllegalArgumentException(
+					"The vertex is not a content tree vertex.");
+		}
+		Iterable<Edge> incomingEdges = contentVertex.query()
+				.direction(Direction.IN).edges();
+		Iterator<Edge> incomingEdgesIterator = incomingEdges.iterator();
+		if (incomingEdgesIterator.hasNext()) {
+			// We have incoming edges, so this is a shared content. We are not
+			// allowed to remove it.
+			return;
+		}
+		Iterable<Edge> outgoingEdges = contentVertex.query()
+				.direction(Direction.OUT).edges();
+		Iterator<Edge> outgoingEdgesIterator = outgoingEdges.iterator();
+		while (outgoingEdgesIterator.hasNext()) {
+			Edge edge = outgoingEdgesIterator.next();
+			Vertex childVertex = edge.getVertex(Direction.IN);
+			VertexType vertexType = VertexType.valueOf((String) childVertex
+					.getProperty(TitanElementNames.VERTEX_TYPE));
+			if (vertexType == VertexType.CONTENT_TREE_ELEMENT) {
+				edge.remove();
+				checkAndRemoveContentNode(childVertex);
+			} else if (vertexType == VertexType.ANALYSIS) {
+				edge.remove();
+				removeAnalysis(childVertex);
+			} else {
+				throw new AnalysisStoreException("Unsupported vertex found.");
+			}
+		}
+		HashId hashId = HashId.valueOf((String) contentVertex
+				.getProperty(TitanElementNames.TREE_ELEMENT_HASH));
+		boolean isFile = (Boolean) contentVertex
+				.getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE);
+		contentVertex.remove();
+		AnalysisStoreCassandraUtils.removeAnalysisFile(hashId);
+		if (isFile) {
+			EvaluatorStoreCassandraUtils.deleteFileEvaluation(hashId);
+		} else {
+			EvaluatorStoreCassandraUtils.deleteDirectoryEvaluation(hashId);
+		}
+	}
+
+	public static void removeAnalysis(Vertex analysisVertex) {
+		if (!VertexType.ANALYSIS.name().equals(
+				analysisVertex.getProperty(TitanElementNames.VERTEX_TYPE))) {
+			throw new IllegalArgumentException(
+					"The vertex is not analysis vertex.");
+		}
+		Iterable<Edge> edges = analysisVertex.query().edges();
+		Iterator<Edge> edgeIterator = edges.iterator();
+		if (edgeIterator.hasNext()) {
+			while (edgeIterator.hasNext()) {
+				TitanUtils
+						.printEdgeInformation(System.err, edgeIterator.next());
+			}
+			throw new IllegalStateException(
+					"Vertex has still edges and cannot be deleted.");
+		}
+		analysisVertex.remove();
+	}
 }

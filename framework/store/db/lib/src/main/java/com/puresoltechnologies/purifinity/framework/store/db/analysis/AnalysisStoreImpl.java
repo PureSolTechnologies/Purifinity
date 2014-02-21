@@ -32,7 +32,7 @@ import com.puresoltechnologies.purifinity.framework.store.db.analysis.cassandra.
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.AnalysisStoreContentTreeUtils;
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.AnalysisStoreFileTreeUtils;
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.AnalysisStoreTitanUtils;
-import com.puresoltechnologies.purifinity.framework.store.db.evaluation.EvaluatorStoreUtils;
+import com.puresoltechnologies.purifinity.framework.store.db.evaluation.cassandra.BigTableUtils;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
@@ -137,12 +137,14 @@ public class AnalysisStoreImpl implements AnalysisStore {
 			throws AnalysisStoreException {
 		TitanGraph graph = TitanConnection.getGraph();
 		try {
-			Vertex vertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(
-					graph, projectUUID);
+			// delete analysis runs first
 			List<AnalysisRunInformation> runs = readAllRunInformation(projectUUID);
 			for (AnalysisRunInformation run : runs) {
 				removeAnalysisRun(projectUUID, run.getUUID());
 			}
+			// delete project
+			Vertex vertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(
+					graph, projectUUID);
 			Iterable<Edge> edges = vertex.query().edges();
 			if (edges.iterator().hasNext()) {
 				// We do not expect incoming edges (never!) and also no outgoing
@@ -151,6 +153,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 						"Analysis project has still edges connected. Database is inconsistent!");
 			}
 			graph.removeVertex(vertex);
+			AnalysisStoreCassandraUtils.removeProjectSettings(projectUUID);
 			graph.commit();
 		} catch (AnalysisStoreException e) {
 			graph.rollback();
@@ -327,17 +330,25 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		try {
 			Vertex runVertex = AnalysisStoreTitanUtils.findAnalysisRunVertex(
 					graph, projectUUID, runUUID);
+			// delete file tree first
 			Vertex fileTreeVertex = AnalysisStoreTitanUtils.findFileTreeVertex(
 					projectUUID, runUUID, runVertex);
 			if (fileTreeVertex != null) {
 				AnalysisStoreFileTreeUtils.deleteFileTree(fileTreeVertex);
 			}
+			// remove analysis run vertex
 			runVertex.remove();
+			// clear caches
+			AnalysisStoreCacheUtils
+					.clearAnalysisRunCaches(projectUUID, runUUID);
+			// remove run settings
 			AnalysisStoreCassandraUtils.removeAnalysisRunSettings(projectUUID,
 					runUUID);
-			AnalysisStoreCacheUtils.removeAnalysisRunCaches(projectUUID,
-					runUUID);
-			EvaluatorStoreUtils.removeAnalysisRun(projectUUID, runUUID);
+			// remove analysis run results
+			BigTableUtils.removeAnalysisRunResults(projectUUID, runUUID);
+			// cleanup content tree
+			AnalysisStoreContentTreeUtils
+					.checkAndRemoveAnalysisRunContent(runVertex);
 			graph.commit();
 		} catch (AnalysisStoreException e) {
 			graph.rollback();
