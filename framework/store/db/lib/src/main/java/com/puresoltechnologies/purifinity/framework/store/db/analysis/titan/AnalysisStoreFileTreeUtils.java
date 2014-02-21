@@ -385,7 +385,8 @@ public class AnalysisStoreFileTreeUtils {
 					.equals(edgeLabel)) {
 				deleteFileTree(edge.getVertex(Direction.IN));
 			} else if (TitanElementNames.HAS_CONTENT_LABEL.equals(edgeLabel)) {
-				// Content is not intended to be deleted.
+				// FIXME Add content deletion here for content nodes which do
+				// not have other incoming edges.
 				edge.remove();
 			} else if (TitanElementNames.HAS_ANALYSIS_LABEL.equals(edgeLabel)) {
 				edge.getVertex(Direction.IN).remove();

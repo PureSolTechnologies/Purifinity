@@ -32,6 +32,7 @@ import com.puresoltechnologies.purifinity.framework.store.db.analysis.cassandra.
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.AnalysisStoreContentTreeUtils;
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.AnalysisStoreFileTreeUtils;
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.titan.AnalysisStoreTitanUtils;
+import com.puresoltechnologies.purifinity.framework.store.db.evaluation.EvaluatorStoreUtils;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Vertex;
@@ -324,6 +325,7 @@ public class AnalysisStoreImpl implements AnalysisStore {
 					runUUID);
 			AnalysisStoreCacheUtils.removeAnalysisRunCaches(projectUUID,
 					runUUID);
+			EvaluatorStoreUtils.removeAnalysisRun(projectUUID, runUUID);
 			graph.commit();
 		} catch (AnalysisStoreException e) {
 			graph.rollback();
