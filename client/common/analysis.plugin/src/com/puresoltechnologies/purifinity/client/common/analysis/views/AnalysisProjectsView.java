@@ -3,12 +3,12 @@ package com.puresoltechnologies.purifinity.client.common.analysis.views;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.common.NotDefinedException;
-import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -35,6 +35,8 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.progress.UIJob;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
@@ -64,18 +66,18 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 		implements IJobChangeListener, ISelectionProvider, SelectionListener,
 		Refreshable, DatabaseTarget {
 
-	private static final ILog logger = Activator.getDefault().getLog();
+	private static final Logger logger = LoggerFactory
+			.getLogger(AnalysisProjectsView.class);
 
 	private Table projectsTable;
 	private TableViewer analysisProjectsViewer;
-	private ISelection selection = null;
+	private AnalysisProjectSelection selection = null;
 	private ToolItem addProject;
 	private ToolItem editProject;
 	private ToolItem deleteProject;
 
 	private final java.util.List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
-	private Composite parent = null;
 	private RefreshAction refreshAction = null;
 
 	private boolean enabled = true;
@@ -89,7 +91,6 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
 
-		this.parent = parent;
 		parent.setLayout(new FormLayout());
 		projectsTable = new Table(parent, SWT.BORDER);
 		projectsTable.addSelectionListener(this);
@@ -150,9 +151,7 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 
 	@Override
 	public void setFocus() {
-		if (parent != null) {
-			parent.setFocus();
-		}
+		projectsTable.setFocus();
 	}
 
 	@Override
@@ -168,7 +167,8 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	@Override
 	public void done(IJobChangeEvent event) {
 		Job job = event.getJob();
-		if (job.getClass().equals(AnalysisJob.class)) {
+		Class<? extends Job> jobClass = job.getClass();
+		if (jobClass.equals(AnalysisJob.class)) {
 			refresh();
 		}
 	}
@@ -218,12 +218,34 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 
 	@Override
 	public void setSelection(ISelection selection) {
-		this.selection = selection;
-		updateEnabledState();
-		for (ISelectionChangedListener listener : listeners) {
-			listener.selectionChanged(new SelectionChangedEvent(this,
-					getSelection()));
+		AnalysisProjectSelection newSelection = (AnalysisProjectSelection) selection;
+		if (hasSelectionChanged(newSelection)) {
+			this.selection = newSelection;
+			updateEnabledState();
+			for (ISelectionChangedListener listener : listeners) {
+				listener.selectionChanged(new SelectionChangedEvent(this,
+						getSelection()));
+			}
 		}
+	}
+
+	private boolean hasSelectionChanged(AnalysisProjectSelection newSelection) {
+		AnalysisProject newAnalysisProject = newSelection == null ? null
+				: newSelection.getAnalysisProject();
+		AnalysisProject oldAnalysisProject = selection == null ? null
+				: selection.getAnalysisProject();
+		if ((newAnalysisProject == null) && (oldAnalysisProject == null)) {
+			return false;
+		}
+		if ((newAnalysisProject == null) && (oldAnalysisProject != null)) {
+			return true;
+		}
+		if ((newAnalysisProject != null) && (oldAnalysisProject == null)) {
+			return true;
+		}
+		UUID oldUUID = oldAnalysisProject.getInformation().getUUID();
+		UUID newUUID = newAnalysisProject.getInformation().getUUID();
+		return !oldUUID.equals(newUUID);
 	}
 
 	@Override
@@ -252,8 +274,7 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 					NewAnalysisProjectHandler.class.getName(), null);
 		} catch (ExecutionException | NotDefinedException | NotEnabledException
 				| NotHandledException e) {
-			logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
-					.getName(), "Could not run new analysis!", e));
+			logger.error("Could not run new analysis!", e);
 		}
 	}
 
@@ -282,11 +303,9 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 						}
 						return Status.OK_STATUS;
 					} catch (AnalysisStoreException e) {
-						logger.log(new Status(
-								Status.ERROR,
-								AnalysisProjectsView.class.getName(),
+						logger.error(
 								"Could not retrieve analysis from analysis store!",
-								e));
+								e);
 						return new Status(Status.ERROR, Activator.getDefault()
 								.getBundle().getSymbolicName(),
 								"Could not delete projects.");
@@ -299,31 +318,31 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 
 	private void refreshAnalysisProjectList() {
 		try {
-			if (!projectsTable.isDisposed()) {
-				AnalysisStore store = AnalysisStoreFactory.getFactory()
-						.getInstance();
-				if (store != null) {
-					List<AnalysisProjectInformation> allAnalysisProjectInformation = store
-							.readAllAnalysisProjectInformation();
-					List<AnalysisProject> analysisProjects = new ArrayList<>();
-					for (AnalysisProjectInformation information : allAnalysisProjectInformation) {
-						AnalysisProjectSettings settings = store
-								.readAnalysisProjectSettings(information
-										.getUUID());
-						analysisProjects.add(new AnalysisProjectImpl(
-								information.getUUID(), information
-										.getCreationTime(), settings));
-					}
-
-					analysisProjectsViewer.setInput(analysisProjects);
-					updateEnabledState();
+			List<AnalysisProject> analysisProjects = new ArrayList<>();
+			AnalysisStore store = AnalysisStoreFactory.getFactory()
+					.getInstance();
+			if (store != null) {
+				List<AnalysisProjectInformation> allAnalysisProjectInformation = store
+						.readAllAnalysisProjectInformation();
+				for (AnalysisProjectInformation information : allAnalysisProjectInformation) {
+					AnalysisProjectSettings settings = store
+							.readAnalysisProjectSettings(information.getUUID());
+					AnalysisProjectImpl newItem = new AnalysisProjectImpl(
+							information.getUUID(),
+							information.getCreationTime(), settings);
+					analysisProjects.add(newItem);
 				}
+			} else {
+				logger.warn("No analysis store is available.");
+				return;
 			}
+			analysisProjectsViewer.setInput(analysisProjects);
+			processProjectSelection();
+			updateEnabledState();
 		} catch (AnalysisStoreException e) {
-			logger.log(new Status(Status.ERROR, AnalysisProjectsView.class
-					.getName(),
+			logger.error(
 					"Could not retrieve list of analyzes from analysis store!",
-					e));
+					e);
 		}
 	}
 
@@ -350,14 +369,19 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 		refreshAction.setEnabled(enabled && availableDatabase);
 		addProject.setEnabled(enabled && availableDatabase);
 		editProject.setEnabled(enabled && availableDatabase
-				&& (selection != null));
+				&& (selection != null)
+				&& (selection.getAnalysisProject() != null));
 		deleteProject.setEnabled(enabled && availableDatabase
-				&& (selection != null));
+				&& (selection != null)
+				&& (selection.getAnalysisProject() != null));
 	}
 
 	@Override
 	public void setDatabaseAvailable(boolean available) {
 		availableDatabase = available;
+		if (available) {
+			refresh();
+		}
 		updateEnabledState();
 	}
 }

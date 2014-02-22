@@ -35,7 +35,11 @@ public class EvaluationFileTreeViewer extends TreeViewer {
 	}
 
 	public void setInput(AnalysisRun analysisRun) {
-		super.setInput(analysisRun.getFileTree());
+		if (analysisRun != null) {
+			super.setInput(analysisRun.getFileTree());
+		} else {
+			super.setInput(null);
+		}
 		labelProvider.setAnalysisRun(analysisRun);
 	}
 

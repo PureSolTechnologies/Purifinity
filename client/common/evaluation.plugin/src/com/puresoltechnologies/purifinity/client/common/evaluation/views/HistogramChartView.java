@@ -248,23 +248,25 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	@Override
 	public void showEvaluation(AnalysisFileTree path) {
 		final List<Value<?>> histogramValues = new ArrayList<Value<?>>();
-		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
-			@Override
-			public WalkingAction visit(AnalysisFileTree node) {
-				if (!node.isFile()) {
+		if (path != null) {
+			TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
+				@Override
+				public WalkingAction visit(AnalysisFileTree node) {
+					if (!node.isFile()) {
+						return WalkingAction.PROCEED;
+					}
+					HashId hashId = node.getHashId();
+					List<Value<?>> valueList = values.getValues(hashId);
+					if (valueList != null) {
+						for (Value<?> value : valueList) {
+							histogramValues.add(value);
+						}
+					}
 					return WalkingAction.PROCEED;
 				}
-				HashId hashId = node.getHashId();
-				List<Value<?>> valueList = values.getValues(hashId);
-				if (valueList != null) {
-					for (Value<?> value : valueList) {
-						histogramValues.add(value);
-					}
-				}
-				return WalkingAction.PROCEED;
-			}
-		};
-		TreeWalker.walk(visitor, path);
+			};
+			TreeWalker.walk(visitor, path);
+		}
 		setupChart(histogramValues);
 	}
 

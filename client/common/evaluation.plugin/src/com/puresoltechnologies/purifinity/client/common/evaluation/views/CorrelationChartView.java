@@ -224,7 +224,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 				loadData();
 			} else {
 				AnalysisFileTree path = analysisSelection.getFileTreeNode();
-				if (path.isFile()) {
+				if ((path != null) && (path.isFile())) {
 					path = path.getParent();
 				}
 				showEvaluation(path);
@@ -302,43 +302,44 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 	@Override
 	public void showEvaluation(AnalysisFileTree path) {
 		final List<Mark2D<Double, Double>> correlationValues = new ArrayList<Mark2D<Double, Double>>();
-		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
-			@Override
-			public WalkingAction visit(AnalysisFileTree node) {
-				if (!node.isFile()) {
-					return WalkingAction.PROCEED;
-				}
-				HashId hashId = node.getHashId();
-
-				Map<String, Value<? extends Number>> xValueList = xValues
-						.getValues(hashId);
-				if (xValueList == null) {
-					return WalkingAction.PROCEED;
-				}
-				Map<String, Value<? extends Number>> yValueList = yValues
-						.getValues(hashId);
-				if (yValueList == null) {
-					return WalkingAction.PROCEED;
-				}
-
-				for (String codeRangeName : xValueList.keySet()) {
-
-					Double xValue = xValueList.get(codeRangeName).getValue()
-							.doubleValue();
-					Double yValue = yValueList.get(codeRangeName).getValue()
-							.doubleValue();
-					if ((xValue != null) && (yValue != null)) {
-						Mark2D<Double, Double> value = new GenericMark2D<Double, Double>(
-								xValue, yValue, node.getPathFile(false)
-										.toString(), node);
-						correlationValues.add(value);
+		if (path != null) {
+			TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
+				@Override
+				public WalkingAction visit(AnalysisFileTree node) {
+					if (!node.isFile()) {
+						return WalkingAction.PROCEED;
 					}
-				}
-				return WalkingAction.PROCEED;
-			}
-		};
-		TreeWalker.walk(visitor, path);
+					HashId hashId = node.getHashId();
 
+					Map<String, Value<? extends Number>> xValueList = xValues
+							.getValues(hashId);
+					if (xValueList == null) {
+						return WalkingAction.PROCEED;
+					}
+					Map<String, Value<? extends Number>> yValueList = yValues
+							.getValues(hashId);
+					if (yValueList == null) {
+						return WalkingAction.PROCEED;
+					}
+
+					for (String codeRangeName : xValueList.keySet()) {
+
+						Double xValue = xValueList.get(codeRangeName)
+								.getValue().doubleValue();
+						Double yValue = yValueList.get(codeRangeName)
+								.getValue().doubleValue();
+						if ((xValue != null) && (yValue != null)) {
+							Mark2D<Double, Double> value = new GenericMark2D<Double, Double>(
+									xValue, yValue, node.getPathFile(false)
+											.toString(), node);
+							correlationValues.add(value);
+						}
+					}
+					return WalkingAction.PROCEED;
+				}
+			};
+			TreeWalker.walk(visitor, path);
+		}
 		setupChart(correlationValues);
 	}
 

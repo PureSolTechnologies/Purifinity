@@ -34,9 +34,11 @@ public class AnalysisSelection implements ISelection {
 		this.analysisProject = analysisProject;
 		this.analysisRun = analysisRun;
 		this.fileTreeNode = fileTreeNode;
-		projectUUID = analysisProject.getInformation().getUUID();
-		runUUID = analysisRun.getInformation().getUUID();
-		parentTreeNode = fileTreeNode.getHashId();
+		projectUUID = analysisProject == null ? null : analysisProject
+				.getInformation().getUUID();
+		runUUID = analysisRun == null ? null : analysisRun.getInformation()
+				.getUUID();
+		parentTreeNode = fileTreeNode == null ? null : fileTreeNode.getHashId();
 	}
 
 	public AnalysisProject getAnalysisProject() {

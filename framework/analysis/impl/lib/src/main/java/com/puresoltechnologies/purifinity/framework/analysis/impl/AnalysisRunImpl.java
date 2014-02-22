@@ -136,4 +136,10 @@ public class AnalysisRunImpl implements AnalysisRun {
 	public AnalysisFileTree findTreeNode(HashId hashId) {
 		return hashIds.get(hashId);
 	}
+
+	@Override
+	public String toString() {
+		return getInformation().getStartTime().toString() + " ("
+				+ getInformation().getUUID() + ")";
+	}
 }

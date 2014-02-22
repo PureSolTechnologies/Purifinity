@@ -241,7 +241,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 				loadData();
 			} else {
 				AnalysisFileTree path = analysisSelection.getFileTreeNode();
-				if (path.isFile()) {
+				if ((path != null) && (path.isFile())) {
 					path = path.getParent();
 				}
 				showEvaluation(path);
@@ -317,7 +317,11 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 
 	@Override
 	public void showEvaluation(AnalysisFileTree path) {
-		label.setText(path.getPathFile(false).getPath());
+		if (path != null) {
+			label.setText(path.getPathFile(false).getPath());
+		} else {
+			label.setText("");
+		}
 		AreaMapData data = calculateAreaData(path);
 		setColorProvider();
 		areaMap.setData(data, mapParameterSelection.getUnit());
@@ -364,27 +368,32 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	 */
 	private AreaMapData calculateAreaData(AnalysisFileTree path) {
 		List<AreaMapData> childAreas = calculateChildAreaMaps(path);
-		HashId hashId = path.getHashId();
-		Map<String, Value<? extends Number>> mapResults = mapValues
-				.getMapValues(hashId);
-		Map<String, Value<?>> colorResults = mapValues.getColorValues(hashId);
-		if ((mapResults == null) || (mapResults.size() == 0)) {
-			return processAreaWithoutOwnValues(path,
-					childAreas.toArray(new AreaMapData[childAreas.size()]));
-		}
 		Double sum = 0.0;
 		Object secondaryValue = null;
-		for (String codeRangeName : mapResults.keySet()) {
-			sum += mapResults.get(codeRangeName).getValue().doubleValue();
-			if ((colorResults != null) && (colorResults.size() > 0)) {
-				if (secondaryValue == null) {
-					secondaryValue = colorResults.get(codeRangeName).getValue();
+		String pathName = "";
+		if (path != null) {
+			pathName = path.getPathFile(false).toString();
+			HashId hashId = path.getHashId();
+			Map<String, Value<? extends Number>> mapResults = mapValues
+					.getMapValues(hashId);
+			Map<String, Value<?>> colorResults = mapValues
+					.getColorValues(hashId);
+			if ((mapResults == null) || (mapResults.size() == 0)) {
+				return processAreaWithoutOwnValues(path,
+						childAreas.toArray(new AreaMapData[childAreas.size()]));
+			}
+			for (String codeRangeName : mapResults.keySet()) {
+				sum += mapResults.get(codeRangeName).getValue().doubleValue();
+				if ((colorResults != null) && (colorResults.size() > 0)) {
+					if (secondaryValue == null) {
+						secondaryValue = colorResults.get(codeRangeName)
+								.getValue();
+					}
 				}
 			}
 		}
-		return new AreaMapData(path.getPathFile(false).toString(), sum,
-				secondaryValue, childAreas.toArray(new AreaMapData[childAreas
-						.size()]));
+		return new AreaMapData(pathName, sum, secondaryValue,
+				childAreas.toArray(new AreaMapData[childAreas.size()]));
 	}
 
 	/**
@@ -398,8 +407,11 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	 * @throws EvaluationStoreException
 	 */
 	private List<AreaMapData> calculateChildAreaMaps(AnalysisFileTree path) {
-		List<AnalysisFileTree> children = path.getChildren();
 		List<AreaMapData> childAreas = new ArrayList<AreaMapData>();
+		if (path == null) {
+			return childAreas;
+		}
+		List<AnalysisFileTree> children = path.getChildren();
 		for (int i = 0; i < children.size(); i++) {
 			AreaMapData areaData = calculateAreaData(children.get(i));
 			if (areaData != null) {

@@ -185,40 +185,41 @@ public class MaintainabilityIndexParetoChartView extends
 		final List<Mark2D<String, Double>> paretoValuesMI = new ArrayList<>();
 		final Map<String, Mark2D<String, Double>> paretoValuesMIwoc = new HashMap<>();
 		final Map<String, Mark2D<String, Double>> paretoValuesMIcw = new HashMap<>();
-		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
-			@Override
-			public WalkingAction visit(AnalysisFileTree node) {
-				if (!node.isFile()) {
+		if (path != null) {
+			TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
+				@Override
+				public WalkingAction visit(AnalysisFileTree node) {
+					if (!node.isFile()) {
+						return WalkingAction.PROCEED;
+					}
+					HashId hashId = node.getHashId();
+
+					Map<String, Value<? extends Number>> miList = mi
+							.getValues(hashId);
+					if (miList == null) {
+						return WalkingAction.PROCEED;
+					}
+					Map<String, Value<? extends Number>> miWocList = miWoc
+							.getValues(hashId);
+					if (miWocList == null) {
+						return WalkingAction.PROCEED;
+					}
+					Map<String, Value<? extends Number>> miCwList = miCw
+							.getValues(hashId);
+					if (miCwList == null) {
+						return WalkingAction.PROCEED;
+					}
+
+					extractValues(paretoValuesMI, node, miList);
+					extractValues(paretoValuesMIcw, node, miCwList);
+					extractValues(paretoValuesMIwoc, node, miWocList);
+
 					return WalkingAction.PROCEED;
 				}
-				HashId hashId = node.getHashId();
 
-				Map<String, Value<? extends Number>> miList = mi
-						.getValues(hashId);
-				if (miList == null) {
-					return WalkingAction.PROCEED;
-				}
-				Map<String, Value<? extends Number>> miWocList = miWoc
-						.getValues(hashId);
-				if (miWocList == null) {
-					return WalkingAction.PROCEED;
-				}
-				Map<String, Value<? extends Number>> miCwList = miCw
-						.getValues(hashId);
-				if (miCwList == null) {
-					return WalkingAction.PROCEED;
-				}
-
-				extractValues(paretoValuesMI, node, miList);
-				extractValues(paretoValuesMIcw, node, miCwList);
-				extractValues(paretoValuesMIwoc, node, miWocList);
-
-				return WalkingAction.PROCEED;
-			}
-
-		};
-		TreeWalker.walk(visitor, path);
-
+			};
+			TreeWalker.walk(visitor, path);
+		}
 		setupChart(paretoValuesMI, paretoValuesMIwoc, paretoValuesMIcw);
 	}
 

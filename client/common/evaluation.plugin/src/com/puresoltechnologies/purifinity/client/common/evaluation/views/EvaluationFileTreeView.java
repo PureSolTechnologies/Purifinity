@@ -35,7 +35,6 @@ import com.puresoltechnologies.purifinity.client.common.analysis.editors.FileAna
 import com.puresoltechnologies.purifinity.client.common.analysis.editors.FileAnalysisEditorInput;
 import com.puresoltechnologies.purifinity.client.common.analysis.editors.NotAnalyzedEditor;
 import com.puresoltechnologies.purifinity.client.common.analysis.editors.NotAnalyzedEditorInput;
-import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisProjectSelection;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisRunSelection;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
@@ -49,13 +48,12 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 		implements ISelectionListener, IDoubleClickListener,
 		ISelectionProvider, SelectionListener, PartSettingsCapability {
 
-	private AnalysisProject analysis;
-	private AnalysisRun analysisRun;
 	private Tree fileTree;
 	private EvaluationFileTreeViewer fileTreeViewer;
-	private AnalysisSelection fileAnalysisSelection;
+
+	private AnalysisSelection analysisSelection;
 	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
-	private AnalysisFileTree lastSelection;
+	private AnalysisFileTree lastFileTreeSelection;
 
 	private Combo evaluatorCombo;
 	private EvaluatorComboViewer comboViewer;
@@ -146,22 +144,29 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 		if (part == this) {
 			return;
 		}
-		if (selection instanceof AnalysisProjectSelection) {
-			AnalysisProjectSelection analysisSelection = (AnalysisProjectSelection) selection;
-			analysis = analysisSelection.getAnalysisProject();
-		} else if (selection instanceof AnalysisRunSelection) {
+		if (selection instanceof AnalysisRunSelection) {
 			AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
-			setAnalysisRun(analysisRunSelection.getAnalysisRun());
+			AnalysisSelection newSelection = new AnalysisSelection(
+					analysisRunSelection.getAnalysisProject(),
+					analysisRunSelection.getAnalysisRun(), null);
+			if (!newSelection.equals(analysisSelection)) {
+				analysisSelection = newSelection;
+				setAnalysisRun(analysisRunSelection.getAnalysisRun());
+				setSelection(newSelection);
+			}
 		} else if (selection instanceof AnalysisSelection) {
-			AnalysisSelection analysisSelection = (AnalysisSelection) selection;
-			analysis = analysisSelection.getAnalysisProject();
-			setAnalysisRun(analysisSelection.getAnalysisRun());
-			fileTreeViewer.setSelection(analysisSelection.getFileTreeNode());
+			AnalysisSelection newSelection = (AnalysisSelection) selection;
+			if (!newSelection.equals(analysisSelection)) {
+				analysisSelection = newSelection;
+				setAnalysisRun(analysisSelection.getAnalysisRun());
+				fileTreeViewer
+						.setSelection(analysisSelection.getFileTreeNode());
+				setSelection(newSelection);
+			}
 		}
 	}
 
 	private void setAnalysisRun(AnalysisRun analysisRun) {
-		this.analysisRun = analysisRun;
 		fileTreeViewer.setInput(analysisRun);
 		fileTree.redraw();
 		fileTreeViewer.refresh();
@@ -187,7 +192,10 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 			throws PartInitException {
 		AnalysisFileTree firstElement = (AnalysisFileTree) selection
 				.getFirstElement();
-		fileAnalysisSelection = new AnalysisSelection(analysis, analysisRun,
+		AnalysisProject analysisProject = analysisSelection
+				.getAnalysisProject();
+		AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
+		analysisSelection = new AnalysisSelection(analysisProject, analysisRun,
 				firstElement);
 		AnalysisInformation analyzedCode = analysisRun
 				.findAnalyzedCode(firstElement.getPathFile(false).getPath());
@@ -219,7 +227,7 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 
 	@Override
 	public ISelection getSelection() {
-		return fileAnalysisSelection;
+		return analysisSelection;
 	}
 
 	@Override
@@ -230,10 +238,10 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 
 	@Override
 	public void setSelection(ISelection selection) {
-		fileAnalysisSelection = (AnalysisSelection) selection;
+		analysisSelection = (AnalysisSelection) selection;
 		for (ISelectionChangedListener listener : selectionChangedListener) {
 			listener.selectionChanged(new SelectionChangedEvent(this,
-					fileAnalysisSelection));
+					analysisSelection));
 		}
 	}
 
@@ -254,20 +262,23 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 		TreeSelection selection = (TreeSelection) fileTreeViewer.getSelection();
 		Object first = selection.getFirstElement();
 		if (first != null) {
+			AnalysisProject analysisProject = analysisSelection
+					.getAnalysisProject();
+			AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
 			if (first.getClass().equals(AnalysisFileTree.class)) {
 				AnalysisFileTree firstElement = (AnalysisFileTree) first;
-				if (!firstElement.equals(lastSelection)) {
+				if (!firstElement.equals(lastFileTreeSelection)) {
 					AnalysisSelection fileAnalysisSelection = new AnalysisSelection(
-							analysis, analysisRun, firstElement);
+							analysisProject, analysisRun, firstElement);
 					setSelection(fileAnalysisSelection);
-					lastSelection = firstElement;
+					lastFileTreeSelection = firstElement;
 				}
 			} else if (first.getClass().equals(String.class)) {
 				AnalysisFileTree firstElement = analysisRun.getFileTree();
 				AnalysisSelection fileAnalysisSelection = new AnalysisSelection(
-						analysis, analysisRun, firstElement);
+						analysisProject, analysisRun, firstElement);
 				setSelection(fileAnalysisSelection);
-				lastSelection = firstElement;
+				lastFileTreeSelection = firstElement;
 			}
 		}
 	}

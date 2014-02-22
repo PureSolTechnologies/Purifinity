@@ -118,4 +118,13 @@ public class AnalysisProjectImpl implements AnalysisProject {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return getSettings().getName()
+				+ ": "
+				+ RepositoryLocationCreator.createFromSerialization(
+						getSettings().getRepositoryLocation())
+						.getHumanReadableLocationString() + " ("
+				+ getInformation().getUUID() + ")";
+	}
 }
