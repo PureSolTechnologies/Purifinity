@@ -35,6 +35,7 @@ import com.puresoltechnologies.purifinity.client.common.analysis.editors.FileAna
 import com.puresoltechnologies.purifinity.client.common.analysis.editors.FileAnalysisEditorInput;
 import com.puresoltechnologies.purifinity.client.common.analysis.editors.NotAnalyzedEditor;
 import com.puresoltechnologies.purifinity.client.common.analysis.editors.NotAnalyzedEditorInput;
+import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisProjectSelection;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisRunSelection;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
@@ -48,13 +49,17 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 		implements ISelectionListener, IDoubleClickListener,
 		ISelectionProvider, SelectionListener, PartSettingsCapability {
 
-	private Tree fileTree;
-	private EvaluationFileTreeViewer fileTreeViewer;
+	private AnalysisProject analysisProject = null;
+	private AnalysisRun analysisRun = null;
+	private AnalysisFileTree analysisFileTree = null;
 
-	private AnalysisSelection analysisSelection;
-	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
+	private AnalysisSelection selection;
 	private AnalysisFileTree lastFileTreeSelection;
 
+	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
+
+	private Tree fileTree;
+	private EvaluationFileTreeViewer fileTreeViewer;
 	private Combo evaluatorCombo;
 	private EvaluatorComboViewer comboViewer;
 
@@ -144,32 +149,111 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 		if (part == this) {
 			return;
 		}
-		if (selection instanceof AnalysisRunSelection) {
+		if (selection instanceof AnalysisProjectSelection) {
+			AnalysisProjectSelection analysisProjectSelection = (AnalysisProjectSelection) selection;
+			if (hasSelectionChange(analysisProjectSelection)) {
+				analysisProject = analysisProjectSelection.getAnalysisProject();
+				analysisRun = null;
+				analysisFileTree = null;
+				refresh();
+			}
+		} else if (selection instanceof AnalysisRunSelection) {
 			AnalysisRunSelection analysisRunSelection = (AnalysisRunSelection) selection;
-			AnalysisSelection newSelection = new AnalysisSelection(
-					analysisRunSelection.getAnalysisProject(),
-					analysisRunSelection.getAnalysisRun(), null);
-			if (!newSelection.equals(analysisSelection)) {
-				analysisSelection = newSelection;
-				setAnalysisRun(analysisRunSelection.getAnalysisRun());
-				setSelection(newSelection);
+			if (hasSelectionChanged(analysisRunSelection)) {
+				analysisProject = analysisRunSelection.getAnalysisProject();
+				analysisRun = analysisRunSelection.getAnalysisRun();
+				analysisFileTree = analysisRun.getFileTree();
+				refresh();
 			}
 		} else if (selection instanceof AnalysisSelection) {
-			AnalysisSelection newSelection = (AnalysisSelection) selection;
-			if (!newSelection.equals(analysisSelection)) {
-				analysisSelection = newSelection;
-				setAnalysisRun(analysisSelection.getAnalysisRun());
-				fileTreeViewer
-						.setSelection(analysisSelection.getFileTreeNode());
-				setSelection(newSelection);
+			AnalysisSelection analysisSelection = (AnalysisSelection) selection;
+			if (hasSelectionChanged(analysisSelection)) {
+				analysisProject = analysisSelection.getAnalysisProject();
+				analysisRun = analysisSelection.getAnalysisRun();
+				analysisFileTree = analysisSelection.getFileTreeNode();
+				refresh();
 			}
+		} else {
+			return;
 		}
 	}
 
-	private void setAnalysisRun(AnalysisRun analysisRun) {
+	private boolean hasSelectionChange(
+			AnalysisProjectSelection analysisProjectSelection) {
+		return hasChanged(analysisProjectSelection.getAnalysisProject());
+	}
+
+	private boolean hasChanged(AnalysisProject newAnalysisProject) {
+		if ((analysisProject == null) && (newAnalysisProject == null)) {
+			return false;
+		}
+		if (((analysisProject == null) && (newAnalysisProject != null)) || //
+				((analysisProject != null) && (newAnalysisProject == null))) {
+			return true;
+		}
+		if (!analysisProject.getInformation().getUUID()
+				.equals(newAnalysisProject.getInformation().getUUID())) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean hasSelectionChanged(
+			AnalysisRunSelection analysisRunSelection) {
+		if (hasChanged(analysisRunSelection.getAnalysisProject())) {
+			return true;
+		}
+		return hasChanged(analysisRunSelection.getAnalysisRun());
+	}
+
+	private boolean hasChanged(AnalysisRun newAnalysisRun) {
+		if ((analysisRun == null) && (newAnalysisRun == null)) {
+			return false;
+		}
+		if (((analysisRun == null) && (newAnalysisRun != null)) || //
+				((analysisRun != null) && (newAnalysisRun == null))) {
+			return true;
+		}
+		if (!analysisRun.getInformation().getUUID()
+				.equals(newAnalysisRun.getInformation().getUUID())) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean hasSelectionChanged(AnalysisSelection analysisSelection) {
+		if (hasChanged(analysisSelection.getAnalysisProject())) {
+			return true;
+		}
+		if (hasChanged(analysisSelection.getAnalysisRun())) {
+			return true;
+		}
+		return hasChanged(analysisSelection.getFileTreeNode());
+	}
+
+	private boolean hasChanged(AnalysisFileTree newFileTreeNode) {
+		if ((analysisFileTree == null) && (newFileTreeNode == null)) {
+			return false;
+		}
+		if (((analysisFileTree == null) && (newFileTreeNode != null)) || //
+				((analysisFileTree != null) && (newFileTreeNode == null))) {
+			return true;
+		}
+		if (!analysisFileTree.getHashId().equals(newFileTreeNode.getHashId())) {
+			return true;
+		}
+		return false;
+	}
+
+	private void refresh() {
+		setSelection(new AnalysisSelection(analysisProject, analysisRun,
+				analysisFileTree));
 		fileTreeViewer.setInput(analysisRun);
-		fileTree.redraw();
-		fileTreeViewer.refresh();
+		if (analysisRun != null) {
+			fileTreeViewer.setSelection(selection.getFileTreeNode());
+			fileTree.redraw();
+			fileTreeViewer.refresh();
+		}
 	}
 
 	@Override
@@ -188,14 +272,13 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 		}
 	}
 
-	private void processDoubleClickOnFileTree(TreeSelection selection)
+	private void processDoubleClickOnFileTree(TreeSelection treeSelection)
 			throws PartInitException {
-		AnalysisFileTree firstElement = (AnalysisFileTree) selection
+		AnalysisFileTree firstElement = (AnalysisFileTree) treeSelection
 				.getFirstElement();
-		AnalysisProject analysisProject = analysisSelection
-				.getAnalysisProject();
-		AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
-		analysisSelection = new AnalysisSelection(analysisProject, analysisRun,
+		AnalysisProject analysisProject = selection.getAnalysisProject();
+		AnalysisRun analysisRun = selection.getAnalysisRun();
+		selection = new AnalysisSelection(analysisProject, analysisRun,
 				firstElement);
 		AnalysisInformation analyzedCode = analysisRun
 				.findAnalyzedCode(firstElement.getPathFile(false).getPath());
@@ -227,7 +310,7 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 
 	@Override
 	public ISelection getSelection() {
-		return analysisSelection;
+		return selection;
 	}
 
 	@Override
@@ -238,10 +321,13 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 
 	@Override
 	public void setSelection(ISelection selection) {
-		analysisSelection = (AnalysisSelection) selection;
-		for (ISelectionChangedListener listener : selectionChangedListener) {
-			listener.selectionChanged(new SelectionChangedEvent(this,
-					analysisSelection));
+		AnalysisSelection newSelection = (AnalysisSelection) selection;
+		if (!newSelection.equals(this.selection)) {
+			this.selection = newSelection;
+			for (ISelectionChangedListener listener : selectionChangedListener) {
+				listener.selectionChanged(new SelectionChangedEvent(this,
+						getSelection()));
+			}
 		}
 	}
 
@@ -259,12 +345,12 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 	}
 
 	private void processFileTreeSelection() {
-		TreeSelection selection = (TreeSelection) fileTreeViewer.getSelection();
-		Object first = selection.getFirstElement();
+		TreeSelection treeSelection = (TreeSelection) fileTreeViewer
+				.getSelection();
+		Object first = treeSelection.getFirstElement();
 		if (first != null) {
-			AnalysisProject analysisProject = analysisSelection
-					.getAnalysisProject();
-			AnalysisRun analysisRun = analysisSelection.getAnalysisRun();
+			AnalysisProject analysisProject = selection.getAnalysisProject();
+			AnalysisRun analysisRun = selection.getAnalysisRun();
 			if (first.getClass().equals(AnalysisFileTree.class)) {
 				AnalysisFileTree firstElement = (AnalysisFileTree) first;
 				if (!firstElement.equals(lastFileTreeSelection)) {

@@ -50,14 +50,14 @@ public class EvaluationFileTreeViewer extends TreeViewer {
 
 	public void setSelection(AnalysisFileTree node) {
 		List<Object> path = new ArrayList<>();
-		do {
+		while (node != null) {
 			if (node.getParent() != null) {
 				path.add(node);
 			} else {
 				path.add(node.getName());
 			}
 			node = node.getParent();
-		} while (node != null);
+		}
 		Collections.reverse(path);
 		TreeSelection structuredSelection = new TreeSelection(new TreePath(
 				path.toArray()));

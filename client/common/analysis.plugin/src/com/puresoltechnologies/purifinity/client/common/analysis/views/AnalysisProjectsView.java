@@ -3,7 +3,6 @@ package com.puresoltechnologies.purifinity.client.common.analysis.views;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.NotEnabledException;
@@ -75,6 +74,7 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	private ToolItem addProject;
 	private ToolItem editProject;
 	private ToolItem deleteProject;
+	private ToolItem unselectProject;
 
 	private final java.util.List<ISelectionChangedListener> listeners = new ArrayList<ISelectionChangedListener>();
 
@@ -130,6 +130,10 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 		deleteProject.setImage(ClientImages
 				.getImage(ClientImages.ANALYSIS_DELETE_16x16));
 		deleteProject.addSelectionListener(this);
+
+		unselectProject = new ToolItem(toolBar, SWT.NONE);
+		unselectProject.setText("Unselect");
+		unselectProject.addSelectionListener(this);
 
 		Job.getJobManager().addJobChangeListener(this);
 		getSite().setSelectionProvider(this);
@@ -219,7 +223,7 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	@Override
 	public void setSelection(ISelection selection) {
 		AnalysisProjectSelection newSelection = (AnalysisProjectSelection) selection;
-		if (hasSelectionChanged(newSelection)) {
+		if (!newSelection.equals(this.selection)) {
 			this.selection = newSelection;
 			updateEnabledState();
 			for (ISelectionChangedListener listener : listeners) {
@@ -227,25 +231,6 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 						getSelection()));
 			}
 		}
-	}
-
-	private boolean hasSelectionChanged(AnalysisProjectSelection newSelection) {
-		AnalysisProject newAnalysisProject = newSelection == null ? null
-				: newSelection.getAnalysisProject();
-		AnalysisProject oldAnalysisProject = selection == null ? null
-				: selection.getAnalysisProject();
-		if ((newAnalysisProject == null) && (oldAnalysisProject == null)) {
-			return false;
-		}
-		if ((newAnalysisProject == null) && (oldAnalysisProject != null)) {
-			return true;
-		}
-		if ((newAnalysisProject != null) && (oldAnalysisProject == null)) {
-			return true;
-		}
-		UUID oldUUID = oldAnalysisProject.getInformation().getUUID();
-		UUID newUUID = newAnalysisProject.getInformation().getUUID();
-		return !oldUUID.equals(newUUID);
 	}
 
 	@Override
@@ -258,12 +243,9 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 			editProject();
 		} else if (event.getSource() == deleteProject) {
 			deleteProject();
+		} else if (event.getSource() == unselectProject) {
+			unselectProject();
 		}
-	}
-
-	private void editProject() {
-		MessageDialog.openInformation(getSite().getShell(), "Not implemented",
-				"This functionality is not implemented, yet!");
 	}
 
 	private void addProject() {
@@ -276,6 +258,11 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 				| NotHandledException e) {
 			logger.error("Could not run new analysis!", e);
 		}
+	}
+
+	private void editProject() {
+		MessageDialog.openInformation(getSite().getShell(), "Not implemented",
+				"This functionality is not implemented, yet!");
 	}
 
 	private void deleteProject() {
@@ -314,6 +301,11 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 			};
 			job.schedule();
 		}
+	}
+
+	private void unselectProject() {
+		analysisProjectsViewer.setSelection(null);
+		setSelection(new AnalysisProjectSelection(null));
 	}
 
 	private void refreshAnalysisProjectList() {

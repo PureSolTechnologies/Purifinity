@@ -3,7 +3,6 @@ package com.puresoltechnologies.purifinity.client.common.analysis.views;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -63,7 +62,6 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
-	private AnalysisProject analysisProject;
 	private Table analysisRunsTable;
 	private TableViewer analysisRunsViewer;
 	private ToolItem addAnalysisRun;
@@ -71,6 +69,7 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	private ToolItem deleteAnalysisRun;
 	private RefreshAction refreshAction;
 
+	private AnalysisProject analysisProject = null;
 	private AnalysisRunSelection selection = null;
 	private boolean enabled = true;
 	private boolean availableDatabase = true;
@@ -185,7 +184,7 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	@Override
 	public void setSelection(ISelection selection) {
 		AnalysisRunSelection newSelection = (AnalysisRunSelection) selection;
-		if (hasSelectionChanged(newSelection)) {
+		if (!newSelection.equals(this.selection)) {
 			this.selection = newSelection;
 			updateEnabledState();
 			for (ISelectionChangedListener listener : listeners) {
@@ -193,25 +192,6 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 						getSelection()));
 			}
 		}
-	}
-
-	private boolean hasSelectionChanged(AnalysisRunSelection newSelection) {
-		AnalysisRun newAnalysisRun = newSelection == null ? null : newSelection
-				.getAnalysisRun();
-		AnalysisRun oldAnalysisRun = selection == null ? null : selection
-				.getAnalysisRun();
-		if ((newAnalysisRun == null) && (oldAnalysisRun == null)) {
-			return false;
-		}
-		if ((newAnalysisRun == null) && (oldAnalysisRun != null)) {
-			return true;
-		}
-		if ((newAnalysisRun != null) && (oldAnalysisRun == null)) {
-			return true;
-		}
-		UUID oldUUID = oldAnalysisRun.getInformation().getUUID();
-		UUID newUUID = newAnalysisRun.getInformation().getUUID();
-		return !oldUUID.equals(newUUID);
 	}
 
 	@Override
@@ -308,12 +288,12 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	}
 
 	private void processAnalysisProjectSelection(
-			AnalysisProjectSelection selection) {
+			AnalysisProjectSelection newSelection) {
 		try {
-			AnalysisProject newAnalysisProject = selection.getAnalysisProject();
+			AnalysisProject newAnalysisProject = newSelection
+					.getAnalysisProject();
 			if (hasSelectionChanged(newAnalysisProject)) {
 				analysisProject = newAnalysisProject;
-				updateEnabledState();
 				if (analysisProject != null) {
 					analysisRunsViewer.setInput(analysisProject
 							.getAllRunInformation());
@@ -330,18 +310,18 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	}
 
 	private boolean hasSelectionChanged(AnalysisProject newAnalysisProject) {
-		if ((newAnalysisProject == null) && (analysisProject == null)) {
+		if ((analysisProject == null) && (newAnalysisProject == null)) {
 			return false;
 		}
-		if ((newAnalysisProject == null) && (analysisProject != null)) {
+		if (((analysisProject == null) && (newAnalysisProject != null))
+				|| ((analysisProject != null) && (newAnalysisProject == null))) {
 			return true;
 		}
-		if ((newAnalysisProject != null) && (analysisProject == null)) {
+		if (!analysisProject.getInformation().getUUID()
+				.equals(newAnalysisProject.getInformation().getUUID())) {
 			return true;
 		}
-		UUID oldUUID = analysisProject.getInformation().getUUID();
-		UUID newUUID = newAnalysisProject.getInformation().getUUID();
-		return !oldUUID.equals(newUUID);
+		return false;
 	}
 
 	@Override

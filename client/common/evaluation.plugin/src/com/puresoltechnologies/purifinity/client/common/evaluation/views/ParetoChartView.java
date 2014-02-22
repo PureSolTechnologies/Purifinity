@@ -264,36 +264,37 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	@Override
 	public void showEvaluation(AnalysisFileTree path) {
 		final List<Mark2D<String, Double>> paretoValues = new ArrayList<>();
-		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
-			@Override
-			public WalkingAction visit(AnalysisFileTree node) {
-				if (!node.isFile()) {
+		if (path != null) {
+			TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
+				@Override
+				public WalkingAction visit(AnalysisFileTree node) {
+					if (!node.isFile()) {
+						return WalkingAction.PROCEED;
+					}
+					HashId hashId = node.getHashId();
+
+					Map<String, Value<? extends Number>> valueList = values
+							.getValues(hashId);
+					if (valueList == null) {
+						return WalkingAction.PROCEED;
+					}
+
+					for (Entry<String, Value<? extends Number>> entry : valueList
+							.entrySet()) {
+						String codeRangeName = entry.getKey();
+						Number value = entry.getValue().getValue();
+						String category = node.getPathFile(false).getPath()
+								+ "." + codeRangeName;
+						paretoValues.add(new GenericMark2D<String, Double>(
+								category, value.doubleValue(),
+								codeRangeTypeSelection.getName() + " "
+										+ codeRangeName, node));
+					}
 					return WalkingAction.PROCEED;
 				}
-				HashId hashId = node.getHashId();
-
-				Map<String, Value<? extends Number>> valueList = values
-						.getValues(hashId);
-				if (valueList == null) {
-					return WalkingAction.PROCEED;
-				}
-
-				for (Entry<String, Value<? extends Number>> entry : valueList
-						.entrySet()) {
-					String codeRangeName = entry.getKey();
-					Number value = entry.getValue().getValue();
-					String category = node.getPathFile(false).getPath() + "."
-							+ codeRangeName;
-					paretoValues.add(new GenericMark2D<String, Double>(
-							category, value.doubleValue(),
-							codeRangeTypeSelection.getName() + " "
-									+ codeRangeName, node));
-				}
-				return WalkingAction.PROCEED;
-			}
-		};
-		TreeWalker.walk(visitor, path);
-
+			};
+			TreeWalker.walk(visitor, path);
+		}
 		setupChart(paretoValues);
 	}
 

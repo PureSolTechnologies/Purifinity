@@ -41,7 +41,7 @@ public class AnalysisRunContentTreeContentProvider implements
 
 	@Override
 	public Object getParent(Object element) {
-		if (element instanceof String) {
+		if ((element instanceof String) || (fileTree == null)) {
 			return null;
 		} else {
 			AnalysisFileTree input = (AnalysisFileTree) element;
