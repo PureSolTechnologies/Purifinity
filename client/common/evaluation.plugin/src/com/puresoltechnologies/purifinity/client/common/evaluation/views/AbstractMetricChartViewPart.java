@@ -126,4 +126,10 @@ public abstract class AbstractMetricChartViewPart extends
 		}
 	}
 
+	protected boolean isFullSelection(AnalysisSelection analysisSelection) {
+		return (analysisSelection != null)
+				&& (analysisSelection.getAnalysisProject() != null)
+				&& (analysisSelection.getAnalysisRun() != null)
+				&& (analysisSelection.getFileTreeNode() != null);
+	}
 }

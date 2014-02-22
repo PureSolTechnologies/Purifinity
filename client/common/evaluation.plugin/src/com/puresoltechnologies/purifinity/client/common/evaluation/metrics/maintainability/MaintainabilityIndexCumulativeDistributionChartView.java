@@ -112,7 +112,7 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 	@Override
 	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
-		if (analysisSelection != null) {
+		if (isFullSelection(analysisSelection)) {
 			if (wasSelectionChanged()) {
 				oldAnalysisSelection = analysisSelection;
 				loadData();

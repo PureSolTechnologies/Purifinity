@@ -11,6 +11,7 @@ import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -24,7 +25,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.CodeRangeComboViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
-import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractEvaluationView;
+import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractMetricViewPart;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricDirectoryResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricFileResults;
@@ -34,7 +35,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreExc
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
-public class HalsteadMetricView extends AbstractEvaluationView implements
+public class HalsteadMetricView extends AbstractMetricViewPart implements
 		ISelectionChangedListener {
 
 	private Combo codeRangeCombo;
@@ -186,7 +187,8 @@ public class HalsteadMetricView extends AbstractEvaluationView implements
 	}
 
 	@Override
-	protected void handleChangedAnalysisSelection() throws EvaluationStoreException {
+	protected void handleChangedAnalysisSelection()
+			throws EvaluationStoreException {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
 			path = analysisSelection.getFileTreeNode();
@@ -215,6 +217,36 @@ public class HalsteadMetricView extends AbstractEvaluationView implements
 								"Could not handle new selection.", e));
 			}
 		}
+	}
+
+	@Override
+	public void showSettings() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void applySettings() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void closeSettings() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void refresh() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void export() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void print(Printer printer, String printJobName) {
+		// TODO Auto-generated method stub
 	}
 
 }

@@ -212,7 +212,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 	@Override
 	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
-		if ((analysisSelection != null) && (xMetricSelection != null)
+		if ((isFullSelection(analysisSelection)) && (xMetricSelection != null)
 				&& (xParameterSelection != null) && (yMetricSelection != null)
 				&& (yParameterSelection != null)) {
 			if (wasSelectionChanged()) {

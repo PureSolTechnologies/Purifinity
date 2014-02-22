@@ -178,8 +178,8 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	@Override
 	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
-		if ((analysisSelection != null) && (evaluatorSelection != null)
-				&& (parameterSelection != null)) {
+		if ((isFullSelection(analysisSelection))
+				&& (evaluatorSelection != null) && (parameterSelection != null)) {
 			if (wasSelectionChanged()) {
 				oldAnalysisSelection = analysisSelection;
 				oldEvaluatorSelection = evaluatorSelection;

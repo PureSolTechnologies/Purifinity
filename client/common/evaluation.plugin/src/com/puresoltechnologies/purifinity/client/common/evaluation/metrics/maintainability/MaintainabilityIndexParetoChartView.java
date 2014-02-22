@@ -99,13 +99,11 @@ public class MaintainabilityIndexParetoChartView extends
 	@Override
 	public void showSettings() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void applySettings() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -116,7 +114,7 @@ public class MaintainabilityIndexParetoChartView extends
 	@Override
 	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
-		if (analysisSelection != null) {
+		if (isFullSelection(analysisSelection)) {
 			if (wasSelectionChanged()) {
 				oldAnalysisSelection = analysisSelection;
 				loadData();
@@ -167,7 +165,6 @@ public class MaintainabilityIndexParetoChartView extends
 				monitor.worked(1);
 				monitor.done();
 				new UIJob("Draw Maintainability Index Pareto Chart") {
-
 					@Override
 					public IStatus runInUIThread(IProgressMonitor monitor) {
 						showEvaluation(analysisSelection.getFileTreeNode());

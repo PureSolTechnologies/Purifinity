@@ -55,7 +55,8 @@ import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapData;
 import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapDataProvider;
 import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapDataProviderFactory;
 
-public class MetricsMapView extends AbstractMetricViewPart implements Printable {
+public class MetricsMapView extends AbstractMetricChartViewPart implements
+		Printable {
 
 	private AnalysisSelection oldAnalysisSelection = null;
 
@@ -214,11 +215,6 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	}
 
 	@Override
-	public void setFocus() {
-		areaMap.setFocus();
-	}
-
-	@Override
 	public void refresh() {
 		if (settingsDialog != null) {
 			settingsDialog.refresh();
@@ -228,7 +224,8 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 	@Override
 	protected void handleChangedAnalysisSelection() {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
-		if ((analysisSelection != null) && (mapMetricSelection != null)
+		if ((isFullSelection(analysisSelection))
+				&& (mapMetricSelection != null)
 				&& (mapParameterSelection != null)
 				&& (colorMetricSelection != null)
 				&& (colorParameterSelection != null)) {
