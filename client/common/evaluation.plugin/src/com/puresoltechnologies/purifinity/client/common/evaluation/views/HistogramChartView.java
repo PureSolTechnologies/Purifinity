@@ -61,8 +61,6 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	private HistogramChartViewSettingsDialog settingsDialog;
 
-	private AnalysisSelection oldAnalysisSelection = null;
-
 	private EvaluatorFactory evaluatorSelection = null;
 	private EvaluatorFactory oldEvaluatorSelection = null;
 	private Parameter<?> parameterSelection = null;
@@ -164,7 +162,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 		evaluatorSelection = settingsDialog.getMetric();
 		parameterSelection = settingsDialog.getParameter();
 		if ((evaluatorSelection != null) && (parameterSelection != null)) {
-			handleChangedAnalysisSelection();
+			updateView();
 		}
 	}
 
@@ -176,26 +174,24 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	}
 
 	@Override
-	protected void handleChangedAnalysisSelection() {
-		AnalysisSelection analysisSelection = getAnalysisSelection();
-		if ((isFullSelection(analysisSelection))
-				&& (evaluatorSelection != null) && (parameterSelection != null)) {
-			if (wasSelectionChanged()) {
-				oldAnalysisSelection = analysisSelection;
-				oldEvaluatorSelection = evaluatorSelection;
-				oldParameterSelection = parameterSelection;
-				loadData();
-			} else {
-				showEvaluation(analysisSelection.getFileTreeNode());
-			}
-		}
+	protected void clear() {
+		showEvaluation(null);
 	}
 
-	private boolean wasSelectionChanged() {
-		if ((oldAnalysisSelection == null)
-				|| (!oldAnalysisSelection.isSameRun(getAnalysisSelection()))) {
-			return true;
-		}
+	@Override
+	protected void updateView() {
+		oldEvaluatorSelection = evaluatorSelection;
+		oldParameterSelection = parameterSelection;
+		loadData();
+	}
+
+	@Override
+	protected boolean hasFullViewSettings() {
+		return (evaluatorSelection != null) && (parameterSelection != null);
+	}
+
+	@Override
+	protected boolean hasChangedViewSettings() {
 		if ((oldEvaluatorSelection == null)
 				|| (!evaluatorSelection.getClass().equals(
 						oldEvaluatorSelection.getClass()))) {

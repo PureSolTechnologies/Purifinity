@@ -55,10 +55,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapData;
 import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapDataProvider;
 import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapDataProviderFactory;
 
-public class MetricsMapView extends AbstractMetricChartViewPart implements
-		Printable {
-
-	private AnalysisSelection oldAnalysisSelection = null;
+public class MetricsMapView extends AbstractMetricViewPart implements Printable {
 
 	private EvaluatorFactory mapMetricSelection = null;
 	private EvaluatorFactory oldMapMetricSelection = null;
@@ -111,7 +108,8 @@ public class MetricsMapView extends AbstractMetricChartViewPart implements
 		initializeMenu();
 		super.createPartControl(parent);
 
-		setSelection(AnalysisSelections.getInstance().getAnalysisSelection());
+		setAnalysisSelection(AnalysisSelections.getInstance()
+				.getAnalysisSelection());
 	}
 
 	/**
@@ -222,35 +220,28 @@ public class MetricsMapView extends AbstractMetricChartViewPart implements
 	}
 
 	@Override
-	protected void handleChangedAnalysisSelection() {
-		AnalysisSelection analysisSelection = getAnalysisSelection();
-		if ((isFullSelection(analysisSelection))
-				&& (mapMetricSelection != null)
-				&& (mapParameterSelection != null)
-				&& (colorMetricSelection != null)
-				&& (colorParameterSelection != null)) {
-			if (wasSelectionChanged()) {
-				oldAnalysisSelection = analysisSelection;
-				oldMapMetricSelection = mapMetricSelection;
-				oldMapParameterSelection = mapParameterSelection;
-				oldColorMetricSelection = colorMetricSelection;
-				oldColorParameterSelection = colorParameterSelection;
-				loadData();
-			} else {
-				AnalysisFileTree path = analysisSelection.getFileTreeNode();
-				if ((path != null) && (path.isFile())) {
-					path = path.getParent();
-				}
-				showEvaluation(path);
-			}
-		}
+	protected void clear() {
+		showEvaluation(null);
 	}
 
-	private boolean wasSelectionChanged() {
-		if ((oldAnalysisSelection == null)
-				|| (!oldAnalysisSelection.isSameRun(getAnalysisSelection()))) {
-			return true;
-		}
+	@Override
+	protected void updateView() {
+		oldMapMetricSelection = mapMetricSelection;
+		oldMapParameterSelection = mapParameterSelection;
+		oldColorMetricSelection = colorMetricSelection;
+		oldColorParameterSelection = colorParameterSelection;
+		loadData();
+	}
+
+	@Override
+	protected boolean hasFullViewSettings() {
+		return (mapMetricSelection != null) && (mapParameterSelection != null)
+				&& (colorMetricSelection != null)
+				&& (colorParameterSelection != null);
+	}
+
+	@Override
+	protected boolean hasChangedViewSettings() {
 		if ((oldMapMetricSelection == null)
 				|| (!mapMetricSelection.getClass().equals(
 						oldMapMetricSelection.getClass()))) {
@@ -457,7 +448,7 @@ public class MetricsMapView extends AbstractMetricChartViewPart implements
 		mapParameterSelection = settingsDialog.getMapValue();
 		colorMetricSelection = settingsDialog.getColorMetric();
 		colorParameterSelection = settingsDialog.getColorValue();
-		handleChangedAnalysisSelection();
+		updateView();
 	}
 
 	@Override
@@ -487,5 +478,10 @@ public class MetricsMapView extends AbstractMetricChartViewPart implements
 		} finally {
 			printer.endJob();
 		}
+	}
+
+	@Override
+	public void setFocus() {
+		areaMap.setFocus();
 	}
 }

@@ -149,7 +149,12 @@ public class MaintainabilityIndexView extends AbstractEvaluationView implements
 	}
 
 	@Override
-	protected void handleChangedAnalysisSelection() throws EvaluationStoreException {
+	protected void clear() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void updateView() throws EvaluationStoreException {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
 			path = analysisSelection.getFileTreeNode();
@@ -178,5 +183,15 @@ public class MaintainabilityIndexView extends AbstractEvaluationView implements
 								"Could not handle new selection.", e));
 			}
 		}
+	}
+
+	@Override
+	protected boolean hasFullViewSettings() {
+		return true;
+	}
+
+	@Override
+	protected boolean hasChangedViewSettings() {
+		return false;
 	}
 }

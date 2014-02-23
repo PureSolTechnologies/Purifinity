@@ -63,7 +63,6 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 
 	private ParetoChartViewSettingsDialog settingsDialog;
 
-	private AnalysisSelection oldAnalysisSelection = null;
 	private EvaluatorFactory evaluatorSelection = null;
 	private EvaluatorFactory oldEvaluatorSelection = null;
 	private Parameter<?> parameterSelection = null;
@@ -172,10 +171,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 		evaluatorSelection = settingsDialog.getMetric();
 		parameterSelection = settingsDialog.getParameter();
 		codeRangeTypeSelection = settingsDialog.getCodeRangeType();
-		if ((evaluatorSelection != null) && (parameterSelection != null)
-				&& (codeRangeTypeSelection != null)) {
-			handleChangedAnalysisSelection();
-		}
+		updateView();
 	}
 
 	@Override
@@ -191,36 +187,37 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	}
 
 	@Override
-	protected void handleChangedAnalysisSelection() {
-		AnalysisSelection analysisSelection = getAnalysisSelection();
-		if ((isFullSelection(analysisSelection))
-				&& (evaluatorSelection != null) && (parameterSelection != null)) {
-			if (wasSelectionChanged()) {
-				oldAnalysisSelection = analysisSelection;
-				oldEvaluatorSelection = evaluatorSelection;
-				oldParameterSelection = parameterSelection;
-				oldCodeRangeTypeSelection = codeRangeTypeSelection;
-				loadData();
-			} else {
-				showEvaluation(analysisSelection.getFileTreeNode());
-			}
-		}
+	protected void clear() {
+		showEvaluation(null);
 	}
 
-	private boolean wasSelectionChanged() {
-		if ((oldAnalysisSelection == null)
-				|| (!oldAnalysisSelection.isSameRun(getAnalysisSelection()))) {
-			return true;
-		}
+	@Override
+	protected void updateView() {
+		oldEvaluatorSelection = evaluatorSelection;
+		oldParameterSelection = parameterSelection;
+		oldCodeRangeTypeSelection = codeRangeTypeSelection;
+		loadData();
+	}
+
+	@Override
+	protected boolean hasFullViewSettings() {
+		return (evaluatorSelection != null) && (parameterSelection != null)
+				&& (codeRangeTypeSelection != null);
+	}
+
+	@Override
+	protected boolean hasChangedViewSettings() {
 		if ((oldEvaluatorSelection == null)
 				|| (!evaluatorSelection.getClass().equals(
 						oldEvaluatorSelection.getClass()))) {
 			return true;
 		}
-		if (!oldParameterSelection.equals(parameterSelection)) {
+		if ((oldParameterSelection == null)
+				|| (!oldParameterSelection.equals(parameterSelection))) {
 			return true;
 		}
-		if (!oldCodeRangeTypeSelection.equals(codeRangeTypeSelection)) {
+		if ((oldCodeRangeTypeSelection == null)
+				|| (!oldCodeRangeTypeSelection.equals(codeRangeTypeSelection))) {
 			return true;
 		}
 		return false;

@@ -27,7 +27,6 @@ public abstract class AbstractMetricChartViewPart extends
 		AbstractMetricViewPart implements MouseListener, ISelectionProvider {
 
 	private final List<ISelectionChangedListener> selectionChangedListener = new ArrayList<ISelectionChangedListener>();
-	private AnalysisSelection analysisSelection;
 	private ChartCanvas chartCanvas;
 
 	@Override
@@ -114,22 +113,19 @@ public abstract class AbstractMetricChartViewPart extends
 
 	@Override
 	public ISelection getSelection() {
-		return analysisSelection;
+		return getAnalysisSelection();
+	}
+
+	@Override
+	protected void setAnalysisSelection(AnalysisSelection analysisSelection) {
+		super.setAnalysisSelection(analysisSelection);
+		setSelection(analysisSelection);
 	}
 
 	@Override
 	public void setSelection(ISelection selection) {
-		analysisSelection = (AnalysisSelection) selection;
 		for (ISelectionChangedListener listener : selectionChangedListener) {
-			listener.selectionChanged(new SelectionChangedEvent(this,
-					analysisSelection));
+			listener.selectionChanged(new SelectionChangedEvent(this, selection));
 		}
-	}
-
-	protected boolean isFullSelection(AnalysisSelection analysisSelection) {
-		return (analysisSelection != null)
-				&& (analysisSelection.getAnalysisProject() != null)
-				&& (analysisSelection.getAnalysisRun() != null)
-				&& (analysisSelection.getFileTreeNode() != null);
 	}
 }

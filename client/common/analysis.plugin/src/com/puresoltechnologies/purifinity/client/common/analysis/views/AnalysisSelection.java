@@ -96,26 +96,4 @@ public class AnalysisSelection implements ISelection {
 			return false;
 		return true;
 	}
-
-	public boolean isSameRun(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AnalysisSelection other = (AnalysisSelection) obj;
-		if (projectUUID == null) {
-			if (other.projectUUID != null)
-				return false;
-		} else if (!projectUUID.equals(other.projectUUID))
-			return false;
-		if (runUUID == null) {
-			if (other.runUUID != null)
-				return false;
-		} else if (!runUUID.equals(other.runUUID))
-			return false;
-		return true;
-	}
-
 }

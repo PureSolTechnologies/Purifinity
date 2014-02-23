@@ -57,7 +57,12 @@ public class BasicCoCoMoView extends AbstractEvaluationView {
 	}
 
 	@Override
-	protected void handleChangedAnalysisSelection() throws EvaluationStoreException {
+	protected void clear() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void updateView() throws EvaluationStoreException {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
 			showEvaluation(analysisSelection.getFileTreeNode());
@@ -67,6 +72,16 @@ public class BasicCoCoMoView extends AbstractEvaluationView {
 	@Override
 	public void setFocus() {
 		resultComponent.setFocus();
+	}
+
+	@Override
+	protected boolean hasFullViewSettings() {
+		return true;
+	}
+
+	@Override
+	protected boolean hasChangedViewSettings() {
+		return false;
 	}
 
 }

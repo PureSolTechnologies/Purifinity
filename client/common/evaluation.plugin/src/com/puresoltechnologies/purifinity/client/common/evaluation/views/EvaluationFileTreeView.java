@@ -151,7 +151,7 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 		}
 		if (selection instanceof AnalysisProjectSelection) {
 			AnalysisProjectSelection analysisProjectSelection = (AnalysisProjectSelection) selection;
-			if (hasSelectionChange(analysisProjectSelection)) {
+			if (hasSelectionChanged(analysisProjectSelection)) {
 				analysisProject = analysisProjectSelection.getAnalysisProject();
 				analysisRun = null;
 				analysisFileTree = null;
@@ -178,7 +178,7 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 		}
 	}
 
-	private boolean hasSelectionChange(
+	private boolean hasSelectionChanged(
 			AnalysisProjectSelection analysisProjectSelection) {
 		return hasChanged(analysisProjectSelection.getAnalysisProject());
 	}

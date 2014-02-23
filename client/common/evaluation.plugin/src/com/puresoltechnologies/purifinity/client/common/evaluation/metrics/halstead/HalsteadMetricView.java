@@ -187,8 +187,12 @@ public class HalsteadMetricView extends AbstractMetricViewPart implements
 	}
 
 	@Override
-	protected void handleChangedAnalysisSelection()
-			throws EvaluationStoreException {
+	protected void clear() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected void updateView() throws EvaluationStoreException {
 		AnalysisSelection analysisSelection = getAnalysisSelection();
 		if (analysisSelection != null) {
 			path = analysisSelection.getFileTreeNode();
@@ -247,6 +251,16 @@ public class HalsteadMetricView extends AbstractMetricViewPart implements
 	@Override
 	public void print(Printer printer, String printJobName) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	protected boolean hasFullViewSettings() {
+		return true;
+	}
+
+	@Override
+	protected boolean hasChangedViewSettings() {
+		return false;
 	}
 
 }

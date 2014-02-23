@@ -55,8 +55,6 @@ import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataPro
 public class MaintainabilityIndexCumulativeDistributionChartView extends
 		AbstractMetricChartViewPart {
 
-	private AnalysisSelection oldAnalysisSelection = null;
-
 	private ParetoChartData miWoc = new ParetoChartData();
 	private ParetoChartData miCw = new ParetoChartData();
 	private ParetoChartData mi = new ParetoChartData();
@@ -110,23 +108,22 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 	}
 
 	@Override
-	protected void handleChangedAnalysisSelection() {
-		AnalysisSelection analysisSelection = getAnalysisSelection();
-		if (isFullSelection(analysisSelection)) {
-			if (wasSelectionChanged()) {
-				oldAnalysisSelection = analysisSelection;
-				loadData();
-			} else {
-				showEvaluation(analysisSelection.getFileTreeNode());
-			}
-		}
+	protected void clear() {
+		showEvaluation(null);
 	}
 
-	private boolean wasSelectionChanged() {
-		if ((oldAnalysisSelection == null)
-				|| (!oldAnalysisSelection.isSameRun(getAnalysisSelection()))) {
-			return true;
-		}
+	@Override
+	protected void updateView() {
+		loadData();
+	}
+
+	@Override
+	protected boolean hasFullViewSettings() {
+		return true;
+	}
+
+	@Override
+	protected boolean hasChangedViewSettings() {
 		return false;
 	}
 

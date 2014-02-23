@@ -50,8 +50,6 @@ import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataPro
 
 public class CorrelationChartView extends AbstractMetricChartViewPart {
 
-	private AnalysisSelection oldAnalysisSelection = null;
-
 	private EvaluatorFactory xMetricSelection = null;
 	private EvaluatorFactory oldXMetricSelection = null;
 	private Parameter<?> xParameterSelection = null;
@@ -194,7 +192,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 		xParameterSelection = settingsDialog.getXParameter();
 		yMetricSelection = settingsDialog.getYMetric();
 		yParameterSelection = settingsDialog.getYParameter();
-		handleChangedAnalysisSelection();
+		updateView();
 	}
 
 	@Override
@@ -210,33 +208,27 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 	}
 
 	@Override
-	protected void handleChangedAnalysisSelection() {
-		AnalysisSelection analysisSelection = getAnalysisSelection();
-		if ((isFullSelection(analysisSelection)) && (xMetricSelection != null)
-				&& (xParameterSelection != null) && (yMetricSelection != null)
-				&& (yParameterSelection != null)) {
-			if (wasSelectionChanged()) {
-				oldAnalysisSelection = analysisSelection;
-				oldXMetricSelection = xMetricSelection;
-				oldXParameterSelection = xParameterSelection;
-				oldYMetricSelection = yMetricSelection;
-				oldYParameterSelection = yParameterSelection;
-				loadData();
-			} else {
-				AnalysisFileTree path = analysisSelection.getFileTreeNode();
-				if ((path != null) && (path.isFile())) {
-					path = path.getParent();
-				}
-				showEvaluation(path);
-			}
-		}
+	protected void clear() {
+		showEvaluation(null);
 	}
 
-	private boolean wasSelectionChanged() {
-		if ((oldAnalysisSelection == null)
-				|| (!oldAnalysisSelection.isSameRun(getAnalysisSelection()))) {
-			return true;
-		}
+	@Override
+	protected void updateView() {
+		oldXMetricSelection = xMetricSelection;
+		oldXParameterSelection = xParameterSelection;
+		oldYMetricSelection = yMetricSelection;
+		oldYParameterSelection = yParameterSelection;
+		loadData();
+	}
+
+	@Override
+	protected boolean hasFullViewSettings() {
+		return (xMetricSelection != null) && (xParameterSelection != null)
+				&& (yMetricSelection != null) && (yParameterSelection != null);
+	}
+
+	@Override
+	protected boolean hasChangedViewSettings() {
 		if ((oldXMetricSelection == null)
 				|| (!xMetricSelection.getClass().equals(
 						oldXMetricSelection.getClass()))) {
