@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -32,6 +31,8 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.progress.UIJob;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
@@ -40,7 +41,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListLabelProvider;
-import com.puresoltechnologies.purifinity.client.common.analysis.controls.ParserTreeControl;
 import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
@@ -60,7 +60,8 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 		SelectionListener, ISelectionProvider, ISelectionListener,
 		IJobChangeListener, Refreshable, DatabaseTarget {
 
-	private static final ILog logger = Activator.getDefault().getLog();
+	private static final Logger logger = LoggerFactory
+			.getLogger(AnalysisReportView.class);
 
 	private Table analysisRunsTable;
 	private TableViewer analysisRunsViewer;
@@ -219,27 +220,41 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	}
 
 	private void deleteAnalysisRun() {
-		try {
-			StructuredSelection selection = (StructuredSelection) analysisRunsViewer
-					.getSelection();
-			if (!selection.isEmpty()) {
-				if (MessageDialog
-						.openQuestion(getSite().getShell(), "Delete?",
-								"Do you really want to delete the selected analysis run(s)?")) {
-					@SuppressWarnings("unchecked")
-					Iterator<AnalysisRunInformation> iterator = selection
-							.iterator();
-					while (iterator.hasNext()) {
-						AnalysisRunInformation analysisRun = iterator.next();
-						analysisProject
-								.removeAnalysisRun(analysisRun.getUUID());
+		final StructuredSelection selection = (StructuredSelection) analysisRunsViewer
+				.getSelection();
+		if (!selection.isEmpty()) {
+			if (MessageDialog
+					.openQuestion(getSite().getShell(), "Delete?",
+							"Do you really want to delete the selected analysis run(s)?")) {
+				Job job = new Job("Analysis Project Removal") {
+
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						try {
+							@SuppressWarnings("unchecked")
+							Iterator<AnalysisRunInformation> iterator = selection
+									.iterator();
+							while (iterator.hasNext()) {
+								AnalysisRunInformation analysisRun = iterator
+										.next();
+								analysisProject.removeAnalysisRun(analysisRun
+										.getUUID());
+							}
+							refresh();
+							return Status.OK_STATUS;
+						} catch (AnalysisProjectException e) {
+							logger.error(
+									"Could not remove analysis run from analysis store!",
+									e);
+							return new Status(Status.ERROR,
+									Activator.getDefault().getBundle()
+											.getSymbolicName(),
+									"Could not delete projects.");
+						}
 					}
-					refreshAnalysisRunList();
-				}
+				};
+				job.schedule();
 			}
-		} catch (AnalysisProjectException e) {
-			logger.log(new Status(Status.ERROR, ParserTreeControl.class
-					.getName(), "Can not read analysis runs from store!", e));
 		}
 	}
 
@@ -250,9 +265,10 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 						.getAllRunInformation();
 				analysisRunsViewer.setInput(allRunInformation);
 			}
+			processAnalysisRunSelection();
+			updateEnabledState();
 		} catch (AnalysisProjectException e) {
-			logger.log(new Status(Status.ERROR, ParserTreeControl.class
-					.getName(), "Can not read analysis runs from store!", e));
+			logger.error("Can not read analysis runs from store!", e);
 		}
 	}
 
@@ -262,13 +278,14 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 					.getSelection();
 			AnalysisRunInformation information = (AnalysisRunInformation) selection
 					.getFirstElement();
-			AnalysisRun analysisRun = AnalysisRunImpl.readFromStore(
-					analysisProject.getInformation().getUUID(),
-					information.getUUID());
+			AnalysisRun analysisRun = null;
+			if (information != null) {
+				analysisRun = AnalysisRunImpl.readFromStore(analysisProject
+						.getInformation().getUUID(), information.getUUID());
+			}
 			setSelection(new AnalysisRunSelection(analysisProject, analysisRun));
 		} catch (AnalysisStoreException e) {
-			logger.log(new Status(Status.ERROR, ParserTreeControl.class
-					.getName(), "Can not read analysis runs from store!", e));
+			logger.error("Can not read analysis runs from store!", e);
 		}
 	}
 
@@ -304,8 +321,7 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 				}
 			}
 		} catch (AnalysisProjectException e) {
-			logger.log(new Status(Status.ERROR, ParserTreeControl.class
-					.getName(), "Can not read analysis store!", e));
+			logger.error("Can not read analysis store!", e);
 		}
 	}
 

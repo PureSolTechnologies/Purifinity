@@ -268,38 +268,41 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	private void deleteProject() {
 		final StructuredSelection selection = (StructuredSelection) analysisProjectsViewer
 				.getSelection();
-		if (MessageDialog
-				.openQuestion(getSite().getShell(), "Delete?",
-						"Do you really want to delete analysis the selected analysis project(s)?")) {
-			Job job = new Job("Analysis Project Removal") {
+		if (!selection.isEmpty()) {
+			if (MessageDialog
+					.openQuestion(getSite().getShell(), "Delete?",
+							"Do you really want to delete analysis the selected analysis project(s)?")) {
+				Job job = new Job("Analysis Project Removal") {
 
-				@Override
-				protected IStatus run(IProgressMonitor monitor) {
-					try {
-						Iterator<?> iterator = selection.iterator();
-						while (iterator.hasNext()) {
-							AnalysisProject information = (AnalysisProject) iterator
-									.next();
-							AnalysisStore store = AnalysisStoreFactory
-									.getFactory().getInstance();
-							if (store != null) {
-								store.removeAnalysisProject(information
-										.getInformation().getUUID());
-								refresh();
+					@Override
+					protected IStatus run(IProgressMonitor monitor) {
+						try {
+							Iterator<?> iterator = selection.iterator();
+							while (iterator.hasNext()) {
+								AnalysisProject information = (AnalysisProject) iterator
+										.next();
+								AnalysisStore store = AnalysisStoreFactory
+										.getFactory().getInstance();
+								if (store != null) {
+									store.removeAnalysisProject(information
+											.getInformation().getUUID());
+									refresh();
+								}
 							}
+							return Status.OK_STATUS;
+						} catch (AnalysisStoreException e) {
+							logger.error(
+									"Could not retrieve analysis from analysis store!",
+									e);
+							return new Status(Status.ERROR,
+									Activator.getDefault().getBundle()
+											.getSymbolicName(),
+									"Could not delete projects.");
 						}
-						return Status.OK_STATUS;
-					} catch (AnalysisStoreException e) {
-						logger.error(
-								"Could not retrieve analysis from analysis store!",
-								e);
-						return new Status(Status.ERROR, Activator.getDefault()
-								.getBundle().getSymbolicName(),
-								"Could not delete projects.");
 					}
-				}
-			};
-			job.schedule();
+				};
+				job.schedule();
+			}
 		}
 	}
 

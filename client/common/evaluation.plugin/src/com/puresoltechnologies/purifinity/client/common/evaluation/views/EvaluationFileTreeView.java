@@ -162,7 +162,8 @@ public class EvaluationFileTreeView extends AbstractPureSolTechnologiesView
 			if (hasSelectionChanged(analysisRunSelection)) {
 				analysisProject = analysisRunSelection.getAnalysisProject();
 				analysisRun = analysisRunSelection.getAnalysisRun();
-				analysisFileTree = analysisRun.getFileTree();
+				analysisFileTree = analysisRun == null ? null : analysisRun
+						.getFileTree();
 				refresh();
 			}
 		} else if (selection instanceof AnalysisSelection) {
