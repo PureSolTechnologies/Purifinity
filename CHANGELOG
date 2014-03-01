@@ -1,0 +1,42 @@
+===================
+PURIFINITY CHANGLOG
+===================
+
+--------------------------
+Version 0.2.0 (12 Changes)
+--------------------------
+
+58    Purifinity - Client        Bug      Blocker   Memory Leak in Client UI
+52    Purifinity - Client        Bug      Critical  Check for available settings in saveState method
+55    Purifinity - Client        Bug      Critical  Enable and test logging in packaged clients
+53    Purifinity - Client        Bug      Normal    Implement a selection retrieval for newly opened windows
+42    Purifinity - Client        Feature  Critical  Embed Cassandra into standalone version to avoid a separate start of Cassandra
+57    Purifinity - Client        Feature  Normal    Add data load and graph creation feedback to UI
+56    Purifinity - Client        Feature  Normal    Add feedback for tree generation in Titan
+39    Purifinity Framework       Bug      Critical  Storage insufficiant in case of two files with same content, but different name in tree
+54    Purifinity Framework       Bug      Normal    Deletion of Analysis Projects and Analysis Runs do not work
+40    Purifinity Framework       Bug      Normal    Storage system is too slow
+38    Purifinity Framework       Feature  Critical  New Storage System
+29    Purifinity Framework       Feature  Normal    Separate API for analysis and evaluation plug-in development
+
+-------------------------
+Version 0.1.1 (2 Changes)
+-------------------------
+
+30    Purifinity                 Bug      Critical  Repository is not complete after build
+31    Purifinity - Client        Bug      Normal    Metrics Map is in wrong part category
+
+--------------------------
+Version 0.1.0 (10 Changes)
+--------------------------
+
+2     Fortran Language Analysis  Bug                Some code is not analyzed due to parser ambiguities
+3     Java Language Analysis     Bug      Critical  Halstead metric shows empty or white spaces as operands
+1     Java Language Analysis     Bug      Normal    Block comments are not broken into multiple lines
+16    Purifinity - Client        Bug      Critical  Directory evaluations are not working
+15    Purifinity - Client        Bug      Critical  Selection listeners are not removed from central selection service
+4     Purifinity - Client        Bug      Normal    Linkage errors during analysis
+17    Purifinity - Client        Bug      Normal    Change Eclipse RCP from Juno to Kepler
+18    Purifinity - Client        Feature  Critical  Implement Help System
+5     Purifinity - Client        Feature  Normal    Decorators for Tree in Analysis Run Content
+6     Purifinity - Client        Feature  Normal    Interactive Graphs for Analysis Selection

@@ -31,6 +31,7 @@
 						<docbookFile>PurifinityClientUsersManual/PurifinityClientUsersManual.xml</docbookFile>
 						<docbookFile>SourceCodeAnalysisAndEvaluation/SourceCodeAnalysisAndEvaluation.xml</docbookFile>
 						<docbookFile>PurifinityExtensionsDevelopment/PurifinityExtensionsDevelopment.xml</docbookFile>
+						<docbookFile>Changelog/Changelog.xml</docbookFile>
 					</docbookFiles>
 					<targetDirectory>${basedir}/books</targetDirectory>
 				</configuration>

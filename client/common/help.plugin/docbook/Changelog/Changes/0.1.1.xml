@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../docbook.dtd">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="Version0.1.1">Version 0.1.1</title>
+	<table frame="all">
+		<title>Changes in Purifinity 0.1.1</title>
+		<tgroup cols="5" align="left" colsep="1" rowsep="1">
+			<colspec colname="Ticket No." />
+			<colspec colname="Component" />
+			<colspec colname="Type of Change" />
+			<colspec colname="Severity" />
+			<colspec colname="Subject" />
+			<thead>
+				<row>
+					<entry>Ticket No.</entry>
+					<entry>Component</entry>
+					<entry>Type of Change</entry>
+					<entry>Severity</entry>
+					<entry>Subject</entry>
+				</row>
+			</thead>
+			<tbody>
+				<row>
+					<entry>30</entry>
+					<entry>Purifinity</entry>
+					<entry>Bug</entry>
+					<entry>Critical</entry>
+					<entry>Repository is not complete after build</entry>
+				</row>
+				<row>
+					<entry>31</entry>
+					<entry>Purifinity - Client</entry>
+					<entry>Bug</entry>
+					<entry>Normal</entry>
+					<entry>Metrics Map is in wrong part category</entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</table>
+</section>

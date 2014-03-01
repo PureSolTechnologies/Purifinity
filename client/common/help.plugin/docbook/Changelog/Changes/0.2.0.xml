@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../docbook.dtd">
+<section xmlns="http://docbook.org/ns/docbook" version="5.0">
+	<title xml:id="Version0.2.0">Version 0.2.0</title>
+	<table frame="all">
+		<title>Changes in Purifinity 0.2.0</title>
+		<tgroup cols="5" align="left" colsep="1" rowsep="1">
+			<colspec colname="Ticket No." />
+			<colspec colname="Component" />
+			<colspec colname="Type of Change" />
+			<colspec colname="Severity" />
+			<colspec colname="Subject" />
+			<thead>
+				<row>
+					<entry>Ticket No.</entry>
+					<entry>Component</entry>
+					<entry>Type of Change</entry>
+					<entry>Severity</entry>
+					<entry>Subject</entry>
+				</row>
+			</thead>
+			<tbody>
+				<row>
+					<entry>58</entry>
+					<entry>Purifinity - Client</entry>
+					<entry>Bug</entry>
+					<entry></entry>
+					<entry>Blocker Memory Leak in Client UI</entry>
+				</row>
+				<row>
+					<entry>52</entry>
+					<entry>Purifinity - Client</entry>
+					<entry>Bug</entry>
+					<entry>Critical</entry>
+					<entry>Check for available settings in saveState method</entry>
+				</row>
+				<row>
+					<entry>55</entry>
+					<entry>Purifinity - Client</entry>
+					<entry>Bug</entry>
+					<entry>Critical</entry>
+					<entry>Enable and test logging in packaged clients</entry>
+				</row>
+				<row>
+					<entry>53</entry>
+					<entry>Purifinity - Client</entry>
+					<entry>Bug</entry>
+					<entry>Normal</entry>
+					<entry>Implement a selection retrieval for newly opened windows
+					</entry>
+				</row>
+				<row>
+					<entry>42</entry>
+					<entry>Purifinity - Client</entry>
+					<entry>Feature</entry>
+					<entry>Critical</entry>
+					<entry>Embed Cassandra into standalone version to avoid a separate
+						start of Cassandra</entry>
+				</row>
+				<row>
+					<entry>57</entry>
+					<entry>Purifinity - Client</entry>
+					<entry>Feature</entry>
+					<entry>Normal</entry>
+					<entry>Add data load and graph creation feedback to UI</entry>
+				</row>
+				<row>
+					<entry>56</entry>
+					<entry>Purifinity - Client</entry>
+					<entry>Feature</entry>
+					<entry>Normal</entry>
+					<entry>Add feedback for tree generation in Titan</entry>
+				</row>
+				<row>
+					<entry>39</entry>
+					<entry>Purifinity Framework</entry>
+					<entry>Bug</entry>
+					<entry>Critical</entry>
+					<entry>Storage insufficiant in case of two files with same content,
+						but different name in tree</entry>
+				</row>
+				<row>
+					<entry>54</entry>
+					<entry>Purifinity Framework</entry>
+					<entry>Bug</entry>
+					<entry>Normal</entry>
+					<entry>Deletion of Analysis Projects and Analysis Runs do not work
+					</entry>
+				</row>
+				<row>
+					<entry>40</entry>
+					<entry>Purifinity Framework</entry>
+					<entry>Bug</entry>
+					<entry>Normal</entry>
+					<entry>Storage system is too slow</entry>
+				</row>
+				<row>
+					<entry>38</entry>
+					<entry>Purifinity Framework</entry>
+					<entry>Feature</entry>
+					<entry>Critical</entry>
+					<entry>New Storage System</entry>
+				</row>
+				<row>
+					<entry>29</entry>
+					<entry>Purifinity Framework</entry>
+					<entry>Feature</entry>
+					<entry>Normal</entry>
+					<entry>Separate API for analysis and evaluation plug-in development
+					</entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</table>
+</section>

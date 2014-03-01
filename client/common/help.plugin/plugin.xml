@@ -15,6 +15,10 @@
             file="books/SourceCodeAnalysisAndEvaluation/toc.xml"
             primary="true">
       </toc>
+      <toc
+            file="books/Changelog/toc.xml"
+            primary="true">
+      </toc>
    </extension>
 
 </plugin>
