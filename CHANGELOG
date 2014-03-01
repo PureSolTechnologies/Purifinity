@@ -6,6 +6,7 @@ PURIFINITY CHANGLOG
 Version 0.2.0 (12 Changes)
 --------------------------
 
+59    Purifinity                 Feature  Normal    Implement a Feature in Build System to support Changelogs to customers
 58    Purifinity - Client        Bug      Blocker   Memory Leak in Client UI
 52    Purifinity - Client        Bug      Critical  Check for available settings in saveState method
 55    Purifinity - Client        Bug      Critical  Enable and test logging in packaged clients

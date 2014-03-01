@@ -21,6 +21,14 @@
 			</thead>
 			<tbody>
 				<row>
+					<entry>59</entry>
+					<entry>Purifinity</entry>
+					<entry>Feature</entry>
+					<entry>Normal</entry>
+					<entry>Implement a Feature in Build System to support Changelogs to
+						customers</entry>
+				</row>
+				<row>
 					<entry>58</entry>
 					<entry>Purifinity - Client</entry>
 					<entry>Bug</entry>
@@ -55,7 +63,8 @@
 					<entry>Feature</entry>
 					<entry>Critical</entry>
 					<entry>Embed Cassandra into standalone version to avoid a separate
-						start of Cassandra</entry>
+						start of Cassandra
+					</entry>
 				</row>
 				<row>
 					<entry>57</entry>
@@ -77,7 +86,8 @@
 					<entry>Bug</entry>
 					<entry>Critical</entry>
 					<entry>Storage insufficiant in case of two files with same content,
-						but different name in tree</entry>
+						but different name in tree
+					</entry>
 				</row>
 				<row>
 					<entry>54</entry>
