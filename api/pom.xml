@@ -52,12 +52,12 @@
 
 	<issueManagement>
 		<system>Redmine</system>
-		<url>https://bugs.puresol-technologies.net/projects/license-maven-plugin</url>
+		<url>https://bugs.puresol-technologies.net/projects/purifinity-api</url>
 	</issueManagement>
 
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>https://travis-ci.org/RickRainerLudwig/license-maven-plugin</url>
+		<url>http://ci.puresol-technologies.net</url>
 	</ciManagement>
 
 	<distributionManagement>

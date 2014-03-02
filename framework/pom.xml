@@ -42,6 +42,39 @@
 		<tag>HEAD</tag>
 	</scm>
 
+	<developers>
+		<developer>
+			<name>Rick-Rainer Ludwig</name>
+			<email>ludwig@puresol-technologies.com</email>
+			<organization>PureSol Technologies</organization>
+			<organizationUrl>http://puresol-technologies.com</organizationUrl>
+			<url>http://rick-rainer-ludwig.com</url>
+		</developer>
+	</developers>
+
+	<issueManagement>
+		<system>Redmine</system>
+		<url>https://bugs.puresol-technologies.net/projects/purifinity-framework</url>
+	</issueManagement>
+
+	<ciManagement>
+		<system>Jenkins</system>
+		<url>http://ci.puresol-technologies.net</url>
+	</ciManagement>
+
+	<distributionManagement>
+		<repository>
+			<id>libs-release-local</id>
+			<name>Repository libs-release-local</name>
+			<url>http://repo.puresol-technologies.net/libs-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>libs-snapshot-local</id>
+			<name>Repository libs-snapshot-local</name>
+			<url>http://repo.puresol-technologies.net/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<repositories>
 		<repository>
 			<snapshots>
@@ -519,6 +552,13 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>2.5</version>
+			</extension>
+		</extensions>
 	</build>
 
 	<modules>
