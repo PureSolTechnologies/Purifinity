@@ -15,7 +15,7 @@
 
 	<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 	<artifactId>framework-parent</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Purifinity Framework</name>
@@ -39,7 +39,7 @@
 		<developerConnection>scm:git:git@git:Purifinity</developerConnection>
 		<connection>scm:git:git@git:Purifinity</connection>
 		<url>http://git/gitweb/</url>
-		<tag>framework-v0.2.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
