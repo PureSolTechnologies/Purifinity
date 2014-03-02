@@ -2,7 +2,7 @@
 <feature
       id="com.puresoltechnologies.purifinity.client.storage.db.feature"
       label="com.puresoltechnologies.purifinity.client.storage.db.feature"
-      version="0.2.0"
+      version="0.3.0.qualifier"
       provider-name="PureSol Techologies"
       plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin"
       os="linux,macosx,win32"
@@ -54,14 +54,14 @@
       <import plugin="org.eclipse.ui" version="3.103.0" match="greaterOrEqual"/>
       <import plugin="org.slf4j.api" version="1.6.4" match="greaterOrEqual"/>
       <import plugin="org.apache.cassandra.server.bundle" version="2.0.4" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.framework.commons.utils.bundle" version="0.2.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.2.0" match="greaterOrEqual"/>
-      <import plugin="com.thinkaurelius.titan.bundle" version="0.2.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.framework.store.db.bundle" version="0.2.0" match="greaterOrEqual"/>
-      <import plugin="com.datastax.cassandra.bundle" version="0.2.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.2.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.analysis.plugin" version="0.2.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.client.common.ui.plugin" version="0.2.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.commons.utils.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.thinkaurelius.titan.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.framework.store.db.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.datastax.cassandra.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.analysis.plugin" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.client.common.ui.plugin" version="0.3.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
