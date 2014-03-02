@@ -65,8 +65,18 @@
 		<site>
 			<id>FTPPureSolTechnologiesCom</id>
 			<name>FTPPureSolTechnologiesCom</name>
-			<url>ftp://puresol-technologies.com/test/license-maven-plugin</url>
+			<url>ftp://puresol-technologies.com/oss/purifinity-api</url>
 		</site>
+		<repository>
+			<id>libs-release-local</id>
+			<name>Repository libs-release-local</name>
+			<url>http://repo/libs-release</url>
+		</repository>
+		<snapshotRepository>
+			<id>libs-snapshot-local</id>
+			<name>Repository libs-snapshot-local</name>
+			<url>http://repo/libs-snapshot</url>
+		</snapshotRepository>
 	</distributionManagement>
 
 	<repositories>
