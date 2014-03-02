@@ -70,12 +70,12 @@
 		<repository>
 			<id>libs-release-local</id>
 			<name>Repository libs-release-local</name>
-			<url>http://repo/libs-release</url>
+			<url>http://repo.puresol-technologies.net/libs-release-local</url>
 		</repository>
 		<snapshotRepository>
 			<id>libs-snapshot-local</id>
 			<name>Repository libs-snapshot-local</name>
-			<url>http://repo/libs-snapshot</url>
+			<url>http://repo.puresol-technologies.net/libs-snapshot-local</url>
 		</snapshotRepository>
 	</distributionManagement>
 
@@ -86,18 +86,13 @@
 			</snapshots>
 			<id>central</id>
 			<name>libs-release</name>
-			<url>http://repo/libs-release</url>
+			<url>http://repo.puresol-technologies.net/libs-release</url>
 		</repository>
 		<repository>
 			<snapshots />
 			<id>snapshots</id>
 			<name>libs-snapshot</name>
-			<url>http://repo/libs-snapshot</url>
-		</repository>
-		<repository>
-			<id>JBoss</id>
-			<name>JBoss</name>
-			<url>https://repository.jboss.org/nexus/content/groups/public</url>
+			<url>http://repo.puresol-technologies.net/libs-snapshot</url>
 		</repository>
 	</repositories>
 
@@ -108,13 +103,13 @@
 			</snapshots>
 			<id>central</id>
 			<name>plugins-release</name>
-			<url>http://repo/plugins-release</url>
+			<url>http://repo.puresol-technologies.net/plugins-release</url>
 		</pluginRepository>
 		<pluginRepository>
 			<snapshots />
 			<id>snapshots</id>
 			<name>plugins-snapshot</name>
-			<url>http://repo/plugins-snapshot</url>
+			<url>http://repo.puresol-technologies.net/plugins-snapshot</url>
 		</pluginRepository>
 	</pluginRepositories>
 
