@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.client</groupId>
 		<artifactId>com.puresoltechnologies.purifinity.client.lang.cpp11</artifactId>
-		<version>0.1.1-SNAPSHOT</version>
+		<version>0.2.0</version>
 	</parent>
 
 	<artifactId>com.puresoltechnologies.purifinity.client.lang.cpp11.plugin</artifactId>

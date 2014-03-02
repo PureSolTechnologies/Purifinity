@@ -3,31 +3,31 @@
    <description name="Source Code Analysis Repository">
       
    </description>
-   <feature url="features/com.puresoltechnologies.purifinity.client.features.cleancode.feature_0.1.1.qualifier.jar" id="com.puresoltechnologies.purifinity.client.features.cleancode.feature" version="0.1.1.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
-      <category name="com.puresoltechnologies.purifinity.client.application"/>
-   </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.lang.c11.feature_0.1.1.qualifier.jar" id="com.puresoltechnologies.purifinity.client.lang.c11.feature" version="0.1.1.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+   <feature url="features/com.puresoltechnologies.purifinity.client.lang.c11.feature_0.2.0.jar" id="com.puresoltechnologies.purifinity.client.lang.c11.feature" version="0.2.0" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
       <category name="com.puresoltechnologies.purifinity.client.lang"/>
    </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.lang.cpp11.feature_0.1.1.qualifier.jar" id="com.puresoltechnologies.purifinity.client.lang.cpp11.feature" version="0.1.1.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+   <feature url="features/com.puresoltechnologies.purifinity.client.lang.cpp11.feature_0.2.0.jar" id="com.puresoltechnologies.purifinity.client.lang.cpp11.feature" version="0.2.0" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
       <category name="com.puresoltechnologies.purifinity.client.lang"/>
    </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.lang.fortran2008.feature_0.1.1.qualifier.jar" id="com.puresoltechnologies.purifinity.client.lang.fortran2008.feature" version="0.1.1.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+   <feature url="features/com.puresoltechnologies.purifinity.client.lang.fortran2008.feature_0.2.0.jar" id="com.puresoltechnologies.purifinity.client.lang.fortran2008.feature" version="0.2.0" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
       <category name="com.puresoltechnologies.purifinity.client.lang"/>
    </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.lang.java7.feature_0.1.1.qualifier.jar" id="com.puresoltechnologies.purifinity.client.lang.java7.feature" version="0.1.1.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+   <feature url="features/com.puresoltechnologies.purifinity.client.lang.java7.feature_0.2.0.jar" id="com.puresoltechnologies.purifinity.client.lang.java7.feature" version="0.2.0" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
       <category name="com.puresoltechnologies.purifinity.client.lang"/>
    </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.application.feature_0.1.1.qualifier.jar" id="com.puresoltechnologies.purifinity.client.application.feature" version="0.1.1.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+   <feature url="features/com.puresoltechnologies.purifinity.client.storage.db.feature_0.2.0.jar" id="com.puresoltechnologies.purifinity.client.storage.db.feature" version="0.2.0" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
       <category name="com.puresoltechnologies.purifinity.client.application"/>
    </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.common.feature_0.1.1.qualifier.jar" id="com.puresoltechnologies.purifinity.client.common.feature" version="0.1.1.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+   <feature url="features/com.puresoltechnologies.purifinity.client.storage.srv.feature_0.2.0.jar" id="com.puresoltechnologies.purifinity.client.storage.srv.feature" version="0.2.0" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
       <category name="com.puresoltechnologies.purifinity.client.application"/>
    </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.storage.srv.feature_0.1.1.qualifier.jar" id="com.puresoltechnologies.purifinity.client.storage.srv.feature" version="0.1.1.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+   <feature url="features/com.puresoltechnologies.purifinity.client.application.feature_0.2.0.jar" id="com.puresoltechnologies.purifinity.client.application.feature" version="0.2.0" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
       <category name="com.puresoltechnologies.purifinity.client.application"/>
    </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.storage.db.feature_0.1.1.qualifier.jar" id="com.puresoltechnologies.purifinity.client.storage.db.feature" version="0.1.1.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+   <feature url="features/com.puresoltechnologies.purifinity.client.common.feature_0.2.0.jar" id="com.puresoltechnologies.purifinity.client.common.feature" version="0.2.0" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
+      <category name="com.puresoltechnologies.purifinity.client.application"/>
+   </feature>
+   <feature url="features/com.puresoltechnologies.purifinity.client.features.cleancode.feature_0.2.0.jar" id="com.puresoltechnologies.purifinity.client.features.cleancode.feature" version="0.2.0" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
       <category name="com.puresoltechnologies.purifinity.client.application"/>
    </feature>
    <category-def name="com.puresoltechnologies.purifinity.client.application" label="Purifinity">

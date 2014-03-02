@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: com.puresoltechnologies.purifinity.client.common.analysis.plugin
 Bundle-SymbolicName: com.puresoltechnologies.purifinity.client.common.analysis.plugin;singleton:=true
-Bundle-Version: 0.1.1.qualifier
+Bundle-Version: 0.2.0
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
@@ -14,65 +14,55 @@ Require-Bundle: org.eclipse.osgi;bundle-version="3.8.2",
  org.eclipse.e4.ui.workbench;bundle-version="0.11.0",
  org.eclipse.ui.intro;bundle-version="3.4.200",
  org.eclipse.help;bundle-version="3.6.0",
- com.puresoltechnologies.commons.trees.api.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.commons.misc.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.framework.commons.utils.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.parsers.api.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.parsers.impl.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.analysis.domain.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.analysis.api.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.framework.store.api.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.framework.analysis.impl.bundle;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.client.application.plugin;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.client.common.branding.plugin;bundle-version="0.1.1",
- com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.1.1"
-Export-Package: com.puresoltechnologies.purifinity.client.common.analysis;uses:="com.puresoltechnologies.purifinity.client.common.osgi,org.eclipse.ui.plugin,org.osgi.framework",
- com.puresoltechnologies.purifinity.client.common.analysis.contents;
-  uses:="com.puresoltechnologies.purifinity.analysis.api,
-   org.eclipse.swt.custom,
-   org.eclipse.swt.graphics,
-   org.eclipse.jface.viewers,
-   org.eclipse.swt.widgets,
-   com.puresoltechnologies.purifinity.client.common.ui.contents",
- com.puresoltechnologies.purifinity.client.common.analysis.controls;
-  uses:="com.puresoltechnologies.purifinity.analysis.api,
-   com.puresoltechnologies.purifinity.lang.api,
-   org.eclipse.swt.events,
-   com.puresoltechnologies.parsers.api.source,
-   org.eclipse.swt.widgets",
- com.puresoltechnologies.purifinity.client.common.analysis.editors;
-  uses:="com.puresoltechnologies.purifinity.analysis.api,
-   com.puresoltechnologies.purifinity.client.common.ui.editors,
-   org.eclipse.core.runtime,
-   org.eclipse.jface.resource,
-   org.eclipse.ui,
-   org.eclipse.swt.widgets",
- com.puresoltechnologies.purifinity.client.common.analysis.grammar;uses:="com.puresoltechnologies.parsers.impl.parser,org.eclipse.swt.graphics,com.puresoltechnologies.parsers.impl.grammar",
- com.puresoltechnologies.purifinity.client.common.analysis.handlers;uses:="org.eclipse.core.commands",
- com.puresoltechnologies.purifinity.client.common.analysis.jobs;
-  uses:="com.puresoltechnologies.purifinity.analysis.api,
-   org.eclipse.core.runtime,
-   org.eclipse.core.runtime.jobs,
-   com.puresoltechnologies.commons",
- com.puresoltechnologies.purifinity.client.common.analysis.perspectives;uses:="org.eclipse.ui",
- com.puresoltechnologies.purifinity.client.common.analysis.preferences;
-  uses:="org.eclipse.jface.preference,
-   org.eclipse.jface.resource,
-   org.eclipse.ui,
-   org.eclipse.core.runtime.preferences,
-   org.eclipse.swt.widgets",
- com.puresoltechnologies.purifinity.client.common.analysis.utils;uses:="org.eclipse.jface.preference,com.puresoltechnologies.commons",
- com.puresoltechnologies.purifinity.client.common.analysis.views;
-  uses:="com.puresoltechnologies.purifinity.analysis.api,
-   org.eclipse.core.runtime.jobs,
-   org.eclipse.ui,
-   org.eclipse.swt.events,
-   org.eclipse.jface.viewers,
-   com.puresoltechnologies.purifinity.client.common.ui.actions,
-   com.puresoltechnologies.purifinity.client.common.ui.views,
-   org.eclipse.swt.widgets,
-   org.eclipse.swt.browser",
- com.puresoltechnologies.purifinity.client.common.analysis.wizards;uses:="org.eclipse.jface.wizard,org.eclipse.swt.widgets"
+ com.puresoltechnologies.commons.trees.api.bundle;bundle-version="0.2.0",
+ com.puresoltechnologies.commons.misc.bundle;bundle-version="0.2.0",
+ com.puresoltechnologies.purifinity.framework.commons.utils.bundle;bundle-version="0.2.0",
+ com.puresoltechnologies.parsers.api.bundle;bundle-version="0.2.0",
+ com.puresoltechnologies.parsers.impl.bundle;bundle-version="0.2.0",
+ com.puresoltechnologies.purifinity.analysis.domain.bundle;bundle-version="0.2.0",
+ com.puresoltechnologies.purifinity.analysis.api.bundle;bundle-version="0.2.0",
+ com.puresoltechnologies.purifinity.framework.store.api.bundle;bundle-version="0.2.0",
+ com.puresoltechnologies.purifinity.framework.analysis.impl.bundle;bundle-version="0.2.0",
+ com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.2.0",
+ com.puresoltechnologies.purifinity.client.application.plugin;bundle-version="0.2.0",
+ com.puresoltechnologies.purifinity.client.common.branding.plugin;bundle-version="0.2.0",
+ com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.2.0"
+Export-Package: com.puresoltechnologies.purifinity.client.common.analy
+ sis;uses:="com.puresoltechnologies.purifinity.client.common.osgi,org.
+ eclipse.ui.plugin,org.osgi.framework",com.puresoltechnologies.purifin
+ ity.client.common.analysis.contents; uses:="com.puresoltechnologies.p
+ urifinity.analysis.api,  org.eclipse.swt.custom,  org.eclipse.swt.gra
+ phics,  org.eclipse.jface.viewers,  org.eclipse.swt.widgets,  com.pur
+ esoltechnologies.purifinity.client.common.ui.contents",com.puresoltec
+ hnologies.purifinity.client.common.analysis.controls; uses:="com.pure
+ soltechnologies.purifinity.analysis.api,  com.puresoltechnologies.pur
+ ifinity.lang.api,  org.eclipse.swt.events,  com.puresoltechnologies.p
+ arsers.api.source,  org.eclipse.swt.widgets",com.puresoltechnologies.
+ purifinity.client.common.analysis.editors; uses:="com.puresoltechnolo
+ gies.purifinity.analysis.api,  com.puresoltechnologies.purifinity.cli
+ ent.common.ui.editors,  org.eclipse.core.runtime,  org.eclipse.jface.
+ resource,  org.eclipse.ui,  org.eclipse.swt.widgets",com.puresoltechn
+ ologies.purifinity.client.common.analysis.grammar;uses:="com.puresolt
+ echnologies.parsers.impl.parser,org.eclipse.swt.graphics,com.puresolt
+ echnologies.parsers.impl.grammar",com.puresoltechnologies.purifinity.
+ client.common.analysis.handlers;uses:="org.eclipse.core.commands",com
+ .puresoltechnologies.purifinity.client.common.analysis.jobs; uses:="c
+ om.puresoltechnologies.purifinity.analysis.api,  org.eclipse.core.run
+ time,  org.eclipse.core.runtime.jobs,  com.puresoltechnologies.common
+ s",com.puresoltechnologies.purifinity.client.common.analysis.perspect
+ ives;uses:="org.eclipse.ui",com.puresoltechnologies.purifinity.client
+ .common.analysis.preferences; uses:="org.eclipse.jface.preference,  o
+ rg.eclipse.jface.resource,  org.eclipse.ui,  org.eclipse.core.runtime
+ .preferences,  org.eclipse.swt.widgets",com.puresoltechnologies.purif
+ inity.client.common.analysis.utils;uses:="org.eclipse.jface.preferenc
+ e,com.puresoltechnologies.commons",com.puresoltechnologies.purifinity
+ .client.common.analysis.views; uses:="com.puresoltechnologies.purifin
+ ity.analysis.api,  org.eclipse.core.runtime.jobs,  org.eclipse.ui,  o
+ rg.eclipse.swt.events,  org.eclipse.jface.viewers,  com.puresoltechno
+ logies.purifinity.client.common.ui.actions,  com.puresoltechnologies.
+ purifinity.client.common.ui.views,  org.eclipse.swt.widgets,  org.ecl
+ ipse.swt.browser",com.puresoltechnologies.purifinity.client.common.an
+ alysis.wizards;uses:="org.eclipse.jface.wizard,org.eclipse.swt.widget
+ s"
 Bundle-Activator: com.puresoltechnologies.purifinity.client.common.analysis.Activator
 Bundle-ActivationPolicy: lazy
