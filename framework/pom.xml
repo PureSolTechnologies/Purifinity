@@ -8,6 +8,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<purifinity.api.version>0.2.0</purifinity.api.version>
 		<cassandra.version>2.0.4</cassandra.version>
 		<cassandra.driver.version>2.0.0-rc2</cassandra.driver.version>
 		<titan.version>0.4.2</titan.version>
@@ -146,11 +147,6 @@
 			<!-- Project internal -->
 			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
-				<artifactId>parsers.api</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.parsers</groupId>
 				<artifactId>parsers.impl</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -159,26 +155,6 @@
 				<artifactId>parsers.impl.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.api</groupId>
-				<artifactId>analysis.api</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.api</groupId>
-				<artifactId>analysis.domain</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.api</groupId>
-				<artifactId>evaluation.api</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.api</groupId>
-				<artifactId>evaluation.domain</artifactId>
-				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
@@ -272,22 +248,47 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>math</artifactId>
-				<version>${project.version}</version>
+				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>misc</artifactId>
-				<version>${project.version}</version>
+				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>osgi</artifactId>
-				<version>${project.version}</version>
+				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>trees.api</artifactId>
-				<version>${project.version}</version>
+				<version>${purifinity.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.parsers</groupId>
+				<artifactId>parsers.api</artifactId>
+				<version>${purifinity.api.version}}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>analysis.api</artifactId>
+				<version>${purifinity.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>analysis.domain</artifactId>
+				<version>${purifinity.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>evaluation.api</artifactId>
+				<version>${purifinity.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>evaluation.domain</artifactId>
+				<version>${purifinity.api.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
 			<dependency>
