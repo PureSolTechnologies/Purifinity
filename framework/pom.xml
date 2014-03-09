@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<prerequisites>
@@ -489,6 +490,25 @@
 										<ignore />
 									</action>
 								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											com.puresoltechnologies.maven.plugins
+										</groupId>
+										<artifactId>
+											license-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.1.2-SNAPSHOT,)
+										</versionRange>
+										<goals>
+											<goal>validate</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
 							</pluginExecutions>
 						</lifecycleMappingMetadata>
 					</configuration>
@@ -499,46 +519,167 @@
 			<plugin>
 				<groupId>com.puresoltechnologies.maven.plugins</groupId>
 				<artifactId>license-maven-plugin</artifactId>
-				<version>1.1.1</version>
+				<version>1.1.2-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>validate</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
 					<recursive>true</recursive>
+					<skipTestScope>true</skipTestScope>
+					<knownLicenses>
+						<knownLicenses>
+							<key>pstl</key>
+							<name>PureSol Technologies Commercial License</name>
+							<url>http://puresol-technologies.com</url>
+						</knownLicenses>
+						<knownLicense>
+							<key>alv2</key>
+							<name>Apache License, Version 2.0</name>
+							<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+						</knownLicense>
+						<knownLicense>
+							<key>epl-v10</key>
+							<name>Eclipse Public License - v1.0</name>
+							<url>http://www.eclipse.org/legal/epl-v10.html</url>
+						</knownLicense>
+						<knownLicense>
+							<key>mit</key>
+							<name>The MIT License (MIT)</name>
+							<url>http://opensource.org/licenses/MIT</url>
+						</knownLicense>
+						<knownLicense>
+							<key>bsd</key>
+							<name>The BSD 3-Clause License</name>
+							<url>http://opensource.org/licenses/BSD-3-Clause</url>
+						</knownLicense>
+						<knownLicense>
+							<key>cpl1</key>
+							<name>Common Public License Version 1.0 (CPL)</name>
+							<url>http://opensource.org/licenses/cpl1.0.php</url>
+						</knownLicense>
+						<knownLicense>
+							<key>cddl10</key>
+							<name>Common Development and Distribution License (CDDL-1.0)</name>
+							<url>http://opensource.org/licenses/CDDL-1.0</url>
+						</knownLicense>
+						<knownLicense>
+							<key>lgpl21</key>
+							<name>GNU Lesser General Public License, Version 2.1</name>
+							<url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
+						</knownLicense>
+					</knownLicenses>
 					<validLicenses>
-						<validLicense>PureSol Technologies Commercial License</validLicense>
+						<validLicense>
+							<name>PureSol Technologies Commercial License</name>
+							<key>pstl</key>
+						</validLicense>
 						<!-- Apache License -->
-						<validLicense>Apache 2</validLicense>
-						<validLicense>Apache Software License - Version 2.0</validLicense>
-						<validLicense>Apache License</validLicense>
-						<validLicense>Apache License 2.0</validLicense>
-						<validLicense>Apache License Version 2.0</validLicense>
-						<validLicense>Apache License, Version 2.0</validLicense>
-						<validLicense>The Apache Software License, Version 2.0</validLicense>
+						<validLicense>
+							<name>Apache 2</name>
+							<key>alv2</key>
+						</validLicense>
+						<validLicense>
+							<name>Apache Software License - Version 2.0</name>
+							<key>alv2</key>
+						</validLicense>
+						<validLicense>
+							<name>Apache License</name>
+							<key>alv2</key>
+						</validLicense>
+						<validLicense>
+							<name>Apache License 2.0</name>
+							<key>alv2</key>
+						</validLicense>
+						<validLicense>
+							<name>Apache License Version 2.0</name>
+							<key>alv2</key>
+						</validLicense>
+						<validLicense>
+							<name>Apache License, Version 2.0</name>
+							<key>alv2</key>
+						</validLicense>
+						<validLicense>
+							<name>The Apache Software License, Version 2.0</name>
+							<key>alv2</key>
+						</validLicense>
 						<!-- BSD License -->
-						<validLicense>BSD</validLicense>
-						<validLicense>BSD License</validLicense>
-						<validLicense>BSD licence</validLicense>
-						<validLicense>BSD license</validLicense>
-						<validLicense>BSD style</validLicense>
-						<validLicense>ISC/BSD License</validLicense>
+						<validLicense>
+							<name>BSD</name>
+							<key>bsd</key>
+						</validLicense>
+						<validLicense>
+							<name>BSD License</name>
+							<key>bsd</key>
+						</validLicense>
+						<validLicense>
+							<name>BSD licence</name>
+							<key>bsd</key>
+						</validLicense>
+						<validLicense>
+							<name>BSD license</name>
+							<key>bsd</key>
+						</validLicense>
+						<validLicense>
+							<name>BSD style</name>
+							<key>bsd</key>
+						</validLicense>
+						<validLicense>
+							<name>ISC/BSD License</name>
+							<key>bsd</key>
+						</validLicense>
 						<!-- CPL -->
-						<validLicense>Common Public License Version 1.0</validLicense>
+						<validLicense>
+							<name>Common Public License Version 1.0</name>
+							<key>cpl1</key>
+						</validLicense>
 						<!-- EPL -->
-						<validLicense>Eclipse Public License</validLicense>
-						<validLicense>Eclipse Public License - Version 1.0</validLicense>
+						<validLicense>
+							<name>Eclipse Public License</name>
+							<key>epl-v10</key>
+						</validLicense>
+						<validLicense>
+							<name>Eclipse Public License - Version 1.0</name>
+							<key>epl-v10</key>
+						</validLicense>
+						<validLicense>
+							<name>Eclipse Public License - v 1.0</name>
+							<key>epl-v10</key>
+						</validLicense>
 						<!-- LGPL -->
-						<validLicense><![CDATA[GNU Lesser General Public License (LGPL), Version 2.1]]></validLicense>
+						<validLicense>
+							<name><![CDATA[GNU Lesser General Public License (LGPL), Version 2.1]]></name>
+							<key>lgpl21</key>
+						</validLicense>
 						<!-- MIT License -->
-						<validLicense>MIT License</validLicense>
-						<validLicense>The MIT License</validLicense>
+						<validLicense>
+							<name>MIT License</name>
+							<key>mit</key>
+						</validLicense>
+						<validLicense>
+							<name>The MIT License</name>
+							<key>mit</key>
+						</validLicense>
 						<!-- Public Domain -->
-						<validLicense>Public Domain</validLicense>
+						<validLicense>
+							<name>Public Domain</name>
+							<key>publicdomain</key>
+						</validLicense>
 						<!-- Snaptree License -->
-						<validLicense>SNAPTREE LICENSE</validLicense>
+						<validLicense>
+							<name>SNAPTREE LICENSE</name>
+							<key>snaptree</key>
+						</validLicense>
 					</validLicenses>
 					<approvedDependencies>
-						<approvedDependency>commons-codec:.*:.*</approvedDependency>
-						<approvedDependency>org\.antlr:.*:.*</approvedDependency>
-						<approvedDependency>org\.apache\.cassandra\..*:.*:.*</approvedDependency>
-						<approvedDependency>javax.servlet:servlet-api:.*</approvedDependency>
+						<approvedDependency><identifier>commons-codec:.*:.*</identifier><key>alv1</key></approvedDependency>
+						<approvedDependency><identifier>org\.antlr:.*:.*</identifier><key>bsd</key></approvedDependency>
+						<approvedDependency><identifier>org\.apache\.cassandra\..*:.*:.*</identifier><key>alv1</key></approvedDependency>
+						<approvedDependency><identifier>javax.servlet:servlet-api:.*</identifier><key>cddl10</key></approvedDependency>
 					</approvedDependencies>
 				</configuration>
 			</plugin>
