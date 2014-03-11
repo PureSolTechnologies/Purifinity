@@ -333,75 +333,17 @@
 				<configuration>
 					<recursive>true</recursive>
 					<skipTestScope>true</skipTestScope>
+					<skipProvidedScope>true</skipProvidedScope>
+					<skipOptionals>true</skipOptionals>
 					<knownLicenses>
 						<knownLicense>
-							<key>alv2</key>
 							<name>Apache License, Version 2.0</name>
 							<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-						</knownLicense>
-						<knownLicense>
-							<key>epl-v10</key>
-							<name>Eclipse Public License - v1.0</name>
-							<url>http://www.eclipse.org/legal/epl-v10.html</url>
-						</knownLicense>
-						<knownLicense>
-							<key>mit</key>
-							<name>The MIT License (MIT)</name>
-							<url>http://opensource.org/licenses/MIT</url>
-						</knownLicense>
-						<knownLicense>
-							<key>bsd</key>
-							<name>The BSD 3-Clause License</name>
-							<url>http://opensource.org/licenses/BSD-3-Clause</url>
-						</knownLicense>
-						<knownLicense>
-							<key>cpl1</key>
-							<name>Common Public License Version 1.0 (CPL)</name>
-							<url>http://opensource.org/licenses/cpl1.0.php</url>
+							<aliases>
+								<alias>The Apache Software License, Version 2.0</alias>
+							</aliases>
 						</knownLicense>
 					</knownLicenses>
-					<validLicenses>
-						<!-- Apache License -->
-						<validLicense>
-							<name>Apache License, Version 2.0</name>
-							<key>alv2</key>
-						</validLicense>
-						<validLicense>
-							<name>The Apache Software License, Version 2.0</name>
-							<key>alv2</key>
-						</validLicense>
-						<!-- BSD License -->
-						<validLicense>
-							<name>BSD style</name>
-							<key>bsd</key>
-						</validLicense>
-						<!-- CPL -->
-						<validLicense>
-							<name>Common Public License Version 1.0</name>
-							<key>cpl1</key>
-						</validLicense>
-						<!-- EPL -->
-						<validLicense>
-							<name>Eclipse Public License - v 1.0</name>
-							<key>epl-v10</key>
-						</validLicense>
-						<!-- LGPL -->
-						<validLicense>
-							<name><![CDATA[GNU Lesser General Public License (LGPL), Version 2.1]]></name>
-							<key>lgpl21</key>
-						</validLicense>
-						<!-- MIT License -->
-						<validLicense>
-							<name>MIT License</name>
-							<key>mit</key>
-						</validLicense>
-						<validLicense>
-							<name>The MIT License</name>
-							<key>mit</key>
-						</validLicense>
-					</validLicenses>
-					<approvedDependencies>
-					</approvedDependencies>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -417,7 +359,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.3</version>
-
 			</plugin>
 		</plugins>
 		<extensions>

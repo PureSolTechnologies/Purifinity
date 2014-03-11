@@ -455,25 +455,6 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>
-											com.puresoltechnologies.maven.plugins
-										</groupId>
-										<artifactId>
-											license-plugin
-										</artifactId>
-										<versionRange>
-											[0.1.0-SNAPSHOT,)
-										</versionRange>
-										<goals>
-											<goal>validate</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
 											org.apache.maven.plugins
 										</groupId>
 										<artifactId>
@@ -531,223 +512,145 @@
 				<configuration>
 					<recursive>true</recursive>
 					<skipTestScope>true</skipTestScope>
+					<skipProvidedScope>true</skipProvidedScope>
+					<skipOptionals>true</skipOptionals>
 					<knownLicenses>
 						<knownLicenses>
-							<key>pstl</key>
 							<name>PureSol Technologies Commercial License</name>
 							<url>http://puresol-technologies.com</url>
 						</knownLicenses>
 						<knownLicense>
-							<key>alv2</key>
+							<name>The Apache Software License, Version 1.1</name>
+							<url>https://www.apache.org/licenses/LICENSE-1.1</url>
+							<approvedDependencies>
+								<approvedDependency>avalon-framework:avalon-framework:4\.1\.3</approvedDependency>
+							</approvedDependencies>
+						</knownLicense>
+						<knownLicense>
 							<name>Apache License, Version 2.0</name>
 							<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+							<aliases>
+								<alias>Apache 2</alias>
+								<alias>Apache License</alias>
+								<alias>Apache License 2.0</alias>
+								<alias>Apache License Version 2.0</alias>
+								<alias>Apache Software License - Version 2.0</alias>
+								<alias>The Apache Software License, Version 2.0</alias>
+							</aliases>
+							<approvedDependencies>
+								<approvedDependency>commons-beanutils:commons-beanutils:1\.7\.0</approvedDependency>
+								<approvedDependency>commons-codec:commons-codec:1\.2</approvedDependency>
+								<approvedDependency>commons-logging:commons-logging:1\.0\.3</approvedDependency>
+								<approvedDependency>log4j:log4j:1\.2\.12</approvedDependency>
+								<approvedDependency>logkit:logkit:1\.0\.1</approvedDependency>
+								<approvedDependency>org\.apache.*:.*:.*</approvedDependency>
+								<approvedDependency>org\.codehaus\.jettison:jettison:1\.2</approvedDependency>
+								<approvedDependency>oro:oro:2\.0\.8</approvedDependency>
+							</approvedDependencies>
 						</knownLicense>
 						<knownLicense>
-							<key>bsd</key>
+							<name>The BSD 2-Clause License</name>
+							<url>http://opensource.org/licenses/BSD-2-Clause</url>
+							<approvedDependencies>
+								<approvedDependency>com\.esotericsoftware\.kryo:kryo:2\.21</approvedDependency>
+								<approvedDependency>com\.esotericsoftware\.minlog:minlog:1\.2</approvedDependency>
+								<approvedDependency>com\.esotericsoftware\.reflectasm:reflectasm:1\.07</approvedDependency>
+								<approvedDependency>jline:jline:.*</approvedDependency>
+								<approvedDependency>org\.hamcrest:hamcrest-core:1\.1</approvedDependency>
+							</approvedDependencies>
+						</knownLicense>
+						<knownLicense>
 							<name>The BSD 3-Clause License</name>
 							<url>http://opensource.org/licenses/BSD-3-Clause</url>
+							<aliases>
+								<alias>BSD 3-Clause</alias>
+							</aliases>
+							<approvedDependencies>
+								<approvedDependency>antlr:antlr:.*</approvedDependency>
+								<approvedDependency>asm:asm.*:.*</approvedDependency>
+								<approvedDependency>org\.antlr:.*:.*</approvedDependency>
+								<approvedDependency>org\.ow2\.asm:asm:4\.0</approvedDependency>
+							</approvedDependencies>
 						</knownLicense>
 						<knownLicense>
-							<key>cddl10</key>
-							<name>Common Development and Distribution License (CDDL-1.0)</name>
+							<name><![CDATA[Common Development and Distribution License (CDDL-1.0)]]></name>
 							<url>http://opensource.org/licenses/CDDL-1.0</url>
+							<approvedDependencies>
+								<approvedDependency>javax\.servlet:servlet-api:.*</approvedDependency>
+							</approvedDependencies>
 						</knownLicense>
 						<knownLicense>
-							<key>cpl1</key>
 							<name>Common Public License Version 1.0 (CPL)</name>
 							<url>http://opensource.org/licenses/cpl1.0.php</url>
+							<aliases>
+								<alias>Common Public License Version 1.0</alias>
+							</aliases>
 						</knownLicense>
 						<knownLicense>
-							<key>epl-v10</key>
 							<name>Eclipse Public License - v1.0</name>
 							<url>http://www.eclipse.org/legal/epl-v10.html</url>
+							<aliases>
+								<alias>Eclipse Public License - Version 1.0</alias>
+							</aliases>
 						</knownLicense>
 						<knownLicense>
-							<key>gpl2-ce</key>
-							<name>GNU General Public License, version 2, with the Classpath Exception</name>
-							<url>http://openjdk.java.net/legal/gplv2+ce.html</url>
-						</knownLicense>
-						<knownLicense>
-							<key>lgpl21</key>
 							<name>GNU Lesser General Public License, Version 2.1</name>
 							<url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
+							<aliases>
+								<alias>GNU Lesser General Public License (LGPL), Version 2.1</alias>
+								<alias>LGPL 2.1</alias>
+							</aliases>
 						</knownLicense>
 						<knownLicense>
-							<key>mit</key>
+							<name><![CDATA[GNU Lesser General Public License, Version 3.0]]></name>
+							<url>http://www.gnu.org/copyleft/lesser.html</url>
+							<approvedDependencies>
+								<approvedDependency>colt:colt:1\.2\.0</approvedDependency>
+								<approvedDependency>org\.acplt:oncrpc:1\.0\.7</approvedDependency>
+							</approvedDependencies>
+						</knownLicense>
+						<knownLicense>
+							<name>ISC License (ISC)</name>
+							<url>http://www.opensource.org/licenses/isc-license.txt</url>
+							<aliases>
+								<alias>ISC/BSD License</alias>
+							</aliases>
+						</knownLicense>
+						<knownLicense>
 							<name>The MIT License (MIT)</name>
 							<url>http://opensource.org/licenses/MIT</url>
+							<aliases>
+								<alias>MIT License</alias>
+								<alias>The MIT License</alias>
+							</aliases>
+							<approvedDependencies>
+								<approvedDependency>org\.slf4j:slf4j-api:1\.5\.8</approvedDependency>
+							</approvedDependencies>
 						</knownLicense>
 						<knownLicense>
-							<key>publicdomain</key>
+							<name>Mozilla Public License Version 1.1</name>
+							<url>http://www.mozilla.org/MPL/1.1</url>
+							<aliases>
+								<alias>MPL 1.1</alias>
+							</aliases>
+						</knownLicense> <!-- knownLicense> <name>OSGi Specification License, Version 2.0</name> <url>http://www.osgi.org/Main/OSGiSpecificationLicense</url> 
+							</knownLicense -->
+						<knownLicense>
 							<name>Public Domain</name>
 							<url>http://en.wikipedia.org/wiki/Public_domain</url>
+							<aliases>
+								<alias>Public domain, Sun Microsoystems</alias>
+								<alias>provided without support or warranty</alias>
+							</aliases>
+						</knownLicense>
+						<knownLicense>
+							<name>Snaptree License</name>
+							<url>https://github.com/nbronson/snaptree/blob/master/LICENSE</url>
+							<aliases>
+								<alias>SNAPTREE LICENSE</alias>
+							</aliases>
 						</knownLicense>
 					</knownLicenses>
-					<validLicenses>
-						<validLicense>
-							<name>PureSol Technologies Commercial License</name>
-							<key>pstl</key>
-						</validLicense>
-						<!-- Apache License -->
-						<validLicense>
-							<name>Apache 2</name>
-							<key>alv2</key>
-						</validLicense>
-						<validLicense>
-							<name>Apache Software License - Version 2.0</name>
-							<key>alv2</key>
-						</validLicense>
-						<validLicense>
-							<name>Apache License</name>
-							<key>alv2</key>
-						</validLicense>
-						<validLicense>
-							<name>Apache License 2.0</name>
-							<key>alv2</key>
-						</validLicense>
-						<validLicense>
-							<name>Apache License Version 2.0</name>
-							<key>alv2</key>
-						</validLicense>
-						<validLicense>
-							<name>Apache License, Version 2.0</name>
-							<key>alv2</key>
-						</validLicense>
-						<validLicense>
-							<name>The Apache Software License, Version 2.0</name>
-							<key>alv2</key>
-						</validLicense>
-						<!-- BSD License -->
-						<validLicense>
-							<name>BSD</name>
-							<key>bsd</key>
-						</validLicense>
-						<validLicense>
-							<name>BSD License</name>
-							<key>bsd</key>
-						</validLicense>
-						<validLicense>
-							<name>BSD licence</name>
-							<key>bsd</key>
-						</validLicense>
-						<validLicense>
-							<name>BSD license</name>
-							<key>bsd</key>
-						</validLicense>
-						<validLicense>
-							<name>BSD style</name>
-							<key>bsd</key>
-						</validLicense>
-						<validLicense>
-							<name>ISC/BSD License</name>
-							<key>bsd</key>
-						</validLicense>
-						<validLicense>
-							<name>New BSD license</name>
-							<key>bsd</key>
-						</validLicense>
-						<!-- CDDL -->
-						<validLicense>
-							<name>COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0</name>
-							<key>cddl10</key>
-						</validLicense>
-						<validLicense>
-							<name>Common Development and Distribution License (CDDL) v1.0</name>
-							<key>cddl10</key>
-						</validLicense>
-						<!-- CPL -->
-						<validLicense>
-							<name>Common Public License Version 1.0</name>
-							<key>cpl1</key>
-						</validLicense>
-						<!-- EPL -->
-						<validLicense>
-							<name>Eclipse Public License</name>
-							<key>epl-v10</key>
-						</validLicense>
-						<validLicense>
-							<name>Eclipse Public License - Version 1.0</name>
-							<key>epl-v10</key>
-						</validLicense>
-						<validLicense>
-							<name>Eclipse Public License - v 1.0</name>
-							<key>epl-v10</key>
-						</validLicense>
-						<!-- LGPL -->
-						<validLicense>
-							<name><![CDATA[GNU Lesser General Public License (LGPL), Version 2.1]]></name>
-							<key>lgpl21</key>
-						</validLicense>
-						<validLicense>
-							<name>lgpl</name>
-							<key>lgpl21</key>
-						</validLicense>
-						<!-- MIT License -->
-						<validLicense>
-							<name>MIT License</name>
-							<key>mit</key>
-						</validLicense>
-						<validLicense>
-							<name>The MIT License</name>
-							<key>mit</key>
-						</validLicense>
-						<!-- Public Domain -->
-						<validLicense>
-							<name>Public Domain</name>
-							<key>publicdomain</key>
-						</validLicense>
-						<!-- Snaptree License -->
-						<validLicense>
-							<name>SNAPTREE LICENSE</name>
-							<key>snaptree</key>
-						</validLicense>
-					</validLicenses>
-					<approvedDependencies>
-						<approvedDependency>
-							<identifier>commons-codec:.*:.*</identifier>
-							<key>alv1</key>
-						</approvedDependency>
-						<approvedDependency>
-							<identifier>org\.antlr:.*:.*</identifier>
-							<key>bsd</key>
-						</approvedDependency>
-						<approvedDependency>
-							<identifier>org\.apache\.cassandra\..*:.*:.*</identifier>
-							<key>alv1</key>
-						</approvedDependency>
-						<approvedDependency>
-							<identifier>javax.servlet:servlet-api:.*</identifier>
-							<key>cddl10</key>
-						</approvedDependency>
-						<approvedDependency>
-							<identifier>junit:junit:4.0</identifier>
-							<key>epl-v10</key>
-						</approvedDependency>
-						<approvedDependency>
-							<identifier>javax.activation:activation:1.1</identifier>
-							<key>cddl10</key>
-						</approvedDependency>
-						<approvedDependency>
-							<identifier>org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.0</identifier>
-							<key>alv2</key>
-						</approvedDependency>
-						<approvedDependency>
-							<identifier>jdk:srczip:999</identifier>
-							<key>gpl2-ce</key>
-						</approvedDependency>
-						<approvedDependency>
-							<identifier>log4j:log4j:1.2.12</identifier>
-							<key>alv2</key>
-						</approvedDependency>
-						<approvedDependency>
-							<identifier>logkit:logkit:1.0.1</identifier>
-							<key>alv2</key>
-						</approvedDependency>
-						<approvedDependency>
-							<identifier>avalon-framework:avalon-framework:4.1.3</identifier>
-							<key>alv2</key>
-						</approvedDependency>
-					</approvedDependencies>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -768,7 +671,6 @@
 			</extension>
 		</extensions>
 	</build>
-
 	<modules>
 		<module>bundles</module>
 		<module>commons</module>
