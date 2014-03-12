@@ -19,7 +19,7 @@
 	<description>This Maven project and all its sub-projects contain public APIs and SPIs of Purifinity.</description>
 
 	<inceptionYear>2009</inceptionYear>
-	<url>http://oss.puresol-technologies.com/purifinity-api</url>
+	<url>http://opensource.puresol-technologies.com/purifinity-api</url>
 
 	<organization>
 		<name>PureSol Technologies</name>
@@ -65,7 +65,7 @@
 		<site>
 			<id>FTPPureSolTechnologiesCom</id>
 			<name>FTPPureSolTechnologiesCom</name>
-			<url>ftp://puresol-technologies.com/oss/purifinity-api</url>
+			<url>ftp://puresol-technologies.com/opensource/purifinity-api</url>
 		</site>
 		<repository>
 			<id>libs-release-local</id>
@@ -301,7 +301,7 @@
 											license-maven-plugin
 										</artifactId>
 										<versionRange>
-											[1.1.2-SNAPSHOT,)
+											[1.2.0,)
 										</versionRange>
 										<goals>
 											<goal>validate</goal>
@@ -321,7 +321,7 @@
 			<plugin>
 				<groupId>com.puresoltechnologies.maven.plugins</groupId>
 				<artifactId>license-maven-plugin</artifactId>
-				<version>1.1.2-SNAPSHOT</version>
+				<version>1.2.0</version>
 				<executions>
 					<execution>
 						<phase>validate</phase>

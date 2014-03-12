@@ -23,7 +23,7 @@
 	<description>This is the functional framework for Purifinity.</description>
 
 	<inceptionYear>2009</inceptionYear>
-	<url>http://oss.puresol-technologies.com/purifinity-api</url>
+	<url>http://purifinity.com</url>
 
 	<organization>
 		<name>PureSol Technologies</name>
@@ -480,7 +480,7 @@
 											license-maven-plugin
 										</artifactId>
 										<versionRange>
-											[1.1.2-SNAPSHOT,)
+											[1.2.0,)
 										</versionRange>
 										<goals>
 											<goal>validate</goal>
@@ -500,7 +500,7 @@
 			<plugin>
 				<groupId>com.puresoltechnologies.maven.plugins</groupId>
 				<artifactId>license-maven-plugin</artifactId>
-				<version>1.1.2-SNAPSHOT</version>
+				<version>1.2.0</version>
 				<executions>
 					<execution>
 						<phase>validate</phase>
