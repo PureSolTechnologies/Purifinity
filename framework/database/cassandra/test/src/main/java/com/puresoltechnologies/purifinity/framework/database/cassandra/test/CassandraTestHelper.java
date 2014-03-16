@@ -58,12 +58,12 @@ public final class CassandraTestHelper {
 		assertNotNull(
 				"The session to Cassandra cluster was not connected, yet.",
 				session);
-		session.shutdown();
+		session.close();
 		session = null;
 		assertNotNull(
 				"The connection to Cassandra cluster was not established, yet.",
 				cluster);
-		cluster.shutdown();
+		cluster.close();
 		cluster = null;
 	}
 

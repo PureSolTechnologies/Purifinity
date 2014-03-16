@@ -64,7 +64,7 @@ public class CassandraMigration {
 				logger.info("ChangeLog table for Cassandra migration created.");
 			}
 		} finally {
-			session.shutdown();
+			session.close();
 		}
 	}
 
@@ -122,10 +122,10 @@ public class CassandraMigration {
 					logger.info("Cassandra migration performed successfully.");
 				}
 			} finally {
-				keyspaceSession.shutdown();
+				keyspaceSession.close();
 			}
 		} finally {
-			session.shutdown();
+			session.close();
 		}
 	}
 
@@ -145,7 +145,7 @@ public class CassandraMigration {
 				logger.info("Cassandra migration performed successfully.");
 			}
 		} finally {
-			session.shutdown();
+			session.close();
 		}
 	}
 

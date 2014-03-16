@@ -70,15 +70,15 @@ public class CassandraConnection {
 	public static void disconnect() {
 		preparedStatements.clear();
 		if (evaluationSession != null) {
-			evaluationSession.shutdown();
+			evaluationSession.close();
 			evaluationSession = null;
 		}
 		if (analysisSession != null) {
-			analysisSession.shutdown();
+			analysisSession.close();
 			analysisSession = null;
 		}
 		if (cluster != null) {
-			cluster.shutdown();
+			cluster.close();
 			cluster = null;
 		}
 	}

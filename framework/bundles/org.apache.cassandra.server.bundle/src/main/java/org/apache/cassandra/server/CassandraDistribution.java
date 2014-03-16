@@ -19,8 +19,11 @@ public class CassandraDistribution {
 	private static final Logger logger = LoggerFactory
 			.getLogger(CassandraDistribution.class);
 
-	static final String DIRECTORY_REPLACEMENT = "apache-cassandra-2.0.4/";
-	static final String DISTRIBUTION_RESOURCE = "/cassandra-distribution-2.0.4-binary.tar.gz";
+	static final String CASSANDRA_VERSION = "2.0.6";
+	static final String DIRECTORY_REPLACEMENT = "apache-cassandra-"
+			+ CASSANDRA_VERSION + "/";
+	static final String DISTRIBUTION_RESOURCE = "/cassandra-distribution-"
+			+ CASSANDRA_VERSION + "-binary.tar.gz";
 
 	public static void extract(File targetDirectory) throws IOException {
 		logger.info("Cassandra distribution will be unpacked.");
