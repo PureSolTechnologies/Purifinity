@@ -11,11 +11,11 @@
 		<title>i18n4java</title>
 	</bannerRight>
 	<body> 	
- 		<menu name="Overview" inherit="top">
+ 		<menu name="Overview">
       			<item name="Introduction" href="introduction.html" /> 		
       			<item name="Usage" href="usage.html" /> 		
  		</menu>
- 		<menu name="Project Documentation" inherit="top">
+ 		<menu name="Project Documentation">
 	 		<item name="Project Information" href="project-info.html">
       			<item name="About" href="index.html" />
       			<item name="Plugin Management" href="plugin-management.html" />

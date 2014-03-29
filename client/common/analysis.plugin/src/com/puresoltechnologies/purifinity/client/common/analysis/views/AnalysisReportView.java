@@ -176,24 +176,25 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 	}
 
 	private void readLastAnalysisRun() throws AnalysisProjectException {
+		if (analysis == null) {
+			return;
+		}
 		final AnalysisRunInformation analysisRunInformation = analysis
 				.loadLastAnalysisRun();
 		new Job("Read Analysis Run") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					analysisRun = AnalysisRunImpl.readFromStore(
-							analysis.getInformation().getUUID(),
-							analysisRunInformation.getUUID());
+					analysisRun = AnalysisRunImpl.readFromStore(analysis
+							.getInformation().getUUID(), analysisRunInformation
+							.getUUID());
 				} catch (AnalysisStoreException e) {
-					logger.log(new Status(Status.ERROR,
-							ParserTreeControl.class.getName(),
-							"Can not read analysis store!", e));
+					logger.log(new Status(Status.ERROR, ParserTreeControl.class
+							.getName(), "Can not read analysis store!", e));
 				}
 				new UIJob("Refresh Analysis Report") {
 					@Override
-					public IStatus runInUIThread(
-							IProgressMonitor monitor) {
+					public IStatus runInUIThread(IProgressMonitor monitor) {
 						refresh();
 						return Status.OK_STATUS;
 					}

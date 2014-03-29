@@ -29,11 +29,6 @@ public class ParameterComboViewer extends ComboViewer implements
 				if ((unit != null) && (!unit.isEmpty())) {
 					builder.append("[").append(parameter.getUnit()).append("]");
 				}
-				String description = parameter.getDescription();
-				if ((description != null) && (!description.isEmpty())) {
-					builder.append("(").append(parameter.getDescription())
-							.append(")");
-				}
 				return builder.toString();
 			}
 		});

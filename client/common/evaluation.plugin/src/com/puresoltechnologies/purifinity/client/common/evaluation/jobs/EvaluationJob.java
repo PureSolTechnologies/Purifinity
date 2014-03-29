@@ -3,7 +3,6 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.jobs;
 import java.util.List;
 import java.util.UUID;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -67,11 +66,8 @@ public class EvaluationJob extends Job {
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-		Evaluators evaluators = Evaluators.createInstance();
-		try {
+		try (Evaluators evaluators = Evaluators.createInstance()) {
 			return runEvaluators(monitor, evaluators);
-		} finally {
-			IOUtils.closeQuietly(evaluators);
 		}
 	}
 

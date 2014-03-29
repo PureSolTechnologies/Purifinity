@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.framework.evaluation.commons.impl;
 
-import java.io.Closeable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,7 +13,7 @@ import java.util.ServiceLoader;
  * 
  * @author Rick-Rainer Ludwig
  */
-public abstract class Evaluators implements Closeable {
+public abstract class Evaluators implements AutoCloseable {
 
 	public static Evaluators createInstance() {
 		ServiceLoader<Evaluators> loader = ServiceLoader.load(Evaluators.class);
@@ -38,6 +37,9 @@ public abstract class Evaluators implements Closeable {
 	 *         available evaluators.
 	 */
 	public abstract List<EvaluatorFactory> getAll();
+
+	@Override
+	public abstract void close();
 
 	/**
 	 * This method returns all available evaluators in sorted order. The sorting

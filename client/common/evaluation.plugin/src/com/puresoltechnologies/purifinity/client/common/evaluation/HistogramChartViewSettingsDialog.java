@@ -17,9 +17,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 
+import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.MetricComboViewer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.ParameterComboViewer;
+import com.puresoltechnologies.purifinity.client.common.evaluation.controls.MetricParameterSelectionComponent;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.HistogramChartView;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.AbstractPartSettingsDialog;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
@@ -81,6 +83,8 @@ public class HistogramChartViewSettingsDialog extends
 				parameterComboViewer = new ParameterComboViewer(parameterCombo);
 			}
 		}
+		new MetricParameterSelectionComponent(LevelOfMeasurement.NOMINAL,
+				container, SWT.BORDER);
 		populateCombos();
 		return container;
 	}

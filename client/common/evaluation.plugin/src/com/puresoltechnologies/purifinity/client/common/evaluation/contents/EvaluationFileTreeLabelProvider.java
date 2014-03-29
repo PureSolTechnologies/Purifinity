@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -239,8 +238,8 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 
 	private QualityLevel getFileQuality(AnalysisFileTree node)
 			throws EvaluationStoreException {
-		Evaluators evaluators = Evaluators.createInstance();
-		try {
+
+		try (Evaluators evaluators = Evaluators.createInstance()) {
 			EvaluatorStoreFactory storeFactory = EvaluatorStoreFactory
 					.getFactory();
 			List<EvaluatorFactory> allEvaluators = retrieveEvaluatorsForImage(evaluators);
@@ -275,8 +274,6 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 				}
 			}
 			return qualityLevel;
-		} finally {
-			IOUtils.closeQuietly(evaluators);
 		}
 	}
 
@@ -310,8 +307,7 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 
 	private QualityLevel getDirectoryQuality(AnalysisFileTree node)
 			throws EvaluationStoreException {
-		Evaluators evaluators = Evaluators.createInstance();
-		try {
+		try (Evaluators evaluators = Evaluators.createInstance()) {
 			QualityLevel qualityLevel = null;
 			EvaluatorStoreFactory storeFactory = EvaluatorStoreFactory
 					.getFactory();
@@ -336,8 +332,6 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 				}
 			}
 			return qualityLevel;
-		} finally {
-			IOUtils.closeQuietly(evaluators);
 		}
 	}
 

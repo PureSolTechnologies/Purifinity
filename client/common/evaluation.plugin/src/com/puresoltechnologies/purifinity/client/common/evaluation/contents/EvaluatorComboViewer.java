@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.contents;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -38,7 +37,7 @@ public class EvaluatorComboViewer extends ComboViewer {
 	}
 
 	public void dispose() {
-		IOUtils.closeQuietly(evaluators);
+		evaluators.close();
 	}
 
 	public EvaluatorFactory getSelectedEvaluator() {
