@@ -1,5 +1,9 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.contents;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -33,7 +37,14 @@ public class EvaluatorComboViewer extends ComboViewer {
 			}
 		});
 		evaluators = Evaluators.createInstance();
-		setInput(evaluators.getAll());
+		List<EvaluatorFactory> evaluatorList = evaluators.getAll();
+		Collections.sort(evaluatorList, new Comparator<EvaluatorFactory>() {
+			@Override
+			public int compare(EvaluatorFactory o1, EvaluatorFactory o2) {
+				return o1.getName().compareTo(o2.getName());
+			}
+		});
+		setInput(evaluatorList);
 	}
 
 	public void dispose() {

@@ -1,6 +1,8 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.contents;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +29,8 @@ public class ParameterComboViewer extends ComboViewer implements
 				StringBuilder builder = new StringBuilder(parameter.getName());
 				String unit = parameter.getUnit();
 				if ((unit != null) && (!unit.isEmpty())) {
-					builder.append("[").append(parameter.getUnit()).append("]");
+					builder.append(" [").append(parameter.getUnit())
+							.append("]");
 				}
 				return builder.toString();
 			}
@@ -46,6 +49,13 @@ public class ParameterComboViewer extends ComboViewer implements
 			@SuppressWarnings("unchecked")
 			Set<Parameter<?>> factoryList = (Set<Parameter<?>>) newInput;
 			parameters.addAll(factoryList);
+			Collections.sort(parameters, new Comparator<Parameter<?>>() {
+				@Override
+				public int compare(Parameter<?> o1, Parameter<?> o2) {
+					return o1.getName().toLowerCase()
+							.compareTo(o2.getName().toLowerCase());
+				}
+			});
 		}
 	}
 

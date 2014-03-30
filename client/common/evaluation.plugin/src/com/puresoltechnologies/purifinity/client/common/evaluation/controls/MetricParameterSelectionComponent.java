@@ -1,15 +1,19 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.controls;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.layout.FormData;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Group;
 
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
@@ -32,17 +36,20 @@ public class MetricParameterSelectionComponent extends Composite implements
 	private final EvaluatorComboViewer evaluatorComboViewer;
 	private final Combo parameterCombo;
 	private final ParameterComboViewer parameterComboViewer;
-	private final Text description;
 
-	public MetricParameterSelectionComponent(
-			LevelOfMeasurement levelOfMeasurement, Composite parent, int style) {
-		super(parent, style);
+	public MetricParameterSelectionComponent(Composite parent,
+			LevelOfMeasurement levelOfMeasurement, String title) {
+		super(parent, SWT.NONE);
 		this.levelOfMeasurement = levelOfMeasurement;
+		setLayout(new FillLayout());
+
+		Group group = new Group(this, SWT.SHADOW_ETCHED_IN);
+		group.setText(title);
 
 		FormLayout layout = new FormLayout();
-		setLayout(layout);
+		group.setLayout(layout);
 
-		evaluatorCombo = new Combo(this, SWT.READ_ONLY);
+		evaluatorCombo = new Combo(group, SWT.READ_ONLY);
 		FormData fdEvaluatorCombo = new FormData();
 		fdEvaluatorCombo.left = new FormAttachment(0, SWTUtils.DEFAULT_MARGIN);
 		fdEvaluatorCombo.right = new FormAttachment(100,
@@ -51,7 +58,7 @@ public class MetricParameterSelectionComponent extends Composite implements
 		evaluatorCombo.setLayoutData(fdEvaluatorCombo);
 		evaluatorCombo.addSelectionListener(this);
 
-		parameterCombo = new Combo(this, SWT.READ_ONLY);
+		parameterCombo = new Combo(group, SWT.READ_ONLY);
 		FormData fdParameterCombo = new FormData();
 		fdParameterCombo.left = new FormAttachment(0, SWTUtils.DEFAULT_MARGIN);
 		fdParameterCombo.right = new FormAttachment(100,
@@ -61,27 +68,24 @@ public class MetricParameterSelectionComponent extends Composite implements
 		parameterCombo.setLayoutData(fdParameterCombo);
 		parameterCombo.addSelectionListener(this);
 
-		description = new Text(this, SWT.READ_ONLY | SWT.MULTI
-				| SWT.SCROLL_LINE | SWT.SCROLL_PAGE | SWT.SCROLLBAR_OVERLAY
-				| SWT.V_SCROLL | SWT.WRAP);
 		FormData fdDescription = new FormData();
 		fdDescription.left = new FormAttachment(0, SWTUtils.DEFAULT_MARGIN);
 		fdDescription.right = new FormAttachment(100, -SWTUtils.DEFAULT_MARGIN);
 		fdDescription.top = new FormAttachment(parameterCombo,
 				SWTUtils.DEFAULT_MARGIN);
 		fdDescription.bottom = new FormAttachment(100, -SWTUtils.DEFAULT_MARGIN);
-		description.setLayoutData(fdDescription);
 
 		evaluatorComboViewer = new EvaluatorComboViewer(evaluatorCombo);
-		evaluatorCombo.select(0);
-
 		parameterComboViewer = new ParameterComboViewer(parameterCombo);
+
+		evaluatorCombo.select(0);
+		evaluationSelectionChanged();
 		parameterCombo.select(0);
+		parameterSelectionChanged();
 	}
 
 	@Override
 	public void dispose() {
-		description.dispose();
 		parameterComboViewer.dispose();
 		parameterCombo.dispose();
 		evaluatorComboViewer.dispose();
@@ -92,24 +96,40 @@ public class MetricParameterSelectionComponent extends Composite implements
 	@Override
 	public void widgetSelected(SelectionEvent e) {
 		if (e.getSource() == evaluatorCombo) {
-			StructuredSelection selection = (StructuredSelection) evaluatorComboViewer
-					.getSelection();
-			EvaluatorFactory evaluatorFactory = (EvaluatorFactory) selection
-					.getFirstElement();
-			// parameterComboViewer.set
-			parameterComboViewer.setInput(evaluatorFactory.getParameters());
-			parameterCombo.select(0);
+			evaluationSelectionChanged();
 		} else if (e.getSource() == parameterCombo) {
-			StructuredSelection selection = (StructuredSelection) parameterComboViewer
-					.getSelection();
-			Parameter<?> parameter = (Parameter<?>) selection.getFirstElement();
-			description.setText(parameter.getDescription());
+			parameterSelectionChanged();
 		}
+	}
+
+	private void evaluationSelectionChanged() {
+		StructuredSelection selection = (StructuredSelection) evaluatorComboViewer
+				.getSelection();
+		EvaluatorFactory evaluatorFactory = (EvaluatorFactory) selection
+				.getFirstElement();
+		evaluatorCombo.setToolTipText(evaluatorFactory.getDescription());
+		Set<Parameter<?>> parameters = new LinkedHashSet<>();
+		for (Parameter<?> parameter : evaluatorFactory.getParameters()) {
+			if (parameter.getLevelOfMeasurement().isAtLeast(levelOfMeasurement)) {
+				parameters.add(parameter);
+			}
+		}
+		parameterComboViewer.setInput(parameters);
+		parameterCombo.select(0);
+	}
+
+	private void parameterSelectionChanged() {
+		StructuredSelection selection = (StructuredSelection) parameterComboViewer
+				.getSelection();
+		Parameter<?> parameter = (Parameter<?>) selection.getFirstElement();
+		parameterCombo.setToolTipText(parameter.getDescription());
 	}
 
 	@Override
 	public void widgetDefaultSelected(SelectionEvent e) {
 		evaluatorCombo.select(0);
+		evaluationSelectionChanged();
 		parameterCombo.select(0);
+		parameterSelectionChanged();
 	}
 }

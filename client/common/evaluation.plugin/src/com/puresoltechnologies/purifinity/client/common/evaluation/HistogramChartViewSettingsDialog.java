@@ -83,8 +83,8 @@ public class HistogramChartViewSettingsDialog extends
 				parameterComboViewer = new ParameterComboViewer(parameterCombo);
 			}
 		}
-		new MetricParameterSelectionComponent(LevelOfMeasurement.NOMINAL,
-				container, SWT.BORDER);
+		new MetricParameterSelectionComponent(container,
+				LevelOfMeasurement.INTERVAL, "Category Settings");
 		populateCombos();
 		return container;
 	}
