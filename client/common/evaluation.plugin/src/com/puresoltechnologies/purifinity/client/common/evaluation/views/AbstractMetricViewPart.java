@@ -6,6 +6,11 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.PartSettingsC
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Reproducable;
 
+/**
+ * This class represents a view part containing metrics.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public abstract class AbstractMetricViewPart extends AbstractEvaluationView
 		implements Reproducable, PartSettingsCapability, Refreshable,
 		Exportable, Printable {

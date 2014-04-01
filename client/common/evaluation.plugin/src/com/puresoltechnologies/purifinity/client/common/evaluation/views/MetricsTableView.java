@@ -183,31 +183,32 @@ public class MetricsTableView extends AbstractPureSolTechnologiesView implements
 		SourceCodeQuality sourceCodeQuality = null;
 		QualityLevel qualityLevel = null;
 
-		EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
-		EvaluatorStore store = factory.createInstance(selectedEvaluator
-				.getEvaluatorClass());
-		if (path.isFile()) {
-			MetricFileResults fileResults = store.readFileResults(path
-					.getHashId());
-			if (fileResults != null) {
-				sourceCodeQuality = fileResults.getSourceQuality();
-				qualityLevel = fileResults.getQualityLevel();
+		if (path != null) {
+			EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
+			EvaluatorStore store = factory.createInstance(selectedEvaluator
+					.getEvaluatorClass());
+			if (path.isFile()) {
+				MetricFileResults fileResults = store.readFileResults(path
+						.getHashId());
+				if (fileResults != null) {
+					sourceCodeQuality = fileResults.getSourceQuality();
+					qualityLevel = fileResults.getQualityLevel();
+				} else {
+					sourceCodeQuality = SourceCodeQuality.UNSPECIFIED;
+					qualityLevel = null;
+				}
 			} else {
-				sourceCodeQuality = SourceCodeQuality.UNSPECIFIED;
-				qualityLevel = null;
-			}
-		} else {
-			MetricDirectoryResults directoryResults = store
-					.readDirectoryResults(path.getHashId());
-			if (directoryResults != null) {
-				sourceCodeQuality = directoryResults.getSourceQuality();
-				qualityLevel = directoryResults.getQualityLevel();
-			} else {
-				sourceCodeQuality = SourceCodeQuality.UNSPECIFIED;
-				qualityLevel = null;
+				MetricDirectoryResults directoryResults = store
+						.readDirectoryResults(path.getHashId());
+				if (directoryResults != null) {
+					sourceCodeQuality = directoryResults.getSourceQuality();
+					qualityLevel = directoryResults.getQualityLevel();
+				} else {
+					sourceCodeQuality = SourceCodeQuality.UNSPECIFIED;
+					qualityLevel = null;
+				}
 			}
 		}
-
 		quality.setSourceCodeQuality(sourceCodeQuality);
 		this.qualityLevel.setQualityLevel(qualityLevel);
 	}

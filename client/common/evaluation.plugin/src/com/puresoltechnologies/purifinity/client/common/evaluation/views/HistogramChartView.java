@@ -32,7 +32,6 @@ import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.client.common.analysis.AnalysisSelections;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.Axis;
@@ -45,12 +44,11 @@ import com.puresoltechnologies.purifinity.client.common.chart.Plot;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.BarMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.HistogramChartViewSettingsDialog;
+import com.puresoltechnologies.purifinity.client.common.evaluation.controls.MetricParameterSelection;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartData;
 import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProvider;
 import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProviderFactory;
@@ -61,10 +59,10 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	private HistogramChartViewSettingsDialog settingsDialog;
 
-	private EvaluatorFactory evaluatorSelection = null;
-	private EvaluatorFactory oldEvaluatorSelection = null;
-	private Parameter<?> parameterSelection = null;
-	private Parameter<?> oldParameterSelection = null;
+	private MetricParameterSelection metricParameterSelection = new MetricParameterSelection(
+			null, null, null);
+	private MetricParameterSelection oldMetricParameterSelection = new MetricParameterSelection(
+			null, null, null);
 
 	private Chart2D chart;
 
@@ -73,48 +71,14 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
-		if (memento == null) {
-			return;
-		}
-		// touch old classes to get the plugins activated... :-(
-		String mapMeticClass = memento.getString("metric.class");
-		if (mapMeticClass != null) {
-			try {
-				Class.forName(mapMeticClass);
-			} catch (ClassNotFoundException e) {
-			}
-		}
-		List<EvaluatorFactory> allMetrics = Evaluators.createInstance()
-				.getAllMetrics();
-		String metricSelectionName = memento.getString("metric");
-		String parameterSelectionName = memento.getString("parameter");
-		for (EvaluatorFactory metric : allMetrics) {
-			if (metric.getName().equals(metricSelectionName)) {
-				evaluatorSelection = metric;
-				if (parameterSelectionName != null) {
-					for (Parameter<?> parameter : evaluatorSelection
-							.getParameters()) {
-						if (parameter.getName().equals(parameterSelectionName)) {
-							parameterSelection = parameter;
-							break;
-						}
-					}
-				}
-				break;
-			}
-		}
+		metricParameterSelection = HistogramChartViewSettingsDialog
+				.init(memento);
 	}
 
 	@Override
 	public void saveState(IMemento memento) {
-		if (evaluatorSelection != null) {
-			memento.putString("metric.class", evaluatorSelection.getClass()
-					.getName());
-			memento.putString("metric", evaluatorSelection.getName());
-		}
-		if (parameterSelection != null) {
-			memento.putString("parameter", parameterSelection.getName());
-		}
+		HistogramChartViewSettingsDialog.saveState(memento,
+				metricParameterSelection);
 		super.saveState(memento);
 	}
 
@@ -144,7 +108,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	public void showSettings() {
 		if (settingsDialog == null) {
 			settingsDialog = new HistogramChartViewSettingsDialog(this,
-					evaluatorSelection, parameterSelection);
+					metricParameterSelection);
 			settingsDialog.open();
 		} else {
 			settingsDialog.close();
@@ -159,9 +123,8 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	public void applySettings() {
-		evaluatorSelection = settingsDialog.getMetric();
-		parameterSelection = settingsDialog.getParameter();
-		if ((evaluatorSelection != null) && (parameterSelection != null)) {
+		metricParameterSelection = settingsDialog.getMetricParameterSelection();
+		if (metricParameterSelection.isComplete()) {
 			updateView();
 		}
 	}
@@ -180,65 +143,63 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	protected void updateView() {
-		oldEvaluatorSelection = evaluatorSelection;
-		oldParameterSelection = parameterSelection;
+		oldMetricParameterSelection = metricParameterSelection;
 		loadData();
 	}
 
 	@Override
 	protected boolean hasFullViewSettings() {
-		return (evaluatorSelection != null) && (parameterSelection != null);
+		return metricParameterSelection.isComplete();
 	}
 
 	@Override
 	protected boolean hasChangedViewSettings() {
-		if ((oldEvaluatorSelection == null)
-				|| (!evaluatorSelection.getClass().equals(
-						oldEvaluatorSelection.getClass()))) {
-			return true;
-		}
-		if (!oldParameterSelection.equals(parameterSelection)) {
+		if (!oldMetricParameterSelection.equals(metricParameterSelection)) {
 			return true;
 		}
 		return false;
 	}
 
 	private void loadData() {
-		Job job = new Job("Histogram Chart") {
-			@Override
-			protected IStatus run(IProgressMonitor monitor) {
-				monitor.beginTask("Load data", 6);
-				HistogramChartDataProvider dataProvider = HistogramChartDataProviderFactory
-						.getFactory().getInstance();
-				monitor.worked(1);
-				final AnalysisSelection analysisSelection = getAnalysisSelection();
-				monitor.worked(1);
-				AnalysisProject analysisProject = analysisSelection
-						.getAnalysisProject();
-				monitor.worked(1);
-				UUID analysisProjectUUID = analysisProject.getInformation()
-						.getUUID();
-				monitor.worked(1);
-				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-						.getInformation().getUUID();
-				monitor.worked(1);
-				values = dataProvider.loadValues(analysisProjectUUID,
-						analysisRunUUID, evaluatorSelection.getName(),
-						parameterSelection, CodeRangeType.FILE);
-				monitor.worked(1);
-				monitor.done();
-				new UIJob("Draw Histogram Chart") {
+		if (getAnalysisSelection() != null) {
+			Job job = new Job("Histogram Chart") {
+				@Override
+				protected IStatus run(IProgressMonitor monitor) {
+					monitor.beginTask("Load data", 6);
+					HistogramChartDataProvider dataProvider = HistogramChartDataProviderFactory
+							.getFactory().getInstance();
+					monitor.worked(1);
+					final AnalysisSelection analysisSelection = getAnalysisSelection();
+					monitor.worked(1);
+					AnalysisProject analysisProject = analysisSelection
+							.getAnalysisProject();
+					monitor.worked(1);
+					UUID analysisProjectUUID = analysisProject.getInformation()
+							.getUUID();
+					monitor.worked(1);
+					UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+							.getInformation().getUUID();
+					monitor.worked(1);
+					values = dataProvider.loadValues(analysisProjectUUID,
+							analysisRunUUID, metricParameterSelection
+									.getEvaluatorFactory().getName(),
+							metricParameterSelection.getParameter(),
+							metricParameterSelection.getCodeRangeType());
+					monitor.worked(1);
+					monitor.done();
+					new UIJob("Draw Histogram Chart") {
 
-					@Override
-					public IStatus runInUIThread(IProgressMonitor monitor) {
-						showEvaluation(analysisSelection.getFileTreeNode());
-						return Status.OK_STATUS;
-					}
-				}.schedule();
-				return Status.OK_STATUS;
-			}
-		};
-		job.schedule();
+						@Override
+						public IStatus runInUIThread(IProgressMonitor monitor) {
+							showEvaluation(analysisSelection.getFileTreeNode());
+							return Status.OK_STATUS;
+						}
+					}.schedule();
+					return Status.OK_STATUS;
+				}
+			};
+			job.schedule();
+		}
 	}
 
 	@Override
@@ -269,7 +230,10 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	private void setupChart(List<Value<?>> histogramValues) {
 		chart.removeAllPlots();
 
-		chart.setTitle("Histogram Chart for " + evaluatorSelection.getName());
+		chart.setTitle("Histogram Chart for "
+				+ metricParameterSelection.getEvaluatorFactory().getName());
+		Parameter<?> parameterSelection = metricParameterSelection
+				.getParameter();
 		chart.setSubTitle(parameterSelection.getName());
 
 		if (parameterSelection.isNumeric()) {

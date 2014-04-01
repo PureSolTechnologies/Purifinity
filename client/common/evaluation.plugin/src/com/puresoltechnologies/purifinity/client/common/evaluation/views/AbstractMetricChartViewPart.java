@@ -23,6 +23,11 @@ import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisS
 import com.puresoltechnologies.purifinity.client.common.chart.ChartCanvas;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ChartRenderer;
 
+/**
+ * This class represents a view part containing metrics as chart.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public abstract class AbstractMetricChartViewPart extends
 		AbstractMetricViewPart implements MouseListener, ISelectionProvider {
 
@@ -50,7 +55,7 @@ public abstract class AbstractMetricChartViewPart extends
 	}
 
 	@Override
-	public void print(Printer printer, String printJobName) {
+	public final void print(Printer printer, String printJobName) {
 		printer.startJob(printJobName);
 		try {
 			GC gc = new GC(printer);
@@ -101,29 +106,31 @@ public abstract class AbstractMetricChartViewPart extends
 	}
 
 	@Override
-	public void addSelectionChangedListener(ISelectionChangedListener listener) {
+	public final void addSelectionChangedListener(
+			ISelectionChangedListener listener) {
 		selectionChangedListener.add(listener);
 	}
 
 	@Override
-	public void removeSelectionChangedListener(
+	public final void removeSelectionChangedListener(
 			ISelectionChangedListener listener) {
 		selectionChangedListener.remove(listener);
 	}
 
 	@Override
-	public ISelection getSelection() {
+	public final ISelection getSelection() {
 		return getAnalysisSelection();
 	}
 
 	@Override
-	protected void setAnalysisSelection(AnalysisSelection analysisSelection) {
+	protected final void setAnalysisSelection(
+			AnalysisSelection analysisSelection) {
 		super.setAnalysisSelection(analysisSelection);
 		setSelection(analysisSelection);
 	}
 
 	@Override
-	public void setSelection(ISelection selection) {
+	public final void setSelection(ISelection selection) {
 		for (ISelectionChangedListener listener : selectionChangedListener) {
 			listener.selectionChanged(new SelectionChangedEvent(this, selection));
 		}

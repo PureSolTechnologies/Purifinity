@@ -7,6 +7,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.widgets.Combo;
@@ -54,6 +55,12 @@ public class EvaluatorComboViewer extends ComboViewer {
 	public EvaluatorFactory getSelectedEvaluator() {
 		IStructuredSelection selection = (IStructuredSelection) getSelection();
 		return (EvaluatorFactory) selection.getFirstElement();
+	}
+
+	public void setSelection(EvaluatorFactory evaluatorSelection) {
+		if (evaluatorSelection != null) {
+			setSelection(new StructuredSelection(evaluatorSelection));
+		}
 	}
 
 	public int getNumber() {

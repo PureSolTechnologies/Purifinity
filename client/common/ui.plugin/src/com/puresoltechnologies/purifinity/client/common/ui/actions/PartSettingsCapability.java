@@ -12,8 +12,18 @@ import org.eclipse.ui.IWorkbenchPartSite;
  */
 public interface PartSettingsCapability {
 
+	/**
+	 * This method returns the title for the part settings dialog.
+	 * 
+	 * @return A {@link String} with the title is returned.
+	 */
 	String getTitle();
 
+	/**
+	 * Returns the reference to the site.
+	 * 
+	 * @return
+	 */
 	IWorkbenchPartSite getSite();
 
 	/**

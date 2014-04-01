@@ -28,6 +28,11 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.AbstractPartS
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 
+/**
+ * This is the settings dialog for pareto charts.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 		implements SelectionListener {
 

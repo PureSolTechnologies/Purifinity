@@ -11,11 +11,11 @@ import org.eclipse.ui.part.ViewPart;
  */
 public interface Reproducable {
 
-    /**
-     * This method should be implemented by {@link ViewPart}.
-     * 
-     * @return
-     */
-    IWorkbenchPartSite getSite();
+	/**
+	 * This method should be implemented by {@link ViewPart}.
+	 * 
+	 * @return Returns a {@link IWorkbenchPartSite} object.
+	 */
+	IWorkbenchPartSite getSite();
 
 }

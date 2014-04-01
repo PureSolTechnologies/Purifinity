@@ -21,6 +21,9 @@ public abstract class AbstractPureSolTechnologiesView extends ViewPart {
 		this.activator = activator;
 	}
 
+	/**
+	 * This method was implemented to add the help system texts.
+	 */
 	@Override
 	public void createPartControl(Composite parent) {
 		PlatformUI

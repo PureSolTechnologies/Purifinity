@@ -2,7 +2,9 @@ package com.puresoltechnologies.purifinity.client.common.analysis.contents;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -45,6 +47,17 @@ public class CodeRangeTypeComboViewer extends ComboViewer {
 	public void refresh() {
 		super.refresh();
 		setInput(CodeRangeType.values());
+	}
+
+	public CodeRangeType getSelectedCodeRangeType() {
+		IStructuredSelection selection = (IStructuredSelection) getSelection();
+		return (CodeRangeType) selection.getFirstElement();
+	}
+
+	public void setSelection(CodeRangeType codeRangeTypeSelection) {
+		if (codeRangeTypeSelection != null) {
+			setSelection(new StructuredSelection(codeRangeTypeSelection));
+		}
 	}
 
 }
