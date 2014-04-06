@@ -230,6 +230,10 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 	private void setupChart(List<Value<?>> histogramValues) {
 		chart.removeAllPlots();
 
+		if (!metricParameterSelection.isComplete()) {
+			return;
+		}
+
 		chart.setTitle("Histogram Chart for "
 				+ metricParameterSelection.getEvaluatorFactory().getName());
 		Parameter<?> parameterSelection = metricParameterSelection

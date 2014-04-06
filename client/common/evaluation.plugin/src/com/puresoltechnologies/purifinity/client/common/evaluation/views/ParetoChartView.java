@@ -243,6 +243,10 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	private void setupChart(final List<Mark2D<String, Double>> paretoValues) {
 		chart.removeAllPlots();
 
+		if (!metricParameterSelection.isComplete()) {
+			return;
+		}
+
 		chart.setTitle("Pareto Chart for "
 				+ metricParameterSelection.getEvaluatorFactory().getName());
 		chart.setSubTitle(metricParameterSelection.getParameter().getName());

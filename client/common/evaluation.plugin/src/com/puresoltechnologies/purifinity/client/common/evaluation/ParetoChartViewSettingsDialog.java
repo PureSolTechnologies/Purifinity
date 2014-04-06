@@ -36,7 +36,7 @@ public class ParetoChartViewSettingsDialog extends AbstractPartSettingsDialog
 		container.setLayout(new FillLayout());
 
 		metricParameterSelectionComponent = new MetricParameterSelectionComponent(
-				container, LevelOfMeasurement.NOMINAL, "Category Selection");
+				container, LevelOfMeasurement.RATIO, "Category Selection");
 		metricParameterSelectionComponent.addSelectionListener(this);
 
 		metricParameterSelectionComponent
