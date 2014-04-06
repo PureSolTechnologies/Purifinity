@@ -33,7 +33,6 @@ import com.puresoltechnologies.commons.trees.api.TreeVisitor;
 import com.puresoltechnologies.commons.trees.api.TreeWalker;
 import com.puresoltechnologies.commons.trees.api.WalkingAction;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.client.common.analysis.AnalysisSelections;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.Axis;
@@ -46,15 +45,15 @@ import com.puresoltechnologies.purifinity.client.common.chart.Mark2D;
 import com.puresoltechnologies.purifinity.client.common.chart.Plot;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.BarMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
+import com.puresoltechnologies.purifinity.client.common.evaluation.HistogramChartViewSettingsDialog;
 import com.puresoltechnologies.purifinity.client.common.evaluation.ParetoChartViewSettingsDialog;
+import com.puresoltechnologies.purifinity.client.common.evaluation.controls.MetricParameterSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.ChartConfigProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.DefaultParetoChartConfigProvider;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ExportAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartData;
 import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProvider;
 import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProviderFactory;
@@ -63,12 +62,10 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 
 	private ParetoChartViewSettingsDialog settingsDialog;
 
-	private EvaluatorFactory evaluatorSelection = null;
-	private EvaluatorFactory oldEvaluatorSelection = null;
-	private Parameter<?> parameterSelection = null;
-	private Parameter<?> oldParameterSelection = null;
-	private CodeRangeType codeRangeTypeSelection = CodeRangeType.FILE;
-	private CodeRangeType oldCodeRangeTypeSelection = CodeRangeType.FILE;
+	private MetricParameterSelection metricParameterSelection = new MetricParameterSelection(
+			null, null, null);
+	private MetricParameterSelection oldMetricParameterSelection = new MetricParameterSelection(
+			null, null, null);
 
 	private Chart2D chart;
 
@@ -77,56 +74,14 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		super.init(site, memento);
-		if (memento == null) {
-			return;
-		}
-		// touch old classes to get the plugins activated... :-(
-		String mapMeticClass = memento.getString("metric.class");
-		if (mapMeticClass != null) {
-			try {
-				Class.forName(mapMeticClass);
-			} catch (ClassNotFoundException e) {
-			}
-		}
-		List<EvaluatorFactory> allMetrics = Evaluators.createInstance()
-				.getAllMetrics();
-		String metricSelectionName = memento.getString("metric");
-		String parameterSelectionName = memento.getString("parameter");
-		for (EvaluatorFactory metric : allMetrics) {
-			if (metric.getName().equals(metricSelectionName)) {
-				evaluatorSelection = metric;
-				if (parameterSelectionName != null) {
-					for (Parameter<?> parameter : evaluatorSelection
-							.getParameters()) {
-						if (parameter.getName().equals(parameterSelectionName)) {
-							parameterSelection = parameter;
-							break;
-						}
-					}
-				}
-				break;
-			}
-		}
-		String codeRangeTypeSelectionName = memento.getString("coderangetype");
-		if (codeRangeTypeSelectionName != null) {
-			codeRangeTypeSelection = CodeRangeType.valueOf(CodeRangeType.class,
-					codeRangeTypeSelectionName);
-		}
+		metricParameterSelection = HistogramChartViewSettingsDialog
+				.init(memento);
 	}
 
 	@Override
 	public void saveState(IMemento memento) {
-		if (evaluatorSelection != null) {
-			memento.putString("metric.class", evaluatorSelection.getClass()
-					.getName());
-			memento.putString("metric", evaluatorSelection.getName());
-		}
-		if (parameterSelection != null) {
-			memento.putString("parameter", parameterSelection.getName());
-		}
-		if (codeRangeTypeSelection != null) {
-			memento.putString("coderangetype", codeRangeTypeSelection.name());
-		}
+		HistogramChartViewSettingsDialog.saveState(memento,
+				metricParameterSelection);
 		super.saveState(memento);
 	}
 
@@ -157,8 +112,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	public void showSettings() {
 		if (settingsDialog == null) {
 			settingsDialog = new ParetoChartViewSettingsDialog(this,
-					evaluatorSelection, parameterSelection,
-					codeRangeTypeSelection);
+					metricParameterSelection);
 			settingsDialog.open();
 		} else {
 			settingsDialog.close();
@@ -168,10 +122,10 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	public void applySettings() {
-		evaluatorSelection = settingsDialog.getMetric();
-		parameterSelection = settingsDialog.getParameter();
-		codeRangeTypeSelection = settingsDialog.getCodeRangeType();
-		updateView();
+		metricParameterSelection = settingsDialog.getMetricParameterSelection();
+		if (metricParameterSelection.isComplete()) {
+			updateView();
+		}
 	}
 
 	@Override
@@ -193,31 +147,18 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 
 	@Override
 	protected void updateView() {
-		oldEvaluatorSelection = evaluatorSelection;
-		oldParameterSelection = parameterSelection;
-		oldCodeRangeTypeSelection = codeRangeTypeSelection;
+		oldMetricParameterSelection = metricParameterSelection;
 		loadData();
 	}
 
 	@Override
 	protected boolean hasFullViewSettings() {
-		return (evaluatorSelection != null) && (parameterSelection != null)
-				&& (codeRangeTypeSelection != null);
+		return metricParameterSelection.isComplete();
 	}
 
 	@Override
 	protected boolean hasChangedViewSettings() {
-		if ((oldEvaluatorSelection == null)
-				|| (!evaluatorSelection.getClass().equals(
-						oldEvaluatorSelection.getClass()))) {
-			return true;
-		}
-		if ((oldParameterSelection == null)
-				|| (!oldParameterSelection.equals(parameterSelection))) {
-			return true;
-		}
-		if ((oldCodeRangeTypeSelection == null)
-				|| (!oldCodeRangeTypeSelection.equals(codeRangeTypeSelection))) {
+		if (!oldMetricParameterSelection.equals(metricParameterSelection)) {
 			return true;
 		}
 		return false;
@@ -240,8 +181,10 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 						.getInformation().getUUID();
 				monitor.worked(1);
 				values = dataProvider.loadValues(analysisProjectUUID,
-						analysisRunUUID, evaluatorSelection.getName(),
-						parameterSelection, codeRangeTypeSelection);
+						analysisRunUUID, metricParameterSelection
+								.getEvaluatorFactory().getName(),
+						metricParameterSelection.getParameter(),
+						metricParameterSelection.getCodeRangeType());
 				monitor.worked(1);
 				monitor.done();
 				new UIJob("Draw Pareto Chart") {
@@ -282,10 +225,12 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 						Number value = entry.getValue().getValue();
 						String category = node.getPathFile(false).getPath()
 								+ "." + codeRangeName;
-						paretoValues.add(new GenericMark2D<String, Double>(
-								category, value.doubleValue(),
-								codeRangeTypeSelection.getName() + " "
-										+ codeRangeName, node));
+						paretoValues
+								.add(new GenericMark2D<String, Double>(
+										category, value.doubleValue(),
+										metricParameterSelection
+												.getCodeRangeType().getName()
+												+ " " + codeRangeName, node));
 					}
 					return WalkingAction.PROCEED;
 				}
@@ -298,8 +243,9 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 	private void setupChart(final List<Mark2D<String, Double>> paretoValues) {
 		chart.removeAllPlots();
 
-		chart.setTitle("Pareto Chart for " + evaluatorSelection.getName());
-		chart.setSubTitle(parameterSelection.getName());
+		chart.setTitle("Pareto Chart for "
+				+ metricParameterSelection.getEvaluatorFactory().getName());
+		chart.setSubTitle(metricParameterSelection.getParameter().getName());
 
 		Collections.sort(paretoValues,
 				new Comparator<Mark2D<String, Double>>() {
@@ -328,7 +274,8 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 		chart.setxAxis(xAxis);
 
 		@SuppressWarnings("unchecked")
-		Parameter<Double> yAxisParameter = (Parameter<Double>) parameterSelection;
+		Parameter<Double> yAxisParameter = (Parameter<Double>) metricParameterSelection
+				.getParameter();
 		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,
 				yAxisParameter, min, max, (max - min) / 10.0, 1, 2);
 		chart.setyAxis(yAxis);
@@ -350,7 +297,8 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 		try {
 			BundleContext bundleContext = Activator.getDefault().getBundle()
 					.getBundleContext();
-			String parameterName = parameterSelection.getName();
+			String parameterName = metricParameterSelection.getParameter()
+					.getName();
 			parameterName = parameterName.replaceAll("\\(", "\\\\(")
 					.replaceAll("\\)", "\\\\)");
 			String filter = "(parameterName=" + parameterName + ")";
