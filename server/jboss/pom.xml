@@ -4,7 +4,7 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.server</groupId>
-		<artifactId>parent</artifactId>
+		<artifactId>server-parent</artifactId>
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 
