@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>jboss.test</artifactId>
+			<artifactId>wildfly.test</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -42,9 +42,17 @@
 						<executions>
 							<execution>
 								<id>startCassandra</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>start</goal>
+								</goals>
 							</execution>
 							<execution>
 								<id>stopCassandra</id>
+								<phase>post-integration-test</phase>
+								<goals>
+									<goal>stop</goal>
+								</goals>
 							</execution>
 						</executions>
 					</plugin>

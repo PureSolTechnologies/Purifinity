@@ -22,6 +22,7 @@ import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraMigration;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.MigrationException;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
+import com.puresoltechnologies.purifinity.framework.store.db.CassandraSchema;
 import com.puresoltechnologies.purifinity.server.eventlogger.EventLogger;
 import com.puresoltechnologies.purifinity.server.eventlogger.EventLoggerRemote;
 
@@ -55,6 +56,7 @@ public class EventLoggerBean implements EventLoggerRemote {
 		cluster = Cluster.builder().addContactPoints(CASSANDRA_HOST)
 				.withPort(CASSANDRA_CQL_PORT).build();
 		try {
+			CassandraSchema.migrate(cluster);
 			checkAndCreateKeyspace();
 		} catch (MigrationException e) {
 			throw new RuntimeException("Cassandra could not be migrated.", e);

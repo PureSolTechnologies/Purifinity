@@ -6,8 +6,8 @@ import javax.inject.Inject;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.jboss.test.AbstractServerTest;
 import com.puresoltechnologies.purifinity.server.eventlogger.EventLogger;
+import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
 
 public class EventLoggerBeanIT extends AbstractServerTest {
 

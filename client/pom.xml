@@ -554,8 +554,7 @@
 							<aliases>
 								<alias>MPL 1.1</alias>
 							</aliases>
-						</knownLicense> <!-- knownLicense> <name>OSGi Specification License, Version 2.0</name> <url>http://www.osgi.org/Main/OSGiSpecificationLicense</url> 
-							</knownLicense -->
+						</knownLicense>
 						<knownLicense>
 							<name>Public Domain</name>
 							<url>http://en.wikipedia.org/wiki/Public_domain</url>

@@ -8,20 +8,19 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<commons.version>0.1.1-SNAPSHOT</commons.version>
-		<!-- JBoss settings -->
-		<jboss.http.port>8080</jboss.http.port>
+		<!-- WildFly settings -->
+		<wildfly.http.port>8080</wildfly.http.port>
 		<server.config.directory>${work.dir}/config</server.config.directory>
 		<server.data.directory>${work.dir}/data</server.data.directory>
-		<jboss.debug.options>-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</jboss.debug.options>
-		<jboss.memory.options>-Xms128m -Xmx512m -XX:MaxPermSize=256m</jboss.memory.options>
-		<jboss.options>${jboss.memory.options} ${jboss.debug.options}</jboss.options>
-		<!-- JBoss -->
-		<jboss.version>7.2.0.Final</jboss.version>
-		<resteasy.version>2.3.4.Final</resteasy.version>
+		<wildfly.debug.options>-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</wildfly.debug.options>
+		<wildfly.memory.options>-Xms128m -Xmx512m -XX:MaxPermSize=256m</wildfly.memory.options>
+		<wildfly.options>${wildfly.memory.options} ${wildfly.debug.options}</wildfly.options>
+		<!-- WildFly -->
+		<wildfly.version>8.0.0.Final</wildfly.version>
+		<resteasy.version>3.0.6.Final</resteasy.version>
 		<!-- Arquillian -->
-		<arquillian.version>1.1.2.Final</arquillian.version>
-		<arquillian.test.dir>${project.build.directory}/jboss</arquillian.test.dir>
+		<arquillian.version>1.1.4.Final</arquillian.version>
+		<arquillian.test.dir>${project.build.directory}/wildfly</arquillian.test.dir>
 		<!-- Cargo -->
 		<cargo.dir>${work.dir}/cargo</cargo.dir>
 		<cargo.logging>medium</cargo.logging>
@@ -91,11 +90,8 @@
 			<name>libs-snapshot</name>
 			<url>http://repo/libs-snapshot</url>
 		</repository>
-		<repository>
-			<id>JBoss</id>
-			<name>JBoss</name>
-			<url>https://repository.jboss.org/nexus/content/groups/public</url>
-		</repository>
+		<!-- repository> <id>WildFly</id> <name>WildFly</name> <url>https://repository.jboss.org/nexus/content/groups/public</url> 
+			</repository -->
 	</repositories>
 
 	<pluginRepositories>
@@ -119,6 +115,31 @@
 		<profile>
 			<id>it</id>
 			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.codehaus.mojo</groupId>
+							<artifactId>cassandra-maven-plugin</artifactId>
+							<version>2.0.0-1</version>
+							<executions>
+								<execution>
+									<id>cassandra-start</id>
+									<phase>pre-integration-test</phase>
+									<goals>
+										<goal>start</goal>
+									</goals>
+								</execution>
+								<execution>
+									<id>cassandra-stop</id>
+									<phase>post-integration-test</phase>
+									<goals>
+										<goal>stop</goal>
+									</goals>
+								</execution>
+							</executions>
+						</plugin>
+					</plugins>
+				</pluginManagement>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -138,6 +159,151 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.puresoltechnologies.maven.plugins</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<version>1.2.0</version>
+						<executions>
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>validate</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<recursive>true</recursive>
+							<skipTestScope>true</skipTestScope>
+							<skipProvidedScope>true</skipProvidedScope>
+							<skipOptionals>true</skipOptionals>
+							<knownLicenses>
+								<knownLicenses>
+									<name>PureSol Technologies Commercial License</name>
+									<url>http://puresol-technologies.com</url>
+								</knownLicenses>
+								<!-- knownLicense> <name>The Apache Software License, Version 1.1</name> 
+									<url>https://www.apache.org/licenses/LICENSE-1.1</url> <approvedDependencies> 
+									<approvedDependency>avalon-framework:avalon-framework:4\.1\.3</approvedDependency> 
+									</approvedDependencies> </knownLicense -->
+								<knownLicense>
+									<name>Apache License, Version 2.0</name>
+									<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+									<aliases>
+										<alias>AL 2.0</alias>
+										<!-- alias>Apache 2</alias> <alias>Apache License</alias> <alias>Apache 
+											License 2.0</alias -->
+										<alias>Apache License Version 2.0</alias>
+										<alias>Apache License, version 2.0</alias>
+										<!-- alias>Apache Software License - Version 2.0</alias -->
+										<alias>The Apache Software License, Version 2.0</alias>
+									</aliases>
+									<approvedDependencies>
+										<!-- approvedDependency>commons-beanutils:commons-beanutils:1\.7\.0</approvedDependency> 
+											<approvedDependency>commons-codec:commons-codec:1\.2</approvedDependency> 
+											<approvedDependency>commons-logging:commons-logging:1\.0\.3</approvedDependency> 
+											<approvedDependency>log4j:log4j:1\.2\.12</approvedDependency> <approvedDependency>logkit:logkit:1\.0\.1</approvedDependency -->
+										<approvedDependency>org\.apache.commons:.*:.*</approvedDependency> <!-- approvedDependency>org\.codehaus\.jettison:jettison:1\.2</approvedDependency> 
+											<approvedDependency>oro:oro:2\.0\.8</approvedDependency -->
+									</approvedDependencies>
+								</knownLicense>
+								<knownLicense>
+									<name>The BSD 2-Clause License</name>
+									<url>http://opensource.org/licenses/BSD-2-Clause</url>
+									<approvedDependencies>
+										<!-- approvedDependency>com\.esotericsoftware\.kryo:kryo:2\.21</approvedDependency> 
+											<approvedDependency>com\.esotericsoftware\.minlog:minlog:1\.2</approvedDependency> 
+											<approvedDependency>com\.esotericsoftware\.reflectasm:reflectasm:1\.07</approvedDependency> 
+											<approvedDependency>jline:jline:.*</approvedDependency -->
+										<approvedDependency>org\.hamcrest:hamcrest-core:1\.1</approvedDependency>
+									</approvedDependencies>
+								</knownLicense>
+								<!-- knownLicense> <name>The BSD 3-Clause License</name> <url>http://opensource.org/licenses/BSD-3-Clause</url> 
+									<aliases> <alias>BSD 3-Clause</alias> </aliases> <approvedDependencies> <approvedDependency>antlr:antlr:.*</approvedDependency> 
+									<approvedDependency>asm:asm.*:.*</approvedDependency> <approvedDependency>org\.antlr:.*:.*</approvedDependency> 
+									<approvedDependency>org\.ow2\.asm:asm:4\.0</approvedDependency> </approvedDependencies> 
+									</knownLicense -->
+								<knownLicense>
+									<name><![CDATA[Common Development and Distribution License (CDDL-1.0)]]></name>
+									<url>http://opensource.org/licenses/CDDL-1.0</url>
+									<aliases>
+										<alias>CDDL v1.1 / GPL v2 dual license</alias>
+									</aliases>
+									<!-- approvedDependencies> <approvedDependency>javax\.servlet:servlet-api:.*</approvedDependency> 
+										</approvedDependencies -->
+								</knownLicense>
+								<knownLicense>
+									<name>Common Public License Version 1.0 (CPL)</name>
+									<url>http://opensource.org/licenses/cpl1.0.php</url>
+									<aliases>
+										<alias>Common Public License Version 1.0</alias>
+									</aliases>
+								</knownLicense>
+								<knownLicense>
+									<name>Eclipse Public License - v1.0</name>
+									<url>http://www.eclipse.org/legal/epl-v10.html</url>
+									<aliases>
+										<alias>Eclipse License, Version 1.0</alias>
+									</aliases>
+								</knownLicense>
+								<knownLicense>
+									<name><![CDATA[GNU General Public License, version 2, with the Classpath Exception]]></name>
+									<url>http://openjdk.java.net/legal/gplv2+ce.html</url>
+									<approvedDependencies>
+										<approvedDependency>sun\.jdk:jconsole:.*</approvedDependency>
+									</approvedDependencies>
+								</knownLicense>
+								<knownLicense>
+									<name>GNU Lesser General Public License, Version 2.1</name>
+									<url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
+									<aliases>
+										<!-- alias>GNU Lesser General Public License (LGPL), Version 2.1</alias -->
+										<alias>GNU Lesser General Public License, version 2.1</alias>
+										<alias>LGPL 2.1</alias>
+										<alias>lgpl</alias>
+										<alias>lgpl_v2_1</alias>
+									</aliases>
+								</knownLicense>
+								<!-- knownLicense> <name><![CDATA[GNU Lesser General Public License, 
+									Version 3.0]]></name> <url>http://www.gnu.org/copyleft/lesser.html</url> 
+									<approvedDependencies> <approvedDependency>colt:colt:1\.2\.0</approvedDependency> 
+									<approvedDependency>org\.acplt:oncrpc:1\.0\.7</approvedDependency> </approvedDependencies> 
+									</knownLicense> <knownLicense> <name>ISC License (ISC)</name> <url>http://www.opensource.org/licenses/isc-license.txt</url> 
+									<aliases> <alias>ISC/BSD License</alias> </aliases> </knownLicense -->
+								<knownLicense>
+									<name>The MIT License (MIT)</name>
+									<url>http://opensource.org/licenses/MIT</url>
+									<aliases>
+										<!-- alias>MIT License</alias -->
+										<alias>The MIT License</alias>
+										<alias>The MIT license</alias>
+									</aliases>
+									<approvedDependencies>
+										<approvedDependency>org\.slf4j:slf4j-api:1\.5\.8</approvedDependency>
+									</approvedDependencies>
+								</knownLicense>
+								<!-- knownLicense> <name>Mozilla Public License Version 1.1</name> 
+									<url>http://www.mozilla.org/MPL/1.1</url> <aliases> <alias>MPL 1.1</alias> 
+									</aliases> </knownLicense -->
+								<!-- knownLicense> <name>OSGi Specification License, Version 2.0</name> 
+									<url>http://www.osgi.org/Main/OSGiSpecificationLicense</url> </knownLicense -->
+								<knownLicense>
+									<name>Public Domain</name>
+									<url>http://en.wikipedia.org/wiki/Public_domain</url>
+									<!-- aliases> <alias>Public domain, Sun Microsoystems</alias> <alias>provided 
+										without support or warranty</alias> </aliases -->
+								</knownLicense>
+								<!-- knownLicense> <name>Snaptree License</name> <url>https://github.com/nbronson/snaptree/blob/master/LICENSE</url> 
+									<aliases> <alias>SNAPTREE LICENSE</alias> </aliases> </knownLicense -->
+							</knownLicenses>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<dependencyManagement>
@@ -147,7 +313,7 @@
 			<!-- ================ -->
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>jboss.configuration</artifactId>
+				<artifactId>wildfly.configuration</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- Server -->
@@ -169,7 +335,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>jboss.test</artifactId>
+				<artifactId>wildfly.test</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -203,6 +369,11 @@
 				<artifactId>database.titan.utils</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>store.db.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<!-- =========================== -->
 			<!-- Specific external libraries -->
 			<!-- =========================== -->
@@ -217,22 +388,23 @@
 				<artifactId>commons-io</artifactId>
 				<version>1.3.2</version>
 			</dependency>
-			<!-- JBoss -->
+			<!-- WildFly -->
 			<dependency>
-				<groupId>org.jboss.as</groupId>
-				<artifactId>jboss-as-server</artifactId>
-				<version>${jboss.version}</version>
+				<groupId>org.wildfly</groupId>
+				<artifactId>wildfly-server</artifactId>
+				<version>8.0.0.Final</version>
+				<type>zip</type>
 				<scope>provided</scope>
 			</dependency>
 			<!-- REST library -->
 			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
+				<groupId>org.wildfly.resteasy</groupId>
 				<artifactId>resteasy-jaxrs</artifactId>
 				<version>${resteasy.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.jboss.resteasy</groupId>
+				<groupId>org.wildfly.resteasy</groupId>
 				<artifactId>jaxrs-api</artifactId>
 				<version>${resteasy.version}</version>
 				<scope>provided</scope>
@@ -263,9 +435,9 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.jboss.as</groupId>
-				<artifactId>jboss-as-arquillian-container-managed</artifactId>
-				<version>${jboss.version}</version>
+				<groupId>org.wildfly</groupId>
+				<artifactId>wildfly-arquillian-container-managed</artifactId>
+				<version>${wildfly.version}</version>
 				<scope>test</scope>
 			</dependency>
 			<!-- Logging -->
@@ -353,10 +525,10 @@
 				<plugin>
 					<groupId>org.codehaus.cargo</groupId>
 					<artifactId>cargo-maven2-plugin</artifactId>
-					<version>1.2.2</version>
+					<version>1.4.8</version>
 					<executions>
 						<execution>
-							<id>JBoss Configuration</id>
+							<id>WildFly Configuration</id>
 							<phase>package</phase>
 							<goals>
 								<goal>configure</goal>
@@ -367,12 +539,12 @@
 					<configuration>
 						<!-- wait>false</wait -->
 						<container>
-							<containerId>jboss71x</containerId>
+							<containerId>wildfly8x</containerId>
 							<timeout>60000</timeout>
 							<artifactInstaller>
-								<groupId>org.jboss.as</groupId>
-								<artifactId>jboss-as-dist</artifactId>
-								<version>${jboss.version}</version>
+								<groupId>org.wildfly</groupId>
+								<artifactId>wildfly-server</artifactId>
+								<version>${wildfly.version}</version>
 								<type>zip</type>
 								<extractDir>${cargo.dir}</extractDir>
 							</artifactInstaller>
@@ -393,11 +565,10 @@
 								</file>
 							</files>
 							<properties>
-								<cargo.jboss.configuration>default</cargo.jboss.configuration>
-								<cargo.servlet.port>8080</cargo.servlet.port>
+								<cargo.wildfly.configuration>default</cargo.wildfly.configuration>
 								<cargo.rmi.port>1099</cargo.rmi.port>
-								<cargo.jvmargs>${jboss.jvm.options}</cargo.jvmargs>
-								<cargo.servlet.port>${jboss.http.port}</cargo.servlet.port>
+								<cargo.jvmargs>${wildfly.jvm.options}</cargo.jvmargs>
+								<cargo.servlet.port>${wildfly.http.port}</cargo.servlet.port>
 								<cargo.logging>${cargo.logging}</cargo.logging>
 							</properties>
 						</configuration>
@@ -421,7 +592,7 @@
 											license-maven-plugin
 										</artifactId>
 										<versionRange>
-											[1.1.1,)
+											[1.2.0,)
 										</versionRange>
 										<goals>
 											<goal>validate</goal>
@@ -438,83 +609,6 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<plugin>
-				<groupId>com.puresoltechnologies.maven.plugins</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>1.1.1</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>validate</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<recursive>true</recursive>
-					<validLicenses>
-						<validLicense>PureSol Technologies Commercial License</validLicense>
-						<!-- Apache License -->
-						<validLicense>Apache 2</validLicense>
-						<validLicense>Apache License</validLicense>
-						<validLicense>Apache License 2.0</validLicense>
-						<validLicense>Apache License Version 2.0</validLicense>
-						<validLicense>Apache License, Version 2.0</validLicense>
-						<validLicense>Apache License, version 2.0</validLicense>
-						<validLicense>Apache Public License 2.0</validLicense>
-						<validLicense>Apache Software License - Version 2.0</validLicense>
-						<validLicense>The Apache Software License, Version 2.0</validLicense>
-						<!-- BSD License -->
-						<validLicense>BSD</validLicense>
-						<validLicense>BSD 3-Clause</validLicense>
-						<validLicense>BSD License</validLicense>
-						<validLicense>BSD licence</validLicense>
-						<validLicense>BSD style</validLicense>
-						<validLicense>ISC/BSD License</validLicense>
-						<validLicense>New BSD License</validLicense>
-						<!-- CDDL -->
-						<validLicense>CDDL + GPLv2 with classpath exception</validLicense>
-						<validLicense>CDDL v1.1 / GPL v2 dual license</validLicense>
-						<validLicense>CDDL or GPLv2 with exceptions</validLicense>
-						<validLicense>Common Development and Distribution License</validLicense>
-						<!-- CPL -->
-						<validLicense>Common Public License Version 1.0</validLicense>
-						<!-- EPL -->
-						<validLicense>Eclipse Public License - Version 1.0</validLicense>
-						<validLicense>Eclipse Public License, Version 1.0</validLicense>
-						<!-- GPL with Classpath Exception -->
-						<validLicense>GPLv2 (with classpath exception)</validLicense>
-						<validLicense><![CDATA[GNU General Public License, Version 2 with the Classpath Exception]]></validLicense>
-						<!-- LGPL -->
-						<validLicense>lgpl</validLicense>
-						<validLicense>lgpl_v2_1</validLicense>
-						<validLicense>LGPL 2.1</validLicense>
-						<validLicense>GNU Lesser General Public License</validLicense>
-						<validLicense>GNU Lesser General Public License, version 2.1</validLicense>
-						<!-- MPL -->
-						<validLicenses>MPL 1.1</validLicenses>
-						<!-- MIT License -->
-						<validLicense>MIT License</validLicense>
-						<validLicense>The MIT License</validLicense>
-						<validLicense>The MIT license</validLicense>
-						<!-- Public Domain -->
-						<validLicense>Public Domain</validLicense>
-						<validLicense>Public domain, Sun Microsoystems</validLicense>
-						<validLicense>provided without support or warranty</validLicense>
-						<!-- Snaptree License -->
-						<validLicense>SNAPTREE LICENSE</validLicense>
-					</validLicenses>
-					<approvedDependencies>
-						<approvedDependency>commons-beanutils:commons-beanutils:1.7.0</approvedDependency>
-						<approvedDependency>colt:colt:1.2.0</approvedDependency>
-						<approvedDependency>javax.servlet:servlet-api:2.5</approvedDependency>
-						<approvedDependency>org.apache.cassandra.deps:avro:1.4.0-cassandra-1</approvedDependency>
-						<approvedDependency>org.antlr:antlr.*:.*</approvedDependency>
-						<approvedDependency>org.osgi:org.osgi.*:4.2.0</approvedDependency>
-						<approvedDependency>system:jdk-tools:jdk</approvedDependency>
-					</approvedDependencies>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-ear-plugin</artifactId>
@@ -572,7 +666,7 @@
 	</build>
 
 	<modules>
-		<module>jboss</module>
+		<module>wildfly</module>
 		<module>logger</module>
 		<module>eventlogger</module>
 	</modules>
