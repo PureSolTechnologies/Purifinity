@@ -1,0 +1,136 @@
+package com.puresol.accountmanager.login;
+
+import java.io.IOException;
+import java.security.Principal;
+import java.util.Map;
+import java.util.Set;
+
+import javax.security.auth.Subject;
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.NameCallback;
+import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.UnsupportedCallbackException;
+import javax.security.auth.login.LoginException;
+import javax.security.auth.spi.LoginModule;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.puresol.accountmanager.core.api.AccountManagerPrincipalImpl;
+import com.puresol.passwordstore.client.CallerPrincipalGroup;
+import com.puresol.passwordstore.client.NamePrincipal;
+import com.puresol.passwordstore.client.PasswordStoreClient;
+import com.puresol.passwordstore.client.RolesGroup;
+
+/**
+ * This is the login module for the PasswordStore. This class contains the JAAS
+ * conform implementation of the {@link LoginModule} interface.
+ * 
+ * Have a look to:
+ * 
+ * http://
+ * docs.jboss.org/jbosssecurity/docs/6.0/security_guide/html/Login_Modules.html
+ * 
+ * http://docs.jboss.org/jbossas/docs/Server_Configuration_Guide/4/html/
+ * Writing_Custom_Login_Modules-A_Custom_LoginModule_Example.html
+ * 
+ * http://www.pramati.com/docstore/1270002/index.htm
+ * 
+ * http://www.edc4it.com/2011/05
+ * /13/understanding-java-security-and-jaas-part-3-a-custom-login-module/
+ * 
+ * @author Rick-Rainer Ludwig
+ */
+public class PasswordStoreLoginModule implements LoginModule {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(PasswordStoreLoginModule.class);
+
+	private Subject subject = null;
+	private CallbackHandler callbackHander = null;
+	private Map<String, ?> sharedState = null;
+	private Map<String, ?> options = null;
+	private boolean loggedIn = false;
+
+	private final NamePrincipal shopUserPrincipal = new NamePrincipal(
+			"ShopUser");
+	private final RolesGroup rolesGroup = new RolesGroup();
+	private final CallerPrincipalGroup callerPrincipalGroup = new CallerPrincipalGroup();
+	private AccountManagerPrincipalImpl userNamePrincipal;
+
+	@Override
+	public void initialize(Subject subject, CallbackHandler callbackHandler,
+			Map<String, ?> sharedState, Map<String, ?> options) {
+		this.subject = subject;
+		this.callbackHander = callbackHandler;
+		this.sharedState = sharedState;
+		this.options = options;
+	}
+
+	@Override
+	public boolean login() throws LoginException {
+		try {
+			loggedIn = false;
+			NameCallback nameCallback = new NameCallback("Email");
+			PasswordCallback passwordCallback = new PasswordCallback(
+					"Password", false);
+			Callback[] callbacks = new Callback[] { nameCallback,
+					passwordCallback };
+			callbackHander.handle(callbacks);
+			String email = nameCallback.getName();
+			String password = new String(passwordCallback.getPassword());
+			PasswordStoreClient passwordStore = PasswordStoreClient
+					.createInstance();
+			loggedIn = passwordStore.authenticate(email, password);
+			if (loggedIn) {
+				userNamePrincipal = new AccountManagerPrincipalImpl(email);
+			} else {
+				userNamePrincipal = null;
+			}
+			return loggedIn;
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			throw new LoginException("IO exception occured!");
+		} catch (UnsupportedCallbackException e) {
+			logger.error(e.getMessage(), e);
+			throw new LoginException("Unsupported callback used!");
+		}
+	}
+
+	@Override
+	public boolean commit() throws LoginException {
+		Set<Principal> principals = subject.getPrincipals();
+		if (loggedIn) {
+			principals.add(shopUserPrincipal);
+			principals.add(rolesGroup);
+			rolesGroup.addMember(shopUserPrincipal);
+			principals.add(callerPrincipalGroup);
+			callerPrincipalGroup.addMember(userNamePrincipal);
+		} else {
+			principals.remove(shopUserPrincipal);
+			principals.remove(rolesGroup);
+			rolesGroup.removeMember(shopUserPrincipal);
+			principals.remove(callerPrincipalGroup);
+			callerPrincipalGroup.removeMember(userNamePrincipal);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean abort() throws LoginException {
+		return true;
+	}
+
+	@Override
+	public boolean logout() throws LoginException {
+		Set<Principal> principals = subject.getPrincipals();
+		principals.remove(shopUserPrincipal);
+		principals.remove(rolesGroup);
+		rolesGroup.removeMember(shopUserPrincipal);
+		principals.remove(callerPrincipalGroup);
+		callerPrincipalGroup.removeMember(userNamePrincipal);
+		return true;
+	}
+
+}

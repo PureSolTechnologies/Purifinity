@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translations>
+    <translations>
+        <entry>
+            <key>Fields marked with a star (*) are mandatory.</key>
+            <value>Beid Feldern die mit einem Stern (*) markiert sind, handelt es sich um Pflichtfelder.</value>
+        </entry>
+        <entry>
+            <key>last name</key>
+            <value>Nachnahme</value>
+        </entry>
+        <entry>
+            <key>preferred language</key>
+            <value>Bevorzugte Sprache</value>
+        </entry>
+        <entry>
+            <key>first name</key>
+            <value>Vorname</value>
+        </entry>
+        <entry>
+            <key>Language</key>
+            <value>Sprache</value>
+        </entry>
+        <entry>
+            <key>change settings</key>
+            <value>Änderungen übernehmen</value>
+        </entry>
+        <entry>
+            <key>title</key>
+            <value>Titel </value>
+        </entry>
+        <entry>
+            <key>date of birth</key>
+            <value>Geburtsdatum</value>
+        </entry>
+        <entry>
+            <key>reset form</key>
+            <value>Formular zurücksetzen</value>
+        </entry>
+        <entry>
+            <key>Account Settings</key>
+            <value>Kontoeinstellungen</value>
+        </entry>
+    </translations>
+</translations>

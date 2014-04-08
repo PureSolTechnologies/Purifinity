@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translations>
+    <translations>
+        <entry>
+            <key>logout</key>
+            <value>abmeldeń</value>
+        </entry>
+        <entry>
+            <key>Welcome, {0}!</key>
+            <value>Willkommen, {0}!</value>
+        </entry>
+        <entry>
+            <key>login</key>
+            <value>anmelden</value>
+        </entry>
+        <entry>
+            <key>create account</key>
+            <value>Konto erstellen</value>
+        </entry>
+        <entry>
+            <key>my account</key>
+            <value>Mein Konto</value>
+        </entry>
+        <entry>
+            <key>reset form</key>
+            <value>Formular zurücksetzen</value>
+        </entry>
+        <entry>
+            <key>home</key>
+            <value>Startseite</value>
+        </entry>
+        <entry>
+            <key>Welcome! Please feel free to create a new account or to login.</key>
+            <value>Willkommen! Bitte erstellen Sie ein Konto oder melden Sie sich an.</value>
+        </entry>
+    </translations>
+</translations>

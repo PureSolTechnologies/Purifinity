@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Login Box for Password Safe</title>
+	<!--
+	This login box represents a single component which shows the login screen or the logout button. 
+	 -->
+</h:head>
+<h:body>
+	<composite:interface>
+	</composite:interface>
+	<composite:implementation>
+		<h:outputStylesheet library="css" name="login.css" />
+		<h1>Create Account</h1>
+		<h:form>
+			<h:messages />
+			<h:panelGrid columns="2" columnClasses="rightAlign,leftAlign">
+
+				<h:outputText value="Email address:" />
+				<h:inputText label="Email address" value="#{createAccountMBean.email}"
+					required="true">
+					<f:validator validatorId="emailAddressValidator" />
+					<f:validateLength minimum="5" maximum="128" />
+				</h:inputText>
+
+				<h:outputText value="Password:" />
+				<h:inputText label="Password" binding="#{password}"
+					value="#{createAccountMBean.password}" required="true">
+					<f:validateLength minimum="4" maximum="30" />
+				</h:inputText>
+
+				<h:outputText value="Confirm Password:" />
+				<h:inputText label="Confirm Password" required="true">
+					<f:validateLength minimum="4" maximum="30" />
+					<f:validator validatorId="passwordStrengthValidator" />
+					<f:attribute name="password" value="#{password.value}" />
+				</h:inputText>
+
+				<p:captcha label="Captcha" language="tr" theme="white" />
+
+				<h:panelGroup></h:panelGroup>
+
+				<h:commandButton action="#{createAccountMBean.createAccount()}"
+					value="Create..." />
+			</h:panelGrid>
+		</h:form>
+	</composite:implementation>
+</h:body>
+</html>

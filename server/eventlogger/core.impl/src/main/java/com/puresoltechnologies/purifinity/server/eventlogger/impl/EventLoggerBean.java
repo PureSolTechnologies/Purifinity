@@ -95,8 +95,8 @@ public class EventLoggerBean implements EventLoggerRemote {
 	@PreDestroy
 	private void disconnect() {
 		logger.info("Disconnect EventLogger from Cassandra...");
-		session.shutdown();
-		cluster.shutdown();
+		session.close();
+		cluster.close();
 		logger.info("EventLogger disconnected.");
 	}
 

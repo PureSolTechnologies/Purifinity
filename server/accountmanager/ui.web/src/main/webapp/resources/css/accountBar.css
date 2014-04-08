@@ -1,0 +1,15 @@
+.accountBar {
+	font-size: 10pt;
+	text-align: right;
+	float: right;
+}
+
+.languageSelector {
+	font-size: 10pt;
+	text-align: left;
+	float: left;
+}
+
+div.barContainer {
+	overflow: auto;
+}

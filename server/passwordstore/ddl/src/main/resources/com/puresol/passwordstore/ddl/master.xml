@@ -1,0 +1,173 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="1" author="Rick-Rainer Ludwig">
+
+		<createTable tableName="users"
+			remarks="This table contains the list of all users.">
+			<column name="UserId" type="bigint"
+				remarks="The universal and unique user id to identify the user.">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="Email" type="varchar(255)"
+				remarks="The email address of the user to be used as login and for primary communication. The email address is always uniquely assigned to an individual or organization and therefore a good login identifier.">
+				<constraints unique="true" nullable="false" />
+			</column>
+			<column name="PasswordHash" type="varchar(256)" remarks="The password hash.">
+				<constraints nullable="false" />
+			</column>
+			<column name="State" type="varchar(32)"
+				remarks="This is the current state of the user account.">
+				<constraints nullable="false" />
+			</column>
+			<column name="Created" type="datetime"
+				remarks="This is the creational date and time of the account.">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="ACTIVATION_KEYS"
+			remarks="This list contains all activation keys used to activate the user account.">
+			<column name="UserId" type="bigint"
+				remarks="The universal and unique user id to identify the user.">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="ActivationKey" type="varchar(64)"
+				remarks="This is the activation key to be used to activate the account after creation. This key is to be send via email to verify the email address.">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addForeignKeyConstraint constraintName="ActivationKeysUsersFK"
+			referencedTableName="users" baseColumnNames="UserId" baseTableName="ACTIVATION_KEYS"
+			referencedColumnNames="UserId" />
+
+		<createTable tableName="USER_PERMISSIONS"
+			remarks="This table assignes permissions to a user.">
+			<column name="UserId" type="bigint"
+				remarks="The universal and unique user id to identify the user.">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="Permission" type="varchar(64)"
+				remarks="This is the permission assigned to the user.">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addForeignKeyConstraint constraintName="UserPermissionsUsersFK"
+			referencedTableName="users" baseColumnNames="UserId" baseTableName="USER_PERMISSIONS"
+			referencedColumnNames="UserId" />
+		<addUniqueConstraint tableName="USER_PERMISSIONS"
+			columnNames="UserId,Permission" />
+
+		<createTable tableName="AVAILABLE_PERMISSIONS"
+			remarks="This table contains all roles which are defined in the system and which can be assigned to users.">
+			<column name="Permission" type="varchar(64)"
+				remarks="This is a permission which can be assigned to a user.">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+		</createTable>
+		<addForeignKeyConstraint constraintName="UserPermissionsAvailablePermissionsFK"
+			referencedTableName="AVAILABLE_PERMISSIONS" baseColumnNames="Permission"
+			baseTableName="USER_PERMISSIONS" referencedColumnNames="Permission" />
+
+		<insert tableName="AVAILABLE_PERMISSIONS">
+			<column name="Permission" value="customer" />
+		</insert>
+		<insert tableName="AVAILABLE_PERMISSIONS">
+			<column name="Permission" value="trader" />
+		</insert>
+		<insert tableName="AVAILABLE_PERMISSIONS">
+			<column name="Permission" value="moderator" />
+		</insert>
+		<insert tableName="AVAILABLE_PERMISSIONS">
+			<column name="Permission" value="accountant" />
+		</insert>
+		<insert tableName="AVAILABLE_PERMISSIONS">
+			<column name="Permission" value="administrator" />
+		</insert>
+		<insert tableName="AVAILABLE_PERMISSIONS">
+			<column name="Permission" value="manager" />
+		</insert>
+
+		<createTable tableName="PERMISSION_DESCRIPTIONS"
+			remarks="This table contains translated descriptions for the available user permissions.">
+			<column name="Permission" type="varchar(64)"
+				remarks="This is a permission which can be assigned to a user.">
+				<constraints nullable="false" />
+			</column>
+			<column name="Locale" type="varchar(16)"
+				remarks="This is the locale identifier identifying the language of the description.">
+				<constraints nullable="false" />
+			</column>
+			<column name="Description" type="varchar(255)"
+				remarks="This is a translated description of the permission to be shown in internationalized user interfaces.">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+		<addPrimaryKey tableName="PERMISSION_DESCRIPTIONS"
+			columnNames="Permission,Locale" />
+		<addForeignKeyConstraint constraintName="UserPermissionsAvailablePermissionsFK"
+			referencedTableName="AVAILABLE_PERMISSIONS" baseColumnNames="Permission"
+			baseTableName="PERMISSION_DESCRIPTIONS" referencedColumnNames="Permission" />
+
+		<insert tableName="PERMISSION_DESCRIPTIONS">
+			<column name="Permission" value="customer" />
+			<column name="Locale" value="en" />
+			<column name="Description"
+				value="Permission to buy, administer own information and to read product catalogs." />
+		</insert>
+		<insert tableName="PERMISSION_DESCRIPTIONS">
+			<column name="Permission" value="trader" />
+			<column name="Locale" value="en" />
+			<column name="Description"
+				value="Permission to sell, administer own information and to administer own product catalog." />
+		</insert>
+		<insert tableName="PERMISSION_DESCRIPTIONS">
+			<column name="Permission" value="moderator" />
+			<column name="Locale" value="en" />
+			<column name="Description"
+				value="Is able to remove user comments, pictures and other stuff which is offending, illegal or in another way unwanted. User can be promoted to be moderators." />
+		</insert>
+		<insert tableName="PERMISSION_DESCRIPTIONS">
+			<column name="Permission" value="accountant" />
+			<column name="Locale" value="en" />
+			<column name="Description"
+				value="Permission to read business data and create reports." />
+		</insert>
+		<insert tableName="PERMISSION_DESCRIPTIONS">
+			<column name="Permission" value="administrator" />
+			<column name="Locale" value="en" />
+			<column name="Description" value="Permission to change technical settings." />
+		</insert>
+		<insert tableName="PERMISSION_DESCRIPTIONS">
+			<column name="Permission" value="manager" />
+			<column name="Locale" value="en" />
+			<column name="Description" value="Permission to everything. Use with care!" />
+		</insert>
+
+		<rollback>
+			<dropTable tableName="USER_PERMISSIONS" />
+			<dropTable tableName="AVAILABLE_PERMISSIONS" />
+			<dropTable tableName="ACTIVATION_KEYS" />
+			<dropTable tableName="users" />
+		</rollback>
+
+	</changeSet>
+	<changeSet id="2" author="Rick-Rainer Ludwig">
+		<createSequence sequenceName="passwordstore_userid_seq"
+			incrementBy="1" minValue="10000" startValue="10000" />
+		<sql>
+			ALTER TABLE users ALTER COLUMN "UserId" SET DEFAULT
+			nextval('passwordstore_userid_seq');
+		</sql>
+
+		<rollback>
+			<sql>
+				ALTER TABLE users ALTER COLUMN "UserId" DROP DEFAULT;
+			</sql>
+		</rollback>
+
+	</changeSet>
+
+</databaseChangeLog>

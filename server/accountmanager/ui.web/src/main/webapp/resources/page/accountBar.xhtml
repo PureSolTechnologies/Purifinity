@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:page="http://java.sun.com/jsf/composite/page"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Footer</title>
+	<!--
+	This is the global footer at the very end of the page. Here are the links 
+	contained which are needed in almost all situations like the imprint, the
+	copyright and the webmaster link... 
+	 -->
+</h:head>
+<h:body>
+	<composite:interface>
+	</composite:interface>
+	<composite:implementation>
+		<h:outputStylesheet library="css" name="accountBar.css" />
+		<div class="barContainer">
+			<h:panelGroup styleClass="languageSelector">
+				<page:languageSelector />
+			</h:panelGroup>
+			<h:form styleClass="accountBar">
+				<h:panelGroup rendered="#{!loginMBean.isLoggedIn()}">
+					<h:outputText value="#{accountBarMBean.pleaseLoginTranslated}"
+						style="font-weight:bold" />
+				</h:panelGroup>
+				<h:panelGroup rendered="#{loginMBean.isLoggedIn()}">
+					<h:outputText value="#{accountBarMBean.helloMessageTranslated}"
+						style="font-weight:bold" />
+				</h:panelGroup>
+
+				<a href="/index.jsf" class="home"><h:outputText
+						value="#{accountBarMBean.homeTranslated}" /></a> |
+				
+				<h:panelGroup rendered="#{!loginMBean.isLoggedIn()}">
+					<a class="login" href="/account/myaccount.jsf"><h:outputText
+							value="#{accountBarMBean.loginTranslated}" /></a> |
+					<a class="login" href="/create_account.jsf"><h:outputText
+							value="#{accountBarMBean.createAccountTranslated}" /></a>
+				</h:panelGroup>
+
+				<h:panelGroup rendered="#{loginMBean.isLoggedIn()}">
+					<a class="login" href="/account/configuration.jsf"><h:outputText
+							value="#{accountBarMBean.myAccountTranslated}" /></a> | 
+					<h:commandLink styleClass="login"
+						value="#{accountBarMBean.logoutTranslated}"
+						action="#{loginMBean.logout}" />
+				</h:panelGroup>
+			</h:form>
+		</div>
+	</composite:implementation>
+</h:body>
+</html>

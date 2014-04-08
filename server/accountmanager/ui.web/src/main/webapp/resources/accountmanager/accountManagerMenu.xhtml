@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Account Manager Menu</title>
+	<!--
+	This is the central catalog browser element.  
+	 -->
+</h:head>
+<h:body>
+	<composite:interface>
+	</composite:interface>
+	<composite:implementation>
+		<h:outputStylesheet library="css" name="catalogBrowser.css" />
+		<div class="catalog">
+			<h2>Account Manager Menu</h2>
+			<h:form>
+				<p:menu>
+					<p:menuitem value="My Account" url="/account/myaccount.jsf" />
+					<p:menuitem value="Settings"
+						url="/account/account_settings.jsf" />
+					<p:menuitem value="Address Manager"
+						url="/account/addresses.jsf" />
+					<p:menuitem value="Change Password"
+						url="/account/change_password.jsf" />
+				</p:menu>
+			</h:form>
+		</div>
+	</composite:implementation>
+</h:body>
+</html>

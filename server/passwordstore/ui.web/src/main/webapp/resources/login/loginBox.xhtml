@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+<h:head>
+	<title>Login Box for Password Safe</title>
+	<!--
+	This login box represents a single component which shows the login screen or the logout button. 
+	 -->
+</h:head>
+<h:body>
+	<composite:interface>
+	</composite:interface>
+	<composite:implementation>
+		<h:outputStylesheet library="css" name="login.css" />
+		<h:panelGroup rendered="#{!loginMBean.isLoggedIn()}">
+			<h1>
+				<h:outputText value="#{loginMBean.loginToExistingAccountTranslated}" />
+			</h1>
+			<h:form>
+				<p>
+					<h:outputLabel for="usernameInput"
+						value="#{loginMBean.emailTranslated}" />
+					<h:inputText id="usernameInput" value="#{loginMBean.username}"
+						require="true" />
+				</p>
+				<p>
+					<h:outputLabel for="passwordInput"
+						value="#{loginMBean.passwordTranslated}" />
+					<h:inputSecret id="passwordInput" value="#{loginMBean.password}"
+						require="true" />
+				</p>
+				<p>
+					<h:commandButton value="#{loginMBean.loginTranslated}"
+						action="#{loginMBean.login}" />
+				</p>
+			</h:form>
+		</h:panelGroup>
+		<h:panelGroup rendered="#{loginMBean.isLoggedIn()}">
+			<h1>
+				<h:outputText value="#{loginMBean.logoutTranslated}" />
+			</h1>
+			<h:form>
+				<h:commandButton value="#{loginMBean.logoutTranslated}"
+					action="#{loginMBean.logout}" />
+			</h:form>
+		</h:panelGroup>
+	</composite:implementation>
+</h:body>
+</html>

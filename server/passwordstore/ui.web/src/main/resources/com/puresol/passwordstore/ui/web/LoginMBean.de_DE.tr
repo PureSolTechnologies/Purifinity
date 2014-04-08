@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translations>
+    <translations>
+        <entry>
+            <key>logout</key>
+            <value>abmelden</value>
+        </entry>
+        <entry>
+            <key>Login into Existing Account</key>
+            <value>Anmeldung in ein existierendes Konto</value>
+        </entry>
+        <entry>
+            <key>password:</key>
+            <value>Passwort:</value>
+        </entry>
+        <entry>
+            <key>email:</key>
+            <value>Email:</value>
+        </entry>
+        <entry>
+            <key>login</key>
+            <value>anmelden</value>
+        </entry>
+        <entry>
+            <key>reset</key>
+            <value>zurücksetzen</value>
+        </entry>
+    </translations>
+</translations>

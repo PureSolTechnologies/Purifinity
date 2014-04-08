@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<internationalization>
+    <translations>
+        <entry>
+            <key>Welcome! Please feel free to create a new account or to login.</key>
+            <value>
+                <source>Welcome! Please feel free to create a new account or to login.</source>
+                <translations>
+                    <entry>
+                        <key>de_DE</key>
+                        <value>Willkommen! Bitte erstellen Sie ein Konto oder melden Sie sich an.</value>
+                    </entry>
+                </translations>
+                <locations>
+                    <file>com.puresol.accountmanager.ui.web.AccountBarMBean.java</file>
+                    <line>40</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>logout</key>
+            <value>
+                <source>logout</source>
+                <translations>
+                    <entry>
+                        <key>de_DE</key>
+                        <value>abmeldeń</value>
+                    </entry>
+                </translations>
+                <locations>
+                    <file>com.puresol.accountmanager.ui.web.AccountBarMBean.java</file>
+                    <line>53</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>my account</key>
+            <value>
+                <source>my account</source>
+                <translations>
+                    <entry>
+                        <key>de_DE</key>
+                        <value>Mein Konto</value>
+                    </entry>
+                </translations>
+                <locations>
+                    <file>com.puresol.accountmanager.ui.web.AccountBarMBean.java</file>
+                    <line>57</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>login</key>
+            <value>
+                <source>login</source>
+                <translations>
+                    <entry>
+                        <key>de_DE</key>
+                        <value>anmelden</value>
+                    </entry>
+                </translations>
+                <locations>
+                    <file>com.puresol.accountmanager.ui.web.AccountBarMBean.java</file>
+                    <line>49</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>create account</key>
+            <value>
+                <source>create account</source>
+                <translations>
+                    <entry>
+                        <key>de_DE</key>
+                        <value>Konto erstellen</value>
+                    </entry>
+                </translations>
+                <locations>
+                    <file>com.puresol.accountmanager.ui.web.AccountBarMBean.java</file>
+                    <line>62</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>Welcome, {0}!</key>
+            <value>
+                <source>Welcome, {0}!</source>
+                <translations>
+                    <entry>
+                        <key>de_DE</key>
+                        <value>Willkommen, {0}!</value>
+                    </entry>
+                    <entry>
+                        <key>vi_VN</key>
+                        <value>Xin chao, {0}!</value>
+                    </entry>
+                </translations>
+                <locations>
+                    <file>com.puresol.accountmanager.ui.web.AccountBarMBean.java</file>
+                    <line>34</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>home</key>
+            <value>
+                <source>home</source>
+                <translations>
+                    <entry>
+                        <key>de_DE</key>
+                        <value>Startseite</value>
+                    </entry>
+                </translations>
+                <locations>
+                    <file>com.puresol.accountmanager.ui.web.AccountBarMBean.java</file>
+                    <line>45</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>reset form</key>
+            <value>
+                <source>reset form</source>
+                <translations>
+                    <entry>
+                        <key>de_DE</key>
+                        <value>Formular zurücksetzen</value>
+                    </entry>
+                </translations>
+            </value>
+        </entry>
+    </translations>
+</internationalization>

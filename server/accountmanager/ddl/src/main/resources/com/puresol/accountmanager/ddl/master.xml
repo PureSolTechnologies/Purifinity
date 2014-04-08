@@ -1,0 +1,148 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+	<changeSet id="1" author="Rick-Rainer Ludwig">
+
+		<createTable tableName="users"
+			remarks="This table contains the list of all users.">
+			<column name="UserId" type="bigint"
+				remarks="The universal and unique user id to identify the user.">
+				<constraints primaryKey="true" nullable="false" />
+			</column>
+			<column name="Email" type="varchar(255)"
+				remarks="The email address of the user to be used as login and for primary communication. The email address is always uniquely assigned to an individual or organization and therefore a good login identifier.">
+				<constraints unique="true" nullable="false" />
+			</column>
+			<column name="Sex" type="number(1)" remarks="This is the user's gender.">
+				<constraints nullable="false" />
+			</column>
+			<column name="FirstName" type="varchar(256)" remarks="This is the user's first name.">
+				<constraints nullable="false" />
+			</column>
+			<column name="LastName" type="varchar(256)" remarks="This is the user's last name.">
+				<constraints nullable="false" />
+			</column>
+			<column name="DateOfBirth" type="date"
+				remarks="This is the user's date of birth.">
+				<constraints nullable="false" />
+			</column>
+			<column name="PreferredLanguage" type="varchar(12)"
+				remarks="This is the locale for the user's preferred language.">
+				<constraints nullable="false" />
+			</column>
+			<column name="Created" type="datetime"
+				remarks="This is the creational date and time of the account.">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<createTable tableName="addresses"
+			remarks="This table contains the addresses for all users with the type information">
+			<column name="UserId" type="bigint"
+				remarks="The universal and unique user id to identify the user.">
+				<constraints nullable="false" />
+			</column>
+			<column name="AddressId" type="bigint"
+				remarks="The user unique address id to identify the address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="Sex" type="number(1)" remarks="This is the user's gender.">
+				<constraints nullable="false" />
+			</column>
+			<column name="FirstName" type="varchar(256)" remarks="This is the user's first name.">
+				<constraints nullable="false" />
+			</column>
+			<column name="LastName" type="varchar(256)" remarks="This is the user's last name.">
+				<constraints nullable="false" />
+			</column>
+			<column name="AddressHint" type="varchar(256)"
+				remarks="This is an additional hint for the address like c/o or the number of the postbox or flat.">
+				<constraints nullable="false" />
+			</column>
+			<column name="Street" type="varchar(256)"
+				remarks="This is the street part of the address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="Number" type="varchar(256)"
+				remarks="This is the number of the building in the street of the address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="ZipCode" type="varchar(256)"
+				remarks="This is the zip code part of the address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="City" type="varchar(256)"
+				remarks="This is the city part of the address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="State" type="varchar(256)"
+				remarks="This is the state part of the address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="Country" type="varchar(256)"
+				remarks="This is the country part of the address.">
+				<constraints nullable="false" />
+			</column>
+		</createTable>
+
+		<addPrimaryKey tableName="addresses" columnNames="UserId,AddressId" />
+		<addForeignKeyConstraint constraintName="UsersAddressesFK"
+			referencedTableName="users" baseColumnNames="UserId" baseTableName="addresses"
+			referencedColumnNames="UserId" />
+
+		<createTable tableName="companies">
+			<column name="CompanyId" type="bigint" remarks="This is the company id.">
+				<constraints nullable="false" primaryKey="true" />
+			</column>
+			<column name="Representative" type="bigint"
+				remarks="This is the user which is the primary contact for the company. This user is the first contact for all questions and responsible for user administration and all transactions. It should be the CEO, business manager, an executive or anybode else legally in charge.">
+				<constraints nullable="false" />
+			</column>
+			<column name="Name" type="varchar(256)" remarks="This is the company's name.">
+			</column>
+			<column name="AddressHint" type="varchar(256)"
+				remarks="This is an additional hint for the company address like c/o or the number of the postbox or flat.">
+				<constraints nullable="false" />
+			</column>
+			<column name="Street" type="varchar(256)"
+				remarks="This is the street part of the address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="Number" type="varchar(256)"
+				remarks="This is the number of the building in the street of the address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="ZipCode" type="varchar(256)"
+				remarks="This is the zip code part of the address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="City" type="varchar(256)"
+				remarks="This is the city part of the address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="State" type="varchar(256)"
+				remarks="This is the state part of the address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="Country" type="varchar(256)"
+				remarks="This is the country part of the address.">
+				<constraints nullable="false" />
+			</column>
+			<column name="TaxId" type="varchar(256)"
+				remarks="This is the company's tax id which might be used for invoices and quotations." />
+		</createTable>
+
+		<addForeignKeyConstraint constraintName="UsersCompaniesFK"
+			referencedTableName="users" baseColumnNames="Representative"
+			baseTableName="companies" referencedColumnNames="UserId" />
+
+		<rollback>
+			<dropTable tableName="users" />
+			<dropTable tableName="addresses" />
+		</rollback>
+
+	</changeSet>
+
+</databaseChangeLog>

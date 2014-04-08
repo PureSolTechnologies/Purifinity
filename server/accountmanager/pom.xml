@@ -1,0 +1,33 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.puresoltechnologies.purifinity.server</groupId>
+		<artifactId>server-parent</artifactId>
+		<version>0.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>accountmanager</artifactId>
+	<packaging>pom</packaging>
+
+	<properties>
+		<accountmanager.jdbc.host>localhost</accountmanager.jdbc.host>
+		<accountmanager.jdbc.port>5432</accountmanager.jdbc.port>
+		<accountmanager.jdbc.database>accountmanager</accountmanager.jdbc.database>
+		<accountmanager.jdbc.user>liquibase</accountmanager.jdbc.user>
+		<accountmanager.jdbc.password>liquibase</accountmanager.jdbc.password>
+	</properties>
+
+	<modules>
+		<module>ddl</module>
+		<module>domain</module>
+		<module>core.api</module>
+		<module>core.impl</module>
+		<module>login</module>
+		<module>test</module>
+		<module>ui.api</module>
+		<module>ui.web</module>
+		<module>app</module>
+	</modules>
+</project>

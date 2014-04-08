@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>Account Settings</title>
+	<!--
+	This is the central elements for account settings.  
+	 -->
+</h:head>
+<h:body>
+	<composite:interface>
+	</composite:interface>
+	<composite:implementation>
+		<h:outputStylesheet library="css" name="catalogBrowser.css" />
+		<h1>#{accountSettingsMBean.pageTitleTranslated}</h1>
+		<h:form>
+			<h:panelGrid columns="2">
+				<h:panelGroup>
+					<h:outputLabel value="#{accountSettingsMBean.titleTranslated}" />* /
+					<h:outputLabel value="#{accountSettingsMBean.firstNameTranslated}" />* /
+					<h:outputLabel value="#{accountSettingsMBean.lastNameTranslated}" />*
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:selectOneMenu />
+					<h:inputText />
+					<h:inputText />
+				</h:panelGroup>
+				<h:panelGroup>
+					<h:outputLabel
+						value="#{accountSettingsMBean.dateOfBirthTranslated}" />*
+				</h:panelGroup>
+				<h:inputText />
+				<h:panelGroup>
+					<h:outputLabel
+						value="#{accountSettingsMBean.preferredLanguageTranslated}" />*
+				</h:panelGroup>
+				<h:inputText />
+			</h:panelGrid>
+			<h:outputText
+				value="#{accountSettingsMBean.starExplanationTranslated}" />*
+			<h:button value="#{accountSettingsMBean.changeSettingsTranslated}" />
+			<h:button value="#{accountSettingsMBean.resetFormTranslated}" />
+		</h:form>
+	</composite:implementation>
+</h:body>
+</html>

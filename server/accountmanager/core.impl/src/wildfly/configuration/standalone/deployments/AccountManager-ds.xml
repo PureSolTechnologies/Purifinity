@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+	<datasource jta="false" jndi-name="java:/ds/AccountManager-ds"
+		enabled="true" use-java-context="true" pool-name="AccountManager-ds-pool">
+		<!-- jdbc:postgresql://host:port/database -->
+		<connection-url>jdbc:postgresql://${accountmanager.jdbc.host}:${accountmanager.jdbc.port}/${accountmanager.jdbc.database}
+		</connection-url>
+		<driver-class>org.postgresql.Driver</driver-class>
+		<driver>postgresql-8.4-702.jdbc4.jar</driver>
+		<security>
+			<user-name>${accountmanager.jdbc.user}</user-name>
+			<password>${accountmanager.jdbc.password}</password>
+		</security>
+	</datasource>
+</datasources>
