@@ -16,10 +16,7 @@ import javax.inject.Inject;
 import com.puresol.accountmanager.core.api.AccountManager;
 import com.puresol.accountmanager.core.api.AccountManagerRemote;
 import com.puresol.commons.utils.SupportedLocales;
-import com.puresol.eventlogger.client.EventLoggerClient;
-import com.puresol.peopleregister.client.PeopleRegisterClient;
-import com.puresol.peopleregister.core.api.Person;
-import com.puresol.peopleregister.core.api.Gender;
+import com.puresoltechnologies.purifinity.server.eventlogger.impl.EventLoggerRemote;
 
 @Stateful
 @Local(AccountManager.class)
@@ -30,10 +27,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	private static final long serialVersionUID = 2254178680686589373L;
 
 	@Inject
-	private EventLoggerClient eventLogger;
-
-	@Inject
-	private PeopleRegisterClient peopleRegister;
+	private EventLoggerRemote eventLogger;
 
 	@Resource
 	private SessionContext context;
@@ -112,8 +106,9 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	public void createAccount(long userId, String email, Locale locale) {
 		eventLogger.logUserAction(email, "Creating user account for '" + email
 				+ "'...");
-		Person person = new Person(userId, "", "", Gender.FEMALE, "");
-		peopleRegister.addPerson(person);
+		// FIXME
+		// Person person = new Person(userId, "", "", Gender.FEMALE, "");
+		// peopleRegister.addPerson(person);
 		eventLogger.logUserAction(email, "User account created for '" + email
 				+ "'.");
 

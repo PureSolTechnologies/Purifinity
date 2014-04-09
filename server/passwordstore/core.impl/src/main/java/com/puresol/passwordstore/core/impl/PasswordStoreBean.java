@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import com.puresol.commons.utils.EmailAddressValidator;
 import com.puresol.passwordstore.core.api.PasswordData;
 import com.puresol.passwordstore.core.api.PasswordEncrypter;
 import com.puresol.passwordstore.core.api.PasswordStore;
@@ -24,8 +25,9 @@ import com.puresol.passwordstore.domain.AccountCreationException;
 import com.puresol.passwordstore.domain.PasswordChangeException;
 import com.puresol.passwordstore.domain.PasswordEncryptionException;
 import com.puresol.passwordstore.domain.PasswordResetException;
+import com.puresol.passwordstore.domain.PasswordStoreExceptionMessage;
 import com.puresol.passwordstore.domain.PasswordStrengthCalculator;
-import com.puresoltechnologies.purifinity.server.eventlogger.EventLoggerRemote;
+import com.puresoltechnologies.purifinity.server.eventlogger.impl.EventLoggerRemote;
 
 /**
  * This is the central implementation of the {@link PasswordStore}.

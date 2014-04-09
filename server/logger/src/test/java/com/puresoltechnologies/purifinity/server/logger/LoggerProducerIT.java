@@ -31,6 +31,11 @@ public class LoggerProducerIT {
 	@Test
 	public void test() {
 		assertNotNull(logger);
+		logger.trace("TRACE String");
+		logger.debug("DEBUG String");
+		logger.info("INFO String");
+		logger.warn("WARN String");
+		logger.error("ERROR String");
 	}
 
 }

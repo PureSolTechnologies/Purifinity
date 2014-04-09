@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.core.MultivaluedMap;
 
-import org.apache.commons.httpclient.HttpStatus;
+import org.apache.http.HttpStatus;
 import org.jboss.resteasy.client.ClientResponse;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
@@ -50,11 +50,12 @@ public class PasswordStoreClient {
 				.createAccount(email + "\n" + password);
 		try {
 			if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_CREATED) {
-				MultivaluedMap<String, String> headers = response.getHeaders();
-				return headers
-						.getFirst(PasswordStoreConstants.HTTP_HEADER_ACTIVATION_KEY);
+				MultivaluedMap<String, Object> headers = response.getHeaders();
+				return String
+						.valueOf(headers
+								.getFirst(PasswordStoreConstants.HTTP_HEADER_ACTIVATION_KEY));
 			}
-			List<String> errorIds = response.getHeaders().get(
+			List<Object> errorIds = response.getHeaders().get(
 					PasswordStoreConstants.HTTP_HEADER_MESSAGE);
 			if (errorIds == null) {
 				throw new RuntimeException(
@@ -66,14 +67,15 @@ public class PasswordStoreClient {
 								+ " messages included.\n"
 								+ "Only on is expected!\n"
 								+ "The messages are:");
-				for (String errorId : errorIds) {
+				for (Object errorId : errorIds) {
 					builder.append("\n");
 					builder.append(errorId);
 				}
 				throw new RuntimeException(builder.toString());
 			}
 			throw new AccountCreationException(
-					PasswordStoreExceptionMessage.getFromId(errorIds.get(0)));
+					PasswordStoreExceptionMessage.getFromId((String) errorIds
+							.get(0)));
 		} finally {
 			response.releaseConnection();
 		}
@@ -100,7 +102,7 @@ public class PasswordStoreClient {
 				.activateAccount(email + "\n" + activationKey);
 		try {
 			if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_OK) {
-				List<String> userIdList = response.getHeaders().get(
+				List<Object> userIdList = response.getHeaders().get(
 						PasswordStoreConstants.HTTP_HEADER_USER_ID);
 				if (userIdList.size() == 0) {
 					throw new RuntimeException(
@@ -110,7 +112,7 @@ public class PasswordStoreClient {
 					throw new RuntimeException(
 							"The current OK response does have multiple user-id headers included!");
 				}
-				String userId = userIdList.get(0);
+				String userId = (String) userIdList.get(0);
 				try {
 					return Long.valueOf(userId);
 				} catch (NumberFormatException e) {
@@ -120,7 +122,7 @@ public class PasswordStoreClient {
 									+ "' (number format is wrong) included!", e);
 				}
 			}
-			List<String> errorIds = response.getHeaders().get(
+			List<Object> errorIds = response.getHeaders().get(
 					PasswordStoreConstants.HTTP_HEADER_MESSAGE);
 			if (errorIds == null) {
 				throw new RuntimeException(
@@ -132,14 +134,15 @@ public class PasswordStoreClient {
 								+ " messages included.\n"
 								+ "Only on is expected!\n"
 								+ "The messages are:");
-				for (String errorId : errorIds) {
+				for (Object errorId : errorIds) {
 					builder.append("\n");
 					builder.append(errorId);
 				}
 				throw new RuntimeException(builder.toString());
 			}
 			throw new AccountActivationException(
-					PasswordStoreExceptionMessage.getFromId(errorIds.get(0)));
+					PasswordStoreExceptionMessage.getFromId((String) errorIds
+							.get(0)));
 		} finally {
 			response.releaseConnection();
 		}
@@ -156,7 +159,7 @@ public class PasswordStoreClient {
 			} else if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
 				return false;
 			}
-			List<String> errorIds = response.getHeaders().get(
+			List<Object> errorIds = response.getHeaders().get(
 					PasswordStoreConstants.HTTP_HEADER_MESSAGE);
 			if (errorIds == null) {
 				throw new RuntimeException(
@@ -168,14 +171,15 @@ public class PasswordStoreClient {
 								+ " messages included.\n"
 								+ "Only on is expected!\n"
 								+ "The messages are:");
-				for (String errorId : errorIds) {
+				for (Object errorId : errorIds) {
 					builder.append("\n");
 					builder.append(errorId);
 				}
 				throw new RuntimeException(builder.toString());
 			}
 			throw new PasswordChangeException(
-					PasswordStoreExceptionMessage.getFromId(errorIds.get(0)));
+					PasswordStoreExceptionMessage.getFromId((String) errorIds
+							.get(0)));
 		} finally {
 			response.releaseConnection();
 		}
@@ -187,11 +191,11 @@ public class PasswordStoreClient {
 				.resetPassword(email);
 		try {
 			if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_OK) {
-				MultivaluedMap<String, String> headers = response.getHeaders();
-				return headers
+				MultivaluedMap<String, Object> headers = response.getHeaders();
+				return (String) headers
 						.getFirst(PasswordStoreConstants.HTTP_HEADER_NEW_PASSWORD);
 			}
-			List<String> errorIds = response.getHeaders().get(
+			List<Object> errorIds = response.getHeaders().get(
 					PasswordStoreConstants.HTTP_HEADER_MESSAGE);
 			if (errorIds == null) {
 				throw new RuntimeException(
@@ -203,14 +207,15 @@ public class PasswordStoreClient {
 								+ " messages included.\n"
 								+ "Only on is expected!\n"
 								+ "The messages are:");
-				for (String errorId : errorIds) {
+				for (Object errorId : errorIds) {
 					builder.append("\n");
 					builder.append(errorId);
 				}
 				throw new RuntimeException(builder.toString());
 			}
 			throw new PasswordResetException(
-					PasswordStoreExceptionMessage.getFromId(errorIds.get(0)));
+					PasswordStoreExceptionMessage.getFromId((String) errorIds
+							.get(0)));
 		} finally {
 			response.releaseConnection();
 		}
