@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.server.systemmonitor.events;
 
-import java.net.InetAddress;
 import java.util.Date;
 
 /**
@@ -11,22 +10,28 @@ import java.util.Date;
 public class Event {
 
 	private final Date time;
+	private final String component;
+	private final long eventId;
 	private final EventType type;
 	private final EventSeverity severity;
 	private final String message;
 
-	private String user = null;
-	private InetAddress ipAddress = null;
+	private String userEmail = null;
+	private long userId = -1;
+	private String clientHostname = null;
 	private Throwable throwable;
 
-	public Event(EventType type, EventSeverity severity, String message) {
-		this(new Date(), type, severity, message);
+	public Event(String component, long eventId, EventType type,
+			EventSeverity severity, String message) {
+		this(new Date(), component, eventId, type, severity, message);
 	}
 
-	public Event(Date time, EventType type, EventSeverity severity,
-			String message) {
+	public Event(Date time, String component, long eventId, EventType type,
+			EventSeverity severity, String message) {
 		super();
 		this.time = time;
+		this.component = component;
+		this.eventId = eventId;
 		this.type = type;
 		this.severity = severity;
 		this.message = message;
@@ -34,6 +39,14 @@ public class Event {
 
 	public Date getTime() {
 		return time;
+	}
+
+	public String getComponent() {
+		return component;
+	}
+
+	public long getEventId() {
+		return eventId;
 	}
 
 	public EventSeverity getSeverity() {
@@ -48,28 +61,40 @@ public class Event {
 		return message;
 	}
 
-	public String getUser() {
-		return user;
+	public String getUserEmail() {
+		return userEmail;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public Event setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+		return this;
 	}
 
-	public InetAddress getIpAddress() {
-		return ipAddress;
+	public long getUserId() {
+		return userId;
 	}
 
-	public void setIpAddress(InetAddress ipAddress) {
-		this.ipAddress = ipAddress;
+	public Event setUserId(long userId) {
+		this.userId = userId;
+		return this;
+	}
+
+	public String getClientHostname() {
+		return clientHostname;
+	}
+
+	public Event setClientHostname(String clientHostname) {
+		this.clientHostname = clientHostname;
+		return this;
 	}
 
 	public Throwable getThrowable() {
 		return throwable;
 	}
 
-	public void setThrowable(Throwable throwable) {
+	public Event setThrowable(Throwable throwable) {
 		this.throwable = throwable;
+		return this;
 	}
 
 }

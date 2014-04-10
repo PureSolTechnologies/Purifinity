@@ -45,7 +45,7 @@ public interface PasswordStore {
 	 * @throws AccountActivationException
 	 *             is thrown if the account could not be activated.
 	 */
-	public long activateAccount(String email, String activationKey)
+	public String activateAccount(String email, String activationKey)
 			throws AccountActivationException;
 
 	/**

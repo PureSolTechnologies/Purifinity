@@ -1,19 +1,29 @@
 package com.puresol.passwordstore.domain;
 
-import com.puresol.commons.utils.ExceptionMessage;
-import com.puresol.commons.utils.ExtendedException;
-
 /**
  * This exception is thrown in cases of account activation issues.
  * 
  * @author Rick-Rainer Ludwig
  */
-public class AccountActivationException extends ExtendedException {
+public class AccountActivationException extends Exception {
 
-	private static final long serialVersionUID = -5765310131309262189L;
+	private static final long serialVersionUID = 5052037298425784708L;
 
-	public AccountActivationException(ExceptionMessage message) {
+	private final long eventId;
+
+	public AccountActivationException(long eventId, String message,
+			Throwable cause) {
+		super(message, cause);
+		this.eventId = eventId;
+	}
+
+	public AccountActivationException(long eventId, String message) {
 		super(message);
+		this.eventId = eventId;
+	}
+
+	public long getEventId() {
+		return eventId;
 	}
 
 }

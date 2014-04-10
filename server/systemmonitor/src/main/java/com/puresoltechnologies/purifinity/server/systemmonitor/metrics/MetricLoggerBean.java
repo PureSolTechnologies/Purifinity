@@ -15,9 +15,6 @@ import org.slf4j.Logger;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Host;
-import com.datastax.driver.core.KeyspaceMetadata;
-import com.datastax.driver.core.Metadata;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.math.Parameter;
@@ -26,10 +23,7 @@ import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.Cas
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.MigrationException;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
 import com.puresoltechnologies.purifinity.server.systemmonitor.SystemMonitorConstants;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSeverity;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventType;
 
 /**
  * This is the central metric logger implementation.
@@ -61,44 +55,39 @@ public class MetricLoggerBean implements MetricLogger {
 
 	private Cluster cluster = null;
 	private Session session = null;
+	private PreparedStatement preparedStatement;
 
 	@PostConstruct
 	public void createStatements() {
 		try {
-			logger.info("Connect EventLogger to Cassandra...");
-			cluster = Cluster.builder()
-					.addContactPoints(SystemMonitorConstants.CASSANDRA_HOST)
-					.withPort(SystemMonitorConstants.CASSANDRA_CQL_PORT)
-					.build();
-			CassandraMigration.initialize(cluster);
-			checkAndCreateKeyspace();
-			session = cluster
-					.connect(SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME);
-			checkAndCreateTables();
-			logger.info("EventLogger connected.");
-			eventLogger.logEvent(new Event(EventType.SYSTEM,
-					EventSeverity.INFO, "MetricLogger was started up..."));
+			connectToCassandra();
+			createKeyspaceAndConnectToIt();
+			createPreparedStatements();
+			eventLogger.logEvent(MetricLoggerEvents.createStartEvent());
 		} catch (MigrationException e) {
 			throw new RuntimeException("Cassandra could not be migrated.", e);
 		}
 	}
 
+	private void connectToCassandra() {
+		logger.debug("Connect MetricLogger to Cassandra...");
+		cluster = Cluster.builder()
+				.addContactPoints(SystemMonitorConstants.CASSANDRA_HOST)
+				.withPort(SystemMonitorConstants.CASSANDRA_CQL_PORT).build();
+		logger.info("MetricLogger connected to Cassandra.");
+	}
+
+	private void createKeyspaceAndConnectToIt() throws MigrationException {
+		logger.debug("Initialize migration and check schema...");
+		CassandraMigration.initialize(cluster);
+		checkAndCreateKeyspace();
+		session = cluster
+				.connect(SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME);
+		checkAndCreateTables();
+		logger.info("MetricLogger schema is ok.");
+	}
+
 	private void checkAndCreateKeyspace() throws MigrationException {
-		Metadata metadata = cluster.getMetadata();
-		logger.info("Cassandra cluster name: '" + metadata.getClusterName()
-				+ "'.");
-		int hostId = 0;
-		for (Host host : metadata.getAllHosts()) {
-			hostId++;
-			logger.info("Host " + hostId + ": " + host.getDatacenter() + "/"
-					+ host.getRack() + "/" + host.getAddress().toString());
-		}
-		int keyspaceId = 0;
-		for (KeyspaceMetadata keyspaceMetadata : metadata.getKeyspaces()) {
-			keyspaceId++;
-			logger.info("Keyspace " + keyspaceId + ": "
-					+ keyspaceMetadata.getName());
-		}
 		CassandraMigration.createKeyspace(cluster,
 				SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME, "1.0.0",
 				"Rick-Rainer Ludwig", "Keeps the event log.",
@@ -124,14 +113,20 @@ public class MetricLoggerBean implements MetricLogger {
 						+ "WITH comment='" + description + "';");
 	}
 
+	private void createPreparedStatements() {
+		preparedStatement = session
+				.prepare("INSERT INTO "
+						+ METRICS_TABLE_NAME
+						+ " (time, server, name, unit, type, description, decimal_value, integer_value, level_of_measurement)"
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	}
+
 	@PreDestroy
 	public void disconnect() {
-		eventLogger.logEvent(new Event(EventType.SYSTEM, EventSeverity.INFO,
-				"MetricLogger is shutting down..."));
-		logger.info("Disconnect EventLogger from Cassandra...");
+		eventLogger.logEvent(MetricLoggerEvents.createStopEvent());
 		session.close();
 		cluster.close();
-		logger.info("EventLogger disconnected.");
+		logger.info("MetricsLogger disconnected.");
 	}
 
 	@Override
@@ -141,16 +136,16 @@ public class MetricLoggerBean implements MetricLogger {
 
 	@Override
 	public void logEvent(Date time, Value<?> value) {
+		writeToCassandra(time, value);
+		writeToLogger(value);
+	}
+
+	private void writeToCassandra(Date time, Value<?> value) {
 		Parameter<?> parameter = value.getParameter();
 		if (!parameter.isNumeric()) {
 			throw new IllegalArgumentException("The value '" + value.toString()
 					+ "' is not numeric!");
 		}
-		PreparedStatement preparedStatement = session
-				.prepare("INSERT INTO "
-						+ METRICS_TABLE_NAME
-						+ " (time, server, name, unit, type, description, decimal_value, integer_value, level_of_measurement)"
-						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		BigDecimal decimalValue = null;
 		BigInteger integerValue = null;
 		if (Long.class.isAssignableFrom(parameter.getType())) {
@@ -163,6 +158,10 @@ public class MetricLoggerBean implements MetricLogger {
 						.getName(), parameter.getDescription(), decimalValue,
 				integerValue, parameter.getLevelOfMeasurement().name());
 		session.execute(boundStatement);
+	}
+
+	private void writeToLogger(Value<?> value) {
+		Parameter<?> parameter = value.getParameter();
 		logger.info("-----| parameter: " + parameter + " = " + value.getValue()
 				+ " [" + parameter.getUnit() + "] |-----");
 	}

@@ -32,7 +32,7 @@
 				<configuration>
 					<modules>
 						<webModule>
-							<groupId>com.puresol</groupId>
+							<groupId>com.puresoltechnologies.purifinity.server</groupId>
 							<artifactId>passwordstore.rest.impl</artifactId>
 							<contextRoot>/passwordstore</contextRoot>
 						</webModule>

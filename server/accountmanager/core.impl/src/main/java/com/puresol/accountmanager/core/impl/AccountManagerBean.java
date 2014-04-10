@@ -13,10 +13,13 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+
 import com.puresol.accountmanager.core.api.AccountManager;
 import com.puresol.accountmanager.core.api.AccountManagerRemote;
+import com.puresol.accountmanager.domain.AccountManagerEvents;
 import com.puresol.commons.utils.SupportedLocales;
-import com.puresoltechnologies.purifinity.server.eventlogger.impl.EventLoggerRemote;
+import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
 @Stateful
 @Local(AccountManager.class)
@@ -27,7 +30,10 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	private static final long serialVersionUID = 2254178680686589373L;
 
 	@Inject
-	private EventLoggerRemote eventLogger;
+	private Logger logger;
+
+	@Inject
+	private EventLogger eventLogger;
 
 	@Resource
 	private SessionContext context;
@@ -104,14 +110,11 @@ public class AccountManagerBean implements Serializable, AccountManager,
 
 	@Override
 	public void createAccount(long userId, String email, Locale locale) {
-		eventLogger.logUserAction(email, "Creating user account for '" + email
-				+ "'...");
+		logger.debug("Creating user account for '" + email + "'...");
 		// FIXME
 		// Person person = new Person(userId, "", "", Gender.FEMALE, "");
 		// peopleRegister.addPerson(person);
-		eventLogger.logUserAction(email, "User account created for '" + email
-				+ "'.");
-
+		eventLogger.logEvent(AccountManagerEvents.createAccountCreationEvent(
+				userId, email));
 	}
-
 }

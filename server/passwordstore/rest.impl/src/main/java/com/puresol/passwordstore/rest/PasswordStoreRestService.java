@@ -8,17 +8,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.http.HttpHeaders;
+import org.apache.http.HttpStatus;
 import org.jboss.resteasy.core.ServerResponse;
 
-import com.puresol.commons.utils.ExceptionMessage;
 import com.puresol.passwordstore.core.api.PasswordStore;
 import com.puresol.passwordstore.domain.AccountActivationException;
 import com.puresol.passwordstore.domain.AccountCreationException;
 import com.puresol.passwordstore.domain.PasswordChangeException;
 import com.puresol.passwordstore.domain.PasswordResetException;
-import com.puresol.passwordstore.domain.PasswordStoreExceptionMessage;
 
 public class PasswordStoreRestService implements PasswordStoreRestInterface {
 
@@ -33,7 +31,7 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
 				return Response
 						.status(HttpStatus.SC_BAD_REQUEST)
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID,
 								"Invalid parameter!").build();
 			}
 			String activationKey = passwordStore.createAccount(splits[0],
@@ -42,42 +40,25 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
 					.status(HttpStatus.SC_CREATED);
 			return response
 					.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-					.header(PasswordStoreConstants.HTTP_HEADER_ACTIVATION_KEY,
+					.header(PasswordStoreHttpConstants.HTTP_HEADER_ACTIVATION_KEY,
 							activationKey).build();
 		} catch (AccountCreationException e) {
-			ExceptionMessage exceptionMessage = e.getExceptionMessage();
-			if (exceptionMessage == PasswordStoreExceptionMessage.INVALID_EMAIL_ADDRESS) {
+			if (e.getEventId() > 0) {
 				return Response
 						.status(HttpStatus.SC_NOT_ACCEPTABLE)
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
-								exceptionMessage.getId())
-						.header(PasswordStoreConstants.HTTP_HEADER_EXCEPTION_MESSAGE,
-								exceptionMessage.getClass()).build();
-			} else if (exceptionMessage == PasswordStoreExceptionMessage.PASSWORD_TOO_WEAK) {
-				return Response
-						.status(HttpStatus.SC_NOT_ACCEPTABLE)
-						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
-								exceptionMessage.getId())
-						.header(PasswordStoreConstants.HTTP_HEADER_EXCEPTION_MESSAGE,
-								exceptionMessage.getClass()).build();
-			} else if (exceptionMessage == PasswordStoreExceptionMessage.ACCOUNT_ALREADY_EXISTS) {
-				return Response
-						.status(HttpStatus.SC_NOT_ACCEPTABLE)
-						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
-								exceptionMessage.getId())
-						.header(PasswordStoreConstants.HTTP_HEADER_EXCEPTION_MESSAGE,
-								exceptionMessage.getClass()).build();
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID,
+								e.getEventId())
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_MESSAGE,
+								e.getMessage()).build();
 			} else {
 				return Response
 						.status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
-								exceptionMessage.getId())
-						.header(PasswordStoreConstants.HTTP_HEADER_EXCEPTION_MESSAGE,
-								exceptionMessage.getClass()).build();
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID,
+								e.getEventId())
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_MESSAGE,
+								e.getMessage()).build();
 			}
 		}
 	}
@@ -90,33 +71,30 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
 				return Response
 						.status(HttpStatus.SC_BAD_REQUEST)
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID,
 								"Invalid parameter!").build();
 			}
-			long userId = passwordStore.activateAccount(splits[0], splits[1]);
+			String email = passwordStore.activateAccount(splits[0], splits[1]);
 			ResponseBuilder response = ServerResponse.ok();
 			return response
 					.status(HttpStatus.SC_OK)
 					.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-					.header(PasswordStoreConstants.HTTP_HEADER_USER_ID,
-							String.valueOf(userId)).build();
+					.header(PasswordStoreHttpConstants.HTTP_HEADER_USER_EMAIL,
+							email).build();
 		} catch (AccountActivationException e) {
-			ExceptionMessage exceptionMessage = e.getExceptionMessage();
-			if (exceptionMessage == PasswordStoreExceptionMessage.INVALID_ACTIVATION_KEY) {
+			if (e.getEventId() > 0) {
 				return Response
 						.status(HttpStatus.SC_NOT_ACCEPTABLE)
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
-								exceptionMessage.getId())
-						.header(PasswordStoreConstants.HTTP_HEADER_EXCEPTION_MESSAGE,
-								exceptionMessage.getClass()).build();
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID,
+								e.getEventId())
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_MESSAGE,
+								e.getMessage()).build();
 			} else {
-				return Response
-						.status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+				return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header("message", exceptionMessage.getId())
-						.header("exception-message",
-								exceptionMessage.getClass()).build();
+						.header("message", e.getEventId())
+						.header("exception-message", e.getMessage()).build();
 			}
 		}
 	}
@@ -128,7 +106,7 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
 			return Response
 					.status(HttpStatus.SC_BAD_REQUEST)
 					.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-					.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
+					.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID,
 							"Invalid parameter!").build();
 		}
 		boolean authenticated = passwordStore
@@ -151,7 +129,7 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
 				return Response
 						.status(HttpStatus.SC_BAD_REQUEST)
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID,
 								"Invalid parameter!").build();
 			}
 			boolean changed = passwordStore.changePassword(splits[0],
@@ -161,34 +139,33 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
 						.status(HttpStatus.SC_OK);
 				return response
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_ACTIVATION_KEY,
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_ACTIVATION_KEY,
 								changed).build();
 			} else {
 				ResponseBuilder response = ServerResponse
 						.status(HttpStatus.SC_UNAUTHORIZED);
 				return response
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_ACTIVATION_KEY,
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_ACTIVATION_KEY,
 								changed).build();
 			}
 		} catch (PasswordChangeException e) {
-			ExceptionMessage exceptionMessage = e.getExceptionMessage();
-			if (exceptionMessage == PasswordStoreExceptionMessage.PASSWORD_TOO_WEAK) {
+			if (e.getEventId() > 0) {
 				return Response
 						.status(HttpStatus.SC_NOT_ACCEPTABLE)
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
-								exceptionMessage.getId())
-						.header(PasswordStoreConstants.HTTP_HEADER_EXCEPTION_MESSAGE,
-								exceptionMessage.getClass()).build();
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID,
+								e.getEventId())
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_MESSAGE,
+								e.getMessage()).build();
 			} else {
 				return Response
 						.status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
-								exceptionMessage.getId())
-						.header(PasswordStoreConstants.HTTP_HEADER_EXCEPTION_MESSAGE,
-								exceptionMessage.getClass()).build();
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID,
+								e.getEventId())
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_MESSAGE,
+								e.getMessage()).build();
 			}
 		}
 	}
@@ -204,26 +181,25 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
 			ResponseBuilder response = ServerResponse.status(HttpStatus.SC_OK);
 			return response
 					.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-					.header(PasswordStoreConstants.HTTP_HEADER_NEW_PASSWORD,
+					.header(PasswordStoreHttpConstants.HTTP_HEADER_NEW_PASSWORD,
 							activationKey).build();
 		} catch (PasswordResetException e) {
-			ExceptionMessage exceptionMessage = e.getExceptionMessage();
-			if (exceptionMessage == PasswordStoreExceptionMessage.UNKNOWN_EMAIL_ADDRESS) {
+			if (e.getEventId() > 0) {
 				return Response
 						.status(HttpStatus.SC_NOT_ACCEPTABLE)
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
-								exceptionMessage.getId())
-						.header(PasswordStoreConstants.HTTP_HEADER_EXCEPTION_MESSAGE,
-								exceptionMessage.getClass()).build();
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID,
+								e.getEventId())
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_MESSAGE,
+								e.getMessage()).build();
 			} else {
 				return Response
 						.status(HttpStatus.SC_INTERNAL_SERVER_ERROR)
 						.header(HttpHeaders.CONTENT_TYPE, "text/plain")
-						.header(PasswordStoreConstants.HTTP_HEADER_MESSAGE,
-								exceptionMessage.getId())
-						.header(PasswordStoreConstants.HTTP_HEADER_EXCEPTION_MESSAGE,
-								exceptionMessage.getClass()).build();
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID,
+								e.getEventId())
+						.header(PasswordStoreHttpConstants.HTTP_HEADER_EVENT_MESSAGE,
+								e.getMessage()).build();
 			}
 		}
 	}

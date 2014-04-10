@@ -1,33 +1,38 @@
 package com.puresol.passwordstore.core.impl;
 
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import javax.ejb.EJB;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
+import org.slf4j.Logger;
+
+import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+import com.datastax.driver.core.Session;
 import com.puresol.commons.utils.EmailAddressValidator;
 import com.puresol.passwordstore.core.api.PasswordData;
 import com.puresol.passwordstore.core.api.PasswordEncrypter;
 import com.puresol.passwordstore.core.api.PasswordStore;
-import com.puresol.passwordstore.core.impl.entities.AccountState;
-import com.puresol.passwordstore.core.impl.entities.ActivationKeyDAO;
-import com.puresol.passwordstore.core.impl.entities.ActivationKeyEntity;
-import com.puresol.passwordstore.core.impl.entities.UserDAO;
-import com.puresol.passwordstore.core.impl.entities.UserEntity;
 import com.puresol.passwordstore.domain.AccountActivationException;
 import com.puresol.passwordstore.domain.AccountCreationException;
 import com.puresol.passwordstore.domain.PasswordChangeException;
 import com.puresol.passwordstore.domain.PasswordEncryptionException;
 import com.puresol.passwordstore.domain.PasswordResetException;
-import com.puresol.passwordstore.domain.PasswordStoreExceptionMessage;
 import com.puresol.passwordstore.domain.PasswordStrengthCalculator;
-import com.puresoltechnologies.purifinity.server.eventlogger.impl.EventLoggerRemote;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraMigration;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.MigrationException;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
+import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
+import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
 /**
  * This is the central implementation of the {@link PasswordStore}.
@@ -38,6 +43,11 @@ import com.puresoltechnologies.purifinity.server.eventlogger.impl.EventLoggerRem
 @Stateless
 public class PasswordStoreBean implements PasswordStore {
 
+	public static final String PASSWORD_STORE_KEYSPACE_NAME = "system_monitor";
+	public static final String CASSANDRA_HOST = "localhost";
+	public static final int CASSANDRA_CQL_PORT = 9042;
+	public static final String PASSWORD_TABLE_NAME = "passwords";
+
 	@Inject
 	private SecurityKeyGenerator securityKeyGenerator;
 
@@ -45,204 +55,284 @@ public class PasswordStoreBean implements PasswordStore {
 	private PasswordEncrypter passwordEncrypter;
 
 	@Inject
-	private UserDAO userDAO;
+	private Logger logger;
 
 	@Inject
-	private ActivationKeyDAO activationKeyDAO;
+	private EventLogger eventLogger;
 
-	@EJB(lookup = "???")
-	private EventLoggerRemote eventLogger;
+	private Cluster cluster = null;
+	private Session session = null;
+	private PreparedStatement createAccountStatement = null;
+	private PreparedStatement activateAccountStatement = null;
+	private PreparedStatement changePasswordStatement = null;
+	private PreparedStatement retrieveUserByEmailStatement = null;
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	@PostConstruct
+	public void connectAndInitialize() {
+		try {
+			connectToCassandra();
+			createKeyspaceAndConnectToIt();
+			createPreparedStatements();
+			eventLogger.logEvent(PasswordStoreEvents.createStartEvent());
+		} catch (MigrationException e) {
+			throw new RuntimeException("Cassandra could not be migrated.", e);
+		}
+	}
+
+	private void connectToCassandra() {
+		logger.debug("Connect PasswordStore to Cassandra...");
+		cluster = Cluster.builder().addContactPoints(CASSANDRA_HOST)
+				.withPort(CASSANDRA_CQL_PORT).build();
+		logger.info("PasswordStore connected to Cassandra.");
+	}
+
+	private void createKeyspaceAndConnectToIt() throws MigrationException {
+		logger.debug("Initialize migration and check schema...");
+		CassandraMigration.initialize(cluster);
+		checkAndCreateKeyspace();
+		session = cluster.connect(PASSWORD_STORE_KEYSPACE_NAME);
+		checkAndCreateTables();
+		logger.info("PasswordStore schema is ok.");
+	}
+
+	private void checkAndCreateKeyspace() throws MigrationException {
+		CassandraMigration.createKeyspace(cluster,
+				PASSWORD_STORE_KEYSPACE_NAME, "1.0.0", "Rick-Rainer Ludwig",
+				"Keeps the event log.", ReplicationStrategy.SIMPLE_STRATEGY, 3);
+	}
+
+	private void checkAndCreateTables() throws MigrationException {
+		String description = "This table contains the authentication data and the state of the account.";
+		CassandraMigration.createTable(cluster, PASSWORD_STORE_KEYSPACE_NAME,
+				"1.0.0", "Rick-Rainer Ludwig", description, "CREATE TABLE "
+						+ PASSWORD_TABLE_NAME//
+						+ " (created timestamp, " //
+						+ "last_modified timestamp, " //
+						+ "email varchar," //
+						+ "password ascii, " //
+						+ "state ascii, "
+						+ "activation_key ascii, "//
+						+ "PRIMARY KEY (email))" + "WITH comment='"
+						+ description + "';");
+		CassandraMigration.createIndex(cluster, PASSWORD_STORE_KEYSPACE_NAME,
+				"1.0.0", "Rick-Rainer Ludwig", "Secondary index on state.",
+				PASSWORD_TABLE_NAME, "state");
+	}
+
+	private void createPreparedStatements() {
+		createAccountStatement = session
+				.prepare("INSERT INTO "
+						+ PASSWORD_TABLE_NAME
+						+ " (created, last_modified, email, password, state, activation_key)"
+						+ "VALUES (?, ?, ?, ?, ?, "
+						+ AccountState.CREATED.name() + ", ?)");
+		activateAccountStatement = session.prepare("INSERT INTO "
+				+ PASSWORD_TABLE_NAME + " (last_modified, state)"
+				+ "VALUES (?, " + AccountState.ACTIVE.name()
+				+ ") WHERE email = ?");
+		changePasswordStatement = session.prepare("UPDATE "
+				+ PASSWORD_TABLE_NAME + " SET password = ? WHERE email = ?");
+		retrieveUserByEmailStatement = session.prepare("SELECT * FROM "
+				+ PASSWORD_TABLE_NAME + " WHERE email = ?");
+	}
+
+	@PreDestroy
+	public void disconnect() {
+		eventLogger.logEvent(PasswordStoreEvents.createStopEvent());
+		session.close();
+		cluster.close();
+		logger.info("PasswordStore disconnected.");
+	}
 
 	@Override
 	public String createAccount(String email, String password)
 			throws AccountCreationException {
-		eventLogger.logUserAction(email, "Creating accout for user '" + email
-				+ "'...");
+		logger.info("An account for '" + email + "' is going to be created...");
 		if (!EmailAddressValidator.validate(email)) {
-			eventLogger.logUserException(email,
-					PasswordStoreExceptionMessage.INVALID_EMAIL_ADDRESS,
-					"Creation of account for user '" + email
-							+ "' failed! Email address is invalid!");
-			throw new AccountCreationException(
-					PasswordStoreExceptionMessage.INVALID_EMAIL_ADDRESS);
+			Event event = PasswordStoreEvents
+					.createInvalidEmailAddressErrorEvent(email);
+			eventLogger.logEvent(event);
+			throw new AccountCreationException(event.getEventId(),
+					event.getMessage());
 		}
 		if (!PasswordStrengthCalculator.validate(password)) {
-			eventLogger.logUserException(email,
-					PasswordStoreExceptionMessage.PASSWORD_TOO_WEAK,
-					"Creation of account for user '" + email
-							+ "' failed! Password is too weak!");
-			throw new AccountCreationException(
-					PasswordStoreExceptionMessage.PASSWORD_TOO_WEAK);
+			Event event = PasswordStoreEvents
+					.createPasswordTooWeakErrorEvent(email);
+			eventLogger.logEvent(event);
+			throw new AccountCreationException(event.getEventId(),
+					event.getMessage());
 		}
-		if (userDAO.getUserByEmail(email) != null) {
-			eventLogger.logUserException(email,
-					PasswordStoreExceptionMessage.PASSWORD_TOO_WEAK,
-					"Creation of account for user '" + email
-							+ "' failed! Account already exists!");
-			throw new AccountCreationException(
-					PasswordStoreExceptionMessage.ACCOUNT_ALREADY_EXISTS);
+		BoundStatement boundStatement = retrieveUserByEmailStatement
+				.bind(email);
+		ResultSet result = session.execute(boundStatement);
+		if (result.one() != null) {
+			Event event = PasswordStoreEvents
+					.createAccountAlreadyExistsErrorEvent(email);
+			eventLogger.logEvent(event);
+			throw new AccountCreationException(event.getEventId(),
+					event.getMessage());
 		}
-		UserEntity user = new UserEntity();
-		user.setEmail(email);
+
+		String passwordHash;
 		try {
-			user.setPwh(passwordEncrypter.encryptPassword(password).toString());
+			passwordHash = passwordEncrypter.encryptPassword(password)
+					.toString();
 		} catch (PasswordEncryptionException e) {
-			eventLogger.logUserException(email, e,
-					"Could not encrypt password for user '" + user + "'!");
-			eventLogger.logSystemException(e,
-					"Could not encrypt password for user '" + user + "'!");
-			throw new RuntimeException("Could not encrypt password!", e);
+			Event event = PasswordStoreEvents
+					.createPasswordEncryptionErrorEvent(email, e);
+			eventLogger.logEvent(event);
+			throw new RuntimeException(event.getMessage(), e);
 		}
-		user.setState(AccountState.CREATED);
-		user.setCreated(new Date(new java.util.Date().getTime()));
-		entityManager.persist(user);
+		String activationKey = securityKeyGenerator.generate();
+		Date created = new Date();
 
-		ActivationKeyEntity activationKey = new ActivationKeyEntity();
-		activationKey.setUserId(user.getUserId());
-		activationKey.setActivationKey(securityKeyGenerator.generate());
-		entityManager.persist(activationKey);
+		// FIXME userId needs to come from counter!
+		boundStatement = createAccountStatement.bind(created, created, -1,
+				email, passwordHash, activationKey);
+		session.execute(boundStatement);
 
-		String activationKeyString = activationKey.getActivationKey();
-		eventLogger
-				.logUserAction(email, "Accout for user '" + email
-						+ "' created. Activation key is '"
-						+ activationKeyString + "'.");
-		return activationKeyString;
+		eventLogger.logEvent(PasswordStoreEvents.createAccountCreationEvent(
+				email, activationKey));
+		return activationKey;
 	}
 
 	@Override
-	public long activateAccount(String email, String activationKey)
+	public String activateAccount(String email, String activationKey)
 			throws AccountActivationException {
-		eventLogger.logUserAction(email, "Activating accout for user '" + email
-				+ "'...");
-		UserEntity userEntity = userDAO.getUserByEmail(email);
-		if (userEntity.getState() != AccountState.CREATED) {
-			eventLogger.logUserException(email,
-					PasswordStoreExceptionMessage.ACCOUNT_ALREADY_ACTIVATED,
-					"Activation of account for user '" + email
-							+ "' was failed! Account was already activated!");
-			throw new AccountActivationException(
-					PasswordStoreExceptionMessage.ACCOUNT_ALREADY_ACTIVATED);
+		logger.info("Account for user '" + email + "' is to be activated...");
+
+		Row account = getUserByEmail(email);
+		String stateString = account.getString("state");
+		if (!AccountState.CREATED.name().equals(stateString)) {
+			Event event = PasswordStoreEvents
+					.createAccountAlreadyActivatedEvent(email);
+			eventLogger.logEvent(event);
+			throw new AccountActivationException(event.getEventId(),
+					event.getMessage());
 		}
 
-		ActivationKeyEntity activationKeyEntity = activationKeyDAO
-				.getActivationKeyByUserId(userEntity.getUserId());
-
-		if (!activationKeyEntity.getActivationKey().equals(activationKey)) {
-			eventLogger.logUserException(email,
-					PasswordStoreExceptionMessage.ACCOUNT_ALREADY_ACTIVATED,
-					"Activation of account for user '" + email
-							+ "' was failed! Activation key is not valied!");
-			throw new AccountActivationException(
-					PasswordStoreExceptionMessage.INVALID_ACTIVATION_KEY);
+		String definedActivationKey = account.getString("activation_key");
+		if (!definedActivationKey.equals(activationKey)) {
+			Event event = PasswordStoreEvents
+					.createInvalidActivationKeyErrorEvent(email);
+			eventLogger.logEvent(event);
+			throw new AccountActivationException(event.getEventId(),
+					event.getMessage());
 		}
-		userEntity.setState(AccountState.ACTIVE);
-		entityManager.merge(userEntity);
-		eventLogger.logUserAction(email, "Account for user '" + email
-				+ "' was activated.");
-		return userEntity.getUserId();
+
+		BoundStatement boundStatement = activateAccountStatement.bind(
+				new Date(), email);
+		session.execute(boundStatement);
+
+		eventLogger.logEvent(PasswordStoreEvents.createAccountActivatedEvent(
+				email, activationKey));
+		return email;
+	}
+
+	private Row getUserByEmail(String email) {
+		BoundStatement boundStatement = retrieveUserByEmailStatement
+				.bind(email);
+		ResultSet result = session.execute(boundStatement);
+		Row account = result.one();
+		return account;
 	}
 
 	@Override
 	public boolean authenticate(String email, String password) {
 		try {
-			eventLogger.logUserAction(email, "Authenticating user '" + email
-					+ "'...");
-			UserEntity userEntity = userDAO.getUserByEmail(email);
-			if (userEntity == null) {
-				eventLogger.logUserAction(email, "Authentication for user '"
-						+ email + "' failed! Account does not exist!");
+			logger.info(email, "Authenticating user '" + email + "'...");
+			Row account = getUserByEmail(email);
+			if (account == null) {
+				eventLogger
+						.logEvent(PasswordStoreEvents
+								.createUserAuthenticationFailedAccountNotExistsEvent(email));
 				return false;
 			}
-			if (userEntity.getState() != AccountState.ACTIVE) {
-				eventLogger.logUserAction(email, "Authentication for user '"
-						+ email + "' failed! Account is not active!");
+			String stateString = account.getString("state");
+			if (!AccountState.ACTIVE.equals(stateString)) {
+				eventLogger
+						.logEvent(PasswordStoreEvents
+								.createUserAuthenticationFailedAccountNotActiveEvent(email));
 				return false;
 			}
 			boolean authenticated = passwordEncrypter.checkPassword(password,
-					PasswordData.fromString(userEntity.getPwh()));
+					PasswordData.fromString(account.getString("password")));
 			if (authenticated) {
-				eventLogger.logUserAction(email, "Authentication for user '"
-						+ email + "' successful!");
+				eventLogger.logEvent(PasswordStoreEvents
+						.createUserAuthenticatedEvent(email));
 			} else {
-				eventLogger.logUserAction(email, "Authentication for user '"
-						+ email + "' failed! Password does not match!");
+				eventLogger.logEvent(PasswordStoreEvents
+						.createUserAuthenticationFailedEvent(email));
 			}
 			return authenticated;
 		} catch (PasswordEncryptionException e) {
-			eventLogger.logUserException(email, e,
-					"Could not encrypt password for user '" + email + "'!");
-			eventLogger.logSystemException(e,
-					"Could not encrypt password for user '" + email + "'!");
-			throw new RuntimeException("Could not encrypt password!", e);
+			Event event = PasswordStoreEvents
+					.createPasswordEncryptionErrorEvent(email, e);
+			eventLogger.logEvent(event);
+			throw new RuntimeException(event.getMessage(), e);
 		}
 	}
 
 	@Override
 	public boolean changePassword(String email, String oldPassword,
 			String newPassword) throws PasswordChangeException {
-		eventLogger.logUserAction(email, "Change password for user '" + email
-				+ "'...");
+		logger.info("Password for user '" + email
+				+ "' is going to be changed...");
 		if (!authenticate(email, oldPassword)) {
-			eventLogger.logUserAction(email,
-					"Password change not possible for user '" + email
-							+ "' due to failed authentication!");
+			eventLogger.logEvent(PasswordStoreEvents
+					.createPasswordChangeFailedNotAuthenticatedEvent(email));
 			return false;
 		}
 		if (!PasswordStrengthCalculator.validate(newPassword)) {
-			eventLogger.logUserException(email,
-					PasswordStoreExceptionMessage.PASSWORD_TOO_WEAK,
-					"Password change not possible for user '" + email
-							+ "' due to too weak password.");
-			throw new PasswordChangeException(
-					PasswordStoreExceptionMessage.PASSWORD_TOO_WEAK);
+			Event event = PasswordStoreEvents
+					.createPasswordChangeFailedPasswordTooWeakEvent(email);
+			eventLogger.logEvent(event);
+			throw new PasswordChangeException(event.getEventId(),
+					event.getMessage());
 		}
-		UserEntity user = userDAO.getUserByEmail(email);
+		String passwordHash;
 		try {
-			user.setPwh(passwordEncrypter.encryptPassword(newPassword)
-					.toString());
+			passwordHash = passwordEncrypter.encryptPassword(newPassword)
+					.toString();
 		} catch (PasswordEncryptionException e) {
-			eventLogger.logUserException(email, e,
-					"Could not encrypt password for user '" + user + "'!");
-			eventLogger.logSystemException(e,
-					"Could not encrypt password for user '" + user + "'!");
-			throw new RuntimeException("Could not encrypt password!", e);
+			Event event = PasswordStoreEvents
+					.createPasswordEncryptionErrorEvent(email, e);
+			eventLogger.logEvent(event);
+			throw new RuntimeException(event.getMessage(), e);
 		}
-		entityManager.merge(user);
-		eventLogger.logUserAction(email, "Password for user '" + email
-				+ "' was changed.");
+		changePasswordStatement.bind(passwordHash, email);
+
+		eventLogger.logEvent(PasswordStoreEvents
+				.createPasswordChangedEvent(email));
 		return true;
 	}
 
 	@Override
 	public String resetPassword(String email) throws PasswordResetException {
-		eventLogger.logUserAction(email, "Reseting password for user '" + email
-				+ "'...");
-		UserEntity user = userDAO.getUserByEmail(email);
-		if (user == null) {
-			eventLogger.logUserException(email,
-					PasswordStoreExceptionMessage.UNKNOWN_EMAIL_ADDRESS,
-					"Password reset not possible for user '" + user
-							+ "' due to non exsiting account!");
-			throw new PasswordResetException(
-					PasswordStoreExceptionMessage.UNKNOWN_EMAIL_ADDRESS);
+		logger.info("Password for user '" + email + "' is going to be reset...");
+		Row account = getUserByEmail(email);
+		if (account == null) {
+			Event event = PasswordStoreEvents
+					.createPasswordResetFailedUnknownAccountEvent(email);
+			eventLogger.logEvent(event);
+			throw new PasswordResetException(event.getEventId(),
+					event.getMessage());
 		}
 		String password = generatePassword();
+		String passwordHash;
 		try {
-			user.setPwh(passwordEncrypter.encryptPassword(password).toString());
+			passwordHash = passwordEncrypter.encryptPassword(password)
+					.toString();
 		} catch (PasswordEncryptionException e) {
-			eventLogger.logUserException(email, e,
-					"Could not encrypt password for user '" + user + "'!");
-			eventLogger.logSystemException(e,
-					"Could not encrypt password for user '" + user + "'!");
-			throw new RuntimeException("Could not encrypt password!", e);
+			Event event = PasswordStoreEvents
+					.createPasswordEncryptionErrorEvent(email, e);
+			eventLogger.logEvent(event);
+			throw new RuntimeException(event.getMessage(), e);
 		}
-		entityManager.merge(user);
-		eventLogger.logUserAction(email, "Password for user '" + email
-				+ "' was reset.");
+		changePasswordStatement.bind(passwordHash, email);
+
+		eventLogger.logEvent(PasswordStoreEvents
+				.createPasswordResetEvent(email));
 		return password;
 	}
 

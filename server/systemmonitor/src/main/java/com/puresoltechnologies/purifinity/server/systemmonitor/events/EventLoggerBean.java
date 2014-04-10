@@ -15,9 +15,6 @@ import org.slf4j.Logger;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Host;
-import com.datastax.driver.core.KeyspaceMetadata;
-import com.datastax.driver.core.Metadata;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraMigration;
@@ -52,44 +49,39 @@ public class EventLoggerBean implements EventLogger {
 
 	private Cluster cluster = null;
 	private Session session = null;
+	private PreparedStatement preparedLogEventStatement = null;
 
 	@PostConstruct
-	public void createStatements() {
+	public void connectAndInitialize() {
 		try {
-			logger.info("Connect EventLogger to Cassandra...");
-			cluster = Cluster.builder()
-					.addContactPoints(SystemMonitorConstants.CASSANDRA_HOST)
-					.withPort(SystemMonitorConstants.CASSANDRA_CQL_PORT)
-					.build();
-			CassandraMigration.initialize(cluster);
-			checkAndCreateKeyspace();
-			session = cluster
-					.connect(SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME);
-			checkAndCreateTables();
-			logger.info("EventLogger connected.");
-			logEvent(new Event(EventType.SYSTEM, EventSeverity.INFO,
-					"EventLogger was started up..."));
+			connectToCassandra();
+			createKeyspaceAndConnectToIt();
+			createPreparedStatements();
+			logEvent(EventLoggerEvents.createStartEvent());
 		} catch (MigrationException e) {
 			throw new RuntimeException("Cassandra could not be migrated.", e);
 		}
 	}
 
+	private void connectToCassandra() {
+		logger.debug("Connect EventLogger to Cassandra...");
+		cluster = Cluster.builder()
+				.addContactPoints(SystemMonitorConstants.CASSANDRA_HOST)
+				.withPort(SystemMonitorConstants.CASSANDRA_CQL_PORT).build();
+		logger.info("EventLogger connected to Cassandra.");
+	}
+
+	private void createKeyspaceAndConnectToIt() throws MigrationException {
+		logger.debug("Initialize migration and check schema...");
+		CassandraMigration.initialize(cluster);
+		checkAndCreateKeyspace();
+		session = cluster
+				.connect(SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME);
+		checkAndCreateTables();
+		logger.info("EventLogger schema is ok.");
+	}
+
 	private void checkAndCreateKeyspace() throws MigrationException {
-		Metadata metadata = cluster.getMetadata();
-		logger.info("Cassandra cluster name: '" + metadata.getClusterName()
-				+ "'.");
-		int hostId = 0;
-		for (Host host : metadata.getAllHosts()) {
-			hostId++;
-			logger.info("Host " + hostId + ": " + host.getDatacenter() + "/"
-					+ host.getRack() + "/" + host.getAddress().toString());
-		}
-		int keyspaceId = 0;
-		for (KeyspaceMetadata keyspaceMetadata : metadata.getKeyspaces()) {
-			keyspaceId++;
-			logger.info("Keyspace " + keyspaceId + ": "
-					+ keyspaceMetadata.getName());
-		}
 		CassandraMigration.createKeyspace(cluster,
 				SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME, "1.0.0",
 				"Rick-Rainer Ludwig", "Keeps the event log.",
@@ -108,23 +100,32 @@ public class EventLoggerBean implements EventLogger {
 						"CREATE TABLE "
 								+ EVENTS_TABLE_NAME //
 								+ " (time timestamp, " //
+								+ "component ascii," //
+								+ "event_id bigint," //
 								+ "server ascii," //
 								+ "type ascii, " //
 								+ "severity ascii, "
 								+ "message text, "//
 								+ "user varchar, "
-								+ "ip_address inet, " //
+								+ "user_id bigint," //
+								+ "client ascii, " //
 								+ "exception_message ascii, "
 								+ "exception_stacktrace ascii, "//
-								+ "PRIMARY KEY (server, time, type, severity, message))"
+								+ "PRIMARY KEY (server, time, severity, type, component, event_id, message))"
 								+ "WITH comment='" + description + "';");
+	}
+
+	private void createPreparedStatements() {
+		preparedLogEventStatement = session
+				.prepare("INSERT INTO "
+						+ EVENTS_TABLE_NAME
+						+ " (time, component, event_id, server, type, severity, message, user, user_id, client, exception_message, exception_stacktrace)"
+						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	}
 
 	@PreDestroy
 	public void disconnect() {
-		logEvent(new Event(EventType.SYSTEM, EventSeverity.INFO,
-				"EventLogger is shutting down..."));
-		logger.info("Disconnect EventLogger from Cassandra...");
+		logEvent(EventLoggerEvents.createStopEvent());
 		session.close();
 		cluster.close();
 		logger.info("EventLogger disconnected.");
@@ -137,20 +138,20 @@ public class EventLoggerBean implements EventLogger {
 			String stackTrace = byteArrayOutputStream.toString();
 			return stackTrace;
 		} catch (IOException e) {
-			/*
-			 * This should not happen...
-			 */
-			return "";
+			logger.warn(
+					"Could not read stacktrace into PrintStream. This should never happen.",
+					e);
+			return "<stacktrace conversion errored>";
 		}
 	}
 
 	@Override
 	public void logEvent(Event event) {
-		PreparedStatement preparedStatement = session
-				.prepare("INSERT INTO "
-						+ EVENTS_TABLE_NAME
-						+ " (time, server, type, severity, message, user, ip_address, exception_message, exception_stacktrace)"
-						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		writeToCassandra(event);
+		writeToLogger(event);
+	}
+
+	private void writeToCassandra(Event event) {
 		Throwable throwable = event.getThrowable();
 		String exceptionMessage = null;
 		String exceptionStacktrace = null;
@@ -158,12 +159,16 @@ public class EventLoggerBean implements EventLogger {
 			exceptionMessage = throwable.getMessage();
 			exceptionStacktrace = getStackTrace(throwable);
 		}
-		BoundStatement boundStatement = preparedStatement.bind(event.getTime(),
+		BoundStatement boundStatement = preparedLogEventStatement.bind(
+				event.getTime(), event.getComponent(), event.getEventId(),
 				server, event.getType().name(), event.getSeverity().name(),
-				event.getMessage(), event.getUser(), event.getIpAddress(),
-				exceptionMessage, exceptionStacktrace);
+				event.getMessage(), event.getUserEmail(), event.getUserId(),
+				event.getClientHostname(), exceptionMessage,
+				exceptionStacktrace);
 		session.execute(boundStatement);
+	}
 
+	private void writeToLogger(Event event) {
 		String message = "=====| " + event.getSeverity() + " event: "
 				+ event.getMessage() + " (time=" + event.getTime() + ";type="
 				+ event.getType() + ") |=====";

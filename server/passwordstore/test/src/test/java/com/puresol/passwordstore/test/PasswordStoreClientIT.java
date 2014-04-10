@@ -16,7 +16,6 @@ import com.puresol.passwordstore.domain.AccountActivationException;
 import com.puresol.passwordstore.domain.AccountCreationException;
 import com.puresol.passwordstore.domain.PasswordChangeException;
 import com.puresol.passwordstore.domain.PasswordResetException;
-import com.puresol.passwordstore.domain.PasswordStoreExceptionMessage;
 
 public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 

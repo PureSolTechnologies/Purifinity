@@ -15,16 +15,15 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresol.jboss.test.arquillian.EnhanceDeployment;
 import com.puresol.passwordstore.core.api.PasswordStore;
-import com.puresol.passwordstore.core.impl.entities.AccountState;
+import com.puresol.passwordstore.core.impl.AccountState;
 import com.puresol.passwordstore.core.impl.entities.UserDAO;
 import com.puresol.passwordstore.core.impl.entities.UserEntity;
 import com.puresol.passwordstore.domain.AccountActivationException;
 import com.puresol.passwordstore.domain.AccountCreationException;
 import com.puresol.passwordstore.domain.PasswordChangeException;
 import com.puresol.passwordstore.domain.PasswordResetException;
-import com.puresol.passwordstore.domain.PasswordStoreExceptionMessage;
+import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
 public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 

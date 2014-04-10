@@ -14,8 +14,7 @@ import com.puresol.passwordstore.domain.AccountActivationException;
 import com.puresol.passwordstore.domain.AccountCreationException;
 import com.puresol.passwordstore.domain.PasswordChangeException;
 import com.puresol.passwordstore.domain.PasswordResetException;
-import com.puresol.passwordstore.domain.PasswordStoreExceptionMessage;
-import com.puresol.passwordstore.rest.PasswordStoreConstants;
+import com.puresol.passwordstore.rest.PasswordStoreHttpConstants;
 import com.puresol.passwordstore.rest.PasswordStoreRestInterface;
 
 /**
@@ -53,29 +52,14 @@ public class PasswordStoreClient {
 				MultivaluedMap<String, Object> headers = response.getHeaders();
 				return String
 						.valueOf(headers
-								.getFirst(PasswordStoreConstants.HTTP_HEADER_ACTIVATION_KEY));
+								.getFirst(PasswordStoreHttpConstants.HTTP_HEADER_ACTIVATION_KEY));
 			}
-			List<Object> errorIds = response.getHeaders().get(
-					PasswordStoreConstants.HTTP_HEADER_MESSAGE);
-			if (errorIds == null) {
-				throw new RuntimeException(
-						"The current response has no messages included!");
-			}
-			if (errorIds.size() != 1) {
-				StringBuilder builder = new StringBuilder(
-						"The current response has " + errorIds.size()
-								+ " messages included.\n"
-								+ "Only on is expected!\n"
-								+ "The messages are:");
-				for (Object errorId : errorIds) {
-					builder.append("\n");
-					builder.append(errorId);
-				}
-				throw new RuntimeException(builder.toString());
-			}
-			throw new AccountCreationException(
-					PasswordStoreExceptionMessage.getFromId((String) errorIds
-							.get(0)));
+			Object errorId = response.getHeaders().getFirst(
+					PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID);
+			Object errorMessage = response.getHeaders().getFirst(
+					PasswordStoreHttpConstants.HTTP_HEADER_EVENT_MESSAGE);
+			throw new AccountCreationException(Long.valueOf((String) errorId),
+					(String) errorMessage);
 		} finally {
 			response.releaseConnection();
 		}
@@ -103,7 +87,7 @@ public class PasswordStoreClient {
 		try {
 			if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_OK) {
 				List<Object> userIdList = response.getHeaders().get(
-						PasswordStoreConstants.HTTP_HEADER_USER_ID);
+						PasswordStoreHttpConstants.HTTP_HEADER_USER_EMAIL);
 				if (userIdList.size() == 0) {
 					throw new RuntimeException(
 							"The current OK response does not have a user-id header included!");
@@ -122,27 +106,12 @@ public class PasswordStoreClient {
 									+ "' (number format is wrong) included!", e);
 				}
 			}
-			List<Object> errorIds = response.getHeaders().get(
-					PasswordStoreConstants.HTTP_HEADER_MESSAGE);
-			if (errorIds == null) {
-				throw new RuntimeException(
-						"The current response has no messages included!");
-			}
-			if (errorIds.size() != 1) {
-				StringBuilder builder = new StringBuilder(
-						"The current response has " + errorIds.size()
-								+ " messages included.\n"
-								+ "Only on is expected!\n"
-								+ "The messages are:");
-				for (Object errorId : errorIds) {
-					builder.append("\n");
-					builder.append(errorId);
-				}
-				throw new RuntimeException(builder.toString());
-			}
+			Object errorId = response.getHeaders().getFirst(
+					PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID);
+			Object errorMessage = response.getHeaders().getFirst(
+					PasswordStoreHttpConstants.HTTP_HEADER_EVENT_MESSAGE);
 			throw new AccountActivationException(
-					PasswordStoreExceptionMessage.getFromId((String) errorIds
-							.get(0)));
+					Long.valueOf((String) errorId), (String) errorMessage);
 		} finally {
 			response.releaseConnection();
 		}
@@ -159,27 +128,12 @@ public class PasswordStoreClient {
 			} else if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
 				return false;
 			}
-			List<Object> errorIds = response.getHeaders().get(
-					PasswordStoreConstants.HTTP_HEADER_MESSAGE);
-			if (errorIds == null) {
-				throw new RuntimeException(
-						"The current response has no messages included!");
-			}
-			if (errorIds.size() != 1) {
-				StringBuilder builder = new StringBuilder(
-						"The current response has " + errorIds.size()
-								+ " messages included.\n"
-								+ "Only on is expected!\n"
-								+ "The messages are:");
-				for (Object errorId : errorIds) {
-					builder.append("\n");
-					builder.append(errorId);
-				}
-				throw new RuntimeException(builder.toString());
-			}
-			throw new PasswordChangeException(
-					PasswordStoreExceptionMessage.getFromId((String) errorIds
-							.get(0)));
+			Object errorId = response.getHeaders().getFirst(
+					PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID);
+			Object errorMessage = response.getHeaders().getFirst(
+					PasswordStoreHttpConstants.HTTP_HEADER_EVENT_MESSAGE);
+			throw new PasswordChangeException(Long.valueOf((String) errorId),
+					(String) errorMessage);
 		} finally {
 			response.releaseConnection();
 		}
@@ -193,29 +147,14 @@ public class PasswordStoreClient {
 			if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_OK) {
 				MultivaluedMap<String, Object> headers = response.getHeaders();
 				return (String) headers
-						.getFirst(PasswordStoreConstants.HTTP_HEADER_NEW_PASSWORD);
+						.getFirst(PasswordStoreHttpConstants.HTTP_HEADER_NEW_PASSWORD);
 			}
-			List<Object> errorIds = response.getHeaders().get(
-					PasswordStoreConstants.HTTP_HEADER_MESSAGE);
-			if (errorIds == null) {
-				throw new RuntimeException(
-						"The current response has no messages included!");
-			}
-			if (errorIds.size() != 1) {
-				StringBuilder builder = new StringBuilder(
-						"The current response has " + errorIds.size()
-								+ " messages included.\n"
-								+ "Only on is expected!\n"
-								+ "The messages are:");
-				for (Object errorId : errorIds) {
-					builder.append("\n");
-					builder.append(errorId);
-				}
-				throw new RuntimeException(builder.toString());
-			}
-			throw new PasswordResetException(
-					PasswordStoreExceptionMessage.getFromId((String) errorIds
-							.get(0)));
+			Object errorId = response.getHeaders().getFirst(
+					PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID);
+			Object errorMessage = response.getHeaders().getFirst(
+					PasswordStoreHttpConstants.HTTP_HEADER_EVENT_MESSAGE);
+			throw new PasswordResetException(Long.valueOf((String) errorId),
+					(String) errorMessage);
 		} finally {
 			response.releaseConnection();
 		}

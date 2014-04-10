@@ -21,10 +21,6 @@
 			<artifactId>accountmanager.domain</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>eventlogger.core.api</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 		</dependency>
@@ -46,7 +42,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
-					<execution>
+					<execution> 
 						<id>copy-jboss-configuration</id>
 						<goals>
 							<goal>copy-resources</goal>

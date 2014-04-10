@@ -1,19 +1,28 @@
 package com.puresol.passwordstore.domain;
 
-import com.puresol.commons.utils.ExceptionMessage;
-import com.puresol.commons.utils.ExtendedException;
-
 /**
  * This exception is thrown in cases of password change issues.
  * 
  * @author Rick-Rainer Ludwig
  */
-public class PasswordChangeException extends ExtendedException {
+public class PasswordChangeException extends Exception {
 
-	private static final long serialVersionUID = -5765310131309262189L;
+	private static final long serialVersionUID = 1392998301414837383L;
 
-	public PasswordChangeException(ExceptionMessage message) {
+	private final long eventId;
+
+	public PasswordChangeException(long eventId, String message, Throwable cause) {
+		super(message, cause);
+		this.eventId = eventId;
+	}
+
+	public PasswordChangeException(long eventId, String message) {
 		super(message);
+		this.eventId = eventId;
+	}
+
+	public long getEventId() {
+		return eventId;
 	}
 
 }
