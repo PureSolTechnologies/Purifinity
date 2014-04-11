@@ -26,10 +26,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>wildfly.test</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>passwordstore.app</artifactId>
 			<type>ear</type>
 		</dependency>
@@ -40,6 +36,10 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>passwordstore.test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>wildfly.test</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>
@@ -58,18 +58,16 @@
 				<groupId>org.codehaus.cargo</groupId>
 				<artifactId>cargo-maven2-plugin</artifactId>
 				<configuration>
-					<deployer>
-						<deployables>
-							<deployable>
-								<groupId>com.puresol</groupId>
-								<artifactId>passwordstore.app</artifactId>
-								<type>ear</type>
-								<properties>
-									<name>passwordstore.app.ear</name>
-								</properties>
-							</deployable>
-						</deployables>
-					</deployer>
+					<deployables>
+						<deployable>
+							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<artifactId>passwordstore.app</artifactId>
+							<type>ear</type>
+							<properties>
+								<name>passwordstore.app.ear</name>
+							</properties>
+						</deployable>
+					</deployables>
 				</configuration>
 			</plugin>
 		</plugins>

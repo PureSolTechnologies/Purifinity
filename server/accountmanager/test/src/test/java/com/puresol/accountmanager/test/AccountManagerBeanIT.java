@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import javax.inject.Inject;
 import javax.naming.InitialContext;
@@ -22,7 +21,6 @@ import org.junit.Test;
 
 import com.puresol.accountmanager.core.api.AccountManager;
 import com.puresol.passwordstore.client.PasswordStoreClient;
-import com.puresol.peopleregister.core.api.PeopleRegister;
 
 public class AccountManagerBeanIT extends AbstractAccountManagerTest {
 
@@ -31,9 +29,6 @@ public class AccountManagerBeanIT extends AbstractAccountManagerTest {
 
 	@Inject
 	private AccountManager accountManager;
-
-	@Inject
-	private PeopleRegister peopleRegister;
 
 	@BeforeClass
 	public static void setupStandardAccounts() throws Exception {
@@ -79,11 +74,8 @@ public class AccountManagerBeanIT extends AbstractAccountManagerTest {
 
 	@Test
 	public void testCreateEmptyAccount() {
-		Locale preferredLocale = Locale.US;
 		String email = "email@address.com";
 		int userId = 1234567890;
-		accountManager.createAccount(userId, email, preferredLocale);
-
-		peopleRegister.getPerson(userId);
+		accountManager.createAccount(userId, email);
 	}
 }

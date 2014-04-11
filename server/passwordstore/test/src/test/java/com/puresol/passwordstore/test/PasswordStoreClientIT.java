@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.puresol.passwordstore.client.PasswordStoreClient;
+import com.puresol.passwordstore.core.impl.PasswordStoreEvents;
 import com.puresol.passwordstore.domain.AccountActivationException;
 import com.puresol.passwordstore.domain.AccountCreationException;
 import com.puresol.passwordstore.domain.PasswordChangeException;
@@ -56,8 +57,9 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 			// now we expect an error...
 			restClient.createAccount(EMAIL_ADDRESS, VALID_PASSWORD);
 		} catch (AccountCreationException e) {
-			assertEquals(PasswordStoreExceptionMessage.ACCOUNT_ALREADY_EXISTS,
-					e.getExceptionMessage());
+			assertEquals(PasswordStoreEvents
+					.createAccountAlreadyExistsErrorEvent(EMAIL_ADDRESS)
+					.getMessage(), e.getMessage());
 			throw e;
 		}
 	}
@@ -74,8 +76,9 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 		try {
 			restClient.createAccount(EMAIL_ADDRESS, TOO_WEAK_PASSWORD);
 		} catch (AccountCreationException e) {
-			assertEquals(PasswordStoreExceptionMessage.PASSWORD_TOO_WEAK,
-					e.getExceptionMessage());
+			assertEquals(
+					PasswordStoreEvents.createPasswordTooWeakErrorEvent(
+							EMAIL_ADDRESS).getMessage(), e.getMessage());
 			throw e;
 		}
 	}
@@ -93,8 +96,9 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 		try {
 			restClient.createAccount(INVALID_EMAIL_ADDRESS, TOO_WEAK_PASSWORD);
 		} catch (AccountCreationException e) {
-			assertEquals(PasswordStoreExceptionMessage.INVALID_EMAIL_ADDRESS,
-					e.getExceptionMessage());
+			assertEquals(PasswordStoreEvents
+					.createInvalidEmailAddressErrorEvent(EMAIL_ADDRESS)
+					.getMessage(), e.getMessage());
 			throw e;
 		}
 	}
@@ -119,8 +123,9 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 		try {
 			restClient.activateAccount(EMAIL_ADDRESS, activationKey + "Wrong!");
 		} catch (AccountActivationException e) {
-			assertEquals(PasswordStoreExceptionMessage.INVALID_ACTIVATION_KEY,
-					e.getExceptionMessage());
+			assertEquals(PasswordStoreEvents
+					.createInvalidActivationKeyErrorEvent(EMAIL_ADDRESS)
+					.getMessage(), e.getMessage());
 			throw e;
 		}
 	}
@@ -212,8 +217,9 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 			restClient.changePassword(EMAIL_ADDRESS, VALID_PASSWORD,
 					TOO_WEAK_PASSWORD);
 		} catch (PasswordChangeException e) {
-			assertEquals(PasswordStoreExceptionMessage.PASSWORD_TOO_WEAK,
-					e.getExceptionMessage());
+			assertEquals(
+					PasswordStoreEvents.createPasswordTooWeakErrorEvent(
+							EMAIL_ADDRESS).getMessage(), e.getMessage());
 			assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
 			throw e;
 		}
@@ -235,8 +241,10 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 		try {
 			restClient.resetPassword(EMAIL_ADDRESS);
 		} catch (PasswordResetException e) {
-			assertEquals(PasswordStoreExceptionMessage.UNKNOWN_EMAIL_ADDRESS,
-					e.getExceptionMessage());
+			assertEquals(
+					PasswordStoreEvents
+							.createPasswordResetFailedUnknownAccountEvent(
+									EMAIL_ADDRESS).getMessage(), e.getMessage());
 			throw e;
 		}
 	}

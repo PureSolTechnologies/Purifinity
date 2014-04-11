@@ -48,7 +48,7 @@ public abstract class AbstractServerTest {
 
 	private static final String DEPLOYMENT_STRUCTURE_FILE = "META-INF/jboss-deployment-structure.xml";
 
-	private static final Logger LOG = LoggerFactory
+	private static final Logger logger = LoggerFactory
 			.getLogger(AbstractServerTest.class);
 
 	private static final String DUMMY_WAR = "dummy.war";
@@ -78,7 +78,7 @@ public abstract class AbstractServerTest {
 
 		if (!appDir.exists() || !testJarDir.exists()) {
 			String msg = "Build Application with Maven first!";
-			LOG.error(msg);
+			logger.error(msg);
 			throw new IllegalStateException(msg);
 		}
 
@@ -87,7 +87,7 @@ public abstract class AbstractServerTest {
 				EAR_EXTENSION));
 		if (earFiles.length != 1) {
 			String msg = "Can not find EAR of the project. Build Application with Maven first!";
-			LOG.error(msg);
+			logger.error(msg);
 			throw new IllegalStateException(msg);
 		}
 
@@ -160,7 +160,7 @@ public abstract class AbstractServerTest {
 
 		} catch (IOException e) {
 			String msg = "Could not modify application.xml";
-			LOG.error(msg);
+			logger.error(msg);
 			throw new IllegalStateException(msg);
 		}
 

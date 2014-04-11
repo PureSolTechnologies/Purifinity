@@ -7,7 +7,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 
 import com.puresol.accountmanager.ui.api.AccountManagerDelegatorMBean;
-import com.puresol.accountmanager.ui.api.LanguageSelectorMBean;
 import com.puresol.passwordstore.client.PasswordStoreClient;
 
 @ManagedBean
@@ -20,15 +19,8 @@ public class ActivateAccountMBean {
 	@ManagedProperty(value = "#{accountManagerDelegatorMBean}")
 	private AccountManagerDelegatorMBean accountManager;
 
-	@ManagedProperty(value = "#{languageSelectorMBean}")
-	private LanguageSelectorMBean languageSelector;
-
 	public void setAccountManager(AccountManagerDelegatorMBean accountManager) {
 		this.accountManager = accountManager;
-	}
-
-	public void setLanguageSelector(LanguageSelectorMBean languageSelector) {
-		this.languageSelector = languageSelector;
 	}
 
 	public String activateAccount() {
@@ -36,8 +28,7 @@ public class ActivateAccountMBean {
 			PasswordStoreClient passwordStore = PasswordStoreClient
 					.createInstance();
 			long userId = passwordStore.activateAccount(email, activationKey);
-			accountManager.createAccount(userId, email,
-					languageSelector.getCurrentLocale());
+			accountManager.createAccount(userId, email);
 			return "account_activated";
 		} catch (Exception e) {
 			FacesContext context = FacesContext.getCurrentInstance();

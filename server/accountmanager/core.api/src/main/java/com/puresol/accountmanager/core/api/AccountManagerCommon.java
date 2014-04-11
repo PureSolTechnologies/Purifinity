@@ -1,6 +1,5 @@
 package com.puresol.accountmanager.core.api;
 
-import java.util.Locale;
 
 /**
  * This is the common interface for local and remote AccountManagerBean
@@ -26,28 +25,6 @@ public interface AccountManagerCommon {
 	public String getName();
 
 	/**
-	 * This method returns all available locales for the user. If the user is
-	 * not logged in, than this method shall return a list of all(!) supported
-	 * languages of the platform.
-	 * 
-	 * If the user is logged in, the local list is limited to the languages
-	 * defined in the user account.
-	 * 
-	 * @return
-	 */
-	public Locale[] getAvailableLocales();
-
-	/**
-	 * This method returns the default local for this account. If the user is
-	 * not logged in, yet, the default locale is English. If the user is logged
-	 * in, the default locale is set to the default setting in the account
-	 * configuration.
-	 * 
-	 * @return
-	 */
-	public Locale getDefaultLocale();
-
-	/**
 	 * This method returns whether the user was already logged in
 	 * (authenticated) or not.
 	 * 
@@ -63,9 +40,7 @@ public interface AccountManagerCommon {
 	 *            is the user id for the account to be created.
 	 * @param email
 	 *            is the email address of the user which activated the account.
-	 * @param locale
-	 *            is the locale to be used to create the new account.
 	 */
-	void createAccount(long userId, String email, Locale locale);
+	void createAccount(long userId, String email);
 
 }

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Principal;
-import java.util.Locale;
 
 import javax.annotation.Resource;
 import javax.ejb.Local;
@@ -18,7 +17,6 @@ import org.slf4j.Logger;
 import com.puresol.accountmanager.core.api.AccountManager;
 import com.puresol.accountmanager.core.api.AccountManagerRemote;
 import com.puresol.accountmanager.domain.AccountManagerEvents;
-import com.puresol.commons.utils.SupportedLocales;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
 @Stateful
@@ -99,17 +97,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	}
 
 	@Override
-	public Locale[] getAvailableLocales() {
-		return SupportedLocales.getLocales();
-	}
-
-	@Override
-	public Locale getDefaultLocale() {
-		return Locale.US;
-	}
-
-	@Override
-	public void createAccount(long userId, String email, Locale locale) {
+	public void createAccount(long userId, String email) {
 		logger.debug("Creating user account for '" + email + "'...");
 		// FIXME
 		// Person person = new Person(userId, "", "", Gender.FEMALE, "");

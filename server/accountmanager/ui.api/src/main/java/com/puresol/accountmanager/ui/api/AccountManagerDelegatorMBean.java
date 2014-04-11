@@ -1,7 +1,6 @@
 package com.puresol.accountmanager.ui.api;
 
 import java.io.Serializable;
-import java.util.Locale;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -26,7 +25,7 @@ public class AccountManagerDelegatorMBean implements Serializable {
 		return accountManager.isLoggedIn();
 	}
 
-	public void createAccount(long userId, String email, Locale locale) {
-		accountManager.createAccount(userId, email, locale);
+	public void createAccount(long userId, String email) {
+		accountManager.createAccount(userId, email);
 	}
 }
