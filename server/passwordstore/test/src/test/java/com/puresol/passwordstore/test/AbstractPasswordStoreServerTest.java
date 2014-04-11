@@ -25,12 +25,13 @@ public abstract class AbstractPasswordStoreServerTest extends
 	}
 
 	@BeforeClass
-	public static void connectCassandra() {
+	public static void connectCassandra()  {
 		cluster = Cluster.builder()
 				.addContactPoint(PasswordStoreBean.CASSANDRA_HOST)
 				.withPort(PasswordStoreBean.CASSANDRA_CQL_PORT).build();
 		session = cluster
 				.connect(PasswordStoreBean.PASSWORD_STORE_KEYSPACE_NAME);
+		cleanupPasswordStoreDatabase();
 	}
 
 	@AfterClass
@@ -45,8 +46,7 @@ public abstract class AbstractPasswordStoreServerTest extends
 		}
 	}
 
-	@BeforeClass
-	public static final void cleanupPasswordStoreDatabase() throws IOException {
+	public static final void cleanupPasswordStoreDatabase() {
 		session.execute("DELETE FROM " + PasswordStoreBean.PASSWORD_TABLE_NAME
 				+ " WHERE user_id > 0");
 	}
