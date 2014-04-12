@@ -18,8 +18,8 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraMigration;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.MigrationException;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
+import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
 import com.puresoltechnologies.purifinity.server.systemmonitor.SystemMonitorConstants;
 
 /**

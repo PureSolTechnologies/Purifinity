@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.framework.database.cassandra.utils;
+package com.puresoltechnologies.purifinity.framework.database.migration;
 
 /**
  * This exception is thrown in cases of issues during Cassandra database

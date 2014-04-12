@@ -28,8 +28,8 @@ import com.puresol.passwordstore.domain.PasswordEncryptionException;
 import com.puresol.passwordstore.domain.PasswordResetException;
 import com.puresol.passwordstore.domain.PasswordStrengthCalculator;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraMigration;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.MigrationException;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
+import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.EmailAddressValidator;
@@ -43,7 +43,7 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.EmailAddressValid
 @Stateless
 public class PasswordStoreBean implements PasswordStore {
 
-	public static final String PASSWORD_STORE_KEYSPACE_NAME = "system_monitor";
+	public static final String PASSWORD_STORE_KEYSPACE_NAME = "password_store";
 	public static final String CASSANDRA_HOST = "localhost";
 	public static final int CASSANDRA_CQL_PORT = 9042;
 	public static final String PASSWORD_TABLE_NAME = "passwords";

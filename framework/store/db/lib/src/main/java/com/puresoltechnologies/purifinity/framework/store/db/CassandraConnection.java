@@ -11,7 +11,7 @@ import com.datastax.driver.core.Cluster.Builder;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraUtils;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.MigrationException;
+import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
 
 /**
  * Manages the actual connection to Cassandra. The methods connect and

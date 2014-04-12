@@ -11,6 +11,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>migration</module>
 		<module>cassandra</module>
 		<module>titan</module>
 	</modules>

@@ -4,8 +4,8 @@ import static com.puresoltechnologies.purifinity.framework.database.cassandra.ut
 
 import com.datastax.driver.core.Cluster;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraMigration;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.MigrationException;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
+import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraElementNames;
 
 public class CassandraSchemaV100 {

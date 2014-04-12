@@ -24,6 +24,10 @@
 			<artifactId>database.cassandra.setup</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>database.migration</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.datastax.cassandra</groupId>
 			<artifactId>cassandra-driver-core</artifactId>
 		</dependency>

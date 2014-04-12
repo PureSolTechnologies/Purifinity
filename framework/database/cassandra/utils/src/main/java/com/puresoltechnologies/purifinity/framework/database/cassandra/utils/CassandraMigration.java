@@ -16,6 +16,8 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.SimpleStatement;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
+import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
+import com.puresoltechnologies.purifinity.framework.database.migration.MigrationStep;
 
 public class CassandraMigration {
 
@@ -130,16 +132,15 @@ public class CassandraMigration {
 	}
 
 	public static void migrate(Cluster cluster, String keyspace,
-			String version, String developer,
-			MigrationProcedure migrationProcedure, String comment)
-			throws MigrationException {
+			String version, String developer, MigrationStep migrationStep,
+			String comment) throws MigrationException {
 		Session session = CassandraUtils.connectToCluster(cluster, keyspace);
 		try {
-			String command = migrationProcedure.getClass().getCanonicalName();
+			String command = migrationStep.getClass().getCanonicalName();
 			if (!wasMigrated(session, version, keyspace, command)) {
 				logger.info("Cassandra migration is needed:\n\"" + command
 						+ "\"");
-				migrationProcedure.perform(cluster);
+				// FIXME migrationStep.migrate(cluster);
 				writeLog(session, version, developer, keyspace, command,
 						comment);
 				logger.info("Cassandra migration performed successfully.");
