@@ -3,7 +3,6 @@ package com.puresol.accountmanager.test;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 
 import com.puresol.accountmanager.login.PasswordStoreLoginModule;
-import com.puresol.commons.utils.ExtendedException;
 import com.puresol.passwordstore.client.PasswordStoreClient;
 import com.puresol.passwordstore.domain.AccountCreationException;
 import com.puresol.passwordstore.rest.PasswordStoreRestInterface;
@@ -15,7 +14,6 @@ public abstract class AbstractAccountManagerTest extends AbstractServerTest {
 	@EnhanceDeployment
 	public static void addDeployments(JavaArchive javaArchive) {
 		javaArchive.addPackages(true, PasswordStoreClient.class.getPackage());
-		javaArchive.addPackages(true, ExtendedException.class.getPackage());
 		javaArchive.addPackages(true,
 				AccountCreationException.class.getPackage());
 		javaArchive.addPackages(true, "org.jboss.resteasy");

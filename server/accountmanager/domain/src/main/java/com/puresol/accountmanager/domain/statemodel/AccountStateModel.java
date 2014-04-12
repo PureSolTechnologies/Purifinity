@@ -1,6 +1,6 @@
 package com.puresol.accountmanager.domain.statemodel;
 
-import com.puresol.commons.utils.statemodel.AbstractStateModel;
+import com.puresoltechnologies.purifinity.framework.commons.utils.statemodel.AbstractStateModel;
 
 public class AccountStateModel extends AbstractStateModel<AccountState> {
 

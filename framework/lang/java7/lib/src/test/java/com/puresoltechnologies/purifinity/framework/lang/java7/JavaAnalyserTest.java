@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
-import com.puresoltechnologies.purifinity.framework.commons.utils.PathUtils;
+import com.puresoltechnologies.purifinity.framework.commons.utils.io.PathUtils;
 import com.puresoltechnologies.purifinity.framework.lang.java7.Java;
 import com.puresoltechnologies.purifinity.framework.lang.java7.JavaAnalyzer;
 

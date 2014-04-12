@@ -29,9 +29,9 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.RepositoryLocationCreator;
 import com.puresoltechnologies.purifinity.framework.analysis.test.TreeTestUtils;
-import com.puresoltechnologies.purifinity.framework.commons.utils.FileSearch;
-import com.puresoltechnologies.purifinity.framework.commons.utils.FileTree;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
+import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileSearch;
+import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;

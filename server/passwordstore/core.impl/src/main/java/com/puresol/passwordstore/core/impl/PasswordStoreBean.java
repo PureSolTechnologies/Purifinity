@@ -18,7 +18,6 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import com.puresol.commons.utils.EmailAddressValidator;
 import com.puresol.passwordstore.core.api.PasswordData;
 import com.puresol.passwordstore.core.api.PasswordEncrypter;
 import com.puresol.passwordstore.core.api.PasswordStore;
@@ -33,6 +32,7 @@ import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.Mig
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
+import com.puresoltechnologies.purifinity.server.wildfly.utils.EmailAddressValidator;
 
 /**
  * This is the central implementation of the {@link PasswordStore}.

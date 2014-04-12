@@ -392,11 +392,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>server-commons.utils</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>systemmonitor</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -408,6 +403,16 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>wildfly.test</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>wildfly.ui</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>wildfly.utils</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- PureSol Technologies -->
@@ -795,7 +800,6 @@
 
 	<modules>
 		<module>wildfly</module>
-		<module>server-commons</module>
 		<module>logger</module>
 		<module>systemmonitor</module>
 		<module>accountmanager</module>

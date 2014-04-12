@@ -24,7 +24,8 @@ public class EmailAddressValidator implements Validator {
 			Object value) throws ValidatorException {
 		String email = (String) value;
 
-		if (!com.puresol.commons.utils.EmailAddressValidator.validate(email)) {
+		if (!com.puresoltechnologies.purifinity.server.wildfly.utils.EmailAddressValidator
+				.validate(email)) {
 			HtmlInputText htmlInputText = (HtmlInputText) uiComponent;
 			FacesMessage facesMessage = new FacesMessage(
 					htmlInputText.getLabel() + ": email format is not valid");

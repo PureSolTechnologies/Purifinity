@@ -12,8 +12,8 @@ import com.puresoltechnologies.parsers.api.source.SourceCode;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
 import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
-import com.puresoltechnologies.purifinity.framework.commons.utils.FileUtilities;
-import com.puresoltechnologies.purifinity.framework.commons.utils.PathUtils;
+import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileUtilities;
+import com.puresoltechnologies.purifinity.framework.commons.utils.io.PathUtils;
 
 public class SourceCodeTest {
 

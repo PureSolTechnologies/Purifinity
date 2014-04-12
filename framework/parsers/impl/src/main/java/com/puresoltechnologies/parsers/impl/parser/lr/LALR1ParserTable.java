@@ -24,7 +24,7 @@ import com.puresoltechnologies.parsers.impl.parser.parsetable.AbstractParserTabl
 import com.puresoltechnologies.parsers.impl.parser.parsetable.ActionType;
 import com.puresoltechnologies.parsers.impl.parser.parsetable.ParserAction;
 import com.puresoltechnologies.parsers.impl.parser.parsetable.ParserActionSet;
-import com.puresoltechnologies.purifinity.framework.commons.utils.FileUtilities;
+import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileUtilities;
 
 public class LALR1ParserTable extends AbstractParserTable {
 

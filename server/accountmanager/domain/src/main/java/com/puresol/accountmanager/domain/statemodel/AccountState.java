@@ -3,8 +3,8 @@ package com.puresol.accountmanager.domain.statemodel;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresol.commons.utils.statemodel.State;
-import com.puresol.commons.utils.statemodel.Transition;
+import com.puresoltechnologies.purifinity.framework.commons.utils.statemodel.State;
+import com.puresoltechnologies.purifinity.framework.commons.utils.statemodel.Transition;
 
 public enum AccountState implements State<AccountState> {
 

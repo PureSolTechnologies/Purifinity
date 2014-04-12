@@ -16,8 +16,8 @@ import com.puresoltechnologies.parsers.impl.grammar.Grammar;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
-import com.puresoltechnologies.purifinity.framework.commons.utils.FileSearch;
-import com.puresoltechnologies.purifinity.framework.commons.utils.FileTree;
+import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileSearch;
+import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
 import com.puresoltechnologies.purifinity.framework.lang.java7.grammar.JavaGrammar;
 
 /**

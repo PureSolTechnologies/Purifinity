@@ -9,8 +9,8 @@ import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.api.source.RepositoryLocation;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.impl.source.SourceFileLocation;
-import com.puresoltechnologies.purifinity.framework.commons.utils.FileSearch;
-import com.puresoltechnologies.purifinity.framework.commons.utils.FileTree;
+import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileSearch;
+import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
 
 /**
  * 
