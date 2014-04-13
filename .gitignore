@@ -9,3 +9,4 @@ workspace
 *.log.*
 *.lock
 *~
+dependency-reduced-pom.xml

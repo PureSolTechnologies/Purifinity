@@ -11,7 +11,6 @@ import com.datastax.driver.core.Cluster.Builder;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraUtils;
-import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
 
 /**
  * Manages the actual connection to Cassandra. The methods connect and
@@ -49,21 +48,11 @@ public class CassandraConnection {
 			logger.info("Connect to Cassandra database...");
 			cluster = clusterBuilder.addContactPoints(CASSANDRA_HOST)
 					.withPort(CASSANDRA_CQL_PORT).build();
-			migrate();
 			analysisSession = CassandraUtils.connectToCluster(cluster,
 					CassandraElementNames.ANALYSIS_KEYSPACE);
 			evaluationSession = CassandraUtils.connectToCluster(cluster,
 					CassandraElementNames.EVALUATION_KEYSPACE);
 			logger.info("Cassandra database connected.");
-		}
-	}
-
-	private static void migrate() throws CassandraConnectionException {
-		try {
-			CassandraSchema.migrate(cluster);
-		} catch (MigrationException e) {
-			throw new CassandraConnectionException(
-					"Could not migrate Cassandra.", e);
 		}
 	}
 

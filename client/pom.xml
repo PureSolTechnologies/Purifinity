@@ -477,7 +477,7 @@
 								<approvedDependency>com\.esotericsoftware\.minlog:minlog:1\.2</approvedDependency>
 								<approvedDependency>com\.esotericsoftware\.reflectasm:reflectasm:1\.07</approvedDependency>
 								<approvedDependency>jline:jline:.*</approvedDependency>
-								<approvedDependency>org\.hamcrest:hamcrest-core:1\.1</approvedDependency>
+								<approvedDependency>org\.hamcrest:hamcrest-core:1\.[13]</approvedDependency>
 							</approvedDependencies>
 						</knownLicense>
 						<knownLicense>

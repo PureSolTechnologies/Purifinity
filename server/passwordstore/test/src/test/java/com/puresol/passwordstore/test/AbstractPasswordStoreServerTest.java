@@ -1,7 +1,5 @@
 package com.puresol.passwordstore.test;
 
-import java.io.IOException;
-
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -25,7 +23,7 @@ public abstract class AbstractPasswordStoreServerTest extends
 	}
 
 	@BeforeClass
-	public static void connectCassandra()  {
+	public static void connectCassandra() {
 		cluster = Cluster.builder()
 				.addContactPoint(PasswordStoreBean.CASSANDRA_HOST)
 				.withPort(PasswordStoreBean.CASSANDRA_CQL_PORT).build();
@@ -47,8 +45,9 @@ public abstract class AbstractPasswordStoreServerTest extends
 	}
 
 	public static final void cleanupPasswordStoreDatabase() {
-		session.execute("DELETE FROM " + PasswordStoreBean.PASSWORD_TABLE_NAME
-				+ " WHERE user_id > 0");
+		session.execute("TRUNCATE " + PasswordStoreBean.PASSWORD_TABLE_NAME
+				+ ";");
+
 	}
 
 }

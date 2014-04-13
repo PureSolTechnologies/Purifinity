@@ -847,8 +847,11 @@
 		<module>wildfly</module>
 		<module>logger</module>
 		<module>systemmonitor</module>
-		<module>accountmanager</module>
+		<module>systemmonitor.ddl</module>
 		<module>passwordstore</module>
+		<module>accountmanager</module>
+		<module>analysisservice</module>
+		<module>evaluationservice</module>
 	</modules>
 
 </project>

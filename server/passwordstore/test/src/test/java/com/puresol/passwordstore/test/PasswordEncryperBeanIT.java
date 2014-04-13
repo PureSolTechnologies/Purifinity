@@ -1,7 +1,9 @@
 package com.puresol.passwordstore.test;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +20,9 @@ import com.puresol.passwordstore.domain.PasswordEncryptionException;
 
 @RunWith(Arquillian.class)
 public class PasswordEncryperBeanIT extends AbstractPasswordStoreServerTest {
+
+	private static final int NUMBER_OF_ENCRYPTIONS = 1000;
+	private static final double MILLISECONDS_IN_SECONDS = 1000.0;
 
 	@Inject
 	private PasswordEncrypter encrypter;
@@ -38,17 +43,22 @@ public class PasswordEncryperBeanIT extends AbstractPasswordStoreServerTest {
 	@Test
 	public void test1000Encryptions() throws PasswordEncryptionException {
 		Map<String, PasswordData> passwords = new HashMap<String, PasswordData>();
-		long start = System.nanoTime();
-		for (int i = 0; i < 1000; i++) {
+		long start = System.currentTimeMillis();
+		for (int i = 0; i < NUMBER_OF_ENCRYPTIONS; i++) {
 			String password = "This is my password No. '" + i + "'!";
 			PasswordData encryptPassword = encrypter.encryptPassword(password);
 			System.out.println(encryptPassword);
 			passwords.put(password, encryptPassword);
 		}
-		long stop = System.nanoTime();
-		double totalMilliseconds = (stop - start) / 1000000.0;
-		System.out.println("stop - start: " + totalMilliseconds);
-		System.out.println("stop - start: " + 1000.0 / totalMilliseconds);
+		long stop = System.currentTimeMillis();
+		double totalSeconds = (stop - start) / MILLISECONDS_IN_SECONDS;
+		System.out.println(MessageFormat.format("time: {0} s", totalSeconds));
+		double speed = NUMBER_OF_ENCRYPTIONS / totalSeconds;
+		System.out.println(MessageFormat.format("speed: {0} encryptions/s",
+				speed));
+		assertTrue(
+				"It is assumed that more than 200 encryptions are possible. It's not!",
+				speed > 200);
 	}
 
 }

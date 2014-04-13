@@ -1,8 +1,5 @@
 package com.puresol.passwordstore.test;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import org.apache.http.HttpEntity;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.AfterClass;
@@ -27,6 +24,7 @@ public abstract class AbstractPasswordStoreClientTest extends
 				.withPort(PasswordStoreBean.CASSANDRA_CQL_PORT).build();
 		session = cluster
 				.connect(PasswordStoreBean.PASSWORD_STORE_KEYSPACE_NAME);
+		cleanupPasswordStoreDatabase();
 	}
 
 	@AfterClass
@@ -35,11 +33,9 @@ public abstract class AbstractPasswordStoreClientTest extends
 		cluster.close();
 	}
 
-	@BeforeClass
-	public static final void cleanupPasswordStoreDatabase()
-			throws SQLException, IOException {
-		session.execute("DELETE FROM " + PasswordStoreBean.PASSWORD_TABLE_NAME
-				+ " WHERE user_id > 0");
+	public static final void cleanupPasswordStoreDatabase() {
+		session.execute("TRUNCATE " + PasswordStoreBean.PASSWORD_TABLE_NAME
+				+ ";");
 	}
 
 	@EnhanceDeployment

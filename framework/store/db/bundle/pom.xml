@@ -26,6 +26,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>database.migration</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 			<artifactId>database.titan.utils</artifactId>
 		</dependency>
 		<dependency>
