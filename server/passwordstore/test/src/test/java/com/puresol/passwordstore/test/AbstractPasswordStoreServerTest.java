@@ -4,7 +4,10 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
+import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresol.passwordstore.core.impl.PasswordStoreBean;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
@@ -48,6 +51,19 @@ public abstract class AbstractPasswordStoreServerTest extends
 		session.execute("TRUNCATE " + PasswordStoreBean.PASSWORD_TABLE_NAME
 				+ ";");
 
+	}
+
+	protected Row readAccoutFromDatabase(String email) {
+		Cluster cluster = Cluster.builder()
+				.addContactPoint(PasswordStoreBean.CASSANDRA_HOST)
+				.withPort(PasswordStoreBean.CASSANDRA_CQL_PORT).build();
+		Session session = cluster.connect();
+		String accountQuery = "SELECT * FROM "
+				+ PasswordStoreBean.PASSWORD_STORE_KEYSPACE_NAME + "."
+				+ PasswordStoreBean.PASSWORD_TABLE_NAME + " WHERE email=?;";
+		PreparedStatement preparedStatement = session.prepare(accountQuery);
+		BoundStatement account = preparedStatement.bind(email);
+		return session.execute(account).one();
 	}
 
 }

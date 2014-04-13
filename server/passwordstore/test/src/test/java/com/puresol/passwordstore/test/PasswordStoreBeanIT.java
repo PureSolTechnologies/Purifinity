@@ -3,6 +3,7 @@ package com.puresol.passwordstore.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
@@ -13,7 +14,9 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.datastax.driver.core.Row;
 import com.puresol.passwordstore.core.api.PasswordStore;
+import com.puresol.passwordstore.core.impl.AccountState;
 import com.puresol.passwordstore.core.impl.PasswordStoreEvents;
 import com.puresol.passwordstore.domain.AccountActivationException;
 import com.puresol.passwordstore.domain.AccountCreationException;
@@ -42,20 +45,22 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 		cleanupPasswordStoreDatabase();
 	}
 
-	// @Test
-	// public void testCreateAccount() throws AccountCreationException {
-	// String activationKey = passwordStore.createAccount(EMAIL_ADDRESS,
-	// VALID_PASSWORD);
-	// assertNotNull(activationKey);
-	// assertFalse(activationKey.isEmpty());
-	// assertEquals(64, activationKey.length());
-	//
-	// UserEntity userEntity = userDAO.getUserByEmail(EMAIL_ADDRESS);
-	// assertEquals(EMAIL_ADDRESS, userEntity.getEmail());
-	// assertNotNull(userEntity.getPwh());
-	// assertFalse(userEntity.getPwh().isEmpty());
-	// assertEquals(AccountState.CREATED, userEntity.getState());
-	// }
+	@Test
+	public void testCreateAccount() throws AccountCreationException {
+		String activationKey = passwordStore.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
+		assertNotNull(activationKey);
+		assertFalse(activationKey.isEmpty());
+		assertEquals(64, activationKey.length());
+
+		Row account = readAccoutFromDatabase(EMAIL_ADDRESS);
+
+		assertEquals(EMAIL_ADDRESS, account.getString("email"));
+		assertNotNull(account.getString("password"));
+		assertFalse(account.getString("password").isEmpty());
+		assertEquals(AccountState.CREATED,
+				AccountState.valueOf(account.getString("state")));
+	}
 
 	/**
 	 * We create here two account with the same email address. We expect here an
@@ -64,26 +69,29 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 	 * 
 	 * @throws AccountCreationException
 	 */
-	// @Test(expected = AccountCreationException.class)
-	// public void testCreateAccountDuplicateEmail()
-	// throws AccountCreationException {
-	// // the first account should be created normally...
-	// passwordStore.createAccount(EMAIL_ADDRESS, VALID_PASSWORD);
-	// try {
-	// // now we expect an error...
-	// passwordStore.createAccount(EMAIL_ADDRESS, VALID_PASSWORD);
-	// } catch (AccountCreationException e) {
-	// assertEquals(PasswordStoreEvents
-	// .createAccountAlreadyExistsErrorEvent(EMAIL_ADDRESS)
-	// .getMessage(), e.getMessage());
-	// UserEntity userEntity = userDAO.getUserByEmail(EMAIL_ADDRESS);
-	// assertNotNull(userEntity);
-	// assertNotNull(userEntity.getPwh());
-	// assertFalse(userEntity.getPwh().isEmpty());
-	// assertEquals(AccountState.CREATED, userEntity.getState());
-	// throw e;
-	// }
-	// }
+	@Test(expected = AccountCreationException.class)
+	public void testCreateAccountDuplicateEmail()
+			throws AccountCreationException {
+		// the first account should be created normally...
+		passwordStore.createAccount(EMAIL_ADDRESS, VALID_PASSWORD);
+		try {
+			// now we expect an error...
+			passwordStore.createAccount(EMAIL_ADDRESS, VALID_PASSWORD);
+		} catch (AccountCreationException e) {
+			assertEquals(PasswordStoreEvents
+					.createAccountAlreadyExistsErrorEvent(EMAIL_ADDRESS)
+					.getMessage(), e.getMessage());
+
+			Row account = readAccoutFromDatabase(EMAIL_ADDRESS);
+
+			assertNotNull(account);
+			assertNotNull(account.getString("password"));
+			assertFalse(account.getString("password").isEmpty());
+			assertEquals(AccountState.CREATED,
+					AccountState.valueOf(account.getString("state")));
+			throw e;
+		}
+	}
 
 	/**
 	 * For a trival password we expect a {@link AccountCreationException} here
@@ -91,19 +99,21 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 	 * 
 	 * @throws AccountCreationException
 	 */
-	// @Test(expected = AccountCreationException.class)
-	// public void testCreateAccountTooWeakPassword()
-	// throws AccountCreationException {
-	// try {
-	// passwordStore.createAccount(EMAIL_ADDRESS, TOO_WEAK_PASSWORD);
-	// } catch (AccountCreationException e) {
-	// assertEquals(
-	// PasswordStoreEvents.createPasswordTooWeakErrorEvent(
-	// EMAIL_ADDRESS).getMessage(), e.getMessage());
-	// assertNull(userDAO.getUserByEmail(EMAIL_ADDRESS));
-	// throw e;
-	// }
-	// }
+	@Test(expected = AccountCreationException.class)
+	public void testCreateAccountTooWeakPassword()
+			throws AccountCreationException {
+		try {
+			passwordStore.createAccount(EMAIL_ADDRESS, TOO_WEAK_PASSWORD);
+		} catch (AccountCreationException e) {
+			assertEquals(
+					PasswordStoreEvents.createPasswordTooWeakErrorEvent(
+							EMAIL_ADDRESS).getMessage(), e.getMessage());
+
+			Row account = readAccoutFromDatabase(EMAIL_ADDRESS);
+			assertNull(account);
+			throw e;
+		}
+	}
 
 	/**
 	 * For an invalid email address we expect an
@@ -112,56 +122,70 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 	 * 
 	 * @throws AccountCreationException
 	 */
-	// @Test(expected = AccountCreationException.class)
-	// public void testCreateAccountWithInvalidEmailAddress()
-	// throws AccountCreationException {
-	// try {
-	// passwordStore.createAccount(INVALID_EMAIL_ADDRESS,
-	// TOO_WEAK_PASSWORD);
-	// } catch (AccountCreationException e) {
-	// assertEquals(PasswordStoreEvents
-	// .createInvalidEmailAddressErrorEvent(EMAIL_ADDRESS)
-	// .getMessage(), e.getMessage());
-	// assertNull(userDAO.getUserByEmail(EMAIL_ADDRESS));
-	// throw e;
-	// }
-	// }
+	@Test(expected = AccountCreationException.class)
+	public void testCreateAccountWithInvalidEmailAddress()
+			throws AccountCreationException {
+		try {
+			passwordStore.createAccount(INVALID_EMAIL_ADDRESS,
+					TOO_WEAK_PASSWORD);
+		} catch (AccountCreationException e) {
+			assertEquals(PasswordStoreEvents
+					.createInvalidEmailAddressErrorEvent(EMAIL_ADDRESS)
+					.getMessage(), e.getMessage());
 
-	// @Test
-	// public void testActivateAccount() throws AccountCreationException,
-	// AccountActivationException {
-	// String activationKey = passwordStore.createAccount(EMAIL_ADDRESS,
-	// VALID_PASSWORD);
-	// UserEntity userEntity = userDAO.getUserByEmail(EMAIL_ADDRESS);
-	// assertEquals(AccountState.CREATED, userEntity.getState());
-	//
-	// passwordStore.activateAccount(EMAIL_ADDRESS, activationKey);
-	// userEntity = userDAO.getUserByEmail(EMAIL_ADDRESS);
-	// assertEquals(AccountState.ACTIVE, userEntity.getState());
-	// }
+			Row account = readAccoutFromDatabase(EMAIL_ADDRESS);
 
-	// @Test(expected = AccountActivationException.class)
-	// public void testActivateAccountWithInvalidActivationKey()
-	// throws AccountCreationException, AccountActivationException {
-	// String activationKey = passwordStore.createAccount(EMAIL_ADDRESS,
-	// VALID_PASSWORD);
-	// UserEntity userEntity = userDAO.getUserByEmail(EMAIL_ADDRESS);
-	// assertEquals(AccountState.CREATED, userEntity.getState());
-	//
-	// try {
-	// passwordStore.activateAccount(EMAIL_ADDRESS, activationKey
-	// + "Wrong!");
-	// } catch (AccountActivationException e) {
-	// assertEquals(PasswordStoreExceptionMessage.INVALID_ACTIVATION_KEY,
-	// e.getExceptionMessage());
-	// userEntity = userDAO.getUserByEmail(EMAIL_ADDRESS);
-	// assertNotNull(userEntity);
-	// assertNotNull(userEntity.getPwh());
-	// assertFalse(userEntity.getPwh().isEmpty());
-	// assertEquals(AccountState.CREATED, userEntity.getState());
-	// throw e;
-	// }
-	// }
+			assertNull(account);
+			throw e;
+		}
+	}
+
+	@Test
+	public void testActivateAccount() throws AccountCreationException,
+			AccountActivationException {
+		String activationKey = passwordStore.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
+
+		Row account = readAccoutFromDatabase(EMAIL_ADDRESS);
+
+		assertEquals(AccountState.CREATED,
+				AccountState.valueOf(account.getString("state")));
+
+		passwordStore.activateAccount(EMAIL_ADDRESS, activationKey);
+
+		account = readAccoutFromDatabase(EMAIL_ADDRESS);
+		assertEquals(AccountState.ACTIVE,
+				AccountState.valueOf(account.getString("state")));
+	}
+
+	@Test(expected = AccountActivationException.class)
+	public void testActivateAccountWithInvalidActivationKey()
+			throws AccountCreationException, AccountActivationException {
+		String activationKey = passwordStore.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
+
+		Row account = readAccoutFromDatabase(EMAIL_ADDRESS);
+
+		assertEquals(AccountState.CREATED,
+				AccountState.valueOf(account.getString("state")));
+
+		try {
+			passwordStore.activateAccount(EMAIL_ADDRESS, activationKey
+					+ "Wrong!");
+		} catch (AccountActivationException e) {
+			assertEquals(
+					PasswordStoreEvents
+							.createInvalidActivationKeyErrorEvent(EMAIL_ADDRESS),
+					e.getMessage());
+			account = readAccoutFromDatabase(EMAIL_ADDRESS);
+			assertNotNull(account);
+			assertNotNull(account.getString("password"));
+			assertFalse(account.getString("password").isEmpty());
+			assertEquals(AccountState.CREATED,
+					AccountState.valueOf(account.getString("state")));
+			throw e;
+		}
+	}
 
 	@Test
 	public void testAuthenticate() throws AccountCreationException,
@@ -245,28 +269,30 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 				+ "Wrong!", VALID_PASSWORD + "New!"));
 	}
 
-	// @Test(expected = PasswordChangeException.class)
-	// public void testChangePasswordTooWeakPassword()
-	// throws AccountCreationException, AccountActivationException,
-	// PasswordChangeException {
-	// try {
-	// String activationKey = passwordStore.createAccount(EMAIL_ADDRESS,
-	// VALID_PASSWORD);
-	// assertFalse(passwordStore.authenticate(EMAIL_ADDRESS,
-	// VALID_PASSWORD));
-	// passwordStore.activateAccount(EMAIL_ADDRESS, activationKey);
-	// assertTrue(passwordStore
-	// .authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
-	// passwordStore.changePassword(EMAIL_ADDRESS, VALID_PASSWORD,
-	// TOO_WEAK_PASSWORD);
-	// } catch (PasswordChangeException e) {
-	// assertEquals(PasswordStoreExceptionMessage.PASSWORD_TOO_WEAK,
-	// e.getExceptionMessage());
-	// assertTrue(passwordStore
-	// .authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
-	// throw e;
-	// }
-	// }
+	@Test(expected = PasswordChangeException.class)
+	public void testChangePasswordTooWeakPassword()
+			throws AccountCreationException, AccountActivationException,
+			PasswordChangeException {
+		try {
+			String activationKey = passwordStore.createAccount(EMAIL_ADDRESS,
+					VALID_PASSWORD);
+			assertFalse(passwordStore.authenticate(EMAIL_ADDRESS,
+					VALID_PASSWORD));
+			passwordStore.activateAccount(EMAIL_ADDRESS, activationKey);
+			assertTrue(passwordStore
+					.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
+			passwordStore.changePassword(EMAIL_ADDRESS, VALID_PASSWORD,
+					TOO_WEAK_PASSWORD);
+		} catch (PasswordChangeException e) {
+			assertEquals(
+					PasswordStoreEvents
+							.createPasswordTooWeakErrorEvent(EMAIL_ADDRESS),
+					e.getMessage());
+			assertTrue(passwordStore
+					.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
+			throw e;
+		}
+	}
 
 	@Test
 	public void testResetPassword() throws AccountCreationException,
