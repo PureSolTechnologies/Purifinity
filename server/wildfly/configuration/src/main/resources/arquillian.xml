@@ -5,7 +5,7 @@
 
    <defaultProtocol type="Servlet 3.0" />
 
-	<container qualifier="jboss" default="true">
+	<container qualifier="wildfly" default="true">
 		<configuration>
 			<property name="jbossHome">${work.dir}/cargo/wildfly-server-${wildfly.version}/wildfly-${wildfly.version}</property>
 			<property name="javaVmArguments">${wildfly.options} -Djboss.server.base.dir=target/wildfly -Dserver.config.directory=${server.config.directory}</property>
