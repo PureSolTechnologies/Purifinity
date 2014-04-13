@@ -13,11 +13,13 @@ import com.datastax.driver.core.Metadata;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.SimpleStatement;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
+import com.puresoltechnologies.purifinity.framework.commons.utils.Version;
+import com.puresoltechnologies.purifinity.framework.database.migration.DatabaseMigrationConnector;
 import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
 import com.puresoltechnologies.purifinity.framework.database.migration.MigrationStep;
+import com.puresoltechnologies.purifinity.framework.database.migration.MigrationStepMetadata;
 
 public class CassandraMigration {
 
@@ -28,6 +30,7 @@ public class CassandraMigration {
 	public static final String CHANGELOG_TABLE = "changelog";
 
 	private static PreparedStatement preparedInsertStatement = null;
+	private static PreparedStatement preparedSelectStatement = null;
 
 	/**
 	 * Initializes the migration tables for the given cluster.
@@ -47,7 +50,7 @@ public class CassandraMigration {
 				session.execute("CREATE KEYSPACE " + KEYSPACE_NAME
 						+ " WITH replication " + "= {'class':'"
 						+ ReplicationStrategy.SIMPLE_STRATEGY.getStrategyName()
-						+ "', 'replication_factor':1};");
+						+ "', 'replication_factor':3};");
 				keyspaceMetadata = clusterMetadata.getKeyspace(KEYSPACE_NAME);
 				if (keyspaceMetadata == null) {
 					throw new MigrationException("Could not create keyspace '"
@@ -70,45 +73,96 @@ public class CassandraMigration {
 		}
 	}
 
-	public static void createKeyspace(Cluster cluster, String keyspace,
-			String version, String developer, String comment,
-			ReplicationStrategy replicationStrategy, int replicationFactor)
-			throws MigrationException {
-		migrate(cluster, null, version, developer, "CREATE KEYSPACE "
-				+ keyspace + " WITH replication " + "= {'class':'"
-				+ replicationStrategy.getStrategyName()
-				+ "', 'replication_factor':" + replicationFactor + "};",
-				comment);
+	public static MigrationStep createKeyspace(final String keyspace,
+			final Version version, final String developer,
+			final String comment,
+			final ReplicationStrategy replicationStrategy,
+			final int replicationFactor) throws MigrationException {
+		return new MigrationStep() {
+
+			@Override
+			public void migrate(DatabaseMigrationConnector connector)
+					throws IOException, MigrationException {
+				CassandraMigration.migrate(
+						((CassandraMigrationConnector) connector).getCluster(),
+						null, getMetadata());
+			}
+
+			@Override
+			public MigrationStepMetadata getMetadata() {
+				return new MigrationStepMetadata(version, developer, keyspace,
+						"CREATE KEYSPACE " + keyspace + " WITH replication "
+								+ "= {'class':'"
+								+ replicationStrategy.getStrategyName()
+								+ "', 'replication_factor':"
+								+ replicationFactor + "};", comment);
+			}
+		};
 	}
 
 	public static void dropKeyspace(Cluster cluster, String keyspace,
-			String version, String developer, String comment)
+			Version version, String developer, String comment)
 			throws MigrationException {
 		migrate(cluster, null, version, developer, "DROP KEYSPACE " + keyspace
 				+ ";", comment);
 	}
 
-	public static void createTable(Cluster cluster, String keyspace,
-			String version, String developer, String comment,
-			String creationStatement, String... additionalStatements)
+	public static MigrationStep createTable(final String keyspace,
+			final Version version, final String developer,
+			final String comment, final String creationStatement)
 			throws MigrationException {
-		migrate(cluster, keyspace, version, developer, creationStatement,
-				comment);
-		for (String statement : additionalStatements) {
-			migrate(cluster, keyspace, version, developer, statement, comment);
-		}
+		return new MigrationStep() {
+
+			@Override
+			public void migrate(DatabaseMigrationConnector connector)
+					throws IOException, MigrationException {
+				CassandraMigration.migrate(
+						((CassandraMigrationConnector) connector).getCluster(),
+						keyspace, getMetadata());
+			}
+
+			@Override
+			public MigrationStepMetadata getMetadata() {
+
+				return new MigrationStepMetadata(version, developer,
+						creationStatement, creationStatement, comment);
+			}
+		};
+
 	}
 
-	public static void createIndex(Cluster cluster, String keyspace,
-			String version, String developer, String comment, String table,
-			String column) throws MigrationException {
-		migrate(cluster, keyspace, version, developer, "CREATE INDEX idx_"
-				+ table + "_" + column + " ON " + table + " (" + column + ");",
-				comment);
+	public static MigrationStep createIndex(final String keyspace,
+			final Version version, final String developer,
+			final String comment, final String table, final String column)
+			throws MigrationException {
+		return new MigrationStep() {
+
+			@Override
+			public void migrate(DatabaseMigrationConnector connector)
+					throws IOException, MigrationException {
+				CassandraMigration.migrate(
+						((CassandraMigrationConnector) connector).getCluster(),
+						keyspace, getMetadata());
+			}
+
+			@Override
+			public MigrationStepMetadata getMetadata() {
+				return new MigrationStepMetadata(version, developer, keyspace,
+						"CREATE INDEX idx_" + table + "_" + column + " ON "
+								+ table + " (" + column + ");", comment);
+			}
+		};
 	}
 
 	public static void migrate(Cluster cluster, String keyspace,
-			String version, String developer, String command, String comment)
+			MigrationStepMetadata metadata) throws MigrationException {
+		migrate(cluster, keyspace, metadata.getVersion(),
+				metadata.getDeveloper(), metadata.getCommand(),
+				metadata.getComment());
+	}
+
+	public static void migrate(Cluster cluster, String keyspace,
+			Version version, String developer, String command, String comment)
 			throws MigrationException {
 		Session session = CassandraUtils.connectToCluster(cluster);
 		try {
@@ -132,7 +186,7 @@ public class CassandraMigration {
 	}
 
 	public static void migrate(Cluster cluster, String keyspace,
-			String version, String developer, MigrationStep migrationStep,
+			Version version, String developer, MigrationStep migrationStep,
 			String comment) throws MigrationException {
 		Session session = CassandraUtils.connectToCluster(cluster, keyspace);
 		try {
@@ -163,28 +217,30 @@ public class CassandraMigration {
 	 *            is the command
 	 * @return
 	 */
-	private static boolean wasMigrated(Session session, String version,
+	private static boolean wasMigrated(Session session, Version version,
 			String keyspace, String command) {
+		if (preparedSelectStatement == null) {
+			createPreparedStatements(session);
+		}
 		String keyspaceName = keyspace == null ? "" : keyspace;
-		String statement = "SELECT version, keyspace_name, command FROM "
-				+ KEYSPACE_NAME + "." + CHANGELOG_TABLE + " WHERE version='"
-				+ version + "' AND keyspace_name='" + keyspaceName
-				+ "' AND command='" + command.replaceAll("'", "''") + "';";
-		ResultSet result = session.execute(statement);
+		BoundStatement boundStatement = preparedSelectStatement.bind(
+				version.toString(), keyspaceName, command);
+		ResultSet result = session.execute(boundStatement);
 		return result.iterator().hasNext();
 	}
 
-	private static void writeLog(Session session, String version,
+	private static void writeLog(Session session, Version version,
 			String developer, String keyspace, String command, String comment)
 			throws MigrationException {
 		if (preparedInsertStatement == null) {
-			createPreparedInsertStatement(session);
+			createPreparedStatements(session);
 		}
 		try {
 			HashId hashId = HashUtilities.createHashId(command);
 			BoundStatement boundStatement = preparedInsertStatement.bind(
-					new Date(), version, developer, keyspace == null ? ""
-							: keyspace, command, hashId.toString(), comment);
+					new Date(), version.toString(), developer,
+					keyspace == null ? "" : keyspace, command, hashId
+							.toString(), comment);
 			session.execute(boundStatement);
 		} catch (IOException e) {
 			throw new MigrationException(
@@ -192,16 +248,22 @@ public class CassandraMigration {
 		}
 	}
 
-	private static synchronized void createPreparedInsertStatement(
-			Session session) {
+	private static synchronized void createPreparedStatements(Session session) {
 		if (preparedInsertStatement == null) {
 			preparedInsertStatement = session
-					.prepare(new SimpleStatement(
-							"INSERT INTO "
-									+ KEYSPACE_NAME
-									+ "."
-									+ CHANGELOG_TABLE
-									+ " (time, version, developer, keyspace_name, command, hashid, comment) VALUES (?, ?, ?, ?, ?, ?, ?)"));
+					.prepare("INSERT INTO "
+							+ KEYSPACE_NAME
+							+ "."
+							+ CHANGELOG_TABLE
+							+ " (time, version, developer, keyspace_name, command, hashid, comment)"
+							+ " VALUES (?, ?, ?, ?, ?, ?, ?);");
+		}
+		if (preparedSelectStatement == null) {
+			preparedSelectStatement = session
+					.prepare("SELECT version, keyspace_name, command FROM "
+							+ KEYSPACE_NAME + "." + CHANGELOG_TABLE
+							+ " WHERE version=?" + " AND keyspace_name=?"
+							+ " AND command=?" + ";");
 		}
 	}
 }

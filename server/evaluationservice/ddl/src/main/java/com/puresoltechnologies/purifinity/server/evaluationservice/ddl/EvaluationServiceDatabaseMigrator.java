@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.passwordstore.ddl;
+package com.puresoltechnologies.purifinity.server.evaluationservice.ddl;
 
 import java.io.IOException;
 
@@ -10,18 +10,18 @@ import com.puresoltechnologies.purifinity.framework.database.migration.AbstractD
 import com.puresoltechnologies.purifinity.framework.database.migration.DatabaseMigrationConnector;
 import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
 
-public class PasswordStoreDatabaseMigrator extends AbstractDatabaseMigrator {
+public class EvaluationServiceDatabaseMigrator extends AbstractDatabaseMigrator {
 
 	public static final String PASSWORD_STORE_KEYSPACE_NAME = "password_store";
 	public static final String CASSANDRA_HOST = "localhost";
 	public static final int CASSANDRA_CQL_PORT = 9042;
 	public static final String PASSWORD_TABLE_NAME = "passwords";
 
-	protected PasswordStoreDatabaseMigrator(DatabaseMigrationConnector connector) {
+	protected EvaluationServiceDatabaseMigrator(DatabaseMigrationConnector connector) {
 		super(connector);
 	}
 
-	private static void migrateVersion100(PasswordStoreDatabaseMigrator migrator)
+	private static void migrateVersion100(EvaluationServiceDatabaseMigrator migrator)
 			throws MigrationException {
 		Version v100 = new Version(1, 0, 0);
 		migrator.registerMigrationStep(CassandraMigration.createKeyspace(
@@ -51,7 +51,7 @@ public class PasswordStoreDatabaseMigrator extends AbstractDatabaseMigrator {
 		CassandraMigrationConnector connector = new CassandraMigrationConnector(
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT);
 		try {
-			PasswordStoreDatabaseMigrator migrator = new PasswordStoreDatabaseMigrator(
+			EvaluationServiceDatabaseMigrator migrator = new EvaluationServiceDatabaseMigrator(
 					connector);
 			migrateVersion100(migrator);
 			migrator.migrate();

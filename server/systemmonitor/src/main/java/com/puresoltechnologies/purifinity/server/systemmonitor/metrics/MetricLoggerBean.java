@@ -19,9 +19,6 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraMigration;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
-import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
 import com.puresoltechnologies.purifinity.server.systemmonitor.SystemMonitorConstants;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
@@ -59,58 +56,15 @@ public class MetricLoggerBean implements MetricLogger {
 
 	@PostConstruct
 	public void createStatements() {
-		try {
-			connectToCassandra();
-			createKeyspaceAndConnectToIt();
-			createPreparedStatements();
-			eventLogger.logEvent(MetricLoggerEvents.createStartEvent());
-		} catch (MigrationException e) {
-			throw new RuntimeException("Cassandra could not be migrated.", e);
-		}
-	}
-
-	private void connectToCassandra() {
 		logger.debug("Connect MetricLogger to Cassandra...");
 		cluster = Cluster.builder()
 				.addContactPoints(SystemMonitorConstants.CASSANDRA_HOST)
 				.withPort(SystemMonitorConstants.CASSANDRA_CQL_PORT).build();
-		logger.info("MetricLogger connected to Cassandra.");
-	}
-
-	private void createKeyspaceAndConnectToIt() throws MigrationException {
-		logger.debug("Initialize migration and check schema...");
-		CassandraMigration.initialize(cluster);
-		checkAndCreateKeyspace();
 		session = cluster
 				.connect(SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME);
-		checkAndCreateTables();
-		logger.info("MetricLogger schema is ok.");
-	}
-
-	private void checkAndCreateKeyspace() throws MigrationException {
-		CassandraMigration.createKeyspace(cluster,
-				SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME, "1.0.0",
-				"Rick-Rainer Ludwig", "Keeps the event log.",
-				ReplicationStrategy.SIMPLE_STRATEGY, 3);
-	}
-
-	private void checkAndCreateTables() throws MigrationException {
-		String description = "This is the table for metrics and KPIs.";
-		CassandraMigration.createTable(cluster,
-				SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME, "1.0.0",
-				"Rick-Rainer Ludwig", description, "CREATE TABLE "
-						+ METRICS_TABLE_NAME //
-						+ " (time timestamp, " //
-						+ "server ascii," //
-						+ "name varchar," //
-						+ "unit varchar, " //
-						+ "type ascii, "
-						+ "description text, "//
-						+ "decimal_value decimal, "//
-						+ "integer_value varint, "//
-						+ "level_of_measurement ascii, "
-						+ "PRIMARY KEY (server, time, name))"
-						+ "WITH comment='" + description + "';");
+		logger.info("MetricLogger connected to Cassandra.");
+		createPreparedStatements();
+		eventLogger.logEvent(MetricLoggerEvents.createStartEvent());
 	}
 
 	private void createPreparedStatements() {

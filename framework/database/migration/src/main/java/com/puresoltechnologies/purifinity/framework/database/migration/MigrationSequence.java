@@ -18,9 +18,15 @@ public class MigrationSequence implements MigrationStep {
 	private final List<MigrationStep> migrationSteps = new ArrayList<>();
 
 	@Override
-	public void migrate() throws IOException, MigrationException {
+	public MigrationStepMetadata getMetadata() {
+		return null;
+	}
+
+	@Override
+	public void migrate(DatabaseMigrationConnector connector)
+			throws IOException, MigrationException {
 		for (MigrationStep migrationStep : migrationSteps) {
-			migrationStep.migrate();
+			migrationStep.migrate(connector);
 		}
 	}
 

@@ -17,9 +17,6 @@ import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraMigration;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
-import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
 import com.puresoltechnologies.purifinity.server.systemmonitor.SystemMonitorConstants;
 
 /**
@@ -53,66 +50,15 @@ public class EventLoggerBean implements EventLogger {
 
 	@PostConstruct
 	public void connectAndInitialize() {
-		try {
-			connectToCassandra();
-			createKeyspaceAndConnectToIt();
-			createPreparedStatements();
-			logEvent(EventLoggerEvents.createStartEvent());
-		} catch (MigrationException e) {
-			throw new RuntimeException("Cassandra could not be migrated.", e);
-		}
-	}
-
-	private void connectToCassandra() {
 		logger.debug("Connect EventLogger to Cassandra...");
 		cluster = Cluster.builder()
 				.addContactPoints(SystemMonitorConstants.CASSANDRA_HOST)
 				.withPort(SystemMonitorConstants.CASSANDRA_CQL_PORT).build();
-		logger.info("EventLogger connected to Cassandra.");
-	}
-
-	private void createKeyspaceAndConnectToIt() throws MigrationException {
-		logger.debug("Initialize migration and check schema...");
-		CassandraMigration.initialize(cluster);
-		checkAndCreateKeyspace();
 		session = cluster
 				.connect(SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME);
-		checkAndCreateTables();
-		logger.info("EventLogger schema is ok.");
-	}
-
-	private void checkAndCreateKeyspace() throws MigrationException {
-		CassandraMigration.createKeyspace(cluster,
-				SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME, "1.0.0",
-				"Rick-Rainer Ludwig", "Keeps the event log.",
-				ReplicationStrategy.SIMPLE_STRATEGY, 3);
-	}
-
-	private void checkAndCreateTables() throws MigrationException {
-		String description = "This is the table for the event log.";
-		CassandraMigration
-				.createTable(
-						cluster,
-						SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME,
-						"1.0.0",
-						"Rick-Rainer Ludwig",
-						description,
-						"CREATE TABLE "
-								+ EVENTS_TABLE_NAME //
-								+ " (time timestamp, " //
-								+ "component ascii," //
-								+ "event_id bigint," //
-								+ "server ascii," //
-								+ "type ascii, " //
-								+ "severity ascii, "
-								+ "message text, "//
-								+ "user varchar, "
-								+ "user_id bigint," //
-								+ "client ascii, " //
-								+ "exception_message ascii, "
-								+ "exception_stacktrace ascii, "//
-								+ "PRIMARY KEY (server, time, severity, type, component, event_id, message))"
-								+ "WITH comment='" + description + "';");
+		logger.info("EventLogger connected to Cassandra.");
+		createPreparedStatements();
+		logEvent(EventLoggerEvents.createStartEvent());
 	}
 
 	private void createPreparedStatements() {

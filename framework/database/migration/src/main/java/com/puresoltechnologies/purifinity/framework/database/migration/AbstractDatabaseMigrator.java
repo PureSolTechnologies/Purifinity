@@ -8,8 +8,9 @@ import java.io.IOException;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractDatabaseMigrator extends MigrationSequence {
+public abstract class AbstractDatabaseMigrator implements DatabaseMigrator {
 
+	private final MigrationSequence sequence = new MigrationSequence();
 	private final DatabaseMigrationConnector connector;
 
 	protected AbstractDatabaseMigrator(DatabaseMigrationConnector connector) {
@@ -17,17 +18,17 @@ public abstract class AbstractDatabaseMigrator extends MigrationSequence {
 		this.connector = connector;
 	}
 
-	protected DatabaseMigrationConnector getConnector() {
+	@Override
+	public DatabaseMigrationConnector getConnector() {
 		return connector;
 	}
 
-	@Override
 	public void migrate() throws IOException, MigrationException {
 		getConnector().initialize();
 		try {
 			getConnector().startMigration();
 			try {
-				super.migrate();
+				sequence.migrate(connector);
 			} finally {
 				getConnector().finishMigration();
 			}
@@ -36,4 +37,8 @@ public abstract class AbstractDatabaseMigrator extends MigrationSequence {
 		}
 	}
 
+	@Override
+	public void registerMigrationStep(MigrationStep migrationStep) {
+		sequence.registerMigrationStep(migrationStep);
+	}
 }

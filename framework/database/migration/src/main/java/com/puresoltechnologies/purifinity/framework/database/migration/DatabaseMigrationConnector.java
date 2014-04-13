@@ -40,4 +40,5 @@ public interface DatabaseMigrationConnector extends Closeable {
 	 */
 	@Override
 	public void close() throws IOException;
+
 }

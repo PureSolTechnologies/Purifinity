@@ -27,9 +27,6 @@ import com.puresol.passwordstore.domain.PasswordChangeException;
 import com.puresol.passwordstore.domain.PasswordEncryptionException;
 import com.puresol.passwordstore.domain.PasswordResetException;
 import com.puresol.passwordstore.domain.PasswordStrengthCalculator;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraMigration;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.ReplicationStrategy;
-import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.EmailAddressValidator;
@@ -69,54 +66,13 @@ public class PasswordStoreBean implements PasswordStore {
 
 	@PostConstruct
 	public void connectAndInitialize() {
-		try {
-			connectToCassandra();
-			createKeyspaceAndConnectToIt();
-			createPreparedStatements();
-			eventLogger.logEvent(PasswordStoreEvents.createStartEvent());
-		} catch (MigrationException e) {
-			throw new RuntimeException("Cassandra could not be migrated.", e);
-		}
-	}
-
-	private void connectToCassandra() {
 		logger.debug("Connect PasswordStore to Cassandra...");
 		cluster = Cluster.builder().addContactPoints(CASSANDRA_HOST)
 				.withPort(CASSANDRA_CQL_PORT).build();
-		logger.info("PasswordStore connected to Cassandra.");
-	}
-
-	private void createKeyspaceAndConnectToIt() throws MigrationException {
-		logger.debug("Initialize migration and check schema...");
-		CassandraMigration.initialize(cluster);
-		checkAndCreateKeyspace();
 		session = cluster.connect(PASSWORD_STORE_KEYSPACE_NAME);
-		checkAndCreateTables();
-		logger.info("PasswordStore schema is ok.");
-	}
-
-	private void checkAndCreateKeyspace() throws MigrationException {
-		CassandraMigration.createKeyspace(cluster,
-				PASSWORD_STORE_KEYSPACE_NAME, "1.0.0", "Rick-Rainer Ludwig",
-				"Keeps the event log.", ReplicationStrategy.SIMPLE_STRATEGY, 3);
-	}
-
-	private void checkAndCreateTables() throws MigrationException {
-		String description = "This table contains the authentication data and the state of the account.";
-		CassandraMigration.createTable(cluster, PASSWORD_STORE_KEYSPACE_NAME,
-				"1.0.0", "Rick-Rainer Ludwig", description, "CREATE TABLE "
-						+ PASSWORD_TABLE_NAME//
-						+ " (created timestamp, " //
-						+ "last_modified timestamp, " //
-						+ "email varchar," //
-						+ "password ascii, " //
-						+ "state ascii, "
-						+ "activation_key ascii, "//
-						+ "PRIMARY KEY (email))" + "WITH comment='"
-						+ description + "';");
-		CassandraMigration.createIndex(cluster, PASSWORD_STORE_KEYSPACE_NAME,
-				"1.0.0", "Rick-Rainer Ludwig", "Secondary index on state.",
-				PASSWORD_TABLE_NAME, "state");
+		logger.info("PasswordStore connected to Cassandra.");
+		createPreparedStatements();
+		eventLogger.logEvent(PasswordStoreEvents.createStartEvent());
 	}
 
 	private void createPreparedStatements() {

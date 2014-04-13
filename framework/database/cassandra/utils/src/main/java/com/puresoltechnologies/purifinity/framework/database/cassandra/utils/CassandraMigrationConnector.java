@@ -1,32 +1,30 @@
 package com.puresoltechnologies.purifinity.framework.database.cassandra.utils;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.framework.database.migration.DatabaseMigrationConnector;
 import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
 
 public class CassandraMigrationConnector implements DatabaseMigrationConnector {
 
-	private Cluster cluster = null;
-	private Session session = null;
+	private final boolean closeCluster;
+	private final Cluster cluster;
 
-	private final String host;
-	private final int port;
-	private final String keyspace;
-
-	public CassandraMigrationConnector(String host, int port, String keyspace) {
+	public CassandraMigrationConnector(String host, int port) {
 		super();
-		this.host = host;
-		this.port = port;
-		this.keyspace = keyspace;
+		cluster = Cluster.builder().addContactPoint(host).withPort(port)
+				.build();
+		closeCluster = true;
+	}
+
+	public CassandraMigrationConnector(Cluster cluster) {
+		super();
+		this.cluster = cluster;
+		closeCluster = false;
 	}
 
 	@Override
 	public void initialize() throws MigrationException {
-		cluster = Cluster.builder().addContactPoint(host).withPort(port)
-				.build();
 		CassandraMigration.initialize(cluster);
-		session = cluster.connect(keyspace);
 	}
 
 	@Override
@@ -42,11 +40,13 @@ public class CassandraMigrationConnector implements DatabaseMigrationConnector {
 
 	@Override
 	public void close() {
-		try {
-			session.close();
-		} finally {
+		if (closeCluster) {
 			cluster.close();
 		}
+	}
+
+	public Cluster getCluster() {
+		return cluster;
 	}
 
 }

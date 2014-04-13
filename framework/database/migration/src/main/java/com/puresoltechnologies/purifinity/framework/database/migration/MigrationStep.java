@@ -9,6 +9,8 @@ import java.io.IOException;
  */
 public interface MigrationStep {
 
+	public MigrationStepMetadata getMetadata();
+
 	/**
 	 * This method runs the actual Migration.
 	 * 
@@ -18,6 +20,7 @@ public interface MigrationStep {
 	 * @throws IOException
 	 *             is thrown in a case of connection and database issues.
 	 */
-	public void migrate() throws IOException, MigrationException;
+	public void migrate(DatabaseMigrationConnector connector)
+			throws IOException, MigrationException;
 
 }
