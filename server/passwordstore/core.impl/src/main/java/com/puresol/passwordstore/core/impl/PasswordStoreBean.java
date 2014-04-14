@@ -45,6 +45,18 @@ public class PasswordStoreBean implements PasswordStore {
 	public static final int CASSANDRA_CQL_PORT = 9042;
 	public static final String PASSWORD_TABLE_NAME = "passwords";
 
+	public static final String CREATE_ACCOUNT_STATEMENT = "INSERT INTO "
+			+ PASSWORD_TABLE_NAME
+			+ " (created, last_modified, email, password, state, activation_key)"
+			+ " VALUES (?, ?, ?, ?, '" + AccountState.CREATED.name() + "', ?)";
+	public static final String ACTIVATE_ACCOUNT_STATEMENT = "UPDATE "
+			+ PASSWORD_TABLE_NAME + " SET last_modified = ?, state = '"
+			+ AccountState.ACTIVE.name() + "'" + " WHERE email = ?";
+	public static final String CHANGE_PASSWORD_STATEMENT = "UPDATE "
+			+ PASSWORD_TABLE_NAME + " SET password = ? WHERE email = ?";
+	public static final String RETRIEVE_ACCOUNT_STATEMENT = "SELECT * FROM "
+			+ PASSWORD_TABLE_NAME + " WHERE email = ?";
+
 	@Inject
 	private SecurityKeyGenerator securityKeyGenerator;
 
@@ -76,36 +88,23 @@ public class PasswordStoreBean implements PasswordStore {
 	}
 
 	private void createPreparedStatements() {
-		String createAccountStatementString = "INSERT INTO "
-				+ PASSWORD_TABLE_NAME
-				+ " (created, last_modified, email, password, state, activation_key)"
-				+ " VALUES (?, ?, ?, ?, '" + AccountState.CREATED.name()
-				+ "', ?)";
-		logger.info("Create prepared statement for '"
-				+ createAccountStatementString + "'");
-		createAccountStatement = session.prepare(createAccountStatementString);
 
-		String activateAccountStatementString = "UPDATE " + PASSWORD_TABLE_NAME
-				+ " SET last_modified = ?, state = '"
-				+ AccountState.ACTIVE.name() + "'" + " WHERE email = ?";
 		logger.info("Create prepared statement for '"
-				+ activateAccountStatementString + "'");
-		activateAccountStatement = session
-				.prepare(activateAccountStatementString);
+				+ CREATE_ACCOUNT_STATEMENT + "'");
+		createAccountStatement = session.prepare(CREATE_ACCOUNT_STATEMENT);
 
-		String changePasswordStatementString = "UPDATE " + PASSWORD_TABLE_NAME
-				+ " SET password = ? WHERE email = ?";
 		logger.info("Create prepared statement for '"
-				+ changePasswordStatementString + "'");
-		changePasswordStatement = session
-				.prepare(changePasswordStatementString);
+				+ ACTIVATE_ACCOUNT_STATEMENT + "'");
+		activateAccountStatement = session.prepare(ACTIVATE_ACCOUNT_STATEMENT);
 
-		String retrieveUserByEmailStatementString = "SELECT * FROM "
-				+ PASSWORD_TABLE_NAME + " WHERE email = ?";
 		logger.info("Create prepared statement for '"
-				+ retrieveUserByEmailStatementString + "'");
+				+ CHANGE_PASSWORD_STATEMENT + "'");
+		changePasswordStatement = session.prepare(CHANGE_PASSWORD_STATEMENT);
+
+		logger.info("Create prepared statement for '"
+				+ RETRIEVE_ACCOUNT_STATEMENT + "'");
 		retrieveUserByEmailStatement = session
-				.prepare(retrieveUserByEmailStatementString);
+				.prepare(RETRIEVE_ACCOUNT_STATEMENT);
 	}
 
 	@PreDestroy

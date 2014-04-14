@@ -31,6 +31,10 @@ public class EventLoggerBean implements EventLogger {
 	private static final long serialVersionUID = -4162895953533068913L;
 
 	private static final String EVENTS_TABLE_NAME = "events";
+	private static final String LOG_EVENT_STATEMENT = "INSERT INTO "
+			+ EVENTS_TABLE_NAME
+			+ " (time, component, event_id, server, type, severity, message, user, user_id, client, exception_message, exception_stacktrace)"
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 	@Inject
 	private Logger logger;
@@ -62,11 +66,7 @@ public class EventLoggerBean implements EventLogger {
 	}
 
 	private void createPreparedStatements() {
-		preparedLogEventStatement = session
-				.prepare("INSERT INTO "
-						+ EVENTS_TABLE_NAME
-						+ " (time, component, event_id, server, type, severity, message, user, user_id, client, exception_message, exception_stacktrace)"
-						+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		preparedLogEventStatement = session.prepare(LOG_EVENT_STATEMENT);
 	}
 
 	@PreDestroy
