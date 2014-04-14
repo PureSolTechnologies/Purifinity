@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import com.puresoltechnologies.purifinity.server.systemmonitor.SystemMonitorCons
  * 
  */
 @Singleton
+@Startup
 public class EventLoggerBean implements EventLogger {
 
 	private static final long serialVersionUID = -4162895953533068913L;
