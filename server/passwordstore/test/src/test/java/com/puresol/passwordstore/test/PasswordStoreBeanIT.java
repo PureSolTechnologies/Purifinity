@@ -129,13 +129,15 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 			passwordStore.createAccount(INVALID_EMAIL_ADDRESS,
 					TOO_WEAK_PASSWORD);
 		} catch (AccountCreationException e) {
-			assertEquals(PasswordStoreEvents
-					.createInvalidEmailAddressErrorEvent(EMAIL_ADDRESS)
-					.getMessage(), e.getMessage());
-
 			Row account = readAccoutFromDatabase(EMAIL_ADDRESS);
-
 			assertNull(account);
+
+			String expectedMessage = PasswordStoreEvents
+					.createInvalidEmailAddressErrorEvent(INVALID_EMAIL_ADDRESS)
+					.getMessage();
+			String actualMessage = e.getMessage();
+			assertEquals(expectedMessage, actualMessage);
+
 			throw e;
 		}
 	}
@@ -173,10 +175,9 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 			passwordStore.activateAccount(EMAIL_ADDRESS, activationKey
 					+ "Wrong!");
 		} catch (AccountActivationException e) {
-			assertEquals(
-					PasswordStoreEvents
-							.createInvalidActivationKeyErrorEvent(EMAIL_ADDRESS),
-					e.getMessage());
+			assertEquals(PasswordStoreEvents
+					.createInvalidActivationKeyErrorEvent(EMAIL_ADDRESS)
+					.getMessage(), e.getMessage());
 			account = readAccoutFromDatabase(EMAIL_ADDRESS);
 			assertNotNull(account);
 			assertNotNull(account.getString("password"));
@@ -190,10 +191,10 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 	@Test
 	public void testAuthenticate() throws AccountCreationException,
 			AccountActivationException {
-		String activationInformation = passwordStore.createAccount(
-				EMAIL_ADDRESS, VALID_PASSWORD);
+		String activationKey = passwordStore.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
 		assertFalse(passwordStore.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
-		passwordStore.activateAccount(EMAIL_ADDRESS, activationInformation);
+		passwordStore.activateAccount(EMAIL_ADDRESS, activationKey);
 		assertTrue(passwordStore.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
 	}
 
@@ -284,10 +285,11 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 			passwordStore.changePassword(EMAIL_ADDRESS, VALID_PASSWORD,
 					TOO_WEAK_PASSWORD);
 		} catch (PasswordChangeException e) {
-			assertEquals(
-					PasswordStoreEvents
-							.createPasswordTooWeakErrorEvent(EMAIL_ADDRESS),
-					e.getMessage());
+			String expectedMessage = PasswordStoreEvents
+					.createPasswordChangeFailedPasswordTooWeakEvent(
+							EMAIL_ADDRESS).getMessage();
+			String actualMessage = e.getMessage();
+			assertEquals(expectedMessage, actualMessage);
 			assertTrue(passwordStore
 					.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
 			throw e;

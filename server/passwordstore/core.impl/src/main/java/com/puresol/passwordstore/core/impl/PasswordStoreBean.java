@@ -76,20 +76,36 @@ public class PasswordStoreBean implements PasswordStore {
 	}
 
 	private void createPreparedStatements() {
-		createAccountStatement = session
-				.prepare("INSERT INTO "
-						+ PASSWORD_TABLE_NAME
-						+ " (created, last_modified, email, password, state, activation_key)"
-						+ "VALUES (?, ?, ?, ?, ?, "
-						+ AccountState.CREATED.name() + ", ?)");
-		activateAccountStatement = session.prepare("INSERT INTO "
-				+ PASSWORD_TABLE_NAME + " (last_modified, state)"
-				+ "VALUES (?, " + AccountState.ACTIVE.name()
-				+ ") WHERE email = ?");
-		changePasswordStatement = session.prepare("UPDATE "
-				+ PASSWORD_TABLE_NAME + " SET password = ? WHERE email = ?");
-		retrieveUserByEmailStatement = session.prepare("SELECT * FROM "
-				+ PASSWORD_TABLE_NAME + " WHERE email = ?");
+		String createAccountStatementString = "INSERT INTO "
+				+ PASSWORD_TABLE_NAME
+				+ " (created, last_modified, email, password, state, activation_key)"
+				+ " VALUES (?, ?, ?, ?, '" + AccountState.CREATED.name()
+				+ "', ?)";
+		logger.info("Create prepared statement for '"
+				+ createAccountStatementString + "'");
+		createAccountStatement = session.prepare(createAccountStatementString);
+
+		String activateAccountStatementString = "UPDATE " + PASSWORD_TABLE_NAME
+				+ " SET last_modified = ?, state = '"
+				+ AccountState.ACTIVE.name() + "'" + " WHERE email = ?";
+		logger.info("Create prepared statement for '"
+				+ activateAccountStatementString + "'");
+		activateAccountStatement = session
+				.prepare(activateAccountStatementString);
+
+		String changePasswordStatementString = "UPDATE " + PASSWORD_TABLE_NAME
+				+ " SET password = ? WHERE email = ?";
+		logger.info("Create prepared statement for '"
+				+ changePasswordStatementString + "'");
+		changePasswordStatement = session
+				.prepare(changePasswordStatementString);
+
+		String retrieveUserByEmailStatementString = "SELECT * FROM "
+				+ PASSWORD_TABLE_NAME + " WHERE email = ?";
+		logger.info("Create prepared statement for '"
+				+ retrieveUserByEmailStatementString + "'");
+		retrieveUserByEmailStatement = session
+				.prepare(retrieveUserByEmailStatementString);
 	}
 
 	@PreDestroy
@@ -143,8 +159,8 @@ public class PasswordStoreBean implements PasswordStore {
 		Date created = new Date();
 
 		// FIXME userId needs to come from counter!
-		boundStatement = createAccountStatement.bind(created, created, -1,
-				email, passwordHash, activationKey);
+		boundStatement = createAccountStatement.bind(created, created, email,
+				passwordHash, activationKey);
 		session.execute(boundStatement);
 
 		eventLogger.logEvent(PasswordStoreEvents.createAccountCreationEvent(
@@ -205,7 +221,7 @@ public class PasswordStoreBean implements PasswordStore {
 				return false;
 			}
 			String stateString = account.getString("state");
-			if (!AccountState.ACTIVE.equals(stateString)) {
+			if (!AccountState.ACTIVE.name().equals(stateString)) {
 				eventLogger
 						.logEvent(PasswordStoreEvents
 								.createUserAuthenticationFailedAccountNotActiveEvent(email));
@@ -256,7 +272,9 @@ public class PasswordStoreBean implements PasswordStore {
 			eventLogger.logEvent(event);
 			throw new RuntimeException(event.getMessage(), e);
 		}
-		changePasswordStatement.bind(passwordHash, email);
+		BoundStatement boundStatement = changePasswordStatement.bind(
+				passwordHash, email);
+		session.execute(boundStatement);
 
 		eventLogger.logEvent(PasswordStoreEvents
 				.createPasswordChangedEvent(email));
@@ -285,7 +303,9 @@ public class PasswordStoreBean implements PasswordStore {
 			eventLogger.logEvent(event);
 			throw new RuntimeException(event.getMessage(), e);
 		}
-		changePasswordStatement.bind(passwordHash, email);
+		BoundStatement boundStatement = changePasswordStatement.bind(
+				passwordHash, email);
+		session.execute(boundStatement);
 
 		eventLogger.logEvent(PasswordStoreEvents
 				.createPasswordResetEvent(email));
