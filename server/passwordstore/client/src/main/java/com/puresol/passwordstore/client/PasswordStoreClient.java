@@ -3,10 +3,12 @@ package com.puresol.passwordstore.client;
 import java.util.List;
 
 import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.Response;
 
 import org.apache.http.HttpStatus;
-import org.jboss.resteasy.client.ClientResponse;
-import org.jboss.resteasy.client.ProxyFactory;
+import org.jboss.resteasy.client.jaxrs.ResteasyClient;
+import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
@@ -38,17 +40,17 @@ public class PasswordStoreClient {
 	}
 
 	public PasswordStoreClient() {
-		proxy = ProxyFactory.create(PasswordStoreRestInterface.class,
-				"http://localhost:8080/passwordstore");
+		ResteasyClient client = new ResteasyClientBuilder().build();
+		ResteasyWebTarget webTarget = client
+				.target("http://localhost:8080/passwordstore");
+		proxy = webTarget.proxy(PasswordStoreRestInterface.class);
 	}
 
 	public String createAccount(String email, String password)
 			throws AccountCreationException {
-		@SuppressWarnings("unchecked")
-		ClientResponse<String> response = (ClientResponse<String>) proxy
-				.createAccount(email + "\n" + password);
+		Response response = proxy.createAccount(email + "\n" + password);
 		try {
-			if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_CREATED) {
+			if (response.getStatus() == HttpStatus.SC_CREATED) {
 				MultivaluedMap<String, Object> headers = response.getHeaders();
 				return String
 						.valueOf(headers
@@ -61,31 +63,27 @@ public class PasswordStoreClient {
 			throw new AccountCreationException(Long.valueOf((String) errorId),
 					(String) errorMessage);
 		} finally {
-			response.releaseConnection();
+			response.close();
 		}
 	}
 
 	public boolean authenticate(String email, String password) {
-		@SuppressWarnings("unchecked")
-		ClientResponse<String> response = (ClientResponse<String>) proxy
-				.authenticate(email + "\n" + password);
+		Response response = proxy.authenticate(email + "\n" + password);
 		try {
-			if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_OK) {
+			if (response.getStatus() == HttpStatus.SC_OK) {
 				return true;
 			}
 			return false;
 		} finally {
-			response.releaseConnection();
+			response.close();
 		}
 	}
 
-	public long activateAccount(String email, String activationKey)
+	public String activateAccount(String email, String activationKey)
 			throws AccountActivationException {
-		@SuppressWarnings("unchecked")
-		ClientResponse<String> response = (ClientResponse<String>) proxy
-				.activateAccount(email + "\n" + activationKey);
+		Response response = proxy.activateAccount(email + "\n" + activationKey);
 		try {
-			if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_OK) {
+			if (response.getStatus() == HttpStatus.SC_OK) {
 				List<Object> userIdList = response.getHeaders().get(
 						PasswordStoreHttpConstants.HTTP_HEADER_USER_EMAIL);
 				if (userIdList.size() == 0) {
@@ -96,15 +94,7 @@ public class PasswordStoreClient {
 					throw new RuntimeException(
 							"The current OK response does have multiple user-id headers included!");
 				}
-				String userId = (String) userIdList.get(0);
-				try {
-					return Long.valueOf(userId);
-				} catch (NumberFormatException e) {
-					throw new RuntimeException(
-							"The current OK response does have an invalid user-id '"
-									+ userId
-									+ "' (number format is wrong) included!", e);
-				}
+				return (String) userIdList.get(0);
 			}
 			Object errorId = response.getHeaders().getFirst(
 					PasswordStoreHttpConstants.HTTP_HEADER_EVENT_ID);
@@ -113,19 +103,18 @@ public class PasswordStoreClient {
 			throw new AccountActivationException(
 					Long.valueOf((String) errorId), (String) errorMessage);
 		} finally {
-			response.releaseConnection();
+			response.close();
 		}
 	}
 
 	public boolean changePassword(String email, String oldPassword,
 			String newPassword) throws PasswordChangeException {
-		@SuppressWarnings("unchecked")
-		ClientResponse<String> response = (ClientResponse<String>) proxy
-				.changePassword(email + "\n" + oldPassword + "\n" + newPassword);
+		Response response = proxy.changePassword(email + "\n" + oldPassword
+				+ "\n" + newPassword);
 		try {
-			if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_OK) {
+			if (response.getStatus() == HttpStatus.SC_OK) {
 				return true;
-			} else if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+			} else if (response.getStatus() == HttpStatus.SC_UNAUTHORIZED) {
 				return false;
 			}
 			Object errorId = response.getHeaders().getFirst(
@@ -135,16 +124,14 @@ public class PasswordStoreClient {
 			throw new PasswordChangeException(Long.valueOf((String) errorId),
 					(String) errorMessage);
 		} finally {
-			response.releaseConnection();
+			response.close();
 		}
 	}
 
 	public String resetPassword(String email) throws PasswordResetException {
-		@SuppressWarnings("unchecked")
-		ClientResponse<String> response = (ClientResponse<String>) proxy
-				.resetPassword(email);
+		Response response = proxy.resetPassword(email);
 		try {
-			if (response.getResponseStatus().getStatusCode() == HttpStatus.SC_OK) {
+			if (response.getStatus() == HttpStatus.SC_OK) {
 				MultivaluedMap<String, Object> headers = response.getHeaders();
 				return (String) headers
 						.getFirst(PasswordStoreHttpConstants.HTTP_HEADER_NEW_PASSWORD);
@@ -156,7 +143,7 @@ public class PasswordStoreClient {
 			throw new PasswordResetException(Long.valueOf((String) errorId),
 					(String) errorMessage);
 		} finally {
-			response.releaseConnection();
+			response.close();
 		}
 	}
 }

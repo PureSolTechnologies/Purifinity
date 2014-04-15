@@ -1,5 +1,6 @@
 package com.puresol.passwordstore.core.impl;
 
+
 /**
  * This enum represents the different state of a user account.
  * 

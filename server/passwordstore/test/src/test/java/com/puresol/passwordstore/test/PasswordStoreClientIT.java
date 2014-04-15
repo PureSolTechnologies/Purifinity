@@ -97,7 +97,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 			restClient.createAccount(INVALID_EMAIL_ADDRESS, TOO_WEAK_PASSWORD);
 		} catch (AccountCreationException e) {
 			assertEquals(PasswordStoreEvents
-					.createInvalidEmailAddressErrorEvent(EMAIL_ADDRESS)
+					.createInvalidEmailAddressErrorEvent(INVALID_EMAIL_ADDRESS)
 					.getMessage(), e.getMessage());
 			throw e;
 		}
@@ -218,8 +218,9 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 					TOO_WEAK_PASSWORD);
 		} catch (PasswordChangeException e) {
 			assertEquals(
-					PasswordStoreEvents.createPasswordTooWeakErrorEvent(
-							EMAIL_ADDRESS).getMessage(), e.getMessage());
+					PasswordStoreEvents
+							.createPasswordChangeFailedPasswordTooWeakEvent(
+									EMAIL_ADDRESS).getMessage(), e.getMessage());
 			assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
 			throw e;
 		}
