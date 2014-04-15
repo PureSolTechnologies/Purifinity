@@ -1,6 +1,7 @@
 package com.puresol.accountmanager.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -16,11 +17,13 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.puresol.accountmanager.core.api.AccountManager;
 import com.puresol.passwordstore.client.PasswordStoreClient;
+import com.puresol.passwordstore.domain.AccountActivationException;
+import com.puresol.passwordstore.domain.AccountCreationException;
 
 public class AccountManagerBeanIT extends AbstractAccountManagerTest {
 
@@ -30,12 +33,16 @@ public class AccountManagerBeanIT extends AbstractAccountManagerTest {
 	@Inject
 	private AccountManager accountManager;
 
-	@BeforeClass
-	public static void setupStandardAccounts() throws Exception {
+	@Before
+	public void setup() throws AccountCreationException,
+			AccountActivationException {
 		PasswordStoreClient passwordStoreClient = new PasswordStoreClient();
 		String activationKey = passwordStoreClient.createAccount(EMAIL,
 				PASSWORD);
 		passwordStoreClient.activateAccount(EMAIL, activationKey);
+
+		assertNotNull(accountManager);
+		cleanupPasswordStoreDatabase();
 	}
 
 	@Test
@@ -75,7 +82,6 @@ public class AccountManagerBeanIT extends AbstractAccountManagerTest {
 	@Test
 	public void testCreateEmptyAccount() {
 		String email = "email@address.com";
-		int userId = 1234567890;
-		accountManager.createAccount(userId, email);
+		accountManager.createAccount(email);
 	}
 }

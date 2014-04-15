@@ -28,9 +28,9 @@ public class AccountManagerEvents {
 	 * @param email
 	 * @return
 	 */
-	public static Event createAccountCreationEvent(long userId, String email) {
+	public static Event createAccountCreationEvent(String email) {
 		return new Event(COMPONENT, 0x01, EventType.USER_ACTION,
 				EventSeverity.INFO, "User account created for '" + email + "'.")
-				.setUserEmail(email).setUserId(userId);
+				.setUserEmail(email);
 	}
 }

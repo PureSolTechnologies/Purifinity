@@ -1,6 +1,5 @@
 package com.puresol.accountmanager.core.api;
 
-
 /**
  * This is the common interface for local and remote AccountManagerBean
  * interface. This is a single place to document the interface.
@@ -36,11 +35,9 @@ public interface AccountManagerCommon {
 	 * This method is used to create a new empty account. This method is used
 	 * once(!) after account activation.
 	 * 
-	 * @param userId
-	 *            is the user id for the account to be created.
 	 * @param email
 	 *            is the email address of the user which activated the account.
 	 */
-	void createAccount(long userId, String email);
+	void createAccount(String email);
 
 }

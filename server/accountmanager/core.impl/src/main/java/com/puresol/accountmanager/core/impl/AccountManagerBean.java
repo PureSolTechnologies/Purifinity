@@ -97,12 +97,12 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	}
 
 	@Override
-	public void createAccount(long userId, String email) {
+	public void createAccount(String email) {
 		logger.debug("Creating user account for '" + email + "'...");
 		// FIXME
 		// Person person = new Person(userId, "", "", Gender.FEMALE, "");
 		// peopleRegister.addPerson(person);
-		eventLogger.logEvent(AccountManagerEvents.createAccountCreationEvent(
-				userId, email));
+		eventLogger.logEvent(AccountManagerEvents
+				.createAccountCreationEvent(email));
 	}
 }

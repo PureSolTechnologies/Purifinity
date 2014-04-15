@@ -27,8 +27,8 @@ public class ActivateAccountMBean {
 		try {
 			PasswordStoreClient passwordStore = PasswordStoreClient
 					.createInstance();
-			long userId = passwordStore.activateAccount(email, activationKey);
-			accountManager.createAccount(userId, email);
+			email = passwordStore.activateAccount(email, activationKey);
+			accountManager.createAccount(email);
 			return "account_activated";
 		} catch (Exception e) {
 			FacesContext context = FacesContext.getCurrentInstance();

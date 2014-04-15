@@ -25,7 +25,7 @@ public class AccountManagerDelegatorMBean implements Serializable {
 		return accountManager.isLoggedIn();
 	}
 
-	public void createAccount(long userId, String email) {
-		accountManager.createAccount(userId, email);
+	public void createAccount(String email) {
+		accountManager.createAccount(email);
 	}
 }
