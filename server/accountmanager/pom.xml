@@ -26,6 +26,7 @@
 		<module>core.impl</module>
 		<module>login</module>
 		<module>test</module>
+		<module>socket</module>
 		<module>ui.api</module>
 		<module>ui.web</module>
 		<module>app</module>

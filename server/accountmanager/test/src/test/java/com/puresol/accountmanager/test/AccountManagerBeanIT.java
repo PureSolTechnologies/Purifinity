@@ -25,7 +25,7 @@ import com.puresol.passwordstore.client.PasswordStoreClient;
 import com.puresol.passwordstore.domain.AccountActivationException;
 import com.puresol.passwordstore.domain.AccountCreationException;
 
-public class AccountManagerBeanIT extends AbstractAccountManagerTest {
+public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
 
 	private static final String EMAIL = "ludwig@puresol-technologies.com";
 	private static final String PASSWORD = "!234Qwer";

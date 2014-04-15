@@ -8,19 +8,28 @@
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>accountmanager.app</artifactId>
-	<packaging>ear</packaging>
+	<artifactId>accountmanager.socket</artifactId>
+	<packaging>war</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>accountmanager.core.impl</artifactId>
-			<type>ejb</type>
+			<artifactId>accountmanager.core.api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>accountmanager.socket</artifactId>
-			<type>war</type>
+			<artifactId>systemmonitor</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>logger</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
 		</dependency>
 	</dependencies>
 

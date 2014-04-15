@@ -16,7 +16,7 @@ import com.puresol.passwordstore.rest.PasswordStoreRestInterface;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
-public abstract class AbstractAccountManagerTest extends AbstractServerTest {
+public abstract class AbstractAccountManagerServerTest extends AbstractServerTest {
 
 	private Cluster cluster;
 	private Session session;
