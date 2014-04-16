@@ -3,8 +3,10 @@ package com.puresol.accountmanager.test;
 import java.net.URI;
 
 import javax.websocket.ClientEndpoint;
+import javax.websocket.ContainerProvider;
+import javax.websocket.Session;
+import javax.websocket.WebSocketContainer;
 
-import org.glassfish.tyrus.client.ClientManager;
 import org.junit.Test;
 
 public class AccountManagerSocketIT extends AbstractAccountManagerClientTest {
@@ -17,8 +19,11 @@ public class AccountManagerSocketIT extends AbstractAccountManagerClientTest {
 	@Test
 	public void test() throws Exception {
 
-		ClientManager client = new ClientManager();
-		client.connectToServer(AccountManagerClientEndpoint.class, new URI(
-				"ws://localhost:8080/accountmanager-socket/socket"));
+		WebSocketContainer webSocketContainer = ContainerProvider
+				.getWebSocketContainer();
+		Session session = webSocketContainer.connectToServer(
+				new AccountManagerClientEndpoint(), new URI(
+						"ws://localhost:8080/accountmanager.socket/socket"));
+		session.getBasicRemote().sendText("Hallo, Socket!");
 	}
 }
