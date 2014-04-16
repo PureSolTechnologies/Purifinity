@@ -394,6 +394,34 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>purifinityserver.app</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>purifinityserver.client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>purifinityserver.core.api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>purifinityserver.core.impl</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>purifinityserver.socket</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>passwordstore.test</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -489,6 +517,17 @@
 				<groupId>javax.mail</groupId>
 				<artifactId>mail</artifactId>
 				<version>1.4.7</version>
+			</dependency>
+			<!-- WebSocket libraries -->
+			<dependency>
+				<groupId>org.eclipse.jetty.websocket</groupId>
+				<artifactId>websocket-client</artifactId>
+				<version>9.2.0.M0</version>
+			</dependency>
+			<dependency>
+				<groupId>org.eclipse.jetty.websocket</groupId>
+				<artifactId>javax-websocket-client-impl</artifactId>
+				<version>9.2.0.M0</version>
 			</dependency>
 			<!-- REST library -->
 			<dependency>
@@ -590,7 +629,7 @@
 					<artifactId>maven-ear-plugin</artifactId>
 					<version>2.7</version>
 					<configuration>
-						<version>6</version>
+						<version>7</version>
 						<defaultLibBundleDir>lib</defaultLibBundleDir>
 						<skinnyWars>true</skinnyWars>
 						<applicationName>${project.artifactId}</applicationName>
@@ -864,6 +903,7 @@
 		<module>accountmanager</module>
 		<module>analysisservice</module>
 		<module>evaluationservice</module>
+		<module>purifinityserver</module>
 	</modules>
 
 </project>

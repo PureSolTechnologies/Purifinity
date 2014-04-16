@@ -4,38 +4,26 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.server</groupId>
-		<artifactId>accountmanager</artifactId>
+		<artifactId>purifinityserver</artifactId>
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>accountmanager.test</artifactId>
+	<artifactId>purifinityserver.test</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>accountmanager.core.api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>accountmanager.core.impl</artifactId>
-			<type>ejb</type>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>accountmanager.login</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>passwordstore.app</artifactId>
+			<artifactId>purifinityserver.app</artifactId>
 			<type>ear</type>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>passwordstore.client</artifactId>
+			<artifactId>purifinityserver.client</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>passwordstore.test</artifactId>
+			<artifactId>purifinityserver.core.impl</artifactId>
+			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -67,14 +55,14 @@
 				<artifactId>cargo-maven2-plugin</artifactId>
 				<configuration>
 					<deployables>
-						<deployable>
+						<!-- deployable>
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>
-							<artifactId>passwordstore.app</artifactId>
+							<artifactId>purifinityserver.app</artifactId>
 							<type>ear</type>
 							<properties>
-								<name>passwordstore.app.ear</name>
+								<name>purifinityserver.app.ear</name>
 							</properties>
-						</deployable>
+						</deployable -->
 					</deployables>
 				</configuration>
 			</plugin>
