@@ -3,9 +3,7 @@ package com.puresoltechnologies.purifinity.framework.store.db;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import com.puresoltechnologies.purifinity.commons.test.AbstractCassandraTest;
-
-public abstract class AbstractDbStoreTest extends AbstractCassandraTest {
+public abstract class AbstractDbStoreTest {
 
 	@BeforeClass
 	public static void connect() throws CassandraConnectionException {

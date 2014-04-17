@@ -3,9 +3,7 @@ package com.puresoltechnologies.purifinity.framework.store.db;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.commons.test.AbstractCassandraTest;
-
-public class CassandraConnectionIT extends AbstractCassandraTest {
+public class CassandraConnectionIT {
 
 	@Before
 	public void checkForDisconnected() {

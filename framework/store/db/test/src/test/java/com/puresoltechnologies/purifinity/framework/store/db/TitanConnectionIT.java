@@ -3,9 +3,7 @@ package com.puresoltechnologies.purifinity.framework.store.db;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.commons.test.AbstractCassandraTest;
-
-public class TitanConnectionIT extends AbstractCassandraTest {
+public class TitanConnectionIT {
 
 	@Before
 	public void checkForDisconnected() {

@@ -8,12 +8,11 @@ import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.commons.test.AbstractCassandraTest;
 import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Vertex;
 
-public class BaseTitanIT extends AbstractCassandraTest {
+public class BaseTitanIT {
 
 	@Test
 	public void test() {

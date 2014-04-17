@@ -12,10 +12,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache</groupId>
-			<artifactId>cassandra.server.bundle</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>

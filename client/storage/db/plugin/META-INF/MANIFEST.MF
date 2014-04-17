@@ -6,7 +6,6 @@ Bundle-Version: 0.3.0.qualifier
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.8.0",
  org.eclipse.ui;bundle-version="3.103.0",
  org.slf4j.api;bundle-version="1.6.4",
- org.apache.cassandra.server.bundle;bundle-version="2.0.4",
  com.datastax.cassandra.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.framework.commons.utils.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.3.0",

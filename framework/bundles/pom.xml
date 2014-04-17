@@ -14,7 +14,6 @@
 		<module>org.apache.commons.commons-math.bundle</module>
 		<module>org.reflections.reflections.external.bundle</module>
 		<module>org.codehaus.jackson.jackson-jaxrs.external.bundle</module>
-		<module>org.apache.cassandra.server.bundle</module>
 		<module>com.datastax.cassandra.bundle</module>
 		<module>com.thinkaurelius.titan.bundle</module>
 	</modules>

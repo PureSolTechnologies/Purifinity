@@ -1,11 +1,5 @@
 package com.puresoltechnologies.purifinity.client.storage.db;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.apache.cassandra.server.CassandraServer;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -46,13 +40,7 @@ public class Activator extends AbstractUIPlugin {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					monitor.beginTask("Starting", 4);
-					monitor.subTask("Cassandra process");
-					CassandraServer.start(getEclipseHome());
-					monitor.worked(1);
-					monitor.subTask("Wait for Cassandra");
-					CassandraServer.waitForStartup(15000);
-					monitor.worked(1);
+					monitor.beginTask("Starting", 2);
 					monitor.subTask("Connect to Cassandra");
 					CassandraConnection.connect();
 					monitor.worked(1);
@@ -61,7 +49,7 @@ public class Activator extends AbstractUIPlugin {
 					monitor.worked(1);
 					monitor.done();
 					return Status.OK_STATUS;
-				} catch (IOException | CassandraConnectionException e) {
+				} catch (CassandraConnectionException e) {
 					monitor.done();
 					return new Status(Status.ERROR, getBundle()
 							.getSymbolicName(),
@@ -78,17 +66,6 @@ public class Activator extends AbstractUIPlugin {
 			throw new RuntimeException(result.getMessage(),
 					result.getException());
 		}
-	}
-
-	private static File getEclipseHome() throws MalformedURLException {
-		String eclipseHomeLocation = System
-				.getProperty("eclipse.home.location");
-		if (eclipseHomeLocation == null) {
-			throw new RuntimeException(
-					"Eclipse home location (eclipse.home.location) was not set.");
-		}
-		URL eclipseHomeLocationURL = new URL(eclipseHomeLocation);
-		return new File(eclipseHomeLocationURL.getFile());
 	}
 
 	private void setDBUIEnabled(final boolean enabled) {
@@ -121,7 +98,6 @@ public class Activator extends AbstractUIPlugin {
 	public void stop(BundleContext context) throws Exception {
 		TitanConnection.disconnect();
 		CassandraConnection.disconnect();
-		CassandraServer.stop();
 		super.stop(context);
 		if (plugin == null) {
 			throw new RuntimeException("A " + getClass().getName()
