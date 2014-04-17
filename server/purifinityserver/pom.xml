@@ -20,6 +20,7 @@
 		<!-- module>rest.impl</module -->
 		<module>socket</module>
 		<module>client</module>
+		<module>client.bundle</module>
 		<module>app</module>
 		<module>test</module>
 		<!-- module>ui.web</module -->
