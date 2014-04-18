@@ -346,7 +346,7 @@
 				<security-domain name="passwordstore" cache-type="default">
 					<authentication>
 						<login-module
-							code="com.puresol.accountmanager.login.PasswordStoreLoginModule"
+							code="com.puresoltechnologies.purifinity.server.accountmanager.login.PasswordStoreLoginModule"
 							flag="sufficient">
 						</login-module>
 					</authentication>

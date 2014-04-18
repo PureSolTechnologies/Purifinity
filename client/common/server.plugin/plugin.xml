@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="com.puresoltechnologies.purifinity.client.common.server.ServerCategory"
+            name="Purifinity Server">
+      </category>
+      <view
+            category="com.puresoltechnologies.purifinity.client.common.server.ServerCategory"
+            class="com.puresoltechnologies.purifinity.client.common.server.views.PurifinityServerStatusView"
+            id="com.puresoltechnologies.purifinity.client.common.server.views.PurifinityServerStatusView"
+            name="Purifinity Server Status"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>
