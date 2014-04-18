@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<translations>
-    <translations>
-        <entry>
-            <key>Welcome, {0}!</key>
-            <value>Xin chao, {0}!</value>
-        </entry>
-    </translations>
-</translations>
