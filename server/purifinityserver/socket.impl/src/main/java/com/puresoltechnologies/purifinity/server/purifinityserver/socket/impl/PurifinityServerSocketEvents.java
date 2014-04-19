@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.purifinityserver.socket;
+package com.puresoltechnologies.purifinity.server.purifinityserver.socket.impl;
 
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSeverity;

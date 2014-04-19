@@ -59,7 +59,7 @@
 						<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
 						<!-- assume public classes are in the top package, and private classes 
 							are under ".internal" -->
-						<Export-Package>${bundle.namespace}*;version="${project.version}",javax.websocket.*</Export-Package>
+						<Export-Package>${bundle.namespace}*;version="${project.version}",com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.*,com.puresoltechnologies.purifinity.server.purifinityserver.domain.*,javax.websocket.*</Export-Package>
 						<Import-Package>*</Import-Package>
 						<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
 						<!-- embed compile/runtime dependencies using path that matches the 

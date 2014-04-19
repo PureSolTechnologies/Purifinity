@@ -12,17 +12,14 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<!-- module>ddl</module -->
-		<!-- module>domain</module -->
+		<module>domain</module>
 		<module>core.api</module>
 		<module>core.impl</module>
-		<!-- module>rest.api</module -->
-		<!-- module>rest.impl</module -->
-		<module>socket</module>
+		<module>socket.api</module>
+		<module>socket.impl</module>
 		<module>client</module>
 		<module>client.bundle</module>
 		<module>app</module>
 		<module>test</module>
-		<!-- module>ui.web</module -->
 	</modules>
 </project>

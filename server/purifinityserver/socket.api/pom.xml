@@ -8,12 +8,16 @@
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>purifinityserver.core.api</artifactId>
+	<artifactId>purifinityserver.socket.api</artifactId>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>purifinityserver.domain</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
 		</dependency>
 	</dependencies>
 

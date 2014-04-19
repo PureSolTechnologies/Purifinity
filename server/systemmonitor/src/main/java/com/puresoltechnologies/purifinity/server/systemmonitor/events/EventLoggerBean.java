@@ -16,6 +16,7 @@ import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.exceptions.NoHostAvailableException;
 import com.puresoltechnologies.purifinity.server.systemmonitor.SystemMonitorConstants;
 
 /**
@@ -94,8 +95,8 @@ public class EventLoggerBean implements EventLogger {
 
 	@Override
 	public void logEvent(Event event) {
-		writeToCassandra(event);
 		writeToLogger(event);
+		writeToCassandra(event);
 	}
 
 	private void writeToCassandra(Event event) {
@@ -112,7 +113,14 @@ public class EventLoggerBean implements EventLogger {
 				event.getMessage(), event.getUserEmail(), event.getUserId(),
 				event.getClientHostname(), exceptionMessage,
 				exceptionStacktrace);
-		session.execute(boundStatement);
+		try {
+			session.execute(boundStatement);
+		} catch (NoHostAvailableException e) {
+			logger.info("Reconnect due to NoAvailableHostException.");
+			disconnect();
+			connectAndInitialize();
+			session.execute(boundStatement);
+		}
 	}
 
 	private void writeToLogger(Event event) {
