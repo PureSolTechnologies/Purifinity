@@ -19,8 +19,7 @@ public class PurifinityServerStatusDecoder implements
 
 	@Override
 	public PurifinityServerStatus decode(String s) throws DecodeException {
-		// TODO Auto-generated method stub
-		return null;
+		return new PurifinityServerStatus();
 	}
 
 	@Override

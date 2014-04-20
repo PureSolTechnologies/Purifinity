@@ -1,13 +1,11 @@
 package com.puresoltechnologies.purifinity.server.purifinityserver.client;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
@@ -30,7 +28,6 @@ import com.puresoltechnologies.purifinity.server.purifinityserver.domain.Purifin
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusDecoder;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusEncoder;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusListener;
 
 @ClientEndpoint(encoders = { PurifinityServerStatusEncoder.class }, decoders = { PurifinityServerStatusDecoder.class })
 public class PurifinityServerClientImpl implements PurifinityServerClient {
@@ -50,8 +47,10 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 	private static final WebSocketContainer webSocketContainer = ContainerProvider
 			.getWebSocketContainer();
 
-	private final Set<WeakReference<PurifinityServerStatusListener>> statusListeners = new HashSet<>();
 	private Session session = null;
+	private final Object statusLock = new Object();
+	private PurifinityServerStatus status = null;
+	private CountDownLatch latch = null;
 
 	public final boolean isConnected() {
 		return session != null;
@@ -97,15 +96,10 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 
 	@OnMessage
 	public void retrieveMessage(Session session, PurifinityServerStatus status) {
-		Iterator<WeakReference<PurifinityServerStatusListener>> iterator = statusListeners
-				.iterator();
-		while (iterator.hasNext()) {
-			WeakReference<PurifinityServerStatusListener> listener = iterator
-					.next();
-			PurifinityServerStatusListener ref = listener.get();
-			if (ref != null) {
-				ref.newServerStatus(status);
-			}
+		this.status = status;
+		System.err.println("Status: " + status.getStatusMessage());
+		if (latch != null) {
+			latch.countDown();
 		}
 	}
 
@@ -115,47 +109,21 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 	}
 
 	@Override
-	public void requestServerStatus() throws IOException {
+	public PurifinityServerStatus requestServerStatus() throws IOException {
 		if (!isConnected()) {
 			connect();
 		}
+		status = null;
+		latch = new CountDownLatch(1);
 		Basic basicRemote = session.getBasicRemote();
 		basicRemote.sendText("getStatus");
-	}
-
-	@Override
-	public void addPurifinityServerStatusListener(
-			PurifinityServerStatusListener listener) {
-		cleanListeners();
-		statusListeners.add(new WeakReference<PurifinityServerStatusListener>(
-				listener));
-	}
-
-	@Override
-	public void removePurifinityServerStatusListener(
-			PurifinityServerStatusListener listener) {
-		cleanListeners();
-		Iterator<WeakReference<PurifinityServerStatusListener>> iterator = statusListeners
-				.iterator();
-		while (iterator.hasNext()) {
-			WeakReference<PurifinityServerStatusListener> current = iterator
-					.next();
-			if (current == listener) {
-				iterator.remove();
-			}
+		try {
+			latch.await(10, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	}
-
-	private void cleanListeners() {
-		Iterator<WeakReference<PurifinityServerStatusListener>> iterator = statusListeners
-				.iterator();
-		while (iterator.hasNext()) {
-			WeakReference<PurifinityServerStatusListener> listener = iterator
-					.next();
-			if (listener.get() == null) {
-				iterator.remove();
-			}
-		}
+		return status;
 	}
 
 }

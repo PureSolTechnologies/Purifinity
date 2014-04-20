@@ -2,6 +2,8 @@ package com.puresoltechnologies.purifinity.server.purifinityserver.socket.api;
 
 import java.io.IOException;
 
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.PurifinityServerStatus;
+
 /**
  * This is the official interface to the Purifinity server for the client
  * implementation.
@@ -17,13 +19,7 @@ public interface PurifinityServerClient extends AutoCloseable {
 	 * @throws IOException
 	 *             is throw in cases of IO issues.
 	 */
-	public void requestServerStatus() throws IOException;
-
-	public void addPurifinityServerStatusListener(
-			PurifinityServerStatusListener listener);
-
-	public void removePurifinityServerStatusListener(
-			PurifinityServerStatusListener listener);
+	public PurifinityServerStatus requestServerStatus() throws IOException;
 
 	@Override
 	public void close() throws IOException;

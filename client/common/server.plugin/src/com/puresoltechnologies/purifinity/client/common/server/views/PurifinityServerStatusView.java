@@ -13,9 +13,7 @@ import org.osgi.framework.ServiceReference;
 
 import com.puresoltechnologies.purifinity.client.common.server.Activator;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.PurifinityServerStatus;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusListener;
 
 public class PurifinityServerStatusView extends AbstractPureSolTechnologiesView {
 
@@ -41,19 +39,9 @@ public class PurifinityServerStatusView extends AbstractPureSolTechnologiesView 
 						.getServiceReference(PurifinityServerClient.class);
 				PurifinityServerClient client = activator.getBundle()
 						.getBundleContext().getService(serviceReference);
-				client.addPurifinityServerStatusListener(new PurifinityServerStatusListener() {
-
-					@Override
-					public void newServerStatus(PurifinityServerStatus status) {
-						if (status != null) {
-							text.setText(status.getStatusMessage());
-						} else {
-							text.setText("<null>");
-						}
-					}
-				});
 				try {
-					client.requestServerStatus();
+					text.setText(client.requestServerStatus()
+							.getStatusMessage());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

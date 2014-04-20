@@ -50,13 +50,14 @@ public class PurifinityServerSocket {
 	}
 
 	@OnMessage
-	public void recieveMessage(Session session, String message)
+	public Object recieveMessage(Session session, String message)
 			throws IOException, EncodeException {
 		logger.info("Got message: " + message);
 		if ("getStatus".equals(message)) {
 			PurifinityServerStatus status = purifinityServer.getStatus();
-			session.getBasicRemote().sendObject(status);
+			return status;
 		}
+		return "Nothing to tell...";
 	}
 
 	@OnError
