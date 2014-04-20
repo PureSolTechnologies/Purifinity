@@ -25,14 +25,14 @@ public class PurifinityServerSocketEvents {
 				"Socket was opened.");
 	}
 
-	public static Event createSocketCloseEvent() {
+	public static Event createSocketCloseEvent(String reason) {
 		return new Event(COMPONENT, 0x02, EventType.SYSTEM, EventSeverity.INFO,
-				"Socket is closing.");
+				"Socket is closing of reason '" + reason + "'.");
 	}
 
 	public static Event createSocketErrorEvent(Throwable throwable) {
-		return new Event(COMPONENT, 0x03, EventType.SYSTEM, EventSeverity.INFO,
-				"Socket got error.");
+		return new Event(COMPONENT, 0x03, EventType.SYSTEM,
+				EventSeverity.ERROR, "Socket got error.");
 	}
 
 }

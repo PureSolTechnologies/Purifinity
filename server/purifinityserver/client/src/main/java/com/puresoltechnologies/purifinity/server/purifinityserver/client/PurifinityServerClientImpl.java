@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javax.websocket.ClientEndpoint;
 import javax.websocket.CloseReason;
+import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;
 import javax.websocket.EndpointConfig;
@@ -52,12 +53,8 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 	private static final WebSocketContainer webSocketContainer = ContainerProvider
 			.getWebSocketContainer();
 
-	private final Session session;
+	private Session session = null;
 
-	public PurifinityServerClientImpl() {
-		session = webSocketContainer.connectToServer(this, DEFAULT_URI);
-	}
-	
 	public final boolean isConnected() {
 		return session != null;
 	}
@@ -68,6 +65,7 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 				throw new IllegalStateException(
 						"Client was already connected to server.");
 			}
+			session = webSocketContainer.connectToServer(this, DEFAULT_URI);
 		} catch (DeploymentException e) {
 			throw new RuntimeException(
 					"Connecting to the server was not possible.", e);
@@ -80,7 +78,8 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 			throw new IllegalStateException(
 					"Client was not connected to server, yet.");
 		}
-		session.close();
+		session.close(new CloseReason(CloseCodes.NORMAL_CLOSURE,
+				"Close was requested."));
 	}
 
 	@OnOpen

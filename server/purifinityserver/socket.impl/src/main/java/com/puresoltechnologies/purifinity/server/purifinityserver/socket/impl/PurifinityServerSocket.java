@@ -41,8 +41,10 @@ public class PurifinityServerSocket {
 
 	@OnClose
 	public void close(Session session, CloseReason reason) {
+		String reasonPhrase = reason != null ? reason.getReasonPhrase()
+				: "<no reason provided>";
 		eventLogger.logEvent(PurifinityServerSocketEvents
-				.createSocketCloseEvent());
+				.createSocketCloseEvent(reasonPhrase));
 	}
 
 	@OnMessage

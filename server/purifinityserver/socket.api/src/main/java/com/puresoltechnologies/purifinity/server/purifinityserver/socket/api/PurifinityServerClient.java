@@ -24,4 +24,8 @@ public interface PurifinityServerClient extends AutoCloseable {
 
 	public void removePurifinityServerStatusListener(
 			PurifinityServerStatusListener listener);
+
+	@Override
+	public void close() throws IOException;
+
 }

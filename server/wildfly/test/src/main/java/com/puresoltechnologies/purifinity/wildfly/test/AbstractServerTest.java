@@ -42,7 +42,7 @@ import com.puresoltechnologies.purifinity.wildfly.test.mockito.MockitoExtension;
  * @author Rick-Rainer Ludwig
  */
 @RunWith(Arquillian.class)
-public abstract class AbstractServerTest {
+public abstract class AbstractServerTest extends AbstractArquillianTest {
 	/** The name of the test archive. */
 	public static final String TEST_JAR_NAME = "test.jar";
 
@@ -53,10 +53,9 @@ public abstract class AbstractServerTest {
 
 	private static final String DUMMY_WAR = "dummy.war";
 	private static final String WAR_EXTENSION = ".war";
-	private static final String EAR_EXTENSION = ".ear";
-	private static final String APP_TARGET = "../app/target";
-	private static final String TARGET = "target/";
-	private static final String TEST_RESOURCES = "src/test/resources/";
+	private static final File TARGET_DIRECTORY = new File("target/");
+	private static final File TEST_RESOURCES_DIRECTORY = new File(
+			"src/test/resources/");
 
 	/**
 	 * The {@link MockitoExtension}.
@@ -71,29 +70,15 @@ public abstract class AbstractServerTest {
 	 */
 	@Deployment
 	public static EnterpriseArchive createArchive() {
-		// first, locate the paths to the EAR and the -test.jar of the actual
-		// facility
-		File testJarDir = new File(TARGET);
-		File appDir = new File(APP_TARGET);
-
-		if (!appDir.exists() || !testJarDir.exists()) {
+		// Check for Maven build
+		if (!TARGET_DIRECTORY.exists()) {
 			String msg = "Build Application with Maven first!";
 			logger.error(msg);
 			throw new IllegalStateException(msg);
 		}
 
-		// now, search for the EAR and the -test.jar
-		File[] earFiles = appDir.listFiles(new FilenameSuffixFilter(
-				EAR_EXTENSION));
-		if (earFiles.length != 1) {
-			String msg = "Can not find EAR of the project. Build Application with Maven first!";
-			logger.error(msg);
-			throw new IllegalStateException(msg);
-		}
-
-		File earFile = earFiles[0];
-
 		// create the EAR and JAR from the file
+		File earFile = findProjectEARFile();
 		EnterpriseArchive ear = ShrinkWrap.createFromZipFile(
 				EnterpriseArchive.class, earFile);
 
@@ -104,7 +89,7 @@ public abstract class AbstractServerTest {
 		ear.addAsModule(testJar);
 
 		// replace app deployment descriptor with the provided by the test
-		File testDeploymentDesc = new File(TEST_RESOURCES + "/"
+		File testDeploymentDesc = new File(TEST_RESOURCES_DIRECTORY + "/"
 				+ DEPLOYMENT_STRUCTURE_FILE);
 		if (testDeploymentDesc.exists()) {
 			Node deplStructNode = ear.get(DEPLOYMENT_STRUCTURE_FILE);
@@ -188,14 +173,14 @@ public abstract class AbstractServerTest {
 				TEST_JAR_NAME);
 
 		// add resources
-		File testResourcesDir = new File(TEST_RESOURCES);
-		if (testResourcesDir.exists()) {
-			ResourceUtils.addResources(testJar, testResourcesDir,
+		if (TEST_RESOURCES_DIRECTORY.exists()) {
+			ResourceUtils.addResources(testJar, TEST_RESOURCES_DIRECTORY,
 					new ResourceFilterForSuffixExclusion(
 							DEPLOYMENT_STRUCTURE_FILE));
 		}
 
 		// add common test class to the test.jar
+		testJar.addClass(AbstractArquillianTest.class);
 		testJar.addClass(AbstractServerTest.class);
 		// add Mockito
 		testJar.addPackages(true, Mockito.class.getPackage());
@@ -225,7 +210,6 @@ public abstract class AbstractServerTest {
 			List<String> extensions = new ArrayList<String>();
 			while (resources.hasMoreElements()) {
 				URL resource = resources.nextElement();
-				@SuppressWarnings("unchecked")
 				List<String> lines = IOUtils.readLines(resource.openStream());
 				extensions.addAll(lines);
 			}

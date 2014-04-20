@@ -99,7 +99,7 @@ public class EventLoggerBean implements EventLogger {
 		writeToCassandra(event);
 	}
 
-	private void writeToCassandra(Event event) {
+	protected void writeToCassandra(Event event) {
 		Throwable throwable = event.getThrowable();
 		String exceptionMessage = null;
 		String exceptionStacktrace = null;
@@ -116,27 +116,32 @@ public class EventLoggerBean implements EventLogger {
 		try {
 			session.execute(boundStatement);
 		} catch (NoHostAvailableException e) {
-			logger.info("Reconnect due to NoAvailableHostException.");
+			logger.warn("Reconnect due to NoAvailableHostException.");
 			disconnect();
 			connectAndInitialize();
 			session.execute(boundStatement);
 		}
 	}
 
-	private void writeToLogger(Event event) {
+	protected void writeToLogger(Event event) {
 		String message = "=====| " + event.getSeverity() + " event: "
 				+ event.getMessage() + " (time=" + event.getTime() + ";type="
 				+ event.getType() + ") |=====";
+		Throwable throwable = event.getThrowable();
 		switch (event.getSeverity()) {
 		case INFO:
 			logger.info(message);
 			break;
 		case WARNING:
-			logger.warn(message);
+			if (throwable == null) {
+				logger.warn(message);
+			} else {
+				logger.warn(message, throwable);
+			}
 			break;
 		case ERROR:
 		case FATAL:
-			logger.error(message);
+			logger.error(message, throwable);
 			break;
 		}
 	}
