@@ -24,4 +24,22 @@
 		</dependency>
 	</dependencies>
 
+<build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-ear-plugin</artifactId>
+        <configuration>
+           <modules>
+             <webModule>
+               <groupId>com.puresoltechnologies.purifinity.server</groupId>
+               <artifactId>purifinityserver.socket.impl</artifactId>
+               <contextRoot>/purifinityserver</contextRoot>
+             </webModule>
+          </modules>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  
 </project>

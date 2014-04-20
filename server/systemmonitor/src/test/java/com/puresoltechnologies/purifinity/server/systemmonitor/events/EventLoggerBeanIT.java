@@ -10,7 +10,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -40,11 +39,6 @@ public class EventLoggerBeanIT {
 	public void setup() {
 		eventLogger = weldContainer.instance().select(EventLogger.class).get();
 		assertNotNull(eventLogger);
-	}
-
-	@After
-	public void tearDown() {
-		((EventLoggerBean) eventLogger).disconnect();
 	}
 
 	@Test

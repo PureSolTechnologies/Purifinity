@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Singleton;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -16,7 +17,6 @@ import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
-import com.datastax.driver.core.exceptions.NoHostAvailableException;
 import com.puresoltechnologies.purifinity.server.systemmonitor.SystemMonitorConstants;
 
 /**
@@ -25,6 +25,7 @@ import com.puresoltechnologies.purifinity.server.systemmonitor.SystemMonitorCons
  * @author Rick-Rainer Ludwig
  * 
  */
+@Singleton
 public class EventLoggerBean implements EventLogger {
 
 	private static final long serialVersionUID = -4162895953533068913L;
@@ -52,7 +53,7 @@ public class EventLoggerBean implements EventLogger {
 	private PreparedStatement preparedLogEventStatement = null;
 
 	@PostConstruct
-	public void connectAndInitialize() {
+	private void connectAndInitialize() {
 		logger.debug("Connect EventLogger to Cassandra...");
 		cluster = Cluster.builder()
 				.addContactPoints(SystemMonitorConstants.CASSANDRA_HOST)
@@ -62,15 +63,11 @@ public class EventLoggerBean implements EventLogger {
 				.connect(SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME);
 		logger.debug("Session is connected.");
 		logger.info("EventLogger connected to Cassandra.");
-		createPreparedStatements();
-	}
-
-	private void createPreparedStatements() {
 		preparedLogEventStatement = session.prepare(LOG_EVENT_STATEMENT);
 	}
 
 	@PreDestroy
-	public void disconnect() {
+	private void disconnect() {
 		logger.debug("EventLogger is going to disconnet from Cassandra...");
 		session.close();
 		logger.debug("Session was closed.");
@@ -107,19 +104,17 @@ public class EventLoggerBean implements EventLogger {
 			exceptionMessage = throwable.getMessage();
 			exceptionStacktrace = getStackTrace(throwable);
 		}
-		BoundStatement boundStatement = preparedLogEventStatement.bind(
-				event.getTime(), event.getComponent(), event.getEventId(),
-				server, event.getType().name(), event.getSeverity().name(),
-				event.getMessage(), event.getUserEmail(), event.getUserId(),
-				event.getClientHostname(), exceptionMessage,
-				exceptionStacktrace);
-		try {
+		if (!session.isClosed()) {
+			BoundStatement boundStatement = preparedLogEventStatement.bind(
+					event.getTime(), event.getComponent(), event.getEventId(),
+					server, event.getType().name(), event.getSeverity().name(),
+					event.getMessage(), event.getUserEmail(),
+					event.getUserId(), event.getClientHostname(),
+					exceptionMessage, exceptionStacktrace);
 			session.execute(boundStatement);
-		} catch (NoHostAvailableException e) {
-			logger.warn("Reconnect due to NoAvailableHostException.");
-			disconnect();
-			connectAndInitialize();
-			session.execute(boundStatement);
+		} else {
+			throw new IllegalStateException(
+					"Connection Cassandra was closed already!");
 		}
 	}
 

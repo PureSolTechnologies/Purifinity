@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.purifinityserver.socket.impl;
 
 import java.io.IOException;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.websocket.CloseReason;
 import javax.websocket.EncodeException;
@@ -22,6 +23,7 @@ import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.Pur
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
 @ServerEndpoint(value = "/socket", encoders = { PurifinityServerStatusEncoder.class }, decoders = { PurifinityServerStatusDecoder.class })
+@Stateless
 public class PurifinityServerSocket {
 
 	@Inject

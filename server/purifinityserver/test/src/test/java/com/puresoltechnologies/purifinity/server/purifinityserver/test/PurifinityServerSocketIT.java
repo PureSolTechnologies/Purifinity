@@ -23,12 +23,10 @@ public class PurifinityServerSocketIT extends
 	@Test
 	public void test() throws Exception {
 		Session session = webSocketContainer.connectToServer(this, new URI(
-				"ws://localhost:8080/purifinityserver.socket.impl/socket"));
+				"ws://localhost:8080/purifinityserver/socket"));
 		try {
-			System.err.println("Before");
 			Basic basic = session.getBasicRemote();
-			basic.sendText("Hallo, Socket!");
-			System.err.println("After");
+			basic.sendText("getStatus");
 		} finally {
 			session.close(new CloseReason(CloseCodes.GOING_AWAY,
 					"We are done..."));

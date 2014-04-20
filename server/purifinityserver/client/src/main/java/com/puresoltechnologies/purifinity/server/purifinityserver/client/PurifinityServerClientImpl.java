@@ -38,13 +38,10 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 	private static final Logger logger = LoggerFactory
 			.getLogger(PurifinityServerClientImpl.class);
 
-	private final Set<WeakReference<PurifinityServerStatusListener>> statusListeners = new HashSet<>();
-
 	private static final URI DEFAULT_URI;
 	static {
 		try {
-			DEFAULT_URI = new URI(
-					"ws://localhost:8080/purifinityserver.socket.impl/socket");
+			DEFAULT_URI = new URI("ws://localhost:8080/purifinityserver/socket");
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
@@ -53,6 +50,7 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 	private static final WebSocketContainer webSocketContainer = ContainerProvider
 			.getWebSocketContainer();
 
+	private final Set<WeakReference<PurifinityServerStatusListener>> statusListeners = new HashSet<>();
 	private Session session = null;
 
 	public final boolean isConnected() {
