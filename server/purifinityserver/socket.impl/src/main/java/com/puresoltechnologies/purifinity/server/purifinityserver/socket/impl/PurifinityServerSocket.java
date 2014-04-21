@@ -16,7 +16,12 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.slf4j.Logger;
 
+import com.puresoltechnologies.purifinity.server.purifinityserver.core.api.ChartDataProvider;
 import com.puresoltechnologies.purifinity.server.purifinityserver.core.api.PurifinityServer;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ChartData1D;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.PurifinityServerStatus;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ChartData1DRequest;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ChartData1DRequestDecoder;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusEncoder;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequest;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequestDecoder;
@@ -24,7 +29,8 @@ import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogge
 
 @ServerEndpoint(value = "/socket", //
 encoders = { PurifinityServerStatusEncoder.class }, //
-decoders = { PurifinityServerStatusRequestDecoder.class })
+decoders = { PurifinityServerStatusRequestDecoder.class,
+		ChartData1DRequestDecoder.class })
 @Stateless
 public class PurifinityServerSocket {
 
@@ -36,6 +42,9 @@ public class PurifinityServerSocket {
 
 	@Inject
 	private PurifinityServer purifinityServer;
+
+	@Inject
+	private ChartDataProvider chartDataProvider;
 
 	@OnOpen
 	public void open(Session session, EndpointConfig config) {
@@ -52,11 +61,20 @@ public class PurifinityServerSocket {
 	}
 
 	@OnMessage
-	public Object recieveMessage(Session session,
+	public PurifinityServerStatus recieveMessage(Session session,
 			PurifinityServerStatusRequest request) throws IOException,
 			EncodeException {
 		logger.info("Got request for status.");
 		return purifinityServer.getStatus();
+	}
+
+	@OnMessage
+	public ChartData1D recieveMessage(Session session,
+			ChartData1DRequest request) throws IOException, EncodeException {
+		logger.info("Got request for 1D chart data.");
+		return chartDataProvider.loadValues(request.getAnalysisProject(),
+				request.getAnalysisRun(), request.getEvaluatorName(),
+				request.getParameter(), request.getCodeRangeType());
 	}
 
 	@OnError

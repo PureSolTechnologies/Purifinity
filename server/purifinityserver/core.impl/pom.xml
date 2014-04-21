@@ -14,11 +14,15 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>purifinityserver.core.api</artifactId>
+			<artifactId>databaseconnector.cassandra</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>logger</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>purifinityserver.core.api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

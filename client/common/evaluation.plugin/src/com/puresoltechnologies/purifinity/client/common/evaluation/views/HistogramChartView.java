@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.views;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,13 +46,13 @@ import com.puresoltechnologies.purifinity.client.common.chart.renderer.BarMarkRe
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.HistogramChartViewSettingsDialog;
 import com.puresoltechnologies.purifinity.client.common.evaluation.controls.MetricParameterSelection;
+import com.puresoltechnologies.purifinity.client.common.server.PurifinityServerClientFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartData;
-import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProvider;
-import com.puresoltechnologies.purifinity.framework.store.api.HistogramChartDataProviderFactory;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ChartData1D;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 
 public class HistogramChartView extends AbstractMetricChartViewPart {
 
@@ -66,7 +67,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	private Chart2D chart;
 
-	private HistogramChartData values = new HistogramChartData();
+	private ChartData1D values = new ChartData1D();
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -166,8 +167,8 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					monitor.beginTask("Load data", 6);
-					HistogramChartDataProvider dataProvider = HistogramChartDataProviderFactory
-							.getFactory().getInstance();
+					PurifinityServerClient client = PurifinityServerClientFactory
+							.getInstance();
 					monitor.worked(1);
 					final AnalysisSelection analysisSelection = getAnalysisSelection();
 					monitor.worked(1);
@@ -180,11 +181,15 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 					UUID analysisRunUUID = analysisSelection.getAnalysisRun()
 							.getInformation().getUUID();
 					monitor.worked(1);
-					values = dataProvider.loadValues(analysisProjectUUID,
-							analysisRunUUID, metricParameterSelection
-									.getEvaluatorFactory().getName(),
-							metricParameterSelection.getParameter(),
-							metricParameterSelection.getCodeRangeType());
+					try {
+						values = client.loadValues(analysisProjectUUID,
+								analysisRunUUID, metricParameterSelection
+										.getEvaluatorFactory().getName(),
+								metricParameterSelection.getParameter(),
+								metricParameterSelection.getCodeRangeType());
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
 					monitor.worked(1);
 					monitor.done();
 					new UIJob("Draw Histogram Chart") {

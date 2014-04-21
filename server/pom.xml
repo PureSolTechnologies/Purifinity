@@ -347,7 +347,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.cassandra.utils</artifactId>
+				<artifactId>databaseconnector.cassandra</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -464,13 +464,28 @@
 			<!-- PureSol Technologies -->
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>math</artifactId>
+				<version>${purifinity.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>misc</artifactId>
+				<version>${purifinity.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>osgi</artifactId>
 				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>utils</artifactId>
-				<version>${project.version}</version>
+				<version>${purifinity.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>analysis.domain</artifactId>
+				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
@@ -954,6 +969,7 @@
 		<module>logger</module>
 		<module>systemmonitor</module>
 		<module>systemmonitor.ddl</module>
+		<module>databaseconnector</module>
 		<module>passwordstore</module>
 		<module>accountmanager</module>
 		<module>analysisservice</module>

@@ -4,21 +4,16 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.server</groupId>
-		<artifactId>purifinityserver</artifactId>
+		<artifactId>server-parent</artifactId>
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>purifinityserver.domain</artifactId>
+	<artifactId>databaseconnector</artifactId>
+	<name>${project.groupId}.${project.artifactId}</name>
+	<packaging>pom</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>math</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>misc</artifactId>
-		</dependency>
-	</dependencies>
-
+	<modules>
+		<module>cassandra</module>
+		<module>titan</module>
+	</modules>
 </project>

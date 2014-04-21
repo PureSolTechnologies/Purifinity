@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map.Entry;
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -25,13 +26,21 @@ import javax.websocket.WebSocketContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresoltechnologies.commons.math.Parameter;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ChartData1D;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.PurifinityServerStatus;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ChartData1DDecoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ChartData1DRequest;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ChartData1DRequestEncoder;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusDecoder;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequest;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequestEncoder;
 
-@ClientEndpoint(encoders = { PurifinityServerStatusRequestEncoder.class }, decoders = { PurifinityServerStatusDecoder.class })
+@ClientEndpoint(encoders = { PurifinityServerStatusRequestEncoder.class,
+		ChartData1DRequestEncoder.class }, decoders = {
+		PurifinityServerStatusDecoder.class, ChartData1DDecoder.class })
 public class PurifinityServerClientImpl implements PurifinityServerClient {
 
 	private static final Logger logger = LoggerFactory
@@ -51,9 +60,13 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 
 	private Session session = null;
 
-	private final Object requestServerStatusLock = new Object();
+	private final Object getServerStatusLock = new Object();
 	private PurifinityServerStatus status = null;
-	private CountDownLatch requestServerStatusLatch = null;
+	private CountDownLatch getServerStatusLatch = null;
+
+	private final Object getChartData1DLock = new Object();
+	private ChartData1D data1D = null;
+	private CountDownLatch getChartData1DLatch = null;
 
 	public final boolean isConnected() {
 		return session != null;
@@ -97,31 +110,31 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 				+ closeReason.getReasonPhrase());
 	}
 
-	@OnMessage
-	public void retrieveMessage(Session session, PurifinityServerStatus status) {
-		this.status = status;
-		System.err.println("Status: " + status.getStatusMessage());
-		if (requestServerStatusLatch != null) {
-			requestServerStatusLatch.countDown();
-		}
-	}
-
 	@OnError
 	public void error(Session session, Throwable throwable) {
 		logger.error("Got error.", throwable);
 	}
 
+	@OnMessage
+	public void retrieveMessage(Session session, PurifinityServerStatus status) {
+		this.status = status;
+		System.err.println("Status: " + status.getStatusMessage());
+		if (getServerStatusLatch != null) {
+			getServerStatusLatch.countDown();
+		}
+	}
+
 	@Override
-	public PurifinityServerStatus requestServerStatus() throws IOException {
+	public PurifinityServerStatus getServerStatus() throws IOException {
 		if (!isConnected()) {
 			connect();
 		}
 		Basic basicRemote = session.getBasicRemote();
-		synchronized (requestServerStatusLock) {
+		synchronized (getServerStatusLock) {
 			try {
-				requestServerStatusLatch = new CountDownLatch(1);
+				getServerStatusLatch = new CountDownLatch(1);
 				basicRemote.sendObject(new PurifinityServerStatusRequest());
-				requestServerStatusLatch.await(10, TimeUnit.SECONDS);
+				getServerStatusLatch.await(10, TimeUnit.SECONDS);
 			} catch (InterruptedException e) {
 				throw new IOException("Communication was aborted.", e);
 			} catch (EncodeException e) {
@@ -131,4 +144,34 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 		return status;
 	}
 
+	@OnMessage
+	public void retrieveMessage(Session session, ChartData1D data1D) {
+		this.data1D = data1D;
+		if (getChartData1DLatch != null) {
+			getChartData1DLatch.countDown();
+		}
+	}
+
+	@Override
+	public ChartData1D loadValues(UUID analysisProject, UUID analysisRun,
+			String evaluatorName, Parameter<?> parameter,
+			CodeRangeType codeRangeType) throws IOException {
+		if (!isConnected()) {
+			connect();
+		}
+		Basic basicRemote = session.getBasicRemote();
+		synchronized (getChartData1DLock) {
+			try {
+				getChartData1DLatch = new CountDownLatch(1);
+				basicRemote.sendObject(new ChartData1DRequest(analysisProject,
+						analysisRun, evaluatorName, parameter, codeRangeType));
+				getChartData1DLatch.await(10, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				throw new IOException("Communication was aborted.", e);
+			} catch (EncodeException e) {
+				throw new RuntimeException("Could not send request.", e);
+			}
+		}
+		return data1D;
+	};
 }

@@ -20,6 +20,10 @@
 			<artifactId>purifinityserver.socket.api</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>analysis.domain</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.eclipse.jetty.websocket</groupId>
 			<artifactId>websocket-client</artifactId>
 		</dependency>

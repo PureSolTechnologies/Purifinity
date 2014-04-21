@@ -9,9 +9,9 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.osgi.framework.ServiceReference;
 
 import com.puresoltechnologies.purifinity.client.common.server.Activator;
+import com.puresoltechnologies.purifinity.client.common.server.PurifinityServerClientFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 
@@ -33,15 +33,11 @@ public class PurifinityServerStatusView extends AbstractPureSolTechnologiesView 
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Activator activator = Activator.getDefault();
-				ServiceReference<PurifinityServerClient> serviceReference = activator
-						.getBundle().getBundleContext()
-						.getServiceReference(PurifinityServerClient.class);
-				PurifinityServerClient client = activator.getBundle()
-						.getBundleContext().getService(serviceReference);
+
+				PurifinityServerClient client = PurifinityServerClientFactory
+						.getInstance();
 				try {
-					text.setText(client.requestServerStatus()
-							.getStatusMessage());
+					text.setText(client.getServerStatus().getStatusMessage());
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

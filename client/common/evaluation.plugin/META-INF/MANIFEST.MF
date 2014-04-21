@@ -32,5 +32,7 @@ Require-Bundle: org.apache.commons.io;bundle-version="2.0.1",
  com.puresoltechnologies.purifinity.client.common.chart.plugin;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.help.plugin;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.3.0",
- com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.3.0"
+ com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.3.0",
+ com.puresoltechnologies.purifinity.client.common.server.plugin;bundle-version="0.3.0",
+ com.puresoltechnologies.purifinity.server.purifinityserver.client.bundle
 Bundle-Activator: com.puresoltechnologies.purifinity.client.common.evaluation.Activator

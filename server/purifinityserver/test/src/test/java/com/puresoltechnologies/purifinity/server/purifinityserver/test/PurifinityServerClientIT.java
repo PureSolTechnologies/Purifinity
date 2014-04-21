@@ -22,7 +22,7 @@ public class PurifinityServerClientIT extends
 			InterruptedException {
 		PurifinityServerClient client = new PurifinityServerClientImpl();
 		try {
-			assertNotNull(client.requestServerStatus());
+			assertNotNull(client.getServerStatus());
 		} finally {
 			client.close();
 		}
@@ -38,7 +38,7 @@ public class PurifinityServerClientIT extends
 						@Override
 						public Void start(int threadId, int eventId)
 								throws Exception {
-							assertNotNull(client.requestServerStatus());
+							assertNotNull(client.getServerStatus());
 							return null;
 						}
 					});
