@@ -18,15 +18,15 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
 
-public class NewAnalysisWizard extends Wizard {
+public class NewProjectWizard extends Wizard {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
-	private final NewAnalysisGeneralSettingsPage generalSettingsPage = new NewAnalysisGeneralSettingsPage();
+	private final NewProjectGeneralSettingsPage generalSettingsPage = new NewProjectGeneralSettingsPage();
 
-	public NewAnalysisWizard() {
+	public NewProjectWizard() {
 		super();
-		setWindowTitle("New Analysis");
+		setWindowTitle("New Project");
 		addPage(generalSettingsPage);
 	}
 
@@ -50,7 +50,8 @@ public class NewAnalysisWizard extends Wizard {
 			AnalysisProjectInformation analysisInformation = analysisStore
 					.createAnalysisProject(analysisSettings);
 
-			AnalysisJob job = new AnalysisJob(analysisInformation, analysisSettings);
+			AnalysisJob job = new AnalysisJob(analysisInformation,
+					analysisSettings);
 			job.schedule();
 			return true;
 		} catch (AnalysisStoreException e) {

@@ -24,7 +24,7 @@ import org.osgi.service.prefs.Preferences;
 
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 
-public class NewAnalysisGeneralSettingsPage extends WizardPage {
+public class NewProjectGeneralSettingsPage extends WizardPage {
 
 	public static final String LAST_NEW_ANALYSIS_SOURCE_DIRECTORY = "lastNewAnalysisSourceDirectory";
 
@@ -34,7 +34,7 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 	private Text textProjectName;
 	private Text textDescription;
 
-	protected NewAnalysisGeneralSettingsPage() {
+	protected NewProjectGeneralSettingsPage() {
 		super("Source Directory");
 		setTitle("General Settings");
 		setMessage("Provide the general settings for the new analysis.");
@@ -106,7 +106,7 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 	private String getLastSourceDirectory() {
 		IEclipsePreferences preferences = ConfigurationScope.INSTANCE
 				.getNode("Code Analysis");
-		Preferences newAnalysisNode = preferences.node("New Analysis");
+		Preferences newAnalysisNode = preferences.node("New Project");
 		return newAnalysisNode.get(LAST_NEW_ANALYSIS_SOURCE_DIRECTORY,
 				System.getProperty("user.home", ""));
 	}
@@ -115,7 +115,7 @@ public class NewAnalysisGeneralSettingsPage extends WizardPage {
 		try {
 			IEclipsePreferences preferences = ConfigurationScope.INSTANCE
 					.getNode("Code Analysis");
-			Preferences newAnalysisNode = preferences.node("New Analysis");
+			Preferences newAnalysisNode = preferences.node("New Project");
 			newAnalysisNode.put(LAST_NEW_ANALYSIS_SOURCE_DIRECTORY, directory);
 			preferences.flush();
 		} catch (BackingStoreException e) {

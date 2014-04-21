@@ -9,7 +9,7 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
-import com.puresoltechnologies.purifinity.client.common.analysis.wizards.NewAnalysisWizard;
+import com.puresoltechnologies.purifinity.client.common.analysis.wizards.NewProjectWizard;
 
 public class NewAnalysisProjectHandler extends AbstractHandler {
 
@@ -29,7 +29,7 @@ public class NewAnalysisProjectHandler extends AbstractHandler {
     public Object execute(ExecutionEvent event) throws ExecutionException {
 	Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 		.getShell();
-	NewAnalysisWizard wizard = new NewAnalysisWizard();
+	NewProjectWizard wizard = new NewProjectWizard();
 	WizardDialog wizardDialog = new WizardDialog(shell, wizard);
 	wizardDialog.open();
 	return null;
