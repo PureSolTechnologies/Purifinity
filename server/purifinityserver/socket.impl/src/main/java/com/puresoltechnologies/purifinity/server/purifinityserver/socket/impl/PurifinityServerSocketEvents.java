@@ -32,7 +32,8 @@ public class PurifinityServerSocketEvents {
 
 	public static Event createSocketErrorEvent(Throwable throwable) {
 		return new Event(COMPONENT, 0x03, EventType.SYSTEM,
-				EventSeverity.ERROR, "Socket got error.");
+				EventSeverity.ERROR, "Socket got error.")
+				.setThrowable(throwable);
 	}
 
 }

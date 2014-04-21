@@ -12,6 +12,7 @@ import javax.websocket.CloseReason;
 import javax.websocket.CloseReason.CloseCodes;
 import javax.websocket.ContainerProvider;
 import javax.websocket.DeploymentException;
+import javax.websocket.EncodeException;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -27,9 +28,10 @@ import org.slf4j.LoggerFactory;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.PurifinityServerStatus;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusDecoder;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusEncoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequest;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequestEncoder;
 
-@ClientEndpoint(encoders = { PurifinityServerStatusEncoder.class }, decoders = { PurifinityServerStatusDecoder.class })
+@ClientEndpoint(encoders = { PurifinityServerStatusRequestEncoder.class }, decoders = { PurifinityServerStatusDecoder.class })
 public class PurifinityServerClientImpl implements PurifinityServerClient {
 
 	private static final Logger logger = LoggerFactory
@@ -48,9 +50,10 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 			.getWebSocketContainer();
 
 	private Session session = null;
-	private final Object statusLock = new Object();
+
+	private final Object requestServerStatusLock = new Object();
 	private PurifinityServerStatus status = null;
-	private CountDownLatch latch = null;
+	private CountDownLatch requestServerStatusLatch = null;
 
 	public final boolean isConnected() {
 		return session != null;
@@ -98,8 +101,8 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 	public void retrieveMessage(Session session, PurifinityServerStatus status) {
 		this.status = status;
 		System.err.println("Status: " + status.getStatusMessage());
-		if (latch != null) {
-			latch.countDown();
+		if (requestServerStatusLatch != null) {
+			requestServerStatusLatch.countDown();
 		}
 	}
 
@@ -113,15 +116,17 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 		if (!isConnected()) {
 			connect();
 		}
-		status = null;
-		latch = new CountDownLatch(1);
 		Basic basicRemote = session.getBasicRemote();
-		basicRemote.sendText("getStatus");
-		try {
-			latch.await(10, TimeUnit.SECONDS);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		synchronized (requestServerStatusLock) {
+			try {
+				requestServerStatusLatch = new CountDownLatch(1);
+				basicRemote.sendObject(new PurifinityServerStatusRequest());
+				requestServerStatusLatch.await(10, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				throw new IOException("Communication was aborted.", e);
+			} catch (EncodeException e) {
+				throw new RuntimeException("Could not send request.", e);
+			}
 		}
 		return status;
 	}

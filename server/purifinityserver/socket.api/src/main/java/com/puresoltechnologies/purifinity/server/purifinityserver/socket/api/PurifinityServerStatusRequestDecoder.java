@@ -7,10 +7,8 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.PurifinityServerStatus;
-
-public class PurifinityServerStatusDecoder implements
-		Decoder.TextStream<PurifinityServerStatus> {
+public class PurifinityServerStatusRequestDecoder implements
+		Decoder.TextStream<PurifinityServerStatusRequest> {
 
 	@Override
 	public void init(EndpointConfig config) {
@@ -21,9 +19,9 @@ public class PurifinityServerStatusDecoder implements
 	}
 
 	@Override
-	public PurifinityServerStatus decode(Reader reader) throws DecodeException,
-			IOException {
-		return new PurifinityServerStatus();
+	public PurifinityServerStatusRequest decode(Reader reader)
+			throws DecodeException, IOException {
+		return new PurifinityServerStatusRequest();
 	}
 
 }

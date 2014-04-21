@@ -12,6 +12,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>commons.test</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>purifinityserver.app</artifactId>
 			<type>ear</type>
@@ -55,14 +59,9 @@
 				<artifactId>cargo-maven2-plugin</artifactId>
 				<configuration>
 					<deployables>
-						<!-- deployable>
-							<groupId>com.puresoltechnologies.purifinity.server</groupId>
-							<artifactId>purifinityserver.app</artifactId>
-							<type>ear</type>
-							<properties>
-								<name>purifinityserver.app.ear</name>
-							</properties>
-						</deployable -->
+						<!-- deployable> <groupId>com.puresoltechnologies.purifinity.server</groupId> 
+							<artifactId>purifinityserver.app</artifactId> <type>ear</type> <properties> 
+							<name>purifinityserver.app.ear</name> </properties> </deployable -->
 					</deployables>
 				</configuration>
 			</plugin>

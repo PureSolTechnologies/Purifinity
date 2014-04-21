@@ -17,12 +17,14 @@ import javax.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.purifinity.server.purifinityserver.core.api.PurifinityServer;
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.PurifinityServerStatus;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusDecoder;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusEncoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequest;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequestDecoder;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
-@ServerEndpoint(value = "/socket", encoders = { PurifinityServerStatusEncoder.class }, decoders = { PurifinityServerStatusDecoder.class })
+@ServerEndpoint(value = "/socket", //
+encoders = { PurifinityServerStatusEncoder.class }, //
+decoders = { PurifinityServerStatusRequestDecoder.class })
 @Stateless
 public class PurifinityServerSocket {
 
@@ -50,14 +52,11 @@ public class PurifinityServerSocket {
 	}
 
 	@OnMessage
-	public Object recieveMessage(Session session, String message)
-			throws IOException, EncodeException {
-		logger.info("Got message: " + message);
-		if ("getStatus".equals(message)) {
-			PurifinityServerStatus status = purifinityServer.getStatus();
-			return status;
-		}
-		return "Nothing to tell...";
+	public Object recieveMessage(Session session,
+			PurifinityServerStatusRequest request) throws IOException,
+			EncodeException {
+		logger.info("Got request for status.");
+		return purifinityServer.getStatus();
 	}
 
 	@OnError

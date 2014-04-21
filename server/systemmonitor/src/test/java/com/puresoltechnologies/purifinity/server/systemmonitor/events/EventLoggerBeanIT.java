@@ -4,9 +4,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.environment.se.WeldContainer;
@@ -14,6 +11,10 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import com.puresoltechnologies.purifinity.commons.test.PerformanceTest;
+import com.puresoltechnologies.purifinity.commons.test.PerformanceTestResult;
+import com.puresoltechnologies.purifinity.commons.test.PerformanceTester;
 
 public class EventLoggerBeanIT {
 
@@ -62,7 +63,6 @@ public class EventLoggerBeanIT {
 
 	@Test
 	public void testParallelFullEntries() throws InterruptedException {
-		int SECOND_TO_MILLIS = 1000;
 		int NUMBER_OF_THREADS = 8;
 		final int NUMBER_OF_EVENTS_PER_THREAD = 125;
 
@@ -70,34 +70,29 @@ public class EventLoggerBeanIT {
 				"This is a test exception", new IllegalArgumentException(
 						"This is a test cause for the test exception."));
 
-		ExecutorService executor = Executors
-				.newFixedThreadPool(NUMBER_OF_THREADS);
-		long start = System.currentTimeMillis();
-		for (int threadId = 0; threadId < NUMBER_OF_THREADS; threadId++) {
-			final int threadIdFinal = threadId;
-			executor.submit(new Runnable() {
+		PerformanceTestResult<Void> performanceResult = PerformanceTester
+				.runPerformanceTest(NUMBER_OF_THREADS,
+						NUMBER_OF_EVENTS_PER_THREAD,
+						new PerformanceTest<Void>() {
 
-				@Override
-				public void run() {
-					String componentName = "Component " + threadIdFinal;
-					for (int eventId = 0; eventId < NUMBER_OF_EVENTS_PER_THREAD; eventId++) {
-						Event event = new Event(componentName, eventId,
-								EventType.USER_ACTION, EventSeverity.INFO,
-								"Hallo");
-						event.setClientHostname("clientHostName");
-						event.setThrowable(testException);
-						event.setUserEmail("user@email.com");
-						event.setUserId(123456);
-						eventLogger.logEvent(event);
-					}
-				}
-			});
-		}
-		executor.shutdown();
-		executor.awaitTermination(60, TimeUnit.SECONDS);
-		long stop = System.currentTimeMillis();
-		double speed = NUMBER_OF_THREADS * NUMBER_OF_EVENTS_PER_THREAD
-				* SECOND_TO_MILLIS / (double) (stop - start);
+							@Override
+							public Void start(int threadId, int eventId) {
+								String componentName = "Component " + threadId;
+								Event event = new Event(componentName, eventId,
+										EventType.USER_ACTION,
+										EventSeverity.INFO, "Hallo");
+								event.setClientHostname("clientHostName");
+								event.setThrowable(testException);
+								event.setUserEmail("user@email.com");
+								event.setUserId(123456);
+								eventLogger.logEvent(event);
+								return null;
+							}
+						});
+
+		System.out.println(performanceResult.toString());
+
+		double speed = performanceResult.getSpeed();
 		System.out.println("EventLogger speed: " + speed + " events/s");
 		assertTrue(speed > 500);
 	}
