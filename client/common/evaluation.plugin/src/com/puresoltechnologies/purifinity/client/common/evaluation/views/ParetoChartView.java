@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.views;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -50,13 +51,13 @@ import com.puresoltechnologies.purifinity.client.common.evaluation.ParetoChartVi
 import com.puresoltechnologies.purifinity.client.common.evaluation.controls.MetricParameterSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.ChartConfigProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.DefaultParetoChartConfigProvider;
+import com.puresoltechnologies.purifinity.client.common.server.PurifinityServerClientFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ExportAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartData;
-import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProvider;
-import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProviderFactory;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 
 public class ParetoChartView extends AbstractMetricChartViewPart {
 
@@ -169,8 +170,8 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Load data", 5);
-				ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
-						.getFactory().getInstance();
+				PurifinityServerClient client = PurifinityServerClientFactory
+						.getInstance();
 				monitor.worked(1);
 				final AnalysisSelection analysisSelection = getAnalysisSelection();
 				monitor.worked(1);
@@ -180,11 +181,15 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
 						.getInformation().getUUID();
 				monitor.worked(1);
-				values = dataProvider.loadValues(analysisProjectUUID,
-						analysisRunUUID, metricParameterSelection
-								.getEvaluatorFactory().getName(),
-						metricParameterSelection.getParameter(),
-						metricParameterSelection.getCodeRangeType());
+				try {
+					values = client.loadParetoChartData(analysisProjectUUID,
+							analysisRunUUID, metricParameterSelection
+									.getEvaluatorFactory().getName(),
+							metricParameterSelection.getParameter(),
+							metricParameterSelection.getCodeRangeType());
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 				monitor.worked(1);
 				monitor.done();
 				new UIJob("Draw Pareto Chart") {

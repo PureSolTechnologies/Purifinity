@@ -28,19 +28,25 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ChartData1D;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.HistogramChartData;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.PurifinityServerStatus;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ChartData1DDecoder;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ChartData1DRequest;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ChartData1DRequestEncoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.HistogramChartDataDecoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.HistogramChartDataRequest;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.HistogramChartDataRequestEncoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ParetoChartDataDecoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ParetoChartDataRequestEncoder;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusDecoder;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequest;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequestEncoder;
 
-@ClientEndpoint(encoders = { PurifinityServerStatusRequestEncoder.class,
-		ChartData1DRequestEncoder.class }, decoders = {
-		PurifinityServerStatusDecoder.class, ChartData1DDecoder.class })
+@ClientEndpoint(//
+encoders = { PurifinityServerStatusRequestEncoder.class,
+		HistogramChartDataRequestEncoder.class,
+		ParetoChartDataRequestEncoder.class }, //
+decoders = { PurifinityServerStatusDecoder.class,
+		HistogramChartDataDecoder.class, ParetoChartDataDecoder.class })
 public class PurifinityServerClientImpl implements PurifinityServerClient {
 
 	private static final Logger logger = LoggerFactory
@@ -64,9 +70,13 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 	private PurifinityServerStatus status = null;
 	private CountDownLatch getServerStatusLatch = null;
 
-	private final Object getChartData1DLock = new Object();
-	private ChartData1D data1D = null;
-	private CountDownLatch getChartData1DLatch = null;
+	private final Object getHistogramChartDataLock = new Object();
+	private HistogramChartData historgramChartData = null;
+	private CountDownLatch getHistogramChartDataLatch = null;
+
+	private final Object getParetoChartDataLock = new Object();
+	private ParetoChartData paretoChartData = null;
+	private CountDownLatch getParetoChartDataLatch = null;
 
 	public final boolean isConnected() {
 		return session != null;
@@ -145,33 +155,68 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 	}
 
 	@OnMessage
-	public void retrieveMessage(Session session, ChartData1D data1D) {
-		this.data1D = data1D;
-		if (getChartData1DLatch != null) {
-			getChartData1DLatch.countDown();
+	public void retrieveHistogramChartData(Session session,
+			HistogramChartData data) {
+		this.historgramChartData = data;
+		if (getHistogramChartDataLatch != null) {
+			getHistogramChartDataLatch.countDown();
+		}
+	}
+
+	@OnMessage
+	public void retrieveParetoChartData(Session session, ParetoChartData data) {
+		this.paretoChartData = data;
+		if (getHistogramChartDataLatch != null) {
+			getHistogramChartDataLatch.countDown();
 		}
 	}
 
 	@Override
-	public ChartData1D loadValues(UUID analysisProject, UUID analysisRun,
-			String evaluatorName, Parameter<?> parameter,
+	public HistogramChartData loadHistogramChartData(UUID analysisProject,
+			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType) throws IOException {
 		if (!isConnected()) {
 			connect();
 		}
 		Basic basicRemote = session.getBasicRemote();
-		synchronized (getChartData1DLock) {
+		synchronized (getHistogramChartDataLock) {
 			try {
-				getChartData1DLatch = new CountDownLatch(1);
-				basicRemote.sendObject(new ChartData1DRequest(analysisProject,
-						analysisRun, evaluatorName, parameter, codeRangeType));
-				getChartData1DLatch.await(10, TimeUnit.SECONDS);
+				getHistogramChartDataLatch = new CountDownLatch(1);
+				basicRemote.sendObject(new HistogramChartDataRequest(
+						analysisProject, analysisRun, evaluatorName, parameter,
+						codeRangeType));
+				getHistogramChartDataLatch.await(10, TimeUnit.SECONDS);
 			} catch (InterruptedException e) {
 				throw new IOException("Communication was aborted.", e);
 			} catch (EncodeException e) {
 				throw new RuntimeException("Could not send request.", e);
 			}
 		}
-		return data1D;
+		return historgramChartData;
 	};
+
+	@Override
+	public ParetoChartData loadParetoChartData(UUID analysisProject,
+			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
+			CodeRangeType codeRangeType) throws IOException {
+		if (!isConnected()) {
+			connect();
+		}
+		Basic basicRemote = session.getBasicRemote();
+		synchronized (getParetoChartDataLock) {
+			try {
+				getParetoChartDataLatch = new CountDownLatch(1);
+				basicRemote.sendObject(new HistogramChartDataRequest(
+						analysisProject, analysisRun, evaluatorName, parameter,
+						codeRangeType));
+				getParetoChartDataLatch.await(10, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				throw new IOException("Communication was aborted.", e);
+			} catch (EncodeException e) {
+				throw new RuntimeException("Could not send request.", e);
+			}
+		}
+		return paretoChartData;
+	};
+
 }

@@ -1,11 +1,14 @@
 package com.puresoltechnologies.purifinity.server.purifinityserver.socket.api;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 
-public class ChartData1DRequest {
+public class HistogramChartDataRequest implements Serializable {
+
+	private static final long serialVersionUID = 1977852266179529031L;
 
 	private final UUID analysisProject;
 	private final UUID analysisRun;
@@ -13,7 +16,7 @@ public class ChartData1DRequest {
 	private final Parameter<?> parameter;
 	private final CodeRangeType codeRangeType;
 
-	public ChartData1DRequest(UUID analysisProject, UUID analysisRun,
+	public HistogramChartDataRequest(UUID analysisProject, UUID analysisRun,
 			String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType) {
 		super();

@@ -5,7 +5,8 @@ import java.util.UUID;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ChartData1D;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.HistogramChartData;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.PurifinityServerStatus;
 
 /**
@@ -38,7 +39,21 @@ public interface PurifinityServerClient extends AutoCloseable {
 	 * @return
 	 * @throws IOException
 	 */
-	public ChartData1D loadValues(UUID analysisProject, UUID analysisRun,
-			String evaluatorName, Parameter<?> parameter,
+	public HistogramChartData loadHistogramChartData(UUID analysisProject,
+			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
+			CodeRangeType codeRangeType) throws IOException;
+
+	/**
+	 * 
+	 * @param analysisProject
+	 * @param analysisRun
+	 * @param evaluatorName
+	 * @param parameter
+	 * @param codeRangeType
+	 * @return
+	 * @throws IOException
+	 */
+	public ParetoChartData loadParetoChartData(UUID analysisProject,
+			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType) throws IOException;
 }

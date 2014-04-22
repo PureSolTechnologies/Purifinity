@@ -8,17 +8,17 @@ import java.util.Map;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashId;
 
-public class ChartData1D implements Serializable {
+public class HistogramChartData implements Serializable {
 
 	private static final long serialVersionUID = 6282396037915983592L;
 
 	private final Map<HashId, List<Value<?>>> values;
 
-	public ChartData1D(Map<HashId, List<Value<?>>> values) {
+	public HistogramChartData(Map<HashId, List<Value<?>>> values) {
 		this.values = values;
 	}
 
-	public ChartData1D() {
+	public HistogramChartData() {
 		values = new HashMap<HashId, List<Value<?>>>();
 	}
 

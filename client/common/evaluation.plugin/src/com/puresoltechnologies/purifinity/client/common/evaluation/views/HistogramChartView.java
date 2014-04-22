@@ -51,7 +51,7 @@ import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ChartData1D;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.HistogramChartData;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 
 public class HistogramChartView extends AbstractMetricChartViewPart {
@@ -67,7 +67,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 
 	private Chart2D chart;
 
-	private ChartData1D values = new ChartData1D();
+	private HistogramChartData values = new HistogramChartData();
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
@@ -182,24 +182,29 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 							.getInformation().getUUID();
 					monitor.worked(1);
 					try {
-						values = client.loadValues(analysisProjectUUID,
-								analysisRunUUID, metricParameterSelection
-										.getEvaluatorFactory().getName(),
-								metricParameterSelection.getParameter(),
+						values = client.loadHistogramChartData(
+								analysisProjectUUID, analysisRunUUID,
+								metricParameterSelection.getEvaluatorFactory()
+										.getName(), metricParameterSelection
+										.getParameter(),
 								metricParameterSelection.getCodeRangeType());
 					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
 					monitor.worked(1);
 					monitor.done();
-					new UIJob("Draw Histogram Chart") {
+					if (values != null) {
+						new UIJob("Draw Histogram Chart") {
 
-						@Override
-						public IStatus runInUIThread(IProgressMonitor monitor) {
-							showEvaluation(analysisSelection.getFileTreeNode());
-							return Status.OK_STATUS;
-						}
-					}.schedule();
+							@Override
+							public IStatus runInUIThread(
+									IProgressMonitor monitor) {
+								showEvaluation(analysisSelection
+										.getFileTreeNode());
+								return Status.OK_STATUS;
+							}
+						}.schedule();
+					}
 					return Status.OK_STATUS;
 				}
 			};

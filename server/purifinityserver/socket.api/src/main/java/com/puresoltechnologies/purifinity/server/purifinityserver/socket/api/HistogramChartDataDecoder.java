@@ -8,9 +8,9 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ChartData1D;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.HistogramChartData;
 
-public class ChartData1DDecoder implements Decoder.BinaryStream<ChartData1D> {
+public class HistogramChartDataDecoder implements Decoder.BinaryStream<HistogramChartData> {
 
 	@Override
 	public void init(EndpointConfig config) {
@@ -21,11 +21,11 @@ public class ChartData1DDecoder implements Decoder.BinaryStream<ChartData1D> {
 	}
 
 	@Override
-	public ChartData1D decode(InputStream is) throws DecodeException,
+	public HistogramChartData decode(InputStream is) throws DecodeException,
 			IOException {
 		try {
 			ObjectInputStream objectInputStream = new ObjectInputStream(is);
-			return (ChartData1D) objectInputStream.readObject();
+			return (HistogramChartData) objectInputStream.readObject();
 		} catch (ClassNotFoundException e) {
 			throw new IOException("Could not read object.", e);
 		}

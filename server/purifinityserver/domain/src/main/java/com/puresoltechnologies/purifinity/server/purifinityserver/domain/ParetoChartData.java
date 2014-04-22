@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.framework.store.api;
+package com.puresoltechnologies.purifinity.server.purifinityserver.domain;
 
 import java.util.HashMap;
 import java.util.Map;

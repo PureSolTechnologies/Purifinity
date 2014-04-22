@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.views;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,15 +39,15 @@ import com.puresoltechnologies.purifinity.client.common.chart.Plot;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.CorrelationChartViewSettingsDialog;
+import com.puresoltechnologies.purifinity.client.common.server.PurifinityServerClientFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
-import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartData;
-import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProvider;
-import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProviderFactory;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 
 public class CorrelationChartView extends AbstractMetricChartViewPart {
 
@@ -253,8 +254,8 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Load data", 6);
-				ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
-						.getFactory().getInstance();
+				PurifinityServerClient client = PurifinityServerClientFactory
+						.getInstance();
 				monitor.worked(1);
 				final AnalysisSelection analysisSelection = getAnalysisSelection();
 				monitor.worked(1);
@@ -264,13 +265,21 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
 						.getInformation().getUUID();
 				monitor.worked(1);
-				xValues = dataProvider.loadValues(analysisProjectUUID,
-						analysisRunUUID, xMetricSelection.getName(),
-						xParameterSelection, CodeRangeType.FILE);
+				try {
+					xValues = client.loadParetoChartData(analysisProjectUUID,
+							analysisRunUUID, xMetricSelection.getName(),
+							xParameterSelection, CodeRangeType.FILE);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 				monitor.worked(1);
-				yValues = dataProvider.loadValues(analysisProjectUUID,
-						analysisRunUUID, yMetricSelection.getName(),
-						yParameterSelection, CodeRangeType.FILE);
+				try {
+					yValues = client.loadParetoChartData(analysisProjectUUID,
+							analysisRunUUID, yMetricSelection.getName(),
+							yParameterSelection, CodeRangeType.FILE);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 				monitor.worked(1);
 				monitor.done();
 				new UIJob("Draw Correlation Chart") {

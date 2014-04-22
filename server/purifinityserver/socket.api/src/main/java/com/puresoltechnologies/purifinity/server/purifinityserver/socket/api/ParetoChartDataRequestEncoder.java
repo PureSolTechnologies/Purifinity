@@ -8,9 +8,8 @@ import javax.websocket.EncodeException;
 import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ChartData1D;
-
-public class ChartData1DEncoder implements Encoder.BinaryStream<ChartData1D> {
+public class ParetoChartDataRequestEncoder implements
+		Encoder.BinaryStream<ParetoChartDataRequestEncoder> {
 
 	@Override
 	public void init(EndpointConfig config) {
@@ -21,7 +20,7 @@ public class ChartData1DEncoder implements Encoder.BinaryStream<ChartData1D> {
 	}
 
 	@Override
-	public void encode(ChartData1D object, OutputStream os)
+	public void encode(ParetoChartDataRequestEncoder object, OutputStream os)
 			throws EncodeException, IOException {
 		ObjectOutputStream objectOutputStream = new ObjectOutputStream(os);
 		objectOutputStream.writeObject(object);

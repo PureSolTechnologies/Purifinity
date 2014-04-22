@@ -8,8 +8,8 @@ import java.net.UnknownHostException;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.Singleton;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 
@@ -48,17 +48,15 @@ public class EventLoggerBean implements EventLogger {
 		}
 	}
 
-	private Cluster cluster = null;
+	@Inject
+	private Cluster cluster;
+
 	private Session session = null;
 	private PreparedStatement preparedLogEventStatement = null;
 
 	@PostConstruct
 	private void connectAndInitialize() {
 		logger.debug("Connect EventLogger to Cassandra...");
-		cluster = Cluster.builder()
-				.addContactPoints(SystemMonitorConstants.CASSANDRA_HOST)
-				.withPort(SystemMonitorConstants.CASSANDRA_CQL_PORT).build();
-		logger.debug("Cluster is connected.");
 		session = cluster
 				.connect(SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME);
 		logger.debug("Session is connected.");
@@ -71,8 +69,6 @@ public class EventLoggerBean implements EventLogger {
 		logger.debug("EventLogger is going to disconnet from Cassandra...");
 		session.close();
 		logger.debug("Session was closed.");
-		cluster.close();
-		logger.debug("Cluster was closed.");
 		logger.info("EventLogger disconnected.");
 	}
 

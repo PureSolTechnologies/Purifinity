@@ -24,8 +24,8 @@ public class CassandraConnection {
 	private static final Logger logger = LoggerFactory
 			.getLogger(CassandraConnection.class);
 
-	private static final String CASSANDRA_HOST = "localhost";
-	private static final int CASSANDRA_CQL_PORT = 9042;
+	public static final String CASSANDRA_HOST = "localhost";
+	public static final int CASSANDRA_CQL_PORT = 9042;
 
 	private static final Builder clusterBuilder = Cluster.builder();
 

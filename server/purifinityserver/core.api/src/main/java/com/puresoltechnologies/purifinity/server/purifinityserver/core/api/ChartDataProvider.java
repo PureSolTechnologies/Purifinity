@@ -4,7 +4,8 @@ import java.util.UUID;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ChartData1D;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.HistogramChartData;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
 
 /**
  * This interface represents a the chart data provider for the client.
@@ -14,8 +15,7 @@ import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ChartDa
 public interface ChartDataProvider {
 
 	/**
-	 * This method reads data for a single 1D chart like histogram charts,
-	 * pareto charts and so forth.
+	 * This method reads data for a single histogram chart.
 	 * 
 	 * @param analysisProject
 	 * @param analysisRun
@@ -24,7 +24,21 @@ public interface ChartDataProvider {
 	 * @param codeRangeType
 	 * @return
 	 */
-	public ChartData1D loadValues(UUID analysisProject, UUID analysisRun,
-			String evaluatorName, Parameter<?> parameter,
+	public HistogramChartData loadHistogramChartData(UUID analysisProject,
+			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
+			CodeRangeType codeRangeType);
+
+	/**
+	 * This method reads data for a single pareto chart.
+	 * 
+	 * @param analysisProject
+	 * @param analysisRun
+	 * @param evaluatorName
+	 * @param parameter
+	 * @param codeRangeType
+	 * @return
+	 */
+	public ParetoChartData loadParetoChartData(UUID analysisProject,
+			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType);
 }

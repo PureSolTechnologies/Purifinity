@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -21,12 +22,12 @@ import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
 import com.puresoltechnologies.purifinity.framework.store.db.CassandraElementNames;
 import com.puresoltechnologies.purifinity.framework.store.db.ValueSerializer;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.CassandraKeyspaces;
 import com.puresoltechnologies.purifinity.server.purifinityserver.core.api.ChartDataProvider;
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ChartData1D;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.HistogramChartData;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
 
 @Stateless
 public class ChartDataProviderBean implements ChartDataProvider {
@@ -35,21 +36,35 @@ public class ChartDataProviderBean implements ChartDataProvider {
 	@Named(CassandraKeyspaces.EVALUATION)
 	private Session session;
 
+	private PreparedStatement preparedNumericHistogramChartDataStatement = null;
+	private PreparedStatement preparedCategoryHistogramChartDataStatement = null;
+	private PreparedStatement preparedParetoChartDataStatement = null;
+
+	@PostConstruct
+	public void initialize() {
+		preparedNumericHistogramChartDataStatement = session
+				.prepare("SELECT hashid, numeric_value FROM "
+						+ CassandraElementNames.EVALUATION_METRICS_TABLE
+						+ " WHERE project_uuid=? AND run_uuid=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
+		preparedCategoryHistogramChartDataStatement = session
+				.prepare("SELECT hashid, string_value FROM "
+						+ CassandraElementNames.EVALUATION_METRICS_TABLE
+						+ " WHERE project_uuid=? AND run_uuid=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
+		preparedParetoChartDataStatement = session
+				.prepare("SELECT hashid, code_range_name, numeric_value FROM "
+						+ CassandraElementNames.EVALUATION_METRICS_TABLE
+						+ " WHERE project_uuid=? AND run_uuid=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
+	}
+
 	@Override
-	public ChartData1D loadValues(UUID analysisProject, UUID analysisRun,
-			String evaluatorName, Parameter<?> parameter,
+	public HistogramChartData loadHistogramChartData(UUID analysisProject,
+			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType) {
 		Map<HashId, List<Value<?>>> values = new HashMap<>();
 		if (parameter.isNumeric()) {
-			PreparedStatement preparedStatement = CassandraConnection
-					.getPreparedStatement(
-							session,
-							"SELECT hashid, numeric_value FROM "
-									+ CassandraElementNames.EVALUATION_METRICS_TABLE
-									+ " WHERE project_uuid=? AND run_uuid=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
-			BoundStatement boundStatement = preparedStatement.bind(
-					analysisProject, analysisRun, evaluatorName,
-					parameter.getName(), codeRangeType.name());
+			BoundStatement boundStatement = preparedNumericHistogramChartDataStatement
+					.bind(analysisProject, analysisRun, evaluatorName,
+							parameter.getName(), codeRangeType.name());
 			ResultSet result = session.execute(boundStatement);
 			while (!result.isExhausted()) {
 				Row row = result.one();
@@ -68,15 +83,9 @@ public class ChartDataProviderBean implements ChartDataProvider {
 				valueList.add(new GeneralValue<>(value, metricParameter));
 			}
 		} else {
-			PreparedStatement preparedStatement = CassandraConnection
-					.getPreparedStatement(
-							session,
-							"SELECT hashid, string_value FROM "
-									+ CassandraElementNames.EVALUATION_METRICS_TABLE
-									+ " WHERE project_uuid=? AND run_uuid=? AND evaluator_name=? AND parameter_name=? AND code_range_type=?");
-			BoundStatement boundStatement = preparedStatement.bind(
-					analysisProject, analysisRun, evaluatorName,
-					parameter.getName(), codeRangeType.name());
+			BoundStatement boundStatement = preparedCategoryHistogramChartDataStatement
+					.bind(analysisProject, analysisRun, evaluatorName,
+							parameter.getName(), codeRangeType.name());
 			ResultSet result = session.execute(boundStatement);
 			while (!result.isExhausted()) {
 				Row row = result.one();
@@ -92,7 +101,40 @@ public class ChartDataProviderBean implements ChartDataProvider {
 				valueList.add(value);
 			}
 		}
-		return new ChartData1D(values);
+		return new HistogramChartData(values);
+	}
+
+	@Override
+	public ParetoChartData loadParetoChartData(UUID analysisProject,
+			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
+			CodeRangeType codeRangeType) {
+		Map<HashId, Map<String, Value<? extends Number>>> values = new HashMap<>();
+		if (parameter.isNumeric()) {
+			BoundStatement boundStatement = preparedParetoChartDataStatement
+					.bind(analysisProject, analysisRun, evaluatorName,
+							parameter.getName(), codeRangeType.name());
+			ResultSet result = session.execute(boundStatement);
+			while (!result.isExhausted()) {
+				Row row = result.one();
+				HashId hashId = HashId.valueOf(row.getString(0));
+				String codeRangeName = row.getString(1);
+				Double value = row.getDouble(2);
+
+				ParameterWithArbitraryUnit<Double> metricParameter = new ParameterWithArbitraryUnit<>(
+						parameter.getName(), parameter.getUnit(),
+						parameter.getLevelOfMeasurement(),
+						parameter.getDescription(), Double.class);
+				Map<String, Value<? extends Number>> valueList = values
+						.get(hashId);
+				if (valueList == null) {
+					valueList = new HashMap<>();
+					values.put(hashId, valueList);
+				}
+				valueList.put(codeRangeName, new GeneralValue<>(value,
+						metricParameter));
+			}
+		}
+		return new ParetoChartData(values);
 	}
 
 }

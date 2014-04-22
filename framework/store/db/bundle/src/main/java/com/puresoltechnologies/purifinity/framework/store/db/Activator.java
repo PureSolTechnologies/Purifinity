@@ -21,12 +21,10 @@ import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapDataProvider;
-import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProvider;
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.AnalysisStoreImpl;
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.DirectoryStoreImpl;
 import com.puresoltechnologies.purifinity.framework.store.db.analysis.FileStoreImpl;
 import com.puresoltechnologies.purifinity.framework.store.db.charts.MetricsMapDataProviderImpl;
-import com.puresoltechnologies.purifinity.framework.store.db.charts.ParetoChartDataProviderImpl;
 import com.puresoltechnologies.purifinity.framework.store.db.metrics.BasicCoCoMoEvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.db.metrics.CodeDepthEvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.db.metrics.EntropyEvaluatorStore;
@@ -46,8 +44,6 @@ public class Activator extends AbstractActivator {
 		registerService(AnalysisStore.class, new AnalysisStoreImpl());
 		registerService(DirectoryStore.class, new DirectoryStoreImpl());
 		registerService(FileStore.class, new FileStoreImpl());
-		registerService(ParetoChartDataProvider.class,
-				new ParetoChartDataProviderImpl());
 		registerService(MetricsMapDataProvider.class,
 				new MetricsMapDataProviderImpl());
 

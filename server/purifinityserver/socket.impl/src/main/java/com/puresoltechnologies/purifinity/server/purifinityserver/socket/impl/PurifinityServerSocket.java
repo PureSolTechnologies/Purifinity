@@ -18,19 +18,26 @@ import org.slf4j.Logger;
 
 import com.puresoltechnologies.purifinity.server.purifinityserver.core.api.ChartDataProvider;
 import com.puresoltechnologies.purifinity.server.purifinityserver.core.api.PurifinityServer;
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ChartData1D;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.HistogramChartData;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.PurifinityServerStatus;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ChartData1DRequest;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ChartData1DRequestDecoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.HistogramChartDataEncoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.HistogramChartDataRequest;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.HistogramChartDataRequestDecoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ParetoChartDataEncoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ParetoChartDataRequest;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ParetoChartDataRequestDecoder;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusEncoder;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequest;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequestDecoder;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
 @ServerEndpoint(value = "/socket", //
-encoders = { PurifinityServerStatusEncoder.class }, //
+encoders = { PurifinityServerStatusEncoder.class,
+		HistogramChartDataEncoder.class, ParetoChartDataEncoder.class }, //
 decoders = { PurifinityServerStatusRequestDecoder.class,
-		ChartData1DRequestDecoder.class })
+		HistogramChartDataRequestDecoder.class,
+		ParetoChartDataRequestDecoder.class })
 @Stateless
 public class PurifinityServerSocket {
 
@@ -61,7 +68,7 @@ public class PurifinityServerSocket {
 	}
 
 	@OnMessage
-	public PurifinityServerStatus recieveMessage(Session session,
+	public PurifinityServerStatus getServerStatus(Session session,
 			PurifinityServerStatusRequest request) throws IOException,
 			EncodeException {
 		logger.info("Got request for status.");
@@ -69,12 +76,34 @@ public class PurifinityServerSocket {
 	}
 
 	@OnMessage
-	public ChartData1D recieveMessage(Session session,
-			ChartData1DRequest request) throws IOException, EncodeException {
+	public HistogramChartData getHistogramChartData(Session session,
+			HistogramChartDataRequest request) throws IOException,
+			EncodeException {
+		logger.info("Got request for histogram chart data.");
+		return chartDataProvider.loadHistogramChartData(
+				request.getAnalysisProject(), request.getAnalysisRun(),
+				request.getEvaluatorName(), request.getParameter(),
+				request.getCodeRangeType());
+	}
+
+	@OnMessage
+	public ParetoChartData getHistogramChartData(Session session,
+			ParetoChartDataRequest request) {
+		logger.info("Got request for pareto chart data.");
+		return chartDataProvider.loadParetoChartData(
+				request.getAnalysisProject(), request.getAnalysisRun(),
+				request.getEvaluatorName(), request.getParameter(),
+				request.getCodeRangeType());
+	}
+
+	@OnMessage
+	public ParetoChartData getParetoChartData(Session session,
+			ParetoChartDataRequest request) throws IOException, EncodeException {
 		logger.info("Got request for 1D chart data.");
-		return chartDataProvider.loadValues(request.getAnalysisProject(),
-				request.getAnalysisRun(), request.getEvaluatorName(),
-				request.getParameter(), request.getCodeRangeType());
+		return chartDataProvider.loadParetoChartData(
+				request.getAnalysisProject(), request.getAnalysisRun(),
+				request.getEvaluatorName(), request.getParameter(),
+				request.getCodeRangeType());
 	}
 
 	@OnError

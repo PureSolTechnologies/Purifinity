@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.metrics.main
 
 import static com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,6 +46,7 @@ import com.puresoltechnologies.purifinity.client.common.chart.Plot;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractMetricChartViewPart;
+import com.puresoltechnologies.purifinity.client.common.server.PurifinityServerClientFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ExportAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
@@ -52,9 +54,8 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsA
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
-import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartData;
-import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProvider;
-import com.puresoltechnologies.purifinity.framework.store.api.ParetoChartDataProviderFactory;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 
 public class MaintainabilityIndexParetoChartView extends
 		AbstractMetricChartViewPart {
@@ -134,8 +135,8 @@ public class MaintainabilityIndexParetoChartView extends
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Load data", 7);
-				ParetoChartDataProvider dataProvider = ParetoChartDataProviderFactory
-						.getFactory().getInstance();
+				PurifinityServerClient client = PurifinityServerClientFactory
+						.getInstance();
 				monitor.worked(1);
 				final AnalysisSelection analysisSelection = getAnalysisSelection();
 				monitor.worked(1);
@@ -145,20 +146,35 @@ public class MaintainabilityIndexParetoChartView extends
 				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
 						.getInformation().getUUID();
 				monitor.worked(1);
-				mi = dataProvider.loadValues(analysisProjectUUID,
-						analysisRunUUID, MaintainabilityIndexEvaluator.NAME,
-						MaintainabilityIndexEvaluatorParameter.MI,
-						codeRangeTypeSelection);
+				try {
+					mi = client.loadParetoChartData(analysisProjectUUID,
+							analysisRunUUID,
+							MaintainabilityIndexEvaluator.NAME,
+							MaintainabilityIndexEvaluatorParameter.MI,
+							codeRangeTypeSelection);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 				monitor.worked(1);
-				miWoc = dataProvider.loadValues(analysisProjectUUID,
-						analysisRunUUID, MaintainabilityIndexEvaluator.NAME,
-						MaintainabilityIndexEvaluatorParameter.MI_WOC,
-						codeRangeTypeSelection);
+				try {
+					miWoc = client.loadParetoChartData(analysisProjectUUID,
+							analysisRunUUID,
+							MaintainabilityIndexEvaluator.NAME,
+							MaintainabilityIndexEvaluatorParameter.MI_WOC,
+							codeRangeTypeSelection);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 				monitor.worked(1);
-				miCw = dataProvider.loadValues(analysisProjectUUID,
-						analysisRunUUID, MaintainabilityIndexEvaluator.NAME,
-						MaintainabilityIndexEvaluatorParameter.MI_CW,
-						codeRangeTypeSelection);
+				try {
+					miCw = client.loadParetoChartData(analysisProjectUUID,
+							analysisRunUUID,
+							MaintainabilityIndexEvaluator.NAME,
+							MaintainabilityIndexEvaluatorParameter.MI_CW,
+							codeRangeTypeSelection);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 				monitor.worked(1);
 				monitor.done();
 				new UIJob("Draw Maintainability Index Pareto Chart") {
