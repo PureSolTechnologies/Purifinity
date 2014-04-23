@@ -15,9 +15,9 @@ import com.puresoltechnologies.purifinity.client.common.server.PurifinityServerC
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresoltechnologies.purifinity.server.purifinityserver.client.PurifinityServerClient;
 
-public class PurifinityServerStatusView extends AbstractPureSolTechnologiesView {
+public class ServerJobsStatusView extends AbstractPureSolTechnologiesView {
 
-	public PurifinityServerStatusView() {
+	public ServerJobsStatusView() {
 		super(Activator.getDefault());
 	}
 
@@ -27,6 +27,7 @@ public class PurifinityServerStatusView extends AbstractPureSolTechnologiesView 
 		composite.setLayout(new FillLayout());
 
 		Button refreshButton = new Button(composite, SWT.NONE);
+		refreshButton.setText("Refresh");
 		final Text text = new Text(composite, SWT.NONE);
 
 		refreshButton.addSelectionListener(new SelectionListener() {
