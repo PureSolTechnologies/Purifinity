@@ -9,7 +9,7 @@ import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
 public class ParetoChartDataRequestEncoder implements
-		Encoder.BinaryStream<ParetoChartDataRequestEncoder> {
+		Encoder.BinaryStream<ParetoChartDataRequest> {
 
 	@Override
 	public void init(EndpointConfig config) {
@@ -20,7 +20,7 @@ public class ParetoChartDataRequestEncoder implements
 	}
 
 	@Override
-	public void encode(ParetoChartDataRequestEncoder object, OutputStream os)
+	public void encode(ParetoChartDataRequest object, OutputStream os)
 			throws EncodeException, IOException {
 		ObjectOutputStream objectOutputStream = new ObjectOutputStream(os);
 		objectOutputStream.writeObject(object);

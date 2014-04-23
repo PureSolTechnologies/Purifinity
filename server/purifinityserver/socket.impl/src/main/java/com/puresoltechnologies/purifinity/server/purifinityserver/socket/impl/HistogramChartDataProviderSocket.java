@@ -13,19 +13,19 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.slf4j.Logger;
 
-import com.puresoltechnologies.purifinity.server.purifinityserver.core.api.PurifinityServer;
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.PurifinityServerStatus;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusEncoder;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequest;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequestDecoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.core.api.ChartDataProvider;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.HistogramChartData;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.HistogramChartDataEncoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.HistogramChartDataRequest;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.HistogramChartDataRequestDecoder;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
-@ServerEndpoint(value = "/socket", //
-encoders = { PurifinityServerStatusEncoder.class }, //
-decoders = { PurifinityServerStatusRequestDecoder.class }//
+@ServerEndpoint(value = "/dataprovider/charts/histogramchart", //
+encoders = { HistogramChartDataEncoder.class }, //
+decoders = { HistogramChartDataRequestDecoder.class }//
 )
 @Stateless
-public class PurifinityServerSocket {
+public class HistogramChartDataProviderSocket {
 
 	@Inject
 	private Logger logger;
@@ -34,7 +34,7 @@ public class PurifinityServerSocket {
 	private EventLogger eventLogger;
 
 	@Inject
-	private PurifinityServer purifinityServer;
+	private ChartDataProvider chartDataProvider;
 
 	@OnOpen
 	public void open(Session session, EndpointConfig config) {
@@ -51,10 +51,13 @@ public class PurifinityServerSocket {
 	}
 
 	@OnMessage
-	public PurifinityServerStatus getServerStatus(Session session,
-			PurifinityServerStatusRequest request) {
-		logger.info("Got request for status.");
-		return purifinityServer.getStatus();
+	public HistogramChartData getHistogramChartData(Session session,
+			HistogramChartDataRequest request) {
+		logger.info("Got request for histogram chart data.");
+		return chartDataProvider.loadHistogramChartData(
+				request.getAnalysisProject(), request.getAnalysisRun(),
+				request.getEvaluatorName(), request.getParameter(),
+				request.getCodeRangeType());
 	}
 
 	@OnError

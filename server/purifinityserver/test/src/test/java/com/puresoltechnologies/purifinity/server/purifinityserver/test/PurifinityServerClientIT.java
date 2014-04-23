@@ -11,8 +11,7 @@ import org.junit.Test;
 import com.puresoltechnologies.purifinity.commons.test.PerformanceTest;
 import com.puresoltechnologies.purifinity.commons.test.PerformanceTestResult;
 import com.puresoltechnologies.purifinity.commons.test.PerformanceTester;
-import com.puresoltechnologies.purifinity.server.purifinityserver.client.PurifinityServerClientImpl;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
+import com.puresoltechnologies.purifinity.server.purifinityserver.client.PurifinityServerClient;
 
 public class PurifinityServerClientIT extends
 		AbstractPurifinityServerClientTest {
@@ -20,7 +19,7 @@ public class PurifinityServerClientIT extends
 	@Test
 	public void testSingleStatusRequest() throws IOException,
 			InterruptedException {
-		PurifinityServerClient client = new PurifinityServerClientImpl();
+		PurifinityServerClient client = new PurifinityServerClient();
 		try {
 			assertNotNull(client.getServerStatus());
 		} finally {
@@ -31,7 +30,7 @@ public class PurifinityServerClientIT extends
 	@Test
 	public void testStatusRequestPerformance() throws InterruptedException,
 			IOException {
-		final PurifinityServerClient client = new PurifinityServerClientImpl();
+		final PurifinityServerClient client = new PurifinityServerClient();
 		try {
 			PerformanceTestResult<Void> performanceResult = PerformanceTester
 					.runPerformanceTest(4, 25, new PerformanceTest<Void>() {

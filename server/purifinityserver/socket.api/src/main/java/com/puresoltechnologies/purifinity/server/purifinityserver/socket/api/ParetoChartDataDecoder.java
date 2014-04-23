@@ -8,10 +8,10 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.HistogramChartData;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
 
 public class ParetoChartDataDecoder implements
-		Decoder.BinaryStream<HistogramChartData> {
+		Decoder.BinaryStream<ParetoChartData> {
 
 	@Override
 	public void init(EndpointConfig config) {
@@ -22,11 +22,11 @@ public class ParetoChartDataDecoder implements
 	}
 
 	@Override
-	public HistogramChartData decode(InputStream is) throws DecodeException,
+	public ParetoChartData decode(InputStream is) throws DecodeException,
 			IOException {
 		try {
 			ObjectInputStream objectInputStream = new ObjectInputStream(is);
-			return (HistogramChartData) objectInputStream.readObject();
+			return (ParetoChartData) objectInputStream.readObject();
 		} catch (ClassNotFoundException e) {
 			throw new IOException("Could not read object.", e);
 		}

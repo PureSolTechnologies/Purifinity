@@ -51,13 +51,12 @@ import com.puresoltechnologies.purifinity.client.common.evaluation.ParetoChartVi
 import com.puresoltechnologies.purifinity.client.common.evaluation.controls.MetricParameterSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.ChartConfigProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.DefaultParetoChartConfigProvider;
-import com.puresoltechnologies.purifinity.client.common.server.PurifinityServerClientFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ExportAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
+import com.puresoltechnologies.purifinity.server.purifinityserver.client.ParetoChartDataProviderClient;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 
 public class ParetoChartView extends AbstractMetricChartViewPart {
 
@@ -170,37 +169,36 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Load data", 5);
-				PurifinityServerClient client = PurifinityServerClientFactory
-						.getInstance();
-				monitor.worked(1);
-				final AnalysisSelection analysisSelection = getAnalysisSelection();
-				monitor.worked(1);
-				UUID analysisProjectUUID = analysisSelection
-						.getAnalysisProject().getInformation().getUUID();
-				monitor.worked(1);
-				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-						.getInformation().getUUID();
-				monitor.worked(1);
-				try {
+				try (ParetoChartDataProviderClient client = new ParetoChartDataProviderClient()) {
+					client.connect();
+					monitor.worked(1);
+					final AnalysisSelection analysisSelection = getAnalysisSelection();
+					monitor.worked(1);
+					UUID analysisProjectUUID = analysisSelection
+							.getAnalysisProject().getInformation().getUUID();
+					monitor.worked(1);
+					UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+							.getInformation().getUUID();
+					monitor.worked(1);
 					values = client.loadParetoChartData(analysisProjectUUID,
 							analysisRunUUID, metricParameterSelection
 									.getEvaluatorFactory().getName(),
 							metricParameterSelection.getParameter(),
 							metricParameterSelection.getCodeRangeType());
+					monitor.worked(1);
+					monitor.done();
+					new UIJob("Draw Pareto Chart") {
+
+						@Override
+						public IStatus runInUIThread(IProgressMonitor monitor) {
+							showEvaluation(analysisSelection.getFileTreeNode());
+							return Status.OK_STATUS;
+						}
+					}.schedule();
+					return Status.OK_STATUS;
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
-				monitor.worked(1);
-				monitor.done();
-				new UIJob("Draw Pareto Chart") {
-
-					@Override
-					public IStatus runInUIThread(IProgressMonitor monitor) {
-						showEvaluation(analysisSelection.getFileTreeNode());
-						return Status.OK_STATUS;
-					}
-				}.schedule();
-				return Status.OK_STATUS;
 			}
 		};
 		job.schedule();

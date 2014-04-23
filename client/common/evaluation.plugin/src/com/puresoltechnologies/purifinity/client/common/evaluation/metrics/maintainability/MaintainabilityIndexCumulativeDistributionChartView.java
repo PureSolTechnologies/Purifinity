@@ -43,15 +43,14 @@ import com.puresoltechnologies.purifinity.client.common.chart.VerticalColoredAre
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractMetricChartViewPart;
-import com.puresoltechnologies.purifinity.client.common.server.PurifinityServerClientFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluator;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
+import com.puresoltechnologies.purifinity.server.purifinityserver.client.ParetoChartDataProviderClient;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 
 public class MaintainabilityIndexCumulativeDistributionChartView extends
 		AbstractMetricChartViewPart {
@@ -134,57 +133,48 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Load data", 7);
-				PurifinityServerClient client = PurifinityServerClientFactory
-						.getInstance();
-				monitor.worked(1);
-				final AnalysisSelection analysisSelection = getAnalysisSelection();
-				monitor.worked(1);
-				UUID analysisProjectUUID = analysisSelection
-						.getAnalysisProject().getInformation().getUUID();
-				monitor.worked(1);
-				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-						.getInformation().getUUID();
-				monitor.worked(1);
-				try {
+				try (ParetoChartDataProviderClient client = new ParetoChartDataProviderClient()) {
+					client.connect();
+					monitor.worked(1);
+					final AnalysisSelection analysisSelection = getAnalysisSelection();
+					monitor.worked(1);
+					UUID analysisProjectUUID = analysisSelection
+							.getAnalysisProject().getInformation().getUUID();
+					monitor.worked(1);
+					UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+							.getInformation().getUUID();
+					monitor.worked(1);
 					mi = client.loadParetoChartData(analysisProjectUUID,
 							analysisRunUUID,
 							MaintainabilityIndexEvaluator.NAME,
 							MaintainabilityIndexEvaluatorParameter.MI,
 							codeRangeTypeSelection);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-				monitor.worked(1);
-				try {
+					monitor.worked(1);
 					miWoc = client.loadParetoChartData(analysisProjectUUID,
 							analysisRunUUID,
 							MaintainabilityIndexEvaluator.NAME,
 							MaintainabilityIndexEvaluatorParameter.MI_WOC,
 							codeRangeTypeSelection);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-				monitor.worked(1);
-				try {
+					monitor.worked(1);
 					miCw = client.loadParetoChartData(analysisProjectUUID,
 							analysisRunUUID,
 							MaintainabilityIndexEvaluator.NAME,
 							MaintainabilityIndexEvaluatorParameter.MI_CW,
 							codeRangeTypeSelection);
+					monitor.worked(1);
+					monitor.done();
+					new UIJob(
+							"Draw Maintainability Index Cumulative Distribution Chart") {
+						@Override
+						public IStatus runInUIThread(IProgressMonitor monitor) {
+							showEvaluation(analysisSelection.getFileTreeNode());
+							return Status.OK_STATUS;
+						}
+					}.schedule();
+					return Status.OK_STATUS;
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
-				monitor.worked(1);
-				monitor.done();
-				new UIJob(
-						"Draw Maintainability Index Cumulative Distribution Chart") {
-					@Override
-					public IStatus runInUIThread(IProgressMonitor monitor) {
-						showEvaluation(analysisSelection.getFileTreeNode());
-						return Status.OK_STATUS;
-					}
-				}.schedule();
-				return Status.OK_STATUS;
 			}
 		};
 		job.schedule();

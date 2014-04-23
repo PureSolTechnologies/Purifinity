@@ -46,13 +46,12 @@ import com.puresoltechnologies.purifinity.client.common.chart.renderer.BarMarkRe
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.HistogramChartViewSettingsDialog;
 import com.puresoltechnologies.purifinity.client.common.evaluation.controls.MetricParameterSelection;
-import com.puresoltechnologies.purifinity.client.common.server.PurifinityServerClientFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
+import com.puresoltechnologies.purifinity.server.purifinityserver.client.HistogramChartDataProviderClient;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.HistogramChartData;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 
 public class HistogramChartView extends AbstractMetricChartViewPart {
 
@@ -167,45 +166,44 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 				@Override
 				protected IStatus run(IProgressMonitor monitor) {
 					monitor.beginTask("Load data", 6);
-					PurifinityServerClient client = PurifinityServerClientFactory
-							.getInstance();
-					monitor.worked(1);
-					final AnalysisSelection analysisSelection = getAnalysisSelection();
-					monitor.worked(1);
-					AnalysisProject analysisProject = analysisSelection
-							.getAnalysisProject();
-					monitor.worked(1);
-					UUID analysisProjectUUID = analysisProject.getInformation()
-							.getUUID();
-					monitor.worked(1);
-					UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-							.getInformation().getUUID();
-					monitor.worked(1);
-					try {
+					try (HistogramChartDataProviderClient client = new HistogramChartDataProviderClient()) {
+						client.connect();
+						monitor.worked(1);
+						final AnalysisSelection analysisSelection = getAnalysisSelection();
+						monitor.worked(1);
+						AnalysisProject analysisProject = analysisSelection
+								.getAnalysisProject();
+						monitor.worked(1);
+						UUID analysisProjectUUID = analysisProject
+								.getInformation().getUUID();
+						monitor.worked(1);
+						UUID analysisRunUUID = analysisSelection
+								.getAnalysisRun().getInformation().getUUID();
+						monitor.worked(1);
 						values = client.loadHistogramChartData(
 								analysisProjectUUID, analysisRunUUID,
 								metricParameterSelection.getEvaluatorFactory()
 										.getName(), metricParameterSelection
 										.getParameter(),
 								metricParameterSelection.getCodeRangeType());
+						monitor.worked(1);
+						monitor.done();
+						if (values != null) {
+							new UIJob("Draw Histogram Chart") {
+
+								@Override
+								public IStatus runInUIThread(
+										IProgressMonitor monitor) {
+									showEvaluation(analysisSelection
+											.getFileTreeNode());
+									return Status.OK_STATUS;
+								}
+							}.schedule();
+						}
+						return Status.OK_STATUS;
 					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
-					monitor.worked(1);
-					monitor.done();
-					if (values != null) {
-						new UIJob("Draw Histogram Chart") {
-
-							@Override
-							public IStatus runInUIThread(
-									IProgressMonitor monitor) {
-								showEvaluation(analysisSelection
-										.getFileTreeNode());
-								return Status.OK_STATUS;
-							}
-						}.schedule();
-					}
-					return Status.OK_STATUS;
 				}
 			};
 			job.schedule();

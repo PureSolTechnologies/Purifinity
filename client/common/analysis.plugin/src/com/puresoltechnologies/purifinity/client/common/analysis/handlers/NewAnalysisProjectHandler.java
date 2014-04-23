@@ -13,41 +13,41 @@ import com.puresoltechnologies.purifinity.client.common.analysis.wizards.NewProj
 
 public class NewAnalysisProjectHandler extends AbstractHandler {
 
-    private final ListenerList listeners = new ListenerList();
+	private final ListenerList listeners = new ListenerList();
 
-    @Override
-    public void addHandlerListener(IHandlerListener handlerListener) {
-	listeners.add(handlerListener);
-    }
+	@Override
+	public void addHandlerListener(IHandlerListener handlerListener) {
+		listeners.add(handlerListener);
+	}
 
-    @Override
-    public void dispose() {
-	// TODO Auto-generated method stub
-    }
+	@Override
+	public void dispose() {
+		// TODO Auto-generated method stub
+	}
 
-    @Override
-    public Object execute(ExecutionEvent event) throws ExecutionException {
-	Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-		.getShell();
-	NewProjectWizard wizard = new NewProjectWizard();
-	WizardDialog wizardDialog = new WizardDialog(shell, wizard);
-	wizardDialog.open();
-	return null;
-    }
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getShell();
+		NewProjectWizard wizard = new NewProjectWizard();
+		WizardDialog wizardDialog = new WizardDialog(shell, wizard);
+		wizardDialog.open();
+		return null;
+	}
 
-    @Override
-    public boolean isEnabled() {
-	return true;
-    }
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 
-    @Override
-    public boolean isHandled() {
-	return true;
-    }
+	@Override
+	public boolean isHandled() {
+		return true;
+	}
 
-    @Override
-    public void removeHandlerListener(IHandlerListener handlerListener) {
-	listeners.remove(handlerListener);
-    }
+	@Override
+	public void removeHandlerListener(IHandlerListener handlerListener) {
+		listeners.remove(handlerListener);
+	}
 
 }

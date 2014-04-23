@@ -39,15 +39,14 @@ import com.puresoltechnologies.purifinity.client.common.chart.Plot;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.CorrelationChartViewSettingsDialog;
-import com.puresoltechnologies.purifinity.client.common.server.PurifinityServerClientFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
+import com.puresoltechnologies.purifinity.server.purifinityserver.client.ParetoChartDataProviderClient;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
 
 public class CorrelationChartView extends AbstractMetricChartViewPart {
 
@@ -254,47 +253,42 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Load data", 6);
-				PurifinityServerClient client = PurifinityServerClientFactory
-						.getInstance();
-				monitor.worked(1);
-				final AnalysisSelection analysisSelection = getAnalysisSelection();
-				monitor.worked(1);
-				UUID analysisProjectUUID = analysisSelection
-						.getAnalysisProject().getInformation().getUUID();
-				monitor.worked(1);
-				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-						.getInformation().getUUID();
-				monitor.worked(1);
-				try {
+				try (ParetoChartDataProviderClient client = new ParetoChartDataProviderClient()) {
+					client.connect();
+					monitor.worked(1);
+					final AnalysisSelection analysisSelection = getAnalysisSelection();
+					monitor.worked(1);
+					UUID analysisProjectUUID = analysisSelection
+							.getAnalysisProject().getInformation().getUUID();
+					monitor.worked(1);
+					UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+							.getInformation().getUUID();
+					monitor.worked(1);
 					xValues = client.loadParetoChartData(analysisProjectUUID,
 							analysisRunUUID, xMetricSelection.getName(),
 							xParameterSelection, CodeRangeType.FILE);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-				monitor.worked(1);
-				try {
+					monitor.worked(1);
 					yValues = client.loadParetoChartData(analysisProjectUUID,
 							analysisRunUUID, yMetricSelection.getName(),
 							yParameterSelection, CodeRangeType.FILE);
+					monitor.worked(1);
+					monitor.done();
+					new UIJob("Draw Correlation Chart") {
+						@Override
+						public IStatus runInUIThread(IProgressMonitor monitor) {
+							AnalysisFileTree path = analysisSelection
+									.getFileTreeNode();
+							if (path.isFile()) {
+								path = path.getParent();
+							}
+							showEvaluation(path);
+							return Status.OK_STATUS;
+						}
+					}.schedule();
+					return Status.OK_STATUS;
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
-				monitor.worked(1);
-				monitor.done();
-				new UIJob("Draw Correlation Chart") {
-					@Override
-					public IStatus runInUIThread(IProgressMonitor monitor) {
-						AnalysisFileTree path = analysisSelection
-								.getFileTreeNode();
-						if (path.isFile()) {
-							path = path.getParent();
-						}
-						showEvaluation(path);
-						return Status.OK_STATUS;
-					}
-				}.schedule();
-				return Status.OK_STATUS;
 			}
 		};
 		job.schedule();

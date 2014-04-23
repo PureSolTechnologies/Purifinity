@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.purifinityserver.domain;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,9 @@ import com.puresoltechnologies.commons.misc.HashId;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class ParetoChartData {
+public class ParetoChartData implements Serializable {
+
+	private static final long serialVersionUID = 3589012218679125578L;
 
 	private final Map<HashId, Map<String, Value<? extends Number>>> data = new HashMap<>();
 

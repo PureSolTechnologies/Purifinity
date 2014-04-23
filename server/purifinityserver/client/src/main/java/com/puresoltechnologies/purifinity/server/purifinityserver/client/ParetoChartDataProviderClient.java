@@ -28,34 +28,25 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.HistogramChartData;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.PurifinityServerStatus;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.HistogramChartDataDecoder;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.HistogramChartDataRequest;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.HistogramChartDataRequestEncoder;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ParetoChartDataDecoder;
+import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ParetoChartDataRequest;
 import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.ParetoChartDataRequestEncoder;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusDecoder;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequest;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerStatusRequestEncoder;
 
 @ClientEndpoint(//
-encoders = { PurifinityServerStatusRequestEncoder.class,
-		HistogramChartDataRequestEncoder.class,
-		ParetoChartDataRequestEncoder.class }, //
-decoders = { PurifinityServerStatusDecoder.class,
-		HistogramChartDataDecoder.class, ParetoChartDataDecoder.class })
-public class PurifinityServerClientImpl implements PurifinityServerClient {
+encoders = { ParetoChartDataRequestEncoder.class }, //
+decoders = { ParetoChartDataDecoder.class }//
+)
+public class ParetoChartDataProviderClient implements AutoCloseable {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(PurifinityServerClientImpl.class);
+			.getLogger(ParetoChartDataProviderClient.class);
 
 	private static final URI DEFAULT_URI;
 	static {
 		try {
-			DEFAULT_URI = new URI("ws://localhost:8080/purifinityserver/socket");
+			DEFAULT_URI = new URI(
+					"ws://localhost:8080/purifinityserver/dataprovider/charts/paretochart");
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
@@ -65,14 +56,6 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 			.getWebSocketContainer();
 
 	private Session session = null;
-
-	private final Object getServerStatusLock = new Object();
-	private PurifinityServerStatus status = null;
-	private CountDownLatch getServerStatusLatch = null;
-
-	private final Object getHistogramChartDataLock = new Object();
-	private HistogramChartData historgramChartData = null;
-	private CountDownLatch getHistogramChartDataLatch = null;
 
 	private final Object getParetoChartDataLock = new Object();
 	private ParetoChartData paretoChartData = null;
@@ -126,76 +109,13 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 	}
 
 	@OnMessage
-	public void retrieveMessage(Session session, PurifinityServerStatus status) {
-		this.status = status;
-		System.err.println("Status: " + status.getStatusMessage());
-		if (getServerStatusLatch != null) {
-			getServerStatusLatch.countDown();
-		}
-	}
-
-	@Override
-	public PurifinityServerStatus getServerStatus() throws IOException {
-		if (!isConnected()) {
-			connect();
-		}
-		Basic basicRemote = session.getBasicRemote();
-		synchronized (getServerStatusLock) {
-			try {
-				getServerStatusLatch = new CountDownLatch(1);
-				basicRemote.sendObject(new PurifinityServerStatusRequest());
-				getServerStatusLatch.await(10, TimeUnit.SECONDS);
-			} catch (InterruptedException e) {
-				throw new IOException("Communication was aborted.", e);
-			} catch (EncodeException e) {
-				throw new RuntimeException("Could not send request.", e);
-			}
-		}
-		return status;
-	}
-
-	@OnMessage
-	public void retrieveHistogramChartData(Session session,
-			HistogramChartData data) {
-		this.historgramChartData = data;
-		if (getHistogramChartDataLatch != null) {
-			getHistogramChartDataLatch.countDown();
-		}
-	}
-
-	@OnMessage
 	public void retrieveParetoChartData(Session session, ParetoChartData data) {
 		this.paretoChartData = data;
-		if (getHistogramChartDataLatch != null) {
-			getHistogramChartDataLatch.countDown();
+		if (getParetoChartDataLatch != null) {
+			getParetoChartDataLatch.countDown();
 		}
 	}
 
-	@Override
-	public HistogramChartData loadHistogramChartData(UUID analysisProject,
-			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
-			CodeRangeType codeRangeType) throws IOException {
-		if (!isConnected()) {
-			connect();
-		}
-		Basic basicRemote = session.getBasicRemote();
-		synchronized (getHistogramChartDataLock) {
-			try {
-				getHistogramChartDataLatch = new CountDownLatch(1);
-				basicRemote.sendObject(new HistogramChartDataRequest(
-						analysisProject, analysisRun, evaluatorName, parameter,
-						codeRangeType));
-				getHistogramChartDataLatch.await(10, TimeUnit.SECONDS);
-			} catch (InterruptedException e) {
-				throw new IOException("Communication was aborted.", e);
-			} catch (EncodeException e) {
-				throw new RuntimeException("Could not send request.", e);
-			}
-		}
-		return historgramChartData;
-	};
-
-	@Override
 	public ParetoChartData loadParetoChartData(UUID analysisProject,
 			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType) throws IOException {
@@ -206,7 +126,7 @@ public class PurifinityServerClientImpl implements PurifinityServerClient {
 		synchronized (getParetoChartDataLock) {
 			try {
 				getParetoChartDataLatch = new CountDownLatch(1);
-				basicRemote.sendObject(new HistogramChartDataRequest(
+				basicRemote.sendObject(new ParetoChartDataRequest(
 						analysisProject, analysisRun, evaluatorName, parameter,
 						codeRangeType));
 				getParetoChartDataLatch.await(10, TimeUnit.SECONDS);

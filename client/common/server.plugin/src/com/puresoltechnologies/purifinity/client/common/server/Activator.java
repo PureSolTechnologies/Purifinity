@@ -4,8 +4,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import com.puresoltechnologies.purifinity.server.purifinityserver.client.PurifinityServerClientImpl;
-import com.puresoltechnologies.purifinity.server.purifinityserver.socket.api.PurifinityServerClient;
+import com.puresoltechnologies.purifinity.server.purifinityserver.client.PurifinityServerClient;
 
 public class Activator extends AbstractUIPlugin {
 
@@ -23,7 +22,7 @@ public class Activator extends AbstractUIPlugin {
 		}
 		plugin = this;
 		clientRegistration = context.registerService(
-				PurifinityServerClient.class, new PurifinityServerClientImpl(),
+				PurifinityServerClient.class, new PurifinityServerClient(),
 				null);
 	}
 
