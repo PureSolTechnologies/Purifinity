@@ -13,14 +13,13 @@
 
 	<modules>
 		<module>ddl</module>
-		<!-- module>domain</module>
+		<module>domain</module>
 		<module>core.api</module>
 		<module>core.impl</module>
 		<module>rest.api</module>
 		<module>rest.impl</module>
 		<module>client</module>
 		<module>test</module>
-		<module>ui.web</module>
-		<module>app</module -->
+		<module>app</module>
 	</modules>
 </project>
