@@ -11,6 +11,10 @@
 	<artifactId>analysisservice.domain</artifactId>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>analysis.domain</artifactId>
+		</dependency>
 	</dependencies>
 
 </project>

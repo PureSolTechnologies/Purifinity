@@ -48,12 +48,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>logger</artifactId>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>store.db.lib</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>systemmonitor</artifactId>
+			<artifactId>logger</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>
