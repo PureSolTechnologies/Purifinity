@@ -1052,6 +1052,7 @@
 
 	<modules>
 		<module>wildfly</module>
+		<module>common</module>
 		<module>logger</module>
 		<module>systemmonitor</module>
 		<module>systemmonitor.ddl</module>
