@@ -570,6 +570,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>analysis.impl.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 				<artifactId>commons.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
