@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.core.impl;
+package com.puresoltechnologies.purifinity.server.analysisservice.core.impl.store;
 
 import java.util.Date;
 import java.util.List;

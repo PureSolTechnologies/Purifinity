@@ -24,12 +24,6 @@
    <feature url="features/com.puresoltechnologies.purifinity.client.features.cleancode.feature_0.3.0.qualifier.jar" id="com.puresoltechnologies.purifinity.client.features.cleancode.feature" version="0.3.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
       <category name="com.puresoltechnologies.purifinity.client.application"/>
    </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.storage.db.feature_0.3.0.qualifier.jar" id="com.puresoltechnologies.purifinity.client.storage.db.feature" version="0.3.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
-      <category name="com.puresoltechnologies.purifinity.client.application"/>
-   </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.storage.srv.feature_0.3.0.qualifier.jar" id="com.puresoltechnologies.purifinity.client.storage.srv.feature" version="0.3.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
-      <category name="com.puresoltechnologies.purifinity.client.application"/>
-   </feature>
    <category-def name="com.puresoltechnologies.purifinity.client.application" label="Purifinity">
       <description>
          Contains the basic features for Purifinity.

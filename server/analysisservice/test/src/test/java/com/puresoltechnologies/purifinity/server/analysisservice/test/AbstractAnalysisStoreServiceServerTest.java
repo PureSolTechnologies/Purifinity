@@ -10,7 +10,7 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.TableMetadata;
-import com.puresoltechnologies.purifinity.server.analysisservice.core.impl.AnalysisStoreServiceBean;
+import com.puresoltechnologies.purifinity.server.analysisservice.core.impl.store.AnalysisStoreServiceBean;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
