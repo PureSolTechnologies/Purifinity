@@ -3,18 +3,6 @@
    <description name="Source Code Analysis Repository">
       
    </description>
-   <feature url="features/com.puresoltechnologies.purifinity.client.lang.c11.feature_0.3.0.qualifier.jar" id="com.puresoltechnologies.purifinity.client.lang.c11.feature" version="0.3.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
-      <category name="com.puresoltechnologies.purifinity.client.lang"/>
-   </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.lang.cpp11.feature_0.3.0.qualifier.jar" id="com.puresoltechnologies.purifinity.client.lang.cpp11.feature" version="0.3.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
-      <category name="com.puresoltechnologies.purifinity.client.lang"/>
-   </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.lang.fortran2008.feature_0.3.0.qualifier.jar" id="com.puresoltechnologies.purifinity.client.lang.fortran2008.feature" version="0.3.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
-      <category name="com.puresoltechnologies.purifinity.client.lang"/>
-   </feature>
-   <feature url="features/com.puresoltechnologies.purifinity.client.lang.java7.feature_0.3.0.qualifier.jar" id="com.puresoltechnologies.purifinity.client.lang.java7.feature" version="0.3.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
-      <category name="com.puresoltechnologies.purifinity.client.lang"/>
-   </feature>
    <feature url="features/com.puresoltechnologies.purifinity.client.application.feature_0.3.0.qualifier.jar" id="com.puresoltechnologies.purifinity.client.application.feature" version="0.3.0.qualifier" os="linux,macosx,win32" ws="carbon,cocoa,gtk,win32" arch="x86,x86_64">
       <category name="com.puresoltechnologies.purifinity.client.application"/>
    </feature>
@@ -27,11 +15,6 @@
    <category-def name="com.puresoltechnologies.purifinity.client.application" label="Purifinity">
       <description>
          Contains the basic features for Purifinity.
-      </description>
-   </category-def>
-   <category-def name="com.puresoltechnologies.purifinity.client.lang" label="Languages">
-      <description>
-         Contains several language features for the client.
       </description>
    </category-def>
 </site>

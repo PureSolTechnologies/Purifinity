@@ -609,7 +609,6 @@
 	<modules>
 		<module>application</module>
 		<module>common</module>
-		<module>lang</module>
 		<module>features</module>
 		<module>product</module>
 		<module>repository</module>

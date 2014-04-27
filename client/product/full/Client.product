@@ -70,10 +70,6 @@ Apache Software Foundation http://apache.org
       <feature id="org.eclipse.help"/>
       <feature id="com.puresoltechnologies.purifinity.client.application.feature" version="0.3.0.qualifier"/>
       <feature id="com.puresoltechnologies.purifinity.client.common.feature" version="0.3.0.qualifier"/>
-      <feature id="com.puresoltechnologies.purifinity.client.lang.c11.feature" version="0.3.0.qualifier"/>
-      <feature id="com.puresoltechnologies.purifinity.client.lang.cpp11.feature" version="0.3.0.qualifier"/>
-      <feature id="com.puresoltechnologies.purifinity.client.lang.fortran2008.feature" version="0.3.0.qualifier"/>
-      <feature id="com.puresoltechnologies.purifinity.client.lang.java7.feature" version="0.3.0.qualifier"/>
       <feature id="com.puresoltechnologies.purifinity.client.features.cleancode.feature" version="0.3.0.qualifier"/>
    </features>
 
