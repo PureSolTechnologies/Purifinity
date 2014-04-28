@@ -26,12 +26,8 @@ public class AnalysisStoreServiceRestService implements
 	@Override
 	public Response createAnalysisProject(String string) {
 		try {
-			com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisProjectSettings settingsREST = JSONMapper
-					.fromJSONString(
-							string,
-							com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisProjectSettings.class);
-			AnalysisProjectSettings settings = AnalysisProjectSettingsConverter
-					.fromREST(settingsREST);
+			AnalysisProjectSettings settings = JSONMapper.fromJSONString(
+					string, AnalysisProjectSettings.class);
 			analysisStore.createAnalysisProject(settings);
 			return Response.status(Status.CREATED).build();
 		} catch (IOException | AnalysisStoreException e) {

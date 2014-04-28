@@ -6,6 +6,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Properties;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 
 /**
@@ -53,9 +55,11 @@ public final class AnalysisProjectSettings implements Serializable {
 	 * @param repositoryLocation
 	 *            is the source directory to be search for analysis.
 	 */
-	public AnalysisProjectSettings(String name, String description,
-			FileSearchConfiguration fileSearchConfiguration,
-			Properties repositoryLocation) {
+	public AnalysisProjectSettings(
+			@JsonProperty("name") String name,
+			@JsonProperty("description") String description,
+			@JsonProperty("fileSearchConfiguration") FileSearchConfiguration fileSearchConfiguration,
+			@JsonProperty("repositoryLocation") Properties repositoryLocation) {
 		super();
 		checkNotNull("name", name);
 		checkNotNull("fileSearchConfiguration", fileSearchConfiguration);

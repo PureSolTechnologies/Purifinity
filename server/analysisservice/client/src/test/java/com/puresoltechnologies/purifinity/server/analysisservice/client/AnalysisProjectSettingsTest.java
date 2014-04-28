@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.rest.api;
+package com.puresoltechnologies.purifinity.server.analysisservice.client;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,6 +9,8 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.server.common.rest.JSONMapper;
 
 public class AnalysisProjectSettingsTest {

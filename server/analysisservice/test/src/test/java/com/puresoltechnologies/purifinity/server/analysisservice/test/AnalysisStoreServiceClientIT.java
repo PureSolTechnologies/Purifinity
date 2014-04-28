@@ -12,12 +12,11 @@ import java.util.UUID;
 
 import org.junit.Test;
 
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.server.analysisservice.client.AnalysisStoreServiceClient;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisProjectInformation;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisStoreRestException;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.FileSearchConfiguration;
 
 public class AnalysisStoreServiceClientIT extends
 		AbstractAnalysisStoreServiceClientTest {
@@ -37,7 +36,7 @@ public class AnalysisStoreServiceClientIT extends
 	}
 
 	@Test
-	public void testCreateProject() throws AnalysisStoreRestException {
+	public void testCreateProject() {
 		Date start = new Date();
 		AnalysisProjectSettings settings = createProjectSettings();
 
@@ -59,7 +58,7 @@ public class AnalysisStoreServiceClientIT extends
 	}
 
 	@Test
-	public void testReadAllProjects() throws AnalysisStoreRestException {
+	public void testReadAllProjects() {
 		AnalysisProjectSettings settings = createProjectSettings();
 
 		List<AnalysisProjectInformation> projects = analysisStoreService
@@ -82,7 +81,7 @@ public class AnalysisStoreServiceClientIT extends
 	}
 
 	@Test
-	public void testDeleteProject() throws AnalysisStoreRestException {
+	public void testDeleteProject() {
 		AnalysisProjectSettings settings = createProjectSettings();
 
 		List<AnalysisProjectInformation> projects = analysisStoreService

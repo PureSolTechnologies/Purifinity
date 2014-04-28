@@ -5,6 +5,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 /**
  * This class contains the file search configuration for the file search
  * facilities in FileSearch class. Several settings specify the behavior which
@@ -53,20 +55,23 @@ public class FileSearchConfiguration implements Serializable, Cloneable {
 	/**
 	 * This constructor sets the initial value for this class.
 	 * 
-	 * @param dirIncludes
-	 * @param dirExcludes
+	 * @param locationIncludes
+	 * @param locationExcludes
 	 * @param fileIncludes
 	 * @param fileExcludes
 	 * @param ignoreHidden
 	 */
-	public FileSearchConfiguration(List<String> dirIncludes,
-			List<String> dirExcludes, List<String> fileIncludes,
-			List<String> fileExcludes, boolean ignoreHidden) {
+	public FileSearchConfiguration(
+			@JsonProperty("locationIncludes") List<String> locationIncludes,
+			@JsonProperty("locationExcludes") List<String> locationExcludes,
+			@JsonProperty("fileIncludes") List<String> fileIncludes,
+			@JsonProperty("fileExcludes") List<String> fileExcludes,
+			@JsonProperty("ignoreHidden") boolean ignoreHidden) {
 		super();
 		this.fileIncludes.addAll(fileIncludes);
 		this.fileExcludes.addAll(fileExcludes);
-		this.locationIncludes.addAll(dirIncludes);
-		this.locationExcludes.addAll(dirExcludes);
+		this.locationIncludes.addAll(locationIncludes);
+		this.locationExcludes.addAll(locationExcludes);
 		this.ignoreHidden = ignoreHidden;
 		hashCode = ObjectUtilities.calculateConstantHashCode(locationIncludes,
 				locationExcludes, fileIncludes, fileExcludes, ignoreHidden);

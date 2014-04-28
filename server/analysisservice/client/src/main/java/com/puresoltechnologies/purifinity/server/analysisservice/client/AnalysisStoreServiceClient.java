@@ -13,16 +13,18 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisProjectInformation;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisStoreRestException;
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.ProgressObserver;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisStoreServiceRestInterface;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.server.common.rest.JSONMapper;
 
-public class AnalysisStoreServiceClient {
+public class AnalysisStoreServiceClient implements AnalysisStore {
 
 	private final AnalysisStoreServiceRestInterface proxy;
 
@@ -41,8 +43,9 @@ public class AnalysisStoreServiceClient {
 		proxy = webTarget.proxy(AnalysisStoreServiceRestInterface.class);
 	}
 
+	@Override
 	public AnalysisProjectInformation createAnalysisProject(
-			AnalysisProjectSettings settings) throws AnalysisStoreRestException {
+			AnalysisProjectSettings settings) {
 		try {
 			String jsonString = JSONMapper.toJSONString(settings);
 			Response response = proxy.createAnalysisProject(jsonString);
@@ -53,78 +56,96 @@ public class AnalysisStoreServiceClient {
 		}
 	}
 
-	public List<AnalysisProjectInformation> readAllAnalysisProjectInformation()
-			throws AnalysisStoreRestException {
+	@Override
+	public List<AnalysisProjectInformation> readAllAnalysisProjectInformation() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public AnalysisProjectInformation readAnalysisProjectInformation(
-			UUID projectUUID) throws AnalysisStoreRestException {
+			UUID projectUUID) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void removeAnalysisProject(UUID projectUUID)
-			throws AnalysisStoreRestException {
+	@Override
+	public void removeAnalysisProject(UUID projectUUID) {
 		// TODO Auto-generated method stub
 
 	}
 
+	@Override
 	public AnalysisProjectSettings readAnalysisProjectSettings(
-			UUID analysisProjectUUID) throws AnalysisStoreRestException {
+			UUID analysisProjectUUID) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public void updateAnalysisProjectSettings(UUID projectUUID,
-			AnalysisProjectSettings settings) throws AnalysisStoreRestException {
+			AnalysisProjectSettings settings) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
-			throws AnalysisStoreRestException {
+	@Override
+	public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
 	public AnalysisRunInformation readAnalysisRun(UUID projectUUID,
-			UUID analysisRunUUID) throws AnalysisStoreRestException {
+			UUID analysisRunUUID) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)
-			throws AnalysisStoreRestException {
+	@Override
+	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void removeAnalysisRun(UUID projectUUID, UUID analysisRunUUID)
-			throws AnalysisStoreRestException {
+	@Override
+	public void removeAnalysisRun(UUID projectUUID, UUID analysisRunUUID) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public FileSearchConfiguration readSearchConfiguration(UUID analysisRunUUID)
-			throws AnalysisStoreRestException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
-			throws AnalysisStoreRestException {
+	@Override
+	public FileSearchConfiguration readSearchConfiguration(UUID analysisRunUUID) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	@Override
+	public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public AnalysisRunInformation createAnalysisRun(UUID analysisProjectUUID,
 			Date startTime, long duration, String description,
-			FileSearchConfiguration fileSearchConfiguration)
-			throws AnalysisStoreRestException {
+			FileSearchConfiguration fileSearchConfiguration) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void storeAnalysisFileTree(UUID projectUUID, UUID analysisRunUUID,
+			AnalysisFileTree fileTree) throws AnalysisStoreException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void storeAnalysisFileTree(
+			ProgressObserver<AnalysisStore> progressObserver, UUID projectUUID,
+			UUID analysisRunUUID, AnalysisFileTree fileTree)
+			throws AnalysisStoreException {
+		// TODO Auto-generated method stub
 	}
 
 }
