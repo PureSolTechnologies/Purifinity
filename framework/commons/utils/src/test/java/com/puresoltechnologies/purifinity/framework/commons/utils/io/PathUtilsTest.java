@@ -2,15 +2,16 @@ package com.puresoltechnologies.purifinity.framework.commons.utils.io;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeFalse;
+import static org.junit.Assume.assumeTrue;
 
 import java.io.File;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.framework.commons.utils.io.PathResolutionException;
-import com.puresoltechnologies.purifinity.framework.commons.utils.io.PathUtils;
-
 public class PathUtilsTest {
+
+	private static final String os = System.getProperty("sun.desktop");
 
 	@Test
 	public void testClassToRelativePackagePath() {
@@ -20,7 +21,10 @@ public class PathUtilsTest {
 	}
 
 	@Test
-	public void testNormalizePath() {
+	public void testNormalizePathLinux() {
+		assumeFalse(
+				"This test is for Linux, but we do not have a Linux at the moment.",
+				os.equals("windows"));
 		assertEquals(
 				"destination/to.txt",
 				PathUtils.normalizePath(
@@ -45,6 +49,38 @@ public class PathUtilsTest {
 						new File("/root//redundant/../../destination//to.txt"))
 						.getPath());
 		assertEquals("/a/b/c/d/e",
+				PathUtils.normalizePath(new File("/a/b/././c/d/e/.")).getPath());
+	}
+
+	@Test
+	public void testNormalizePathWindows() {
+		assumeTrue(
+				"This test is for Linux, but we do not have a Linux at the moment.",
+				os.equals("windows"));
+		assertEquals(
+				"destination\\to.txt",
+				PathUtils.normalizePath(
+						new File("redundant/../destination/to.txt")).getPath());
+		assertEquals(
+				"\\destination\\to.txt",
+				PathUtils.normalizePath(
+						new File("/redundant/../destination/to.txt")).getPath());
+		assertEquals(
+				"\\root\\destination\\to.txt",
+				PathUtils.normalizePath(
+						new File("/root/redundant/../destination/to.txt"))
+						.getPath());
+		assertEquals(
+				"\\destination\\to.txt",
+				PathUtils.normalizePath(
+						new File("/root/redundant/../../destination/to.txt"))
+						.getPath());
+		assertEquals(
+				"\\destination\\to.txt",
+				PathUtils.normalizePath(
+						new File("/root//redundant/../../destination//to.txt"))
+						.getPath());
+		assertEquals("\\a\\b\\c\\d\\e",
 				PathUtils.normalizePath(new File("/a/b/././c/d/e/.")).getPath());
 	}
 

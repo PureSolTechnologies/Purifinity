@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.framework.commons.utils.io;
 
 import java.io.File;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * This class contains several static methods for easier access to standard
@@ -16,7 +17,8 @@ public class FileTreeConverter {
 			List<File> files) {
 		FileTree top = new FileTree(null, rootName);
 		for (File file : files) {
-			String[] pathComponents = file.getPath().split(File.separator);
+			String[] pathComponents = file.getPath().split(
+					Pattern.quote(File.separator));
 			FileTree current = top;
 			for (String component : pathComponents) {
 				if (component.isEmpty()) {

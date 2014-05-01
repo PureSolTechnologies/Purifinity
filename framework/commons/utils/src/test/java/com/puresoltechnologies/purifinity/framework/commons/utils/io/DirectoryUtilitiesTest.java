@@ -6,8 +6,6 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.framework.commons.utils.io.DirectoryUtilities;
-
 public class DirectoryUtilitiesTest {
 
 	@Test
@@ -22,21 +20,23 @@ public class DirectoryUtilitiesTest {
 				.getInstallationDirectory(DirectoryUtilitiesTest.class, false);
 		assertTrue(installationDirectory.isDirectory());
 		System.out.println(installationDirectory);
-		String expected = "/target/test-classes/"
-				+ DirectoryUtilitiesTest.class.getPackage().getName()
-						.replaceAll("\\.", "/");
+		File expected = new File("/target/test-classes/",
+				DirectoryUtilitiesTest.class.getPackage().getName()
+						.replaceAll("\\.", "/"));
 		System.out.println(expected);
-		assertTrue(installationDirectory.toString().endsWith(expected));
+		assertTrue(installationDirectory.toString().endsWith(
+				expected.toString()));
 
 		installationDirectory = DirectoryUtilities.getInstallationDirectory(
 				DirectoryUtilitiesTest.class, true);
 		assertTrue(installationDirectory.isDirectory());
 		System.out.println(installationDirectory);
-		expected = "/target/test-classes/"
-				+ DirectoryUtilitiesTest.class.getPackage().getName()
-						.replaceAll("\\.", "/");
+		expected = new File("/target/test-classes/",
+				DirectoryUtilitiesTest.class.getPackage().getName()
+						.replaceAll("\\.", "/"));
 		System.out.println(expected);
-		assertTrue(installationDirectory.toString().endsWith(expected));
+		assertTrue(installationDirectory.toString().endsWith(
+				expected.toString()));
 	}
 
 }

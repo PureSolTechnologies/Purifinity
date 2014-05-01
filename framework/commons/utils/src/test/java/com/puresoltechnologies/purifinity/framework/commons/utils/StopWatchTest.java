@@ -26,8 +26,10 @@ public class StopWatchTest {
 		stopWatch.stop();
 		assertNotNull(stopWatch.getStartTime());
 		assertNotNull(stopWatch.getStopTime());
-		assertTrue(stopWatch.getMilliseconds() >= 100);
-		assertTrue(stopWatch.getSeconds() >= 0.1);
+		long milliseconds = stopWatch.getMilliseconds();
+		assertTrue("Expected to have at least 100ms, but got: " + milliseconds
+				+ "ms", milliseconds >= 90);
+		assertEquals(stopWatch.getSeconds(), milliseconds / 1000.0, 0.01);
 		assertTrue(stopWatch.getStopTime().getTime() >= stopWatch
 				.getStartTime().getTime() + 100);
 	}
