@@ -41,6 +41,7 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
+import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisProjectListItem;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisProjectsTableViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.handlers.NewAnalysisProjectHandler;
 import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
@@ -49,7 +50,6 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseTarget;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisProjectImpl;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
@@ -313,7 +313,7 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 
 	private void refreshAnalysisProjectList() {
 		try {
-			List<AnalysisProject> analysisProjects = new ArrayList<>();
+			List<AnalysisProjectListItem> analysisProjectsListItems = new ArrayList<>();
 			AnalysisStore store = AnalysisStoreFactory.getFactory()
 					.getInstance();
 			if (store != null) {
@@ -322,16 +322,16 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 				for (AnalysisProjectInformation information : allAnalysisProjectInformation) {
 					AnalysisProjectSettings settings = store
 							.readAnalysisProjectSettings(information.getUUID());
-					AnalysisProjectImpl newItem = new AnalysisProjectImpl(
+					AnalysisProjectListItem newItem = new AnalysisProjectListItem(
 							information.getUUID(),
 							information.getCreationTime(), settings);
-					analysisProjects.add(newItem);
+					analysisProjectsListItems.add(newItem);
 				}
 			} else {
 				logger.warn("No analysis store is available.");
 				return;
 			}
-			analysisProjectsViewer.setInput(analysisProjects);
+			analysisProjectsViewer.setInput(analysisProjectsListItems);
 			processProjectSelection();
 			updateEnabledState();
 		} catch (AnalysisStoreException e) {

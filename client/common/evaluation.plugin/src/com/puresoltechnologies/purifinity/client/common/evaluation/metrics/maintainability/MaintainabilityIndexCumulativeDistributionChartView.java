@@ -1,7 +1,5 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.metrics.maintainability;
 
-import static com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,12 +41,12 @@ import com.puresoltechnologies.purifinity.client.common.chart.VerticalColoredAre
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractMetricChartViewPart;
+import com.puresoltechnologies.purifinity.client.common.server.connectors.MaintainabilityIndexEvaluatorConnector;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexEvaluatorParameter;
 import com.puresoltechnologies.purifinity.server.purifinityserver.client.ParetoChartDataProviderClient;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
 
@@ -146,19 +144,19 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 					monitor.worked(1);
 					mi = client.loadParetoChartData(analysisProjectUUID,
 							analysisRunUUID,
-							MaintainabilityIndexEvaluator.NAME,
+							MaintainabilityIndexEvaluatorConnector.NAME,
 							MaintainabilityIndexEvaluatorParameter.MI,
 							codeRangeTypeSelection);
 					monitor.worked(1);
 					miWoc = client.loadParetoChartData(analysisProjectUUID,
 							analysisRunUUID,
-							MaintainabilityIndexEvaluator.NAME,
+							MaintainabilityIndexEvaluatorConnector.NAME,
 							MaintainabilityIndexEvaluatorParameter.MI_WOC,
 							codeRangeTypeSelection);
 					monitor.worked(1);
 					miCw = client.loadParetoChartData(analysisProjectUUID,
 							analysisRunUUID,
-							MaintainabilityIndexEvaluator.NAME,
+							MaintainabilityIndexEvaluatorConnector.NAME,
 							MaintainabilityIndexEvaluatorParameter.MI_CW,
 							codeRangeTypeSelection);
 					monitor.worked(1);
@@ -293,7 +291,8 @@ public class MaintainabilityIndexCumulativeDistributionChartView extends
 		max = Axis.suggestMax(max);
 
 		Axis<Double> xAxis = AxisFactory.createDoubleValueAxis(AxisDirection.X,
-				MI, min, max, (max - min) / 10.0, 1, 2);
+				MaintainabilityIndexEvaluatorParameter.MI, min, max,
+				(max - min) / 10.0, 1, 2);
 		chart.setxAxis(xAxis);
 
 		Axis<Double> yAxis = AxisFactory.createDoubleValueAxis(AxisDirection.Y,

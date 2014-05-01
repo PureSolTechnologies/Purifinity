@@ -6,11 +6,10 @@ import org.osgi.framework.Bundle;
 
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.basic.BasicCoCoMoEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.basic.BasicCoCoMoResults;
+import com.puresoltechnologies.purifinity.client.common.server.connectors.BasicCoCoMoEvaluatorConnector;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.basic.BasicCoCoMoResults;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
 public class BasicCoCoMoFileResultComponent extends BasicCoCoMoResultComponent {
 
@@ -18,8 +17,8 @@ public class BasicCoCoMoFileResultComponent extends BasicCoCoMoResultComponent {
 			AnalysisInformation analyzedSourceCode) {
 		super(parent);
 		try {
-			EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
-					.createInstance(BasicCoCoMoEvaluator.class);
+			EvaluatorStore evaluatorStore = BasicCoCoMoEvaluatorConnector
+					.getStore();
 			BasicCoCoMoResults fileResults = (BasicCoCoMoResults) evaluatorStore
 					.readFileResults(analyzedSourceCode.getHashId());
 			setResults(fileResults);

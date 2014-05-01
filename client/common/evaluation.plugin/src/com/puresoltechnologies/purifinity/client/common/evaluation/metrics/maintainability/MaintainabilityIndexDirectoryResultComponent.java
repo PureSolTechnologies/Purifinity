@@ -12,12 +12,11 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexFileResult;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexFileResults;
+import com.puresoltechnologies.purifinity.client.common.server.connectors.MaintainabilityIndexEvaluatorConnector;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResult;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResults;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
 public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 
@@ -27,8 +26,8 @@ public class MaintainabilityIndexDirectoryResultComponent extends Composite {
 		try {
 			setLayout(new FillLayout());
 
-			EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
-					.createInstance(MaintainabilityIndexEvaluator.class);
+			EvaluatorStore evaluatorStore = MaintainabilityIndexEvaluatorConnector
+					.getStore();
 
 			Map<Double, String> maintainability = new HashMap<Double, String>();
 			for (AnalysisFileTree child : directory.getChildren()) {

@@ -8,6 +8,8 @@ import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.ProgressObserver;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
@@ -46,67 +48,82 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	@Override
 	public List<AnalysisProjectInformation> readAllAnalysisProjectInformation()
 			throws AnalysisStoreException {
-		return readAllAnalysisProjectInformation();
+		return analysisStore.readAllAnalysisProjectInformation();
 	}
 
 	@Override
 	public AnalysisProjectInformation readAnalysisProjectInformation(
 			UUID projectUUID) throws AnalysisStoreException {
-		return readAnalysisProjectInformation(projectUUID);
+		return analysisStore.readAnalysisProjectInformation(projectUUID);
 	}
 
 	@Override
 	public void removeAnalysisProject(UUID projectUUID)
 			throws AnalysisStoreException {
-		readAnalysisProjectInformation(projectUUID);
+		analysisStore.removeAnalysisProject(projectUUID);
 	}
 
 	@Override
 	public AnalysisProjectSettings readAnalysisProjectSettings(
 			UUID analysisProjectUUID) throws AnalysisStoreException {
-		return readAnalysisProjectSettings(analysisProjectUUID);
+		return analysisStore.readAnalysisProjectSettings(analysisProjectUUID);
+	}
+
+	@Override
+	public AnalysisProject readAnalysisProject(
+			AnalysisProjectInformation information)
+			throws AnalysisStoreException {
+		return analysisStore.readAnalysisProject(information);
 	}
 
 	@Override
 	public void updateAnalysisProjectSettings(UUID projectUUID,
 			AnalysisProjectSettings settings) throws AnalysisStoreException {
-		updateAnalysisProjectSettings(projectUUID, settings);
+		analysisStore.updateAnalysisProjectSettings(projectUUID, settings);
 	}
 
 	@Override
 	public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
 			throws AnalysisStoreException {
-		return readAllRunInformation(projectUUID);
+		return analysisStore.readAllRunInformation(projectUUID);
 	}
 
 	@Override
 	public AnalysisRunInformation readAnalysisRun(UUID projectUUID,
 			UUID analysisRunUUID) throws AnalysisStoreException {
-		return readAnalysisRun(projectUUID, analysisRunUUID);
+		return analysisStore.readAnalysisRun(projectUUID, analysisRunUUID);
+	}
+
+	@Override
+	public AnalysisRun readAnalysisRun(
+			AnalysisRunInformation analysisRunInformation)
+			throws AnalysisStoreException {
+		return analysisStore.readAnalysisRun(analysisRunInformation);
 	}
 
 	@Override
 	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)
 			throws AnalysisStoreException {
-		return readLastAnalysisRun(projectUUID);
+		return analysisStore.readLastAnalysisRun(projectUUID);
 	}
 
 	@Override
 	public void removeAnalysisRun(UUID projectUUID, UUID analysisRunUUID)
 			throws AnalysisStoreException {
-		readAllRunInformation(projectUUID);
+		analysisStore.removeAnalysisRun(projectUUID, analysisRunUUID);
 	}
 
 	@Override
 	public FileSearchConfiguration readSearchConfiguration(UUID analysisRunUUID)
 			throws AnalysisStoreException {
-		return readSearchConfiguration(analysisRunUUID);
+		return analysisStore.readSearchConfiguration(analysisRunUUID);
 	}
 
 	@Override
 	public void storeAnalysisFileTree(UUID projectUUID, UUID analysisRunUUID,
 			AnalysisFileTree fileTree) throws AnalysisStoreException {
-		storeAnalysisFileTree(projectUUID, analysisRunUUID, fileTree);
+		analysisStore.storeAnalysisFileTree(projectUUID, analysisRunUUID,
+				fileTree);
 	}
 
 	@Override
@@ -114,13 +131,14 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 			ProgressObserver<AnalysisStore> progressObserver, UUID projectUUID,
 			UUID analysisRunUUID, AnalysisFileTree fileTree)
 			throws AnalysisStoreException {
-		storeAnalysisFileTree(projectUUID, analysisRunUUID, fileTree);
+		analysisStore.storeAnalysisFileTree(projectUUID, analysisRunUUID,
+				fileTree);
 	}
 
 	@Override
 	public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException {
-		return readAnalysisFileTree(projectUUID, runUUID);
+		return analysisStore.readAnalysisFileTree(projectUUID, runUUID);
 	}
 
 	@Override
@@ -128,8 +146,8 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 			Date startTime, long duration, String description,
 			FileSearchConfiguration fileSearchConfiguration)
 			throws AnalysisStoreException {
-		return createAnalysisRun(analysisProjectUUID, startTime, duration,
-				description, fileSearchConfiguration);
+		return analysisStore.createAnalysisRun(analysisProjectUUID, startTime,
+				duration, description, fileSearchConfiguration);
 	}
 
 }

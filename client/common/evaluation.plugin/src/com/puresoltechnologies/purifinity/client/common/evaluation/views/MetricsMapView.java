@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.views;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,16 +45,15 @@ import com.puresoltechnologies.purifinity.client.common.chart.renderer.AreaMapRe
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ColorProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.MetricsMapViewSettingsDialog;
+import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.client.common.server.Evaluators;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapData;
-import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapDataProvider;
-import com.puresoltechnologies.purifinity.framework.store.api.MetricsMapDataProviderFactory;
+import com.puresoltechnologies.purifinity.server.purifinityserver.client.MetricsMapDataProviderClient;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.MetricsMapData;
 
 public class MetricsMapView extends AbstractMetricViewPart implements Printable {
 
@@ -266,38 +266,41 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				monitor.beginTask("Load data", 5);
-				MetricsMapDataProvider dataProvider = MetricsMapDataProviderFactory
-						.getFactory().getInstance();
-				monitor.worked(1);
-				final AnalysisSelection analysisSelection = getAnalysisSelection();
-				monitor.worked(1);
-				UUID analysisProjectUUID = analysisSelection
-						.getAnalysisProject().getInformation().getUUID();
-				monitor.worked(1);
-				UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-						.getInformation().getUUID();
-				monitor.worked(1);
-				mapValues = dataProvider.loadMapValues(analysisProjectUUID,
-						analysisRunUUID, mapMetricSelection.getName(),
-						mapParameterSelection, colorMetricSelection.getName(),
-						colorParameterSelection);
-				monitor.worked(1);
-				monitor.done();
-				new UIJob("Draw Metric Map") {
+				try (MetricsMapDataProviderClient client = new MetricsMapDataProviderClient()) {
+					monitor.worked(1);
+					final AnalysisSelection analysisSelection = getAnalysisSelection();
+					monitor.worked(1);
+					UUID analysisProjectUUID = analysisSelection
+							.getAnalysisProject().getInformation().getUUID();
+					monitor.worked(1);
+					UUID analysisRunUUID = analysisSelection.getAnalysisRun()
+							.getInformation().getUUID();
+					monitor.worked(1);
+					mapValues = client.loadMetricsMapData(analysisProjectUUID,
+							analysisRunUUID, mapMetricSelection.getName(),
+							mapParameterSelection,
+							colorMetricSelection.getName(),
+							colorParameterSelection);
+					monitor.worked(1);
+					monitor.done();
+					new UIJob("Draw Metric Map") {
 
-					@Override
-					public IStatus runInUIThread(IProgressMonitor monitor) {
-						AnalysisFileTree path = analysisSelection
-								.getFileTreeNode();
-						if (path.isFile()) {
-							path = path.getParent();
+						@Override
+						public IStatus runInUIThread(IProgressMonitor monitor) {
+							AnalysisFileTree path = analysisSelection
+									.getFileTreeNode();
+							if (path.isFile()) {
+								path = path.getParent();
+							}
+							showEvaluation(path);
+							return Status.OK_STATUS;
 						}
-						showEvaluation(path);
-						return Status.OK_STATUS;
-					}
-				}.schedule();
-				;
-				return Status.OK_STATUS;
+					}.schedule();
+					;
+					return Status.OK_STATUS;
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		};
 		job.schedule();

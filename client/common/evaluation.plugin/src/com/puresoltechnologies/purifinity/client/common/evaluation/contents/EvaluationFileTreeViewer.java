@@ -13,7 +13,7 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunContentTreeContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunContentTreeViewer;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
 
 /**
  * This viewer is used in {@link Tree}s to render the content of an analysis

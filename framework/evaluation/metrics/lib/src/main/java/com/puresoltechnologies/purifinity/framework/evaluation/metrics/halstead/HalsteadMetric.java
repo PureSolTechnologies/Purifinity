@@ -22,10 +22,11 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.Result;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.CodeRangeEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Result;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadResult;
 
 public class HalsteadMetric extends CodeRangeEvaluator {
 

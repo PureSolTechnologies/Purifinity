@@ -30,6 +30,7 @@ import com.puresoltechnologies.purifinity.client.common.evaluation.contents.Metr
 import com.puresoltechnologies.purifinity.client.common.evaluation.ui.QualityLevelLabel;
 import com.puresoltechnologies.purifinity.client.common.evaluation.ui.SourceCodeQualityLabel;
 import com.puresoltechnologies.purifinity.client.common.evaluation.utils.EvaluationsTarget;
+import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTUtils;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ExportAction;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
@@ -37,7 +38,6 @@ import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResul
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;

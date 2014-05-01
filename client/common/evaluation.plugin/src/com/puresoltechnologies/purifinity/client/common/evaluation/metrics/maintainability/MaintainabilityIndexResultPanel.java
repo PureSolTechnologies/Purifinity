@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexResult;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexResult;
 
 public class MaintainabilityIndexResultPanel extends Composite {
 

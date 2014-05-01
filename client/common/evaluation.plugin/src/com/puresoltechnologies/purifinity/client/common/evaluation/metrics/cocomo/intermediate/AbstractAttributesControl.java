@@ -17,9 +17,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCOCOMOAttribute;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.Rating;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.IntermediateCOCOMOAttribute;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.IntermediateCoCoMoResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.Rating;
 
 public abstract class AbstractAttributesControl extends Composite implements
 		SelectionListener {

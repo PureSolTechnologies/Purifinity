@@ -20,12 +20,12 @@ import org.osgi.framework.ServiceReference;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.EvaluatorInformationDialog;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.AvailableEvaluatorsTableViewer;
+import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.InformationAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.InformationProvider;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 
 public class AvailableEvaluatorsView extends AbstractPureSolTechnologiesView
 		implements Refreshable, InformationProvider, ISelectionChangedListener {

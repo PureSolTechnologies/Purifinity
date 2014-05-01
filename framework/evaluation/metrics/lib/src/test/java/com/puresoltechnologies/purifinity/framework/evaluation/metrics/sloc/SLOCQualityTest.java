@@ -10,7 +10,7 @@ import org.junit.Test;
 import com.puresoltechnologies.commons.math.statistics.Statistics;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCMetric;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCQuality;
 
 public class SLOCQualityTest {

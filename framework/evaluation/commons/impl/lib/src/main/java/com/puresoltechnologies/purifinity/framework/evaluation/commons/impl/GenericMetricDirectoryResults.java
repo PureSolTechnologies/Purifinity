@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
+import com.puresoltechnologies.purifinity.evaluation.api.AbstractEvaluatorResult;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 
 public class GenericMetricDirectoryResults extends AbstractEvaluatorResult

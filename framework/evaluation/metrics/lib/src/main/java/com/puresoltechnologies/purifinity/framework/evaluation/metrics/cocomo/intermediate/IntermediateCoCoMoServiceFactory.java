@@ -9,6 +9,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluatorFactory;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCEvaluator;
 
 public class IntermediateCoCoMoServiceFactory extends AbstractEvaluatorFactory {

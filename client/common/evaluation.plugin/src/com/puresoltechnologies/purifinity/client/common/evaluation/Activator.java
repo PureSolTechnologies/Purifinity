@@ -14,7 +14,7 @@ import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.maint
 import com.puresoltechnologies.purifinity.client.common.evaluation.metrics.maintainability.MIParetoChartConfigProvider;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevelParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexEvaluatorParameter;
 
 public class Activator extends AbstractUIPlugin {
 	// The shared instance

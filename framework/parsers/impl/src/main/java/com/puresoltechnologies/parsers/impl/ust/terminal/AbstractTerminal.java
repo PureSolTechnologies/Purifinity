@@ -15,7 +15,7 @@ import com.puresoltechnologies.purifinity.framework.commons.utils.StringUtils;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class AbstractTerminal extends AbstractUniversalSyntaxTreeNode {
+public abstract class AbstractTerminal extends AbstractUniversalSyntaxTreeNode {
 
 	private static final long serialVersionUID = -1620557770406497800L;
 

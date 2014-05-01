@@ -3,7 +3,6 @@ package com.puresoltechnologies.purifinity.server.purifinityserver.client;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -91,10 +90,6 @@ public class HistogramChartDataProviderClient implements AutoCloseable {
 	@OnOpen
 	public void open(Session session, EndpointConfig endpointConfig) {
 		logger.info("Socket was opened.");
-		for (Entry<String, Object> entry : endpointConfig.getUserProperties()
-				.entrySet()) {
-			System.out.println(entry.getKey() + " -> " + entry.getValue());
-		}
 	}
 
 	@OnClose

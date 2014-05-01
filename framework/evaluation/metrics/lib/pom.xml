@@ -36,6 +36,10 @@
 			<artifactId>evaluation.commons.impl.lib</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>evaluation.metrics.api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.parsers</groupId>
 			<artifactId>parsers.impl</artifactId>
 		</dependency>

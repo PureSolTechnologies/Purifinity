@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.HistogramChartData;
+import com.puresoltechnologies.purifinity.server.purifinityserver.domain.MetricsMapData;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
 
 /**
@@ -41,4 +42,8 @@ public interface ChartDataProvider {
 	public ParetoChartData loadParetoChartData(UUID analysisProject,
 			UUID analysisRun, String evaluatorName, Parameter<?> parameter,
 			CodeRangeType codeRangeType);
+
+	public MetricsMapData loadMapValues(UUID analysisProject, UUID analysisRun,
+			String mapEvaluatorName, Parameter<?> mapParameter,
+			String colorEvaluatorName, Parameter<?> colorParameter);
 }

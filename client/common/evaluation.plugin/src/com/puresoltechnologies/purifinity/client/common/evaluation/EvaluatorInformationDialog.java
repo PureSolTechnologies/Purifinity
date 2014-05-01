@@ -23,10 +23,10 @@ import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.ParameterListViewer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.QualityCharacteristicListViewer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.controls.QualityCharacteristicInformationComponent;
+import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.controls.ParameterInformationComponent;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StringUtils;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
 
 public class EvaluatorInformationDialog extends Dialog implements
 		SelectionListener {

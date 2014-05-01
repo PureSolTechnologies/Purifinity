@@ -27,9 +27,8 @@ import com.puresoltechnologies.purifinity.client.common.analysis.contents.Analys
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisListLabelProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListLabelProvider;
+import com.puresoltechnologies.purifinity.client.common.server.connectors.AnalysisStoreConnector;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisProjectImpl;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunImpl;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
@@ -191,8 +190,8 @@ public class AnalysisStoreView extends AbstractPureSolTechnologiesView
 		try {
 			updateRunInformation(null);
 			if (information != null) {
-				selectedAnalysis = AnalysisProjectImpl
-						.readFromStore(information.getUUID());
+				selectedAnalysis = AnalysisStoreConnector.getStore()
+						.readAnalysisProject(information);
 				selectedAnalysisRun = null;
 				analysisRunViewer.setInput(selectedAnalysis
 						.getAllRunInformation());
@@ -213,9 +212,8 @@ public class AnalysisStoreView extends AbstractPureSolTechnologiesView
 			AnalysisRunInformation analysisRunInformation) {
 		try {
 			if (analysisRunInformation != null) {
-				selectedAnalysisRun = AnalysisRunImpl.readFromStore(
-						selectedAnalysis.getInformation().getUUID(),
-						analysisRunInformation.getUUID());
+				selectedAnalysisRun = AnalysisStoreConnector.getStore()
+						.readAnalysisRun(analysisRunInformation);
 				runName.setText(selectedAnalysis.getSettings().getName());
 				runDescription.setText(analysisRunInformation.getDescription());
 			} else {

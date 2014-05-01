@@ -22,10 +22,10 @@ Require-Bundle: org.eclipse.osgi;bundle-version="3.8.2",
  com.puresoltechnologies.purifinity.analysis.domain.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.analysis.api.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.framework.store.api.bundle;bundle-version="0.3.0",
- com.puresoltechnologies.purifinity.framework.analysis.impl.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.application.plugin;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.branding.plugin;bundle-version="0.3.0",
+ com.puresoltechnologies.purifinity.client.common.server.plugin;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.3.0"
 Export-Package: com.puresoltechnologies.purifinity.client.common.analy
  sis;uses:="com.puresoltechnologies.purifinity.client.common.osgi,org.

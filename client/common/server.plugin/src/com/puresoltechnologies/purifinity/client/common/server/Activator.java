@@ -12,6 +12,7 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin = null;
 
 	private ServiceRegistration<PurifinityServerClient> clientRegistration = null;
+	private final PurifinityServerClient purifinityServerClient = null;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -21,9 +22,10 @@ public class Activator extends AbstractUIPlugin {
 					+ " plugin was already started!");
 		}
 		plugin = this;
+
+		PurifinityServerClient purifinityServerClient = new PurifinityServerClient();
 		clientRegistration = context.registerService(
-				PurifinityServerClient.class, new PurifinityServerClient(),
-				null);
+				PurifinityServerClient.class, purifinityServerClient, null);
 	}
 
 	@Override

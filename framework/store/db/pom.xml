@@ -13,7 +13,6 @@
 
 	<modules>
 		<module>lib</module>
-		<module>bundle</module>
 		<module>test</module>
 	</modules>
 

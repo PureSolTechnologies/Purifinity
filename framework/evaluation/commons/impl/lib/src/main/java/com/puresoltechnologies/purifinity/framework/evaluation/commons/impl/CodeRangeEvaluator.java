@@ -8,6 +8,7 @@ import java.util.concurrent.Callable;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.evaluation.api.Result;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;

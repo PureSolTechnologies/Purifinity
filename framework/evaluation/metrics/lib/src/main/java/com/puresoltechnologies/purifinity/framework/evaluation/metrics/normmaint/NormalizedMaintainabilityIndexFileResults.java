@@ -21,10 +21,10 @@ import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.AbstractEvaluatorResult;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluatorResult;
 
 public class NormalizedMaintainabilityIndexFileResults extends
 		AbstractEvaluatorResult implements MetricFileResults {

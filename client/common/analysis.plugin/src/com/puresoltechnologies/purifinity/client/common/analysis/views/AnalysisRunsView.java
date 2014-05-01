@@ -43,11 +43,11 @@ import com.puresoltechnologies.purifinity.client.common.analysis.contents.Analys
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListLabelProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
+import com.puresoltechnologies.purifinity.client.common.server.connectors.AnalysisStoreConnector;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseTarget;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunImpl;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 
 /**
@@ -280,8 +280,8 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 					.getFirstElement();
 			AnalysisRun analysisRun = null;
 			if (information != null) {
-				analysisRun = AnalysisRunImpl.readFromStore(analysisProject
-						.getInformation().getUUID(), information.getUUID());
+				analysisRun = AnalysisStoreConnector.getStore()
+						.readAnalysisRun(information);
 			}
 			setSelection(new AnalysisRunSelection(analysisProject, analysisRun));
 		} catch (AnalysisStoreException e) {

@@ -39,12 +39,12 @@ import com.puresoltechnologies.purifinity.client.common.chart.Plot;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.CircleMarkRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ConstantColorProvider;
 import com.puresoltechnologies.purifinity.client.common.evaluation.CorrelationChartViewSettingsDialog;
+import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.client.common.server.Evaluators;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 import com.puresoltechnologies.purifinity.server.purifinityserver.client.ParetoChartDataProviderClient;
 import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
 

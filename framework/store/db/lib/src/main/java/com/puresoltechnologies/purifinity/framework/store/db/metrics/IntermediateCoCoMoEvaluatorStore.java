@@ -2,8 +2,8 @@ package com.puresoltechnologies.purifinity.framework.store.db.metrics;
 
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoDirectoryResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoFileResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.IntermediateCoCoMoDirectoryResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.IntermediateCoCoMoFileResults;
 import com.puresoltechnologies.purifinity.framework.store.db.evaluation.AbstractEvaluatorStore;
 
 public class IntermediateCoCoMoEvaluatorStore extends AbstractEvaluatorStore {

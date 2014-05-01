@@ -22,17 +22,15 @@ import com.puresoltechnologies.purifinity.client.common.analysis.contents.CodeRa
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractEvaluationView;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricDirectoryResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricFileResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricResult;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexFileResult;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexFileResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexResult;
+import com.puresoltechnologies.purifinity.client.common.server.connectors.HalsteadMetricEvaluatorConnector;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricDirectoryResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricFileResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricResult;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResult;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexResult;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
 public class MaintainabilityIndexView extends AbstractEvaluationView implements
 		ISelectionChangedListener {
@@ -94,8 +92,8 @@ public class MaintainabilityIndexView extends AbstractEvaluationView implements
 			throws EvaluationStoreException {
 		MaintainabilityIndexResult maintainabilityResult = null;
 		if ((codeRangeId >= 0) && (codeRangeId < codeRanges.size())) {
-			EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
-					.createInstance(MaintainabilityIndexEvaluator.class);
+			EvaluatorStore evaluatorStore = HalsteadMetricEvaluatorConnector
+					.getStore();
 			if (path.isFile()) {
 				MaintainabilityIndexFileResults fileResults = (MaintainabilityIndexFileResults) evaluatorStore
 						.readFileResults(path.getHashId());
@@ -118,8 +116,8 @@ public class MaintainabilityIndexView extends AbstractEvaluationView implements
 	private void updateCodeRanges(AnalysisFileTree path)
 			throws EvaluationStoreException {
 		codeRanges.clear();
-		EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
-				.createInstance(HalsteadMetricEvaluator.class);
+		EvaluatorStore evaluatorStore = HalsteadMetricEvaluatorConnector
+				.getStore();
 		if (path.isFile()) {
 			HalsteadMetricFileResults fileResults = (HalsteadMetricFileResults) evaluatorStore
 					.readFileResults(path.getHashId());

@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadResult;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadResult;
 
 public class HalsteadMetricResultPanel extends Composite {
 

@@ -36,8 +36,8 @@ import com.puresoltechnologies.purifinity.client.common.analysis.contents.Analyz
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.FailedFilesTableViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ParserTreeControl;
 import com.puresoltechnologies.purifinity.client.common.analysis.dialogs.AnalysisInformationDialog;
+import com.puresoltechnologies.purifinity.client.common.server.connectors.AnalysisStoreConnector;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.AnalysisRunImpl;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
@@ -185,9 +185,8 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					analysisRun = AnalysisRunImpl.readFromStore(analysis
-							.getInformation().getUUID(), analysisRunInformation
-							.getUUID());
+					analysisRun = AnalysisStoreConnector.getStore()
+							.readAnalysisRun(analysisRunInformation);
 				} catch (AnalysisStoreException e) {
 					logger.log(new Status(Status.ERROR, ParserTreeControl.class
 							.getName(), "Can not read analysis store!", e));

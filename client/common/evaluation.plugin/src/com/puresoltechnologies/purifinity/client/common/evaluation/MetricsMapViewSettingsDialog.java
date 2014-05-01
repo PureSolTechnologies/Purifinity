@@ -22,9 +22,9 @@ import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.MetricComboViewer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.ParameterComboViewer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.MetricsMapView;
+import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.client.common.server.Evaluators;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.AbstractPartSettingsDialog;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 
 public class MetricsMapViewSettingsDialog extends AbstractPartSettingsDialog
 		implements SelectionListener {

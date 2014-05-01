@@ -8,7 +8,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.ProgrammingLanguages;
 
 /**
  * This class is a simple viewer for combo boxes which provide a selection for
@@ -53,9 +52,10 @@ public class ProgrammingLanguageViewer extends ComboViewer {
 	@Override
 	public void refresh() {
 		super.refresh();
-		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-				.createInstance()) {
-			setInput(programmingLanguages.getAll());
-		}
+		// FIXME
+		// try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
+		// .createInstance()) {
+		// setInput(programmingLanguages.getAll());
+		// }
 	}
 }

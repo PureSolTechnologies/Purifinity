@@ -13,7 +13,7 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
 
 public class AvailableEvaluatorsTableViewer extends TableViewer implements
 		IStructuredContentProvider {

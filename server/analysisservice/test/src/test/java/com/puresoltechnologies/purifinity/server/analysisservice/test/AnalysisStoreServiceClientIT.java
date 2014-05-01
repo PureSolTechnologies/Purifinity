@@ -16,12 +16,12 @@ import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
-import com.puresoltechnologies.purifinity.server.analysisservice.client.AnalysisStoreServiceClient;
+import com.puresoltechnologies.purifinity.server.analysisservice.client.AnalysisStoreClient;
 
 public class AnalysisStoreServiceClientIT extends
 		AbstractAnalysisStoreServiceClientTest {
 
-	private final AnalysisStoreServiceClient analysisStoreService = new AnalysisStoreServiceClient();
+	private final AnalysisStoreClient analysisStoreService = new AnalysisStoreClient();
 
 	private AnalysisProjectSettings createProjectSettings() {
 		DirectoryRepositoryLocation directoryRepositoryLocation = new DirectoryRepositoryLocation(

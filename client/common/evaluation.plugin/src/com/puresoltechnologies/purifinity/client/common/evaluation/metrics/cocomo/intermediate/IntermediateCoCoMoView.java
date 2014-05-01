@@ -8,14 +8,13 @@ import org.eclipse.swt.widgets.Composite;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractEvaluationView;
+import com.puresoltechnologies.purifinity.client.common.server.connectors.IntermediateCoCoMoEvaluatorConnector;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoDirectoryResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.IntermediateCoCoMoFileResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.IntermediateCoCoMoDirectoryResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.IntermediateCoCoMoFileResults;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
 public class IntermediateCoCoMoView extends AbstractEvaluationView {
 	private IntermediateCoCoMoResultComponent resultComponent = null;
@@ -38,10 +37,8 @@ public class IntermediateCoCoMoView extends AbstractEvaluationView {
 	@Override
 	public void showEvaluation(AnalysisFileTree path)
 			throws EvaluationStoreException {
-		EvaluatorStoreFactory evaluationStoreFactory = EvaluatorStoreFactory
-				.getFactory();
-		EvaluatorStore evaluationStore = evaluationStoreFactory
-				.createInstance(IntermediateCoCoMoEvaluator.class);
+		EvaluatorStore evaluationStore = IntermediateCoCoMoEvaluatorConnector
+				.getStore();
 		if (path.isFile()) {
 			MetricFileResults fileResults = evaluationStore
 					.readFileResults(path.getHashId());

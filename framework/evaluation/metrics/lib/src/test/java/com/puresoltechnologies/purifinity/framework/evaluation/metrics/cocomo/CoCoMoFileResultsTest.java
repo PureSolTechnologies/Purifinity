@@ -6,8 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.basic.BasicCoCoMoFileResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.basic.SoftwareProject;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.basic.BasicCoCoMoFileResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.basic.SoftwareProject;
 
 public class CoCoMoFileResultsTest {
 

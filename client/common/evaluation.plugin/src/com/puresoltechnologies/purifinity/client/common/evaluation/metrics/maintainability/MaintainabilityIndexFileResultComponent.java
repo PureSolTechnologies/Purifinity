@@ -16,13 +16,12 @@ import org.osgi.framework.Bundle;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.utils.ColorUtils;
+import com.puresoltechnologies.purifinity.client.common.server.connectors.MaintainabilityIndexEvaluatorConnector;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexFileResult;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.maintainability.MaintainabilityIndexFileResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResult;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResults;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
 public class MaintainabilityIndexFileResultComponent extends Composite {
 
@@ -32,8 +31,8 @@ public class MaintainabilityIndexFileResultComponent extends Composite {
 		try {
 			setLayout(new FillLayout());
 
-			EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
-					.createInstance(MaintainabilityIndexEvaluator.class);
+			EvaluatorStore evaluatorStore = MaintainabilityIndexEvaluatorConnector
+					.getStore();
 
 			MaintainabilityIndexFileResults fileResults = (MaintainabilityIndexFileResults) evaluatorStore
 					.readFileResults(analyzedCode.getHashId());

@@ -25,9 +25,9 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.CodeRangeTypeComboViewer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.EvaluatorComboViewer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.ParameterComboViewer;
+import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.client.common.server.Evaluators;
 import com.puresoltechnologies.purifinity.client.common.ui.SWTUtils;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 
 /**
  * This components provides a selection for an evaluator and a parameters.

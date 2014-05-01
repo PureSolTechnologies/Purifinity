@@ -26,9 +26,13 @@ import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacte
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.IntermediateCoCoMoDirectoryResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.IntermediateCoCoMoFileResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.IntermediateCoCoMoResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.SoftwareProject;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCFileResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCFileResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.sloc.SLOCResult;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;

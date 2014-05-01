@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.metrics.coco
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.cocomo.intermediate.HardwareAttributes;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.HardwareAttributes;
 
 public class HardwareAttributesControl extends AbstractAttributesControl {
 

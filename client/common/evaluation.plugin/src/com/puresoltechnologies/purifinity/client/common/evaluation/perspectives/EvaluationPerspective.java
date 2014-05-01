@@ -6,8 +6,8 @@ import org.eclipse.ui.IPerspectiveFactory;
 
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisProjectsView;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisRunsView;
-import com.puresoltechnologies.purifinity.client.common.evaluation.views.EvaluationFileTreeView;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AvailableEvaluatorsView;
+import com.puresoltechnologies.purifinity.client.common.evaluation.views.EvaluationFileTreeView;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.MetricsTableView;
 
 public class EvaluationPerspective implements IPerspectiveFactory {

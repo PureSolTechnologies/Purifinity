@@ -198,7 +198,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>evaluation.metrics.bundle</artifactId>
+			<artifactId>evaluation.metrics.api.bundle</artifactId>
 			<version>${purifinity.framework.version}</version>
 		</dependency>
 		<dependency>
@@ -237,16 +237,6 @@
 			<version>${purifinity.server.version}</version>
 		</dependency>
 		<!-- External bundles -->
-		<dependency>
-			<groupId>com.datastax</groupId>
-			<artifactId>cassandra.bundle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.thinkaurelius</groupId>
-			<artifactId>titan.bundle</artifactId>
-			<version>${project.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math.bundle</artifactId>

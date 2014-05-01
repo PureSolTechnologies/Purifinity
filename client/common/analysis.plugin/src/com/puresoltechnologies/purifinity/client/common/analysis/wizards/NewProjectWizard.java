@@ -3,20 +3,10 @@ package com.puresoltechnologies.purifinity.client.common.analysis.wizards;
 import java.io.File;
 
 import org.eclipse.core.runtime.ILog;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.Wizard;
 
-import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
-import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
-import com.puresoltechnologies.purifinity.client.common.analysis.utils.PreferencesUtils;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.framework.commons.utils.NotImplementedException;
 
 public class NewProjectWizard extends Wizard {
 
@@ -32,34 +22,36 @@ public class NewProjectWizard extends Wizard {
 
 	@Override
 	public boolean performFinish() {
-		try {
-			String projectName = getProjectName();
-			String description = getProjectDescription();
-			File sourceDirectory = getSourceDirectory();
-
-			IPreferenceStore preferenceStore = Activator.getDefault()
-					.getPreferenceStore();
-			FileSearchConfiguration searchConfiguration = PreferencesUtils
-					.getFileSearchConfiguration(preferenceStore);
-			AnalysisStore analysisStore = AnalysisStoreFactory.getFactory()
-					.getInstance();
-			AnalysisProjectSettings analysisSettings = new AnalysisProjectSettings(
-					projectName, description, searchConfiguration,
-					new DirectoryRepositoryLocation(projectName,
-							sourceDirectory).getSerialization());
-			AnalysisProjectInformation analysisInformation = analysisStore
-					.createAnalysisProject(analysisSettings);
-
-			AnalysisJob job = new AnalysisJob(analysisInformation,
-					analysisSettings);
-			job.schedule();
-			return true;
-		} catch (AnalysisStoreException e) {
-			logger.log(new Status(Status.ERROR, Activator.getDefault()
-					.getBundle().getSymbolicName(),
-					"Could not create new analysis project.", e));
-			return false;
-		}
+		throw new NotImplementedException("Analysis Project Creation");
+		// try {
+		// String projectName = getProjectName();
+		// String description = getProjectDescription();
+		// File sourceDirectory = getSourceDirectory();
+		//
+		// IPreferenceStore preferenceStore = Activator.getDefault()
+		// .getPreferenceStore();
+		// FileSearchConfiguration searchConfiguration = PreferencesUtils
+		// .getFileSearchConfiguration(preferenceStore);
+		// AnalysisStore analysisStore = AnalysisStoreFactory.getFactory()
+		// .getInstance();
+		// AnalysisProjectSettings analysisSettings = new
+		// AnalysisProjectSettings(
+		// projectName, description, searchConfiguration,
+		// new DirectoryRepositoryLocation(projectName,
+		// sourceDirectory).getSerialization());
+		// AnalysisProjectInformation analysisInformation = analysisStore
+		// .createAnalysisProject(analysisSettings);
+		//
+		// AnalysisJob job = new AnalysisJob(analysisInformation,
+		// analysisSettings);
+		// job.schedule();
+		// return true;
+		// } catch (AnalysisStoreException e) {
+		// logger.log(new Status(Status.ERROR, Activator.getDefault()
+		// .getBundle().getSymbolicName(),
+		// "Could not create new analysis project.", e));
+		// return false;
+		// }
 	}
 
 	public String getProjectName() {

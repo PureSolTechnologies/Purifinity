@@ -14,10 +14,10 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
+import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.client.common.server.Evaluators;
 import com.puresoltechnologies.purifinity.client.common.ui.jobs.ObservedJob;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.Evaluators;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
 

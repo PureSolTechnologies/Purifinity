@@ -16,6 +16,8 @@ import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.ProgressObserver;
 import com.puresoltechnologies.commons.trees.api.TreeUtils;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
@@ -441,6 +443,22 @@ public class AnalysisStoreImpl implements AnalysisStore {
 		AnalysisStoreCacheUtils.cacheAnalysisFileTree(projectUUID, runUUID,
 				analysisFileTree);
 		return analysisFileTree;
+	}
+
+	@Override
+	public AnalysisProject readAnalysisProject(
+			AnalysisProjectInformation information)
+			throws AnalysisStoreException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AnalysisRun readAnalysisRun(
+			AnalysisRunInformation analysisRunInformation)
+			throws AnalysisStoreException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

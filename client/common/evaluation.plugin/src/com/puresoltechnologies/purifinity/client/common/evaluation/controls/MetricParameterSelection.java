@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.controls;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.EvaluatorFactory;
+import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
 
 public class MetricParameterSelection {
 

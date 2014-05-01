@@ -26,14 +26,13 @@ import com.puresoltechnologies.purifinity.client.common.analysis.contents.CodeRa
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractMetricViewPart;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricDirectoryResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricEvaluator;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricFileResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadMetricResult;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.halstead.HalsteadResult;
+import com.puresoltechnologies.purifinity.client.common.server.connectors.HalsteadMetricEvaluatorConnector;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricDirectoryResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricFileResults;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricResult;
+import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadResult;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
 public class HalsteadMetricView extends AbstractMetricViewPart implements
 		ISelectionChangedListener {
@@ -116,8 +115,8 @@ public class HalsteadMetricView extends AbstractMetricViewPart implements
 			throws EvaluationStoreException {
 		HalsteadResult halsteadResult = null;
 		if ((codeRangeId >= 0) && (codeRangeId < codeRanges.size())) {
-			EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
-					.createInstance(HalsteadMetricEvaluator.class);
+			EvaluatorStore evaluatorStore = HalsteadMetricEvaluatorConnector
+					.getStore();
 			if (path.isFile()) {
 				HalsteadMetricFileResults fileResults = (HalsteadMetricFileResults) evaluatorStore
 						.readFileResults(path.getHashId());
@@ -145,8 +144,8 @@ public class HalsteadMetricView extends AbstractMetricViewPart implements
 	private void updateCodeRanges(AnalysisFileTree path)
 			throws EvaluationStoreException {
 		codeRanges.clear();
-		EvaluatorStore evaluatorStore = EvaluatorStoreFactory.getFactory()
-				.createInstance(HalsteadMetricEvaluator.class);
+		EvaluatorStore evaluatorStore = HalsteadMetricEvaluatorConnector
+				.getStore();
 		if (path.isFile()) {
 			HalsteadMetricFileResults fileResults = (HalsteadMetricFileResults) evaluatorStore
 					.readFileResults(path.getHashId());

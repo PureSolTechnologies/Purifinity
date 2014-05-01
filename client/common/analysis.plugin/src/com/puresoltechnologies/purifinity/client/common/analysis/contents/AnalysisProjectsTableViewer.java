@@ -14,12 +14,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.RepositoryLocationCreator;
 
 public class AnalysisProjectsTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 
-	private final List<AnalysisProject> analysisProjects = new ArrayList<AnalysisProject>();
+	private final List<AnalysisProjectListItem> analysisProjectListItems = new ArrayList<AnalysisProjectListItem>();
 
 	public AnalysisProjectsTableViewer(Table table) {
 		super(table);
@@ -37,7 +36,7 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalysisProject analysisProject = (AnalysisProject) element;
+				AnalysisProjectListItem analysisProject = (AnalysisProjectListItem) element;
 				return analysisProject.getSettings().getName();
 			}
 		});
@@ -50,7 +49,7 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalysisProject analysisProject = (AnalysisProject) element;
+				AnalysisProjectListItem analysisProject = (AnalysisProjectListItem) element;
 				return analysisProject.getSettings().getDescription();
 			}
 		});
@@ -63,10 +62,11 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalysisProject analysisProject = (AnalysisProject) element;
-				return RepositoryLocationCreator.createFromSerialization(
-						analysisProject.getSettings().getRepositoryLocation())
-						.getHumanReadableLocationString();
+				AnalysisProjectListItem analysisProject = (AnalysisProjectListItem) element;
+				return "FIXME!!!";
+				// return RepositoryLocationCreator.createFromSerialization(
+				// analysisProject.getSettings().getRepositoryLocation())
+				// .getHumanReadableLocationString();
 			}
 		});
 	}
@@ -78,10 +78,10 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalysisProject analysisProject = (AnalysisProject) element;
+				AnalysisProjectListItem analysisProject = (AnalysisProjectListItem) element;
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
 						"yyyy-MM-dd HH:mm:ss");
-				return simpleDateFormat.format(analysisProject.getInformation()
+				return simpleDateFormat.format(analysisProject
 						.getCreationTime());
 			}
 		});
@@ -93,22 +93,22 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 
 	@Override
 	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		analysisProjects.clear();
+		analysisProjectListItems.clear();
 		if (newInput == null) {
 			return;
 		}
 		if (Collection.class.isAssignableFrom(newInput.getClass())) {
 			@SuppressWarnings("unchecked")
-			Collection<AnalysisProject> collection = (Collection<AnalysisProject>) newInput;
-			analysisProjects.addAll(collection);
+			Collection<AnalysisProjectListItem> collection = (Collection<AnalysisProjectListItem>) newInput;
+			analysisProjectListItems.addAll(collection);
 		}
 		refresh();
 	}
 
 	@Override
 	public AnalysisProject[] getElements(Object inputElement) {
-		return analysisProjects.toArray(new AnalysisProject[analysisProjects
-				.size()]);
+		return analysisProjectListItems
+				.toArray(new AnalysisProject[analysisProjectListItems.size()]);
 	}
 
 }
