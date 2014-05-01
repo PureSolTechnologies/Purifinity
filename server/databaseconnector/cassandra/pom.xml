@@ -49,7 +49,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>store.db.lib</artifactId>
+			<artifactId>database.cassandra.utils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

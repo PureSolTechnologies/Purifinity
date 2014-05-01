@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.purifinity.framework.store.db.CassandraElementNames;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraElementNames;
 
 @Singleton
 public class SessionProducer {

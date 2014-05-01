@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Cluster.Builder;
-import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnection;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraConnection;
 
 @Singleton
 public class ClusterProducer {

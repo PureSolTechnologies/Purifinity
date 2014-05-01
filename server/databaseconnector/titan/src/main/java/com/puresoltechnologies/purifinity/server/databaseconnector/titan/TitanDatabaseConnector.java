@@ -4,8 +4,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.enterprise.inject.Produces;
 
-import com.puresoltechnologies.purifinity.framework.store.db.CassandraConnectionException;
-import com.puresoltechnologies.purifinity.framework.store.db.TitanConnection;
+import com.puresoltechnologies.purifinity.database.titan.utils.TitanConnection;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraConnectionException;
 import com.thinkaurelius.titan.core.TitanGraph;
 
 public class TitanDatabaseConnector {

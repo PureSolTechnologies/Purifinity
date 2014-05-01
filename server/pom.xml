@@ -601,13 +601,13 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>store.api</artifactId>
-				<version>${purifinity.api.version}</version>
+				<artifactId>evaluation.commons.impl.lib</artifactId>
+				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>store.db.lib</artifactId>
-				<version>${project.version}</version>
+				<artifactId>store.api</artifactId>
+				<version>${purifinity.api.version}</version>
 			</dependency>
 			<!-- =========================== -->
 			<!-- Specific external libraries -->
