@@ -14,7 +14,8 @@
 	<modules>
 		<module>api</module>
 		<module>api.bundle</module>
-		<module>db</module>
+		<module>lib</module>
+		<module>test</module>
 	</modules>
 
 </project>
