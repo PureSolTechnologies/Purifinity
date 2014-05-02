@@ -10,7 +10,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
@@ -63,8 +62,6 @@ public class AvailableAnalyzersView extends AbstractPureSolTechnologiesView
 	@Override
 	public void refresh() {
 		try {
-			BundleContext bundleContext = Activator.getDefault().getBundle()
-					.getBundleContext();
 			Collection<ServiceReference<ProgrammingLanguageAnalyzer>> allServiceReferences = bundleContext
 					.getServiceReferences(ProgrammingLanguageAnalyzer.class,
 							null);

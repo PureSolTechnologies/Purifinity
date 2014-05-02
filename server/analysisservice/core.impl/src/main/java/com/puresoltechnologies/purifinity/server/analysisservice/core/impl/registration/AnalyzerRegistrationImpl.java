@@ -17,9 +17,9 @@ import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRegistration;
 import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRegistrationRemote;
+import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRemotePlugin;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
 @Singleton
@@ -36,7 +36,7 @@ public class AnalyzerRegistrationImpl implements AnalyzerRegistration,
 
 	public Set<String> internalJNDIAddresses = new HashSet<>();
 	public Set<String> externalJNDIAddresses = new HashSet<>();
-	public Map<String, ProgrammingLanguage> languages = new HashMap<>();
+	public Map<String, AnalyzerRemotePlugin> languages = new HashMap<>();
 
 	@PostConstruct
 	public void initialize() {
@@ -53,22 +53,26 @@ public class AnalyzerRegistrationImpl implements AnalyzerRegistration,
 
 	@Override
 	public void registerInternal(String jndiAdress) throws NamingException {
+		logger.info("Register new analyzer: " + jndiAdress);
 		internalJNDIAddresses.add(jndiAdress);
 
-		ProgrammingLanguage language = InitialContext.doLookup(jndiAdress);
+		AnalyzerRemotePlugin language = InitialContext.doLookup(jndiAdress);
 		languages.put(jndiAdress, language);
+		logger.info("New analyzer '" + jndiAdress + "' registered.");
 	}
 
 	@Override
 	public void registerRemote(String jndiAdress) throws NamingException {
+		logger.info("Register new analyzer: " + jndiAdress);
 		externalJNDIAddresses.add(jndiAdress);
 
-		ProgrammingLanguage language = InitialContext.doLookup(jndiAdress);
+		AnalyzerRemotePlugin language = InitialContext.doLookup(jndiAdress);
 		languages.put(jndiAdress, language);
+		logger.info("New analyzer '" + jndiAdress + "' registered.");
 	}
 
 	@Override
-	public Collection<ProgrammingLanguage> getAnalyzers() {
+	public Collection<AnalyzerRemotePlugin> getAnalyzers() {
 		return languages.values();
 	}
 

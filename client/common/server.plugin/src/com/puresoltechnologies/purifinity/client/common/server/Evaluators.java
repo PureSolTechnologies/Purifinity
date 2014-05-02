@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.client.common.server;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Evaluators implements AutoCloseable {
@@ -16,8 +17,7 @@ public class Evaluators implements AutoCloseable {
 	}
 
 	public List<EvaluatorFactory> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override

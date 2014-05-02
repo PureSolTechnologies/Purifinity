@@ -476,6 +476,18 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>plugin.java7.ejb</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>plugin.java7.app</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>purifinityserver.app</artifactId>
 				<version>${project.version}</version>
 				<type>ear</type>
@@ -602,6 +614,11 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 				<artifactId>evaluation.commons.impl.lib</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+				<artifactId>lang.java7.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -1067,6 +1084,7 @@
 		<module>analysisservice</module>
 		<module>evaluationservice</module>
 		<module>purifinityserver</module>
+		<module>plugin</module>
 	</modules>
 
 </project>
