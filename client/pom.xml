@@ -167,6 +167,11 @@
 			<version>${purifinity.api.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>commons-io.bundle</artifactId>
+			<version>${purifinity.server.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.api</groupId>
 			<artifactId>evaluation.api.bundle</artifactId>
 			<version>${purifinity.api.version}</version>

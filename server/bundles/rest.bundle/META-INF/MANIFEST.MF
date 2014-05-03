@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
-Bnd-LastModified: 1399146391118
-Build-Jdk: 1.7.0_45
-Built-By: ludwig
+Bnd-LastModified: 1399152591466
+Build-Jdk: 1.7.0_51
+Built-By: Rick-Rainer Ludwig
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.puresoltechnologies.purifinity.server.rest.Activat
  or

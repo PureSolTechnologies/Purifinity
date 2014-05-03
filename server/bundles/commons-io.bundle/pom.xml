@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -7,7 +8,7 @@
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>json.bundle</artifactId>
+	<artifactId>commons-io.bundle</artifactId>
 	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
@@ -17,8 +18,8 @@
 			<artifactId>osgi</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-jaxrs</artifactId>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse</groupId>
@@ -31,7 +32,7 @@
 	</dependencies>
 
 	<properties>
-		<bundle.namespace>com.puresoltechnologies.purifinity.server.json</bundle.namespace>
+		<bundle.namespace>com.puresoltechnologies.purifinity.server.commons.io</bundle.namespace>
 	</properties>
 
 	<build>
@@ -51,8 +52,8 @@
 						<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
 						<!-- assume public classes are in the top package, and private classes 
 							are under ".internal" -->
-						<Export-Package>${bundle.namespace}*;version="${project.version}",org.codehaus.jackson.*;version="1.9.13"</Export-Package>
-						<Import-Package>!org.codehaus.jackson.xc*,!org.joda*,!javax.ws*,*</Import-Package>
+						<Export-Package>${bundle.namespace}*;version="${project.version}",org.apache.commons.io.*;version="2.1"</Export-Package>
+						<Import-Package>*</Import-Package>
 						<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
 						<!-- embed compile/runtime dependencies using path that matches the 
 							copied dependency folder -->

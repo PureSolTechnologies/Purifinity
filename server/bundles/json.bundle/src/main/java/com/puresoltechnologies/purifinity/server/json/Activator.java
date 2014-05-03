@@ -1,4 +1,4 @@
-package org.codehaus.jackson;
+package com.puresoltechnologies.purifinity.server.json;
 
 import org.osgi.framework.BundleContext;
 
