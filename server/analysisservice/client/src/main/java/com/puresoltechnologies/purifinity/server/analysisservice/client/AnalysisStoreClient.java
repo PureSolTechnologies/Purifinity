@@ -23,12 +23,12 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSetting
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisStoreServiceRestInterface;
+import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisStoreRestInterface;
 import com.puresoltechnologies.purifinity.server.common.rest.JSONMapper;
 
 public class AnalysisStoreClient implements AnalysisStore {
 
-	private final AnalysisStoreServiceRestInterface proxy;
+	private final AnalysisStoreRestInterface proxy;
 
 	static {
 		RegisterBuiltin.register(ResteasyProviderFactory.getInstance());
@@ -42,7 +42,7 @@ public class AnalysisStoreClient implements AnalysisStore {
 		ResteasyClient client = new ResteasyClientBuilder().build();
 		ResteasyWebTarget webTarget = client
 				.target("http://localhost:8080/analysisservice");
-		proxy = webTarget.proxy(AnalysisStoreServiceRestInterface.class);
+		proxy = webTarget.proxy(AnalysisStoreRestInterface.class);
 	}
 
 	@Override

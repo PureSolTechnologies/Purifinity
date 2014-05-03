@@ -203,33 +203,13 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>lang.c11.bundle</artifactId>
-			<version>${purifinity.framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>lang.cpp11.bundle</artifactId>
-			<version>${purifinity.framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>lang.java7.bundle</artifactId>
-			<version>${purifinity.framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>lang.fortran2008.bundle</artifactId>
-			<version>${purifinity.framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 			<artifactId>store.api.bundle</artifactId>
 			<version>${purifinity.framework.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>store.db.bundle</artifactId>
-			<version>${purifinity.framework.version}</version>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>analysisservice.client.bundle</artifactId>
+			<version>${purifinity.server.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

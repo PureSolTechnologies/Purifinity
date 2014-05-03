@@ -1,8 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.views;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.TableViewer;
@@ -10,8 +8,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
@@ -19,6 +15,7 @@ import com.puresoltechnologies.purifinity.client.common.analysis.contents.Availa
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
+import com.puresoltechnologies.purifinity.server.analysisservice.client.AnalysisServiceClient;
 
 public class AvailableAnalyzersView extends AbstractPureSolTechnologiesView
 		implements Refreshable {
@@ -61,20 +58,26 @@ public class AvailableAnalyzersView extends AbstractPureSolTechnologiesView
 
 	@Override
 	public void refresh() {
-		try {
-			Collection<ServiceReference<ProgrammingLanguageAnalyzer>> allServiceReferences = bundleContext
-					.getServiceReferences(ProgrammingLanguageAnalyzer.class,
-							null);
-			List<ProgrammingLanguageAnalyzer> languages = new ArrayList<ProgrammingLanguageAnalyzer>();
-			for (ServiceReference<ProgrammingLanguageAnalyzer> serviceReference : allServiceReferences) {
-				ProgrammingLanguageAnalyzer service = bundleContext
-						.getService(serviceReference);
-				languages.add(service);
-				bundleContext.ungetService(serviceReference);
-			}
-			viewer.setInput(languages);
-		} catch (InvalidSyntaxException e1) {
-			viewer.setInput(new ArrayList<ProgrammingLanguageAnalyzer>());
-		}
+		// try {
+		AnalysisServiceClient client = new AnalysisServiceClient();
+		client.getAnalyzers();
+		// FIXME
+		// Collection<ServiceReference<ProgrammingLanguageAnalyzer>>
+		// allServiceReferences = bundleContext
+		// .getServiceReferences(ProgrammingLanguageAnalyzer.class,
+		// null);
+		// List<ProgrammingLanguageAnalyzer> languages = new
+		// ArrayList<ProgrammingLanguageAnalyzer>();
+		// for (ServiceReference<ProgrammingLanguageAnalyzer>
+		// serviceReference : allServiceReferences) {
+		// ProgrammingLanguageAnalyzer service = bundleContext
+		// .getService(serviceReference);
+		// languages.add(service);
+		// bundleContext.ungetService(serviceReference);
+		// }
+		// viewer.setInput(languages);
+		// } catch (InvalidSyntaxException e1) {
+		viewer.setInput(new ArrayList<ProgrammingLanguageAnalyzer>());
+		// }
 	}
 }

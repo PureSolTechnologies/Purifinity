@@ -11,11 +11,11 @@ import org.slf4j.Logger;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisStoreServiceRestInterface;
+import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisStoreRestInterface;
 import com.puresoltechnologies.purifinity.server.common.rest.JSONMapper;
 
-public class AnalysisStoreServiceRestService implements
-		AnalysisStoreServiceRestInterface {
+public class AnalysisStoreRestService implements
+		AnalysisStoreRestInterface {
 
 	@Inject
 	private Logger logger;

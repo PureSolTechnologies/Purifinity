@@ -18,6 +18,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>analysisservice.client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>plugin.java7.app</artifactId>
 			<type>ear</type>
 		</dependency>

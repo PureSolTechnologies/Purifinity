@@ -4,6 +4,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
+import com.puresoltechnologies.purifinity.server.analysisservice.client.AnalysisServiceClient;
 import com.puresoltechnologies.purifinity.server.purifinityserver.client.PurifinityServerClient;
 
 public class Activator extends AbstractUIPlugin {
@@ -11,8 +12,11 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin = null;
 
-	private ServiceRegistration<PurifinityServerClient> clientRegistration = null;
-	private final PurifinityServerClient purifinityServerClient = null;
+	private ServiceRegistration<PurifinityServerClient> purifinityServerClientRegistration = null;
+	private PurifinityServerClient purifinityServerClient = null;
+
+	private ServiceRegistration<AnalysisServiceClient> analysisServiceClientRegistration = null;
+	private AnalysisServiceClient analysisServiceClient = null;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -23,9 +27,13 @@ public class Activator extends AbstractUIPlugin {
 		}
 		plugin = this;
 
-		PurifinityServerClient purifinityServerClient = new PurifinityServerClient();
-		clientRegistration = context.registerService(
+		purifinityServerClient = new PurifinityServerClient();
+		purifinityServerClientRegistration = context.registerService(
 				PurifinityServerClient.class, purifinityServerClient, null);
+
+		analysisServiceClient = new AnalysisServiceClient();
+		analysisServiceClientRegistration = context.registerService(
+				AnalysisServiceClient.class, analysisServiceClient, null);
 	}
 
 	@Override
@@ -36,8 +44,15 @@ public class Activator extends AbstractUIPlugin {
 		}
 		plugin = null;
 
-		clientRegistration.unregister();
-		clientRegistration = null;
+		purifinityServerClientRegistration.unregister();
+		purifinityServerClientRegistration = null;
+		purifinityServerClient.close();
+		purifinityServerClient = null;
+
+		analysisServiceClientRegistration.unregister();
+		analysisServiceClientRegistration = null;
+		analysisServiceClient.close();
+		analysisServiceClient = null;
 
 		super.stop(context);
 	}

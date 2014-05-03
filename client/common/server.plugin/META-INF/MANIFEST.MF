@@ -8,6 +8,7 @@ Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.ui,
+ org.codehaus.jackson.jackson-jaxrs.external.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.commons.math.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.commons.misc.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.analysis.domain.bundle,
@@ -17,6 +18,7 @@ Require-Bundle: org.eclipse.ui,
  com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.framework.store.api.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.server.purifinityserver.client.bundle;bundle-version="0.3.0",
+ com.puresoltechnologies.purifinity.server.analysisservice.client.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.3.0",
  org.slf4j.api;bundle-version="1.6.4",
