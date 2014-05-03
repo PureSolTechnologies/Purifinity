@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>analysisservice.core.api</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>

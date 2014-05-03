@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>wildfly.ui</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>war</packaging>
 
 	<dependencies>

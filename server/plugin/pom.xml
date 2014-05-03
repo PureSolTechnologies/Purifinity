@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>plugin</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>

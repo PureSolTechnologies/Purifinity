@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>purifinityserver.client.bundle</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
 	<dependencies>
@@ -30,14 +30,6 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>osgi</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty.websocket</groupId>
-			<artifactId>websocket-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty.websocket</groupId>
-			<artifactId>javax-websocket-client-impl</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse</groupId>

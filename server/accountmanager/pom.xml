@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>accountmanager</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<properties>

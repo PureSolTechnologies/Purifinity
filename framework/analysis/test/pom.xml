@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>analysis.test</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Framework: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>
@@ -17,12 +17,16 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>analysis.impl.lib</artifactId>
+			<artifactId>analysis.impl</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 			<artifactId>database.test</artifactId>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>store.api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.parsers</groupId>

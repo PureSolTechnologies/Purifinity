@@ -15,7 +15,7 @@
 	<version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Purifinity's public APIs and SPIs</name>
+	<name>Purifinity Public API: ${project.artifactId}</name>
 	<description>This Maven project and all its sub-projects contain public APIs and SPIs of Purifinity.</description>
 
 	<inceptionYear>2009</inceptionYear>
@@ -131,6 +131,41 @@
 						</executions>
 						<configuration>
 							<forkMode>always</forkMode>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.puresoltechnologies.maven.plugins</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<version>1.2.0</version>
+						<executions>
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>validate</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<recursive>true</recursive>
+							<skipTestScope>true</skipTestScope>
+							<skipProvidedScope>true</skipProvidedScope>
+							<skipOptionals>true</skipOptionals>
+							<knownLicenses>
+								<knownLicense>
+									<name>Apache License, Version 2.0</name>
+									<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+									<aliases>
+										<alias>The Apache Software License, Version 2.0</alias>
+									</aliases>
+								</knownLicense>
+							</knownLicenses>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -325,34 +360,6 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<plugin>
-				<groupId>com.puresoltechnologies.maven.plugins</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>1.2.0</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>validate</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<recursive>true</recursive>
-					<skipTestScope>true</skipTestScope>
-					<skipProvidedScope>true</skipProvidedScope>
-					<skipOptionals>true</skipOptionals>
-					<knownLicenses>
-						<knownLicense>
-							<name>Apache License, Version 2.0</name>
-							<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-							<aliases>
-								<alias>The Apache Software License, Version 2.0</alias>
-							</aliases>
-						</knownLicense>
-					</knownLicenses>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>

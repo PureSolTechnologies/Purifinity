@@ -43,17 +43,7 @@ public class SessionProducer {
 		return session;
 	}
 
-	public void closeAnalysisKeyspaceSession(
-			@Disposes @Named(CassandraKeyspaces.ANALYSIS) Session session) {
-		logger.info("Closing Cassandra Analysis Session...");
+	public void closeAnalysisKeyspaceSession(@Disposes Session session) {
 		cluster.close();
-		logger.info("Cassandra Analysis Session closed.");
-	}
-
-	public void closeEvaluationKeyspaceSession(
-			@Disposes @Named(CassandraKeyspaces.EVALUATION) Session session) {
-		logger.info("Closing Cassandra Evaluation Session...");
-		cluster.close();
-		logger.info("Cassandra Evaluation Session closed.");
 	}
 }

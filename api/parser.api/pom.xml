@@ -9,7 +9,7 @@
 
 	<groupId>com.puresoltechnologies.parsers</groupId>
 	<artifactId>parsers.api</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Public API: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>

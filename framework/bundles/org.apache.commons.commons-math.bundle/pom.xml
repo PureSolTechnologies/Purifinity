@@ -9,7 +9,7 @@
 
 	<groupId>org.apache.commons</groupId>
 	<artifactId>commons-math.bundle</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Framework: ${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
 	<dependencies>

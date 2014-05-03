@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>purifinityserver.socket.impl</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>war</packaging>
 
 	<dependencies>

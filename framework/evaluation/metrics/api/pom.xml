@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>evaluation.metrics.api</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Framework: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>

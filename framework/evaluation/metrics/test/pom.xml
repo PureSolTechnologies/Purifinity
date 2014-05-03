@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>evaluation.metrics.test</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Framework: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>
@@ -17,7 +17,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>lang.java7.lib</artifactId>
+			<artifactId>lang.java7</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>

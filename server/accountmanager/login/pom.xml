@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>accountmanager.login</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 
 	<dependencies> 
 		<dependency>

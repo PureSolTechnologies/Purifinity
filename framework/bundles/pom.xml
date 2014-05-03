@@ -8,11 +8,11 @@
 	</parent>
 
 	<artifactId>bundles</artifactId>
+	<name>Purifinity Framework: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>org.apache.commons.commons-math.bundle</module>
-		<module>org.codehaus.jackson.jackson-jaxrs.external.bundle</module>
 	</modules>
 
 </project>

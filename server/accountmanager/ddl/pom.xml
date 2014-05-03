@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>accountmanager.ddl</artifactId>
-
+	<name>Purifinity Server: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>

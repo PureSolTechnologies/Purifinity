@@ -19,7 +19,7 @@
 	<version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Purifinity Framework</name>
+	<name>Purifinity Framework: ${project.artifactId}</name>
 	<description>This is the functional framework for Purifinity.</description>
 
 	<inceptionYear>2009</inceptionYear>
@@ -321,7 +321,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>analysis.impl.lib</artifactId>
+				<artifactId>analysis.impl</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -363,27 +363,27 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>evaluation.commons.impl.lib</artifactId>
+				<artifactId>evaluation.commons</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>lang.c11.lib</artifactId>
+				<artifactId>lang.c11</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>lang.cpp11.lib</artifactId>
+				<artifactId>lang.cpp11</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>lang.fortran2008.lib</artifactId>
+				<artifactId>lang.fortran2008</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>lang.java7.lib</artifactId>
+				<artifactId>lang.java7</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>plugin.java7.app</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>ear</packaging>
 
 	<dependencies>

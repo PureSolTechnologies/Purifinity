@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>passwordstore.ddl</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>

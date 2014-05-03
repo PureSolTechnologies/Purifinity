@@ -7,7 +7,7 @@
 	</parent>
 
 	<artifactId>database</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Framework: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>

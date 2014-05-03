@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>purifinityserver.client</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>

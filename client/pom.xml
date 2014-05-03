@@ -178,22 +178,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>analysis.impl.bundle</artifactId>
-			<version>${purifinity.framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 			<artifactId>commons.utils.bundle</artifactId>
 			<version>${purifinity.framework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 			<artifactId>evaluation.cleancode.bundle</artifactId>
-			<version>${purifinity.framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>evaluation.commons.impl.bundle</artifactId>
 			<version>${purifinity.framework.version}</version>
 		</dependency>
 		<dependency>
@@ -213,7 +203,22 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>json.bundle</artifactId>
+			<version>${purifinity.server.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>purifinityserver.client.bundle</artifactId>
+			<version>${purifinity.server.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>rest.bundle</artifactId>
+			<version>${purifinity.server.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>websocket.bundle</artifactId>
 			<version>${purifinity.server.version}</version>
 		</dependency>
 		<!-- External bundles -->

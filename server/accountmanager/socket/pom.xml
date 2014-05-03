@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>accountmanager.socket</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>war</packaging>
 
 	<dependencies>

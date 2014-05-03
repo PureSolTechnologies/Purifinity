@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>purifinityserver</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>

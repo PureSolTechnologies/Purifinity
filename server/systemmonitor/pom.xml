@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>systemmonitor</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>ejb</packaging>
 
 	<profiles>

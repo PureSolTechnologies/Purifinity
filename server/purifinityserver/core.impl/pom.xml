@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>purifinityserver.core.impl</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>ejb</packaging>
 
 	<dependencies>
@@ -18,7 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>evaluation.commons.impl.lib</artifactId>
+			<artifactId>evaluation.commons</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

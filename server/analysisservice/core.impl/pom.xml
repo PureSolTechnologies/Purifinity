@@ -9,12 +9,13 @@
 	</parent>
 
 	<artifactId>analysisservice.core.impl</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>ejb</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>analysis.impl.lib</artifactId>
+			<artifactId>analysis.impl</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

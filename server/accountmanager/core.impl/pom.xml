@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>accountmanager.core.impl</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>ejb</packaging>
 
 	<dependencies>

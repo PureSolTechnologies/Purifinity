@@ -30,10 +30,10 @@
 
 	<groupId>com.puresoltechnologies.purifinity.server</groupId>
 	<artifactId>server-parent</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Purifinity's Server Implementation</name>
 	<description>In this module and all its sub-modules server components are included..</description>
 
 	<inceptionYear>2009</inceptionYear>
@@ -582,7 +582,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>analysis.impl.lib</artifactId>
+				<artifactId>analysis.impl</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -613,12 +613,12 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>evaluation.commons.impl.lib</artifactId>
+				<artifactId>evaluation.commons</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>lang.java7.lib</artifactId>
+				<artifactId>lang.java7</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -1085,6 +1085,7 @@
 		<module>evaluationservice</module>
 		<module>purifinityserver</module>
 		<module>plugin</module>
+		<module>bundles</module>
 	</modules>
 
 </project>

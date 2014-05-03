@@ -9,7 +9,7 @@
 
 	<groupId>com.puresoltechnologies.commons</groupId>
 	<artifactId>misc.bundle</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Commons: ${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
 	<dependencies>

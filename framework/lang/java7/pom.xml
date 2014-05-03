@@ -8,13 +8,43 @@
 	</parent>
 
 	<artifactId>lang.java7</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
-	<packaging>pom</packaging>
+	<name>Purifinity Framework: ${project.artifactId}</name>
 
-	<modules>
-		<module>lib</module>
-		<module>test</module>
-		<module>bundle</module>
-	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>analysis.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>commons.test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>evaluation.metrics.lib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.parsers</groupId>
+			<artifactId>parsers.impl</artifactId>
+		</dependency>
+		<dependency>
+			<!-- needed for testing -->
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>store.api</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
 
 </project>

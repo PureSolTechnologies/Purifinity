@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>analysisservice.client.bundle</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
 	<dependencies>

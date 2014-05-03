@@ -38,6 +38,7 @@
       <import plugin="com.puresoltechnologies.purifinity.analysis.domain.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.store.api.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.server.analysisservice.client.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.application.plugin" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin" version="0.3.0" match="greaterOrEqual"/>
@@ -56,12 +57,18 @@
       <import plugin="com.puresoltechnologies.purifinity.client.common.chart.plugin" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.help.plugin" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
-      <import plugin="org.codehaus.jackson.jackson-jaxrs.external.bundle"/>
       <import plugin="javax.servlet"/>
+      <import plugin="com.puresoltechnologies.purifinity.server.json.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.server.purifinityserver.client.bundle" version="0.3.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.server.analysisservice.client.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="org.jboss.tools.ws.ui"/>
       <import plugin="org.apache.httpcomponents.httpcore"/>
       <import plugin="org.apache.httpcomponents.httpclient"/>
+      <import plugin="com.puresoltechnologies.purifinity.server.websocket.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.server.rest.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.jdt.debug"/>
+      <import plugin="javax.annotation"/>
+      <import plugin="org.apache.log4j"/>
+      <import plugin="org.junit"/>
    </requires>
 
    <plugin
@@ -220,6 +227,27 @@
 
    <plugin
          id="com.puresoltechnologies.purifinity.server.analysisservice.client.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.purifinity.server.json.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.purifinity.server.rest.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.purifinity.server.websocket.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

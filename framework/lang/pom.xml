@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>lang</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Framework: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -16,6 +16,7 @@
 		<module>cpp11</module>
 		<module>fortran2008</module>
 		<module>java7</module>
+		<module>java7.test</module>
 	</modules>
 
 </project>

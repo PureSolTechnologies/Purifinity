@@ -8,9 +8,9 @@
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
-	<packaging>war</packaging>
-
 	<artifactId>evaluationservice.rest.impl</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
+	<packaging>war</packaging>
 
 	<dependencies>
 		<dependency>

@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>logger</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Server: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>

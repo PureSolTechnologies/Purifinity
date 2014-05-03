@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>evaluation.domain.bundle</artifactId>
-	<name>${project.groupId}.${project.artifactId}</name>
+	<name>Purifinity Public API: ${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
 	<dependencies>

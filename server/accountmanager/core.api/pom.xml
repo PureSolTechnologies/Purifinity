@@ -9,5 +9,6 @@
 	</parent>
 
 	<artifactId>accountmanager.core.api</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 
 </project>

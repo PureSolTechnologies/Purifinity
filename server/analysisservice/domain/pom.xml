@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>analysisservice.domain</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 
 	<dependencies>
 	</dependencies>

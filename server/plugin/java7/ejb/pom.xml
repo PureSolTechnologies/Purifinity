@@ -9,12 +9,13 @@
 	</parent>
 
 	<artifactId>plugin.java7.ejb</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>ejb</packaging>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>lang.java7.lib</artifactId>
+			<artifactId>lang.java7</artifactId>
 			<exclusions>
 				<exclusion>
 					<groupId>org.jboss.netty</groupId>
