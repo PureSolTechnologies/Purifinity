@@ -1,0 +1,38 @@
+Manifest-Version: 1.0
+Bnd-LastModified: 1399158543296
+Build-Jdk: 1.7.0_51
+Built-By: Rick-Rainer Ludwig
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: com.puresoltechnologies.purifinity.server.commons.io.A
+ ctivator
+Bundle-ClassPath: .,lib/osgi-0.3.0-SNAPSHOT.jar,lib/commons-io-2.1.jar
+Bundle-Description: In this module and all its sub-modules server compon
+ ents are included..
+Bundle-DocURL: http://puresol-technologies.com
+Bundle-ManifestVersion: 2
+Bundle-Name: com.puresoltechnologies.purifinity.server.commons-io.bundle
+Bundle-SymbolicName: com.puresoltechnologies.purifinity.server.commons-i
+ o.bundle
+Bundle-Vendor: PureSol Technologies
+Bundle-Version: 0.3.0.SNAPSHOT
+Created-By: Apache Maven Bundle Plugin
+Embed-Dependency: *;scope=compile|runtime;inline=false
+Embed-Directory: lib
+Embed-StripGroup: true
+Embed-Transitive: true
+Embedded-Artifacts: lib/osgi-0.3.0-SNAPSHOT.jar;g="com.puresoltechnologi
+ es.commons";a="osgi";v="0.3.0-SNAPSHOT",lib/commons-io-2.1.jar;g="commo
+ ns-io";a="commons-io";v="2.1"
+Export-Package: com.puresoltechnologies.purifinity.server.commons.io;use
+ s:="org.osgi.framework";version="0.3.0.SNAPSHOT",org.apache.commons.io.
+ output;uses:="org.apache.commons.io.input,org.apache.commons.io";versio
+ n="2.1",org.apache.commons.io.monitor;uses:="org.apache.commons.io.comp
+ arator,org.apache.commons.io";version="2.1",org.apache.commons.io.input
+ ;uses:="org.apache.commons.io";version="2.1",org.apache.commons.io.file
+ filter;uses:="org.apache.commons.io";version="2.1",org.apache.commons.i
+ o.comparator;uses:="org.apache.commons.io";version="2.1",org.apache.com
+ mons.io;uses:="org.apache.commons.io.filefilter,org.apache.commons.io.o
+ utput";version="2.1"
+Import-Package: org.osgi.framework;version="[1.7,2)",org.slf4j;version="
+ [1.6,2)"
+Tool: Bnd-1.50.0

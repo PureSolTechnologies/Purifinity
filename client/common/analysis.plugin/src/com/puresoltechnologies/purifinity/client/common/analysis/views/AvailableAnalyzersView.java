@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.views;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import org.eclipse.jface.action.IToolBarManager;
@@ -16,6 +17,7 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresoltechnologies.purifinity.server.analysisservice.client.AnalysisServiceClient;
+import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AvailableAnalyzers;
 
 public class AvailableAnalyzersView extends AbstractPureSolTechnologiesView
 		implements Refreshable {
@@ -60,24 +62,11 @@ public class AvailableAnalyzersView extends AbstractPureSolTechnologiesView
 	public void refresh() {
 		// try {
 		AnalysisServiceClient client = new AnalysisServiceClient();
-		client.getAnalyzers();
-		// FIXME
-		// Collection<ServiceReference<ProgrammingLanguageAnalyzer>>
-		// allServiceReferences = bundleContext
-		// .getServiceReferences(ProgrammingLanguageAnalyzer.class,
-		// null);
-		// List<ProgrammingLanguageAnalyzer> languages = new
-		// ArrayList<ProgrammingLanguageAnalyzer>();
-		// for (ServiceReference<ProgrammingLanguageAnalyzer>
-		// serviceReference : allServiceReferences) {
-		// ProgrammingLanguageAnalyzer service = bundleContext
-		// .getService(serviceReference);
-		// languages.add(service);
-		// bundleContext.ungetService(serviceReference);
-		// }
-		// viewer.setInput(languages);
-		// } catch (InvalidSyntaxException e1) {
-		viewer.setInput(new ArrayList<ProgrammingLanguageAnalyzer>());
-		// }
+		try {
+			AvailableAnalyzers analyzers = client.getAnalyzers();
+			viewer.setInput(analyzers.getAnalyzers());
+		} catch (IOException e) {
+			viewer.setInput(new ArrayList<ProgrammingLanguageAnalyzer>());
+		}
 	}
 }

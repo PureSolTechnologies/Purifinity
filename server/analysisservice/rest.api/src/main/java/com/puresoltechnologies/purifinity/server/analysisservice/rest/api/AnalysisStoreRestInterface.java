@@ -13,6 +13,7 @@ public interface AnalysisStoreRestInterface {
 
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("projects")
 	public Response createAnalysisProject(String string);
 

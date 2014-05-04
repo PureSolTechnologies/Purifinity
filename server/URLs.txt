@@ -1,0 +1,46 @@
+Interface URLs
+
+----------------
+PurifinityServer
+----------------
+
+* http://localhost:8080/monitor/socket
+Monitoring websocket...
+
+Chart Data Provider:
+* http://localhost:8080/dataprovider/charts/<charttype>
+
+---------------
+AnalysisService
+---------------
+
+Service:
+* http://localhost:8080/analysisservice/rest
+Generic store.
+
+Stores:
+* http://localhost:8080/analysisservice/store/rest
+Generic store.
+
+* http://localhost:8080/analysisservice/stores/<analyerId>
+Analyzer specific stores.
+
+-----------------
+EvaluationService
+-----------------
+
+Stores:
+* http://localhost:8080/evaluationservice/stores/<evaluatorId>
+Evaluator specific store.
+
+--------------
+AccountManager
+--------------
+
+* http://localhost:8080/accountmanager/rest
+
+-------------
+PasswordStore
+-------------
+
+* http://localhost:8080/passwordstore/rest

@@ -14,11 +14,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalyzerInformation;
 
 public class AvailableAnalyzersTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 
-	private final List<ProgrammingLanguageAnalyzer> languages = new ArrayList<ProgrammingLanguageAnalyzer>();
+	private final List<AnalyzerInformation> languages = new ArrayList<AnalyzerInformation>();
 
 	public AvailableAnalyzersTableViewer(Table table) {
 		super(table);
@@ -27,8 +28,10 @@ public class AvailableAnalyzersTableViewer extends TableViewer implements
 			public int compare(Viewer viewer, Object e1, Object e2) {
 				ProgrammingLanguageAnalyzer programmingLanguage1 = (ProgrammingLanguageAnalyzer) e1;
 				ProgrammingLanguageAnalyzer programmingLanguage2 = (ProgrammingLanguageAnalyzer) e2;
-				String lang1 = programmingLanguage1.getName() + programmingLanguage1.getVersion();
-				String lang2 = programmingLanguage2.getName() + programmingLanguage2.getVersion();
+				String lang1 = programmingLanguage1.getName()
+						+ programmingLanguage1.getVersion();
+				String lang2 = programmingLanguage2.getName()
+						+ programmingLanguage2.getVersion();
 				return lang1.compareTo(lang2);
 			}
 		});
@@ -44,7 +47,7 @@ public class AvailableAnalyzersTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				ProgrammingLanguageAnalyzer language = (ProgrammingLanguageAnalyzer) element;
+				AnalyzerInformation language = (AnalyzerInformation) element;
 				return language.getName();
 			}
 		});
@@ -57,7 +60,7 @@ public class AvailableAnalyzersTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				ProgrammingLanguageAnalyzer language = (ProgrammingLanguageAnalyzer) element;
+				AnalyzerInformation language = (AnalyzerInformation) element;
 				return language.getVersion();
 			}
 		});
@@ -75,7 +78,7 @@ public class AvailableAnalyzersTableViewer extends TableViewer implements
 		}
 		if (Collection.class.isAssignableFrom(newInput.getClass())) {
 			@SuppressWarnings("unchecked")
-			Collection<ProgrammingLanguageAnalyzer> collection = (Collection<ProgrammingLanguageAnalyzer>) newInput;
+			Collection<AnalyzerInformation> collection = (Collection<AnalyzerInformation>) newInput;
 			languages.addAll(collection);
 		}
 		refresh();
