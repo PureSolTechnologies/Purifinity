@@ -60,9 +60,7 @@ public class AvailableAnalyzersView extends AbstractPureSolTechnologiesView
 
 	@Override
 	public void refresh() {
-		// try {
-		AnalysisServiceClient client = new AnalysisServiceClient();
-		try {
+		try (AnalysisServiceClient client = new AnalysisServiceClient()) {
 			AvailableAnalyzers analyzers = client.getAnalyzers();
 			viewer.setInput(analyzers.getAnalyzers());
 		} catch (IOException e) {

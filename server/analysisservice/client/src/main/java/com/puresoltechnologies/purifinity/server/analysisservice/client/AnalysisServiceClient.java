@@ -30,7 +30,7 @@ public class AnalysisServiceClient implements AutoCloseable {
 	}
 
 	@Override
-	public void close() throws Exception {
+	public void close() throws IOException {
 		// TODO Auto-generated method stub
 	}
 
