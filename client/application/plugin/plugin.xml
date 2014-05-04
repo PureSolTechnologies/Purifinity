@@ -367,11 +367,17 @@
             name="Purifinity">
          <property
                name="aboutImage"
-               value="images/alt_about.gif">
+               value="/com.puresoltechnologies.purifinity.client.product.full/images/puresol-logo-green_small.png">
          </property>
          <property
                name="aboutText"
-               value="About Purifinity">
+               value="Purifinity
+
+(c) Copyright PureSol Techologies 2009-2013.  All rights reserved.
+Visit http://puresol-technologies.com
+
+This product includes software developed by the
+Apache Software Foundation http://apache.org">
          </property>
          <property
                name="startupForegroundColor"
@@ -379,11 +385,11 @@
          </property>
          <property
                name="startupProgressRect"
-               value="50,200,445,32">
+               value="10,200,620,32">
          </property>
          <property
                name="startupMessageRect"
-               value="50,250,445,20">
+               value="10,248,620,20">
          </property>
          <property
                name="introTitle"
@@ -396,6 +402,14 @@
          <property
                name="introBrandingImage"
                value="product:images/puresol-logo-green.png">
+         </property>
+         <property
+               name="appName"
+               value="Purifinity">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
          </property>
       </product>
    </extension>

@@ -218,11 +218,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>rest.bundle</artifactId>
-			<version>${purifinity.server.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>websocket.bundle</artifactId>
 			<version>${purifinity.server.version}</version>
 		</dependency>

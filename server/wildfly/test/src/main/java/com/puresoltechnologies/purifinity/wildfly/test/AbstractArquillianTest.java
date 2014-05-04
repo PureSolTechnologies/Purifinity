@@ -29,11 +29,10 @@ public abstract class AbstractArquillianTest {
 		}
 		if (earFiles.length > 1) {
 			throw new IllegalStateException(
-					"Multiple EAR files were found! There is only on EAR file allow. "
+					"Multiple EAR files were found! There is only on EAR file allowed. "
 							+ "Maybe this is an issue with the project setup.");
 		}
-		File earFile = earFiles[0];
-		return earFile;
+		return earFiles[0];
 	}
 
 }

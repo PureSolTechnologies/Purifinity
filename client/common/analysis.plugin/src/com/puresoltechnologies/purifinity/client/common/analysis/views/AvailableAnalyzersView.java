@@ -9,6 +9,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
@@ -21,6 +23,9 @@ import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.Availa
 
 public class AvailableAnalyzersView extends AbstractPureSolTechnologiesView
 		implements Refreshable {
+
+	private static final Logger logger = LoggerFactory
+			.getLogger(AvailableAnalyzersView.class);
 
 	public AvailableAnalyzersView() {
 		super(Activator.getDefault());
@@ -60,12 +65,11 @@ public class AvailableAnalyzersView extends AbstractPureSolTechnologiesView
 
 	@Override
 	public void refresh() {
-		// try {
-		AnalysisServiceClient client = new AnalysisServiceClient();
-		try {
+		try (AnalysisServiceClient client = new AnalysisServiceClient()) {
 			AvailableAnalyzers analyzers = client.getAnalyzers();
 			viewer.setInput(analyzers.getAnalyzers());
 		} catch (IOException e) {
+			logger.error("Could not retrieve a list of available analyzers.", e);
 			viewer.setInput(new ArrayList<ProgrammingLanguageAnalyzer>());
 		}
 	}

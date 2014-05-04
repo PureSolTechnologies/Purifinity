@@ -53,19 +53,13 @@
       <import plugin="com.puresoltechnologies.purifinity.evaluation.domain.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.evaluation.api.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.server.purifinityserver.client.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.analysis.plugin" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.chart.plugin" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.help.plugin" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
       <import plugin="javax.servlet"/>
-      <import plugin="com.puresoltechnologies.purifinity.server.json.bundle" version="0.3.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.server.websocket.bundle" version="0.3.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.server.rest.bundle" version="0.3.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.server.purifinityserver.client.bundle" version="0.3.0" match="greaterOrEqual"/>
-      <import plugin="org.apache.httpcomponents.httpcore"/>
-      <import plugin="org.apache.httpcomponents.httpclient"/>
       <import plugin="org.eclipse.jdt.debug"/>
-      <import plugin="org.apache.log4j"/>
       <import plugin="org.junit"/>
    </requires>
 
@@ -231,35 +225,7 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresoltechnologies.purifinity.server.json.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.puresoltechnologies.purifinity.server.rest.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.puresoltechnologies.purifinity.server.websocket.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.puresoltechnologies.purifinity.framework.store.api.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.puresoltechnologies.purifinity.server.commons-io.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

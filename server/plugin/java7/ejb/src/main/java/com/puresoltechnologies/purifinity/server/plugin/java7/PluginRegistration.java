@@ -17,10 +17,9 @@ import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.framework.lang.java7.Java;
 import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRegistrationRemote;
 import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRemotePlugin;
-import com.puresoltechnologies.purifinity.framework.lang.java7.Java;
 
 @Singleton
 @Startup

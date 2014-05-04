@@ -7,7 +7,10 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ClassPath: .
 Bundle-Vendor: PureSol Technologies
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.ui,
+Require-Bundle: org.slf4j.api;bundle-version="1.6.4",
+ org.eclipse.ui,
+ org.eclipse.ui.workbench;bundle-version="3.104.0",
+ org.eclipse.core.runtime;bundle-version="3.8.0",
  com.puresoltechnologies.commons.math.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.commons.misc.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.analysis.domain.bundle,
@@ -16,16 +19,10 @@ Require-Bundle: org.eclipse.ui,
  com.puresoltechnologies.purifinity.evaluation.api.bundle,
  com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.framework.store.api.bundle;bundle-version="0.3.0",
- com.puresoltechnologies.purifinity.server.json.bundle;bundle-version="0.3.0",
- com.puresoltechnologies.purifinity.server.websocket.bundle;bundle-version="0.3.0",
- com.puresoltechnologies.purifinity.server.rest.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.server.purifinityserver.client.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.server.analysisservice.client.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.3.0",
- com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.3.0",
- org.slf4j.api;bundle-version="1.6.4",
- org.eclipse.core.runtime;bundle-version="3.8.0",
- org.eclipse.ui.workbench;bundle-version="3.104.0"
+ com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.3.0"
 Bundle-Activator: com.puresoltechnologies.purifinity.client.common.server.Activator
 Export-Package: com.puresoltechnologies.purifinity.client.common.server,
  com.puresoltechnologies.purifinity.client.common.server.connectors

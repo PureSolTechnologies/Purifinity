@@ -674,11 +674,13 @@
 				<groupId>org.eclipse.jetty.websocket</groupId>
 				<artifactId>websocket-client</artifactId>
 				<version>9.2.0.M0</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jetty.websocket</groupId>
 				<artifactId>javax-websocket-client-impl</artifactId>
 				<version>9.2.0.M0</version>
+				<scope>provided</scope>
 			</dependency>
 			<!-- REST library -->
 			<dependency>
@@ -703,6 +705,7 @@
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-client</artifactId>
 				<version>${resteasy.version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<!-- Arquillian -->
 			<dependency>
@@ -1085,7 +1088,7 @@
 		<module>evaluationservice</module>
 		<module>purifinityserver</module>
 		<module>plugin</module>
-		<module>bundles</module>
+		<module>test</module>
 	</modules>
 
 </project>

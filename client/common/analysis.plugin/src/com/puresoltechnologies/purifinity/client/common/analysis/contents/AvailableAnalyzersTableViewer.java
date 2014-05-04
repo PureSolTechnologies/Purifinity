@@ -85,9 +85,8 @@ public class AvailableAnalyzersTableViewer extends TableViewer implements
 	}
 
 	@Override
-	public ProgrammingLanguageAnalyzer[] getElements(Object inputElement) {
-		return languages.toArray(new ProgrammingLanguageAnalyzer[languages
-				.size()]);
+	public AnalyzerInformation[] getElements(Object inputElement) {
+		return languages.toArray(new AnalyzerInformation[languages.size()]);
 	}
 
 }
