@@ -20,10 +20,20 @@ import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
 import com.puresoltechnologies.purifinity.framework.lang.java7.Java;
 import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRegistrationRemote;
 import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRemotePlugin;
+import com.puresoltechnologies.purifinity.server.analysisservice.domain.AnalyzerInformation;
+import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
 public class PluginRegistration implements AnalyzerRemotePlugin {
+
+	private static final String JNDI_ADDRESS = JndiUtils.createGlobalAddress(
+			"plugin.java7.app", "plugin.java7.ejb", AnalyzerRemotePlugin.class,
+			PluginRegistration.class);
+	// "java:global/plugin.java7.app/plugin.java7.ejb/PluginRegistration!com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRemotePlugin";
+	private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
+			Java.getInstance().getName(), Java.getInstance().getVersion(),
+			"no description");
 
 	@Inject
 	private Logger logger;
@@ -40,8 +50,7 @@ public class PluginRegistration implements AnalyzerRemotePlugin {
 				InitialContext context = new InitialContext();
 				AnalyzerRegistrationRemote registrator = (AnalyzerRegistrationRemote) context
 						.lookup("java:global/analysisservice.app/analysisservice.core.impl/AnalyzerRegistrationImpl!com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRegistrationRemote");
-				registrator
-						.registerRemote("java:global/plugin.java7.app/plugin.java7.ejb/PluginRegistration!com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRemotePlugin");
+				registrator.registerRemote(JNDI_ADDRESS, INFORMATION);
 				registered = true;
 				break;
 			} catch (NamingException e) {

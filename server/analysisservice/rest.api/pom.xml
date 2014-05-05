@@ -13,6 +13,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>analysisservice.domain</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>jaxrs-api</artifactId>
 		</dependency>

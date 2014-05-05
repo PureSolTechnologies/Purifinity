@@ -14,7 +14,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalyzerInformation;
+import com.puresoltechnologies.purifinity.server.analysisservice.domain.AnalyzerInformation;
 
 public class AvailableAnalyzersTableViewer extends TableViewer implements
 		IStructuredContentProvider {

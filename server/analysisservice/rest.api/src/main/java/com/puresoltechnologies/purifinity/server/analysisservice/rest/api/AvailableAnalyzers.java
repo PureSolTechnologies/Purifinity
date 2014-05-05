@@ -1,20 +1,22 @@
 package com.puresoltechnologies.purifinity.server.analysisservice.rest.api;
 
-import java.util.Set;
+import java.util.Collection;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.puresoltechnologies.purifinity.server.analysisservice.domain.AnalyzerInformation;
+
 public class AvailableAnalyzers {
 
-	private final Set<AnalyzerInformation> analyzers;
+	private final Collection<AnalyzerInformation> analyzers;
 
 	public AvailableAnalyzers(
-			@JsonProperty("analyzers") Set<AnalyzerInformation> analyzers) {
+			@JsonProperty("analyzers") Collection<AnalyzerInformation> analyzers) {
 		super();
 		this.analyzers = analyzers;
 	}
 
-	public Set<AnalyzerInformation> getAnalyzers() {
+	public Collection<AnalyzerInformation> getAnalyzers() {
 		return analyzers;
 	}
 

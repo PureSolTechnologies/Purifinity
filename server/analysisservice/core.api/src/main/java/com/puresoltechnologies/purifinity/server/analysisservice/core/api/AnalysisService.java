@@ -2,6 +2,8 @@ package com.puresoltechnologies.purifinity.server.analysisservice.core.api;
 
 import java.util.Collection;
 
+import com.puresoltechnologies.purifinity.server.analysisservice.domain.AnalyzerInformation;
+
 /**
  * This is the interface for analysis service. This service provides information
  * about the analyzers and also triggers an new analysis.
@@ -12,6 +14,6 @@ public interface AnalysisService {
 
 	public void triggerNewAnalysis();
 
-	public Collection<AnalyzerRemotePlugin> getAnalyzers();
+	public Collection<AnalyzerInformation> getAnalyzers();
 
 }
