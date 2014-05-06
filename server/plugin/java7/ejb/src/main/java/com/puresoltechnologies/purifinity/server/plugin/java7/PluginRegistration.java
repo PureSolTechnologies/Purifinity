@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.plugin.java7;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -18,7 +19,7 @@ import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
 import com.puresoltechnologies.purifinity.framework.lang.java7.Java;
-import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRegistrationRemote;
+import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerPluginServiceRemote;
 import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRemotePlugin;
 import com.puresoltechnologies.purifinity.server.analysisservice.domain.AnalyzerInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
@@ -30,7 +31,6 @@ public class PluginRegistration implements AnalyzerRemotePlugin {
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalAddress(
 			"plugin.java7.app", "plugin.java7.ejb", AnalyzerRemotePlugin.class,
 			PluginRegistration.class);
-	// "java:global/plugin.java7.app/plugin.java7.ejb/PluginRegistration!com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRemotePlugin";
 	private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
 			Java.getInstance().getName(), Java.getInstance().getVersion(),
 			"no description");
@@ -48,9 +48,10 @@ public class PluginRegistration implements AnalyzerRemotePlugin {
 		while (retried < 10) {
 			try {
 				InitialContext context = new InitialContext();
-				AnalyzerRegistrationRemote registrator = (AnalyzerRegistrationRemote) context
-						.lookup("java:global/analysisservice.app/analysisservice.core.impl/AnalyzerRegistrationImpl!com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRegistrationRemote");
-				registrator.registerRemote(JNDI_ADDRESS, INFORMATION);
+				AnalyzerPluginServiceRemote registrator = (AnalyzerPluginServiceRemote) context
+						.lookup(AnalyzerPluginServiceRemote.JNDI_NAME);
+				registrator.registerService(JNDI_ADDRESS, INFORMATION,
+						new Properties());
 				registered = true;
 				break;
 			} catch (NamingException e) {

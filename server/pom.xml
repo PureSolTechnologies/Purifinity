@@ -385,6 +385,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>common.plugins</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>common.rest</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -985,7 +990,6 @@
 										</versionRange>
 										<goals>
 											<goal>enforce</goal>
-											<goal>enforce-once</goal>
 										</goals>
 									</pluginExecutionFilter>
 									<action>
@@ -1006,7 +1010,7 @@
 				<executions>
 					<execution>
 						<goals>
-							<goal>enforce-once</goal>
+							<goal>enforce</goal>
 						</goals>
 						<configuration>
 							<rules>

@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.core.impl.registration;
+package com.puresoltechnologies.purifinity.server.common.plugins;
 
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSeverity;
@@ -9,24 +9,25 @@ import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventType;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class AnalyzerRegistrationEvents {
+public class PluginServiceEvents {
 
 	private static final String COMPONENT = "AnalyzerRegistration";
 
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
-	private AnalyzerRegistrationEvents() {
+	private PluginServiceEvents() {
 	}
 
-	public static Event createStartupEvent() {
+	public static Event createStartupEvent(String pluginServiceName) {
 		return new Event(COMPONENT, 1l, EventType.SYSTEM, EventSeverity.INFO,
-				"AnalyzerRegistration was started.");
+				"Plugin Service '" + pluginServiceName + "' was started.");
 	}
 
-	public static Event createShutdownEvent() {
+	public static Event createShutdownEvent(String pluginServiceName) {
 		return new Event(COMPONENT, 2l, EventType.SYSTEM, EventSeverity.INFO,
-				"AnalyzerRegistration is going to shut down.");
+				"Plugin Service '" + pluginServiceName
+						+ "'  is going to shut down.");
 	}
 
 }

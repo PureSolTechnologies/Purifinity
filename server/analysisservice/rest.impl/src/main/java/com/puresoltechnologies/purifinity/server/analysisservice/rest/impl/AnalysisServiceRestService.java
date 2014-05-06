@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRegistration;
+import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerPluginService;
 import com.puresoltechnologies.purifinity.server.analysisservice.domain.AnalyzerInformation;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisServiceRestInterface;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AvailableAnalyzers;
@@ -13,12 +13,12 @@ import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.Availa
 public class AnalysisServiceRestService implements AnalysisServiceRestInterface {
 
 	@Inject
-	private AnalyzerRegistration analyzerRegistration;
+	private AnalyzerPluginService analyzerRegistration;
 
 	@Override
 	public AvailableAnalyzers getAnalyzers() throws IOException {
 		Collection<AnalyzerInformation> analyzers = analyzerRegistration
-				.getAnalyzers();
+				.getServices();
 		return new AvailableAnalyzers(analyzers);
 	}
 

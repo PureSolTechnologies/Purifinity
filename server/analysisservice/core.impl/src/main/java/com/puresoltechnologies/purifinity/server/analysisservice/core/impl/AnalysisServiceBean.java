@@ -8,7 +8,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalysisService;
-import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRegistration;
+import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerPluginService;
 import com.puresoltechnologies.purifinity.server.analysisservice.domain.AnalyzerInformation;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
@@ -19,7 +19,7 @@ public class AnalysisServiceBean implements AnalysisService {
 	private EventLogger eventLogger;
 
 	@Inject
-	private AnalyzerRegistration analyzerRegistration;
+	private AnalyzerPluginService analyzerRegistration;
 
 	@PostConstruct
 	public void initialize() {
@@ -39,7 +39,7 @@ public class AnalysisServiceBean implements AnalysisService {
 
 	@Override
 	public Collection<AnalyzerInformation> getAnalyzers() {
-		return analyzerRegistration.getAnalyzers();
+		return analyzerRegistration.getServices();
 	}
 
 }

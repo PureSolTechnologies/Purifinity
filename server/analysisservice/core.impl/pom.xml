@@ -37,7 +37,7 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
-		<dependency>
+		<dependency> 
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 		</dependency>
