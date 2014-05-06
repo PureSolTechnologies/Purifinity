@@ -17,6 +17,8 @@
 		<module>domain</module>
 		<module>core.api</module>
 		<module>core.impl</module>
+		<module>rest.api</module>
+		<module>rest.impl</module>
 		<module>socket.api</module>
 		<module>socket.impl</module>
 		<module>client</module>

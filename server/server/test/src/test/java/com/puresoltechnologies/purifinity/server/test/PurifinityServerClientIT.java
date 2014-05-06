@@ -11,7 +11,7 @@ import org.junit.Test;
 import com.puresoltechnologies.purifinity.commons.test.PerformanceTest;
 import com.puresoltechnologies.purifinity.commons.test.PerformanceTestResult;
 import com.puresoltechnologies.purifinity.commons.test.PerformanceTester;
-import com.puresoltechnologies.purifinity.server.client.PurifinityServerClient;
+import com.puresoltechnologies.purifinity.server.client.socket.PurifinityServerClient;
 
 public class PurifinityServerClientIT extends
 		AbstractPurifinityServerClientTest {

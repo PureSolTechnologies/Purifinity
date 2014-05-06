@@ -14,12 +14,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>analysisservice.app</artifactId>
+			<artifactId>server.app</artifactId>
 			<type>ear</type>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>analysisservice.client</artifactId>
+			<artifactId>server.client</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -50,10 +50,10 @@
 					<deployables>
 						<deployable>
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>
-							<artifactId>analysisservice.app</artifactId>
+							<artifactId>server.app</artifactId>
 							<type>ear</type>
 							<properties>
-								<name>purifinityserver.app.ear</name>
+								<name>server.app.ear</name>
 							</properties>
 						</deployable>
 					</deployables>

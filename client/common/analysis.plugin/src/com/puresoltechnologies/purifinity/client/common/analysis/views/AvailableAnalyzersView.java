@@ -18,8 +18,8 @@ import com.puresoltechnologies.purifinity.client.common.analysis.contents.Availa
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.server.analysisservice.client.AnalysisServiceClient;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AvailableAnalyzers;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisServiceClient;
 
 public class AvailableAnalyzersView extends AbstractPureSolTechnologiesView
 		implements Refreshable {

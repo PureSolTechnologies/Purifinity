@@ -38,7 +38,7 @@
       <import plugin="com.puresoltechnologies.purifinity.analysis.domain.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.store.api.bundle" version="0.3.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.server.analysisservice.client.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.purifinity.server.server.client.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.osgi.plugin" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.application.plugin" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.branding.plugin" version="0.3.0" match="greaterOrEqual"/>
@@ -53,14 +53,12 @@
       <import plugin="com.puresoltechnologies.purifinity.evaluation.domain.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.evaluation.api.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.bundle" version="0.3.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.purifinity.server.server.client.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.analysis.plugin" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.chart.plugin" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.client.common.help.plugin" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.ui.workbench" version="3.104.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.jdt.debug"/>
       <import plugin="javax.servlet"/>
-      <import plugin="org.junit"/>
+      <import plugin="com.puresoltechnologies.purifinity.server.analysisservice.client.bundle"/>
    </requires>
 
    <plugin
@@ -205,13 +203,6 @@
 
    <plugin
          id="com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.puresoltechnologies.purifinity.server.analysisservice.client.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

@@ -53,7 +53,7 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexEvaluatorParameter;
-import com.puresoltechnologies.purifinity.server.client.ParetoChartDataProviderClient;
+import com.puresoltechnologies.purifinity.server.client.socket.ParetoChartDataProviderClient;
 import com.puresoltechnologies.purifinity.server.domain.ParetoChartData;
 
 public class MaintainabilityIndexParetoChartView extends

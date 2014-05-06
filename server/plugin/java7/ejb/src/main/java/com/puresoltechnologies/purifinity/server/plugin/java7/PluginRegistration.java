@@ -19,9 +19,9 @@ import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
 import com.puresoltechnologies.purifinity.framework.lang.java7.Java;
-import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerPluginServiceRemote;
-import com.puresoltechnologies.purifinity.server.analysisservice.core.api.AnalyzerRemotePlugin;
-import com.puresoltechnologies.purifinity.server.analysisservice.domain.AnalyzerInformation;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginServiceRemote;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerRemotePlugin;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton

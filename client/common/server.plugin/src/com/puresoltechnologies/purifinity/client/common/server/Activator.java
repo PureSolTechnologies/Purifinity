@@ -4,8 +4,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import com.puresoltechnologies.purifinity.server.analysisservice.client.AnalysisServiceClient;
-import com.puresoltechnologies.purifinity.server.client.PurifinityServerClient;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisServiceClient;
+import com.puresoltechnologies.purifinity.server.client.socket.PurifinityServerClient;
 
 public class Activator extends AbstractUIPlugin {
 

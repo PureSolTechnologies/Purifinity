@@ -20,6 +20,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>server.rest.impl</artifactId>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>server.socket.impl</artifactId>
 			<type>war</type>
 		</dependency>
@@ -32,6 +37,11 @@
         <artifactId>maven-ear-plugin</artifactId>
         <configuration>
            <modules>
+             <webModule>
+               <groupId>com.puresoltechnologies.purifinity.server</groupId>
+               <artifactId>server.rest.impl</artifactId>
+               <contextRoot>/rest</contextRoot>
+             </webModule>
              <webModule>
                <groupId>com.puresoltechnologies.purifinity.server</groupId>
                <artifactId>server.socket.impl</artifactId>

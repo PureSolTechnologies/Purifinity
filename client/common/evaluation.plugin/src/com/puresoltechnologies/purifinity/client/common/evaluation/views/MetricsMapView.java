@@ -52,7 +52,7 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsA
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.server.client.MetricsMapDataProviderClient;
+import com.puresoltechnologies.purifinity.server.client.socket.MetricsMapDataProviderClient;
 import com.puresoltechnologies.purifinity.server.domain.MetricsMapData;
 
 public class MetricsMapView extends AbstractMetricViewPart implements Printable {

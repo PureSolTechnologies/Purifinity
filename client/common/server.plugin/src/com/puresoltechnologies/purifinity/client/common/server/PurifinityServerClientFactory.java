@@ -4,7 +4,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import com.puresoltechnologies.purifinity.server.client.PurifinityServerClient;
+import com.puresoltechnologies.purifinity.server.client.socket.PurifinityServerClient;
 
 public class PurifinityServerClientFactory {
 

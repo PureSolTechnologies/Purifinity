@@ -19,6 +19,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>analysis.impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 			<artifactId>evaluation.commons</artifactId>
 		</dependency>
 		<dependency>
