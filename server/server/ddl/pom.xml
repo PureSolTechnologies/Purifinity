@@ -4,11 +4,11 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.server</groupId>
-		<artifactId>analysisservice</artifactId>
+		<artifactId>server</artifactId>
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>analysisservice.ddl</artifactId>
+	<artifactId>server.ddl</artifactId>
 	<name>Purifinity Server: ${project.artifactId}</name>
 
 	<dependencies>
@@ -45,7 +45,7 @@
 					<transformers>
 						<transformer
 							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-							<mainClass>com.puresoltechnologies.purifinity.server.analysisservice.ddl.AnalysisServiceDatabaseMigrator</mainClass>
+							<mainClass>com.puresoltechnologies.purifinity.server.evaluationservice.ddl.EvaluationServiceDatabaseMigrator</mainClass>
 						</transformer>
 					</transformers>
 				</configuration>

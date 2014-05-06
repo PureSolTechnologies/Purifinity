@@ -13,7 +13,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>ddl</module>
 		<module>domain</module>
 		<module>core.api</module>
 		<module>core.impl</module>
