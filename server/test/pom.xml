@@ -42,7 +42,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>purifinityserver.app</artifactId>
+			<artifactId>server.app</artifactId>
 			<type>ear</type>
 		</dependency>
 		<dependency>
@@ -100,10 +100,10 @@
 						</deployable>
 						<deployable>
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>
-							<artifactId>purifinityserver.app</artifactId>
+							<artifactId>server.app</artifactId>
 							<type>ear</type>
 							<properties>
-								<name>purifinityserver.app.ear</name>
+								<name>server.app.ear</name>
 							</properties>
 						</deployable>
 					</deployables>

@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Text;
 import com.puresoltechnologies.purifinity.client.common.server.Activator;
 import com.puresoltechnologies.purifinity.client.common.server.PurifinityServerClientFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.server.purifinityserver.client.PurifinityServerClient;
+import com.puresoltechnologies.purifinity.server.client.PurifinityServerClient;
 
 public class ServerJobsStatusView extends AbstractPureSolTechnologiesView {
 

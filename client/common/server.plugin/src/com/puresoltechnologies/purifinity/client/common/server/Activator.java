@@ -5,7 +5,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 import com.puresoltechnologies.purifinity.server.analysisservice.client.AnalysisServiceClient;
-import com.puresoltechnologies.purifinity.server.purifinityserver.client.PurifinityServerClient;
+import com.puresoltechnologies.purifinity.server.client.PurifinityServerClient;
 
 public class Activator extends AbstractUIPlugin {
 

@@ -45,8 +45,8 @@ import com.puresoltechnologies.purifinity.client.common.ui.SWTColor;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ShowSettingsAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.ViewReproductionAction;
-import com.puresoltechnologies.purifinity.server.purifinityserver.client.ParetoChartDataProviderClient;
-import com.puresoltechnologies.purifinity.server.purifinityserver.domain.ParetoChartData;
+import com.puresoltechnologies.purifinity.server.client.ParetoChartDataProviderClient;
+import com.puresoltechnologies.purifinity.server.domain.ParetoChartData;
 
 public class CorrelationChartView extends AbstractMetricChartViewPart {
 

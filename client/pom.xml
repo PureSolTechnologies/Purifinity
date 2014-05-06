@@ -213,7 +213,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>purifinityserver.client.bundle</artifactId>
+			<artifactId>server.client.bundle</artifactId>
 			<version>${purifinity.server.version}</version>
 		</dependency>
 		<dependency>

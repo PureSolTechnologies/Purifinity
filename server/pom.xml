@@ -493,39 +493,39 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>purifinityserver.app</artifactId>
+				<artifactId>server.app</artifactId>
 				<version>${project.version}</version>
 				<type>ear</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>purifinityserver.client</artifactId>
+				<artifactId>server.client</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>purifinityserver.core.api</artifactId>
+				<artifactId>server.core.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>purifinityserver.core.impl</artifactId>
+				<artifactId>server.core.impl</artifactId>
 				<version>${project.version}</version>
 				<type>ejb</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>purifinityserver.domain</artifactId>
+				<artifactId>server.domain</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>purifinityserver.socket.api</artifactId>
+				<artifactId>server.socket.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>purifinityserver.socket.impl</artifactId>
+				<artifactId>server.socket.impl</artifactId>
 				<version>${project.version}</version>
 				<type>war</type>
 			</dependency>
@@ -1090,7 +1090,7 @@
 		<module>accountmanager</module>
 		<module>analysisservice</module>
 		<module>evaluationservice</module>
-		<module>purifinityserver</module>
+		<module>server</module>
 		<module>plugin</module>
 		<module>test</module>
 	</modules>
