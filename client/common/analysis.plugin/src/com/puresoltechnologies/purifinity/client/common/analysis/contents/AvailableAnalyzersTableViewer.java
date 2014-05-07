@@ -13,7 +13,6 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 
 public class AvailableAnalyzersTableViewer extends TableViewer implements
@@ -26,8 +25,8 @@ public class AvailableAnalyzersTableViewer extends TableViewer implements
 		setComparator(new ViewerComparator() {
 			@Override
 			public int compare(Viewer viewer, Object e1, Object e2) {
-				ProgrammingLanguageAnalyzer programmingLanguage1 = (ProgrammingLanguageAnalyzer) e1;
-				ProgrammingLanguageAnalyzer programmingLanguage2 = (ProgrammingLanguageAnalyzer) e2;
+				AnalyzerInformation programmingLanguage1 = (AnalyzerInformation) e1;
+				AnalyzerInformation programmingLanguage2 = (AnalyzerInformation) e2;
 				String lang1 = programmingLanguage1.getName()
 						+ programmingLanguage1.getVersion();
 				String lang2 = programmingLanguage2.getName()
