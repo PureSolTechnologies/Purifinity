@@ -19,7 +19,7 @@ Require-Bundle: org.slf4j.api;bundle-version="1.6.4",
  com.puresoltechnologies.purifinity.evaluation.api.bundle,
  com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.framework.store.api.bundle;bundle-version="0.3.0",
- com.puresoltechnologies.purifinity.server.server.client.bundle;bundle-version="0.3.0",
+ com.puresoltechnologies.purifinity.server.client.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.3.0"
 Bundle-Activator: com.puresoltechnologies.purifinity.client.common.server.Activator

@@ -8,20 +8,11 @@
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>server</artifactId>
+	<artifactId>plugins</artifactId>
 	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>ddl</module>
-		<module>domain</module>
-		<module>core.api</module>
-		<module>core.impl</module>
-		<module>rest.api</module>
-		<module>rest.impl</module>
-		<module>socket.api</module>
-		<module>socket.impl</module>
-		<module>app</module>
-		<module>test</module>
+		<module>java7</module>
 	</modules>
 </project>

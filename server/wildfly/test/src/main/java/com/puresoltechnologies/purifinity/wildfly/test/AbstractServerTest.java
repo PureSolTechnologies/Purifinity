@@ -78,7 +78,7 @@ public abstract class AbstractServerTest extends AbstractArquillianTest {
 		}
 
 		// create the EAR and JAR from the file
-		File earFile = findProjectEARFile();
+		File earFile = findApplicationEARFile();
 		EnterpriseArchive ear = ShrinkWrap.createFromZipFile(
 				EnterpriseArchive.class, earFile);
 

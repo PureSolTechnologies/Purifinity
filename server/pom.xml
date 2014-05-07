@@ -347,6 +347,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>common.plugins</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -359,6 +364,18 @@
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>databaseconnector.cassandra</artifactId>
 				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>java7.ejb</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>java7.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -405,26 +422,9 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>plugin.java7.ejb</artifactId>
-				<version>${project.version}</version>
-				<type>ejb</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>plugin.java7.app</artifactId>
-				<version>${project.version}</version>
-				<type>ear</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>server.app</artifactId>
 				<version>${project.version}</version>
 				<type>ear</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>server.client</artifactId>
-				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -1024,7 +1024,9 @@
 		<module>passwordstore</module>
 		<module>accountmanager</module>
 		<module>server</module>
-		<module>plugin</module>
+		<module>client</module>
+		<module>client.bundle</module>
+		<module>plugins</module>
 		<module>test</module>
 	</modules>
 

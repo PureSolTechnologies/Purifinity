@@ -16,11 +16,11 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 @RunAsClient
-public abstract class AbstractClientTest extends AbstractArquillianTest {
+public abstract class AbstractPluginClientTest extends AbstractArquillianTest {
 
 	@Deployment
 	public static EnterpriseArchive createArchive() {
-		File earFile = findApplicationEARFile();
+		File earFile = findPluginEARFile();
 		return ShrinkWrap.createFromZipFile(EnterpriseArchive.class, earFile);
 	}
 

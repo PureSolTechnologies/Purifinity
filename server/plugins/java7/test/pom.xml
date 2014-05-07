@@ -4,35 +4,26 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.server</groupId>
-		<artifactId>server-parent</artifactId>
+		<artifactId>java7</artifactId>
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>test</artifactId>
+	<artifactId>java7.test</artifactId>
 	<name>Purifinity Server: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>databaseconnector.cassandra</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>passwordstore.app</artifactId>
+			<artifactId>server.app</artifactId>
 			<type>ear</type>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>passwordstore.client</artifactId>
+			<artifactId>client</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>java7.plugin</artifactId>
-			<type>ear</type>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>server.app</artifactId>
 			<type>ear</type>
 		</dependency>
 		<dependency>
@@ -44,8 +35,21 @@
 			<artifactId>javaee-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
@@ -56,22 +60,6 @@
 				<artifactId>cargo-maven2-plugin</artifactId>
 				<configuration>
 					<deployables>
-						<deployable>
-							<groupId>com.puresoltechnologies.purifinity.server</groupId>
-							<artifactId>passwordstore.app</artifactId>
-							<type>ear</type>
-							<properties>
-								<name>passwordstore.app.ear</name>
-							</properties>
-						</deployable>
-						<deployable>
-							<groupId>com.puresoltechnologies.purifinity.server</groupId>
-							<artifactId>java7.plugin</artifactId>
-							<type>ear</type>
-							<properties>
-								<name>java7.plugin.ear</name>
-							</properties>
-						</deployable>
 						<deployable>
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>
 							<artifactId>server.app</artifactId>

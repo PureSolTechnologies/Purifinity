@@ -4,35 +4,50 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.server</groupId>
-		<artifactId>server</artifactId>
+		<artifactId>server-parent</artifactId>
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>server.test</artifactId>
+	<artifactId>client</artifactId>
 	<name>Purifinity Server: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>commons.test</artifactId>
+			<artifactId>store.api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>server.app</artifactId>
-			<type>ear</type>
+			<artifactId>common.rest</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>client</artifactId>
+			<artifactId>server.domain</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>server.core.impl</artifactId>
-			<type>ejb</type>
+			<artifactId>server.rest.api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>wildfly.test</artifactId>
+			<artifactId>server.socket.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>analysis.domain</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty.websocket</groupId>
@@ -43,30 +58,13 @@
 			<artifactId>javax-websocket-client-impl</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>compile</scope>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.cargo</groupId>
-				<artifactId>cargo-maven2-plugin</artifactId>
-				<configuration>
-					<deployables>
-						<!-- deployable> <groupId>com.puresoltechnologies.purifinity.server</groupId> 
-							<artifactId>purifinityserver.app</artifactId> <type>ear</type> <properties> 
-							<name>purifinityserver.app.ear</name> </properties> </deployable -->
-					</deployables>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>
