@@ -1,5 +1,8 @@
 package com.puresoltechnologies.commons.math;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
+
 public class ParameterWithArbitraryUnit<T> implements Parameter<T> {
 
 	private static final long serialVersionUID = 7556745066178507744L;
@@ -10,9 +13,12 @@ public class ParameterWithArbitraryUnit<T> implements Parameter<T> {
 	private final String description;
 	private final Class<T> type;
 
-	public ParameterWithArbitraryUnit(String name, String unit,
-			LevelOfMeasurement levelOfMeasurement, String description,
-			Class<T> type) {
+	public ParameterWithArbitraryUnit(
+			@JsonProperty("name") String name,
+			@JsonProperty("unit") String unit,
+			@JsonProperty("levelOfMeasurement") LevelOfMeasurement levelOfMeasurement,
+			@JsonProperty("description") String description,
+			@JsonProperty("type") Class<T> type) {
 		super();
 		if ((name == null) || (name.isEmpty())) {
 			throw new IllegalArgumentException(
@@ -64,6 +70,7 @@ public class ParameterWithArbitraryUnit<T> implements Parameter<T> {
 		return type;
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isNumeric() {
 		return Number.class.isAssignableFrom(type);

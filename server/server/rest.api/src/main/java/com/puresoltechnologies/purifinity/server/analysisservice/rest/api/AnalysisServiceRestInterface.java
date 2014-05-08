@@ -15,4 +15,9 @@ public interface AnalysisServiceRestInterface {
 	@Path("analyzers")
 	public AvailableAnalyzers getAnalyzers() throws IOException;
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("repositories")
+	public RepositoryTypes getRepositoryTypes() throws IOException;
+
 }

@@ -21,5 +21,4 @@ public interface AnalysisStoreRestInterface {
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("projects")
 	public Response getProjects();
-
 }

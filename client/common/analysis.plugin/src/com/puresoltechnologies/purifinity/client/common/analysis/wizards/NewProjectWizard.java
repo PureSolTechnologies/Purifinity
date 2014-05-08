@@ -13,11 +13,13 @@ public class NewProjectWizard extends Wizard {
 	private static final ILog logger = Activator.getDefault().getLog();
 
 	private final NewProjectGeneralSettingsPage generalSettingsPage = new NewProjectGeneralSettingsPage();
+	private final NewProjectSourceCodeLocationPage sourceCodeLocationPage = new NewProjectSourceCodeLocationPage();
 
 	public NewProjectWizard() {
 		super();
 		setWindowTitle("New Project");
 		addPage(generalSettingsPage);
+		addPage(sourceCodeLocationPage);
 	}
 
 	@Override
@@ -63,6 +65,6 @@ public class NewProjectWizard extends Wizard {
 	}
 
 	public File getSourceDirectory() {
-		return new File(generalSettingsPage.getSourceDirectory());
+		return new File(sourceCodeLocationPage.getSourceDirectory());
 	}
 }
