@@ -8,7 +8,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<tycho.version>0.19.0</tycho.version>
+		<tycho.version>0.20.0</tycho.version>
 		<purifinity.api.version>0.3.0-SNAPSHOT</purifinity.api.version>
 		<purifinity.framework.version>0.3.0-SNAPSHOT</purifinity.framework.version>
 		<purifinity.server.version>0.3.0-SNAPSHOT</purifinity.server.version>
@@ -167,11 +167,6 @@
 			<version>${purifinity.api.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>commons-io.bundle</artifactId>
-			<version>${purifinity.server.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.api</groupId>
 			<artifactId>evaluation.api.bundle</artifactId>
 			<version>${purifinity.api.version}</version>
@@ -203,22 +198,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>analysisservice.client.bundle</artifactId>
-			<version>${purifinity.server.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>json.bundle</artifactId>
-			<version>${purifinity.server.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>client.bundle</artifactId>
-			<version>${purifinity.server.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>websocket.bundle</artifactId>
 			<version>${purifinity.server.version}</version>
 		</dependency>
 		<!-- External bundles -->
