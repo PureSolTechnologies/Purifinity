@@ -11,7 +11,7 @@
 		<purifinity.api.version>0.3.0-SNAPSHOT</purifinity.api.version>
 		<cassandra.version>2.0.7</cassandra.version>
 		<cassandra.driver.version>2.0.1</cassandra.driver.version>
-		<titan.version>0.4.2</titan.version>
+		<titan.version>0.4.4</titan.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity.framework</groupId>
