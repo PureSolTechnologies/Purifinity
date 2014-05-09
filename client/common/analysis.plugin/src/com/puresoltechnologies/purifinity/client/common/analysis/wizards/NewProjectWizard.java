@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.wizards;
 
-import java.io.File;
+import java.util.Properties;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.jface.wizard.Wizard;
@@ -64,7 +64,7 @@ public class NewProjectWizard extends Wizard {
 		return generalSettingsPage.getProjectDescription();
 	}
 
-	public File getSourceDirectory() {
-		return new File(sourceCodeLocationPage.getSourceDirectory());
+	public Properties getSourceLocationProperties() {
+		return sourceCodeLocationPage.getSourceLocationProperties();
 	}
 }
