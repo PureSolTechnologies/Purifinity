@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AvailableAnalyzers;
@@ -14,7 +16,17 @@ import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInforma
 
 public class RegistrationIT extends AbstractJava7PluginClientTest {
 
-	private final AnalysisServiceClient client = new AnalysisServiceClient();
+	private static AnalysisServiceClient client;
+
+	@BeforeClass
+	public static void initilize() {
+		client = AnalysisServiceClient.getInstance();
+	}
+
+	@AfterClass
+	public static void destroy() throws IOException {
+		client.close();
+	}
 
 	@Test
 	public void test() throws IOException {

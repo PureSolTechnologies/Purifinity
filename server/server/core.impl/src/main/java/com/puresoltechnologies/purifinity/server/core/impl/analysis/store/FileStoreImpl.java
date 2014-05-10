@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.framework.analysis.impl.store;
+package com.puresoltechnologies.purifinity.server.core.impl.analysis.store;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

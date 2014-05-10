@@ -73,7 +73,7 @@ public class NewProjectSourceCodeLocationPage extends WizardPage implements
 		fdRepositoryType.right = new FormAttachment(100, -DEFAULT_MARGIN);
 		repositoryType.setLayoutData(fdRepositoryType);
 
-		try (AnalysisServiceClient client = new AnalysisServiceClient()) {
+		try (AnalysisServiceClient client = AnalysisServiceClient.getInstance()) {
 			RepositoryTypes repositoryTypes = client.getRepositoryTypes();
 			this.repositoryTypes.addAll(repositoryTypes.getRepositoryTypes());
 		} catch (IOException e) {

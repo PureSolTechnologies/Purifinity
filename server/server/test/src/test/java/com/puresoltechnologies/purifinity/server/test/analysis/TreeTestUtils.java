@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.framework.analysis.test;
+package com.puresoltechnologies.purifinity.server.test.analysis;
 
 import java.io.File;
 import java.io.IOException;

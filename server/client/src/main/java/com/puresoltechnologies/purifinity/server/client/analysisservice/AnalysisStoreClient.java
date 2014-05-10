@@ -1,17 +1,8 @@
 package com.puresoltechnologies.purifinity.server.client.analysisservice;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
-import javax.ws.rs.core.Response;
-
-import org.jboss.resteasy.client.jaxrs.ResteasyClient;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
-import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
-import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
-import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.ProgressObserver;
@@ -24,44 +15,29 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisStoreRestInterface;
-import com.puresoltechnologies.purifinity.server.common.rest.JSONMapper;
+import com.puresoltechnologies.purifinity.server.common.rest.AbstractRestClient;
 
-public class AnalysisStoreClient implements AnalysisStore {
+public class AnalysisStoreClient extends
+		AbstractRestClient<AnalysisStoreRestInterface> implements AnalysisStore {
 
-	private final AnalysisStoreRestInterface proxy;
-
-	static {
-		RegisterBuiltin.register(ResteasyProviderFactory.getInstance());
-	}
-
-	public static AnalysisStoreClient createInstance() {
+	public static AnalysisStoreClient getInstance() {
 		return new AnalysisStoreClient();
 	}
 
-	public AnalysisStoreClient() {
-		ResteasyClient client = new ResteasyClientBuilder().build();
-		ResteasyWebTarget webTarget = client
-				.target("http://localhost:8080/analysisservice");
-		proxy = webTarget.proxy(AnalysisStoreRestInterface.class);
+	private AnalysisStoreClient() {
+		super(AnalysisStoreRestInterface.class);
 	}
 
 	@Override
 	public AnalysisProjectInformation createAnalysisProject(
-			AnalysisProjectSettings settings) {
-		try {
-			String jsonString = JSONMapper.toJSONString(settings);
-			Response response = proxy.createAnalysisProject(jsonString);
-			System.err.println(response.getStatus());
-			return null;
-		} catch (IOException e) {
-			throw new RuntimeException("Could not marshall JSON request.", e);
-		}
+			AnalysisProjectSettings settings) throws AnalysisStoreException {
+		return getProxy().createAnalysisProject(settings);
 	}
 
 	@Override
-	public List<AnalysisProjectInformation> readAllAnalysisProjectInformation() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<AnalysisProjectInformation> readAllAnalysisProjectInformation()
+			throws AnalysisStoreException {
+		return getProxy().readAllAnalysisProjectInformation();
 	}
 
 	@Override

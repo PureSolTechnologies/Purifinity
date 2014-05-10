@@ -62,7 +62,7 @@ public class NewProjectGeneralSettingsPage extends WizardPage {
 		fdDescriptionLabel.right = new FormAttachment(100, -DEFAULT_MARGIN);
 		descriptionLabel.setLayoutData(fdDescriptionLabel);
 
-		description = new Text(composite, SWT.BORDER);
+		description = new Text(composite, SWT.BORDER | SWT.MULTI);
 		FormData fdDescription = new FormData();
 		fdDescription.top = new FormAttachment(descriptionLabel, DEFAULT_MARGIN);
 		fdDescription.bottom = new FormAttachment(100, -DEFAULT_MARGIN);

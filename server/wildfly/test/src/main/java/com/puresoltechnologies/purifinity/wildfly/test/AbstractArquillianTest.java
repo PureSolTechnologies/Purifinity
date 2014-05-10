@@ -2,17 +2,12 @@ package com.puresoltechnologies.purifinity.wildfly.test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -21,7 +16,6 @@ import org.jboss.shrinkwrap.api.asset.ByteArrayAsset;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 /**
  * This class contains all common settings and functionality used for Arquillian
@@ -67,9 +61,7 @@ public abstract class AbstractArquillianTest {
 	}
 
 	protected static void removeWAR(EnterpriseArchive archive, String warName)
-			throws ParserConfigurationException, SAXException, IOException,
-			TransformerConfigurationException,
-			TransformerFactoryConfigurationError, TransformerException {
+			throws Exception {
 		// Delete war file
 		archive.delete("/server.socket.impl.war");
 		// now we remove the module entry in application.xml

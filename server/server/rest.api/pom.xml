@@ -13,6 +13,14 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>analysis.domain</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
+			<artifactId>store.api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>server.domain</artifactId>
 		</dependency>

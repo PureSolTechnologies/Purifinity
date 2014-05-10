@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.Set;
 
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.RepositoryTypes;
@@ -15,8 +17,20 @@ import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryT
 import com.puresoltechnologies.purifinity.server.test.AbstractPurifinityServerClientTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
-public class RepositoryPluginServiceIT extends
+public class RepositoryTypePluginServiceIT extends
 		AbstractPurifinityServerClientTest {
+
+	private static AnalysisServiceClient client;
+
+	@BeforeClass
+	public static void initialize() {
+		client = AnalysisServiceClient.getInstance();
+	}
+
+	@AfterClass
+	public static void destroy() throws IOException {
+		client.close();
+	}
 
 	@EnhanceDeployment
 	public static void enhance(EnterpriseArchive archive) throws Exception {
@@ -26,7 +40,6 @@ public class RepositoryPluginServiceIT extends
 
 	@Test
 	public void test() throws IOException {
-		AnalysisServiceClient client = new AnalysisServiceClient();
 		RepositoryTypes repositoryTypes = client.getRepositoryTypes();
 		assertNotNull(repositoryTypes);
 		Set<RepositoryType> types = repositoryTypes.getRepositoryTypes();

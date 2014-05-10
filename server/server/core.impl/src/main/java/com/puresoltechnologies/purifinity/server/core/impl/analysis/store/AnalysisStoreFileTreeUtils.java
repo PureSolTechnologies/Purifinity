@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.framework.analysis.impl.store.titan;
+package com.puresoltechnologies.purifinity.server.core.impl.analysis.store;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +11,6 @@ import com.puresoltechnologies.commons.misc.ProgressObserver;
 import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
-import com.puresoltechnologies.purifinity.database.titan.utils.TitanConnection;
 import com.puresoltechnologies.purifinity.database.titan.utils.TitanElementNames;
 import com.puresoltechnologies.purifinity.database.titan.utils.VertexType;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.SourceCodeLocationCreator;
@@ -28,8 +27,7 @@ import com.tinkerpop.blueprints.Vertex;
  * This class contains functionality for {@link AnalysisFileTree}s in Titan
  * graph database.
  * 
- * @author Rick-Rainer Ludwig
- * 
+ * @author Rick-Rainer Ludwig -
  */
 public class AnalysisStoreFileTreeUtils {
 
@@ -211,9 +209,8 @@ public class AnalysisStoreFileTreeUtils {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	public static AnalysisFileTree createAnalysisFileTree(UUID projectUUID,
-			UUID runUUID) throws AnalysisStoreException {
-		TitanGraph graph = TitanConnection.getGraph();
+	public static AnalysisFileTree createAnalysisFileTree(TitanGraph graph,
+			UUID projectUUID, UUID runUUID) throws AnalysisStoreException {
 		try {
 			Iterable<Vertex> runVertices = graph.query()
 					.has(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY, runUUID)

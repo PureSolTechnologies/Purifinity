@@ -347,12 +347,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>database.test</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 				<artifactId>database.titan.utils</artifactId>
 				<version>${project.version}</version>
 			</dependency>

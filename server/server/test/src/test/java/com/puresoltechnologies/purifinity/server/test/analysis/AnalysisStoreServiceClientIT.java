@@ -10,18 +10,31 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisStoreClient;
 
 public class AnalysisStoreServiceClientIT extends
 		AbstractAnalysisStoreServiceClientTest {
 
-	private final AnalysisStoreClient analysisStoreService = new AnalysisStoreClient();
+	private static AnalysisStoreClient analysisStoreService;
+
+	@BeforeClass
+	public static void initialize() {
+		analysisStoreService = AnalysisStoreClient.getInstance();
+	}
+
+	@AfterClass
+	public static void destroy() throws Exception {
+		analysisStoreService.close();
+	}
 
 	private AnalysisProjectSettings createProjectSettings() {
 		DirectoryRepositoryLocation directoryRepositoryLocation = new DirectoryRepositoryLocation(
@@ -36,7 +49,7 @@ public class AnalysisStoreServiceClientIT extends
 	}
 
 	@Test
-	public void testCreateProject() {
+	public void testCreateProject() throws AnalysisStoreException {
 		Date start = new Date();
 		AnalysisProjectSettings settings = createProjectSettings();
 
@@ -58,7 +71,7 @@ public class AnalysisStoreServiceClientIT extends
 	}
 
 	@Test
-	public void testReadAllProjects() {
+	public void testReadAllProjects() throws AnalysisStoreException {
 		AnalysisProjectSettings settings = createProjectSettings();
 
 		List<AnalysisProjectInformation> projects = analysisStoreService
@@ -81,7 +94,7 @@ public class AnalysisStoreServiceClientIT extends
 	}
 
 	@Test
-	public void testDeleteProject() {
+	public void testDeleteProject() throws AnalysisStoreException {
 		AnalysisProjectSettings settings = createProjectSettings();
 
 		List<AnalysisProjectInformation> projects = analysisStoreService

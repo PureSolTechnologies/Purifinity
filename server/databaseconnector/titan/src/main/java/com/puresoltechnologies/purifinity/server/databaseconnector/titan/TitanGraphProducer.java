@@ -1,11 +1,20 @@
-package com.puresoltechnologies.purifinity.database.titan.utils;
+package com.puresoltechnologies.purifinity.server.databaseconnector.titan;
 
 import java.util.Date;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.commons.configuration.Configuration;
+import org.slf4j.Logger;
 
+import com.puresoltechnologies.purifinity.database.titan.utils.TitanElementNames;
 import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraConnection;
+import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraConnectionException;
 import com.thinkaurelius.titan.core.KeyMaker;
 import com.thinkaurelius.titan.core.LabelMaker;
 import com.thinkaurelius.titan.core.TitanFactory;
@@ -14,31 +23,43 @@ import com.thinkaurelius.titan.core.TypeMaker.UniquenessConsistency;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
-/**
- * Manages the actual connection to Titan. The methods connect and disconnect
- * need to be called by a lifecycle component like the OSGi container of JavaEE
- * container to establish the actual connection.
- * 
- * @author Rick-Rainer Ludwig
- */
-public class TitanConnection {
+@Singleton
+public class TitanGraphProducer {
 
-	private static TitanGraph graph = null;
+	@Inject
+	private Logger logger;
 
-	/**
-	 * This method opens a connection to Titan. This method is idempotent due to
-	 * the connection pool which was already opened. Once the connection is
-	 * open, the already opened connection is returned.
-	 */
-	public static void connect() {
-		if (graph == null) {
-			Configuration conf = getConfigurationForCassandraBackend();
-			graph = TitanFactory.open(conf);
-			checkLabelAndKeySettings();
-		}
+	private TitanGraph graph;
+
+	@PostConstruct
+	private void initialize() throws CassandraConnectionException {
+		Configuration conf = getConfigurationForCassandraBackend();
+		logger.info("Connect to Titan...");
+		graph = TitanFactory.open(conf);
+		logger.info("Titan connected.");
+		checkLabelAndKeySettings();
 	}
 
-	private static void checkLabelAndKeySettings() {
+	@PreDestroy
+	private void destroy() {
+		logger.info("Shutting down Titan...");
+		graph.shutdown();
+		logger.info("Titan shut down.");
+	}
+
+	@Produces
+	public TitanGraph getCluster() {
+		return graph;
+	}
+
+	private static Configuration getConfigurationForCassandraBackend() {
+		Configuration conf = new BaseConfiguration();
+		conf.setProperty("storage.backend", "cassandra");
+		conf.setProperty("storage.hostname", CassandraConnection.getHost());
+		return conf;
+	}
+
+	private void checkLabelAndKeySettings() {
 
 		if (graph.getType(TitanElementNames.VERTEX_TYPE) == null) {
 			KeyMaker keyMaker = graph.makeKey(TitanElementNames.VERTEX_TYPE);
@@ -272,31 +293,5 @@ public class TitanConnection {
 			makeLabel.make();
 		}
 		graph.commit();
-	}
-
-	private static Configuration getConfigurationForCassandraBackend() {
-		Configuration conf = new BaseConfiguration();
-		conf.setProperty("storage.backend", "cassandra");
-		conf.setProperty("storage.hostname", CassandraConnection.getHost());
-		return conf;
-	}
-
-	/**
-	 * Disconnection is idempotent. Once disconnected, each additional
-	 * disconnection will result into the same result.
-	 */
-	public static void disconnect() {
-		if (graph != null) {
-			graph.shutdown();
-			graph = null;
-		}
-	}
-
-	public static boolean isConnected() {
-		return graph != null;
-	}
-
-	public static TitanGraph getGraph() {
-		return graph;
 	}
 }

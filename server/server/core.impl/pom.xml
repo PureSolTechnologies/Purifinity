@@ -31,6 +31,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>databaseconnector.titan</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>logger</artifactId>
 		</dependency>
 		<dependency>

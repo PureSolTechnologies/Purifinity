@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.framework.analysis.test;
+package com.puresoltechnologies.purifinity.server.test.analysis;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -15,7 +15,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
-import org.junit.BeforeClass;
+import javax.inject.Inject;
+
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -28,24 +30,25 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSetting
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.framework.analysis.impl.RepositoryLocationCreator;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.store.AnalysisStoreImpl;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.store.FileStoreImpl;
 import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileSearch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
-import com.puresoltechnologies.purifinity.framework.database.test.AbstractDbStoreTest;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.FileStoreImpl;
+import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
-public class AnalysisStoreImplIT extends AbstractDbStoreTest {
+public class AnalysisStoreImplIT extends AbstractAnalysisStoreServiceServerTest {
 
-	private static AnalysisStore analysisStore;
+	@Inject
+	private AnalysisStoreService analysisStore;
 
-	@BeforeClass
-	public static void openAnalysisStore() {
-		analysisStore = new AnalysisStoreImpl();
+	@EnhanceDeployment
+	public static void removeWARFile(EnterpriseArchive archive)
+			throws Exception {
+		removeWAR(archive, "server.socket.impl.war");
 	}
 
 	@Test

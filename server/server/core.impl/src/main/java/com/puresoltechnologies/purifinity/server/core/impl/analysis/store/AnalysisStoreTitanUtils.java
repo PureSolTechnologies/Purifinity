@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.framework.analysis.impl.store.titan;
+package com.puresoltechnologies.purifinity.server.core.impl.analysis.store;
 
 import java.util.Date;
 import java.util.Iterator;

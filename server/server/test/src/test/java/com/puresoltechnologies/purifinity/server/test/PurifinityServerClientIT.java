@@ -19,19 +19,17 @@ public class PurifinityServerClientIT extends
 	@Test
 	public void testSingleStatusRequest() throws IOException,
 			InterruptedException {
-		PurifinityServerClient client = new PurifinityServerClient();
-		try {
+		try (PurifinityServerClient client = PurifinityServerClient
+				.getInstance()) {
 			assertNotNull(client.getServerStatus());
-		} finally {
-			client.close();
 		}
 	}
 
 	@Test
 	public void testStatusRequestPerformance() throws InterruptedException,
 			IOException {
-		final PurifinityServerClient client = new PurifinityServerClient();
-		try {
+		try (PurifinityServerClient client = PurifinityServerClient
+				.getInstance()) {
 			PerformanceTestResult<Void> performanceResult = PerformanceTester
 					.runPerformanceTest(4, 25, new PerformanceTest<Void>() {
 						@Override
@@ -44,8 +42,6 @@ public class PurifinityServerClientIT extends
 			System.out.println(performanceResult);
 			assertFalse(performanceResult.hadErrror());
 			assertTrue(performanceResult.getSpeed() > 5);
-		} finally {
-			client.close();
 		}
 	}
 }

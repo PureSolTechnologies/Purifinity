@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.framework.analysis.test;
+package com.puresoltechnologies.purifinity.server.test.analysis;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -11,8 +11,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.inject.Inject;
+
 import org.apache.commons.io.IOUtils;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -22,18 +23,13 @@ import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.store.FileStoreImpl;
-import com.puresoltechnologies.purifinity.framework.database.test.AbstractDbStoreTest;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.FileStoreImpl;
 
-public class FileStoreImplIT extends AbstractDbStoreTest {
+public class FileStoreImplIT extends AbstractAnalysisStoreServiceServerTest {
 
-	private static FileStoreImpl fileStore;
-
-	@BeforeClass
-	public static void openFileStore() {
-		fileStore = new FileStoreImpl();
-	}
+	@Inject
+	private FileStoreImpl fileStore;
 
 	@Test
 	public void testStoreAndReadRawFile() throws FileStoreException,

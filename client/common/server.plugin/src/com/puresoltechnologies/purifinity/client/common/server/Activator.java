@@ -27,11 +27,11 @@ public class Activator extends AbstractUIPlugin {
 		}
 		plugin = this;
 
-		purifinityServerClient = new PurifinityServerClient();
+		purifinityServerClient = PurifinityServerClient.getInstance();
 		purifinityServerClientRegistration = context.registerService(
 				PurifinityServerClient.class, purifinityServerClient, null);
 
-		analysisServiceClient = new AnalysisServiceClient();
+		analysisServiceClient = AnalysisServiceClient.getInstance();
 		analysisServiceClientRegistration = context.registerService(
 				AnalysisServiceClient.class, analysisServiceClient, null);
 	}

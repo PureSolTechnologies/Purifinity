@@ -10,7 +10,11 @@ import com.puresoltechnologies.purifinity.server.common.rest.AbstractRestClient;
 public class AnalysisServiceClient extends
 		AbstractRestClient<AnalysisServiceRestInterface> {
 
-	public AnalysisServiceClient() {
+	public static AnalysisServiceClient getInstance() {
+		return new AnalysisServiceClient();
+	}
+
+	private AnalysisServiceClient() {
 		super(AnalysisServiceRestInterface.class);
 	}
 

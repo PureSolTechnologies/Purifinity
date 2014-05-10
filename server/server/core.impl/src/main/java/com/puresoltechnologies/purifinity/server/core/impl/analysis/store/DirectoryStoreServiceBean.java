@@ -1,29 +1,31 @@
-package com.puresoltechnologies.purifinity.framework.analysis.impl.store;
+package com.puresoltechnologies.purifinity.server.core.impl.analysis.store;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.database.titan.utils.TitanConnection;
 import com.puresoltechnologies.purifinity.database.titan.utils.TitanElementNames;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Vertex;
 
-public class DirectoryStoreImpl implements DirectoryStore {
+public class DirectoryStoreServiceBean implements DirectoryStore {
+
+	@Inject
+	private TitanGraph graph;
 
 	@Override
 	public boolean isAvailable(HashId hashId) throws DirectoryStoreException {
-		TitanGraph graph = TitanConnection.getGraph();
 		Vertex vertex = findDirectory(graph, hashId);
 		return vertex != null;
 	}
 
 	@Override
 	public List<HashId> getFiles(HashId hashId) throws DirectoryStoreException {
-		TitanGraph graph = TitanConnection.getGraph();
 		Vertex vertex = findDirectory(graph, hashId);
 		Iterable<Vertex> vertices = vertex.query()
 				.has(TitanElementNames.TREE_ELEMENT_IS_FILE, true).vertices();
@@ -60,7 +62,6 @@ public class DirectoryStoreImpl implements DirectoryStore {
 	@Override
 	public List<HashId> getDirectories(HashId hashId)
 			throws DirectoryStoreException {
-		TitanGraph graph = TitanConnection.getGraph();
 		Vertex vertex = findDirectory(graph, hashId);
 		Iterable<Vertex> vertices = vertex.query()
 				.has(TitanElementNames.TREE_ELEMENT_IS_FILE, false).vertices();

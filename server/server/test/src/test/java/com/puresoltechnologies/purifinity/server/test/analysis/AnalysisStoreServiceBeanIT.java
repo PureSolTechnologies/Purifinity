@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
@@ -20,9 +21,16 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSetting
 import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
 public class AnalysisStoreServiceBeanIT extends
 		AbstractAnalysisStoreServiceServerTest {
+
+	@EnhanceDeployment
+	public static void removeWARFile(EnterpriseArchive archive)
+			throws Exception {
+		removeWAR(archive, "server.socket.impl.war");
+	}
 
 	@Inject
 	private AnalysisStoreService analysisStoreService;

@@ -50,11 +50,18 @@ public class PurifinityServerClient implements AutoCloseable {
 	private static final WebSocketContainer webSocketContainer = ContainerProvider
 			.getWebSocketContainer();
 
+	public static PurifinityServerClient getInstance() {
+		return new PurifinityServerClient();
+	}
+
 	private Session session = null;
 
 	private final Object getServerStatusLock = new Object();
 	private PurifinityServerStatus status = null;
 	private CountDownLatch getServerStatusLatch = null;
+
+	private PurifinityServerClient() {
+	}
 
 	public final boolean isConnected() {
 		return session != null;
