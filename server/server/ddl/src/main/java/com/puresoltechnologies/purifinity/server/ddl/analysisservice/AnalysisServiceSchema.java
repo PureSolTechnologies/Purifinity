@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.ddl;
+package com.puresoltechnologies.purifinity.server.ddl.analysisservice;
 
 import static com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraMigration.createKeyspace;
 import static com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraMigration.createTable;

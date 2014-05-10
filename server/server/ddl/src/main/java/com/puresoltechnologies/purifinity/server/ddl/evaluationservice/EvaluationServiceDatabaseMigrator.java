@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.evaluationservice.ddl;
+package com.puresoltechnologies.purifinity.server.ddl.evaluationservice;
 
 import java.io.IOException;
 
