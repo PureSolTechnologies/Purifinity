@@ -7,12 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.puresoltechnologies.commons.misc.HashAlgorithm;
+import com.puresoltechnologies.commons.misc.HashCodeGenerator;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
-import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
+import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
-import com.puresoltechnologies.purifinity.framework.commons.utils.data.HashCodeGenerator;
 import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
 
 public class TreeTestUtils {

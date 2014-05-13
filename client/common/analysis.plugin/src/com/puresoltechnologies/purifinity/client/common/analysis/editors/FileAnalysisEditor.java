@@ -17,8 +17,8 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.parsers.api.source.SourceCode;
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.parsers.source.SourceCode;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;

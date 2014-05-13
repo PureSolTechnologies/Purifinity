@@ -14,24 +14,20 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>database.cassandra.utils</artifactId>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>evaluation.spi</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>analysis.impl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>evaluation.commons</artifactId>
+			<artifactId>evaluation.metrics.api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>databaseconnector.cassandra</artifactId>
+			<artifactId>database.cassandra</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>databaseconnector.titan</artifactId>
+			<artifactId>database.titan</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -40,6 +36,10 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>server.core.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>server.metrics.spi</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

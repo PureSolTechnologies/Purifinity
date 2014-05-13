@@ -9,9 +9,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<purifinity.api.version>0.3.0-SNAPSHOT</purifinity.api.version>
-		<cassandra.version>2.0.7</cassandra.version>
-		<cassandra.driver.version>2.0.1</cassandra.driver.version>
-		<titan.version>0.4.4</titan.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity.framework</groupId>
@@ -309,92 +306,14 @@
 		<dependencies>
 			<!-- Project internal -->
 			<dependency>
-				<groupId>com.puresoltechnologies.parsers</groupId>
-				<artifactId>parsers.impl</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.parsers</groupId>
-				<artifactId>parsers.impl.test</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>analysis.impl</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>analysis.test</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>database.cassandra.utils</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>database.cassandra.setup</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>database.migration</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>database.titan.utils</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 				<artifactId>evaluation.cleancode.lib</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>evaluation.commons</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>lang.c11</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>lang.cpp11</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>lang.fortran2008</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>lang.java7</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 				<artifactId>evaluation.metrics.api</artifactId>
 				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>evaluation.metrics.lib</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>evaluation.metrics.test</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
@@ -405,12 +324,6 @@
 				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 				<artifactId>store.api</artifactId>
 				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>commons.test</artifactId>
-				<version>${project.version}</version>
-				<scope>test</scope>
 			</dependency>
 			<!-- PureSol Technologies dependencies -->
 			<dependency>
@@ -430,12 +343,12 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>trees.api</artifactId>
+				<artifactId>trees</artifactId>
 				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
-				<artifactId>parsers.api</artifactId>
+				<artifactId>parsers</artifactId>
 				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>
@@ -459,26 +372,6 @@
 				<version>${purifinity.api.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
-			<dependency>
-				<groupId>com.datastax.cassandra</groupId>
-				<artifactId>cassandra-driver-core</artifactId>
-				<version>${cassandra.driver.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>net.jpountz.lz4</groupId>
-				<artifactId>lz4</artifactId>
-				<version>1.2.0</version>
-			</dependency>
-			<dependency>
-				<groupId>com.thinkaurelius.titan</groupId>
-				<artifactId>titan-core</artifactId>
-				<version>${titan.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.thinkaurelius.titan</groupId>
-				<artifactId>titan-cassandra</artifactId>
-				<version>${titan.version}</version>
-			</dependency>
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
@@ -700,10 +593,6 @@
 	<modules>
 		<module>bundles</module>
 		<module>commons</module>
-		<module>database</module>
-		<module>parsers</module>
-		<module>analysis</module>
-		<module>lang</module>
 		<module>evaluation</module>
 		<module>store</module>
 	</modules>

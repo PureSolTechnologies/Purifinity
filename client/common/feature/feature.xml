@@ -31,11 +31,10 @@
       <import plugin="org.eclipse.ui.intro" version="3.4.200" match="greaterOrEqual"/>
       <import plugin="org.eclipse.help" version="3.6.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.math.bundle" version="0.3.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.commons.trees.api.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.commons.trees.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.commons.misc.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.framework.commons.utils.bundle" version="0.3.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.parsers.api.bundle" version="0.3.0" match="greaterOrEqual"/>
-      <import plugin="com.puresoltechnologies.parsers.impl.bundle" version="0.3.0" match="greaterOrEqual"/>
+      <import plugin="com.puresoltechnologies.parsers.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.domain.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.analysis.api.bundle" version="0.3.0" match="greaterOrEqual"/>
       <import plugin="com.puresoltechnologies.purifinity.server.client.bundle" version="0.3.0" match="greaterOrEqual"/>
@@ -115,27 +114,6 @@
          unpack="false"/>
 
    <plugin
-         id="com.puresoltechnologies.parsers.api.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.puresoltechnologies.parsers.impl.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.puresoltechnologies.commons.trees.api.bundle"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.puresoltechnologies.commons.math.bundle"
          download-size="0"
          install-size="0"
@@ -200,6 +178,20 @@
 
    <plugin
          id="com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.commons.trees.bundle"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.puresoltechnologies.parsers.bundle"
          download-size="0"
          install-size="0"
          version="0.0.0"

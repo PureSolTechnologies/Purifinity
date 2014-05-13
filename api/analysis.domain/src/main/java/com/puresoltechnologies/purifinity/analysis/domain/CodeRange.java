@@ -5,7 +5,7 @@ import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
 import java.io.Serializable;
 
 import com.puresoltechnologies.commons.misc.ObjectUtilities;
-import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 
 /**
  * This class is for keeping information about a subtree. This sub tree is

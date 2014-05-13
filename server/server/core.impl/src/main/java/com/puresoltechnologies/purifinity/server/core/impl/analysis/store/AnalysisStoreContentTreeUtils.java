@@ -2,19 +2,20 @@ package com.puresoltechnologies.purifinity.server.core.impl.analysis.store;
 
 import java.util.Iterator;
 
+import javax.inject.Inject;
+
 import org.apache.commons.lang.StringUtils;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.ProgressObserver;
-import com.puresoltechnologies.commons.trees.api.TreeUtils;
+import com.puresoltechnologies.commons.trees.TreeUtils;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
-import com.puresoltechnologies.purifinity.database.titan.utils.TitanElementNames;
-import com.puresoltechnologies.purifinity.database.titan.utils.TitanUtils;
-import com.puresoltechnologies.purifinity.database.titan.utils.VertexType;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.store.cassandra.AnalysisStoreCassandraUtils;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.databaseconnector.titan.TitanElementNames;
+import com.puresoltechnologies.purifinity.server.databaseconnector.titan.TitanUtils;
+import com.puresoltechnologies.purifinity.server.databaseconnector.titan.VertexType;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
@@ -28,6 +29,12 @@ import com.tinkerpop.blueprints.Vertex;
  * 
  */
 public class AnalysisStoreContentTreeUtils {
+
+	@Inject
+	private AnalysisStoreCassandraUtils analysisStoreCassandraUtils;
+
+	@Inject
+	private AnalysisStoreFileTreeUtils analysisStoreFileTreeUtils;
 
 	/**
 	 * This method adds a new content tree node or content tree part to the
@@ -43,7 +50,7 @@ public class AnalysisStoreContentTreeUtils {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	public static Vertex addContentTree(AnalysisStore analysisStore,
+	public Vertex addContentTree(AnalysisStore analysisStore,
 			ProgressObserver<AnalysisStore> progressObserver, TitanGraph graph,
 			AnalysisFileTree fileTree, Vertex parentVertex)
 			throws AnalysisStoreException {
@@ -66,7 +73,7 @@ public class AnalysisStoreContentTreeUtils {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	public static Vertex addContentTreeVertex(AnalysisStore analysisStore,
+	public Vertex addContentTreeVertex(AnalysisStore analysisStore,
 			ProgressObserver<AnalysisStore> progressObserver, TitanGraph graph,
 			AnalysisFileTree fileTree, Vertex parentVertex, String edgeLabel)
 			throws AnalysisStoreException {
@@ -122,7 +129,7 @@ public class AnalysisStoreContentTreeUtils {
 							TitanElementNames.CONTAINS_DIRECTORY_LABEL);
 				}
 			}
-			AnalysisStoreFileTreeUtils.addMetadata(vertex, fileTree);
+			analysisStoreFileTreeUtils.addMetadata(vertex, fileTree);
 			if (fileTree.isFile()) {
 				for (AnalysisInformation analyzedCode : fileTree.getAnalyses()) {
 					storeAnalysisInformation(graph, vertex, analyzedCode);
@@ -144,9 +151,8 @@ public class AnalysisStoreContentTreeUtils {
 	 * @param analysis
 	 * @throws AnalysisStoreException
 	 */
-	public static void storeAnalysisInformation(TitanGraph graph,
-			Vertex treeNode, AnalysisInformation analysis)
-			throws AnalysisStoreException {
+	public void storeAnalysisInformation(TitanGraph graph, Vertex treeNode,
+			AnalysisInformation analysis) throws AnalysisStoreException {
 		Vertex analysisVertex = graph.addVertex(null);
 
 		Edge analysisEdge = treeNode.addEdge(
@@ -189,7 +195,7 @@ public class AnalysisStoreContentTreeUtils {
 		graph.commit();
 	}
 
-	public static void checkAndRemoveAnalysisRunContent(Vertex runVertex)
+	public void checkAndRemoveAnalysisRunContent(Vertex runVertex)
 			throws AnalysisStoreException {
 		Iterable<Edge> edges = runVertex.query().direction(Direction.OUT)
 				.labels(TitanElementNames.ANALYZED_CONTENT_TREE_LABEL).edges();
@@ -210,7 +216,7 @@ public class AnalysisStoreContentTreeUtils {
 		checkAndRemoveContentNode(contentVertex);
 	}
 
-	private static void checkAndRemoveContentNode(Vertex contentVertex)
+	private void checkAndRemoveContentNode(Vertex contentVertex)
 			throws AnalysisStoreException {
 		if (!VertexType.CONTENT_TREE_ELEMENT.name().equals(
 				contentVertex.getProperty(TitanElementNames.VERTEX_TYPE))) {
@@ -246,7 +252,7 @@ public class AnalysisStoreContentTreeUtils {
 		HashId hashId = HashId.valueOf((String) contentVertex
 				.getProperty(TitanElementNames.TREE_ELEMENT_HASH));
 		contentVertex.remove();
-		AnalysisStoreCassandraUtils.removeAnalysisFile(hashId);
+		analysisStoreCassandraUtils.removeAnalysisFile(hashId);
 		// FIXME: The evaluation values need to be removed!
 		// boolean isFile = (Boolean) contentVertex
 		// .getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE);
@@ -257,7 +263,7 @@ public class AnalysisStoreContentTreeUtils {
 		// }
 	}
 
-	public static void removeAnalysis(Vertex analysisVertex) {
+	public void removeAnalysis(Vertex analysisVertex) {
 		if (!VertexType.ANALYSIS.name().equals(
 				analysisVertex.getProperty(TitanElementNames.VERTEX_TYPE))) {
 			throw new IllegalArgumentException(

@@ -21,11 +21,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>trees.api</artifactId>
+			<artifactId>trees</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.parsers</groupId>
-			<artifactId>parsers.api</artifactId>
+			<artifactId>parsers</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.api</groupId>

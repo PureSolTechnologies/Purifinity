@@ -143,18 +143,13 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>trees.api.bundle</artifactId>
+			<artifactId>trees.bundle</artifactId>
 			<version>${purifinity.api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.parsers</groupId>
-			<artifactId>parsers.api.bundle</artifactId>
+			<artifactId>parsers.bundle</artifactId>
 			<version>${purifinity.api.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.parsers</groupId>
-			<artifactId>parsers.impl.bundle</artifactId>
-			<version>${purifinity.framework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.api</groupId>

@@ -16,6 +16,6 @@
 		<module>java7</module>
 		<module>fortran2008</module>
 		<module>c11</module>
-		<!-- module>cpp11</module -->
+		<module>cpp11</module>
 	</modules>
 </project>

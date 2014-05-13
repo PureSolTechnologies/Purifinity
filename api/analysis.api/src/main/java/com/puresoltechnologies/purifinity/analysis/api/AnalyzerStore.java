@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.analysis.api;
 import java.io.File;
 import java.io.IOException;
 
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 
 /**
  * This interface is implemented by language classes which support creating and

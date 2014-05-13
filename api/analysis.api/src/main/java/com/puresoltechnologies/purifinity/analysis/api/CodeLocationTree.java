@@ -3,8 +3,8 @@ package com.puresoltechnologies.purifinity.analysis.api;
 import java.io.Serializable;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.trees.api.AbstractTreeImpl;
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.commons.trees.AbstractTreeImpl;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 
 public class CodeLocationTree extends AbstractTreeImpl<CodeLocationTree>
 		implements Serializable {

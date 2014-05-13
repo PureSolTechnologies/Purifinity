@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.main
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 

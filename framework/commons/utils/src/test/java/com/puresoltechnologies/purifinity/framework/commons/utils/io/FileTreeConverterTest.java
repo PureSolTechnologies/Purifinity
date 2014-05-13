@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.trees.api.TreePrinter;
+import com.puresoltechnologies.commons.trees.TreePrinter;
 import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
 import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTreeConverter;
 

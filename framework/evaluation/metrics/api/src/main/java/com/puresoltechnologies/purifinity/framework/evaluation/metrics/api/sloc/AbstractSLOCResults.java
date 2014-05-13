@@ -21,7 +21,7 @@ import java.util.Map;
 import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.math.statistics.Statistics;
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.AbstractEvaluatorResult;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;

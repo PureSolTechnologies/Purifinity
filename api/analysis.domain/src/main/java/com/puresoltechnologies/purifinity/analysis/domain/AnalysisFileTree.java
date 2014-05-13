@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.trees.api.Tree;
-import com.puresoltechnologies.commons.trees.api.TreeVisitor;
-import com.puresoltechnologies.commons.trees.api.TreeWalker;
-import com.puresoltechnologies.commons.trees.api.WalkingAction;
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.commons.trees.Tree;
+import com.puresoltechnologies.commons.trees.TreeVisitor;
+import com.puresoltechnologies.commons.trees.TreeWalker;
+import com.puresoltechnologies.commons.trees.WalkingAction;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 
 public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 

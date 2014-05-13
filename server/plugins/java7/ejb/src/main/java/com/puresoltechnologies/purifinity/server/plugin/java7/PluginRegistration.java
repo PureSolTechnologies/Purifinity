@@ -15,10 +15,9 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
-import com.puresoltechnologies.purifinity.framework.lang.java7.Java;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerRemotePlugin;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;

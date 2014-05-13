@@ -6,18 +6,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.ProgressObserver;
-import com.puresoltechnologies.parsers.api.source.SourceCodeLocation;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
-import com.puresoltechnologies.purifinity.database.titan.utils.TitanElementNames;
-import com.puresoltechnologies.purifinity.database.titan.utils.VertexType;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.SourceCodeLocationCreator;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.store.AnalysisStoreDAO;
 import com.puresoltechnologies.purifinity.framework.commons.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.SourceCodeLocationCreator;
+import com.puresoltechnologies.purifinity.server.databaseconnector.titan.TitanElementNames;
+import com.puresoltechnologies.purifinity.server.databaseconnector.titan.VertexType;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
@@ -31,6 +32,15 @@ import com.tinkerpop.blueprints.Vertex;
  */
 public class AnalysisStoreFileTreeUtils {
 
+	@Inject
+	private AnalysisStoreContentTreeUtils analysisStoreContentTreeUtils;
+
+	@Inject
+	private AnalysisStoreFileTreeUtils analysisStoreFileTreeUtils;
+
+	@Inject
+	private AnalysisStoreDAO analysisStoreDAO;
+
 	/**
 	 * This method adds a new file tree to a Analysis Run vertex.
 	 * 
@@ -42,7 +52,7 @@ public class AnalysisStoreFileTreeUtils {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	public static Vertex addFileTree(AnalysisStore analysisStore,
+	public Vertex addFileTree(AnalysisStore analysisStore,
 			ProgressObserver<AnalysisStore> progressObserver, TitanGraph graph,
 			AnalysisFileTree fileTree, Vertex analysisRunVertex)
 			throws AnalysisStoreException {
@@ -63,7 +73,7 @@ public class AnalysisStoreFileTreeUtils {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	private static Vertex addFileTreeVertex(AnalysisStore analysisStore,
+	private Vertex addFileTreeVertex(AnalysisStore analysisStore,
 			ProgressObserver<AnalysisStore> progressObserver, TitanGraph graph,
 			AnalysisFileTree fileTree, Vertex parentVertex, String edgeLabel)
 			throws AnalysisStoreException {
@@ -88,7 +98,7 @@ public class AnalysisStoreFileTreeUtils {
 		edge.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
 				fileTree.isFile());
 
-		AnalysisStoreFileTreeUtils.addMetadata(vertex, fileTree);
+		analysisStoreFileTreeUtils.addMetadata(vertex, fileTree);
 		graph.commit();
 
 		Iterable<Vertex> vertices = graph
@@ -110,7 +120,7 @@ public class AnalysisStoreFileTreeUtils {
 		if (fileTree.isFile()) {
 			for (AnalysisInformation analyzedCode : fileTree.getAnalyses()) {
 				// XXX do we really need this information here?
-				AnalysisStoreContentTreeUtils.storeAnalysisInformation(graph,
+				analysisStoreContentTreeUtils.storeAnalysisInformation(graph,
 						vertex, analyzedCode);
 			}
 		}
@@ -141,10 +151,10 @@ public class AnalysisStoreFileTreeUtils {
 	 * @param fileTreeNode
 	 * @throws AnalysisStoreException
 	 */
-	public static void addMetadata(Vertex vertex, AnalysisFileTree fileTreeNode)
+	public void addMetadata(Vertex vertex, AnalysisFileTree fileTreeNode)
 			throws AnalysisStoreException {
 		if (fileTreeNode.isFile()) {
-			long size = AnalysisStoreDAO.getFileSize(fileTreeNode.getHashId());
+			long size = analysisStoreDAO.getFileSize(fileTreeNode.getHashId());
 			vertex.setProperty(TitanElementNames.TREE_ELEMENT_SIZE, size);
 		} else {
 			Iterable<Vertex> childVertexes = vertex
@@ -209,7 +219,7 @@ public class AnalysisStoreFileTreeUtils {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	public static AnalysisFileTree createAnalysisFileTree(TitanGraph graph,
+	public AnalysisFileTree createAnalysisFileTree(TitanGraph graph,
 			UUID projectUUID, UUID runUUID) throws AnalysisStoreException {
 		try {
 			Iterable<Vertex> runVertices = graph.query()
@@ -247,9 +257,8 @@ public class AnalysisStoreFileTreeUtils {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	private static AnalysisFileTree convertToAnalysisFileTree(
-			Vertex fileTreeVertex, AnalysisFileTree parent)
-			throws AnalysisStoreException {
+	private AnalysisFileTree convertToAnalysisFileTree(Vertex fileTreeVertex,
+			AnalysisFileTree parent) throws AnalysisStoreException {
 		AnalysisFileTree hashIdFileTree = createAnalysisFileTreeNode(
 				fileTreeVertex, parent);
 		Iterable<Vertex> vertices = fileTreeVertex
@@ -273,9 +282,8 @@ public class AnalysisStoreFileTreeUtils {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	private static AnalysisFileTree createAnalysisFileTreeNode(
-			Vertex fileTreeVertex, AnalysisFileTree parent)
-			throws AnalysisStoreException {
+	private AnalysisFileTree createAnalysisFileTreeNode(Vertex fileTreeVertex,
+			AnalysisFileTree parent) throws AnalysisStoreException {
 		String name = (String) fileTreeVertex
 				.getProperty(TitanElementNames.TREE_ELEMENT_NAME);
 		boolean isFile = (boolean) fileTreeVertex
@@ -315,8 +323,8 @@ public class AnalysisStoreFileTreeUtils {
 	 * @param hash
 	 * @return
 	 */
-	private static List<AnalysisInformation> readAnalyses(
-			Vertex fileTreeVertex, String hash) {
+	private List<AnalysisInformation> readAnalyses(Vertex fileTreeVertex,
+			String hash) {
 		List<AnalysisInformation> analyses = new ArrayList<AnalysisInformation>();
 		Iterable<Vertex> analysisVertices = fileTreeVertex.query()
 				.direction(Direction.OUT)
@@ -339,7 +347,7 @@ public class AnalysisStoreFileTreeUtils {
 	 * @param analysisVertex
 	 * @return
 	 */
-	private static AnalysisInformation readAnalysisInformation(String hashId,
+	private AnalysisInformation readAnalysisInformation(String hashId,
 			Vertex analysisVertex) {
 		Date startTime = analysisVertex
 				.getProperty(TitanElementNames.ANALYSIS_START_TIME_PROPERTY);
@@ -368,7 +376,7 @@ public class AnalysisStoreFileTreeUtils {
 	 *            is the vertex of the file to be deleted.
 	 * @throws AnalysisStoreException
 	 */
-	public static void deleteFileTree(Vertex fileTreeVertex)
+	public void deleteFileTree(Vertex fileTreeVertex)
 			throws AnalysisStoreException {
 		Iterable<Edge> edges = fileTreeVertex.query().direction(Direction.OUT)
 				.edges();
@@ -384,7 +392,7 @@ public class AnalysisStoreFileTreeUtils {
 					.equals(edgeLabel)) {
 				deleteFileTree(childVertex);
 			} else if (TitanElementNames.HAS_ANALYSIS_LABEL.equals(edgeLabel)) {
-				AnalysisStoreContentTreeUtils.removeAnalysis(childVertex);
+				analysisStoreContentTreeUtils.removeAnalysis(childVertex);
 			} else if (TitanElementNames.HAS_CONTENT_LABEL.equals(edgeLabel)) {
 				// intentionally left blank, content is deleted in another step
 				// in analysis run deletion

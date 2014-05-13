@@ -12,7 +12,6 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>test</module>
 		<module>utils</module>
 		<module>utils.bundle</module>
 	</modules>

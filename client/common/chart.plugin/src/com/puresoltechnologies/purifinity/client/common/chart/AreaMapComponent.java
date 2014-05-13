@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 
-import com.puresoltechnologies.commons.trees.api.Tree;
+import com.puresoltechnologies.commons.trees.Tree;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.AreaMapData;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.AreaMapRenderer;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ColorProvider;

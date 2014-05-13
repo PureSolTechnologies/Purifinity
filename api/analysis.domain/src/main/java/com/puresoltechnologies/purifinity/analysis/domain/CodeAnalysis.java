@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.puresoltechnologies.commons.misc.TimeAwareness;
-import com.puresoltechnologies.parsers.api.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 
 /**
  * This is a interface to a single analysis. It's used to implement a language

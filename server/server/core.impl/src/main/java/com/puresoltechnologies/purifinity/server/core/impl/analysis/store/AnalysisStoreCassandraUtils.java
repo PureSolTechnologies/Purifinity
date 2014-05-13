@@ -1,0 +1,86 @@
+package com.puresoltechnologies.purifinity.server.core.impl.analysis.store;
+
+import java.util.UUID;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.Session;
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.CassandraKeyspaces;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
+
+/**
+ * This class contains methods to handle analysis projects and run in Cassandra.
+ * 
+ * @author Rick-Rainer Ludwig
+ * 
+ */
+public class AnalysisStoreCassandraUtils {
+
+	@Inject
+	@Named(CassandraKeyspaces.ANALYSIS)
+	private Session session;
+
+	/**
+	 * This method write the project analysis settings into database.
+	 * 
+	 * @param runUUID
+	 * @param fileSearchConfiguration
+	 */
+	public void writeAnalysisRunSettings(UUID runUUID,
+			FileSearchConfiguration fileSearchConfiguration) {
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(session, "INSERT INTO "
+						+ CassandraElementNames.RUN_SETTINGS_TABLE
+						+ " (run_uuid, " + "file_includes, file_excludes, "
+						+ "location_includes, location_excludes, "
+						+ "ignore_hidden) " + "VALUES (?, ?, ?, ?, ?, ?)");
+		BoundStatement bound = preparedStatement.bind(runUUID,
+				fileSearchConfiguration.getFileIncludes(),
+				fileSearchConfiguration.getFileExcludes(),
+				fileSearchConfiguration.getLocationIncludes(),
+				fileSearchConfiguration.getLocationExcludes(),
+				fileSearchConfiguration.isIgnoreHidden());
+		session.execute(bound);
+	}
+
+	/**
+	 * This method removes Analysis Run Settings from Cassandra.
+	 * 
+	 * @param projectUUID
+	 * @param runUUID
+	 */
+	public void removeAnalysisRunSettings(UUID projectUUID, UUID runUUID) {
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(session, "DELETE FROM "
+						+ CassandraElementNames.RUN_SETTINGS_TABLE
+						+ " WHERE run_uuid= ?");
+		BoundStatement bound = preparedStatement.bind(runUUID);
+		session.execute(bound);
+	}
+
+	public void removeAnalysisFile(HashId hashId) {
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(session, "DELETE FROM "
+						+ CassandraElementNames.ANALYSIS_FILES_TABLE
+						+ " WHERE hashid=?;");
+		BoundStatement boundStatement = preparedStatement.bind(hashId
+				.toString());
+		session.execute(boundStatement);
+	}
+
+	public void removeProjectSettings(UUID projectUUID) {
+		PreparedStatement preparedStatement = CassandraConnection
+				.getPreparedStatement(session, "DELETE FROM "
+						+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
+						+ " WHERE project_uuid=?;");
+		BoundStatement bound = preparedStatement.bind(projectUUID);
+		session.execute(bound);
+	}
+
+}

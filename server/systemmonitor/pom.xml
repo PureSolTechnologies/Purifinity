@@ -49,19 +49,15 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>commons.test</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 			<artifactId>commons.utils</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>database.cassandra.utils</artifactId>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>common.test</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>databaseconnector.cassandra</artifactId>
+			<artifactId>database.cassandra</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

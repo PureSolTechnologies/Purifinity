@@ -14,11 +14,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>analysis.impl</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>server.core.api</artifactId>
 			<scope>provided</scope>

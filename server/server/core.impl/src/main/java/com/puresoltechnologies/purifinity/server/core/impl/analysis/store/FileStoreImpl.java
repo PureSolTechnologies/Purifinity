@@ -9,6 +9,9 @@ import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.security.DigestInputStream;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.commons.io.IOUtils;
 
 import com.datastax.driver.core.BoundStatement;
@@ -18,17 +21,22 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
-import com.puresoltechnologies.parsers.api.source.SourceCode;
-import com.puresoltechnologies.parsers.impl.source.SourceCodeImpl;
-import com.puresoltechnologies.parsers.impl.source.UnspecifiedSourceCodeLocation;
+import com.puresoltechnologies.commons.misc.StringUtils;
+import com.puresoltechnologies.parsers.source.SourceCode;
+import com.puresoltechnologies.parsers.source.SourceCodeImpl;
+import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
-import com.puresoltechnologies.purifinity.framework.commons.utils.StringUtils;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraConnection;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.CassandraKeyspaces;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
 
 public final class FileStoreImpl implements FileStore {
+
+	@Inject
+	@Named(CassandraKeyspaces.ANALYSIS)
+	private Session session;
 
 	@Override
 	public HashId storeRawFile(InputStream rawStream) throws FileStoreException {
@@ -44,7 +52,6 @@ public final class FileStoreImpl implements FileStore {
 						HashUtilities.getDefaultMessageDigestAlgorithm(),
 						hashString);
 
-				Session session = CassandraConnection.getAnalysisSession();
 				PreparedStatement preparedStmt = CassandraConnection
 						.getPreparedStatement(session, "INSERT INTO "
 								+ CassandraElementNames.ANALYSIS_FILES_TABLE
@@ -65,7 +72,6 @@ public final class FileStoreImpl implements FileStore {
 
 	@Override
 	public InputStream readRawFile(HashId hashId) throws FileStoreException {
-		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session.execute("SELECT raw FROM "
 				+ CassandraElementNames.ANALYSIS_FILES_TABLE
 				+ " WHERE hashid='" + hashId.toString() + "'");
@@ -87,7 +93,6 @@ public final class FileStoreImpl implements FileStore {
 	@Override
 	public CodeAnalysis loadAnalysis(HashId hashId, ClassLoader classLoader)
 			throws FileStoreException {
-		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session.execute("SELECT analysis FROM "
 				+ CassandraElementNames.ANALYSIS_FILES_TABLE
 				+ " WHERE hashid='" + hashId.toString() + "'");
@@ -115,7 +120,6 @@ public final class FileStoreImpl implements FileStore {
 	@Override
 	public final void storeAnalysis(HashId hashId, CodeAnalysis fileAnalysis)
 			throws FileStoreException {
-		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.ANALYSIS_FILES_TABLE
@@ -141,7 +145,6 @@ public final class FileStoreImpl implements FileStore {
 
 	@Override
 	public final boolean isAvailable(HashId hashId) {
-		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session.execute("SELECT hash FROM "
 				+ CassandraElementNames.ANALYSIS_FILES_TABLE
 				+ " WHERE hashid='" + hashId.toString() + "'");
@@ -163,7 +166,6 @@ public final class FileStoreImpl implements FileStore {
 
 	@Override
 	public final boolean wasAnalyzed(HashId hashId) {
-		Session session = CassandraConnection.getAnalysisSession();
 		ResultSet resultSet = session.execute("SELECT analysis FROM "
 				+ CassandraElementNames.ANALYSIS_FILES_TABLE
 				+ " WHERE hashid='" + hashId.toString() + "'");

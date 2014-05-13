@@ -22,11 +22,11 @@ import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraConnection;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraElementNames;
-import com.puresoltechnologies.purifinity.framework.evaluation.commons.impl.store.cassandra.ValueSerializer;
 import com.puresoltechnologies.purifinity.server.core.api.ChartDataProvider;
+import com.puresoltechnologies.purifinity.server.core.impl.evaluation.store.ValueSerializer;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.CassandraKeyspaces;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.domain.HistogramChartData;
 import com.puresoltechnologies.purifinity.server.domain.MetricsMapData;
 import com.puresoltechnologies.purifinity.server.domain.ParetoChartData;
@@ -143,7 +143,6 @@ public class ChartDataProviderBean implements ChartDataProvider {
 	public MetricsMapData loadMapValues(UUID analysisProject, UUID analysisRun,
 			String mapEvaluatorName, Parameter<?> mapParameter,
 			String colorEvaluatorName, Parameter<?> colorParameter) {
-		Session session = CassandraConnection.getEvaluationSession();
 		Map<HashId, Map<String, Value<? extends Number>>> mapValues = readMapValues(
 				session, analysisProject, analysisRun, mapEvaluatorName,
 				mapParameter, CodeRangeType.FILE);

@@ -8,10 +8,10 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.commons.test.PerformanceTest;
-import com.puresoltechnologies.purifinity.commons.test.PerformanceTestResult;
-import com.puresoltechnologies.purifinity.commons.test.PerformanceTester;
 import com.puresoltechnologies.purifinity.server.client.socket.PurifinityServerClient;
+import com.puresoltechnologies.purifinity.server.common.test.PerformanceTest;
+import com.puresoltechnologies.purifinity.server.common.test.PerformanceTestResult;
+import com.puresoltechnologies.purifinity.server.common.test.PerformanceTester;
 
 public class PurifinityServerClientIT extends
 		AbstractPurifinityServerClientTest {

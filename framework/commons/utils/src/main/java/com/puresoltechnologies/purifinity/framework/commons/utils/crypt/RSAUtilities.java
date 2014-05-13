@@ -16,7 +16,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import com.puresoltechnologies.purifinity.framework.commons.utils.StringUtils;
+import com.puresoltechnologies.commons.misc.StringUtils;
 
 /**
  * This class contains utilities and simplifying helper functions for RSA

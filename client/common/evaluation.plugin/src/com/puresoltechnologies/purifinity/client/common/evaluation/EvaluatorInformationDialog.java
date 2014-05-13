@@ -20,13 +20,13 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.puresoltechnologies.commons.math.Parameter;
+import com.puresoltechnologies.commons.misc.StringUtils;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.ParameterListViewer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.contents.QualityCharacteristicListViewer;
 import com.puresoltechnologies.purifinity.client.common.evaluation.controls.QualityCharacteristicInformationComponent;
 import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.controls.ParameterInformationComponent;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.framework.commons.utils.StringUtils;
 
 public class EvaluatorInformationDialog extends Dialog implements
 		SelectionListener {

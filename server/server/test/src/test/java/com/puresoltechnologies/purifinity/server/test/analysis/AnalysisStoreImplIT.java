@@ -22,21 +22,21 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.commons.trees.api.TreeUtils;
-import com.puresoltechnologies.parsers.api.source.RepositoryLocation;
+import com.puresoltechnologies.commons.misc.StopWatch;
+import com.puresoltechnologies.commons.trees.TreeUtils;
+import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.DirectoryRepositoryLocation;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.RepositoryLocationCreator;
-import com.puresoltechnologies.purifinity.framework.commons.utils.StopWatch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileSearch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.DirectoryRepositoryLocation;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.RepositoryLocationCreator;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.FileStoreImpl;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 

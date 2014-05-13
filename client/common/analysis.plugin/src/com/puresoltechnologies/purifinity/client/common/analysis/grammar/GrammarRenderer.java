@@ -8,8 +8,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.RGB;
 
-import com.puresoltechnologies.commons.trees.api.TreeException;
-import com.puresoltechnologies.parsers.impl.parser.ParserTree;
+import com.puresoltechnologies.commons.trees.TreeException;
+import com.puresoltechnologies.parsers.parser.ParserTree;
 
 public final class GrammarRenderer extends AbstractRenderer {
 

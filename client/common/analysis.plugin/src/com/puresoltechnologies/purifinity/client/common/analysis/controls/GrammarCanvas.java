@@ -14,9 +14,9 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresoltechnologies.parsers.impl.grammar.GrammarException;
-import com.puresoltechnologies.parsers.impl.grammar.GrammarReader;
-import com.puresoltechnologies.parsers.impl.parser.ParserTree;
+import com.puresoltechnologies.parsers.grammar.GrammarException;
+import com.puresoltechnologies.parsers.grammar.GrammarReader;
+import com.puresoltechnologies.parsers.parser.ParserTree;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.client.common.analysis.grammar.GrammarRenderer;

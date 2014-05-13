@@ -9,14 +9,12 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import com.puresoltechnologies.commons.misc.ProgressObserver;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunner;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.framework.commons.utils.NotImplementedException;
 
-public class AnalysisJob extends Job implements
-		ProgressObserver<AnalysisRunner> {
+public class AnalysisJob extends Job implements ProgressObserver<Runnable> {
 
 	private static final ILog logger = Activator.getDefault().getLog();
 
@@ -24,7 +22,7 @@ public class AnalysisJob extends Job implements
 
 	private final AnalysisProjectInformation analysisProjectInformation;
 	private final AnalysisProjectSettings analysisProjectSettings;
-	private AnalysisRunner analysisRunner;
+	private Runnable analysisRunner;
 	private AnalysisRun analysisRun;
 	private final IProgressMonitor monitor = null;
 	private final Future<Boolean> future = null;
@@ -106,21 +104,19 @@ public class AnalysisJob extends Job implements
 	}
 
 	@Override
-	public void started(AnalysisRunner observable, String message, long total) {
+	public void started(Runnable observable, String message, long total) {
 		monitor.beginTask(analysisProjectSettings.getName(), (int) total);
 		monitor.subTask(message);
 	}
 
 	@Override
-	public void done(AnalysisRunner observable, String message,
-			boolean successful) {
+	public void done(Runnable observable, String message, boolean successful) {
 		monitor.subTask(message);
 		monitor.done();
 	}
 
 	@Override
-	public void updateWork(AnalysisRunner observable, String message,
-			long finished) {
+	public void updateWork(Runnable observable, String message, long finished) {
 		monitor.subTask(message);
 		monitor.worked((int) finished);
 	}

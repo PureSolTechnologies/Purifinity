@@ -13,8 +13,12 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>commons.test</artifactId>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>analysis.spi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>common.test</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

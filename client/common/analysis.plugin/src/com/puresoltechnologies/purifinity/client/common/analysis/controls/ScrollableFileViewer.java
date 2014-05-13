@@ -8,8 +8,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import com.puresoltechnologies.parsers.api.source.SourceCode;
-import com.puresoltechnologies.parsers.api.source.SourceCodeLine;
+import com.puresoltechnologies.parsers.source.SourceCode;
+import com.puresoltechnologies.parsers.source.SourceCodeLine;
 
 /**
  * This is a simple text element which show a text file.

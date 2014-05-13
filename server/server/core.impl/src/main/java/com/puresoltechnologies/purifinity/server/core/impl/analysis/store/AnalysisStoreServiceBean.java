@@ -9,6 +9,7 @@ import java.util.Properties;
 import java.util.UUID;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -17,23 +18,21 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.ProgressObserver;
-import com.puresoltechnologies.commons.trees.api.TreeUtils;
+import com.puresoltechnologies.commons.trees.TreeUtils;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.database.titan.utils.TitanElementNames;
-import com.puresoltechnologies.purifinity.database.titan.utils.VertexType;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.store.cassandra.AnalysisStoreCacheUtils;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.store.cassandra.AnalysisStoreCassandraUtils;
-import com.puresoltechnologies.purifinity.framework.analysis.impl.store.cassandra.BigTableUtils;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraConnection;
-import com.puresoltechnologies.purifinity.framework.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.CassandraKeyspaces;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.databaseconnector.titan.TitanElementNames;
+import com.puresoltechnologies.purifinity.server.databaseconnector.titan.VertexType;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSeverity;
@@ -52,6 +51,25 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 
 	@Inject
 	private EventLogger eventLogger;
+
+	@Inject
+	@Named(CassandraKeyspaces.ANALYSIS)
+	private Session session;
+
+	@Inject
+	private AnalysisStoreCassandraUtils analysisStoreCassandraUtils;
+
+	@Inject
+	private AnalysisStoreFileTreeUtils analysisStoreFileTreeUtils;
+
+	@Inject
+	private AnalysisStoreContentTreeUtils analysisStoreContentTreeUtils;
+
+	@Inject
+	private AnalysisStoreCacheUtils analysisStoreCacheUtils;
+
+	@Inject
+	private BigTableUtils bigTableUtils;
 
 	@Inject
 	private TitanGraph graph;
@@ -88,7 +106,6 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 		FileSearchConfiguration fileSearchConfiguration = settings
 				.getFileSearchConfiguration();
 
-		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
@@ -169,7 +186,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 						"Analysis project has still edges connected. Database is inconsistent!");
 			}
 			graph.removeVertex(vertex);
-			AnalysisStoreCassandraUtils.removeProjectSettings(projectUUID);
+			analysisStoreCassandraUtils.removeProjectSettings(projectUUID);
 			graph.commit();
 		} catch (AnalysisStoreException e) {
 			graph.rollback();
@@ -180,7 +197,6 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	@Override
 	public AnalysisProjectSettings readAnalysisProjectSettings(UUID projectUUID)
 			throws AnalysisStoreException {
-		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(
 						session,
@@ -274,7 +290,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 					projectVertex, runUUID, creationTime, startTime, duration,
 					description);
 
-			AnalysisStoreCassandraUtils.writeAnalysisRunSettings(runUUID,
+			analysisStoreCassandraUtils.writeAnalysisRunSettings(runUUID,
 					fileSearchConfiguration);
 
 			graph.commit();
@@ -346,20 +362,20 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 			Vertex fileTreeVertex = AnalysisStoreTitanUtils.findFileTreeVertex(
 					projectUUID, runUUID, runVertex);
 			if (fileTreeVertex != null) {
-				AnalysisStoreFileTreeUtils.deleteFileTree(fileTreeVertex);
+				analysisStoreFileTreeUtils.deleteFileTree(fileTreeVertex);
 			}
 			// remove analysis run vertex
 			runVertex.remove();
 			// clear caches
-			AnalysisStoreCacheUtils
+			analysisStoreCacheUtils
 					.clearAnalysisRunCaches(projectUUID, runUUID);
 			// remove run settings
-			AnalysisStoreCassandraUtils.removeAnalysisRunSettings(projectUUID,
+			analysisStoreCassandraUtils.removeAnalysisRunSettings(projectUUID,
 					runUUID);
 			// remove analysis run results
-			BigTableUtils.removeAnalysisRunResults(projectUUID, runUUID);
+			bigTableUtils.removeAnalysisRunResults(projectUUID, runUUID);
 			// cleanup content tree
-			AnalysisStoreContentTreeUtils
+			analysisStoreContentTreeUtils
 					.checkAndRemoveAnalysisRunContent(runVertex);
 			graph.commit();
 		} catch (AnalysisStoreException e) {
@@ -371,7 +387,6 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	@Override
 	public FileSearchConfiguration readSearchConfiguration(UUID runUUID)
 			throws AnalysisStoreException {
-		Session session = CassandraConnection.getAnalysisSession();
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(
 						session,
@@ -420,9 +435,9 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 			}
 			Vertex analysisRunVertex = AnalysisStoreTitanUtils
 					.findAnalysisRunVertex(graph, projectUUID, runUUID);
-			AnalysisStoreContentTreeUtils.addContentTree(this,
+			analysisStoreContentTreeUtils.addContentTree(this,
 					progressObserver, graph, fileTree, analysisRunVertex);
-			AnalysisStoreFileTreeUtils.addFileTree(this, progressObserver,
+			analysisStoreFileTreeUtils.addFileTree(this, progressObserver,
 					graph, fileTree, analysisRunVertex);
 			graph.commit();
 			if (progressObserver != null) {
@@ -442,14 +457,14 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	@Override
 	public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException {
-		AnalysisFileTree analysisFileTree = AnalysisStoreCacheUtils
+		AnalysisFileTree analysisFileTree = analysisStoreCacheUtils
 				.readCachedAnalysisFileTree(projectUUID, runUUID);
 		if (analysisFileTree != null) {
 			return analysisFileTree;
 		}
-		analysisFileTree = AnalysisStoreFileTreeUtils.createAnalysisFileTree(
+		analysisFileTree = analysisStoreFileTreeUtils.createAnalysisFileTree(
 				graph, projectUUID, runUUID);
-		AnalysisStoreCacheUtils.cacheAnalysisFileTree(projectUUID, runUUID,
+		analysisStoreCacheUtils.cacheAnalysisFileTree(projectUUID, runUUID,
 				analysisFileTree);
 		return analysisFileTree;
 	}

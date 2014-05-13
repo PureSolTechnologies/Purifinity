@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>commons.utils</artifactId>
-	<name>Purifinity Framework: ${project.artifactId}</name>
+	<name>Purifinity Framework: ${project.artifa-ctId}</name>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -22,7 +22,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>trees.api</artifactId>
+			<artifactId>trees</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

@@ -193,12 +193,12 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>trees.api</artifactId>
+				<artifactId>trees</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
-				<artifactId>parsers.api</artifactId>
+				<artifactId>parsers</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -408,20 +408,22 @@
 		<module>osgi</module>
 		<module>math</module>
 		<module>math.bundle</module>
-		<module>trees.api</module>
-		<module>trees.api.bundle</module>
+		<module>trees</module>
+		<module>trees.bundle</module>
 		<module>misc</module>
 		<module>misc.bundle</module>
-		<module>parser.api</module>
-		<module>parser.api.bundle</module>
+		<module>parsers</module>
+		<module>parsers.bundle</module>
 		<module>analysis.domain</module>
 		<module>analysis.domain.bundle</module>
 		<module>analysis.api</module>
 		<module>analysis.api.bundle</module>
+		<module>analysis.spi</module>
 		<module>evaluation.domain</module>
 		<module>evaluation.domain.bundle</module>
 		<module>evaluation.api</module>
 		<module>evaluation.api.bundle</module>
+		<module>evaluation.spi</module>
 	</modules>
 
 </project>

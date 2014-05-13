@@ -15,5 +15,6 @@
 	<modules>
 		<module>plugins</module>
 		<module>rest</module>
+		<module>test</module>
 	</modules>
 </project>
