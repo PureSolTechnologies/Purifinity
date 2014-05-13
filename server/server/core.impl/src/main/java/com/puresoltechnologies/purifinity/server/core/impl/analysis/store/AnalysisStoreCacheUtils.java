@@ -9,7 +9,6 @@ import java.nio.ByteBuffer;
 import java.util.UUID;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +19,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.CassandraKeyspaces;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.AnalysisKeyspace;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
 
@@ -39,7 +38,7 @@ public class AnalysisStoreCacheUtils {
 			.getLogger(AnalysisStoreCacheUtils.class);
 
 	@Inject
-	@Named(CassandraKeyspaces.ANALYSIS)
+	@AnalysisKeyspace
 	private Session session;
 
 	/**

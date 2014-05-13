@@ -60,14 +60,16 @@
 			<artifactId>titan-core</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.thinkaurelius.titan</groupId>
+			<artifactId>titan-cassandra</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.weld.se</groupId>
 			<artifactId>weld-se</artifactId>
-			<version>1.1.19.Final</version>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

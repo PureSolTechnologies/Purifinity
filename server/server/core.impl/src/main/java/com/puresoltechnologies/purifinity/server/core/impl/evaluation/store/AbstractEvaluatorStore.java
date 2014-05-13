@@ -13,7 +13,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -39,7 +38,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.CassandraKeyspaces;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.EvaluationKeyspace;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
 
@@ -51,7 +50,7 @@ import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.uti
 public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 
 	@Inject
-	@Named(CassandraKeyspaces.EVALUATION)
+	@EvaluationKeyspace
 	private Session session;
 
 	protected abstract Class<? extends MetricFileResults> getFileResultClass();

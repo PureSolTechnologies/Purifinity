@@ -9,7 +9,6 @@ import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -24,7 +23,7 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.server.core.api.ChartDataProvider;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.store.ValueSerializer;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.CassandraKeyspaces;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.EvaluationKeyspace;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.domain.HistogramChartData;
@@ -35,7 +34,7 @@ import com.puresoltechnologies.purifinity.server.domain.ParetoChartData;
 public class ChartDataProviderBean implements ChartDataProvider {
 
 	@Inject
-	@Named(CassandraKeyspaces.EVALUATION)
+	@EvaluationKeyspace
 	private Session session;
 
 	private PreparedStatement preparedNumericHistogramChartDataStatement = null;

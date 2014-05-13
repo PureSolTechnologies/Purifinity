@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -28,7 +28,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.CassandraKeyspaces;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.AnalysisKeyspace;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.databaseconnector.titan.TitanElementNames;
@@ -42,6 +42,7 @@ import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
+@Stateless
 public class AnalysisStoreServiceBean implements AnalysisStoreService {
 
 	public static final String CASSANDRA_HOST = "localhost";
@@ -53,7 +54,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	private EventLogger eventLogger;
 
 	@Inject
-	@Named(CassandraKeyspaces.ANALYSIS)
+	@AnalysisKeyspace
 	private Session session;
 
 	@Inject

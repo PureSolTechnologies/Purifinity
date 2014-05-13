@@ -10,7 +10,6 @@ import java.nio.ByteBuffer;
 import java.security.DigestInputStream;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.apache.commons.io.IOUtils;
 
@@ -28,14 +27,14 @@ import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.CassandraKeyspaces;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.AnalysisKeyspace;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
 
 public final class FileStoreImpl implements FileStore {
 
 	@Inject
-	@Named(CassandraKeyspaces.ANALYSIS)
+	@AnalysisKeyspace
 	private Session session;
 
 	@Override

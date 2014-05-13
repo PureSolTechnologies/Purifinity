@@ -3,12 +3,11 @@ package com.puresoltechnologies.purifinity.server.core.impl.analysis.store;
 import java.util.UUID;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.CassandraKeyspaces;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.EvaluationKeyspace;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
 
@@ -20,7 +19,7 @@ import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.uti
 public class BigTableUtils {
 
 	@Inject
-	@Named(CassandraKeyspaces.EVALUATION)
+	@EvaluationKeyspace
 	private Session session;
 
 	public void removeAnalysisRunResults(UUID projectUUID, UUID runUUID) {

@@ -1,20 +1,19 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis.store;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.CassandraKeyspaces;
+import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.AnalysisKeyspace;
 import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
 
 public class AnalysisStoreDAO {
 
 	@Inject
-	@Named(CassandraKeyspaces.ANALYSIS)
+	@AnalysisKeyspace
 	private Session session;
 
 	public int getFileSize(HashId hashId) throws AnalysisStoreException {

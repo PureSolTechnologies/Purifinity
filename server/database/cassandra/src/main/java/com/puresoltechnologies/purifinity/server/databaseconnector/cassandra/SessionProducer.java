@@ -3,7 +3,6 @@ package com.puresoltechnologies.purifinity.server.databaseconnector.cassandra;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.slf4j.Logger;
@@ -23,7 +22,7 @@ public class SessionProducer {
 
 	@Produces
 	@Singleton
-	@Named(CassandraKeyspaces.ANALYSIS)
+	@AnalysisKeyspace
 	public Session getAnalysisSession() {
 		logger.info("Creating Cassandra Analysis Session...");
 		Session session = cluster
@@ -34,7 +33,7 @@ public class SessionProducer {
 
 	@Produces
 	@Singleton
-	@Named(CassandraKeyspaces.EVALUATION)
+	@EvaluationKeyspace
 	public Session getEvaluationSession() {
 		logger.info("Creating Cassandra Evaluation Session...");
 		Session session = cluster
@@ -43,7 +42,13 @@ public class SessionProducer {
 		return session;
 	}
 
-	public void closeAnalysisKeyspaceSession(@Disposes Session session) {
+	public void closeAnalysisKeyspaceSession(
+			@Disposes @AnalysisKeyspace Session session) {
+		cluster.close();
+	}
+
+	public void closeEvaluationKeyspaceSession(
+			@Disposes @EvaluationKeyspace Session session) {
 		cluster.close();
 	}
 }
