@@ -9,9 +9,9 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.AnalysisKeyspace;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 
 /**
  * This class contains methods to handle analysis projects and run in Cassandra.
@@ -22,7 +22,7 @@ import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.uti
 public class AnalysisStoreCassandraUtils {
 
 	@Inject
-	@AnalysisKeyspace
+	@AnalysisStoreKeyspace
 	private Session session;
 
 	/**

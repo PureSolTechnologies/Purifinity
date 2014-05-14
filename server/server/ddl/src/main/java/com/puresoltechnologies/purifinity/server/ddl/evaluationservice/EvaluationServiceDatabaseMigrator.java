@@ -2,10 +2,10 @@ package com.puresoltechnologies.purifinity.server.ddl.evaluationservice;
 
 import java.io.IOException;
 
-import com.puresoltechnologies.purifinity.framework.database.migration.AbstractDatabaseMigrator;
-import com.puresoltechnologies.purifinity.framework.database.migration.DatabaseMigrationConnector;
-import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraMigrationConnector;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigrationConnector;
+import com.puresoltechnologies.purifinity.server.database.migration.AbstractDatabaseMigrator;
+import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrationConnector;
+import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 
 public class EvaluationServiceDatabaseMigrator extends AbstractDatabaseMigrator {
 

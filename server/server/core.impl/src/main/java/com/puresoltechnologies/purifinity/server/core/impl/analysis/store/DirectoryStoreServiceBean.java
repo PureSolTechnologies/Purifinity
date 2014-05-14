@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
-import com.puresoltechnologies.purifinity.server.databaseconnector.titan.TitanElementNames;
+import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Vertex;
 

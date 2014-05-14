@@ -5,8 +5,8 @@ import java.util.Iterator;
 import java.util.UUID;
 
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.databaseconnector.titan.TitanElementNames;
-import com.puresoltechnologies.purifinity.server.databaseconnector.titan.VertexType;
+import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
+import com.puresoltechnologies.purifinity.server.database.titan.VertexType;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;

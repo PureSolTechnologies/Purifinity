@@ -7,13 +7,13 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.AnalysisKeyspace;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 
 public class AnalysisStoreDAO {
 
 	@Inject
-	@AnalysisKeyspace
+	@AnalysisStoreKeyspace
 	private Session session;
 
 	public int getFileSize(HashId hashId) throws AnalysisStoreException {

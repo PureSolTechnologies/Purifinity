@@ -23,9 +23,9 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.server.core.api.ChartDataProvider;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.store.ValueSerializer;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.EvaluationKeyspace;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.domain.HistogramChartData;
 import com.puresoltechnologies.purifinity.server.domain.MetricsMapData;
 import com.puresoltechnologies.purifinity.server.domain.ParetoChartData;
@@ -34,7 +34,7 @@ import com.puresoltechnologies.purifinity.server.domain.ParetoChartData;
 public class ChartDataProviderBean implements ChartDataProvider {
 
 	@Inject
-	@EvaluationKeyspace
+	@EvaluationStoreKeyspace
 	private Session session;
 
 	private PreparedStatement preparedNumericHistogramChartDataStatement = null;

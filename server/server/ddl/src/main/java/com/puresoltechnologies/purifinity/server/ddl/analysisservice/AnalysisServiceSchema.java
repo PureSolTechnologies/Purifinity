@@ -1,12 +1,12 @@
 package com.puresoltechnologies.purifinity.server.ddl.analysisservice;
 
-import static com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraMigration.createKeyspace;
-import static com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraMigration.createTable;
+import static com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration.createKeyspace;
+import static com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration.createTable;
 
 import com.puresoltechnologies.purifinity.framework.commons.utils.Version;
-import com.puresoltechnologies.purifinity.framework.database.migration.DatabaseMigrator;
-import com.puresoltechnologies.purifinity.framework.database.migration.MigrationException;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.ReplicationStrategy;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
+import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrator;
+import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 
 public class AnalysisServiceSchema {
 

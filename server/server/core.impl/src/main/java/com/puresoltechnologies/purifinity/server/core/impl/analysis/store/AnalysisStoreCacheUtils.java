@@ -19,9 +19,9 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.AnalysisKeyspace;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 
 /**
  * Some database operations are quite complex and time consuming. For that
@@ -38,7 +38,7 @@ public class AnalysisStoreCacheUtils {
 			.getLogger(AnalysisStoreCacheUtils.class);
 
 	@Inject
-	@AnalysisKeyspace
+	@AnalysisStoreKeyspace
 	private Session session;
 
 	/**

@@ -10,14 +10,15 @@ import org.junit.Test;
 
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.server.common.test.AbstractWeldTest;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.AnalysisKeyspace;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.EvaluationKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
 
 public class SessionProducerIT extends AbstractWeldTest {
 
 	@Test
 	public void testAnalysisKeyspace() {
-		Session session = getInstance(Session.class, AnalysisKeyspace.class);
+		Session session = getInstance(Session.class,
+				AnalysisStoreKeyspace.class);
 		assertNotNull(session);
 		assertFalse(session.isClosed());
 		assertEquals("analysis_store", session.getLoggedKeyspace());
@@ -25,16 +26,19 @@ public class SessionProducerIT extends AbstractWeldTest {
 
 	@Test
 	public void testAnalysisKeyspaceSingleton() {
-		Session session1 = getInstance(Session.class, AnalysisKeyspace.class);
+		Session session1 = getInstance(Session.class,
+				AnalysisStoreKeyspace.class);
 		assertNotNull(session1);
-		Session session2 = getInstance(Session.class, AnalysisKeyspace.class);
+		Session session2 = getInstance(Session.class,
+				AnalysisStoreKeyspace.class);
 		assertNotNull(session2);
 		assertSame(session1, session2);
 	}
 
 	@Test
 	public void testEvaluationKeyspace() {
-		Session session = getInstance(Session.class, EvaluationKeyspace.class);
+		Session session = getInstance(Session.class,
+				EvaluationStoreKeyspace.class);
 		assertNotNull(session);
 		assertFalse(session.isClosed());
 		assertEquals("evaluation_store", session.getLoggedKeyspace());
@@ -42,9 +46,11 @@ public class SessionProducerIT extends AbstractWeldTest {
 
 	@Test
 	public void testEvaluationKeyspaceSingleton() {
-		Session session1 = getInstance(Session.class, EvaluationKeyspace.class);
+		Session session1 = getInstance(Session.class,
+				EvaluationStoreKeyspace.class);
 		assertNotNull(session1);
-		Session session2 = getInstance(Session.class, EvaluationKeyspace.class);
+		Session session2 = getInstance(Session.class,
+				EvaluationStoreKeyspace.class);
 		assertNotNull(session2);
 		assertSame(session1, session2);
 	}

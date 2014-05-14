@@ -32,6 +32,48 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>it</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cassandra-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>startCassandra</id>
+							</execution>
+							<execution>
+								<id>stopCassandra</id>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>java</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<includeProjectDependencies>true</includeProjectDependencies>
+							<mainClass>com.puresoltechnologies.purifinity.server.ddl.DatabaseMigrator</mainClass>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -49,7 +91,7 @@
 					<transformers>
 						<transformer
 							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-							<mainClass>com.puresoltechnologies.purifinity.server.evaluationservice.ddl.EvaluationServiceDatabaseMigrator</mainClass>
+							<mainClass>com.puresoltechnologies.purifinity.server.ddl.DatabaseMigrator</mainClass>
 						</transformer>
 					</transformers>
 				</configuration>

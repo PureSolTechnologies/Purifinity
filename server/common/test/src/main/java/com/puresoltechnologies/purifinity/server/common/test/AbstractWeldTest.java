@@ -29,7 +29,9 @@ public abstract class AbstractWeldTest {
 
 	@AfterClass
 	public final static void destroyWeld() {
-		weld.shutdown();
+		if (weld != null) {
+			weld.shutdown();
+		}
 	}
 
 	@SafeVarargs

@@ -8,14 +8,14 @@ import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.EvaluationKeyspace;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 
 public class EvaluatorStoreCassandraUtils {
 
 	@Inject
-	@EvaluationKeyspace
+	@EvaluationStoreKeyspace
 	private Session session;
 
 	public void deleteFileEvaluation(HashId hashId) {

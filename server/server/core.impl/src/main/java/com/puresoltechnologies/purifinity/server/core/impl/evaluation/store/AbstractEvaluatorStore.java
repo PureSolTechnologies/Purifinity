@@ -38,9 +38,9 @@ import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.EvaluationKeyspace;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 
 /**
  * This is an abstract implementation of an evaluator store.
@@ -50,7 +50,7 @@ import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.uti
 public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 
 	@Inject
-	@EvaluationKeyspace
+	@EvaluationStoreKeyspace
 	private Session session;
 
 	protected abstract Class<? extends MetricFileResults> getFileResultClass();

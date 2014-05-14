@@ -28,11 +28,11 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.AnalysisKeyspace;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraConnection;
-import com.puresoltechnologies.purifinity.server.databaseconnector.cassandra.utils.CassandraElementNames;
-import com.puresoltechnologies.purifinity.server.databaseconnector.titan.TitanElementNames;
-import com.puresoltechnologies.purifinity.server.databaseconnector.titan.VertexType;
+import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
+import com.puresoltechnologies.purifinity.server.database.titan.VertexType;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSeverity;
@@ -54,7 +54,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	private EventLogger eventLogger;
 
 	@Inject
-	@AnalysisKeyspace
+	@AnalysisStoreKeyspace
 	private Session session;
 
 	@Inject
