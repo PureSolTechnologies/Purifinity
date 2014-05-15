@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.database.cassandra.test;
+package com.puresoltechnologies.purifinity.server.test.database.cassandra;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;

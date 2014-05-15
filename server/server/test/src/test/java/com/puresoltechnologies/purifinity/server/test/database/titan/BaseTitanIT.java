@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.database.titan.test;
+package com.puresoltechnologies.purifinity.server.test.database.titan;
 
 import static org.junit.Assert.assertTrue;
 

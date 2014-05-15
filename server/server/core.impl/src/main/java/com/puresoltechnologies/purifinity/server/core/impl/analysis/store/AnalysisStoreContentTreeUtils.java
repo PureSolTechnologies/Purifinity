@@ -33,9 +33,6 @@ public class AnalysisStoreContentTreeUtils {
 	@Inject
 	private AnalysisStoreCassandraUtils analysisStoreCassandraUtils;
 
-	@Inject
-	private AnalysisStoreFileTreeUtils analysisStoreFileTreeUtils;
-
 	/**
 	 * This method adds a new content tree node or content tree part to the
 	 * database.
@@ -129,7 +126,6 @@ public class AnalysisStoreContentTreeUtils {
 							TitanElementNames.CONTAINS_DIRECTORY_LABEL);
 				}
 			}
-			analysisStoreFileTreeUtils.addMetadata(vertex, fileTree);
 			if (fileTree.isFile()) {
 				for (AnalysisInformation analyzedCode : fileTree.getAnalyses()) {
 					storeAnalysisInformation(graph, vertex, analyzedCode);

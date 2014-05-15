@@ -36,9 +36,6 @@ public class AnalysisStoreFileTreeUtils {
 	private AnalysisStoreContentTreeUtils analysisStoreContentTreeUtils;
 
 	@Inject
-	private AnalysisStoreFileTreeUtils analysisStoreFileTreeUtils;
-
-	@Inject
 	private AnalysisStoreDAO analysisStoreDAO;
 
 	/**
@@ -98,7 +95,7 @@ public class AnalysisStoreFileTreeUtils {
 		edge.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
 				fileTree.isFile());
 
-		analysisStoreFileTreeUtils.addMetadata(vertex, fileTree);
+		addMetadata(vertex, fileTree);
 		graph.commit();
 
 		Iterable<Vertex> vertices = graph
@@ -116,14 +113,6 @@ public class AnalysisStoreFileTreeUtils {
 				contentVertex);
 		// XXX
 		graph.commit();
-
-		if (fileTree.isFile()) {
-			for (AnalysisInformation analyzedCode : fileTree.getAnalyses()) {
-				// XXX do we really need this information here?
-				analysisStoreContentTreeUtils.storeAnalysisInformation(graph,
-						vertex, analyzedCode);
-			}
-		}
 
 		if (progressObserver != null) {
 			progressObserver.updateWork(analysisStore,

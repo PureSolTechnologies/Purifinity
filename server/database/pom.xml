@@ -15,8 +15,6 @@
 	<modules>
 		<module>migration</module>
 		<module>cassandra</module>
-		<module>cassandra.test</module>
 		<module>titan</module>
-		<module>titan.test</module>
 	</modules>
 </project>
