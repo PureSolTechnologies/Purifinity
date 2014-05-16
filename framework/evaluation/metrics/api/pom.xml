@@ -28,10 +28,6 @@
 			<artifactId>evaluation.api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>evaluation.metrics.api</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>
