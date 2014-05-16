@@ -18,6 +18,7 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
@@ -25,6 +26,7 @@ import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordSt
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountCreationException;
 
+@Ignore
 public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
 
 	private static final String EMAIL = "ludwig@puresol-technologies.com";
