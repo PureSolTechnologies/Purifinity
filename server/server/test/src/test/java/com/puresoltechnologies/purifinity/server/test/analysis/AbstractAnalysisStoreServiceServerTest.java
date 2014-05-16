@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.test.analysis;
 
 import static org.junit.Assert.assertNotNull;
 
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.After;
 import org.junit.Before;
@@ -19,6 +20,12 @@ public abstract class AbstractAnalysisStoreServiceServerTest extends
 
 	private Cluster cluster;
 	private Session session;
+
+	@EnhanceDeployment
+	public static void removeWARFile(EnterpriseArchive enterpriseArchive)
+			throws Exception {
+		removeWAR(enterpriseArchive, "server.socket.impl.war");
+	}
 
 	@EnhanceDeployment
 	public static final void enhanceDeployment(JavaArchive archive) {

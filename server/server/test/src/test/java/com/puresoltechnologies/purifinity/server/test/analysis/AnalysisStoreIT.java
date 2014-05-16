@@ -31,19 +31,19 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSetting
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileSearch;
 import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.RepositoryLocationCreator;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.FileStoreImpl;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
-public class AnalysisStoreImplIT extends AbstractAnalysisStoreServiceServerTest {
+public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 
 	@Inject
-	private AnalysisStoreService analysisStore;
+	private AnalysisStore analysisStore;
 
 	@EnhanceDeployment
 	public static void removeWARFile(EnterpriseArchive archive)
