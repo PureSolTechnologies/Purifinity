@@ -29,6 +29,22 @@
 					<groupId>com.puresoltechnologies.commons</groupId>
 					<artifactId>misc</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>com.puresoltechnologies.purifinity.api</groupId>
+					<artifactId>analysis.api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.puresoltechnologies.purifinity.api</groupId>
+					<artifactId>analysis.domain</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.puresoltechnologies.purifinity.api</groupId>
+					<artifactId>evaluation.api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.puresoltechnologies.purifinity.api</groupId>
+					<artifactId>evaluation.domain</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>

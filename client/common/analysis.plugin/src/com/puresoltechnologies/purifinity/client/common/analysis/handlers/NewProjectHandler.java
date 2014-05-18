@@ -11,7 +11,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.puresoltechnologies.purifinity.client.common.analysis.wizards.NewProjectWizard;
 
-public class NewAnalysisProjectHandler extends AbstractHandler {
+public class NewProjectHandler extends AbstractHandler {
 
 	private final ListenerList listeners = new ListenerList();
 

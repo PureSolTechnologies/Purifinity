@@ -9,7 +9,9 @@ import javax.inject.Inject;
 
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
+import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
 @Stateless
@@ -20,6 +22,9 @@ public class AnalysisServiceBean implements AnalysisService {
 
 	@Inject
 	private AnalyzerPluginService analyzerRegistration;
+
+	@Inject
+	private RepositoryTypePluginService repositoryTypePluginService;
 
 	@PostConstruct
 	public void initialize() {
@@ -40,6 +45,11 @@ public class AnalysisServiceBean implements AnalysisService {
 	@Override
 	public Collection<AnalyzerInformation> getAnalyzers() {
 		return analyzerRegistration.getServices();
+	}
+
+	@Override
+	public Collection<RepositoryType> getRepositoryTypes() {
+		return repositoryTypePluginService.getServices();
 	}
 
 }

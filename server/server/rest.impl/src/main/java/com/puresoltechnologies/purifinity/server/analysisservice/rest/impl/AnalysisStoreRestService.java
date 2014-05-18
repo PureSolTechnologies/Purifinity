@@ -34,71 +34,61 @@ public class AnalysisStoreRestService implements AnalysisStoreRestInterface {
 	@Override
 	public AnalysisProjectInformation readAnalysisProjectInformation(
 			UUID projectUUID) throws AnalysisStoreException {
-		// TODO Auto-generated method stub
-		return null;
+		return analysisStore.readAnalysisProjectInformation(projectUUID);
 	}
 
 	@Override
 	public void removeAnalysisProject(UUID projectUUID)
 			throws AnalysisStoreException {
-		// TODO Auto-generated method stub
-
+		analysisStore.removeAnalysisProject(projectUUID);
 	}
 
 	@Override
 	public AnalysisProjectSettings readAnalysisProjectSettings(
-			UUID analysisProjectUUID) throws AnalysisStoreException {
-		// TODO Auto-generated method stub
-		return null;
+			UUID projectUUID) throws AnalysisStoreException {
+		return analysisStore.readAnalysisProjectSettings(projectUUID);
 	}
 
 	@Override
 	public void updateAnalysisProjectSettings(UUID projectUUID,
 			AnalysisProjectSettings settings) throws AnalysisStoreException {
-		// TODO Auto-generated method stub
-
+		analysisStore.updateAnalysisProjectSettings(projectUUID, settings);
 	}
 
 	@Override
 	public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
 			throws AnalysisStoreException {
-		// TODO Auto-generated method stub
-		return null;
+		return analysisStore.readAllRunInformation(projectUUID);
 	}
 
 	@Override
 	public AnalysisRunInformation readAnalysisRun(UUID projectUUID,
 			UUID analysisRunUUID) throws AnalysisStoreException {
-		// TODO Auto-generated method stub
-		return null;
+		return analysisStore.readAnalysisRun(projectUUID, analysisRunUUID);
 	}
 
 	@Override
 	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)
 			throws AnalysisStoreException {
-		// TODO Auto-generated method stub
-		return null;
+		return analysisStore.readLastAnalysisRun(projectUUID);
 	}
 
 	@Override
 	public void removeAnalysisRun(UUID projectUUID, UUID analysisRunUUID)
 			throws AnalysisStoreException {
-		// TODO Auto-generated method stub
-
+		analysisStore.removeAnalysisRun(projectUUID, analysisRunUUID);
 	}
 
 	@Override
 	public FileSearchConfiguration readSearchConfiguration(UUID analysisRunUUID)
 			throws AnalysisStoreException {
-		// TODO Auto-generated method stub
-		return null;
+		return analysisStore.readSearchConfiguration(analysisRunUUID);
 	}
 
 	@Override
 	public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException {
-		// TODO Auto-generated method stub
-		return null;
+		return analysisStore.readAnalysisFileTree(projectUUID, runUUID);
 	}
 
 }

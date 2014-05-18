@@ -59,9 +59,9 @@
    <extension
          point="org.eclipse.ui.commands">
       <command
-            defaultHandler="com.puresoltechnologies.purifinity.client.common.analysis.handlers.NewAnalysisProjectHandler"
-            id="com.puresoltechnologies.purifinity.client.common.analysis.handlers.NewAnalysisProjectHandler"
-            name="New Analysis">
+            defaultHandler="com.puresoltechnologies.purifinity.client.common.analysis.handlers.NewProjectHandler"
+            id="com.puresoltechnologies.purifinity.client.common.analysis.handlers.NewProjectHandler"
+            name="New Project">
       </command>
       <command
             defaultHandler="com.puresoltechnologies.purifinity.client.common.analysis.handlers.ReAnalyzeHandler"

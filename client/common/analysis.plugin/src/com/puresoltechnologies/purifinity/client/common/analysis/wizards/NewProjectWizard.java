@@ -12,10 +12,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInforma
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.utils.PreferencesUtils;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
-import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisServiceClient;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisStoreClient;
 
 public class NewProjectWizard extends Wizard {
 
@@ -43,15 +41,13 @@ public class NewProjectWizard extends Wizard {
 					.getPreferenceStore();
 			FileSearchConfiguration searchConfiguration = PreferencesUtils
 					.getFileSearchConfiguration(preferenceStore);
-			AnalysisStore analysisStore = AnalysisStoreFactory.getFactory()
+			AnalysisStoreClient analysisStore = AnalysisStoreClient
 					.getInstance();
 			AnalysisProjectSettings analysisSettings = new AnalysisProjectSettings(
 					projectName, description, searchConfiguration,
 					sourceLocationProperties);
 			AnalysisProjectInformation analysisInformation = analysisStore
 					.createAnalysisProject(analysisSettings);
-
-			AnalysisServiceClient client = AnalysisServiceClient.getInstance();
 			// TODO
 			//
 			// AnalysisJob job = new AnalysisJob(analysisInformation,

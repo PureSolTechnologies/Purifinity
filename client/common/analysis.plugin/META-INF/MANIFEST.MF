@@ -21,12 +21,12 @@ Require-Bundle: org.eclipse.osgi;bundle-version="3.8.2",
  com.puresoltechnologies.parsers.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.analysis.domain.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.analysis.api.bundle;bundle-version="0.3.0",
- com.puresoltechnologies.purifinity.server.client.bundle;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.osgi.plugin;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.application.plugin;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.branding.plugin;bundle-version="0.3.0",
  com.puresoltechnologies.purifinity.client.common.server.plugin;bundle-version="0.3.0",
- com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.3.0"
+ com.puresoltechnologies.purifinity.client.common.ui.plugin;bundle-version="0.3.0",
+ com.puresoltechnologies.purifinity.server.client.bundle
 Export-Package: com.puresoltechnologies.purifinity.client.common.analy
  sis;uses:="com.puresoltechnologies.purifinity.client.common.osgi,org.
  eclipse.ui.plugin,org.osgi.framework",com.puresoltechnologies.purifin

@@ -43,7 +43,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSetting
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisProjectListItem;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisProjectsTableViewer;
-import com.puresoltechnologies.purifinity.client.common.analysis.handlers.NewAnalysisProjectHandler;
+import com.puresoltechnologies.purifinity.client.common.analysis.handlers.NewProjectHandler;
 import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
@@ -53,6 +53,7 @@ import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSol
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisStoreClient;
 
 /**
  * This view shows a list of all analysis which are opened and the tree of files
@@ -252,8 +253,8 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 		try {
 			IHandlerService handlerService = (IHandlerService) getSite()
 					.getService(IHandlerService.class);
-			handlerService.executeCommand(
-					NewAnalysisProjectHandler.class.getName(), null);
+			handlerService.executeCommand(NewProjectHandler.class.getName(),
+					null);
 		} catch (ExecutionException | NotDefinedException | NotEnabledException
 				| NotHandledException e) {
 			logger.error("Could not run new analysis!", e);
@@ -314,22 +315,16 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 	private void refreshAnalysisProjectList() {
 		try {
 			List<AnalysisProjectListItem> analysisProjectsListItems = new ArrayList<>();
-			AnalysisStore store = AnalysisStoreFactory.getFactory()
-					.getInstance();
-			if (store != null) {
-				List<AnalysisProjectInformation> allAnalysisProjectInformation = store
-						.readAllAnalysisProjectInformation();
-				for (AnalysisProjectInformation information : allAnalysisProjectInformation) {
-					AnalysisProjectSettings settings = store
-							.readAnalysisProjectSettings(information.getUUID());
-					AnalysisProjectListItem newItem = new AnalysisProjectListItem(
-							information.getUUID(),
-							information.getCreationTime(), settings);
-					analysisProjectsListItems.add(newItem);
-				}
-			} else {
-				logger.warn("No analysis store is available.");
-				return;
+			AnalysisStoreClient store = AnalysisStoreClient.getInstance();
+			List<AnalysisProjectInformation> allAnalysisProjectInformation = store
+					.readAllAnalysisProjectInformation();
+			for (AnalysisProjectInformation information : allAnalysisProjectInformation) {
+				AnalysisProjectSettings settings = store
+						.readAnalysisProjectSettings(information.getUUID());
+				AnalysisProjectListItem newItem = new AnalysisProjectListItem(
+						information.getUUID(), information.getCreationTime(),
+						settings);
+				analysisProjectsListItems.add(newItem);
 			}
 			analysisProjectsViewer.setInput(analysisProjectsListItems);
 			processProjectSelection();

@@ -20,4 +20,8 @@ public interface AnalysisServiceRestInterface {
 	@Path("repositories")
 	public RepositoryTypes getRepositoryTypes() throws IOException;
 
+	@GET
+	@Path("trigger")
+	void triggerNewAnalysis();
+
 }
