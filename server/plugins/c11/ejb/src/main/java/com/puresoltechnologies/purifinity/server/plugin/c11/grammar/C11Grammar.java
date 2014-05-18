@@ -16,7 +16,7 @@ public class C11Grammar extends AbstractLanguageGrammar {
 
 	private static final long serialVersionUID = -8286230838527909083L;
 
-	public static final String GRAMMAR_RESOURCE = "/com/puresoltechnologies/purifinity/framework/lang/c11/grammar/C11.g";
+	public static final String GRAMMAR_RESOURCE = "/com/puresoltechnologies/purifinity/server/plugin/c11/grammar/C11.g";
 	public static final String PERSISTED_GRAMMAR_RESOURCE = GrammarManager
 			.getPersistedGrammarPath(GRAMMAR_RESOURCE);
 	public static final String PERSISTED_LEXER_RESOURCE = GrammarManager

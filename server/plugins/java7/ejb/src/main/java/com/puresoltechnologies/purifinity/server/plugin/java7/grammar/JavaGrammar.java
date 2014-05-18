@@ -22,7 +22,7 @@ public class JavaGrammar extends AbstractLanguageGrammar {
 
 	private static final long serialVersionUID = 7320197893887717979L;
 
-	public static final String GRAMMAR_RESOURCE = "/com/puresoltechnologies/purifinity/framework/lang/java/grammar/Java-1.7.g";
+	public static final String GRAMMAR_RESOURCE = "/com/puresoltechnologies/purifinity/server/plugin/java7/grammar/Java-1.7.g";
 	public static final String PERSISTED_GRAMMAR_RESOURCE = GrammarManager
 			.getPersistedGrammarPath(GRAMMAR_RESOURCE);
 	public static final String PERSISTED_LEXER_RESOURCE = GrammarManager
