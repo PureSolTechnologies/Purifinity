@@ -45,9 +45,6 @@ import com.tinkerpop.blueprints.Vertex;
 @Stateless
 public class AnalysisStoreServiceBean implements AnalysisStoreService {
 
-	public static final String CASSANDRA_HOST = "localhost";
-	public static final int CASSANDRA_CQL_PORT = 9042;
-	public static final String KEYSPACE_NAME = "analysis_store";
 	public static final String COMPONENT_NAME = "AnalysisStoreService";
 
 	@Inject
@@ -392,7 +389,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 				.getPreparedStatement(
 						session,
 						"SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
-								+ CassandraElementNames.RUN_SETTINGS_TABLE
+								+ CassandraElementNames.ANALYSIS_RUN_SETTINGS_TABLE
 								+ " WHERE run_uuid=?");
 		BoundStatement boundStatement = preparedStatement.bind(runUUID);
 		ResultSet resultSet = session.execute(boundStatement);

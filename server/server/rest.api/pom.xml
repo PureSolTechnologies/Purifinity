@@ -15,14 +15,17 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.api</groupId>
 			<artifactId>analysis.domain</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
 			<artifactId>store.api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>server.domain</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>

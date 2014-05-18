@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -33,7 +34,14 @@ public class AnalysisStoreServiceClientIT extends
 
 	@AfterClass
 	public static void destroy() throws Exception {
-		analysisStoreService.close();
+		if (analysisStoreService != null) {
+			analysisStoreService.close();
+		}
+	}
+
+	@Before
+	public void cleanup() {
+		cleanupAnalysisStore();
 	}
 
 	private AnalysisProjectSettings createProjectSettings() {

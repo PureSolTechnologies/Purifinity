@@ -53,7 +53,7 @@ public class AnalysisStoreCacheUtils {
 			UUID runUUID) {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "SELECT persisted_tree FROM "
-						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
+						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
 						+ " WHERE run_uuid=?");
 		BoundStatement boundStatement = preparedStatement.bind(runUUID);
 		ResultSet resultSet = session.execute(boundStatement);
@@ -87,7 +87,7 @@ public class AnalysisStoreCacheUtils {
 			AnalysisFileTree analysisFileTree) {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "INSERT INTO "
-						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
+						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
 						+ " (run_uuid, persisted_tree) VALUES (?, ?)");
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 			try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
@@ -113,7 +113,7 @@ public class AnalysisStoreCacheUtils {
 	public void clearAnalysisRunCaches(UUID projectUUID, UUID runUUID) {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "DELETE FROM "
-						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
+						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
 						+ " WHERE run_uuid=?");
 		BoundStatement boundStatement = preparedStatement.bind(runUUID);
 		session.execute(boundStatement);

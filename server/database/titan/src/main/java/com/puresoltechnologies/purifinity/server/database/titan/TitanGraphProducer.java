@@ -8,13 +8,10 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.apache.commons.configuration.BaseConfiguration;
-import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;
 
 import com.thinkaurelius.titan.core.KeyMaker;
 import com.thinkaurelius.titan.core.LabelMaker;
-import com.thinkaurelius.titan.core.TitanFactory;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TypeMaker.UniquenessConsistency;
 import com.tinkerpop.blueprints.Edge;
@@ -23,8 +20,6 @@ import com.tinkerpop.blueprints.Vertex;
 @Singleton
 public class TitanGraphProducer {
 
-	private static final Object CASSANDRA_HOST = "localhost";
-
 	@Inject
 	private Logger logger;
 
@@ -32,9 +27,8 @@ public class TitanGraphProducer {
 
 	@PostConstruct
 	private void initialize() {
-		Configuration conf = getConfigurationForCassandraBackend();
 		logger.info("Connect to Titan...");
-		graph = TitanFactory.open(conf);
+		graph = TitanGraphHelper.connect();
 		logger.info("Titan connected.");
 		checkLabelAndKeySettings();
 	}
@@ -49,13 +43,6 @@ public class TitanGraphProducer {
 	@Produces
 	public TitanGraph getCluster() {
 		return graph;
-	}
-
-	private static Configuration getConfigurationForCassandraBackend() {
-		Configuration conf = new BaseConfiguration();
-		conf.setProperty("storage.backend", "cassandra");
-		conf.setProperty("storage.hostname", CASSANDRA_HOST);
-		return conf;
 	}
 
 	private void checkLabelAndKeySettings() {

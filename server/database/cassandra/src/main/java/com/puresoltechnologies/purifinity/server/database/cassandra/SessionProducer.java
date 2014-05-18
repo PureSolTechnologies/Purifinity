@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 
 @Singleton
 public class SessionProducer {
@@ -25,8 +24,7 @@ public class SessionProducer {
 	@AnalysisStoreKeyspace
 	public Session getAnalysisSession() {
 		logger.info("Creating Cassandra Analysis Session...");
-		Session session = cluster
-				.connect(CassandraElementNames.ANALYSIS_KEYSPACE);
+		Session session = cluster.connect(AnalysisStoreKeyspace.NAME);
 		logger.info("Cassandra Analysis Session created.");
 		return session;
 	}
@@ -36,8 +34,7 @@ public class SessionProducer {
 	@EvaluationStoreKeyspace
 	public Session getEvaluationSession() {
 		logger.info("Creating Cassandra Evaluation Session...");
-		Session session = cluster
-				.connect(CassandraElementNames.EVALUATION_KEYSPACE);
+		Session session = cluster.connect(EvaluationStoreKeyspace.NAME);
 		logger.info("Cassandra Evaluation Session created...");
 		return session;
 	}

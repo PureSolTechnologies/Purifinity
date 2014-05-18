@@ -8,13 +8,10 @@ import javax.inject.Singleton;
 import org.slf4j.Logger;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Cluster.Builder;
 
 @Singleton
 public class ClusterProducer {
 
-	private static final String CASSANDRA_HOST = "localhost";
-	private static final int CASSANDRA_CQL_PORT = 9042;
 	@Inject
 	private Logger logger;
 
@@ -22,9 +19,7 @@ public class ClusterProducer {
 	@Singleton
 	public Cluster getCluster() {
 		logger.info("Creating Cassandra Cluster...");
-		Builder clusterBuilder = Cluster.builder();
-		Cluster cluster = clusterBuilder.addContactPoint(CASSANDRA_HOST)
-				.withPort(CASSANDRA_CQL_PORT).build();
+		Cluster cluster = CassandraClusterHelper.connect();
 		logger.info("Cassandra Cluster created.");
 		return cluster;
 	}

@@ -24,7 +24,7 @@ public class TestLanguageGrammar extends AbstractLanguageGrammar {
 
 	private static final long serialVersionUID = 8411042156803619382L;
 
-	public static final String GRAMMAR_RESOURCE = "/com/puresoltechnologies/purifinity/framework/lang/test/grammar/TestLanguage.g";
+	public static final String GRAMMAR_RESOURCE = "/com/puresoltechnologies/purifinity/server/test/lang/grammar/TestLanguage.g";
 	static {
 		URL grammarResource = TestLanguageGrammar.class
 				.getResource(GRAMMAR_RESOURCE);

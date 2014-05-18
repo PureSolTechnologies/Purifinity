@@ -22,6 +22,7 @@ import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountAct
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
+import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreDatabaseHelper;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
 public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
@@ -42,7 +43,7 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 	@Before
 	public void setup() throws IOException {
 		assertNotNull(passwordStore);
-		cleanupPasswordStoreDatabase();
+		PasswordStoreDatabaseHelper.cleanPasswordStore(getCluster());
 	}
 
 	@Test

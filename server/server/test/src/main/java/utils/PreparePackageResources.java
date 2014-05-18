@@ -36,7 +36,7 @@ public class PreparePackageResources {
 					.getResourceAsStream(TestLanguageGrammar.GRAMMAR_RESOURCE);
 			if (grammerResource == null) {
 				throw new RuntimeException(
-						"Could not open teat language grammar '"
+						"Could not open test language grammar '"
 								+ TestLanguageGrammar.GRAMMAR_RESOURCE + "'!");
 			}
 			try {

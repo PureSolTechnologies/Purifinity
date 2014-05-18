@@ -386,6 +386,7 @@
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>common.test</artifactId>
 				<version>${project.version}</version>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -483,6 +484,12 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>passwordstore.test</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>server.app</artifactId>
 				<version>${project.version}</version>
 				<type>ear</type>
@@ -539,11 +546,7 @@
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>server.test</artifactId>
 				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>passwordstore.test</artifactId>
-				<version>${project.version}</version>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -559,6 +562,7 @@
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>wildfly.test</artifactId>
 				<version>${project.version}</version>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>

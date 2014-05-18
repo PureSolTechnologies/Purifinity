@@ -1,45 +1,37 @@
 package com.puresoltechnologies.purifinity.server.test.analysis;
 
 import org.apache.http.HttpEntity;
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.KeyspaceMetadata;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.TableMetadata;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.AnalysisStoreServiceBean;
+import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
+import com.puresoltechnologies.purifinity.server.database.titan.TitanGraphHelper;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractClientTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
+import com.thinkaurelius.titan.core.TitanGraph;
 
 public abstract class AbstractAnalysisStoreServiceClientTest extends
 		AbstractClientTest {
 
-	private static Cluster cluster;
-	private static Session session;
-
 	@BeforeClass
-	public static void connectCassandra() {
-		cluster = Cluster.builder()
-				.addContactPoint(AnalysisStoreServiceBean.CASSANDRA_HOST)
-				.withPort(AnalysisStoreServiceBean.CASSANDRA_CQL_PORT).build();
-		session = cluster.connect(AnalysisStoreServiceBean.KEYSPACE_NAME);
-		cleanupAnalysisStoreDatabase();
-	}
-
-	@AfterClass
-	public static void disconnectCassandra() {
-		session.close();
-		cluster.close();
-	}
-
-	public static final void cleanupAnalysisStoreDatabase() {
-		KeyspaceMetadata metadata = cluster.getMetadata().getKeyspace(
-				AnalysisStoreServiceBean.KEYSPACE_NAME);
-		for (TableMetadata tableMetadata : metadata.getTables()) {
-			session.execute("TRUNCATE " + tableMetadata.getName() + ";");
+	public static void cleanupAnalysisStore() {
+		try (Cluster cluster = CassandraClusterHelper.connect()) {
+			TitanGraph titanGraph = TitanGraphHelper.connect();
+			try {
+				AnalysisStoreDatabaseHelper.cleanAnalysisStore(cluster,
+						titanGraph);
+			} finally {
+				titanGraph.shutdown();
+			}
 		}
+	}
+
+	@EnhanceDeployment
+	public static void removeWARFile(EnterpriseArchive enterpriseArchive)
+			throws Exception {
+		removeWAR(enterpriseArchive, "server.socket.impl.war");
 	}
 
 	@EnhanceDeployment

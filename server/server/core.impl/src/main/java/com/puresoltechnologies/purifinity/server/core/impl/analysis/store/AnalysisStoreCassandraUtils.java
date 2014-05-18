@@ -35,7 +35,7 @@ public class AnalysisStoreCassandraUtils {
 			FileSearchConfiguration fileSearchConfiguration) {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "INSERT INTO "
-						+ CassandraElementNames.RUN_SETTINGS_TABLE
+						+ CassandraElementNames.ANALYSIS_RUN_SETTINGS_TABLE
 						+ " (run_uuid, " + "file_includes, file_excludes, "
 						+ "location_includes, location_excludes, "
 						+ "ignore_hidden) " + "VALUES (?, ?, ?, ?, ?, ?)");
@@ -57,7 +57,7 @@ public class AnalysisStoreCassandraUtils {
 	public void removeAnalysisRunSettings(UUID projectUUID, UUID runUUID) {
 		PreparedStatement preparedStatement = CassandraConnection
 				.getPreparedStatement(session, "DELETE FROM "
-						+ CassandraElementNames.RUN_SETTINGS_TABLE
+						+ CassandraElementNames.ANALYSIS_RUN_SETTINGS_TABLE
 						+ " WHERE run_uuid= ?");
 		BoundStatement bound = preparedStatement.bind(runUUID);
 		session.execute(bound);

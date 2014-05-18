@@ -1,31 +1,28 @@
 package com.puresoltechnologies.purifinity.server.analysisservice.rest.api;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.commons.misc.ProgressObserver;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 
 @Path("store/rest")
-public interface AnalysisStoreRestInterface extends AnalysisStore {
+public interface AnalysisStoreRestInterface {
 
-	@Override
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -33,76 +30,74 @@ public interface AnalysisStoreRestInterface extends AnalysisStore {
 	public AnalysisProjectInformation createAnalysisProject(
 			AnalysisProjectSettings settings) throws AnalysisStoreException;
 
-	@Override
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("projects")
 	public List<AnalysisProjectInformation> readAllAnalysisProjectInformation()
 			throws AnalysisStoreException;
 
-	@Override
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("projects/{project_uuid}")
 	public AnalysisProjectInformation readAnalysisProjectInformation(
-			UUID projectUUID) throws AnalysisStoreException;
-
-	@Override
-	public AnalysisProject readAnalysisProject(
-			AnalysisProjectInformation information)
+			@PathParam("project_uuid") UUID projectUUID)
 			throws AnalysisStoreException;
 
-	@Override
-	public void removeAnalysisProject(UUID projectUUID)
+	@DELETE
+	@Path("projects/{project_uuid}")
+	public void removeAnalysisProject(
+			@PathParam("project_uuid") UUID projectUUID)
 			throws AnalysisStoreException;
 
-	@Override
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("projects/{project_uuid}")
 	public AnalysisProjectSettings readAnalysisProjectSettings(
-			UUID analysisProjectUUID) throws AnalysisStoreException;
+			@PathParam("project_uuid") UUID projectUUID)
+			throws AnalysisStoreException;
 
-	@Override
-	public void updateAnalysisProjectSettings(UUID projectUUID,
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("projects/{project_uuid}")
+	public void updateAnalysisProjectSettings(
+			@PathParam("project_uuid") UUID projectUUID,
 			AnalysisProjectSettings settings) throws AnalysisStoreException;
 
-	@Override
-	public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
+	@GET
+	@Path("projects/{project_uuid}/runs")
+	public List<AnalysisRunInformation> readAllRunInformation(
+			@PathParam("project_uuid") UUID projectUUID)
 			throws AnalysisStoreException;
 
-	@Override
-	public AnalysisRunInformation readAnalysisRun(UUID projectUUID,
-			UUID analysisRunUUID) throws AnalysisStoreException;
-
-	@Override
-	public AnalysisRun readAnalysisRun(
-			AnalysisRunInformation analysisRunInformation)
+	@GET
+	@Path("projects/{project_uuid}/runs/{run_uuid}")
+	public AnalysisRunInformation readAnalysisRun(
+			@PathParam("project_uuid") UUID projectUUID,
+			@PathParam("run_uuid") UUID analysisRunUUID)
 			throws AnalysisStoreException;
 
-	@Override
-	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("projects/{project_uuid}/lastrun")
+	public AnalysisRunInformation readLastAnalysisRun(
+			@PathParam("project_uuid") UUID projectUUID)
 			throws AnalysisStoreException;
 
-	@Override
-	public void removeAnalysisRun(UUID projectUUID, UUID analysisRunUUID)
-			throws AnalysisStoreException;
+	@DELETE
+	@Path("projects/{project_uuid}/runs/{run_uuid}")
+	public void removeAnalysisRun(@PathParam("project_uuid") UUID projectUUID,
+			@PathParam("run_uuid") UUID runUUID) throws AnalysisStoreException;
 
-	@Override
-	public FileSearchConfiguration readSearchConfiguration(UUID analysisRunUUID)
-			throws AnalysisStoreException;
+	@GET
+	@Path("projects/{project_uuid}/runs/{run_uuid}/searchconfiguration")
+	@Produces(MediaType.APPLICATION_JSON)
+	public FileSearchConfiguration readSearchConfiguration(
+			@PathParam("run_uuid") UUID runUUID) throws AnalysisStoreException;
 
-	@Override
-	public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
-			throws AnalysisStoreException;
+	@GET
+	@Path("projects/{project_uuid}/runs/{run_uuid}/filetree")
+	public AnalysisFileTree readAnalysisFileTree(
+			@PathParam("project_uuid") UUID projectUUID,
+			@PathParam("run_uuid") UUID runUUID) throws AnalysisStoreException;
 
-	@Override
-	public AnalysisRunInformation createAnalysisRun(UUID analysisProjectUUID,
-			Date startTime, long duration, String description,
-			FileSearchConfiguration fileSearchConfiguration)
-			throws AnalysisStoreException;
-
-	@Override
-	public void storeAnalysisFileTree(UUID projectUUID, UUID analysisRunUUID,
-			AnalysisFileTree fileTree) throws AnalysisStoreException;
-
-	@Override
-	public void storeAnalysisFileTree(
-			ProgressObserver<AnalysisStore> progressObserver, UUID projectUUID,
-			UUID analysisRunUUID, AnalysisFileTree fileTree)
-			throws AnalysisStoreException;
 }

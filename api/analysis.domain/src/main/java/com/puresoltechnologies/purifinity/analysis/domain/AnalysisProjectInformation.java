@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 /**
  * This is the central interface for information about a single analysis.
  * 
@@ -19,7 +21,8 @@ public final class AnalysisProjectInformation implements Serializable {
 	private final UUID uuid;
 	private final Date creationTime;
 
-	public AnalysisProjectInformation(UUID uuid, Date creationTime) {
+	public AnalysisProjectInformation(@JsonProperty("uuid") UUID uuid,
+			@JsonProperty("creationTime") Date creationTime) {
 		super();
 		checkNotNull("uuid", uuid);
 		checkNotNull("creationTime", creationTime);
