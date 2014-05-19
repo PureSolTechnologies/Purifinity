@@ -51,7 +51,7 @@ public interface AnalysisStoreRestInterface {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("projects/{project_uuid}")
+	@Path("projects/{project_uuid}/settings")
 	public AnalysisProjectSettings readAnalysisProjectSettings(
 			@PathParam("project_uuid") UUID projectUUID)
 			throws AnalysisStoreException;
@@ -64,12 +64,14 @@ public interface AnalysisStoreRestInterface {
 			AnalysisProjectSettings settings) throws AnalysisStoreException;
 
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("projects/{project_uuid}/runs")
 	public List<AnalysisRunInformation> readAllRunInformation(
 			@PathParam("project_uuid") UUID projectUUID)
 			throws AnalysisStoreException;
 
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("projects/{project_uuid}/runs/{run_uuid}")
 	public AnalysisRunInformation readAnalysisRun(
 			@PathParam("project_uuid") UUID projectUUID,
@@ -95,6 +97,7 @@ public interface AnalysisStoreRestInterface {
 			@PathParam("run_uuid") UUID runUUID) throws AnalysisStoreException;
 
 	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("projects/{project_uuid}/runs/{run_uuid}/filetree")
 	public AnalysisFileTree readAnalysisFileTree(
 			@PathParam("project_uuid") UUID projectUUID,

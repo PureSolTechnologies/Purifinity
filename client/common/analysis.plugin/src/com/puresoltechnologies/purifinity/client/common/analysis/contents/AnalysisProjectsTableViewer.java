@@ -13,8 +13,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-
 public class AnalysisProjectsTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 
@@ -106,9 +104,10 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 	}
 
 	@Override
-	public AnalysisProject[] getElements(Object inputElement) {
+	public AnalysisProjectListItem[] getElements(Object inputElement) {
+		int size = analysisProjectListItems.size();
 		return analysisProjectListItems
-				.toArray(new AnalysisProject[analysisProjectListItems.size()]);
+				.toArray(new AnalysisProjectListItem[size]);
 	}
 
 }
