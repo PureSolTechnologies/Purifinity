@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.test.analysis;
+package com.puresoltechnologies.purifinity.server.test.analysis.store;
 
 import static org.junit.Assert.assertNotNull;
 

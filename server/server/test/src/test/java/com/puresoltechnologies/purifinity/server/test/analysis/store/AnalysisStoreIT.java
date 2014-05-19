@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.test.analysis;
+package com.puresoltechnologies.purifinity.server.test.analysis.store;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -38,6 +38,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.RepositoryLocationCreator;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.FileStoreImpl;
+import com.puresoltechnologies.purifinity.server.test.analysis.TreeTestUtils;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
 public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {

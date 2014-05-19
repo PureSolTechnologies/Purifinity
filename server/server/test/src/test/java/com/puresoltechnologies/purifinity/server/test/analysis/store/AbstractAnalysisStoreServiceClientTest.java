@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.test.analysis;
+package com.puresoltechnologies.purifinity.server.test.analysis.store;
 
 import org.apache.http.HttpEntity;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import com.datastax.driver.core.Cluster;
 import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanGraphHelper;
+import com.puresoltechnologies.purifinity.server.test.analysis.AnalysisStoreDatabaseHelper;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractClientTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 import com.thinkaurelius.titan.core.TitanGraph;

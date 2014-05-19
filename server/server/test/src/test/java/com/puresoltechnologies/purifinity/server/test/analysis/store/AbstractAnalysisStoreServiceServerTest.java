@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.test.analysis;
+package com.puresoltechnologies.purifinity.server.test.analysis.store;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -12,6 +12,7 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreDatabaseHelper;
+import com.puresoltechnologies.purifinity.server.test.analysis.AnalysisStoreDatabaseHelper;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 import com.thinkaurelius.titan.core.TitanGraph;

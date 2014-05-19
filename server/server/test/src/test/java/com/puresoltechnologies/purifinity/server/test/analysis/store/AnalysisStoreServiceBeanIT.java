@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.test.analysis;
+package com.puresoltechnologies.purifinity.server.test.analysis.store;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -10,38 +10,38 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.junit.AfterClass;
+import javax.inject.Inject;
+
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisStoreClient;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.DirectoryRepositoryLocation;
+import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
-public class AnalysisStoreServiceClientIT extends
-		AbstractAnalysisStoreServiceClientTest {
+public class AnalysisStoreServiceBeanIT extends
+		AbstractAnalysisStoreServiceServerTest {
 
-	private static AnalysisStoreClient analysisStoreService;
-
-	@BeforeClass
-	public static void initialize() {
-		analysisStoreService = AnalysisStoreClient.getInstance();
+	@EnhanceDeployment
+	public static void removeWARFile(EnterpriseArchive archive)
+			throws Exception {
+		removeWAR(archive, "server.socket.impl.war");
 	}
 
-	@AfterClass
-	public static void destroy() throws Exception {
-		if (analysisStoreService != null) {
-			analysisStoreService.close();
-		}
-	}
+	@Inject
+	private AnalysisStoreService analysisStoreService;
 
 	@Before
-	public void cleanup() {
-		cleanupAnalysisStore();
+	public void cleanup() throws AnalysisStoreException {
+		List<AnalysisProjectInformation> projects = analysisStoreService
+				.readAllAnalysisProjectInformation();
+		assertNotNull(projects);
+		assertEquals(0, projects.size());
 	}
 
 	private AnalysisProjectSettings createProjectSettings() {
@@ -61,11 +61,6 @@ public class AnalysisStoreServiceClientIT extends
 		Date start = new Date();
 		AnalysisProjectSettings settings = createProjectSettings();
 
-		// List<AnalysisProjectInformation> projects = analysisStoreService
-		// .readAllAnalysisProjectInformation();
-		// assertNotNull(projects);
-		// assertEquals(0, projects.size());
-
 		AnalysisProjectInformation information = analysisStoreService
 				.createAnalysisProject(settings);
 		assertNotNull(information);
@@ -82,16 +77,12 @@ public class AnalysisStoreServiceClientIT extends
 	public void testReadAllProjects() throws AnalysisStoreException {
 		AnalysisProjectSettings settings = createProjectSettings();
 
-		List<AnalysisProjectInformation> projects = analysisStoreService
-				.readAllAnalysisProjectInformation();
-		assertNotNull(projects);
-		assertEquals(0, projects.size());
-
 		AnalysisProjectInformation information = analysisStoreService
 				.createAnalysisProject(settings);
 		assertNotNull(information);
 
-		projects = analysisStoreService.readAllAnalysisProjectInformation();
+		List<AnalysisProjectInformation> projects = analysisStoreService
+				.readAllAnalysisProjectInformation();
 		assertNotNull(projects);
 		assertEquals(1, projects.size());
 
@@ -105,16 +96,12 @@ public class AnalysisStoreServiceClientIT extends
 	public void testDeleteProject() throws AnalysisStoreException {
 		AnalysisProjectSettings settings = createProjectSettings();
 
-		List<AnalysisProjectInformation> projects = analysisStoreService
-				.readAllAnalysisProjectInformation();
-		assertNotNull(projects);
-		assertEquals(0, projects.size());
-
 		AnalysisProjectInformation information = analysisStoreService
 				.createAnalysisProject(settings);
 		assertNotNull(information);
 
-		projects = analysisStoreService.readAllAnalysisProjectInformation();
+		List<AnalysisProjectInformation> projects = analysisStoreService
+				.readAllAnalysisProjectInformation();
 		assertNotNull(projects);
 		assertEquals(1, projects.size());
 
