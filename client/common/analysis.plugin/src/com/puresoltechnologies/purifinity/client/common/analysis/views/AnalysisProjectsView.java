@@ -37,11 +37,9 @@ import org.eclipse.ui.progress.UIJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
-import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisProjectListItem;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisProjectsTableViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.handlers.NewProjectHandler;
 import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
@@ -314,19 +312,17 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 
 	private void refreshAnalysisProjectList() {
 		try {
-			List<AnalysisProjectListItem> analysisProjectsListItems = new ArrayList<>();
-			AnalysisStoreClient store = AnalysisStoreClient.getInstance();
-			List<AnalysisProjectInformation> allAnalysisProjectInformation = store
+			List<AnalysisProject> analysisProjects = new ArrayList<>();
+			AnalysisStoreClient analysisStore = AnalysisStoreClient
+					.getInstance();
+			List<AnalysisProjectInformation> allAnalysisProjectInformation = analysisStore
 					.readAllAnalysisProjectInformation();
 			for (AnalysisProjectInformation information : allAnalysisProjectInformation) {
-				AnalysisProjectSettings settings = store
-						.readAnalysisProjectSettings(information.getUUID());
-				AnalysisProjectListItem newItem = new AnalysisProjectListItem(
-						information.getUUID(), information.getCreationTime(),
-						settings);
-				analysisProjectsListItems.add(newItem);
+				AnalysisProject analysisProject = analysisStore
+						.readAnalysisProject(information.getUUID());
+				analysisProjects.add(analysisProject);
 			}
-			analysisProjectsViewer.setInput(analysisProjectsListItems);
+			analysisProjectsViewer.setInput(analysisProjects);
 			processProjectSelection();
 			updateEnabledState();
 		} catch (AnalysisStoreException e) {

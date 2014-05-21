@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
 
 /**

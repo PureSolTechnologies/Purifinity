@@ -34,21 +34,20 @@ import org.eclipse.ui.progress.UIJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListLabelProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
-import com.puresoltechnologies.purifinity.client.common.server.connectors.AnalysisStoreConnector;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseTarget;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisStoreClient;
 
 /**
  * This view contains a list of all analysis runs. Additionally, it allows the
@@ -237,12 +236,15 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 							while (iterator.hasNext()) {
 								AnalysisRunInformation analysisRun = iterator
 										.next();
-								analysisProject.removeAnalysisRun(analysisRun
-										.getUUID());
+								AnalysisStoreClient analysisStore = AnalysisStoreClient
+										.getInstance();
+								analysisStore.removeAnalysisRun(
+										analysisRun.getProjectUUID(),
+										analysisRun.getUUID());
 							}
 							refresh();
 							return Status.OK_STATUS;
-						} catch (AnalysisProjectException e) {
+						} catch (AnalysisStoreException e) {
 							logger.error(
 									"Could not remove analysis run from analysis store!",
 									e);
@@ -261,13 +263,16 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 	private void refreshAnalysisRunList() {
 		try {
 			if (analysisProject != null) {
-				List<AnalysisRunInformation> allRunInformation = analysisProject
-						.getAllRunInformation();
+				AnalysisStoreClient analysisStore = AnalysisStoreClient
+						.getInstance();
+				List<AnalysisRunInformation> allRunInformation = analysisStore
+						.readAllRunInformation(analysisProject.getInformation()
+								.getUUID());
 				analysisRunsViewer.setInput(allRunInformation);
 			}
 			processAnalysisRunSelection();
 			updateEnabledState();
-		} catch (AnalysisProjectException e) {
+		} catch (AnalysisStoreException e) {
 			logger.error("Can not read analysis runs from store!", e);
 		}
 	}
@@ -280,8 +285,10 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 					.getFirstElement();
 			AnalysisRun analysisRun = null;
 			if (information != null) {
-				analysisRun = AnalysisStoreConnector.getStore()
-						.readAnalysisRun(information);
+				AnalysisStoreClient analysisStore = AnalysisStoreClient
+						.getInstance();
+				analysisRun = analysisStore.readAnalysisRun(
+						information.getProjectUUID(), information.getUUID());
 			}
 			setSelection(new AnalysisRunSelection(analysisProject, analysisRun));
 		} catch (AnalysisStoreException e) {
@@ -312,15 +319,18 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 			if (hasSelectionChanged(newAnalysisProject)) {
 				analysisProject = newAnalysisProject;
 				if (analysisProject != null) {
-					analysisRunsViewer.setInput(analysisProject
-							.getAllRunInformation());
+					AnalysisStoreClient analysisStore = AnalysisStoreClient
+							.getInstance();
+					analysisRunsViewer.setInput(analysisStore
+							.readAllRunInformation(analysisProject
+									.getInformation().getUUID()));
 					setSelection(new AnalysisRunSelection(analysisProject, null));
 				} else {
 					analysisRunsViewer.setInput(null);
 					setSelection(new AnalysisRunSelection(null, null));
 				}
 			}
-		} catch (AnalysisProjectException e) {
+		} catch (AnalysisStoreException e) {
 			logger.error("Can not read analysis store!", e);
 		}
 	}

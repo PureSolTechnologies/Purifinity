@@ -1,7 +1,6 @@
-package com.puresoltechnologies.purifinity.server.core.impl.analysis.common;
+package com.puresoltechnologies.purifinity.analysis.domain;
 
-import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,39 +8,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.trees.TreeVisitor;
 import com.puresoltechnologies.commons.trees.TreeWalker;
 import com.puresoltechnologies.commons.trees.WalkingAction;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
 
 /**
  * This class is an implementation of {@link AnalysisRun}.
  * 
  * @author Rick-Rainer Ludwig
  */
-public class AnalysisRunImpl implements AnalysisRun {
+public class AnalysisRun implements Serializable {
 
-	private static final long serialVersionUID = 6413809660830217670L;
-
-	public static AnalysisRunImpl readFromStore(UUID projectUUID, UUID runUUID)
-			throws AnalysisStoreException {
-		AnalysisStore analysisStore = AnalysisStoreFactory.getFactory()
-				.getInstance();
-		AnalysisRunInformation information = analysisStore.readAnalysisRun(
-				projectUUID, runUUID);
-		AnalysisFileTree analysisFileTree = analysisStore.readAnalysisFileTree(
-				projectUUID, runUUID);
-		return new AnalysisRunImpl(information, analysisFileTree);
-	}
+	private static final long serialVersionUID = -3727921466916770165L;
 
 	private final AnalysisRunInformation information;
 	private final AnalysisFileTree fileTree;
@@ -58,12 +41,16 @@ public class AnalysisRunImpl implements AnalysisRun {
 	 * @param runDirectory
 	 * @param searchConfiguration
 	 */
-	public AnalysisRunImpl(UUID analysisProjectUUID, UUID uuid, Date startTime,
-			long duration, AnalysisFileTree fileTree,
-			FileSearchConfiguration fileSearchConfiguration,
-			Map<HashId, SourceCodeLocation> sourceCodeLocations) {
-		this(new AnalysisRunInformation(analysisProjectUUID, uuid, startTime,
-				duration, "", fileSearchConfiguration), fileTree);
+	public AnalysisRun(
+			@JsonProperty("projectUUID") UUID projectUUID,
+			@JsonProperty("uuid") UUID uuid,
+			@JsonProperty("startTime") Date startTime,
+			@JsonProperty("duration") long duration,
+			@JsonProperty("fileTree") AnalysisFileTree fileTree,
+			@JsonProperty("fileSearchConfiguration") FileSearchConfiguration fileSearchConfiguration,
+			@JsonProperty("sourceCodeLocations") Map<HashId, SourceCodeLocation> sourceCodeLocations) {
+		this(new AnalysisRunInformation(projectUUID, uuid, startTime, duration,
+				"", fileSearchConfiguration), fileTree);
 	}
 
 	/**
@@ -74,11 +61,9 @@ public class AnalysisRunImpl implements AnalysisRun {
 	 * @param runDirectory
 	 * @param searchConfiguration
 	 */
-	public AnalysisRunImpl(AnalysisRunInformation information,
+	public AnalysisRun(AnalysisRunInformation information,
 			AnalysisFileTree fileTree) {
 		super();
-		checkNotNull("information", information);
-		checkNotNull("fileTree", fileTree);
 		this.information = information;
 		this.fileTree = fileTree;
 		populateFields();
@@ -107,32 +92,26 @@ public class AnalysisRunImpl implements AnalysisRun {
 		TreeWalker.walk(visitor, fileTree);
 	}
 
-	@Override
 	public List<AnalysisInformation> getAnalyzedFiles() {
 		return successfulFiles;
 	}
 
-	@Override
 	public AnalysisFileTree getFileTree() {
 		return fileTree;
 	}
 
-	@Override
 	public List<AnalysisInformation> getFailedFiles() {
 		return failedFiles;
 	}
 
-	@Override
 	public AnalysisInformation findAnalyzedCode(String internalPath) {
 		return internalPaths.get(internalPath);
 	}
 
-	@Override
 	public AnalysisRunInformation getInformation() {
 		return information;
 	}
 
-	@Override
 	public AnalysisFileTree findTreeNode(HashId hashId) {
 		return hashIds.get(hashId);
 	}

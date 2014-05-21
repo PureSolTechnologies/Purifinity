@@ -4,8 +4,8 @@ import java.util.UUID;
 
 import org.eclipse.jface.viewers.ISelection;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 
 /**
  * This class represents a single analysis run selection.

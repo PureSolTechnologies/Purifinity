@@ -8,9 +8,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
 
 import com.puresoltechnologies.commons.misc.ProgressObserver;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.framework.commons.utils.NotImplementedException;
 

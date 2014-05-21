@@ -8,8 +8,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.Bundle;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.server.connectors.MaintainabilityIndexEvaluatorConnector;

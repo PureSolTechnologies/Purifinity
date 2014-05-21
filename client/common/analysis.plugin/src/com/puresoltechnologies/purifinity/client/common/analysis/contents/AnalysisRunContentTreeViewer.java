@@ -11,8 +11,8 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.widgets.Tree;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 
 /**
  * This viewer is used in {@link Tree}s to render the content of an analysis

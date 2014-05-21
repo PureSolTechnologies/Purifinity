@@ -15,7 +15,7 @@ public class FloatingPointLiteralIT {
 	public void test() throws Exception {
 		Lexer lexer = JavaGrammar.getInstance().getLexer();
 		TokenStream tokenStream = lexer.lex(new FixedCodeLocation("0.1234")
-				.loadSourceCode());
+				.getSourceCode());
 		assertEquals(1, tokenStream.size());
 		assertEquals("FloatingPointLiteral", tokenStream.get(0).getName());
 	}

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.Result;

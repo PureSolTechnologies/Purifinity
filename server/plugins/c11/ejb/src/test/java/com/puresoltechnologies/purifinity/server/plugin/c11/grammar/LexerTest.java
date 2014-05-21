@@ -26,9 +26,9 @@ public class LexerTest {
 
 	@Test
 	public void testFloat() throws Exception {
-		lexer.lex(new FixedCodeLocation("1.234E+56").loadSourceCode());
-		lexer.lex(new FixedCodeLocation("1234.E+56").loadSourceCode());
-		lexer.lex(new FixedCodeLocation(".1234E+56").loadSourceCode());
+		lexer.lex(new FixedCodeLocation("1.234E+56").getSourceCode());
+		lexer.lex(new FixedCodeLocation("1234.E+56").getSourceCode());
+		lexer.lex(new FixedCodeLocation(".1234E+56").getSourceCode());
 	}
 
 	@Test

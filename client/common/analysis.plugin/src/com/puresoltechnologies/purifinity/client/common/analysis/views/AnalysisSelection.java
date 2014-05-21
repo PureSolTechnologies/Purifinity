@@ -5,9 +5,9 @@ import java.util.UUID;
 import org.eclipse.jface.viewers.ISelection;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 
 /**
  * This class represents a global file analysis selection. This selection is

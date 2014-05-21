@@ -5,8 +5,8 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 
 public class FileAnalysisEditorInput implements IEditorInput {
 

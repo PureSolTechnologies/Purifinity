@@ -1,7 +1,5 @@
 package com.puresoltechnologies.purifinity.analysis.domain;
 
-import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
@@ -31,10 +29,6 @@ public final class AnalysisRunInformation implements Serializable,
 			Date startTime, long duration, String description,
 			FileSearchConfiguration fileSearchConfiguration) {
 		super();
-		checkNotNull("projectUUID", projectUUID);
-		checkNotNull("runUUID", runUUID);
-		checkNotNull("startTime", startTime);
-		checkNotNull("fileSearchConfiguration", fileSearchConfiguration);
 		this.projectUUID = projectUUID;
 		this.runUUID = runUUID;
 		this.startTime = startTime;

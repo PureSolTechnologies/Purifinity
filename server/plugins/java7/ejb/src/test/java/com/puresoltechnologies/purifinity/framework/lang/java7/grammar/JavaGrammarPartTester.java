@@ -37,7 +37,7 @@ public class JavaGrammarPartTester {
 		if (parsers.get(production) == null) {
 			initializeParser(production);
 		}
-		TokenStream tokenStream = getLexer().lex(source.loadSourceCode());
+		TokenStream tokenStream = getLexer().lex(source.getSourceCode());
 		parsers.get(production).parse(tokenStream);
 		return true;
 	}

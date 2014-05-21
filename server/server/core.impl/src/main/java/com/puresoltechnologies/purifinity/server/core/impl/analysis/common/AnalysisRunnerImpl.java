@@ -33,10 +33,10 @@ import com.puresoltechnologies.commons.trees.WalkingAction;
 import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
@@ -335,7 +335,7 @@ public class AnalysisRunnerImpl extends
 
 	@Override
 	public AnalysisRun getAnalysisRun() throws AnalysisProjectException {
-		return new AnalysisRunImpl(analysisRun, fileTree);
+		return new AnalysisRun(analysisRun, fileTree);
 	}
 
 	@Override

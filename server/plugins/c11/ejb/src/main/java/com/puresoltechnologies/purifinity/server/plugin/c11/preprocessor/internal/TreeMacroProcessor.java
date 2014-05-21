@@ -19,9 +19,9 @@ import com.puresoltechnologies.parsers.lexer.TokenStream;
 import com.puresoltechnologies.parsers.parser.ParserTree;
 import com.puresoltechnologies.parsers.preprocessor.PreprocessorException;
 import com.puresoltechnologies.parsers.source.SourceCode;
-import com.puresoltechnologies.parsers.source.SourceCodeImpl;
+import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCodeLine;
-import com.puresoltechnologies.parsers.source.SourceCodeLineImpl;
+import com.puresoltechnologies.parsers.source.SourceCodeLine;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.source.SourceFileLocation;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
@@ -66,7 +66,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	/**
 	 * This field contains after processing the new source code.
 	 */
-	private final SourceCodeImpl sourceCode = new SourceCodeImpl();
+	private final SourceCode sourceCode = new SourceCode();
 	/**
 	 * This field contains the original {@link ParserTree} of the source file
 	 * which is now to be processed.
@@ -134,7 +134,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	 * @return A new {@link SourceCode} object containing the process code is
 	 *         returned.
 	 */
-	public SourceCodeImpl getSourceCode() {
+	public SourceCode getSourceCode() {
 		return sourceCode;
 	}
 
@@ -242,7 +242,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 			while (pos < buffer.length()) {
 				int index = buffer.indexOf("\n", pos);
 				String line = buffer.substring(pos, index + 1);
-				SourceCodeLine sourceCodeLine = new SourceCodeLineImpl(
+				SourceCodeLine sourceCodeLine = new SourceCodeLine(
 						metaData.getSource(), metaData.getLine() + lineNum,
 						line);
 				sourceCode.addSourceCodeLine(sourceCodeLine);
@@ -513,7 +513,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 				return false;
 			}
 			// read to be included source...
-			SourceCode sourceCode = includeSource.loadSourceCode();
+			SourceCode sourceCode = includeSource.getSourceCode();
 			// we need to process this source, too, before we can
 			// include it...
 			SourceCode processedSourceCode = new C11Preprocessor(

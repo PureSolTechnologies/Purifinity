@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
 
 /**

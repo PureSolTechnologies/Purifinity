@@ -245,6 +245,13 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-jaxrs</artifactId>
+				<version>1.9.13</version>
+				<!-- This dependency is needed for testing the serialization. -->
+				<scope>test</scope>
+			</dependency>
+			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.11</version>

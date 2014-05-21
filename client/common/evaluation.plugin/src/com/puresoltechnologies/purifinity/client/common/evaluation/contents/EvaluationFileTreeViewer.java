@@ -9,8 +9,8 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Tree;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunContentTreeContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunContentTreeViewer;
 import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;

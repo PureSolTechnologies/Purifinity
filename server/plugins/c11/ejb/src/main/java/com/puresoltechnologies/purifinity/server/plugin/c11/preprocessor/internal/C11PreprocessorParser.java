@@ -22,7 +22,7 @@ import com.puresoltechnologies.parsers.parser.ParserException;
 import com.puresoltechnologies.parsers.parser.ParserTree;
 import com.puresoltechnologies.parsers.parser.packrat.PackratParser;
 import com.puresoltechnologies.parsers.source.SourceCode;
-import com.puresoltechnologies.parsers.source.SourceCodeImpl;
+import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCodeLine;
 import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
 
@@ -231,7 +231,7 @@ public class C11PreprocessorParser {
 			throw new IllegalArgumentException("Line number '" + lineNum
 					+ "' is not present.");
 		}
-		SourceCodeImpl codeToParse = new SourceCodeImpl();
+		SourceCode codeToParse = new SourceCode();
 		SourceCodeLine line;
 		int lineCount = 0;
 		SourceCodeLine nextLine;
@@ -280,7 +280,7 @@ public class C11PreprocessorParser {
 			throw new IllegalArgumentException("Line number '" + lineNum
 					+ "' is not present.");
 		}
-		SourceCodeImpl codeToParse = new SourceCodeImpl();
+		SourceCode codeToParse = new SourceCode();
 		SourceCodeLine line;
 		int lineCount = 0;
 		do {

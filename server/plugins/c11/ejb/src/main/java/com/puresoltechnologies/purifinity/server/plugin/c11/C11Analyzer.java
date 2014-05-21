@@ -58,7 +58,7 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 			fileAnalysis = null;
 			Date date = new Date();
 			StopWatch watch = new StopWatch();
-			SourceCode sourceCode = getSource().loadSourceCode();
+			SourceCode sourceCode = getSource().getSourceCode();
 			watch.start();
 			PackratParser packratParser = new PackratParser(getGrammar());
 			ParserTree parserTree = packratParser.parse(sourceCode);

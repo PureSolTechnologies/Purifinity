@@ -1,9 +1,9 @@
 package com.puresoltechnologies.purifinity.analysis.domain;
 
-import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
-
 import java.io.Serializable;
 import java.util.Date;
+
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.TimeAwareness;
@@ -28,8 +28,12 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 	private final String languageVersion;
 	private final String analyzerErrorMessage;
 
-	public AnalysisInformation(HashId hashId, Date time, long duration,
-			boolean successful, String languageName, String languageVersion) {
+	public AnalysisInformation(@JsonProperty("hashId") HashId hashId,
+			@JsonProperty("time") Date time,
+			@JsonProperty("duration") long duration,
+			@JsonProperty("successful") boolean successful,
+			@JsonProperty("languageName") String languageName,
+			@JsonProperty("languageVersion") String languageVersion) {
 		this(hashId, time, duration, successful, languageName, languageVersion,
 				null);
 	}
@@ -38,10 +42,6 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 			boolean successful, String languageName, String languageVersion,
 			String analyzerErrorMessage) {
 		super();
-		checkNotNull("hashId", hashId);
-		checkNotNull("time", time);
-		checkNotNull("languageName", languageName);
-		checkNotNull("languageVersion", languageVersion);
 		this.hashId = hashId;
 		this.time = time;
 		this.duration = duration;

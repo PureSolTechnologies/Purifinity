@@ -24,8 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.Result;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;

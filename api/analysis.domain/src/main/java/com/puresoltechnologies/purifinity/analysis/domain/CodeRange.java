@@ -1,7 +1,5 @@
 package com.puresoltechnologies.purifinity.analysis.domain;
 
-import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
-
 import java.io.Serializable;
 
 import com.puresoltechnologies.commons.misc.ObjectUtilities;
@@ -46,12 +44,6 @@ public final class CodeRange implements Serializable, Comparable<CodeRange> {
 	public CodeRange(String simpleName, String canonicalName,
 			CodeRangeType type, UniversalSyntaxTree ust) {
 		super();
-		checkNotNull("simpleName", simpleName);
-		checkNotNull("canonicalName", canonicalName);
-		checkNotNull("type", type);
-		if (type != CodeRangeType.DIRECTORY) {
-			checkNotNull("ust", ust);
-		}
 		this.simpleName = simpleName;
 		this.canonicalName = canonicalName;
 		this.type = type;

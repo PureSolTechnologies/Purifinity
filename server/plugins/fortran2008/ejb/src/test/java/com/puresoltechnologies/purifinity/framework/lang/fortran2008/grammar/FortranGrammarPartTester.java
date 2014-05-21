@@ -45,7 +45,7 @@ public class FortranGrammarPartTester {
 			initializeParser(production);
 		}
 		FortranPreConditioner fortranPreConditioner = new FortranPreConditioner(
-				source.loadSourceCode());
+				source.getSourceCode());
 		TokenStream tokenStream = fortranPreConditioner.scan(lexer);
 		parsers.get(production).parse(tokenStream);
 		return true;

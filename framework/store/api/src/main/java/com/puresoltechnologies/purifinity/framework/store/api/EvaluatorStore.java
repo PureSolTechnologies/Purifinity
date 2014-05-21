@@ -3,8 +3,8 @@ package com.puresoltechnologies.purifinity.framework.store.api;
 import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;

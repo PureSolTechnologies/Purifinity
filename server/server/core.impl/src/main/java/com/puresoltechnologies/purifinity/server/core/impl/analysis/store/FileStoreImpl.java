@@ -22,7 +22,7 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
 import com.puresoltechnologies.commons.misc.StringUtils;
 import com.puresoltechnologies.parsers.source.SourceCode;
-import com.puresoltechnologies.parsers.source.SourceCodeImpl;
+import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
@@ -155,7 +155,7 @@ public final class FileStoreImpl implements FileStore {
 	public final SourceCode readSourceCode(HashId hashId)
 			throws FileStoreException {
 		try (InputStream inputStream = readRawFile(hashId)) {
-			return SourceCodeImpl.read(inputStream,
+			return SourceCode.read(inputStream,
 					new UnspecifiedSourceCodeLocation());
 		} catch (IOException e) {
 			throw new FileStoreException("Could not load file with id '"

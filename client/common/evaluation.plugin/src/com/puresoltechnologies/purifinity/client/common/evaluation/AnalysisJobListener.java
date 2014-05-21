@@ -6,7 +6,7 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
 import com.puresoltechnologies.purifinity.client.common.evaluation.jobs.EvaluationJob;
 

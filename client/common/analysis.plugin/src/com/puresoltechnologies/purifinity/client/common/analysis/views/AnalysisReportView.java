@@ -26,21 +26,18 @@ import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.progress.UIJob;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalyzedFilesTableViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.FailedFilesTableViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ParserTreeControl;
 import com.puresoltechnologies.purifinity.client.common.analysis.dialogs.AnalysisInformationDialog;
-import com.puresoltechnologies.purifinity.client.common.server.connectors.AnalysisStoreConnector;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisStoreClient;
 
 public class AnalysisReportView extends AbstractPureSolTechnologiesView
 		implements ISelectionListener, IDoubleClickListener,
@@ -60,9 +57,6 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 
 	private AnalysisRun analysisRun = null;
 	private AnalysisProject analysis = null;
-
-	private final AnalysisStore analysisStore = AnalysisStoreFactory
-			.getFactory().getInstance();
 
 	private AnalysisInformationDialog informationDialog;
 
@@ -169,24 +163,27 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 				analysisRun = analysisRunSelection.getAnalysisRun();
 				refresh();
 			}
-		} catch (AnalysisProjectException e) {
+		} catch (AnalysisStoreException e) {
 			logger.log(new Status(Status.ERROR, ParserTreeControl.class
 					.getName(), "Can not read analysis store!", e));
 		}
 	}
 
-	private void readLastAnalysisRun() throws AnalysisProjectException {
+	private void readLastAnalysisRun() throws AnalysisStoreException {
 		if (analysis == null) {
 			return;
 		}
-		final AnalysisRunInformation analysisRunInformation = analysis
-				.loadLastAnalysisRun();
+		final AnalysisStoreClient analysisStore = AnalysisStoreClient
+				.getInstance();
+		final AnalysisRunInformation analysisRunInformation = analysisStore
+				.readLastAnalysisRun(analysis.getInformation().getUUID());
 		new Job("Read Analysis Run") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				try {
-					analysisRun = AnalysisStoreConnector.getStore()
-							.readAnalysisRun(analysisRunInformation);
+					analysisRun = analysisStore.readAnalysisRun(
+							analysisRunInformation.getProjectUUID(),
+							analysisRunInformation.getUUID());
 				} catch (AnalysisStoreException e) {
 					logger.log(new Status(Status.ERROR, ParserTreeControl.class
 							.getName(), "Can not read analysis store!", e));

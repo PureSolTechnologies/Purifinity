@@ -15,8 +15,10 @@ import javax.ws.rs.core.MediaType;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 
@@ -39,7 +41,7 @@ public interface AnalysisStoreRestInterface {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("projects/{project_uuid}")
-	public AnalysisProjectInformation readAnalysisProjectInformation(
+	public AnalysisProject readAnalysisProject(
 			@PathParam("project_uuid") UUID projectUUID)
 			throws AnalysisStoreException;
 
@@ -53,6 +55,13 @@ public interface AnalysisStoreRestInterface {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("projects/{project_uuid}/settings")
 	public AnalysisProjectSettings readAnalysisProjectSettings(
+			@PathParam("project_uuid") UUID projectUUID)
+			throws AnalysisStoreException;
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("projects/{project_uuid}/information")
+	public AnalysisProjectInformation readAnalysisProjectInformation(
 			@PathParam("project_uuid") UUID projectUUID)
 			throws AnalysisStoreException;
 
@@ -73,7 +82,15 @@ public interface AnalysisStoreRestInterface {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("projects/{project_uuid}/runs/{run_uuid}")
-	public AnalysisRunInformation readAnalysisRun(
+	public AnalysisRun readAnalysisRun(
+			@PathParam("project_uuid") UUID projectUUID,
+			@PathParam("run_uuid") UUID analysisRunUUID)
+			throws AnalysisStoreException;
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("projects/{project_uuid}/runs/{run_uuid}/information")
+	public AnalysisRunInformation readAnalysisRunInformation(
 			@PathParam("project_uuid") UUID projectUUID,
 			@PathParam("run_uuid") UUID analysisRunUUID)
 			throws AnalysisStoreException;

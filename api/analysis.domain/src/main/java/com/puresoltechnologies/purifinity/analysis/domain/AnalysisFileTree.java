@@ -1,11 +1,11 @@
 package com.puresoltechnologies.purifinity.analysis.domain;
 
-import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.trees.Tree;
@@ -27,19 +27,14 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 	private final SourceCodeLocation sourceCodeLocation;
 	private final List<AnalysisInformation> analyzedCodes = new ArrayList<>();
 
-	public AnalysisFileTree(AnalysisFileTree parent, String name,
-			HashId hashId, boolean file, SourceCodeLocation sourceCodeLocation,
-			List<AnalysisInformation> analyzedCodes) {
+	public AnalysisFileTree(
+			@JsonProperty("parent") AnalysisFileTree parent,
+			@JsonProperty("name") String name,
+			@JsonProperty("hashId") HashId hashId,
+			@JsonProperty("file") boolean file,
+			@JsonProperty("sourceCodeLocation") SourceCodeLocation sourceCodeLocation,
+			@JsonProperty("analyzedCodes") List<AnalysisInformation> analyzedCodes) {
 		super();
-		checkNotNull("name", name);
-		if ((!file) && (analyzedCodes != null)) {
-			throw new IllegalArgumentException(
-					"Analyses are only allowed for files. Directories need to have null for analyses list.");
-		}
-		if ((file) && (analyzedCodes == null)) {
-			throw new IllegalArgumentException(
-					"Analyses are not allowed to be null for files. If there is no analysis, set an empty list.");
-		}
 		this.parent = parent;
 		this.name = name;
 		this.hashId = hashId;

@@ -12,13 +12,13 @@ import com.puresoltechnologies.parsers.grammar.Grammar;
 import com.puresoltechnologies.parsers.parser.ParserTree;
 import com.puresoltechnologies.parsers.parser.packrat.PackratParser;
 import com.puresoltechnologies.parsers.source.SourceCode;
-import com.puresoltechnologies.parsers.source.SourceCodeImpl;
+import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
 
 public class C11PreprocessorParserTest {
 
 	private ParserTree checkParser(String... lines) throws Exception {
-		SourceCode sourceCode = SourceCodeImpl.fromStringArray(lines);
+		SourceCode sourceCode = SourceCode.fromStringArray(lines);
 
 		C11PreprocessorParser parser = new C11PreprocessorParser();
 		ParserTree ast = parser.parse(sourceCode);
@@ -34,7 +34,7 @@ public class C11PreprocessorParserTest {
 		C11PreprocessorParser.setLineTerminatorToVisible(production);
 		System.out.println(production.toString());
 		PackratParser parser = new PackratParser(production);
-		ParserTree ast = parser.parse(SourceCodeImpl.fromStringArray(lines));
+		ParserTree ast = parser.parse(SourceCode.fromStringArray(lines));
 		assertContainsNode(productionName, ast);
 	}
 

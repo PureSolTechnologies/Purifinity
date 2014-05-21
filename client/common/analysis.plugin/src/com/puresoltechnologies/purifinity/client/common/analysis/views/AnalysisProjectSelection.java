@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import org.eclipse.jface.viewers.ISelection;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 
 /**
  * This class contains the selection of an {@link AnalysisProject}.

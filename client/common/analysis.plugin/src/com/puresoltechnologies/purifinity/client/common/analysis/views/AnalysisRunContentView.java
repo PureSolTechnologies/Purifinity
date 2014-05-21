@@ -21,10 +21,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunContentTreeViewer;
 import com.puresoltechnologies.purifinity.client.common.analysis.editors.DirectoryAnalysisEditor;

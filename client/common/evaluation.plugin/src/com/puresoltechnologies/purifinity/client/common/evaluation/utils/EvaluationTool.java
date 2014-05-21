@@ -7,8 +7,8 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.ui.progress.UIJob;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.jobs.ObservedJob;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;

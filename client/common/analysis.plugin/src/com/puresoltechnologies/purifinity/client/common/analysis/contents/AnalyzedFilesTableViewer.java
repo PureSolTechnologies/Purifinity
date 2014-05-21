@@ -16,9 +16,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 
 public class AnalyzedFilesTableViewer extends TableViewer implements
 		IStructuredContentProvider {

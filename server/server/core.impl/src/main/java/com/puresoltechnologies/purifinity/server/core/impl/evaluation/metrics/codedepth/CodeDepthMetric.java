@@ -7,8 +7,8 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.trees.TreeIterator;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.Result;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;

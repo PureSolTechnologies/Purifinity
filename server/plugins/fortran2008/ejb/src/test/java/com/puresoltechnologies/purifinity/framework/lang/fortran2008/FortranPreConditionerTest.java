@@ -120,7 +120,7 @@ public class FortranPreConditionerTest {
 		FortranPreConditioner fixedFormFile = new FortranPreConditioner(
 				new SourceFileLocation(
 						"src/test/resources/com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples",
-						"FixedFormSample.f").loadSourceCode());
+						"FixedFormSample.f").getSourceCode());
 		assertTrue(fixedFormFile.isValidFixedForm());
 	}
 
@@ -129,7 +129,7 @@ public class FortranPreConditionerTest {
 		FortranPreConditioner fixedFormFile = new FortranPreConditioner(
 				new SourceFileLocation(
 						"src/test/resources/com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples",
-						"FixedFormSample.f").loadSourceCode());
+						"FixedFormSample.f").getSourceCode());
 		TokenStream tokenStream = fixedFormFile.scan(FortranGrammar
 				.getInstance().getLexer());
 		for (Token token : tokenStream) {

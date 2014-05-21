@@ -6,11 +6,11 @@ import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.ProgressObserver;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 
 /**
@@ -63,8 +63,7 @@ public interface AnalysisStore {
 	public AnalysisProjectInformation readAnalysisProjectInformation(
 			UUID projectUUID) throws AnalysisStoreException;
 
-	public AnalysisProject readAnalysisProject(
-			AnalysisProjectInformation information)
+	public AnalysisProject readAnalysisProject(UUID projectUUID)
 			throws AnalysisStoreException;
 
 	/**
@@ -94,11 +93,10 @@ public interface AnalysisStore {
 	public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
 			throws AnalysisStoreException;
 
-	public AnalysisRunInformation readAnalysisRun(UUID projectUUID,
+	public AnalysisRunInformation readAnalysisRunInformation(UUID projectUUID,
 			UUID analysisRunUUID) throws AnalysisStoreException;
 
-	public AnalysisRun readAnalysisRun(
-			AnalysisRunInformation analysisRunInformation)
+	public AnalysisRun readAnalysisRun(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException;
 
 	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)

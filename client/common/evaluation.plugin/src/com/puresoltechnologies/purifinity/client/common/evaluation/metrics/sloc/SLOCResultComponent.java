@@ -13,8 +13,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.osgi.framework.Bundle;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.utils.ColorUtils;
 import com.puresoltechnologies.purifinity.client.common.server.connectors.SLOCEvaluatorConnector;

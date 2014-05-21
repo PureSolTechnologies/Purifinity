@@ -10,9 +10,9 @@ import com.puresoltechnologies.parsers.parser.ParserTree;
 import com.puresoltechnologies.parsers.preprocessor.Preprocessor;
 import com.puresoltechnologies.parsers.preprocessor.PreprocessorException;
 import com.puresoltechnologies.parsers.source.SourceCode;
-import com.puresoltechnologies.parsers.source.SourceCodeImpl;
+import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCodeLine;
-import com.puresoltechnologies.parsers.source.SourceCodeLineImpl;
+import com.puresoltechnologies.parsers.source.SourceCodeLine;
 import com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor.internal.C11PreprocessorParser;
 import com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor.internal.TreeMacroProcessor;
 
@@ -139,7 +139,7 @@ public class C11Preprocessor implements Preprocessor {
 	public SourceCode process(SourceCode sourceCode)
 			throws PreprocessorException {
 		boolean added = assureLineTerminatorAtLastLine(sourceCode);
-		SourceCodeImpl preProcessedSourceCode = performPreprocessing(sourceCode);
+		SourceCode preProcessedSourceCode = performPreprocessing(sourceCode);
 		if (added) {
 			preProcessedSourceCode.removeLineTerminatorAtLastLine();
 		}
@@ -173,7 +173,7 @@ public class C11Preprocessor implements Preprocessor {
 			}
 		}
 		lines.remove(lastLine);
-		lastLine = new SourceCodeLineImpl(lastLine.getSource(),
+		lastLine = new SourceCodeLine(lastLine.getSource(),
 				lastLine.getLineNumber(), text + "\n");
 		lines.add(lastLine);
 		/*
@@ -192,7 +192,7 @@ public class C11Preprocessor implements Preprocessor {
 	 * @return
 	 * @throws PreprocessorException
 	 */
-	private SourceCodeImpl performPreprocessing(SourceCode sourceCode)
+	private SourceCode performPreprocessing(SourceCode sourceCode)
 			throws PreprocessorException {
 		try {
 			C11PreprocessorParser parser = new C11PreprocessorParser();

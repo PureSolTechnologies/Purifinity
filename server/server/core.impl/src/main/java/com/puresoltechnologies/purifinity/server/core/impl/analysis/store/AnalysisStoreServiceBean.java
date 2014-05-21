@@ -19,11 +19,11 @@ import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.ProgressObserver;
 import com.puresoltechnologies.commons.trees.TreeUtils;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
@@ -302,8 +302,8 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 
 	@Override
-	public AnalysisRunInformation readAnalysisRun(UUID projectUUID, UUID runUUID)
-			throws AnalysisStoreException {
+	public AnalysisRunInformation readAnalysisRunInformation(UUID projectUUID,
+			UUID runUUID) throws AnalysisStoreException {
 		try {
 			Vertex run = AnalysisStoreTitanUtils.findAnalysisRunVertex(graph,
 					projectUUID, runUUID);
@@ -468,19 +468,21 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 
 	@Override
-	public AnalysisProject readAnalysisProject(
-			AnalysisProjectInformation information)
+	public AnalysisProject readAnalysisProject(UUID projectUUID)
 			throws AnalysisStoreException {
-		// TODO Auto-generated method stub
-		return null;
+		AnalysisProjectInformation information = readAnalysisProjectInformation(projectUUID);
+		AnalysisProjectSettings settings = readAnalysisProjectSettings(projectUUID);
+		return new AnalysisProject(information, settings);
 	}
 
 	@Override
-	public AnalysisRun readAnalysisRun(
-			AnalysisRunInformation analysisRunInformation)
+	public AnalysisRun readAnalysisRun(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException {
-		// TODO Auto-generated method stub
-		return null;
+		AnalysisRunInformation information = readAnalysisRunInformation(
+				projectUUID, runUUID);
+		AnalysisFileTree analysisFileTree = readAnalysisFileTree(projectUUID,
+				runUUID);
+		return new AnalysisRun(information, analysisFileTree);
 	}
 
 }

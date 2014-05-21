@@ -64,7 +64,7 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 			Date date = new Date();
 			StopWatch watch = new StopWatch();
 			watch.start();
-			SourceCode sourceCode = getSource().loadSourceCode();
+			SourceCode sourceCode = getSource().getSourceCode();
 			Lexer lexer = getGrammar().getLexer();
 			TokenStream tokenStream = lexer.lex(sourceCode);
 			Parser parser = getGrammar().getParser();

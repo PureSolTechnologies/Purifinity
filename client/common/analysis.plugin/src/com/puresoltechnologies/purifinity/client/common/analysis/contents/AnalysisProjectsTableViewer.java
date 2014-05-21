@@ -13,10 +13,12 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
+
 public class AnalysisProjectsTableViewer extends TableViewer implements
 		IStructuredContentProvider {
 
-	private final List<AnalysisProjectListItem> analysisProjectListItems = new ArrayList<AnalysisProjectListItem>();
+	private final List<AnalysisProject> analysisProjectListItems = new ArrayList<AnalysisProject>();
 
 	public AnalysisProjectsTableViewer(Table table) {
 		super(table);
@@ -34,7 +36,7 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalysisProjectListItem analysisProject = (AnalysisProjectListItem) element;
+				AnalysisProject analysisProject = (AnalysisProject) element;
 				return analysisProject.getSettings().getName();
 			}
 		});
@@ -47,7 +49,7 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalysisProjectListItem analysisProject = (AnalysisProjectListItem) element;
+				AnalysisProject analysisProject = (AnalysisProject) element;
 				return analysisProject.getSettings().getDescription();
 			}
 		});
@@ -60,7 +62,7 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalysisProjectListItem analysisProject = (AnalysisProjectListItem) element;
+				AnalysisProject analysisProject = (AnalysisProject) element;
 				return "FIXME!!!";
 				// return RepositoryLocationCreator.createFromSerialization(
 				// analysisProject.getSettings().getRepositoryLocation())
@@ -76,10 +78,10 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		nameColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				AnalysisProjectListItem analysisProject = (AnalysisProjectListItem) element;
+				AnalysisProject analysisProject = (AnalysisProject) element;
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(
 						"yyyy-MM-dd HH:mm:ss");
-				return simpleDateFormat.format(analysisProject
+				return simpleDateFormat.format(analysisProject.getInformation()
 						.getCreationTime());
 			}
 		});
@@ -97,17 +99,16 @@ public class AnalysisProjectsTableViewer extends TableViewer implements
 		}
 		if (Collection.class.isAssignableFrom(newInput.getClass())) {
 			@SuppressWarnings("unchecked")
-			Collection<AnalysisProjectListItem> collection = (Collection<AnalysisProjectListItem>) newInput;
+			Collection<AnalysisProject> collection = (Collection<AnalysisProject>) newInput;
 			analysisProjectListItems.addAll(collection);
 		}
 		refresh();
 	}
 
 	@Override
-	public AnalysisProjectListItem[] getElements(Object inputElement) {
+	public AnalysisProject[] getElements(Object inputElement) {
 		int size = analysisProjectListItems.size();
-		return analysisProjectListItems
-				.toArray(new AnalysisProjectListItem[size]);
+		return analysisProjectListItems.toArray(new AnalysisProject[size]);
 	}
 
 }

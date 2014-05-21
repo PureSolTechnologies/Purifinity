@@ -1,10 +1,9 @@
 package com.puresoltechnologies.commons.misc;
 
-import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNull;
-import static com.puresoltechnologies.commons.misc.ParameterChecks.checkNotNullOrEmpty;
-
 import java.io.Serializable;
 import java.util.IllegalFormatException;
+
+import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
  * 
@@ -55,10 +54,9 @@ public class HashId implements Serializable, Comparable<HashId> {
 	 * @param hash
 	 *            is the hash.
 	 */
-	public HashId(HashAlgorithm algorithm, String hash) {
+	public HashId(@JsonProperty("algorithm") HashAlgorithm algorithm,
+			@JsonProperty("hash") String hash) {
 		super();
-		checkNotNull("algorithm", algorithm);
-		checkNotNullOrEmpty("hash", hash);
 		this.algorithm = algorithm;
 		this.hash = hash;
 	}

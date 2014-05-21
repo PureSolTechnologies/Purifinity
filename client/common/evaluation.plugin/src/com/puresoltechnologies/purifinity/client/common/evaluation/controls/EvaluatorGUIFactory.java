@@ -2,8 +2,8 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.controls;
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 
 /**
  * This interface is used to register factories which produce file result

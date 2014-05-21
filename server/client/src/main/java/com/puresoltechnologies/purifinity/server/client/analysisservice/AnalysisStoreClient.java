@@ -5,8 +5,10 @@ import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisStoreRestInterface;
@@ -60,9 +62,20 @@ public class AnalysisStoreClient extends
 		return getProxy().readAllRunInformation(projectUUID);
 	}
 
-	public AnalysisRunInformation readAnalysisRun(UUID projectUUID,
-			UUID analysisRunUUID) throws AnalysisStoreException {
+	public AnalysisProject readAnalysisProject(UUID projectUUID)
+			throws AnalysisStoreException {
+		return getProxy().readAnalysisProject(projectUUID);
+	}
+
+	public AnalysisRun readAnalysisRun(UUID projectUUID, UUID analysisRunUUID)
+			throws AnalysisStoreException {
 		return getProxy().readAnalysisRun(projectUUID, analysisRunUUID);
+	}
+
+	public AnalysisRunInformation readAnalysisRunInformation(UUID projectUUID,
+			UUID analysisRunUUID) throws AnalysisStoreException {
+		return getProxy().readAnalysisRunInformation(projectUUID,
+				analysisRunUUID);
 	}
 
 	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)

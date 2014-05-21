@@ -5,7 +5,7 @@ import java.util.Set;
 import com.puresoltechnologies.commons.misc.CallableProgressObservable;
 import com.puresoltechnologies.commons.misc.Configurable;
 import com.puresoltechnologies.commons.misc.TimeAwareness;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 
 /**

@@ -199,7 +199,7 @@ public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 		assertNotSame(analysisRun, analysisRunRead);
 		assertEquals(analysisRun, analysisRunRead);
 
-		analysisRunRead = analysisStore.readAnalysisRun(projectUUID,
+		analysisRunRead = analysisStore.readAnalysisRunInformation(projectUUID,
 				analysisRun.getUUID());
 		assertNotSame(analysisRun, analysisRunRead);
 		assertEquals(analysisRun, analysisRunRead);

@@ -69,7 +69,7 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 			Date date = new Date();
 			StopWatch watch = new StopWatch();
 			watch.start();
-			SourceCode sourceCode = getSource().loadSourceCode();
+			SourceCode sourceCode = getSource().getSourceCode();
 			TokenStream tokenStream = preConditioningAndLexing(sourceCode);
 			Parser parser = getGrammar().getParser();
 			ParserTree parserTree = parser.parse(tokenStream);

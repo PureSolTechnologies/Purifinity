@@ -17,21 +17,18 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectException;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisListContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisListLabelProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.AnalysisRunListLabelProvider;
-import com.puresoltechnologies.purifinity.client.common.server.connectors.AnalysisStoreConnector;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisStoreClient;
 
 /**
  * This view is a view into the analysis store. All analyzes which are available
@@ -44,9 +41,6 @@ public class AnalysisStoreView extends AbstractPureSolTechnologiesView
 		implements SelectionListener {
 
 	private static final ILog logger = Activator.getDefault().getLog();
-
-	private final AnalysisStore analysisStore = AnalysisStoreFactory
-			.getFactory().getInstance();
 
 	private Text runDescription;
 	private List analysisList;
@@ -174,6 +168,8 @@ public class AnalysisStoreView extends AbstractPureSolTechnologiesView
 		try {
 			selectedAnalysis = null;
 			updateAnalysisRunList(null);
+			AnalysisStoreClient analysisStore = AnalysisStoreClient
+					.getInstance();
 			java.util.List<AnalysisProjectInformation> allAnalysisProjectInformation = analysisStore
 					.readAllAnalysisProjectInformation();
 			analysisViewer.setInput(allAnalysisProjectInformation);
@@ -190,16 +186,19 @@ public class AnalysisStoreView extends AbstractPureSolTechnologiesView
 		try {
 			updateRunInformation(null);
 			if (information != null) {
-				selectedAnalysis = AnalysisStoreConnector.getStore()
-						.readAnalysisProject(information);
+				AnalysisStoreClient analysisStore = AnalysisStoreClient
+						.getInstance();
+				selectedAnalysis = analysisStore
+						.readAnalysisProject(information.getUUID());
 				selectedAnalysisRun = null;
-				analysisRunViewer.setInput(selectedAnalysis
-						.getAllRunInformation());
+				analysisRunViewer.setInput(analysisStore
+						.readAllRunInformation(selectedAnalysis
+								.getInformation().getUUID()));
 			} else {
 				selectedAnalysis = null;
 				analysisRunList.removeAll();
 			}
-		} catch (AnalysisStoreException | AnalysisProjectException e) {
+		} catch (AnalysisStoreException e) {
 			logger.log(new Status(
 					Status.ERROR,
 					AnalysisProjectsView.class.getName(),
@@ -212,8 +211,11 @@ public class AnalysisStoreView extends AbstractPureSolTechnologiesView
 			AnalysisRunInformation analysisRunInformation) {
 		try {
 			if (analysisRunInformation != null) {
-				selectedAnalysisRun = AnalysisStoreConnector.getStore()
-						.readAnalysisRun(analysisRunInformation);
+				AnalysisStoreClient analysisStore = AnalysisStoreClient
+						.getInstance();
+				selectedAnalysisRun = analysisStore.readAnalysisRun(
+						analysisRunInformation.getProjectUUID(),
+						analysisRunInformation.getUUID());
 				runName.setText(selectedAnalysis.getSettings().getName());
 				runDescription.setText(analysisRunInformation.getDescription());
 			} else {

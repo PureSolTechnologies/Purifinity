@@ -363,7 +363,7 @@ public class FortranPreConditioner {
 	private TokenStream processRemainingLine(Lexer lexer, String line,
 			int column) throws LexerException, IOException {
 		if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_NONE) {
-			return lexer.lex(new FixedCodeLocation(line).loadSourceCode());
+			return lexer.lex(new FixedCodeLocation(line).getSourceCode());
 		}
 		final Matcher matcher;
 		if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_SINGLE_QUOTE) {
@@ -383,7 +383,7 @@ public class FortranPreConditioner {
 				Visibility.VISIBLE, getCurrentMetaData(1, column)));
 		currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_NONE;
 		return lexer.lex(new FixedCodeLocation(line.substring(matcher.group()
-				.length())).loadSourceCode());
+				.length())).getSourceCode());
 	}
 
 	private void processSubTokenStream(TokenStream subTokenStream, int column)

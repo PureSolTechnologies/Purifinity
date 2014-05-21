@@ -15,7 +15,7 @@ public class IdentifierIT {
 	public void testIdentifier() throws Exception {
 		Lexer lexer = JavaGrammar.getInstance().getLexer();
 		TokenStream tokenStream = lexer.lex(new FixedCodeLocation("identifier")
-				.loadSourceCode());
+				.getSourceCode());
 		assertEquals(1, tokenStream.size());
 		assertEquals("Identifier", tokenStream.get(0).getName());
 	}

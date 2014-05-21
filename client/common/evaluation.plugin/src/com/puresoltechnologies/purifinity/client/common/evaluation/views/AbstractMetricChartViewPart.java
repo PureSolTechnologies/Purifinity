@@ -16,9 +16,9 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.widgets.Composite;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisSelection;
 import com.puresoltechnologies.purifinity.client.common.chart.ChartCanvas;
 import com.puresoltechnologies.purifinity.client.common.chart.renderer.ChartRenderer;

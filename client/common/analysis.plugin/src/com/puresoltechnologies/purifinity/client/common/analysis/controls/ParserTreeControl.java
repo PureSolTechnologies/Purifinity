@@ -13,9 +13,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Tree;
 
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.UniversalSyntaxTreeContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.UniversalSyntaxTreeLabelProvider;

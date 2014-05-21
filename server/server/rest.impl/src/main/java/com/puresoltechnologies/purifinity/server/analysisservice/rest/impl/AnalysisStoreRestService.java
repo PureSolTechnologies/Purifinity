@@ -7,8 +7,10 @@ import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisStoreRestInterface;
@@ -44,8 +46,8 @@ public class AnalysisStoreRestService implements AnalysisStoreRestInterface {
 	}
 
 	@Override
-	public AnalysisProjectSettings readAnalysisProjectSettings(
-			UUID projectUUID) throws AnalysisStoreException {
+	public AnalysisProjectSettings readAnalysisProjectSettings(UUID projectUUID)
+			throws AnalysisStoreException {
 		return analysisStore.readAnalysisProjectSettings(projectUUID);
 	}
 
@@ -62,9 +64,16 @@ public class AnalysisStoreRestService implements AnalysisStoreRestInterface {
 	}
 
 	@Override
-	public AnalysisRunInformation readAnalysisRun(UUID projectUUID,
-			UUID analysisRunUUID) throws AnalysisStoreException {
+	public AnalysisRun readAnalysisRun(UUID projectUUID, UUID analysisRunUUID)
+			throws AnalysisStoreException {
 		return analysisStore.readAnalysisRun(projectUUID, analysisRunUUID);
+	}
+
+	@Override
+	public AnalysisRunInformation readAnalysisRunInformation(UUID projectUUID,
+			UUID analysisRunUUID) throws AnalysisStoreException {
+		return analysisStore.readAnalysisRunInformation(projectUUID,
+				analysisRunUUID);
 	}
 
 	@Override
@@ -89,6 +98,12 @@ public class AnalysisStoreRestService implements AnalysisStoreRestInterface {
 	public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException {
 		return analysisStore.readAnalysisFileTree(projectUUID, runUUID);
+	}
+
+	@Override
+	public AnalysisProject readAnalysisProject(UUID projectUUID)
+			throws AnalysisStoreException {
+		return analysisStore.readAnalysisProject(projectUUID);
 	}
 
 }

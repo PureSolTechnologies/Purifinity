@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 
 public class AnalysisInformationDialog extends Dialog {
 
