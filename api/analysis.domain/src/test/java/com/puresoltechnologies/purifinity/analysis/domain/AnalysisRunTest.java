@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.client.analysisservice;
+package com.puresoltechnologies.purifinity.analysis.domain;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -13,12 +13,12 @@ import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.JSONSerializer;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.server.common.rest.JSONMapper;
 
 public class AnalysisRunTest {
 
@@ -38,9 +38,9 @@ public class AnalysisRunTest {
 				new UnspecifiedSourceCodeLocation(),
 				new ArrayList<AnalysisInformation>());
 		AnalysisRun run = new AnalysisRun(analysisRunInformation, tree);
-		String json = JSONMapper.toJSONString(run);
+		String json = JSONSerializer.toJSONString(run);
 		assertNotNull(json);
-		AnalysisRun unmarshalled = JSONMapper.fromJSONString(json,
+		AnalysisRun unmarshalled = JSONSerializer.fromJSONString(json,
 				AnalysisRun.class);
 		assertNotNull(unmarshalled);
 	}

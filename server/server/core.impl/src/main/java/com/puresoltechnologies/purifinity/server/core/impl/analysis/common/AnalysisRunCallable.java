@@ -13,9 +13,8 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 
 public class AnalysisRunCallable implements Callable<AnalysisInformation> {
 
@@ -23,14 +22,14 @@ public class AnalysisRunCallable implements Callable<AnalysisInformation> {
 			.getLogger(AnalysisRunCallable.class);
 
 	private final SourceCodeLocation sourceFile;
-	private final FileStore codeStore;
+	private final FileStoreService codeStore;
 	private Date startTime = null;
 
-	public AnalysisRunCallable(SourceCodeLocation sourceFile) {
+	public AnalysisRunCallable(FileStoreService codeStore,
+			SourceCodeLocation sourceFile) {
 		super();
 		this.sourceFile = sourceFile;
-		FileStoreFactory codeStoreFactory = FileStoreFactory.getFactory();
-		codeStore = codeStoreFactory.getInstance();
+		this.codeStore = codeStore;
 	}
 
 	@Override

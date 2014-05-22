@@ -262,7 +262,7 @@ public class CorrelationChartView extends AbstractMetricChartViewPart {
 							.getAnalysisProject().getInformation().getUUID();
 					monitor.worked(1);
 					UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-							.getInformation().getUUID();
+							.getInformation().getRunUUID();
 					monitor.worked(1);
 					xValues = client.loadParetoChartData(analysisProjectUUID,
 							analysisRunUUID, xMetricSelection.getName(),

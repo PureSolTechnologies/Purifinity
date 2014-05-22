@@ -2,6 +2,10 @@ package com.puresoltechnologies.commons.math;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.annotate.JsonTypeInfo.As;
+import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
+
 /**
  * <p>
  * This interface represents a value. A value always consists of two parts:
@@ -17,6 +21,7 @@ import java.io.Serializable;
  * @param <T>
  *            is the type of the value to be stored.
  */
+@JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "class")
 public interface Value<T> extends Serializable {
 
 	/**

@@ -4,6 +4,7 @@ import static com.puresoltechnologies.purifinity.client.common.ui.SWTUtils.DEFAU
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -25,8 +26,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.RepositoryTypes;
 import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisServiceClient;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 
@@ -74,8 +73,9 @@ public class NewProjectSourceCodeLocationPage extends WizardPage implements
 		repositoryType.setLayoutData(fdRepositoryType);
 
 		try (AnalysisServiceClient client = AnalysisServiceClient.getInstance()) {
-			RepositoryTypes repositoryTypes = client.getRepositoryTypes();
-			this.repositoryTypes.addAll(repositoryTypes.getRepositoryTypes());
+			Collection<RepositoryType> repositoryTypes = client
+					.getRepositoryTypes();
+			this.repositoryTypes.addAll(repositoryTypes);
 		} catch (IOException e) {
 			throw new RuntimeException(
 					"Could not read the available repository types.", e);
@@ -118,8 +118,7 @@ public class NewProjectSourceCodeLocationPage extends WizardPage implements
 		removeControls();
 
 		Control lastControl = repositoryType;
-		Map<String, ParameterWithArbitraryUnit<?>> parameters = type
-				.getParameters();
+		Map<String, Parameter<?>> parameters = type.getParameters();
 		for (String parameterId : parameters.keySet()) {
 			Parameter<?> parameter = parameters.get(parameterId);
 			Label label = new Label(composite, SWT.NONE);

@@ -13,9 +13,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ScrollableFileViewer;
 import com.puresoltechnologies.purifinity.client.common.ui.editors.AbstractPureSolTechnologiesEditor;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.FileStoreClient;
 
 public class NotAnalyzedEditor extends AbstractPureSolTechnologiesEditor {
 
@@ -62,8 +61,8 @@ public class NotAnalyzedEditor extends AbstractPureSolTechnologiesEditor {
 		NotAnalyzedEditorInput editorInput = (NotAnalyzedEditorInput) getEditorInput();
 		AnalysisFileTree hashIdFile = editorInput.getAnalysisRun()
 				.getFileTree().findFile(editorInput.getFile());
-		FileStore fileStore = FileStoreFactory.getFactory().getInstance();
 		try {
+			FileStoreClient fileStore = FileStoreClient.getInstance();
 			SourceCode sourceCode = fileStore.readSourceCode(hashIdFile
 					.getHashId());
 			text.setStreamAndUpdateContent(sourceCode);

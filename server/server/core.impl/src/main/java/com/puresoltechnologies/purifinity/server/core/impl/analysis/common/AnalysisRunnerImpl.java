@@ -40,6 +40,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 
 public class AnalysisRunnerImpl implements Callable<Boolean> {
 
@@ -59,12 +60,15 @@ public class AnalysisRunnerImpl implements Callable<Boolean> {
 
 	private final UUID projectUUID;
 	private final AnalysisStoreService analysisStore;
+	private final FileStoreService fileStore;
 	private final FileSearchConfiguration searchConfig;
 
 	public AnalysisRunnerImpl(AnalysisStoreService analysisStore,
-			UUID analysisProjectUUID) throws AnalysisStoreException {
+			FileStoreService fileStore, UUID analysisProjectUUID)
+			throws AnalysisStoreException {
 		super();
 		this.analysisStore = analysisStore;
+		this.fileStore = fileStore;
 		this.projectUUID = analysisProjectUUID;
 		AnalysisProjectSettings settings = analysisStore
 				.readAnalysisProjectSettings(analysisProjectUUID);
@@ -86,7 +90,7 @@ public class AnalysisRunnerImpl implements Callable<Boolean> {
 					searchConfig);
 			buildCodeLocationTree();
 			analysisStore.storeAnalysisFileTree(projectUUID,
-					analysisRun.getUUID(), fileTree);
+					analysisRun.getRunUUID(), fileTree);
 			return true;
 		} else {
 			return false;
@@ -131,7 +135,7 @@ public class AnalysisRunnerImpl implements Callable<Boolean> {
 		for (int index = 0; index < sourceFiles.size(); index++) {
 			SourceCodeLocation sourceFile = sourceFiles.get(index);
 			Callable<AnalysisInformation> callable = new AnalysisRunCallable(
-					sourceFile);
+					fileStore, sourceFile);
 			Future<AnalysisInformation> future = threadPool.submit(callable);
 			futures.put(sourceFile, future);
 		}

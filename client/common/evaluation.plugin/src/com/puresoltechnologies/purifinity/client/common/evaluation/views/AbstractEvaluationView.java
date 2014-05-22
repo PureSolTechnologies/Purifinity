@@ -135,8 +135,8 @@ public abstract class AbstractEvaluationView extends
 				((analysisRun != null) && (newAnalysisRun == null))) {
 			return true;
 		}
-		if (!analysisRun.getInformation().getUUID()
-				.equals(newAnalysisRun.getInformation().getUUID())) {
+		if (!analysisRun.getInformation().getRunUUID()
+				.equals(newAnalysisRun.getInformation().getRunUUID())) {
 			return true;
 		}
 		return false;

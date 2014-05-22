@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.client.common.analysis.views;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.TableViewer;
@@ -18,8 +19,8 @@ import com.puresoltechnologies.purifinity.client.common.analysis.contents.Availa
 import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction;
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AvailableAnalyzers;
 import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisServiceClient;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 
 public class AvailableAnalyzersView extends AbstractPureSolTechnologiesView
 		implements Refreshable {
@@ -66,8 +67,8 @@ public class AvailableAnalyzersView extends AbstractPureSolTechnologiesView
 	@Override
 	public void refresh() {
 		try (AnalysisServiceClient client = AnalysisServiceClient.getInstance()) {
-			AvailableAnalyzers analyzers = client.getAnalyzers();
-			viewer.setInput(analyzers.getAnalyzers());
+			Collection<AnalyzerInformation> analyzers = client.getAnalyzers();
+			viewer.setInput(analyzers);
 		} catch (IOException e) {
 			logger.error("Could not retrieve a list of available analyzers.", e);
 			viewer.setInput(new ArrayList<ProgrammingLanguageAnalyzer>());

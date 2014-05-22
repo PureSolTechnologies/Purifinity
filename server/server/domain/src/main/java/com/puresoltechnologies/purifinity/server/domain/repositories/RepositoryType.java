@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
+import com.puresoltechnologies.commons.math.Parameter;
 
 /**
  * This class contains all information about an available repository type.
@@ -20,12 +20,11 @@ public class RepositoryType implements Serializable {
 
 	public final String name;
 	public final String description;
-	public final Map<String, ParameterWithArbitraryUnit<?>> parameters = new LinkedHashMap<>();
+	public final Map<String, Parameter<?>> parameters = new LinkedHashMap<>();
 
-	public RepositoryType(
-			@JsonProperty("name") String name,
+	public RepositoryType(@JsonProperty("name") String name,
 			@JsonProperty("description") String description,
-			@JsonProperty("parameters") Map<String, ParameterWithArbitraryUnit<?>> parameters) {
+			@JsonProperty("parameters") Map<String, Parameter<?>> parameters) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -40,7 +39,7 @@ public class RepositoryType implements Serializable {
 		return description;
 	}
 
-	public Map<String, ParameterWithArbitraryUnit<?>> getParameters() {
+	public Map<String, Parameter<?>> getParameters() {
 		return parameters;
 	}
 

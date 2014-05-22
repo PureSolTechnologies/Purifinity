@@ -17,9 +17,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.client.common.branding.ClientImages;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.FileStoreClient;
 
 public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
 	private final Logger logger = LoggerFactory
@@ -48,7 +47,7 @@ public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
 		File path = input.getPathFile(false);
 		AnalysisInformation analyzedFile = analysisRun.findAnalyzedCode(path
 				.getPath());
-		FileStore fileStore = FileStoreFactory.getFactory().getInstance();
+		FileStoreClient fileStore = FileStoreClient.getInstance();
 		if ((fileStore != null) && (analyzedFile != null)) {
 			if (fileStore.wasAnalyzed(analyzedFile.getHashId())) {
 				try {

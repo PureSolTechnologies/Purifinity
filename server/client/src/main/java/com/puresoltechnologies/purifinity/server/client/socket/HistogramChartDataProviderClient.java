@@ -45,7 +45,7 @@ public class HistogramChartDataProviderClient implements AutoCloseable {
 	static {
 		try {
 			DEFAULT_URI = new URI(
-					"ws://localhost:8080/purifinityserver/dataprovider/charts/histogramchart");
+					"ws://localhost:8080/purifinityserver/socket/dataprovider/charts/histogramchart");
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}

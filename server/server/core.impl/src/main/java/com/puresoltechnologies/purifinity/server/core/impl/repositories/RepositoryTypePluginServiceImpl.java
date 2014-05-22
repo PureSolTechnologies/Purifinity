@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
+import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
@@ -30,7 +31,7 @@ public class RepositoryTypePluginServiceImpl extends
 	}
 
 	private void registerDirectoryRepository() {
-		Map<String, ParameterWithArbitraryUnit<?>> parameters = new LinkedHashMap<>();
+		Map<String, Parameter<?>> parameters = new LinkedHashMap<>();
 		parameters
 				.put("Directory", new ParameterWithArbitraryUnit<>("directory",
 						"", LevelOfMeasurement.NOMINAL,
@@ -42,7 +43,7 @@ public class RepositoryTypePluginServiceImpl extends
 	}
 
 	private void registerGitRepository() {
-		Map<String, ParameterWithArbitraryUnit<?>> parameters = new LinkedHashMap<>();
+		Map<String, Parameter<?>> parameters = new LinkedHashMap<>();
 		parameters.put("Host", new ParameterWithArbitraryUnit<>("host", "",
 				LevelOfMeasurement.NOMINAL,
 				"The host where the repository is to be retrieved from.",

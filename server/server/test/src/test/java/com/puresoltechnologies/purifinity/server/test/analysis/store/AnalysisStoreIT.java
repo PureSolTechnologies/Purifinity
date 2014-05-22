@@ -37,7 +37,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.RepositoryLocationCreator;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.FileStoreImpl;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.FileStoreServiceBean;
 import com.puresoltechnologies.purifinity.server.test.analysis.TreeTestUtils;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
@@ -185,7 +185,7 @@ public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 				projectUUID, startTime, 12345, "Analysis Run Description",
 				fileSearchConfiguration);
 		assertNotNull(analysisRun);
-		assertNotNull(analysisRun.getUUID());
+		assertNotNull(analysisRun.getRunUUID());
 		assertEquals(projectUUID, analysisRun.getProjectUUID());
 		assertEquals(startTime, analysisRun.getStartTime());
 		assertEquals(12345, analysisRun.getDuration());
@@ -200,7 +200,7 @@ public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 		assertEquals(analysisRun, analysisRunRead);
 
 		analysisRunRead = analysisStore.readAnalysisRunInformation(projectUUID,
-				analysisRun.getUUID());
+				analysisRun.getRunUUID());
 		assertNotSame(analysisRun, analysisRunRead);
 		assertEquals(analysisRun, analysisRunRead);
 	}
@@ -237,7 +237,7 @@ public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 
 		StopWatch storeRawFileWatch = new StopWatch();
 		storeRawFileWatch.start();
-		FileStore fileStore = new FileStoreImpl();
+		FileStore fileStore = new FileStoreServiceBean();
 		for (FileTree f : fileTree) {
 			File file = f.getPathFile(true);
 			if (file.isFile()) {
@@ -253,14 +253,14 @@ public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 
 		StopWatch storeFileTreeWatch = new StopWatch();
 		storeFileTreeWatch.start();
-		analysisStore.storeAnalysisFileTree(projectUUID, analysisRun.getUUID(),
+		analysisStore.storeAnalysisFileTree(projectUUID, analysisRun.getRunUUID(),
 				hashIdFileTree);
 		storeFileTreeWatch.stop();
 
 		StopWatch readFileTreeWatch = new StopWatch();
 		readFileTreeWatch.start();
 		AnalysisFileTree treeRead = analysisStore.readAnalysisFileTree(
-				projectUUID, analysisRun.getUUID());
+				projectUUID, analysisRun.getRunUUID());
 		readFileTreeWatch.stop();
 
 		System.out.println("Storing raw files: "

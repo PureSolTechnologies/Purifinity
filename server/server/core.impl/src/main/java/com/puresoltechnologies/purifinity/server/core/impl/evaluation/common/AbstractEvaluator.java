@@ -11,6 +11,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,13 +31,11 @@ import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreFactory;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -58,10 +58,12 @@ public abstract class AbstractEvaluator extends
 
 	private final Map<String, Object> properties = new HashMap<>();
 
-	private final FileStore fileStore = FileStoreFactory.getFactory()
-			.getInstance();
-	private final DirectoryStore directoryStore = DirectoryStoreFactory
-			.getFactory().getInstance();
+	@Inject
+	private FileStore fileStore;
+
+	@Inject
+	private DirectoryStore directoryStore;
+
 	private final EvaluatorStoreFactory evaluatorStoreFactory = EvaluatorStoreFactory
 			.getFactory();
 

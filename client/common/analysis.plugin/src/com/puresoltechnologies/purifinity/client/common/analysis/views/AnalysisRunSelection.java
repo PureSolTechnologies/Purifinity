@@ -28,7 +28,7 @@ public class AnalysisRunSelection implements ISelection {
 		analysisProjectUUID = analysisProject == null ? null : analysisProject
 				.getInformation().getUUID();
 		analysisRunUUID = analysisRun == null ? null : analysisRun
-				.getInformation().getUUID();
+				.getInformation().getRunUUID();
 	}
 
 	public AnalysisProject getAnalysisProject() {

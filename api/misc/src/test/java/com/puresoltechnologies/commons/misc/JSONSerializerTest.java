@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.common.rest;
+package com.puresoltechnologies.commons.misc;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,9 +9,9 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.common.rest.JSONMapper;
+import com.puresoltechnologies.commons.misc.JSONSerializer;
 
-public class JSONMapperTest {
+public class JSONSerializerTest {
 
 	public static class TestClass {
 		private String a;
@@ -60,9 +60,9 @@ public class JSONMapperTest {
 		TestClass test = new TestClass();
 		test.setA("A");
 		test.setB("B");
-		String string = JSONMapper.toJSONString(test);
+		String string = JSONSerializer.toJSONString(test);
 		System.out.println(string);
-		TestClass o = JSONMapper.fromJSONString(string, TestClass.class);
+		TestClass o = JSONSerializer.fromJSONString(string, TestClass.class);
 		assertEquals(test.getA(), o.getA());
 		assertEquals(test.getB(), o.getB());
 	}
@@ -71,9 +71,9 @@ public class JSONMapperTest {
 	public void testToJSONWithValueClass() throws JsonGenerationException,
 			JsonMappingException, IOException {
 		TestValueClass test = new TestValueClass("A", "B");
-		String string = JSONMapper.toJSONString(test);
+		String string = JSONSerializer.toJSONString(test);
 		System.out.println(string);
-		TestValueClass o = JSONMapper.fromJSONString(string,
+		TestValueClass o = JSONSerializer.fromJSONString(string,
 				TestValueClass.class);
 		assertEquals(test.getA(), o.getA());
 		assertEquals(test.getB(), o.getB());

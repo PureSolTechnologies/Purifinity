@@ -40,9 +40,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.FileStoreClient;
 
 public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 
@@ -108,7 +107,7 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		File path = input.getPathFile(false);
 		AnalysisInformation analyzedFile = analysisRun.findAnalyzedCode(path
 				.getPath());
-		FileStore fileStore = FileStoreFactory.getFactory().getInstance();
+		FileStoreClient fileStore = FileStoreClient.getInstance();
 		if ((fileStore != null) && (analyzedFile != null)) {
 			if (fileStore.wasAnalyzed(analyzedFile.getHashId())) {
 				try {

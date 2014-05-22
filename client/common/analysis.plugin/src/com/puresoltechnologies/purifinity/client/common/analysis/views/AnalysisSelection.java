@@ -37,7 +37,7 @@ public class AnalysisSelection implements ISelection {
 		projectUUID = analysisProject == null ? null : analysisProject
 				.getInformation().getUUID();
 		runUUID = analysisRun == null ? null : analysisRun.getInformation()
-				.getUUID();
+				.getRunUUID();
 		parentTreeNode = fileTreeNode == null ? null : fileTreeNode.getHashId();
 	}
 

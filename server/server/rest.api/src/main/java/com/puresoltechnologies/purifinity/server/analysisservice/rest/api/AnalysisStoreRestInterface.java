@@ -26,7 +26,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 
-@Path("store/rest")
+@Path("analysisstore")
 public interface AnalysisStoreRestInterface extends AnalysisStore {
 
 	@Override

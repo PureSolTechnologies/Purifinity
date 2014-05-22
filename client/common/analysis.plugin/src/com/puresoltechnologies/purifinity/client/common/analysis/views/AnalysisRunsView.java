@@ -240,7 +240,7 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 										.getInstance();
 								analysisStore.removeAnalysisRun(
 										analysisRun.getProjectUUID(),
-										analysisRun.getUUID());
+										analysisRun.getRunUUID());
 							}
 							refresh();
 							return Status.OK_STATUS;
@@ -288,7 +288,7 @@ public class AnalysisRunsView extends AbstractPureSolTechnologiesView implements
 				AnalysisStoreClient analysisStore = AnalysisStoreClient
 						.getInstance();
 				analysisRun = analysisStore.readAnalysisRun(
-						information.getProjectUUID(), information.getUUID());
+						information.getProjectUUID(), information.getRunUUID());
 			}
 			setSelection(new AnalysisRunSelection(analysisProject, analysisRun));
 		} catch (AnalysisStoreException e) {

@@ -177,7 +177,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		AnalysisRun analysisRun = evaluator.getAnalysisRun();
 		UUID analysisProjectUUID = analysisRun.getInformation()
 				.getProjectUUID();
-		UUID analysisRunUUID = analysisRun.getInformation().getUUID();
+		UUID analysisRunUUID = analysisRun.getInformation().getRunUUID();
 		AnalysisInformation analysisInformation = codeAnalysis
 				.getAnalysisInformation();
 		HashId hashId = analysisInformation.getHashId();
@@ -309,7 +309,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		AnalysisRun analysisRun = evaluator.getAnalysisRun();
 		UUID analysisProjectUUID = analysisRun.getInformation()
 				.getProjectUUID();
-		UUID analysisRunUUID = analysisRun.getInformation().getUUID();
+		UUID analysisRunUUID = analysisRun.getInformation().getRunUUID();
 		File pathFile = directory.getPathFile(false);
 		String internalPath = pathFile.getParent();
 		if (internalPath == null) {

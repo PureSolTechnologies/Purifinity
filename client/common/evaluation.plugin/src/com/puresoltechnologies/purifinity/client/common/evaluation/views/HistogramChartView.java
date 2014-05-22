@@ -178,7 +178,7 @@ public class HistogramChartView extends AbstractMetricChartViewPart {
 								.getInformation().getUUID();
 						monitor.worked(1);
 						UUID analysisRunUUID = analysisSelection
-								.getAnalysisRun().getInformation().getUUID();
+								.getAnalysisRun().getInformation().getRunUUID();
 						monitor.worked(1);
 						values = client.loadHistogramChartData(
 								analysisProjectUUID, analysisRunUUID,

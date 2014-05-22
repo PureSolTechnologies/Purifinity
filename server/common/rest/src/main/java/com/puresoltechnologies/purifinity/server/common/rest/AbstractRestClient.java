@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.server.common.rest;
 
 import java.io.IOException;
+import java.net.URI;
 
 import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
@@ -35,12 +36,12 @@ public class AbstractRestClient<GenericRestInterface> implements AutoCloseable {
 	 * @param restInterface
 	 *            is the interface class with the specification annotations.
 	 */
-	protected AbstractRestClient(Class<GenericRestInterface> restInterface) {
+	protected AbstractRestClient(URI uri,
+			Class<GenericRestInterface> restInterface) {
 		ResteasyClientBuilder resteasyClientBuilder = new ResteasyClientBuilder();
 		resteasyClientBuilder.register(JacksonJsonProvider.class);
 		client = resteasyClientBuilder.build();
-		ResteasyWebTarget webTarget = client
-				.target("http://localhost:8080/rest");
+		ResteasyWebTarget webTarget = client.target(uri);
 		proxy = webTarget.proxy(restInterface);
 	}
 

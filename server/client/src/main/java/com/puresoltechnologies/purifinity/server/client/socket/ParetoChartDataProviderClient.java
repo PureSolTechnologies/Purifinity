@@ -45,7 +45,7 @@ public class ParetoChartDataProviderClient implements AutoCloseable {
 	static {
 		try {
 			DEFAULT_URI = new URI(
-					"ws://localhost:8080/purifinityserver/dataprovider/charts/paretochart");
+					"ws://localhost:8080/purifinityserver/socket/dataprovider/charts/paretochart");
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}

@@ -4,14 +4,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.Set;
+import java.util.Collection;
 
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.RepositoryTypes;
 import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisServiceClient;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 import com.puresoltechnologies.purifinity.server.test.AbstractPurifinityServerClientTest;
@@ -40,11 +39,10 @@ public class RepositoryTypePluginServiceIT extends
 
 	@Test
 	public void test() throws IOException {
-		RepositoryTypes repositoryTypes = client.getRepositoryTypes();
+		Collection<RepositoryType> repositoryTypes = client
+				.getRepositoryTypes();
 		assertNotNull(repositoryTypes);
-		Set<RepositoryType> types = repositoryTypes.getRepositoryTypes();
-		assertNotNull(types);
-		assertTrue(types.size() > 0);
+		assertTrue(repositoryTypes.size() > 0);
 	}
 
 }

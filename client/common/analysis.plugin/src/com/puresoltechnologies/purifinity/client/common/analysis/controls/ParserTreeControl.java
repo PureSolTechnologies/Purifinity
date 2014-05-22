@@ -20,10 +20,9 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.UniversalSyntaxTreeContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.UniversalSyntaxTreeLabelProvider;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;
 import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisStoreClient;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.FileStoreClient;
 
 /**
  * This is a simple text element which show a text file.
@@ -32,9 +31,6 @@ import com.puresoltechnologies.purifinity.server.client.analysisservice.Analysis
  * 
  */
 public class ParserTreeControl extends Composite {
-
-	private final FileStore codeStore = FileStoreFactory.getFactory()
-			.getInstance();
 
 	private final Label lblNewLabel;
 	private final Tree tree;
@@ -75,6 +71,7 @@ public class ParserTreeControl extends Composite {
 	public void setContentAndUpdateContent(AnalysisInformation analyzedCode,
 			AnalysisRun analysisRun) throws IOException, FileStoreException,
 			AnalysisStoreException {
+		FileStoreClient codeStore = FileStoreClient.getInstance();
 		CodeAnalysis codeAnalysis = codeStore.loadAnalysis(analyzedCode
 				.getHashId(), Thread.currentThread().getContextClassLoader());
 		if (codeAnalysis != null) {

@@ -168,7 +168,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 			// delete analysis runs first
 			List<AnalysisRunInformation> runs = readAllRunInformation(projectUUID);
 			for (AnalysisRunInformation run : runs) {
-				removeAnalysisRun(projectUUID, run.getUUID());
+				removeAnalysisRun(projectUUID, run.getRunUUID());
 			}
 			// delete project
 			Vertex vertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(

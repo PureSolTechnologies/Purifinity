@@ -10,7 +10,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AvailableAnalyzers;
 import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisServiceClient;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 
@@ -30,12 +29,10 @@ public class RegistrationIT extends AbstractJava7PluginClientTest {
 
 	@Test
 	public void test() throws IOException {
-		AvailableAnalyzers analyzers = client.getAnalyzers();
+		Collection<AnalyzerInformation> analyzers = client.getAnalyzers();
 		assertNotNull(analyzers);
-		Collection<AnalyzerInformation> analyzerSet = analyzers.getAnalyzers();
-		assertNotNull(analyzerSet);
-		assertEquals(1, analyzerSet.size());
-		AnalyzerInformation analyzer = analyzerSet.iterator().next();
+		assertEquals(1, analyzers.size());
+		AnalyzerInformation analyzer = analyzers.iterator().next();
 		assertEquals("C", analyzer.getName());
 		assertEquals("11", analyzer.getVersion());
 	}

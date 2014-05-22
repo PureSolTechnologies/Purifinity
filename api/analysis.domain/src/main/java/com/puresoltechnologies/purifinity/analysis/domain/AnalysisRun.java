@@ -119,6 +119,6 @@ public class AnalysisRun implements Serializable {
 	@Override
 	public String toString() {
 		return getInformation().getStartTime().toString() + " ("
-				+ getInformation().getUUID() + ")";
+				+ getInformation().getRunUUID() + ")";
 	}
 }

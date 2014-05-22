@@ -143,7 +143,7 @@ public class MaintainabilityIndexParetoChartView extends
 							.getAnalysisProject().getInformation().getUUID();
 					monitor.worked(1);
 					UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-							.getInformation().getUUID();
+							.getInformation().getRunUUID();
 					monitor.worked(1);
 					mi = client.loadParetoChartData(analysisProjectUUID,
 							analysisRunUUID,

@@ -183,7 +183,7 @@ public class AnalysisReportView extends AbstractPureSolTechnologiesView
 				try {
 					analysisRun = analysisStore.readAnalysisRun(
 							analysisRunInformation.getProjectUUID(),
-							analysisRunInformation.getUUID());
+							analysisRunInformation.getRunUUID());
 				} catch (AnalysisStoreException e) {
 					logger.log(new Status(Status.ERROR, ParserTreeControl.class
 							.getName(), "Can not read analysis store!", e));

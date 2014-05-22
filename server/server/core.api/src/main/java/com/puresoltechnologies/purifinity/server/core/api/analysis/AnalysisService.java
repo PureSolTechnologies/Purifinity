@@ -1,7 +1,9 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis;
 
 import java.util.Collection;
+import java.util.UUID;
 
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 
@@ -13,7 +15,8 @@ import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryT
  */
 public interface AnalysisService {
 
-	public void triggerNewAnalysis();
+	public void triggerNewAnalysis(UUID projectUUID)
+			throws AnalysisStoreException;
 
 	public Collection<AnalyzerInformation> getAnalyzers();
 

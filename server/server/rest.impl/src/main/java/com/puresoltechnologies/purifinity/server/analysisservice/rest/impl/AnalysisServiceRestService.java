@@ -1,14 +1,16 @@
 package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl;
 
 import java.io.IOException;
-import java.util.LinkedHashSet;
+import java.util.Collection;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
+import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisServiceRestInterface;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AvailableAnalyzers;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.RepositoryTypes;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 
 public class AnalysisServiceRestService implements AnalysisServiceRestInterface {
 
@@ -16,18 +18,22 @@ public class AnalysisServiceRestService implements AnalysisServiceRestInterface 
 	private AnalysisService analysisService;
 
 	@Override
-	public AvailableAnalyzers getAnalyzers() throws IOException {
-		return new AvailableAnalyzers(analysisService.getAnalyzers());
+	public Collection<AnalyzerInformation> getAnalyzers() throws IOException {
+		return analysisService.getAnalyzers();
 	}
 
 	@Override
-	public RepositoryTypes getRepositoryTypes() throws IOException {
-		return new RepositoryTypes(new LinkedHashSet<>(
-				analysisService.getRepositoryTypes()));
+	public Collection<RepositoryType> getRepositoryTypes() throws IOException {
+		return analysisService.getRepositoryTypes();
 	}
 
 	@Override
-	public void triggerNewAnalysis() {
-		analysisService.triggerNewAnalysis();
+	public void triggerNewAnalysisRun(UUID projectUUID) {
+		try {
+			analysisService.triggerNewAnalysis(projectUUID);
+		} catch (AnalysisStoreException e) {
+			throw new RuntimeException(
+					"Triggered analysis run finished with exception.", e);
+		}
 	}
 }

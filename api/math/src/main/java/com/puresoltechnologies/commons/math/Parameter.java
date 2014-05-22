@@ -2,6 +2,10 @@ package com.puresoltechnologies.commons.math;
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.annotate.JsonTypeInfo.As;
+import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
+
 /**
  * This {@link Parameter} class is a representation of a single date value type.
  * This class does not provide a value (like a measurement) itself, but contains
@@ -16,6 +20,7 @@ import java.io.Serializable;
  *            is the actual value type class of the value itself. This class
  *            keeps the class to provide the information.
  */
+@JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "class")
 public interface Parameter<T> extends Serializable {
 
 	/**

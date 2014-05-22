@@ -24,13 +24,13 @@ import com.puresoltechnologies.commons.misc.StringUtils;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 
-public final class FileStoreImpl implements FileStore {
+public final class FileStoreServiceBean implements FileStoreService {
 
 	@Inject
 	@AnalysisStoreKeyspace

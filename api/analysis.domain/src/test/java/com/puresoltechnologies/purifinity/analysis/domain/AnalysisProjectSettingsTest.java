@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.client.analysisservice;
+package com.puresoltechnologies.purifinity.analysis.domain;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,8 +10,7 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.server.common.rest.JSONMapper;
+import com.puresoltechnologies.commons.misc.JSONSerializer;
 
 public class AnalysisProjectSettingsTest {
 
@@ -27,9 +26,9 @@ public class AnalysisProjectSettingsTest {
 		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
 				"Description", fileSearchConfiguration, new Properties());
 
-		String jsonString = JSONMapper.toJSONString(settings);
+		String jsonString = JSONSerializer.toJSONString(settings);
 		System.out.println(jsonString);
-		AnalysisProjectSettings fromJSONString = JSONMapper.fromJSONString(
+		AnalysisProjectSettings fromJSONString = JSONSerializer.fromJSONString(
 				jsonString, AnalysisProjectSettings.class);
 		System.out.println(fromJSONString);
 	}

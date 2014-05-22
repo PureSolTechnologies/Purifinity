@@ -2,27 +2,21 @@ package com.puresoltechnologies.purifinity.client.common.analysis.jobs;
 
 import java.util.concurrent.Future;
 
-import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import com.puresoltechnologies.commons.misc.ProgressObserver;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
-import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
-import com.puresoltechnologies.purifinity.framework.commons.utils.NotImplementedException;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisServiceClient;
 
 public class AnalysisJob extends Job implements ProgressObserver<Runnable> {
 
-	private static final ILog logger = Activator.getDefault().getLog();
-
-	private static final int RUN_TIMEOUT_IN_SECONDS = 3600;
-
 	private final AnalysisProjectInformation analysisProjectInformation;
 	private final AnalysisProjectSettings analysisProjectSettings;
-	private Runnable analysisRunner;
 	private AnalysisRun analysisRun;
 	private final IProgressMonitor monitor = null;
 	private final Future<Boolean> future = null;
@@ -50,49 +44,11 @@ public class AnalysisJob extends Job implements ProgressObserver<Runnable> {
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-		throw new NotImplementedException("Analysis Job");
-		// FIXME
-		// try {
-		// this.monitor = monitor;
-		// analysisRunner = new AnalysisRunnerImpl(
-		// analysisProjectInformation.getUUID());
-		// analysisRunner.addObserver(this);
-		//
-		// ExecutorService executor = Executors.newSingleThreadExecutor();
-		// future = executor.submit(analysisRunner);
-		// executor.shutdown();
-		// executor.awaitTermination(RUN_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
-		// try {
-		// Boolean result = future.get();
-		// if ((result != null) && (result)) {
-		// analysisRun = analysisRunner.getAnalysisRun();
-		// return Status.OK_STATUS;
-		// } else {
-		// return Status.CANCEL_STATUS;
-		// }
-		// } catch (ExecutionException e) {
-		// logger.log(new Status(Status.ERROR,
-		// AnalysisJob.class.getName(),
-		// "Analysis finished with an exception!", e));
-		// throw new RuntimeException("Analysis was not successful.");
-		// }
-		// } catch (OperationCanceledException e) {
-		// logger.log(new Status(Status.INFO, AnalysisJob.class.getName(),
-		// "Analysis was cancelled!", e));
-		// return Status.CANCEL_STATUS;
-		// } catch (InterruptedException e) {
-		// logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
-		// "Analysis was interrupted!", e));
-		// return Status.CANCEL_STATUS;
-		// } catch (AnalysisProjectException e) {
-		// logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
-		// "Analysis project has issues!", e));
-		// return Status.CANCEL_STATUS;
-		// } catch (AnalysisStoreException e) {
-		// logger.log(new Status(Status.ERROR, AnalysisJob.class.getName(),
-		// "Analysis store has issues!", e));
-		// return Status.CANCEL_STATUS;
-		// }
+		monitor.beginTask("Starting a new analysis run...", 1);
+		AnalysisServiceClient.getInstance().triggerNewAnalysisRun(
+				analysisProjectInformation.getUUID());
+		monitor.done();
+		return Status.OK_STATUS;
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.server.client.analysisservice;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,14 +19,22 @@ import com.puresoltechnologies.purifinity.server.common.rest.AbstractRestClient;
 public class AnalysisStoreClient extends
 		AbstractRestClient<AnalysisStoreRestInterface> {
 
-	private static final AnalysisStoreClient INSTANCE = new AnalysisStoreClient();
+	private static final AnalysisStoreClient INSTANCE;
+	static {
+		try {
+			INSTANCE = new AnalysisStoreClient();
+		} catch (URISyntaxException e) {
+			throw new RuntimeException("Unknown URI for Analysis Service.", e);
+		}
+	}
 
 	public static AnalysisStoreClient getInstance() {
 		return INSTANCE;
 	}
 
-	private AnalysisStoreClient() {
-		super(AnalysisStoreRestInterface.class);
+	private AnalysisStoreClient() throws URISyntaxException {
+		super(new URI("http://localhost:8080/purifinityserver/rest"),
+				AnalysisStoreRestInterface.class);
 	}
 
 	public AnalysisProjectInformation createAnalysisProject(

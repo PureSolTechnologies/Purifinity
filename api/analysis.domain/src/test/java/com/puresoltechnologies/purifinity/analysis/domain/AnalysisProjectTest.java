@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.client.analysisservice;
+package com.puresoltechnologies.purifinity.analysis.domain;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -13,10 +13,10 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.JSONSerializer;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.server.common.rest.JSONMapper;
 
 public class AnalysisProjectTest {
 
@@ -34,9 +34,9 @@ public class AnalysisProjectTest {
 						new ArrayList<String>(), true), new Properties());
 		AnalysisProject project = new AnalysisProject(
 				analysisProjectInformation, analysisProjectSettings);
-		String json = JSONMapper.toJSONString(project);
+		String json = JSONSerializer.toJSONString(project);
 		assertNotNull(json);
-		AnalysisProject unmarshalled = JSONMapper.fromJSONString(json,
+		AnalysisProject unmarshalled = JSONSerializer.fromJSONString(json,
 				AnalysisProject.class);
 		assertNotNull(unmarshalled);
 	}

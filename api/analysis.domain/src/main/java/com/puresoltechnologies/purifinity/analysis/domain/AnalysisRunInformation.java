@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.TimeAwareness;
 
@@ -25,9 +27,13 @@ public final class AnalysisRunInformation implements Serializable,
 	private final String description;
 	private final FileSearchConfiguration fileSearchConfiguration;
 
-	public AnalysisRunInformation(UUID projectUUID, UUID runUUID,
-			Date startTime, long duration, String description,
-			FileSearchConfiguration fileSearchConfiguration) {
+	public AnalysisRunInformation(
+			@JsonProperty("projectUUID") UUID projectUUID,
+			@JsonProperty("runUUID") UUID runUUID,
+			@JsonProperty("startTime") Date startTime,
+			@JsonProperty("duration") long duration,
+			@JsonProperty("description") String description,
+			@JsonProperty("fileSearchConfiguration") FileSearchConfiguration fileSearchConfiguration) {
 		super();
 		this.projectUUID = projectUUID;
 		this.runUUID = runUUID;
@@ -53,7 +59,7 @@ public final class AnalysisRunInformation implements Serializable,
 	 * 
 	 * @return An UUID object is returned.
 	 */
-	public final UUID getUUID() {
+	public final UUID getRunUUID() {
 		return runUUID;
 	}
 

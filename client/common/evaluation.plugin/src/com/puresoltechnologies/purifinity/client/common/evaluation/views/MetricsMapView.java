@@ -274,7 +274,7 @@ public class MetricsMapView extends AbstractMetricViewPart implements Printable 
 							.getAnalysisProject().getInformation().getUUID();
 					monitor.worked(1);
 					UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-							.getInformation().getUUID();
+							.getInformation().getRunUUID();
 					monitor.worked(1);
 					mapValues = client.loadMetricsMapData(analysisProjectUUID,
 							analysisRunUUID, mapMetricSelection.getName(),

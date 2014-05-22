@@ -26,9 +26,8 @@ import com.puresoltechnologies.purifinity.client.common.analysis.controls.Parser
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ScrollableFileViewer;
 import com.puresoltechnologies.purifinity.client.common.ui.editors.AbstractPureSolTechnologiesEditor;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.FileStoreClient;
 
 public class FileAnalysisEditor extends AbstractPureSolTechnologiesEditor {
 
@@ -114,7 +113,7 @@ public class FileAnalysisEditor extends AbstractPureSolTechnologiesEditor {
 					editorInput.getAnalysisRun());
 
 			HashId hashId = editorInput.getAnalysisInformation().getHashId();
-			FileStore codeStore = FileStoreFactory.getFactory().getInstance();
+			FileStoreClient codeStore = FileStoreClient.getInstance();
 			SourceCode sourceCode = codeStore.readSourceCode(hashId);
 			fileViewer.setStreamAndUpdateContent(sourceCode);
 		} catch (IOException | FileStoreException | AnalysisStoreException e) {

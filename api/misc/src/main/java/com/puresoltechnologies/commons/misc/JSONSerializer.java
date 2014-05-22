@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.common.rest;
+package com.puresoltechnologies.commons.misc;
 
 import java.io.IOException;
 
@@ -8,7 +8,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.ObjectReader;
 import org.codehaus.jackson.map.ObjectWriter;
 
-public class JSONMapper {
+public class JSONSerializer {
 
 	public static String toJSONString(Object o) throws JsonGenerationException,
 			JsonMappingException, IOException {

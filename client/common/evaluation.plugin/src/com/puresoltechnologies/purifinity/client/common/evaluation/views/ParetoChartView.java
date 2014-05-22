@@ -178,7 +178,7 @@ public class ParetoChartView extends AbstractMetricChartViewPart {
 							.getAnalysisProject().getInformation().getUUID();
 					monitor.worked(1);
 					UUID analysisRunUUID = analysisSelection.getAnalysisRun()
-							.getInformation().getUUID();
+							.getInformation().getRunUUID();
 					monitor.worked(1);
 					values = client.loadParetoChartData(analysisProjectUUID,
 							analysisRunUUID, metricParameterSelection

@@ -44,7 +44,7 @@ public class MetricsMapDataProviderClient implements AutoCloseable {
 	static {
 		try {
 			DEFAULT_URI = new URI(
-					"ws://localhost:8080/purifinityserver/dataprovider/charts/metricsmap");
+					"ws://localhost:8080/purifinityserver/socket/dataprovider/charts/metricsmap");
 		} catch (URISyntaxException e) {
 			throw new RuntimeException(e);
 		}

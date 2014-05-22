@@ -215,7 +215,7 @@ public class AnalysisStoreView extends AbstractPureSolTechnologiesView
 						.getInstance();
 				selectedAnalysisRun = analysisStore.readAnalysisRun(
 						analysisRunInformation.getProjectUUID(),
-						analysisRunInformation.getUUID());
+						analysisRunInformation.getRunUUID());
 				runName.setText(selectedAnalysis.getSettings().getName());
 				runDescription.setText(analysisRunInformation.getDescription());
 			} else {
