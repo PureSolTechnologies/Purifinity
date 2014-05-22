@@ -9,7 +9,6 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.misc.ProgressObserver;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
@@ -49,13 +48,11 @@ public class AnalysisStoreFileTreeUtils {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	public Vertex addFileTree(AnalysisStore analysisStore,
-			ProgressObserver<AnalysisStore> progressObserver, TitanGraph graph,
+	public Vertex addFileTree(AnalysisStore analysisStore, TitanGraph graph,
 			AnalysisFileTree fileTree, Vertex analysisRunVertex)
 			throws AnalysisStoreException {
-		return addFileTreeVertex(analysisStore, progressObserver, graph,
-				fileTree, analysisRunVertex,
-				TitanElementNames.ANALYZED_FILE_TREE_LABEL);
+		return addFileTreeVertex(analysisStore, graph, fileTree,
+				analysisRunVertex, TitanElementNames.ANALYZED_FILE_TREE_LABEL);
 	}
 
 	/**
@@ -71,9 +68,8 @@ public class AnalysisStoreFileTreeUtils {
 	 * @throws AnalysisStoreException
 	 */
 	private Vertex addFileTreeVertex(AnalysisStore analysisStore,
-			ProgressObserver<AnalysisStore> progressObserver, TitanGraph graph,
-			AnalysisFileTree fileTree, Vertex parentVertex, String edgeLabel)
-			throws AnalysisStoreException {
+			TitanGraph graph, AnalysisFileTree fileTree, Vertex parentVertex,
+			String edgeLabel) throws AnalysisStoreException {
 		Vertex vertex = graph.addVertex(null);
 		vertex.setProperty(TitanElementNames.VERTEX_TYPE,
 				VertexType.FILE_TREE_ELEMENT.name());
@@ -114,19 +110,12 @@ public class AnalysisStoreFileTreeUtils {
 		// XXX
 		graph.commit();
 
-		if (progressObserver != null) {
-			progressObserver.updateWork(analysisStore,
-					"Created file tree node for '" + fileTree.getName() + "'.",
-					1);
-		}
-
 		for (AnalysisFileTree child : fileTree.getChildren()) {
 			if (child.isFile()) {
-				addFileTreeVertex(analysisStore, progressObserver, graph,
-						child, vertex, TitanElementNames.CONTAINS_FILE_LABEL);
+				addFileTreeVertex(analysisStore, graph, child, vertex,
+						TitanElementNames.CONTAINS_FILE_LABEL);
 			} else {
-				addFileTreeVertex(analysisStore, progressObserver, graph,
-						child, vertex,
+				addFileTreeVertex(analysisStore, graph, child, vertex,
 						TitanElementNames.CONTAINS_DIRECTORY_LABEL);
 			}
 		}

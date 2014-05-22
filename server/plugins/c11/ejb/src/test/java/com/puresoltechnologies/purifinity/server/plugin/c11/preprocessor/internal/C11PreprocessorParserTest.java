@@ -12,7 +12,6 @@ import com.puresoltechnologies.parsers.grammar.Grammar;
 import com.puresoltechnologies.parsers.parser.ParserTree;
 import com.puresoltechnologies.parsers.parser.packrat.PackratParser;
 import com.puresoltechnologies.parsers.source.SourceCode;
-import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
 
 public class C11PreprocessorParserTest {

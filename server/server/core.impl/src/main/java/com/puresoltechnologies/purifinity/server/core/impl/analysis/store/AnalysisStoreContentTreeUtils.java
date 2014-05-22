@@ -7,8 +7,6 @@ import javax.inject.Inject;
 import org.apache.commons.lang.StringUtils;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.misc.ProgressObserver;
-import com.puresoltechnologies.commons.trees.TreeUtils;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
@@ -47,13 +45,11 @@ public class AnalysisStoreContentTreeUtils {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	public Vertex addContentTree(AnalysisStore analysisStore,
-			ProgressObserver<AnalysisStore> progressObserver, TitanGraph graph,
+	public Vertex addContentTree(AnalysisStore analysisStore, TitanGraph graph,
 			AnalysisFileTree fileTree, Vertex parentVertex)
 			throws AnalysisStoreException {
-		return addContentTreeVertex(analysisStore, progressObserver, graph,
-				fileTree, parentVertex,
-				TitanElementNames.ANALYZED_CONTENT_TREE_LABEL);
+		return addContentTreeVertex(analysisStore, graph, fileTree,
+				parentVertex, TitanElementNames.ANALYZED_CONTENT_TREE_LABEL);
 	}
 
 	/**
@@ -71,9 +67,8 @@ public class AnalysisStoreContentTreeUtils {
 	 * @throws AnalysisStoreException
 	 */
 	public Vertex addContentTreeVertex(AnalysisStore analysisStore,
-			ProgressObserver<AnalysisStore> progressObserver, TitanGraph graph,
-			AnalysisFileTree fileTree, Vertex parentVertex, String edgeLabel)
-			throws AnalysisStoreException {
+			TitanGraph graph, AnalysisFileTree fileTree, Vertex parentVertex,
+			String edgeLabel) throws AnalysisStoreException {
 		Iterable<Vertex> vertices = graph
 				.query()
 				.has(TitanElementNames.TREE_ELEMENT_HASH,
@@ -96,11 +91,6 @@ public class AnalysisStoreContentTreeUtils {
 					TitanElementNames.TREE_ELEMENT_IS_FILE,
 					exstingTreeElementVertex
 							.getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE));
-			if (progressObserver != null) {
-				progressObserver.updateWork(analysisStore,
-						"Content found for '" + fileTree.getName() + "'.",
-						TreeUtils.countNodes(fileTree));
-			}
 			return exstingTreeElementVertex;
 		} else {
 			Vertex vertex = graph.addVertex(null);
@@ -117,12 +107,10 @@ public class AnalysisStoreContentTreeUtils {
 					fileTree.isFile());
 			for (AnalysisFileTree child : fileTree.getChildren()) {
 				if (child.isFile()) {
-					addContentTreeVertex(analysisStore, progressObserver,
-							graph, child, vertex,
+					addContentTreeVertex(analysisStore, graph, child, vertex,
 							TitanElementNames.CONTAINS_FILE_LABEL);
 				} else {
-					addContentTreeVertex(analysisStore, progressObserver,
-							graph, child, vertex,
+					addContentTreeVertex(analysisStore, graph, child, vertex,
 							TitanElementNames.CONTAINS_DIRECTORY_LABEL);
 				}
 			}
@@ -130,10 +118,6 @@ public class AnalysisStoreContentTreeUtils {
 				for (AnalysisInformation analyzedCode : fileTree.getAnalyses()) {
 					storeAnalysisInformation(graph, vertex, analyzedCode);
 				}
-			}
-			if (progressObserver != null) {
-				progressObserver.updateWork(analysisStore,
-						"Created content for '" + fileTree.getName() + "'.", 1);
 			}
 			return vertex;
 		}

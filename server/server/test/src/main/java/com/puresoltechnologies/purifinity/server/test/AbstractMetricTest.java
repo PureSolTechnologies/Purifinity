@@ -7,6 +7,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Properties;
 
+import javax.inject.Inject;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -15,10 +17,10 @@ import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.ProgrammingLanguages;
+import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
 
 /**
  * This class is used for metrics tests as parent class. This class guarantees a
@@ -27,21 +29,10 @@ import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.Progr
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractMetricTest {
+public abstract class AbstractMetricTest extends AbstractServerTest {
 
-	private static final AnalysisStoreFactory factory = AnalysisStoreFactory
-			.getFactory();
-	private static final AnalysisStore analysisStore = factory.getInstance();
-
-	@BeforeClass
-	public static void checkEnvironment() {
-		assertNotNull("Analysis store is null!", analysisStore);
-
-		List<ProgrammingLanguageAnalyzer> languages = ProgrammingLanguages
-				.createInstance().getAll();
-		assertNotNull("The list of languages is null!", languages);
-		assertTrue("No programming languages found!", languages.size() > 0);
-	}
+	@Inject
+	private AnalysisStoreService analysisStore;
 
 	@BeforeClass
 	public static void cleanCodeAnalysisDirectory() {
@@ -51,6 +42,16 @@ public abstract class AbstractMetricTest {
 		// if (codeAnalysisDirectory.exists()) {
 		// DirectoryUtilities.deleteDirectoryRecursivly(codeAnalysisDirectory);
 		// }
+	}
+
+	@Before
+	public void checkEnvironment() {
+		assertNotNull("Analysis store is null!", analysisStore);
+
+		List<ProgrammingLanguageAnalyzer> languages = ProgrammingLanguages
+				.createInstance().getAll();
+		assertNotNull("The list of languages is null!", languages);
+		assertTrue("No programming languages found!", languages.size() > 0);
 	}
 
 	private AnalysisProjectInformation analysisProjectInformation;

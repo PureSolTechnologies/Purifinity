@@ -1,8 +1,6 @@
 package com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +8,6 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.puresoltechnologies.parsers.preprocessor.PreprocessorException;
-import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCodeLine;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -94,9 +91,8 @@ public class C11PreprocessorTest {
 				"FileWithoutMacros2.txt").getSourceCode();
 
 		SourceCode expected = new SourceCode();
-		expected.addSourceCodeLine(new SourceCodeLine(
-				new SourceFileLocation(directory, "RecursiveIncludeMacros3.txt"),
-				1, "<end of file>"));
+		expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
+				directory, "RecursiveIncludeMacros3.txt"), 1, "<end of file>"));
 		expected.addSourceCode(sourceWithoutMacros2);
 		expected.addSourceCode(sourceWithoutMacros);
 
@@ -114,8 +110,7 @@ public class C11PreprocessorTest {
 				.process(sourceCode);
 
 		SourceCode expected = new SourceCode();
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 2,
-				"1\n"));
+		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 2, "1\n"));
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 4,
 				"\"Hello, world!\"\n"));
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 6,
@@ -169,8 +164,7 @@ public class C11PreprocessorTest {
 				.process(sourceCode);
 
 		SourceCode expected = new SourceCode();
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 3,
-				"\n"));
+		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 3, "\n"));
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 4,
 				"    fprintf(stderr, \"%s\\\\n\", \n"));
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 5,
@@ -181,8 +175,7 @@ public class C11PreprocessorTest {
 				"/* This is another comment\n"));
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 8,
 				"   with multiple lines! */\n"));
-		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 9,
-				");\n"));
+		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 9, ");\n"));
 		assertEquals(expected, preProcessedSourceCode);
 	}
 

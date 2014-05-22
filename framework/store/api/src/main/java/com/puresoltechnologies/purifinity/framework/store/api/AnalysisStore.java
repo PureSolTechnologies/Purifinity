@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.commons.misc.ProgressObserver;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
@@ -126,10 +125,5 @@ public interface AnalysisStore {
 
 	public void storeAnalysisFileTree(UUID projectUUID, UUID analysisRunUUID,
 			AnalysisFileTree fileTree) throws AnalysisStoreException;
-
-	public void storeAnalysisFileTree(
-			ProgressObserver<AnalysisStore> progressObserver, UUID projectUUID,
-			UUID analysisRunUUID, AnalysisFileTree fileTree)
-			throws AnalysisStoreException;
 
 }

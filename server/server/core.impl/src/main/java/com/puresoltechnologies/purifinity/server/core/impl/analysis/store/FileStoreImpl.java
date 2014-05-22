@@ -22,7 +22,6 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
 import com.puresoltechnologies.commons.misc.StringUtils;
 import com.puresoltechnologies.parsers.source.SourceCode;
-import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;

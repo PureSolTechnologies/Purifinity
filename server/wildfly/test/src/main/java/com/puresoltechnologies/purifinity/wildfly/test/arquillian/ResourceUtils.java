@@ -83,7 +83,6 @@ public class ResourceUtils {
 	static List<File> findResourcesRecursively(File directory,
 			Filter<File> filter) {
 		List<File> resources = new ArrayList<File>();
-		@SuppressWarnings("unchecked")
 		Collection<File> files = FileUtils.listFiles(directory, null, true);
 		for (File file : files) {
 			if (filter == null || filter.include(file)) {

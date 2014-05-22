@@ -48,9 +48,7 @@ import com.puresoltechnologies.purifinity.client.common.ui.actions.RefreshAction
 import com.puresoltechnologies.purifinity.client.common.ui.actions.Refreshable;
 import com.puresoltechnologies.purifinity.client.common.ui.parts.DatabaseTarget;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
 import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisStoreClient;
 
 /**
@@ -280,8 +278,8 @@ public class AnalysisProjectsView extends AbstractPureSolTechnologiesView
 							while (iterator.hasNext()) {
 								AnalysisProject information = (AnalysisProject) iterator
 										.next();
-								AnalysisStore store = AnalysisStoreFactory
-										.getFactory().getInstance();
+								AnalysisStoreClient store = AnalysisStoreClient
+										.getInstance();
 								if (store != null) {
 									store.removeAnalysisProject(information
 											.getInformation().getUUID());

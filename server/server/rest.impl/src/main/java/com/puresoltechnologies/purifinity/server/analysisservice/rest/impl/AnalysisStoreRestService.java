@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -104,6 +105,23 @@ public class AnalysisStoreRestService implements AnalysisStoreRestInterface {
 	public AnalysisProject readAnalysisProject(UUID projectUUID)
 			throws AnalysisStoreException {
 		return analysisStore.readAnalysisProject(projectUUID);
+	}
+
+	@Override
+	public AnalysisRunInformation createAnalysisRun(UUID analysisProjectUUID,
+			Date startTime, long duration, String description,
+			FileSearchConfiguration fileSearchConfiguration)
+			throws AnalysisStoreException {
+		return analysisStore.createAnalysisRun(analysisProjectUUID, startTime,
+				duration, description, fileSearchConfiguration);
+	}
+
+	@Override
+	public void storeAnalysisFileTree(UUID projectUUID, UUID analysisRunUUID,
+			AnalysisFileTree fileTree) throws AnalysisStoreException {
+		analysisStore.storeAnalysisFileTree(projectUUID, analysisRunUUID,
+				fileTree);
+
 	}
 
 }

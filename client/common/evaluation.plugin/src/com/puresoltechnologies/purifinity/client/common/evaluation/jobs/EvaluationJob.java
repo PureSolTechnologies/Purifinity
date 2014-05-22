@@ -19,7 +19,7 @@ import com.puresoltechnologies.purifinity.client.common.server.Evaluators;
 import com.puresoltechnologies.purifinity.client.common.ui.jobs.ObservedJob;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisStoreClient;
 
 public class EvaluationJob extends Job {
 
@@ -43,8 +43,8 @@ public class EvaluationJob extends Job {
 		try {
 			AnalysisRunInformation information = analysisRun.getInformation();
 			UUID projectUUID = information.getProjectUUID();
-			analysisProjectSettings = AnalysisStoreFactory.getFactory()
-					.getInstance().readAnalysisProjectSettings(projectUUID);
+			analysisProjectSettings = AnalysisStoreClient.getInstance()
+					.readAnalysisProjectSettings(projectUUID);
 		} catch (AnalysisStoreException e) {
 			Activator activator = Activator.getDefault();
 			Bundle bundle = activator.getBundle();

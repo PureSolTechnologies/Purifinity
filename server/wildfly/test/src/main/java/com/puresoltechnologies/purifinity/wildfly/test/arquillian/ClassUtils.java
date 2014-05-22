@@ -45,7 +45,6 @@ public final class ClassUtils {
 			packagePrefix += ".";
 		}
 		ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
-		@SuppressWarnings("unchecked")
 		Collection<File> files = FileUtils.listFiles(directory,
 				new String[] { "class" }, true);
 		String directoryWoBackSlashes = directory.getPath().replaceAll("\\\\",

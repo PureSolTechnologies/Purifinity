@@ -19,12 +19,11 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.UniversalSyntaxTreeContentProvider;
 import com.puresoltechnologies.purifinity.client.common.analysis.contents.UniversalSyntaxTreeLabelProvider;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreFactory;
+import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisStoreClient;
 
 /**
  * This is a simple text element which show a text file.
@@ -36,8 +35,6 @@ public class ParserTreeControl extends Composite {
 
 	private final FileStore codeStore = FileStoreFactory.getFactory()
 			.getInstance();
-	private final AnalysisStore analysisStore = AnalysisStoreFactory
-			.getFactory().getInstance();
 
 	private final Label lblNewLabel;
 	private final Tree tree;
@@ -82,8 +79,8 @@ public class ParserTreeControl extends Composite {
 				.getHashId(), Thread.currentThread().getContextClassLoader());
 		if (codeAnalysis != null) {
 			UUID projectUUID = analysisRun.getInformation().getProjectUUID();
-			AnalysisProjectSettings settings = analysisStore
-					.readAnalysisProjectSettings(projectUUID);
+			AnalysisProjectSettings settings = AnalysisStoreClient
+					.getInstance().readAnalysisProjectSettings(projectUUID);
 			SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
 					analyzedCode.getHashId()).getSourceCodeLocation();
 			lblNewLabel.setText(settings.getName() + ": "

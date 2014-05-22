@@ -25,7 +25,6 @@ import com.puresoltechnologies.commons.misc.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.HashCodeGenerator;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
-import com.puresoltechnologies.commons.misc.ProgressObserver;
 import com.puresoltechnologies.commons.misc.StopWatch;
 import com.puresoltechnologies.commons.trees.TreeVisitor;
 import com.puresoltechnologies.commons.trees.TreeWalker;
@@ -38,16 +37,11 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunner;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 
-public class AnalysisRunnerImpl extends
-		AbstractProgressObservable<AnalysisRunner> implements AnalysisRunner,
-		ProgressObserver<AnalysisStore> {
+public class AnalysisRunnerImpl implements Callable<Boolean> {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(AnalysisRunnerImpl.class);
@@ -64,13 +58,13 @@ public class AnalysisRunnerImpl extends
 	private final Map<HashId, SourceCodeLocation> sourceCodeLocations = new HashMap<>();
 
 	private final UUID projectUUID;
-	private final AnalysisStore analysisStore = AnalysisStoreFactory
-			.getFactory().getInstance();
+	private final AnalysisStoreService analysisStore;
 	private final FileSearchConfiguration searchConfig;
 
-	public AnalysisRunnerImpl(UUID analysisProjectUUID)
-			throws AnalysisStoreException {
+	public AnalysisRunnerImpl(AnalysisStoreService analysisStore,
+			UUID analysisProjectUUID) throws AnalysisStoreException {
 		super();
+		this.analysisStore = analysisStore;
 		this.projectUUID = analysisProjectUUID;
 		AnalysisProjectSettings settings = analysisStore
 				.readAnalysisProjectSettings(analysisProjectUUID);
@@ -79,34 +73,23 @@ public class AnalysisRunnerImpl extends
 
 	@Override
 	public Boolean call() throws Exception {
-		try {
-			if (stopWatch != null) {
-				throw new IllegalStateException("Runner was run already.");
-			}
-			stopWatch = new StopWatch();
-			stopWatch.start();
-			boolean analysisSuccessful = analyzeFiles();
-			stopWatch.stop();
-			if (analysisSuccessful) {
-				analysisRun = analysisStore.createAnalysisRun(projectUUID,
-						stopWatch.getStartTime(), stopWatch.getMilliseconds(),
-						"", searchConfig);
-				buildCodeLocationTree();
-				fireDone("Finished successfully.", true);
-				analysisStore.storeAnalysisFileTree(this, projectUUID,
-						analysisRun.getUUID(), fileTree);
-				return true;
-			} else {
-				fireDone("Run aborted.", false);
-				return false;
-			}
-		} catch (RuntimeException e) {
-			fireDone("Finished with runtime exception: '" + e.getMessage()
-					+ "'", false);
-			throw e;
-		} catch (Exception e) {
-			fireDone("Finished with error: '" + e.getMessage() + "'", false);
-			throw e;
+		if (stopWatch != null) {
+			throw new IllegalStateException("Runner was run already.");
+		}
+		stopWatch = new StopWatch();
+		stopWatch.start();
+		boolean analysisSuccessful = analyzeFiles();
+		stopWatch.stop();
+		if (analysisSuccessful) {
+			analysisRun = analysisStore.createAnalysisRun(projectUUID,
+					stopWatch.getStartTime(), stopWatch.getMilliseconds(), "",
+					searchConfig);
+			buildCodeLocationTree();
+			analysisStore.storeAnalysisFileTree(projectUUID,
+					analysisRun.getUUID(), fileTree);
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -144,7 +127,6 @@ public class AnalysisRunnerImpl extends
 
 		ExecutorService threadPool = Executors
 				.newFixedThreadPool(NUMBER_OF_PARALLEL_THREADS);
-		fireStarted("Analyze files", sourceFiles.size());
 		Map<SourceCodeLocation, Future<AnalysisInformation>> futures = new HashMap<SourceCodeLocation, Future<AnalysisInformation>>();
 		for (int index = 0; index < sourceFiles.size(); index++) {
 			SourceCodeLocation sourceFile = sourceFiles.get(index);
@@ -180,17 +162,12 @@ public class AnalysisRunnerImpl extends
 							.get(sourceCodeLocation);
 					if (future.isDone()) {
 						iterator.remove();
-						fireUpdateWork("Finished a file.", 1);
 						try {
 							if (!future.isCancelled()) {
 								AnalysisInformation result = future.get();
 								analyzedFiles.put(sourceCodeLocation, result);
 								sourceCodeLocations.put(result.getHashId(),
 										sourceCodeLocation);
-								fireUpdateWork(
-										"Finished '"
-												+ sourceCodeLocation.getHumanReadableLocationString()
-												+ "'.", 0);
 							}
 						} catch (CancellationException e) {
 							logger.debug("Job was cancelled.", e);
@@ -333,26 +310,8 @@ public class AnalysisRunnerImpl extends
 		return hashes;
 	}
 
-	@Override
 	public AnalysisRun getAnalysisRun() throws AnalysisProjectException {
 		return new AnalysisRun(analysisRun, fileTree);
-	}
-
-	@Override
-	public void started(AnalysisStore observable, String message, long total) {
-		fireStarted(message, total);
-	}
-
-	@Override
-	public void done(AnalysisStore observable, String message,
-			boolean successful) {
-		fireDone(message, successful);
-	}
-
-	@Override
-	public void updateWork(AnalysisStore observable, String message,
-			long finished) {
-		fireUpdateWork(message, finished);
 	}
 
 }

@@ -17,15 +17,12 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.commons.misc.ProgressObserver;
-import com.puresoltechnologies.commons.trees.TreeUtils;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
@@ -413,41 +410,16 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	@Override
 	public final void storeAnalysisFileTree(UUID projectUUID, UUID runUUID,
 			AnalysisFileTree fileTree) throws AnalysisStoreException {
-		storeAnalysisFileTree(null, projectUUID, runUUID, fileTree);
-	}
-
-	@Override
-	public void storeAnalysisFileTree(
-			ProgressObserver<AnalysisStore> progressObserver, UUID projectUUID,
-			UUID runUUID, AnalysisFileTree fileTree)
-			throws AnalysisStoreException {
 		try {
-			if (progressObserver != null) {
-				int nodeCount = TreeUtils.countNodes(fileTree);
-				/*
-				 * Node count 2x because of creation of content tree and file
-				 * tree.
-				 */
-				progressObserver.started(this, "DB file tree creation",
-						2 * nodeCount);
-			}
 			Vertex analysisRunVertex = AnalysisStoreTitanUtils
 					.findAnalysisRunVertex(graph, projectUUID, runUUID);
-			analysisStoreContentTreeUtils.addContentTree(this,
-					progressObserver, graph, fileTree, analysisRunVertex);
-			analysisStoreFileTreeUtils.addFileTree(this, progressObserver,
-					graph, fileTree, analysisRunVertex);
+			analysisStoreContentTreeUtils.addContentTree(this, graph, fileTree,
+					analysisRunVertex);
+			analysisStoreFileTreeUtils.addFileTree(this, graph, fileTree,
+					analysisRunVertex);
 			graph.commit();
-			if (progressObserver != null) {
-				progressObserver
-						.done(this, "Finished file tree storage.", true);
-			}
 		} catch (AnalysisStoreException e) {
 			graph.rollback();
-			if (progressObserver != null) {
-				progressObserver
-						.done(this, "Failed to store file tree.", false);
-			}
 			throw e;
 		}
 	}

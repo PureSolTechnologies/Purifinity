@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -24,7 +26,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreExcep
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunner;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.AnalysisRunnerImpl;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.server.test.AbstractMetricTest;
@@ -35,6 +37,9 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 
 	private static final File testProjectDir = new File(
 			"src/test/resources/test_project");
+
+	@Inject
+	private AnalysisStoreService analysisStore;
 
 	public SLOCEvaluatorIT() {
 		super(testProjectDir, new TestFileSearchConfiguration());
@@ -55,8 +60,8 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 	private AnalysisRun performAnalysis() throws AnalysisStoreException,
 			InterruptedException, Exception {
 		AnalysisProjectInformation analysisProject = getAnalysisProject();
-		AnalysisRunner analysisRunner = new AnalysisRunnerImpl(
-				analysisProject.getUUID());
+		AnalysisRunnerImpl analysisRunner = new AnalysisRunnerImpl(
+				analysisStore, analysisProject.getUUID());
 		assertTrue("Analysis run did not succeed.", analysisRunner.call());
 		AnalysisRun analysisRun = analysisRunner.getAnalysisRun();
 		List<AnalysisInformation> analyzedFiles = analysisRun

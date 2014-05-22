@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.views;
 
-import org.eclipse.core.runtime.ILog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -10,16 +9,10 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
 import com.puresoltechnologies.purifinity.client.common.analysis.controls.ParserTreeControl;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreFactory;
 
 public class ParserTreeView extends AbstractPureSolTechnologiesView implements
 		ISelectionListener {
 
-	private static final ILog log = Activator.getDefault().getLog();
-
-	private final AnalysisStore store = AnalysisStoreFactory.getFactory()
-			.getInstance();
 	private ParserTreeControl viewer;
 
 	public ParserTreeView() {
