@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisServiceRestInterface;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
@@ -31,7 +32,7 @@ public class AnalysisServiceRestService implements AnalysisServiceRestInterface 
 	public void triggerNewAnalysisRun(UUID projectUUID) {
 		try {
 			analysisService.triggerNewAnalysis(projectUUID);
-		} catch (AnalysisStoreException e) {
+		} catch (AnalysisStoreException | AnalyzerException e) {
 			throw new RuntimeException(
 					"Triggered analysis run finished with exception.", e);
 		}

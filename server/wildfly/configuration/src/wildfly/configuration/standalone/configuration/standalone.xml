@@ -14,6 +14,7 @@
 		<extension module="org.jboss.as.jsf" />
 		<extension module="org.jboss.as.logging" />
 		<extension module="org.jboss.as.mail" />
+		<extension module="org.jboss.as.messaging" />
 		<extension module="org.jboss.as.naming" />
 		<extension module="org.jboss.as.pojo" />
 		<extension module="org.jboss.as.remoting" />
@@ -211,6 +212,10 @@
 					passivation-disabled-cache-ref="simple" />
 				<singleton default-access-timeout="5000" />
 			</session-bean>
+            <mdb>
+                <resource-adapter-ref resource-adapter-name="${ejb.resource-adapter-name:hornetq-ra.rar}"/>
+                <bean-instance-pool-ref pool-name="mdb-strict-max-pool"/>
+            </mdb>
 			<pools>
 				<bean-instance-pools>
 					<!-- A sample strict max pool configuration -->
@@ -329,6 +334,91 @@
 			<mail-session name="default" jndi-name="java:jboss/mail/Default">
 				<smtp-server outbound-socket-binding-ref="mail-smtp" />
 			</mail-session>
+		</subsystem>
+		<subsystem xmlns="urn:jboss:domain:messaging:2.0">
+			<hornetq-server>
+				<persistence-enabled>true</persistence-enabled>
+				<journal-file-size>102400</journal-file-size>
+				<journal-min-files>2</journal-min-files>
+				<connectors>
+					<http-connector name="http-connector"
+						socket-binding="http">
+						<param key="http-upgrade-endpoint" value="http-acceptor" />
+					</http-connector>
+					<http-connector name="http-connector-throughput"
+						socket-binding="http">
+						<param key="http-upgrade-endpoint" value="http-acceptor-throughput" />
+						<param key="batch-delay" value="50" />
+					</http-connector>
+					<in-vm-connector name="in-vm" server-id="0" />
+				</connectors>
+				<acceptors>
+					<http-acceptor name="http-acceptor" http-listener="default" />
+					<http-acceptor name="http-acceptor-throughput"
+						http-listener="default">
+						<param key="batch-delay" value="50" />
+						<param key="direct-deliver" value="false" />
+					</http-acceptor>
+					<in-vm-acceptor name="in-vm" server-id="0" />
+				</acceptors>
+				<security-settings>
+					<security-setting match="#">
+						<permission type="send" roles="guest" />
+						<permission type="consume" roles="guest" />
+						<permission type="createNonDurableQueue" roles="guest" />
+						<permission type="deleteNonDurableQueue" roles="guest" />
+					</security-setting>
+				</security-settings>
+				<address-settings>
+					<!--default for catch all -->
+					<address-setting match="#">
+						<dead-letter-address>jms.queue.DLQ</dead-letter-address>
+						<expiry-address>jms.queue.ExpiryQueue</expiry-address>
+						<redelivery-delay>0</redelivery-delay>
+						<max-size-bytes>10485760</max-size-bytes>
+						<address-full-policy>PAGE</address-full-policy>
+						<page-size-bytes>2097152</page-size-bytes>
+						<message-counter-history-day-limit>10
+						</message-counter-history-day-limit>
+					</address-setting>
+				</address-settings>
+				<jms-connection-factories>
+					<connection-factory name="InVmConnectionFactory">
+						<connectors>
+							<connector-ref connector-name="in-vm" />
+						</connectors>
+						<entries>
+							<entry name="java:/ConnectionFactory" />
+						</entries>
+					</connection-factory>
+					<connection-factory name="RemoteConnectionFactory">
+						<connectors>
+							<connector-ref connector-name="http-connector" />
+						</connectors>
+						<entries>
+							<entry name="java:jboss/exported/jms/RemoteConnectionFactory" />
+						</entries>
+					</connection-factory>
+					<pooled-connection-factory name="hornetq-ra">
+						<transaction mode="xa" />
+						<connectors>
+							<connector-ref connector-name="in-vm" />
+						</connectors>
+						<entries>
+							<entry name="java:/JmsXA" />
+							<!-- Global JNDI entry used to provide a default JMS Connection factory 
+								to EE application -->
+							<entry name="java:jboss/DefaultJMSConnectionFactory" />
+						</entries>
+					</pooled-connection-factory>
+				</jms-connection-factories>
+				<jms-destinations>
+					<jms-queue name="AnalysisFileStorageQueue">
+						<entry name="java:jboss/jms/queue/analysisFileStorageQueue" />
+						<durable>true</durable>
+					</jms-queue>
+				</jms-destinations>
+			</hornetq-server>
 		</subsystem>
 		<subsystem xmlns="urn:jboss:domain:naming:2.0">
 			<remote-naming />

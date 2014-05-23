@@ -10,11 +10,20 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.MessageProducer;
+import javax.jms.Queue;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 
 import org.slf4j.Logger;
 
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
@@ -30,6 +39,12 @@ import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogge
 public class AnalysisServiceBean implements AnalysisService {
 
 	private static final int RUN_TIMEOUT_IN_SECONDS = 3600;
+
+	@Resource(mappedName = "java:/ConnectionFactory")
+	private ConnectionFactory cf;
+
+	@Resource(mappedName = "java:jboss/jms/queue/analysisFileStorageQueue")
+	private Queue analysisFileStorageQueue;
 
 	@Inject
 	private Logger logger;
@@ -61,6 +76,28 @@ public class AnalysisServiceBean implements AnalysisService {
 
 	@Override
 	public void triggerNewAnalysis(UUID projectUUID)
+			throws AnalysisStoreException, AnalyzerException {
+		try (Connection connection = cf.createConnection()) {
+			try (Session session = connection.createSession(false,
+					Session.AUTO_ACKNOWLEDGE)) {
+				MessageProducer producer = session
+						.createProducer(analysisFileStorageQueue);
+				connection.start();
+				try {
+					TextMessage message = session.createTextMessage(projectUUID
+							.toString());
+					producer.send(message);
+				} finally {
+					connection.stop();
+				}
+			}
+		} catch (JMSException e) {
+			throw new AnalyzerException("Could not queue the analysis.", e);
+		}
+		startConventional(projectUUID);
+	}
+
+	private void startConventional(UUID projectUUID)
 			throws AnalysisStoreException {
 		try {
 			AnalysisRunner analysisRunner = new AnalysisRunner(
