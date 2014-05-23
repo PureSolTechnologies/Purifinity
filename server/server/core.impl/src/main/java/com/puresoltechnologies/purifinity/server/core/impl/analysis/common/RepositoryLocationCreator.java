@@ -22,18 +22,12 @@ public class RepositoryLocationCreator {
 		} catch (ClassNotFoundException e) {
 			throw new IllegalArgumentException(
 					"Unknown repository location for class '"
-							+ repositoryLocationClass
-							+ "' with type '"
-							+ properties.getProperty(RepositoryLocation.REPOSITORY_LOCATION_TYPE)
-							+ "'.", e);
+							+ repositoryLocationClass + "'.", e);
 		} catch (NoSuchMethodException | SecurityException
 				| InstantiationException | IllegalAccessException
 				| InvocationTargetException e) {
 			throw new IllegalArgumentException(
-					"Repository location for class '"
-							+ repositoryLocationClass
-							+ "' with type '"
-							+ properties.getProperty(RepositoryLocation.REPOSITORY_LOCATION_TYPE)
+					"Repository location for class '" + repositoryLocationClass
 							+ "' could not be instantiated.", e);
 		}
 	}

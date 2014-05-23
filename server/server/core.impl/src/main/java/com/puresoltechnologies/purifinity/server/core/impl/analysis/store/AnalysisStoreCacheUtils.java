@@ -20,8 +20,8 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 
 /**
  * Some database operations are quite complex and time consuming. For that
@@ -41,6 +41,9 @@ public class AnalysisStoreCacheUtils {
 	@AnalysisStoreKeyspace
 	private Session session;
 
+	@Inject
+	private CassandraPreparedStatements cassandraPreparedStatements;
+
 	/**
 	 * This method reads the cached {@link AnalysisFileTree} object stored with
 	 * {@link #cacheAnalysisFileTree(UUID, UUID, AnalysisFileTree)}.
@@ -51,7 +54,7 @@ public class AnalysisStoreCacheUtils {
 	 */
 	public AnalysisFileTree readCachedAnalysisFileTree(UUID projectUUID,
 			UUID runUUID) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "SELECT persisted_tree FROM "
 						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
 						+ " WHERE run_uuid=?");
@@ -85,7 +88,7 @@ public class AnalysisStoreCacheUtils {
 	 */
 	public void cacheAnalysisFileTree(UUID projectUUID, UUID runUUID,
 			AnalysisFileTree analysisFileTree) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
 						+ " (run_uuid, persisted_tree) VALUES (?, ?)");
@@ -111,7 +114,7 @@ public class AnalysisStoreCacheUtils {
 	 * @param runUUID
 	 */
 	public void clearAnalysisRunCaches(UUID projectUUID, UUID runUUID) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "DELETE FROM "
 						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
 						+ " WHERE run_uuid=?");

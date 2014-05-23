@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.domain.repositories;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
@@ -20,7 +21,7 @@ public class RepositoryTypeTest {
 		parameters.put("parameter1", new ParameterWithArbitraryUnit<Double>(
 				"parameterName", "parameterUnit", LevelOfMeasurement.NOMINAL,
 				"parameterDescription", Double.class));
-		RepositoryType repositoryType = new RepositoryType("name",
+		RepositoryType repositoryType = new RepositoryType("className", "name",
 				"description", parameters);
 		String serialized = JSONSerializer.toJSONString(repositoryType);
 		assertNotNull(serialized);
@@ -29,5 +30,9 @@ public class RepositoryTypeTest {
 		RepositoryType deserialized = JSONSerializer.fromJSONString(serialized,
 				RepositoryType.class);
 		assertNotNull(deserialized);
+		assertEquals("className", deserialized.getClassName());
+		assertEquals("name", deserialized.getName());
+		assertEquals("description", deserialized.getDescription());
+		assertEquals(parameters, deserialized.getParameters());
 	}
 }

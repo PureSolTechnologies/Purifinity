@@ -8,8 +8,8 @@ import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 
 /**
  * This class contains method to handle the evaluation big tables.
@@ -22,8 +22,11 @@ public class BigTableUtils {
 	@EvaluationStoreKeyspace
 	private Session session;
 
+	@Inject
+	private CassandraPreparedStatements cassandraPreparedStatements;
+
 	public void removeAnalysisRunResults(UUID projectUUID, UUID runUUID) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "DELETE FROM "
 						+ CassandraElementNames.EVALUATION_METRICS_TABLE
 						+ " WHERE project_uuid=? AND run_uuid=?;");

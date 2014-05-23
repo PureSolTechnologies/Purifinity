@@ -18,17 +18,24 @@ public class RepositoryType implements Serializable {
 
 	private static final long serialVersionUID = 1607123633941143239L;
 
+	public final String className;
 	public final String name;
 	public final String description;
 	public final Map<String, Parameter<?>> parameters = new LinkedHashMap<>();
 
-	public RepositoryType(@JsonProperty("name") String name,
+	public RepositoryType(@JsonProperty("className") String className,
+			@JsonProperty("name") String name,
 			@JsonProperty("description") String description,
 			@JsonProperty("parameters") Map<String, Parameter<?>> parameters) {
 		super();
+		this.className = className;
 		this.name = name;
 		this.description = description;
 		this.parameters.putAll(parameters);
+	}
+
+	public String getClassName() {
+		return className;
 	}
 
 	public String getName() {

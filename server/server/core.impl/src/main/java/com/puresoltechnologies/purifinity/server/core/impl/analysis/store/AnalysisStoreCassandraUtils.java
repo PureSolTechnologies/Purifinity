@@ -10,8 +10,8 @@ import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 
 /**
  * This class contains methods to handle analysis projects and run in Cassandra.
@@ -25,6 +25,9 @@ public class AnalysisStoreCassandraUtils {
 	@AnalysisStoreKeyspace
 	private Session session;
 
+	@Inject
+	private CassandraPreparedStatements cassandraPreparedStatements;
+
 	/**
 	 * This method write the project analysis settings into database.
 	 * 
@@ -33,7 +36,7 @@ public class AnalysisStoreCassandraUtils {
 	 */
 	public void writeAnalysisRunSettings(UUID runUUID,
 			FileSearchConfiguration fileSearchConfiguration) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.ANALYSIS_RUN_SETTINGS_TABLE
 						+ " (run_uuid, " + "file_includes, file_excludes, "
@@ -55,7 +58,7 @@ public class AnalysisStoreCassandraUtils {
 	 * @param runUUID
 	 */
 	public void removeAnalysisRunSettings(UUID projectUUID, UUID runUUID) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "DELETE FROM "
 						+ CassandraElementNames.ANALYSIS_RUN_SETTINGS_TABLE
 						+ " WHERE run_uuid= ?");
@@ -64,7 +67,7 @@ public class AnalysisStoreCassandraUtils {
 	}
 
 	public void removeAnalysisFile(HashId hashId) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "DELETE FROM "
 						+ CassandraElementNames.ANALYSIS_FILES_TABLE
 						+ " WHERE hashid=?;");
@@ -74,7 +77,7 @@ public class AnalysisStoreCassandraUtils {
 	}
 
 	public void removeProjectSettings(UUID projectUUID) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "DELETE FROM "
 						+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
 						+ " WHERE project_uuid=?;");

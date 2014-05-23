@@ -2,15 +2,9 @@ package com.puresoltechnologies.purifinity.client.common.analysis.wizards;
 
 import static com.puresoltechnologies.purifinity.client.common.ui.SWTUtils.DEFAULT_MARGIN;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -26,7 +20,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisServiceClient;
+import com.puresoltechnologies.parsers.source.RepositoryLocation;
+import com.puresoltechnologies.purifinity.client.common.analysis.contents.RepositoryTypeComboViewer;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 
 public class NewProjectSourceCodeLocationPage extends WizardPage implements
@@ -36,9 +31,9 @@ public class NewProjectSourceCodeLocationPage extends WizardPage implements
 
 	private Composite composite;
 	private Combo repositoryType;
+	private RepositoryTypeComboViewer comboViewer;
 	private final Map<String, Label> labels = new HashMap<>();
 	private final Map<String, Text> controls = new HashMap<>();
-	private final Set<RepositoryType> repositoryTypes = new LinkedHashSet<>();
 
 	protected NewProjectSourceCodeLocationPage() {
 		super("Source Code Location");
@@ -72,19 +67,7 @@ public class NewProjectSourceCodeLocationPage extends WizardPage implements
 		fdRepositoryType.right = new FormAttachment(100, -DEFAULT_MARGIN);
 		repositoryType.setLayoutData(fdRepositoryType);
 
-		try (AnalysisServiceClient client = AnalysisServiceClient.getInstance()) {
-			Collection<RepositoryType> repositoryTypes = client
-					.getRepositoryTypes();
-			this.repositoryTypes.addAll(repositoryTypes);
-		} catch (IOException e) {
-			throw new RuntimeException(
-					"Could not read the available repository types.", e);
-		}
-		List<String> names = new ArrayList<>();
-		for (RepositoryType type : repositoryTypes) {
-			names.add(type.getName() + " '" + type.getDescription() + "'");
-		}
-		repositoryType.setItems(names.toArray(new String[names.size()]));
+		comboViewer = new RepositoryTypeComboViewer(repositoryType);
 		repositoryType.addSelectionListener(this);
 
 		return composite;
@@ -92,6 +75,11 @@ public class NewProjectSourceCodeLocationPage extends WizardPage implements
 
 	public Properties getSourceLocationProperties() {
 		Properties properties = new Properties();
+		RepositoryType repositoryType = comboViewer.getSelectedRepositoryType();
+		properties.put(RepositoryLocation.REPOSITORY_LOCATION_CLASS,
+				repositoryType.getClassName());
+		properties.setProperty(RepositoryLocation.REPOSITORY_LOCATION_NAME,
+				repositoryType.getName());
 		for (String parameterId : controls.keySet()) {
 			Text text = controls.get(parameterId);
 			properties.setProperty(parameterId, text.getText());
@@ -102,49 +90,43 @@ public class NewProjectSourceCodeLocationPage extends WizardPage implements
 	@Override
 	public void widgetSelected(SelectionEvent e) {
 		if (e.getSource() == repositoryType) {
-			String typeName = repositoryType.getText();
-			if (!typeName.isEmpty()) {
-				for (RepositoryType type : repositoryTypes) {
-					if (typeName.contains(type.getName())) {
-						selectionChange(type);
-						break;
-					}
-				}
-			}
+			RepositoryType type = comboViewer.getSelectedRepositoryType();
+			selectionChange(type);
 		}
 	}
 
 	private void selectionChange(RepositoryType type) {
 		removeControls();
+		if (type != null) {
+			Control lastControl = repositoryType;
+			Map<String, Parameter<?>> parameters = type.getParameters();
+			for (String parameterId : parameters.keySet()) {
+				Parameter<?> parameter = parameters.get(parameterId);
+				Label label = new Label(composite, SWT.NONE);
+				String labelText = parameter.getName();
+				String unit = parameter.getUnit();
+				if ((unit != null) && (!unit.isEmpty())) {
+					labelText += " [" + unit + "]";
+				}
+				label.setText(labelText);
+				FormData fdLabel = new FormData();
+				fdLabel.top = new FormAttachment(lastControl, DEFAULT_MARGIN);
+				fdLabel.left = new FormAttachment(0, DEFAULT_MARGIN);
+				label.setLayoutData(fdLabel);
 
-		Control lastControl = repositoryType;
-		Map<String, Parameter<?>> parameters = type.getParameters();
-		for (String parameterId : parameters.keySet()) {
-			Parameter<?> parameter = parameters.get(parameterId);
-			Label label = new Label(composite, SWT.NONE);
-			String labelText = parameter.getName();
-			String unit = parameter.getUnit();
-			if ((unit != null) && (!unit.isEmpty())) {
-				labelText += " [" + unit + "]";
+				Text control = new Text(composite, SWT.BORDER);
+				control.setToolTipText(parameter.getDescription());
+				FormData fdControl = new FormData();
+				fdControl.top = new FormAttachment(label, 0, SWT.TOP);
+				fdControl.left = new FormAttachment(label, DEFAULT_MARGIN);
+				fdControl.right = new FormAttachment(100, -DEFAULT_MARGIN);
+				control.setLayoutData(fdControl);
+
+				labels.put(parameter.getName(), label);
+				controls.put(parameter.getName(), control);
+
+				lastControl = control;
 			}
-			label.setText(labelText);
-			FormData fdLabel = new FormData();
-			fdLabel.top = new FormAttachment(lastControl, DEFAULT_MARGIN);
-			fdLabel.left = new FormAttachment(0, DEFAULT_MARGIN);
-			label.setLayoutData(fdLabel);
-
-			Text control = new Text(composite, SWT.BORDER);
-			control.setToolTipText(parameter.getDescription());
-			FormData fdControl = new FormData();
-			fdControl.top = new FormAttachment(label, 0, SWT.TOP);
-			fdControl.left = new FormAttachment(label, DEFAULT_MARGIN);
-			fdControl.right = new FormAttachment(100, -DEFAULT_MARGIN);
-			control.setLayoutData(fdControl);
-
-			labels.put(parameter.getName(), label);
-			controls.put(parameter.getName(), control);
-
-			lastControl = control;
 		}
 		composite.layout(true);
 	}

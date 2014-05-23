@@ -39,8 +39,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 
 /**
  * This is an abstract implementation of an evaluator store.
@@ -53,6 +53,9 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@EvaluationStoreKeyspace
 	private Session session;
 
+	@Inject
+	private CassandraPreparedStatements cassandraPreparedStatements;
+
 	protected abstract Class<? extends MetricFileResults> getFileResultClass();
 
 	protected abstract Class<? extends MetricDirectoryResults> getDirectoryResultClass();
@@ -62,7 +65,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final boolean hasFileResults(HashId hashId)
 			throws EvaluationStoreException {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "SELECT hashid FROM "
 						+ CassandraElementNames.EVALUATION_FILES_TABLE
 						+ " WHERE hashid=? AND resultsClass=?");
@@ -80,7 +83,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final boolean hasDirectoryResults(HashId hashId)
 			throws EvaluationStoreException {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "SELECT hashid FROM "
 						+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
 						+ " WHERE hashid=? AND resultsClass=?");
@@ -98,7 +101,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final boolean hasProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "SELECT uuid FROM "
 						+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
 						+ " WHERE uuid=? AND resultsClass=?");
@@ -118,7 +121,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 			Evaluator evaluator, MetricFileResults results)
 			throws EvaluationStoreException {
 		HashId hashId = codeAnalysis.getAnalysisInformation().getHashId();
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.EVALUATION_FILES_TABLE
 						+ "(hashId, resultsClass, results) VALUES (?, ?, ?)");
@@ -142,7 +145,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public void storeMetricsInBigTable(CodeAnalysis codeAnalysis,
 			Evaluator evaluator, MetricFileResults results) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(
 						session,
 						"INSERT INTO "
@@ -249,7 +252,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final void storeDirectoryResults(AnalysisFileTree directory,
 			Evaluator evaluator, MetricDirectoryResults results)
 			throws EvaluationStoreException {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
 						+ "(hashId, resultsClass, results) VALUES (?, ?, ?)");
@@ -277,7 +280,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public void storeMetricsInBigTable(AnalysisFileTree directory,
 			Evaluator evaluator, MetricDirectoryResults results) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(
 						session,
 						"INSERT INTO "
@@ -372,7 +375,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	public final void storeProjectResults(UUID analysisRunUUID,
 			Evaluator evaluator, AnalysisFileTree directory,
 			MetricDirectoryResults results) throws EvaluationStoreException {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
 						+ "(uuid, resultsClass, results) VALUES (?, ?, ?)");
@@ -398,7 +401,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final MetricFileResults readFileResults(HashId hashId)
 			throws EvaluationStoreException {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "SELECT results FROM "
 						+ CassandraElementNames.EVALUATION_FILES_TABLE
 						+ " WHERE hashid=? AND resultsClass=?");
@@ -432,7 +435,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final MetricDirectoryResults readDirectoryResults(HashId hashId)
 			throws EvaluationStoreException {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "SELECT results FROM "
 						+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
 						+ " WHERE hashid=? AND resultsClass=?");
@@ -466,7 +469,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	@Override
 	public final MetricDirectoryResults readProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "SELECT results FROM "
 						+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
 						+ " WHERE uuid=? AND resultsClass=?");

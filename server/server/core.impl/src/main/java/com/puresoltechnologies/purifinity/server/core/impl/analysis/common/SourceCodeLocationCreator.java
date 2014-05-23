@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
-import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 
 public class SourceCodeLocationCreator {
@@ -23,18 +22,12 @@ public class SourceCodeLocationCreator {
 		} catch (ClassNotFoundException e) {
 			throw new IllegalArgumentException(
 					"Unknown repository location for class '"
-							+ repositoryLocationClass
-							+ "' with type '"
-							+ properties.getProperty(RepositoryLocation.REPOSITORY_LOCATION_TYPE)
-							+ "'.", e);
+							+ repositoryLocationClass + "'.", e);
 		} catch (NoSuchMethodException | SecurityException
 				| InstantiationException | IllegalAccessException
 				| InvocationTargetException e) {
 			throw new IllegalArgumentException(
-					"Repository location for class '"
-							+ repositoryLocationClass
-							+ "' with type '"
-							+ properties.getProperty(RepositoryLocation.REPOSITORY_LOCATION_TYPE)
+					"Repository location for class '" + repositoryLocationClass
 							+ "' could not be instantiated.", e);
 		}
 	}

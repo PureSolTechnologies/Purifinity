@@ -42,10 +42,10 @@ import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 
-public class AnalysisRunnerImpl implements Callable<Boolean> {
+public class AnalysisRunner implements Callable<Boolean> {
 
 	private static final Logger logger = LoggerFactory
-			.getLogger(AnalysisRunnerImpl.class);
+			.getLogger(AnalysisRunner.class);
 
 	private static final int NUMBER_OF_PARALLEL_THREADS = Runtime.getRuntime()
 			.availableProcessors();
@@ -63,7 +63,7 @@ public class AnalysisRunnerImpl implements Callable<Boolean> {
 	private final FileStoreService fileStore;
 	private final FileSearchConfiguration searchConfig;
 
-	public AnalysisRunnerImpl(AnalysisStoreService analysisStore,
+	public AnalysisRunner(AnalysisStoreService analysisStore,
 			FileStoreService fileStore, UUID analysisProjectUUID)
 			throws AnalysisStoreException {
 		super();

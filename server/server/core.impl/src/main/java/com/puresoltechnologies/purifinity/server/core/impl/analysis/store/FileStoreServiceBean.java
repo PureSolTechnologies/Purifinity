@@ -27,14 +27,17 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 
 public final class FileStoreServiceBean implements FileStoreService {
 
 	@Inject
 	@AnalysisStoreKeyspace
 	private Session session;
+
+	@Inject
+	private CassandraPreparedStatements cassandraPreparedStatements;
 
 	@Override
 	public HashId storeRawFile(InputStream rawStream) throws FileStoreException {
@@ -50,7 +53,7 @@ public final class FileStoreServiceBean implements FileStoreService {
 						HashUtilities.getDefaultMessageDigestAlgorithm(),
 						hashString);
 
-				PreparedStatement preparedStmt = CassandraConnection
+				PreparedStatement preparedStmt = cassandraPreparedStatements
 						.getPreparedStatement(session, "INSERT INTO "
 								+ CassandraElementNames.ANALYSIS_FILES_TABLE
 								+ " (hashid, raw, size) VALUES (?,?,?)");
@@ -118,7 +121,7 @@ public final class FileStoreServiceBean implements FileStoreService {
 	@Override
 	public final void storeAnalysis(HashId hashId, CodeAnalysis fileAnalysis)
 			throws FileStoreException {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.ANALYSIS_FILES_TABLE
 						+ " (hashid, analysis) VALUES (?,?)");

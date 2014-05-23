@@ -22,7 +22,7 @@ public class NewProjectHandler extends AbstractHandler {
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		// intentionally left empty
 	}
 
 	@Override

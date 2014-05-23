@@ -24,8 +24,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.server.core.api.ChartDataProvider;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.store.ValueSerializer;
 import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 import com.puresoltechnologies.purifinity.server.domain.HistogramChartData;
 import com.puresoltechnologies.purifinity.server.domain.MetricsMapData;
 import com.puresoltechnologies.purifinity.server.domain.ParetoChartData;
@@ -36,6 +36,9 @@ public class ChartDataProviderBean implements ChartDataProvider {
 	@Inject
 	@EvaluationStoreKeyspace
 	private Session session;
+
+	@Inject
+	private CassandraPreparedStatements cassandraPreparedStatements;
 
 	private PreparedStatement preparedNumericHistogramChartDataStatement = null;
 	private PreparedStatement preparedCategoryHistogramChartDataStatement = null;
@@ -162,7 +165,7 @@ public class ChartDataProviderBean implements ChartDataProvider {
 			CodeRangeType codeRangeType) {
 		Map<HashId, Map<String, Value<? extends Number>>> values = new HashMap<>();
 		if (mapParameter.isNumeric()) {
-			PreparedStatement preparedStatement = CassandraConnection
+			PreparedStatement preparedStatement = cassandraPreparedStatements
 					.getPreparedStatement(
 							session,
 							"SELECT hashid, code_range_name, numeric_value FROM "
@@ -200,7 +203,7 @@ public class ChartDataProviderBean implements ChartDataProvider {
 			Parameter<?> colorParameter, CodeRangeType codeRangeType) {
 		Map<HashId, Map<String, Value<?>>> values = new HashMap<>();
 		if (colorParameter.isNumeric()) {
-			PreparedStatement preparedStatement = CassandraConnection
+			PreparedStatement preparedStatement = cassandraPreparedStatements
 					.getPreparedStatement(
 							session,
 							"SELECT hashid, code_range_name, numeric_value FROM "
@@ -229,7 +232,7 @@ public class ChartDataProviderBean implements ChartDataProvider {
 						metricParameter));
 			}
 		} else {
-			PreparedStatement preparedStatement = CassandraConnection
+			PreparedStatement preparedStatement = cassandraPreparedStatements
 					.getPreparedStatement(
 							session,
 							"SELECT hashid, code_range_name, string_value FROM "

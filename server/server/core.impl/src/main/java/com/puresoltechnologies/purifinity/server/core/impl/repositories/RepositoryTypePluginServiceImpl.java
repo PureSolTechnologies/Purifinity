@@ -13,6 +13,8 @@ import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginServiceRemote;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.DirectoryRepositoryLocation;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.GITRepositoryLocation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 
 @Singleton
@@ -33,11 +35,15 @@ public class RepositoryTypePluginServiceImpl extends
 	private void registerDirectoryRepository() {
 		Map<String, Parameter<?>> parameters = new LinkedHashMap<>();
 		parameters
-				.put("Directory", new ParameterWithArbitraryUnit<>("directory",
-						"", LevelOfMeasurement.NOMINAL,
-						"The directory the source code can be found in.",
-						String.class));
-		registerService("jndi:dir", new RepositoryType("Directory",
+				.put("Directory",
+						new ParameterWithArbitraryUnit<>(
+								DirectoryRepositoryLocation.REPOSITORY_LOCATION_DIRECTORY,
+								"",
+								LevelOfMeasurement.NOMINAL,
+								"The directory the source code can be found in.",
+								String.class));
+		registerService("jndi:dir", new RepositoryType(
+				DirectoryRepositoryLocation.class.getName(), "Directory",
 				"Simple directory in the file system of the server.",
 				parameters), new Properties());
 	}
@@ -63,7 +69,8 @@ public class RepositoryTypePluginServiceImpl extends
 				"", LevelOfMeasurement.NOMINAL,
 				"The password of the user to be used for login into the host.",
 				String.class));
-		registerService("jndi:git", new RepositoryType("GIT",
+		registerService("jndi:git", new RepositoryType(
+				GITRepositoryLocation.class.getName(), "GIT",
 				"Remote GIT repository.", parameters), new Properties());
 	}
 }

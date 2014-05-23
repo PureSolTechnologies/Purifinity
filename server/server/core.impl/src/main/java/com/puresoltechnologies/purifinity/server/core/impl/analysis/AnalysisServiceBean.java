@@ -21,7 +21,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStore
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.AnalysisRunnerImpl;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.AnalysisRunner;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
@@ -63,7 +63,7 @@ public class AnalysisServiceBean implements AnalysisService {
 	public void triggerNewAnalysis(UUID projectUUID)
 			throws AnalysisStoreException {
 		try {
-			AnalysisRunnerImpl analysisRunner = new AnalysisRunnerImpl(
+			AnalysisRunner analysisRunner = new AnalysisRunner(
 					analysisStoreService, fileStoreService, projectUUID);
 
 			ExecutorService executor = Executors.newSingleThreadExecutor();

@@ -26,8 +26,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
 import com.puresoltechnologies.purifinity.server.database.titan.VertexType;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
@@ -62,6 +62,9 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 
 	@Inject
 	private AnalysisStoreCacheUtils analysisStoreCacheUtils;
+
+	@Inject
+	private CassandraPreparedStatements cassandraPreparedStatements;
 
 	@Inject
 	private BigTableUtils bigTableUtils;
@@ -101,7 +104,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 		FileSearchConfiguration fileSearchConfiguration = settings
 				.getFileSearchConfiguration();
 
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
 						+ " (project_uuid, name, description, "
@@ -192,7 +195,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	@Override
 	public AnalysisProjectSettings readAnalysisProjectSettings(UUID projectUUID)
 			throws AnalysisStoreException {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(
 						session,
 						"SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location FROM "
@@ -382,7 +385,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	@Override
 	public FileSearchConfiguration readSearchConfiguration(UUID runUUID)
 			throws AnalysisStoreException {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(
 						session,
 						"SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "

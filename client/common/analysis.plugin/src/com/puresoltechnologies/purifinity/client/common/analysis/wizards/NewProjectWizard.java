@@ -11,6 +11,7 @@ import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.client.common.analysis.Activator;
+import com.puresoltechnologies.purifinity.client.common.analysis.jobs.AnalysisJob;
 import com.puresoltechnologies.purifinity.client.common.analysis.utils.PreferencesUtils;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisStoreClient;
@@ -48,11 +49,9 @@ public class NewProjectWizard extends Wizard {
 					sourceLocationProperties);
 			AnalysisProjectInformation analysisInformation = analysisStore
 					.createAnalysisProject(analysisSettings);
-			// TODO
-			//
-			// AnalysisJob job = new AnalysisJob(analysisInformation,
-			// analysisSettings);
-			// job.schedule();
+			AnalysisJob job = new AnalysisJob(analysisInformation,
+					analysisSettings);
+			job.schedule();
 			return true;
 		} catch (AnalysisStoreException e) {
 			logger.error("Could not create new analysis project.", e);

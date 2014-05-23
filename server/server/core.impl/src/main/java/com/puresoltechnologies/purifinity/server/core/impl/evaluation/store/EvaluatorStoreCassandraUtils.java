@@ -9,8 +9,8 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraConnection;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 
 public class EvaluatorStoreCassandraUtils {
 
@@ -18,8 +18,11 @@ public class EvaluatorStoreCassandraUtils {
 	@EvaluationStoreKeyspace
 	private Session session;
 
+	@Inject
+	private CassandraPreparedStatements cassandraPreparedStatements;
+
 	public void deleteFileEvaluation(HashId hashId) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "DELETE FROM "
 						+ CassandraElementNames.EVALUATION_FILES_TABLE
 						+ " WHERE hashid=?;");
@@ -29,7 +32,7 @@ public class EvaluatorStoreCassandraUtils {
 	}
 
 	public void deleteDirectoryEvaluation(HashId hashId) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "DELETE FROM "
 						+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
 						+ " WHERE hashid=?;");
@@ -39,7 +42,7 @@ public class EvaluatorStoreCassandraUtils {
 	}
 
 	public void deleteDirectoryEvaluation(UUID runUUID) {
-		PreparedStatement preparedStatement = CassandraConnection
+		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "DELETE FROM "
 						+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
 						+ " WHERE run_uuid=?;");

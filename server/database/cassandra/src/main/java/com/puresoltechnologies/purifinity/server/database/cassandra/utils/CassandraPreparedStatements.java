@@ -3,6 +3,8 @@ package com.puresoltechnologies.purifinity.server.database.cassandra.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Singleton;
+
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 
@@ -13,22 +15,12 @@ import com.datastax.driver.core.Session;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class CassandraConnection {
+@Singleton
+public class CassandraPreparedStatements {
 
-	public static final String CASSANDRA_HOST = "localhost";
-	public static final int CASSANDRA_CQL_PORT = 9042;
+	private final Map<Session, Map<String, PreparedStatement>> preparedStatements = new HashMap<>();
 
-	private static Map<Session, Map<String, PreparedStatement>> preparedStatements = new HashMap<>();
-
-	public static String getHost() {
-		return CASSANDRA_HOST;
-	}
-
-	public static int getPort() {
-		return CASSANDRA_CQL_PORT;
-	}
-
-	public static PreparedStatement getPreparedStatement(Session session,
+	public PreparedStatement getPreparedStatement(Session session,
 			String statement) {
 		if (session == null) {
 			throw new IllegalArgumentException("Session must no be null");
@@ -48,8 +40,8 @@ public class CassandraConnection {
 		return preparedStatement;
 	}
 
-	private static synchronized PreparedStatement prepareStatement(
-			Session session, String statement) {
+	private synchronized PreparedStatement prepareStatement(Session session,
+			String statement) {
 		Map<String, PreparedStatement> sessionStatements = preparedStatements
 				.get(session);
 		if (sessionStatements == null) {

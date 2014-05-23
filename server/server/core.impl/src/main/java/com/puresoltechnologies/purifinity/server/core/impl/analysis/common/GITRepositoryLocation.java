@@ -16,20 +16,20 @@ import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class DirectoryRepositoryLocation extends AbstractRepositoryLocation {
+public class GITRepositoryLocation extends AbstractRepositoryLocation {
 
 	private static final long serialVersionUID = -5405680480509263585L;
 
-	public static final String REPOSITORY_LOCATION_DIRECTORY = "repository.location.directory";
+	private static final String DIRCTORY_REPOSITORY_LOCATION_DIRECTORY = "repository.location.directory";
 
 	private final File repositoryDirectory;
 
-	public DirectoryRepositoryLocation(String name, File repositoryDirectory) {
+	public GITRepositoryLocation(String name, File repositoryDirectory) {
 		super(name);
 		this.repositoryDirectory = repositoryDirectory;
 	}
 
-	public DirectoryRepositoryLocation(Properties properties) {
+	public GITRepositoryLocation(Properties properties) {
 		super(properties.getProperty(REPOSITORY_LOCATION_NAME));
 		Object repositoryLocationClass = properties
 				.get(REPOSITORY_LOCATION_CLASS);
@@ -41,7 +41,7 @@ public class DirectoryRepositoryLocation extends AbstractRepositoryLocation {
 							+ "'. (" + properties.toString() + ")");
 		}
 		String repositoryDirectoryString = properties
-				.getProperty(REPOSITORY_LOCATION_DIRECTORY);
+				.getProperty(DIRCTORY_REPOSITORY_LOCATION_DIRECTORY);
 		if (repositoryDirectoryString == null) {
 			throw new IllegalArgumentException(
 					"Repository location with class '"
@@ -93,7 +93,7 @@ public class DirectoryRepositoryLocation extends AbstractRepositoryLocation {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		DirectoryRepositoryLocation other = (DirectoryRepositoryLocation) obj;
+		GITRepositoryLocation other = (GITRepositoryLocation) obj;
 		if (repositoryDirectory == null) {
 			if (other.repositoryDirectory != null)
 				return false;
@@ -107,7 +107,7 @@ public class DirectoryRepositoryLocation extends AbstractRepositoryLocation {
 		Properties properties = new Properties();
 		properties.setProperty(REPOSITORY_LOCATION_CLASS, getClass().getName());
 		properties.setProperty(REPOSITORY_LOCATION_NAME, getName());
-		properties.setProperty(REPOSITORY_LOCATION_DIRECTORY,
+		properties.setProperty(DIRCTORY_REPOSITORY_LOCATION_DIRECTORY,
 				repositoryDirectory.getPath());
 		return properties;
 	}
