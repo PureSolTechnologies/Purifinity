@@ -9,6 +9,7 @@ import com.puresoltechnologies.commons.misc.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.HashCodeGenerator;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
+import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 
@@ -62,7 +63,7 @@ public class TreeTestUtils {
 		File file = node.getPathFile(true);
 		boolean isFile = file.isFile();
 		AnalysisRunFileTree currentNode = new AnalysisRunFileTree(parent, name,
-				isFile, hashId);
+				isFile, new UnspecifiedSourceCodeLocation(), hashId);
 		for (FileTree child : node.getChildren()) {
 			convertToAnalysisFileTree(hashes, child, currentNode);
 		}

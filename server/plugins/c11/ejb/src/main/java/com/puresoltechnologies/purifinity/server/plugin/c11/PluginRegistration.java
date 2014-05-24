@@ -32,12 +32,12 @@ public class PluginRegistration implements AnalyzerRemotePlugin {
 			PluginRegistration.class);
 	private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
 			C11.getInstance().getName(), C11.getInstance().getVersion(),
-			"no description");
+			JNDI_ADDRESS, "no description");
 
 	@Inject
 	private Logger logger;
 
-	private C11 c11;
+	private final C11 c11 = C11.getInstance();
 
 	@PostConstruct
 	public void registraion() throws InterruptedException {
@@ -65,62 +65,52 @@ public class PluginRegistration implements AnalyzerRemotePlugin {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return c11.getName();
 	}
 
 	@Override
 	public String getVersion() {
-		// TODO Auto-generated method stub
-		return null;
+		return c11.getVersion();
 	}
 
 	@Override
 	public boolean isSuitable(SourceCodeLocation source) {
-		// TODO Auto-generated method stub
-		return false;
+		return c11.isSuitable(source);
 	}
 
 	@Override
 	public LanguageGrammar getGrammar() {
-		// TODO Auto-generated method stub
-		return null;
+		return c11.getGrammar();
 	}
 
 	@Override
 	public <T> T getImplementation(Class<T> clazz) {
-		// TODO Auto-generated method stub
-		return null;
+		return c11.getImplementation(clazz);
 	}
 
 	@Override
 	public CodeAnalyzer createAnalyser(SourceCodeLocation source) {
-		// TODO Auto-generated method stub
-		return null;
+		return c11.createAnalyser(source);
 	}
 
 	@Override
 	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		return c11.restoreAnalyzer(file);
 	}
 
 	@Override
 	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-		// TODO Auto-generated method stub
-		return null;
+		return c11.getAvailableConfigurationParameters();
 	}
 
 	@Override
 	public <T> void setConfigurationParameter(
 			ConfigurationParameter<T> parameter, T value) {
-		// TODO Auto-generated method stub
-
+		c11.setConfigurationParameter(parameter, value);
 	}
 
 	@Override
 	public <T> T getConfigurationParameter(ConfigurationParameter<T> parameter) {
-		// TODO Auto-generated method stub
-		return null;
+		return c11.getConfigurationParameter(parameter);
 	}
 }

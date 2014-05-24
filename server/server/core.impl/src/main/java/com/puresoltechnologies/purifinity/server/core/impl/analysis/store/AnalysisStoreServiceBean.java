@@ -495,7 +495,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	private AnalysisRunFileTree convertToAnalysisRunFileTree(
 			Map<SourceCodeLocation, HashId> storedSources) {
 		AnalysisRunFileTree fileTree = new AnalysisRunFileTree(null, "root",
-				false);
+				false, null);
 		for (Entry<SourceCodeLocation, HashId> entry : storedSources.entrySet()) {
 			SourceCodeLocation sourceCodeLocation = entry.getKey();
 			HashId hashId = entry.getValue();
@@ -513,10 +513,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 					boolean isFile = !pathIterator.hasNext();
 					if (isFile) {
 						currentNode = new AnalysisRunFileTree(currentNode,
-								name, isFile, hashId);
+								name, isFile,sourceCodeLocation, hashId);
 					} else {
 						currentNode = new AnalysisRunFileTree(currentNode,
-								name, isFile, hashId);
+								name, isFile,sourceCodeLocation, hashId);
 					}
 				}
 			}

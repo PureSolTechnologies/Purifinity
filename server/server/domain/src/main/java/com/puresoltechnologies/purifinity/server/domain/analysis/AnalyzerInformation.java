@@ -10,14 +10,17 @@ public class AnalyzerInformation implements Serializable {
 
 	private final String name;
 	private final String version;
+	private final String jndiName;
 	private final String description;
 
 	public AnalyzerInformation(@JsonProperty("name") String name,
 			@JsonProperty("version") String version,
+			@JsonProperty("jndiName") String jndiName,
 			@JsonProperty("description") String description) {
 		super();
 		this.name = name;
 		this.version = version;
+		this.jndiName = jndiName;
 		this.description = description;
 	}
 
@@ -29,8 +32,16 @@ public class AnalyzerInformation implements Serializable {
 		return version;
 	}
 
+	public String getJndiName() {
+		return jndiName;
+	}
+
 	public String getDescription() {
 		return description;
 	}
 
+	@Override
+	public String toString() {
+		return getName() + " " + getVersion() + "(" + getJndiName() + ")";
+	}
 }

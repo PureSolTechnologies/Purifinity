@@ -32,12 +32,12 @@ public class PluginRegistration implements AnalyzerRemotePlugin {
 			AnalyzerRemotePlugin.class, PluginRegistration.class);
 	private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
 			Fortran.getInstance().getName(),
-			Fortran.getInstance().getVersion(), "no description");
+			Fortran.getInstance().getVersion(), JNDI_ADDRESS, "no description");
 
 	@Inject
 	private Logger logger;
 
-	private Fortran fortran;
+	private final Fortran fortran = Fortran.getInstance();
 
 	@PostConstruct
 	public void registraion() throws InterruptedException {
@@ -65,62 +65,52 @@ public class PluginRegistration implements AnalyzerRemotePlugin {
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return fortran.getName();
 	}
 
 	@Override
 	public String getVersion() {
-		// TODO Auto-generated method stub
-		return null;
+		return fortran.getVersion();
 	}
 
 	@Override
 	public boolean isSuitable(SourceCodeLocation source) {
-		// TODO Auto-generated method stub
-		return false;
+		return fortran.isSuitable(source);
 	}
 
 	@Override
 	public LanguageGrammar getGrammar() {
-		// TODO Auto-generated method stub
-		return null;
+		return fortran.getGrammar();
 	}
 
 	@Override
 	public <T> T getImplementation(Class<T> clazz) {
-		// TODO Auto-generated method stub
-		return null;
+		return fortran.getImplementation(null);
 	}
 
 	@Override
 	public CodeAnalyzer createAnalyser(SourceCodeLocation source) {
-		// TODO Auto-generated method stub
-		return null;
+		return fortran.createAnalyser(source);
 	}
 
 	@Override
 	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-		// TODO Auto-generated method stub
-		return null;
+		return fortran.restoreAnalyzer(file);
 	}
 
 	@Override
 	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-		// TODO Auto-generated method stub
-		return null;
+		return fortran.getAvailableConfigurationParameters();
 	}
 
 	@Override
 	public <T> void setConfigurationParameter(
 			ConfigurationParameter<T> parameter, T value) {
-		// TODO Auto-generated method stub
-
+		fortran.setConfigurationParameter(parameter, value);
 	}
 
 	@Override
 	public <T> T getConfigurationParameter(ConfigurationParameter<T> parameter) {
-		// TODO Auto-generated method stub
-		return null;
+		return fortran.getConfigurationParameter(parameter);
 	}
 }

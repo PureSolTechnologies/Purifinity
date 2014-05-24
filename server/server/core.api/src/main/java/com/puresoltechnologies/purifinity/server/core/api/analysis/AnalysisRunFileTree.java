@@ -8,6 +8,7 @@ import org.codehaus.jackson.annotate.JsonManagedReference;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.trees.Tree;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 
 public class AnalysisRunFileTree implements Tree<AnalysisRunFileTree> {
 
@@ -18,29 +19,32 @@ public class AnalysisRunFileTree implements Tree<AnalysisRunFileTree> {
 	private AnalysisRunFileTree parent;
 	private String name;
 	private boolean file;
+	private SourceCodeLocation sourceCodeLocation;
 
 	public AnalysisRunFileTree() {
 	}
 
 	public AnalysisRunFileTree(AnalysisRunFileTree parent, String name,
-			boolean file) {
+			boolean file, SourceCodeLocation sourceCodeLocation) {
 		this.parent = parent;
 		this.name = name;
 		this.file = file;
+		this.sourceCodeLocation = sourceCodeLocation;
 		if (parent != null) {
 			parent.addChild(this);
 		}
 	}
 
 	public AnalysisRunFileTree(AnalysisRunFileTree parent, String name,
-			boolean file, HashId hashId) {
-		this(parent, name, file);
+			boolean file, SourceCodeLocation sourceCodeLocation, HashId hashId) {
+		this(parent, name, file, sourceCodeLocation);
 		this.hashId = hashId;
 	}
 
 	public AnalysisRunFileTree(AnalysisRunFileTree parent, String name,
-			boolean file, HashId hashId, List<AnalysisRunFileTree> children) {
-		this(parent, name, file, hashId);
+			boolean file, SourceCodeLocation sourceCodeLocation, HashId hashId,
+			List<AnalysisRunFileTree> children) {
+		this(parent, name, file, sourceCodeLocation, hashId);
 		this.children.addAll(children);
 	}
 
@@ -86,6 +90,18 @@ public class AnalysisRunFileTree implements Tree<AnalysisRunFileTree> {
 
 	public boolean isFile() {
 		return file;
+	}
+
+	public SourceCodeLocation getSourceCodeLocation() {
+		return sourceCodeLocation;
+	}
+
+	public void setSourceCodeLocation(SourceCodeLocation sourceCodeLocation) {
+		this.sourceCodeLocation = sourceCodeLocation;
+	}
+
+	public void setFile(boolean file) {
+		this.file = file;
 	}
 
 	public HashId getHashId() {
