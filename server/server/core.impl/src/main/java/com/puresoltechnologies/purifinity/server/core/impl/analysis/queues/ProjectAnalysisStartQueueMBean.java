@@ -2,6 +2,8 @@ package com.puresoltechnologies.purifinity.server.core.impl.analysis.queues;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
@@ -56,19 +58,27 @@ public class ProjectAnalysisStartQueueMBean implements MessageListener {
 		try {
 			TextMessage textMessage = (TextMessage) message;
 			UUID uuid = UUID.fromString(textMessage.getText());
+
 			AnalysisProject analysisProject = analysisStore
 					.readAnalysisProject(uuid);
 			eventLogger.logEvent(ProjectAnalysisEvents
 					.createQueueAnalysisEvent(uuid, analysisProject
 							.getSettings().getName()));
+
 			// TODO the actual logic for the collision avoidance is still
 			// missing.
-			AnalysisRunInformation runInformation = analysisStore
+
+			AnalysisRunInformation analysisRunInformation = analysisStore
 					.createAnalysisRun(analysisProject.getInformation()
 							.getUUID(), new Date(), 0, "", analysisProject
 							.getSettings().getFileSearchConfiguration());
-			messageSender.sendMessage(projectFileStorageQueue,
-					JSONSerializer.toJSONString(runInformation));
+
+			Map<String, String> stringMap = new HashMap<>();
+			stringMap.put("AnalysisProject",
+					JSONSerializer.toJSONString(analysisProject));
+			stringMap.put("AnalysisRunInformation",
+					JSONSerializer.toJSONString(analysisRunInformation));
+			messageSender.sendMessage(projectFileStorageQueue, stringMap);
 		} catch (JMSException | AnalysisStoreException | IOException e) {
 			// An issue occurred, re-queue the request.
 			eventLogger.logEvent(ProjectAnalysisEvents.createGeneralError(e));

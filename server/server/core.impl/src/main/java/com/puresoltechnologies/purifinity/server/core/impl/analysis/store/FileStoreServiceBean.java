@@ -43,7 +43,7 @@ public final class FileStoreServiceBean implements FileStoreService {
 	public HashId storeRawFile(InputStream rawStream) throws FileStoreException {
 		try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
 			try (DigestInputStream digestInputStream = new DigestInputStream(
-					rawStream, HashUtilities.getDefaultMessageDigest())) {
+					rawStream, AnalysisStoreServiceBean.DEFAULT_HASH)) {
 				IOUtils.copy(digestInputStream, buffer);
 				byte[] hashBytes = digestInputStream.getMessageDigest()
 						.digest();

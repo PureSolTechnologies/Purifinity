@@ -2,7 +2,6 @@ package com.puresoltechnologies.purifinity.server.test.analysis;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,14 +9,12 @@ import com.puresoltechnologies.commons.misc.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.HashCodeGenerator;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
-import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 
 public class TreeTestUtils {
 
-	public static AnalysisFileTree convertToHashIdFileTree(FileTree fileTree)
+	public static AnalysisRunFileTree convertToHashIdFileTree(FileTree fileTree)
 			throws IOException {
 		Map<FileTree, HashId> hashes = new HashMap<>();
 		calculateHashes(hashes, fileTree);
@@ -57,16 +54,15 @@ public class TreeTestUtils {
 	 * @return
 	 * @throws IOException
 	 */
-	private static AnalysisFileTree convertToAnalysisFileTree(
-			Map<FileTree, HashId> hashes, FileTree node, AnalysisFileTree parent)
-			throws IOException {
+	private static AnalysisRunFileTree convertToAnalysisFileTree(
+			Map<FileTree, HashId> hashes, FileTree node,
+			AnalysisRunFileTree parent) throws IOException {
 		String name = node.getName();
 		HashId hashId = hashes.get(node);
 		File file = node.getPathFile(true);
 		boolean isFile = file.isFile();
-		AnalysisFileTree currentNode = new AnalysisFileTree(parent, name,
-				hashId, isFile, new UnspecifiedSourceCodeLocation(),
-				isFile ? new ArrayList<AnalysisInformation>() : null);
+		AnalysisRunFileTree currentNode = new AnalysisRunFileTree(parent, name,
+				isFile, hashId);
 		for (FileTree child : node.getChildren()) {
 			convertToAnalysisFileTree(hashes, child, currentNode);
 		}

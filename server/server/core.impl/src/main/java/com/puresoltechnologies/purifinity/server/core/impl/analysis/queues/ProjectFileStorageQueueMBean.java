@@ -11,24 +11,24 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
 import javax.jms.JMSException;
+import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.Queue;
-import javax.jms.TextMessage;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.JSONSerializer;
 import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.RepositoryLocationCreator;
@@ -70,26 +70,38 @@ public class ProjectFileStorageQueueMBean implements MessageListener {
 	@Override
 	public void onMessage(Message message) {
 		try {
-			AnalysisRunInformation analysisRun = extractMessage(message);
-			AnalysisProjectSettings projectSettings = analysisStoreService
-					.readAnalysisProjectSettings(analysisRun.getProjectUUID());
+			MapMessage mapMessage = (MapMessage) message;
+			AnalysisProject analysisProject = JSONSerializer.fromJSONString(
+					mapMessage.getString("AnalysisProject"),
+					AnalysisProject.class);
+			AnalysisRunInformation analysisRunInformation = JSONSerializer
+					.fromJSONString(
+							mapMessage.getString("AnalysisRunInformation"),
+							AnalysisRunInformation.class);
+
+			AnalysisProjectSettings projectSettings = analysisProject
+					.getSettings();
+
 			Map<SourceCodeLocation, HashId> storedSources = storeFilesInStore(projectSettings);
-			storeFileTree(storedSources);
-			messageSender.sendMessage(projectAnalysisQueue,
-					JSONSerializer.toJSONString(analysisRun));
+			AnalysisRunFileTree fileTree = analysisStoreService
+					.createAndStoreFileAndContentTree(
+							analysisRunInformation.getProjectUUID(),
+							analysisRunInformation.getRunUUID(), storedSources);
+
+			Map<String, String> stringMap = new HashMap<>();
+			stringMap.put("AnalysisProject",
+					JSONSerializer.toJSONString(analysisProject));
+			stringMap.put("AnalysisRunInformation",
+					JSONSerializer.toJSONString(analysisRunInformation));
+			stringMap.put("AnalysisRunFileTree",
+					JSONSerializer.toJSONString(fileTree));
+
+			messageSender.sendMessage(projectAnalysisQueue, stringMap);
 		} catch (JMSException | IOException | AnalysisStoreException e) {
 			// An issue occurred, re-queue the request.
 			eventLogger.logEvent(ProjectAnalysisEvents.createGeneralError(e));
 			throw new RuntimeException("Could not store the project files.", e);
 		}
-	}
-
-	private AnalysisRunInformation extractMessage(Message message)
-			throws JsonGenerationException, JsonMappingException, IOException,
-			JMSException {
-		TextMessage textMessage = (TextMessage) message;
-		return JSONSerializer.fromJSONString(textMessage.getText(),
-				AnalysisRunInformation.class);
 	}
 
 	private Map<SourceCodeLocation, HashId> storeFilesInStore(
@@ -124,10 +136,5 @@ public class ProjectFileStorageQueueMBean implements MessageListener {
 			}
 		}
 		return storedSources;
-	}
-
-	private void storeFileTree(Map<SourceCodeLocation, HashId> storedSources) {
-		// analysisStoreService.storeFileTree(storedSources);
-
 	}
 }

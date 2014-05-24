@@ -1,10 +1,17 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis.store;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -17,6 +24,13 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.HashAlgorithm;
+import com.puresoltechnologies.commons.misc.HashCodeGenerator;
+import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.trees.TreeVisitor;
+import com.puresoltechnologies.commons.trees.TreeWalker;
+import com.puresoltechnologies.commons.trees.WalkingAction;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
@@ -24,6 +38,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSetting
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
@@ -41,6 +56,19 @@ import com.tinkerpop.blueprints.Vertex;
 
 @Stateless
 public class AnalysisStoreServiceBean implements AnalysisStoreService {
+
+	public static final HashAlgorithm DEFAULT_HASH_ALGORITHM = HashAlgorithm.SHA256;
+	public static final MessageDigest DEFAULT_HASH;
+	static {
+		try {
+			DEFAULT_HASH = MessageDigest.getInstance(DEFAULT_HASH_ALGORITHM
+					.getAlgorithmName());
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(
+					"Could not initialize default hash algorithm for analysis store.",
+					e);
+		}
+	}
 
 	public static final String COMPONENT_NAME = "AnalysisStoreService";
 
@@ -411,23 +439,6 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 
 	@Override
-	public final void storeAnalysisFileTree(UUID projectUUID, UUID runUUID,
-			AnalysisFileTree fileTree) throws AnalysisStoreException {
-		try {
-			Vertex analysisRunVertex = AnalysisStoreTitanUtils
-					.findAnalysisRunVertex(graph, projectUUID, runUUID);
-			analysisStoreContentTreeUtils.addContentTree(this, graph, fileTree,
-					analysisRunVertex);
-			analysisStoreFileTreeUtils.addFileTree(this, graph, fileTree,
-					analysisRunVertex);
-			graph.commit();
-		} catch (AnalysisStoreException e) {
-			graph.rollback();
-			throw e;
-		}
-	}
-
-	@Override
 	public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
 			throws AnalysisStoreException {
 		AnalysisFileTree analysisFileTree = analysisStoreCacheUtils
@@ -458,6 +469,107 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 		AnalysisFileTree analysisFileTree = readAnalysisFileTree(projectUUID,
 				runUUID);
 		return new AnalysisRun(information, analysisFileTree);
+	}
+
+	@Override
+	public AnalysisRunFileTree createAndStoreFileAndContentTree(
+			UUID projectUUID, UUID runUUID,
+			Map<SourceCodeLocation, HashId> storedSources)
+			throws AnalysisStoreException {
+		try {
+			AnalysisRunFileTree fileTree = convertToAnalysisRunFileTree(storedSources);
+			Vertex analysisRunVertex = AnalysisStoreTitanUtils
+					.findAnalysisRunVertex(graph, projectUUID, runUUID);
+			analysisStoreContentTreeUtils.addContentTree(this, graph, fileTree,
+					analysisRunVertex);
+			analysisStoreFileTreeUtils.addFileTree(this, graph, fileTree,
+					analysisRunVertex);
+			graph.commit();
+			return fileTree;
+		} catch (AnalysisStoreException e) {
+			graph.rollback();
+			throw e;
+		}
+	}
+
+	private AnalysisRunFileTree convertToAnalysisRunFileTree(
+			Map<SourceCodeLocation, HashId> storedSources) {
+		AnalysisRunFileTree fileTree = new AnalysisRunFileTree(null, "root",
+				false);
+		for (Entry<SourceCodeLocation, HashId> entry : storedSources.entrySet()) {
+			SourceCodeLocation sourceCodeLocation = entry.getKey();
+			HashId hashId = entry.getValue();
+			File internalPath = new File(
+					sourceCodeLocation.getInternalLocation());
+			AnalysisRunFileTree currentNode = fileTree;
+			Iterator<Path> pathIterator = internalPath.toPath().iterator();
+			while (pathIterator.hasNext()) {
+				Path pathElement = pathIterator.next();
+				String name = pathElement.toFile().getName();
+				AnalysisRunFileTree child = currentNode.findChild(name);
+				if (child != null) {
+					currentNode = child;
+				} else {
+					boolean isFile = !pathIterator.hasNext();
+					if (isFile) {
+						currentNode = new AnalysisRunFileTree(currentNode,
+								name, isFile, hashId);
+					} else {
+						currentNode = new AnalysisRunFileTree(currentNode,
+								name, isFile, hashId);
+					}
+				}
+			}
+		}
+		TreeWalker.walkBackward(new TreeVisitor<AnalysisRunFileTree>() {
+
+			@Override
+			public WalkingAction visit(AnalysisRunFileTree tree) {
+				if (tree.isFile()) {
+					return WalkingAction.PROCEED;
+				}
+				List<HashId> hashIds = new ArrayList<>();
+				for (AnalysisRunFileTree child : tree.getChildren()) {
+					hashIds.add(child.getHashId());
+				}
+				HashId hashId = calculateDirectoryHashId(hashIds);
+				tree.setHashId(hashId);
+				return WalkingAction.PROCEED;
+			}
+
+		}, fileTree);
+		return fileTree;
+	}
+
+	/**
+	 * This method calculates a {@link HashId} for a directory with the given
+	 * list of hashIds of the children. The children are both: Files and
+	 * Directories contained in the directory for which this HashId is to be
+	 * calculated.
+	 * 
+	 * @param hashIds
+	 *            is {@link List} of {@link HashId} of the containing files and
+	 *            directories. This list might be empty, if the direcoty does
+	 *            not contain any children.
+	 * @return A {@link HashId} is returned for the directory.
+	 */
+	public static HashId calculateDirectoryHashId(List<HashId> hashIds) {
+		Collections.sort(hashIds, new Comparator<HashId>() {
+			@Override
+			public int compare(HashId o1, HashId o2) {
+				return o1.toString().compareTo(o2.toString());
+			}
+		});
+		StringBuffer buffer = new StringBuffer();
+		for (HashId hashId : hashIds) {
+			if (buffer.length() > 0) {
+				buffer.append(',');
+			}
+			buffer.append(hashId.toString());
+		}
+		HashAlgorithm algorithm = AnalysisStoreServiceBean.DEFAULT_HASH_ALGORITHM;
+		String hash = HashCodeGenerator.get(algorithm, buffer.toString());
+		return new HashId(algorithm, hash);
 	}
 
 }

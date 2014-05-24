@@ -15,6 +15,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.framework.commons.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.SourceCodeLocationCreator;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
 import com.puresoltechnologies.purifinity.server.database.titan.VertexType;
@@ -49,7 +50,7 @@ public class AnalysisStoreFileTreeUtils {
 	 * @throws AnalysisStoreException
 	 */
 	public Vertex addFileTree(AnalysisStore analysisStore, TitanGraph graph,
-			AnalysisFileTree fileTree, Vertex analysisRunVertex)
+			AnalysisRunFileTree fileTree, Vertex analysisRunVertex)
 			throws AnalysisStoreException {
 		return addFileTreeVertex(analysisStore, graph, fileTree,
 				analysisRunVertex, TitanElementNames.ANALYZED_FILE_TREE_LABEL);
@@ -68,8 +69,9 @@ public class AnalysisStoreFileTreeUtils {
 	 * @throws AnalysisStoreException
 	 */
 	private Vertex addFileTreeVertex(AnalysisStore analysisStore,
-			TitanGraph graph, AnalysisFileTree fileTree, Vertex parentVertex,
-			String edgeLabel) throws AnalysisStoreException {
+			TitanGraph graph, AnalysisRunFileTree fileTree,
+			Vertex parentVertex, String edgeLabel)
+			throws AnalysisStoreException {
 		Vertex vertex = graph.addVertex(null);
 		vertex.setProperty(TitanElementNames.VERTEX_TYPE,
 				VertexType.FILE_TREE_ELEMENT.name());
@@ -77,14 +79,7 @@ public class AnalysisStoreFileTreeUtils {
 				fileTree.getName());
 		vertex.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
 				fileTree.isFile());
-		SourceCodeLocation sourceCodeLocation = fileTree
-				.getSourceCodeLocation();
-		if (sourceCodeLocation != null) {
-			vertex.setProperty(
-					TitanElementNames.TREE_ELEMENT_SOURCE_CODE_LOCATION,
-					PropertiesUtils.toString(sourceCodeLocation
-							.getSerialization()));
-		}
+
 		Edge edge = parentVertex.addEdge(edgeLabel, vertex);
 		edge.setProperty(TitanElementNames.TREE_ELEMENT_HASH, fileTree
 				.getHashId().toString());
@@ -105,12 +100,10 @@ public class AnalysisStoreFileTreeUtils {
 							+ fileTree.toString() + "'.");
 		}
 		Vertex contentVertex = vertexIterator.next();
-		Edge contentEdge = vertex.addEdge(TitanElementNames.HAS_CONTENT_LABEL,
-				contentVertex);
-		// XXX
+		vertex.addEdge(TitanElementNames.HAS_CONTENT_LABEL, contentVertex);
 		graph.commit();
 
-		for (AnalysisFileTree child : fileTree.getChildren()) {
+		for (AnalysisRunFileTree child : fileTree.getChildren()) {
 			if (child.isFile()) {
 				addFileTreeVertex(analysisStore, graph, child, vertex,
 						TitanElementNames.CONTAINS_FILE_LABEL);
@@ -129,7 +122,7 @@ public class AnalysisStoreFileTreeUtils {
 	 * @param fileTreeNode
 	 * @throws AnalysisStoreException
 	 */
-	public void addMetadata(Vertex vertex, AnalysisFileTree fileTreeNode)
+	public void addMetadata(Vertex vertex, AnalysisRunFileTree fileTreeNode)
 			throws AnalysisStoreException {
 		if (fileTreeNode.isFile()) {
 			long size = analysisStoreDAO.getFileSize(fileTreeNode.getHashId());

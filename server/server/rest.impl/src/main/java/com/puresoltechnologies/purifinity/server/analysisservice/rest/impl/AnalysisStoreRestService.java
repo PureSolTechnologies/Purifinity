@@ -116,12 +116,4 @@ public class AnalysisStoreRestService implements AnalysisStoreRestInterface {
 				duration, description, fileSearchConfiguration);
 	}
 
-	@Override
-	public void storeAnalysisFileTree(UUID projectUUID, UUID analysisRunUUID,
-			AnalysisFileTree fileTree) throws AnalysisStoreException {
-		analysisStore.storeAnalysisFileTree(projectUUID, analysisRunUUID,
-				fileTree);
-
-	}
-
 }

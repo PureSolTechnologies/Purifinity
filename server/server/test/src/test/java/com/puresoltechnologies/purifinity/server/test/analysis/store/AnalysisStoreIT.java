@@ -6,8 +6,6 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -18,33 +16,23 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.commons.misc.StopWatch;
-import com.puresoltechnologies.commons.trees.TreeUtils;
 import com.puresoltechnologies.parsers.source.RepositoryLocation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileSearch;
-import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.RepositoryLocationCreator;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.FileStoreServiceBean;
-import com.puresoltechnologies.purifinity.server.test.analysis.TreeTestUtils;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
 public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 
 	@Inject
-	private AnalysisStore analysisStore;
+	private AnalysisStoreService analysisStore;
 
 	@EnhanceDeployment
 	public static void removeWARFile(EnterpriseArchive archive)
@@ -205,74 +193,4 @@ public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 		assertEquals(analysisRun, analysisRunRead);
 	}
 
-	@Ignore("Database consistency check fails. A more realistic scenario needs to be tested.")
-	@Test
-	public void testSaveAndReadAnalysisRunFileTree()
-			throws AnalysisStoreException, IOException, FileStoreException {
-		Date startTime = new Date();
-
-		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
-				new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
-						"*.java", "*.xml"), Arrays.asList("*.bak"), true);
-		RepositoryLocation location = new DirectoryRepositoryLocation(
-				"DirRepo", new File("/home/ludwig"));
-		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
-				"Description", fileSearchConfiguration,
-				location.getSerialization());
-		AnalysisProjectInformation information = analysisStore
-				.createAnalysisProject(settings);
-		assertNotNull(information);
-
-		UUID projectUUID = information.getUUID();
-
-		AnalysisRunInformation analysisRun = analysisStore.createAnalysisRun(
-				projectUUID, startTime, 12345, "Analysis Run Description",
-				fileSearchConfiguration);
-		assertNotNull(analysisRun);
-
-		FileTree fileTree = FileSearch.getFileTree(new File("."),
-				fileSearchConfiguration);
-		assertNotNull(fileTree);
-		assertTrue(TreeUtils.countNodes(fileTree) > 0);
-
-		StopWatch storeRawFileWatch = new StopWatch();
-		storeRawFileWatch.start();
-		FileStore fileStore = new FileStoreServiceBean();
-		for (FileTree f : fileTree) {
-			File file = f.getPathFile(true);
-			if (file.isFile()) {
-				try (FileInputStream inputStream = new FileInputStream(file)) {
-					fileStore.storeRawFile(inputStream);
-				}
-			}
-		}
-		storeRawFileWatch.stop();
-
-		AnalysisFileTree hashIdFileTree = TreeTestUtils
-				.convertToHashIdFileTree(fileTree);
-
-		StopWatch storeFileTreeWatch = new StopWatch();
-		storeFileTreeWatch.start();
-		analysisStore.storeAnalysisFileTree(projectUUID, analysisRun.getRunUUID(),
-				hashIdFileTree);
-		storeFileTreeWatch.stop();
-
-		StopWatch readFileTreeWatch = new StopWatch();
-		readFileTreeWatch.start();
-		AnalysisFileTree treeRead = analysisStore.readAnalysisFileTree(
-				projectUUID, analysisRun.getRunUUID());
-		readFileTreeWatch.stop();
-
-		System.out.println("Storing raw files: "
-				+ storeRawFileWatch.getMilliseconds() + "ms");
-		System.out.println("Storing file tree: "
-				+ storeFileTreeWatch.getMilliseconds() + "ms");
-		System.out.println("Reading file tree: "
-				+ readFileTreeWatch.getMilliseconds() + "ms");
-
-		assertNotNull(treeRead);
-		assertEquals(TreeUtils.countNodes(hashIdFileTree),
-				TreeUtils.countNodes(treeRead));
-		TreeUtils.equalsWithoutOrder(hashIdFileTree, treeRead);
-	}
 }

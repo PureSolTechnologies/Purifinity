@@ -7,10 +7,10 @@ import javax.inject.Inject;
 import org.apache.commons.lang.StringUtils;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanUtils;
 import com.puresoltechnologies.purifinity.server.database.titan.VertexType;
@@ -46,7 +46,7 @@ public class AnalysisStoreContentTreeUtils {
 	 * @throws AnalysisStoreException
 	 */
 	public Vertex addContentTree(AnalysisStore analysisStore, TitanGraph graph,
-			AnalysisFileTree fileTree, Vertex parentVertex)
+			AnalysisRunFileTree fileTree, Vertex parentVertex)
 			throws AnalysisStoreException {
 		return addContentTreeVertex(analysisStore, graph, fileTree,
 				parentVertex, TitanElementNames.ANALYZED_CONTENT_TREE_LABEL);
@@ -66,9 +66,10 @@ public class AnalysisStoreContentTreeUtils {
 	 * @return
 	 * @throws AnalysisStoreException
 	 */
-	public Vertex addContentTreeVertex(AnalysisStore analysisStore,
-			TitanGraph graph, AnalysisFileTree fileTree, Vertex parentVertex,
-			String edgeLabel) throws AnalysisStoreException {
+	private Vertex addContentTreeVertex(AnalysisStore analysisStore,
+			TitanGraph graph, AnalysisRunFileTree fileTree,
+			Vertex parentVertex, String edgeLabel)
+			throws AnalysisStoreException {
 		Iterable<Vertex> vertices = graph
 				.query()
 				.has(TitanElementNames.TREE_ELEMENT_HASH,
@@ -105,18 +106,13 @@ public class AnalysisStoreContentTreeUtils {
 					.getHashId().toString());
 			edge.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
 					fileTree.isFile());
-			for (AnalysisFileTree child : fileTree.getChildren()) {
+			for (AnalysisRunFileTree child : fileTree.getChildren()) {
 				if (child.isFile()) {
 					addContentTreeVertex(analysisStore, graph, child, vertex,
 							TitanElementNames.CONTAINS_FILE_LABEL);
 				} else {
 					addContentTreeVertex(analysisStore, graph, child, vertex,
 							TitanElementNames.CONTAINS_DIRECTORY_LABEL);
-				}
-			}
-			if (fileTree.isFile()) {
-				for (AnalysisInformation analyzedCode : fileTree.getAnalyses()) {
-					storeAnalysisInformation(graph, vertex, analyzedCode);
 				}
 			}
 			return vertex;

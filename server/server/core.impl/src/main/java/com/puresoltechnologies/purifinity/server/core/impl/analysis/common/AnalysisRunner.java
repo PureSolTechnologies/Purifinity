@@ -24,7 +24,6 @@ import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.HashCodeGenerator;
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.misc.HashUtilities;
 import com.puresoltechnologies.commons.misc.StopWatch;
 import com.puresoltechnologies.commons.trees.TreeVisitor;
 import com.puresoltechnologies.commons.trees.TreeWalker;
@@ -41,6 +40,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreExcep
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.AnalysisStoreServiceBean;
 
 @Deprecated
 public class AnalysisRunner implements Callable<Boolean> {
@@ -90,8 +90,8 @@ public class AnalysisRunner implements Callable<Boolean> {
 					stopWatch.getStartTime(), stopWatch.getMilliseconds(), "",
 					searchConfig);
 			buildCodeLocationTree();
-			analysisStore.storeAnalysisFileTree(projectUUID,
-					analysisRun.getRunUUID(), fileTree);
+			// analysisStore.storeAnalysisFileTree(projectUUID,
+			// analysisRun.getRunUUID(), fileTree);
 			return true;
 		} else {
 			return false;
@@ -252,7 +252,7 @@ public class AnalysisRunner implements Callable<Boolean> {
 	}
 
 	private void createFinalTree(AnalysisFileTree intermediate) {
-		Map<File, HashId> hashes = generateModuleHashes(intermediate);
+		Map<File, HashId> hashes = generateDirectoryHashes(intermediate);
 		fileTree = new AnalysisFileTree(null, intermediate.getName(),
 				hashes.get(intermediate.getPathFile(false)), false,
 				sourceCodeLocations.get(intermediate.getHashId()), null);
@@ -279,7 +279,8 @@ public class AnalysisRunner implements Callable<Boolean> {
 	 * @param intermediate
 	 * @return
 	 */
-	private Map<File, HashId> generateModuleHashes(AnalysisFileTree intermediate) {
+	private Map<File, HashId> generateDirectoryHashes(
+			AnalysisFileTree intermediate) {
 		final Map<File, HashId> hashes = new HashMap<File, HashId>();
 		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
 
@@ -301,8 +302,7 @@ public class AnalysisRunner implements Callable<Boolean> {
 						}
 						joinedHash.append(hash);
 					}
-					HashAlgorithm algorithm = HashUtilities
-							.getDefaultMessageDigestAlgorithm();
+					HashAlgorithm algorithm = AnalysisStoreServiceBean.DEFAULT_HASH_ALGORITHM;
 					String hash = HashCodeGenerator.get(algorithm,
 							joinedHash.toString());
 					hashes.put(tree.getPathFile(false), new HashId(algorithm,

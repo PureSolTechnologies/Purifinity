@@ -123,7 +123,4 @@ public interface AnalysisStore {
 			FileSearchConfiguration fileSearchConfiguration)
 			throws AnalysisStoreException;
 
-	public void storeAnalysisFileTree(UUID projectUUID, UUID analysisRunUUID,
-			AnalysisFileTree fileTree) throws AnalysisStoreException;
-
 }

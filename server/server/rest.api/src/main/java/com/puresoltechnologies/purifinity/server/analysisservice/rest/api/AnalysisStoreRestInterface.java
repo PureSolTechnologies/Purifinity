@@ -141,15 +141,6 @@ public interface AnalysisStoreRestInterface extends AnalysisStore {
 	@Override
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("projects/{project_uuid}/runs/{run_uuid}/filetree")
-	public void storeAnalysisFileTree(
-			@PathParam("project_uuid") UUID projectUUID,
-			@PathParam("run_uuid") UUID runUUID, AnalysisFileTree fileTree)
-			throws AnalysisStoreException;
-
-	@Override
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("projects/{project_uuid}/create_run")
 	public AnalysisRunInformation createAnalysisRun(
 			@PathParam("project_uuid") UUID analysisProjectUUID,
