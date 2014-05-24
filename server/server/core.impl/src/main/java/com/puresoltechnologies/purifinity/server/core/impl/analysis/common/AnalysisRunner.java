@@ -42,6 +42,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 
+@Deprecated
 public class AnalysisRunner implements Callable<Boolean> {
 
 	private static final Logger logger = LoggerFactory

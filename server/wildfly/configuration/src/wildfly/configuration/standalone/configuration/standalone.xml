@@ -413,8 +413,20 @@
 					</pooled-connection-factory>
 				</jms-connection-factories>
 				<jms-destinations>
-					<jms-queue name="AnalysisFileStorageQueue">
-						<entry name="java:jboss/jms/queue/analysisFileStorageQueue" />
+					<jms-queue name="ProjectAnalysisStartQueue">
+						<entry name="java:jboss/jms/queue/projectAnalysisStartQueue" />
+						<durable>true</durable>
+					</jms-queue>
+					<jms-queue name="ProjectFileStorageQueue">
+						<entry name="java:jboss/jms/queue/projectFileStorageQueue" />
+						<durable>true</durable>
+					</jms-queue>
+					<jms-queue name="ProjectAnalysisQueue">
+						<entry name="java:jboss/jms/queue/projectAnalysisQueue" />
+						<durable>true</durable>
+					</jms-queue>
+					<jms-queue name="ProjectEvaluationQueue">
+						<entry name="java:jboss/jms/queue/projectEvaluationQueue" />
 						<durable>true</durable>
 					</jms-queue>
 				</jms-destinations>

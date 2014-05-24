@@ -76,8 +76,7 @@ public class EventLoggerBean implements EventLogger {
 		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 				PrintStream stream = new PrintStream(byteArrayOutputStream)) {
 			throwable.printStackTrace(stream);
-			String stackTrace = byteArrayOutputStream.toString();
-			return stackTrace;
+			return byteArrayOutputStream.toString();
 		} catch (IOException e) {
 			logger.warn(
 					"Could not read stacktrace into PrintStream. This should never happen.",

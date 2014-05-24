@@ -13,24 +13,20 @@ import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
-import javax.jms.MessageProducer;
 import javax.jms.Queue;
-import javax.jms.Session;
-import javax.jms.TextMessage;
 
 import org.slf4j.Logger;
 
-import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.AnalysisRunner;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.queues.ProjectAnalysisStartQueue;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
@@ -40,17 +36,17 @@ public class AnalysisServiceBean implements AnalysisService {
 
 	private static final int RUN_TIMEOUT_IN_SECONDS = 3600;
 
-	@Resource(mappedName = "java:/ConnectionFactory")
-	private ConnectionFactory cf;
-
-	@Resource(mappedName = "java:jboss/jms/queue/analysisFileStorageQueue")
-	private Queue analysisFileStorageQueue;
+	@Resource(mappedName = ProjectAnalysisStartQueue.NAME)
+	private Queue projectAnalysisStartQueue;
 
 	@Inject
 	private Logger logger;
 
 	@Inject
 	private EventLogger eventLogger;
+
+	@Inject
+	private JMSMessageSender messageSender;
 
 	@Inject
 	private AnalysisStoreService analysisStoreService;
@@ -75,28 +71,12 @@ public class AnalysisServiceBean implements AnalysisService {
 	}
 
 	@Override
-	public void triggerNewAnalysis(UUID projectUUID)
-			throws AnalysisStoreException, AnalyzerException {
-		try (Connection connection = cf.createConnection()) {
-			try (Session session = connection.createSession(false,
-					Session.AUTO_ACKNOWLEDGE)) {
-				MessageProducer producer = session
-						.createProducer(analysisFileStorageQueue);
-				connection.start();
-				try {
-					TextMessage message = session.createTextMessage(projectUUID
-							.toString());
-					producer.send(message);
-				} finally {
-					connection.stop();
-				}
-			}
-		} catch (JMSException e) {
-			throw new AnalyzerException("Could not queue the analysis.", e);
-		}
-		startConventional(projectUUID);
+	public void triggerNewAnalysis(UUID projectUUID) throws JMSException {
+		messageSender.sendMessage(projectAnalysisStartQueue,
+				projectUUID.toString());
 	}
 
+	// XXX This is to be put into to message consumers.
 	private void startConventional(UUID projectUUID)
 			throws AnalysisStoreException {
 		try {

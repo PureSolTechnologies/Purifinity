@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.core.impl.analysis;
+package com.puresoltechnologies.purifinity.server.core.impl.analysis.queues;
 
 import java.util.UUID;
 
@@ -14,14 +14,14 @@ import org.slf4j.Logger;
 
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 
-@MessageDriven(name = "AnalysisFileStorageQueueMBean",//
+@MessageDriven(name = "ProjectEvaluationQueueMBean",//
 activationConfig = {//
-		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"), //
-		@ActivationConfigProperty(propertyName = "destination", propertyValue = "java:jboss/jms/queue/analysisFileStorageQueue"), //
+		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = ProjectEvaluationQueue.TYPE), //
+		@ActivationConfigProperty(propertyName = "destination", propertyValue = ProjectEvaluationQueue.NAME), //
 		@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") //
 }//
 )
-public class AnalysisFileStorageQueueMBean implements MessageListener {
+public class ProjectEvaluationQueueMBean implements MessageListener {
 
 	@Inject
 	private Logger logger;

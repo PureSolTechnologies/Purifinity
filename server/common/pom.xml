@@ -14,6 +14,7 @@
 
 	<modules>
 		<module>plugins</module>
+		<module>jms</module>
 		<module>rest</module>
 		<module>test</module>
 	</modules>
