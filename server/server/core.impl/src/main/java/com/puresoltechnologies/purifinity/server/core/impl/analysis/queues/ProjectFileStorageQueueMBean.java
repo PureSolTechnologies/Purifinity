@@ -86,7 +86,9 @@ public class ProjectFileStorageQueueMBean implements MessageListener {
 			AnalysisRunFileTree fileTree = analysisStoreService
 					.createAndStoreFileAndContentTree(
 							analysisRunInformation.getProjectUUID(),
-							analysisRunInformation.getRunUUID(), storedSources);
+							analysisRunInformation.getRunUUID(),
+							analysisProject.getSettings().getName(),
+							storedSources);
 
 			Map<String, String> stringMap = new HashMap<>();
 			stringMap.put("AnalysisProject",

@@ -11,7 +11,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreExcep
 public interface AnalysisStoreService extends AnalysisStore {
 
 	public AnalysisRunFileTree createAndStoreFileAndContentTree(
-			UUID projectUUID, UUID runUUID,
+			UUID projectUUID, UUID runUUID, String rootNodeName,
 			Map<SourceCodeLocation, HashId> storedSources)
 			throws AnalysisStoreException;
 

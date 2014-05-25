@@ -67,7 +67,7 @@ public class AnalysisRunContentTreeViewer extends TreeViewer {
 
 	public void setInput(AnalysisRun analysisRun) {
 		labelProvider.setAnalysisRun(analysisRun);
-		super.setInput(analysisRun.getFileTree());
+		super.setInput(analysisRun != null ? analysisRun.getFileTree() : null);
 	}
 
 	public void setSelection(AnalysisFileTree node) {

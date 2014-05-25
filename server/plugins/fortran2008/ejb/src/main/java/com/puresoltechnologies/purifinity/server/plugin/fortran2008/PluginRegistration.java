@@ -16,8 +16,10 @@ import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerRemotePlugin;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
@@ -112,5 +114,11 @@ public class PluginRegistration implements AnalyzerRemotePlugin {
 	@Override
 	public <T> T getConfigurationParameter(ConfigurationParameter<T> parameter) {
 		return fortran.getConfigurationParameter(parameter);
+	}
+
+	@Override
+	public CodeAnalysis analyze(SourceCodeLocation sourceCodeLocation)
+			throws AnalyzerException, IOException {
+		return fortran.analyze(sourceCodeLocation);
 	}
 }

@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.trees.Tree;
@@ -19,21 +21,20 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 	private static final long serialVersionUID = 294965469645813244L;
 
 	private final List<AnalysisFileTree> children = new ArrayList<AnalysisFileTree>();
-
-	private final AnalysisFileTree parent;
-	private final String name;
-	private final HashId hashId;
-	private final boolean file;
-	private final SourceCodeLocation sourceCodeLocation;
 	private final List<AnalysisInformation> analyzedCodes = new ArrayList<>();
 
-	public AnalysisFileTree(
-			@JsonProperty("parent") AnalysisFileTree parent,
-			@JsonProperty("name") String name,
-			@JsonProperty("hashId") HashId hashId,
-			@JsonProperty("file") boolean file,
-			@JsonProperty("sourceCodeLocation") SourceCodeLocation sourceCodeLocation,
-			@JsonProperty("analyzedCodes") List<AnalysisInformation> analyzedCodes) {
+	private AnalysisFileTree parent;
+	private String name;
+	private HashId hashId;
+	private boolean file;
+	private SourceCodeLocation sourceCodeLocation;
+
+	public AnalysisFileTree() {
+	}
+
+	public AnalysisFileTree(AnalysisFileTree parent, String name,
+			HashId hashId, boolean file, SourceCodeLocation sourceCodeLocation,
+			List<AnalysisInformation> analyzedCodes) {
 		super();
 		this.parent = parent;
 		this.name = name;
@@ -48,7 +49,42 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 		}
 	}
 
+	public List<AnalysisInformation> getAnalyzedCodes() {
+		return analyzedCodes;
+	}
+
+	public void setAnalyzedCodes(List<AnalysisInformation> analyzedCodes) {
+		this.analyzedCodes.clear();
+		this.analyzedCodes.addAll(analyzedCodes);
+	}
+
+	public void setChildren(List<AnalysisFileTree> children) {
+		this.children.clear();
+		this.children.addAll(children);
+	}
+
+	public void setParent(AnalysisFileTree parent) {
+		this.parent = parent;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setHashId(HashId hashId) {
+		this.hashId = hashId;
+	}
+
+	public void setFile(boolean file) {
+		this.file = file;
+	}
+
+	public void setSourceCodeLocation(SourceCodeLocation sourceCodeLocation) {
+		this.sourceCodeLocation = sourceCodeLocation;
+	}
+
 	@Override
+	@JsonBackReference
 	public final AnalysisFileTree getParent() {
 		return parent;
 	}
@@ -59,6 +95,7 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 	}
 
 	@Override
+	@JsonManagedReference
 	public final List<AnalysisFileTree> getChildren() {
 		return children;
 	}
@@ -110,6 +147,7 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 	 *            False, does not.
 	 * @return
 	 */
+	@JsonIgnore
 	public File getPathFile(boolean includeRootElement) {
 		if (getParent() == null) {
 			return new File("");
@@ -162,6 +200,7 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 		return visitor.getFound();
 	}
 
+	@JsonIgnore
 	public AnalysisFileTree getChild(String name) {
 		for (AnalysisFileTree child : children) {
 			if (child.getName().equals(name)) {

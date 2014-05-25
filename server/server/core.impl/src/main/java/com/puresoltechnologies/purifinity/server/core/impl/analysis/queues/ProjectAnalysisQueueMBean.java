@@ -22,8 +22,6 @@ import com.puresoltechnologies.commons.trees.TreeWalker;
 import com.puresoltechnologies.commons.trees.WalkingAction;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
-import com.puresoltechnologies.purifinity.analysis.api.LanguageNotSupportedException;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
@@ -104,14 +102,11 @@ public class ProjectAnalysisQueueMBean implements MessageListener {
 		}, analysisRunFileTree);
 	}
 
-	private AnalysisInformation analyze(HashId hashId,
-			SourceCodeLocation sourceCodeLocation) {
+	private void analyze(HashId hashId, SourceCodeLocation sourceCodeLocation) {
 		Date startTime = new Date();
 		try {
-			if (fileStore.wasAnalyzed(hashId)) {
-				return loadAnalysis(hashId);
-			} else {
-				return createNewAnalysis(startTime, hashId, sourceCodeLocation);
+			if (!fileStore.wasAnalyzed(hashId)) {
+				createNewAnalysis(startTime, hashId, sourceCodeLocation);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -125,8 +120,6 @@ public class ProjectAnalysisQueueMBean implements MessageListener {
 				t = t.getCause();
 				id++;
 			}
-			return new AnalysisInformation(hashId, startTime, 0, false, "n/a",
-					"n/a", message.toString());
 		}
 	}
 
@@ -140,9 +133,9 @@ public class ProjectAnalysisQueueMBean implements MessageListener {
 	 * @throws IOException
 	 * @throws FileStoreException
 	 */
-	private AnalysisInformation createNewAnalysis(Date startTime,
-			HashId hashId, SourceCodeLocation sourceFile)
-			throws AnalyzerException, IOException, FileStoreException {
+	private void createNewAnalysis(Date startTime, HashId hashId,
+			SourceCodeLocation sourceFile) throws AnalyzerException,
+			IOException, FileStoreException {
 		try {
 			for (AnalyzerInformation analyzerInformation : analyzerPluginService
 					.getServices()) {
@@ -153,40 +146,13 @@ public class ProjectAnalysisQueueMBean implements MessageListener {
 							+ sourceFile.getHumanReadableLocationString()
 							+ "' is a suitable file for '" + instance.getName()
 							+ "'.");
+					CodeAnalysis codeAnalysis = instance.analyze(sourceFile);
+					fileStore.storeAnalysis(hashId, codeAnalysis);
 				}
 			}
-			throw new LanguageNotSupportedException();
-			//
-			// CodeAnalyzer analyzer =
-			// CodeAnalyzerFactory.createFactory().create(
-			// sourceFile);
-			// analyzer.analyze();
-			//
-			// fileStore.storeAnalysis(hashId, analyzer.getAnalysis());
-			// return analyzer.getAnalysis().getAnalysisInformation();
-		} catch (LanguageNotSupportedException | NamingException e) {
+		} catch (NamingException e) {
 			logger.warn("File " + sourceFile.getHumanReadableLocationString()
 					+ " could be analyzed.");
-			return new AnalysisInformation(hashId, startTime, 0, false, "n/a",
-					"n/a", "No analyzer found.");
 		}
-	}
-
-	/**
-	 * This method loads an already existing analysis.
-	 * 
-	 * @param hashId
-	 * @param sourceFile
-	 * @return
-	 * @throws FileStoreException
-	 */
-	private AnalysisInformation loadAnalysis(HashId hashId)
-			throws FileStoreException {
-		CodeAnalysis analysis = fileStore.loadAnalysis(hashId, Thread
-				.currentThread().getContextClassLoader());
-		AnalysisInformation analyzedCode = new AnalysisInformation(hashId,
-				analysis.getStartTime(), analysis.getDuration(), true,
-				analysis.getLanguageName(), analysis.getLanguageVersion());
-		return analyzedCode;
 	}
 }

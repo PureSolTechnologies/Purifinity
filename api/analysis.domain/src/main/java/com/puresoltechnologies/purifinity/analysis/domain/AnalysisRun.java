@@ -41,14 +41,10 @@ public class AnalysisRun implements Serializable {
 	 * @param runDirectory
 	 * @param searchConfiguration
 	 */
-	public AnalysisRun(
-			@JsonProperty("projectUUID") UUID projectUUID,
-			@JsonProperty("uuid") UUID uuid,
-			@JsonProperty("startTime") Date startTime,
-			@JsonProperty("duration") long duration,
-			@JsonProperty("fileTree") AnalysisFileTree fileTree,
-			@JsonProperty("fileSearchConfiguration") FileSearchConfiguration fileSearchConfiguration,
-			@JsonProperty("sourceCodeLocations") Map<HashId, SourceCodeLocation> sourceCodeLocations) {
+	public AnalysisRun(UUID projectUUID, UUID uuid, Date startTime,
+			long duration, AnalysisFileTree fileTree,
+			FileSearchConfiguration fileSearchConfiguration,
+			Map<HashId, SourceCodeLocation> sourceCodeLocations) {
 		this(new AnalysisRunInformation(projectUUID, uuid, startTime, duration,
 				"", fileSearchConfiguration), fileTree);
 	}
@@ -61,8 +57,9 @@ public class AnalysisRun implements Serializable {
 	 * @param runDirectory
 	 * @param searchConfiguration
 	 */
-	public AnalysisRun(AnalysisRunInformation information,
-			AnalysisFileTree fileTree) {
+	public AnalysisRun(
+			@JsonProperty("information") AnalysisRunInformation information,
+			@JsonProperty("fileTree") AnalysisFileTree fileTree) {
 		super();
 		this.information = information;
 		this.fileTree = fileTree;

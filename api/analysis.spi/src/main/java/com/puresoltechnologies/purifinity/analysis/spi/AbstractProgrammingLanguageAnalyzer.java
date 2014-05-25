@@ -1,10 +1,15 @@
 package com.puresoltechnologies.purifinity.analysis.spi;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
+import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 
 /**
  * This class is an abstract implementation of
@@ -41,5 +46,13 @@ public abstract class AbstractProgrammingLanguageAnalyzer extends
 					+ "' is not known.");
 		}
 		properties.put(parameter.getPropertyKey(), value);
+	}
+
+	@Override
+	public CodeAnalysis analyze(SourceCodeLocation sourceCodeLocation)
+			throws AnalyzerException, IOException {
+		CodeAnalyzer analyser = createAnalyser(sourceCodeLocation);
+		analyser.analyze();
+		return analyser.getAnalysis();
 	}
 }

@@ -37,7 +37,7 @@ public interface FileStoreRestInterface extends FileStore {
 	@GET
 	@Path("files/{hashId}/available")
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean isAvailable(HashId hashId);
+	public boolean isAvailable(@PathParam("hashId") HashId hashId);
 
 	@Override
 	@GET

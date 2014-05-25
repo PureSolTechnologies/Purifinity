@@ -473,11 +473,12 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 
 	@Override
 	public AnalysisRunFileTree createAndStoreFileAndContentTree(
-			UUID projectUUID, UUID runUUID,
+			UUID projectUUID, UUID runUUID, String rootNodeName,
 			Map<SourceCodeLocation, HashId> storedSources)
 			throws AnalysisStoreException {
 		try {
-			AnalysisRunFileTree fileTree = convertToAnalysisRunFileTree(storedSources);
+			AnalysisRunFileTree fileTree = convertToAnalysisRunFileTree(
+					storedSources, rootNodeName);
 			Vertex analysisRunVertex = AnalysisStoreTitanUtils
 					.findAnalysisRunVertex(graph, projectUUID, runUUID);
 			analysisStoreContentTreeUtils.addContentTree(this, graph, fileTree,
@@ -493,9 +494,9 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 
 	private AnalysisRunFileTree convertToAnalysisRunFileTree(
-			Map<SourceCodeLocation, HashId> storedSources) {
-		AnalysisRunFileTree fileTree = new AnalysisRunFileTree(null, "root",
-				false, null);
+			Map<SourceCodeLocation, HashId> storedSources, String rootNodeName) {
+		AnalysisRunFileTree fileTree = new AnalysisRunFileTree(null,
+				rootNodeName, false, null);
 		for (Entry<SourceCodeLocation, HashId> entry : storedSources.entrySet()) {
 			SourceCodeLocation sourceCodeLocation = entry.getKey();
 			HashId hashId = entry.getValue();
@@ -513,10 +514,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 					boolean isFile = !pathIterator.hasNext();
 					if (isFile) {
 						currentNode = new AnalysisRunFileTree(currentNode,
-								name, isFile,sourceCodeLocation, hashId);
+								name, isFile, sourceCodeLocation, hashId);
 					} else {
 						currentNode = new AnalysisRunFileTree(currentNode,
-								name, isFile,sourceCodeLocation, hashId);
+								name, isFile, sourceCodeLocation, hashId);
 					}
 				}
 			}
