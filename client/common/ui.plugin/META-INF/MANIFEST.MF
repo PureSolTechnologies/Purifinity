@@ -31,3 +31,4 @@ Export-Package: com.puresoltechnologies.purifinity.client.common.ui;us
  ity.client.common.ui.parts,com.puresoltechnologies.purifinity.client.
  common.ui.views
 Bundle-Activator: com.puresoltechnologies.purifinity.client.common.ui.Activator
+Import-Package: org.codehaus.jackson.annotate;version="1.9.13"

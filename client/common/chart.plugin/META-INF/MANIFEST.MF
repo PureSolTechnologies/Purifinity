@@ -25,3 +25,4 @@ Export-Package: com.puresoltechnologies.purifinity.client.common.chart
  finity.client.common.chart,  com.puresoltechnologies.commons.trees.ap
  i,  org.eclipse.swt.graphics,  com.puresoltechnologies.purifinity.cli
  ent.common.chart.math"
+Import-Package: org.codehaus.jackson.annotate;version="1.9.13"
