@@ -3,13 +3,11 @@ package com.puresoltechnologies.purifinity.server.accountmanager.domain.statemod
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
 import com.puresoltechnologies.purifinity.framework.commons.utils.statemodel.Transition;
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.statemodel.AccountState;
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.statemodel.AccountTransition;
 
 public class AccountStateTest {
 
@@ -21,7 +19,7 @@ public class AccountStateTest {
 	@Test
 	public void testStartState() {
 		AccountState state = AccountState.START;
-		List<Transition<AccountState>> transitions = state.getTransitions();
+		Set<Transition<AccountState>> transitions = state.getTransitions();
 		assertEquals(1, transitions.size());
 		assertTrue(transitions.contains(AccountTransition.CREATE));
 	}
@@ -29,7 +27,7 @@ public class AccountStateTest {
 	@Test
 	public void testCreatedState() {
 		AccountState state = AccountState.CREATED;
-		List<Transition<AccountState>> transitions = state.getTransitions();
+		Set<Transition<AccountState>> transitions = state.getTransitions();
 		assertEquals(3, transitions.size());
 		assertTrue(transitions.contains(AccountTransition.ACTIVATE));
 		assertTrue(transitions.contains(AccountTransition.LOCK));
@@ -39,7 +37,7 @@ public class AccountStateTest {
 	@Test
 	public void testActivatedState() {
 		AccountState state = AccountState.ACTIVATED;
-		List<Transition<AccountState>> transitions = state.getTransitions();
+		Set<Transition<AccountState>> transitions = state.getTransitions();
 		assertEquals(2, transitions.size());
 		assertTrue(transitions.contains(AccountTransition.DEACTIVATE));
 		assertTrue(transitions.contains(AccountTransition.LOCK));
@@ -48,7 +46,7 @@ public class AccountStateTest {
 	@Test
 	public void testDeactivatedState() {
 		AccountState state = AccountState.DEACTIVATED;
-		List<Transition<AccountState>> transitions = state.getTransitions();
+		Set<Transition<AccountState>> transitions = state.getTransitions();
 		assertEquals(3, transitions.size());
 		assertTrue(transitions.contains(AccountTransition.REACTIVATE));
 		assertTrue(transitions.contains(AccountTransition.LOCK));
@@ -58,7 +56,7 @@ public class AccountStateTest {
 	@Test
 	public void testLockedState() {
 		AccountState state = AccountState.LOCKED;
-		List<Transition<AccountState>> transitions = state.getTransitions();
+		Set<Transition<AccountState>> transitions = state.getTransitions();
 		assertEquals(2, transitions.size());
 		assertTrue(transitions.contains(AccountTransition.UNLOCK));
 		assertTrue(transitions.contains(AccountTransition.DELETE));
@@ -67,7 +65,7 @@ public class AccountStateTest {
 	@Test
 	public void testDeletedState() {
 		AccountState state = AccountState.DELETED;
-		List<Transition<AccountState>> transitions = state.getTransitions();
+		Set<Transition<AccountState>> transitions = state.getTransitions();
 		assertEquals(0, transitions.size());
 	}
 

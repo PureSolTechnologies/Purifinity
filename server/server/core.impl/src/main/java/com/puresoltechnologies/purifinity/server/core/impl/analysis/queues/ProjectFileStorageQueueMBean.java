@@ -32,6 +32,8 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFi
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.RepositoryLocationCreator;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.states.AnalysisProcessStateTracker;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.states.AnalysisProcessTransition;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
 /**
@@ -67,6 +69,9 @@ public class ProjectFileStorageQueueMBean implements MessageListener {
 	@Inject
 	private FileStoreService fileStore;
 
+	@Inject
+	private AnalysisProcessStateTracker analysisProcessStateTracker;
+
 	@Override
 	public void onMessage(Message message) {
 		try {
@@ -78,6 +83,11 @@ public class ProjectFileStorageQueueMBean implements MessageListener {
 					.fromJSONString(
 							mapMessage.getString("AnalysisRunInformation"),
 							AnalysisRunInformation.class);
+
+			analysisProcessStateTracker.changeProcessState(
+					analysisRunInformation.getProjectUUID(),
+					analysisRunInformation.getRunUUID(),
+					AnalysisProcessTransition.START_STORAGE);
 
 			AnalysisProjectSettings projectSettings = analysisProject
 					.getSettings();
@@ -98,6 +108,10 @@ public class ProjectFileStorageQueueMBean implements MessageListener {
 			stringMap.put("AnalysisRunFileTree",
 					JSONSerializer.toJSONString(fileTree));
 
+			analysisProcessStateTracker.changeProcessState(
+					analysisRunInformation.getProjectUUID(),
+					analysisRunInformation.getRunUUID(),
+					AnalysisProcessTransition.QUEUE_FOR_ANALYSIS);
 			messageSender.sendMessage(projectAnalysisQueue, stringMap);
 		} catch (JMSException | IOException | AnalysisStoreException e) {
 			// An issue occurred, re-queue the request.

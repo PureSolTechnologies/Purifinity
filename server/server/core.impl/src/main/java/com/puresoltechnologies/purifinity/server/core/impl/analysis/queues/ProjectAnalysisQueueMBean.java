@@ -31,6 +31,8 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFi
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerRemotePlugin;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.states.AnalysisProcessStateTracker;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.states.AnalysisProcessTransition;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
@@ -55,6 +57,9 @@ public class ProjectAnalysisQueueMBean implements MessageListener {
 	@Inject
 	private AnalyzerPluginService analyzerPluginService;
 
+	@Inject
+	private AnalysisProcessStateTracker analysisProcessStateTracker;
+
 	@Override
 	public void onMessage(Message message) {
 		try {
@@ -71,6 +76,11 @@ public class ProjectAnalysisQueueMBean implements MessageListener {
 							mapMessage.getString("AnalysisRunFileTree"),
 							AnalysisRunFileTree.class);
 
+			analysisProcessStateTracker.changeProcessState(
+					analysisRunInformation.getProjectUUID(),
+					analysisRunInformation.getRunUUID(),
+					AnalysisProcessTransition.START_ANALYSIS);
+
 			System.out.println("Start analysis for project '"
 					+ analysisProject.getSettings().getName() + "' and run '"
 					+ analysisRunInformation.getRunUUID() + "'.");
@@ -82,6 +92,22 @@ public class ProjectAnalysisQueueMBean implements MessageListener {
 					.getSettings();
 			logger.info("Start analysis for project '"
 					+ projectSettings.getName() + "'.");
+
+			analysisProcessStateTracker.changeProcessState(
+					analysisRunInformation.getProjectUUID(),
+					analysisRunInformation.getRunUUID(),
+					AnalysisProcessTransition.QUEUE_FOR_EVALUATION);
+			analysisProcessStateTracker.changeProcessState(
+					analysisRunInformation.getProjectUUID(),
+					analysisRunInformation.getRunUUID(),
+					AnalysisProcessTransition.START_EVALUATION);
+			analysisProcessStateTracker.changeProcessState(
+					analysisRunInformation.getProjectUUID(),
+					analysisRunInformation.getRunUUID(),
+					AnalysisProcessTransition.FINISH);
+			analysisProcessStateTracker.stopProcess(analysisRunInformation
+					.getProjectUUID());
+
 		} catch (JMSException | IOException e) {
 			// An issue occurred, re-queue the request.
 			eventLogger.logEvent(ProjectAnalysisEvents.createGeneralError(e));

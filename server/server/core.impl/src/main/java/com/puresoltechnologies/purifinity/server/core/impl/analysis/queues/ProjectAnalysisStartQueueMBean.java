@@ -22,6 +22,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.states.AnalysisProcessStateTracker;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.states.AnalysisProcessTransition;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
 /**
@@ -41,6 +43,7 @@ activationConfig = {//
 }//
 )
 public class ProjectAnalysisStartQueueMBean implements MessageListener {
+
 	@Inject
 	private EventLogger eventLogger;
 
@@ -52,6 +55,9 @@ public class ProjectAnalysisStartQueueMBean implements MessageListener {
 
 	@Inject
 	private AnalysisStore analysisStore;
+
+	@Inject
+	private AnalysisProcessStateTracker analysisProcessStateTracker;
 
 	@Override
 	public void onMessage(Message message) {
@@ -78,6 +84,10 @@ public class ProjectAnalysisStartQueueMBean implements MessageListener {
 					JSONSerializer.toJSONString(analysisProject));
 			stringMap.put("AnalysisRunInformation",
 					JSONSerializer.toJSONString(analysisRunInformation));
+
+			analysisProcessStateTracker.changeProcessState(uuid,
+					analysisRunInformation.getRunUUID(),
+					AnalysisProcessTransition.QUEUE_FOR_STORAGE);
 			messageSender.sendMessage(projectFileStorageQueue, stringMap);
 		} catch (JMSException | AnalysisStoreException | IOException e) {
 			// An issue occurred, re-queue the request.

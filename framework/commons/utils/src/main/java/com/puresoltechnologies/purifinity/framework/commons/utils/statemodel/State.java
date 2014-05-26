@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.framework.commons.utils.statemodel;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * This is a single state of the system within the state model.
@@ -33,6 +33,6 @@ public interface State<S extends State<S>> {
 	 * 
 	 * @return
 	 */
-	public List<Transition<S>> getTransitions();
+	public Set<Transition<S>> getTransitions();
 
 }

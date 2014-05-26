@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.framework.commons.utils.statemodel;
 
-
 /**
  * This interface represents a single transition within the state model.
  * 

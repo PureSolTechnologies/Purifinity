@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.codehaus.jackson.annotate.JsonProperty;
+
 /**
  * This class contains version information which is to be interpreted as
  * described in Semantic Versioning 2.0.0 (<a
@@ -42,28 +44,31 @@ public class Version implements Serializable, Comparable<Version> {
 				preReleaseInformation, buildMetadata);
 	}
 
-	private final int majorVersion;
-	private final int minorVersion;
-	private final int patchVersion;
+	private final int major;
+	private final int minor;
+	private final int patch;
 	private final String preReleaseInformation;
 	private final String buildMetadata;
 
-	public Version(int majorVersion, int minorVersion, int patchVersion) {
-		this(majorVersion, minorVersion, patchVersion, null, null);
+	public Version(int major, int minor, int patch) {
+		this(major, minor, patch, null, null);
 	}
 
-	public Version(int majorVersion, int minorVersion, int patchVersion,
+	public Version(int major, int minor, int patchVersion,
 			String preReleaseInformation) {
-		this(majorVersion, minorVersion, patchVersion, preReleaseInformation,
-				null);
+		this(major, minor, patchVersion, preReleaseInformation, null);
 	}
 
-	public Version(int majorVersion, int minorVersion, int patchVersion,
-			String preReleaseInformation, String buildMetadata) {
+	public Version(
+			@JsonProperty("major") int major,
+			@JsonProperty("minor") int minor,
+			@JsonProperty("patch") int patch,
+			@JsonProperty("preReleaseInformation") String preReleaseInformation,
+			@JsonProperty("buildMetadata") String buildMetadata) {
 		super();
-		this.majorVersion = majorVersion;
-		this.minorVersion = minorVersion;
-		this.patchVersion = patchVersion;
+		this.major = major;
+		this.minor = minor;
+		this.patch = patch;
 		if ((preReleaseInformation == null)
 				|| (preReleaseInformation.isEmpty())) {
 			this.preReleaseInformation = null;
@@ -79,19 +84,19 @@ public class Version implements Serializable, Comparable<Version> {
 	}
 
 	private final void checkContent() {
-		if (majorVersion < 0) {
+		if (major < 0) {
 			throw new IllegalArgumentException(
 					"The major version must not be negative.");
 		}
-		if (minorVersion < 0) {
+		if (minor < 0) {
 			throw new IllegalArgumentException(
 					"The minor version must not be negative.");
 		}
-		if (patchVersion < 0) {
+		if (patch < 0) {
 			throw new IllegalArgumentException(
 					"The patch version must not be negative.");
 		}
-		if (majorVersion + minorVersion + patchVersion == 0) {
+		if (major + minor + patch == 0) {
 			throw new IllegalArgumentException(
 					"The version must contain at least one non zero digit.");
 		}
@@ -113,16 +118,16 @@ public class Version implements Serializable, Comparable<Version> {
 		}
 	}
 
-	public int getMajorVersion() {
-		return majorVersion;
+	public int getMajor() {
+		return major;
 	}
 
-	public int getMinorVersion() {
-		return minorVersion;
+	public int getMinor() {
+		return minor;
 	}
 
-	public int getPatchVersion() {
-		return patchVersion;
+	public int getPatch() {
+		return patch;
 	}
 
 	public String getPreReleaseInformation() {
@@ -135,14 +140,14 @@ public class Version implements Serializable, Comparable<Version> {
 
 	@Override
 	public int compareTo(Version o) {
-		if (majorVersion != o.majorVersion) {
-			return Integer.compare(majorVersion, o.majorVersion);
+		if (major != o.major) {
+			return Integer.compare(major, o.major);
 		}
-		if (minorVersion != o.minorVersion) {
-			return Integer.compare(minorVersion, o.minorVersion);
+		if (minor != o.minor) {
+			return Integer.compare(minor, o.minor);
 		}
-		if (patchVersion != o.patchVersion) {
-			return Integer.compare(patchVersion, o.patchVersion);
+		if (patch != o.patch) {
+			return Integer.compare(patch, o.patch);
 		}
 		if (preReleaseInformation == null) {
 			if (o.preReleaseInformation == null) {
@@ -211,11 +216,11 @@ public class Version implements Serializable, Comparable<Version> {
 	@Override
 	public String toString() {
 		StringBuffer buffer = new StringBuffer();
-		buffer.append(majorVersion);
+		buffer.append(major);
 		buffer.append('.');
-		buffer.append(minorVersion);
+		buffer.append(minor);
 		buffer.append('.');
-		buffer.append(patchVersion);
+		buffer.append(patch);
 		if (preReleaseInformation != null) {
 			buffer.append('-');
 			buffer.append(preReleaseInformation);

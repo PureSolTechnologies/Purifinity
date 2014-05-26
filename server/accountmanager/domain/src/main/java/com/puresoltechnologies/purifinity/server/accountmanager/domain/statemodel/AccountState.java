@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.domain.statemodel;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.puresoltechnologies.purifinity.framework.commons.utils.statemodel.State;
 import com.puresoltechnologies.purifinity.framework.commons.utils.statemodel.Transition;
@@ -21,8 +21,8 @@ public enum AccountState implements State<AccountState> {
 		}
 
 		@Override
-		public List<Transition<AccountState>> getTransitions() {
-			List<Transition<AccountState>> transitions = new ArrayList<Transition<AccountState>>();
+		public Set<Transition<AccountState>> getTransitions() {
+			Set<Transition<AccountState>> transitions = new HashSet<Transition<AccountState>>();
 			transitions.add(AccountTransition.CREATE);
 			return transitions;
 		}
@@ -40,8 +40,8 @@ public enum AccountState implements State<AccountState> {
 		}
 
 		@Override
-		public List<Transition<AccountState>> getTransitions() {
-			List<Transition<AccountState>> transitions = new ArrayList<Transition<AccountState>>();
+		public Set<Transition<AccountState>> getTransitions() {
+			Set<Transition<AccountState>> transitions = new HashSet<Transition<AccountState>>();
 			transitions.add(AccountTransition.ACTIVATE);
 			transitions.add(AccountTransition.LOCK);
 			transitions.add(AccountTransition.DELETE);
@@ -61,8 +61,8 @@ public enum AccountState implements State<AccountState> {
 		}
 
 		@Override
-		public List<Transition<AccountState>> getTransitions() {
-			List<Transition<AccountState>> transitions = new ArrayList<Transition<AccountState>>();
+		public Set<Transition<AccountState>> getTransitions() {
+			Set<Transition<AccountState>> transitions = new HashSet<Transition<AccountState>>();
 			transitions.add(AccountTransition.DEACTIVATE);
 			transitions.add(AccountTransition.LOCK);
 			return transitions;
@@ -81,8 +81,8 @@ public enum AccountState implements State<AccountState> {
 		}
 
 		@Override
-		public List<Transition<AccountState>> getTransitions() {
-			List<Transition<AccountState>> transitions = new ArrayList<Transition<AccountState>>();
+		public Set<Transition<AccountState>> getTransitions() {
+			Set<Transition<AccountState>> transitions = new HashSet<Transition<AccountState>>();
 			transitions.add(AccountTransition.REACTIVATE);
 			transitions.add(AccountTransition.LOCK);
 			transitions.add(AccountTransition.DELETE);
@@ -102,8 +102,8 @@ public enum AccountState implements State<AccountState> {
 		}
 
 		@Override
-		public List<Transition<AccountState>> getTransitions() {
-			List<Transition<AccountState>> transitions = new ArrayList<Transition<AccountState>>();
+		public Set<Transition<AccountState>> getTransitions() {
+			Set<Transition<AccountState>> transitions = new HashSet<Transition<AccountState>>();
 			transitions.add(AccountTransition.UNLOCK);
 			transitions.add(AccountTransition.DELETE);
 			return transitions;
@@ -122,8 +122,8 @@ public enum AccountState implements State<AccountState> {
 		}
 
 		@Override
-		public List<Transition<AccountState>> getTransitions() {
-			return new ArrayList<Transition<AccountState>>();
+		public Set<Transition<AccountState>> getTransitions() {
+			return new HashSet<Transition<AccountState>>();
 		}
 	},
 	;

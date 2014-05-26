@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.framework.commons.utils.statemodel;
 
-
 /**
  * This is the first abstract implementation of a state model.
  * 
@@ -10,7 +9,7 @@ package com.puresoltechnologies.purifinity.framework.commons.utils.statemodel;
 public abstract class AbstractStateModel<S extends State<S>> implements
 		StateModel<S> {
 
-	private State<S> currentState;
+	private S currentState;
 
 	/**
 	 * This is the default constructor. It starts the model at the start state
@@ -27,19 +26,24 @@ public abstract class AbstractStateModel<S extends State<S>> implements
 	 * 
 	 * @param initialState
 	 */
-	public AbstractStateModel(State<S> initialState) {
+	public AbstractStateModel(S initialState) {
 		super();
 		currentState = initialState;
 	}
 
 	@Override
-	public final State<S> getState() {
+	public final S getState() {
 		return currentState;
 	}
 
 	@Override
+	public boolean canPerformTransition(Transition<S> transition) {
+		return currentState.getTransitions().contains(transition);
+	}
+
+	@Override
 	public final void performTransition(Transition<S> transition) {
-		if (!currentState.getTransitions().contains(transition)) {
+		if (!canPerformTransition(transition)) {
 			throw new IllegalStateException("Transition '"
 					+ transition.getName() + "' is not allowed in state '"
 					+ currentState.getName() + "'");

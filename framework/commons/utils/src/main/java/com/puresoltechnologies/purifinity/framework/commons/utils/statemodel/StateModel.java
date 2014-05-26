@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.framework.commons.utils.statemodel;
 
+import java.util.Set;
+
 /**
  * This is an interface for a state model.
  * 
@@ -19,14 +21,17 @@ public interface StateModel<S extends State<S>> {
 	public S getStartState();
 
 	/**
-	 * This method returns the end state of the model which shows, that the
-	 * model is finished and cannot be changed anymore.
+	 * This method returns the possible end states of the model which show, that
+	 * the model is finished and cannot be changed anymore. There are different
+	 * possible end states due to the normal ends, aborts and errors.
 	 * 
-	 * This is the only state which must not have a valid transition!
+	 * These are the states which must not have a transition! All other states
+	 * need to have.
 	 * 
-	 * @return
+	 * @return A {@link Set} of state is returned which mark the end state of
+	 *         the state model.
 	 */
-	public S getEndState();
+	public Set<S> getEndStates();
 
 	/**
 	 * This method returns the current {@link State} of the model.
@@ -34,6 +39,12 @@ public interface StateModel<S extends State<S>> {
 	 * @return The current {@link State} is returned.
 	 */
 	public State<S> getState();
+
+	/**
+	 * This method checks whether a transition can be performed with the current
+	 * state.
+	 */
+	public boolean canPerformTransition(Transition<S> transition);
 
 	/**
 	 * This method performs the transition provided.

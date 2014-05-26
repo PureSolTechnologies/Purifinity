@@ -11,15 +11,12 @@ import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 
-import org.slf4j.Logger;
-
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.queues.ProjectAnalysisStartQueue;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.states.AnalysisProcessStateTracker;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
@@ -27,13 +24,8 @@ import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogge
 @Stateless
 public class AnalysisServiceBean implements AnalysisService {
 
-	private static final int RUN_TIMEOUT_IN_SECONDS = 3600;
-
 	@Resource(mappedName = ProjectAnalysisStartQueue.NAME)
 	private Queue projectAnalysisStartQueue;
-
-	@Inject
-	private Logger logger;
 
 	@Inject
 	private EventLogger eventLogger;
@@ -42,16 +34,13 @@ public class AnalysisServiceBean implements AnalysisService {
 	private JMSMessageSender messageSender;
 
 	@Inject
-	private AnalysisStoreService analysisStoreService;
-
-	@Inject
-	private FileStoreService fileStoreService;
-
-	@Inject
 	private AnalyzerPluginService analyzerRegistration;
 
 	@Inject
 	private RepositoryTypePluginService repositoryTypePluginService;
+
+	@Inject
+	private AnalysisProcessStateTracker analysisProcessStateTracker;
 
 	@PostConstruct
 	public void initialize() {
@@ -65,6 +54,7 @@ public class AnalysisServiceBean implements AnalysisService {
 
 	@Override
 	public void triggerNewAnalysis(UUID projectUUID) throws JMSException {
+		analysisProcessStateTracker.startProcess(projectUUID);
 		messageSender.sendMessage(projectAnalysisStartQueue,
 				projectUUID.toString());
 	}

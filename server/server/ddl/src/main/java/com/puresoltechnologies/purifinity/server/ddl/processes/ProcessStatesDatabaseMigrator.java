@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.ddl.analysisservice;
+package com.puresoltechnologies.purifinity.server.ddl.processes;
 
 import java.io.IOException;
 
@@ -7,13 +7,12 @@ import com.puresoltechnologies.purifinity.server.database.migration.AbstractData
 import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrationConnector;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 
-public class AnalysisServiceDatabaseMigrator extends AbstractDatabaseMigrator {
+public class ProcessStatesDatabaseMigrator extends AbstractDatabaseMigrator {
 
 	public static final String CASSANDRA_HOST = "localhost";
 	public static final int CASSANDRA_CQL_PORT = 9042;
 
-	protected AnalysisServiceDatabaseMigrator(
-			DatabaseMigrationConnector connector) {
+	protected ProcessStatesDatabaseMigrator(DatabaseMigrationConnector connector) {
 		super(connector);
 	}
 
@@ -21,9 +20,9 @@ public class AnalysisServiceDatabaseMigrator extends AbstractDatabaseMigrator {
 		CassandraMigrationConnector connector = new CassandraMigrationConnector(
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT);
 		try {
-			AnalysisServiceDatabaseMigrator migrator = new AnalysisServiceDatabaseMigrator(
+			ProcessStatesDatabaseMigrator migrator = new ProcessStatesDatabaseMigrator(
 					connector);
-			AnalysisServiceSchema.createSequence(migrator);
+			ProcessStatesSchema.createSequence(migrator);
 			migrator.migrate();
 		} catch (IOException | MigrationException e) {
 			e.printStackTrace();

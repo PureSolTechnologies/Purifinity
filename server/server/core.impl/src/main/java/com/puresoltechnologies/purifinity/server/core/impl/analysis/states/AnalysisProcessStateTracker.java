@@ -1,0 +1,114 @@
+package com.puresoltechnologies.purifinity.server.core.impl.analysis.states;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import javax.inject.Inject;
+
+import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+import com.datastax.driver.core.Session;
+import com.puresoltechnologies.purifinity.framework.commons.utils.statemodel.Transition;
+import com.puresoltechnologies.purifinity.server.database.cassandra.ProcessStatesKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
+
+public class AnalysisProcessStateTracker {
+
+	@Inject
+	@ProcessStatesKeyspace
+	private Session session;
+
+	@Inject
+	private CassandraPreparedStatements preparedStatements;
+
+	public void startProcess(UUID projectUUID) {
+		AnalysisProcessStatusInformation state = readProcessState(projectUUID);
+		if (state != null) {
+			throw new IllegalStateException(
+					"Process(es) was/were found for project UUID '"
+							+ projectUUID + "'.");
+		}
+		PreparedStatement preparedStatement = preparedStatements
+				.getPreparedStatement(session,
+						"INSERT INTO analysis_process (project_uuid, state) VALUES (?, ?);");
+		BoundStatement boundStatement = preparedStatement.bind(projectUUID,
+				AnalysisProcessState.QUEUED_FOR_START.name());
+		session.execute(boundStatement);
+	}
+
+	public List<AnalysisProcessStatusInformation> readProcessStates() {
+		PreparedStatement preparedStatement = preparedStatements
+				.getPreparedStatement(session,
+						"SELECT * FROM analysis_process;");
+		BoundStatement boundStatement = preparedStatement.bind();
+		ResultSet resultSet = session.execute(boundStatement);
+		List<AnalysisProcessStatusInformation> information = new ArrayList<>();
+		while (!resultSet.isExhausted()) {
+			Row row = resultSet.one();
+			UUID projectUUID = row.getUUID("run_uuid");
+			UUID runUUID = row.getUUID("run_uuid");
+			String stateString = row.getString("state");
+			AnalysisProcessState state = AnalysisProcessState
+					.valueOf(stateString);
+			information.add(new AnalysisProcessStatusInformation(projectUUID,
+					runUUID, state));
+		}
+		return information;
+	}
+
+	public AnalysisProcessStatusInformation readProcessState(UUID projectUUID) {
+		PreparedStatement preparedStatement = preparedStatements
+				.getPreparedStatement(session,
+						"SELECT run_uuid, state FROM analysis_process WHERE project_uuid=?;");
+		BoundStatement boundStatement = preparedStatement.bind(projectUUID);
+		ResultSet resultSet = session.execute(boundStatement);
+		if (resultSet.isExhausted()) {
+			return null;
+		}
+		Row row = resultSet.one();
+		if (!resultSet.isExhausted()) {
+			throw new IllegalStateException(
+					"More than one process was found for project UUID '"
+							+ projectUUID + "'.");
+		}
+		UUID runUUID = row.getUUID("run_uuid");
+		String stateString = row.getString("state");
+		AnalysisProcessState state = AnalysisProcessState.valueOf(stateString);
+		return new AnalysisProcessStatusInformation(projectUUID, runUUID, state);
+	}
+
+	public boolean changeProcessState(UUID projectUUID, UUID runUUID,
+			Transition<AnalysisProcessState> transition) {
+		AnalysisProcessStatusInformation statusInformation = readProcessState(projectUUID);
+		AnalysisProcessState state = statusInformation.getState();
+		AnalysisProcessStateModel model = new AnalysisProcessStateModel(state);
+		if (!model.canPerformTransition(transition)) {
+			return false;
+		}
+		model.performTransition(transition);
+		setProcessState(projectUUID, runUUID, model.getState());
+		return true;
+	}
+
+	private void setProcessState(UUID projectUUID, UUID runUUID,
+			AnalysisProcessState state) {
+		PreparedStatement preparedStatement = preparedStatements
+				.getPreparedStatement(
+						session,
+						"INSERT INTO analysis_process (project_uuid, run_uuid, state) VALUES (?, ?, ?);");
+		BoundStatement boundStatement = preparedStatement.bind(projectUUID,
+				runUUID, state.name());
+		session.execute(boundStatement);
+	}
+
+	public void stopProcess(UUID projectUUID) {
+		PreparedStatement preparedStatement = preparedStatements
+				.getPreparedStatement(session,
+						"DELETE FROM analysis_process WHERE project_uuid = ?;");
+		BoundStatement boundStatement = preparedStatement.bind(projectUUID);
+		session.execute(boundStatement);
+	}
+}

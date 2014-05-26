@@ -18,51 +18,51 @@ public class VersionTest {
 	@Test
 	public void testValueOf() {
 		Version version = Version.valueOf("1.2.3-alpha");
-		assertThat(version.getMajorVersion(), equalTo(1));
-		assertThat(version.getMinorVersion(), equalTo(2));
-		assertThat(version.getPatchVersion(), equalTo(3));
+		assertThat(version.getMajor(), equalTo(1));
+		assertThat(version.getMinor(), equalTo(2));
+		assertThat(version.getPatch(), equalTo(3));
 		assertThat(version.getPreReleaseInformation(), equalTo("alpha"));
 		assertThat(version.getBuildMetadata(), equalTo(null));
 
 		version = Version.valueOf("1.3.5-alpha.1");
-		assertThat(version.getMajorVersion(), equalTo(1));
-		assertThat(version.getMinorVersion(), equalTo(3));
-		assertThat(version.getPatchVersion(), equalTo(5));
+		assertThat(version.getMajor(), equalTo(1));
+		assertThat(version.getMinor(), equalTo(3));
+		assertThat(version.getPatch(), equalTo(5));
 		assertThat(version.getPreReleaseInformation(), equalTo("alpha.1"));
 		assertThat(version.getBuildMetadata(), equalTo(null));
 
 		version = Version.valueOf("1.0.0-0.3.7");
-		assertThat(version.getMajorVersion(), equalTo(1));
-		assertThat(version.getMinorVersion(), equalTo(0));
-		assertThat(version.getPatchVersion(), equalTo(0));
+		assertThat(version.getMajor(), equalTo(1));
+		assertThat(version.getMinor(), equalTo(0));
+		assertThat(version.getPatch(), equalTo(0));
 		assertThat(version.getPreReleaseInformation(), equalTo("0.3.7"));
 		assertThat(version.getBuildMetadata(), equalTo(null));
 
 		version = Version.valueOf("1.0.0-x.7.z.92");
-		assertThat(version.getMajorVersion(), equalTo(1));
-		assertThat(version.getMinorVersion(), equalTo(0));
-		assertThat(version.getPatchVersion(), equalTo(0));
+		assertThat(version.getMajor(), equalTo(1));
+		assertThat(version.getMinor(), equalTo(0));
+		assertThat(version.getPatch(), equalTo(0));
 		assertThat(version.getPreReleaseInformation(), equalTo("x.7.z.92"));
 		assertThat(version.getBuildMetadata(), equalTo(null));
 
 		version = Version.valueOf("1.0.0-alpha+001");
-		assertThat(version.getMajorVersion(), equalTo(1));
-		assertThat(version.getMinorVersion(), equalTo(0));
-		assertThat(version.getPatchVersion(), equalTo(0));
+		assertThat(version.getMajor(), equalTo(1));
+		assertThat(version.getMinor(), equalTo(0));
+		assertThat(version.getPatch(), equalTo(0));
 		assertThat(version.getPreReleaseInformation(), equalTo("alpha"));
 		assertThat(version.getBuildMetadata(), equalTo("001"));
 
 		version = Version.valueOf("1.0.0+20130313144700");
-		assertThat(version.getMajorVersion(), equalTo(1));
-		assertThat(version.getMinorVersion(), equalTo(0));
-		assertThat(version.getPatchVersion(), equalTo(0));
+		assertThat(version.getMajor(), equalTo(1));
+		assertThat(version.getMinor(), equalTo(0));
+		assertThat(version.getPatch(), equalTo(0));
 		assertThat(version.getPreReleaseInformation(), equalTo(null));
 		assertThat(version.getBuildMetadata(), equalTo("20130313144700"));
 
 		version = Version.valueOf("1.0.0-beta+exp.sha.5114f85");
-		assertThat(version.getMajorVersion(), equalTo(1));
-		assertThat(version.getMinorVersion(), equalTo(0));
-		assertThat(version.getPatchVersion(), equalTo(0));
+		assertThat(version.getMajor(), equalTo(1));
+		assertThat(version.getMinor(), equalTo(0));
+		assertThat(version.getPatch(), equalTo(0));
 		assertThat(version.getPreReleaseInformation(), equalTo("beta"));
 		assertThat(version.getBuildMetadata(), equalTo("exp.sha.5114f85"));
 	}

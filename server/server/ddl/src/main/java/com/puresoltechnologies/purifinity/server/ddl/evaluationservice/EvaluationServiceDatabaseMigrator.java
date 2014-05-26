@@ -9,10 +9,8 @@ import com.puresoltechnologies.purifinity.server.database.migration.MigrationExc
 
 public class EvaluationServiceDatabaseMigrator extends AbstractDatabaseMigrator {
 
-	public static final String PASSWORD_STORE_KEYSPACE_NAME = "password_store";
 	public static final String CASSANDRA_HOST = "localhost";
 	public static final int CASSANDRA_CQL_PORT = 9042;
-	public static final String PASSWORD_TABLE_NAME = "passwords";
 
 	protected EvaluationServiceDatabaseMigrator(
 			DatabaseMigrationConnector connector) {

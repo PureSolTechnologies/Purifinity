@@ -4,13 +4,14 @@ import static com.puresoltechnologies.purifinity.server.database.cassandra.utils
 import static com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration.createTable;
 
 import com.puresoltechnologies.purifinity.framework.commons.utils.Version;
+import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
 import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrator;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 
 public class EvaluationServiceSchema {
 
-	private static final String EVALUATION_KEYSPACE = "evaluation_store";
+	private static final String EVALUATION_KEYSPACE = EvaluationStoreKeyspace.NAME;
 
 	private static final String EVALUATION_FILES_TABLE = "files";
 	private static final String EVALUATION_DIRECTORIES_TABLE = "directories";
