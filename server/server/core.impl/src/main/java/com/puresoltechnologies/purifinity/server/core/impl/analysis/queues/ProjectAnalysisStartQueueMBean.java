@@ -50,6 +50,9 @@ public class ProjectAnalysisStartQueueMBean implements MessageListener {
 	@Resource(mappedName = ProjectFileStorageQueue.NAME)
 	private Queue projectFileStorageQueue;
 
+	@Resource(mappedName = ProjectAnalysisStartQueue.NAME)
+	private Queue projectAnalysisStartQueue;
+
 	@Inject
 	private JMSMessageSender messageSender;
 
@@ -64,6 +67,20 @@ public class ProjectAnalysisStartQueueMBean implements MessageListener {
 		try {
 			TextMessage textMessage = (TextMessage) message;
 			UUID uuid = UUID.fromString(textMessage.getText());
+
+			if (analysisProcessStateTracker.readProcessState(uuid) != null) {
+				/*
+				 * There is already a process running for the project, so we
+				 * re-queue here.
+				 */
+				messageSender.sendMessageWithDelay(projectAnalysisStartQueue,
+						uuid.toString(), 60000);
+				/*
+				 * We finish here and let the re-delivery do the job.
+				 */
+				return;
+			}
+			analysisProcessStateTracker.startProcess(uuid);
 
 			AnalysisProject analysisProject = analysisStore
 					.readAnalysisProject(uuid);

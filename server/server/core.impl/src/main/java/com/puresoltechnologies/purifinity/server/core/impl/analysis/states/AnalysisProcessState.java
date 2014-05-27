@@ -23,6 +23,7 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		public Set<Transition<AnalysisProcessState>> getTransitions() {
 			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
 			transitions.add(AnalysisProcessTransition.QUEUE_FOR_STORAGE);
+			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
 		}
 	},
@@ -41,6 +42,7 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		public Set<Transition<AnalysisProcessState>> getTransitions() {
 			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
 			transitions.add(AnalysisProcessTransition.START_STORAGE);
+			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
 		}
 	},
@@ -59,6 +61,7 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		public Set<Transition<AnalysisProcessState>> getTransitions() {
 			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
 			transitions.add(AnalysisProcessTransition.QUEUE_FOR_ANALYSIS);
+			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
 		}
 	},
@@ -77,6 +80,7 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		public Set<Transition<AnalysisProcessState>> getTransitions() {
 			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
 			transitions.add(AnalysisProcessTransition.START_ANALYSIS);
+			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
 		}
 	},
@@ -95,6 +99,7 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		public Set<Transition<AnalysisProcessState>> getTransitions() {
 			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
 			transitions.add(AnalysisProcessTransition.QUEUE_FOR_EVALUATION);
+			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
 		}
 	},
@@ -113,6 +118,7 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		public Set<Transition<AnalysisProcessState>> getTransitions() {
 			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
 			transitions.add(AnalysisProcessTransition.START_EVALUATION);
+			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
 		}
 	},
@@ -131,6 +137,7 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		public Set<Transition<AnalysisProcessState>> getTransitions() {
 			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
 			transitions.add(AnalysisProcessTransition.FINISH);
+			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
 		}
 	},

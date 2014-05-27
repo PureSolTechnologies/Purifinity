@@ -70,4 +70,33 @@ public class JMSMessageSender {
 		}
 	}
 
+	/**
+	 * This method is used to send a text message with a delay.
+	 * 
+	 * @param projectAnalysisStartQueue
+	 * @param text
+	 *            is the text for the text message to be sent.
+	 * @param delay
+	 *            is the delay in milliseconds to be waited until delivery.
+	 * @throws JMSException
+	 */
+	public void sendMessageWithDelay(Queue queue, String text, long delay)
+			throws JMSException {
+		TextMessage message = session.createTextMessage(text);
+		sendMessageWithDelay(queue, message, delay);
+	}
+
+	private void sendMessageWithDelay(Queue queue, Message message, long delay)
+			throws JMSException {
+		try (MessageProducer producer = session.createProducer(queue)) {
+			producer.setDeliveryDelay(delay);
+			connection.start();
+			try {
+				producer.send(message);
+			} finally {
+				connection.stop();
+			}
+		}
+	}
+
 }

@@ -212,10 +212,10 @@
 					passivation-disabled-cache-ref="simple" />
 				<singleton default-access-timeout="5000" />
 			</session-bean>
-            <mdb>
-                <resource-adapter-ref resource-adapter-name="${ejb.resource-adapter-name:hornetq-ra.rar}"/>
-                <bean-instance-pool-ref pool-name="mdb-strict-max-pool"/>
-            </mdb>
+			<mdb>
+				<resource-adapter-ref resource-adapter-name="${ejb.resource-adapter-name:hornetq-ra.rar}" />
+				<bean-instance-pool-ref pool-name="mdb-strict-max-pool" />
+			</mdb>
 			<pools>
 				<bean-instance-pools>
 					<!-- A sample strict max pool configuration -->
@@ -381,6 +381,12 @@
 						<message-counter-history-day-limit>10
 						</message-counter-history-day-limit>
 					</address-setting>
+					<address-setting match="jms.queue.ProjectAnalysisStartQueue">
+						<dead-letter-address>jms.queue.ECGDeadLetterQueue
+						</dead-letter-address>
+						<redelivery-delay>60000</redelivery-delay>
+						<max-delivery-attempts>60</max-delivery-attempts>
+					</address-setting>
 				</address-settings>
 				<jms-connection-factories>
 					<connection-factory name="InVmConnectionFactory">
@@ -416,6 +422,9 @@
 					<jms-queue name="ProjectAnalysisStartQueue">
 						<entry name="java:jboss/jms/queue/projectAnalysisStartQueue" />
 						<durable>true</durable>
+					</jms-queue>
+					<jms-queue name="ProjectAnalysisStartDLQ">
+						<entry name="java:jboss/jms/queue/projectAnalysisStartDLQ" />
 					</jms-queue>
 					<jms-queue name="ProjectFileStorageQueue">
 						<entry name="java:jboss/jms/queue/projectFileStorageQueue" />

@@ -16,7 +16,6 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisServi
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.queues.ProjectAnalysisStartQueue;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.states.AnalysisProcessStateTracker;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
@@ -39,9 +38,6 @@ public class AnalysisServiceBean implements AnalysisService {
 	@Inject
 	private RepositoryTypePluginService repositoryTypePluginService;
 
-	@Inject
-	private AnalysisProcessStateTracker analysisProcessStateTracker;
-
 	@PostConstruct
 	public void initialize() {
 		eventLogger.logEvent(AnalysisServiceEvents.createStartupEvent());
@@ -54,7 +50,6 @@ public class AnalysisServiceBean implements AnalysisService {
 
 	@Override
 	public void triggerNewAnalysis(UUID projectUUID) throws JMSException {
-		analysisProcessStateTracker.startProcess(projectUUID);
 		messageSender.sendMessage(projectAnalysisStartQueue,
 				projectUUID.toString());
 	}
