@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!--  link href="css/default.css" rel="stylesheet" type="text/css" / -->
+	<title>Standard Error Page</title>
+</h:head>
+<h:body>
+	<h:outputStylesheet library="css" name="page.css" target="body" />
+	<ui:composition template="../resources/templates/page_template.xhtml">
+		<!--  h:outputStylesheet library="css" name="css/default.css" target="body" / -->
+		<ui:define name="page_content">
+			<h2>ERROR <ui:insert name="error_code">Code</ui:insert> - <ui:insert name="error_name">Name</ui:insert></h2>
+			<p><ui:insert name="error_description">Description</ui:insert></p>
+			<p>
+				<a href="index.jsf">Return to home page</a>
+			</p>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

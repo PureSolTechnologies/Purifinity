@@ -21,9 +21,6 @@
 	<composite:implementation>
 		<h:outputStylesheet library="css" name="accountBar.css" />
 		<div class="barContainer">
-			<h:panelGroup styleClass="languageSelector">
-				<page:languageSelector />
-			</h:panelGroup>
 			<h:form styleClass="accountBar">
 				<h:panelGroup rendered="#{!loginMBean.isLoggedIn()}">
 					<h:outputText value="#{accountBarMBean.pleaseLoginTranslated}"

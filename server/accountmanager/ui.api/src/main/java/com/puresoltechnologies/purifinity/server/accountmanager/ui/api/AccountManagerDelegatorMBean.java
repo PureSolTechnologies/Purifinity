@@ -14,7 +14,7 @@ public class AccountManagerDelegatorMBean implements Serializable {
 
 	private static final long serialVersionUID = 4724997649418867363L;
 
-	@EJB(lookup = "java:global/accountmanager.app/accountmanager.core.impl/AccountManagerBean!com.puresol.accountmanager.core.api.AccountManagerRemote")
+	@EJB(lookup = "java:global/accountmanager.app/accountmanager.core.impl/AccountManagerBean!com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerRemote")
 	private AccountManagerRemote accountManager;
 
 	public Object getName() {

@@ -1,0 +1,13 @@
+body {
+	background-color: #000000;
+}
+
+div.page {
+	background-color: #ffffff;
+	border: 2pt solid #b4d85a;
+	padding: 0pt;
+}
+
+div.pageContainer {
+	overflow: auto;
+}

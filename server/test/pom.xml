@@ -14,6 +14,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>accountmanager.app</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>c11.plugin</artifactId>
 			<type>ear</type>
 		</dependency>
@@ -68,10 +73,10 @@
 					<deployables>
 						<deployable>
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>
-							<artifactId>passwordstore.app</artifactId>
+							<artifactId>accountmanager.app</artifactId>
 							<type>ear</type>
 							<properties>
-								<name>passwordstore.app.ear</name>
+								<name>accountmanager.app.ear</name>
 							</properties>
 						</deployable>
 						<deployable>
@@ -104,6 +109,14 @@
 							<type>ear</type>
 							<properties>
 								<name>server.app.ear</name>
+							</properties>
+						</deployable>
+						<deployable>
+							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<artifactId>passwordstore.app</artifactId>
+							<type>ear</type>
+							<properties>
+								<name>passwordstore.app.ear</name>
 							</properties>
 						</deployable>
 					</deployables>

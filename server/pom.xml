@@ -319,6 +319,12 @@
 			<!-- ================ -->
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>accountmanager.app</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>accountmanager.core.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -348,6 +354,12 @@
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>accountmanager.ui.api</artifactId>
 				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>accountmanager.ui.web</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -397,6 +409,7 @@
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>common.ui</artifactId>
 				<version>${project.version}</version>
+				<type>war</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -497,6 +510,12 @@
 				<artifactId>passwordstore.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>passwordstore.ui.web</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
