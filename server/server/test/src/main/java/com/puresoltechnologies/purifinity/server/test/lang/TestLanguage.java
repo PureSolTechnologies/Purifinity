@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerStore;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
@@ -42,7 +43,7 @@ public class TestLanguage extends AbstractProgrammingLanguage implements
 	}
 
 	private TestLanguage() {
-		super("TestLanguage", "0.0");
+		super("TestLanguage", new Version(0, 0, 0));
 	}
 
 	@Override

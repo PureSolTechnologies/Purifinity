@@ -8,6 +8,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.security.DigestInputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -54,13 +57,15 @@ public final class FileStoreServiceBean implements FileStoreService {
 						hashString);
 
 				PreparedStatement preparedStmt = cassandraPreparedStatements
-						.getPreparedStatement(session, "INSERT INTO "
-								+ CassandraElementNames.ANALYSIS_FILES_TABLE
-								+ " (hashid, raw, size) VALUES (?,?,?)");
+						.getPreparedStatement(
+								session,
+								"INSERT INTO "
+										+ CassandraElementNames.ANALYSIS_FILES_TABLE
+										+ " (time, hashid, raw, size) VALUES (?, ?, ?, ?)");
 				byte[] array = buffer.toByteArray();
 				ByteBuffer byteBuffer = ByteBuffer.wrap(array);
-				BoundStatement boundStatement = preparedStmt.bind(hashId
-						.toString());
+				BoundStatement boundStatement = preparedStmt.bind(new Date(),
+						hashId.toString());
 				boundStatement.setBytes("raw", byteBuffer);
 				boundStatement.setInt("size", buffer.size());
 				session.execute(boundStatement);
@@ -92,41 +97,50 @@ public final class FileStoreServiceBean implements FileStoreService {
 	}
 
 	@Override
-	public CodeAnalysis loadAnalysis(HashId hashId, ClassLoader classLoader)
-			throws FileStoreException {
+	public List<CodeAnalysis> loadAnalyses(HashId hashId,
+			ClassLoader classLoader) throws FileStoreException {
+		List<CodeAnalysis> analyses = new ArrayList<>();
 		ResultSet resultSet = session.execute("SELECT analysis FROM "
-				+ CassandraElementNames.ANALYSIS_FILES_TABLE
+				+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
 				+ " WHERE hashid='" + hashId.toString() + "'");
 		Row result = resultSet.one();
 		if (result == null) {
 			throw new FileStoreException(
-					"Could not load analysis for file with hash '" + hashId
+					"Could not load analyses for file with hash '" + hashId
 							+ "'");
 		}
-		ByteBuffer byteBuffer = result.getBytes("analysis");
-		try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
-				byteBuffer.array(), byteBuffer.position(), byteBuffer.limit())) {
-			try (ObjectInputStream inStream = new ObjectInputStream(
-					byteArrayInputStream)) {
-				Object object = inStream.readObject();
-				return (CodeAnalysis) object;
+		while (!resultSet.isExhausted()) {
+			ByteBuffer byteBuffer = result.getBytes("analysis");
+			try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
+					byteBuffer.array(), byteBuffer.position(),
+					byteBuffer.limit())) {
+				try (ObjectInputStream inStream = new ObjectInputStream(
+						byteArrayInputStream)) {
+					Object object = inStream.readObject();
+					analyses.add((CodeAnalysis) object);
+				}
+			} catch (ClassNotFoundException | IOException e) {
+				throw new FileStoreException(
+						"Could not load analysis for file with hash '" + hashId
+								+ "'", e);
 			}
-		} catch (ClassNotFoundException | IOException e) {
-			throw new FileStoreException(
-					"Could not load analysis for file with hash '" + hashId
-							+ "'", e);
+			result = resultSet.one();
 		}
+		return analyses;
 	}
 
 	@Override
 	public final void storeAnalysis(HashId hashId, CodeAnalysis fileAnalysis)
 			throws FileStoreException {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
-				.getPreparedStatement(session, "INSERT INTO "
-						+ CassandraElementNames.ANALYSIS_FILES_TABLE
-						+ " (hashid, analysis) VALUES (?,?)");
-		BoundStatement boundStatement = preparedStatement.bind(hashId
-				.toString());
+				.getPreparedStatement(
+						session,
+						"INSERT INTO "
+								+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
+								+ " (time, hashid, analyzer, analyzer_version, analysis) VALUES (?, ?, ?, ?, ?)");
+		BoundStatement boundStatement = preparedStatement.bind(new Date(),
+				hashId.toString(), fileAnalysis.getLanguageName(), fileAnalysis
+						.getLanguageVersion().toString());
 		try {
 			try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 				try (ObjectOutputStream outStream = new ObjectOutputStream(
@@ -146,7 +160,7 @@ public final class FileStoreServiceBean implements FileStoreService {
 
 	@Override
 	public final boolean isAvailable(HashId hashId) {
-		ResultSet resultSet = session.execute("SELECT hash FROM "
+		ResultSet resultSet = session.execute("SELECT hashid FROM "
 				+ CassandraElementNames.ANALYSIS_FILES_TABLE
 				+ " WHERE hashid='" + hashId.toString() + "'");
 		Row result = resultSet.one();
@@ -168,9 +182,9 @@ public final class FileStoreServiceBean implements FileStoreService {
 	@Override
 	public final boolean wasAnalyzed(HashId hashId) {
 		ResultSet resultSet = session.execute("SELECT analysis FROM "
-				+ CassandraElementNames.ANALYSIS_FILES_TABLE
+				+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
 				+ " WHERE hashid='" + hashId.toString() + "'");
 		Row result = resultSet.one();
-		return result.getBytes("analysis") != null;
+		return (result != null) && (result.getBytes("analysis") != null);
 	}
 }

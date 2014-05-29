@@ -30,7 +30,7 @@ activationConfig = {//
 		@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") //
 }//
 )
-public class ProjectAnalysisStartDLQMBean implements MessageListener {
+public class ProjectAnalysisStartDLQMDBean implements MessageListener {
 
 	@Inject
 	private EventLogger eventLogger;

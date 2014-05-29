@@ -15,7 +15,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
-import com.puresoltechnologies.purifinity.framework.commons.utils.Version;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrationConnector;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationStep;

@@ -49,7 +49,7 @@ activationConfig = {//
 		@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") //
 }//
 )
-public class ProjectFileStorageQueueMBean implements MessageListener {
+public class ProjectFileStorageQueueMDBean implements MessageListener {
 
 	@Inject
 	private Logger logger;

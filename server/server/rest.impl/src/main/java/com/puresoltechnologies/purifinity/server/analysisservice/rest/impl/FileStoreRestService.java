@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl;
 
 import java.io.InputStream;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -37,9 +38,9 @@ public class FileStoreRestService implements FileStoreRestInterface {
 	}
 
 	@Override
-	public CodeAnalysis loadAnalysis(HashId hashId, ClassLoader classLoader)
-			throws FileStoreException {
-		return fileStore.loadAnalysis(hashId, classLoader);
+	public List<CodeAnalysis> loadAnalyses(HashId hashId,
+			ClassLoader classLoader) throws FileStoreException {
+		return fileStore.loadAnalyses(hashId, classLoader);
 	}
 
 	@Override

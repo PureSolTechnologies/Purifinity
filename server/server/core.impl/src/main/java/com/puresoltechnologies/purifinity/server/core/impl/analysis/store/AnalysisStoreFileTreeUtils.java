@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
@@ -326,8 +327,9 @@ public class AnalysisStoreFileTreeUtils {
 				.getProperty(TitanElementNames.ANALYSIS_DURATION_PROPERTY);
 		String languageName = analysisVertex
 				.getProperty(TitanElementNames.ANALYSIS_LANGUAGE_NAME_PROPERTY);
-		String languageVersion = analysisVertex
-				.getProperty(TitanElementNames.ANALYSIS_LANGUAGE_VERSION_PROPERTY);
+		Version languageVersion = Version
+				.valueOf((String) analysisVertex
+						.getProperty(TitanElementNames.ANALYSIS_LANGUAGE_VERSION_PROPERTY));
 		boolean successful = analysisVertex
 				.getProperty(TitanElementNames.ANALYSIS_SUCCESSFUL_PROPERTY);
 		String analyzerMessage = analysisVertex

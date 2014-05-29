@@ -10,6 +10,7 @@ import java.util.ServiceLoader;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
@@ -45,7 +46,7 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	private Java() {
-		super("Java", "7");
+		super("Java", new Version(1, 7, 0));
 	}
 
 	/**

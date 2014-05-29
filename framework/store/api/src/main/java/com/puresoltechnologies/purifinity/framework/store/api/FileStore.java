@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.framework.store.api;
 
 import java.io.InputStream;
+import java.util.List;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCode;
@@ -74,8 +75,8 @@ public interface FileStore {
 	 * @return
 	 * @throws FileStoreException
 	 */
-	public CodeAnalysis loadAnalysis(HashId hashId, ClassLoader classLoader)
-			throws FileStoreException;
+	public List<CodeAnalysis> loadAnalyses(HashId hashId,
+			ClassLoader classLoader) throws FileStoreException;
 
 	/**
 	 * This method stores a single analysis for a file.

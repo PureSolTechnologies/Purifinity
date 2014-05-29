@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.analysis.spi;
 
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 
@@ -7,9 +8,9 @@ public abstract class AbstractProgrammingLanguage implements
 		ProgrammingLanguage {
 
 	private final String name;
-	private final String version;
+	private final Version version;
 
-	protected AbstractProgrammingLanguage(String name, String version) {
+	protected AbstractProgrammingLanguage(String name, Version version) {
 		this.name = name;
 		this.version = version;
 	}
@@ -23,7 +24,7 @@ public abstract class AbstractProgrammingLanguage implements
 	}
 
 	@Override
-	public final String getVersion() {
+	public final Version getVersion() {
 		return version;
 	}
 

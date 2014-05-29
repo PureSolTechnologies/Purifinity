@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 
@@ -50,7 +51,7 @@ public abstract class ProgrammingLanguages implements Closeable, AutoCloseable {
 	 * @return The programming language is returned. If the language was not
 	 *         found null is returned.
 	 */
-	public ProgrammingLanguage findByName(String name, String version) {
+	public ProgrammingLanguage findByName(String name, Version version) {
 		for (ProgrammingLanguage language : getAll()) {
 			if ((language.getName().equals(name))
 					&& (language.getVersion().equals(version))) {

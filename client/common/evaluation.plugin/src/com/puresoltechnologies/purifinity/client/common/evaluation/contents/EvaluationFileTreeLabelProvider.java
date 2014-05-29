@@ -111,11 +111,19 @@ public class EvaluationFileTreeLabelProvider implements ITableLabelProvider {
 		if ((fileStore != null) && (analyzedFile != null)) {
 			if (fileStore.wasAnalyzed(analyzedFile.getHashId())) {
 				try {
-					CodeAnalysis analysisResult = fileStore.loadAnalysis(
-							analyzedFile.getHashId(), Thread.currentThread()
-									.getContextClassLoader());
-					text += " (" + analysisResult.getLanguageName() + " "
-							+ analysisResult.getLanguageVersion() + ")";
+					List<CodeAnalysis> analysisResults = fileStore
+							.loadAnalysis(analyzedFile.getHashId(), Thread
+									.currentThread().getContextClassLoader());
+					StringBuffer buffer = new StringBuffer();
+					for (CodeAnalysis codeAnalysis : analysisResults) {
+						if (buffer.length() > 0) {
+							buffer.append(", ");
+						}
+						buffer.append(codeAnalysis.getLanguageName());
+						buffer.append(" ");
+						buffer.append(codeAnalysis.getLanguageVersion());
+					}
+					text += " (" + buffer.toString() + ")";
 				} catch (FileStoreException e) {
 					logger.warn(
 							"Could not load the analysis which was offered by the store.",

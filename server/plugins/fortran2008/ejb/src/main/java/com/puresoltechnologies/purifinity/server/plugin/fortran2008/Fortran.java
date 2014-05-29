@@ -10,6 +10,7 @@ import java.util.ServiceLoader;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
@@ -40,7 +41,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	private SourceForm sourceForm = SourceForm.FREE_FORM;
 
 	private Fortran() {
-		super("Fortran", "2008");
+		super("Fortran", new Version(2008, 0, 0));
 	}
 
 	@Override

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -20,6 +21,7 @@ import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
@@ -75,14 +77,16 @@ public class FileStoreIT extends AbstractAnalysisStoreServiceServerTest {
 			assertNotNull(hashId.getHash());
 		}
 		AnalysisInformation analyzedFile = new AnalysisInformation(hashId,
-				new Date(), 12345l, true, "language", "1.2.3");
+				new Date(), 12345l, true, "language", new Version(1, 2, 3));
 		CodeAnalysis fileAnalysis = new CodeAnalysis(new Date(), 12345l,
-				"language", "1.2.3", analyzedFile, new ArrayList<CodeRange>(),
-				(UniversalSyntaxTree) null);
+				"language", new Version(1, 2, 3), analyzedFile,
+				new ArrayList<CodeRange>(), (UniversalSyntaxTree) null);
 		fileStore.storeAnalysis(hashId, fileAnalysis);
-		CodeAnalysis fileAnalysisRead = fileStore.loadAnalysis(hashId, Thread
-				.currentThread().getContextClassLoader());
-		assertNotSame(fileAnalysis, fileAnalysisRead);
-		assertEquals(fileAnalysis, fileAnalysisRead);
+		List<CodeAnalysis> fileAnalysisRead = fileStore.loadAnalyses(hashId,
+				Thread.currentThread().getContextClassLoader());
+		assertNotNull(fileAnalysisRead);
+		assertEquals(1, fileAnalysisRead.size());
+		assertNotSame(fileAnalysis, fileAnalysisRead.get(0));
+		assertEquals(fileAnalysis, fileAnalysisRead.get(0));
 	}
 }

@@ -15,6 +15,7 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
@@ -71,7 +72,7 @@ public class PluginRegistration implements AnalyzerRemotePlugin {
 	}
 
 	@Override
-	public String getVersion() {
+	public Version getVersion() {
 		return c11.getVersion();
 	}
 

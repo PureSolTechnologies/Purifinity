@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.puresoltechnologies.commons.misc.TimeAwareness;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 
 /**
@@ -32,13 +33,13 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 	private final Date time;
 	private final long duration;
 	private final String languageName;
-	private final String languageVersion;
+	private final Version languageVersion;
 	private final AnalysisInformation analyzedFile;
 	private final List<CodeRange> analyzableCodeRanges;
 	private final UniversalSyntaxTree universalSyntaxTree;
 
 	public CodeAnalysis(Date time, long duration, String languageName,
-			String languageVersion, AnalysisInformation analyzedFile,
+			Version languageVersion, AnalysisInformation analyzedFile,
 			List<CodeRange> analyzableCodeRanges,
 			UniversalSyntaxTree universalSyntaxTree) {
 		super();
@@ -89,7 +90,7 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 	 * 
 	 * @return
 	 */
-	public String getLanguageVersion() {
+	public Version getLanguageVersion() {
 		return languageVersion;
 	}
 

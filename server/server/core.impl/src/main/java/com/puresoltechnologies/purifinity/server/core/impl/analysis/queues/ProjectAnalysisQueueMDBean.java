@@ -43,7 +43,7 @@ activationConfig = {//
 		@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") //
 }//
 )
-public class ProjectAnalysisQueueMBean implements MessageListener {
+public class ProjectAnalysisQueueMDBean implements MessageListener {
 
 	@Inject
 	private Logger logger;
@@ -136,16 +136,6 @@ public class ProjectAnalysisQueueMBean implements MessageListener {
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-			Throwable t = e;
-			StringBuilder message = new StringBuilder();
-			int id = 1;
-			while (t != null) {
-				message.append(id).append(")\t");
-				message.append(t.getMessage());
-				message.append("\n");
-				t = t.getCause();
-				id++;
-			}
 		}
 	}
 

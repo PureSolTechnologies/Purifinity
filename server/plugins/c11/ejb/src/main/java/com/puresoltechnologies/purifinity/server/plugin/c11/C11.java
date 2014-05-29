@@ -10,6 +10,7 @@ import java.util.ServiceLoader;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
@@ -46,7 +47,7 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	private C11() {
-		super("C", "11");
+		super("C", new Version(11, 0, 0));
 	}
 
 	/**

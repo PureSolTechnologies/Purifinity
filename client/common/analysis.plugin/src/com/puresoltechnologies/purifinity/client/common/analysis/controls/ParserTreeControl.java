@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.controls;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 import org.eclipse.jface.viewers.TreeViewer;
@@ -72,9 +73,9 @@ public class ParserTreeControl extends Composite {
 			AnalysisRun analysisRun) throws IOException, FileStoreException,
 			AnalysisStoreException {
 		FileStoreClient codeStore = FileStoreClient.getInstance();
-		CodeAnalysis codeAnalysis = codeStore.loadAnalysis(analyzedCode
+		List<CodeAnalysis> codeAnalyses = codeStore.loadAnalysis(analyzedCode
 				.getHashId(), Thread.currentThread().getContextClassLoader());
-		if (codeAnalysis != null) {
+		if ((codeAnalyses != null) && (codeAnalyses.size() > 0)) {
 			UUID projectUUID = analysisRun.getInformation().getProjectUUID();
 			AnalysisProjectSettings settings = AnalysisStoreClient
 					.getInstance().readAnalysisProjectSettings(projectUUID);
@@ -82,7 +83,8 @@ public class ParserTreeControl extends Composite {
 					analyzedCode.getHashId()).getSourceCodeLocation();
 			lblNewLabel.setText(settings.getName() + ": "
 					+ sourceCodeLocation.getHumanReadableLocationString());
-			treeViewer.setInput(codeAnalysis.getUniversalSyntaxTree());
+			// FIXME: Here we need to support multiple analyses.
+			treeViewer.setInput(codeAnalyses.get(0).getUniversalSyntaxTree());
 		} else {
 			lblNewLabel.setText("");
 			treeViewer.setInput(null);

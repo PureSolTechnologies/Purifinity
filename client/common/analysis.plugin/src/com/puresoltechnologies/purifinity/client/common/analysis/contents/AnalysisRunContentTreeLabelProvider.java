@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.client.common.analysis.contents;
 
 import java.io.File;
+import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DecorationOverlayIcon;
@@ -51,11 +52,19 @@ public class AnalysisRunContentTreeLabelProvider extends LabelProvider {
 		if ((fileStore != null) && (analyzedFile != null)) {
 			if (fileStore.wasAnalyzed(analyzedFile.getHashId())) {
 				try {
-					CodeAnalysis analysisResult = fileStore.loadAnalysis(
-							analyzedFile.getHashId(), Thread.currentThread()
-									.getContextClassLoader());
-					text += " (" + analysisResult.getLanguageName() + " "
-							+ analysisResult.getLanguageVersion() + ")";
+					List<CodeAnalysis> analysisResults = fileStore
+							.loadAnalysis(analyzedFile.getHashId(), Thread
+									.currentThread().getContextClassLoader());
+					StringBuffer buffer = new StringBuffer();
+					for (CodeAnalysis codeAnalysis : analysisResults) {
+						if (buffer.length() > 0) {
+							buffer.append(", ");
+						}
+						buffer.append(codeAnalysis.getLanguageName());
+						buffer.append(" ");
+						buffer.append(codeAnalysis.getLanguageVersion());
+					}
+					text += " (" + buffer.toString() + ")";
 				} catch (FileStoreException e) {
 					logger.warn(
 							"Could not load the analysis which was offered by the store.",

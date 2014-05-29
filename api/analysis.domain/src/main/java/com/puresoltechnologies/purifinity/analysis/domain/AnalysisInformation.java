@@ -7,6 +7,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.TimeAwareness;
+import com.puresoltechnologies.commons.misc.Version;
 
 /**
  * This class is for keeping a list of analyzed files within ProjectAnalyzer.
@@ -25,7 +26,7 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 	private final long duration;
 	private final boolean successful;
 	private final String languageName;
-	private final String languageVersion;
+	private final Version languageVersion;
 	private final String analyzerErrorMessage;
 
 	public AnalysisInformation(@JsonProperty("hashId") HashId hashId,
@@ -33,13 +34,13 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 			@JsonProperty("duration") long duration,
 			@JsonProperty("successful") boolean successful,
 			@JsonProperty("languageName") String languageName,
-			@JsonProperty("languageVersion") String languageVersion) {
+			@JsonProperty("languageVersion") Version languageVersion) {
 		this(hashId, time, duration, successful, languageName, languageVersion,
 				null);
 	}
 
 	public AnalysisInformation(HashId hashId, Date time, long duration,
-			boolean successful, String languageName, String languageVersion,
+			boolean successful, String languageName, Version languageVersion,
 			String analyzerErrorMessage) {
 		super();
 		this.hashId = hashId;
@@ -73,7 +74,7 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 		return languageName;
 	}
 
-	public final String getLanguageVersion() {
+	public final Version getLanguageVersion() {
 		return languageVersion;
 	}
 

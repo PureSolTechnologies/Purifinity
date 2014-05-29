@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.server.analysisservice.rest.api;
 
 import java.io.InputStream;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -51,7 +52,7 @@ public interface FileStoreRestInterface extends FileStore {
 	@Path("files/{hashId}/analysis")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public CodeAnalysis loadAnalysis(@PathParam("hashId") HashId hashId,
+	public List<CodeAnalysis> loadAnalyses(@PathParam("hashId") HashId hashId,
 			ClassLoader classLoader) throws FileStoreException;
 
 	@Override

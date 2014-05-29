@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
@@ -22,7 +23,7 @@ public abstract class AbstractProgrammingLanguageAnalyzer extends
 
 	private final Map<String, Object> properties = new HashMap<>();
 
-	protected AbstractProgrammingLanguageAnalyzer(String name, String version) {
+	protected AbstractProgrammingLanguageAnalyzer(String name, Version version) {
 		super(name, version);
 	}
 

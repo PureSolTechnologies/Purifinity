@@ -3,6 +3,7 @@ package com.puresoltechnologies.purifinity.server.client.analysisservice;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCode;
@@ -43,9 +44,9 @@ public class FileStoreClient extends AbstractRestClient<FileStoreRestInterface> 
 		return getProxy().readSourceCode(hashId);
 	}
 
-	public CodeAnalysis loadAnalysis(HashId hashId, ClassLoader classLoader)
-			throws FileStoreException {
-		return getProxy().loadAnalysis(hashId, classLoader);
+	public List<CodeAnalysis> loadAnalysis(HashId hashId,
+			ClassLoader classLoader) throws FileStoreException {
+		return getProxy().loadAnalyses(hashId, classLoader);
 	}
 
 	public boolean wasAnalyzed(HashId hashId) {

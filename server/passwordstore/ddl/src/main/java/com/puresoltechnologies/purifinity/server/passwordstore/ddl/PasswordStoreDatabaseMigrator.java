@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.passwordstore.ddl;
 
 import java.io.IOException;
 
-import com.puresoltechnologies.purifinity.framework.commons.utils.Version;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigrationConnector;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;

@@ -42,7 +42,7 @@ activationConfig = {//
 		@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") //
 }//
 )
-public class ProjectAnalysisStartQueueMBean implements MessageListener {
+public class ProjectAnalysisStartQueueMDBean implements MessageListener {
 
 	@Inject
 	private EventLogger eventLogger;

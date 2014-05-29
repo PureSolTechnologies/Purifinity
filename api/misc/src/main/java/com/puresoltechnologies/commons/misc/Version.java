@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.framework.commons.utils;
+package com.puresoltechnologies.commons.misc;
 
 import java.io.Serializable;
 import java.util.regex.Matcher;

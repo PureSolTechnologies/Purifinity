@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.ddl.evaluationservice;
 import static com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration.createKeyspace;
 import static com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration.createTable;
 
-import com.puresoltechnologies.purifinity.framework.commons.utils.Version;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
 import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrator;

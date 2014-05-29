@@ -74,6 +74,12 @@ public class AnalysisStoreCassandraUtils {
 		BoundStatement boundStatement = preparedStatement.bind(hashId
 				.toString());
 		session.execute(boundStatement);
+		preparedStatement = cassandraPreparedStatements.getPreparedStatement(
+				session, "DELETE FROM "
+						+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
+						+ " WHERE hashid=?;");
+		boundStatement = preparedStatement.bind(hashId.toString());
+		session.execute(boundStatement);
 	}
 
 	public void removeProjectSettings(UUID projectUUID) {

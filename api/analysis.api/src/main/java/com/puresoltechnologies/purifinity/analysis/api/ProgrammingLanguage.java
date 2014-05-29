@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.analysis.api;
 
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 
 /**
@@ -26,7 +27,7 @@ public interface ProgrammingLanguage { // do not Serialize!
 	 * 
 	 * @return
 	 */
-	public String getVersion();
+	public Version getVersion();
 
 	/**
 	 * This method specifies whether the programming language is suitable for a

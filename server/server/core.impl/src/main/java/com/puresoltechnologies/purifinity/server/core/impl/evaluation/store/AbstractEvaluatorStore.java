@@ -22,6 +22,7 @@ import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
@@ -191,7 +192,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		String sourceCodeLocation = analysisTreeNode.getSourceCodeLocation()
 				.getHumanReadableLocationString();
 		String languageName = codeAnalysis.getLanguageName();
-		String languageVersion = codeAnalysis.getLanguageVersion();
+		Version languageVersion = codeAnalysis.getLanguageVersion();
 		String evaluatorName = evaluator.getInformation().getName();
 		CodeRangeNameParameter codeRangeNameParameter = CodeRangeNameParameter
 				.getInstance();

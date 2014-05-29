@@ -4,17 +4,19 @@ import java.io.Serializable;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.puresoltechnologies.commons.misc.Version;
+
 public class AnalyzerInformation implements Serializable {
 
 	private static final long serialVersionUID = -1867488685418681896L;
 
 	private final String name;
-	private final String version;
+	private final Version version;
 	private final String jndiName;
 	private final String description;
 
 	public AnalyzerInformation(@JsonProperty("name") String name,
-			@JsonProperty("version") String version,
+			@JsonProperty("version") Version version,
 			@JsonProperty("jndiName") String jndiName,
 			@JsonProperty("description") String description) {
 		super();
@@ -28,7 +30,7 @@ public class AnalyzerInformation implements Serializable {
 		return name;
 	}
 
-	public String getVersion() {
+	public Version getVersion() {
 		return version;
 	}
 

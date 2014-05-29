@@ -60,7 +60,7 @@ public class AvailableAnalyzersTableViewer extends TableViewer implements
 			@Override
 			public String getText(Object element) {
 				AnalyzerInformation language = (AnalyzerInformation) element;
-				return language.getVersion();
+				return language.getVersion().toString();
 			}
 		});
 	}

@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.core.impl.evaluation.common;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -256,20 +257,22 @@ public abstract class AbstractEvaluator extends
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 		HashId hashId = fileNode.getHashId();
 		if (fileStore.wasAnalyzed(hashId)) {
-			CodeAnalysis fileAnalysis = fileStore.loadAnalysis(hashId, Thread
-					.currentThread().getContextClassLoader());
-			if ((!evaluatorStore.hasFileResults(hashId)) || (reEvaluation)) {
-				MetricFileResults fileResults = processFile(fileAnalysis);
-				if (fileResults != null) {
-					evaluatorStore.storeFileResults(fileAnalysis, this,
-							fileResults);
-				}
-			} else {
-				MetricFileResults fileResults = evaluatorStore
-						.readFileResults(hashId);
-				if (fileResults != null) {
-					evaluatorStore.storeMetricsInBigTable(fileAnalysis, this,
-							fileResults);
+			List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyses(hashId,
+					Thread.currentThread().getContextClassLoader());
+			for (CodeAnalysis fileAnalysis : fileAnalyses) {
+				if ((!evaluatorStore.hasFileResults(hashId)) || (reEvaluation)) {
+					MetricFileResults fileResults = processFile(fileAnalysis);
+					if (fileResults != null) {
+						evaluatorStore.storeFileResults(fileAnalysis, this,
+								fileResults);
+					}
+				} else {
+					MetricFileResults fileResults = evaluatorStore
+							.readFileResults(hashId);
+					if (fileResults != null) {
+						evaluatorStore.storeMetricsInBigTable(fileAnalysis,
+								this, fileResults);
+					}
 				}
 			}
 		}

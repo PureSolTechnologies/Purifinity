@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
@@ -33,7 +34,7 @@ public class CPP extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	private CPP() {
-		super("C++", "11");
+		super("C++", new Version(11, 0, 0));
 	}
 
 	@Override
