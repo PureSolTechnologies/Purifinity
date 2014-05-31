@@ -67,7 +67,9 @@ public class AnalysisStoreRestService implements AnalysisStoreRestInterface {
 	@Override
 	public AnalysisRun readAnalysisRun(UUID projectUUID, UUID analysisRunUUID)
 			throws AnalysisStoreException {
-		return analysisStore.readAnalysisRun(projectUUID, analysisRunUUID);
+		AnalysisRunInformation information = analysisStore
+				.readAnalysisRunInformation(projectUUID, analysisRunUUID);
+		return analysisStore.readAnalysisRun(information);
 	}
 
 	@Override

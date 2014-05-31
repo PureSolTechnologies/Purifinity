@@ -89,10 +89,8 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 					analysisRunInformation.getRunUUID(),
 					AnalysisProcessTransition.START_STORAGE);
 
-			AnalysisProjectSettings projectSettings = analysisProject
-					.getSettings();
-
-			Map<SourceCodeLocation, HashId> storedSources = storeFilesInStore(projectSettings);
+			Map<SourceCodeLocation, HashId> storedSources = storeFilesInStore(analysisProject
+					.getSettings());
 			AnalysisRunFileTree fileTree = analysisStoreService
 					.createAndStoreFileAndContentTree(
 							analysisRunInformation.getProjectUUID(),
@@ -120,6 +118,17 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 		}
 	}
 
+	/**
+	 * Searches the source code repository for source files and stores them in
+	 * the database.
+	 * 
+	 * @param projectSettings
+	 *            is a {@link AnalysisProjectSettings} object representing the
+	 *            analysis project.
+	 * @return A {@link Map} is returned containing a mapping of the
+	 *         {@link SourceCodeLocation}s to the {@link HashId}s calculated
+	 *         during storage.
+	 */
 	private Map<SourceCodeLocation, HashId> storeFilesInStore(
 			AnalysisProjectSettings projectSettings) {
 		logger.debug("Start file storage for project '"
@@ -131,26 +140,39 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 		List<SourceCodeLocation> sourceCodeLocations = repository
 				.getSourceCodes(projectSettings.getFileSearchConfiguration());
 		for (SourceCodeLocation sourceCodeLocation : sourceCodeLocations) {
-			try (InputStream stream = sourceCodeLocation.openStream()) {
-				HashId hashId = fileStore.storeRawFile(stream);
-				storedSources.put(sourceCodeLocation, hashId);
-				eventLogger.logEvent(ProjectAnalysisEvents
-						.createRawFileStoredEvent(
-								sourceCodeLocation.getInternalLocation(),
-								hashId, projectSettings.getName(),
-								repository.getHumanReadableLocationString()));
-			} catch (FileStoreException | IOException e) {
-				eventLogger
-						.logEvent(ProjectAnalysisEvents
-								.createRawFileStoreError(sourceCodeLocation
-										.getInternalLocation(), projectSettings
-										.getName(), repository
-										.getHumanReadableLocationString(), e));
-				throw new RuntimeException("Error storing file '"
-						+ sourceCodeLocation.getHumanReadableLocationString()
-						+ "'.");
-			}
+			HashId hashId = storeFile(projectSettings, repository,
+					sourceCodeLocation);
+			storedSources.put(sourceCodeLocation, hashId);
 		}
 		return storedSources;
+	}
+
+	/**
+	 * Stores a single file in database.
+	 * 
+	 * @param projectSettings
+	 * @param repository
+	 * @param sourceCodeLocation
+	 * @return
+	 */
+	private HashId storeFile(AnalysisProjectSettings projectSettings,
+			RepositoryLocation repository, SourceCodeLocation sourceCodeLocation) {
+		try (InputStream stream = sourceCodeLocation.openStream()) {
+			HashId hashId = fileStore.storeRawFile(stream);
+			eventLogger.logEvent(ProjectAnalysisEvents
+					.createRawFileStoredEvent(
+							sourceCodeLocation.getInternalLocation(), hashId,
+							projectSettings.getName(),
+							repository.getHumanReadableLocationString()));
+			return hashId;
+		} catch (FileStoreException | IOException e) {
+			eventLogger.logEvent(ProjectAnalysisEvents.createRawFileStoreError(
+					sourceCodeLocation.getInternalLocation(),
+					projectSettings.getName(),
+					repository.getHumanReadableLocationString(), e));
+			throw new RuntimeException("Error storing file '"
+					+ sourceCodeLocation.getHumanReadableLocationString()
+					+ "'.");
+		}
 	}
 }

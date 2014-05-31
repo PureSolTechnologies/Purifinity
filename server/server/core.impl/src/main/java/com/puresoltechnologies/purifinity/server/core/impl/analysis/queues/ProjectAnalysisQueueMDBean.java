@@ -2,7 +2,10 @@ package com.puresoltechnologies.purifinity.server.core.impl.analysis.queues;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
@@ -10,23 +13,23 @@ import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.Queue;
 import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.JSONSerializer;
-import com.puresoltechnologies.commons.trees.TreePrinter;
 import com.puresoltechnologies.commons.trees.TreeVisitor;
 import com.puresoltechnologies.commons.trees.TreeWalker;
 import com.puresoltechnologies.commons.trees.WalkingAction;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
+import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerRemotePlugin;
@@ -51,6 +54,9 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 	@Inject
 	private EventLogger eventLogger;
 
+	@Resource(mappedName = ProjectEvaluationQueue.NAME)
+	private Queue projectEvaluationQueue;
+
 	@Inject
 	private FileStoreService fileStore;
 
@@ -59,6 +65,9 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 
 	@Inject
 	private AnalysisProcessStateTracker analysisProcessStateTracker;
+
+	@Inject
+	private JMSMessageSender messageSender;
 
 	@Override
 	public void onMessage(Message message) {
@@ -81,33 +90,20 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 					analysisRunInformation.getRunUUID(),
 					AnalysisProcessTransition.START_ANALYSIS);
 
-			System.out.println("Start analysis for project '"
-					+ analysisProject.getSettings().getName() + "' and run '"
-					+ analysisRunInformation.getRunUUID() + "'.");
-			new TreePrinter(System.out).println(analysisRunFileTree);
-
 			analyze(analysisRunFileTree);
-
-			AnalysisProjectSettings projectSettings = analysisProject
-					.getSettings();
-			logger.info("Start analysis for project '"
-					+ projectSettings.getName() + "'.");
 
 			analysisProcessStateTracker.changeProcessState(
 					analysisRunInformation.getProjectUUID(),
 					analysisRunInformation.getRunUUID(),
 					AnalysisProcessTransition.QUEUE_FOR_EVALUATION);
-			analysisProcessStateTracker.changeProcessState(
-					analysisRunInformation.getProjectUUID(),
-					analysisRunInformation.getRunUUID(),
-					AnalysisProcessTransition.START_EVALUATION);
-			analysisProcessStateTracker.changeProcessState(
-					analysisRunInformation.getProjectUUID(),
-					analysisRunInformation.getRunUUID(),
-					AnalysisProcessTransition.FINISH);
-			analysisProcessStateTracker.stopProcess(analysisRunInformation
-					.getProjectUUID());
 
+			Map<String, String> stringMap = new HashMap<>();
+			stringMap.put("AnalysisProject",
+					JSONSerializer.toJSONString(analysisProject));
+			stringMap.put("AnalysisRunInformation",
+					JSONSerializer.toJSONString(analysisRunInformation));
+
+			messageSender.sendMessage(projectEvaluationQueue, stringMap);
 		} catch (JMSException | IOException e) {
 			// An issue occurred, re-queue the request.
 			eventLogger.logEvent(ProjectAnalysisEvents.createGeneralError(e));

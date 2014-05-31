@@ -462,12 +462,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 
 	@Override
-	public AnalysisRun readAnalysisRun(UUID projectUUID, UUID runUUID)
+	public AnalysisRun readAnalysisRun(AnalysisRunInformation information)
 			throws AnalysisStoreException {
-		AnalysisRunInformation information = readAnalysisRunInformation(
-				projectUUID, runUUID);
-		AnalysisFileTree analysisFileTree = readAnalysisFileTree(projectUUID,
-				runUUID);
+		AnalysisFileTree analysisFileTree = readAnalysisFileTree(
+				information.getProjectUUID(), information.getRunUUID());
 		return new AnalysisRun(information, analysisFileTree);
 	}
 

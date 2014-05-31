@@ -95,7 +95,7 @@ public interface AnalysisStore {
 	public AnalysisRunInformation readAnalysisRunInformation(UUID projectUUID,
 			UUID analysisRunUUID) throws AnalysisStoreException;
 
-	public AnalysisRun readAnalysisRun(UUID projectUUID, UUID runUUID)
+	public AnalysisRun readAnalysisRun(AnalysisRunInformation information)
 			throws AnalysisStoreException;
 
 	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)
