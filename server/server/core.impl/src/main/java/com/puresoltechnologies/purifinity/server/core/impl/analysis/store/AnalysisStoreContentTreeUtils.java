@@ -4,15 +4,11 @@ import java.util.Iterator;
 
 import javax.inject.Inject;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
-import com.puresoltechnologies.purifinity.server.database.titan.TitanUtils;
 import com.puresoltechnologies.purifinity.server.database.titan.VertexType;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Direction;
@@ -119,58 +115,6 @@ public class AnalysisStoreContentTreeUtils {
 		}
 	}
 
-	/**
-	 * This method adds a analysis information to a content node.
-	 * 
-	 * @param graph
-	 * @param treeNode
-	 * @param analysis
-	 * @throws AnalysisStoreException
-	 */
-	public void storeAnalysisInformation(TitanGraph graph, Vertex treeNode,
-			AnalysisInformation analysis) throws AnalysisStoreException {
-		Vertex analysisVertex = graph.addVertex(null);
-
-		Edge analysisEdge = treeNode.addEdge(
-				TitanElementNames.HAS_ANALYSIS_LABEL, analysisVertex);
-		analysisEdge.setProperty(TitanElementNames.ANALYSIS_NAME_PROPERTY,
-				"n/a");
-		analysisEdge.setProperty(TitanElementNames.ANALYSIS_VERSION_PROPERTY,
-				"n/a");
-		analysisEdge.setProperty(
-				TitanElementNames.ANALYSIS_START_TIME_PROPERTY,
-				analysis.getStartTime());
-
-		analysisVertex.setProperty(TitanElementNames.VERTEX_TYPE,
-				VertexType.ANALYSIS.name());
-
-		analysisVertex.setProperty(TitanElementNames.ANALYSIS_NAME_PROPERTY,
-				"n/a");
-		analysisVertex.setProperty(TitanElementNames.ANALYSIS_VERSION_PROPERTY,
-				"n/a");
-		analysisVertex.setProperty(
-				TitanElementNames.ANALYSIS_START_TIME_PROPERTY,
-				analysis.getStartTime());
-		analysisVertex.setProperty(
-				TitanElementNames.ANALYSIS_DURATION_PROPERTY,
-				analysis.getDuration());
-		analysisVertex.setProperty(
-				TitanElementNames.ANALYSIS_LANGUAGE_NAME_PROPERTY,
-				analysis.getLanguageName());
-		analysisVertex.setProperty(
-				TitanElementNames.ANALYSIS_LANGUAGE_VERSION_PROPERTY,
-				analysis.getLanguageVersion());
-		analysisVertex.setProperty(
-				TitanElementNames.ANALYSIS_SUCCESSFUL_PROPERTY,
-				analysis.isSuccessful());
-		String message = analysis.getMessage();
-		if (!StringUtils.isEmpty(message)) {
-			analysisVertex.setProperty(
-					TitanElementNames.ANALYSIS_MESSAGE_PROPERTY, message);
-		}
-		graph.commit();
-	}
-
 	public void checkAndRemoveAnalysisRunContent(Vertex runVertex)
 			throws AnalysisStoreException {
 		Iterable<Edge> edges = runVertex.query().direction(Direction.OUT)
@@ -218,9 +162,6 @@ public class AnalysisStoreContentTreeUtils {
 			if (vertexType == VertexType.CONTENT_TREE_ELEMENT) {
 				edge.remove();
 				checkAndRemoveContentNode(childVertex);
-			} else if (vertexType == VertexType.ANALYSIS) {
-				edge.remove();
-				removeAnalysis(childVertex);
 			} else {
 				throw new AnalysisStoreException("Unsupported vertex found.");
 			}
@@ -237,24 +178,5 @@ public class AnalysisStoreContentTreeUtils {
 		// } else {
 		// EvaluatorStoreCassandraUtils.deleteDirectoryEvaluation(hashId);
 		// }
-	}
-
-	public void removeAnalysis(Vertex analysisVertex) {
-		if (!VertexType.ANALYSIS.name().equals(
-				analysisVertex.getProperty(TitanElementNames.VERTEX_TYPE))) {
-			throw new IllegalArgumentException(
-					"The vertex is not analysis vertex.");
-		}
-		Iterable<Edge> edges = analysisVertex.query().edges();
-		Iterator<Edge> edgeIterator = edges.iterator();
-		if (edgeIterator.hasNext()) {
-			while (edgeIterator.hasNext()) {
-				TitanUtils
-						.printEdgeInformation(System.err, edgeIterator.next());
-			}
-			throw new IllegalStateException(
-					"Vertex has still edges and cannot be deleted.");
-		}
-		analysisVertex.remove();
 	}
 }

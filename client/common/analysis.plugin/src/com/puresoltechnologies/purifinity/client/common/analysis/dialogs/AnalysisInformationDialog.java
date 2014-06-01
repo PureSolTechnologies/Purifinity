@@ -93,7 +93,7 @@ public class AnalysisInformationDialog extends Dialog {
 				analyzedCode.getHashId()).getSourceCodeLocation();
 		filePath.setText(sourceCodeLocation.getInternalLocation());
 		fileName.setText(sourceCodeLocation.getName());
-		String messageText = analyzedCode.getMessage();
+		String messageText = analyzedCode.getAnalyzerErrorMessage();
 		if (messageText != null) {
 			message.setText(messageText);
 		} else {

@@ -35,8 +35,8 @@ public class FailedFilesViewerSorter extends AbstractViewerSorter {
 			rc = code1.getStartTime().compareTo(code2.getStartTime());
 			break;
 		case 2:
-			String message1 = code1.getMessage().toLowerCase();
-			String message2 = code2.getMessage().toLowerCase();
+			String message1 = code1.getAnalyzerErrorMessage().toLowerCase();
+			String message2 = code2.getAnalyzerErrorMessage().toLowerCase();
 			rc = message1.compareTo(message2);
 			break;
 		}

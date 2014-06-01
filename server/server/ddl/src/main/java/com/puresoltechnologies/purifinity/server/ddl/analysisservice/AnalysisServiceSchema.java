@@ -79,7 +79,7 @@ public class AnalysisServiceSchema {
 						+ "files and their raw data.",
 				"CREATE TABLE "
 						+ ANALYSIS_ANALYSES_TABLE
-						+ " (time timestamp, hashid varchar, analyzer varchar, analyzer_version varchar, duration bigint, "
+						+ " (time timestamp, hashid varchar, analyzer varchar, analyzer_version varchar, duration bigint, successful boolean, analyzer_messages text,"
 						+ "analysis blob, PRIMARY KEY(hashid, analyzer, analyzer_version));"));
 
 		migrator.registerMigrationStep(createTable(

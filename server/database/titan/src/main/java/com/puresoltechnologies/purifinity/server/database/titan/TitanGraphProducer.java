@@ -272,12 +272,6 @@ public class TitanGraphProducer {
 					graph.getType(TitanElementNames.TREE_ELEMENT_IS_FILE));
 			makeLabel.make();
 		}
-		if (graph.getType(TitanElementNames.HAS_ANALYSIS_LABEL) == null) {
-			LabelMaker makeLabel = graph
-					.makeLabel(TitanElementNames.HAS_ANALYSIS_LABEL);
-			makeLabel.oneToMany(UniquenessConsistency.LOCK);
-			makeLabel.make();
-		}
 		graph.commit();
 	}
 }

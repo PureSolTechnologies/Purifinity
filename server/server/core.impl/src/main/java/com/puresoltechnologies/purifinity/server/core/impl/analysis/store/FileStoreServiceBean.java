@@ -26,6 +26,7 @@ import com.puresoltechnologies.commons.misc.HashUtilities;
 import com.puresoltechnologies.commons.misc.StringUtils;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
@@ -137,10 +138,15 @@ public final class FileStoreServiceBean implements FileStoreService {
 						session,
 						"INSERT INTO "
 								+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
-								+ " (time, hashid, analyzer, analyzer_version, analysis) VALUES (?, ?, ?, ?, ?)");
-		BoundStatement boundStatement = preparedStatement.bind(new Date(),
-				hashId.toString(), fileAnalysis.getLanguageName(), fileAnalysis
-						.getLanguageVersion().toString());
+								+ " (time, hashid, analyzer, analyzer_version, analyzer_message, successful, analysis) VALUES (?, ?, ?, ?, ?, ?, ?)");
+		AnalysisInformation analysisInformation = fileAnalysis
+				.getAnalysisInformation();
+		BoundStatement boundStatement = preparedStatement.bind(
+				analysisInformation.getStartTime(), hashId.toString(),
+				analysisInformation.getLanguageName(), analysisInformation
+						.getLanguageVersion().toString(), analysisInformation
+						.getAnalyzerErrorMessage(), analysisInformation
+						.isSuccessful());
 		try {
 			try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 				try (ObjectOutputStream outStream = new ObjectOutputStream(

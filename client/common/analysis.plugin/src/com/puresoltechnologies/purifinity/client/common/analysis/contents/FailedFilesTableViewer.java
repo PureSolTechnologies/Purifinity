@@ -89,7 +89,7 @@ public class FailedFilesTableViewer extends TableViewer implements
 			public String getText(Object element) {
 				AnalysisInformation analysis = (AnalysisInformation) element;
 				if (analysis.wasError()) {
-					return analysis.getMessage();
+					return analysis.getAnalyzerErrorMessage();
 				}
 				return "";
 			}

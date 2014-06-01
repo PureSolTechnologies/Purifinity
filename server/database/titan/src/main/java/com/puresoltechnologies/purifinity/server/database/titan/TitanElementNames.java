@@ -22,7 +22,6 @@ public class TitanElementNames {
 	public static final String ANALYZED_CONTENT_TREE_LABEL = "analyzedContentTree";
 	public static final String ANALYZED_FILE_TREE_LABEL = "analyzedFileTree";
 	public static final String HAS_ANALYSIS_RUN_LABEL = "hasAnalysisRun";
-	public static final String HAS_ANALYSIS_LABEL = "hasAnalysis";
 	public static final String HAS_CONTENT_LABEL = "hasContent";
 
 	/*
@@ -56,6 +55,5 @@ public class TitanElementNames {
 	 * GENERAL PURPOSE
 	 */
 	public static final String CREATION_TIME_PROPERTY = "time.creation";
-
 
 }

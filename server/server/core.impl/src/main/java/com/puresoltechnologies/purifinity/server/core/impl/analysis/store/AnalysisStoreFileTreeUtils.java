@@ -8,6 +8,11 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
+import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -18,6 +23,9 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.SourceCodeLocationCreator;
+import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
 import com.puresoltechnologies.purifinity.server.database.titan.VertexType;
 import com.thinkaurelius.titan.core.TitanGraph;
@@ -34,10 +42,14 @@ import com.tinkerpop.blueprints.Vertex;
 public class AnalysisStoreFileTreeUtils {
 
 	@Inject
-	private AnalysisStoreContentTreeUtils analysisStoreContentTreeUtils;
+	private AnalysisStoreDAO analysisStoreDAO;
 
 	@Inject
-	private AnalysisStoreDAO analysisStoreDAO;
+	@AnalysisStoreKeyspace
+	private Session session;
+
+	@Inject
+	private CassandraPreparedStatements preparedStatements;
 
 	/**
 	 * This method adds a new file tree to a Analysis Run vertex.
@@ -277,14 +289,15 @@ public class AnalysisStoreFileTreeUtils {
 		Vertex contentVertex = contextVertexIterator.next();
 		String hash = contentVertex
 				.getProperty(TitanElementNames.TREE_ELEMENT_HASH);
+		HashId hashId = HashId.valueOf(hash);
 		final List<AnalysisInformation> analyses;
 		if (isFile) {
-			analyses = readAnalyses(fileTreeVertex, hash);
+			analyses = readAnalyses(hashId);
 		} else {
 			analyses = null;
 		}
 		AnalysisFileTree hashIdFileTree = new AnalysisFileTree(parent, name,
-				HashId.valueOf(hash), isFile, sourceCodeLocation, analyses);
+				hashId, isFile, sourceCodeLocation, analyses);
 		return hashIdFileTree;
 	}
 
@@ -295,49 +308,30 @@ public class AnalysisStoreFileTreeUtils {
 	 * @param hash
 	 * @return
 	 */
-	private List<AnalysisInformation> readAnalyses(Vertex fileTreeVertex,
-			String hash) {
+	private List<AnalysisInformation> readAnalyses(HashId hashId) {
 		List<AnalysisInformation> analyses = new ArrayList<AnalysisInformation>();
-		Iterable<Vertex> analysisVertices = fileTreeVertex.query()
-				.direction(Direction.OUT)
-				.labels(TitanElementNames.HAS_ANALYSIS_LABEL).vertices();
-		Iterator<Vertex> analysisVertexIterator = analysisVertices.iterator();
-		while (analysisVertexIterator.hasNext()) {
-			Vertex analysisVertex = analysisVertexIterator.next();
-			AnalysisInformation analysis = readAnalysisInformation(hash,
-					analysisVertex);
-			analyses.add(analysis);
+
+		PreparedStatement preparedStatement = preparedStatements
+				.getPreparedStatement(session, "SELECT * FROM "
+						+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
+						+ " WHERE hashId=?;");
+		BoundStatement boundStatement = preparedStatement.bind(hashId
+				.toString());
+		ResultSet resultSet = session.execute(boundStatement);
+		while (!resultSet.isExhausted()) {
+			Row row = resultSet.one();
+			Date time = row.getDate("time");
+			long duration = row.getLong("duration");
+			String analyzer = row.getString("analyzer");
+			String analyzerVersion = row.getString("analyzer_version");
+			boolean successful = row.getBool("successful");
+			String message = row.getString("analyzer_message");
+			AnalysisInformation information = new AnalysisInformation(hashId,
+					time, duration, successful, analyzer,
+					Version.valueOf(analyzerVersion), message);
+			analyses.add(information);
 		}
 		return analyses;
-	}
-
-	/**
-	 * This method reads the analysis information from an Analysis Node attached
-	 * as properties.
-	 * 
-	 * @param hashId
-	 * @param analysisVertex
-	 * @return
-	 */
-	private AnalysisInformation readAnalysisInformation(String hashId,
-			Vertex analysisVertex) {
-		Date startTime = analysisVertex
-				.getProperty(TitanElementNames.ANALYSIS_START_TIME_PROPERTY);
-		long duration = analysisVertex
-				.getProperty(TitanElementNames.ANALYSIS_DURATION_PROPERTY);
-		String languageName = analysisVertex
-				.getProperty(TitanElementNames.ANALYSIS_LANGUAGE_NAME_PROPERTY);
-		Version languageVersion = Version
-				.valueOf((String) analysisVertex
-						.getProperty(TitanElementNames.ANALYSIS_LANGUAGE_VERSION_PROPERTY));
-		boolean successful = analysisVertex
-				.getProperty(TitanElementNames.ANALYSIS_SUCCESSFUL_PROPERTY);
-		String analyzerMessage = analysisVertex
-				.getProperty(TitanElementNames.ANALYSIS_MESSAGE_PROPERTY);
-
-		return new AnalysisInformation(HashId.valueOf(hashId), startTime,
-				duration, successful, languageName, languageVersion,
-				analyzerMessage);
 	}
 
 	/**
@@ -364,8 +358,6 @@ public class AnalysisStoreFileTreeUtils {
 			} else if (TitanElementNames.CONTAINS_DIRECTORY_LABEL
 					.equals(edgeLabel)) {
 				deleteFileTree(childVertex);
-			} else if (TitanElementNames.HAS_ANALYSIS_LABEL.equals(edgeLabel)) {
-				analysisStoreContentTreeUtils.removeAnalysis(childVertex);
 			} else if (TitanElementNames.HAS_CONTENT_LABEL.equals(edgeLabel)) {
 				// intentionally left blank, content is deleted in another step
 				// in analysis run deletion

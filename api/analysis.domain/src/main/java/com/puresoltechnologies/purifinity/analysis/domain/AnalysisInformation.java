@@ -22,29 +22,29 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 	private static final long serialVersionUID = 2030120585873480183L;
 
 	private final HashId hashId;
-	private final Date time;
+	private final Date startTime;
 	private final long duration;
 	private final boolean successful;
 	private final String languageName;
 	private final Version languageVersion;
 	private final String analyzerErrorMessage;
 
+	public AnalysisInformation(HashId hashId, Date startTime, long duration,
+			boolean successful, String languageName, Version languageVersion) {
+		this(hashId, startTime, duration, successful, languageName,
+				languageVersion, null);
+	}
+
 	public AnalysisInformation(@JsonProperty("hashId") HashId hashId,
-			@JsonProperty("time") Date time,
+			@JsonProperty("startTime") Date startTime,
 			@JsonProperty("duration") long duration,
 			@JsonProperty("successful") boolean successful,
 			@JsonProperty("languageName") String languageName,
-			@JsonProperty("languageVersion") Version languageVersion) {
-		this(hashId, time, duration, successful, languageName, languageVersion,
-				null);
-	}
-
-	public AnalysisInformation(HashId hashId, Date time, long duration,
-			boolean successful, String languageName, Version languageVersion,
-			String analyzerErrorMessage) {
+			@JsonProperty("languageVersion") Version languageVersion,
+			@JsonProperty("analyzerErrorMessage") String analyzerErrorMessage) {
 		super();
 		this.hashId = hashId;
-		this.time = time;
+		this.startTime = startTime;
 		this.duration = duration;
 		this.successful = successful;
 		this.languageName = languageName;
@@ -58,7 +58,7 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 
 	@Override
 	public final Date getStartTime() {
-		return time;
+		return startTime;
 	}
 
 	@Override
@@ -93,7 +93,8 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 		result = prime * result
 				+ ((languageVersion == null) ? 0 : languageVersion.hashCode());
 		result = prime * result + (successful ? 1231 : 1237);
-		result = prime * result + ((time == null) ? 0 : time.hashCode());
+		result = prime * result
+				+ ((startTime == null) ? 0 : startTime.hashCode());
 		return result;
 	}
 
@@ -130,10 +131,10 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 			return false;
 		if (successful != other.successful)
 			return false;
-		if (time == null) {
-			if (other.time != null)
+		if (startTime == null) {
+			if (other.startTime != null)
 				return false;
-		} else if (!time.equals(other.time))
+		} else if (!startTime.equals(other.startTime))
 			return false;
 		return true;
 	}
@@ -147,14 +148,14 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 				&& (!analyzerErrorMessage.isEmpty());
 	}
 
-	public String getMessage() {
+	public String getAnalyzerErrorMessage() {
 		return analyzerErrorMessage;
 	}
 
 	@Override
 	public String toString() {
 		String string = hashId + ":" + languageName + " " + languageVersion
-				+ " " + time + "/" + duration + "ms";
+				+ " " + startTime + "/" + duration + "ms";
 		if (analyzerErrorMessage != null) {
 			string += " (message:'" + analyzerErrorMessage + "')";
 		}
