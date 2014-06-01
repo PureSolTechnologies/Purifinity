@@ -69,14 +69,14 @@ public interface FileStore {
 	public SourceCode readSourceCode(HashId hashId) throws FileStoreException;
 
 	/**
-	 * This method loads a single analysis.
+	 * This method loads all analyzes of a file.
 	 * 
 	 * @param hashId
 	 * @return
 	 * @throws FileStoreException
 	 */
-	public List<CodeAnalysis> loadAnalyses(HashId hashId,
-			ClassLoader classLoader) throws FileStoreException;
+	public List<CodeAnalysis> loadAnalyses(HashId hashId)
+			throws FileStoreException;
 
 	/**
 	 * This method stores a single analysis for a file.

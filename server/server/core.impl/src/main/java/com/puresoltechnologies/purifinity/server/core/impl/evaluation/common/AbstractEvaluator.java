@@ -257,8 +257,7 @@ public abstract class AbstractEvaluator extends
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 		HashId hashId = fileNode.getHashId();
 		if (fileStore.wasAnalyzed(hashId)) {
-			List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyses(hashId,
-					Thread.currentThread().getContextClassLoader());
+			List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyses(hashId);
 			for (CodeAnalysis fileAnalysis : fileAnalyses) {
 				if ((!evaluatorStore.hasFileResults(hashId)) || (reEvaluation)) {
 					MetricFileResults fileResults = processFile(fileAnalysis);

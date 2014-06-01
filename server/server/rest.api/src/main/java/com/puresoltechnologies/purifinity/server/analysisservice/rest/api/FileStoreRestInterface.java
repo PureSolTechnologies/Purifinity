@@ -14,55 +14,46 @@ import javax.ws.rs.core.MediaType;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 
 @Path("filestore")
-public interface FileStoreRestInterface extends FileStore {
+public interface FileStoreRestInterface {
 
-	@Override
 	@PUT
 	@Path("files")
 	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
 	@Produces(MediaType.APPLICATION_JSON)
 	public HashId storeRawFile(InputStream rawStream) throws FileStoreException;
 
-	@Override
 	@GET
 	@Path("files/{hashId}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
 	public InputStream readRawFile(@PathParam("hashId") HashId hashId)
 			throws FileStoreException;
 
-	@Override
 	@GET
 	@Path("files/{hashId}/available")
 	@Produces(MediaType.APPLICATION_JSON)
 	public boolean isAvailable(@PathParam("hashId") HashId hashId);
 
-	@Override
 	@GET
 	@Path("files/{hashId}/sourcecode")
 	@Produces(MediaType.APPLICATION_JSON)
 	public SourceCode readSourceCode(@PathParam("hashId") HashId hashId)
 			throws FileStoreException;
 
-	@Override
 	@GET
 	@Path("files/{hashId}/analysis")
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<CodeAnalysis> loadAnalyses(@PathParam("hashId") HashId hashId,
-			ClassLoader classLoader) throws FileStoreException;
+	public List<CodeAnalysis> loadAnalyses(@PathParam("hashId") HashId hashId)
+			throws FileStoreException;
 
-	@Override
 	@PUT
 	@Path("files/{hashId}/analysis")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void storeAnalysis(@PathParam("hashId") HashId hashId,
 			CodeAnalysis analysis) throws FileStoreException;
 
-	@Override
 	@GET
 	@Path("files/{hashId}/analyzed")
 	@Produces(MediaType.APPLICATION_JSON)

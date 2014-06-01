@@ -76,7 +76,7 @@ public class AnalysisStoreCassandraUtils {
 		session.execute(boundStatement);
 		preparedStatement = cassandraPreparedStatements.getPreparedStatement(
 				session, "DELETE FROM "
-						+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
+						+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
 						+ " WHERE hashid=?;");
 		boundStatement = preparedStatement.bind(hashId.toString());
 		session.execute(boundStatement);

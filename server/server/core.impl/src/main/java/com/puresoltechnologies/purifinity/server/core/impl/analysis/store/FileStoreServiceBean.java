@@ -98,11 +98,11 @@ public final class FileStoreServiceBean implements FileStoreService {
 	}
 
 	@Override
-	public List<CodeAnalysis> loadAnalyses(HashId hashId,
-			ClassLoader classLoader) throws FileStoreException {
+	public List<CodeAnalysis> loadAnalyses(HashId hashId)
+			throws FileStoreException {
 		List<CodeAnalysis> analyses = new ArrayList<>();
 		ResultSet resultSet = session.execute("SELECT analysis FROM "
-				+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
+				+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
 				+ " WHERE hashid='" + hashId.toString() + "'");
 		Row result = resultSet.one();
 		if (result == null) {
@@ -137,7 +137,7 @@ public final class FileStoreServiceBean implements FileStoreService {
 				.getPreparedStatement(
 						session,
 						"INSERT INTO "
-								+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
+								+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
 								+ " (time, hashid, analyzer, analyzer_version, analyzer_message, successful, analysis) VALUES (?, ?, ?, ?, ?, ?, ?)");
 		AnalysisInformation analysisInformation = fileAnalysis
 				.getAnalysisInformation();
@@ -188,7 +188,7 @@ public final class FileStoreServiceBean implements FileStoreService {
 	@Override
 	public final boolean wasAnalyzed(HashId hashId) {
 		ResultSet resultSet = session.execute("SELECT analysis FROM "
-				+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
+				+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
 				+ " WHERE hashid='" + hashId.toString() + "'");
 		Row result = resultSet.one();
 		return (result != null) && (result.getBytes("analysis") != null);

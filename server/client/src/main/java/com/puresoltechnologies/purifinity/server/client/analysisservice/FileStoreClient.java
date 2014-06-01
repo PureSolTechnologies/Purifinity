@@ -46,7 +46,7 @@ public class FileStoreClient extends AbstractRestClient<FileStoreRestInterface> 
 
 	public List<CodeAnalysis> loadAnalysis(HashId hashId,
 			ClassLoader classLoader) throws FileStoreException {
-		return getProxy().loadAnalyses(hashId, classLoader);
+		return getProxy().loadAnalyses(hashId);
 	}
 
 	public boolean wasAnalyzed(HashId hashId) {

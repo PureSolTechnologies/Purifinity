@@ -38,9 +38,9 @@ public class FileStoreRestService implements FileStoreRestInterface {
 	}
 
 	@Override
-	public List<CodeAnalysis> loadAnalyses(HashId hashId,
-			ClassLoader classLoader) throws FileStoreException {
-		return fileStore.loadAnalyses(hashId, classLoader);
+	public List<CodeAnalysis> loadAnalyses(HashId hashId)
+			throws FileStoreException {
+		return fileStore.loadAnalyses(hashId);
 	}
 
 	@Override

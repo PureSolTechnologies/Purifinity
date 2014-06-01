@@ -313,7 +313,7 @@ public class AnalysisStoreFileTreeUtils {
 
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(session, "SELECT * FROM "
-						+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
+						+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
 						+ " WHERE hashId=?;");
 		BoundStatement boundStatement = preparedStatement.bind(hashId
 				.toString());

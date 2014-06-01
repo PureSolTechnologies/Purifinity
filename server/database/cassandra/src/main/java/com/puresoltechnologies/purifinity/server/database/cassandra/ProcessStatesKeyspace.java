@@ -12,6 +12,6 @@ import javax.inject.Qualifier;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ProcessStatesKeyspace {
 
-	public static final String NAME = "process_states";
+	public static final String NAME = "process_monitor";
 
 }

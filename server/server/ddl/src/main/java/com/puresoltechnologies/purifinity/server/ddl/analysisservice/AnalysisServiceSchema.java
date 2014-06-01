@@ -4,21 +4,12 @@ import static com.puresoltechnologies.purifinity.server.database.cassandra.utils
 import static com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration.createTable;
 
 import com.puresoltechnologies.commons.misc.Version;
-import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
 import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrator;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 
 public class AnalysisServiceSchema {
-
-	private static final String ANALYSIS_KEYSPACE = AnalysisStoreKeyspace.NAME;
-
-	private static final String ANALYSIS_PROJECT_SETTINGS_TABLE = "project_settings";
-	private static final String RUN_SETTINGS_TABLE = "run_settings";
-	private static final String ANALYSIS_FILES_TABLE = "files";
-	private static final String ANALYSIS_ANALYSES_TABLE = "analyses";
-
-	private static final String ANALYSIS_FILE_TREE_CACHE = "file_tree_cache";
 
 	private static final Version V_1_0_0 = new Version(1, 0, 0);
 
@@ -30,17 +21,19 @@ public class AnalysisServiceSchema {
 
 	private static void checkAndCreateKeyspaces(DatabaseMigrator migrator)
 			throws MigrationException {
-		migrator.registerMigrationStep(createKeyspace(ANALYSIS_KEYSPACE,
-				V_1_0_0, "Rick-Rainer Ludwig",
-				"Keyspace for analysis information",
+		migrator.registerMigrationStep(createKeyspace(
+				CassandraElementNames.ANALYSIS_KEYSPACE, V_1_0_0,
+				"Rick-Rainer Ludwig", "Keyspace for analysis information",
 				ReplicationStrategy.SIMPLE_STRATEGY, 1));
 	}
 
 	private static void checkAndCreateAnalysisTables(DatabaseMigrator migrator)
 			throws MigrationException {
-		migrator.registerMigrationStep(createTable(ANALYSIS_KEYSPACE, V_1_0_0,
+		migrator.registerMigrationStep(createTable(
+				CassandraElementNames.ANALYSIS_KEYSPACE, V_1_0_0,
 				"Rick-Rainer Ludwig", "Keeps settings of analysis projects.",
-				"CREATE TABLE " + ANALYSIS_PROJECT_SETTINGS_TABLE
+				"CREATE TABLE "
+						+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
 						+ " (project_uuid uuid, " + "name varchar, "
 						+ "description varchar, "
 						+ "file_includes list<text>, "
@@ -51,43 +44,46 @@ public class AnalysisServiceSchema {
 						+ "repository_location map<text,text>, "
 						+ "PRIMARY KEY(project_uuid));"));
 
-		migrator.registerMigrationStep(createTable(ANALYSIS_KEYSPACE, V_1_0_0,
+		migrator.registerMigrationStep(createTable(
+				CassandraElementNames.ANALYSIS_KEYSPACE, V_1_0_0,
 				"Rick-Rainer Ludwig", "Keeps settings of analysis runs.",
-				"CREATE TABLE " + RUN_SETTINGS_TABLE + " (run_uuid uuid, "
-						+ "file_includes list<text>, "
+				"CREATE TABLE "
+						+ CassandraElementNames.ANALYSIS_RUN_SETTINGS_TABLE
+						+ " (run_uuid uuid, " + "file_includes list<text>, "
 						+ "file_excludes list<text>, "
 						+ "location_includes list<text>, "
 						+ "location_excludes list<text>, "
 						+ "ignore_hidden boolean, " + "PRIMARY KEY(run_uuid));"));
 
 		migrator.registerMigrationStep(createTable(
-				ANALYSIS_KEYSPACE,
+				CassandraElementNames.ANALYSIS_KEYSPACE,
 				V_1_0_0,
 				"Rick-Rainer Ludwig",
 				"Keeps analysis information for analyzed and unanalyzed "
 						+ "files and their raw data.",
 				"CREATE TABLE "
-						+ ANALYSIS_FILES_TABLE
+						+ CassandraElementNames.ANALYSIS_FILES_TABLE
 						+ " (time timestamp, hashid varchar, raw blob, size int, "
 						+ "PRIMARY KEY(hashid));"));
 
 		migrator.registerMigrationStep(createTable(
-				ANALYSIS_KEYSPACE,
+				CassandraElementNames.ANALYSIS_KEYSPACE,
 				V_1_0_0,
 				"Rick-Rainer Ludwig",
 				"Keeps analysis information for analyzed and unanalyzed "
 						+ "files and their raw data.",
 				"CREATE TABLE "
-						+ ANALYSIS_ANALYSES_TABLE
+						+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
 						+ " (time timestamp, hashid varchar, analyzer varchar, analyzer_version varchar, duration bigint, successful boolean, analyzer_messages text,"
 						+ "analysis blob, PRIMARY KEY(hashid, analyzer, analyzer_version));"));
 
 		migrator.registerMigrationStep(createTable(
-				ANALYSIS_KEYSPACE,
+				CassandraElementNames.ANALYSIS_KEYSPACE,
 				V_1_0_0,
 				"Rick-Rainer Ludwig",
 				"Keeps a cache for analysis file trees for performance optimization.",
-				"CREATE TABLE " + ANALYSIS_FILE_TREE_CACHE
+				"CREATE TABLE "
+						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
 						+ " (run_uuid uuid, " + "persisted_tree blob, "
 						+ "PRIMARY KEY(run_uuid));"));
 
