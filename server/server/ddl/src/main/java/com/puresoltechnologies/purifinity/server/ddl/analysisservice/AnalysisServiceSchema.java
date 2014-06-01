@@ -74,7 +74,7 @@ public class AnalysisServiceSchema {
 						+ "files and their raw data.",
 				"CREATE TABLE "
 						+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
-						+ " (time timestamp, hashid varchar, analyzer varchar, analyzer_version varchar, duration bigint, successful boolean, analyzer_messages text,"
+						+ " (time timestamp, hashid varchar, analyzer varchar, analyzer_version varchar, duration bigint, successful boolean, analyzer_message text,"
 						+ "analysis blob, PRIMARY KEY(hashid, analyzer, analyzer_version));"));
 
 		migrator.registerMigrationStep(createTable(
