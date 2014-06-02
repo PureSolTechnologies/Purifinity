@@ -57,6 +57,14 @@ public class HashId implements Serializable, Comparable<HashId> {
 	public HashId(@JsonProperty("algorithm") HashAlgorithm algorithm,
 			@JsonProperty("hash") String hash) {
 		super();
+		if ((hash == null) || (hash.isEmpty())) {
+			throw new IllegalArgumentException(
+					"hash must not be null or empty.");
+		}
+		if (algorithm == null) {
+			throw new IllegalArgumentException(
+					"The algorithm must not be null.");
+		}
 		this.algorithm = algorithm;
 		this.hash = hash;
 	}
