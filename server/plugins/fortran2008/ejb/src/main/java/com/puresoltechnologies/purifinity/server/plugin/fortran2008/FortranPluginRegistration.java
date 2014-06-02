@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.naming.NamingException;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.Version;
@@ -25,8 +23,8 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-public class FortranPluginRegistration extends AbstractPluginRegistration implements
-		AnalyzerRemotePlugin {
+public class FortranPluginRegistration extends AbstractPluginRegistration
+		implements AnalyzerRemotePlugin {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalAddress(
 			"fortran2008.plugin", "fortran2008.ejb",
@@ -38,16 +36,10 @@ public class FortranPluginRegistration extends AbstractPluginRegistration implem
 	private final Fortran fortran = Fortran.getInstance();
 
 	@PostConstruct
-	public void registration() throws InterruptedException, NamingException {
+	public void registration() {
 		register(AnalyzerPluginServiceRemote.class,
 				AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
 				INFORMATION);
-	}
-
-	@PreDestroy
-	public void unregistration() throws InterruptedException, NamingException {
-		unregister(AnalyzerPluginServiceRemote.class,
-				AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS);
 	}
 
 	@Override

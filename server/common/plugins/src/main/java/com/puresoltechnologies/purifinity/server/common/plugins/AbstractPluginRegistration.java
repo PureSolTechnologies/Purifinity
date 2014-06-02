@@ -51,43 +51,49 @@ public abstract class AbstractPluginRegistration {
 	protected <Information extends Serializable, RemoteService extends PluginService<Information>> void register(
 			Class<? extends RemoteService> remoteService,
 			String remoteServiceJNDIName, String serviceJNDIName,
-			Information information) throws InterruptedException,
-			NamingException {
-		logger.info("Try to register '" + getName() + "'...");
-		InitialContext context = new InitialContext();
+			Information information) {
 		try {
-			/*
-			 * Retries are implemented, because during startup and parallel
-			 * deployment the remote plugin registration might not be deployed
-			 * and started, yet.
-			 */
-			int retried = 0;
-			boolean registered = false;
-			while (retried < DEFAULT_RETRY_COUNT) {
-				try {
-					@SuppressWarnings("unchecked")
-					RemoteService registrator = (RemoteService) context
-							.lookup(remoteServiceJNDIName);
-					registrator.registerService(serviceJNDIName, information,
-							new Properties());
-					registered = true;
-					break;
-				} catch (NamingException e) {
-					logger.debug("'"
-							+ getName()
-							+ "' was not registered, yet. Plugin service was not found.");
-					Thread.sleep(DEFAULT_SLEEP);
-					retried++;
+			logger.info("Try to register '" + getName() + "'...");
+			InitialContext context = new InitialContext();
+			try {
+				/*
+				 * Retries are implemented, because during startup and parallel
+				 * deployment the remote plugin registration might not be
+				 * deployed and started, yet.
+				 */
+				int retried = 0;
+				boolean registered = false;
+				while (retried < DEFAULT_RETRY_COUNT) {
+					try {
+						@SuppressWarnings("unchecked")
+						RemoteService registrator = (RemoteService) context
+								.lookup(remoteServiceJNDIName);
+						registrator.registerService(serviceJNDIName,
+								information, new Properties());
+						registered = true;
+						break;
+					} catch (NamingException e) {
+						logger.debug("'"
+								+ getName()
+								+ "' was not registered, yet. Plugin service was not found.");
+						Thread.sleep(DEFAULT_SLEEP);
+						retried++;
+					}
 				}
+				if (!registered) {
+					logger.error("'"
+							+ getName()
+							+ "' was not registered. Plugin service was not found.");
+					throw new IllegalStateException(
+							"Could not register plugin.");
+				}
+				logger.info("'" + getName() + "' was registered.");
+			} finally {
+				context.close();
 			}
-			if (!registered) {
-				logger.error("'" + getName()
-						+ "' was not registered. Plugin service was not found.");
-				throw new IllegalStateException("Could not register plugin.");
-			}
-			logger.info("'" + getName() + "' was registered.");
-		} finally {
-			context.close();
+		} catch (InterruptedException | NamingException e) {
+			throw new RuntimeException("Could not register service '"
+					+ getName() + "'.", e);
 		}
 	}
 
@@ -112,28 +118,34 @@ public abstract class AbstractPluginRegistration {
 	 */
 	protected <Information extends Serializable, RemoteService extends PluginService<Information>> void unregister(
 			Class<? extends RemoteService> remoteService,
-			String remoteServiceJNDIName, String serviceJNDIName)
-			throws InterruptedException, NamingException {
-		logger.info("Try to unregister '" + getName() + "'...");
-		InitialContext context = new InitialContext();
+			String remoteServiceJNDIName, String serviceJNDIName) {
 		try {
+			logger.info("Try to unregister '" + getName() + "'...");
+			InitialContext context = new InitialContext();
 			try {
-				/*
-				 * Here is no retry implemented. Because of shutdown, the remote
-				 * registration might be shut down already.
-				 */
-				@SuppressWarnings("unchecked")
-				RemoteService registrator = (RemoteService) context
-						.lookup(remoteServiceJNDIName);
-				registrator.unregisterService(serviceJNDIName);
-				logger.info("'" + getName() + "' was unregisted.");
-			} catch (NamingException e) {
-				logger.info("'"
-						+ getName()
-						+ "' could not be unregistered. Plugin service was not found.");
+				try {
+					/*
+					 * Here is no retry implemented. Because of shutdown, the
+					 * remote registration might be shut down already.
+					 */
+					@SuppressWarnings("unchecked")
+					RemoteService registrator = (RemoteService) context
+							.lookup(remoteServiceJNDIName);
+					registrator.unregisterService(serviceJNDIName);
+					logger.info("'" + getName() + "' was unregisted.");
+				} catch (NamingException e) {
+					logger.info("'"
+							+ getName()
+							+ "' could not be unregistered. Plugin service was not found.");
+				}
+			} finally {
+				context.close();
 			}
-		} finally {
-			context.close();
+		} catch (NamingException e) {
+			throw new RuntimeException("Could not unregister service '"
+					+ getName() + "'.", e);
+		} catch (Throwable e) {
+			logger.warn("Could not unregister service '" + getName() + "'.", e);
 		}
 	}
 

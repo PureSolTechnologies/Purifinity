@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.naming.NamingException;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.Version;
@@ -25,8 +23,8 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-public class JavaPluginRegistration extends AbstractPluginRegistration implements
-		AnalyzerRemotePlugin {
+public class JavaPluginRegistration extends AbstractPluginRegistration
+		implements AnalyzerRemotePlugin {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalAddress(
 			"java7.plugin", "java7.ejb", AnalyzerRemotePlugin.class,
@@ -38,16 +36,10 @@ public class JavaPluginRegistration extends AbstractPluginRegistration implement
 	private final Java java = Java.getInstance();
 
 	@PostConstruct
-	public void registraion() throws InterruptedException, NamingException {
+	public void registraion() {
 		register(AnalyzerPluginServiceRemote.class,
 				AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
 				INFORMATION);
-	}
-
-	@PreDestroy
-	public void unregistration() throws InterruptedException, NamingException {
-		unregister(AnalyzerPluginServiceRemote.class,
-				AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS);
 	}
 
 	@Override

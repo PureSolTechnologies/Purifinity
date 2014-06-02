@@ -5,10 +5,8 @@ import java.io.IOException;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.naming.NamingException;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.Version;
@@ -38,16 +36,10 @@ public class CPluginRegistration extends AbstractPluginRegistration implements
 	private final C11 c11 = C11.getInstance();
 
 	@PostConstruct
-	public void registration() throws InterruptedException, NamingException {
+	public void registration() {
 		register(AnalyzerPluginServiceRemote.class,
 				AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
 				INFORMATION);
-	}
-
-	@PreDestroy
-	public void unregistration() throws InterruptedException, NamingException {
-		unregister(AnalyzerPluginServiceRemote.class,
-				AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS);
 	}
 
 	@Override

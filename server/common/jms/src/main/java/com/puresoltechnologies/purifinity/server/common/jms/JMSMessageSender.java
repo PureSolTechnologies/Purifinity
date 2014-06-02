@@ -27,21 +27,31 @@ public class JMSMessageSender {
 	private Session session;
 
 	@PostConstruct
-	public void connect() throws JMSException {
-		connection = cf.createConnection();
-		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+	public void connect() {
+		try {
+			connection = cf.createConnection();
+			session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+		} catch (JMSException e) {
+			throw new RuntimeException(
+					"Could not create JMS connection or session.", e);
+		}
 	}
 
 	@PreDestroy
-	public void disconnect() throws JMSException {
+	public void disconnect() {
 		try {
-			if (session != null) {
-				session.close();
+			try {
+				if (session != null) {
+					session.close();
+				}
+			} finally {
+				if (connection != null) {
+					connection.close();
+				}
 			}
-		} finally {
-			if (connection != null) {
-				connection.close();
-			}
+		} catch (JMSException e) {
+			throw new RuntimeException(
+					"Could not close JMS connection or session.", e);
 		}
 	}
 
