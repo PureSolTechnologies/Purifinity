@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
@@ -40,6 +41,12 @@ public class JavaPluginRegistration extends AbstractPluginRegistration
 		register(AnalyzerPluginServiceRemote.class,
 				AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
 				INFORMATION);
+	}
+
+	@PreDestroy
+	public void unregistration() {
+		unregister(AnalyzerPluginServiceRemote.class,
+				AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS);
 	}
 
 	@Override

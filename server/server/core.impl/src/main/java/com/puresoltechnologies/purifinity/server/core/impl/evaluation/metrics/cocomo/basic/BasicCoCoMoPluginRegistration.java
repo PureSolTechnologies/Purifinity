@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.server.core.impl.evaluation.metrics.cocomo.basic;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
@@ -28,6 +29,12 @@ public class BasicCoCoMoPluginRegistration extends AbstractPluginRegistration
 		register(EvaluatorPluginServiceRemote.class,
 				EvaluatorPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
 				INFORMATION);
+	}
+
+	@PreDestroy
+	public void unregistration() {
+		unregister(EvaluatorPluginServiceRemote.class,
+				EvaluatorPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS);
 	}
 
 	@Override

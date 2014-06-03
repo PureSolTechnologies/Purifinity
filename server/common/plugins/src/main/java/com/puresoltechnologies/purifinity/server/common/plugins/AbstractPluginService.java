@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -27,7 +28,7 @@ public abstract class AbstractPluginService<PluginInfo extends Serializable>
 	private EventLogger eventLogger;
 
 	private final Set<String> jndiAddresses = new HashSet<>();
-	private final Map<String, PluginInfo> languages = new HashMap<>();
+	private final Map<String, PluginInfo> plugins = new HashMap<>();
 
 	private final String pluginServiceName;
 
@@ -43,8 +44,20 @@ public abstract class AbstractPluginService<PluginInfo extends Serializable>
 
 	@PreDestroy
 	public void shutdown() {
+		int count = 0;
+		while (plugins.size() > 0) {
+			count++;
+			if (count > 12) {
+				break;
+			}
+			try {
+				Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+			} catch (InterruptedException e) {
+				break;
+			}
+		}
 		jndiAddresses.clear();
-		languages.clear();
+		plugins.clear();
 		eventLogger.logEvent(PluginServiceEvents
 				.createShutdownEvent(pluginServiceName));
 	}
@@ -55,19 +68,19 @@ public abstract class AbstractPluginService<PluginInfo extends Serializable>
 		logger.info("Register new analyzer: " + jndiName);
 		jndiAddresses.add(jndiName);
 
-		languages.put(jndiName, pluginInformation);
+		plugins.put(jndiName, pluginInformation);
 		logger.info("New analyzer '" + jndiName + "' registered.");
 	}
 
 	@Override
 	public void unregisterService(String jndiName) {
-		languages.remove(jndiName);
+		plugins.remove(jndiName);
 		jndiAddresses.remove(jndiName);
 	}
 
 	@Override
 	public Collection<PluginInfo> getServices() {
-		return Collections.unmodifiableCollection(languages.values());
+		return Collections.unmodifiableCollection(plugins.values());
 	}
 
 }
