@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorFactory;
+
 /**
  * This is a utilities class which provides functionality to access the metrics
  * services more easily.

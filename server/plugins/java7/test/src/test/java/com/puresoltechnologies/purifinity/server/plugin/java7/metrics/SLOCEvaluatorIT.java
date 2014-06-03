@@ -27,7 +27,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
-import com.puresoltechnologies.purifinity.server.core.impl.evaluation.metrics.sloc.SLOCEvaluator;
+import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.server.test.AbstractMetricTest;
 import com.puresoltechnologies.purifinity.server.test.analysis.TestFileSearchConfiguration;
 

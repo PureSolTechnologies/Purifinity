@@ -17,5 +17,6 @@
 		<module>fortran2008</module>
 		<module>c11</module>
 		<module>cpp11</module>
+		<module>metrics</module>
 	</modules>
 </project>

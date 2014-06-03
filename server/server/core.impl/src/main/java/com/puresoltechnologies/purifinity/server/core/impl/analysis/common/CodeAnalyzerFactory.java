@@ -22,6 +22,7 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageNotSupportedException;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
 
 /**
  * This factory creates an {@link Analyzer} class for a given File in dependence

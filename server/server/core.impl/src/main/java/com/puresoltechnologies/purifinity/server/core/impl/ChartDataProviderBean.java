@@ -22,7 +22,7 @@ import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.server.core.api.ChartDataProvider;
-import com.puresoltechnologies.purifinity.server.core.impl.evaluation.store.ValueSerializer;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.ValueSerializer;
 import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
