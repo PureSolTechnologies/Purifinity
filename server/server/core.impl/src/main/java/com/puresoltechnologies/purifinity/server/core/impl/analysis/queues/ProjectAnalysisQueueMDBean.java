@@ -25,6 +25,7 @@ import com.puresoltechnologies.commons.trees.TreeWalker;
 import com.puresoltechnologies.commons.trees.WalkingAction;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
@@ -32,7 +33,6 @@ import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerRemotePlugin;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.states.AnalysisProcessStateTracker;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.states.AnalysisProcessTransition;
@@ -151,7 +151,7 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 		try {
 			for (AnalyzerInformation analyzerInformation : analyzerPluginService
 					.getServices()) {
-				AnalyzerRemotePlugin instance = analyzerPluginService
+				ProgrammingLanguageAnalyzer instance = analyzerPluginService
 						.createInstance(analyzerInformation.getJndiName());
 				if (instance.isSuitable(sourceFile)) {
 					logger.info("'"

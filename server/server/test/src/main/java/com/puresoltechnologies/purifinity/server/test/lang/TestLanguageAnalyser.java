@@ -33,7 +33,6 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.CompilationUnit;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
@@ -84,11 +83,6 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 			throw new AnalyzerException(this, e);
 		}
 		return;
-	}
-
-	@Override
-	public ProgrammingLanguage getLanguage() {
-		return TestLanguage.getInstance();
 	}
 
 	@Override

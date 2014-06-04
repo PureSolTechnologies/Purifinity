@@ -28,7 +28,6 @@ import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.CompilationUnit;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
@@ -66,12 +65,11 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 			CompilationUnit compilationUnit = TranslationUnitCreator
 					.create(parserTree);
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
-			C11 c11 = C11.getInstance();
 			AnalysisInformation analyzedFile = new AnalysisInformation(
-					sourceCode.getHashId(), date, timeEffort, true,
-					c11.getName(), c11.getVersion());
-			fileAnalysis = new CodeAnalysis(date, timeEffort, c11.getName(),
-					c11.getVersion(), analyzedFile,
+					sourceCode.getHashId(), date, timeEffort, true, C11.NAME,
+					C11.VERSION);
+			fileAnalysis = new CodeAnalysis(date, timeEffort, C11.NAME,
+					C11.VERSION, analyzedFile,
 					this.getAnalyzableCodeRanges(parserTree), compilationUnit);
 		} catch (ParserException | IOException e) {
 			throw new AnalyzerException(this, e);
@@ -107,11 +105,6 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 		} finally {
 			objectOutputStream.close();
 		}
-	}
-
-	@Override
-	public ProgrammingLanguage getLanguage() {
-		return C11.getInstance();
 	}
 
 }

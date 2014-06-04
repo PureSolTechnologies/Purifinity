@@ -1,21 +1,11 @@
 package com.puresoltechnologies.purifinity.server.plugin.java7;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Set;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
-import com.puresoltechnologies.commons.misc.ConfigurationParameter;
-import com.puresoltechnologies.commons.misc.Version;
-import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
-import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
-import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
-import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerRemotePlugin;
@@ -28,13 +18,12 @@ public class JavaPluginRegistration extends AbstractPluginRegistration
 		implements AnalyzerRemotePlugin {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalAddress(
-			"java7.plugin", "java7.ejb", AnalyzerRemotePlugin.class,
-			JavaPluginRegistration.class);
+			"java7.plugin", "java7.ejb", ProgrammingLanguageAnalyzer.class,
+			Java.class);
 	private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
-			Java.getInstance().getName(), Java.getInstance().getVersion(),
-			JNDI_ADDRESS, "no description");
+			Java.NAME, Java.VERSION, JNDI_ADDRESS, "no description");
 
-	private final Java java = Java.getInstance();
+	private final Java java = new Java();
 
 	@PostConstruct
 	public void registraion() {
@@ -52,57 +41,5 @@ public class JavaPluginRegistration extends AbstractPluginRegistration
 	@Override
 	public String getName() {
 		return java.getName();
-	}
-
-	@Override
-	public Version getVersion() {
-		return java.getVersion();
-	}
-
-	@Override
-	public boolean isSuitable(SourceCodeLocation source) {
-		return java.isSuitable(source);
-	}
-
-	@Override
-	public LanguageGrammar getGrammar() {
-		return java.getGrammar();
-	}
-
-	@Override
-	public <T> T getImplementation(Class<T> clazz) {
-		return java.getImplementation(clazz);
-	}
-
-	@Override
-	public CodeAnalyzer createAnalyser(SourceCodeLocation source) {
-		return java.createAnalyser(source);
-	}
-
-	@Override
-	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-		return java.restoreAnalyzer(file);
-	}
-
-	@Override
-	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-		return java.getAvailableConfigurationParameters();
-	}
-
-	@Override
-	public <T> void setConfigurationParameter(
-			ConfigurationParameter<T> parameter, T value) {
-		java.setConfigurationParameter(parameter, value);
-	}
-
-	@Override
-	public <T> T getConfigurationParameter(ConfigurationParameter<T> parameter) {
-		return java.getConfigurationParameter(parameter);
-	}
-
-	@Override
-	public CodeAnalysis analyze(SourceCodeLocation sourceCodeLocation)
-			throws AnalyzerException, IOException {
-		return java.analyze(sourceCodeLocation);
 	}
 }

@@ -9,11 +9,15 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 import java.util.Set;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
 
@@ -25,7 +29,12 @@ import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
  * @author Rick-Rainer Ludwig
  * 
  */
+@Stateless
+@Remote(ProgrammingLanguageAnalyzer.class)
 public class C11 extends AbstractProgrammingLanguageAnalyzer {
+
+	public static final String NAME = "C";
+	public static final Version VERSION = new Version(11, 0, 0);
 
 	public static final String[] FILE_SUFFIXES = { ".h", ".c" };
 
@@ -33,21 +42,8 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 
 	private static C11 instance = null;
 
-	public static C11 getInstance() {
-		if (instance == null) {
-			createInstance();
-		}
-		return instance;
-	}
-
-	private static synchronized void createInstance() {
-		if (instance == null) {
-			instance = new C11();
-		}
-	}
-
-	private C11() {
-		super("C", new Version(11, 0, 0));
+	public C11() {
+		super(NAME, VERSION);
 	}
 
 	/**

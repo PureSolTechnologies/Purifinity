@@ -76,12 +76,11 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 			watch.stop();
 			CompilationUnit program = ProgramCreator.create(parserTree);
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
-			Fortran fortran = Fortran.getInstance();
 			AnalysisInformation analyzedFile = new AnalysisInformation(
 					sourceCode.getHashId(), date, timeEffort, true,
-					fortran.getName(), fortran.getVersion());
-			fileAnalysis = new CodeAnalysis(date, timeEffort,
-					fortran.getName(), fortran.getVersion(), analyzedFile,
+					Fortran.NAME, Fortran.VERSION);
+			fileAnalysis = new CodeAnalysis(date, timeEffort, Fortran.NAME,
+					Fortran.VERSION, analyzedFile,
 					getAnalyzableCodeRanges(program), program);
 		} catch (ParserException | IOException e) {
 			throw new AnalyzerException(this, e);
@@ -101,11 +100,6 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 			logger.error(e.getMessage(), e);
 			throw new AnalyzerException(this);
 		}
-	}
-
-	@Override
-	public Fortran getLanguage() {
-		return Fortran.getInstance();
 	}
 
 	@Override

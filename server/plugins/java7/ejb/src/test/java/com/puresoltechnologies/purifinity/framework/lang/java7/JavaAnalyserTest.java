@@ -2,14 +2,12 @@ package com.puresoltechnologies.purifinity.framework.lang.java7;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.PathUtils;
 import com.puresoltechnologies.parsers.source.SourceFileLocation;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
-import com.puresoltechnologies.purifinity.server.plugin.java7.Java;
 import com.puresoltechnologies.purifinity.server.plugin.java7.JavaAnalyzer;
 
 public class JavaAnalyserTest {
@@ -25,7 +23,6 @@ public class JavaAnalyserTest {
 				"src/test/java", PathUtils.classToRelativePackagePath(
 						this.getClass()).getPath()));
 		assertNull(analyser.getAnalysis());
-		assertSame(Java.getInstance(), analyser.getLanguage());
 	}
 
 	@Test

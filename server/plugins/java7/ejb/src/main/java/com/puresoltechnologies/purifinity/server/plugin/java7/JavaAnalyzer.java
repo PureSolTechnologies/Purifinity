@@ -37,7 +37,6 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.CompilationUnit;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
@@ -84,12 +83,11 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 			CompilationUnit compilationUnit = CompilationUnitCreator
 					.create(parserTree);
 			long timeEffort = watch.getMilliseconds();
-			Java java = Java.getInstance();
 			AnalysisInformation analyzedFile = new AnalysisInformation(
-					sourceCode.getHashId(), date, timeEffort, true,
-					java.getName(), java.getVersion());
-			fileAnalysis = new CodeAnalysis(date, timeEffort, java.getName(),
-					java.getVersion(), analyzedFile,
+					sourceCode.getHashId(), date, timeEffort, true, Java.NAME,
+					Java.VERSION);
+			fileAnalysis = new CodeAnalysis(date, timeEffort, Java.NAME,
+					Java.VERSION, analyzedFile,
 					getAnalyzableCodeRanges(compilationUnit), compilationUnit);
 		} catch (LexerException | ParserException | IOException e) {
 			throw new AnalyzerException(this, e);
@@ -158,11 +156,6 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 		} finally {
 			objectOutputStream.close();
 		}
-	}
-
-	@Override
-	public ProgrammingLanguage getLanguage() {
-		return Java.getInstance();
 	}
 
 }

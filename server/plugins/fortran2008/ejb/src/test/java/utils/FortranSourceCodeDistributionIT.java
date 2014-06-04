@@ -48,10 +48,9 @@ public class FortranSourceCodeDistributionIT {
 	public void test() {
 		try {
 			File file = new File("ndicrs.f");
-			Fortran fortran = Fortran.getInstance();
 			StopWatch watch = new StopWatch();
 			watch.start();
-			CodeAnalyzer analyser = fortran
+			CodeAnalyzer analyser = new Fortran()
 					.createAnalyser(new SourceFileLocation("src/fort", file
 							.getPath()));
 			analyser.analyze();
@@ -139,7 +138,7 @@ public class FortranSourceCodeDistributionIT {
 
 	private static boolean parseFile(File sourceDirectory, File file) {
 		try {
-			Fortran fortran = Fortran.getInstance();
+			Fortran fortran = new Fortran();
 			CodeAnalyzer analyser = fortran
 					.createAnalyser(new SourceFileLocation(sourceDirectory,
 							file));

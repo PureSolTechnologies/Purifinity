@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -44,18 +43,18 @@ public abstract class AbstractPluginService<PluginInfo extends Serializable>
 
 	@PreDestroy
 	public void shutdown() {
-		int count = 0;
-		while (plugins.size() > 0) {
-			count++;
-			if (count > 12) {
-				break;
-			}
-			try {
-				Thread.sleep(TimeUnit.SECONDS.toMillis(5));
-			} catch (InterruptedException e) {
-				break;
-			}
-		}
+		// int count = 0;
+		// while (plugins.size() > 0) {
+		// count++;
+		// if (count > 12) {
+		// break;
+		// }
+		// try {
+		// Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+		// } catch (InterruptedException e) {
+		// break;
+		// }
+		// }
 		jndiAddresses.clear();
 		plugins.clear();
 		eventLogger.logEvent(PluginServiceEvents

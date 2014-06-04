@@ -4,10 +4,10 @@ import javax.ejb.Singleton;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginServiceRemote;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerRemotePlugin;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 
 @Singleton
@@ -20,10 +20,13 @@ public class AnalyzerPluginServiceImpl extends
 	}
 
 	@Override
-	public AnalyzerRemotePlugin createInstance(String jndi)
+	public ProgrammingLanguageAnalyzer createInstance(String jndi)
 			throws NamingException {
 		InitialContext initialContext = new InitialContext();
-		return (AnalyzerRemotePlugin) initialContext.lookup(jndi);
+		Object object = initialContext
+				.lookup(jndi);
+		ProgrammingLanguageAnalyzer instance = (ProgrammingLanguageAnalyzer) object;
+		return instance;
 	}
 
 }

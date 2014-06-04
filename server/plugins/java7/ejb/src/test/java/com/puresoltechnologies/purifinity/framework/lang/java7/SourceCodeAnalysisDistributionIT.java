@@ -77,7 +77,7 @@ public class SourceCodeAnalysisDistributionIT {
 	private static boolean parseFile(File file) throws IOException {
 		try {
 			System.out.println(file);
-			Java java = Java.getInstance();
+			Java java = new Java();
 			CodeAnalyzer analyser = java.createAnalyser(new SourceFileLocation(
 					file.getParentFile(), file.getName()));
 			analyser.analyze();

@@ -9,15 +9,24 @@ import java.util.Iterator;
 import java.util.ServiceLoader;
 import java.util.Set;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
+import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.grammar.FortranGrammar;
 
+@Stateless
+@Remote(ProgrammingLanguageAnalyzer.class)
 public class Fortran extends AbstractProgrammingLanguageAnalyzer {
+
+	public static final String NAME = "Fortran";
+	public static final Version VERSION = new Version(2008, 0, 0);
 
 	public static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
 			".f95", ".for" };
@@ -25,23 +34,10 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 	private static Fortran instance = null;
 
-	public static Fortran getInstance() {
-		if (instance == null) {
-			createInstance();
-		}
-		return instance;
-	}
-
-	private static synchronized void createInstance() {
-		if (instance == null) {
-			instance = new Fortran();
-		}
-	}
-
 	private SourceForm sourceForm = SourceForm.FREE_FORM;
 
-	private Fortran() {
-		super("Fortran", new Version(2008, 0, 0));
+	public Fortran() {
+		super(NAME, VERSION);
 	}
 
 	@Override

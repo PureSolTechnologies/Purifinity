@@ -5,14 +5,12 @@ package com.puresoltechnologies.purifinity.framework.lang.fortran2008;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
 
 import java.io.File;
 
 import org.junit.Test;
 
 import com.puresoltechnologies.parsers.source.SourceFileLocation;
-import com.puresoltechnologies.purifinity.server.plugin.fortran2008.Fortran;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.FortranAnalyzer;
 
 /**
@@ -33,7 +31,6 @@ public class FortranAnalyzerTest {
 		FortranAnalyzer analyser = new FortranAnalyzer(new SourceFileLocation(
 				"src/test", "TestFile.f"));
 		assertNull(analyser.getAnalysis());
-		assertSame(Fortran.getInstance(), analyser.getLanguage());
 	}
 
 	private void test(File sourceDirectory, File file) throws Exception {

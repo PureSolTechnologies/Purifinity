@@ -33,14 +33,6 @@ public interface CodeAnalyzer {
 	public SourceCodeLocation getSource();
 
 	/**
-	 * This method returns from the implemented parser the supported programming
-	 * language.
-	 * 
-	 * @return
-	 */
-	public ProgrammingLanguage getLanguage();
-
-	/**
 	 * This method is called to start the actual parsing process.
 	 * 
 	 * @throws AnalyzerException
