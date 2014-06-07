@@ -14,6 +14,9 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -22,6 +25,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
@@ -31,7 +36,6 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocom
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.SoftwareProject;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCResult;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
@@ -44,6 +48,8 @@ import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluator;
  * @author Rick-Rainer Ludwig
  * 
  */
+@Stateless
+@Remote(Evaluator.class)
 public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = 5098378023541671490L;
@@ -64,9 +70,8 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	private int averageSalary = 56286;
 	private String currency = "USD";
 
-	public IntermediateCoCoMoEvaluator(AnalysisRun analysisRun,
-			AnalysisFileTree path) {
-		super(NAME, DESCRIPTION, analysisRun, path);
+	public IntermediateCoCoMoEvaluator() {
+		super(NAME, DESCRIPTION);
 		store = getEvaluatorStore();
 		slocStore = EvaluatorStoreFactory.getFactory().createInstance(
 				SLOCEvaluator.class);
@@ -95,14 +100,14 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricFileResults processFile(CodeAnalysis analysis)
-			throws EvaluationStoreException {
+	protected MetricFileResults processFile(AnalysisRun analysisRun,
+			CodeAnalysis analysis) throws EvaluationStoreException {
 		HashId hashId = analysis.getAnalysisInformation().getHashId();
 		if (slocStore.hasFileResults(hashId)) {
 			SLOCFileResults slocResults = (SLOCFileResults) slocStore
 					.readFileResults(hashId);
-			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
-					.findTreeNode(hashId).getSourceCodeLocation();
+			SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
+					hashId).getSourceCodeLocation();
 			for (SLOCResult results : slocResults.getResults()) {
 				if (results.getCodeRangeType() == CodeRangeType.FILE) {
 					int phyLoc = results.getSLOCMetric().getPhyLOC();
@@ -119,8 +124,9 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricDirectoryResults processDirectory(AnalysisFileTree directory)
-			throws InterruptedException, EvaluationStoreException {
+	protected MetricDirectoryResults processDirectory(AnalysisRun analysisRun,
+			AnalysisFileTree directory) throws InterruptedException,
+			EvaluationStoreException {
 		int phyLoc = 0;
 		for (AnalysisFileTree child : directory.getChildren()) {
 			HashId hashId = child.getHashId();
@@ -148,10 +154,10 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricDirectoryResults processProject()
+	protected MetricDirectoryResults processProject(AnalysisRun analysisRun)
 			throws InterruptedException, EvaluationStoreException {
-		AnalysisFileTree directory = getAnalysisRun().getFileTree();
-		return processDirectory(directory);
+		AnalysisFileTree directory = analysisRun.getFileTree();
+		return processDirectory(analysisRun, directory);
 	}
 
 }

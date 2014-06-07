@@ -5,6 +5,7 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemotePlugin;
@@ -17,8 +18,8 @@ public class SLOCPluginRegistration extends AbstractPluginRegistration
 		implements EvaluatorRemotePlugin {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalAddress(
-			"metrics.plugin", "metrics.ejb", EvaluatorRemotePlugin.class,
-			SLOCPluginRegistration.class);
+			"metrics.plugin", "metrics.ejb", Evaluator.class,
+			SLOCEvaluator.class);
 
 	private static final EvaluatorInformation INFORMATION = new EvaluatorInformation(
 			SLOCMetricCalculator.NAME, JNDI_ADDRESS,

@@ -27,11 +27,11 @@ import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisS
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.views.AbstractMetricViewPart;
 import com.puresoltechnologies.purifinity.client.common.server.connectors.HalsteadMetricEvaluatorConnector;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricDirectoryResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadResult;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 
 public class HalsteadMetricView extends AbstractMetricViewPart implements

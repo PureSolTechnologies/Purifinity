@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCEvaluatorParameter;
@@ -29,8 +27,8 @@ public class SLOCEvaluatorFactory extends AbstractEvaluatorFactory {
 	}
 
 	@Override
-	public SLOCEvaluator create(AnalysisRun analysisRun, AnalysisFileTree path) {
-		return new SLOCEvaluator(analysisRun, path);
+	public SLOCEvaluator create() {
+		return new SLOCEvaluator();
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.utils;
 
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 
 /**
  * This interface is used to mark a class as evaluations part.

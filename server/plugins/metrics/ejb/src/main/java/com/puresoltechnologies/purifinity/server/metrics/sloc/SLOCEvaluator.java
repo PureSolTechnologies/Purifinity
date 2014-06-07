@@ -3,6 +3,9 @@ package com.puresoltechnologies.purifinity.server.metrics.sloc;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -15,6 +18,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
@@ -22,7 +27,6 @@ import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCDirectoryResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCResult;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
@@ -40,6 +44,8 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEva
  * 
  * @author Rick-Rainer Ludwig
  */
+@Stateless
+@Remote(Evaluator.class)
 public class SLOCEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = -5093217611195212999L;
@@ -48,9 +54,8 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
 	private final EvaluatorStore store;
 
-	public SLOCEvaluator(AnalysisRun analysisRun, AnalysisFileTree path) {
-		super(SLOCMetricCalculator.NAME, SLOCMetricCalculator.DESCRIPTION,
-				analysisRun, path);
+	public SLOCEvaluator() {
+		super(SLOCMetricCalculator.NAME, SLOCMetricCalculator.DESCRIPTION);
 		store = getEvaluatorStore();
 	}
 
@@ -60,8 +65,8 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricFileResults processFile(CodeAnalysis analysis)
-			throws InterruptedException,
+	protected MetricFileResults processFile(AnalysisRun analysisRun,
+			CodeAnalysis analysis) throws InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 		AnalysisInformation analyzedFile = analysis.getAnalysisInformation();
 		HashId hashId = analyzedFile.getHashId();
@@ -75,11 +80,11 @@ public class SLOCEvaluator extends AbstractEvaluator {
 					analysis.getLanguageName(), analysis.getLanguageVersion());
 
 			SLOCFileResults results = new SLOCFileResults();
-			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
-					.findTreeNode(hashId).getSourceCodeLocation();
+			SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
+					hashId).getSourceCodeLocation();
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 				SLOCMetricCalculator metric = new SLOCMetricCalculator(
-						getAnalysisRun(), language, codeRange);
+						analysisRun, language, codeRange);
 				execute(metric);
 
 				results.add(new SLOCResult(sourceCodeLocation, codeRange
@@ -96,8 +101,9 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricDirectoryResults processDirectory(AnalysisFileTree directory)
-			throws InterruptedException, EvaluationStoreException {
+	protected MetricDirectoryResults processDirectory(AnalysisRun analysisRun,
+			AnalysisFileTree directory) throws InterruptedException,
+			EvaluationStoreException {
 		QualityLevel qualityLevel = null;
 		SLOCResult metricResults = null;
 		for (AnalysisFileTree child : directory.getChildren()) {
@@ -150,10 +156,9 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricDirectoryResults processProject()
+	protected MetricDirectoryResults processProject(AnalysisRun analysisRun)
 			throws InterruptedException, EvaluationStoreException {
-		AnalysisRun analysisRun = getAnalysisRun();
 		AnalysisFileTree directory = analysisRun.getFileTree();
-		return processDirectory(directory);
+		return processDirectory(analysisRun, directory);
 	}
 }

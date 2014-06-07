@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexEvaluatorParameter;
@@ -33,9 +31,8 @@ public class MaintainabilityIndexEvaluatorFactory extends
 	}
 
 	@Override
-	public MaintainabilityIndexEvaluator create(AnalysisRun analysisRun,
-			AnalysisFileTree path) {
-		return new MaintainabilityIndexEvaluator(analysisRun, path);
+	public MaintainabilityIndexEvaluator create() {
+		return new MaintainabilityIndexEvaluator();
 	}
 
 	@Override

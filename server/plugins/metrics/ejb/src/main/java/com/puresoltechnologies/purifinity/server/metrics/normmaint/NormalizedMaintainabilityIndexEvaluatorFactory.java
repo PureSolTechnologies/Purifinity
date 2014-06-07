@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluatorFactory;
@@ -30,9 +28,8 @@ public class NormalizedMaintainabilityIndexEvaluatorFactory extends
 	}
 
 	@Override
-	public NormalizedMaintainabilityIndexEvaluator create(
-			AnalysisRun analysisRun, AnalysisFileTree path) {
-		return new NormalizedMaintainabilityIndexEvaluator(analysisRun, path);
+	public NormalizedMaintainabilityIndexEvaluator create() {
+		return new NormalizedMaintainabilityIndexEvaluator();
 	}
 
 	@Override

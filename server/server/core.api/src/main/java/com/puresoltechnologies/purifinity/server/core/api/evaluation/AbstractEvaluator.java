@@ -20,23 +20,21 @@ import org.slf4j.LoggerFactory;
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.StopWatch;
-import com.puresoltechnologies.commons.trees.TreeUtils;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
-import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;
-import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.DirectoryStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -47,8 +45,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractEvaluator extends
-		AbstractProgressObservable<Evaluator> implements Evaluator {
+public abstract class AbstractEvaluator implements Evaluator {
 
 	private static final long serialVersionUID = -497819792461488182L;
 
@@ -60,10 +57,10 @@ public abstract class AbstractEvaluator extends
 	private final Map<String, Object> properties = new HashMap<>();
 
 	@Inject
-	private FileStore fileStore;
+	private FileStoreService fileStore;
 
 	@Inject
-	private DirectoryStore directoryStore;
+	private DirectoryStoreService directoryStore;
 
 	private final EvaluatorStoreFactory evaluatorStoreFactory = EvaluatorStoreFactory
 			.getFactory();
@@ -71,20 +68,15 @@ public abstract class AbstractEvaluator extends
 	private final EvaluatorStore evaluatorStore;
 
 	private final EvaluatorInformation information;
-	private final AnalysisRun analysisRun;
-	private final AnalysisFileTree path;
 	private final Date timeStamp;
 
 	private long timeOfRun;
 
 	private boolean reEvaluation = false;
 
-	public AbstractEvaluator(String name, String description,
-			AnalysisRun analysisRun, AnalysisFileTree path) {
+	public AbstractEvaluator(String name, String description) {
 		super();
 		this.information = new EvaluatorInformation(name, description);
-		this.analysisRun = analysisRun;
-		this.path = path;
 		timeStamp = new Date();
 		evaluatorStore = evaluatorStoreFactory.createInstance(getClass());
 	}
@@ -92,11 +84,6 @@ public abstract class AbstractEvaluator extends
 	@Override
 	public final EvaluatorInformation getInformation() {
 		return information;
-	}
-
-	@Override
-	public final AnalysisRun getAnalysisRun() {
-		return analysisRun;
 	}
 
 	@Override
@@ -159,8 +146,8 @@ public abstract class AbstractEvaluator extends
 	 *             event.
 	 * @throws EvaluationStoreException
 	 */
-	abstract protected MetricFileResults processFile(CodeAnalysis analysis)
-			throws InterruptedException,
+	abstract protected MetricFileResults processFile(AnalysisRun analysisRun,
+			CodeAnalysis analysis) throws InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException;
 
 	/**
@@ -175,8 +162,8 @@ public abstract class AbstractEvaluator extends
 	 * @throws EvaluationStoreException
 	 */
 	abstract protected MetricDirectoryResults processDirectory(
-			AnalysisFileTree directory) throws InterruptedException,
-			EvaluationStoreException;
+			AnalysisRun analysisRun, AnalysisFileTree directory)
+			throws InterruptedException, EvaluationStoreException;
 
 	/**
 	 * This method is used to run an evaluation of the entire project. This
@@ -186,36 +173,31 @@ public abstract class AbstractEvaluator extends
 	 *             is thrown if the evaluation was interrupted.
 	 * @throws EvaluationStoreException
 	 */
-	abstract protected MetricDirectoryResults processProject()
-			throws InterruptedException, EvaluationStoreException;
+	abstract protected MetricDirectoryResults processProject(
+			AnalysisRun analysisRun) throws InterruptedException,
+			EvaluationStoreException;
 
 	@Override
-	public final Boolean call() throws InterruptedException,
-			EvaluationStoreException {
+	public final Boolean analyze(AnalysisRun analysisRun)
+			throws InterruptedException, EvaluationStoreException {
 		// Start time measurement
 		StopWatch watch = new StopWatch();
 		watch.start();
 		// check the files to evaluate and calculate amount of work!
-		if (path != null) {
-			int nodeCount = TreeUtils.countNodes(path);
-			fireStarted("Beginning evaluation...", nodeCount + 1);
-		} else {
-			fireStarted("Beginning evaluation...", 0);
-		}
 		// process files and directories
-		processTree(path);
+		processTree(analysisRun, analysisRun.getFileTree());
 		// process project as whole
-		processProject();
+		processProject(analysisRun);
 		// Stop time measurement
 		watch.stop();
 		timeOfRun = watch.getMilliseconds();
-		fireDone("Evaluation finished.", true);
 		return true;
 	}
 
-	private void processTree(AnalysisFileTree tree) throws InterruptedException {
+	private void processTree(AnalysisRun analysisRun, AnalysisFileTree tree)
+			throws InterruptedException {
 		try {
-			processNode(tree);
+			processNode(analysisRun, tree);
 		} catch (FileStoreException | DirectoryStoreException
 				| ArrayStoreException | EvaluationStoreException e) {
 			logger.error("Evaluation result could not be stored.", e);
@@ -224,18 +206,18 @@ public abstract class AbstractEvaluator extends
 		}
 	}
 
-	private void processNode(AnalysisFileTree node) throws FileStoreException,
-			InterruptedException, UniversalSyntaxTreeEvaluationException,
-			EvaluationStoreException, DirectoryStoreException {
+	private void processNode(AnalysisRun analysisRun, AnalysisFileTree node)
+			throws FileStoreException, InterruptedException,
+			UniversalSyntaxTreeEvaluationException, EvaluationStoreException,
+			DirectoryStoreException {
 		if (Thread.currentThread().isInterrupted()) {
 			throw new InterruptedException();
 		}
 		if (node.isFile()) {
-			processAsFile(node);
+			processAsFile(analysisRun, node);
 		} else {
-			processAsDirectory(node);
+			processAsDirectory(analysisRun, node);
 		}
-		fireUpdateWork("Evaluated '" + node.getName() + "'.", 1);
 	}
 
 	/**
@@ -252,25 +234,27 @@ public abstract class AbstractEvaluator extends
 	 *             is thrown if the evaluation had an exception.
 	 * @throws EvaluationStoreException
 	 */
-	private void processAsFile(AnalysisFileTree fileNode)
-			throws FileStoreException, InterruptedException,
-			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
+	private void processAsFile(AnalysisRun analysisRun,
+			AnalysisFileTree fileNode) throws FileStoreException,
+			InterruptedException, UniversalSyntaxTreeEvaluationException,
+			EvaluationStoreException {
 		HashId hashId = fileNode.getHashId();
 		if (fileStore.wasAnalyzed(hashId)) {
 			List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyses(hashId);
 			for (CodeAnalysis fileAnalysis : fileAnalyses) {
 				if ((!evaluatorStore.hasFileResults(hashId)) || (reEvaluation)) {
-					MetricFileResults fileResults = processFile(fileAnalysis);
+					MetricFileResults fileResults = processFile(analysisRun,
+							fileAnalysis);
 					if (fileResults != null) {
-						evaluatorStore.storeFileResults(fileAnalysis, this,
-								fileResults);
+						evaluatorStore.storeFileResults(analysisRun,
+								fileAnalysis, this, fileResults);
 					}
 				} else {
 					MetricFileResults fileResults = evaluatorStore
 							.readFileResults(hashId);
 					if (fileResults != null) {
-						evaluatorStore.storeMetricsInBigTable(fileAnalysis,
-								this, fileResults);
+						evaluatorStore.storeMetricsInBigTable(analysisRun,
+								fileAnalysis, this, fileResults);
 					}
 				}
 			}
@@ -292,27 +276,28 @@ public abstract class AbstractEvaluator extends
 	 * @throws EvaluationStoreException
 	 * @throws DirectoryStoreException
 	 */
-	private void processAsDirectory(AnalysisFileTree directoryNode)
-			throws FileStoreException, InterruptedException,
-			UniversalSyntaxTreeEvaluationException, DirectoryStoreException,
-			EvaluationStoreException {
+	private void processAsDirectory(AnalysisRun analysisRun,
+			AnalysisFileTree directoryNode) throws FileStoreException,
+			InterruptedException, UniversalSyntaxTreeEvaluationException,
+			DirectoryStoreException, EvaluationStoreException {
 		HashId hashId = directoryNode.getHashId();
 		if (directoryStore.isAvailable(hashId)) {
 			for (AnalysisFileTree child : directoryNode.getChildren()) {
-				processNode(child);
+				processNode(analysisRun, child);
 			}
 			if ((!evaluatorStore.hasDirectoryResults(hashId)) || (reEvaluation)) {
-				MetricDirectoryResults directoryResults = processDirectory(directoryNode);
+				MetricDirectoryResults directoryResults = processDirectory(
+						analysisRun, directoryNode);
 				if (directoryResults != null) {
-					evaluatorStore.storeDirectoryResults(directoryNode, this,
-							directoryResults);
+					evaluatorStore.storeDirectoryResults(analysisRun,
+							directoryNode, this, directoryResults);
 				}
 			} else {
 				MetricDirectoryResults directoryResults = evaluatorStore
 						.readDirectoryResults(hashId);
 				if (directoryResults != null) {
-					evaluatorStore.storeMetricsInBigTable(directoryNode, this,
-							directoryResults);
+					evaluatorStore.storeMetricsInBigTable(analysisRun,
+							directoryNode, this, directoryResults);
 				}
 			}
 		}
@@ -334,10 +319,8 @@ public abstract class AbstractEvaluator extends
 			executor.shutdown();
 			return future.get(EXECUTION_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
 		} catch (ExecutionException e) {
-			fireDone(e.getMessage(), false);
 			throw new UniversalSyntaxTreeEvaluationException(e);
 		} catch (TimeoutException e) {
-			fireDone(e.getMessage(), false);
 			throw new UniversalSyntaxTreeEvaluationException(e);
 		}
 	}

@@ -7,12 +7,13 @@ import org.osgi.framework.ServiceReference;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.client.common.server.Activator;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 
 public class HalsteadMetricEvaluatorConnector implements EvaluatorStore {
@@ -53,25 +54,25 @@ public class HalsteadMetricEvaluatorConnector implements EvaluatorStore {
 	}
 
 	@Override
-	public void storeFileResults(CodeAnalysis codeAnalysis,
-			Evaluator evaluator, MetricFileResults results)
-			throws EvaluationStoreException {
+	public void storeFileResults(AnalysisRun analysisRun,
+			CodeAnalysis codeAnalysis, Evaluator evaluator,
+			MetricFileResults results) throws EvaluationStoreException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void storeDirectoryResults(AnalysisFileTree directory,
-			Evaluator evaluator, MetricDirectoryResults results)
-			throws EvaluationStoreException {
+	public void storeDirectoryResults(AnalysisRun analysisRun,
+			AnalysisFileTree directory, Evaluator evaluator,
+			MetricDirectoryResults results) throws EvaluationStoreException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void storeProjectResults(UUID analysisRunUUID, Evaluator evaluator,
-			AnalysisFileTree directory, MetricDirectoryResults results)
-			throws EvaluationStoreException {
+	public void storeProjectResults(AnalysisRun analysisRun,
+			Evaluator evaluator, AnalysisFileTree directory,
+			MetricDirectoryResults results) throws EvaluationStoreException {
 		// TODO Auto-generated method stub
 
 	}
@@ -98,15 +99,17 @@ public class HalsteadMetricEvaluatorConnector implements EvaluatorStore {
 	}
 
 	@Override
-	public void storeMetricsInBigTable(CodeAnalysis codeAnalysis,
-			Evaluator evaluator, MetricFileResults results) {
+	public void storeMetricsInBigTable(AnalysisRun analysisRun,
+			CodeAnalysis codeAnalysis, Evaluator evaluator,
+			MetricFileResults results) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void storeMetricsInBigTable(AnalysisFileTree directory,
-			Evaluator evaluator, MetricDirectoryResults results) {
+	public void storeMetricsInBigTable(AnalysisRun analysisRun,
+			AnalysisFileTree directory, Evaluator evaluator,
+			MetricDirectoryResults results) {
 		// TODO Auto-generated method stub
 
 	}

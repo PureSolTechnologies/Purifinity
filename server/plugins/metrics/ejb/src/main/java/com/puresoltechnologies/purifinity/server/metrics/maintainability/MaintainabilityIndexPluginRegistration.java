@@ -5,6 +5,7 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemotePlugin;
@@ -17,8 +18,8 @@ public class MaintainabilityIndexPluginRegistration extends
 		AbstractPluginRegistration implements EvaluatorRemotePlugin {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalAddress(
-			"metrics.plugin", "metrics.ejb", EvaluatorRemotePlugin.class,
-			MaintainabilityIndexPluginRegistration.class);
+			"metrics.plugin", "metrics.ejb", Evaluator.class,
+			MaintainabilityIndexEvaluator.class);
 
 	private static final EvaluatorInformation INFORMATION = new EvaluatorInformation(
 			MaintainabilityIndexEvaluator.NAME, JNDI_ADDRESS,

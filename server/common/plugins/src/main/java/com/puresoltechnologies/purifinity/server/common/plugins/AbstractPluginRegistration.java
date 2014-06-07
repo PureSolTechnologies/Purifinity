@@ -18,7 +18,7 @@ import org.slf4j.Logger;
  */
 public abstract class AbstractPluginRegistration {
 
-	private static final int DEFAULT_RETRY_COUNT = 10;
+	private static final int DEFAULT_RETRY_COUNT = 30;
 	private static final int DEFAULT_SLEEP = 1000;
 
 	@Inject
@@ -72,7 +72,7 @@ public abstract class AbstractPluginRegistration {
 								information, new Properties());
 						registered = true;
 						break;
-					} catch (NamingException e) {
+					} catch (NamingException | IllegalStateException e) {
 						logger.debug("'"
 								+ getName()
 								+ "' was not registered, yet. Plugin service was not found.");

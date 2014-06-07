@@ -17,12 +17,12 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCResult;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
@@ -98,8 +98,9 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 	private SLOCFileResults performSLOCEvaluation(AnalysisRun analysisRun,
 			AnalysisFileTree slocTestSample) throws InterruptedException,
 			EvaluationStoreException {
-		SLOCEvaluator evaluator = new SLOCEvaluator(analysisRun, slocTestSample);
-		assertTrue("Evaluator call did not succeed.", evaluator.call());
+		SLOCEvaluator evaluator = new SLOCEvaluator();
+		assertTrue("Evaluator call did not succeed.",
+				evaluator.analyze(analysisRun));
 		EvaluatorStore store = EvaluatorStoreFactory.getFactory()
 				.createInstance(SLOCEvaluator.class);
 		SLOCFileResults fileResults = (SLOCFileResults) store

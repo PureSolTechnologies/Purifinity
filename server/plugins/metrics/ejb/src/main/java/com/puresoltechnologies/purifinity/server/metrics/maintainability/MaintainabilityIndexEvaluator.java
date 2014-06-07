@@ -3,6 +3,9 @@ package com.puresoltechnologies.purifinity.server.metrics.maintainability;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -13,6 +16,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
@@ -27,7 +32,6 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maint
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCResult;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
@@ -37,6 +41,8 @@ import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetricFile
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetricResult;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluator;
 
+@Stateless
+@Remote(Evaluator.class)
 public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = -5093217611195212999L;
@@ -60,9 +66,8 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	private final EvaluatorStore mcCabeStore;
 	private final EvaluatorStore halsteadStore;
 
-	public MaintainabilityIndexEvaluator(AnalysisRun analysisRun,
-			AnalysisFileTree path) {
-		super(NAME, DESCRIPTION, analysisRun, path);
+	public MaintainabilityIndexEvaluator() {
+		super(NAME, DESCRIPTION);
 		store = getEvaluatorStore();
 		EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
 		slocStore = factory.createInstance(SLOCEvaluator.class);
@@ -76,8 +81,9 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricFileResults processFile(CodeAnalysis analysis)
-			throws InterruptedException, EvaluationStoreException {
+	protected MetricFileResults processFile(AnalysisRun analysisRun,
+			CodeAnalysis analysis) throws InterruptedException,
+			EvaluationStoreException {
 		MaintainabilityIndexFileResults results = new MaintainabilityIndexFileResults();
 
 		AnalysisInformation analyzedFile = analysis.getAnalysisInformation();
@@ -88,8 +94,8 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 				.readFileResults(hashId);
 		HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
 				.readFileResults(hashId);
-		SourceCodeLocation sourceCodeLocation = getAnalysisRun().findTreeNode(
-				hashId).getSourceCodeLocation();
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.findTreeNode(hashId).getSourceCodeLocation();
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			SLOCResult slocCodeRangeResult = findFileResult(slocFileResults,
@@ -163,8 +169,9 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricDirectoryResults processDirectory(AnalysisFileTree directory)
-			throws InterruptedException, EvaluationStoreException {
+	protected MetricDirectoryResults processDirectory(AnalysisRun analysisRun,
+			AnalysisFileTree directory) throws InterruptedException,
+			EvaluationStoreException {
 		QualityLevel qualityLevel = null;
 		for (AnalysisFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
@@ -194,9 +201,8 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricDirectoryResults processProject()
+	protected MetricDirectoryResults processProject(AnalysisRun analysisRun)
 			throws InterruptedException, EvaluationStoreException {
-		AnalysisRun analysisRun = getAnalysisRun();
-		return processDirectory(analysisRun.getFileTree());
+		return processDirectory(analysisRun, analysisRun.getFileTree());
 	}
 }

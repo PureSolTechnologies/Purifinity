@@ -6,6 +6,7 @@ import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
@@ -82,9 +83,9 @@ public interface EvaluatorStore {
 	 *            to be stored.
 	 * @throws EvaluationStoreException
 	 */
-	public void storeFileResults(CodeAnalysis codeAnalysis,
-			Evaluator evaluator, MetricFileResults results)
-			throws EvaluationStoreException;
+	public void storeFileResults(AnalysisRun analysisRun,
+			CodeAnalysis codeAnalysis, Evaluator evaluator,
+			MetricFileResults results) throws EvaluationStoreException;
 
 	/**
 	 * This method stores the results for a single directory.
@@ -96,9 +97,9 @@ public interface EvaluatorStore {
 	 *            results to be stored.
 	 * @throws EvaluationStoreException
 	 */
-	public void storeDirectoryResults(AnalysisFileTree directory,
-			Evaluator evaluator, MetricDirectoryResults results)
-			throws EvaluationStoreException;
+	public void storeDirectoryResults(AnalysisRun analysisRun,
+			AnalysisFileTree directory, Evaluator evaluator,
+			MetricDirectoryResults results) throws EvaluationStoreException;
 
 	/**
 	 * This method stores the results for a whole project.
@@ -111,9 +112,9 @@ public interface EvaluatorStore {
 	 *            results to be stored.
 	 * @throws EvaluationStoreException
 	 */
-	public void storeProjectResults(UUID analysisRunUUID, Evaluator evaluator,
-			AnalysisFileTree directory, MetricDirectoryResults results)
-			throws EvaluationStoreException;
+	public void storeProjectResults(AnalysisRun analysisRun,
+			Evaluator evaluator, AnalysisFileTree directory,
+			MetricDirectoryResults results) throws EvaluationStoreException;
 
 	/**
 	 * This method reads the results for a single file.
@@ -154,9 +155,11 @@ public interface EvaluatorStore {
 	public MetricDirectoryResults readProjectResults(UUID analysisRunUUID)
 			throws EvaluationStoreException;
 
-	public void storeMetricsInBigTable(CodeAnalysis codeAnalysis,
-			Evaluator evaluator, MetricFileResults results);
+	public void storeMetricsInBigTable(AnalysisRun analysisRun,
+			CodeAnalysis codeAnalysis, Evaluator evaluator,
+			MetricFileResults results);
 
-	void storeMetricsInBigTable(AnalysisFileTree directory,
-			Evaluator evaluator, MetricDirectoryResults results);
+	void storeMetricsInBigTable(AnalysisRun analysisRun,
+			AnalysisFileTree directory, Evaluator evaluator,
+			MetricDirectoryResults results);
 }

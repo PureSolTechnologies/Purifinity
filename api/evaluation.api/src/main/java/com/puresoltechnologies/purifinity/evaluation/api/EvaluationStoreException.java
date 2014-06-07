@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.framework.store.api;
+package com.puresoltechnologies.purifinity.evaluation.api;
 
 public class EvaluationStoreException extends Exception {
 

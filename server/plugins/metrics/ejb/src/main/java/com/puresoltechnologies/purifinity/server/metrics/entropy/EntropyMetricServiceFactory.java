@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluatorFactory;
@@ -29,9 +27,8 @@ public class EntropyMetricServiceFactory extends AbstractEvaluatorFactory {
 	}
 
 	@Override
-	public EntropyMetricEvaluator create(AnalysisRun analysisRun,
-			AnalysisFileTree path) {
-		return new EntropyMetricEvaluator(analysisRun, path);
+	public EntropyMetricEvaluator create() {
+		return new EntropyMetricEvaluator();
 	}
 
 	@Override

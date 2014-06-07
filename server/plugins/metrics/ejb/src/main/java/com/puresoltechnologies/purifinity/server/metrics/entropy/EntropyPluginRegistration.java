@@ -5,6 +5,7 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemotePlugin;
@@ -17,8 +18,8 @@ public class EntropyPluginRegistration extends AbstractPluginRegistration
 		implements EvaluatorRemotePlugin {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalAddress(
-			"metrics.plugin", "metrics.ejb", EvaluatorRemotePlugin.class,
-			EntropyPluginRegistration.class);
+			"metrics.plugin", "metrics.ejb", Evaluator.class,
+			EntropyMetricEvaluator.class);
 
 	private static final EvaluatorInformation INFORMATION = new EvaluatorInformation(
 			EntropyMetric.NAME, JNDI_ADDRESS, EntropyMetric.DESCRIPTION);

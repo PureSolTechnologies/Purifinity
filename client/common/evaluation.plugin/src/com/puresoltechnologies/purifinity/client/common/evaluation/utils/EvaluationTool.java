@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.client.common.evaluation.utils;
 
+import java.util.concurrent.Callable;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -11,8 +13,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.client.common.server.EvaluatorFactory;
 import com.puresoltechnologies.purifinity.client.common.ui.jobs.ObservedJob;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 
@@ -93,10 +95,15 @@ public class EvaluationTool {
 
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
-				Evaluator evaluator = evaluatorFactory
-						.create(analysisRun, path);
-				ObservedJob<Evaluator, Boolean> job = new ObservedJob<Evaluator, Boolean>(
-						"Evaluation", evaluator);
+				final Evaluator evaluator = evaluatorFactory.create(
+						analysisRun, path);
+				ObservedJob<Boolean> job = new ObservedJob<Boolean>(
+						"Evaluation", new Callable<Boolean>() {
+							@Override
+							public Boolean call() throws Exception {
+								return evaluator.analyze(analysisRun);
+							}
+						});
 				job.schedule();
 				try {
 					job.join();

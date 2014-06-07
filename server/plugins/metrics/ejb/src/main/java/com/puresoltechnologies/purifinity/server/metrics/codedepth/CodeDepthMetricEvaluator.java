@@ -3,6 +3,9 @@ package com.puresoltechnologies.purifinity.server.metrics.codedepth;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -14,6 +17,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
@@ -22,7 +27,6 @@ import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.codedepth.CodeDepthDirectoryResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.codedepth.CodeDepthFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.codedepth.CodeDepthResult;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
@@ -34,6 +38,8 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEva
  * 
  * @author Rick-Rainer Ludwig
  */
+@Stateless
+@Remote(Evaluator.class)
 public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = -5093217611195212999L;
@@ -42,10 +48,8 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
 	private final EvaluatorStore store;
 
-	public CodeDepthMetricEvaluator(AnalysisRun analysisRun,
-			AnalysisFileTree path) {
-		super(CodeDepthMetric.NAME, CodeDepthMetric.DESCRIPTION, analysisRun,
-				path);
+	public CodeDepthMetricEvaluator() {
+		super(CodeDepthMetric.NAME, CodeDepthMetric.DESCRIPTION);
 		store = getEvaluatorStore();
 	}
 
@@ -55,8 +59,8 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricFileResults processFile(CodeAnalysis analysis)
-			throws InterruptedException,
+	protected MetricFileResults processFile(AnalysisRun analysisRun,
+			CodeAnalysis analysis) throws InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
 				.createInstance()) {
@@ -65,10 +69,10 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 
 			CodeDepthFileResults results = new CodeDepthFileResults();
 			HashId hashId = analysis.getAnalysisInformation().getHashId();
-			SourceCodeLocation sourceCodeLocation = getAnalysisRun()
-					.findTreeNode(hashId).getSourceCodeLocation();
+			SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
+					hashId).getSourceCodeLocation();
 			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-				CodeDepthMetric metric = new CodeDepthMetric(getAnalysisRun(),
+				CodeDepthMetric metric = new CodeDepthMetric(analysisRun,
 						language, codeRange);
 				execute(metric);
 				SourceCodeQuality quality = metric.getQuality();
@@ -86,8 +90,9 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricDirectoryResults processDirectory(AnalysisFileTree directory)
-			throws InterruptedException, EvaluationStoreException {
+	protected MetricDirectoryResults processDirectory(AnalysisRun analysisRun,
+			AnalysisFileTree directory) throws InterruptedException,
+			EvaluationStoreException {
 		CodeDepthDirectoryResults directoryResults = new CodeDepthDirectoryResults(
 				new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
 				directory.getName());
@@ -123,9 +128,9 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricDirectoryResults processProject()
+	protected MetricDirectoryResults processProject(AnalysisRun analysisRun)
 			throws InterruptedException, EvaluationStoreException {
-		AnalysisFileTree directory = getAnalysisRun().getFileTree();
-		return processDirectory(directory);
+		AnalysisFileTree directory = analysisRun.getFileTree();
+		return processDirectory(analysisRun, directory);
 	}
 }

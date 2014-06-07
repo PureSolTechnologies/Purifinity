@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.client.common.evaluation.jobs;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -29,7 +30,7 @@ public class EvaluationJob extends Job {
 	private final boolean reEvaluation;
 	private final String projectName;
 
-	private ObservedJob<Evaluator, Boolean> currentJob = null;
+	private ObservedJob<Boolean> currentJob = null;
 
 	public EvaluationJob(AnalysisRun analysisRun) {
 		this(analysisRun, false);
@@ -80,10 +81,15 @@ public class EvaluationJob extends Job {
 					+ " evaluation(s)", evaluatorFactories.size());
 			for (EvaluatorFactory factory : evaluatorFactories) {
 				monitor.subTask("'" + factory.getName() + "' running");
-				Evaluator evaluator = factory.create(analysisRun);
+				final Evaluator evaluator = factory.create(analysisRun);
 				evaluator.setReEvaluation(reEvaluation);
-				currentJob = new ObservedJob<Evaluator, Boolean>(
-						factory.getName(), evaluator);
+				currentJob = new ObservedJob<Boolean>(factory.getName(),
+						new Callable<Boolean>() {
+							@Override
+							public Boolean call() throws Exception {
+								return evaluator.analyze(analysisRun);
+							}
+						});
 				currentJob.schedule();
 				currentJob.join();
 				Boolean successful = currentJob.getRunResult();

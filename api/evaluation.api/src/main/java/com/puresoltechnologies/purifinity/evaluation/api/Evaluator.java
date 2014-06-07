@@ -2,7 +2,6 @@ package com.puresoltechnologies.purifinity.evaluation.api;
 
 import java.util.Set;
 
-import com.puresoltechnologies.commons.misc.CallableProgressObservable;
 import com.puresoltechnologies.commons.misc.Configurable;
 import com.puresoltechnologies.commons.misc.TimeAwareness;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
@@ -16,9 +15,7 @@ import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacte
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface Evaluator extends
-		CallableProgressObservable<Evaluator, Boolean>, TimeAwareness,
-		Configurable {
+public interface Evaluator extends TimeAwareness, Configurable {
 
 	/**
 	 * This method returns the evaluator meta data which describes the evaluator
@@ -27,14 +24,6 @@ public interface Evaluator extends
 	 * @return
 	 */
 	public EvaluatorInformation getInformation();
-
-	/**
-	 * This method returns the analysis run which is the foundation of the
-	 * evaluation run.
-	 * 
-	 * @return
-	 */
-	public AnalysisRun getAnalysisRun();
 
 	/**
 	 * This method returns a list with quality characteristics which might be
@@ -61,4 +50,6 @@ public interface Evaluator extends
 	 */
 	public boolean isReEvaluation();
 
+	public Boolean analyze(AnalysisRun analysisRun)
+			throws InterruptedException, EvaluationStoreException;
 }

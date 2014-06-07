@@ -30,6 +30,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.QualityLevelParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
@@ -37,7 +38,6 @@ import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResul
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
@@ -118,9 +118,9 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	}
 
 	@Override
-	public final void storeFileResults(CodeAnalysis codeAnalysis,
-			Evaluator evaluator, MetricFileResults results)
-			throws EvaluationStoreException {
+	public final void storeFileResults(AnalysisRun analysisRun,
+			CodeAnalysis codeAnalysis, Evaluator evaluator,
+			MetricFileResults results) throws EvaluationStoreException {
 		HashId hashId = codeAnalysis.getAnalysisInformation().getHashId();
 		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "INSERT INTO "
@@ -140,12 +140,13 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 					"Could not store results for hashId '" + hashId
 							+ "' into '" + getStoreName() + "'.", e);
 		}
-		storeMetricsInBigTable(codeAnalysis, evaluator, results);
+		storeMetricsInBigTable(analysisRun, codeAnalysis, evaluator, results);
 	}
 
 	@Override
-	public void storeMetricsInBigTable(CodeAnalysis codeAnalysis,
-			Evaluator evaluator, MetricFileResults results) {
+	public void storeMetricsInBigTable(AnalysisRun analysisRun,
+			CodeAnalysis codeAnalysis, Evaluator evaluator,
+			MetricFileResults results) {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(
 						session,
@@ -178,7 +179,6 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 
 		Date time = evaluator.getStartTime();
 		long duration = evaluator.getDuration();
-		AnalysisRun analysisRun = evaluator.getAnalysisRun();
 		UUID analysisProjectUUID = analysisRun.getInformation()
 				.getProjectUUID();
 		UUID analysisRunUUID = analysisRun.getInformation().getRunUUID();
@@ -250,9 +250,9 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	}
 
 	@Override
-	public final void storeDirectoryResults(AnalysisFileTree directory,
-			Evaluator evaluator, MetricDirectoryResults results)
-			throws EvaluationStoreException {
+	public final void storeDirectoryResults(AnalysisRun analysisRun,
+			AnalysisFileTree directory, Evaluator evaluator,
+			MetricDirectoryResults results) throws EvaluationStoreException {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
@@ -275,12 +275,13 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 							+ getStoreName() + "'.", e);
 		}
 
-		storeMetricsInBigTable(directory, evaluator, results);
+		storeMetricsInBigTable(analysisRun, directory, evaluator, results);
 	}
 
 	@Override
-	public void storeMetricsInBigTable(AnalysisFileTree directory,
-			Evaluator evaluator, MetricDirectoryResults results) {
+	public void storeMetricsInBigTable(AnalysisRun analysisRun,
+			AnalysisFileTree directory, Evaluator evaluator,
+			MetricDirectoryResults results) {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(
 						session,
@@ -310,7 +311,6 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 
 		Date time = evaluator.getStartTime();
 		long duration = evaluator.getDuration();
-		AnalysisRun analysisRun = evaluator.getAnalysisRun();
 		UUID analysisProjectUUID = analysisRun.getInformation()
 				.getProjectUUID();
 		UUID analysisRunUUID = analysisRun.getInformation().getRunUUID();
@@ -373,7 +373,7 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 	}
 
 	@Override
-	public final void storeProjectResults(UUID analysisRunUUID,
+	public final void storeProjectResults(AnalysisRun analysisRun,
 			Evaluator evaluator, AnalysisFileTree directory,
 			MetricDirectoryResults results) throws EvaluationStoreException {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
@@ -385,7 +385,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 					byteArrayOutputStream)) {
 				objectOutputStream.writeObject(results);
 				BoundStatement boundStatement = preparedStatement.bind(
-						analysisRunUUID, getProjectResultClass().getName());
+						analysisRun.getInformation().getRunUUID(),
+						getProjectResultClass().getName());
 				boundStatement.setBytes("results",
 						ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
 				session.execute(boundStatement);
@@ -393,10 +394,10 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		} catch (IOException e) {
 			throw new EvaluationStoreException(
 					"Could not store results for analysis run UUID '"
-							+ analysisRunUUID + "' into '" + getStoreName()
-							+ "'.", e);
+							+ analysisRun.getInformation().getRunUUID()
+							+ "' into '" + getStoreName() + "'.", e);
 		}
-		storeMetricsInBigTable(directory, evaluator, results);
+		storeMetricsInBigTable(analysisRun, directory, evaluator, results);
 	}
 
 	@Override

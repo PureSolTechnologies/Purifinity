@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -13,6 +16,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
@@ -21,12 +26,13 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halst
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadResult;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetricEvaluator;
 
+@Stateless
+@Remote(Evaluator.class)
 public class EntropyMetricEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = -5093217611195212999L;
@@ -36,8 +42,8 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	private final EvaluatorStore store;
 	private final EvaluatorStore halsteadStore;
 
-	public EntropyMetricEvaluator(AnalysisRun analysisRun, AnalysisFileTree path) {
-		super(EntropyMetric.NAME, EntropyMetric.DESCRIPTION, analysisRun, path);
+	public EntropyMetricEvaluator() {
+		super(EntropyMetric.NAME, EntropyMetric.DESCRIPTION);
 		store = getEvaluatorStore();
 		halsteadStore = EvaluatorStoreFactory.getFactory().createInstance(
 				HalsteadMetricEvaluator.class);
@@ -49,15 +55,16 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricFileResults processFile(CodeAnalysis analysis)
-			throws InterruptedException, EvaluationStoreException {
+	protected MetricFileResults processFile(AnalysisRun analysisRun,
+			CodeAnalysis analysis) throws InterruptedException,
+			EvaluationStoreException {
 		HashId hashId = analysis.getAnalysisInformation().getHashId();
 		HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
 				.readFileResults(hashId);
 
 		EntropyFileResults results = new EntropyFileResults();
-		SourceCodeLocation sourceCodeLocation = getAnalysisRun().findTreeNode(
-				hashId).getSourceCodeLocation();
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.findTreeNode(hashId).getSourceCodeLocation();
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			HalsteadMetricResult halsteadFileResult = findFileResult(
@@ -124,8 +131,9 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricDirectoryResults processDirectory(AnalysisFileTree directory)
-			throws InterruptedException, EvaluationStoreException {
+	protected MetricDirectoryResults processDirectory(AnalysisRun analysisRun,
+			AnalysisFileTree directory) throws InterruptedException,
+			EvaluationStoreException {
 		EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
 		EvaluatorStore halsteadMetricResultStore = factory
 				.createInstance(HalsteadMetricEvaluator.class);
@@ -165,9 +173,9 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricDirectoryResults processProject()
+	protected MetricDirectoryResults processProject(AnalysisRun analysisRun)
 			throws InterruptedException, EvaluationStoreException {
-		AnalysisFileTree directory = getAnalysisRun().getFileTree();
-		return processDirectory(directory);
+		AnalysisFileTree directory = analysisRun.getFileTree();
+		return processDirectory(analysisRun, directory);
 	}
 }

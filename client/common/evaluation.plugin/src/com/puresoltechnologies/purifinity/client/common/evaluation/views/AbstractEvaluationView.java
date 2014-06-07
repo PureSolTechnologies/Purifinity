@@ -19,7 +19,7 @@ import com.puresoltechnologies.purifinity.client.common.analysis.views.AnalysisS
 import com.puresoltechnologies.purifinity.client.common.evaluation.Activator;
 import com.puresoltechnologies.purifinity.client.common.evaluation.utils.EvaluationsTarget;
 import com.puresoltechnologies.purifinity.client.common.ui.views.AbstractPureSolTechnologiesView;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 
 /**
  * This abstract class is a parent class for all views which contain a kind of

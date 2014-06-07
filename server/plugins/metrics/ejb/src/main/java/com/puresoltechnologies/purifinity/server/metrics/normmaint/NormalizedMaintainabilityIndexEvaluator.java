@@ -3,6 +3,9 @@ package com.puresoltechnologies.purifinity.server.metrics.normmaint;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -12,6 +15,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
@@ -19,12 +24,13 @@ import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexResult;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluator;
 
+@Stateless
+@Remote(Evaluator.class)
 public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 
 	private static final long serialVersionUID = -5093217611195212999L;
@@ -47,9 +53,8 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	private final EvaluatorStore store;
 	private final EvaluatorStore maintainabilityStore;
 
-	public NormalizedMaintainabilityIndexEvaluator(AnalysisRun analysisRun,
-			AnalysisFileTree path) {
-		super(NAME, DESCRIPTION, analysisRun, path);
+	public NormalizedMaintainabilityIndexEvaluator() {
+		super(NAME, DESCRIPTION);
 		store = getEvaluatorStore();
 
 		maintainabilityStore = EvaluatorStoreFactory.getFactory()
@@ -62,15 +67,16 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricFileResults processFile(CodeAnalysis analysis)
-			throws InterruptedException, EvaluationStoreException {
+	protected MetricFileResults processFile(AnalysisRun analysisRun,
+			CodeAnalysis analysis) throws InterruptedException,
+			EvaluationStoreException {
 		NormalizedMaintainabilityIndexFileResults results = new NormalizedMaintainabilityIndexFileResults();
 
 		HashId hashId = analysis.getAnalysisInformation().getHashId();
 		MaintainabilityIndexFileResults maintainabilityFileResults = (MaintainabilityIndexFileResults) maintainabilityStore
 				.readFileResults(hashId);
-		SourceCodeLocation sourceCodeLocation = getAnalysisRun().findTreeNode(
-				hashId).getSourceCodeLocation();
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.findTreeNode(hashId).getSourceCodeLocation();
 
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 
@@ -112,8 +118,9 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricDirectoryResults processDirectory(AnalysisFileTree directory)
-			throws InterruptedException, EvaluationStoreException {
+	protected MetricDirectoryResults processDirectory(AnalysisRun analysisRun,
+			AnalysisFileTree directory) throws InterruptedException,
+			EvaluationStoreException {
 		QualityLevel qualityLevel = null;
 		for (AnalysisFileTree child : directory.getChildren()) {
 			if (child.isFile()) {
@@ -143,9 +150,8 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	}
 
 	@Override
-	protected MetricDirectoryResults processProject()
+	protected MetricDirectoryResults processProject(AnalysisRun analysisRun)
 			throws InterruptedException, EvaluationStoreException {
-		AnalysisRun analysisRun = getAnalysisRun();
-		return processDirectory(analysisRun.getFileTree());
+		return processDirectory(analysisRun, analysisRun.getFileTree());
 	}
 }
