@@ -1,6 +1,25 @@
-.footer {
-	background-color: #435028;
-	color: white;
+div.footer {
+	background-color: #303030;
+	color: gray;
+	text-align: center;
+	text-shadow: black 2px 2px 5px;
 	font-size: 10pt;
 	text-align: center;
+}
+
+div.footer a {
+	color: gray;
+}
+
+div.companyName {
+	font-weight: bold;
+	display: inline-block;
+}
+
+span.companyNameTechnologiesPart {
+	color: brown;
+}
+
+span.companyNamePureSolPart {
+	color: green;
 }

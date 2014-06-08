@@ -1,13 +1,36 @@
-body {
-	background-color: #000000;
+div.page {
+	
 }
 
-div.page {
-	background-color: #ffffff;
-	border: 2pt solid #b4d85a;
-	padding: 0pt;
+div.pageTop {
+	background-color: #303030;
+	color: white;
+	display: block;
+	width: 100%;
+	text-shadow: gray 2px 2px 5px;
+}
+
+a.pageTop {
+	text-decoration: initial;
+	color: inherit;
+}
+
+div.applicationName,div.pageMenu,div.barContainer {
+	display: inline-block;
+	padding: 2pt;
+}
+
+div.applicationName {
+	font-weight: bold;
+}
+
+div.siteMenu {
+	background-color: lightgray;
+	border-right: 2pt solid #202020;
 }
 
 div.pageContainer {
+	background-color: white;
+	color: black;
 	overflow: auto;
 }

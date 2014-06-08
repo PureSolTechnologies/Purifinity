@@ -63,7 +63,7 @@ public abstract class AbstractArquillianTest {
 	protected static void removeWAR(EnterpriseArchive archive, String warName)
 			throws Exception {
 		// Delete war file
-		archive.delete("/server.socket.impl.war");
+		archive.delete("/" + warName);
 		// now we remove the module entry in application.xml
 		Node node = archive.get(APPLICATION_XML_PATH);
 		DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance()

@@ -1,8 +1,8 @@
 .header {
-	background-color: #435028;
+	background-color: lightgray;
 	color: white;
-	font-size: 10pt;
 	overflow: auto;
+	text-shadow: black 2px 2px 5px;
 }
 
 div.headerName {

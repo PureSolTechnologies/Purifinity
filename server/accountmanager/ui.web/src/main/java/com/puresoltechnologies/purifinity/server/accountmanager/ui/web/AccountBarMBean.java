@@ -22,32 +22,8 @@ public class AccountBarMBean implements Serializable {
 		this.accountManager = accountManager;
 	}
 
-	public String getHelloMessageTranslated() {
+	public String getHelloMessage() {
 		return MessageFormat.format("Welcome, {0}!", accountManager.getName());
-	}
-
-	public String getPleaseLoginTranslated() {
-		return "Welcome! Please feel free to create a new account or to login.";
-	}
-
-	public String getHomeTranslated() {
-		return "home";
-	}
-
-	public String getLoginTranslated() {
-		return "login";
-	}
-
-	public String getLogoutTranslated() {
-		return "logout";
-	}
-
-	public String getMyAccountTranslated() {
-		return "my account";
-	}
-
-	public String getCreateAccountTranslated() {
-		return "create account";
 	}
 
 }

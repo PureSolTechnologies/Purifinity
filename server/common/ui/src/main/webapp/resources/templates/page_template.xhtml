@@ -8,14 +8,34 @@
 	xmlns:page="http://java.sun.com/jsf/composite/page">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<!--  link href="css/default.css" rel="stylesheet" type="text/css" / -->
-	<title>Standard Page Header</title>
+	<title>Purifinity Web Client</title>
 </h:head>
 <h:body>
+	<h:outputStylesheet library="css" name="default.css" />
 	<h:outputStylesheet library="css" name="page.css" />
 	<div class="page">
-		<page:accountBar />
+		<div class="pageTop">
+			<div class="applicationName">
+				<a class="pageTop" href="http://purifinity.com">Purifinity</a>
+			</div>
+			<div class="pageMenu">File | Window | Help</div>
+			<page:accountBar />
+		</div>
 		<page:header additionalName="FIXME" />
+		<div class="siteMenu">This is the site menu... This is the site
+			menu... This is the site menu... This is the site menu... This is the
+			site menu... This is the site menu... This is the site menu... This
+			is the site menu... This is the site menu... This is the site menu...
+			This is the site menu... This is the site menu... This is the site
+			menu... This is the site menu... This is the site menu... This is the
+			site menu... This is the site menu... This is the site menu... This
+			is the site menu... This is the site menu... This is the site menu...
+			This is the site menu... This is the site menu... This is the site
+			menu... This is the site menu... This is the site menu... This is the
+			site menu... This is the site menu... This is the site menu... This
+			is the site menu... This is the site menu... This is the site menu...
+			This is the site menu... This is the site menu... This is the site
+			menu... This is the site menu...</div>
 		<div class="pageContainer">
 			<ui:insert name="page_content">Page Content</ui:insert>
 		</div>

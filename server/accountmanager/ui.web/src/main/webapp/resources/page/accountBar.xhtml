@@ -8,12 +8,7 @@
 	xmlns:page="http://java.sun.com/jsf/composite/page"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-	<title>Footer</title>
-	<!--
-	This is the global footer at the very end of the page. Here are the links 
-	contained which are needed in almost all situations like the imprint, the
-	copyright and the webmaster link... 
-	 -->
+	<title>Account Bar</title>
 </h:head>
 <h:body>
 	<composite:interface>
@@ -23,7 +18,8 @@
 		<div class="barContainer">
 			<h:form styleClass="accountBar">
 				<h:panelGroup rendered="#{!loginMBean.isLoggedIn()}">
-					<h:outputText value="#{accountBarMBean.pleaseLoginTranslated}"
+					<h:outputText
+						value="Welcome! Please login."
 						style="font-weight:bold" />
 				</h:panelGroup>
 				<h:panelGroup rendered="#{loginMBean.isLoggedIn()}">
@@ -31,20 +27,19 @@
 						style="font-weight:bold" />
 				</h:panelGroup>
 
-				<a href="/index.jsf" class="home"><h:outputText
-						value="#{accountBarMBean.homeTranslated}" /></a> |
+				<a href="/index.jsf" class="accountBar"><h:outputText value="home" /></a> |
 				
 				<h:panelGroup rendered="#{!loginMBean.isLoggedIn()}">
-					<a class="login" href="/account/myaccount.jsf"><h:outputText
-							value="#{accountBarMBean.loginTranslated}" /></a> |
-					<a class="login" href="/create_account.jsf"><h:outputText
-							value="#{accountBarMBean.createAccountTranslated}" /></a>
+					<a class="accountBar" href="/account/myaccount.jsf"><h:outputText
+							value="login" /></a> |
+					<a class="accountBar" href="/create_account.jsf"><h:outputText
+							value="create account" /></a>
 				</h:panelGroup>
 
 				<h:panelGroup rendered="#{loginMBean.isLoggedIn()}">
-					<a class="login" href="/account/configuration.jsf"><h:outputText
-							value="#{accountBarMBean.myAccountTranslated}" /></a> | 
-					<h:commandLink styleClass="login"
+					<a class="accountBar" href="/account/configuration.jsf"><h:outputText
+							value="my account" /></a> | 
+					<h:commandLink styleClass="accountBar"
 						value="#{accountBarMBean.logoutTranslated}"
 						action="#{loginMBean.logout}" />
 				</h:panelGroup>
