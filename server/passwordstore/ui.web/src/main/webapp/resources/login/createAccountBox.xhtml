@@ -1,6 +1,7 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite">
 	<cc:interface>
@@ -10,35 +11,35 @@
 		<h1>Create Account</h1>
 		<h:form>
 			<h:messages />
-			<h:panelGrid columns="2" columnClasses="rightAlign,leftAlign">
+			<p:panelGrid columns="2" columnClasses="rightAlign,leftAlign">
 
 				<h:outputText value="Email address:" />
-				<h:inputText label="Email address"
+				<p:inputText label="Email address"
 					value="#{createAccountMBean.email}" required="true">
 					<f:validator validatorId="emailAddressValidator" />
 					<f:validateLength minimum="5" maximum="128" />
-				</h:inputText>
+				</p:inputText>
 
 				<h:outputText value="Password:" />
-				<h:inputText label="Password" binding="#{password}"
+				<p:inputText label="Password" binding="#{password}"
 					value="#{createAccountMBean.password}" required="true">
 					<f:validateLength minimum="4" maximum="30" />
-				</h:inputText>
+				</p:inputText>
 
 				<h:outputText value="Confirm Password:" />
-				<h:inputText label="Confirm Password" required="true">
+				<p:inputText label="Confirm Password" required="true">
 					<f:validateLength minimum="4" maximum="30" />
 					<f:validator validatorId="passwordStrengthValidator" />
 					<f:attribute name="password" value="#{password.value}" />
-				</h:inputText>
+				</p:inputText>
 
 				<!--  h:captcha label="Captcha" language="tr" theme="white" / -->
 
 				<h:panelGroup></h:panelGroup>
 
-				<h:commandButton action="#{createAccountMBean.createAccount()}"
+				<p:commandButton action="#{createAccountMBean.createAccount()}"
 					value="Create..." />
-			</h:panelGrid>
+			</p:panelGrid>
 		</h:form>
 	</cc:implementation>
 </ui:composition>

@@ -1,5 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite">
 	<cc:interface>
@@ -7,11 +8,11 @@
 	<cc:implementation>
 		<div class="accountManager">
 			<h2>Account Manager Menu</h2>
-			<h:link value="My Account" outcome="/account/myaccount" />
+			<p:link value="My Account" outcome="/account/myaccount" />
 			|
-			<h:link value="Settings" outcome="/account/account_settings" />
+			<p:link value="Settings" outcome="/account/account_settings" />
 			|
-			<h:link value="Change Password" outcome="/account/change_password" />
+			<p:link value="Change Password" outcome="/account/change_password" />
 		</div>
 	</cc:implementation>
 </ui:composition>

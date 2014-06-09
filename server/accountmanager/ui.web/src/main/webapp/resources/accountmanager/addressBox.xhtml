@@ -1,37 +1,38 @@
 <ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite">
 	<cc:interface>
 	</cc:interface>
 	<cc:implementation>
 		<h:form>
-			<h:panelGrid columns="2">
-				<h:outputLabel value="address hint" />
-				<h:inputText />
+			<p:panelGrid columns="2">
+				<p:outputLabel value="address hint" />
+				<p:inputText />
 				<h:panelGroup>
-					<h:outputLabel value="street" />* /
-					<h:outputLabel value="number" />*
+					<p:outputLabel value="street" />* /
+					<p:outputLabel value="number" />*
 				</h:panelGroup>
 				<h:panelGroup>
-					<h:inputText />
-					<h:inputText />
+					<p:inputText />
+					<p:inputText />
 				</h:panelGroup>
 				<h:panelGroup>
-					<h:outputLabel value="zip code" />*
+					<p:outputLabel value="zip code" />*
 				</h:panelGroup>
-				<h:inputText />
+				<p:inputText />
 				<h:panelGroup>
-					<h:outputLabel value="state" />*
+					<p:outputLabel value="state" />*
 				</h:panelGroup>
-				<h:inputText />
+				<p:inputText />
 				<h:panelGroup>
-					<h:outputLabel value="country" />*
+					<p:outputLabel value="country" />*
 				</h:panelGroup>
-				<h:inputText />
-			</h:panelGrid>
+				<p:inputText />
+			</p:panelGrid>
 			<h:outputText value="Star mean mandatory!" />*
-			<h:button value="change" />
-			<h:button value="reset" />
+			<p:button value="change" />
+			<p:button value="reset" />
 		</h:form>
 	</cc:implementation>
 </ui:composition>

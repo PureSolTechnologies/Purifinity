@@ -1,5 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite">
 	<cc:interface>
@@ -17,20 +18,19 @@
 						style="font-weight:bold" />
 				</h:panelGroup>
 
-				<a href="/index.jsf" class="accountBar"><h:outputText
-						value="home" /></a> |
-				
+				<p:link value="home" outcome="/index" styleClass="accountBar" /> |
+
 				<h:panelGroup rendered="#{!loginMBean.isLoggedIn()}">
-					<a class="accountBar" href="/login_by_user.jsf"><h:outputText
-							value="login" /></a> |
-					<a class="accountBar" href="/create_account.jsf"><h:outputText
-							value="create account" /></a>
+					<p:link styleClass="accountBar" outcome="/login_by_user"
+						value="login" /> |
+					<p:link styleClass="accountBar" outcome="/create_account"
+						value="create account" />
 				</h:panelGroup>
 
 				<h:panelGroup rendered="#{loginMBean.isLoggedIn()}">
-					<a class="accountBar" href="/account/configuration.jsf"><h:outputText
-							value="my account" /></a> | 
-					<h:commandLink styleClass="accountBar"
+					<p:link styleClass="accountBar" outcome="/account/configuration"
+						value="my account" /> | 
+					<p:commandLink styleClass="accountBar"
 						value="#{accountBarMBean.logoutTranslated}"
 						action="#{loginMBean.logout}" />
 				</h:panelGroup>

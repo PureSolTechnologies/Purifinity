@@ -1,12 +1,14 @@
 <ui:composition template="resources/templates/page_template.xhtml"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<ui:define name="page_content">
 		<h1>Your account was activated!</h1>
 		<p>
 			After activating your account, you are a full member. You are
 			currently not logged in. An empty account was created which can be
-			completed at <a href="/account/myaccount.jsf">My Account</a>. These
-			information is needed to for trading.
+			completed at
+			<p:link outcome="/account/myaccount" value="My Account" />
+			. These information is needed to for trading.
 		</p>
 		<p>You do not need to request for a login. The page which needs
 			authentication first will ask you for login.</p>

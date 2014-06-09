@@ -1,5 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:cc="http://xmlns.jcp.org/jsf/composite">
 	<cc:interface>
@@ -7,10 +8,13 @@
 	<cc:implementation>
 		<h:outputStylesheet library="css" name="footer.css" />
 		<div class="footer">
-			<a href="http://www.puresol-technologies.com" target="copyright">(c)
-				2012 <span class="companyNamePureSolPart">PureSol</span> <span
-				class="companyNameTechnologiesPart">Technologies</span>
-			</a> | <a href="/license.jsf">License</a>
+			<h:outputLink value="http://www.puresol-technologies.com"
+				target="copyright">(c)
+				2012 <span class="companyNamePureSolPart">PureSol</span>
+				<span class="companyNameTechnologiesPart">Technologies</span>
+			</h:outputLink>
+			|
+			<p:link outcome="/license" value="License" />
 		</div>
 	</cc:implementation>
 </ui:composition>
