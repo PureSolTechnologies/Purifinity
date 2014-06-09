@@ -16,6 +16,7 @@
 		<!-- WildFly -->
 		<wildfly.version>8.1.0.Final</wildfly.version>
 		<resteasy.version>3.0.8.Final</resteasy.version>
+		<mojarra.version>2.2.6</mojarra.version>
 		<!-- WildFly settings -->
 		<wildfly.http.port>8080</wildfly.http.port>
 		<server.config.directory>${work.dir}/config</server.config.directory>
@@ -613,11 +614,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>wildfly.ui</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>wildfly.utils</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -747,9 +743,16 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.primefaces</groupId>
-				<artifactId>primefaces</artifactId>
-				<version>4.0</version>
+				<groupId>com.sun.faces</groupId>
+				<artifactId>jsf-api</artifactId>
+				<version>${mojarra.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.sun.faces</groupId>
+				<artifactId>jsf-impl</artifactId>
+				<version>${mojarra.version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>javax.mail</groupId>

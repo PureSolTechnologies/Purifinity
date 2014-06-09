@@ -1,22 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:composite="http://java.sun.com/jsf/composite">
-<h:head>
-	<title>Header</title>
-	<!--
-	This is the global header at the very top of the page. Here is the global web page name displayed and the traders name.
-	For column layouting have a look to: http://aktuell.de.selfhtml.org/weblog/css-spaltenlayout 
-	 -->
-</h:head>
-<h:body>
-	<composite:interface>
-		<composite:attribute name="additionalName" />
-	</composite:interface>
-	<composite:implementation>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+	<cc:interface>
+		<cc:attribute name="additionalName" />
+	</cc:interface>
+	<cc:implementation>
 		<h:outputStylesheet library="css" name="header.css" />
 		<div class="header">
 			<div class="headerName">
@@ -24,6 +13,5 @@
 			</div>
 			<div class="additionalName">#{cc.attrs.additionalName}</div>
 		</div>
-	</composite:implementation>
-</h:body>
-</html>
+	</cc:implementation>
+</ui:composition>

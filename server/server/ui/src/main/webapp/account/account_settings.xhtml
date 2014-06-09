@@ -1,24 +1,8 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:account="http://java.sun.com/jsf/composite/accountmanager">
-<h:head>
-	<title>Account Settings</title>
-	<!-- This is the central login page which is presented as soon as the web 
-		 server needs an authentication. 
- 	-->
-</h:head>
-<h:body>
-	<ui:composition template="../resources/templates/page_template.xhtml">
-		<!--  h:outputStylesheet library="css" name="css/default.css" target="body" / -->
-		<ui:define name="page_content">
-			<account:accountManagerMenu />
-			<account:accountSettingsBox />
-		</ui:define>
-	</ui:composition>
-</h:body>
-</html>
+<ui:composition template="../resources/templates/page_template.xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:account="http://xmlns.jcp.org/jsf/composite/accountmanager">
+	<ui:define name="page_content">
+		<account:accountManagerMenu />
+		<account:accountSettingsBox />
+	</ui:define>
+</ui:composition>

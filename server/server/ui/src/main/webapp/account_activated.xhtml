@@ -1,27 +1,14 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
-<h:head>
-	<title>Enter Customer Data</title>
-</h:head>
-<h:body>
-	<ui:composition template="resources/templates/page_template.xhtml">
-		<ui:define name="page_content">
-			<h:outputStylesheet library="css" name="default.css" />
-			<h1>Your account was activated!</h1>
-			<p>
-				After activating your account, you are a full member. You are
-				currently not logged in. An empty account was created which can be
-				completed at <a href="/account/myaccount.jsf">My Account</a>. These
-				information is needed to for trading.
-			</p>
-			<p>You do not need to request for a login. The page which needs
-				authentication first will ask you for login.</p>
-		</ui:define>
-	</ui:composition>
-</h:body>
-</html>
+<ui:composition template="resources/templates/page_template.xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<ui:define name="page_content">
+		<h1>Your account was activated!</h1>
+		<p>
+			After activating your account, you are a full member. You are
+			currently not logged in. An empty account was created which can be
+			completed at <a href="/account/myaccount.jsf">My Account</a>. These
+			information is needed to for trading.
+		</p>
+		<p>You do not need to request for a login. The page which needs
+			authentication first will ask you for login.</p>
+	</ui:define>
+</ui:composition>

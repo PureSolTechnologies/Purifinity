@@ -2,14 +2,13 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
-	<display-name>JavaServerFaces</display-name>
+	<display-name>Purifinity Web Client</display-name>
 
 	<!-- Change to "Production" when you are ready to deploy -->
 	<context-param>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
 		<param-value>Development</param-value>
 	</context-param>
-
 	<context-param>
 		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
 		<param-value>.xhtml</param-value>
@@ -59,7 +58,7 @@
 	</error-page>
 
 	<!-- Security -->
-	<security-constraint>
+	<!-- security-constraint>
 		<display-name>Constraint</display-name>
 		<web-resource-collection>
 			<web-resource-name>account</web-resource-name>
@@ -100,7 +99,7 @@
 		<user-data-constraint>
 			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
 		</user-data-constraint>
-	</security-constraint>
+	</security-constraint -->
 
 	<login-config>
 		<auth-method>FORM</auth-method>

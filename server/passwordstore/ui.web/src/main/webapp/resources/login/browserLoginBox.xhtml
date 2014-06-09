@@ -1,37 +1,26 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:composite="http://java.sun.com/jsf/composite">
-<h:head>
-	<title>Login Box for Password Safe</title>
-	<!--
-	This login box represents a single component which shows the login screen or the logout button. 
-	 -->
-</h:head>
-<h:body>
-	<composite:interface>
-	</composite:interface>
-	<composite:implementation>
-		<!-- The stylesheet needs to go into the composite implementation to get it rendered. -->
-		<h:outputStylesheet library="css" name="login.css" target="head" />
-			<h:outputText value="#{loginMBean.restrictedAccessMessageTranslated}"/>
-			<form name="loginForm" method="post" action="j_security_check">
+<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+	<cc:interface>
+	</cc:interface>
+	<cc:implementation>
+		<h:outputStylesheet library="css" name="login.css" />
+		<h:outputText value="#{loginMBean.restrictedAccessMessageTranslated}" />
+		<form name="loginForm" method="post" action="j_security_check">
 			<p>
-				<strong><label for="username"><h:outputLabel value="#{loginMBean.emailTranslated}"/> </label></strong> <input
-					id="username" type="text" name="j_username" size="25" />
+				<strong><label for="username"><h:outputLabel
+							value="#{loginMBean.emailTranslated}" /> </label></strong> <input id="username"
+					type="text" name="j_username" size="25" />
 			</p>
 			<p>
-				<strong><label for="password"><h:outputLabel value="#{loginMBean.passwordTranslated}"/> </label></strong> <input
-					id="password" type="password" size="15" name="j_password" />
+				<strong><label for="password"><h:outputLabel
+							value="#{loginMBean.passwordTranslated}" /> </label></strong> <input id="password"
+					type="password" size="15" name="j_password" />
 			</p>
 			<p>
-				<input type="submit" value="#{loginMBean.loginTranslated}" /> <input type="reset"
-					value="#{loginMBean.resetTranslated}" />
+				<input type="submit" value="#{loginMBean.loginTranslated}" /> <input
+					type="reset" value="#{loginMBean.resetTranslated}" />
 			</p>
 		</form>
-	</composite:implementation>
-</h:body>
-</html>
+	</cc:implementation>
+</ui:composition>

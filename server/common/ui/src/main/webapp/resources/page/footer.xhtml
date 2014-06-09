@@ -1,35 +1,16 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:composite="http://java.sun.com/jsf/composite">
-<h:head>
-	<title>Footer</title>
-	<!--
-	This is the global footer at the very end of the page. Here are the links 
-	contained which are needed in almost all situations like the imprint, the
-	copyright and the webmaster link... 
-	 -->
-</h:head>
-<h:body>
-	<composite:interface>
-	</composite:interface>
-	<composite:implementation>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+	<cc:interface>
+	</cc:interface>
+	<cc:implementation>
 		<h:outputStylesheet library="css" name="footer.css" />
 		<div class="footer">
-			<div class="companyName">
-				<a class="pageTop" href="http://puresol-technologies.com.com"> <span
-					class="companyNamePureSolPart">PureSol</span> <span
-					class="companyNameTechnologiesPart">Technologies</span>
-				</a>
-			</div>
-			| <a href="/imprint.jsf">Imprint</a> | <a
-				href="/terms_and_conditions.jsf">Terms &amp; Conditions</a> | <a
-				href="http://www.puresol-technologies.com" target="copyright">(c)
-				2012 PureSol Technologies</a>
+			<a href="http://www.puresol-technologies.com" target="copyright">(c)
+				2012 <span class="companyNamePureSolPart">PureSol</span> <span
+				class="companyNameTechnologiesPart">Technologies</span>
+			</a> | <a href="/license.jsf">License</a>
 		</div>
-	</composite:implementation>
-</h:body>
-</html>
+	</cc:implementation>
+</ui:composition>

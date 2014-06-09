@@ -1,21 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:composite="http://java.sun.com/jsf/composite"
-	xmlns:p="http://primefaces.org/ui">
-<h:head>
-	<title>Address Manager</title>
-	<!--
-	This is the central elements for account settings.  
-	 -->
-</h:head>
-<h:body>
-	<composite:interface>
-	</composite:interface>
-	<composite:implementation>
+<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+	<cc:interface>
+	</cc:interface>
+	<cc:implementation>
 		<h:form>
 			<h:panelGrid columns="2">
 				<h:outputLabel value="address hint" />
@@ -45,6 +33,5 @@
 			<h:button value="change" />
 			<h:button value="reset" />
 		</h:form>
-	</composite:implementation>
-</h:body>
-</html>
+	</cc:implementation>
+</ui:composition>

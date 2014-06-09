@@ -1,20 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:composite="http://java.sun.com/jsf/composite">
-<h:head>
-	<title>Login Box for Password Safe</title>
-	<!--
-	This login box represents a single component which shows the login screen or the logout button. 
-	 -->
-</h:head>
-<h:body>
-	<composite:interface>
-	</composite:interface>
-	<composite:implementation>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:cc="http://xmlns.jcp.org/jsf/composite">
+	<cc:interface>
+	</cc:interface>
+	<cc:implementation>
 		<h:outputStylesheet library="css" name="login.css" />
 		<h:panelGroup rendered="#{!loginMBean.isLoggedIn()}">
 			<h1>
@@ -48,6 +38,5 @@
 					action="#{loginMBean.logout}" />
 			</h:form>
 		</h:panelGroup>
-	</composite:implementation>
-</h:body>
-</html>
+	</cc:implementation>
+</ui:composition>
