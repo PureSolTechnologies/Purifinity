@@ -21,7 +21,8 @@ public class JavaPluginRegistration extends AbstractPluginRegistration
 			"java7.plugin", "java7.ejb", ProgrammingLanguageAnalyzer.class,
 			Java.class);
 	private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
-			Java.NAME, Java.VERSION, JNDI_ADDRESS, "no description");
+			Java.NAME, Java.VERSION, JNDI_ADDRESS,
+			"This is a Java 7 programming language analyzer.");
 
 	private final Java java = new Java();
 

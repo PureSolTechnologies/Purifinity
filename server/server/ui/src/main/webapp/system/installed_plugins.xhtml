@@ -1,0 +1,43 @@
+<ui:composition template="/resources/templates/page_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="page_content">
+		<h1>Installed Plugins</h1>
+
+		<h2>Installed Analyzers</h2>
+		<p:dataTable var="analyzer" value="#{systemPluginsMBean.analyzers}">
+			<p:column headerText="Name">
+				<h:outputText value="#{analyzer.name}" />
+			</p:column>
+			<p:column headerText="Version">
+				<h:outputText value="#{analyzer.version}" />
+			</p:column>
+			<p:column headerText="Description">
+				<h:outputText value="#{analyzer.description}" />
+			</p:column>
+		</p:dataTable>
+
+		<h2>Installed Evaluators</h2>
+		<p:dataTable var="evaluator" value="#{systemPluginsMBean.evaluators}">
+			<p:column headerText="Name">
+				<h:outputText value="#{evaluator.name}" />
+			</p:column>
+			<p:column headerText="Description">
+				<h:outputText value="#{evaluator.description}" />
+			</p:column>
+		</p:dataTable>
+
+		<h2>Installed Repository Types</h2>
+		<p:dataTable var="repositoryType"
+			value="#{systemPluginsMBean.repositoryTypes}">
+			<p:column headerText="Name">
+				<h:outputText value="#{repositoryType.name}" />
+			</p:column>
+			<p:column headerText="Description">
+				<h:outputText value="#{repositoryType.description}" />
+			</p:column>
+		</p:dataTable>
+	</ui:define>
+</ui:composition>

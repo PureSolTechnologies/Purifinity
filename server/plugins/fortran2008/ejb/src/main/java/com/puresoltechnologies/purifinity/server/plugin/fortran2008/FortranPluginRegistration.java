@@ -21,7 +21,8 @@ public class FortranPluginRegistration extends AbstractPluginRegistration
 			"fortran2008.plugin", "fortran2008.ejb",
 			ProgrammingLanguageAnalyzer.class, Fortran.class);
 	private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
-			Fortran.NAME, Fortran.VERSION, JNDI_ADDRESS, "no description");
+			Fortran.NAME, Fortran.VERSION, JNDI_ADDRESS,
+			"This is a Fortran 2008 programming language analyzer.");
 
 	private final Fortran fortran = new Fortran();
 

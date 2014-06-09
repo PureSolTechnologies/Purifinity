@@ -21,7 +21,8 @@ public class CPluginRegistration extends AbstractPluginRegistration implements
 			"c11.plugin", "c11.ejb", ProgrammingLanguageAnalyzer.class,
 			C11.class);
 	private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
-			C11.NAME, C11.VERSION, JNDI_ADDRESS, "no description");
+			C11.NAME, C11.VERSION, JNDI_ADDRESS,
+			"This is a C11 programming language analyzer.");
 
 	private final C11 c11 = new C11();
 

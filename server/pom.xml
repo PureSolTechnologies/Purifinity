@@ -758,6 +758,13 @@
 				<groupId>org.primefaces</groupId>
 				<artifactId>primefaces</artifactId>
 				<version>5.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.primefaces.themes</groupId>
+				<artifactId>all-themes</artifactId>
+				<version>1.0.10</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>javax.mail</groupId>
