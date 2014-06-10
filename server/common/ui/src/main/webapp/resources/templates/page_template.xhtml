@@ -24,32 +24,40 @@
 		<h:form id="menuForm">
 			<p:menubar>
 				<p:submenu label="Projects">
-					<p:menuitem value="Create New" />
+					<p:menuitem value="New" outcome="/projects/new" />
 					<p:separator />
-					<p:menuitem value="Overview" />
+					<p:menuitem value="Overview" outcome="/projects/overview" />
 					<p:separator />
 					<p:menuitem value="Project 1" />
 					<p:menuitem value="Project 2" />
 					<p:menuitem value="Project 3" />
 				</p:submenu>
 				<p:submenu label="Dashboards">
-					<p:menuitem value="Create New" />
+					<p:menuitem value="Create New" outcome="/dashboards/new" />
 					<p:separator />
 					<p:menuitem value="Dashboard 1" />
 					<p:menuitem value="Dashboard 2" />
 					<p:menuitem value="Dashboard 3" />
 				</p:submenu>
 				<p:submenu label="System">
-					<p:menuitem value="Information" outcome="/system/information"/>
-					<p:menuitem value="Installed Plugins"  outcome="/system/installed_plugins"/>
+					<p:menuitem value="Information" outcome="/system/information" />
+					<p:menuitem value="Installed Plugins"
+						outcome="/system/installed_plugins" />
 				</p:submenu>
-				<p:submenu label="Administration">
-					<p:menuitem value="Users" />
+				<p:submenu label="Settings">
+					<p:menuitem value="Users" outcome="/settings/users" />
+					<p:submenu label="Plugins">
+						<p:submenu label="Analyzers">
+						</p:submenu>
+						<p:submenu label="Evaluators">
+						</p:submenu>
+					</p:submenu>
+					<p:menuitem value="System" outcome="/settings/system" />
 				</p:submenu>
 			</p:menubar>
 		</h:form>
 		<page:header additionalName="FIXME" />
-		<h:messages />
+		<p:messages />
 		<div class="pageContainer">
 			<ui:insert name="page_content">Page Content</ui:insert>
 		</div>
