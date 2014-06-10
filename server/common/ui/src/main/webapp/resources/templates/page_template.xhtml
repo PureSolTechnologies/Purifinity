@@ -24,8 +24,6 @@
 		<h:form id="menuForm">
 			<p:menubar>
 				<p:submenu label="Projects">
-					<p:menuitem value="New" outcome="/projects/new" />
-					<p:separator />
 					<p:menuitem value="Overview" outcome="/projects/overview" />
 					<p:separator />
 					<p:menuitem value="Project 1" />
@@ -33,8 +31,6 @@
 					<p:menuitem value="Project 3" />
 				</p:submenu>
 				<p:submenu label="Dashboards">
-					<p:menuitem value="Create New" outcome="/dashboards/new" />
-					<p:separator />
 					<p:menuitem value="Dashboard 1" />
 					<p:menuitem value="Dashboard 2" />
 					<p:menuitem value="Dashboard 3" />
@@ -45,6 +41,9 @@
 						outcome="/system/installed_plugins" />
 				</p:submenu>
 				<p:submenu label="Settings">
+					<p:menuitem value="Projects" outcome="/settings/projects" />
+					<p:menuitem value="Dashboards" outcome="/settings/dashboards" />
+					<p:separator />
 					<p:menuitem value="Users" outcome="/settings/users" />
 					<p:submenu label="Plugins">
 						<p:submenu label="Analyzers">

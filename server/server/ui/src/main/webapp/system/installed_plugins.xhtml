@@ -1,13 +1,14 @@
 <ui:composition template="/resources/templates/page_template.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<ui:define name="page_content">
 		<h1>Installed Plugins</h1>
 
-		<h2>Installed Analyzers</h2>
 		<p:dataTable var="analyzer" value="#{systemPluginsMBean.analyzers}">
+			<f:facet name="header">Installed Analyzers</f:facet>
 			<p:column headerText="Name">
 				<h:outputText value="#{analyzer.name}" />
 			</p:column>
@@ -19,8 +20,8 @@
 			</p:column>
 		</p:dataTable>
 
-		<h2>Installed Evaluators</h2>
 		<p:dataTable var="evaluator" value="#{systemPluginsMBean.evaluators}">
+			<f:facet name="header">Installed Evaluators</f:facet>
 			<p:column headerText="Name">
 				<h:outputText value="#{evaluator.name}" />
 			</p:column>
@@ -29,9 +30,9 @@
 			</p:column>
 		</p:dataTable>
 
-		<h2>Installed Repository Types</h2>
 		<p:dataTable var="repositoryType"
 			value="#{systemPluginsMBean.repositoryTypes}">
+			<f:facet name="header">Installed Repository Types</f:facet>
 			<p:column headerText="Name">
 				<h:outputText value="#{repositoryType.name}" />
 			</p:column>
