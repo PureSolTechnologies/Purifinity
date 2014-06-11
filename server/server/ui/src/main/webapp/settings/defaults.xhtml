@@ -1,0 +1,53 @@
+<ui:composition template="/resources/templates/page_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<ui:define name="page_content">
+		<h1>Default Settings</h1>
+
+		<h:form>
+			<p:tabView scrollable="true">
+				<p:tab title="File Search">
+					<p:panel header="Directory Filter">
+						<p:panelGrid columns="2">
+							<h:outputLabel value="Includes:" for="directoryIncludes" />
+							<p:inputTextarea id="directoryIncludes"
+								value="#{fileSearchDefaultsMBean.directoryIncludes}" />
+							<h:outputLabel value="Excludes:" for="directoryExcludes" />
+							<p:inputTextarea id="directoryExcludes"
+								value="#{fileSearchDefaultsMBean.directoryExcludes}" />
+						</p:panelGrid>
+					</p:panel>
+					<p:panel header="File Filter">
+						<p:panelGrid columns="2">
+							<h:outputLabel value="Includes:" for="fileIncludes" />
+							<p:inputTextarea id="fileIncludes"
+								value="#{fileSearchDefaultsMBean.fileIncludes}" />
+							<h:outputLabel value="Excludes:" for="fileExcludes" />
+							<p:inputTextarea id="fileExcludes"
+								value="#{fileSearchDefaultsMBean.fileExcludes}" />
+						</p:panelGrid>
+					</p:panel>
+					<p:panel header="Switches">
+						<p:panelGrid columns="2">
+							<h:outputLabel value="Ignore hidden files:"
+								for="ignoreHiddenFiles" />
+							<p:selectBooleanButton onLabel="Yes" offLabel="No"
+								id="ignoreHiddenFiles"
+								value="#{fileSearchDefaultsMBean.ignoreHidden}" />
+						</p:panelGrid>
+					</p:panel>
+					<p:commandButton value="Save" />
+					<p:commandButton value="Reset" />
+				</p:tab>
+				<p:tab title="User Privileges">
+					<p:panel header="Account Defaults">
+					</p:panel>
+					<p:commandButton value="Save" />
+					<p:commandButton value="Reset" />
+				</p:tab>
+			</p:tabView>
+		</h:form>
+	</ui:define>
+</ui:composition>

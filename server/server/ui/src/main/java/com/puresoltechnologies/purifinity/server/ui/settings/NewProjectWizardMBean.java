@@ -126,7 +126,7 @@ public class NewProjectWizardMBean {
 									new ArrayList<String>(), true),
 							repositoryLocation));
 			logger.info("Project '" + projectName + "' created.");
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Project created", "Project " + projectName + " ("
 							+ projectDescription + ") was created.");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
@@ -143,7 +143,7 @@ public class NewProjectWizardMBean {
 		try {
 			analysisStore.removeAnalysisProject(uuid);
 			logger.info("Project '" + projectName + "' deleted.");
-			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_FATAL,
+			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Project deleted", "Project " + projectName + " ("
 							+ projectDescription + ") was deleted.");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
