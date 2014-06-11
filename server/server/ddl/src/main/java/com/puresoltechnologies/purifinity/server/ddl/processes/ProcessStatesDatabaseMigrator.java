@@ -1,32 +1,28 @@
 package com.puresoltechnologies.purifinity.server.ddl.processes;
 
-import java.io.IOException;
-
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
+import com.puresoltechnologies.purifinity.server.database.cassandra.ProcessStatesKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigrationConnector;
 import com.puresoltechnologies.purifinity.server.database.migration.AbstractDatabaseMigrator;
-import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrationConnector;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 
 public class ProcessStatesDatabaseMigrator extends AbstractDatabaseMigrator {
 
-	public static final String CASSANDRA_HOST = "localhost";
-	public static final int CASSANDRA_CQL_PORT = 9042;
-
-	protected ProcessStatesDatabaseMigrator(DatabaseMigrationConnector connector) {
-		super(connector);
+	public ProcessStatesDatabaseMigrator(String host, int port)
+			throws MigrationException {
+		super(new CassandraMigrationConnector(host, port));
+		ProcessStatesSchema.createSequence(this);
 	}
 
-	public static void main(String[] args) {
-		CassandraMigrationConnector connector = new CassandraMigrationConnector(
-				CASSANDRA_HOST, CASSANDRA_CQL_PORT);
+	public void drop() {
+		CassandraMigrationConnector connector = (CassandraMigrationConnector) getConnector();
+		Cluster cluster = connector.getCluster();
+		Session session = cluster.connect();
 		try {
-			ProcessStatesDatabaseMigrator migrator = new ProcessStatesDatabaseMigrator(
-					connector);
-			ProcessStatesSchema.createSequence(migrator);
-			migrator.migrate();
-		} catch (IOException | MigrationException e) {
-			e.printStackTrace();
-			System.exit(1);
+			session.execute("DROP KEYSPACE " + ProcessStatesKeyspace.NAME);
+		} finally {
+			session.close();
 		}
 	}
 

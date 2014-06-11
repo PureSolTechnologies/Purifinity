@@ -1,7 +1,8 @@
 package com.puresoltechnologies.purifinity.server.ui.settings;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
@@ -20,8 +21,12 @@ import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesDefaults;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesNames;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.preferences.PreferencesStore;
+import com.puresoltechnologies.purifinity.server.preferences.PreferencesValue;
 
 @ViewScoped
 @ManagedBean
@@ -35,6 +40,9 @@ public class NewProjectWizardMBean {
 
 	@Inject
 	private AnalysisStore analysisStore;
+
+	@Inject
+	private PreferencesStore preferencesStore;
 
 	private String projectName = null;
 	private String projectDescription = null;
@@ -116,15 +124,9 @@ public class NewProjectWizardMBean {
 			// properties.setProperty(parameterId, text.getText());
 			// }
 			// FIXME: Add configuration for file search
-			analysisStore
-					.createAnalysisProject(new AnalysisProjectSettings(
-							projectName, projectDescription,
-							new FileSearchConfiguration(
-									new ArrayList<String>(),
-									new ArrayList<String>(),
-									new ArrayList<String>(),
-									new ArrayList<String>(), true),
-							repositoryLocation));
+			analysisStore.createAnalysisProject(new AnalysisProjectSettings(
+					projectName, projectDescription,
+					createFileSearchConfiguration(), repositoryLocation));
 			logger.info("Project '" + projectName + "' created.");
 			FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO,
 					"Project created", "Project " + projectName + " ("
@@ -137,6 +139,45 @@ public class NewProjectWizardMBean {
 							+ projectName + " (" + projectDescription + ").");
 			FacesContext.getCurrentInstance().addMessage(null, msg);
 		}
+	}
+
+	private FileSearchConfiguration createFileSearchConfiguration() {
+		PreferencesValue directoryIncludesPreference = preferencesStore
+				.getValue(
+						PreferencesNames.DEFAULT_GROUP,
+						PreferencesNames.ANALYSIS_FILE_FILTER_DIRECTORY_INCLUDES,
+						PreferencesDefaults.ANALYSIS_FILE_FILTER_DIRECTORY_INCLUDES);
+		PreferencesValue directoryExcludesPreference = preferencesStore
+				.getValue(
+						PreferencesNames.DEFAULT_GROUP,
+						PreferencesNames.ANALYSIS_FILE_FILTER_DIRECTORY_EXCLUDES,
+						PreferencesDefaults.ANALYSIS_FILE_FILTER_DIRECTORY_EXCLUDES);
+		PreferencesValue fileIncludesPreference = preferencesStore.getValue(
+				PreferencesNames.DEFAULT_GROUP,
+				PreferencesNames.ANALYSIS_FILE_FILTER_FILE_INCLUDES,
+				PreferencesDefaults.ANALYSIS_FILE_FILTER_FILE_INCLUDES);
+		PreferencesValue fileExcludesPreference = preferencesStore.getValue(
+				PreferencesNames.DEFAULT_GROUP,
+				PreferencesNames.ANALYSIS_FILE_FILTER_FILE_EXCLUDES,
+				PreferencesDefaults.ANALYSIS_FILE_FILTER_FILE_EXCLUDES);
+		PreferencesValue ignoreHiddenPreference = preferencesStore.getValue(
+				PreferencesNames.DEFAULT_GROUP,
+				PreferencesNames.ANALYSIS_FILE_FILTER_IGNORE_HIDDEN,
+				PreferencesDefaults.ANALYSIS_FILE_FILTER_IGNORE_HIDDEN);
+
+		List<String> directoryIncludes = Arrays
+				.asList(directoryIncludesPreference.getValue().split("\n"));
+		List<String> directoryExcludes = Arrays
+				.asList(directoryExcludesPreference.getValue().split("\n"));
+		List<String> fileIncludes = Arrays.asList(fileIncludesPreference
+				.getValue().split("\n"));
+		List<String> fileExcludes = Arrays.asList(fileExcludesPreference
+				.getValue().split("\n"));
+
+		Boolean ignoreHidden = Boolean.valueOf(ignoreHiddenPreference
+				.getValue());
+		return new FileSearchConfiguration(directoryIncludes,
+				directoryExcludes, fileIncludes, fileExcludes, ignoreHidden);
 	}
 
 	public void delete(UUID uuid) {

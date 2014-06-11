@@ -14,7 +14,7 @@
 						style="font-weight:bold" />
 				</h:panelGroup>
 				<h:panelGroup rendered="#{loginMBean.isLoggedIn()}">
-					<h:outputText value="#{accountBarMBean.helloMessageTranslated}"
+					<h:outputText value="#{accountBarMBean.helloMessage}"
 						style="font-weight:bold" />
 				</h:panelGroup>
 
@@ -31,7 +31,7 @@
 					<p:link styleClass="accountBar" outcome="/account/configuration"
 						value="my account" /> | 
 					<p:commandLink styleClass="accountBar"
-						value="#{accountBarMBean.logoutTranslated}"
+						value="Logout"
 						action="#{loginMBean.logout}" />
 				</h:panelGroup>
 			</h:form>

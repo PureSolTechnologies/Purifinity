@@ -51,6 +51,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+ 			<artifactId>server.preferences</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>systemmonitor</artifactId>
 		</dependency>
 		<dependency>
@@ -64,50 +68,10 @@
 	</dependencies>
 
 	<build>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-ejb-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution> 
-						<id>copy-jboss-configuration</id>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<phase>process-resources</phase>
-						<configuration>
-							<includeEmptyDirs>true</includeEmptyDirs>
-							<outputDirectory>${cargo.dir}/template</outputDirectory>
-							<resources>
-								<resource>
-									<!-- XML files are filtered to replace properties. -->
-									<directory>src/jboss/configuration</directory>
-									<filtering>true</filtering>
-									<includes>
-										<include>**/*.xml</include>
-									</includes>
-								</resource>
-								<resource>
-									<!-- Non-XML files are not filtered. -->
-									<directory>src/jboss/configuration</directory>
-									<excludes>
-										<exclude>**/*.xml</exclude>
-									</excludes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

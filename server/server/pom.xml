@@ -16,6 +16,7 @@
 		<module>ddl</module>
 		<module>domain</module>
 		<module>metrics.spi</module>
+		<module>preferences</module>
 		<module>core.api</module>
 		<module>core.impl</module>
 		<module>rest.api</module>

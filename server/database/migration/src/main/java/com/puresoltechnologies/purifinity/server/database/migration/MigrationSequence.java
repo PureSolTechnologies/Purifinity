@@ -39,4 +39,7 @@ public class MigrationSequence implements MigrationStep {
 		migrationSteps.add(migrationStep);
 	}
 
+	public List<MigrationStep> getMigrationSteps() {
+		return migrationSteps;
+	}
 }

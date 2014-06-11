@@ -49,6 +49,16 @@ public class SessionProducer {
 		return session;
 	}
 
+	@Produces
+	@Singleton
+	@PreferencesStoreKeyspace
+	public Session getPreferencesStoreSession() {
+		logger.info("Creating Preferences Store Session...");
+		Session session = cluster.connect(PreferencesStoreKeyspace.NAME);
+		logger.info("Cassandra Preferences Store Session created.");
+		return session;
+	}
+
 	public void closeAnalysisKeyspaceSession(
 			@Disposes @AnalysisStoreKeyspace Session session) {
 		session.close();
@@ -61,6 +71,11 @@ public class SessionProducer {
 
 	public void closeProcessStatesKeyspaceSession(
 			@Disposes @ProcessStatesKeyspace Session session) {
+		session.close();
+	}
+
+	public void closePreferencesStoreKeyspaceSession(
+			@Disposes @PreferencesStoreKeyspace Session session) {
 		session.close();
 	}
 }

@@ -10,7 +10,7 @@
 			<p:commandButton value="Create New Project..." type="button"
 				onclick="PF('createProjectDialog').show();" />
 			<p:dialog header="New Project Wizard" widgetVar="createProjectDialog"
-				modal="true" width="640" height="480" >
+				modal="true" width="640" height="480">
 				<p:growl id="growl" sticky="true" showDetail="true" />
 				<p:wizard flowListener="#{newProjectWizardMBean.onFlowProcess}">
 					<p:tab id="generalInformation" title="Information">

@@ -14,8 +14,8 @@ import javax.inject.Qualifier;
 @Qualifier
 @Target({ TYPE, METHOD, FIELD, PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface AnalysisStoreKeyspace {
+public @interface PreferencesStoreKeyspace {
 
-	public static final String NAME = "analysis_store";
+	public static final String NAME = "preferences_store";
 
 }

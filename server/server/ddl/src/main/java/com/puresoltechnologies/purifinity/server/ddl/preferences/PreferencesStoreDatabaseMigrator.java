@@ -1,18 +1,18 @@
-package com.puresoltechnologies.purifinity.server.ddl.analysisservice;
+package com.puresoltechnologies.purifinity.server.ddl.preferences;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.PreferencesStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigrationConnector;
 import com.puresoltechnologies.purifinity.server.database.migration.AbstractDatabaseMigrator;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 
-public class AnalysisServiceDatabaseMigrator extends AbstractDatabaseMigrator {
+public class PreferencesStoreDatabaseMigrator extends AbstractDatabaseMigrator {
 
-	public AnalysisServiceDatabaseMigrator(String host, int port)
+	public PreferencesStoreDatabaseMigrator(String host, int port)
 			throws MigrationException {
 		super(new CassandraMigrationConnector(host, port));
-		AnalysisServiceSchema.createSequence(this);
+		PreferencesStoreSchema.createSequence(this);
 	}
 
 	public void drop() {
@@ -20,7 +20,7 @@ public class AnalysisServiceDatabaseMigrator extends AbstractDatabaseMigrator {
 		Cluster cluster = connector.getCluster();
 		Session session = cluster.connect();
 		try {
-			session.execute("DROP KEYSPACE " + AnalysisStoreKeyspace.NAME);
+			session.execute("DROP KEYSPACE " + PreferencesStoreKeyspace.NAME);
 		} finally {
 			session.close();
 		}

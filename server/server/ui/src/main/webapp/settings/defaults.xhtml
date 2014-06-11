@@ -7,8 +7,8 @@
 		<h1>Default Settings</h1>
 
 		<h:form>
-			<p:tabView scrollable="true">
-				<p:tab title="File Search">
+			<p:tabView id="defaultSettingsTabView" scrollable="true">
+				<p:tab id="fileSearchTab" title="File Search">
 					<p:panel header="Directory Filter">
 						<p:panelGrid columns="2">
 							<h:outputLabel value="Includes:" for="directoryIncludes" />
@@ -38,14 +38,18 @@
 								value="#{fileSearchDefaultsMBean.ignoreHidden}" />
 						</p:panelGrid>
 					</p:panel>
-					<p:commandButton value="Save" />
-					<p:commandButton value="Reset" />
+					<p:commandButton value="Save"
+						actionListener="#{fileSearchDefaultsMBean.save}"
+						update="fileSearchTab" />
+					<p:commandButton value="Refresh"
+						actionListener="#{fileSearchDefaultsMBean.refresh}"
+						update="fileSearchTab" />
 				</p:tab>
 				<p:tab title="User Privileges">
 					<p:panel header="Account Defaults">
 					</p:panel>
 					<p:commandButton value="Save" />
-					<p:commandButton value="Reset" />
+					<p:commandButton value="Refresh" />
 				</p:tab>
 			</p:tabView>
 		</h:form>

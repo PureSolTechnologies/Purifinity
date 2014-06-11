@@ -1,33 +1,28 @@
 package com.puresoltechnologies.purifinity.server.ddl.evaluationservice;
 
-import java.io.IOException;
-
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
+import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigrationConnector;
 import com.puresoltechnologies.purifinity.server.database.migration.AbstractDatabaseMigrator;
-import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrationConnector;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 
 public class EvaluationServiceDatabaseMigrator extends AbstractDatabaseMigrator {
 
-	public static final String CASSANDRA_HOST = "localhost";
-	public static final int CASSANDRA_CQL_PORT = 9042;
-
-	protected EvaluationServiceDatabaseMigrator(
-			DatabaseMigrationConnector connector) {
-		super(connector);
+	public EvaluationServiceDatabaseMigrator(String host, int port)
+			throws MigrationException {
+		super(new CassandraMigrationConnector(host, port));
+		EvaluationServiceSchema.createSequence(this);
 	}
 
-	public static void main(String[] args) {
-		CassandraMigrationConnector connector = new CassandraMigrationConnector(
-				CASSANDRA_HOST, CASSANDRA_CQL_PORT);
+	public void drop() {
+		CassandraMigrationConnector connector = (CassandraMigrationConnector) getConnector();
+		Cluster cluster = connector.getCluster();
+		Session session = cluster.connect();
 		try {
-			EvaluationServiceDatabaseMigrator migrator = new EvaluationServiceDatabaseMigrator(
-					connector);
-			EvaluationServiceSchema.createSequence(migrator);
-			migrator.migrate();
-		} catch (IOException | MigrationException e) {
-			e.printStackTrace();
-			System.exit(1);
+			session.execute("DROP KEYSPACE " + EvaluationStoreKeyspace.NAME);
+		} finally {
+			session.close();
 		}
 	}
 

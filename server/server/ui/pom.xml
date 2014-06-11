@@ -20,6 +20,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+ 			<artifactId>server.preferences</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>accountmanager.ui.web</artifactId>
 			<type>war</type>
 		</dependency>
