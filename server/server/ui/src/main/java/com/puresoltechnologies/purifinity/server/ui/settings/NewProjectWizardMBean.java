@@ -1,9 +1,11 @@
 package com.puresoltechnologies.purifinity.server.ui.settings;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -16,6 +18,7 @@ import javax.inject.Inject;
 import org.primefaces.event.FlowEvent;
 import org.slf4j.Logger;
 
+import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
@@ -48,6 +51,7 @@ public class NewProjectWizardMBean {
 	private String projectDescription = null;
 	private String repositoryTypeClass = null;
 	private RepositoryType repositoryType = null;
+	private final List<RepositorySetting> repositorySettings = new ArrayList<>();
 
 	public String getProjectName() {
 		return projectName;
@@ -65,15 +69,6 @@ public class NewProjectWizardMBean {
 		this.projectDescription = projectDescription;
 	}
 
-	public RepositoryTypePluginService getRepositoryTypePluginService() {
-		return repositoryTypePluginService;
-	}
-
-	public void setRepositoryTypePluginService(
-			RepositoryTypePluginService repositoryTypePluginService) {
-		this.repositoryTypePluginService = repositoryTypePluginService;
-	}
-
 	public String getRepositoryTypeClass() {
 		return repositoryTypeClass;
 	}
@@ -81,6 +76,14 @@ public class NewProjectWizardMBean {
 	public void setRepositoryTypeClass(String repositoryTypeClass) {
 		this.repositoryTypeClass = repositoryTypeClass;
 		repositoryType = findRepositoryTypeForClass(repositoryTypeClass);
+		repositorySettings.clear();
+		if (repositoryType != null) {
+			for (Entry<String, Parameter<?>> entry : repositoryType
+					.getParameters().entrySet()) {
+				repositorySettings.add(new RepositorySetting(entry.getKey(),
+						entry.getValue()));
+			}
+		}
 	}
 
 	private RepositoryType findRepositoryTypeForClass(String repositoryTypeClass) {
@@ -118,12 +121,10 @@ public class NewProjectWizardMBean {
 			repositoryLocation.setProperty(
 					RepositoryLocation.REPOSITORY_LOCATION_NAME,
 					repositoryType.getName());
-			// FIXME: Set properties for repository.
-			// for (String parameterId : controls.keySet()) {
-			// Text text = controls.get(parameterId);
-			// properties.setProperty(parameterId, text.getText());
-			// }
-			// FIXME: Add configuration for file search
+			for (RepositorySetting repositorySetting : repositorySettings) {
+				repositoryLocation.setProperty(repositorySetting.getParameter()
+						.getName(), repositorySetting.getValue());
+			}
 			analysisStore.createAnalysisProject(new AnalysisProjectSettings(
 					projectName, projectDescription,
 					createFileSearchConfiguration(), repositoryLocation));
@@ -200,4 +201,9 @@ public class NewProjectWizardMBean {
 	public String onFlowProcess(FlowEvent event) {
 		return event.getNewStep();
 	}
+
+	public List<RepositorySetting> getRepositorySettings() {
+		return repositorySettings;
+	}
+
 }

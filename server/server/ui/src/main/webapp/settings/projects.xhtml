@@ -3,6 +3,7 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<ui:define name="page_content">
 		<h1>Project Settings</h1>
@@ -16,7 +17,7 @@
 					<p:tab id="generalInformation" title="Information">
 						<p:panel header="General Information">
 							<p:messages />
-							<h:panelGrid columns="2">
+							<p:panelGrid columns="2">
 								<h:outputLabel value="Project Name: *" for="projectName" />
 								<p:inputText id="projectName" required="true"
 									value="#{newProjectWizardMBean.projectName}" />
@@ -24,26 +25,37 @@
 									for="projectDescription" />
 								<p:inputTextarea id="projectDescription"
 									value="#{newProjectWizardMBean.projectDescription}" />
-							</h:panelGrid>
+							</p:panelGrid>
 						</p:panel>
 					</p:tab>
 					<p:tab id="projectLocation" title="Location">
 						<p:panel header="Project Location">
 							<p:messages />
-							<h:panelGrid columns="2">
+							<p:panelGrid columns="2">
 								<h:outputLabel value="Repository Type: *" for="repositoryType" />
 								<p:selectOneMenu id="repositoryType" required="true"
 									value="#{newProjectWizardMBean.repositoryTypeClass}">
+									<p:ajax update="repositoryParametersTable" />
 									<f:selectItem itemLabel="Select One" itemValue="" />
 									<f:selectItems value="#{newProjectWizardMBean.repositoryTypes}" />
 								</p:selectOneMenu>
-							</h:panelGrid>
+							</p:panelGrid>
+							<p:dataTable id="repositoryParametersTable"
+								var="repositorySetting"
+								value="#{newProjectWizardMBean.repositorySettings}">
+								<p:column headerText="Parameter">
+									<h:outputText value="#{repositorySetting.name}" />
+								</p:column>
+								<p:column headerText="Value">
+									<p:inputText value="#{repositorySetting.value}" />
+								</p:column>
+							</p:dataTable>
 						</p:panel>
 					</p:tab>
 					<p:tab id="confirmation" title="Confirmation">
 						<p:panel header="Settings Confirmation">
 							<p:messages />
-							<h:panelGrid columns="2">
+							<p:panelGrid columns="2">
 								<h:outputLabel value="Project Name: *" for="projectNameText" />
 								<h:outputText id="projectNameText"
 									value="#{newProjectWizardMBean.projectName}" />
@@ -55,7 +67,7 @@
 									for="repositoryTypeText" />
 								<h:outputText id="repositoryTypeText"
 									value="#{newProjectWizardMBean.selectedRepositoryTypeName}" />
-							</h:panelGrid>
+							</p:panelGrid>
 							<p:commandButton onclick="PF('createProjectDialog').close();"
 								value="Submit" actionListener="#{newProjectWizardMBean.create}"
 								update="growl" process="@this" />
