@@ -18,10 +18,10 @@
 						<p:panel header="General Information">
 							<p:messages />
 							<p:panelGrid columns="2">
-								<h:outputLabel value="Project Name: *" for="projectName" />
+								<p:outputLabel value="Project Name: *" for="projectName" />
 								<p:inputText id="projectName" required="true"
 									value="#{newProjectWizardMBean.projectName}" />
-								<h:outputLabel value="Project Description:"
+								<p:outputLabel value="Project Description:"
 									for="projectDescription" />
 								<p:inputTextarea id="projectDescription"
 									value="#{newProjectWizardMBean.projectDescription}" />
@@ -32,7 +32,7 @@
 						<p:panel header="Project Location">
 							<p:messages />
 							<p:panelGrid columns="2">
-								<h:outputLabel value="Repository Type: *" for="repositoryType" />
+								<p:outputLabel value="Repository Type: *" for="repositoryType" />
 								<p:selectOneMenu id="repositoryType" required="true"
 									value="#{newProjectWizardMBean.repositoryTypeClass}">
 									<p:ajax update="repositoryParametersTable" />
@@ -56,14 +56,14 @@
 						<p:panel header="Settings Confirmation">
 							<p:messages />
 							<p:panelGrid columns="2">
-								<h:outputLabel value="Project Name: *" for="projectNameText" />
+								<p:outputLabel value="Project Name: *" for="projectNameText" />
 								<h:outputText id="projectNameText"
 									value="#{newProjectWizardMBean.projectName}" />
-								<h:outputLabel value="Project Description:"
+								<p:outputLabel value="Project Description:"
 									for="projectDescriptionText" />
 								<h:outputText id="projectDescriptionText"
 									value="#{newProjectWizardMBean.projectDescription}" />
-								<h:outputLabel value="Repository Type: *"
+								<p:outputLabel value="Repository Type: *"
 									for="repositoryTypeText" />
 								<h:outputText id="repositoryTypeText"
 									value="#{newProjectWizardMBean.selectedRepositoryTypeName}" />

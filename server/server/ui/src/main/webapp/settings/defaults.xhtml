@@ -11,27 +11,27 @@
 				<p:tab id="fileSearchTab" title="File Search">
 					<p:panel header="Directory Filter">
 						<p:panelGrid columns="2">
-							<h:outputLabel value="Includes:" for="directoryIncludes" />
+							<p:outputLabel value="Includes:" for="directoryIncludes" />
 							<p:inputTextarea id="directoryIncludes"
 								value="#{fileSearchDefaultsMBean.directoryIncludes}" />
-							<h:outputLabel value="Excludes:" for="directoryExcludes" />
+							<p:outputLabel value="Excludes:" for="directoryExcludes" />
 							<p:inputTextarea id="directoryExcludes"
 								value="#{fileSearchDefaultsMBean.directoryExcludes}" />
 						</p:panelGrid>
 					</p:panel>
 					<p:panel header="File Filter">
 						<p:panelGrid columns="2">
-							<h:outputLabel value="Includes:" for="fileIncludes" />
+							<p:outputLabel value="Includes:" for="fileIncludes" />
 							<p:inputTextarea id="fileIncludes"
 								value="#{fileSearchDefaultsMBean.fileIncludes}" />
-							<h:outputLabel value="Excludes:" for="fileExcludes" />
+							<p:outputLabel value="Excludes:" for="fileExcludes" />
 							<p:inputTextarea id="fileExcludes"
 								value="#{fileSearchDefaultsMBean.fileExcludes}" />
 						</p:panelGrid>
 					</p:panel>
 					<p:panel header="Switches">
 						<p:panelGrid columns="2">
-							<h:outputLabel value="Ignore hidden files:"
+							<p:outputLabel value="Ignore hidden files:"
 								for="ignoreHiddenFiles" />
 							<p:selectBooleanButton onLabel="Yes" offLabel="No"
 								id="ignoreHiddenFiles"

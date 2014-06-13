@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.core.api.preferences;
+package com.puresoltechnologies.purifinity.server.preferences;
 
 /**
  * This class contains the names of the preferences as stored in the preferences
@@ -15,6 +15,8 @@ public class PreferencesNames {
 	public static final String ANALYSIS_FILE_FILTER_DIRECTORY_INCLUDES = "analysis.filter.files.directory.includes";
 	public static final String ANALYSIS_FILE_FILTER_DIRECTORY_EXCLUDES = "analysis.filter.files.directory.excludes";
 	public static final String ANALYSIS_FILE_FILTER_IGNORE_HIDDEN = "analysis.filter.files.hidden.ignore";
+
+	public static final String SYSTEM_WEB_UI_THEME = "system.ui.web.theme";
 
 	/**
 	 * Private default constructor to avoid instantiation.

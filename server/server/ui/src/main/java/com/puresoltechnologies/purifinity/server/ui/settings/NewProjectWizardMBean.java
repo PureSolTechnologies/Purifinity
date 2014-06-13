@@ -25,9 +25,9 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSetting
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesDefaults;
-import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesNames;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.preferences.PreferencesNames;
 import com.puresoltechnologies.purifinity.server.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.preferences.PreferencesValue;
 

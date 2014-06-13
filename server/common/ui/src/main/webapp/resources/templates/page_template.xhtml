@@ -19,44 +19,44 @@
 			<div class="applicationName">
 				<h:outputLink styleClass="pageTop" value="http://purifinity.com">Purifinity</h:outputLink>
 			</div>
-			<page:accountBar />
-		</div>
-		<h:form id="menuForm">
-			<p:menubar>
-				<p:submenu label="Projects">
-					<p:menuitem value="Overview" outcome="/projects/overview" />
-					<p:separator />
-					<p:menuitem value="Project 1" />
-					<p:menuitem value="Project 2" />
-					<p:menuitem value="Project 3" />
-				</p:submenu>
-				<p:submenu label="Dashboards">
-					<p:menuitem value="Dashboard 1" />
-					<p:menuitem value="Dashboard 2" />
-					<p:menuitem value="Dashboard 3" />
-				</p:submenu>
-				<p:submenu label="System">
-					<p:menuitem value="Information" outcome="/system/information" />
-					<p:menuitem value="Installed Plugins"
-						outcome="/system/installed_plugins" />
-				</p:submenu>
-				<p:submenu label="Settings">
-					<p:menuitem value="Projects" outcome="/settings/projects" />
-					<p:menuitem value="Dashboards" outcome="/settings/dashboards" />
-					<p:separator />
-					<p:menuitem value="Defaults" outcome="/settings/defaults" />
-					<p:menuitem value="Users" outcome="/settings/users" />
-					<p:submenu label="Plugins">
-						<p:submenu label="Analyzers">
-						</p:submenu>
-						<p:submenu label="Evaluators">
-						</p:submenu>
+			<h:form id="menuForm">
+				<p:menubar>
+					<p:menuitem value="Overview" outcome="/overview" />
+					<p:menuitem value="Dashboards" outcome="/dashboards" />
+					<p:menuitem value="Projects" outcome="/projects" />
+					<p:submenu label="System">
+						<p:menuitem value="Information" outcome="/system/information" />
+						<p:menuitem value="Installed Plugins"
+							outcome="/system/installed_plugins" />
 					</p:submenu>
-					<p:menuitem value="System" outcome="/settings/system" />
-					<p:menuitem value="Server" outcome="/settings/server" />
-				</p:submenu>
-			</p:menubar>
-		</h:form>
+					<p:submenu label="Settings">
+						<p:menuitem value="Projects" outcome="/settings/projects" />
+						<p:menuitem value="Dashboards" outcome="/settings/dashboards" />
+						<p:separator />
+						<p:menuitem value="Defaults" outcome="/settings/defaults" />
+						<p:menuitem value="Users" outcome="/settings/users" />
+						<p:submenu label="Plugins">
+							<p:submenu label="Analyzers">
+							</p:submenu>
+							<p:submenu label="Evaluators">
+							</p:submenu>
+						</p:submenu>
+						<p:menuitem value="System" outcome="/settings/system" />
+						<p:menuitem value="Server" outcome="/settings/server" />
+					</p:submenu>
+					<f:facet name="options">
+						<page:accountBar />
+						<p:themeSwitcher id="themeSwitcher" style="width:165px"
+							effect="fade" value="#{themeSwitcherMBean.themeName}" var="t">
+							<f:selectItem itemLabel="Choose Theme" itemValue="" />
+							<f:selectItems value="#{themeSwitcherMBean.themes}" var="theme"
+								itemLabel="${theme.displayName}" itemValue="#{theme.name}" />
+							<p:ajax listener="#{themeSwitcherMBean.save}" />
+						</p:themeSwitcher>
+					</f:facet>
+				</p:menubar>
+			</h:form>
+		</div>
 		<p:messages />
 		<div class="pageContainer">
 			<ui:insert name="page_content">Page Content</ui:insert>

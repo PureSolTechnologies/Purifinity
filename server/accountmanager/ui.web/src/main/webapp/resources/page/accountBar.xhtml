@@ -18,21 +18,19 @@
 						style="font-weight:bold" />
 				</h:panelGroup>
 
-				<p:link value="home" outcome="/index" styleClass="accountBar" /> |
-
 				<h:panelGroup rendered="#{!loginMBean.isLoggedIn()}">
-					<p:link styleClass="accountBar" outcome="/login_by_user"
+					<p:button styleClass="accountBar" outcome="/login_by_user"
 						value="login" /> |
-					<p:link styleClass="accountBar" outcome="/create_account"
+					<p:button styleClass="accountBar" outcome="/create_account"
 						value="create account" />
 				</h:panelGroup>
 
 				<h:panelGroup rendered="#{loginMBean.isLoggedIn()}">
 					<p:link styleClass="accountBar" outcome="/account/configuration"
 						value="my account" /> | 
-					<p:commandLink styleClass="accountBar"
+					<p:commandButton styleClass="accountBar"
 						value="Logout"
-						action="#{loginMBean.logout}" />
+						actionListener="#{loginMBean.logout}" />
 				</h:panelGroup>
 			</h:form>
 		</div>
