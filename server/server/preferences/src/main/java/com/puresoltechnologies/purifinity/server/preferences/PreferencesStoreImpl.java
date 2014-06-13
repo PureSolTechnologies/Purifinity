@@ -67,8 +67,33 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	}
 
 	@Override
+	public void setValue(String group, String name, boolean value) {
+		setValue(group, name, String.valueOf(value));
+	}
+
+	@Override
 	public boolean hasValue(String group, String name) {
 		return getValue(group, name) != null;
+	}
+
+	@Override
+	public Boolean getBoolean(String group, String name) {
+		return Boolean.valueOf(getString(group, name));
+	}
+
+	@Override
+	public boolean getBoolean(String group, String name, String defaultValue) {
+		return Boolean.valueOf(getString(group, name, defaultValue));
+	}
+
+	@Override
+	public String getString(String group, String name) {
+		return getValue(group, name).getValue();
+	}
+
+	@Override
+	public String getString(String group, String name, String defaultValue) {
+		return getValue(group, name, defaultValue).getValue();
 	}
 
 }

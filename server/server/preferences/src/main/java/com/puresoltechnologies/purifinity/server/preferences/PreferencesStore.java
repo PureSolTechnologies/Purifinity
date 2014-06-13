@@ -49,6 +49,8 @@ public interface PreferencesStore {
 	 */
 	public void setValue(String group, String name, String value);
 
+	public void setValue(String group, String name, boolean value);
+
 	/**
 	 * This method checks whether a value was stored for a parameter or not.
 	 * 
@@ -60,5 +62,13 @@ public interface PreferencesStore {
 	 *         <code>false</code> is returned otherwise.
 	 */
 	public boolean hasValue(String group, String name);
+
+	public Boolean getBoolean(String group, String name);
+
+	public boolean getBoolean(String group, String name, String defaultValue);
+
+	public String getString(String group, String name);
+
+	public String getString(String group, String name, String defaultValue);
 
 }

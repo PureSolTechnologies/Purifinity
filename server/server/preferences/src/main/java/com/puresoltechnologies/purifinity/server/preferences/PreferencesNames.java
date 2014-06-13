@@ -18,6 +18,10 @@ public class PreferencesNames {
 
 	public static final String SYSTEM_WEB_UI_THEME = "system.ui.web.theme";
 
+	public static final String SYSTEM_GROUP = "system";
+
+	public static final String SYSTEM_AUTHENTICATION_ANONYMOUS_ALLOWED = "system.authentication.anonymous.allowed";
+
 	/**
 	 * Private default constructor to avoid instantiation.
 	 */

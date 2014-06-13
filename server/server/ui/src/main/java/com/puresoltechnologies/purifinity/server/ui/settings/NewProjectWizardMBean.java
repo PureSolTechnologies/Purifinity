@@ -24,12 +24,11 @@ import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesDefaults;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.preferences.PreferencesDefaults;
 import com.puresoltechnologies.purifinity.server.preferences.PreferencesNames;
 import com.puresoltechnologies.purifinity.server.preferences.PreferencesStore;
-import com.puresoltechnologies.purifinity.server.preferences.PreferencesValue;
 
 @ViewScoped
 @ManagedBean
@@ -143,42 +142,39 @@ public class NewProjectWizardMBean {
 	}
 
 	private FileSearchConfiguration createFileSearchConfiguration() {
-		PreferencesValue directoryIncludesPreference = preferencesStore
-				.getValue(
-						PreferencesNames.DEFAULT_GROUP,
-						PreferencesNames.ANALYSIS_FILE_FILTER_DIRECTORY_INCLUDES,
-						PreferencesDefaults.ANALYSIS_FILE_FILTER_DIRECTORY_INCLUDES);
-		PreferencesValue directoryExcludesPreference = preferencesStore
-				.getValue(
-						PreferencesNames.DEFAULT_GROUP,
-						PreferencesNames.ANALYSIS_FILE_FILTER_DIRECTORY_EXCLUDES,
-						PreferencesDefaults.ANALYSIS_FILE_FILTER_DIRECTORY_EXCLUDES);
-		PreferencesValue fileIncludesPreference = preferencesStore.getValue(
+		String directoryIncludesPreference = preferencesStore.getString(
+				PreferencesNames.DEFAULT_GROUP,
+				PreferencesNames.ANALYSIS_FILE_FILTER_DIRECTORY_INCLUDES,
+				PreferencesDefaults.ANALYSIS_FILE_FILTER_DIRECTORY_INCLUDES);
+		String directoryExcludesPreference = preferencesStore.getString(
+				PreferencesNames.DEFAULT_GROUP,
+				PreferencesNames.ANALYSIS_FILE_FILTER_DIRECTORY_EXCLUDES,
+				PreferencesDefaults.ANALYSIS_FILE_FILTER_DIRECTORY_EXCLUDES);
+		String fileIncludesPreference = preferencesStore.getString(
 				PreferencesNames.DEFAULT_GROUP,
 				PreferencesNames.ANALYSIS_FILE_FILTER_FILE_INCLUDES,
 				PreferencesDefaults.ANALYSIS_FILE_FILTER_FILE_INCLUDES);
-		PreferencesValue fileExcludesPreference = preferencesStore.getValue(
+		String fileExcludesPreference = preferencesStore.getString(
 				PreferencesNames.DEFAULT_GROUP,
 				PreferencesNames.ANALYSIS_FILE_FILTER_FILE_EXCLUDES,
 				PreferencesDefaults.ANALYSIS_FILE_FILTER_FILE_EXCLUDES);
-		PreferencesValue ignoreHiddenPreference = preferencesStore.getValue(
+		boolean ignoreHiddenPreference = preferencesStore.getBoolean(
 				PreferencesNames.DEFAULT_GROUP,
 				PreferencesNames.ANALYSIS_FILE_FILTER_IGNORE_HIDDEN,
 				PreferencesDefaults.ANALYSIS_FILE_FILTER_IGNORE_HIDDEN);
 
 		List<String> directoryIncludes = Arrays
-				.asList(directoryIncludesPreference.getValue().split("\n"));
+				.asList(directoryIncludesPreference.split("\n"));
 		List<String> directoryExcludes = Arrays
-				.asList(directoryExcludesPreference.getValue().split("\n"));
+				.asList(directoryExcludesPreference.split("\n"));
 		List<String> fileIncludes = Arrays.asList(fileIncludesPreference
-				.getValue().split("\n"));
+				.split("\n"));
 		List<String> fileExcludes = Arrays.asList(fileExcludesPreference
-				.getValue().split("\n"));
+				.split("\n"));
 
-		Boolean ignoreHidden = Boolean.valueOf(ignoreHiddenPreference
-				.getValue());
 		return new FileSearchConfiguration(directoryIncludes,
-				directoryExcludes, fileIncludes, fileExcludes, ignoreHidden);
+				directoryExcludes, fileIncludes, fileExcludes,
+				ignoreHiddenPreference);
 	}
 
 	public void delete(UUID uuid) {

@@ -4,7 +4,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.inject.Inject;
 
-import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesDefaults;
+import com.puresoltechnologies.purifinity.server.preferences.PreferencesDefaults;
 import com.puresoltechnologies.purifinity.server.preferences.PreferencesNames;
 import com.puresoltechnologies.purifinity.server.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.preferences.PreferencesValue;

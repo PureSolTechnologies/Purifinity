@@ -1,9 +1,38 @@
 <ui:composition template="/resources/templates/page_template.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<ui:define name="page_content">
-		<h1>Projects</h1>
-		<p>This is the future place for project selection and view.</p>
+		<p:panel header="Projects">
+			<p:layout style="min-width:400px;min-height:800px;">
+				<p:layoutUnit position="west" resizable="true" size="100"
+					minSize="40" maxSize="200">
+					<h:form>
+						<p:selectOneMenu>
+							<f:selectItems value="#{projectsViewMBean.projects}"
+								var="project" itemLabel="#{project.settings.name}"
+								itemValue="#{project.information.UUID}" />
+						</p:selectOneMenu>
+					</h:form>
+					<h:form>
+						<p:accordionPanel multiple="true">
+							<p:tab title="Analysis">
+							</p:tab>
+							<p:tab title="Metrics">
+							</p:tab>
+							<p:tab title="Defects">
+							</p:tab>
+							<p:tab title="Style Issues">
+							</p:tab>
+						</p:accordionPanel>
+					</h:form>
+				</p:layoutUnit>
+				<p:layoutUnit position="center">
+					<p:panel>Project informationv view</p:panel>
+				</p:layoutUnit>
+			</p:layout>
+		</p:panel>
 	</ui:define>
 </ui:composition>

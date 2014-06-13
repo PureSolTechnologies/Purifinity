@@ -4,54 +4,55 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 	<ui:define name="page_content">
-		<h1>Default Settings</h1>
+		<p:panel header="Default Settings">
 
-		<h:form>
-			<p:tabView id="defaultSettingsTabView" scrollable="true">
-				<p:tab id="fileSearchTab" title="File Search">
-					<p:panel header="Directory Filter">
-						<p:panelGrid columns="2">
-							<p:outputLabel value="Includes:" for="directoryIncludes" />
-							<p:inputTextarea id="directoryIncludes"
-								value="#{fileSearchDefaultsMBean.directoryIncludes}" />
-							<p:outputLabel value="Excludes:" for="directoryExcludes" />
-							<p:inputTextarea id="directoryExcludes"
-								value="#{fileSearchDefaultsMBean.directoryExcludes}" />
-						</p:panelGrid>
-					</p:panel>
-					<p:panel header="File Filter">
-						<p:panelGrid columns="2">
-							<p:outputLabel value="Includes:" for="fileIncludes" />
-							<p:inputTextarea id="fileIncludes"
-								value="#{fileSearchDefaultsMBean.fileIncludes}" />
-							<p:outputLabel value="Excludes:" for="fileExcludes" />
-							<p:inputTextarea id="fileExcludes"
-								value="#{fileSearchDefaultsMBean.fileExcludes}" />
-						</p:panelGrid>
-					</p:panel>
-					<p:panel header="Switches">
-						<p:panelGrid columns="2">
-							<p:outputLabel value="Ignore hidden files:"
-								for="ignoreHiddenFiles" />
-							<p:selectBooleanButton onLabel="Yes" offLabel="No"
-								id="ignoreHiddenFiles"
-								value="#{fileSearchDefaultsMBean.ignoreHidden}" />
-						</p:panelGrid>
-					</p:panel>
-					<p:commandButton value="Save"
-						actionListener="#{fileSearchDefaultsMBean.save}"
-						update="fileSearchTab" />
-					<p:commandButton value="Refresh"
-						actionListener="#{fileSearchDefaultsMBean.refresh}"
-						update="fileSearchTab" />
-				</p:tab>
-				<p:tab title="User Privileges">
-					<p:panel header="Account Defaults">
-					</p:panel>
-					<p:commandButton value="Save" />
-					<p:commandButton value="Refresh" />
-				</p:tab>
-			</p:tabView>
-		</h:form>
+			<h:form>
+				<p:tabView id="defaultSettingsTabView" scrollable="true">
+					<p:tab id="fileSearchTab" title="File Search">
+						<p:panel header="Directory Filter">
+							<p:panelGrid columns="2">
+								<p:outputLabel value="Includes:" for="directoryIncludes" />
+								<p:inputTextarea id="directoryIncludes"
+									value="#{fileSearchDefaultsMBean.directoryIncludes}" />
+								<p:outputLabel value="Excludes:" for="directoryExcludes" />
+								<p:inputTextarea id="directoryExcludes"
+									value="#{fileSearchDefaultsMBean.directoryExcludes}" />
+							</p:panelGrid>
+						</p:panel>
+						<p:panel header="File Filter">
+							<p:panelGrid columns="2">
+								<p:outputLabel value="Includes:" for="fileIncludes" />
+								<p:inputTextarea id="fileIncludes"
+									value="#{fileSearchDefaultsMBean.fileIncludes}" />
+								<p:outputLabel value="Excludes:" for="fileExcludes" />
+								<p:inputTextarea id="fileExcludes"
+									value="#{fileSearchDefaultsMBean.fileExcludes}" />
+							</p:panelGrid>
+						</p:panel>
+						<p:panel header="Switches">
+							<p:panelGrid columns="2">
+								<p:outputLabel value="Ignore hidden files:"
+									for="ignoreHiddenFiles" />
+								<p:selectBooleanButton onLabel="Yes" offLabel="No"
+									id="ignoreHiddenFiles"
+									value="#{fileSearchDefaultsMBean.ignoreHidden}" />
+							</p:panelGrid>
+						</p:panel>
+						<p:commandButton value="Save"
+							actionListener="#{fileSearchDefaultsMBean.save}"
+							update="fileSearchTab" />
+						<p:commandButton value="Refresh"
+							actionListener="#{fileSearchDefaultsMBean.refresh}"
+							update="fileSearchTab" />
+					</p:tab>
+					<p:tab title="User Privileges">
+						<p:panel header="Account Defaults">
+						</p:panel>
+						<p:commandButton value="Save" />
+						<p:commandButton value="Refresh" />
+					</p:tab>
+				</p:tabView>
+			</h:form>
+		</p:panel>
 	</ui:define>
 </ui:composition>
