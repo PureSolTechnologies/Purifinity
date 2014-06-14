@@ -8,38 +8,35 @@
 	</cc:interface>
 	<cc:implementation>
 		<h:outputStylesheet library="css" name="login.css" />
-		<h1>Create Account</h1>
-		<h:form>
-			<p:messages />
-			<p:panelGrid columns="2" columnClasses="rightAlign,leftAlign">
+		<p:panel header="Create Account">
+			<h:form>
+				<p:panelGrid columns="2" columnClasses="rightAlign,leftAlign">
 
-				<h:outputText value="Email address:" />
-				<p:inputText label="Email address"
-					value="#{createAccountMBean.email}" required="true">
-					<f:validator validatorId="emailAddressValidator" />
-					<f:validateLength minimum="5" maximum="128" />
-				</p:inputText>
+					<p:outputLabel value="Email address:" for="emailAddress" />
+					<p:inputText id="emailAddress" label="Email address"
+						value="#{createAccountMBean.email}" required="true">
+						<f:validator validatorId="emailAddressValidator" />
+						<f:validateLength minimum="5" maximum="128" />
+					</p:inputText>
 
-				<h:outputText value="Password:" />
-				<p:inputText label="Password" binding="#{password}"
-					value="#{createAccountMBean.password}" required="true">
-					<f:validateLength minimum="4" maximum="30" />
-				</p:inputText>
+					<p:outputLabel value="Password:" for="password" />
+					<p:inputText id="password" label="Password" binding="#{password}"
+						value="#{createAccountMBean.password}" required="true">
+						<f:validateLength minimum="4" maximum="30" />
+					</p:inputText>
 
-				<h:outputText value="Confirm Password:" />
-				<p:inputText label="Confirm Password" required="true">
-					<f:validateLength minimum="4" maximum="30" />
-					<f:validator validatorId="passwordStrengthValidator" />
-					<f:attribute name="password" value="#{password.value}" />
-				</p:inputText>
+					<p:outputLabel value="Confirm Password:" for="passwordConfirm" />
+					<p:inputText id="passwordConfirm" label="Confirm Password"
+						required="true">
+						<f:validateLength minimum="4" maximum="30" />
+						<f:validator validatorId="passwordStrengthValidator" />
+						<f:attribute name="password" value="#{password.value}" />
+					</p:inputText>
 
-				<!--  h:captcha label="Captcha" language="tr" theme="white" / -->
-
-				<h:panelGroup></h:panelGroup>
-
-				<p:commandButton action="#{createAccountMBean.createAccount()}"
-					value="Create..." />
-			</p:panelGrid>
-		</h:form>
+					<p:commandButton action="#{createAccountMBean.createAccount()}"
+						value="Create..." />
+				</p:panelGrid>
+			</h:form>
+		</p:panel>
 	</cc:implementation>
 </ui:composition>

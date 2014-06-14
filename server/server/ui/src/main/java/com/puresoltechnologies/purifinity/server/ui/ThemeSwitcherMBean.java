@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.common.ui;
+package com.puresoltechnologies.purifinity.server.ui;
 
 import java.util.List;
 

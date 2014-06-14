@@ -7,37 +7,29 @@
 	</cc:interface>
 	<cc:implementation>
 		<h:outputStylesheet library="css" name="login.css" />
-		<h:panelGroup rendered="#{!loginMBean.isLoggedIn()}">
-			<h1>
-				<h:outputText value="#{loginMBean.loginToExistingAccountTranslated}" />
-			</h1>
+		<p:panel rendered="#{!loginMBean.isLoggedIn()}"
+			header="#{loginMBean.loginToExistingAccountTranslated}">
 			<h:form>
-				<p>
+				<p:panelGrid columns="2">
 					<p:outputLabel for="usernameInput"
 						value="#{loginMBean.emailTranslated}" />
 					<p:inputText id="usernameInput" value="#{loginMBean.username}"
 						require="true" />
-				</p>
-				<p>
 					<p:outputLabel for="passwordInput"
 						value="#{loginMBean.passwordTranslated}" />
 					<p:password id="passwordInput" value="#{loginMBean.password}"
 						required="true" />
-				</p>
-				<p>
-					<p:commandButton value="#{loginMBean.loginTranslated}"
-						action="#{loginMBean.login}" />
-				</p>
+				</p:panelGrid>
+				<p:commandButton value="#{loginMBean.loginTranslated}"
+					action="#{loginMBean.login}" />
 			</h:form>
-		</h:panelGroup>
-		<h:panelGroup rendered="#{loginMBean.isLoggedIn()}">
-			<h1>
-				<h:outputText value="#{loginMBean.logoutTranslated}" />
-			</h1>
-			<h:form>
-				<p:commandButton value="#{loginMBean.logoutTranslated}"
-					action="#{loginMBean.logout}" />
-			</h:form>
-		</h:panelGroup>
+			</p:panel>
+			<p:panel rendered="#{loginMBean.isLoggedIn()}"
+				header="#{loginMBean.logoutTranslated}">
+				<h:form>
+					<p:commandButton value="#{loginMBean.logoutTranslated}"
+						action="#{loginMBean.logout}" />
+				</h:form>
+			</p:panel>
 	</cc:implementation>
 </ui:composition>

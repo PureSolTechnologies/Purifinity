@@ -6,8 +6,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
 
 /**
  * This managed bean is used for two main reasons:
@@ -21,6 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 @ManagedBean
 @RequestScoped
 public class LoginMBean {
+
+	@Inject
+	private Logger logger;
 
 	private String username;
 	private String password;
@@ -51,12 +57,18 @@ public class LoginMBean {
 		try {
 			HttpServletRequest request = (HttpServletRequest) context
 					.getExternalContext().getRequest();
-			request.login(this.username, this.password);
+			request.login(username, password);
+			logger.info("User '" + username + "' was successfully logged in.");
+			return "";
 		} catch (ServletException e) {
-			context.addMessage(null, new FacesMessage("Login failed."));
+			context.addMessage(
+					null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR,
+							"Login failed.",
+							"Provided user name and password do not match any account."));
+			logger.error("User '" + username + "' couldn not be logged in.", e);
 			return "";
 		}
-		return "";
 	}
 
 	public void logout() {

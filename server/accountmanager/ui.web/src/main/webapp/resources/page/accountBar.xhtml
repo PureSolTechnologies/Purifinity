@@ -7,32 +7,25 @@
 	</cc:interface>
 	<cc:implementation>
 		<h:outputStylesheet library="css" name="accountBar.css" />
-		<div class="barContainer">
-			<h:form styleClass="accountBar">
-				<h:panelGroup rendered="#{!loginMBean.isLoggedIn()}">
-					<h:outputText value="Welcome! Please login."
-						style="font-weight:bold" />
-				</h:panelGroup>
-				<h:panelGroup rendered="#{loginMBean.isLoggedIn()}">
-					<h:outputText value="#{accountBarMBean.helloMessage}"
-						style="font-weight:bold" />
-				</h:panelGroup>
+		<h:form styleClass="accountBar">
+			<h:outputText rendered="#{!loginMBean.isLoggedIn()}"
+				value="Welcome! Please login." style="font-weight:bold" />
+			<h:outputText rendered="#{loginMBean.isLoggedIn()}"
+				value="#{accountBarMBean.helloMessage}" style="font-weight:bold" />
 
-				<h:panelGroup rendered="#{!loginMBean.isLoggedIn()}">
-					<p:button styleClass="accountBar" outcome="/login_by_user"
-						value="login" /> |
-					<p:button styleClass="accountBar" outcome="/create_account"
-						value="create account" />
-				</h:panelGroup>
-
-				<h:panelGroup rendered="#{loginMBean.isLoggedIn()}">
-					<p:link styleClass="accountBar" outcome="/account/configuration"
-						value="my account" /> | 
-					<p:commandButton styleClass="accountBar"
-						value="Logout"
-						actionListener="#{loginMBean.logout}" />
-				</h:panelGroup>
-			</h:form>
-		</div>
+			<p:button rendered="#{!loginMBean.isLoggedIn()}"
+				styleClass="accountBar" outcome="/login_by_user" value="login" />
+			<p:button rendered="#{loginMBean.isLoggedIn()}"
+				styleClass="accountBar" outcome="/account/configuration"
+				value="my account" />
+			<p:button rendered="#{!loginMBean.isLoggedIn()}"
+				styleClass="accountBar" outcome="/create_account"
+				value="create account" />
+			<p:button rendered="#{!loginMBean.isLoggedIn()}"
+				styleClass="accountBar" outcome="/activate_account" value="activate" />
+			<p:commandButton rendered="#{loginMBean.isLoggedIn()}"
+				styleClass="accountBar" value="Logout"
+				actionListener="#{loginMBean.logout}" />
+		</h:form>
 	</cc:implementation>
 </ui:composition>

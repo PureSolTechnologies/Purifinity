@@ -16,47 +16,13 @@
 	<h:outputStylesheet library="css" name="page.css" />
 	<div class="page">
 		<div class="pageTop">
-			<h:form id="menuForm">
-				<p:menubar>
-					<p:menuitem value="Overview" outcome="/overview" />
-					<p:menuitem value="Dashboards" outcome="/dashboards" />
-					<p:menuitem value="Projects" outcome="/projects" />
-					<p:submenu label="System">
-						<p:menuitem value="Information" outcome="/system/information" />
-						<p:menuitem value="Installed Plugins"
-							outcome="/system/installed_plugins" />
-					</p:submenu>
-					<p:submenu label="Settings">
-						<p:menuitem value="Projects" outcome="/settings/projects" />
-						<p:menuitem value="Dashboards" outcome="/settings/dashboards" />
-						<p:separator />
-						<p:menuitem value="Defaults" outcome="/settings/defaults" />
-						<p:menuitem value="Users" outcome="/settings/users" />
-						<p:submenu label="Plugins">
-							<p:submenu label="Analyzers">
-							</p:submenu>
-							<p:submenu label="Evaluators">
-							</p:submenu>
-						</p:submenu>
-						<p:menuitem value="System" outcome="/settings/system" />
-						<p:menuitem value="Server" outcome="/settings/server" />
-					</p:submenu>
-					<f:facet name="options">
-						<page:accountBar />
-						<p:themeSwitcher id="themeSwitcher" style="width:165px"
-							effect="fade" value="#{themeSwitcherMBean.themeName}" var="t">
-							<f:selectItem itemLabel="Choose Theme" itemValue="" />
-							<f:selectItems value="#{themeSwitcherMBean.themes}" var="theme"
-								itemLabel="${theme.displayName}" itemValue="#{theme.name}" />
-							<p:ajax listener="#{themeSwitcherMBean.save}" />
-						</p:themeSwitcher>
-					</f:facet>
-				</p:menubar>
-			</h:form>
+			<ui:insert name="page_top" />
 		</div>
-		<p:messages />
+		<div class="pageMenu">
+			<ui:insert name="page_menu" />
+		</div>
 		<div class="pageContainer">
-			<ui:insert name="page_content">Page Content</ui:insert>
+			<ui:insert name="page_content" />
 		</div>
 		<page:footer />
 	</div>

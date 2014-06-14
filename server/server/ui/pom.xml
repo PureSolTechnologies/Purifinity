@@ -35,6 +35,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>passwordstore.domain</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>passwordstore.ui.web</artifactId>
 			<type>war</type>
 		</dependency>
