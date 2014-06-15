@@ -58,20 +58,47 @@
 	</error-page>
 
 	<!-- Security -->
-	<!-- security-constraint> <display-name>Constraint</display-name> <web-resource-collection> 
-		<web-resource-name>account</web-resource-name> <description /> <url-pattern>/account/*</url-pattern> 
-		</web-resource-collection> <auth-constraint> <description /> <role-name>User</role-name> 
-		</auth-constraint> <user-data-constraint> <transport-guarantee>CONFIDENTIAL</transport-guarantee> 
-		</user-data-constraint> </security-constraint> <security-constraint> <display-name>Constraint</display-name> 
-		<web-resource-collection> <web-resource-name>login</web-resource-name> <description 
-		/> <url-pattern>/login.jsf</url-pattern> </web-resource-collection> <web-resource-collection> 
-		<web-resource-name>login_by_user</web-resource-name> <description /> <url-pattern>/login_by_user.jsf</url-pattern> 
-		</web-resource-collection> <web-resource-collection> <web-resource-name>create_account</web-resource-name> 
-		<description /> <url-pattern>/create_account.jsf</url-pattern> </web-resource-collection> 
-		<web-resource-collection> <web-resource-name>activate_account</web-resource-name> 
-		<description /> <url-pattern>/activate_account.jsf</url-pattern> </web-resource-collection> 
-		<user-data-constraint> <transport-guarantee>CONFIDENTIAL</transport-guarantee> 
-		</user-data-constraint> </security-constraint -->
+	<security-constraint>
+		<display-name>Constraint</display-name>
+		<web-resource-collection>
+			<web-resource-name>account</web-resource-name>
+			<description />
+			<url-pattern>/account/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<description />
+			<role-name>User</role-name>
+		</auth-constraint>
+		<!-- user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint -->
+	</security-constraint>
+	<security-constraint>
+		<display-name>Constraint</display-name>
+		<web-resource-collection>
+			<web-resource-name>login</web-resource-name>
+			<description />
+			<url-pattern>/login.jsf</url-pattern>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>login_by_user</web-resource-name>
+			<description />
+			<url-pattern>/login_by_user.jsf</url-pattern>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>create_account</web-resource-name>
+			<description />
+			<url-pattern>/create_account.jsf</url-pattern>
+		</web-resource-collection>
+		<web-resource-collection>
+			<web-resource-name>activate_account</web-resource-name>
+			<description />
+			<url-pattern>/activate_account.jsf</url-pattern>
+		</web-resource-collection>
+		<!-- user-data-constraint>
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+		</user-data-constraint -->
+	</security-constraint>
 
 	<login-config>
 		<auth-method>FORM</auth-method>

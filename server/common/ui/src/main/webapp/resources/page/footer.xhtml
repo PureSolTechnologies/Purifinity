@@ -8,14 +8,15 @@
 	<cc:implementation>
 		<h:outputStylesheet library="css" name="footer.css" />
 		<div class="footer">
-			<h:outputLink value="http://Purifinity.com" target="purifinity">Purifinity</h:outputLink>
+			<p:link href="http://Purifinity.com" target="purifinity"
+				value="Purifinity" />
 			<h:outputLink value="http://www.puresol-technologies.com"
 				target="copyright">(c)
 				2012 <span class="companyNamePureSolPart">PureSol</span>
 				<span class="companyNameTechnologiesPart">Technologies</span>
-			</h:outputLink>
+				</h:outputLink>
 			|
-			<p:link outcome="/license" value="License" />
+			<p:link href="/license.jsf" value="License" />
 		</div>
 	</cc:implementation>
 </ui:composition>

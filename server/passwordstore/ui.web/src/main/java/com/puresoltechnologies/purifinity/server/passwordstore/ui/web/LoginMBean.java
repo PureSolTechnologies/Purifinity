@@ -4,7 +4,8 @@ import java.security.Principal;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -22,7 +23,7 @@ import org.slf4j.Logger;
  * @author Rick-Rainer Ludwig
  */
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class LoginMBean {
 
 	@Inject
@@ -66,7 +67,7 @@ public class LoginMBean {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR,
 							"Login failed.",
 							"Provided user name and password do not match any account."));
-			logger.error("User '" + username + "' couldn not be logged in.", e);
+			logger.error("User '" + username + "' could not be logged in.", e);
 			return "";
 		}
 	}
@@ -84,9 +85,8 @@ public class LoginMBean {
 
 	public boolean isLoggedIn() {
 		FacesContext context = FacesContext.getCurrentInstance();
-		HttpServletRequest request = (HttpServletRequest) context
-				.getExternalContext().getRequest();
-		Principal userPrincipal = request.getUserPrincipal();
+		ExternalContext externalContext = context.getExternalContext();
+		Principal userPrincipal = externalContext.getUserPrincipal();
 		return userPrincipal != null;
 	}
 

@@ -24,6 +24,15 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>accountmanager.login</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>accountmanager.ui.web</artifactId>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>server.core.impl</artifactId>
 			<type>ejb</type>
 		</dependency>
@@ -54,32 +63,37 @@
 		</dependency>
 	</dependencies>
 
-<build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-ear-plugin</artifactId>
-        <configuration>
-           <modules>
-             <webModule>
-               <groupId>com.puresoltechnologies.purifinity.server</groupId>
-               <artifactId>server.rest.impl</artifactId>
-               <contextRoot>/purifinityserver/rest</contextRoot>
-             </webModule>
-             <webModule>
-               <groupId>com.puresoltechnologies.purifinity.server</groupId>
-               <artifactId>server.socket.impl</artifactId>
-               <contextRoot>/purifinityserver/socket</contextRoot>
-             </webModule>
-             <webModule>
-               <groupId>com.puresoltechnologies.purifinity.server</groupId>
-               <artifactId>server.ui</artifactId>
-               <contextRoot>/</contextRoot>
-             </webModule>
-          </modules>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-  
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-ear-plugin</artifactId>
+				<configuration>
+					<modules>
+						<webModule>
+							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<artifactId>accountmanager.ui.web</artifactId>
+							<contextRoot>/account</contextRoot>
+						</webModule>
+						<webModule>
+							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<artifactId>server.rest.impl</artifactId>
+							<contextRoot>/purifinityserver/rest</contextRoot>
+						</webModule>
+						<webModule>
+							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<artifactId>server.socket.impl</artifactId>
+							<contextRoot>/purifinityserver/socket</contextRoot>
+						</webModule>
+						<webModule>
+							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<artifactId>server.ui</artifactId>
+							<contextRoot>/</contextRoot>
+						</webModule>
+					</modules>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>

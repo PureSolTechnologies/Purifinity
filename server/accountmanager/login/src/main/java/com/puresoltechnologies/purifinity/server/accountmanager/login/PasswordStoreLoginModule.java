@@ -29,6 +29,10 @@ import com.puresoltechnologies.purifinity.server.passwordstore.client.RolesGroup
  * 
  * Have a look to:
  * 
+ * http://www.radcortez.com/custom-principal-and-loginmodule-for-wildfly/
+ * 
+ * Additionally, these posts were helpful:
+ * 
  * http://
  * docs.jboss.org/jbosssecurity/docs/6.0/security_guide/html/Login_Modules.html
  * 
@@ -53,8 +57,7 @@ public class PasswordStoreLoginModule implements LoginModule {
 	private Map<String, ?> options = null;
 	private boolean loggedIn = false;
 
-	private final NamePrincipal shopUserPrincipal = new NamePrincipal(
-			"ShopUser");
+	private final NamePrincipal userPrincipal = new NamePrincipal("User");
 	private final RolesGroup rolesGroup = new RolesGroup();
 	private final CallerPrincipalGroup callerPrincipalGroup = new CallerPrincipalGroup();
 	private AccountManagerPrincipalImpl userNamePrincipal;
@@ -102,15 +105,15 @@ public class PasswordStoreLoginModule implements LoginModule {
 	public boolean commit() throws LoginException {
 		Set<Principal> principals = subject.getPrincipals();
 		if (loggedIn) {
-			principals.add(shopUserPrincipal);
+			principals.add(userPrincipal);
 			principals.add(rolesGroup);
-			rolesGroup.addMember(shopUserPrincipal);
+			rolesGroup.addMember(userPrincipal);
 			principals.add(callerPrincipalGroup);
 			callerPrincipalGroup.addMember(userNamePrincipal);
 		} else {
-			principals.remove(shopUserPrincipal);
+			principals.remove(userPrincipal);
 			principals.remove(rolesGroup);
-			rolesGroup.removeMember(shopUserPrincipal);
+			rolesGroup.removeMember(userPrincipal);
 			principals.remove(callerPrincipalGroup);
 			callerPrincipalGroup.removeMember(userNamePrincipal);
 		}
@@ -125,9 +128,9 @@ public class PasswordStoreLoginModule implements LoginModule {
 	@Override
 	public boolean logout() throws LoginException {
 		Set<Principal> principals = subject.getPrincipals();
-		principals.remove(shopUserPrincipal);
+		principals.remove(userPrincipal);
 		principals.remove(rolesGroup);
-		rolesGroup.removeMember(shopUserPrincipal);
+		rolesGroup.removeMember(userPrincipal);
 		principals.remove(callerPrincipalGroup);
 		callerPrincipalGroup.removeMember(userNamePrincipal);
 		return true;
