@@ -5,32 +5,12 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<ui:define name="page_content">
-		<p:panel header="Project Summary of #{projectsViewMBean.projectName}">
+		<p:panel header="Analysis Details of #{projectsViewMBean.projectName}">
 			<p:layout style="min-width:800px;min-height:600px;">
 				<p:layoutUnit position="west" resizable="true" size="100"
 					minSize="150" maxSize="400">
-					<h:form>
-						<p:accordionPanel multiple="true">
-							<p:tab title="Analysis">
-							</p:tab>
-							<p:tab title="Metrics">
-							</p:tab>
-							<p:tab title="Defects">
-							</p:tab>
-							<p:tab title="Style Issues">
-							</p:tab>
-						</p:accordionPanel>
-					</h:form>
 				</p:layoutUnit>
 				<p:layoutUnit position="center">
-					<p:panel>
-						<div>Project information view</div>
-						<div style="width: 200px; height: 200px">
-							<svg height="200" width="200">
-								<circle r="50" />
-							</svg>
-						</div>
-					</p:panel>
 				</p:layoutUnit>
 			</p:layout>
 		</p:panel>

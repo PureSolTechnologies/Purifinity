@@ -12,9 +12,17 @@
 	<ui:define name="page_menu">
 		<h:form id="menuForm">
 			<p:menubar>
-				<p:menuitem value="Home" outcome="/overview" />
+				<p:menuitem value="Home" outcome="/index" />
 				<p:menuitem value="Summary"
 					outcome="summary?project=#{param['project']}" />
+				<p:menuitem value="Analysis"
+					outcome="analysis?project=#{param['project']}" />
+				<p:menuitem value="Metrics"
+					outcome="metrics?project=#{param['project']}" />
+				<p:menuitem value="Defects"
+					outcome="defects?project=#{param['project']}" />
+				<p:menuitem value="Style Issues"
+					outcome="style_issues?project=#{param['project']}" />
 				<f:facet name="options">
 					<page:accountBar />
 					<p:themeSwitcher id="themeSwitcher" style="width:165px"
