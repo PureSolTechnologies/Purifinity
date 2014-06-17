@@ -26,6 +26,15 @@ public class DriftArrowRenderer extends Renderer {
 	responseWriter.writeAttribute("width", "2em", "width");
 	responseWriter.writeAttribute("viewBox", "0 0 100 100", null);
 
+	responseWriter.startElement("circle", component);
+	responseWriter.writeAttribute("cx", "50", null);
+	responseWriter.writeAttribute("cy", "50", null);
+	responseWriter.writeAttribute("r", "50", null);
+	responseWriter.writeAttribute("stroke", "black", null);
+	responseWriter.writeAttribute("fill", "lightgray", null);
+	responseWriter.writeAttribute("stroke-width", "1", null);
+	responseWriter.endElement("circle");
+
 	responseWriter.startElement("g", component);
 	responseWriter.writeAttribute("transform", "rotate(" + deg + ",50,50)",
 		"degree");
