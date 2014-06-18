@@ -26,9 +26,14 @@
 				<p:layoutUnit position="center">
 					<p:panel>
 						<div>Project information view</div>
-						<div style="width: 200px; height: 200px">
-							<pst:driftArrow deg="15" />
-						</div>
+						<p:panelGrid columns="2">
+							<h:outputText value="criterion 1" />
+							<pst:driftArrow deg="-25" color="red" />
+							<h:outputText value="criterion 2" />
+							<pst:driftArrow deg="0" color="yellow" />
+							<h:outputText value="criterion 3" />
+							<pst:driftArrow deg="50" color="lightgreen" />
+						</p:panelGrid>
 					</p:panel>
 				</p:layoutUnit>
 			</p:layout>

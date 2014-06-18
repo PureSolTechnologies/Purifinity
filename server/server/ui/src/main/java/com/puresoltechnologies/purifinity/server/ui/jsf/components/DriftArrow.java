@@ -11,7 +11,7 @@ public class DriftArrow extends UIOutput {
     public static final String RENDERER_TYPE = COMPONENT_TYPE;
 
     enum PropertyKeys {
-	deg
+	DEG, COLOR
     }
 
     public DriftArrow() {
@@ -29,11 +29,19 @@ public class DriftArrow extends UIOutput {
     }
 
     public int getDeg() {
-	return (Integer) getStateHelper().eval(PropertyKeys.deg, 0);
+	return (Integer) getStateHelper().eval(PropertyKeys.DEG, 0);
     }
 
     public void setDeg(int deg) {
-	getStateHelper().put(PropertyKeys.deg, deg);
+	getStateHelper().put(PropertyKeys.DEG, deg);
+    }
+
+    public String getColor() {
+	return (String) getStateHelper().eval(PropertyKeys.COLOR, "#ffffff");
+    }
+
+    public void setColor(String color) {
+	getStateHelper().put(PropertyKeys.COLOR, color);
     }
 
 }

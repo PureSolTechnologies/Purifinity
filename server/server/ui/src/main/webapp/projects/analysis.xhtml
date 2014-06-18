@@ -6,13 +6,35 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<ui:define name="page_content">
 		<p:panel header="Analysis Details of #{projectsViewMBean.projectName}">
-			<p:layout style="min-width:800px;min-height:600px;">
-				<p:layoutUnit position="west" resizable="true" size="100"
-					minSize="150" maxSize="400">
-				</p:layoutUnit>
-				<p:layoutUnit position="center">
-				</p:layoutUnit>
-			</p:layout>
+			<p:tabView>
+				<p:tab title="Analysis Content">
+					<p:treeTable var="fsElement"
+						value="#{analysisContentTreeTableMBean.root}">
+						<p:column headerText="Filesystem">
+							<h:outputText value="#{fsElement.name}" />
+						</p:column>
+					</p:treeTable>
+				</p:tab>
+				<p:tab title="Project Content">
+					<p:layout style="min-width:800px;min-height:600px;">
+						<p:layoutUnit position="west" resizable="true" size="100"
+							minSize="150" maxSize="400">
+						</p:layoutUnit>
+						<p:layoutUnit position="center">
+						</p:layoutUnit>
+					</p:layout>
+				</p:tab>
+				<p:tab title="Analyzed Files">
+					<p:dataTable></p:dataTable>
+				</p:tab>
+				<p:tab title="Failed Files">
+					<p:dataTable></p:dataTable>
+				</p:tab>
+			</p:tabView>
+			<h:form>
+				<p:commandButton value="New analysis..."
+					action="#{projectsAnalysisViewMBean.triggerNewAnalysis(projectsViewMBean.projectUUID)}" />
+			</h:form>
 		</p:panel>
 	</ui:define>
 </ui:composition>

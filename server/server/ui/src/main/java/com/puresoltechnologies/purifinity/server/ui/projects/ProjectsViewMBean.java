@@ -18,23 +18,32 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreExcep
 @ManagedBean
 public class ProjectsViewMBean {
 
-	@Inject
-	private AnalysisStore analysisStore;
+    @Inject
+    private AnalysisStore analysisStore;
 
-	private AnalysisProject project;
+    private UUID projectUUID;
+    private AnalysisProject project;
 
-	@PostConstruct
-	public void construct() throws AnalysisStoreException {
-		ExternalContext externalContext = FacesContext.getCurrentInstance()
-				.getExternalContext();
-		Map<String, String> requestParameterMap = externalContext
-				.getRequestParameterMap();
-		String projectUUID = requestParameterMap.get("project");
-		project = analysisStore.readAnalysisProject(UUID
-				.fromString(projectUUID));
+    @PostConstruct
+    public void construct() throws AnalysisStoreException {
+	ExternalContext externalContext = FacesContext.getCurrentInstance()
+		.getExternalContext();
+	Map<String, String> requestParameterMap = externalContext
+		.getRequestParameterMap();
+	String projectUUIDString = requestParameterMap.get("project");
+	if (projectUUIDString == null) {
+	    throw new IllegalStateException(
+		    "URL has to have a project parameter containing the project UUID.");
 	}
+	projectUUID = UUID.fromString(projectUUIDString);
+	project = analysisStore.readAnalysisProject(projectUUID);
+    }
 
-	public String getProjectName() {
-		return project.getSettings().getName();
-	}
+    public UUID getProjectUUID() {
+	return project.getInformation().getUUID();
+    }
+
+    public String getProjectName() {
+	return project.getSettings().getName();
+    }
 }
