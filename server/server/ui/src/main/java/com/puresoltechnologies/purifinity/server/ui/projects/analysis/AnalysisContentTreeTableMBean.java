@@ -59,7 +59,8 @@ public class AnalysisContentTreeTableMBean {
 		if (runUUID != null) {
 		    AnalysisFileTree analysisFileTree = analysisStore
 			    .readAnalysisFileTree(projectUUID, runUUID);
-		    fileTree = new DefaultTreeNode(analysisFileTree);
+		    fileTree = new DefaultTreeNode(
+			    new AnalysisContentTreeNodeObject(analysisFileTree));
 		    addChildren(fileTree, analysisFileTree);
 		} else {
 		    fileTree = new DefaultTreeNode();
@@ -77,7 +78,8 @@ public class AnalysisContentTreeTableMBean {
 	for (AnalysisFileTree analysisFileTreeNode : analysisFileTree
 		.getChildren()) {
 	    DefaultTreeNode newTreeNode = new DefaultTreeNode(
-		    analysisFileTreeNode, fileTree);
+		    new AnalysisContentTreeNodeObject(analysisFileTreeNode),
+		    fileTree);
 	    addChildren(newTreeNode, analysisFileTreeNode);
 	}
     }

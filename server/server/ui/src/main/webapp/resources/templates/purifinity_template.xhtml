@@ -6,10 +6,6 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:page="http://xmlns.jcp.org/jsf/composite/page">
-	<ui:define name="page_top">
-		<p:growl id="messages" sticky="false" life="5000" showSummary="true"
-			showDetail="true" globalOnly="false" redisplay="true"/>
-	</ui:define>
 	<ui:define name="page_menu">
 		<h:form id="menuForm">
 			<p:menubar>
@@ -42,7 +38,6 @@
 					<p:menuitem value="Server" outcome="/settings/server" />
 				</p:submenu>
 				<f:facet name="options">
-					<page:accountBar />
 					<p:themeSwitcher id="themeSwitcher" style="width:165px"
 						effect="fade" value="#{themeSwitcherMBean.themeName}" var="t">
 						<f:selectItem itemLabel="Choose Theme" itemValue="" />

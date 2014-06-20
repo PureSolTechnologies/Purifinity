@@ -1,8 +1,18 @@
+.pageTop {
+	font-size: 8pt;
+	font-weight: normal;
+}
+
 div.pageTop {
-	background-color: #303030;
+	background-color: black;
 	color: white;
 	width: 100%;
 	text-shadow: gray 2px 2px 5px;
+}
+
+span.pageTop {
+	font-size: 12pt;
+	font-weight: bold;
 }
 
 a.pageTop {
@@ -14,4 +24,8 @@ div.pageContainer {
 	background-color: white;
 	color: black;
 	overflow: auto;
+}
+
+.pageTop {
+	vertical-align: middle;
 }
