@@ -18,6 +18,7 @@ import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.buschmais.xo.api.XOManager;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
@@ -40,6 +41,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.TitanXOUnit;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
@@ -99,6 +101,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 
     @Inject
     private TitanGraph graph;
+
+    @Inject
+    @TitanXOUnit
+    private XOManager xoManager;
 
     @Override
     public AnalysisProjectInformation createAnalysisProject(

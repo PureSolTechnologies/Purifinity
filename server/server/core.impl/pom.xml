@@ -51,7 +51,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
- 			<artifactId>server.preferences</artifactId>
+			<artifactId>server.preferences</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -60,6 +60,10 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>wildfly.utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.xo</groupId>
+			<artifactId>xo-titan</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>
