@@ -4,29 +4,20 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:c="http://java.sun.com/jstl/core"
-	xmlns:page="http://xmlns.jcp.org/jsf/composite/page">
+	xmlns:c="http://java.sun.com/jstl/core">
 	<ui:define name="page_top">
 		<h:outputStylesheet library="css" name="project_template.css" />
 		<div class="projectsNavigation">
 			<h:form>
 				<p:button styleClass="projectsNavigation" value="Home"
 					outcome="/index" />
-				<p:outputLabel styleClass="projectsNavigation" value="Project:"
-					for="projectSelector" />
-				<p:selectOneMenu styleClass="projectsNavigation"
-					id="projectSelector" value="#{projectsViewMBean.projectUUID}">
-					<f:selectItems value="#{projectsViewMBean.projects}" var="project"
-						itemLabel="#{project.settings.name}"
-						itemValue="#{project.information.UUID}" />
-				</p:selectOneMenu>
-				<p:outputLabel styleClass="projectsNavigation" value="Run:"
-					for="runSelector" />
-				<p:selectOneMenu styleClass="projectsNavigation" id="runSelector">
-					<f:selectItems styleClass="projectsNavigation"
-						value="#{projectsViewMBean.runs}" var="run"
-						itemLabel="#{run.startTime}" itemValue="#{run.runUUID}" />
-				</p:selectOneMenu>
+				<h:outputText styleClass="projectsNavigation" value="Project:" />
+				<h:outputText id="projectName"
+					styleClass="projectsNavigation projectName"
+					value="${projectsViewMBean.projectName}" />
+				<h:outputText styleClass="projectsNavigation" value="Run:" />
+				<h:outputText id="runName" styleClass="projectsNavigation runName"
+					value="${projectsViewMBean.runName}" />
 			</h:form>
 		</div>
 	</ui:define>
@@ -34,9 +25,9 @@
 		<h:form id="menuForm">
 			<p:menubar>
 				<p:menuitem value="Summary"
-					outcome="summary?project=#{param['project']}" />
+					outcome="index?project=#{param['project']}" />
 				<p:menuitem value="Trends"
-					outcome="summary?project=#{param['project']}" />
+					outcome="trends?project=#{param['project']}" />
 				<p:menuitem value="Analysis"
 					outcome="analysis?project=#{param['project']}" />
 				<p:menuitem value="Metrics"

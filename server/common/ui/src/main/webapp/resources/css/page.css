@@ -21,8 +21,6 @@ a.pageTop {
 }
 
 div.pageContainer {
-	background-color: white;
-	color: black;
 	overflow: auto;
 }
 

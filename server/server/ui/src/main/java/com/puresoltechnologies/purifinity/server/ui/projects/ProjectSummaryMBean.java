@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.ui.projects;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -21,17 +20,15 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreExcep
 
 @ViewScoped
 @ManagedBean
-public class ProjectsViewMBean {
+public class ProjectSummaryMBean {
 
     @Inject
     private AnalysisStore analysisStore;
 
-    private List<AnalysisProject> projects = new ArrayList<>();
-    private List<AnalysisRunInformation> runs;
     private UUID projectUUID;
-    private UUID runUUID;
+    private List<AnalysisRunInformation> runs;
     private AnalysisProject project;
-    private AnalysisRun run;
+    private AnalysisRun lastRun;
 
     @PostConstruct
     public void construct() {
@@ -48,56 +45,30 @@ public class ProjectsViewMBean {
 	    projectUUID = UUID.fromString(projectUUIDString);
 	    project = analysisStore.readAnalysisProject(projectUUID);
 
-	    String runUUIDString = requestParameterMap.get("run");
-	    if (runUUIDString == null) {
-		AnalysisRunInformation analysisRunInformation = analysisStore
-			.readLastAnalysisRun(projectUUID);
-		runUUID = analysisRunInformation.getRunUUID();
-		run = analysisStore.readAnalysisRun(analysisRunInformation);
-	    } else {
-		runUUID = UUID.fromString(runUUIDString);
-		AnalysisRunInformation analysisRunInformation = analysisStore
-			.readAnalysisRunInformation(projectUUID, runUUID);
-		run = analysisStore.readAnalysisRun(analysisRunInformation);
-	    }
+	    AnalysisRunInformation lastRunInformation = analysisStore
+		    .readLastAnalysisRun(projectUUID);
+	    lastRun = analysisStore.readAnalysisRun(lastRunInformation);
 
-	    projects = analysisStore.readAllAnalysisProjects();
 	    runs = analysisStore.readAllRunInformation(projectUUID);
 	} catch (AnalysisStoreException e) {
 	    throw new RuntimeException(e);
 	}
     }
 
-    public List<AnalysisProject> getProjects() {
-	return projects;
-    }
-
     public List<AnalysisRunInformation> getRuns() {
 	return runs;
     }
 
-    public String getProjectUUID() {
-	return project.getInformation().getUUID().toString();
-    }
-
-    public void setProjectUUID(String uuid) {
-	projectUUID = UUID.fromString(uuid);
-    }
-
-    public String getRunUUID() {
-	return runUUID.toString();
-    }
-
-    public void setRunUUID(String runUUID) {
-	this.runUUID = UUID.fromString(runUUID);
-    }
-
-    public String getProjectName() {
+    public String getName() {
 	return project.getSettings().getName();
     }
 
-    public String getRunName() {
+    public String getDescription() {
+	return project.getSettings().getDescription();
+    }
+
+    public String getLastRunDate() {
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-	return format.format(run.getInformation().getStartTime());
+	return format.format(lastRun.getInformation().getStartTime());
     }
 }

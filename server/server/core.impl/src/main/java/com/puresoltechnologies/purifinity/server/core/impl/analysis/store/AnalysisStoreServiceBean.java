@@ -381,7 +381,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	AnalysisRunInformation lastRun = null;
 	for (AnalysisRunInformation runInformation : allRunInformation) {
 	    if ((lastRun == null)
-		    || (runInformation.getStartTime().compareTo(time) < 0)) {
+		    || (runInformation.getStartTime().compareTo(time) > 0)) {
 		lastRun = runInformation;
 		time = runInformation.getStartTime();
 	    }
