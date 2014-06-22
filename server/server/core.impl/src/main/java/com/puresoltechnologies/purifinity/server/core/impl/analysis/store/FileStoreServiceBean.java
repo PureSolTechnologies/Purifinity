@@ -138,7 +138,7 @@ public final class FileStoreServiceBean implements FileStoreService {
 			session,
 			"INSERT INTO "
 				+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
-				+ " (time, hashid, analyzer, analyzer_version, analyzer_message, successful, analysis) VALUES (?, ?, ?, ?, ?, ?, ?)");
+				+ " (time, hashid, analyzer, analyzer_version, analyzer_message, successful, duration, analysis) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 	AnalysisInformation analysisInformation = fileAnalysis
 		.getAnalysisInformation();
 	BoundStatement boundStatement = preparedStatement.bind(
@@ -146,7 +146,7 @@ public final class FileStoreServiceBean implements FileStoreService {
 		analysisInformation.getLanguageName(), analysisInformation
 			.getLanguageVersion().toString(), analysisInformation
 			.getAnalyzerErrorMessage(), analysisInformation
-			.isSuccessful());
+			.isSuccessful(), analysisInformation.getDuration());
 	try {
 	    try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 		try (ObjectOutputStream outStream = new ObjectOutputStream(

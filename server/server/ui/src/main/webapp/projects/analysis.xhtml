@@ -9,9 +9,27 @@
 			<p:tabView>
 				<p:tab title="Analysis Content">
 					<p:treeTable var="fsElement"
-						value="#{analysisContentTreeTableMBean.root}">
-						<p:column headerText="Filesystem">
+						value="#{analysisContentTreeTableMBean.root}"
+						resizableColumns="true" liveResize="true" selectionMode="single">
+						<p:column headerText="Name">
 							<h:outputText value="#{fsElement.name}" />
+						</p:column>
+						<p:column headerText="Type">
+							<h:outputText value="#{fsElement.type}" />
+						</p:column>
+						<p:column headerText="Size">
+							<h:outputText value="#{fsElement.size}" />
+							<h:outputText value="(recursive #{fsElement.sizeRecursive})"
+								rendered="#{fsElement.type.equalsIgnoreCase('directory')}" />
+						</p:column>
+						<p:column headerText="Analyzes">
+							<h:outputText value="#{fsElement.analysisCount}" />
+						</p:column>
+						<p:column headerText="Analyzers">
+							<h:outputText value="#{fsElement.analysisLanguages}" />
+						</p:column>
+						<p:column headerText="Source Location">
+							<h:outputText value="#{fsElement.sourceLocation}" />
 						</p:column>
 					</p:treeTable>
 				</p:tab>
