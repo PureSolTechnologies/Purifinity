@@ -52,8 +52,10 @@ public class ProjectsViewMBean {
 	    if (runUUIDString == null) {
 		AnalysisRunInformation analysisRunInformation = analysisStore
 			.readLastAnalysisRun(projectUUID);
-		runUUID = analysisRunInformation.getRunUUID();
-		run = analysisStore.readAnalysisRun(analysisRunInformation);
+		if (analysisRunInformation != null) {
+		    runUUID = analysisRunInformation.getRunUUID();
+		    run = analysisStore.readAnalysisRun(analysisRunInformation);
+		}
 	    } else {
 		runUUID = UUID.fromString(runUUIDString);
 		AnalysisRunInformation analysisRunInformation = analysisStore
@@ -97,6 +99,9 @@ public class ProjectsViewMBean {
     }
 
     public String getRunName() {
+	if (run == null) {
+	    return "";
+	}
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	return format.format(run.getInformation().getStartTime());
     }

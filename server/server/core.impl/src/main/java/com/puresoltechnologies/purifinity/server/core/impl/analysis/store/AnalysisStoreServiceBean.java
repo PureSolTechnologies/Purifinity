@@ -41,16 +41,17 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.TitanXOUnit;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
-import com.puresoltechnologies.purifinity.server.database.titan.VertexType;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSeverity;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventType;
+import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.tinkerpop.blueprints.Direction;
 import com.tinkerpop.blueprints.Edge;
@@ -121,14 +122,12 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     }
 
     private void createAnalysisProjectVertex(UUID projectUUID, Date creationTime) {
-	Vertex vertex = graph.addVertex(null);
-	vertex.setProperty(TitanElementNames.VERTEX_TYPE,
-		VertexType.ANALYSIS_PROJECT.name());
-	vertex.setProperty(TitanElementNames.ANALYSIS_PROJECT_UUID_PROPERTY,
-		projectUUID.toString());
-	vertex.setProperty(TitanElementNames.CREATION_TIME_PROPERTY,
-		creationTime);
-	graph.commit();
+	xoManager.currentTransaction().begin();
+	AnalysisProjectVertex analysisProject = xoManager
+		.create(AnalysisProjectVertex.class);
+	analysisProject.setProjectUUID(projectUUID.toString());
+	analysisProject.setCreationTime(creationTime);
+	xoManager.currentTransaction().commit();
     }
 
     private void storeProjectAnalysisSettings(UUID projectUUID,
@@ -166,8 +165,8 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	try {
 	    Iterable<Vertex> vertices = graph
 		    .query()
-		    .has(TitanElementNames.VERTEX_TYPE,
-			    VertexType.ANALYSIS_PROJECT.name()).vertices();
+		    .has(TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+			    + AnalysisProjectVertex.NAME).vertices();
 	    Iterator<Vertex> vertexIterator = vertices.iterator();
 	    while (vertexIterator.hasNext()) {
 		Vertex vertex = vertexIterator.next();

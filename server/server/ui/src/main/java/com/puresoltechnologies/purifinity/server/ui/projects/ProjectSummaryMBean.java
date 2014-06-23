@@ -47,8 +47,9 @@ public class ProjectSummaryMBean {
 
 	    AnalysisRunInformation lastRunInformation = analysisStore
 		    .readLastAnalysisRun(projectUUID);
-	    lastRun = analysisStore.readAnalysisRun(lastRunInformation);
-
+	    if (lastRunInformation != null) {
+		lastRun = analysisStore.readAnalysisRun(lastRunInformation);
+	    }
 	    runs = analysisStore.readAllRunInformation(projectUUID);
 	} catch (AnalysisStoreException e) {
 	    throw new RuntimeException(e);
@@ -68,6 +69,9 @@ public class ProjectSummaryMBean {
     }
 
     public String getLastRunDate() {
+	if (lastRun == null) {
+	    return "";
+	}
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	return format.format(lastRun.getInformation().getStartTime());
     }

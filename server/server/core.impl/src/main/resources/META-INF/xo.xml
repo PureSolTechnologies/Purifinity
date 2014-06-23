@@ -5,7 +5,7 @@
 		<url>titan-cassandra://localhost:9160/titan</url>
 		<provider><![CDATA[com.puresoltechnologies.xo.titan.api.TitanXOProvider]]></provider>
 		<types>
-			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ProjectVertex]]></type>
+			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex]]></type>
 		</types>
 	</xo-unit>
 </v1:xo>
