@@ -45,7 +45,9 @@ public class AnalysisContentTreeTableMBean {
 	    projectUUID = UUID.fromString(projectUUIDString);
 	    analysisProject = analysisStore.readAnalysisProject(projectUUID);
 	    analysisRun = analysisStore.readLastAnalysisRun(projectUUID);
-	    runUUID = analysisRun.getRunUUID();
+	    if (analysisRun != null) {
+		runUUID = analysisRun.getRunUUID();
+	    }
 	} catch (AnalysisStoreException e) {
 	    throw new RuntimeException(
 		    "Could not read analysis project or analysis run information.",

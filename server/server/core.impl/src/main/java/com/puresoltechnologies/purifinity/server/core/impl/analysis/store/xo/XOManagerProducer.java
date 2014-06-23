@@ -34,16 +34,16 @@ public class XOManagerProducer {
     @Produces
     @TitanXOUnit
     public XOManager produceXOManager() {
-	logger.info("Creating XOManager for Titan...");
+	logger.debug("Creating XOManager for Titan...");
 	XOManager xoManager = xoManagerFactory.createXOManager();
-	logger.info("XOManager for Titan created.");
+	logger.debug("XOManager for Titan created.");
 	return xoManager;
     }
 
     public void closeXOManager(@Disposes @TitanXOUnit XOManager xoManager) {
-	logger.info("Closing XOManager for Titan...");
+	logger.debug("Closing XOManager for Titan...");
 	xoManager.close();
-	logger.info("XOManager for Titan closed.");
+	logger.debug("XOManager for Titan closed.");
     }
 
 }

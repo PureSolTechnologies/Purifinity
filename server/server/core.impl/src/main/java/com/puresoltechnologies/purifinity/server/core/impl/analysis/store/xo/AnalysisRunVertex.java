@@ -1,9 +1,9 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo;
 
 import java.util.Date;
-import java.util.List;
 
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
+import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Incoming;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;
 import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
 import com.puresoltechnologies.xo.titan.api.annotation.Property;
@@ -14,24 +14,28 @@ import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
  * 
  * @author Rick-Rainer Ludwig
  */
-@VertexDefinition(AnalysisProjectVertex.NAME)
-public interface AnalysisProjectVertex {
+@VertexDefinition(AnalysisRunVertex.NAME)
+public interface AnalysisRunVertex {
 
-    public static final String NAME = "analysis_project";
+    public static final String NAME = "analysis_run";
 
     @Indexed
-    @Property(TitanElementNames.ANALYSIS_PROJECT_UUID_PROPERTY)
-    public String getProjectUUID();
+    @Property(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY)
+    public String getRunUUID();
 
-    public void setProjectUUID(String uuid);
+    public void setRunUUID(String uuid);
 
     @Property(TitanElementNames.CREATION_TIME_PROPERTY)
     public Date getCreationTime();
 
     public void setCreationTime(Date time);
 
-    @Outgoing
+    @Incoming
     @HasRun
-    public List<AnalysisRunVertex> getAnalysisRuns();
+    public AnalysisProjectVertex getAnalysisProject();
+
+    @Outgoing
+    @ContainsDirectory
+    public FileTreeDirectoryVertex getRootDirectory();
 
 }

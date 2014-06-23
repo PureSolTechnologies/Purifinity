@@ -6,6 +6,12 @@
 		<provider><![CDATA[com.puresoltechnologies.xo.titan.api.TitanXOProvider]]></provider>
 		<types>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex]]></type>
+			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex]]></type>
+			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex]]></type>
+			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeDirectoryVertex]]></type>
+			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeFileVertex]]></type>
+			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeDirectoryVertex]]></type>
+			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeFileVertex]]></type>
 		</types>
 	</xo-unit>
 </v1:xo>

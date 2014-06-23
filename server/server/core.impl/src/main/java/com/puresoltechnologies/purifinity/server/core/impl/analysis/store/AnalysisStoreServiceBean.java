@@ -18,6 +18,7 @@ import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.buschmais.xo.api.CompositeObject;
 import com.buschmais.xo.api.XOManager;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -198,8 +199,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     public AnalysisProjectInformation readAnalysisProjectInformation(
 	    UUID projectUUID) throws AnalysisStoreException {
 	try {
-	    Vertex vertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(
-		    graph, projectUUID);
+	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
+		    .findAnalysisProjectVertex(xoManager, projectUUID);
+	    Vertex vertex = ((CompositeObject) analysisProjectVertex)
+		    .getDelegate();
 	    Date creationTime = (Date) vertex
 		    .getProperty(TitanElementNames.CREATION_TIME_PROPERTY);
 	    return new AnalysisProjectInformation(projectUUID, creationTime);
@@ -218,8 +221,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 		removeAnalysisRun(projectUUID, run.getRunUUID());
 	    }
 	    // delete project
-	    Vertex vertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(
-		    graph, projectUUID);
+	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
+		    .findAnalysisProjectVertex(xoManager, projectUUID);
+	    Vertex vertex = ((CompositeObject) analysisProjectVertex)
+		    .getDelegate();
 	    Iterable<Edge> edges = vertex.query().edges();
 	    if (edges.iterator().hasNext()) {
 		// We do not expect incoming edges (never!) and also no outgoing
@@ -286,8 +291,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
 	    throws AnalysisStoreException {
 	try {
-	    Vertex projectVertex = AnalysisStoreTitanUtils
-		    .findAnalysisProjectVertex(graph, projectUUID);
+	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
+		    .findAnalysisProjectVertex(xoManager, projectUUID);
+	    Vertex projectVertex = ((CompositeObject) analysisProjectVertex)
+		    .getDelegate();
 	    Iterable<Vertex> analysisRuns = projectVertex.query()
 		    .direction(Direction.OUT)
 		    .labels(TitanElementNames.HAS_ANALYSIS_RUN_LABEL)
@@ -325,8 +332,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    Date creationTime = new Date();
 	    UUID runUUID = UUID.randomUUID();
 
-	    Vertex projectVertex = AnalysisStoreTitanUtils
-		    .findAnalysisProjectVertex(graph, analysisProjectUUID);
+	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
+		    .findAnalysisProjectVertex(xoManager, analysisProjectUUID);
+	    Vertex projectVertex = ((CompositeObject) analysisProjectVertex)
+		    .getDelegate();
 
 	    AnalysisStoreTitanUtils.createAnalysisRunVertex(graph,
 		    projectVertex, runUUID, creationTime, startTime, duration,
@@ -350,7 +359,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    UUID runUUID) throws AnalysisStoreException {
 	try {
 	    Vertex run = AnalysisStoreTitanUtils.findAnalysisRunVertex(graph,
-		    projectUUID, runUUID);
+		    xoManager, projectUUID, runUUID);
 	    if (run == null) {
 		return null;
 	    }
@@ -399,7 +408,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    throws AnalysisStoreException {
 	try {
 	    Vertex runVertex = AnalysisStoreTitanUtils.findAnalysisRunVertex(
-		    graph, projectUUID, runUUID);
+		    graph, xoManager, projectUUID, runUUID);
 	    // delete file tree first
 	    Vertex fileTreeVertex = AnalysisStoreTitanUtils.findFileTreeVertex(
 		    projectUUID, runUUID, runVertex);
@@ -494,7 +503,8 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    AnalysisRunFileTree fileTree = convertToAnalysisRunFileTree(
 		    storedSources, rootNodeName);
 	    Vertex analysisRunVertex = AnalysisStoreTitanUtils
-		    .findAnalysisRunVertex(graph, projectUUID, runUUID);
+		    .findAnalysisRunVertex(graph, xoManager, projectUUID,
+			    runUUID);
 	    analysisStoreContentTreeUtils.addContentTree(this, graph, fileTree,
 		    analysisRunVertex);
 	    analysisStoreFileTreeUtils.addFileTree(this, graph, fileTree,
