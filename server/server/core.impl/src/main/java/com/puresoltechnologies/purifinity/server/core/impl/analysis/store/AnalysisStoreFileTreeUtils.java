@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
+import com.buschmais.xo.api.ResultIterable;
+import com.buschmais.xo.api.ResultIterator;
+import com.buschmais.xo.api.XOManager;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
@@ -19,19 +21,18 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.framework.commons.utils.PropertiesUtils;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.SourceCodeLocationCreator;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeDirectoryVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeFileVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeDirectoryVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeFileVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeRootVertex;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
-import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
-import com.puresoltechnologies.purifinity.server.database.titan.VertexType;
-import com.thinkaurelius.titan.core.TitanGraph;
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
 
 /**
  * This class contains functionality for {@link AnalysisFileTree}s in Titan
@@ -40,9 +41,6 @@ import com.tinkerpop.blueprints.Vertex;
  * @author Rick-Rainer Ludwig -
  */
 public class AnalysisStoreFileTreeUtils {
-
-    @Inject
-    private AnalysisStoreDAO analysisStoreDAO;
 
     @Inject
     @AnalysisStoreKeyspace
@@ -62,11 +60,28 @@ public class AnalysisStoreFileTreeUtils {
      * @return
      * @throws AnalysisStoreException
      */
-    public Vertex addFileTree(AnalysisStore analysisStore, TitanGraph graph,
-	    AnalysisRunFileTree fileTree, Vertex analysisRunVertex)
-	    throws AnalysisStoreException {
-	return addFileTreeVertex(analysisStore, graph, fileTree,
-		analysisRunVertex, TitanElementNames.ANALYZED_FILE_TREE_LABEL);
+    public void addFileTree(XOManager xoManager, AnalysisRunFileTree fileTree,
+	    AnalysisRunVertex analysisRunVertex) throws AnalysisStoreException {
+	ResultIterable<FileTreeRootVertex> contentRootResult = xoManager.find(
+		FileTreeRootVertex.class, fileTree.getHashId().toString());
+	ResultIterator<FileTreeRootVertex> fileRootIterator = contentRootResult
+		.iterator();
+	if (fileRootIterator.hasNext()) {
+	    analysisRunVertex.setRootDirectory(fileRootIterator.next());
+	    return;
+	}
+	FileTreeRootVertex fileRoot = xoManager
+		.create(FileTreeRootVertex.class);
+	fileRoot.setHashId(fileTree.getHashId().toString());
+	fileRoot.setName(fileTree.getName());
+	analysisRunVertex.setRootDirectory(fileRoot);
+	for (AnalysisRunFileTree child : fileTree.getChildren()) {
+	    if (child.isFile()) {
+		addFileTreeFileVertex(xoManager, child, fileRoot);
+	    } else {
+		addFileTreeDirectoryVertex(xoManager, child, fileRoot);
+	    }
+	}
     }
 
     /**
@@ -75,125 +90,100 @@ public class AnalysisStoreFileTreeUtils {
      * @param analysisStore
      * @param progressObserver
      * @param graph
-     * @param fileTree
+     * @param fileTreeNode
      * @param parentVertex
      * @param edgeLabel
      * @return
      * @throws AnalysisStoreException
      */
-    private Vertex addFileTreeVertex(AnalysisStore analysisStore,
-	    TitanGraph graph, AnalysisRunFileTree fileTree,
-	    Vertex parentVertex, String edgeLabel)
-	    throws AnalysisStoreException {
-	Vertex vertex = graph.addVertex(null);
-	vertex.setProperty(TitanElementNames.VERTEX_TYPE,
-		VertexType.FILE_TREE_ELEMENT.name());
-	vertex.setProperty(TitanElementNames.TREE_ELEMENT_NAME,
-		fileTree.getName());
-	vertex.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
-		fileTree.isFile());
+    private FileTreeFileVertex addFileTreeFileVertex(XOManager xoManager,
+	    AnalysisRunFileTree fileTreeNode,
+	    FileTreeDirectoryVertex parentVertex) throws AnalysisStoreException {
+	FileTreeFileVertex file = xoManager.create(FileTreeFileVertex.class);
+	file.setHashId(fileTreeNode.getHashId().toString());
+	file.setName(fileTreeNode.getName());
+	file.setSourceLocation(PropertiesUtils.toString(fileTreeNode
+		.getSourceCodeLocation().getSerialization()));
+	parentVertex.getFiles().add(file);
 
-	Edge edge = parentVertex.addEdge(edgeLabel, vertex);
-	edge.setProperty(TitanElementNames.TREE_ELEMENT_HASH, fileTree
-		.getHashId().toString());
-	edge.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
-		fileTree.isFile());
-
-	addMetadata(analysisStoreDAO, vertex, fileTree);
-	graph.commit();
-
-	Iterable<Vertex> vertices = graph
-		.query()
-		.has(TitanElementNames.TREE_ELEMENT_HASH,
-			fileTree.getHashId().toString()).vertices();
-	Iterator<Vertex> vertexIterator = vertices.iterator();
-	if (!vertexIterator.hasNext()) {
+	ResultIterable<ContentTreeFileVertex> directoryContentResult = xoManager
+		.find(ContentTreeFileVertex.class, file.getHashId().toString());
+	Iterator<ContentTreeFileVertex> fileContentIterator = directoryContentResult
+		.iterator();
+	if (!fileContentIterator.hasNext()) {
 	    throw new AnalysisStoreException(
 		    "Could not find content node for file tree node '"
-			    + fileTree.toString() + "'.");
+			    + fileTreeNode.toString() + "'.");
 	}
-	Vertex contentVertex = vertexIterator.next();
-	vertex.addEdge(TitanElementNames.HAS_CONTENT_LABEL, contentVertex);
-	graph.commit();
+	ContentTreeFileVertex fileContent = fileContentIterator.next();
+	if (fileContentIterator.hasNext()) {
+	    throw new AnalysisStoreException(
+		    "Multiple content nodes found for file tree node '"
+			    + fileTreeNode.toString() + "'.");
+	}
 
-	for (AnalysisRunFileTree child : fileTree.getChildren()) {
-	    if (child.isFile()) {
-		addFileTreeVertex(analysisStore, graph, child, vertex,
-			TitanElementNames.CONTAINS_FILE_LABEL);
-	    } else {
-		addFileTreeVertex(analysisStore, graph, child, vertex,
-			TitanElementNames.CONTAINS_DIRECTORY_LABEL);
-	    }
-	}
-	return vertex;
+	file.setContent(fileContent);
+	file.setSize(fileContent.getSize());
+
+	return file;
     }
 
     /**
-     * This method adds meta data to the file tree node.
+     * This method adds a new file tree node to a parent vertex.
      * 
-     * @param vertex
+     * @param analysisStore
+     * @param progressObserver
+     * @param graph
      * @param fileTreeNode
+     * @param parentVertex
+     * @param edgeLabel
+     * @return
      * @throws AnalysisStoreException
      */
-    public static void addMetadata(AnalysisStoreDAO analysisStoreDAO,
-	    Vertex vertex, AnalysisRunFileTree fileTreeNode)
-	    throws AnalysisStoreException {
-	if (fileTreeNode.isFile()) {
-	    long size = analysisStoreDAO.getFileSize(fileTreeNode.getHashId());
-	    vertex.setProperty(TitanElementNames.TREE_ELEMENT_SIZE, size);
-	} else {
-	    Iterable<Vertex> childVertexes = vertex
-		    .query()
-		    .direction(Direction.OUT)
-		    .labels(TitanElementNames.CONTAINS_DIRECTORY_LABEL,
-			    TitanElementNames.CONTAINS_FILE_LABEL).vertices();
-	    Iterator<Vertex> childVertexIterator = childVertexes.iterator();
-	    long files = 0;
-	    long directories = 0;
-	    long filesRecursive = 0;
-	    long directoriesRecursive = 0;
-	    long size = 0;
-	    long sizeRecursive = 0;
-	    while (childVertexIterator.hasNext()) {
-		Vertex childVertex = childVertexIterator.next();
-		boolean isFile = (boolean) childVertex
-			.getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE);
-		if (isFile) {
-		    files++;
-		    filesRecursive++;
-		    long fileSize = (long) childVertex
-			    .getProperty(TitanElementNames.TREE_ELEMENT_SIZE);
-		    size += fileSize;
-		    sizeRecursive += fileSize;
-		} else {
-		    directories++;
-		    directoriesRecursive++;
-		    Long dr = (Long) childVertex
-			    .getProperty(TitanElementNames.TREE_ELEMENT_CONTAINS_DIRECTORIES_RECURSIVE);
-		    directoriesRecursive += dr != null ? dr : 0;
-		    Long fr = (Long) childVertex
-			    .getProperty(TitanElementNames.TREE_ELEMENT_CONTAINS_FILES_RECURSIVE);
-		    filesRecursive += fr != null ? fr : 0;
-		    Long sr = (Long) childVertex
-			    .getProperty(TitanElementNames.TREE_ELEMENT_SIZE_RECURSIVE);
-		    sizeRecursive += sr != null ? sr : 0;
-		}
-	    }
-	    vertex.setProperty(TitanElementNames.TREE_ELEMENT_CONTAINS_FILES,
-		    files);
-	    vertex.setProperty(
-		    TitanElementNames.TREE_ELEMENT_CONTAINS_FILES_RECURSIVE,
-		    filesRecursive);
-	    vertex.setProperty(
-		    TitanElementNames.TREE_ELEMENT_CONTAINS_DIRECTORIES,
-		    directories);
-	    vertex.setProperty(
-		    TitanElementNames.TREE_ELEMENT_CONTAINS_DIRECTORIES_RECURSIVE,
-		    directoriesRecursive);
-	    vertex.setProperty(TitanElementNames.TREE_ELEMENT_SIZE, size);
-	    vertex.setProperty(TitanElementNames.TREE_ELEMENT_SIZE_RECURSIVE,
-		    sizeRecursive);
+    private FileTreeDirectoryVertex addFileTreeDirectoryVertex(
+	    XOManager xoManager, AnalysisRunFileTree fileTreeNode,
+	    FileTreeDirectoryVertex parentVertex) throws AnalysisStoreException {
+	FileTreeDirectoryVertex directory = xoManager
+		.create(FileTreeDirectoryVertex.class);
+	directory.setHashId(fileTreeNode.getHashId().toString());
+	directory.setName(fileTreeNode.getName());
+	parentVertex.getDirectories().add(directory);
+
+	ResultIterable<ContentTreeDirectoryVertex> directoryContentResult = xoManager
+		.find(ContentTreeDirectoryVertex.class, directory.getHashId()
+			.toString());
+	Iterator<ContentTreeDirectoryVertex> directoryContentIterator = directoryContentResult
+		.iterator();
+	if (!directoryContentIterator.hasNext()) {
+	    throw new AnalysisStoreException(
+		    "Could not find content node for directory tree node '"
+			    + fileTreeNode.toString() + "'.");
 	}
+	ContentTreeDirectoryVertex directoryContent = directoryContentIterator
+		.next();
+	if (directoryContentIterator.hasNext()) {
+	    throw new AnalysisStoreException(
+		    "Multiple content nodes found for directory tree node '"
+			    + fileTreeNode.toString() + "'.");
+	}
+
+	directory.setContent(directoryContent);
+	directory.setSize(directoryContent.getSize());
+	directory.setSizeRecursive(directoryContent.getSizeRecursive());
+	directory.setFileNum(directoryContent.getFileNum());
+	directory.setFileNumRecursive(directoryContent.getFileNumRecursive());
+	directory.setDirectoryNum(directoryContent.getDirectoryNum());
+	directory.setDirectoryNumRecursive(directoryContent
+		.getDirectoryNumRecursive());
+
+	for (AnalysisRunFileTree child : fileTreeNode.getChildren()) {
+	    if (child.isFile()) {
+		addFileTreeFileVertex(xoManager, child, directory);
+	    } else {
+		addFileTreeDirectoryVertex(xoManager, child, directory);
+	    }
+	}
+	return directory;
     }
 
     /**
@@ -204,31 +194,13 @@ public class AnalysisStoreFileTreeUtils {
      * @return
      * @throws AnalysisStoreException
      */
-    public AnalysisFileTree createAnalysisFileTree(TitanGraph graph,
-	    UUID projectUUID, UUID runUUID) throws AnalysisStoreException {
-	try {
-	    Iterable<Vertex> runVertices = graph.query()
-		    .has(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY, runUUID)
-		    .vertices();
-	    Iterator<Vertex> runVertexIterator = runVertices.iterator();
-	    if (!runVertexIterator.hasNext()) {
-		return null;
-	    }
-	    Vertex runVertex = runVertexIterator.next();
-	    if (runVertexIterator.hasNext()) {
-		throw new AnalysisStoreException(
-			"Multiple analysis runs were found for UUID '"
-				+ runUUID + "'. Database is inconsistent!");
-	    }
-	    Vertex fileTreeVertex = AnalysisStoreTitanUtils.findFileTreeVertex(
-		    projectUUID, runUUID, runVertex);
-	    if (fileTreeVertex == null) {
-		return null;
-	    }
-	    return convertToAnalysisFileTree(fileTreeVertex, null);
-	} finally {
-	    graph.rollback();
+    public AnalysisFileTree createAnalysisFileTree(
+	    AnalysisRunVertex analysisRunVertex) throws AnalysisStoreException {
+	FileTreeRootVertex rootDirectory = analysisRunVertex.getRootDirectory();
+	if (rootDirectory == null) {
+	    return null;
 	}
+	return convertToAnalysisFileTree(rootDirectory, null);
     }
 
     /**
@@ -242,19 +214,54 @@ public class AnalysisStoreFileTreeUtils {
      * @return
      * @throws AnalysisStoreException
      */
-    private AnalysisFileTree convertToAnalysisFileTree(Vertex fileTreeVertex,
-	    AnalysisFileTree parent) throws AnalysisStoreException {
-	AnalysisFileTree hashIdFileTree = createAnalysisFileTreeNode(
-		fileTreeVertex, parent);
-	Iterable<Vertex> vertices = fileTreeVertex
-		.query()
-		.labels(TitanElementNames.CONTAINS_DIRECTORY_LABEL,
-			TitanElementNames.CONTAINS_FILE_LABEL)
-		.direction(Direction.OUT).vertices();
-	Iterator<Vertex> vertexIterator = vertices.iterator();
-	while (vertexIterator.hasNext()) {
-	    convertToAnalysisFileTree(vertexIterator.next(), hashIdFileTree);
+    private AnalysisFileTree convertToAnalysisFileTree(
+	    FileTreeDirectoryVertex fileTreeDirectory, AnalysisFileTree parent)
+	    throws AnalysisStoreException {
+	AnalysisFileTree analysisFileTree = createAnalysisFileTreeNode(
+		fileTreeDirectory, parent);
+	for (FileTreeDirectoryVertex directory : fileTreeDirectory
+		.getDirectories()) {
+	    createAnalysisFileTreeNode(directory, analysisFileTree);
 	}
+	for (FileTreeFileVertex file : fileTreeDirectory.getFiles()) {
+	    createAnalysisFileTreeNode(file, analysisFileTree);
+	}
+	return analysisFileTree;
+    }
+
+    /**
+     * This method creates a new {@link AnalysisFileTree} object out of a single
+     * file tree node.
+     * 
+     * @param fileTreeVertex
+     * @param parent
+     * @return
+     * @throws AnalysisStoreException
+     */
+    private AnalysisFileTree createAnalysisFileTreeNode(
+	    FileTreeDirectoryVertex fileTreeDirectory, AnalysisFileTree parent)
+	    throws AnalysisStoreException {
+	String name = fileTreeDirectory.getName();
+	SourceCodeLocation sourceCodeLocation = null;
+	long size = fileTreeDirectory.getSize();
+	long sizeRecursive = fileTreeDirectory.getSizeRecursive();
+
+	HashId hashId = HashId.valueOf(fileTreeDirectory.getHashId());
+
+	AnalysisFileTree hashIdFileTree = new AnalysisFileTree(parent, name,
+		hashId, false, size, sizeRecursive, sourceCodeLocation, null);
+
+	List<FileTreeDirectoryVertex> directories = fileTreeDirectory
+		.getDirectories();
+	if (directories.size() > 0) {
+	    for (FileTreeDirectoryVertex directory : directories) {
+		createAnalysisFileTreeNode(directory, hashIdFileTree);
+	    }
+	}
+	for (FileTreeFileVertex file : fileTreeDirectory.getFiles()) {
+	    createAnalysisFileTreeNode(file, hashIdFileTree);
+	}
+
 	return hashIdFileTree;
     }
 
@@ -267,44 +274,22 @@ public class AnalysisStoreFileTreeUtils {
      * @return
      * @throws AnalysisStoreException
      */
-    private AnalysisFileTree createAnalysisFileTreeNode(Vertex fileTreeVertex,
-	    AnalysisFileTree parent) throws AnalysisStoreException {
-	String name = (String) fileTreeVertex
-		.getProperty(TitanElementNames.TREE_ELEMENT_NAME);
-	boolean isFile = (boolean) fileTreeVertex
-		.getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE);
-	Object serializedSourceCodeLocation = fileTreeVertex
-		.getProperty(TitanElementNames.TREE_ELEMENT_SOURCE_CODE_LOCATION);
-	SourceCodeLocation sourceCodeLocation = serializedSourceCodeLocation != null ? SourceCodeLocationCreator
+    private AnalysisFileTree createAnalysisFileTreeNode(
+	    FileTreeFileVertex fileTreeFile, AnalysisFileTree parent)
+	    throws AnalysisStoreException {
+	String name = fileTreeFile.getName();
+	boolean isFile = true;
+	String serializedSourceCodeLocation = fileTreeFile.getSourceLocation();
+	SourceCodeLocation sourceCodeLocation = SourceCodeLocationCreator
 		.createFromSerialization(PropertiesUtils
-			.fromString(serializedSourceCodeLocation.toString()))
-		: null;
-	long size = (long) fileTreeVertex
-		.getProperty(TitanElementNames.TREE_ELEMENT_SIZE);
-	long sizeRecursive = (long) fileTreeVertex
-		.getProperty(TitanElementNames.TREE_ELEMENT_SIZE_RECURSIVE);
-	Iterable<Vertex> contentVertices = fileTreeVertex.query()
-		.labels(TitanElementNames.HAS_CONTENT_LABEL).vertices();
-	Iterator<Vertex> contextVertexIterator = contentVertices.iterator();
-	if (!contextVertexIterator.hasNext()) {
-	    throw new AnalysisStoreException(
-		    "Could not find content node for file tree node '"
-			    + parent.toString() + "'.");
-	}
-	Vertex contentVertex = contextVertexIterator.next();
-	String hash = contentVertex
-		.getProperty(TitanElementNames.TREE_ELEMENT_HASH);
-	HashId hashId = HashId.valueOf(hash);
-	final List<AnalysisInformation> analyses;
-	if (isFile) {
-	    analyses = readAnalyses(hashId);
-	} else {
-	    analyses = null;
-	}
-	AnalysisFileTree hashIdFileTree = new AnalysisFileTree(parent, name,
-		hashId, isFile, size, sizeRecursive, sourceCodeLocation,
-		analyses);
-	return hashIdFileTree;
+			.fromString(serializedSourceCodeLocation));
+	long size = fileTreeFile.getSize();
+
+	HashId hashId = HashId.valueOf(fileTreeFile.getContent().getHashId());
+
+	List<AnalysisInformation> analyses = readAnalyses(hashId);
+	return new AnalysisFileTree(parent, name, hashId, isFile, size, size,
+		sourceCodeLocation, analyses);
     }
 
     /**
@@ -349,34 +334,18 @@ public class AnalysisStoreFileTreeUtils {
      *            is the vertex of the file to be deleted.
      * @throws AnalysisStoreException
      */
-    public void deleteFileTree(Vertex fileTreeVertex)
+    public void deleteFileTree(XOManager xoManager,
+	    FileTreeDirectoryVertex rootDirectory)
 	    throws AnalysisStoreException {
-	Iterable<Edge> edges = fileTreeVertex.query().direction(Direction.OUT)
-		.edges();
-	Iterator<Edge> edgeIterator = edges.iterator();
-	while (edgeIterator.hasNext()) {
-	    Edge edge = edgeIterator.next();
-	    String edgeLabel = edge.getLabel();
-	    Vertex childVertex = edge.getVertex(Direction.IN);
-	    edge.remove();
-	    if (TitanElementNames.CONTAINS_FILE_LABEL.equals(edgeLabel)) {
-		deleteFileTree(childVertex);
-	    } else if (TitanElementNames.CONTAINS_DIRECTORY_LABEL
-		    .equals(edgeLabel)) {
-		deleteFileTree(childVertex);
-	    } else if (TitanElementNames.HAS_CONTENT_LABEL.equals(edgeLabel)) {
-		// intentionally left blank, content is deleted in another step
-		// in analysis run deletion
-	    } else {
-		throw new AnalysisStoreException("Unknown edge label '"
-			+ edgeLabel
-			+ "' in file tree vertex '"
-			+ fileTreeVertex.getProperty(
-				TitanElementNames.TREE_ELEMENT_NAME).toString()
-			+ "'.");
-	    }
+	for (FileTreeDirectoryVertex directoryVertex : rootDirectory
+		.getDirectories()) {
+	    deleteFileTree(xoManager, directoryVertex);
 	}
-	fileTreeVertex.remove();
+	for (FileTreeFileVertex fileVertex : rootDirectory.getFiles()) {
+	    xoManager.delete(fileVertex);
+	}
+	xoManager.delete(rootDirectory);
+
     }
 
 }

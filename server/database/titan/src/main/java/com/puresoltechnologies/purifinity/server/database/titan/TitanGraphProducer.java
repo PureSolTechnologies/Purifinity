@@ -47,13 +47,6 @@ public class TitanGraphProducer {
 
     private void checkLabelAndKeySettings() {
 
-	if (graph.getType(TitanElementNames.VERTEX_TYPE) == null) {
-	    KeyMaker keyMaker = graph.makeKey(TitanElementNames.VERTEX_TYPE);
-	    keyMaker.dataType(String.class);
-	    keyMaker.indexed(Vertex.class);
-	    keyMaker.make();
-	}
-
 	if (graph.getType(TitanElementNames.CREATION_TIME_PROPERTY) == null) {
 	    KeyMaker keyMaker = graph
 		    .makeKey(TitanElementNames.CREATION_TIME_PROPERTY);
@@ -130,13 +123,6 @@ public class TitanGraphProducer {
 	    keyMaker.make();
 	}
 
-	if (graph.getType(TitanElementNames.TREE_ELEMENT_IS_FILE) == null) {
-	    KeyMaker keyMaker = graph
-		    .makeKey(TitanElementNames.TREE_ELEMENT_IS_FILE);
-	    keyMaker.dataType(Boolean.class);
-	    keyMaker.make();
-	}
-
 	if (graph.getType(TitanElementNames.TREE_ELEMENT_CONTAINS_FILES) == null) {
 	    KeyMaker keyMaker = graph
 		    .makeKey(TitanElementNames.TREE_ELEMENT_CONTAINS_FILES);
@@ -183,6 +169,15 @@ public class TitanGraphProducer {
 	    keyMaker.indexed(Vertex.class);
 	    keyMaker.indexed(Edge.class);
 	    keyMaker.unique();
+	    keyMaker.make();
+	}
+
+	if (graph.getType(TitanElementNames.TREE_FS_ELEMENT_HASH) == null) {
+	    KeyMaker keyMaker = graph
+		    .makeKey(TitanElementNames.TREE_FS_ELEMENT_HASH);
+	    keyMaker.dataType(String.class);
+	    keyMaker.indexed(Vertex.class);
+	    keyMaker.indexed(Edge.class);
 	    keyMaker.make();
 	}
 
@@ -239,37 +234,24 @@ public class TitanGraphProducer {
 	    LabelMaker makeLabel = graph
 		    .makeLabel(TitanElementNames.HAS_ANALYSIS_RUN_LABEL);
 	    makeLabel.oneToMany(UniquenessConsistency.LOCK);
-	    makeLabel
-		    .signature(
-			    graph.getType(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY),
-			    graph.getType(TitanElementNames.ANALYSIS_RUN_START_TIME_PROPERTY));
 	    makeLabel.make();
 	}
 	if (graph.getType(TitanElementNames.ANALYZED_FILE_TREE_LABEL) == null) {
 	    LabelMaker makeLabel = graph
 		    .makeLabel(TitanElementNames.ANALYZED_FILE_TREE_LABEL);
 	    makeLabel.manyToOne();
-	    makeLabel.signature(
-		    graph.getType(TitanElementNames.TREE_ELEMENT_HASH),
-		    graph.getType(TitanElementNames.TREE_ELEMENT_IS_FILE));
 	    makeLabel.make();
 	}
 	if (graph.getType(TitanElementNames.CONTAINS_FILE_LABEL) == null) {
 	    LabelMaker makeLabel = graph
 		    .makeLabel(TitanElementNames.CONTAINS_FILE_LABEL);
 	    makeLabel.manyToMany();
-	    makeLabel.signature(
-		    graph.getType(TitanElementNames.TREE_ELEMENT_HASH),
-		    graph.getType(TitanElementNames.TREE_ELEMENT_IS_FILE));
 	    makeLabel.make();
 	}
 	if (graph.getType(TitanElementNames.CONTAINS_DIRECTORY_LABEL) == null) {
 	    LabelMaker makeLabel = graph
 		    .makeLabel(TitanElementNames.CONTAINS_DIRECTORY_LABEL);
 	    makeLabel.manyToMany();
-	    makeLabel.signature(
-		    graph.getType(TitanElementNames.TREE_ELEMENT_HASH),
-		    graph.getType(TitanElementNames.TREE_ELEMENT_IS_FILE));
 	    makeLabel.make();
 	}
 	graph.commit();

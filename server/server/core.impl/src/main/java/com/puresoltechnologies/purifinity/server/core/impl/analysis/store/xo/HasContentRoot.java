@@ -5,8 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition;
 
-@EdgeDefinition("has_run")
+@EdgeDefinition("has_content_root")
 @Retention(RetentionPolicy.RUNTIME)
-public @interface HasRun {
-
+public @interface HasContentRoot {
 }

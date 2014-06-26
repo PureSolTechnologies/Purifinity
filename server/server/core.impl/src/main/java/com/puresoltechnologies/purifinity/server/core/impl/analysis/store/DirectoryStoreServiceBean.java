@@ -6,72 +6,63 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.buschmais.xo.api.ResultIterable;
+import com.buschmais.xo.api.XOManager;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.DirectoryStoreService;
-import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
-import com.thinkaurelius.titan.core.TitanGraph;
-import com.tinkerpop.blueprints.Vertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeDirectoryVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeFileVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.TitanXOManager;
 
 public class DirectoryStoreServiceBean implements DirectoryStoreService {
 
-	@Inject
-	private TitanGraph graph;
+    @Inject
+    @TitanXOManager
+    private XOManager xoManager;
 
-	@Override
-	public boolean isAvailable(HashId hashId) throws DirectoryStoreException {
-		Vertex vertex = findDirectory(graph, hashId);
-		return vertex != null;
-	}
+    @Override
+    public boolean isAvailable(HashId hashId) throws DirectoryStoreException {
+	return findDirectory(hashId) != null;
+    }
 
-	@Override
-	public List<HashId> getFiles(HashId hashId) throws DirectoryStoreException {
-		Vertex vertex = findDirectory(graph, hashId);
-		Iterable<Vertex> vertices = vertex.query()
-				.has(TitanElementNames.TREE_ELEMENT_IS_FILE, true).vertices();
-		Iterator<Vertex> vertexIterator = vertices.iterator();
-		List<HashId> hashIds = new ArrayList<>();
-		while (vertexIterator.hasNext()) {
-			Vertex fileVertex = vertexIterator.next();
-			hashIds.add(HashId.valueOf((String) fileVertex
-					.getProperty(TitanElementNames.TREE_ELEMENT_HASH)));
-		}
-		return hashIds;
+    @Override
+    public List<HashId> getFiles(HashId hashId) throws DirectoryStoreException {
+	ContentTreeDirectoryVertex directory = findDirectory(hashId);
+	List<HashId> hashIds = new ArrayList<>();
+	for (ContentTreeFileVertex file : directory.getFiles()) {
+	    hashIds.add(HashId.valueOf(file.getHashId()));
 	}
+	return hashIds;
+    }
 
-	private Vertex findDirectory(TitanGraph graph, HashId hashId)
-			throws DirectoryStoreException {
-		Iterable<Vertex> vertices = graph.query()
-				.has(TitanElementNames.TREE_ELEMENT_IS_FILE, false)
-				.has(TitanElementNames.TREE_ELEMENT_HASH, hashId.toString())
-				.vertices();
-		Iterator<Vertex> vertexIterator = vertices.iterator();
-		if (!vertexIterator.hasNext()) {
-			return null;
-		}
-		Vertex vertex = vertexIterator.next();
-		if (vertexIterator.hasNext()) {
-			throw new DirectoryStoreException(
-					"Found multiple directories with hash '"
-							+ hashId.toString()
-							+ "'. Database is inconsistent!");
-		}
-		return vertex;
+    private ContentTreeDirectoryVertex findDirectory(HashId hashId)
+	    throws DirectoryStoreException {
+	ResultIterable<ContentTreeDirectoryVertex> directoryResult = xoManager
+		.find(ContentTreeDirectoryVertex.class, hashId.toString());
+	Iterator<ContentTreeDirectoryVertex> vertexIterator = directoryResult
+		.iterator();
+	if (!vertexIterator.hasNext()) {
+	    return null;
 	}
+	ContentTreeDirectoryVertex vertex = vertexIterator.next();
+	if (vertexIterator.hasNext()) {
+	    throw new DirectoryStoreException(
+		    "Found multiple directories with hash '"
+			    + hashId.toString()
+			    + "'. Database is inconsistent!");
+	}
+	return vertex;
+    }
 
-	@Override
-	public List<HashId> getDirectories(HashId hashId)
-			throws DirectoryStoreException {
-		Vertex vertex = findDirectory(graph, hashId);
-		Iterable<Vertex> vertices = vertex.query()
-				.has(TitanElementNames.TREE_ELEMENT_IS_FILE, false).vertices();
-		Iterator<Vertex> vertexIterator = vertices.iterator();
-		List<HashId> hashIds = new ArrayList<>();
-		while (vertexIterator.hasNext()) {
-			Vertex fileVertex = vertexIterator.next();
-			hashIds.add(HashId.valueOf((String) fileVertex
-					.getProperty(TitanElementNames.TREE_ELEMENT_HASH)));
-		}
-		return hashIds;
+    @Override
+    public List<HashId> getDirectories(HashId hashId)
+	    throws DirectoryStoreException {
+	ContentTreeDirectoryVertex directory = findDirectory(hashId);
+	List<HashId> hashIds = new ArrayList<>();
+	for (ContentTreeDirectoryVertex dir : directory.getDirectories()) {
+	    hashIds.add(HashId.valueOf(dir.getHashId()));
 	}
+	return hashIds;
+    }
 }

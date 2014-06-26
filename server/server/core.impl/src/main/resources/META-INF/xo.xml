@@ -8,10 +8,14 @@
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex]]></type>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex]]></type>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex]]></type>
+			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeRootVertex]]></type>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeDirectoryVertex]]></type>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeFileVertex]]></type>
+			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeRootVertex]]></type>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeDirectoryVertex]]></type>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeFileVertex]]></type>
+
+			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ProjectToRunEdge]]></type>
 		</types>
 	</xo-unit>
 </v1:xo>

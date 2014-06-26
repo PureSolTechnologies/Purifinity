@@ -4,16 +4,16 @@ import java.util.Iterator;
 
 import javax.inject.Inject;
 
+import com.buschmais.xo.api.ResultIterable;
+import com.buschmais.xo.api.ResultIterator;
+import com.buschmais.xo.api.XOManager;
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
-import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
-import com.puresoltechnologies.purifinity.server.database.titan.VertexType;
-import com.thinkaurelius.titan.core.TitanGraph;
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
-import com.tinkerpop.blueprints.Vertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeDirectoryVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeFileVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeRootVertex;
 
 /**
  * This class contains methods to deal with the content tree in Titan graph
@@ -44,11 +44,29 @@ public class AnalysisStoreContentTreeUtils {
      * @return
      * @throws AnalysisStoreException
      */
-    public Vertex addContentTree(AnalysisStore analysisStore, TitanGraph graph,
-	    AnalysisRunFileTree fileTree, Vertex parentVertex)
+    public void addContentTree(XOManager xoManager,
+	    AnalysisRunFileTree fileTree, AnalysisRunVertex analysisRunVertex)
 	    throws AnalysisStoreException {
-	return addContentTreeVertex(analysisStore, graph, fileTree,
-		parentVertex, TitanElementNames.ANALYZED_CONTENT_TREE_LABEL);
+	ResultIterable<ContentTreeRootVertex> contentRootResult = xoManager
+		.find(ContentTreeRootVertex.class, fileTree.getHashId()
+			.toString());
+	ResultIterator<ContentTreeRootVertex> contentRootIterator = contentRootResult
+		.iterator();
+	if (contentRootIterator.hasNext()) {
+	    analysisRunVertex.setContentRoot(contentRootIterator.next());
+	    return;
+	}
+	ContentTreeRootVertex contentRoot = xoManager
+		.create(ContentTreeRootVertex.class);
+	contentRoot.setHashId(fileTree.getHashId().toString());
+	analysisRunVertex.setContentRoot(contentRoot);
+	for (AnalysisRunFileTree child : fileTree.getChildren()) {
+	    if (child.isFile()) {
+		addContentTreeFileVertex(xoManager, child, contentRoot);
+	    } else {
+		addContentTreeDirectoryVertex(xoManager, child, contentRoot);
+	    }
+	}
     }
 
     /**
@@ -59,122 +77,165 @@ public class AnalysisStoreContentTreeUtils {
      *            is an optional observer to be informed about progress (may be
      *            null).
      * @param graph
-     * @param fileTree
-     * @param parentVertex
+     * @param fileTreeNode
+     * @param parentDirectory
      * @param edgeLabel
      * @return
      * @throws AnalysisStoreException
      */
-    private Vertex addContentTreeVertex(AnalysisStore analysisStore,
-	    TitanGraph graph, AnalysisRunFileTree fileTree,
-	    Vertex parentVertex, String edgeLabel)
+    private ContentTreeFileVertex addContentTreeFileVertex(XOManager xoManager,
+	    AnalysisRunFileTree fileTreeNode,
+	    ContentTreeDirectoryVertex parentDirectory)
 	    throws AnalysisStoreException {
-	Iterable<Vertex> vertices = graph
-		.query()
-		.has(TitanElementNames.TREE_ELEMENT_HASH,
-			fileTree.getHashId().toString()).vertices();
-	Iterator<Vertex> iterator = vertices.iterator();
+	ResultIterable<ContentTreeFileVertex> find = xoManager.find(
+		ContentTreeFileVertex.class, fileTreeNode.getHashId()
+			.toString());
+	Iterator<ContentTreeFileVertex> iterator = find.iterator();
 	if (iterator.hasNext()) {
-	    Vertex exstingTreeElementVertex = iterator.next();
+	    ContentTreeFileVertex exstingFile = iterator.next();
 	    if (iterator.hasNext()) {
 		throw new AnalysisStoreException(
 			"Content tree vertex for '"
-				+ fileTree.getHashId()
+				+ fileTreeNode.getHashId()
 				+ "' was found multiple times. Database is inconsistent.");
 	    }
-	    Edge edge = parentVertex.addEdge(edgeLabel,
-		    exstingTreeElementVertex);
-	    edge.setProperty(TitanElementNames.TREE_ELEMENT_HASH,
-		    exstingTreeElementVertex
-			    .getProperty(TitanElementNames.TREE_ELEMENT_HASH));
-	    edge.setProperty(
-		    TitanElementNames.TREE_ELEMENT_IS_FILE,
-		    exstingTreeElementVertex
-			    .getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE));
-	    return exstingTreeElementVertex;
+	    parentDirectory.getFiles().add(exstingFile);
+	    return exstingFile;
 	} else {
-	    Vertex vertex = graph.addVertex(null);
-	    vertex.setProperty(TitanElementNames.VERTEX_TYPE,
-		    VertexType.CONTENT_TREE_ELEMENT.name());
-	    vertex.setProperty(TitanElementNames.TREE_ELEMENT_HASH, fileTree
-		    .getHashId().toString());
-	    vertex.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
-		    fileTree.isFile());
-	    Edge edge = parentVertex.addEdge(edgeLabel, vertex);
-	    edge.setProperty(TitanElementNames.TREE_ELEMENT_HASH, fileTree
-		    .getHashId().toString());
-	    edge.setProperty(TitanElementNames.TREE_ELEMENT_IS_FILE,
-		    fileTree.isFile());
-	    for (AnalysisRunFileTree child : fileTree.getChildren()) {
+	    ContentTreeFileVertex file = xoManager
+		    .create(ContentTreeFileVertex.class);
+	    file.setHashId(fileTreeNode.getHashId().toString());
+	    int fileSize = analysisStoreDAO.getFileSize(fileTreeNode
+		    .getHashId());
+	    file.setSize(fileSize);
+
+	    parentDirectory.getFiles().add(file);
+	    return file;
+	}
+    }
+
+    /**
+     * This method adds a new content tree node or content tree part to the
+     * database.
+     * 
+     * @param progressObserver
+     *            is an optional observer to be informed about progress (may be
+     *            null).
+     * @param graph
+     * @param fileTreeNode
+     * @param parentDirectory
+     * @param edgeLabel
+     * @return
+     * @throws AnalysisStoreException
+     */
+    private ContentTreeDirectoryVertex addContentTreeDirectoryVertex(
+	    XOManager xoManager, AnalysisRunFileTree fileTreeNode,
+	    ContentTreeDirectoryVertex parentDirectory)
+	    throws AnalysisStoreException {
+	ResultIterable<ContentTreeDirectoryVertex> find = xoManager.find(
+		ContentTreeDirectoryVertex.class, fileTreeNode.getHashId()
+			.toString());
+	Iterator<ContentTreeDirectoryVertex> iterator = find.iterator();
+	if (iterator.hasNext()) {
+	    ContentTreeDirectoryVertex exstingDirectory = iterator.next();
+	    if (iterator.hasNext()) {
+		throw new AnalysisStoreException(
+			"Content tree vertex for '"
+				+ fileTreeNode.getHashId()
+				+ "' was found multiple times. Database is inconsistent.");
+	    }
+	    parentDirectory.getDirectories().add(exstingDirectory);
+	    return exstingDirectory;
+	} else {
+	    ContentTreeDirectoryVertex directory = xoManager
+		    .create(ContentTreeDirectoryVertex.class);
+	    directory.setHashId(fileTreeNode.getHashId().toString());
+	    parentDirectory.getDirectories().add(directory);
+	    long size = 0;
+	    long sizeRecursive = 0;
+	    long files = 0;
+	    long directories = 0;
+	    long filesRecursive = 0;
+	    long directoriesRecursive = 0;
+	    for (AnalysisRunFileTree child : fileTreeNode.getChildren()) {
 		if (child.isFile()) {
-		    addContentTreeVertex(analysisStore, graph, child, vertex,
-			    TitanElementNames.CONTAINS_FILE_LABEL);
+		    ContentTreeFileVertex childFile = addContentTreeFileVertex(
+			    xoManager, child, directory);
+		    size += childFile.getSize();
+		    sizeRecursive += childFile.getSize();
+		    files++;
+		    filesRecursive++;
 		} else {
-		    addContentTreeVertex(analysisStore, graph, child, vertex,
-			    TitanElementNames.CONTAINS_DIRECTORY_LABEL);
+		    ContentTreeDirectoryVertex childDirectory = addContentTreeDirectoryVertex(
+			    xoManager, child, directory);
+		    sizeRecursive += childDirectory.getSizeRecursive();
+		    directories++;
+		    directoriesRecursive++;
+		    directoriesRecursive += childDirectory
+			    .getDirectoryNumRecursive();
+		    filesRecursive += childDirectory.getFileNumRecursive();
 		}
 	    }
-	    AnalysisStoreFileTreeUtils.addMetadata(analysisStoreDAO, vertex,
-		    fileTree);
-	    return vertex;
+	    directory.setSize(size);
+	    directory.setSizeRecursive(sizeRecursive);
+	    directory.setFileNum(files);
+	    directory.setFileNumRecursive(filesRecursive);
+	    directory.setDirectoryNum(directories);
+	    directory.setDirectoryNumRecursive(directoriesRecursive);
+	    return directory;
 	}
     }
 
-    public void checkAndRemoveAnalysisRunContent(Vertex runVertex)
-	    throws AnalysisStoreException {
-	Iterable<Edge> edges = runVertex.query().direction(Direction.OUT)
-		.labels(TitanElementNames.ANALYZED_CONTENT_TREE_LABEL).edges();
-	Iterator<Edge> edgeIterator = edges.iterator();
-	if (!edgeIterator.hasNext()) {
-	    return;
-	}
-	Edge contentEdge = edgeIterator.next();
-	if (edgeIterator.hasNext()) {
-	    throw new AnalysisStoreException(
-		    "Analysis run '"
-			    + runVertex
-				    .getProperty(TitanElementNames.ANALYSIS_NAME_PROPERTY)
-			    + "'contains multiple content nodes. Database is inconsistent!");
-	}
-	Vertex contentVertex = contentEdge.getVertex(Direction.IN);
-	contentEdge.remove();
-	checkAndRemoveContentNode(contentVertex);
+    public void checkAndRemoveAnalysisRunContent(XOManager xoManager,
+	    ContentTreeRootVertex contentRoot) throws AnalysisStoreException {
+	checkAndRemoveContentNode(xoManager, contentRoot);
     }
 
-    private void checkAndRemoveContentNode(Vertex contentVertex)
+    private void checkAndRemoveContentNode(XOManager xoManager,
+	    ContentTreeDirectoryVertex contentVertex)
 	    throws AnalysisStoreException {
-	if (!VertexType.CONTENT_TREE_ELEMENT.name().equals(
-		contentVertex.getProperty(TitanElementNames.VERTEX_TYPE))) {
-	    throw new IllegalArgumentException(
-		    "The vertex is not a content tree vertex.");
-	}
-	Iterable<Edge> incomingEdges = contentVertex.query()
-		.direction(Direction.IN).edges();
-	Iterator<Edge> incomingEdgesIterator = incomingEdges.iterator();
-	if (incomingEdgesIterator.hasNext()) {
+	if (contentVertex.getDirectoriesFromRuns().size() > 0) {
 	    // We have incoming edges, so this is a shared content. We are not
 	    // allowed to remove it.
 	    return;
 	}
-	Iterable<Edge> outgoingEdges = contentVertex.query()
-		.direction(Direction.OUT).edges();
-	Iterator<Edge> outgoingEdgesIterator = outgoingEdges.iterator();
-	while (outgoingEdgesIterator.hasNext()) {
-	    Edge edge = outgoingEdgesIterator.next();
-	    Vertex childVertex = edge.getVertex(Direction.IN);
-	    VertexType vertexType = VertexType.valueOf((String) childVertex
-		    .getProperty(TitanElementNames.VERTEX_TYPE));
-	    if (vertexType == VertexType.CONTENT_TREE_ELEMENT) {
-		edge.remove();
-		checkAndRemoveContentNode(childVertex);
-	    } else {
-		throw new AnalysisStoreException("Unsupported vertex found.");
-	    }
+
+	for (ContentTreeDirectoryVertex directory : contentVertex
+		.getDirectories()) {
+	    checkAndRemoveContentNode(xoManager, directory);
 	}
-	HashId hashId = HashId.valueOf((String) contentVertex
-		.getProperty(TitanElementNames.TREE_ELEMENT_HASH));
-	contentVertex.remove();
+	for (ContentTreeFileVertex file : contentVertex.getFiles()) {
+	    checkAndRemoveContentNode(xoManager, file);
+	}
+
+	HashId hashId = HashId.valueOf(contentVertex.getHashId());
+	xoManager.delete(contentVertex);
+
 	analysisStoreCassandraUtils.removeAnalysisFile(hashId);
+
+	// FIXME: The evaluation values need to be removed!
+	// boolean isFile = (Boolean) contentVertex
+	// .getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE);
+	// if (isFile) {
+	// EvaluatorStoreCassandraUtils.deleteFileEvaluation(hashId);
+	// } else {
+	// EvaluatorStoreCassandraUtils.deleteDirectoryEvaluation(hashId);
+	// }
+    }
+
+    private void checkAndRemoveContentNode(XOManager xoManager,
+	    ContentTreeFileVertex contentVertex) throws AnalysisStoreException {
+	if (contentVertex.getFilesFromRuns().size() > 0) {
+	    // We have incoming edges, so this is a shared content. We are not
+	    // allowed to remove it.
+	    return;
+	}
+
+	HashId hashId = HashId.valueOf(contentVertex.getHashId());
+	xoManager.delete(contentVertex);
+
+	analysisStoreCassandraUtils.removeAnalysisFile(hashId);
+
 	// FIXME: The evaluation values need to be removed!
 	// boolean isFile = (Boolean) contentVertex
 	// .getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE);

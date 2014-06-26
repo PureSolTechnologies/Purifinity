@@ -14,7 +14,7 @@ import javax.inject.Qualifier;
 @Qualifier
 @Target({ TYPE, METHOD, FIELD, PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TitanXOUnit {
+public @interface TitanXOManager {
 
     public static final String XO_UNIT_NAME = "Titan";
 

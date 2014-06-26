@@ -56,23 +56,21 @@ public class AnalysisContentTreeTableMBean {
     }
 
     public TreeNode getRoot() {
-	if (fileTree == null) {
-	    try {
-		if (runUUID != null) {
-		    AnalysisFileTree analysisFileTree = analysisStore
-			    .readAnalysisFileTree(projectUUID, runUUID);
+	try {
+	    if ((fileTree == null) && (runUUID != null)) {
+		AnalysisFileTree analysisFileTree = analysisStore
+			.readAnalysisFileTree(projectUUID, runUUID);
+		if (analysisFileTree != null) {
 		    fileTree = new DefaultTreeNode(
 			    new AnalysisContentTreeNodeObject(analysisFileTree));
 		    addChildren(fileTree, analysisFileTree);
-		} else {
-		    fileTree = new DefaultTreeNode();
+		    return fileTree;
 		}
-	    } catch (AnalysisStoreException e) {
-		throw new RuntimeException(
-			"Could not read analysis file tree.", e);
 	    }
+	    return new DefaultTreeNode();
+	} catch (AnalysisStoreException e) {
+	    throw new RuntimeException("Could not read analysis file tree.", e);
 	}
-	return fileTree;
     }
 
     private void addChildren(TreeNode fileTree,

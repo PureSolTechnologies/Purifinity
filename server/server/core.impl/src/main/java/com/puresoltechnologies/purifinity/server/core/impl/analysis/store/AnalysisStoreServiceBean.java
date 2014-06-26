@@ -18,8 +18,8 @@ import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import com.buschmais.xo.api.CompositeObject;
 import com.buschmais.xo.api.XOManager;
+import com.buschmais.xo.api.XOTransaction;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
@@ -43,7 +43,11 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreExcep
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.TitanXOUnit;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeRootVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeDirectoryVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ProjectToRunEdge;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.TitanXOManager;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
@@ -54,8 +58,6 @@ import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSever
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventType;
 import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 import com.thinkaurelius.titan.core.TitanGraph;
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 @Stateless
@@ -105,30 +107,44 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     private TitanGraph graph;
 
     @Inject
-    @TitanXOUnit
+    @TitanXOManager
     private XOManager xoManager;
 
     @Override
     public AnalysisProjectInformation createAnalysisProject(
 	    AnalysisProjectSettings settings) throws AnalysisStoreException {
-	eventLogger
-		.logEvent(new Event(COMPONENT_NAME, 0x01,
-			EventType.USER_ACTION, EventSeverity.INFO,
-			"Create project..."));
-	UUID projectUUID = UUID.randomUUID();
-	Date creationTime = new Date();
-	createAnalysisProjectVertex(projectUUID, creationTime);
-	storeProjectAnalysisSettings(projectUUID, settings);
-	return new AnalysisProjectInformation(projectUUID, creationTime);
+	XOTransaction currentTransaction = xoManager.currentTransaction();
+	boolean active = currentTransaction.isActive();
+	if (!active) {
+	    currentTransaction.begin();
+	}
+	try {
+	    eventLogger.logEvent(new Event(COMPONENT_NAME, 0x01,
+		    EventType.USER_ACTION, EventSeverity.INFO,
+		    "Create project..."));
+	    UUID projectUUID = UUID.randomUUID();
+	    Date creationTime = new Date();
+	    createAnalysisProjectVertex(projectUUID, creationTime);
+	    storeProjectAnalysisSettings(projectUUID, settings);
+	    return new AnalysisProjectInformation(projectUUID, creationTime);
+	} catch (RuntimeException e) {
+	    if (!active) {
+		currentTransaction.rollback();
+		active = true;
+	    }
+	    throw e;
+	} finally {
+	    if (!active) {
+		currentTransaction.commit();
+	    }
+	}
     }
 
     private void createAnalysisProjectVertex(UUID projectUUID, Date creationTime) {
-	xoManager.currentTransaction().begin();
 	AnalysisProjectVertex analysisProject = xoManager
 		.create(AnalysisProjectVertex.class);
 	analysisProject.setProjectUUID(projectUUID.toString());
 	analysisProject.setCreationTime(creationTime);
-	xoManager.currentTransaction().commit();
     }
 
     private void storeProjectAnalysisSettings(UUID projectUUID,
@@ -198,47 +214,40 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     @Override
     public AnalysisProjectInformation readAnalysisProjectInformation(
 	    UUID projectUUID) throws AnalysisStoreException {
+	XOTransaction currentTransaction = xoManager.currentTransaction();
+	boolean active = currentTransaction.isActive();
+	if (!active) {
+	    currentTransaction.begin();
+	}
 	try {
 	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
 		    .findAnalysisProjectVertex(xoManager, projectUUID);
-	    Vertex vertex = ((CompositeObject) analysisProjectVertex)
-		    .getDelegate();
-	    Date creationTime = (Date) vertex
-		    .getProperty(TitanElementNames.CREATION_TIME_PROPERTY);
+	    Date creationTime = analysisProjectVertex.getCreationTime();
 	    return new AnalysisProjectInformation(projectUUID, creationTime);
 	} finally {
-	    graph.rollback();
+	    if (!active) {
+		currentTransaction.rollback();
+	    }
 	}
     }
 
     @Override
     public void removeAnalysisProject(UUID projectUUID)
 	    throws AnalysisStoreException {
-	try {
-	    // delete analysis runs first
-	    List<AnalysisRunInformation> runs = readAllRunInformation(projectUUID);
-	    for (AnalysisRunInformation run : runs) {
-		removeAnalysisRun(projectUUID, run.getRunUUID());
-	    }
-	    // delete project
-	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
-		    .findAnalysisProjectVertex(xoManager, projectUUID);
-	    Vertex vertex = ((CompositeObject) analysisProjectVertex)
-		    .getDelegate();
-	    Iterable<Edge> edges = vertex.query().edges();
-	    if (edges.iterator().hasNext()) {
-		// We do not expect incoming edges (never!) and also no outgoing
-		// edges.
-		throw new AnalysisStoreException(
-			"Analysis project has still edges connected. Database is inconsistent!");
-	    }
-	    graph.removeVertex(vertex);
-	    analysisStoreCassandraUtils.removeProjectSettings(projectUUID);
-	    graph.commit();
-	} catch (AnalysisStoreException e) {
-	    graph.rollback();
-	    throw e;
+	// delete analysis runs first
+	List<AnalysisRunInformation> runs = readAllRunInformation(projectUUID);
+	for (AnalysisRunInformation run : runs) {
+	    removeAnalysisRun(projectUUID, run.getRunUUID());
 	}
+	// delete project
+	deleteProject(projectUUID);
+    }
+
+    private void deleteProject(UUID projectUUID) throws AnalysisStoreException {
+	AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
+		.findAnalysisProjectVertex(xoManager, projectUUID);
+	xoManager.delete(analysisProjectVertex);
+	analysisStoreCassandraUtils.removeProjectSettings(projectUUID);
     }
 
     @Override
@@ -290,28 +299,25 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     @Override
     public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
 	    throws AnalysisStoreException {
+	XOTransaction currentTransaction = xoManager.currentTransaction();
+	boolean active = currentTransaction.isActive();
+	if (!active) {
+	    currentTransaction.begin();
+	}
 	try {
 	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
 		    .findAnalysisProjectVertex(xoManager, projectUUID);
-	    Vertex projectVertex = ((CompositeObject) analysisProjectVertex)
-		    .getDelegate();
-	    Iterable<Vertex> analysisRuns = projectVertex.query()
-		    .direction(Direction.OUT)
-		    .labels(TitanElementNames.HAS_ANALYSIS_RUN_LABEL)
-		    .vertices();
-	    Iterator<Vertex> runIterator = analysisRuns.iterator();
+
+	    List<ProjectToRunEdge> analysisRuns = analysisProjectVertex
+		    .getAnalysisRuns();
+
 	    List<AnalysisRunInformation> allRunInformation = new ArrayList<>();
-	    while (runIterator.hasNext()) {
-		Vertex run = runIterator.next();
-		UUID runUUID = UUID
-			.fromString((String) run
-				.getProperty(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY));
-		Date startTime = (Date) run
-			.getProperty(TitanElementNames.ANALYSIS_RUN_START_TIME_PROPERTY);
-		long duration = (long) run
-			.getProperty(TitanElementNames.ANALYSIS_RUN_DURATION_PROPERTY);
-		String description = (String) run
-			.getProperty(TitanElementNames.ANALYSIS_RUN_DESCRIPTION_PROPERTY);
+	    for (ProjectToRunEdge edge : analysisRuns) {
+		AnalysisRunVertex run = edge.getRun();
+		UUID runUUID = UUID.fromString(run.getRunUUID());
+		Date startTime = run.getStartTime();
+		long duration = run.getDuration();
+		String description = run.getDescription();
 		FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(runUUID);
 		allRunInformation.add(new AnalysisRunInformation(projectUUID,
 			runUUID, startTime, duration, description,
@@ -319,7 +325,9 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    }
 	    return allRunInformation;
 	} finally {
-	    graph.rollback();
+	    if (!active) {
+		currentTransaction.rollback();
+	    }
 	}
     }
 
@@ -328,62 +336,71 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    Date startTime, long duration, String description,
 	    FileSearchConfiguration fileSearchConfiguration)
 	    throws AnalysisStoreException {
+	XOTransaction currentTransaction = xoManager.currentTransaction();
+	boolean active = currentTransaction.isActive();
+	if (!active) {
+	    currentTransaction.begin();
+	}
 	try {
 	    Date creationTime = new Date();
 	    UUID runUUID = UUID.randomUUID();
 
 	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
 		    .findAnalysisProjectVertex(xoManager, analysisProjectUUID);
-	    Vertex projectVertex = ((CompositeObject) analysisProjectVertex)
-		    .getDelegate();
 
-	    AnalysisStoreTitanUtils.createAnalysisRunVertex(graph,
-		    projectVertex, runUUID, creationTime, startTime, duration,
-		    description);
+	    AnalysisStoreTitanUtils.createAnalysisRunVertex(xoManager,
+		    analysisProjectVertex, runUUID, creationTime, startTime,
+		    duration, description);
 
 	    analysisStoreCassandraUtils.writeAnalysisRunSettings(runUUID,
 		    fileSearchConfiguration);
 
-	    graph.commit();
-
 	    return new AnalysisRunInformation(analysisProjectUUID, runUUID,
 		    startTime, duration, description, fileSearchConfiguration);
 	} catch (AnalysisStoreException e) {
-	    graph.rollback();
+	    if (!active) {
+		currentTransaction.rollback();
+		active = true;
+	    }
 	    throw e;
+	} finally {
+	    if (!active) {
+		currentTransaction.commit();
+	    }
 	}
     }
 
     @Override
     public AnalysisRunInformation readAnalysisRunInformation(UUID projectUUID,
 	    UUID runUUID) throws AnalysisStoreException {
+	XOTransaction currentTransaction = xoManager.currentTransaction();
+	boolean active = currentTransaction.isActive();
+	if (!active) {
+	    currentTransaction.begin();
+	}
 	try {
-	    Vertex run = AnalysisStoreTitanUtils.findAnalysisRunVertex(graph,
-		    xoManager, projectUUID, runUUID);
+	    AnalysisRunVertex run = AnalysisStoreTitanUtils
+		    .findAnalysisRunVertex(xoManager, runUUID);
 	    if (run == null) {
 		return null;
 	    }
-	    UUID uuidRead = UUID.fromString((String) run
-		    .getProperty(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY));
+	    UUID uuidRead = UUID.fromString(run.getRunUUID());
 	    if (!runUUID.equals(uuidRead)) {
 		throw new AnalysisStoreException("Anaysis run for '" + runUUID
 			+ "' was not found, but a vertex with run_uuid='"
 			+ uuidRead + "'. Database is inconsistent!");
 	    }
-	    Date startTime = (Date) run
-		    .getProperty(TitanElementNames.ANALYSIS_RUN_START_TIME_PROPERTY);
-	    long duration = (long) run
-		    .getProperty(TitanElementNames.ANALYSIS_RUN_DURATION_PROPERTY);
-	    String description = (String) run
-		    .getProperty(TitanElementNames.ANALYSIS_RUN_DESCRIPTION_PROPERTY);
+	    Date startTime = run.getStartTime();
+	    long duration = run.getDuration();
+	    String description = run.getDescription();
 	    FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(runUUID);
-
-	    graph.commit();
 
 	    return new AnalysisRunInformation(projectUUID, runUUID, startTime,
 		    duration, description, fileSearchConfiguration);
 	} finally {
-	    graph.rollback();
+	    if (!active) {
+		currentTransaction.rollback();
+	    }
 	}
     }
 
@@ -406,17 +423,21 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     @Override
     public void removeAnalysisRun(UUID projectUUID, UUID runUUID)
 	    throws AnalysisStoreException {
+	XOTransaction currentTransaction = xoManager.currentTransaction();
+	boolean active = currentTransaction.isActive();
+	if (!active) {
+	    currentTransaction.begin();
+	}
 	try {
-	    Vertex runVertex = AnalysisStoreTitanUtils.findAnalysisRunVertex(
-		    graph, xoManager, projectUUID, runUUID);
-	    // delete file tree first
-	    Vertex fileTreeVertex = AnalysisStoreTitanUtils.findFileTreeVertex(
-		    projectUUID, runUUID, runVertex);
-	    if (fileTreeVertex != null) {
-		analysisStoreFileTreeUtils.deleteFileTree(fileTreeVertex);
-	    }
+	    AnalysisRunVertex analysisRunVertex = AnalysisStoreTitanUtils
+		    .findAnalysisRunVertex(xoManager, runUUID);
+	    FileTreeDirectoryVertex rootDirectory = analysisRunVertex
+		    .getRootDirectory();
+	    ContentTreeRootVertex contentRoot = analysisRunVertex
+		    .getContentRoot();
+	    analysisStoreFileTreeUtils.deleteFileTree(xoManager, rootDirectory);
 	    // remove analysis run vertex
-	    runVertex.remove();
+	    xoManager.delete(analysisRunVertex);
 	    // clear caches
 	    analysisStoreCacheUtils
 		    .clearAnalysisRunCaches(projectUUID, runUUID);
@@ -426,12 +447,17 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    // remove analysis run results
 	    bigTableUtils.removeAnalysisRunResults(projectUUID, runUUID);
 	    // cleanup content tree
-	    analysisStoreContentTreeUtils
-		    .checkAndRemoveAnalysisRunContent(runVertex);
-	    graph.commit();
+	    analysisStoreContentTreeUtils.checkAndRemoveAnalysisRunContent(
+		    xoManager, contentRoot);
 	} catch (AnalysisStoreException e) {
-	    graph.rollback();
+	    if (!active) {
+		currentTransaction.rollback();
+	    }
 	    throw e;
+	} finally {
+	    if (!active) {
+		currentTransaction.commit();
+	    }
 	}
     }
 
@@ -466,16 +492,34 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     @Override
     public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
 	    throws AnalysisStoreException {
-	AnalysisFileTree analysisFileTree = analysisStoreCacheUtils
-		.readCachedAnalysisFileTree(projectUUID, runUUID);
-	if (analysisFileTree != null) {
-	    return analysisFileTree;
+	XOTransaction currentTransaction = xoManager.currentTransaction();
+	boolean active = currentTransaction.isActive();
+	if (!active) {
+	    currentTransaction.begin();
 	}
-	analysisFileTree = analysisStoreFileTreeUtils.createAnalysisFileTree(
-		graph, projectUUID, runUUID);
-	analysisStoreCacheUtils.cacheAnalysisFileTree(projectUUID, runUUID,
-		analysisFileTree);
-	return analysisFileTree;
+	try {
+	    AnalysisFileTree analysisFileTree = analysisStoreCacheUtils
+		    .readCachedAnalysisFileTree(projectUUID, runUUID);
+	    if (analysisFileTree != null) {
+		return analysisFileTree;
+	    }
+	    AnalysisRunVertex analysisRunVertex = AnalysisStoreTitanUtils
+		    .findAnalysisRunVertex(xoManager, runUUID);
+	    analysisFileTree = analysisStoreFileTreeUtils
+		    .createAnalysisFileTree(analysisRunVertex);
+	    analysisStoreCacheUtils.cacheAnalysisFileTree(projectUUID, runUUID,
+		    analysisFileTree);
+	    return analysisFileTree;
+	} catch (AnalysisStoreException e) {
+	    if (!active) {
+		currentTransaction.rollback();
+	    }
+	    throw e;
+	} finally {
+	    if (!active) {
+		currentTransaction.commit();
+	    }
+	}
     }
 
     @Override
@@ -499,21 +543,30 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    UUID projectUUID, UUID runUUID, String rootNodeName,
 	    Map<SourceCodeLocation, HashId> storedSources)
 	    throws AnalysisStoreException {
+	XOTransaction currentTransaction = xoManager.currentTransaction();
+	boolean active = currentTransaction.isActive();
+	if (!active) {
+	    currentTransaction.begin();
+	}
 	try {
 	    AnalysisRunFileTree fileTree = convertToAnalysisRunFileTree(
 		    storedSources, rootNodeName);
-	    Vertex analysisRunVertex = AnalysisStoreTitanUtils
-		    .findAnalysisRunVertex(graph, xoManager, projectUUID,
-			    runUUID);
-	    analysisStoreContentTreeUtils.addContentTree(this, graph, fileTree,
+	    AnalysisRunVertex analysisRunVertex = AnalysisStoreTitanUtils
+		    .findAnalysisRunVertex(xoManager, runUUID);
+	    analysisStoreContentTreeUtils.addContentTree(xoManager, fileTree,
 		    analysisRunVertex);
-	    analysisStoreFileTreeUtils.addFileTree(this, graph, fileTree,
+	    analysisStoreFileTreeUtils.addFileTree(xoManager, fileTree,
 		    analysisRunVertex);
-	    graph.commit();
 	    return fileTree;
 	} catch (AnalysisStoreException e) {
-	    graph.rollback();
+	    if (!active) {
+		currentTransaction.rollback();
+	    }
 	    throw e;
+	} finally {
+	    if (!active) {
+		currentTransaction.commit();
+	    }
 	}
     }
 

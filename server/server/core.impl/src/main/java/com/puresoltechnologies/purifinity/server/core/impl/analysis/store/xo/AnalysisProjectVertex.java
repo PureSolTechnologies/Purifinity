@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
-import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;
 import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
 import com.puresoltechnologies.xo.titan.api.annotation.Property;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
@@ -30,8 +29,6 @@ public interface AnalysisProjectVertex {
 
     public void setCreationTime(Date time);
 
-    @Outgoing
-    @HasRun
-    public List<AnalysisRunVertex> getAnalysisRuns();
+    public List<ProjectToRunEdge> getAnalysisRuns();
 
 }

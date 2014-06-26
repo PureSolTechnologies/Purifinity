@@ -4,17 +4,14 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.UUID;
 
-import com.buschmais.xo.api.CompositeObject;
 import com.buschmais.xo.api.ResultIterable;
 import com.buschmais.xo.api.ResultIterator;
 import com.buschmais.xo.api.XOManager;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ProjectToRunEdge;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
-import com.puresoltechnologies.purifinity.server.database.titan.VertexType;
-import com.thinkaurelius.titan.core.TitanGraph;
-import com.tinkerpop.blueprints.Direction;
-import com.tinkerpop.blueprints.Edge;
 import com.tinkerpop.blueprints.Vertex;
 
 /**
@@ -54,37 +51,28 @@ public class AnalysisStoreTitanUtils {
      * Creates a new Analysis Run vertex.
      * 
      * @param graph
-     * @param projectVertex
+     * @param analysisProjectVertex
      * @param uuid
      * @param creationTime
      * @param startTime
      * @param duration
      * @param description
      */
-    public static void createAnalysisRunVertex(TitanGraph graph,
-	    Vertex projectVertex, UUID uuid, Date creationTime, Date startTime,
-	    long duration, String description) {
-	Vertex runVertex = graph.addVertex(null);
-	runVertex.setProperty(TitanElementNames.VERTEX_TYPE,
-		VertexType.ANALYSIS_RUN.name());
-	runVertex.setProperty(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY,
-		uuid.toString());
-	runVertex.setProperty(TitanElementNames.CREATION_TIME_PROPERTY,
-		creationTime);
-	runVertex.setProperty(
-		TitanElementNames.ANALYSIS_RUN_START_TIME_PROPERTY, startTime);
-	runVertex.setProperty(TitanElementNames.ANALYSIS_RUN_DURATION_PROPERTY,
-		duration);
-	runVertex.setProperty(
-		TitanElementNames.ANALYSIS_RUN_DESCRIPTION_PROPERTY,
-		description);
+    public static void createAnalysisRunVertex(XOManager xoManager,
+	    AnalysisProjectVertex analysisProjectVertex, UUID uuid,
+	    Date creationTime, Date startTime, long duration, String description) {
+	AnalysisRunVertex analysisRunVertex = xoManager
+		.create(AnalysisRunVertex.class);
 
-	Edge hasAnalysisRunEdge = projectVertex.addEdge(
-		TitanElementNames.HAS_ANALYSIS_RUN_LABEL, runVertex);
-	hasAnalysisRunEdge.setProperty(
-		TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY, uuid.toString());
-	hasAnalysisRunEdge.setProperty(
-		TitanElementNames.ANALYSIS_RUN_START_TIME_PROPERTY, startTime);
+	analysisRunVertex.setRunUUID(uuid.toString());
+	analysisRunVertex.setCreationTime(creationTime);
+	analysisRunVertex.setStartTime(startTime);
+	analysisRunVertex.setDuration(duration);
+	analysisRunVertex.setDescription(description);
+
+	ProjectToRunEdge edge = xoManager.create(analysisProjectVertex,
+		ProjectToRunEdge.class, analysisRunVertex);
+	edge.setRunUUID(uuid.toString());
     }
 
     /**
@@ -96,38 +84,15 @@ public class AnalysisStoreTitanUtils {
      * @return
      * @throws AnalysisStoreException
      */
-    public static Vertex findAnalysisRunVertex(TitanGraph graph,
-	    XOManager xoManager, UUID projectUUID, UUID runUUID)
-	    throws AnalysisStoreException {
-	AnalysisProjectVertex projectVertex = findAnalysisProjectVertex(
-		xoManager, projectUUID);
-	return findAnalysisRunVertex(graph,
-		(Vertex) ((CompositeObject) projectVertex).getDelegate(),
-		runUUID);
-    }
-
-    /**
-     * This method looks a specific Analysis Run vertex up in the graph db.
-     * 
-     * @param graph
-     * @param projectUUID
-     * @param runUUID
-     * @return
-     * @throws AnalysisStoreException
-     */
-    public static Vertex findAnalysisRunVertex(TitanGraph graph,
-	    Vertex projectVertex, UUID runUUID) throws AnalysisStoreException {
-	Iterable<Vertex> analysisRuns = projectVertex
-		.query()
-		.direction(Direction.OUT)
-		.labels(TitanElementNames.HAS_ANALYSIS_RUN_LABEL)
-		.has(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY,
-			runUUID.toString()).vertices();
-	Iterator<Vertex> runIterator = analysisRuns.iterator();
+    public static AnalysisRunVertex findAnalysisRunVertex(XOManager xoManager,
+	    UUID runUUID) throws AnalysisStoreException {
+	ResultIterable<AnalysisRunVertex> analysisRunVertex = xoManager.find(
+		AnalysisRunVertex.class, runUUID);
+	Iterator<AnalysisRunVertex> runIterator = analysisRunVertex.iterator();
 	if (!runIterator.hasNext()) {
 	    return null;
 	}
-	Vertex runVertex = runIterator.next();
+	AnalysisRunVertex runVertex = runIterator.next();
 	if (runIterator.hasNext()) {
 	    throw new AnalysisStoreException(
 		    "Multiple analysis run vertices for '" + runUUID

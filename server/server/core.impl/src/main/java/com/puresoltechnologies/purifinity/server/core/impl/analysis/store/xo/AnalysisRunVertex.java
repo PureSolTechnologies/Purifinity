@@ -3,7 +3,6 @@ package com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo;
 import java.util.Date;
 
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
-import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Incoming;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;
 import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
 import com.puresoltechnologies.xo.titan.api.annotation.Property;
@@ -30,12 +29,32 @@ public interface AnalysisRunVertex {
 
     public void setCreationTime(Date time);
 
-    @Incoming
-    @HasRun
-    public AnalysisProjectVertex getAnalysisProject();
+    @Property(TitanElementNames.ANALYSIS_RUN_START_TIME_PROPERTY)
+    public Date getStartTime();
+
+    public void setStartTime(Date time);
+
+    @Property(TitanElementNames.ANALYSIS_RUN_DURATION_PROPERTY)
+    public long getDuration();
+
+    public void setDuration(long duration);
+
+    @Property(TitanElementNames.ANALYSIS_RUN_DESCRIPTION_PROPERTY)
+    public String getDescription();
+
+    public void setDescription(String description);
+
+    public ProjectToRunEdge getAnalysisProject();
 
     @Outgoing
-    @ContainsDirectory
-    public FileTreeDirectoryVertex getRootDirectory();
+    @HasRootDirectory
+    public FileTreeRootVertex getRootDirectory();
 
+    public void setRootDirectory(FileTreeRootVertex rootDirectory);
+
+    @Outgoing
+    @HasContentRoot
+    public ContentTreeRootVertex getContentRoot();
+
+    public void setContentRoot(ContentTreeRootVertex contentRoot);
 }
