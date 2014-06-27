@@ -200,33 +200,7 @@ public class AnalysisStoreFileTreeUtils {
 	if (rootDirectory == null) {
 	    return null;
 	}
-	return convertToAnalysisFileTree(rootDirectory, null);
-    }
-
-    /**
-     * This method reads from Titan the whole File Tree into a
-     * {@link AnalysisFileTree}. This method only should be used if no cached
-     * file tree is available to create a new tree which is also cached for
-     * later use. This method needs a significant amount of time.
-     * 
-     * @param fileTreeVertex
-     * @param parent
-     * @return
-     * @throws AnalysisStoreException
-     */
-    private AnalysisFileTree convertToAnalysisFileTree(
-	    FileTreeDirectoryVertex fileTreeDirectory, AnalysisFileTree parent)
-	    throws AnalysisStoreException {
-	AnalysisFileTree analysisFileTree = createAnalysisFileTreeNode(
-		fileTreeDirectory, parent);
-	for (FileTreeDirectoryVertex directory : fileTreeDirectory
-		.getDirectories()) {
-	    createAnalysisFileTreeNode(directory, analysisFileTree);
-	}
-	for (FileTreeFileVertex file : fileTreeDirectory.getFiles()) {
-	    createAnalysisFileTreeNode(file, analysisFileTree);
-	}
-	return analysisFileTree;
+	return createAnalysisFileTreeNode(rootDirectory, null);
     }
 
     /**
