@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.ui;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +15,9 @@ import com.puresoltechnologies.purifinity.server.preferences.PreferencesValue;
 
 @ManagedBean
 @ViewScoped
-public class ThemeSwitcherMBean {
+public class ThemeSwitcherMBean implements Serializable {
+
+    private static final long serialVersionUID = -4611799892344805652L;
 
     private String themeName;
     private List<Theme> themes;

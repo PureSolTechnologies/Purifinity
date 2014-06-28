@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.ui.projects;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,9 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreExcep
 
 @ViewScoped
 @ManagedBean
-public class ProjectsViewMBean {
+public class ProjectsViewMBean implements Serializable {
+
+    private static final long serialVersionUID = -856803428226667204L;
 
     @Inject
     private AnalysisStore analysisStore;

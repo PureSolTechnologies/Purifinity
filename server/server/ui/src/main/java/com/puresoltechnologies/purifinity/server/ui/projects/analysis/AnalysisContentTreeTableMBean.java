@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.ui.projects.analysis;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.UUID;
 
@@ -20,7 +21,9 @@ import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreExcep
 
 @ViewScoped
 @ManagedBean
-public class AnalysisContentTreeTableMBean {
+public class AnalysisContentTreeTableMBean implements Serializable {
+
+    private static final long serialVersionUID = -5119042793771957315L;
 
     @Inject
     private AnalysisStore analysisStore;
@@ -57,7 +60,9 @@ public class AnalysisContentTreeTableMBean {
 
     public TreeNode getRoot() {
 	try {
-	    if ((fileTree == null) && (runUUID != null)) {
+	    if (fileTree != null) {
+		return fileTree;
+	    } else if (runUUID != null) {
 		AnalysisFileTree analysisFileTree = analysisStore
 			.readAnalysisFileTree(projectUUID, runUUID);
 		if (analysisFileTree != null) {

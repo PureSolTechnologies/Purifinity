@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.ui.projects.analysis;
 
 import java.util.List;
 
+import com.puresoltechnologies.commons.misc.FileUtilities;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
@@ -33,12 +34,14 @@ public class AnalysisContentTreeNodeObject {
 	return type;
     }
 
-    public long getSize() {
-	return analysisFileTree.getSize();
+    public String getSize() {
+	return FileUtilities.createHumanReadableSizeString(analysisFileTree
+		.getSize());
     }
 
-    public long getSizeRecursive() {
-	return analysisFileTree.getSizeRecursive();
+    public String getSizeRecursive() {
+	return FileUtilities.createHumanReadableSizeString(analysisFileTree
+		.getSizeRecursive());
     }
 
     public int getAnalysisCount() {

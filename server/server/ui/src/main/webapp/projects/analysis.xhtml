@@ -18,8 +18,9 @@
 							<h:outputText value="#{fsElement.type}" />
 						</p:column>
 						<p:column headerText="Size">
-							<h:outputText value="#{fsElement.size}" />
-							<h:outputText value="(recursive #{fsElement.sizeRecursive})"
+							<h:outputText value="" />
+							<h:outputText value="#{fsElement.sizeRecursive}" />
+							<h:outputText value=" (self #{fsElement.size})"
 								rendered="#{fsElement.type.equalsIgnoreCase('directory')}" />
 						</p:column>
 						<p:column headerText="Analyzes">
