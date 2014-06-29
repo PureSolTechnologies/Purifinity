@@ -12,21 +12,20 @@ import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInforma
 
 @Singleton
 public class AnalyzerPluginServiceImpl extends
-		AbstractPluginService<AnalyzerInformation> implements
-		AnalyzerPluginService, AnalyzerPluginServiceRemote {
+	AbstractPluginService<AnalyzerInformation> implements
+	AnalyzerPluginService, AnalyzerPluginServiceRemote {
 
-	public AnalyzerPluginServiceImpl() {
-		super("Analyzer Plugin Service");
-	}
+    public AnalyzerPluginServiceImpl() {
+	super("Analyzer Plugin Service");
+    }
 
-	@Override
-	public ProgrammingLanguageAnalyzer createInstance(String jndi)
-			throws NamingException {
-		InitialContext initialContext = new InitialContext();
-		Object object = initialContext
-				.lookup(jndi);
-		ProgrammingLanguageAnalyzer instance = (ProgrammingLanguageAnalyzer) object;
-		return instance;
-	}
+    @Override
+    public ProgrammingLanguageAnalyzer createInstance(String jndi)
+	    throws NamingException {
+	InitialContext initialContext = new InitialContext();
+	Object object = initialContext.lookup(jndi);
+	ProgrammingLanguageAnalyzer instance = (ProgrammingLanguageAnalyzer) object;
+	return instance;
+    }
 
 }

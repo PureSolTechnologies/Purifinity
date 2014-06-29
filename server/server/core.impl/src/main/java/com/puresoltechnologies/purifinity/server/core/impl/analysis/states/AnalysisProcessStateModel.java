@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.puresoltechnologies.purifinity.framework.commons.utils.statemodel.AbstractStateModel;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessState;
 
 public class AnalysisProcessStateModel extends
 		AbstractStateModel<AnalysisProcessState> {

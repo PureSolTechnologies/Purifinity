@@ -34,8 +34,8 @@ import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.states.AnalysisProcessStateTracker;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.states.AnalysisProcessTransition;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessTransition;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
@@ -112,6 +112,10 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
     }
 
     private void analyze(AnalysisRunFileTree analysisRunFileTree) {
+	if (!analyzerPluginService.hasServices()) {
+	    throw new IllegalStateException(
+		    "There is no analyzer installed. To run an analysis is not possible.");
+	}
 	TreeWalker.walk(new TreeVisitor<AnalysisRunFileTree>() {
 
 	    @Override

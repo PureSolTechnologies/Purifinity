@@ -6,11 +6,13 @@ import java.util.Properties;
 
 public interface PluginService<PluginInfo extends Serializable> {
 
-	public void registerService(String jndiName, PluginInfo pluginInformation,
-			Properties properties, Class<?>... interfaces);
+    public void registerService(String jndiName, PluginInfo pluginInformation,
+	    Properties properties, Class<?>... interfaces);
 
-	public void unregisterService(String jndiName);
+    public void unregisterService(String jndiName);
 
-	public Collection<PluginInfo> getServices();
+    public boolean hasServices();
+
+    public Collection<PluginInfo> getServices();
 
 }

@@ -11,33 +11,36 @@ import com.puresoltechnologies.purifinity.server.database.migration.MigrationExc
 
 public class ProcessStatesSchema {
 
-	private static final String PROCESSES_KEYSPACE = ProcessStatesKeyspace.NAME;
+    private static final String PROCESSES_KEYSPACE = ProcessStatesKeyspace.NAME;
 
-	private static final String ANALYSIS_PROCESS_TABLE = "analysis_process";
+    private static final String ANALYSIS_PROCESS_TABLE = "analysis_process";
 
-	private static final Version v100 = new Version(1, 0, 0);
+    private static final Version v100 = new Version(1, 0, 0);
 
-	public static void createSequence(DatabaseMigrator migrator)
-			throws MigrationException {
-		checkAndCreateKeyspaces(migrator);
-		checkAndCreateAnalysisTables(migrator);
-	}
+    public static void createSequence(DatabaseMigrator migrator)
+	    throws MigrationException {
+	checkAndCreateKeyspaces(migrator);
+	checkAndCreateAnalysisTables(migrator);
+    }
 
-	private static void checkAndCreateKeyspaces(DatabaseMigrator migrator)
-			throws MigrationException {
-		migrator.registerMigrationStep(createKeyspace(PROCESSES_KEYSPACE, v100,
-				"Rick-Rainer Ludwig", "Keyspace for process states",
-				ReplicationStrategy.SIMPLE_STRATEGY, 1));
-	}
+    private static void checkAndCreateKeyspaces(DatabaseMigrator migrator)
+	    throws MigrationException {
+	migrator.registerMigrationStep(createKeyspace(PROCESSES_KEYSPACE, v100,
+		"Rick-Rainer Ludwig", "Keyspace for process states",
+		ReplicationStrategy.SIMPLE_STRATEGY, 1));
+    }
 
-	private static void checkAndCreateAnalysisTables(DatabaseMigrator migrator)
-			throws MigrationException {
-		migrator.registerMigrationStep(createTable(PROCESSES_KEYSPACE, v100,
-				"Rick-Rainer Ludwig",
-				"Keeps states about the running analysis processes.",
-				"CREATE TABLE " + ANALYSIS_PROCESS_TABLE
-						+ " (project_uuid uuid, run_uuid uuid, state text, "
-						+ "PRIMARY KEY(project_uuid));"));
-	}
+    private static void checkAndCreateAnalysisTables(DatabaseMigrator migrator)
+	    throws MigrationException {
+	migrator.registerMigrationStep(createTable(
+		PROCESSES_KEYSPACE,
+		v100,
+		"Rick-Rainer Ludwig",
+		"Keeps states about the running analysis processes.",
+		"CREATE TABLE "
+			+ ANALYSIS_PROCESS_TABLE
+			+ " (started timestamp, project_uuid uuid, run_uuid uuid, state text, last_progress timestamp,"
+			+ "PRIMARY KEY(project_uuid));"));
+    }
 
 }

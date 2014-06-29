@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.core.impl.analysis.states;
+package com.puresoltechnologies.purifinity.server.core.api.analysis.states;
 
 import com.puresoltechnologies.purifinity.framework.commons.utils.statemodel.Transition;
 
