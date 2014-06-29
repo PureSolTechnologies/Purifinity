@@ -10,7 +10,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPlugi
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
-import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorInformation;
+import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorPluginInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 
 @ApplicationScoped
@@ -30,7 +30,7 @@ public class SystemPluginsMBean {
 		return analyzerPluginService.getServices();
 	}
 
-	public Collection<EvaluatorInformation> getEvaluators() {
+	public Collection<EvaluatorPluginInformation> getEvaluators() {
 		return evaluatorPluginService.getServices();
 	}
 

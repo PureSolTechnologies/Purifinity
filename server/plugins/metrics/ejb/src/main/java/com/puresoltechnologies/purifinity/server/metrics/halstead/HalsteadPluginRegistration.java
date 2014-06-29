@@ -9,7 +9,7 @@ import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemotePlugin;
-import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorInformation;
+import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorPluginInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
@@ -21,7 +21,7 @@ public class HalsteadPluginRegistration extends AbstractPluginRegistration
 			"metrics.plugin", "metrics.ejb", Evaluator.class,
 			HalsteadMetricEvaluator.class);
 
-	private static final EvaluatorInformation INFORMATION = new EvaluatorInformation(
+	private static final EvaluatorPluginInformation INFORMATION = new EvaluatorPluginInformation(
 			HalsteadMetric.NAME, JNDI_ADDRESS, HalsteadMetric.DESCRIPTION);
 
 	@PostConstruct

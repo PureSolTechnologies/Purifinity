@@ -8,11 +8,11 @@ import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginSe
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemotePlugin;
-import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorInformation;
+import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorPluginInformation;
 
 @Singleton
 public class EvaluatorPluginServiceImpl extends
-		AbstractPluginService<EvaluatorInformation> implements
+		AbstractPluginService<EvaluatorPluginInformation> implements
 		EvaluatorPluginService, EvaluatorPluginServiceRemote {
 
 	public EvaluatorPluginServiceImpl() {

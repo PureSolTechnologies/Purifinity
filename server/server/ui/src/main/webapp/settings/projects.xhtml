@@ -1,4 +1,5 @@
-<ui:composition template="/resources/templates/purifinity_template.xhtml"
+<ui:composition
+	template="/resources/templates/purifinity_template.xhtml"
 	xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
@@ -79,7 +80,11 @@
 					value="#{projectsTableMBean.projects}">
 					<f:facet name="header">List of Projects</f:facet>
 					<p:column headerText="Name">
-						<h:outputText value="#{project.settings.name}" />
+						<h:outputText value="" />
+						<p:link value="#{project.settings.name}" outcome="/projects/index">
+							<f:param name="project" value="#{project.information.UUID}" />
+						</p:link>
+
 					</p:column>
 					<p:column headerText="Description">
 						<h:outputText value="#{project.settings.description}" />

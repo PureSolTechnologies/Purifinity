@@ -4,14 +4,14 @@ import javax.ejb.Local;
 import javax.naming.NamingException;
 
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginService;
-import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorInformation;
+import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorPluginInformation;
 
 /**
  * This is the interface for the internal analyzer registration.
  */
 @Local
 public interface EvaluatorPluginService extends
-		PluginService<EvaluatorInformation> {
+		PluginService<EvaluatorPluginInformation> {
 
 	public EvaluatorRemotePlugin createInstance(String jndi)
 			throws NamingException;

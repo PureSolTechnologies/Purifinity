@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-public class EvaluatorInformation implements Serializable {
+public class EvaluatorPluginInformation implements Serializable {
 
 	private static final long serialVersionUID = -1867488685418681896L;
 
@@ -12,7 +12,7 @@ public class EvaluatorInformation implements Serializable {
 	private final String jndiName;
 	private final String description;
 
-	public EvaluatorInformation(@JsonProperty("name") String name,
+	public EvaluatorPluginInformation(@JsonProperty("name") String name,
 			@JsonProperty("jndiName") String jndiName,
 			@JsonProperty("description") String description) {
 		super();
