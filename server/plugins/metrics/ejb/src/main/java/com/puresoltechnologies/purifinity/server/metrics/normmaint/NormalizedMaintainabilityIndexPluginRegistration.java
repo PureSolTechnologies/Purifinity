@@ -15,32 +15,37 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 @Singleton
 @Startup
 public class NormalizedMaintainabilityIndexPluginRegistration extends
-		AbstractPluginRegistration implements EvaluatorRemotePlugin {
+	AbstractPluginRegistration implements EvaluatorRemotePlugin {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
-			"metrics.plugin", "metrics.ejb", Evaluator.class,
-			NormalizedMaintainabilityIndexEvaluator.class);
+    private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
+	    "metrics.plugin", "metrics.ejb", Evaluator.class,
+	    NormalizedMaintainabilityIndexEvaluator.class);
 
-	private static final EvaluatorPluginInformation INFORMATION = new EvaluatorPluginInformation(
-			NormalizedMaintainabilityIndexEvaluator.NAME, JNDI_ADDRESS,
-			NormalizedMaintainabilityIndexEvaluator.DESCRIPTION);
+    private static final EvaluatorPluginInformation INFORMATION = new EvaluatorPluginInformation(
+	    NormalizedMaintainabilityIndexEvaluator.ID,
+	    NormalizedMaintainabilityIndexEvaluator.NAME,
+	    JNDI_ADDRESS,
+	    NormalizedMaintainabilityIndexEvaluator.DESCRIPTION,
+	    NormalizedMaintainabilityIndexEvaluator.EVALUATED_QUALITY_CHARACTERISTICS,
+	    NormalizedMaintainabilityIndexEvaluatorParameter.ALL,
+	    NormalizedMaintainabilityIndexEvaluator.DEPENDENCIES);
 
-	@PostConstruct
-	public void registration() {
-		register(EvaluatorPluginServiceRemote.class,
-				EvaluatorPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
-				INFORMATION);
-	}
+    @PostConstruct
+    public void registration() {
+	register(EvaluatorPluginServiceRemote.class,
+		EvaluatorPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
+		INFORMATION);
+    }
 
-	@PreDestroy
-	public void unregistration() {
-		unregister(EvaluatorPluginServiceRemote.class,
-				EvaluatorPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS);
-	}
+    @PreDestroy
+    public void unregistration() {
+	unregister(EvaluatorPluginServiceRemote.class,
+		EvaluatorPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS);
+    }
 
-	@Override
-	public String getName() {
-		return NormalizedMaintainabilityIndexEvaluator.NAME;
-	}
+    @Override
+    public String getName() {
+	return NormalizedMaintainabilityIndexEvaluator.NAME;
+    }
 
 }

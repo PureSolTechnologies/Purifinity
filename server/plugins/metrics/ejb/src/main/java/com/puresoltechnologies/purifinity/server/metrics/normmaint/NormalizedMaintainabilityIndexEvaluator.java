@@ -33,125 +33,131 @@ import com.puresoltechnologies.purifinity.server.metrics.maintainability.Maintai
 @Remote(Evaluator.class)
 public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 
-	private static final long serialVersionUID = -5093217611195212999L;
+    private static final long serialVersionUID = -5093217611195212999L;
 
-	public static final String NAME = "Normalized Maintainability Index";
-	public static final String DESCRIPTION = "Normalized Maintainability Index calculation.";
+    public static final String ID = NormalizedMaintainabilityIndexEvaluator.class
+	    .getName();
+    public static final String NAME = "Normalized Maintainability Index";
+    public static final String DESCRIPTION = "Normalized Maintainability Index calculation.";
 
-	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
-	static {
-		EVALUATED_QUALITY_CHARACTERISTICS
-				.add(QualityCharacteristic.ANALYSABILITY);
-		EVALUATED_QUALITY_CHARACTERISTICS
-				.add(QualityCharacteristic.CHANGEABILITY);
-		EVALUATED_QUALITY_CHARACTERISTICS
-				.add(QualityCharacteristic.TESTABILITY);
+    public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
+    static {
+	EVALUATED_QUALITY_CHARACTERISTICS
+		.add(QualityCharacteristic.ANALYSABILITY);
+	EVALUATED_QUALITY_CHARACTERISTICS
+		.add(QualityCharacteristic.CHANGEABILITY);
+	EVALUATED_QUALITY_CHARACTERISTICS
+		.add(QualityCharacteristic.TESTABILITY);
+    }
+    public static final Set<String> DEPENDENCIES = new HashSet<>();
+    static {
+	DEPENDENCIES.add(MaintainabilityIndexEvaluator.ID);
+    }
+
+    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+
+    private final EvaluatorStore store;
+    private final EvaluatorStore maintainabilityStore;
+
+    public NormalizedMaintainabilityIndexEvaluator() {
+	super(NAME, DESCRIPTION);
+	store = getEvaluatorStore();
+
+	maintainabilityStore = EvaluatorStoreFactory.getFactory()
+		.createInstance(MaintainabilityIndexEvaluator.class);
+    }
+
+    @Override
+    public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+	return configurationParameters;
+    }
+
+    @Override
+    protected MetricFileResults processFile(AnalysisRun analysisRun,
+	    CodeAnalysis analysis) throws InterruptedException,
+	    EvaluationStoreException {
+	NormalizedMaintainabilityIndexFileResults results = new NormalizedMaintainabilityIndexFileResults();
+
+	HashId hashId = analysis.getAnalysisInformation().getHashId();
+	MaintainabilityIndexFileResults maintainabilityFileResults = (MaintainabilityIndexFileResults) maintainabilityStore
+		.readFileResults(hashId);
+	SourceCodeLocation sourceCodeLocation = analysisRun
+		.findTreeNode(hashId).getSourceCodeLocation();
+
+	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+
+	    MaintainabilityIndexFileResult maintainabilityIndexFileResult = findFileResult(
+		    maintainabilityFileResults, codeRange);
+
+	    MaintainabilityIndexResult maintainabilityIndex = maintainabilityIndexFileResult
+		    .getMaintainabilityIndexResult();
+	    NormalizedMaintainabilityIndexResult result = new NormalizedMaintainabilityIndexResult(
+		    maintainabilityIndex.getMIwoc(),
+		    maintainabilityIndex.getMIcw());
+
+	    results.add(new NormalizedMaintainabilityIndexFileResult(
+		    sourceCodeLocation, codeRange.getType(), codeRange
+			    .getCanonicalName(), result,
+		    NormalizedMaintainabilityQuality.get(codeRange.getType(),
+			    result)));
 	}
+	return results;
+    }
 
-	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
-
-	private final EvaluatorStore store;
-	private final EvaluatorStore maintainabilityStore;
-
-	public NormalizedMaintainabilityIndexEvaluator() {
-		super(NAME, DESCRIPTION);
-		store = getEvaluatorStore();
-
-		maintainabilityStore = EvaluatorStoreFactory.getFactory()
-				.createInstance(MaintainabilityIndexEvaluator.class);
+    private MaintainabilityIndexFileResult findFileResult(
+	    MaintainabilityIndexFileResults maintainabilityIndexFileResults,
+	    CodeRange codeRange) {
+	for (MaintainabilityIndexFileResult t : maintainabilityIndexFileResults
+		.getResults()) {
+	    if ((t.getCodeRangeType() == codeRange.getType())
+		    && (t.getCodeRangeName().equals(codeRange
+			    .getCanonicalName()))) {
+		return t;
+	    }
 	}
+	return null;
+    }
 
-	@Override
-	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-		return configurationParameters;
-	}
+    @Override
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 
-	@Override
-	protected MetricFileResults processFile(AnalysisRun analysisRun,
-			CodeAnalysis analysis) throws InterruptedException,
-			EvaluationStoreException {
-		NormalizedMaintainabilityIndexFileResults results = new NormalizedMaintainabilityIndexFileResults();
-
-		HashId hashId = analysis.getAnalysisInformation().getHashId();
-		MaintainabilityIndexFileResults maintainabilityFileResults = (MaintainabilityIndexFileResults) maintainabilityStore
-				.readFileResults(hashId);
-		SourceCodeLocation sourceCodeLocation = analysisRun
-				.findTreeNode(hashId).getSourceCodeLocation();
-
-		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-
-			MaintainabilityIndexFileResult maintainabilityIndexFileResult = findFileResult(
-					maintainabilityFileResults, codeRange);
-
-			MaintainabilityIndexResult maintainabilityIndex = maintainabilityIndexFileResult
-					.getMaintainabilityIndexResult();
-			NormalizedMaintainabilityIndexResult result = new NormalizedMaintainabilityIndexResult(
-					maintainabilityIndex.getMIwoc(),
-					maintainabilityIndex.getMIcw());
-
-			results.add(new NormalizedMaintainabilityIndexFileResult(
-					sourceCodeLocation, codeRange.getType(), codeRange
-							.getCanonicalName(), result,
-					NormalizedMaintainabilityQuality.get(codeRange.getType(),
-							result)));
+    @Override
+    protected MetricDirectoryResults processDirectory(AnalysisRun analysisRun,
+	    AnalysisFileTree directory) throws InterruptedException,
+	    EvaluationStoreException {
+	QualityLevel qualityLevel = null;
+	for (AnalysisFileTree child : directory.getChildren()) {
+	    if (child.isFile()) {
+		NormalizedMaintainabilityIndexFileResults results = (NormalizedMaintainabilityIndexFileResults) store
+			.readFileResults(child.getHashId());
+		if (results != null) {
+		    for (NormalizedMaintainabilityIndexFileResult result : results
+			    .getResults()) {
+			qualityLevel = QualityLevel.combine(qualityLevel,
+				new QualityLevel(result.getQuality()));
+		    }
 		}
-		return results;
-	}
-
-	private MaintainabilityIndexFileResult findFileResult(
-			MaintainabilityIndexFileResults maintainabilityIndexFileResults,
-			CodeRange codeRange) {
-		for (MaintainabilityIndexFileResult t : maintainabilityIndexFileResults
-				.getResults()) {
-			if ((t.getCodeRangeType() == codeRange.getType())
-					&& (t.getCodeRangeName().equals(codeRange
-							.getCanonicalName()))) {
-				return t;
-			}
+	    } else {
+		NormalizedMaintainabilityIndexDirectoryResults results = (NormalizedMaintainabilityIndexDirectoryResults) store
+			.readDirectoryResults(child.getHashId());
+		if (results != null) {
+		    qualityLevel = QualityLevel.combine(qualityLevel,
+			    results.getQualityLevel());
 		}
-		return null;
+	    }
 	}
+	NormalizedMaintainabilityIndexDirectoryResults finalResults = new NormalizedMaintainabilityIndexDirectoryResults(
+		new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
+		directory.getName());
+	finalResults.addQualityLevel(qualityLevel);
+	return finalResults;
+    }
 
-	@Override
-	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return EVALUATED_QUALITY_CHARACTERISTICS;
-	}
-
-	@Override
-	protected MetricDirectoryResults processDirectory(AnalysisRun analysisRun,
-			AnalysisFileTree directory) throws InterruptedException,
-			EvaluationStoreException {
-		QualityLevel qualityLevel = null;
-		for (AnalysisFileTree child : directory.getChildren()) {
-			if (child.isFile()) {
-				NormalizedMaintainabilityIndexFileResults results = (NormalizedMaintainabilityIndexFileResults) store
-						.readFileResults(child.getHashId());
-				if (results != null) {
-					for (NormalizedMaintainabilityIndexFileResult result : results
-							.getResults()) {
-						qualityLevel = QualityLevel.combine(qualityLevel,
-								new QualityLevel(result.getQuality()));
-					}
-				}
-			} else {
-				NormalizedMaintainabilityIndexDirectoryResults results = (NormalizedMaintainabilityIndexDirectoryResults) store
-						.readDirectoryResults(child.getHashId());
-				if (results != null) {
-					qualityLevel = QualityLevel.combine(qualityLevel,
-							results.getQualityLevel());
-				}
-			}
-		}
-		NormalizedMaintainabilityIndexDirectoryResults finalResults = new NormalizedMaintainabilityIndexDirectoryResults(
-				new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
-				directory.getName());
-		finalResults.addQualityLevel(qualityLevel);
-		return finalResults;
-	}
-
-	@Override
-	protected MetricDirectoryResults processProject(AnalysisRun analysisRun)
-			throws InterruptedException, EvaluationStoreException {
-		return processDirectory(analysisRun, analysisRun.getFileTree());
-	}
+    @Override
+    protected MetricDirectoryResults processProject(AnalysisRun analysisRun)
+	    throws InterruptedException, EvaluationStoreException {
+	return processDirectory(analysisRun, analysisRun.getFileTree());
+    }
 }

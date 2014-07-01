@@ -42,201 +42,205 @@ import com.puresoltechnologies.purifinity.server.metrics.spi.sloc.SLOCType;
  */
 public class SLOCMetricCalculator extends CodeRangeEvaluator {
 
-	public static final String NAME = "SLOC Metric";
+    public static final String ID = SLOCEvaluator.class.getName();
 
-	public static final String DESCRIPTION = "SLOC Metric calculation.";
+    public static final String NAME = "SLOC Metric";
 
-	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
-	static {
-		EVALUATED_QUALITY_CHARACTERISTICS
-				.add(QualityCharacteristic.ANALYSABILITY);
-		EVALUATED_QUALITY_CHARACTERISTICS
-				.add(QualityCharacteristic.TESTABILITY);
+    public static final String DESCRIPTION = "SLOC Metric calculation.";
+
+    public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
+    static {
+	EVALUATED_QUALITY_CHARACTERISTICS
+		.add(QualityCharacteristic.ANALYSABILITY);
+	EVALUATED_QUALITY_CHARACTERISTICS
+		.add(QualityCharacteristic.TESTABILITY);
+    }
+
+    public static final Set<String> DEPENDENCIES = new HashSet<>();
+
+    private class LineResults implements Serializable {
+
+	private static final long serialVersionUID = -7222483379600215412L;
+
+	private int length = 0;
+	private boolean comments = false;
+	private boolean productiveContent = false;
+
+	public int getLength() {
+	    return length;
 	}
 
-	private class LineResults implements Serializable {
-
-		private static final long serialVersionUID = -7222483379600215412L;
-
-		private int length = 0;
-		private boolean comments = false;
-		private boolean productiveContent = false;
-
-		public int getLength() {
-			return length;
-		}
-
-		public void addLength(int length) {
-			this.length += length;
-		}
-
-		public boolean hasComments() {
-			return comments;
-		}
-
-		public void setComments(boolean comments) {
-			this.comments = comments;
-		}
-
-		public boolean hasProductiveContent() {
-			return productiveContent;
-		}
-
-		public void setProductiveContent(boolean productiveContent) {
-			this.productiveContent = productiveContent;
-		}
-
-		public boolean isBlank() {
-			return (!hasProductiveContent()) && (!hasComments());
-		}
+	public void addLength(int length) {
+	    this.length += length;
 	}
 
-	private final List<LineResults> lineResults = new ArrayList<LineResults>();
-	private SLOCMetric sloc;
-
-	private final AnalysisRun analysisRun;
-	private final CodeRange codeRange;
-	private final LanguageDependedSLOCMetric langDepended;
-
-	public SLOCMetricCalculator(AnalysisRun analysisRun,
-			ProgrammingLanguage language, CodeRange codeRange) {
-		super(NAME);
-		this.analysisRun = analysisRun;
-		this.codeRange = codeRange;
-		langDepended = language
-				.getImplementation(LanguageDependedSLOCMetric.class);
-		if (langDepended == null) {
-			throw new RuntimeException();
-		}
+	public boolean hasComments() {
+	    return comments;
 	}
 
-	@Override
-	public AnalysisRun getAnalysisRun() {
-		return analysisRun;
+	public void setComments(boolean comments) {
+	    this.comments = comments;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public CodeRange getCodeRange() {
-		return codeRange;
+	public boolean hasProductiveContent() {
+	    return productiveContent;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Boolean call() {
-		fireStarted("Evaluation started.", 1);
-		setup();
-		count();
-		fireDone("Finished evaluation.", true);
-		return true;
+	public void setProductiveContent(boolean productiveContent) {
+	    this.productiveContent = productiveContent;
 	}
 
-	private void setup() {
-		sloc = null;
-		lineResults.clear();
-		for (int i = 0; i < codeRange.getUniversalSyntaxTree().getMetaData()
-				.getLineNum(); i++) {
-			lineResults.add(new LineResults());
-		}
+	public boolean isBlank() {
+	    return (!hasProductiveContent()) && (!hasComments());
 	}
+    }
 
-	private void count() {
-		gatherData();
-		calculateFinalResult();
+    private final List<LineResults> lineResults = new ArrayList<LineResults>();
+    private SLOCMetric sloc;
+
+    private final AnalysisRun analysisRun;
+    private final CodeRange codeRange;
+    private final LanguageDependedSLOCMetric langDepended;
+
+    public SLOCMetricCalculator(AnalysisRun analysisRun,
+	    ProgrammingLanguage language, CodeRange codeRange) {
+	super(NAME);
+	this.analysisRun = analysisRun;
+	this.codeRange = codeRange;
+	langDepended = language
+		.getImplementation(LanguageDependedSLOCMetric.class);
+	if (langDepended == null) {
+	    throw new RuntimeException();
 	}
+    }
 
-	private void gatherData() {
-		TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
-				codeRange.getUniversalSyntaxTree());
-		int lineOffset = codeRange.getUniversalSyntaxTree().getMetaData()
-				.getLine();
-		do {
-			UniversalSyntaxTree node = iterator.getCurrentNode();
-			if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {
-				AbstractTerminal token = (AbstractTerminal) node;
-				SLOCType type = langDepended.getType(token);
-				UniversalSyntaxTreeMetaData metaData = token.getMetaData();
-				int lineId = metaData.getLine() - lineOffset;
-				int lineNum = metaData.getLineNum();
-				for (int line = lineId; line < lineId + lineNum; line++) {
-					if (type == SLOCType.COMMENT) {
-						// Additional check due to end-of-line comments contain
-						// an additional line break
-						if ((!token.getContent().endsWith("\n"))
-								|| (line < lineId + lineNum - 1)) {
-							lineResults.get(line).setComments(true);
-						}
-					} else if (type == SLOCType.PRODUCTIVE) {
-						lineResults.get(line).setProductiveContent(true);
-					}
-				}
-				String[] tokenParts = token.getContent().split("\n");
-				for (int i = 0; i < tokenParts.length; i++) {
-					String tokenPart = tokenParts[i];
-					lineResults.get(lineId + i).addLength(tokenPart.length());
-				}
+    @Override
+    public AnalysisRun getAnalysisRun() {
+	return analysisRun;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CodeRange getCodeRange() {
+	return codeRange;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean call() {
+	fireStarted("Evaluation started.", 1);
+	setup();
+	count();
+	fireDone("Finished evaluation.", true);
+	return true;
+    }
+
+    private void setup() {
+	sloc = null;
+	lineResults.clear();
+	for (int i = 0; i < codeRange.getUniversalSyntaxTree().getMetaData()
+		.getLineNum(); i++) {
+	    lineResults.add(new LineResults());
+	}
+    }
+
+    private void count() {
+	gatherData();
+	calculateFinalResult();
+    }
+
+    private void gatherData() {
+	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
+		codeRange.getUniversalSyntaxTree());
+	int lineOffset = codeRange.getUniversalSyntaxTree().getMetaData()
+		.getLine();
+	do {
+	    UniversalSyntaxTree node = iterator.getCurrentNode();
+	    if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {
+		AbstractTerminal token = (AbstractTerminal) node;
+		SLOCType type = langDepended.getType(token);
+		UniversalSyntaxTreeMetaData metaData = token.getMetaData();
+		int lineId = metaData.getLine() - lineOffset;
+		int lineNum = metaData.getLineNum();
+		for (int line = lineId; line < lineId + lineNum; line++) {
+		    if (type == SLOCType.COMMENT) {
+			// Additional check due to end-of-line comments contain
+			// an additional line break
+			if ((!token.getContent().endsWith("\n"))
+				|| (line < lineId + lineNum - 1)) {
+			    lineResults.get(line).setComments(true);
 			}
-		} while (iterator.goForward());
-	}
-
-	private void calculateFinalResult() {
-		int blLOC = 0;
-		int comLOC = 0;
-		int proLOC = 0;
-		int phyLOC = 0;
-
-		List<Double> lineLengths = new ArrayList<Double>();
-		for (LineResults lineResult : lineResults) {
-			if (lineResult.isBlank()) {
-				blLOC++;
-			} else {
-				if (lineResult.hasComments()) {
-					comLOC++;
-				}
-				if (lineResult.hasProductiveContent()) {
-					proLOC++;
-				}
-			}
-			phyLOC++;
-			lineLengths.add((double) lineResult.getLength());
+		    } else if (type == SLOCType.PRODUCTIVE) {
+			lineResults.get(line).setProductiveContent(true);
+		    }
 		}
-		sloc = new SLOCMetric(phyLOC, proLOC, comLOC, blLOC, new Statistics(
-				lineLengths));
-	}
+		String[] tokenParts = token.getContent().split("\n");
+		for (int i = 0; i < tokenParts.length; i++) {
+		    String tokenPart = tokenParts[i];
+		    lineResults.get(lineId + i).addLength(tokenPart.length());
+		}
+	    }
+	} while (iterator.goForward());
+    }
 
-	public void print() {
-		System.out.println("physical lines: " + sloc.getPhyLOC());
-		System.out.println("productive lines: " + sloc.getProLOC());
-		System.out.println("commented lines: " + sloc.getComLOC());
-		System.out.println("blank lines: " + sloc.getBlLOC());
-	}
+    private void calculateFinalResult() {
+	int blLOC = 0;
+	int comLOC = 0;
+	int proLOC = 0;
+	int phyLOC = 0;
 
-	public SLOCMetric getSLOCResult() {
-		return sloc;
+	List<Double> lineLengths = new ArrayList<Double>();
+	for (LineResults lineResult : lineResults) {
+	    if (lineResult.isBlank()) {
+		blLOC++;
+	    } else {
+		if (lineResult.hasComments()) {
+		    comLOC++;
+		}
+		if (lineResult.hasProductiveContent()) {
+		    proLOC++;
+		}
+	    }
+	    phyLOC++;
+	    lineLengths.add((double) lineResult.getLength());
 	}
+	sloc = new SLOCMetric(phyLOC, proLOC, comLOC, blLOC, new Statistics(
+		lineLengths));
+    }
 
-	@Override
-	public SourceCodeQuality getQuality() {
-		return SLOCQuality.get(codeRange.getType(), sloc);
-	}
+    public void print() {
+	System.out.println("physical lines: " + sloc.getPhyLOC());
+	System.out.println("productive lines: " + sloc.getProLOC());
+	System.out.println("commented lines: " + sloc.getComLOC());
+	System.out.println("blank lines: " + sloc.getBlLOC());
+    }
 
-	@Override
-	public String getDescription() {
-		return DESCRIPTION;
-	}
+    public SLOCMetric getSLOCResult() {
+	return sloc;
+    }
 
-	@Override
-	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return EVALUATED_QUALITY_CHARACTERISTICS;
-	}
+    @Override
+    public SourceCodeQuality getQuality() {
+	return SLOCQuality.get(codeRange.getType(), sloc);
+    }
 
-	@Override
-	public List<Result> getResults() {
-		return sloc.getResults();
-	}
+    @Override
+    public String getDescription() {
+	return DESCRIPTION;
+    }
+
+    @Override
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return EVALUATED_QUALITY_CHARACTERISTICS;
+    }
+
+    @Override
+    public List<Result> getResults() {
+	return sloc.getResults();
+    }
 
 }

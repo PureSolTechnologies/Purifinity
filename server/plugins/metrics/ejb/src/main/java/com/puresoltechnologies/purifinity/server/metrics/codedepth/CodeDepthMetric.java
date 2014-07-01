@@ -25,117 +25,121 @@ import com.puresoltechnologies.purifinity.server.metrics.spi.LanguageDependedCod
  */
 public class CodeDepthMetric extends CodeRangeEvaluator {
 
-	public static final String NAME = "Code Depth Metric";
+    public static final String ID = CodeDepthMetric.class.getName();
 
-	public static final String DESCRIPTION = "Analysis the nested code blocks for a maximum depth.";
+    public static final String NAME = "Code Depth Metric";
 
-	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
-	static {
-		EVALUATED_QUALITY_CHARACTERISTICS
-				.add(QualityCharacteristic.ANALYSABILITY);
-		EVALUATED_QUALITY_CHARACTERISTICS
-				.add(QualityCharacteristic.UNDERSTANDABILITY);
-	}
+    public static final String DESCRIPTION = "Analysis the nested code blocks for a maximum depth.";
 
-	private final AnalysisRun analysisRun;
-	private final List<Result> results = new ArrayList<Result>();
-	private final CodeRange codeRange;
-	private final LanguageDependedCodeDepthMetric langDepended;
-	private int maxDepth = 0;
+    public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
+    static {
+	EVALUATED_QUALITY_CHARACTERISTICS
+		.add(QualityCharacteristic.ANALYSABILITY);
+	EVALUATED_QUALITY_CHARACTERISTICS
+		.add(QualityCharacteristic.UNDERSTANDABILITY);
+    }
 
-	public CodeDepthMetric(AnalysisRun analysisRun,
-			ProgrammingLanguage language, CodeRange codeRange) {
-		super(NAME);
-		this.analysisRun = analysisRun;
-		this.codeRange = codeRange;
-		langDepended = language
-				.getImplementation(LanguageDependedCodeDepthMetric.class);
-	}
+    public static final Set<String> DEPENDENCIES = new HashSet<>();
 
-	@Override
-	public AnalysisRun getAnalysisRun() {
-		return analysisRun;
-	}
+    private final AnalysisRun analysisRun;
+    private final List<Result> results = new ArrayList<Result>();
+    private final CodeRange codeRange;
+    private final LanguageDependedCodeDepthMetric langDepended;
+    private int maxDepth = 0;
 
-	@Override
-	public CodeRange getCodeRange() {
-		return codeRange;
-	}
+    public CodeDepthMetric(AnalysisRun analysisRun,
+	    ProgrammingLanguage language, CodeRange codeRange) {
+	super(NAME);
+	this.analysisRun = analysisRun;
+	this.codeRange = codeRange;
+	langDepended = language
+		.getImplementation(LanguageDependedCodeDepthMetric.class);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Boolean call() {
-		boolean retVal = calculate();
-		recreateResultsList();
-		fireDone("Evaluation finished.", retVal);
-		return retVal;
-	}
+    @Override
+    public AnalysisRun getAnalysisRun() {
+	return analysisRun;
+    }
 
-	private boolean calculate() {
-		fireStarted("Starting evaluation.", 1);
-		maxDepth = 0;
-		TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
-				getCodeRange().getUniversalSyntaxTree());
+    @Override
+    public CodeRange getCodeRange() {
+	return codeRange;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean call() {
+	boolean retVal = calculate();
+	recreateResultsList();
+	fireDone("Evaluation finished.", retVal);
+	return retVal;
+    }
+
+    private boolean calculate() {
+	fireStarted("Starting evaluation.", 1);
+	maxDepth = 0;
+	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
+		getCodeRange().getUniversalSyntaxTree());
+	do {
+	    UniversalSyntaxTree node = iterator.getCurrentNode();
+	    if (!node.hasChildren()) {
+		UniversalSyntaxTree parent = node;
+		int depth = 0;
 		do {
-			UniversalSyntaxTree node = iterator.getCurrentNode();
-			if (!node.hasChildren()) {
-				UniversalSyntaxTree parent = node;
-				int depth = 0;
-				do {
-					if (langDepended.cascadingNode(parent)) {
-						depth++;
-					}
-					parent = parent.getParent();
-				} while ((parent != null)
-						&& (parent != getCodeRange().getUniversalSyntaxTree()));
-				if (depth > maxDepth) {
-					maxDepth = depth;
-				}
-			}
-		} while (iterator.goForward());
-		return true;
-	}
+		    if (langDepended.cascadingNode(parent)) {
+			depth++;
+		    }
+		    parent = parent.getParent();
+		} while ((parent != null)
+			&& (parent != getCodeRange().getUniversalSyntaxTree()));
+		if (depth > maxDepth) {
+		    maxDepth = depth;
+		}
+	    }
+	} while (iterator.goForward());
+	return true;
+    }
 
-	private void recreateResultsList() {
-		results.clear();
-		results.add(new Result(
-				"Maximum code depth",
-				"The maximum code depth is the maximum number of cascaded code blocks within the source.",
-				maxDepth, ""));
-	}
+    private void recreateResultsList() {
+	results.clear();
+	results.add(new Result(
+		"Maximum code depth",
+		"The maximum code depth is the maximum number of cascaded code blocks within the source.",
+		maxDepth, ""));
+    }
 
-	public int getMaxDepth() {
-		return maxDepth;
-	}
+    public int getMaxDepth() {
+	return maxDepth;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDescription() {
-		return DESCRIPTION;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDescription() {
+	return DESCRIPTION;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public SourceCodeQuality getQuality() {
-		return CodeDepthQuality.get(codeRange.getType(), maxDepth);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SourceCodeQuality getQuality() {
+	return CodeDepthQuality.get(codeRange.getType(), maxDepth);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return EVALUATED_QUALITY_CHARACTERISTICS;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 
-	@Override
-	public List<Result> getResults() {
-		return results;
-	}
+    @Override
+    public List<Result> getResults() {
+	return results;
+    }
 }

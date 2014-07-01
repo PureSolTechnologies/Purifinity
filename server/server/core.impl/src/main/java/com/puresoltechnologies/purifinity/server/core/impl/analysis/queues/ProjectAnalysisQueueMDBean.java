@@ -14,7 +14,6 @@ import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.Queue;
-import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 
@@ -152,23 +151,17 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
     private void createNewAnalysis(Date startTime, HashId hashId,
 	    SourceCodeLocation sourceFile) throws AnalyzerException,
 	    IOException, FileStoreException {
-	try {
-	    for (AnalyzerInformation analyzerInformation : analyzerPluginService
-		    .getServices()) {
-		ProgrammingLanguageAnalyzer instance = analyzerPluginService
-			.createInstance(analyzerInformation.getJndiName());
-		if (instance.isSuitable(sourceFile)) {
-		    logger.info("'"
-			    + sourceFile.getHumanReadableLocationString()
-			    + "' is a suitable file for '" + instance.getName()
-			    + "'.");
-		    CodeAnalysis codeAnalysis = instance.analyze(sourceFile);
-		    fileStore.storeAnalysis(hashId, codeAnalysis);
-		}
+	for (AnalyzerInformation analyzerInformation : analyzerPluginService
+		.getServices()) {
+	    ProgrammingLanguageAnalyzer instance = analyzerPluginService
+		    .createInstance(analyzerInformation.getJndiName());
+	    if (instance.isSuitable(sourceFile)) {
+		logger.info("'" + sourceFile.getHumanReadableLocationString()
+			+ "' is a suitable file for '" + instance.getName()
+			+ "'.");
+		CodeAnalysis codeAnalysis = instance.analyze(sourceFile);
+		fileStore.storeAnalysis(hashId, codeAnalysis);
 	    }
-	} catch (NamingException e) {
-	    logger.warn("File " + sourceFile.getHumanReadableLocationString()
-		    + " could be analyzed.");
 	}
     }
 }

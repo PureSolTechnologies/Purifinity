@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis.plugins;
 
 import javax.ejb.Singleton;
-import javax.naming.NamingException;
 
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginService;
@@ -20,8 +19,7 @@ public class AnalyzerPluginServiceImpl extends
     }
 
     @Override
-    public ProgrammingLanguageAnalyzer createInstance(String jndi)
-	    throws NamingException {
+    public ProgrammingLanguageAnalyzer createInstance(String jndi) {
 	return JndiUtils.createRemoteEJBInstance(
 		ProgrammingLanguageAnalyzer.class, jndi);
     }

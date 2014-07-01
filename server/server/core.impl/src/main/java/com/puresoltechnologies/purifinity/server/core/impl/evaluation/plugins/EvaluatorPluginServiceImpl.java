@@ -1,7 +1,10 @@
 package com.puresoltechnologies.purifinity.server.core.impl.evaluation.plugins;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.ejb.Singleton;
-import javax.naming.NamingException;
 
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginService;
@@ -20,10 +23,19 @@ public class EvaluatorPluginServiceImpl extends
     }
 
     @Override
-    public EvaluatorRemotePlugin createInstance(String jndi)
-	    throws NamingException {
+    public EvaluatorRemotePlugin createInstance(String jndi) {
 	return JndiUtils.createRemoteEJBInstance(EvaluatorRemotePlugin.class,
 		jndi);
     }
 
+    @Override
+    public List<EvaluatorPluginInformation> getServicesSortedByDependency() {
+	List<EvaluatorPluginInformation> sorted = new ArrayList<>();
+	Collection<EvaluatorPluginInformation> services = getServices();
+	for (EvaluatorPluginInformation service : services) {
+	    // FIXME add sorting
+	    sorted.add(service);
+	}
+	return sorted;
+    }
 }
