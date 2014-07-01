@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import com.buschmais.xo.api.ResultIterable;
@@ -11,11 +12,14 @@ import com.buschmais.xo.api.XOManager;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.DirectoryStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.DirectoryStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeDirectoryVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeFileVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.TitanXOManager;
 
-public class DirectoryStoreServiceBean implements DirectoryStoreService {
+@Stateless
+public class DirectoryStoreServiceBean implements DirectoryStoreService,
+	DirectoryStoreServiceRemote {
 
     @Inject
     @TitanXOManager

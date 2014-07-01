@@ -1,11 +1,14 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis;
 
+import javax.ejb.Remote;
+
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginService;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
 
 /**
  * This is the interface for the remote analyzer registration.
  */
+@Remote
 public interface AnalyzerPluginServiceRemote extends
 	PluginService<AnalyzerInformation> {
 

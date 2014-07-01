@@ -18,7 +18,7 @@ public interface AnalysisProjectVertex {
 
     public static final String NAME = "analysis_project";
 
-    @Indexed
+    @Indexed(unique = true)
     @Property(TitanElementNames.ANALYSIS_PROJECT_UUID_PROPERTY)
     public String getProjectUUID();
 

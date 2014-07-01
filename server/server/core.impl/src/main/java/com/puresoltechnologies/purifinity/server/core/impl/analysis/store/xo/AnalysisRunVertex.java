@@ -18,7 +18,7 @@ public interface AnalysisRunVertex {
 
     public static final String NAME = "analysis_run";
 
-    @Indexed
+    @Indexed(unique = true)
     @Property(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY)
     public String getRunUUID();
 

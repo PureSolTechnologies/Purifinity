@@ -183,7 +183,8 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    Iterable<Vertex> vertices = graph
 		    .query()
 		    .has(TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
-			    + AnalysisProjectVertex.NAME).vertices();
+			    + AnalysisProjectVertex.NAME,
+			    AnalysisProjectVertex.NAME).vertices();
 	    Iterator<Vertex> vertexIterator = vertices.iterator();
 	    while (vertexIterator.hasNext()) {
 		Vertex vertex = vertexIterator.next();

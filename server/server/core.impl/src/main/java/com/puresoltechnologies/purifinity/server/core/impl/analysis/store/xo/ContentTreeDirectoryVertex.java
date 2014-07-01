@@ -14,7 +14,7 @@ public interface ContentTreeDirectoryVertex {
 
     public static final String NAME = "content_tree_directory_node";
 
-    @Indexed
+    @Indexed(unique = true)
     @Property(TitanElementNames.TREE_ELEMENT_HASH)
     public String getHashId();
 

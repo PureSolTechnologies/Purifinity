@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
@@ -34,6 +35,7 @@ import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStor
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 
+@Stateless
 public final class FileStoreServiceBean implements FileStoreService {
 
     @Inject

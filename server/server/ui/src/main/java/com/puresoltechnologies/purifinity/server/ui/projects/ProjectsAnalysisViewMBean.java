@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.ui.projects;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import javax.faces.bean.ManagedBean;
@@ -11,7 +12,9 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisServi
 
 @ViewScoped
 @ManagedBean
-public class ProjectsAnalysisViewMBean {
+public class ProjectsAnalysisViewMBean implements Serializable {
+
+    private static final long serialVersionUID = 4856285592992961671L;
 
     @Inject
     private AnalysisService analysisService;

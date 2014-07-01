@@ -13,7 +13,7 @@ public interface ContentTreeFileVertex {
 
     public static final String NAME = "content_tree_file_node";
 
-    @Indexed
+    @Indexed(unique = true)
     @Property(TitanElementNames.TREE_ELEMENT_HASH)
     public String getHashId();
 

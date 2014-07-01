@@ -12,7 +12,7 @@ public interface FileTreeFileVertex {
 
     public static final String NAME = "file_tree_file_node";
 
-    @Indexed
+    @Indexed(unique = true)
     @Property(TitanElementNames.TREE_FS_ELEMENT_HASH)
     public String getHashId();
 
