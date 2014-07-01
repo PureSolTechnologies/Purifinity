@@ -17,7 +17,7 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 public class IntermediateCoCoMoPluginRegistration extends
 		AbstractPluginRegistration implements EvaluatorRemotePlugin {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalAddress(
+	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"metrics.plugin", "metrics.ejb", Evaluator.class,
 			IntermediateCoCoMoEvaluator.class);
 

@@ -17,7 +17,7 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 public class FortranPluginRegistration extends AbstractPluginRegistration
 		implements AnalyzerRemotePlugin {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalAddress(
+	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"fortran2008.plugin", "fortran2008.ejb",
 			ProgrammingLanguageAnalyzer.class, Fortran.class);
 	private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(

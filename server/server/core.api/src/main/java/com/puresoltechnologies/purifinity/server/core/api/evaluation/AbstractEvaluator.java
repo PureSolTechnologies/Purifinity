@@ -13,8 +13,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import javax.annotation.PostConstruct;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +35,7 @@ import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFact
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.DirectoryStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreServiceRemote;
+import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 /**
  * This interface is the main interface for all evaluators and the general
@@ -83,44 +82,11 @@ public abstract class AbstractEvaluator implements Evaluator {
 
     @PostConstruct
     public void construct() {
-	fileStore = getRemoteEJB(FileStoreServiceRemote.class,
-		FileStoreServiceRemote.JNDI_NAME);
-	directoryStore = getRemoteEJB(DirectoryStoreServiceRemote.class,
+	fileStore = JndiUtils.createRemoteEJBInstance(
+		FileStoreServiceRemote.class, FileStoreServiceRemote.JNDI_NAME);
+	directoryStore = JndiUtils.createRemoteEJBInstance(
+		DirectoryStoreServiceRemote.class,
 		DirectoryStoreServiceRemote.JNDI_NAME);
-    }
-
-    private static final int DEFAULT_RETRY_COUNT = 12;
-    private static final int DEFAULT_SLEEP = 5000;
-
-    private <T> T getRemoteEJB(Class<T> clazz, String jndiName) {
-	try {
-	    InitialContext context = new InitialContext();
-	    try {
-		/*
-		 * Retries are implemented, because during startup and parallel
-		 * deployment the remote plugin registration might not be
-		 * deployed and started, yet.
-		 */
-		int retried = 0;
-		while (retried < DEFAULT_RETRY_COUNT) {
-		    try {
-			@SuppressWarnings("unchecked")
-			T remoteEJB = (T) context.lookup(jndiName);
-			return remoteEJB;
-		    } catch (NamingException | IllegalStateException e) {
-			Thread.sleep(DEFAULT_SLEEP);
-			retried++;
-		    }
-		}
-		logger.error("'" + jndiName + "' was was not found.");
-		throw new IllegalStateException("Could not register plugin.");
-	    } finally {
-		context.close();
-	    }
-	} catch (InterruptedException | NamingException e) {
-	    throw new RuntimeException("Could not find '" + jndiName + "'.", e);
-	}
-
     }
 
     @Override

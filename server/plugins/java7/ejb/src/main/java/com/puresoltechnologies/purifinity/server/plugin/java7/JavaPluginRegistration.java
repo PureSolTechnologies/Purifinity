@@ -17,7 +17,7 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 public class JavaPluginRegistration extends AbstractPluginRegistration
 		implements AnalyzerRemotePlugin {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalAddress(
+	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"java7.plugin", "java7.ejb", ProgrammingLanguageAnalyzer.class,
 			Java.class);
 	private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
