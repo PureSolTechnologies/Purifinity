@@ -33,69 +33,70 @@ import com.puresoltechnologies.purifinity.server.plugin.java7.grammar.JavaGramma
 @Remote(ProgrammingLanguageAnalyzer.class)
 public class Java extends AbstractProgrammingLanguageAnalyzer {
 
-	public static final String NAME = "Java";
-	public static final Version VERSION = new Version(1, 7, 0);
+    public static final String NAME = "Java";
+    public static final String VERSION = "7";
+    public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
 
-	public static final String[] FILE_SUFFIXES = { ".java" };
+    public static final String[] FILE_SUFFIXES = { ".java" };
 
-	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 
-	public Java() {
-		super(NAME, VERSION);
+    public Java() {
+	super(NAME, VERSION);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String[] getValidFileSuffixes() {
+	return FILE_SUFFIXES;
+    }
+
+    @Override
+    public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+	return configurationParameters;
+    }
+
+    @Override
+    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+	try {
+	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+		    file));
+	    try {
+		return (CodeAnalyzer) ois.readObject();
+	    } finally {
+		ois.close();
+	    }
+	} catch (ClassNotFoundException e) {
+	    /*
+	     * XXX This needs to be null to go on with the language try out...
+	     * :-(
+	     */
+	    return null;
 	}
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected String[] getValidFileSuffixes() {
-		return FILE_SUFFIXES;
-	}
+    @Override
+    public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
+	return new JavaAnalyzer(sourceCodeLocation);
+    }
 
-	@Override
-	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-		return configurationParameters;
-	}
+    @Override
+    public LanguageGrammar getGrammar() {
+	return JavaGrammar.getInstance();
+    }
 
-	@Override
-	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-		try {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
-					file));
-			try {
-				return (CodeAnalyzer) ois.readObject();
-			} finally {
-				ois.close();
-			}
-		} catch (ClassNotFoundException e) {
-			/*
-			 * XXX This needs to be null to go on with the language try out...
-			 * :-(
-			 */
-			return null;
-		}
+    @Override
+    public <T> T getImplementation(Class<T> clazz) {
+	ServiceLoader<T> service = ServiceLoader.load(clazz);
+	Iterator<T> iterator = service.iterator();
+	T result = iterator.next();
+	if (iterator.hasNext()) {
+	    throw new RuntimeException(
+		    "There is more than one implementation available for '"
+			    + clazz.getName() + "'!");
 	}
-
-	@Override
-	public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
-		return new JavaAnalyzer(sourceCodeLocation);
-	}
-
-	@Override
-	public LanguageGrammar getGrammar() {
-		return JavaGrammar.getInstance();
-	}
-
-	@Override
-	public <T> T getImplementation(Class<T> clazz) {
-		ServiceLoader<T> service = ServiceLoader.load(clazz);
-		Iterator<T> iterator = service.iterator();
-		T result = iterator.next();
-		if (iterator.hasNext()) {
-			throw new RuntimeException(
-					"There is more than one implementation available for '"
-							+ clazz.getName() + "'!");
-		}
-		return result;
-	}
+	return result;
+    }
 }

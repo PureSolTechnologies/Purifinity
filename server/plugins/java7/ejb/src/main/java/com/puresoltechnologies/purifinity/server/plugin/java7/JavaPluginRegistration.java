@@ -15,32 +15,32 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 @Singleton
 @Startup
 public class JavaPluginRegistration extends AbstractPluginRegistration
-		implements AnalyzerRemotePlugin {
+	implements AnalyzerRemotePlugin {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
-			"java7.plugin", "java7.ejb", ProgrammingLanguageAnalyzer.class,
-			Java.class);
-	private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
-			Java.NAME, Java.VERSION, JNDI_ADDRESS,
-			"This is a Java 7 programming language analyzer.");
+    private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
+	    "java7.plugin", "java7.ejb", ProgrammingLanguageAnalyzer.class,
+	    Java.class);
+    private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
+	    Java.NAME, Java.VERSION, Java.PLUGIN_VERSION, JNDI_ADDRESS,
+	    "This is a Java 7 programming language analyzer.");
 
-	private final Java java = new Java();
+    private final Java java = new Java();
 
-	@PostConstruct
-	public void registraion() {
-		register(AnalyzerPluginServiceRemote.class,
-				AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
-				INFORMATION);
-	}
+    @PostConstruct
+    public void registraion() {
+	register(AnalyzerPluginServiceRemote.class,
+		AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
+		INFORMATION);
+    }
 
-	@PreDestroy
-	public void unregistration() {
-		unregister(AnalyzerPluginServiceRemote.class,
-				AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS);
-	}
+    @PreDestroy
+    public void unregistration() {
+	unregister(AnalyzerPluginServiceRemote.class,
+		AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS);
+    }
 
-	@Override
-	public String getName() {
-		return java.getName();
-	}
+    @Override
+    public String getName() {
+	return java.getName();
+    }
 }

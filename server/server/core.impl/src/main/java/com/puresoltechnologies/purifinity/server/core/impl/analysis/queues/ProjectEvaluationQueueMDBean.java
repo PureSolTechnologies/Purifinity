@@ -13,6 +13,9 @@ import javax.jms.MessageListener;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.misc.JSONSerializer;
+import com.puresoltechnologies.commons.trees.TreeVisitor;
+import com.puresoltechnologies.commons.trees.TreeWalker;
+import com.puresoltechnologies.commons.trees.WalkingAction;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
@@ -89,9 +92,17 @@ public class ProjectEvaluationQueueMDBean implements MessageListener {
      * @param fileTree
      */
     private void evaluate(AnalysisFileTree fileTree) {
-	for (EvaluatorPluginInformation evaluatorInformation : evaluatorPluginService
-		.getServices()) {
-	    // FIXME: Add evaluation...
-	}
+	TreeWalker.walkBackward(new TreeVisitor<AnalysisFileTree>() {
+
+	    @Override
+	    public WalkingAction visit(AnalysisFileTree tree) {
+		for (EvaluatorPluginInformation evaluatorInformation : evaluatorPluginService
+			.getServices()) {
+		    logger.info("Evaluator ");
+		}
+		return WalkingAction.PROCEED;
+	    }
+	}, fileTree);
+
     }
 }

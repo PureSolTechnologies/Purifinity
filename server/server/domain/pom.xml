@@ -21,6 +21,10 @@
 			<artifactId>misc</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>evaluation.api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-jaxrs</artifactId>
 		</dependency>

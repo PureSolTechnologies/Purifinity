@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.analysis.api;
 
-import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 
 /**
@@ -15,42 +14,42 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
  */
 public interface ProgrammingLanguage { // do not Serialize!
 
-	/**
-	 * This method returns the name of the programming language.
-	 * 
-	 * @return
-	 */
-	public String getName();
+    /**
+     * This method returns the name of the programming language.
+     * 
+     * @return
+     */
+    public String getName();
 
-	/**
-	 * This method returns the version of the programming language.
-	 * 
-	 * @return
-	 */
-	public Version getVersion();
+    /**
+     * This method returns the version of the programming language.
+     * 
+     * @return
+     */
+    public String getVersion();
 
-	/**
-	 * This method specifies whether the programming language is suitable for a
-	 * specified file or not.
-	 * 
-	 * @return
-	 */
-	public boolean isSuitable(SourceCodeLocation source);
+    /**
+     * This method specifies whether the programming language is suitable for a
+     * specified file or not.
+     * 
+     * @return
+     */
+    public boolean isSuitable(SourceCodeLocation source);
 
-	/**
-	 * This method returns the grammar of the programming language.
-	 * 
-	 * @return
-	 */
-	public LanguageGrammar getGrammar();
+    /**
+     * This method returns the grammar of the programming language.
+     * 
+     * @return
+     */
+    public LanguageGrammar getGrammar();
 
-	/**
-	 * This is a current workaround to get language specifics working for
-	 * metrics and evaluators.
-	 * 
-	 * @param clazz
-	 * @return
-	 */
-	public <T> T getImplementation(Class<T> clazz);
+    /**
+     * This is a current workaround to get language specifics working for
+     * metrics and evaluators.
+     * 
+     * @param clazz
+     * @return
+     */
+    public <T> T getImplementation(Class<T> clazz);
 
 }

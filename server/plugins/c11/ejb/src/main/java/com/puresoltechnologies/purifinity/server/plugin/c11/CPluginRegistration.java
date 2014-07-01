@@ -15,32 +15,32 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 @Singleton
 @Startup
 public class CPluginRegistration extends AbstractPluginRegistration implements
-		AnalyzerRemotePlugin {
+	AnalyzerRemotePlugin {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
-			"c11.plugin", "c11.ejb", ProgrammingLanguageAnalyzer.class,
-			C11.class);
-	private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
-			C11.NAME, C11.VERSION, JNDI_ADDRESS,
-			"This is a C11 programming language analyzer.");
+    private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
+	    "c11.plugin", "c11.ejb", ProgrammingLanguageAnalyzer.class,
+	    C11.class);
+    private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
+	    C11.NAME, C11.VERSION, C11.PLUGIN_VERSION, JNDI_ADDRESS,
+	    "This is a C11 programming language analyzer.");
 
-	private final C11 c11 = new C11();
+    private final C11 c11 = new C11();
 
-	@PostConstruct
-	public void registration() {
-		register(AnalyzerPluginServiceRemote.class,
-				AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
-				INFORMATION);
-	}
+    @PostConstruct
+    public void registration() {
+	register(AnalyzerPluginServiceRemote.class,
+		AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
+		INFORMATION);
+    }
 
-	@PreDestroy
-	public void unregistration() {
-		unregister(AnalyzerPluginServiceRemote.class,
-				AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS);
-	}
+    @PreDestroy
+    public void unregistration() {
+	unregister(AnalyzerPluginServiceRemote.class,
+		AnalyzerPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS);
+    }
 
-	@Override
-	public String getName() {
-		return c11.getName();
-	}
+    @Override
+    public String getName() {
+	return c11.getName();
+    }
 }

@@ -8,42 +8,49 @@ import com.puresoltechnologies.commons.misc.Version;
 
 public class AnalyzerInformation implements Serializable {
 
-	private static final long serialVersionUID = -1867488685418681896L;
+    private static final long serialVersionUID = -1867488685418681896L;
 
-	private final String name;
-	private final Version version;
-	private final String jndiName;
-	private final String description;
+    private final String name;
+    private final String version;
+    private final Version pluginVersion;
+    private final String jndiName;
+    private final String description;
 
-	public AnalyzerInformation(@JsonProperty("name") String name,
-			@JsonProperty("version") Version version,
-			@JsonProperty("jndiName") String jndiName,
-			@JsonProperty("description") String description) {
-		super();
-		this.name = name;
-		this.version = version;
-		this.jndiName = jndiName;
-		this.description = description;
-	}
+    public AnalyzerInformation(@JsonProperty("name") String name,
+	    @JsonProperty("version") String version,
+	    @JsonProperty("pluginVersion") Version pluginVersion,
+	    @JsonProperty("jndiName") String jndiName,
+	    @JsonProperty("description") String description) {
+	super();
+	this.name = name;
+	this.version = version;
+	this.pluginVersion = pluginVersion;
+	this.jndiName = jndiName;
+	this.description = description;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+	return name;
+    }
 
-	public Version getVersion() {
-		return version;
-	}
+    public String getVersion() {
+	return version;
+    }
 
-	public String getJndiName() {
-		return jndiName;
-	}
+    public Version getPluginVersion() {
+	return pluginVersion;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getJndiName() {
+	return jndiName;
+    }
 
-	@Override
-	public String toString() {
-		return getName() + " " + getVersion() + "(" + getJndiName() + ")";
-	}
+    public String getDescription() {
+	return description;
+    }
+
+    @Override
+    public String toString() {
+	return getName() + " " + getVersion() + "(" + getJndiName() + ")";
+    }
 }

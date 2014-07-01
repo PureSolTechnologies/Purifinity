@@ -34,92 +34,92 @@ import com.puresoltechnologies.purifinity.server.database.cassandra.utils.Cassan
  */
 public class AnalysisStoreCacheUtils {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(AnalysisStoreCacheUtils.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(AnalysisStoreCacheUtils.class);
 
-	@Inject
-	@AnalysisStoreKeyspace
-	private Session session;
+    @Inject
+    @AnalysisStoreKeyspace
+    private Session session;
 
-	@Inject
-	private CassandraPreparedStatements cassandraPreparedStatements;
+    @Inject
+    private CassandraPreparedStatements cassandraPreparedStatements;
 
-	/**
-	 * This method reads the cached {@link AnalysisFileTree} object stored with
-	 * {@link #cacheAnalysisFileTree(UUID, UUID, AnalysisFileTree)}.
-	 * 
-	 * @param projectUUID
-	 * @param runUUID
-	 * @return
-	 */
-	public AnalysisFileTree readCachedAnalysisFileTree(UUID projectUUID,
-			UUID runUUID) {
-		PreparedStatement preparedStatement = cassandraPreparedStatements
-				.getPreparedStatement(session, "SELECT persisted_tree FROM "
-						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
-						+ " WHERE run_uuid=?");
-		BoundStatement boundStatement = preparedStatement.bind(runUUID);
-		ResultSet resultSet = session.execute(boundStatement);
-		Row result = resultSet.one();
-		if (result == null) {
-			return null;
-		}
-		ByteBuffer byteBuffer = result.getBytes("persisted_tree");
-		try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
-				byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
-				ObjectInputStream objectInputStream = new ObjectInputStream(
-						byteArrayInputStream)) {
-			return (AnalysisFileTree) objectInputStream.readObject();
-		} catch (IOException | ClassNotFoundException e) {
-			logger.warn(
-					"Could not read already cached file tree with run_uuid '"
-							+ runUUID + "'.", e);
-			return null;
-		}
+    /**
+     * This method reads the cached {@link AnalysisFileTree} object stored with
+     * {@link #cacheAnalysisFileTree(UUID, UUID, AnalysisFileTree)}.
+     * 
+     * @param projectUUID
+     * @param runUUID
+     * @return
+     */
+    public AnalysisFileTree readCachedAnalysisFileTree(UUID projectUUID,
+	    UUID runUUID) {
+	PreparedStatement preparedStatement = cassandraPreparedStatements
+		.getPreparedStatement(session, "SELECT persisted_tree FROM "
+			+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
+			+ " WHERE run_uuid=?");
+	BoundStatement boundStatement = preparedStatement.bind(runUUID);
+	ResultSet resultSet = session.execute(boundStatement);
+	Row result = resultSet.one();
+	if (result == null) {
+	    return null;
 	}
-
-	/**
-	 * This method caches a {@link AnalysisFileTree} object Java serialized into
-	 * Cassandra, because it is quite an effort to read it from Titan.
-	 * 
-	 * @param projectUUID
-	 * @param runUUID
-	 * @param analysisFileTree
-	 */
-	public void cacheAnalysisFileTree(UUID projectUUID, UUID runUUID,
-			AnalysisFileTree analysisFileTree) {
-		PreparedStatement preparedStatement = cassandraPreparedStatements
-				.getPreparedStatement(session, "INSERT INTO "
-						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
-						+ " (run_uuid, persisted_tree) VALUES (?, ?)");
-		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-			try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-					byteArrayOutputStream)) {
-				objectOutputStream.writeObject(analysisFileTree);
-				BoundStatement boundStatement = preparedStatement.bind(runUUID);
-				boundStatement.setBytes("persisted_tree",
-						ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
-				session.execute(boundStatement);
-			}
-		} catch (IOException e) {
-			logger.warn("Could not cache analysis file tree with run_uuid '"
-					+ runUUID + "'.", e);
-		}
+	ByteBuffer byteBuffer = result.getBytes("persisted_tree");
+	try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
+		byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
+		ObjectInputStream objectInputStream = new ObjectInputStream(
+			byteArrayInputStream)) {
+	    return (AnalysisFileTree) objectInputStream.readObject();
+	} catch (IOException | ClassNotFoundException | ClassCastException e) {
+	    logger.warn(
+		    "Could not read already cached file tree with run_uuid '"
+			    + runUUID + "'.", e);
+	    return null;
 	}
+    }
 
-	/**
-	 * This method removes Analysis Run related caches.
-	 * 
-	 * @param projectUUID
-	 * @param runUUID
-	 */
-	public void clearAnalysisRunCaches(UUID projectUUID, UUID runUUID) {
-		PreparedStatement preparedStatement = cassandraPreparedStatements
-				.getPreparedStatement(session, "DELETE FROM "
-						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
-						+ " WHERE run_uuid=?");
+    /**
+     * This method caches a {@link AnalysisFileTree} object Java serialized into
+     * Cassandra, because it is quite an effort to read it from Titan.
+     * 
+     * @param projectUUID
+     * @param runUUID
+     * @param analysisFileTree
+     */
+    public void cacheAnalysisFileTree(UUID projectUUID, UUID runUUID,
+	    AnalysisFileTree analysisFileTree) {
+	PreparedStatement preparedStatement = cassandraPreparedStatements
+		.getPreparedStatement(session, "INSERT INTO "
+			+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
+			+ " (run_uuid, persisted_tree) VALUES (?, ?)");
+	try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+	    try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		    byteArrayOutputStream)) {
+		objectOutputStream.writeObject(analysisFileTree);
 		BoundStatement boundStatement = preparedStatement.bind(runUUID);
+		boundStatement.setBytes("persisted_tree",
+			ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
 		session.execute(boundStatement);
+	    }
+	} catch (IOException e) {
+	    logger.warn("Could not cache analysis file tree with run_uuid '"
+		    + runUUID + "'.", e);
 	}
+    }
+
+    /**
+     * This method removes Analysis Run related caches.
+     * 
+     * @param projectUUID
+     * @param runUUID
+     */
+    public void clearAnalysisRunCaches(UUID projectUUID, UUID runUUID) {
+	PreparedStatement preparedStatement = cassandraPreparedStatements
+		.getPreparedStatement(session, "DELETE FROM "
+			+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
+			+ " WHERE run_uuid=?");
+	BoundStatement boundStatement = preparedStatement.bind(runUUID);
+	session.execute(boundStatement);
+    }
 
 }

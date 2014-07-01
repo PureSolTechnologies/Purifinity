@@ -25,78 +25,78 @@ import com.puresoltechnologies.purifinity.server.plugin.fortran2008.grammar.Fort
 @Remote(ProgrammingLanguageAnalyzer.class)
 public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 
-	public static final String NAME = "Fortran";
-	public static final Version VERSION = new Version(2008, 0, 0);
+    public static final String NAME = "Fortran";
+    public static final String VERSION = "2008";
+    public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
 
-	public static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
-			".f95", ".for" };
+    public static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
+	    ".f95", ".for" };
 
-	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
-	private static Fortran instance = null;
+    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 
-	private SourceForm sourceForm = SourceForm.FREE_FORM;
+    private SourceForm sourceForm = SourceForm.FREE_FORM;
 
-	public Fortran() {
-		super(NAME, VERSION);
+    public Fortran() {
+	super(NAME, VERSION);
+    }
+
+    @Override
+    protected String[] getValidFileSuffixes() {
+	return FILE_SUFFIXES;
+    }
+
+    @Override
+    public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+	return configurationParameters;
+    }
+
+    @Override
+    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+	try {
+	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+		    file));
+	    try {
+		return (CodeAnalyzer) ois.readObject();
+	    } finally {
+		ois.close();
+	    }
+	} catch (ClassNotFoundException e) {
+	    /*
+	     * XXX This needs to be null to go on with the language try out...
+	     * :-(
+	     */
+	    return null;
 	}
+    }
 
-	@Override
-	protected String[] getValidFileSuffixes() {
-		return FILE_SUFFIXES;
-	}
+    @Override
+    public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
+	return new FortranAnalyzer(sourceCodeLocation);
+    }
 
-	@Override
-	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-		return configurationParameters;
-	}
+    public void setSourceForm(SourceForm sourceForm) {
+	this.sourceForm = sourceForm;
+    }
 
-	@Override
-	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-		try {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
-					file));
-			try {
-				return (CodeAnalyzer) ois.readObject();
-			} finally {
-				ois.close();
-			}
-		} catch (ClassNotFoundException e) {
-			/*
-			 * XXX This needs to be null to go on with the language try out...
-			 * :-(
-			 */
-			return null;
-		}
-	}
+    public SourceForm getSourceForm() {
+	return sourceForm;
+    }
 
-	@Override
-	public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
-		return new FortranAnalyzer(sourceCodeLocation);
-	}
+    @Override
+    public LanguageGrammar getGrammar() {
+	return FortranGrammar.getInstance();
+    }
 
-	public void setSourceForm(SourceForm sourceForm) {
-		this.sourceForm = sourceForm;
+    @Override
+    public <T> T getImplementation(Class<T> clazz) {
+	ServiceLoader<T> service = ServiceLoader.load(clazz);
+	Iterator<T> iterator = service.iterator();
+	T result = iterator.next();
+	if (iterator.hasNext()) {
+	    throw new RuntimeException(
+		    "There is more than one implementation available for '"
+			    + clazz.getName() + "'!");
 	}
-
-	public SourceForm getSourceForm() {
-		return sourceForm;
-	}
-
-	@Override
-	public LanguageGrammar getGrammar() {
-		return FortranGrammar.getInstance();
-	}
-
-	@Override
-	public <T> T getImplementation(Class<T> clazz) {
-		ServiceLoader<T> service = ServiceLoader.load(clazz);
-		Iterator<T> iterator = service.iterator();
-		T result = iterator.next();
-		if (iterator.hasNext()) {
-			throw new RuntimeException(
-					"There is more than one implementation available for '"
-							+ clazz.getName() + "'!");
-		}
-		return result;
-	}
+	return result;
+    }
 }
