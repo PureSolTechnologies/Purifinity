@@ -139,9 +139,9 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    HashId hashId = child.getHashId();
 	    if (child.isFile()) {
-		if (store.hasFileResults(BasicCoCoMoResults.class, hashId)) {
+		if (store.hasFileResults(BasicCoCoMoFileResults.class, hashId)) {
 		    BasicCoCoMoResults fileResults = store.readFileResults(
-			    BasicCoCoMoResults.class, hashId);
+			    BasicCoCoMoFileResults.class, hashId);
 		    phyLoc += fileResults.getPhyLOC();
 		}
 	    } else {

@@ -139,11 +139,11 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    HashId hashId = child.getHashId();
 	    if (child.isFile()) {
-		if (store.hasFileResults(IntermediateCoCoMoResults.class,
+		if (store.hasFileResults(IntermediateCoCoMoFileResults.class,
 			hashId)) {
 		    IntermediateCoCoMoResults fileResults = store
-			    .readFileResults(IntermediateCoCoMoResults.class,
-				    hashId);
+			    .readFileResults(
+				    IntermediateCoCoMoFileResults.class, hashId);
 		    phyLoc += fileResults.getPhyLOC();
 		}
 	    } else {
