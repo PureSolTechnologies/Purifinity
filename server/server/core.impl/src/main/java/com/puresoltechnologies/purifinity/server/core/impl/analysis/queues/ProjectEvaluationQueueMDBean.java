@@ -13,12 +13,12 @@ import javax.jms.MessageListener;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.misc.JSONSerializer;
-import com.puresoltechnologies.commons.trees.TreeVisitor;
-import com.puresoltechnologies.commons.trees.TreeWalker;
-import com.puresoltechnologies.commons.trees.WalkingAction;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
 import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
@@ -72,7 +72,9 @@ public class ProjectEvaluationQueueMDBean implements MessageListener {
 	    analysisFileTree = analysisStore.readAnalysisFileTree(
 		    analysisRunInformation.getProjectUUID(),
 		    analysisRunInformation.getRunUUID());
-	    evaluate(analysisFileTree);
+	    AnalysisRun analysisRun = new AnalysisRun(analysisRunInformation,
+		    analysisFileTree);
+	    evaluate(analysisRun);
 
 	    analysisProcessStateTracker.changeProcessState(
 		    analysisRunInformation.getProjectUUID(),
@@ -80,29 +82,28 @@ public class ProjectEvaluationQueueMDBean implements MessageListener {
 		    AnalysisProcessTransition.FINISH);
 	    analysisProcessStateTracker.stopProcess(analysisRunInformation
 		    .getProjectUUID());
-	} catch (JMSException | AnalysisStoreException | IOException e) {
+	} catch (InterruptedException | EvaluationStoreException | JMSException
+		| AnalysisStoreException | IOException e) {
 	    // An issue occurred, re-queue the request.
 	    eventLogger.logEvent(ProjectAnalysisEvents.createGeneralError(e));
-	    throw new RuntimeException("Could not analyze the project.", e);
+	    throw new RuntimeException("Could not evaluate the run.", e);
 	}
     }
 
     /**
      * 
      * @param fileTree
+     * @throws EvaluationStoreException
+     * @throws InterruptedException
      */
-    private void evaluate(AnalysisFileTree fileTree) {
-	TreeWalker.walkBackward(new TreeVisitor<AnalysisFileTree>() {
-
-	    @Override
-	    public WalkingAction visit(AnalysisFileTree tree) {
-		for (EvaluatorPluginInformation evaluatorInformation : evaluatorPluginService
-			.getServices()) {
-		    logger.info("Evaluator ");
-		}
-		return WalkingAction.PROCEED;
-	    }
-	}, fileTree);
-
+    private void evaluate(AnalysisRun analysisRun) throws InterruptedException,
+	    EvaluationStoreException {
+	for (EvaluatorPluginInformation evaluatorInformation : evaluatorPluginService
+		.getServicesSortedByDependency()) {
+	    logger.info("Evaluator ");
+	    Evaluator evaluator = evaluatorPluginService
+		    .createInstance(evaluatorInformation.getJndiName());
+	    evaluator.analyze(analysisRun);
+	}
     }
 }

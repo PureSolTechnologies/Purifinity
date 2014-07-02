@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorPluginInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 
@@ -26,7 +26,7 @@ public class SystemPluginsMBean {
 	@Inject
 	private RepositoryTypePluginService repositoryTypePluginService;
 
-	public Collection<AnalyzerInformation> getAnalyzers() {
+	public Collection<AnalyzerPluginInformation> getAnalyzers() {
 		return analyzerPluginService.getServices();
 	}
 

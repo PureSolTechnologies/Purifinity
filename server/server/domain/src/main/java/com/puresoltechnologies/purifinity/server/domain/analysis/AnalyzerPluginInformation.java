@@ -6,7 +6,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.puresoltechnologies.commons.misc.Version;
 
-public class AnalyzerInformation implements Serializable {
+public class AnalyzerPluginInformation implements Serializable {
 
     private static final long serialVersionUID = -1867488685418681896L;
 
@@ -16,7 +16,7 @@ public class AnalyzerInformation implements Serializable {
     private final String jndiName;
     private final String description;
 
-    public AnalyzerInformation(@JsonProperty("name") String name,
+    public AnalyzerPluginInformation(@JsonProperty("name") String name,
 	    @JsonProperty("version") String version,
 	    @JsonProperty("pluginVersion") Version pluginVersion,
 	    @JsonProperty("jndiName") String jndiName,

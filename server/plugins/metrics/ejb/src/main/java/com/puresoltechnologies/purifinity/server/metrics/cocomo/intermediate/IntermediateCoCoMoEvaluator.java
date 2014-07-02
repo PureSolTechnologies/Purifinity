@@ -16,6 +16,7 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
@@ -37,10 +38,8 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocom
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.intermediate.SoftwareProject;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCResult;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
 
 /**
@@ -75,17 +74,15 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 
     private static final Set<ConfigurationParameter<?>> CONFIGURATION_PARAMETERS = new HashSet<>();
 
-    private final EvaluatorStore store;
-    private final EvaluatorStore slocStore;
+    @Inject
+    private EvaluatorStoreService store;
+
     private SoftwareProject project = SoftwareProject.SEMI_DETACHED;
     private int averageSalary = 56286;
     private String currency = "USD";
 
     public IntermediateCoCoMoEvaluator() {
-	super(NAME, DESCRIPTION);
-	store = getEvaluatorStore();
-	slocStore = EvaluatorStoreFactory.getFactory().createInstance(
-		SLOCEvaluator.class);
+	super(ID, NAME, DESCRIPTION);
     }
 
     @Override
@@ -114,9 +111,9 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
     protected MetricFileResults processFile(AnalysisRun analysisRun,
 	    CodeAnalysis analysis) throws EvaluationStoreException {
 	HashId hashId = analysis.getAnalysisInformation().getHashId();
-	if (slocStore.hasFileResults(hashId)) {
-	    SLOCFileResults slocResults = (SLOCFileResults) slocStore
-		    .readFileResults(hashId);
+	if (store.hasFileResults(SLOCFileResults.class, hashId)) {
+	    SLOCFileResults slocResults = store.readFileResults(
+		    SLOCFileResults.class, hashId);
 	    SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
 		    hashId).getSourceCodeLocation();
 	    for (SLOCResult results : slocResults.getResults()) {
@@ -142,15 +139,20 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    HashId hashId = child.getHashId();
 	    if (child.isFile()) {
-		if (store.hasFileResults(hashId)) {
-		    IntermediateCoCoMoResults fileResults = (IntermediateCoCoMoResults) store
-			    .readFileResults(hashId);
+		if (store.hasFileResults(IntermediateCoCoMoResults.class,
+			hashId)) {
+		    IntermediateCoCoMoResults fileResults = store
+			    .readFileResults(IntermediateCoCoMoResults.class,
+				    hashId);
 		    phyLoc += fileResults.getPhyLOC();
 		}
 	    } else {
-		if (store.hasDirectoryResults(hashId)) {
-		    IntermediateCoCoMoDirectoryResults directoryResults = (IntermediateCoCoMoDirectoryResults) store
-			    .readDirectoryResults(hashId);
+		if (store.hasDirectoryResults(
+			IntermediateCoCoMoDirectoryResults.class, hashId)) {
+		    IntermediateCoCoMoDirectoryResults directoryResults = store
+			    .readDirectoryResults(
+				    IntermediateCoCoMoDirectoryResults.class,
+				    hashId);
 		    phyLoc += directoryResults.getPhyLOC();
 		}
 	    }
@@ -169,6 +171,67 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	    throws InterruptedException, EvaluationStoreException {
 	AnalysisFileTree directory = analysisRun.getFileTree();
 	return processDirectory(analysisRun, directory);
+    }
+
+    @Override
+    protected MetricFileResults readFileResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return store.readFileResults(IntermediateCoCoMoFileResults.class,
+		hashId);
+    }
+
+    @Override
+    protected boolean hasFileResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return store
+		.hasFileResults(IntermediateCoCoMoFileResults.class, hashId);
+    }
+
+    @Override
+    protected void storeFileResults(AnalysisRun analysisRun,
+	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
+	    MetricFileResults fileResults) throws EvaluationStoreException {
+	store.storeFileResults(analysisRun, fileAnalysis, evaluator,
+		fileResults);
+    }
+
+    @Override
+    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
+	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
+	    MetricFileResults fileResults) {
+	store.storeMetricsInBigTable(analysisRun, fileAnalysis, evaluator,
+		fileResults);
+    }
+
+    @Override
+    protected MetricDirectoryResults readDirectoryResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return store.readDirectoryResults(
+		IntermediateCoCoMoDirectoryResults.class, hashId);
+    }
+
+    @Override
+    protected boolean hasDirectoryResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return store.hasDirectoryResults(
+		IntermediateCoCoMoDirectoryResults.class, hashId);
+    }
+
+    @Override
+    protected void storeDirectoryResults(AnalysisRun analysisRun,
+	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
+	    MetricDirectoryResults directoryResults)
+	    throws EvaluationStoreException {
+	store.storeDirectoryResults(analysisRun, directoryNode, evaluator,
+		directoryResults);
+    }
+
+    @Override
+    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
+	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
+	    MetricDirectoryResults directoryResults) {
+	store.storeMetricsInBigTable(analysisRun, directoryNode, evaluator,
+		directoryResults);
     }
 
 }

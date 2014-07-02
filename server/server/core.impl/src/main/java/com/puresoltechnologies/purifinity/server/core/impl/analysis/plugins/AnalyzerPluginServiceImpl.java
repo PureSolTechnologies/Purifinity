@@ -6,12 +6,12 @@ import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyz
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginServiceRemote;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 public class AnalyzerPluginServiceImpl extends
-	AbstractPluginService<AnalyzerInformation> implements
+	AbstractPluginService<AnalyzerPluginInformation> implements
 	AnalyzerPluginService, AnalyzerPluginServiceRemote {
 
     public AnalyzerPluginServiceImpl() {

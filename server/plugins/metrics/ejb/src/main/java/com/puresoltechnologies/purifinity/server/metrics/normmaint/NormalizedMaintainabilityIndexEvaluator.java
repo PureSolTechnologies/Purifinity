@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
@@ -25,9 +26,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexResult;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
 import com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluator;
 
 @Stateless
@@ -58,15 +58,11 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 
     private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 
-    private final EvaluatorStore store;
-    private final EvaluatorStore maintainabilityStore;
+    @Inject
+    private EvaluatorStoreService store;
 
     public NormalizedMaintainabilityIndexEvaluator() {
-	super(NAME, DESCRIPTION);
-	store = getEvaluatorStore();
-
-	maintainabilityStore = EvaluatorStoreFactory.getFactory()
-		.createInstance(MaintainabilityIndexEvaluator.class);
+	super(ID, NAME, DESCRIPTION);
     }
 
     @Override
@@ -81,8 +77,8 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	NormalizedMaintainabilityIndexFileResults results = new NormalizedMaintainabilityIndexFileResults();
 
 	HashId hashId = analysis.getAnalysisInformation().getHashId();
-	MaintainabilityIndexFileResults maintainabilityFileResults = (MaintainabilityIndexFileResults) maintainabilityStore
-		.readFileResults(hashId);
+	MaintainabilityIndexFileResults maintainabilityFileResults = store
+		.readFileResults(MaintainabilityIndexFileResults.class, hashId);
 	SourceCodeLocation sourceCodeLocation = analysisRun
 		.findTreeNode(hashId).getSourceCodeLocation();
 
@@ -132,8 +128,10 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	QualityLevel qualityLevel = null;
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    if (child.isFile()) {
-		NormalizedMaintainabilityIndexFileResults results = (NormalizedMaintainabilityIndexFileResults) store
-			.readFileResults(child.getHashId());
+		NormalizedMaintainabilityIndexFileResults results = store
+			.readFileResults(
+				NormalizedMaintainabilityIndexFileResults.class,
+				child.getHashId());
 		if (results != null) {
 		    for (NormalizedMaintainabilityIndexFileResult result : results
 			    .getResults()) {
@@ -142,8 +140,10 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 		    }
 		}
 	    } else {
-		NormalizedMaintainabilityIndexDirectoryResults results = (NormalizedMaintainabilityIndexDirectoryResults) store
-			.readDirectoryResults(child.getHashId());
+		NormalizedMaintainabilityIndexDirectoryResults results = store
+			.readDirectoryResults(
+				NormalizedMaintainabilityIndexDirectoryResults.class,
+				child.getHashId());
 		if (results != null) {
 		    qualityLevel = QualityLevel.combine(qualityLevel,
 			    results.getQualityLevel());
@@ -161,5 +161,66 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
     protected MetricDirectoryResults processProject(AnalysisRun analysisRun)
 	    throws InterruptedException, EvaluationStoreException {
 	return processDirectory(analysisRun, analysisRun.getFileTree());
+    }
+
+    @Override
+    protected MetricFileResults readFileResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return store.readFileResults(
+		NormalizedMaintainabilityIndexFileResults.class, hashId);
+    }
+
+    @Override
+    protected boolean hasFileResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return store.hasFileResults(
+		NormalizedMaintainabilityIndexFileResults.class, hashId);
+    }
+
+    @Override
+    protected void storeFileResults(AnalysisRun analysisRun,
+	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
+	    MetricFileResults fileResults) throws EvaluationStoreException {
+	store.storeFileResults(analysisRun, fileAnalysis, evaluator,
+		fileResults);
+    }
+
+    @Override
+    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
+	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
+	    MetricFileResults fileResults) {
+	store.storeMetricsInBigTable(analysisRun, fileAnalysis, evaluator,
+		fileResults);
+    }
+
+    @Override
+    protected MetricDirectoryResults readDirectoryResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return store.readDirectoryResults(
+		NormalizedMaintainabilityIndexDirectoryResults.class, hashId);
+    }
+
+    @Override
+    protected boolean hasDirectoryResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return store.hasDirectoryResults(
+		NormalizedMaintainabilityIndexDirectoryResults.class, hashId);
+    }
+
+    @Override
+    protected void storeDirectoryResults(AnalysisRun analysisRun,
+	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
+	    MetricDirectoryResults directoryResults)
+	    throws EvaluationStoreException {
+	store.storeDirectoryResults(analysisRun, directoryNode, evaluator,
+		directoryResults);
+    }
+
+    @Override
+    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
+	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
+	    MetricDirectoryResults directoryResults) {
+	store.storeMetricsInBigTable(analysisRun, directoryNode, evaluator,
+		directoryResults);
     }
 }

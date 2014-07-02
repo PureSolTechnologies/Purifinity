@@ -6,10 +6,10 @@ import java.util.List;
 
 import javax.ejb.Singleton;
 
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginServiceRemote;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemotePlugin;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorPluginInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
@@ -23,9 +23,8 @@ public class EvaluatorPluginServiceImpl extends
     }
 
     @Override
-    public EvaluatorRemotePlugin createInstance(String jndi) {
-	return JndiUtils.createRemoteEJBInstance(EvaluatorRemotePlugin.class,
-		jndi);
+    public Evaluator createInstance(String jndi) {
+	return JndiUtils.createRemoteEJBInstance(Evaluator.class, jndi);
     }
 
     @Override

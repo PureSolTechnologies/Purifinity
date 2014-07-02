@@ -16,7 +16,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisServi
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.queues.ProjectAnalysisStartQueue;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
@@ -55,7 +55,7 @@ public class AnalysisServiceBean implements AnalysisService {
 	}
 
 	@Override
-	public Collection<AnalyzerInformation> getAnalyzers() {
+	public Collection<AnalyzerPluginInformation> getAnalyzers() {
 		return analyzerRegistration.getServices();
 	}
 

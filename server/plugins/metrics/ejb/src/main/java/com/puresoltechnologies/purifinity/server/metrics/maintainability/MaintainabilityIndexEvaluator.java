@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
@@ -33,16 +34,12 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maint
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCResult;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStoreFactory;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetric;
-import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetric;
-import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetricFileResults;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetricResult;
-import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
 
 @Stateless
@@ -74,18 +71,11 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
     private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 
-    private final EvaluatorStore store;
-    private final EvaluatorStore slocStore;
-    private final EvaluatorStore mcCabeStore;
-    private final EvaluatorStore halsteadStore;
+    @Inject
+    private EvaluatorStoreService store;
 
     public MaintainabilityIndexEvaluator() {
-	super(NAME, DESCRIPTION);
-	store = getEvaluatorStore();
-	EvaluatorStoreFactory factory = EvaluatorStoreFactory.getFactory();
-	slocStore = factory.createInstance(SLOCEvaluator.class);
-	mcCabeStore = factory.createInstance(McCabeMetricEvaluator.class);
-	halsteadStore = factory.createInstance(HalsteadMetricEvaluator.class);
+	super(ID, NAME, DESCRIPTION);
     }
 
     @Override
@@ -101,12 +91,12 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 
 	AnalysisInformation analyzedFile = analysis.getAnalysisInformation();
 	HashId hashId = analyzedFile.getHashId();
-	SLOCFileResults slocFileResults = (SLOCFileResults) slocStore
-		.readFileResults(hashId);
-	McCabeMetricFileResults mcCabeFileResults = (McCabeMetricFileResults) mcCabeStore
-		.readFileResults(hashId);
-	HalsteadMetricFileResults halsteadFileResults = (HalsteadMetricFileResults) halsteadStore
-		.readFileResults(hashId);
+	SLOCFileResults slocFileResults = store.readFileResults(
+		SLOCFileResults.class, hashId);
+	McCabeMetricFileResults mcCabeFileResults = store.readFileResults(
+		McCabeMetricFileResults.class, hashId);
+	HalsteadMetricFileResults halsteadFileResults = store.readFileResults(
+		HalsteadMetricFileResults.class, hashId);
 	SourceCodeLocation sourceCodeLocation = analysisRun
 		.findTreeNode(hashId).getSourceCodeLocation();
 
@@ -188,8 +178,9 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	QualityLevel qualityLevel = null;
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    if (child.isFile()) {
-		MaintainabilityIndexFileResults results = (MaintainabilityIndexFileResults) store
-			.readFileResults(child.getHashId());
+		MaintainabilityIndexFileResults results = store
+			.readFileResults(MaintainabilityIndexFileResults.class,
+				child.getHashId());
 		if (results != null) {
 		    for (MaintainabilityIndexFileResult result : results
 			    .getResults()) {
@@ -198,8 +189,10 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 		    }
 		}
 	    } else {
-		MaintainabilityIndexDirectoryResults results = (MaintainabilityIndexDirectoryResults) store
-			.readDirectoryResults(child.getHashId());
+		MaintainabilityIndexDirectoryResults results = store
+			.readDirectoryResults(
+				MaintainabilityIndexDirectoryResults.class,
+				child.getHashId());
 		if (results != null) {
 		    qualityLevel = QualityLevel.combine(qualityLevel,
 			    results.getQualityLevel());
@@ -217,5 +210,66 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
     protected MetricDirectoryResults processProject(AnalysisRun analysisRun)
 	    throws InterruptedException, EvaluationStoreException {
 	return processDirectory(analysisRun, analysisRun.getFileTree());
+    }
+
+    @Override
+    protected MetricFileResults readFileResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return store.readFileResults(MaintainabilityIndexFileResults.class,
+		hashId);
+    }
+
+    @Override
+    protected boolean hasFileResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return store.hasFileResults(MaintainabilityIndexFileResults.class,
+		hashId);
+    }
+
+    @Override
+    protected void storeFileResults(AnalysisRun analysisRun,
+	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
+	    MetricFileResults fileResults) throws EvaluationStoreException {
+	store.storeFileResults(analysisRun, fileAnalysis, evaluator,
+		fileResults);
+    }
+
+    @Override
+    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
+	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
+	    MetricFileResults fileResults) {
+	store.storeMetricsInBigTable(analysisRun, fileAnalysis, evaluator,
+		fileResults);
+    }
+
+    @Override
+    protected MetricDirectoryResults readDirectoryResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return store.readDirectoryResults(
+		MaintainabilityIndexDirectoryResults.class, hashId);
+    }
+
+    @Override
+    protected boolean hasDirectoryResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return store.hasDirectoryResults(
+		MaintainabilityIndexDirectoryResults.class, hashId);
+    }
+
+    @Override
+    protected void storeDirectoryResults(AnalysisRun analysisRun,
+	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
+	    MetricDirectoryResults directoryResults)
+	    throws EvaluationStoreException {
+	store.storeDirectoryResults(analysisRun, directoryNode, evaluator,
+		directoryResults);
+    }
+
+    @Override
+    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
+	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
+	    MetricDirectoryResults directoryResults) {
+	store.storeMetricsInBigTable(analysisRun, directoryNode, evaluator,
+		directoryResults);
     }
 }

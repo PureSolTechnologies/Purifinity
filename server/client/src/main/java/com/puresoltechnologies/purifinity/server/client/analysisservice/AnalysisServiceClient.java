@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisServiceRestInterface;
 import com.puresoltechnologies.purifinity.server.common.rest.AbstractRestClient;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 
 public class AnalysisServiceClient extends
@@ -27,7 +27,7 @@ public class AnalysisServiceClient extends
 				AnalysisServiceRestInterface.class);
 	}
 
-	public Collection<AnalyzerInformation> getAnalyzers() throws IOException {
+	public Collection<AnalyzerPluginInformation> getAnalyzers() throws IOException {
 		return getProxy().getAnalyzers();
 	}
 

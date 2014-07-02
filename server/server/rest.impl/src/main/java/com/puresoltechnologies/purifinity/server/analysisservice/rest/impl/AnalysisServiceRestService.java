@@ -9,7 +9,7 @@ import javax.jms.JMSException;
 
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisServiceRestInterface;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 
 public class AnalysisServiceRestService implements AnalysisServiceRestInterface {
@@ -18,7 +18,7 @@ public class AnalysisServiceRestService implements AnalysisServiceRestInterface 
 	private AnalysisService analysisService;
 
 	@Override
-	public Collection<AnalyzerInformation> getAnalyzers() throws IOException {
+	public Collection<AnalyzerPluginInformation> getAnalyzers() throws IOException {
 		return analysisService.getAnalyzers();
 	}
 

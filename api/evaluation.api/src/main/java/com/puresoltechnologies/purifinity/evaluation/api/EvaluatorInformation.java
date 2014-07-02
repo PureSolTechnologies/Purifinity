@@ -10,6 +10,7 @@ package com.puresoltechnologies.purifinity.evaluation.api;
  */
 public class EvaluatorInformation {
 
+    private final String id;
     /**
      * Contains the name of the evaluator.
      */
@@ -19,10 +20,15 @@ public class EvaluatorInformation {
      */
     private final String description;
 
-    public EvaluatorInformation(String name, String description) {
+    public EvaluatorInformation(String id, String name, String description) {
 	super();
+	this.id = id;
 	this.name = name;
 	this.description = description;
+    }
+
+    public String getId() {
+	return id;
     }
 
     /**

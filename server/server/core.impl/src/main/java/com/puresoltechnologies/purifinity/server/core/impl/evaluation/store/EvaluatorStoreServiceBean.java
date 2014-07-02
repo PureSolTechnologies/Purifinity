@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.core.api.evaluation;
+package com.puresoltechnologies.purifinity.server.core.impl.evaluation.store;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import com.datastax.driver.core.BoundStatement;
@@ -37,7 +38,9 @@ import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResul
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.ValueSerializer;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
@@ -47,7 +50,9 @@ import com.puresoltechnologies.purifinity.server.database.cassandra.utils.Cassan
  * 
  * @author Rick-Rainer Ludwig
  */
-public abstract class AbstractEvaluatorStore implements EvaluatorStore {
+@Stateless
+public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
+	EvaluatorStoreServiceRemote {
 
     @Inject
     @EvaluationStoreKeyspace
@@ -56,21 +61,16 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
     @Inject
     private CassandraPreparedStatements cassandraPreparedStatements;
 
-    protected abstract Class<? extends MetricFileResults> getFileResultClass();
-
-    protected abstract Class<? extends MetricDirectoryResults> getDirectoryResultClass();
-
-    protected abstract Class<? extends MetricDirectoryResults> getProjectResultClass();
-
     @Override
-    public final boolean hasFileResults(HashId hashId)
+    public final boolean hasFileResults(
+	    Class<? extends MetricFileResults> fileResultsClass, HashId hashId)
 	    throws EvaluationStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
 		.getPreparedStatement(session, "SELECT hashid FROM "
 			+ CassandraElementNames.EVALUATION_FILES_TABLE
 			+ " WHERE hashid=? AND resultsClass=?");
 	BoundStatement boundStatement = preparedStatement.bind(
-		hashId.toString(), getFileResultClass().getName());
+		hashId.toString(), fileResultsClass.getName());
 	ResultSet resultSet = session.execute(boundStatement);
 	Row result = resultSet.one();
 	if (resultSet.one() != null) {
@@ -81,14 +81,15 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
     }
 
     @Override
-    public final boolean hasDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
+    public final boolean hasDirectoryResults(
+	    Class<? extends MetricDirectoryResults> directoryResultsClass,
+	    HashId hashId) throws EvaluationStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
 		.getPreparedStatement(session, "SELECT hashid FROM "
 			+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
 			+ " WHERE hashid=? AND resultsClass=?");
 	BoundStatement boundStatement = preparedStatement.bind(
-		hashId.toString(), getDirectoryResultClass().getName());
+		hashId.toString(), directoryResultsClass.getName());
 	ResultSet resultSet = session.execute(boundStatement);
 	Row result = resultSet.one();
 	if (resultSet.one() != null) {
@@ -99,14 +100,15 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
     }
 
     @Override
-    public final boolean hasProjectResults(UUID analysisRunUUID)
-	    throws EvaluationStoreException {
+    public final boolean hasProjectResults(
+	    Class<? extends MetricDirectoryResults> directoryResultsClass,
+	    UUID analysisRunUUID) throws EvaluationStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
 		.getPreparedStatement(session, "SELECT uuid FROM "
 			+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
 			+ " WHERE uuid=? AND resultsClass=?");
 	BoundStatement boundStatement = preparedStatement.bind(analysisRunUUID,
-		getProjectResultClass().getName());
+		directoryResultsClass.getName());
 	ResultSet resultSet = session.execute(boundStatement);
 	Row result = resultSet.one();
 	if (resultSet.one() != null) {
@@ -130,14 +132,14 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 			byteArrayOutputStream)) {
 	    objectOutputStream.writeObject(results);
 	    BoundStatement boundStatement = preparedStatement.bind(
-		    hashId.toString(), getFileResultClass().getName());
+		    hashId.toString(), results.getClass().getName());
 	    boundStatement.setBytes("results",
 		    ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
 	    session.execute(boundStatement);
 	} catch (IOException e) {
 	    throw new EvaluationStoreException(
-		    "Could not store results for hashId '" + hashId
-			    + "' into '" + getStoreName() + "'.", e);
+		    "Could not store file results for hashId '" + hashId
+			    + "' into evaluation store.", e);
 	}
 	storeMetricsInBigTable(analysisRun, codeAnalysis, evaluator, results);
     }
@@ -261,17 +263,17 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		    byteArrayOutputStream)) {
 		objectOutputStream.writeObject(results);
 		BoundStatement boundStatement = preparedStatement.bind(
-			directory.getHashId().toString(),
-			getDirectoryResultClass().getName());
+			directory.getHashId().toString(), results.getClass()
+				.getName());
 		boundStatement.setBytes("results",
 			ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
 		session.execute(boundStatement);
 	    }
 	} catch (IOException e) {
 	    throw new EvaluationStoreException(
-		    "Could not store results for hashId '"
-			    + directory.getHashId() + "' into '"
-			    + getStoreName() + "'.", e);
+		    "Could not store directory results for hashId '"
+			    + directory.getHashId()
+			    + "' into evaluation store.", e);
 	}
 
 	storeMetricsInBigTable(analysisRun, directory, evaluator, results);
@@ -384,30 +386,31 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		    byteArrayOutputStream)) {
 		objectOutputStream.writeObject(results);
 		BoundStatement boundStatement = preparedStatement.bind(
-			analysisRun.getInformation().getRunUUID(),
-			getProjectResultClass().getName());
+			analysisRun.getInformation().getRunUUID(), results
+				.getClass().getName());
 		boundStatement.setBytes("results",
 			ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
 		session.execute(boundStatement);
 	    }
 	} catch (IOException e) {
 	    throw new EvaluationStoreException(
-		    "Could not store results for analysis run UUID '"
+		    "Could not store project results for analysis run UUID '"
 			    + analysisRun.getInformation().getRunUUID()
-			    + "' into '" + getStoreName() + "'.", e);
+			    + "' into evaluation store.", e);
 	}
 	storeMetricsInBigTable(analysisRun, directory, evaluator, results);
     }
 
     @Override
-    public final MetricFileResults readFileResults(HashId hashId)
+    public final <T extends MetricFileResults> T readFileResults(
+	    Class<T> fileResultsClass, HashId hashId)
 	    throws EvaluationStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
 		.getPreparedStatement(session, "SELECT results FROM "
 			+ CassandraElementNames.EVALUATION_FILES_TABLE
 			+ " WHERE hashid=? AND resultsClass=?");
 	BoundStatement boundStatement = preparedStatement.bind(
-		hashId.toString(), getFileResultClass().getName());
+		hashId.toString(), fileResultsClass.getName());
 	ResultSet resultSet = session.execute(boundStatement);
 	Row result = resultSet.one();
 	if (result == null) {
@@ -423,8 +426,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		byteBuffer.array(), byteBuffer.position(), byteBuffer.limit())) {
 	    try (ObjectInputStream objectInputStream = new ObjectInputStream(
 		    byteArrayInputStream)) {
-		MetricFileResults object = (MetricFileResults) objectInputStream
-			.readObject();
+		@SuppressWarnings("unchecked")
+		T object = (T) objectInputStream.readObject();
 		return object;
 	    }
 	} catch (IOException | ClassNotFoundException e) {
@@ -434,14 +437,15 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
     }
 
     @Override
-    public final MetricDirectoryResults readDirectoryResults(HashId hashId)
+    public final <T extends MetricDirectoryResults> T readDirectoryResults(
+	    Class<T> directoryResultsClass, HashId hashId)
 	    throws EvaluationStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
 		.getPreparedStatement(session, "SELECT results FROM "
 			+ CassandraElementNames.EVALUATION_DIRECTORIES_TABLE
 			+ " WHERE hashid=? AND resultsClass=?");
 	BoundStatement boundStatement = preparedStatement.bind(
-		hashId.toString(), getDirectoryResultClass().getName());
+		hashId.toString(), directoryResultsClass.getName());
 	ResultSet resultSet = session.execute(boundStatement);
 	Row result = resultSet.one();
 	if (result == null) {
@@ -457,8 +461,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		byteBuffer.array(), byteBuffer.position(), byteBuffer.limit())) {
 	    try (ObjectInputStream objectInputStream = new ObjectInputStream(
 		    byteArrayInputStream)) {
-		MetricDirectoryResults object = (MetricDirectoryResults) objectInputStream
-			.readObject();
+		@SuppressWarnings("unchecked")
+		T object = (T) objectInputStream.readObject();
 		return object;
 	    }
 	} catch (IOException | ClassNotFoundException e) {
@@ -468,14 +472,15 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
     }
 
     @Override
-    public final MetricDirectoryResults readProjectResults(UUID analysisRunUUID)
+    public final <T extends MetricDirectoryResults> T readProjectResults(
+	    Class<T> directoryResultsClass, UUID analysisRunUUID)
 	    throws EvaluationStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
 		.getPreparedStatement(session, "SELECT results FROM "
 			+ CassandraElementNames.EVALUATION_PROJECTS_TABLE
 			+ " WHERE uuid=? AND resultsClass=?");
 	BoundStatement boundStatement = preparedStatement.bind(analysisRunUUID,
-		getProjectResultClass().getName());
+		directoryResultsClass.getName());
 	ResultSet resultSet = session.execute(boundStatement);
 	Row result = resultSet.one();
 	if (result == null) {
@@ -491,8 +496,8 @@ public abstract class AbstractEvaluatorStore implements EvaluatorStore {
 		byteBuffer.array(), byteBuffer.position(), byteBuffer.limit())) {
 	    try (ObjectInputStream objectInputStream = new ObjectInputStream(
 		    byteArrayInputStream)) {
-		MetricDirectoryResults object = (MetricDirectoryResults) objectInputStream
-			.readObject();
+		@SuppressWarnings("unchecked")
+		T object = (T) objectInputStream.readObject();
 		return object;
 	    }
 	} catch (IOException | ClassNotFoundException e) {

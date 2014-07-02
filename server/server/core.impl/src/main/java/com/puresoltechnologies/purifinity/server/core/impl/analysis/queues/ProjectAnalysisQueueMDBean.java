@@ -35,7 +35,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPlugi
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessTransition;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
 @MessageDriven(name = "ProjectAnalysisQueueMBean",//
@@ -151,7 +151,7 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
     private void createNewAnalysis(Date startTime, HashId hashId,
 	    SourceCodeLocation sourceFile) throws AnalyzerException,
 	    IOException, FileStoreException {
-	for (AnalyzerInformation analyzerInformation : analyzerPluginService
+	for (AnalyzerPluginInformation analyzerInformation : analyzerPluginService
 		.getServices()) {
 	    ProgrammingLanguageAnalyzer instance = analyzerPluginService
 		    .createInstance(analyzerInformation.getJndiName());

@@ -9,7 +9,7 @@ import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyz
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerRemotePlugin;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerInformation;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
@@ -20,11 +20,9 @@ public class CPluginRegistration extends AbstractPluginRegistration implements
     private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 	    "c11.plugin", "c11.ejb", ProgrammingLanguageAnalyzer.class,
 	    C11.class);
-    private static final AnalyzerInformation INFORMATION = new AnalyzerInformation(
+    private static final AnalyzerPluginInformation INFORMATION = new AnalyzerPluginInformation(
 	    C11.NAME, C11.VERSION, C11.PLUGIN_VERSION, JNDI_ADDRESS,
 	    "This is a C11 programming language analyzer.");
-
-    private final C11 c11 = new C11();
 
     @PostConstruct
     public void registration() {
@@ -41,6 +39,6 @@ public class CPluginRegistration extends AbstractPluginRegistration implements
 
     @Override
     public String getName() {
-	return c11.getName();
+	return C11.NAME;
     }
 }
