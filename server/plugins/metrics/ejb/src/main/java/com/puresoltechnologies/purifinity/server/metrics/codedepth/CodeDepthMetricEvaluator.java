@@ -5,7 +5,6 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
@@ -28,9 +27,9 @@ import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.codedepth.CodeDepthDirectoryResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.codedepth.CodeDepthFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.codedepth.CodeDepthResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
 
 /**
  * This evaluator calculates the nesting depth of the source code. A too deep
@@ -46,9 +45,6 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
     private static final long serialVersionUID = -5093217611195212999L;
 
     private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
-
-    @Inject
-    private EvaluatorStoreService store;
 
     public CodeDepthMetricEvaluator() {
 	super(CodeDepthMetric.ID, CodeDepthMetric.NAME,
@@ -99,11 +95,13 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 		new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
 		directory.getName());
 	int maxDepth = 0;
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    QualityLevel childLevel;
 	    if (child.isFile()) {
-		CodeDepthFileResults fileResults = store.readFileResults(
-			CodeDepthFileResults.class, child.getHashId());
+		CodeDepthFileResults fileResults = evaluatorStore
+			.readFileResults(CodeDepthFileResults.class,
+				child.getHashId());
 		if (fileResults == null) {
 		    continue;
 		}
@@ -112,7 +110,7 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
 		    maxDepth = Math.max(maxDepth, result.getMaxDepth());
 		}
 	    } else {
-		CodeDepthDirectoryResults childDirectoryResults = store
+		CodeDepthDirectoryResults childDirectoryResults = evaluatorStore
 			.readDirectoryResults(CodeDepthDirectoryResults.class,
 				child.getHashId());
 		if (childDirectoryResults == null) {
@@ -138,61 +136,12 @@ public class CodeDepthMetricEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected MetricFileResults readFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.readFileResults(CodeDepthFileResults.class, hashId);
+    protected Class<? extends MetricFileResults> getFileResultsClass() {
+	return CodeDepthFileResults.class;
     }
 
     @Override
-    protected boolean hasFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.hasFileResults(CodeDepthFileResults.class, hashId);
-    }
-
-    @Override
-    protected void storeFileResults(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) throws EvaluationStoreException {
-	store.storeFileResults(analysisRun, fileAnalysis, evaluator,
-		fileResults);
-    }
-
-    @Override
-    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) {
-	store.storeMetricsInBigTable(analysisRun, fileAnalysis, evaluator,
-		fileResults);
-    }
-
-    @Override
-    protected MetricDirectoryResults readDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.readDirectoryResults(CodeDepthDirectoryResults.class,
-		hashId);
-    }
-
-    @Override
-    protected boolean hasDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.hasDirectoryResults(CodeDepthDirectoryResults.class,
-		hashId);
-    }
-
-    @Override
-    protected void storeDirectoryResults(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults)
-	    throws EvaluationStoreException {
-	store.storeDirectoryResults(analysisRun, directoryNode, evaluator,
-		directoryResults);
-    }
-
-    @Override
-    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults) {
-	store.storeMetricsInBigTable(analysisRun, directoryNode, evaluator,
-		directoryResults);
+    protected Class<? extends MetricDirectoryResults> getDirectoryResultsClass() {
+	return CodeDepthDirectoryResults.class;
     }
 }

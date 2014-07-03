@@ -5,7 +5,6 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
@@ -26,8 +25,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
 import com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluator;
 
 @Stateless
@@ -58,9 +57,6 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 
     private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 
-    @Inject
-    private EvaluatorStoreService store;
-
     public NormalizedMaintainabilityIndexEvaluator() {
 	super(ID, NAME, DESCRIPTION);
     }
@@ -76,8 +72,9 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	    EvaluationStoreException {
 	NormalizedMaintainabilityIndexFileResults results = new NormalizedMaintainabilityIndexFileResults();
 
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
 	HashId hashId = analysis.getAnalysisInformation().getHashId();
-	MaintainabilityIndexFileResults maintainabilityFileResults = store
+	MaintainabilityIndexFileResults maintainabilityFileResults = evaluatorStore
 		.readFileResults(MaintainabilityIndexFileResults.class, hashId);
 	SourceCodeLocation sourceCodeLocation = analysisRun
 		.findTreeNode(hashId).getSourceCodeLocation();
@@ -126,9 +123,10 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
 	QualityLevel qualityLevel = null;
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    if (child.isFile()) {
-		NormalizedMaintainabilityIndexFileResults results = store
+		NormalizedMaintainabilityIndexFileResults results = evaluatorStore
 			.readFileResults(
 				NormalizedMaintainabilityIndexFileResults.class,
 				child.getHashId());
@@ -140,7 +138,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
 		    }
 		}
 	    } else {
-		NormalizedMaintainabilityIndexDirectoryResults results = store
+		NormalizedMaintainabilityIndexDirectoryResults results = evaluatorStore
 			.readDirectoryResults(
 				NormalizedMaintainabilityIndexDirectoryResults.class,
 				child.getHashId());
@@ -164,63 +162,12 @@ public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected MetricFileResults readFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.readFileResults(
-		NormalizedMaintainabilityIndexFileResults.class, hashId);
+    protected Class<? extends MetricFileResults> getFileResultsClass() {
+	return NormalizedMaintainabilityIndexFileResults.class;
     }
 
     @Override
-    protected boolean hasFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.hasFileResults(
-		NormalizedMaintainabilityIndexFileResults.class, hashId);
-    }
-
-    @Override
-    protected void storeFileResults(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) throws EvaluationStoreException {
-	store.storeFileResults(analysisRun, fileAnalysis, evaluator,
-		fileResults);
-    }
-
-    @Override
-    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) {
-	store.storeMetricsInBigTable(analysisRun, fileAnalysis, evaluator,
-		fileResults);
-    }
-
-    @Override
-    protected MetricDirectoryResults readDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.readDirectoryResults(
-		NormalizedMaintainabilityIndexDirectoryResults.class, hashId);
-    }
-
-    @Override
-    protected boolean hasDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.hasDirectoryResults(
-		NormalizedMaintainabilityIndexDirectoryResults.class, hashId);
-    }
-
-    @Override
-    protected void storeDirectoryResults(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults)
-	    throws EvaluationStoreException {
-	store.storeDirectoryResults(analysisRun, directoryNode, evaluator,
-		directoryResults);
-    }
-
-    @Override
-    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults) {
-	store.storeMetricsInBigTable(analysisRun, directoryNode, evaluator,
-		directoryResults);
+    protected Class<? extends MetricDirectoryResults> getDirectoryResultsClass() {
+	return NormalizedMaintainabilityIndexDirectoryResults.class;
     }
 }

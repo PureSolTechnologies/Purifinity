@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
@@ -27,8 +26,8 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halst
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
 
 @Stateless
 @Remote(Evaluator.class)
@@ -37,9 +36,6 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
     private static final long serialVersionUID = -5093217611195212999L;
 
     private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
-
-    @Inject
-    private EvaluatorStoreService store;
 
     public EntropyMetricEvaluator() {
 	super(EntropyMetric.ID, EntropyMetric.NAME, EntropyMetric.DESCRIPTION);
@@ -55,8 +51,8 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	    CodeAnalysis analysis) throws InterruptedException,
 	    EvaluationStoreException {
 	HashId hashId = analysis.getAnalysisInformation().getHashId();
-	HalsteadMetricFileResults halsteadFileResults = store.readFileResults(
-		HalsteadMetricFileResults.class, hashId);
+	HalsteadMetricFileResults halsteadFileResults = getEvaluatorStore()
+		.readFileResults(HalsteadMetricFileResults.class, hashId);
 
 	EntropyFileResults results = new EntropyFileResults();
 	SourceCodeLocation sourceCodeLocation = analysisRun
@@ -130,7 +126,8 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
     protected MetricDirectoryResults processDirectory(AnalysisRun analysisRun,
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
-	HalsteadMetricDirectoryResults halsteadDirectoryResults = store
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
+	HalsteadMetricDirectoryResults halsteadDirectoryResults = evaluatorStore
 		.readDirectoryResults(HalsteadMetricDirectoryResults.class,
 			directory.getHashId());
 	if (halsteadDirectoryResults == null) {
@@ -144,14 +141,15 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    QualityLevel childLevel;
 	    if (child.isFile()) {
-		EntropyFileResults fileResults = store.readFileResults(
-			EntropyFileResults.class, child.getHashId());
+		EntropyFileResults fileResults = evaluatorStore
+			.readFileResults(EntropyFileResults.class,
+				child.getHashId());
 		if (fileResults == null) {
 		    continue;
 		}
 		childLevel = fileResults.getQualityLevel();
 	    } else {
-		EntropyDirectoryResults childDirectoryResults = store
+		EntropyDirectoryResults childDirectoryResults = evaluatorStore
 			.readDirectoryResults(EntropyDirectoryResults.class,
 				child.getHashId());
 		if (childDirectoryResults == null) {
@@ -175,61 +173,13 @@ public class EntropyMetricEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected MetricFileResults readFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.readFileResults(EntropyFileResults.class, hashId);
+    protected Class<? extends MetricFileResults> getFileResultsClass() {
+	return EntropyFileResults.class;
     }
 
     @Override
-    protected boolean hasFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.hasFileResults(EntropyFileResults.class, hashId);
-    }
-
-    @Override
-    protected void storeFileResults(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) throws EvaluationStoreException {
-	store.storeFileResults(analysisRun, fileAnalysis, evaluator,
-		fileResults);
-    }
-
-    @Override
-    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) {
-	store.storeMetricsInBigTable(analysisRun, fileAnalysis, evaluator,
-		fileResults);
-    }
-
-    @Override
-    protected MetricDirectoryResults readDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store
-		.readDirectoryResults(EntropyDirectoryResults.class, hashId);
-    }
-
-    @Override
-    protected boolean hasDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.hasDirectoryResults(EntropyDirectoryResults.class, hashId);
-    }
-
-    @Override
-    protected void storeDirectoryResults(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults)
-	    throws EvaluationStoreException {
-	store.storeDirectoryResults(analysisRun, directoryNode, evaluator,
-		directoryResults);
-    }
-
-    @Override
-    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults) {
-	store.storeMetricsInBigTable(analysisRun, directoryNode, evaluator,
-		directoryResults);
+    protected Class<? extends MetricDirectoryResults> getDirectoryResultsClass() {
+	return EntropyDirectoryResults.class;
     }
 
 }

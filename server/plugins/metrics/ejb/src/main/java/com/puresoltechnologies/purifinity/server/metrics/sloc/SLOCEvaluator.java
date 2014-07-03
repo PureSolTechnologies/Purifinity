@@ -5,7 +5,6 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
@@ -28,9 +27,9 @@ import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCDirectoryResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
 
 /**
  * This evaluator evaluates the Source Lines Of Code metrics which counts the
@@ -53,9 +52,6 @@ public class SLOCEvaluator extends AbstractEvaluator {
 
     private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 
-    @Inject
-    private EvaluatorStoreService store;
-
     public SLOCEvaluator() {
 	super(SLOCMetricCalculator.ID, SLOCMetricCalculator.NAME,
 		SLOCMetricCalculator.DESCRIPTION);
@@ -72,7 +68,8 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	    UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 	AnalysisInformation analyzedFile = analysis.getAnalysisInformation();
 	HashId hashId = analyzedFile.getHashId();
-	if (store.hasFileResults(SLOCFileResults.class, hashId)) {
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
+	if (evaluatorStore.hasFileResults(SLOCFileResults.class, hashId)) {
 	    return null;
 	}
 
@@ -108,11 +105,12 @@ public class SLOCEvaluator extends AbstractEvaluator {
 	    EvaluationStoreException {
 	QualityLevel qualityLevel = null;
 	SLOCResult metricResults = null;
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    if (child.isFile()) {
-		if (store.hasFileResults(SLOCFileResults.class,
+		if (evaluatorStore.hasFileResults(SLOCFileResults.class,
 			child.getHashId())) {
-		    SLOCFileResults results = store.readFileResults(
+		    SLOCFileResults results = evaluatorStore.readFileResults(
 			    SLOCFileResults.class, child.getHashId());
 		    for (SLOCResult result : results.getResults()) {
 			if (result.getCodeRangeType() == CodeRangeType.FILE) {
@@ -125,10 +123,11 @@ public class SLOCEvaluator extends AbstractEvaluator {
 			    results.getQualityLevel());
 		}
 	    } else {
-		if (store.hasDirectoryResults(SLOCDirectoryResults.class,
-			child.getHashId())) {
-		    SLOCDirectoryResults results = store.readDirectoryResults(
-			    SLOCDirectoryResults.class, child.getHashId());
+		if (evaluatorStore.hasDirectoryResults(
+			SLOCDirectoryResults.class, child.getHashId())) {
+		    SLOCDirectoryResults results = evaluatorStore
+			    .readDirectoryResults(SLOCDirectoryResults.class,
+				    child.getHashId());
 		    metricResults = combine(directory, metricResults,
 			    results.getResult());
 		    qualityLevel = QualityLevel.combine(qualityLevel,
@@ -167,59 +166,12 @@ public class SLOCEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected MetricFileResults readFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.readFileResults(SLOCFileResults.class, hashId);
+    protected Class<? extends MetricFileResults> getFileResultsClass() {
+	return SLOCFileResults.class;
     }
 
     @Override
-    protected boolean hasFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.hasFileResults(SLOCFileResults.class, hashId);
-    }
-
-    @Override
-    protected void storeFileResults(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) throws EvaluationStoreException {
-	store.storeFileResults(analysisRun, fileAnalysis, evaluator,
-		fileResults);
-    }
-
-    @Override
-    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) {
-	store.storeMetricsInBigTable(analysisRun, fileAnalysis, evaluator,
-		fileResults);
-    }
-
-    @Override
-    protected MetricDirectoryResults readDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.readDirectoryResults(SLOCDirectoryResults.class, hashId);
-    }
-
-    @Override
-    protected boolean hasDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.hasDirectoryResults(SLOCDirectoryResults.class, hashId);
-    }
-
-    @Override
-    protected void storeDirectoryResults(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults)
-	    throws EvaluationStoreException {
-	store.storeDirectoryResults(analysisRun, directoryNode, evaluator,
-		directoryResults);
-    }
-
-    @Override
-    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults) {
-	store.storeMetricsInBigTable(analysisRun, directoryNode, evaluator,
-		directoryResults);
+    protected Class<? extends MetricDirectoryResults> getDirectoryResultsClass() {
+	return SLOCDirectoryResults.class;
     }
 }

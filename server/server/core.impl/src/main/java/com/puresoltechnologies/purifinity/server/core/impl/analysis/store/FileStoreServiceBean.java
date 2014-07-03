@@ -31,12 +31,14 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 
 @Stateless
-public final class FileStoreServiceBean implements FileStoreService {
+public final class FileStoreServiceBean implements FileStoreService,
+	FileStoreServiceRemote {
 
     @Inject
     @AnalysisStoreKeyspace

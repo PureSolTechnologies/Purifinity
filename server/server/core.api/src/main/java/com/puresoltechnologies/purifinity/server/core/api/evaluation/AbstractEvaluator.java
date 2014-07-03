@@ -30,9 +30,11 @@ import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.DirectoryStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreServiceRemote;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 /**
@@ -55,8 +57,8 @@ public abstract class AbstractEvaluator implements Evaluator {
 
     private final Map<String, Object> properties = new HashMap<>();
 
+    private EvaluatorStoreServiceRemote store;
     private FileStoreServiceRemote fileStore;
-
     private DirectoryStoreServiceRemote directoryStore;
 
     private final EvaluatorInformation information;
@@ -72,44 +74,24 @@ public abstract class AbstractEvaluator implements Evaluator {
 	timeStamp = new Date();
     }
 
-    abstract protected MetricFileResults readFileResults(HashId hashId)
-	    throws EvaluationStoreException;
+    abstract protected Class<? extends MetricFileResults> getFileResultsClass();
 
-    abstract protected boolean hasFileResults(HashId hashId)
-	    throws EvaluationStoreException;
-
-    abstract protected void storeFileResults(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator abstractEvaluator,
-	    MetricFileResults fileResults) throws EvaluationStoreException;
-
-    abstract protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator abstractEvaluator,
-	    MetricFileResults fileResults);
-
-    abstract protected MetricDirectoryResults readDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException;
-
-    abstract protected boolean hasDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException;
-
-    abstract protected void storeDirectoryResults(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode,
-	    AbstractEvaluator abstractEvaluator,
-	    MetricDirectoryResults directoryResults)
-	    throws EvaluationStoreException;
-
-    abstract protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode,
-	    AbstractEvaluator abstractEvaluator,
-	    MetricDirectoryResults directoryResults);
+    abstract protected Class<? extends MetricDirectoryResults> getDirectoryResultsClass();
 
     @PostConstruct
-    public void construct() {
+    public final void construct() {
+	store = JndiUtils.createRemoteEJBInstance(
+		EvaluatorStoreServiceRemote.class,
+		EvaluatorStoreServiceRemote.NAME);
 	fileStore = JndiUtils.createRemoteEJBInstance(
 		FileStoreServiceRemote.class, FileStoreServiceRemote.JNDI_NAME);
 	directoryStore = JndiUtils.createRemoteEJBInstance(
 		DirectoryStoreServiceRemote.class,
 		DirectoryStoreServiceRemote.JNDI_NAME);
+    }
+
+    protected EvaluatorStore getEvaluatorStore() {
+	return store;
     }
 
     @Override
@@ -349,4 +331,58 @@ public abstract class AbstractEvaluator implements Evaluator {
 	    throw new UniversalSyntaxTreeEvaluationException(e);
 	}
     }
+
+    protected final MetricFileResults readFileResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return getEvaluatorStore().readFileResults(getFileResultsClass(),
+		hashId);
+    }
+
+    protected final boolean hasFileResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return getEvaluatorStore()
+		.hasFileResults(getFileResultsClass(), hashId);
+    }
+
+    protected final void storeFileResults(AnalysisRun analysisRun,
+	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
+	    MetricFileResults fileResults) throws EvaluationStoreException {
+	getEvaluatorStore().storeFileResults(analysisRun, fileAnalysis,
+		evaluator, fileResults);
+    }
+
+    protected final void storeMetricsInBigTable(AnalysisRun analysisRun,
+	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
+	    MetricFileResults fileResults) {
+	getEvaluatorStore().storeMetricsInBigTable(analysisRun, fileAnalysis,
+		evaluator, fileResults);
+    }
+
+    protected final MetricDirectoryResults readDirectoryResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return getEvaluatorStore().readDirectoryResults(
+		getDirectoryResultsClass(), hashId);
+    }
+
+    protected final boolean hasDirectoryResults(HashId hashId)
+	    throws EvaluationStoreException {
+	return getEvaluatorStore().hasDirectoryResults(
+		getDirectoryResultsClass(), hashId);
+    }
+
+    protected final void storeDirectoryResults(AnalysisRun analysisRun,
+	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
+	    MetricDirectoryResults directoryResults)
+	    throws EvaluationStoreException {
+	getEvaluatorStore().storeDirectoryResults(analysisRun, directoryNode,
+		evaluator, directoryResults);
+    }
+
+    protected final void storeMetricsInBigTable(AnalysisRun analysisRun,
+	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
+	    MetricDirectoryResults directoryResults) {
+	getEvaluatorStore().storeMetricsInBigTable(analysisRun, directoryNode,
+		evaluator, directoryResults);
+    }
+
 }

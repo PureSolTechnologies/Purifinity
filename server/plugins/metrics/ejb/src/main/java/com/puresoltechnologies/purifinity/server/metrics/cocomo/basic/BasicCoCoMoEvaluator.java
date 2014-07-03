@@ -16,7 +16,6 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
@@ -38,8 +37,8 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocom
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.basic.SoftwareProject;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCResult;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
 
 /**
@@ -73,9 +72,6 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
     }
 
     private static final Set<ConfigurationParameter<?>> CONFIGURATION_PARAMETERS = new HashSet<>();
-
-    @Inject
-    private EvaluatorStoreService store;
 
     private SoftwareProject complexity = SoftwareProject.LOW;
     private int averageSalary = 56286;
@@ -112,8 +108,9 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
     protected MetricFileResults processFile(AnalysisRun analysisRun,
 	    CodeAnalysis analysis) throws EvaluationStoreException {
 	HashId hashId = analysis.getAnalysisInformation().getHashId();
-	if (store.hasFileResults(SLOCFileResults.class, hashId)) {
-	    SLOCFileResults slocResults = store.readFileResults(
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
+	if (evaluatorStore.hasFileResults(SLOCFileResults.class, hashId)) {
+	    SLOCFileResults slocResults = evaluatorStore.readFileResults(
 		    SLOCFileResults.class, hashId);
 	    SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
 		    hashId).getSourceCodeLocation();
@@ -137,18 +134,21 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
 	int phyLoc = 0;
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    HashId hashId = child.getHashId();
 	    if (child.isFile()) {
-		if (store.hasFileResults(BasicCoCoMoFileResults.class, hashId)) {
-		    BasicCoCoMoResults fileResults = store.readFileResults(
-			    BasicCoCoMoFileResults.class, hashId);
+		if (evaluatorStore.hasFileResults(BasicCoCoMoFileResults.class,
+			hashId)) {
+		    BasicCoCoMoResults fileResults = evaluatorStore
+			    .readFileResults(BasicCoCoMoFileResults.class,
+				    hashId);
 		    phyLoc += fileResults.getPhyLOC();
 		}
 	    } else {
-		if (store.hasDirectoryResults(
+		if (evaluatorStore.hasDirectoryResults(
 			BasicCoCoMoDirectoryResults.class, hashId)) {
-		    BasicCoCoMoDirectoryResults directoryResults = store
+		    BasicCoCoMoDirectoryResults directoryResults = evaluatorStore
 			    .readDirectoryResults(
 				    BasicCoCoMoDirectoryResults.class, hashId);
 		    phyLoc += directoryResults.getPhyLOC();
@@ -172,62 +172,13 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected MetricFileResults readFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.readFileResults(BasicCoCoMoFileResults.class, hashId);
+    protected Class<? extends MetricFileResults> getFileResultsClass() {
+	return BasicCoCoMoFileResults.class;
     }
 
     @Override
-    protected boolean hasFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.hasFileResults(BasicCoCoMoFileResults.class, hashId);
-    }
-
-    @Override
-    protected void storeFileResults(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) throws EvaluationStoreException {
-	store.storeFileResults(analysisRun, fileAnalysis, evaluator,
-		fileResults);
-    }
-
-    @Override
-    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) {
-	store.storeMetricsInBigTable(analysisRun, fileAnalysis, evaluator,
-		fileResults);
-    }
-
-    @Override
-    protected MetricDirectoryResults readDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.readDirectoryResults(BasicCoCoMoDirectoryResults.class,
-		hashId);
-    }
-
-    @Override
-    protected boolean hasDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.hasDirectoryResults(BasicCoCoMoDirectoryResults.class,
-		hashId);
-    }
-
-    @Override
-    protected void storeDirectoryResults(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults)
-	    throws EvaluationStoreException {
-	store.storeDirectoryResults(analysisRun, directoryNode, evaluator,
-		directoryResults);
-    }
-
-    @Override
-    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults) {
-	store.storeMetricsInBigTable(analysisRun, directoryNode, evaluator,
-		directoryResults);
+    protected Class<? extends MetricDirectoryResults> getDirectoryResultsClass() {
+	return BasicCoCoMoDirectoryResults.class;
     }
 
 }

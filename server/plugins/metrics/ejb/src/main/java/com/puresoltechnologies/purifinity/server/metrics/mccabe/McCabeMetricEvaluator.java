@@ -5,7 +5,6 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
@@ -24,9 +23,9 @@ import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacte
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
+import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
 
 @Stateless
 @Remote(Evaluator.class)
@@ -35,9 +34,6 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
     private static final long serialVersionUID = -5093217611195212999L;
 
     private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
-
-    @Inject
-    private EvaluatorStoreService store;
 
     public McCabeMetricEvaluator() {
 	super(McCabeMetric.ID, McCabeMetric.NAME, McCabeMetric.DESCRIPTION);
@@ -83,12 +79,14 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 	    EvaluationStoreException {
 	QualityLevel qualityLevel = null;
 	McCabeMetricResult metricResults = null;
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    if (child.isFile()) {
-		if (store.hasFileResults(McCabeMetricFileResults.class,
-			child.getHashId())) {
-		    McCabeMetricFileResults results = store.readFileResults(
-			    McCabeMetricFileResults.class, child.getHashId());
+		if (evaluatorStore.hasFileResults(
+			McCabeMetricFileResults.class, child.getHashId())) {
+		    McCabeMetricFileResults results = evaluatorStore
+			    .readFileResults(McCabeMetricFileResults.class,
+				    child.getHashId());
 		    for (McCabeMetricResult result : results.getResults()) {
 			if (result.getCodeRangeType() == CodeRangeType.FILE) {
 			    metricResults = combine(directory, metricResults,
@@ -100,9 +98,9 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
 			    results.getQualityLevel());
 		}
 	    } else {
-		if (store.hasDirectoryResults(
+		if (evaluatorStore.hasDirectoryResults(
 			McCabeMetricDirectoryResults.class, child.getHashId())) {
-		    McCabeMetricDirectoryResults results = store
+		    McCabeMetricDirectoryResults results = evaluatorStore
 			    .readDirectoryResults(
 				    McCabeMetricDirectoryResults.class,
 				    child.getHashId());
@@ -145,62 +143,13 @@ public class McCabeMetricEvaluator extends AbstractEvaluator {
     }
 
     @Override
-    protected MetricFileResults readFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.readFileResults(McCabeMetricFileResults.class, hashId);
+    protected Class<? extends MetricFileResults> getFileResultsClass() {
+	return McCabeMetricFileResults.class;
     }
 
     @Override
-    protected boolean hasFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.hasFileResults(McCabeMetricFileResults.class, hashId);
-    }
-
-    @Override
-    protected void storeFileResults(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) throws EvaluationStoreException {
-	store.storeFileResults(analysisRun, fileAnalysis, evaluator,
-		fileResults);
-    }
-
-    @Override
-    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) {
-	store.storeMetricsInBigTable(analysisRun, fileAnalysis, evaluator,
-		fileResults);
-    }
-
-    @Override
-    protected MetricDirectoryResults readDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.readDirectoryResults(McCabeMetricDirectoryResults.class,
-		hashId);
-    }
-
-    @Override
-    protected boolean hasDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return store.hasDirectoryResults(McCabeMetricDirectoryResults.class,
-		hashId);
-    }
-
-    @Override
-    protected void storeDirectoryResults(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults)
-	    throws EvaluationStoreException {
-	store.storeDirectoryResults(analysisRun, directoryNode, evaluator,
-		directoryResults);
-    }
-
-    @Override
-    protected void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults) {
-	store.storeMetricsInBigTable(analysisRun, directoryNode, evaluator,
-		directoryResults);
+    protected Class<? extends MetricDirectoryResults> getDirectoryResultsClass() {
+	return McCabeMetricDirectoryResults.class;
     }
 
 }

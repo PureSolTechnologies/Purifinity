@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>Plotting tests</title>
+<style>
+body {
+	background: #dddddd
+}
+
+#canvas {
+	margin: 10px;
+	padding: 10px;
+	background: #ffffff;
+	border: thin inset #aaaaaa;
+	width: 640px;
+	height: 360px;
+	
+}
+</style>
+</head>
+<body>
+	<h1>Plot test</h1>
+	<div style="width: 160pt; height: 90pt; border: 1pt solid black;">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 90"> <path
+			stroke="red" fill="lightgreen" d="M 0 0 160 0 160 90 0 90 0 0" /> <line
+			stroke="black" x1="10" y1="0" x2="10" y2="90" /> <line
+			stroke="black" x1="0" y1="80" x2="160" y2="80" /> <g
+			transform="rotate(-90 10 45)"> <text x="0" y="45">Hallo.</text> </g>
+		</svg>
+	</div>
+	<div>
+		<canvas id="canvas" width="800" height="450">Canvas not
+		supported.</canvas>
+		<script src="plot.js"></script>
+	</div>
+</body>
+</html>
