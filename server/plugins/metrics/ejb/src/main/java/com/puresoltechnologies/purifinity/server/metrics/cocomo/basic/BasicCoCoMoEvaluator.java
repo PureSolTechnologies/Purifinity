@@ -83,6 +83,7 @@ public class BasicCoCoMoEvaluator extends AbstractEvaluator {
 
     public BasicCoCoMoEvaluator() {
 	super(ID, NAME, DESCRIPTION);
+
     }
 
     @Override

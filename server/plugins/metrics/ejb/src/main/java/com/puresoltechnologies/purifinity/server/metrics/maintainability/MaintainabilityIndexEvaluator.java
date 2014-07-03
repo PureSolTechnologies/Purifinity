@@ -272,4 +272,5 @@ public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
 	store.storeMetricsInBigTable(analysisRun, directoryNode, evaluator,
 		directoryResults);
     }
+
 }

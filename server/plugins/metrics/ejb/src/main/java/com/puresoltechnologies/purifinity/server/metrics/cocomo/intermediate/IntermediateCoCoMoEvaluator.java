@@ -66,7 +66,6 @@ public class IntermediateCoCoMoEvaluator extends AbstractEvaluator {
 	    + "software project by couting the physical lines of code.";
 
     public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<>();
-
     public static final Set<String> DEPENDENCIES = new HashSet<>();
     static {
 	DEPENDENCIES.add(SLOCMetricCalculator.ID);
