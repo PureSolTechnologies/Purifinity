@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
@@ -76,7 +77,8 @@ public class FileStoreIT extends AbstractAnalysisStoreServiceServerTest {
 	    assertNotNull(hashId.getHash());
 	}
 	AnalysisInformation analyzedFile = new AnalysisInformation(hashId,
-		new Date(), 12345l, true, "language", "1.2.3");
+		new Date(), 12345l, true, "language", "1.2.3",
+		Version.valueOf("2.3.4"));
 	CodeAnalysis fileAnalysis = new CodeAnalysis(new Date(), 12345l,
 		"language", "1.2.3", analyzedFile, new ArrayList<CodeRange>(),
 		(UniversalSyntaxTree) null);

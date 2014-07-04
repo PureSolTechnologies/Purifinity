@@ -29,7 +29,7 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.coded
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.codedepth.CodeDepthResult;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 
 /**
  * This evaluator calculates the nesting depth of the source code. A too deep
@@ -40,7 +40,7 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEva
  */
 @Stateless
 @Remote(Evaluator.class)
-public class CodeDepthMetricEvaluator extends AbstractEvaluator {
+public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 

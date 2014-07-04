@@ -42,69 +42,69 @@ import com.puresoltechnologies.purifinity.server.plugin.c11.ust.TranslationUnitC
  */
 public class C11Analyzer extends AbstractCodeAnalyzer {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(C11Analyzer.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(C11Analyzer.class);
 
-	private CodeAnalysis fileAnalysis;
+    private CodeAnalysis fileAnalysis;
 
-	public C11Analyzer(SourceCodeLocation sourceCodeLocation) {
-		super(sourceCodeLocation, C11Grammar.getInstance());
+    public C11Analyzer(SourceCodeLocation sourceCodeLocation) {
+	super(sourceCodeLocation, C11Grammar.getInstance());
+    }
+
+    @Override
+    public void analyze() throws AnalyzerException {
+	try {
+	    fileAnalysis = null;
+	    Date date = new Date();
+	    StopWatch watch = new StopWatch();
+	    SourceCode sourceCode = getSource().getSourceCode();
+	    watch.start();
+	    PackratParser packratParser = new PackratParser(getGrammar());
+	    ParserTree parserTree = packratParser.parse(sourceCode);
+	    watch.stop();
+	    CompilationUnit compilationUnit = TranslationUnitCreator
+		    .create(parserTree);
+	    long timeEffort = Math.round(watch.getSeconds() * 1000.0);
+	    AnalysisInformation analyzedFile = new AnalysisInformation(
+		    sourceCode.getHashId(), date, timeEffort, true, C11.NAME,
+		    C11.VERSION, C11.PLUGIN_VERSION);
+	    fileAnalysis = new CodeAnalysis(date, timeEffort, C11.NAME,
+		    C11.VERSION, analyzedFile,
+		    this.getAnalyzableCodeRanges(parserTree), compilationUnit);
+	} catch (ParserException | IOException e) {
+	    throw new AnalyzerException(this, e);
 	}
+	return;
+    }
 
-	@Override
-	public void analyze() throws AnalyzerException {
-		try {
-			fileAnalysis = null;
-			Date date = new Date();
-			StopWatch watch = new StopWatch();
-			SourceCode sourceCode = getSource().getSourceCode();
-			watch.start();
-			PackratParser packratParser = new PackratParser(getGrammar());
-			ParserTree parserTree = packratParser.parse(sourceCode);
-			watch.stop();
-			CompilationUnit compilationUnit = TranslationUnitCreator
-					.create(parserTree);
-			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
-			AnalysisInformation analyzedFile = new AnalysisInformation(
-					sourceCode.getHashId(), date, timeEffort, true, C11.NAME,
-					C11.VERSION);
-			fileAnalysis = new CodeAnalysis(date, timeEffort, C11.NAME,
-					C11.VERSION, analyzedFile,
-					this.getAnalyzableCodeRanges(parserTree), compilationUnit);
-		} catch (ParserException | IOException e) {
-			throw new AnalyzerException(this, e);
-		}
-		return;
-	}
+    @Override
+    public CodeAnalysis getAnalysis() {
+	return fileAnalysis;
+    }
 
-	@Override
-	public CodeAnalysis getAnalysis() {
-		return fileAnalysis;
+    @Override
+    public boolean persist(File file) {
+	try {
+	    persist(this, file);
+	    return true;
+	} catch (IOException e) {
+	    logger.error(e.getMessage(), e);
+	    return false;
 	}
+    }
 
-	@Override
-	public boolean persist(File file) {
-		try {
-			persist(this, file);
-			return true;
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			return false;
-		}
-	}
+    private List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
+	throw new IllegalStateException("No implemented, yet!");
+    }
 
-	private List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
-		throw new IllegalStateException("No implemented, yet!");
+    private <T> void persist(T object, File file) throws IOException {
+	ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+		new FileOutputStream(file));
+	try {
+	    objectOutputStream.writeObject(object);
+	} finally {
+	    objectOutputStream.close();
 	}
-
-	private <T> void persist(T object, File file) throws IOException {
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-				new FileOutputStream(file));
-		try {
-			objectOutputStream.writeObject(object);
-		} finally {
-			objectOutputStream.close();
-		}
-	}
+    }
 
 }

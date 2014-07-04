@@ -34,7 +34,7 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCResult;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetric;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetric;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetricFileResults;
@@ -43,7 +43,7 @@ import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculat
 
 @Stateless
 @Remote(Evaluator.class)
-public class MaintainabilityIndexEvaluator extends AbstractEvaluator {
+public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 

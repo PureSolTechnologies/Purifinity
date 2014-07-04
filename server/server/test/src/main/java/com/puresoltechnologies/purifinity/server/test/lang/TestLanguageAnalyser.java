@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.StopWatch;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.lexer.Lexer;
 import com.puresoltechnologies.parsers.lexer.LexerException;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
@@ -75,7 +76,7 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 		    language.getName(), language.getVersion(),
 		    new AnalysisInformation(sourceCode.getHashId(), date,
 			    timeEffort, true, language.getName(), language
-				    .getVersion()),
+				    .getVersion(), Version.valueOf("1.0.0")),
 		    getAnalyzableCodeRanges(compilationUnit), compilationUnit);
 
 	} catch (LexerException | ParserException | IOException e) {

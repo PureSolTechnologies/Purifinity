@@ -6,6 +6,10 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<ui:define name="page_content">
 		<p:panel header="Analysis Details of #{projectsViewMBean.projectName}">
+			<h:form>
+				<p:commandButton value="New analysis..."
+					action="#{projectsAnalysisViewMBean.triggerNewAnalysis(projectsViewMBean.projectUUID)}" />
+			</h:form>
 			<p:tabView>
 				<p:tab title="Analysis Content">
 					<p:treeTable var="fsElement"
@@ -44,10 +48,6 @@
 					<p:dataTable></p:dataTable>
 				</p:tab>
 			</p:tabView>
-			<h:form>
-				<p:commandButton value="New analysis..."
-					action="#{projectsAnalysisViewMBean.triggerNewAnalysis(projectsViewMBean.projectUUID)}" />
-			</h:form>
 		</p:panel>
 	</ui:define>
 </ui:composition>

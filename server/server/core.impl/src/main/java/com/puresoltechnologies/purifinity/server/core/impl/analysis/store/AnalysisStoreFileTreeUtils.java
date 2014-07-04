@@ -16,6 +16,7 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
@@ -286,13 +287,15 @@ public class AnalysisStoreFileTreeUtils {
 	    Row row = resultSet.one();
 	    Date time = row.getDate("time");
 	    long duration = row.getLong("duration");
-	    String analyzer = row.getString("analyzer");
-	    String analyzerVersion = row.getString("analyzer_version");
+	    String language = row.getString("language");
+	    String languageVersion = row.getString("language_version");
+	    Version pluginVersion = Version.valueOf(row
+		    .getString("plugin_version"));
 	    boolean successful = row.getBool("successful");
 	    String message = row.getString("analyzer_message");
 	    AnalysisInformation information = new AnalysisInformation(hashId,
-		    time, duration, successful, analyzer, analyzerVersion,
-		    message);
+		    time, duration, successful, language, languageVersion,
+		    pluginVersion, message);
 	    analyses.add(information);
 	}
 	return analyses;

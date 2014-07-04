@@ -26,12 +26,13 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maint
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.maintainability.MaintainabilityIndexResult;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluator;
 
 @Stateless
 @Remote(Evaluator.class)
-public class NormalizedMaintainabilityIndexEvaluator extends AbstractEvaluator {
+public class NormalizedMaintainabilityIndexEvaluator extends
+	AbstractMetricEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 

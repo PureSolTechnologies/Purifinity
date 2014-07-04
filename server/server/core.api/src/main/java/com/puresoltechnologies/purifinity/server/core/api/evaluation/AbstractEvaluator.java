@@ -74,9 +74,26 @@ public abstract class AbstractEvaluator implements Evaluator {
 	timeStamp = new Date();
     }
 
-    abstract protected Class<? extends MetricFileResults> getFileResultsClass();
+    abstract protected MetricFileResults readFileResults(HashId hashId)
+	    throws EvaluationStoreException;
 
-    abstract protected Class<? extends MetricDirectoryResults> getDirectoryResultsClass();
+    abstract protected boolean hasFileResults(HashId hashId)
+	    throws EvaluationStoreException;
+
+    abstract protected void storeFileResults(AnalysisRun analysisRun,
+	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
+	    MetricFileResults fileResults) throws EvaluationStoreException;
+
+    abstract protected MetricDirectoryResults readDirectoryResults(HashId hashId)
+	    throws EvaluationStoreException;
+
+    abstract protected boolean hasDirectoryResults(HashId hashId)
+	    throws EvaluationStoreException;
+
+    abstract protected void storeDirectoryResults(AnalysisRun analysisRun,
+	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
+	    MetricDirectoryResults directoryResults)
+	    throws EvaluationStoreException;
 
     @PostConstruct
     public final void construct() {
@@ -332,50 +349,11 @@ public abstract class AbstractEvaluator implements Evaluator {
 	}
     }
 
-    protected final MetricFileResults readFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return getEvaluatorStore().readFileResults(getFileResultsClass(),
-		hashId);
-    }
-
-    protected final boolean hasFileResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return getEvaluatorStore()
-		.hasFileResults(getFileResultsClass(), hashId);
-    }
-
-    protected final void storeFileResults(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) throws EvaluationStoreException {
-	getEvaluatorStore().storeFileResults(analysisRun, fileAnalysis,
-		evaluator, fileResults);
-    }
-
     protected final void storeMetricsInBigTable(AnalysisRun analysisRun,
 	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
 	    MetricFileResults fileResults) {
 	getEvaluatorStore().storeMetricsInBigTable(analysisRun, fileAnalysis,
 		evaluator, fileResults);
-    }
-
-    protected final MetricDirectoryResults readDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return getEvaluatorStore().readDirectoryResults(
-		getDirectoryResultsClass(), hashId);
-    }
-
-    protected final boolean hasDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException {
-	return getEvaluatorStore().hasDirectoryResults(
-		getDirectoryResultsClass(), hashId);
-    }
-
-    protected final void storeDirectoryResults(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults)
-	    throws EvaluationStoreException {
-	getEvaluatorStore().storeDirectoryResults(analysisRun, directoryNode,
-		evaluator, directoryResults);
     }
 
     protected final void storeMetricsInBigTable(AnalysisRun analysisRun,

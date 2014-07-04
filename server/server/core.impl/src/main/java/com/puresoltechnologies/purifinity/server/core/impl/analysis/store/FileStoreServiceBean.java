@@ -37,7 +37,7 @@ import com.puresoltechnologies.purifinity.server.database.cassandra.utils.Cassan
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 
 @Stateless
-public final class FileStoreServiceBean implements FileStoreService,
+public class FileStoreServiceBean implements FileStoreService,
 	FileStoreServiceRemote {
 
     @Inject
@@ -142,13 +142,14 @@ public final class FileStoreServiceBean implements FileStoreService,
 			session,
 			"INSERT INTO "
 				+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
-				+ " (time, hashid, analyzer, analyzer_version, analyzer_message, successful, duration, analysis) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+				+ " (time, hashid, language, language_version, plugin_version, analyzer_message, successful, duration, analysis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	AnalysisInformation analysisInformation = fileAnalysis
 		.getAnalysisInformation();
 	BoundStatement boundStatement = preparedStatement.bind(
 		analysisInformation.getStartTime(), hashId.toString(),
 		analysisInformation.getLanguageName(), analysisInformation
 			.getLanguageVersion().toString(), analysisInformation
+			.getPluginVersion().toString(), analysisInformation
 			.getAnalyzerErrorMessage(), analysisInformation
 			.isSuccessful(), analysisInformation.getDuration());
 	try {

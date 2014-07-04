@@ -38,7 +38,7 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocom
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCFileResults;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCResult;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
 
 /**
@@ -50,7 +50,7 @@ import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculat
  */
 @Stateless
 @Remote(Evaluator.class)
-public class BasicCoCoMoEvaluator extends AbstractEvaluator {
+public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 
     private static final long serialVersionUID = 5098378023541671490L;
 

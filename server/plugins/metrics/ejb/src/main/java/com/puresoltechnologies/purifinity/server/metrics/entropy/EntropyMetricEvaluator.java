@@ -27,11 +27,11 @@ import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halst
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadMetricResult;
 import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.halstead.HalsteadResult;
 import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 
 @Stateless
 @Remote(Evaluator.class)
-public class EntropyMetricEvaluator extends AbstractEvaluator {
+public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
 
     private static final long serialVersionUID = -5093217611195212999L;
 

@@ -7,6 +7,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.TimeAwareness;
+import com.puresoltechnologies.commons.misc.Version;
 
 /**
  * This class is for keeping a list of analyzed files within ProjectAnalyzer.
@@ -26,12 +27,14 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
     private final boolean successful;
     private final String languageName;
     private final String languageVersion;
+    private final Version pluginVersion;
     private final String analyzerErrorMessage;
 
     public AnalysisInformation(HashId hashId, Date startTime, long duration,
-	    boolean successful, String languageName, String languageVersion) {
+	    boolean successful, String languageName, String languageVersion,
+	    Version pluginVersion) {
 	this(hashId, startTime, duration, successful, languageName,
-		languageVersion, null);
+		languageVersion, pluginVersion, null);
     }
 
     public AnalysisInformation(@JsonProperty("hashId") HashId hashId,
@@ -40,6 +43,7 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 	    @JsonProperty("successful") boolean successful,
 	    @JsonProperty("languageName") String languageName,
 	    @JsonProperty("languageVersion") String languageVersion,
+	    @JsonProperty("pluginVersion") Version pluginVersion,
 	    @JsonProperty("analyzerErrorMessage") String analyzerErrorMessage) {
 	super();
 	this.hashId = hashId;
@@ -48,6 +52,7 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 	this.successful = successful;
 	this.languageName = languageName;
 	this.languageVersion = languageVersion;
+	this.pluginVersion = pluginVersion;
 	this.analyzerErrorMessage = analyzerErrorMessage;
     }
 
@@ -75,6 +80,10 @@ public final class AnalysisInformation implements Serializable, TimeAwareness {
 
     public final String getLanguageVersion() {
 	return languageVersion;
+    }
+
+    public final Version getPluginVersion() {
+	return pluginVersion;
     }
 
     @Override
