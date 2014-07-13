@@ -4,23 +4,10 @@
 <html>
 <head>
 <title>Plotting tests</title>
-<style>
-body {
-	background: #dddddd
-}
-
-#canvas {
-	margin: 10px;
-	padding: 10px;
-	background: #ffffff;
-	border: thin inset #aaaaaa;
-	width: 640px;
-	height: 360px;
-	
-}
-</style>
+<link rel="stylesheet" type="text/css" href="plot.css" />
 </head>
-<body>
+<body onload="drawPlots();">
+	<script src="plot.js"></script>
 	<h1>Plot test</h1>
 	<div style="width: 160pt; height: 90pt; border: 1pt solid black;">
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 90"> <path
@@ -30,10 +17,22 @@ body {
 			transform="rotate(-90 10 45)"> <text x="0" y="45">Hallo.</text> </g>
 		</svg>
 	</div>
+	<div id="info"></div>
 	<div>
 		<canvas id="canvas" width="800" height="450">Canvas not
 		supported.</canvas>
-		<script src="plot.js"></script>
+		<script>
+		var plot = new Plot('canvas');
+		plots.push(plot);
+		</script>
+	</div>
+	<div>
+		<canvas id="canvasSmall" width="200" height="112">Canvas not
+		supported.</canvas>
+		<script>
+		var plot = new Plot('canvasSmall');
+		plots.push(plot);
+		</script>
 	</div>
 </body>
 </html>
