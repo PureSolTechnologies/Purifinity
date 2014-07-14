@@ -88,7 +88,6 @@ public class DriftArrowRenderer extends Renderer {
 		+ " 33 ", null);
 	responseWriter.writeAttribute("stroke", "black", null);
 	responseWriter.writeAttribute("fill", "black", null);
-	// TODO
 
 	responseWriter.endElement("path");
 	responseWriter.endElement("g");
