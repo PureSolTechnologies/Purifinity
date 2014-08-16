@@ -9,7 +9,7 @@
 		<h:outputStylesheet library="css" name="login.css" />
 		<h:form>
 			<p:panel id="loginBox">
-				<p:panel rendered="#{!loginMBean.isLoggedIn()}"
+				<p:panel rendered="#{!loginMBean.loggedIn}"
 					header="#{loginMBean.loginToExistingAccountTranslated}">
 					<p:panelGrid columns="2">
 						<p:outputLabel for="usernameInput"

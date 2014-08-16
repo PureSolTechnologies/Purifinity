@@ -1,17 +1,20 @@
 package com.puresoltechnologies.commons.math.money;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 import com.puresoltechnologies.commons.math.MathUtils;
 
 /**
- * This class is inspired by the Money imlementation in Fowler's book
+ * This class is inspired by the Money implementation in Fowler's book
  * "Enterprise Application Patterns".
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
-public class Money {
+public class Money implements Comparable<Money>, Serializable {
+
+	private static final long serialVersionUID = -6697323264404131582L;
 
 	/**
 	 * This field keeps the currency symbol of the currency.
@@ -38,6 +41,18 @@ public class Money {
 		this.currency = currency;
 		this.fraction = fraction;
 		this.amount = amount;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public long getAmount() {
+		return amount;
+	}
+
+	public int getFraction() {
+		return fraction;
 	}
 
 	@Override
@@ -108,5 +123,20 @@ public class Money {
 			allocation[i] = new Money(currency, fraction, amountAllocation[i]);
 		}
 		return allocation;
+	}
+
+	@Override
+	public int compareTo(Money o) {
+		if (!currency.equals(o.currency)) {
+			throw new IllegalArgumentException(
+					"Comparing two money values is only supported with same currency, got '"
+							+ currency + "' and '" + o.currency + "'.");
+		}
+		if (fraction != o.fraction) {
+			throw new IllegalArgumentException(
+					"Comparing two money values is only supported with same fraction, got '"
+							+ fraction + "' and '" + o.fraction + "'.");
+		}
+		return Long.valueOf(amount).compareTo(o.amount);
 	}
 }

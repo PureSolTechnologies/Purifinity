@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.core.impl.analysis.states;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.purifinity.framework.commons.utils.statemodel.AbstractStateModel;
+import com.puresoltechnologies.purifinity.server.common.utils.statemodel.AbstractStateModel;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessState;
 
 public class AnalysisProcessStateModel extends

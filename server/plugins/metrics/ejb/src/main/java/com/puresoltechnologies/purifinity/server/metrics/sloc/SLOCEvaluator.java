@@ -1,6 +1,9 @@
 package com.puresoltechnologies.purifinity.server.metrics.sloc;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.Remote;
@@ -9,7 +12,6 @@ import javax.ejb.Stateless;
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
@@ -20,15 +22,18 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
-import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCDirectoryResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCFileResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCResult;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
+import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 
 /**
@@ -48,130 +53,149 @@ import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator
 @Remote(Evaluator.class)
 public class SLOCEvaluator extends AbstractMetricEvaluator {
 
-    private static final long serialVersionUID = -5093217611195212999L;
+	private static final long serialVersionUID = -5093217611195212999L;
 
-    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 
-    public SLOCEvaluator() {
-	super(SLOCMetricCalculator.ID, SLOCMetricCalculator.NAME,
-		SLOCMetricCalculator.DESCRIPTION);
-    }
-
-    @Override
-    public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-	return configurationParameters;
-    }
-
-    @Override
-    protected MetricFileResults processFile(AnalysisRun analysisRun,
-	    CodeAnalysis analysis) throws InterruptedException,
-	    UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-	AnalysisInformation analyzedFile = analysis.getAnalysisInformation();
-	HashId hashId = analyzedFile.getHashId();
-	EvaluatorStore evaluatorStore = getEvaluatorStore();
-	if (evaluatorStore.hasFileResults(SLOCFileResults.class, hashId)) {
-	    return null;
+	public SLOCEvaluator() {
+		super(SLOCMetricCalculator.ID, SLOCMetricCalculator.NAME,
+				SLOCMetricCalculator.DESCRIPTION);
 	}
 
-	try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-		.createInstance()) {
-	    ProgrammingLanguage language = programmingLanguages.findByName(
-		    analysis.getLanguageName(), analysis.getLanguageVersion());
-
-	    SLOCFileResults results = new SLOCFileResults();
-	    SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
-		    hashId).getSourceCodeLocation();
-	    for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-		SLOCMetricCalculator metric = new SLOCMetricCalculator(
-			analysisRun, language, codeRange);
-		execute(metric);
-
-		results.add(new SLOCResult(sourceCodeLocation, codeRange
-			.getType(), codeRange.getCanonicalName(), metric
-			.getSLOCResult(), metric.getQuality()));
-	    }
-	    return results;
+	@Override
+	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+		return configurationParameters;
 	}
-    }
 
-    @Override
-    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS;
-    }
+	@Override
+	protected FileMetrics processFile(AnalysisRun analysisRun,
+			CodeAnalysis analysis) throws InterruptedException,
+			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
+		AnalysisInformation analyzedFile = analysis.getAnalysisInformation();
+		HashId hashId = analyzedFile.getHashId();
+		EvaluatorStore evaluatorStore = getEvaluatorStore();
+		if (evaluatorStore.hasFileResults(hashId, SLOCMetricCalculator.ID)) {
+			return null;
+		}
 
-    @Override
-    protected MetricDirectoryResults processDirectory(AnalysisRun analysisRun,
-	    AnalysisFileTree directory) throws InterruptedException,
-	    EvaluationStoreException {
-	QualityLevel qualityLevel = null;
-	SLOCResult metricResults = null;
-	EvaluatorStore evaluatorStore = getEvaluatorStore();
-	for (AnalysisFileTree child : directory.getChildren()) {
-	    if (child.isFile()) {
-		if (evaluatorStore.hasFileResults(SLOCFileResults.class,
-			child.getHashId())) {
-		    SLOCFileResults results = evaluatorStore.readFileResults(
-			    SLOCFileResults.class, child.getHashId());
-		    for (SLOCResult result : results.getResults()) {
-			if (result.getCodeRangeType() == CodeRangeType.FILE) {
-			    metricResults = combine(directory, metricResults,
-				    result);
-			    break;
+		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
+				.createInstance()) {
+			ProgrammingLanguage language = programmingLanguages.findByName(
+					analysis.getLanguageName(), analysis.getLanguageVersion());
+
+			SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
+					hashId).getSourceCodeLocation();
+			GenericFileMetrics results = new GenericFileMetrics(
+					SLOCMetricCalculator.ID, hashId, sourceCodeLocation,
+					analysis.getStartTime(), SLOCEvaluatorParameter.ALL);
+			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+				SLOCMetricCalculator metric = new SLOCMetricCalculator(
+						analysisRun, language, codeRange);
+				execute(metric);
+
+				Map<String, MetricValue<?>> values = new HashMap<>();
+				for (MetricValue<?> result : metric.getSLOCResult()
+						.getResults()) {
+					values.put(result.getParameter().getName(), result);
+				}
+				values.put(SourceCodeQualityParameter.getInstance().getName(),
+						new MetricValue<SourceCodeQuality>(metric.getQuality(),
+								SourceCodeQualityParameter.getInstance()));
+
+				results.addCodeRangeMetrics(new GenericCodeRangeMetrics(
+						sourceCodeLocation, codeRange.getType(), codeRange
+								.getCanonicalName(),
+						SLOCEvaluatorParameter.ALL, values));
 			}
-		    }
-		    qualityLevel = QualityLevel.combine(qualityLevel,
-			    results.getQualityLevel());
+			return results;
 		}
-	    } else {
-		if (evaluatorStore.hasDirectoryResults(
-			SLOCDirectoryResults.class, child.getHashId())) {
-		    SLOCDirectoryResults results = evaluatorStore
-			    .readDirectoryResults(SLOCDirectoryResults.class,
-				    child.getHashId());
-		    metricResults = combine(directory, metricResults,
-			    results.getResult());
-		    qualityLevel = QualityLevel.combine(qualityLevel,
-			    results.getQualityLevel());
+	}
+
+	@Override
+	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS;
+	}
+
+	@Override
+	protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
+			AnalysisFileTree directory) throws InterruptedException,
+			EvaluationStoreException {
+		QualityLevel qualityLevel = null;
+		SLOCResult metricResults = null;
+		EvaluatorStore evaluatorStore = getEvaluatorStore();
+		for (AnalysisFileTree child : directory.getChildren()) {
+			if (child.isFile()) {
+				if (evaluatorStore.hasFileResults(child.getHashId(),
+						getInformation().getId())) {
+					GenericFileMetrics results = evaluatorStore
+							.readFileResults(child.getHashId(),
+									getInformation().getId());
+					for (GenericCodeRangeMetrics result : results.getValues()) {
+						if (result.getCodeRangeType() == CodeRangeType.FILE) {
+							metricResults = combine(directory, metricResults,
+									result);
+							break;
+						}
+					}
+					qualityLevel = QualityLevel.combine(qualityLevel,
+							results.getQualityLevel());
+				}
+			} else {
+				if (evaluatorStore.hasDirectoryResults(child.getHashId(),
+						getInformation().getId())) {
+					GenericDirectoryMetrics results = evaluatorStore
+							.readDirectoryResults(child.getHashId(),
+									getInformation().getId());
+					metricResults = combine(directory, metricResults, results);
+					qualityLevel = QualityLevel.combine(qualityLevel,
+							results.getQualityLevel());
+				}
+			}
 		}
-	    }
+		if (metricResults == null) {
+			return null;
+		}
+		Map<String, MetricValue<?>> metrics = SLOCResult
+				.toGenericMetrics(metricResults);
+		GenericDirectoryMetrics finalResults = new GenericDirectoryMetrics(
+				SLOCMetricCalculator.ID, directory.getHashId(), new Date(),
+				SLOCEvaluatorParameter.ALL, metrics);
+		finalResults.addQualityLevel(qualityLevel);
+		return finalResults;
 	}
-	if (metricResults == null) {
-	    return null;
+
+	private SLOCResult combine(AnalysisFileTree directory, SLOCResult results,
+			GenericCodeRangeMetrics result) {
+		if (result != null) {
+			if (results == null) {
+				results = SLOCResult.valueOf(result);
+			} else {
+				results = SLOCResult.combine(results,
+						SLOCResult.valueOf(result));
+			}
+		}
+		return results;
 	}
-	SLOCDirectoryResults finalResults = new SLOCDirectoryResults(
-		metricResults);
-	finalResults.addQualityLevel(qualityLevel);
-	return finalResults;
-    }
 
-    private SLOCResult combine(AnalysisFileTree directory, SLOCResult results,
-	    SLOCResult result) {
-	if (result != null) {
-	    if (results == null) {
-		results = new SLOCResult(new UnspecifiedSourceCodeLocation(),
-			CodeRangeType.DIRECTORY, directory.getName(),
-			result.getSLOCMetric(), result.getQuality());
-	    } else {
-		results = SLOCResult.combine(results, result);
-	    }
+	private SLOCResult combine(AnalysisFileTree directory, SLOCResult results,
+			GenericDirectoryMetrics result) {
+		if (result != null) {
+			if (results == null) {
+				results = SLOCResult.valueOf(result);
+			} else {
+				results = SLOCResult.combine(results,
+						SLOCResult.valueOf(result));
+			}
+		}
+		return results;
 	}
-	return results;
-    }
 
-    @Override
-    protected MetricDirectoryResults processProject(AnalysisRun analysisRun)
-	    throws InterruptedException, EvaluationStoreException {
-	AnalysisFileTree directory = analysisRun.getFileTree();
-	return processDirectory(analysisRun, directory);
-    }
+	@Override
+	protected DirectoryMetrics processProject(AnalysisRun analysisRun,
+			boolean enableReevaluation) throws InterruptedException,
+			EvaluationStoreException {
+		AnalysisFileTree directory = analysisRun.getFileTree();
+		return processDirectory(analysisRun, directory);
+	}
 
-    @Override
-    protected Class<? extends MetricFileResults> getFileResultsClass() {
-	return SLOCFileResults.class;
-    }
-
-    @Override
-    protected Class<? extends MetricDirectoryResults> getDirectoryResultsClass() {
-	return SLOCDirectoryResults.class;
-    }
 }

@@ -23,9 +23,9 @@ import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.LanguageDependedMcCabeMetric;
-import com.puresoltechnologies.purifinity.evaluation.api.Result;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
 
 /**
@@ -54,7 +54,7 @@ public class McCabeMetric extends CodeRangeEvaluator {
     public static final Set<String> DEPENDENCIES = new HashSet<>();
 
     private int cyclomaticNumber = 1;
-    private final List<Result> results = new ArrayList<Result>();
+    private final List<MetricValue<?>> results = new ArrayList<>();
     private final LanguageDependedMcCabeMetric langDepended;
     private final AnalysisRun analysisRun;
     private final CodeRange codeRange;
@@ -104,8 +104,8 @@ public class McCabeMetric extends CodeRangeEvaluator {
 
     private void createResultsList() {
 	results.clear();
-	results.add(new Result("v(G)", "Cyclomatic complexity",
-		cyclomaticNumber, ""));
+	results.add(new MetricValue<Integer>(cyclomaticNumber,
+		McCabeMetricEvaluatorParameter.VG));
     }
 
     public int getCyclomaticNumber() {
@@ -136,7 +136,7 @@ public class McCabeMetric extends CodeRangeEvaluator {
     }
 
     @Override
-    public List<Result> getResults() {
+    public List<MetricValue<?>> getResults() {
 	return results;
     }
 }

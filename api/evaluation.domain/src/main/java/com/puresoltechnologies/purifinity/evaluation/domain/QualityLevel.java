@@ -13,7 +13,7 @@ import com.puresoltechnologies.commons.math.statistics.Statistics;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class QualityLevel implements Serializable {
+public class QualityLevel implements Comparable<QualityLevel>, Serializable {
 
 	private static final long serialVersionUID = -1585502470333567684L;
 
@@ -140,6 +140,11 @@ public class QualityLevel implements Serializable {
 
 	public QualityLevel combine(QualityLevel qualityLevel) {
 		return combine(this, qualityLevel);
+	}
+
+	@Override
+	public int compareTo(QualityLevel o) {
+		return Double.valueOf(getLevel()).compareTo(o.getLevel());
 	}
 
 }

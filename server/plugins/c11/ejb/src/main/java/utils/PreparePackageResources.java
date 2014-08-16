@@ -15,8 +15,8 @@ import com.puresoltechnologies.parsers.lexer.LexerFactoryException;
 import com.puresoltechnologies.parsers.parser.Parser;
 import com.puresoltechnologies.parsers.parser.ParserFactory;
 import com.puresoltechnologies.parsers.parser.ParserFactoryException;
-import com.puresoltechnologies.purifinity.framework.commons.utils.packages.PackageBuilderUtils;
-import com.puresoltechnologies.purifinity.framework.commons.utils.packages.PackageDirectory;
+import com.puresoltechnologies.purifinity.server.common.utils.packages.PackageBuilderUtils;
+import com.puresoltechnologies.purifinity.server.common.utils.packages.PackageDirectory;
 import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
 
 public class PreparePackageResources {

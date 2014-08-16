@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.framework.commons.utils.statemodel.Transition;
+import com.puresoltechnologies.purifinity.server.common.utils.statemodel.Transition;
 
 public class AccountStateModelTest {
 
@@ -29,8 +29,7 @@ public class AccountStateModelTest {
 		assertEquals(1, endStates.size());
 		AccountState endState = endStates.iterator().next();
 		assertEquals(AccountState.DELETED, endState);
-		Set<Transition<AccountState>> transitions = endState
-				.getTransitions();
+		Set<Transition<AccountState>> transitions = endState.getTransitions();
 		assertEquals("End state must not have any transition!", 0,
 				transitions.size());
 	}

@@ -414,6 +414,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>common.utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>cpp11.ejb</artifactId>
 				<version>${project.version}</version>
 				<type>ejb</type>
@@ -640,6 +645,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>trees</artifactId>
+				<version>${purifinity.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>utils</artifactId>
 				<version>${purifinity.api.version}</version>
 			</dependency>
@@ -664,11 +674,6 @@
 				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>commons.utils</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.api</groupId>
 				<artifactId>evaluation.api</artifactId>
 				<version>${purifinity.api.version}</version>
@@ -681,16 +686,6 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.api</groupId>
 				<artifactId>evaluation.spi</artifactId>
-				<version>${purifinity.api.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>evaluation.metrics.api</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-				<artifactId>store.api</artifactId>
 				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>

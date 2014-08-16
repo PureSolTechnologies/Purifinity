@@ -24,8 +24,8 @@ import com.puresoltechnologies.parsers.source.SourceFileLocation;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
-import com.puresoltechnologies.purifinity.framework.commons.utils.ConsoleUtils;
-import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileSearch;
+import com.puresoltechnologies.purifinity.server.common.utils.ConsoleUtils;
+import com.puresoltechnologies.purifinity.server.common.utils.io.FileSearch;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.Fortran;
 
 /**

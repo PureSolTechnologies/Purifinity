@@ -13,6 +13,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>utils</module>
 		<module>plugins</module>
 		<module>jms</module>
 		<module>rest</module>

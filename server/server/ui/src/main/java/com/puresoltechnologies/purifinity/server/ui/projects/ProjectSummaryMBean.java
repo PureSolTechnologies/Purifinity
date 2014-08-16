@@ -16,66 +16,66 @@ import javax.inject.Inject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 
 @ViewScoped
 @ManagedBean
 public class ProjectSummaryMBean implements Serializable {
 
-    private static final long serialVersionUID = 8533223578039802630L;
+	private static final long serialVersionUID = 8533223578039802630L;
 
-    @Inject
-    private AnalysisStore analysisStore;
+	@Inject
+	private AnalysisStore analysisStore;
 
-    private UUID projectUUID;
-    private List<AnalysisRunInformation> runs;
-    private AnalysisProject project;
-    private AnalysisRun lastRun;
+	private UUID projectUUID;
+	private List<AnalysisRunInformation> runs;
+	private AnalysisProject project;
+	private AnalysisRun lastRun;
 
-    @PostConstruct
-    public void construct() {
-	try {
-	    ExternalContext externalContext = FacesContext.getCurrentInstance()
-		    .getExternalContext();
-	    Map<String, String> requestParameterMap = externalContext
-		    .getRequestParameterMap();
-	    String projectUUIDString = requestParameterMap.get("project");
-	    if (projectUUIDString == null) {
-		throw new IllegalStateException(
-			"URL has to have a project parameter containing the project UUID.");
-	    }
-	    projectUUID = UUID.fromString(projectUUIDString);
-	    project = analysisStore.readAnalysisProject(projectUUID);
+	@PostConstruct
+	public void construct() {
+		try {
+			ExternalContext externalContext = FacesContext.getCurrentInstance()
+					.getExternalContext();
+			Map<String, String> requestParameterMap = externalContext
+					.getRequestParameterMap();
+			String projectUUIDString = requestParameterMap.get("project");
+			if (projectUUIDString == null) {
+				throw new IllegalStateException(
+						"URL has to have a project parameter containing the project UUID.");
+			}
+			projectUUID = UUID.fromString(projectUUIDString);
+			project = analysisStore.readAnalysisProject(projectUUID);
 
-	    AnalysisRunInformation lastRunInformation = analysisStore
-		    .readLastAnalysisRun(projectUUID);
-	    if (lastRunInformation != null) {
-		lastRun = analysisStore.readAnalysisRun(lastRunInformation);
-	    }
-	    runs = analysisStore.readAllRunInformation(projectUUID);
-	} catch (AnalysisStoreException e) {
-	    throw new RuntimeException(e);
+			AnalysisRunInformation lastRunInformation = analysisStore
+					.readLastAnalysisRun(projectUUID);
+			if (lastRunInformation != null) {
+				lastRun = analysisStore.readAnalysisRun(lastRunInformation);
+			}
+			runs = analysisStore.readAllRunInformation(projectUUID);
+		} catch (AnalysisStoreException e) {
+			throw new RuntimeException(e);
+		}
 	}
-    }
 
-    public List<AnalysisRunInformation> getRuns() {
-	return runs;
-    }
-
-    public String getName() {
-	return project.getSettings().getName();
-    }
-
-    public String getDescription() {
-	return project.getSettings().getDescription();
-    }
-
-    public String getLastRunDate() {
-	if (lastRun == null) {
-	    return "";
+	public List<AnalysisRunInformation> getRuns() {
+		return runs;
 	}
-	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-	return format.format(lastRun.getInformation().getStartTime());
-    }
+
+	public String getName() {
+		return project.getSettings().getName();
+	}
+
+	public String getDescription() {
+		return project.getSettings().getDescription();
+	}
+
+	public String getLastRunDate() {
+		if (lastRun == null) {
+			return "";
+		}
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+		return format.format(lastRun.getInformation().getStartTime());
+	}
 }

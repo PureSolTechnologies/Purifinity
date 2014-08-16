@@ -3,21 +3,45 @@ package com.puresoltechnologies.purifinity.server.metrics.mccabe;
 import static com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetricEvaluatorParameter.ALL;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
+import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 
 public class McCabeMetricFileResults extends AbstractMcCabeMetricResults
-		implements MetricFileResults {
+		implements FileMetrics {
+
+	private static final long serialVersionUID = -5992363758018121695L;
 
 	private final List<McCabeMetricResult> results = new ArrayList<McCabeMetricResult>();
 
-	private static final long serialVersionUID = -5992363758018121695L;
+	private final HashId hashId;
+	private final SourceCodeLocation sourceCodeLocation;
+
+	public McCabeMetricFileResults(String evaluatorId, HashId hashId,
+			SourceCodeLocation sourceCodeLocation, Date time) {
+		super(evaluatorId, time);
+		this.hashId = hashId;
+		this.sourceCodeLocation = sourceCodeLocation;
+	}
+
+	@Override
+	public HashId getHashId() {
+		return hashId;
+	}
+
+	@Override
+	public SourceCodeLocation getSourceCodeLocation() {
+		return sourceCodeLocation;
+	}
 
 	public List<McCabeMetricResult> getResults() {
 		return results;
@@ -39,14 +63,15 @@ public class McCabeMetricFileResults extends AbstractMcCabeMetricResults
 	}
 
 	@Override
-	public List<Map<String, Value<?>>> getValues() {
-		List<Map<String, Value<?>>> values = new ArrayList<Map<String, Value<?>>>();
-
+	public List<GenericCodeRangeMetrics> getValues() {
+		List<GenericCodeRangeMetrics> values = new ArrayList<>();
 		for (McCabeMetricResult result : results) {
-			Map<String, Value<?>> row = convertToRow(result);
-			values.add(row);
+			Map<String, MetricValue<?>> row = convertToRow(result);
+			values.add(new GenericCodeRangeMetrics(result
+					.getSourceCodeLocation(), result.getCodeRangeType(), result
+					.getCodeRangeName(), McCabeMetricEvaluatorParameter.ALL,
+					row));
 		}
-
 		return values;
 	}
 

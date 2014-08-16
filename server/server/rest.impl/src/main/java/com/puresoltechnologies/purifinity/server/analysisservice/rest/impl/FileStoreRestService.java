@@ -8,9 +8,9 @@ import javax.inject.Inject;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.FileStoreRestInterface;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
 
 public class FileStoreRestService implements FileStoreRestInterface {
 

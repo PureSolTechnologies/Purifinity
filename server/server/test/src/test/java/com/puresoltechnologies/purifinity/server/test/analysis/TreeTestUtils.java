@@ -10,7 +10,7 @@ import com.puresoltechnologies.commons.misc.HashCodeGenerator;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
-import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
+import com.puresoltechnologies.purifinity.server.common.utils.io.FileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 
 public class TreeTestUtils {

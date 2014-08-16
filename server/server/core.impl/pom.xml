@@ -18,10 +18,6 @@
 			<artifactId>evaluation.spi</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.framework</groupId>
-			<artifactId>evaluation.metrics.api</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>common.jms</artifactId>
 		</dependency>

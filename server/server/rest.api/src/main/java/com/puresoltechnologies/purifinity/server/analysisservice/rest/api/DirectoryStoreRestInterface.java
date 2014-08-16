@@ -9,8 +9,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
-import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 
 @Path("directorystore")
 public interface DirectoryStoreRestInterface extends DirectoryStore {

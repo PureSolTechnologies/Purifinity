@@ -9,8 +9,8 @@ import javax.inject.Inject;
 
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStore;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 
 @ApplicationScoped
 @ManagedBean

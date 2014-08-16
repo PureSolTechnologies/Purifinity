@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis.states;
 
-import com.puresoltechnologies.purifinity.framework.commons.utils.statemodel.Transition;
+import com.puresoltechnologies.purifinity.server.common.utils.statemodel.Transition;
 
 public enum AnalysisProcessTransition implements
 		Transition<AnalysisProcessState> {

@@ -8,9 +8,9 @@ import java.util.List;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.FileStoreRestInterface;
 import com.puresoltechnologies.purifinity.server.common.rest.AbstractRestClient;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 
 public class FileStoreClient extends AbstractRestClient<FileStoreRestInterface> {
 

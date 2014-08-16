@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -19,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.misc.StopWatch;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
@@ -27,340 +27,347 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
-import com.puresoltechnologies.purifinity.evaluation.domain.MetricDirectoryResults;
-import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
-import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
-import com.puresoltechnologies.purifinity.framework.store.api.EvaluatorStore;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.DirectoryStoreServiceRemote;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.FileStoreServiceRemote;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProjectMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreServiceRemote;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreServiceRemote;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 /**
- * This interface is the main interface for all evaluators and the general
- * behavior of them. All evaluators should have a name and a description as well
- * as some standard output like the report, the quality level and the evaluated
- * quality characteristics.
+ * This interface is an abstract implementation for evaluators and the general
+ * behavior of them for re-use. All evaluators should have a name and a
+ * description as well as some standard output like the report, the quality
+ * level and the evaluated quality characteristics.
+ * 
+ * <b>Extending implementations must not have mutable state!</b>
  * 
  * @author Rick-Rainer Ludwig
  * 
  */
 public abstract class AbstractEvaluator implements Evaluator {
 
-    private static final long serialVersionUID = -497819792461488182L;
+	private static final Logger logger = LoggerFactory
+			.getLogger(AbstractEvaluator.class);
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(AbstractEvaluator.class);
+	private static final int EXECUTION_TIMEOUT_IN_SECONDS = 30;
 
-    private static final int EXECUTION_TIMEOUT_IN_SECONDS = 30;
+	private final Map<String, Object> properties = new HashMap<>();
 
-    private final Map<String, Object> properties = new HashMap<>();
+	private EvaluatorStoreServiceRemote store;
+	private FileStoreServiceRemote fileStore;
+	private DirectoryStoreServiceRemote directoryStore;
 
-    private EvaluatorStoreServiceRemote store;
-    private FileStoreServiceRemote fileStore;
-    private DirectoryStoreServiceRemote directoryStore;
+	private final EvaluatorInformation information;
 
-    private final EvaluatorInformation information;
-    private final Date timeStamp;
-
-    private long timeOfRun;
-
-    private boolean reEvaluation = false;
-
-    public AbstractEvaluator(String id, String name, String description) {
-	super();
-	this.information = new EvaluatorInformation(id, name, description);
-	timeStamp = new Date();
-    }
-
-    abstract protected MetricFileResults readFileResults(HashId hashId)
-	    throws EvaluationStoreException;
-
-    abstract protected boolean hasFileResults(HashId hashId)
-	    throws EvaluationStoreException;
-
-    abstract protected void storeFileResults(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) throws EvaluationStoreException;
-
-    abstract protected MetricDirectoryResults readDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException;
-
-    abstract protected boolean hasDirectoryResults(HashId hashId)
-	    throws EvaluationStoreException;
-
-    abstract protected void storeDirectoryResults(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults)
-	    throws EvaluationStoreException;
-
-    @PostConstruct
-    public final void construct() {
-	store = JndiUtils.createRemoteEJBInstance(
-		EvaluatorStoreServiceRemote.class,
-		EvaluatorStoreServiceRemote.NAME);
-	fileStore = JndiUtils.createRemoteEJBInstance(
-		FileStoreServiceRemote.class, FileStoreServiceRemote.JNDI_NAME);
-	directoryStore = JndiUtils.createRemoteEJBInstance(
-		DirectoryStoreServiceRemote.class,
-		DirectoryStoreServiceRemote.JNDI_NAME);
-    }
-
-    protected EvaluatorStore getEvaluatorStore() {
-	return store;
-    }
-
-    @Override
-    public final EvaluatorInformation getInformation() {
-	return information;
-    }
-
-    @Override
-    public final Date getStartTime() {
-	return timeStamp;
-    }
-
-    @Override
-    public long getDuration() {
-	return timeOfRun;
-    }
-
-    @Override
-    public final void setReEvaluation(boolean reEvaluation) {
-	this.reEvaluation = reEvaluation;
-    }
-
-    @Override
-    public final boolean isReEvaluation() {
-	return reEvaluation;
-    }
-
-    @Override
-    public final <T> T getConfigurationParameter(
-	    ConfigurationParameter<T> parameter) {
-	if (!getAvailableConfigurationParameters().contains(parameter)) {
-	    throw new IllegalArgumentException("The parameter '" + parameter
-		    + "' is not known.");
+	public AbstractEvaluator(String id, String name, String description) {
+		super();
+		this.information = new EvaluatorInformation(id, name, description);
 	}
-	@SuppressWarnings("unchecked")
-	T t = (T) properties.get(parameter.getPropertyKey());
-	return t != null ? t : parameter.getDefaultValue();
-    }
 
-    @Override
-    public final <T> void setConfigurationParameter(
-	    ConfigurationParameter<T> parameter, T value) {
-	if (!getAvailableConfigurationParameters().contains(parameter)) {
-	    throw new IllegalArgumentException("The parameter '" + parameter
-		    + "' is not known.");
+	abstract protected FileMetrics readFileResults(HashId hashId)
+			throws EvaluationStoreException;
+
+	abstract protected boolean hasFileResults(HashId hashId)
+			throws EvaluationStoreException;
+
+	abstract protected void storeFileResults(AnalysisRun analysisRun,
+			CodeAnalysis fileAnalysis, GenericFileMetrics metrics)
+			throws EvaluationStoreException;
+
+	abstract protected DirectoryMetrics readDirectoryResults(HashId hashId)
+			throws EvaluationStoreException;
+
+	abstract protected boolean hasDirectoryResults(HashId hashId)
+			throws EvaluationStoreException;
+
+	abstract protected void storeDirectoryResults(AnalysisRun analysisRun,
+			AnalysisFileTree directoryNode, GenericDirectoryMetrics metrics)
+			throws EvaluationStoreException;
+
+	abstract protected ProjectMetrics readProjectResults(UUID projectUUID,
+			UUID runUUID) throws EvaluationStoreException;
+
+	abstract protected boolean hasProjectResults(UUID projectUUID, UUID runUUID)
+			throws EvaluationStoreException;
+
+	abstract protected void storeProjectResults(AnalysisRun analysisRun,
+			AnalysisFileTree directoryNode, GenericProjectMetrics metrics)
+			throws EvaluationStoreException;
+
+	@PostConstruct
+	public final void construct() {
+		store = JndiUtils.createRemoteEJBInstance(
+				EvaluatorStoreServiceRemote.class,
+				EvaluatorStoreServiceRemote.NAME);
+		fileStore = JndiUtils.createRemoteEJBInstance(
+				FileStoreServiceRemote.class, FileStoreServiceRemote.JNDI_NAME);
+		directoryStore = JndiUtils.createRemoteEJBInstance(
+				DirectoryStoreServiceRemote.class,
+				DirectoryStoreServiceRemote.JNDI_NAME);
 	}
-	properties.put(parameter.getPropertyKey(), value);
-    }
 
-    /**
-     * This method is used to run an evaluation of an analyzed file. This method
-     * is called by the run method.
-     * 
-     * @param analysis
-     *            is the {@link CodeAnalysis} of the file which is to be
-     *            evaluated.
-     * @throws InterruptedException
-     *             is thrown if the evaluation was interrupted.
-     * @throws UniversalSyntaxTreeEvaluationException
-     *             is thrown if the evaluation was aborted by an exceptional
-     *             event.
-     * @throws EvaluationStoreException
-     */
-    abstract protected MetricFileResults processFile(AnalysisRun analysisRun,
-	    CodeAnalysis analysis) throws InterruptedException,
-	    UniversalSyntaxTreeEvaluationException, EvaluationStoreException;
-
-    /**
-     * This method is used to run an evaluation of an entire directory. This
-     * method is called by the run method.
-     * 
-     * @param directory
-     *            is the {@link HashIdFileTree} object of the directory to be
-     *            evaluated.
-     * @throws InterruptedException
-     *             is thrown if the evaluation was interrupted.
-     * @throws EvaluationStoreException
-     */
-    abstract protected MetricDirectoryResults processDirectory(
-	    AnalysisRun analysisRun, AnalysisFileTree directory)
-	    throws InterruptedException, EvaluationStoreException;
-
-    /**
-     * This method is used to run an evaluation of the entire project. This
-     * method is called by the run method.
-     * 
-     * @throws InterruptedException
-     *             is thrown if the evaluation was interrupted.
-     * @throws EvaluationStoreException
-     */
-    abstract protected MetricDirectoryResults processProject(
-	    AnalysisRun analysisRun) throws InterruptedException,
-	    EvaluationStoreException;
-
-    @Override
-    public final Boolean analyze(AnalysisRun analysisRun)
-	    throws InterruptedException, EvaluationStoreException {
-	// Start time measurement
-	StopWatch watch = new StopWatch();
-	watch.start();
-	// check the files to evaluate and calculate amount of work!
-	// process files and directories
-	processTree(analysisRun, analysisRun.getFileTree());
-	// process project as whole
-	processProject(analysisRun);
-	// Stop time measurement
-	watch.stop();
-	timeOfRun = watch.getMilliseconds();
-	return true;
-    }
-
-    private void processTree(AnalysisRun analysisRun, AnalysisFileTree tree)
-	    throws InterruptedException {
-	try {
-	    processNode(analysisRun, tree);
-	} catch (FileStoreException | DirectoryStoreException
-		| ArrayStoreException | EvaluationStoreException e) {
-	    logger.error("Evaluation result could not be stored.", e);
-	} catch (UniversalSyntaxTreeEvaluationException e) {
-	    logger.error("Evaluation failed.", e);
+	protected EvaluatorStore getEvaluatorStore() {
+		return store;
 	}
-    }
 
-    private void processNode(AnalysisRun analysisRun, AnalysisFileTree node)
-	    throws FileStoreException, InterruptedException,
-	    UniversalSyntaxTreeEvaluationException, EvaluationStoreException,
-	    DirectoryStoreException {
-	if (Thread.currentThread().isInterrupted()) {
-	    throw new InterruptedException();
+	protected FileStore getFileStore() {
+		return fileStore;
 	}
-	if (node.isFile()) {
-	    processAsFile(analysisRun, node);
-	} else {
-	    processAsDirectory(analysisRun, node);
-	}
-    }
 
-    /**
-     * This method is called on a file node to run the actual evaluation. The
-     * evaluation is delegated to the explicit implementing class.
-     * 
-     * @param fileNode
-     *            is the node of the file with in the project's file tree.
-     * @throws FileStoreException
-     *             is thrown if the file store had an exception.
-     * @throws InterruptedException
-     *             is thrown if the operation was interrupted.
-     * @throws UniversalSyntaxTreeEvaluationException
-     *             is thrown if the evaluation had an exception.
-     * @throws EvaluationStoreException
-     */
-    private void processAsFile(AnalysisRun analysisRun,
-	    AnalysisFileTree fileNode) throws FileStoreException,
-	    InterruptedException, UniversalSyntaxTreeEvaluationException,
-	    EvaluationStoreException {
-	HashId hashId = fileNode.getHashId();
-	if (fileStore.wasAnalyzed(hashId)) {
-	    List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyses(hashId);
-	    for (CodeAnalysis fileAnalysis : fileAnalyses) {
-		if ((!hasFileResults(hashId)) || (reEvaluation)) {
-		    MetricFileResults fileResults = processFile(analysisRun,
-			    fileAnalysis);
-		    if (fileResults != null) {
-			storeFileResults(analysisRun, fileAnalysis, this,
-				fileResults);
-		    }
+	protected DirectoryStore getDirectoryStore() {
+		return directoryStore;
+	}
+
+	@Override
+	public final EvaluatorInformation getInformation() {
+		return information;
+	}
+
+	@Override
+	public final <T> T getConfigurationParameter(
+			ConfigurationParameter<T> parameter) {
+		if (!getAvailableConfigurationParameters().contains(parameter)) {
+			throw new IllegalArgumentException("The parameter '" + parameter
+					+ "' is not known.");
+		}
+		@SuppressWarnings("unchecked")
+		T t = (T) properties.get(parameter.getPropertyKey());
+		return t != null ? t : parameter.getDefaultValue();
+	}
+
+	@Override
+	public final <T> void setConfigurationParameter(
+			ConfigurationParameter<T> parameter, T value) {
+		if (!getAvailableConfigurationParameters().contains(parameter)) {
+			throw new IllegalArgumentException("The parameter '" + parameter
+					+ "' is not known.");
+		}
+		properties.put(parameter.getPropertyKey(), value);
+	}
+
+	/**
+	 * This method is used to run an evaluation of an analyzed file. This method
+	 * is called by the run method.
+	 * 
+	 * @param analysis
+	 *            is the {@link CodeAnalysis} of the file which is to be
+	 *            evaluated.
+	 * @throws InterruptedException
+	 *             is thrown if the evaluation was interrupted.
+	 * @throws UniversalSyntaxTreeEvaluationException
+	 *             is thrown if the evaluation was aborted by an exceptional
+	 *             event.
+	 * @throws EvaluationStoreException
+	 */
+	abstract protected FileMetrics processFile(AnalysisRun analysisRun,
+			CodeAnalysis analysis) throws InterruptedException,
+			UniversalSyntaxTreeEvaluationException, EvaluationStoreException;
+
+	/**
+	 * This method is used to run an evaluation of an entire directory. This
+	 * method is called by the run method.
+	 * 
+	 * @param directory
+	 *            is the {@link HashIdFileTree} object of the directory to be
+	 *            evaluated.
+	 * @throws InterruptedException
+	 *             is thrown if the evaluation was interrupted.
+	 * @throws EvaluationStoreException
+	 */
+	abstract protected DirectoryMetrics processDirectory(
+			AnalysisRun analysisRun, AnalysisFileTree directory)
+			throws InterruptedException, EvaluationStoreException;
+
+	/**
+	 * This method is used to run an evaluation of the entire project. This
+	 * method is called by the run method.
+	 * 
+	 * @throws InterruptedException
+	 *             is thrown if the evaluation was interrupted.
+	 * @throws EvaluationStoreException
+	 */
+	abstract protected DirectoryMetrics processProject(AnalysisRun analysisRun,
+			boolean enableReevaluation) throws InterruptedException,
+			EvaluationStoreException;
+
+	@Override
+	public final void evaluate(AnalysisRun analysisRun,
+			boolean enableReevaluation) throws InterruptedException,
+			EvaluationStoreException {
+		// process files and directories
+		processTree(analysisRun, analysisRun.getFileTree(), enableReevaluation);
+		// process project as whole
+		processProject(analysisRun, enableReevaluation);
+	}
+
+	private void processTree(AnalysisRun analysisRun, AnalysisFileTree tree,
+			boolean enableReevaluation) throws InterruptedException {
+		try {
+			processNode(analysisRun, tree, enableReevaluation);
+		} catch (FileStoreException | DirectoryStoreException
+				| ArrayStoreException | EvaluationStoreException e) {
+			logger.error("Evaluation result could not be stored.", e);
+		} catch (UniversalSyntaxTreeEvaluationException e) {
+			logger.error("Evaluation failed.", e);
+		}
+	}
+
+	private void processNode(AnalysisRun analysisRun, AnalysisFileTree node,
+			boolean enableReevaluation) throws FileStoreException,
+			InterruptedException, UniversalSyntaxTreeEvaluationException,
+			EvaluationStoreException, DirectoryStoreException {
+		if (Thread.currentThread().isInterrupted()) {
+			throw new InterruptedException();
+		}
+		if (node.isFile()) {
+			processAsFile(analysisRun, node, enableReevaluation);
 		} else {
-		    MetricFileResults fileResults = readFileResults(hashId);
-		    if (fileResults != null) {
-			storeMetricsInBigTable(analysisRun, fileAnalysis, this,
-				fileResults);
-		    }
+			processAsDirectory(analysisRun, node, enableReevaluation);
 		}
-	    }
 	}
-    }
 
-    /**
-     * This method is called on a directory node to run the actual evaluation.
-     * The evaluation is delegated to the explicit implementing class.
-     * 
-     * @param directoryNode
-     *            is the node of the directory with in the project's file tree.
-     * @throws FileStoreException
-     *             is thrown if the file store had an exception.
-     * @throws InterruptedException
-     *             is thrown if the operation was interrupted.
-     * @throws UniversalSyntaxTreeEvaluationException
-     *             is thrown if the evaluation had an exception.
-     * @throws EvaluationStoreException
-     * @throws DirectoryStoreException
-     */
-    private void processAsDirectory(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode) throws FileStoreException,
-	    InterruptedException, UniversalSyntaxTreeEvaluationException,
-	    DirectoryStoreException, EvaluationStoreException {
-	HashId hashId = directoryNode.getHashId();
-	if (directoryStore.isAvailable(hashId)) {
-	    for (AnalysisFileTree child : directoryNode.getChildren()) {
-		processNode(analysisRun, child);
-	    }
-	    if ((!hasDirectoryResults(hashId)) || (reEvaluation)) {
-		MetricDirectoryResults directoryResults = processDirectory(
-			analysisRun, directoryNode);
-		if (directoryResults != null) {
-		    storeDirectoryResults(analysisRun, directoryNode, this,
-			    directoryResults);
+	/**
+	 * This method is called on a file node to run the actual evaluation. The
+	 * evaluation is delegated to the explicit implementing class.
+	 * 
+	 * @param fileNode
+	 *            is the node of the file with in the project's file tree.
+	 * @throws FileStoreException
+	 *             is thrown if the file store had an exception.
+	 * @throws InterruptedException
+	 *             is thrown if the operation was interrupted.
+	 * @throws UniversalSyntaxTreeEvaluationException
+	 *             is thrown if the evaluation had an exception.
+	 * @throws EvaluationStoreException
+	 */
+	private void processAsFile(AnalysisRun analysisRun,
+			AnalysisFileTree fileNode, boolean enableReevaluation)
+			throws FileStoreException, InterruptedException,
+			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
+		HashId hashId = fileNode.getHashId();
+		if (fileStore.wasAnalyzed(hashId)) {
+			List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyses(hashId);
+			for (CodeAnalysis fileAnalysis : fileAnalyses) {
+				if ((!hasFileResults(hashId)) || (enableReevaluation)) {
+					FileMetrics fileResults = processFile(analysisRun,
+							fileAnalysis);
+					if (fileResults != null) {
+						GenericFileMetrics metrics = new GenericFileMetrics(
+								getInformation().getId(), hashId,
+								fileResults.getSourceCodeLocation(),
+								new Date(), fileResults.getParameters(),
+								fileResults.getValues());
+						storeFileResults(analysisRun, fileAnalysis, metrics);
+					}
+				} else {
+					FileMetrics fileResults = readFileResults(hashId);
+					if (fileResults != null) {
+						storeMetricsInBigTable(analysisRun, fileAnalysis, this,
+								fileResults);
+					}
+				}
+			}
 		}
-	    } else {
-		MetricDirectoryResults directoryResults = readDirectoryResults(hashId);
-		if (directoryResults != null) {
-		    storeMetricsInBigTable(analysisRun, directoryNode, this,
-			    directoryResults);
+	}
+
+	/**
+	 * This method is called on a directory node to run the actual evaluation.
+	 * The evaluation is delegated to the explicit implementing class.
+	 * 
+	 * @param directoryNode
+	 *            is the node of the directory with in the project's file tree.
+	 * @throws FileStoreException
+	 *             is thrown if the file store had an exception.
+	 * @throws InterruptedException
+	 *             is thrown if the operation was interrupted.
+	 * @throws UniversalSyntaxTreeEvaluationException
+	 *             is thrown if the evaluation had an exception.
+	 * @throws EvaluationStoreException
+	 * @throws DirectoryStoreException
+	 */
+	private void processAsDirectory(AnalysisRun analysisRun,
+			AnalysisFileTree directoryNode, boolean enableReevaluation)
+			throws FileStoreException, InterruptedException,
+			UniversalSyntaxTreeEvaluationException, DirectoryStoreException,
+			EvaluationStoreException {
+		HashId hashId = directoryNode.getHashId();
+		if (directoryStore.isAvailable(hashId)) {
+			for (AnalysisFileTree child : directoryNode.getChildren()) {
+				processNode(analysisRun, child, enableReevaluation);
+			}
+			if ((!store.hasDirectoryResults(hashId, getInformation().getId()))
+					|| (enableReevaluation)) {
+				DirectoryMetrics directoryResults = processDirectory(
+						analysisRun, directoryNode);
+				if (directoryResults != null) {
+					GenericDirectoryMetrics metrics = new GenericDirectoryMetrics(
+							getInformation().getId(), hashId, new Date(),
+							directoryResults.getParameters(),
+							directoryResults.getValues());
+					storeDirectoryResults(analysisRun, directoryNode, metrics);
+				}
+			} else {
+				DirectoryMetrics directoryResults = readDirectoryResults(hashId);
+				if (directoryResults != null) {
+					storeMetricsInBigTable(analysisRun, directoryNode, this,
+							directoryResults);
+				}
+			}
 		}
-	    }
 	}
-    }
 
-    /**
-     * This method is used to explicitly start evaluations.
-     * 
-     * @param evaluator
-     * @return
-     * @throws InterruptedException
-     * @throws UniversalSyntaxTreeEvaluationException
-     */
-    protected <T> T execute(Callable<T> evaluator) throws InterruptedException,
-	    UniversalSyntaxTreeEvaluationException {
-	try {
-	    ExecutorService executor = Executors.newSingleThreadExecutor();
-	    Future<T> future = executor.submit(evaluator);
-	    executor.shutdown();
-	    return future.get(EXECUTION_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
-	} catch (ExecutionException e) {
-	    throw new UniversalSyntaxTreeEvaluationException(e);
-	} catch (TimeoutException e) {
-	    throw new UniversalSyntaxTreeEvaluationException(e);
+	/**
+	 * This method is used to explicitly start evaluations.
+	 * 
+	 * @param evaluator
+	 * @return
+	 * @throws InterruptedException
+	 * @throws UniversalSyntaxTreeEvaluationException
+	 */
+	protected <T> T execute(Callable<T> evaluator) throws InterruptedException,
+			UniversalSyntaxTreeEvaluationException {
+		try {
+			ExecutorService executor = Executors.newSingleThreadExecutor();
+			Future<T> future = executor.submit(evaluator);
+			executor.shutdown();
+			return future.get(EXECUTION_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
+		} catch (ExecutionException e) {
+			throw new UniversalSyntaxTreeEvaluationException(e);
+		} catch (TimeoutException e) {
+			throw new UniversalSyntaxTreeEvaluationException(e);
+		}
 	}
-    }
 
-    protected final void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    MetricFileResults fileResults) {
-	getEvaluatorStore().storeMetricsInBigTable(analysisRun, fileAnalysis,
-		evaluator, fileResults);
-    }
+	protected final void storeMetricsInBigTable(AnalysisRun analysisRun,
+			CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
+			FileMetrics fileResults) {
+		GenericFileMetrics metrics = new GenericFileMetrics(getInformation()
+				.getId(), fileResults.getHashId(),
+				fileResults.getSourceCodeLocation(), new Date(),
+				fileResults.getParameters(), fileResults.getValues());
+		getEvaluatorStore().storeMetricsInBigTable(analysisRun, fileAnalysis,
+				metrics);
+	}
 
-    protected final void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    MetricDirectoryResults directoryResults) {
-	getEvaluatorStore().storeMetricsInBigTable(analysisRun, directoryNode,
-		evaluator, directoryResults);
-    }
+	protected final void storeMetricsInBigTable(AnalysisRun analysisRun,
+			AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
+			DirectoryMetrics directoryResults) {
+		GenericDirectoryMetrics metrics = new GenericDirectoryMetrics(
+				getInformation().getId(), directoryResults.getHashId(),
+				new Date(), directoryResults.getParameters(),
+				directoryResults.getValues());
+		getEvaluatorStore().storeMetricsInBigTable(analysisRun, directoryNode,
+				metrics);
+	}
 
 }

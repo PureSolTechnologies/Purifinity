@@ -8,8 +8,8 @@ import java.util.Properties;
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.source.SourceFileLocation;
-import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileSearch;
-import com.puresoltechnologies.purifinity.framework.commons.utils.io.FileTree;
+import com.puresoltechnologies.purifinity.server.common.utils.io.FileSearch;
+import com.puresoltechnologies.purifinity.server.common.utils.io.FileTree;
 
 /**
  * 

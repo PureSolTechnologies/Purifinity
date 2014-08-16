@@ -12,9 +12,9 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInforma
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.framework.store.api.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisStoreRestInterface;
 import com.puresoltechnologies.purifinity.server.common.rest.AbstractRestClient;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 
 public class AnalysisStoreClient extends
 		AbstractRestClient<AnalysisStoreRestInterface> {

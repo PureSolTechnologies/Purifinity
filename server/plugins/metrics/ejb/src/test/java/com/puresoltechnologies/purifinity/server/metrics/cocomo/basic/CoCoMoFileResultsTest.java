@@ -3,24 +3,27 @@ package com.puresoltechnologies.purifinity.server.metrics.cocomo.basic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.Date;
+
 import org.junit.Test;
 
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.basic.BasicCoCoMoFileResults;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.cocomo.basic.SoftwareProject;
 
 public class CoCoMoFileResultsTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new BasicCoCoMoFileResults(
-				new UnspecifiedSourceCodeLocation()));
+		assertNotNull(new BasicCoCoMoFileResults("",
+				HashId.valueOf("SHA-1:1234"),
+				new UnspecifiedSourceCodeLocation(), new Date()));
 	}
 
 	@Test
 	public void testDefaultValues() {
-		BasicCoCoMoFileResults set = new BasicCoCoMoFileResults(
-				new UnspecifiedSourceCodeLocation());
+		BasicCoCoMoFileResults set = new BasicCoCoMoFileResults("",
+				HashId.valueOf("SHA-1:1234"),
+				new UnspecifiedSourceCodeLocation(), new Date());
 		assertEquals(56286, set.getAverageSalary(), 1e-8);
 		assertEquals("$", set.getCurrency());
 		assertEquals(SoftwareProject.LOW, set.getComplexity());
@@ -28,8 +31,9 @@ public class CoCoMoFileResultsTest {
 
 	@Test
 	public void testSetterUndGetter() {
-		BasicCoCoMoFileResults set = new BasicCoCoMoFileResults(
-				new UnspecifiedSourceCodeLocation());
+		BasicCoCoMoFileResults set = new BasicCoCoMoFileResults("",
+				HashId.valueOf("SHA-1:1234"),
+				new UnspecifiedSourceCodeLocation(), new Date());
 		set.setAverageSalary(12345.67, "EUR");
 		set.setComplexity(SoftwareProject.HIGH);
 		set.setSloc(1234567);
@@ -42,8 +46,9 @@ public class CoCoMoFileResultsTest {
 
 	@Test
 	public void testFormalaConstants() {
-		BasicCoCoMoFileResults set = new BasicCoCoMoFileResults(
-				new UnspecifiedSourceCodeLocation());
+		BasicCoCoMoFileResults set = new BasicCoCoMoFileResults("",
+				HashId.valueOf("SHA-1:1234"),
+				new UnspecifiedSourceCodeLocation(), new Date());
 		set.setComplexity(SoftwareProject.LOW);
 		assertEquals(2.4, set.getC1(), 1e-8);
 		assertEquals(1.05, set.getC2(), 1e-8);
@@ -62,8 +67,9 @@ public class CoCoMoFileResultsTest {
 
 	@Test
 	public void testCalculation() {
-		BasicCoCoMoFileResults set = new BasicCoCoMoFileResults(
-				new UnspecifiedSourceCodeLocation());
+		BasicCoCoMoFileResults set = new BasicCoCoMoFileResults("",
+				HashId.valueOf("SHA-1:1234"),
+				new UnspecifiedSourceCodeLocation(), new Date());
 		set.setAverageSalary(50000, "$");
 		set.setComplexity(SoftwareProject.LOW);
 		set.setSloc(100000);

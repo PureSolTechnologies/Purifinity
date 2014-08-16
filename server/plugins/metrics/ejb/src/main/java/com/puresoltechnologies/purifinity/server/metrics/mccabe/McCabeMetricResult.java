@@ -1,10 +1,14 @@
 package com.puresoltechnologies.purifinity.server.metrics.mccabe;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 
 public class McCabeMetricResult implements Serializable {
 
@@ -47,4 +51,14 @@ public class McCabeMetricResult implements Serializable {
 		return quality;
 	}
 
+	public Map<String, MetricValue<?>> getValues() {
+		Map<String, MetricValue<?>> values = new HashMap<>();
+		values.put(McCabeMetricEvaluatorParameter.VG.getName(),
+				new MetricValue<Integer>(cyclomaticComplexity,
+						McCabeMetricEvaluatorParameter.VG));
+		values.put(SourceCodeQualityParameter.getInstance().getName(),
+				new MetricValue<SourceCodeQuality>(quality,
+						SourceCodeQualityParameter.getInstance()));
+		return values;
+	}
 }

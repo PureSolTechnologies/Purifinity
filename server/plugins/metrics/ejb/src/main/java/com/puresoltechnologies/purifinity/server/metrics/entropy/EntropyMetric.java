@@ -25,9 +25,9 @@ import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
-import com.puresoltechnologies.purifinity.evaluation.api.Result;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetric;
 
@@ -116,10 +116,9 @@ public class EntropyMetric extends CodeRangeEvaluator {
 	    double entropy = 0.0;
 	    for (String operant : operands.keySet()) {
 		int count = operands.get(operant);
-		entropy += (double) count
+		entropy += count
 			/ (double) halstead.getTotalOperands()
-			* Math.log((double) count
-				/ (double) halstead.getTotalOperands())
+			* Math.log(count / (double) halstead.getTotalOperands())
 			/ Math.log(2.0);
 	    }
 	    entropy *= -1.0;
@@ -224,7 +223,7 @@ public class EntropyMetric extends CodeRangeEvaluator {
     }
 
     @Override
-    public List<Result> getResults() {
+    public List<MetricValue<?>> getResults() {
 	return result.getResults();
     }
 }

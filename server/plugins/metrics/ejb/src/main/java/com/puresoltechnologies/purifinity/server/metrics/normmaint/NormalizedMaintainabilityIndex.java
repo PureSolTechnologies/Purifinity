@@ -27,13 +27,13 @@ import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationExc
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
-import com.puresoltechnologies.purifinity.evaluation.api.Result;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
-import com.puresoltechnologies.purifinity.framework.evaluation.metrics.api.sloc.SLOCMetric;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetric;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetric;
+import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
 
 public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
@@ -177,7 +177,7 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 	}
 
 	@Override
-	public List<Result> getResults() {
+	public List<MetricValue<?>> getResults() {
 		return result.getResults();
 	}
 

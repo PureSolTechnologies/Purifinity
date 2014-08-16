@@ -13,11 +13,9 @@ public class EvaluationServiceSchema {
 
     private static final String EVALUATION_KEYSPACE = EvaluationStoreKeyspace.NAME;
 
-    private static final String EVALUATION_FILES_TABLE = "files";
-    private static final String EVALUATION_DIRECTORIES_TABLE = "directories";
-    private static final String EVALUATION_PROJECTS_TABLE = "projects";
     private static final String EVALUATION_METRICS_TABLE = "metrics";
 
+    private static final String EVALUATION_PARAMETERS_TABLE = "parameters";
     private static final String EVALUATION_FILE_METRICS_TABLE = "file_metrics";
     private static final String EVALUATION_DIRECTORY_METRICS_TABLE = "directory_metrics";
     private static final String EVALUATION_PROJECT_METRICS_TABLE = "project_metrics";
@@ -44,51 +42,54 @@ public class EvaluationServiceSchema {
 		EVALUATION_KEYSPACE,
 		v100,
 		"Rick-Rainer Ludwig",
+		"This table contains all available parameters of all evaluators.",
+		"CREATE TABLE "
+			+ EVALUATION_PARAMETERS_TABLE
+			+ " (time timestamp, "
+			+ "evaluator_id varchar, "
+			+ "parameter_name varchar, "
+			+ "parameter_unit varchar, "
+			+ "level_of_measurement varchar, "
+			+ "parameter_description varchar, "
+			+ "value double, "
+			+ "PRIMARY KEY(hashid, evaluator_id, parameter_name, code_range_type, code_range_name))"));
+	migrator.registerMigrationStep(createTable(
+		EVALUATION_KEYSPACE,
+		v100,
+		"Rick-Rainer Ludwig",
 		"Keeps metrics for single files and their code ranges.",
 		"CREATE TABLE "
 			+ EVALUATION_FILE_METRICS_TABLE
 			+ " (time timestamp, "
-			+ "duration bigint, "
 			+ "hashid varchar, "
 			+ "code_range_type varchar, "
 			+ "code_range_name varchar, "
 			+ "evaluator_id varchar, "
 			+ "parameter_name varchar, "
 			+ "value double, "
-			+ "PRIMARY KEY(hashid, code_range_type, code_range_name, evaluator_id, parameter_name))"));
+			+ "PRIMARY KEY(hashid, evaluator_id, parameter_name, code_range_type, code_range_name))"));
 	migrator.registerMigrationStep(createTable(EVALUATION_KEYSPACE, v100,
 		"Rick-Rainer Ludwig",
 		"Keeps metrics for single files and their code ranges.",
 		"CREATE TABLE " + EVALUATION_DIRECTORY_METRICS_TABLE
-			+ " (time timestamp, " + "duration bigint, "
-			+ "hashid varchar, " + "evaluator_id varchar, "
-			+ "parameter_name varchar, " + "value double, "
+			+ " (time timestamp, " + "hashid varchar, "
+			+ "evaluator_id varchar, " + "parameter_name varchar, "
+			+ "value double, "
 			+ "PRIMARY KEY(hashid, evaluator_id, parameter_name))"));
-	migrator.registerMigrationStep(createTable(EVALUATION_KEYSPACE, v100,
+	migrator.registerMigrationStep(createTable(
+		EVALUATION_KEYSPACE,
+		v100,
 		"Rick-Rainer Ludwig",
 		"Keeps metrics for single files and their code ranges.",
-		"CREATE TABLE " + EVALUATION_PROJECT_METRICS_TABLE
-			+ " (time timestamp, " + "duration bigint, "
-			+ "uuid UUID, " + "evaluator_id varchar, "
-			+ "parameter_name varchar, " + "value double, "
-			+ "PRIMARY KEY(uuid, evaluator_id, parameter_name))"));
-	migrator.registerMigrationStep(createTable(EVALUATION_KEYSPACE, v100,
-		"Rick-Rainer Ludwig", "Keeps settings of analysis projects.",
-		"CREATE TABLE " + EVALUATION_FILES_TABLE + " (hashid varchar, "
-			+ "resultsClass varchar, " + "results blob, "
-			+ "PRIMARY KEY(hashid, resultsClass));"));
-	migrator.registerMigrationStep(createTable(EVALUATION_KEYSPACE, v100,
-		"Rick-Rainer Ludwig", "Keeps settings of analysis projects.",
-		"CREATE TABLE " + EVALUATION_DIRECTORIES_TABLE
-			+ " (hashid varchar, " + "resultsClass varchar, "
-			+ "results blob, "
-			+ "PRIMARY KEY(hashid, resultsClass));"));
-	migrator.registerMigrationStep(createTable(EVALUATION_KEYSPACE, v100,
-		"Rick-Rainer Ludwig", "Keeps settings of analysis projects.",
-		"CREATE TABLE " + EVALUATION_PROJECTS_TABLE
-			+ " (project_uuid uuid, " + "resultsClass varchar, "
-			+ "results blob, "
-			+ "PRIMARY KEY(project_uuid, resultsClass));"));
+		"CREATE TABLE "
+			+ EVALUATION_PROJECT_METRICS_TABLE
+			+ " (time timestamp, "
+			+ "project_uuid UUID, "
+			+ "run_uuid UUID, "
+			+ "evaluator_id varchar, "
+			+ "parameter_name varchar, "
+			+ "value double, "
+			+ "PRIMARY KEY(project_uuid, run_uuid, evaluator_id, parameter_name))"));
 	migrator.registerMigrationStep(createTable(
 		EVALUATION_KEYSPACE,
 		v100,
@@ -97,7 +98,6 @@ public class EvaluationServiceSchema {
 		"CREATE TABLE "
 			+ EVALUATION_METRICS_TABLE
 			+ " (time timestamp, "
-			+ "duration bigint, "
 			+ "project_uuid uuid, "
 			+ "run_uuid uuid, "
 			+ "hashid varchar, "

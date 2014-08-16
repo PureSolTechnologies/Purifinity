@@ -10,6 +10,8 @@
 
 package com.puresoltechnologies.purifinity.evaluation.domain;
 
+import java.io.Serializable;
+
 /**
  * This enum stands for a quality level. There are three levels defined: low,
  * medium and high level.
@@ -17,7 +19,8 @@ package com.puresoltechnologies.purifinity.evaluation.domain;
  * @author Rick-Rainer Ludwig
  * 
  */
-public enum SourceCodeQuality implements Comparable<SourceCodeQuality> {
+public enum SourceCodeQuality implements Comparable<SourceCodeQuality>,
+		Serializable {
 	LOW, MEDIUM, HIGH, UNSPECIFIED, ;
 
 	/**

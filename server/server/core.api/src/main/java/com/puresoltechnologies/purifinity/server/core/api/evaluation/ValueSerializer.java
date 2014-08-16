@@ -9,7 +9,7 @@ import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.purifinity.framework.commons.utils.PropertiesUtils;
+import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
 
 public class ValueSerializer {
 

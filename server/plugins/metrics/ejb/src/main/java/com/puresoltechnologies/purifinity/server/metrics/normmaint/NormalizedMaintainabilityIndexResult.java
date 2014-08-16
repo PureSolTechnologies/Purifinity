@@ -4,13 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.purifinity.evaluation.api.Result;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 
 public class NormalizedMaintainabilityIndexResult implements Serializable {
 
     private static final long serialVersionUID = -7298758864269099643L;
 
-    private final List<Result> results = new ArrayList<Result>();
+    private final List<MetricValue<?>> results = new ArrayList<>();
 
     /**
      * MaintainabilityIndex without comment.
@@ -34,12 +34,12 @@ public class NormalizedMaintainabilityIndexResult implements Serializable {
     }
 
     private void createResultsList() {
-	results.add(new Result("nMIwoc",
-		"Maintainability index without comments", nMIwoc, ""));
-	results.add(new Result("nMIcw", "Maintainability index comment weight",
-		nMIcw, ""));
-	results.add(new Result("nMI", "Maintainability index without comments",
-		nMI, ""));
+	results.add(new MetricValue<Double>(nMIwoc,
+		NormalizedMaintainabilityIndexEvaluatorParameter.NORM_MI_WOC));
+	results.add(new MetricValue<Double>(nMIcw,
+		NormalizedMaintainabilityIndexEvaluatorParameter.NORM_MI_CW));
+	results.add(new MetricValue<Double>(nMI,
+		NormalizedMaintainabilityIndexEvaluatorParameter.NORM_MI));
     }
 
     public double getNMIwoc() {
@@ -54,7 +54,7 @@ public class NormalizedMaintainabilityIndexResult implements Serializable {
 	return nMI;
     }
 
-    public List<Result> getResults() {
+    public List<MetricValue<?>> getResults() {
 	return results;
     }
 }

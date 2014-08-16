@@ -1,37 +1,55 @@
 package com.puresoltechnologies.purifinity.server.metrics.normmaint;
 
 import static com.puresoltechnologies.purifinity.server.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.ALL;
-import static com.puresoltechnologies.purifinity.server.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.CODE_RANGE_NAME;
-import static com.puresoltechnologies.purifinity.server.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.CODE_RANGE_TYPE;
 import static com.puresoltechnologies.purifinity.server.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.NORM_MI;
 import static com.puresoltechnologies.purifinity.server.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.NORM_MI_CW;
 import static com.puresoltechnologies.purifinity.server.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.NORM_MI_WOC;
 import static com.puresoltechnologies.purifinity.server.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.QUALITY;
 import static com.puresoltechnologies.purifinity.server.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.QUALITY_LEVEL;
-import static com.puresoltechnologies.purifinity.server.metrics.normmaint.NormalizedMaintainabilityIndexEvaluatorParameter.SOURCE_CODE_LOCATION;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.math.Value;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.api.AbstractEvaluatorResult;
-import com.puresoltechnologies.purifinity.evaluation.domain.MetricFileResults;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 
-public class NormalizedMaintainabilityIndexFileResults extends
-		AbstractEvaluatorResult implements MetricFileResults {
+public class NormalizedMaintainabilityIndexFileResults extends AbstractMetrics
+		implements FileMetrics {
 
 	private static final long serialVersionUID = 7667134885288322378L;
 
 	private final List<NormalizedMaintainabilityIndexFileResult> results = new ArrayList<NormalizedMaintainabilityIndexFileResult>();
+
+	private final HashId hashId;
+	private final SourceCodeLocation sourceCodeLocation;
+
+	public NormalizedMaintainabilityIndexFileResults(String evaluatorId,
+			HashId hashId, SourceCodeLocation sourceCodeLocation, Date time) {
+		super(evaluatorId, time);
+		this.hashId = hashId;
+		this.sourceCodeLocation = sourceCodeLocation;
+	}
+
+	@Override
+	public HashId getHashId() {
+		return hashId;
+	}
+
+	@Override
+	public SourceCodeLocation getSourceCodeLocation() {
+		return sourceCodeLocation;
+	}
 
 	public void add(NormalizedMaintainabilityIndexFileResult result) {
 		results.add(result);
@@ -53,38 +71,30 @@ public class NormalizedMaintainabilityIndexFileResults extends
 	}
 
 	@Override
-	public List<Map<String, Value<?>>> getValues() {
-		List<Map<String, Value<?>>> values = new ArrayList<Map<String, Value<?>>>();
-
+	public List<GenericCodeRangeMetrics> getValues() {
+		List<GenericCodeRangeMetrics> values = new ArrayList<>();
 		for (NormalizedMaintainabilityIndexFileResult result : results) {
 			NormalizedMaintainabilityIndexResult mi = result
 					.getNormalizedMaintainabilityIndexResult();
-			Map<String, Value<?>> row = new HashMap<String, Value<?>>();
-			row.put(SOURCE_CODE_LOCATION.getName(),
-					new GeneralValue<SourceCodeLocation>(result
-							.getSourceCodeLocation(), SOURCE_CODE_LOCATION));
-			row.put(CODE_RANGE_TYPE.getName(), new GeneralValue<CodeRangeType>(
-					result.getCodeRangeType(), CODE_RANGE_TYPE));
-			row.put(CODE_RANGE_NAME.getName(),
-					new GeneralValue<String>(result.getCodeRangeName(),
-							CODE_RANGE_NAME));
+			Map<String, MetricValue<?>> row = new HashMap<>();
 			row.put(NORM_MI_WOC.getName(),
-					new GeneralValue<Double>(mi.getNMIwoc(), NORM_MI_WOC));
-			row.put(NORM_MI_CW.getName(),
-					new GeneralValue<Double>(mi.getNMIcw(), NORM_MI_CW));
-			row.put(NORM_MI.getName(), new GeneralValue<Double>(mi.getNMI(),
+					new MetricValue<Double>(mi.getNMIwoc(), NORM_MI_WOC));
+			row.put(NORM_MI_CW.getName(), new MetricValue<Double>(
+					mi.getNMIcw(), NORM_MI_CW));
+			row.put(NORM_MI.getName(), new MetricValue<Double>(mi.getNMI(),
 					NORM_MI));
 			SourceCodeQuality quality = result.getQuality();
-			row.put(QUALITY.getName(), new GeneralValue<SourceCodeQuality>(
+			row.put(QUALITY.getName(), new MetricValue<SourceCodeQuality>(
 					quality, QUALITY));
 			if (quality != SourceCodeQuality.UNSPECIFIED) {
-				row.put(QUALITY_LEVEL.getName(),
-						new GeneralValue<QualityLevel>(
-								new QualityLevel(quality), QUALITY_LEVEL));
+				row.put(QUALITY_LEVEL.getName(), new MetricValue<QualityLevel>(
+						new QualityLevel(quality), QUALITY_LEVEL));
 			}
-			values.add(row);
+			values.add(new GenericCodeRangeMetrics(result
+					.getSourceCodeLocation(), result.getCodeRangeType(), result
+					.getCodeRangeName(),
+					NormalizedMaintainabilityIndexEvaluatorParameter.ALL, row));
 		}
-
 		return values;
 	}
 }

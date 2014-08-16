@@ -5,9 +5,9 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.DirectoryStoreRestInterface;
 import com.puresoltechnologies.purifinity.server.common.rest.AbstractRestClient;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 
 public class DirectoryStoreClient extends
 		AbstractRestClient<DirectoryStoreRestInterface> {

@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
-import com.puresoltechnologies.purifinity.framework.store.api.FileStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 
 @Path("filestore")
 public interface FileStoreRestInterface {

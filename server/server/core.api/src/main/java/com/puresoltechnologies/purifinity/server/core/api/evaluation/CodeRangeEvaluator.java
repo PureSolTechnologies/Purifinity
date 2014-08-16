@@ -8,10 +8,10 @@ import java.util.concurrent.Callable;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.evaluation.api.Result;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
-import com.puresoltechnologies.purifinity.framework.commons.utils.progress.AbstractProgressObservable;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.purifinity.server.common.utils.progress.AbstractProgressObservable;
 
 /**
  * This interface is meant for evaluators which perform operations on ASTs or in
@@ -73,7 +73,7 @@ public abstract class CodeRangeEvaluator extends
 	 * 
 	 * @return
 	 */
-	public abstract List<Result> getResults();
+	public abstract List<MetricValue<?>> getResults();
 
 	/**
 	 * This method returns the quality level after an evalutation was performed.

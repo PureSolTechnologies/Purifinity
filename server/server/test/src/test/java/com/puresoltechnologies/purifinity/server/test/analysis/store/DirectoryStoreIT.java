@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStore;
 
 public class DirectoryStoreIT extends AbstractAnalysisStoreServiceServerTest {
 

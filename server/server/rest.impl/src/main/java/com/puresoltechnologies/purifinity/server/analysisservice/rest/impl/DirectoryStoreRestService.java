@@ -5,9 +5,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.purifinity.framework.store.api.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.DirectoryStoreRestInterface;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.DirectoryStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreService;
 
 public class DirectoryStoreRestService implements DirectoryStoreRestInterface {
 
