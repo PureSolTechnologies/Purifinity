@@ -4,7 +4,6 @@ import static com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.Bas
 import static com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.C1;
 import static com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.C2;
 import static com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.C3;
-import static com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.COMPLEXITY;
 import static com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.COSTS;
 import static com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.KSLOC;
 import static com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.BasicCoCoMoEvaluatorParameter.PERSON_MONTH;
@@ -67,8 +66,6 @@ public class BasicCoCoMoDirectoryResults extends BasicCoCoMoResults implements
 				COSTS));
 
 		row.put(SALARY.getName(), new MetricValue<Money>(getMoney(), SALARY));
-		row.put(COMPLEXITY.getName(), new MetricValue<SoftwareProject>(
-				getComplexity(), COMPLEXITY));
 		row.put(C1.getName(), new MetricValue<Double>(getC1(), C1));
 		row.put(C2.getName(), new MetricValue<Double>(getC2(), C2));
 		row.put(C3.getName(), new MetricValue<Double>(getC3(), C3));

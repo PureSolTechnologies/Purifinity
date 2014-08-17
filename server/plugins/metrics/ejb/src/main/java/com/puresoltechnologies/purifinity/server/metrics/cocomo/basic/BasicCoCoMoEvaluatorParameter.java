@@ -53,12 +53,6 @@ public class BasicCoCoMoEvaluatorParameter {
 	public static final ParameterWithArbitraryUnit<Money> SALARY = new ParameterWithArbitraryUnit<Money>(
 			"Salary", "Currency", LevelOfMeasurement.RATIO,
 			"Average developer salary.", Money.class);
-	public static final ParameterWithArbitraryUnit<SoftwareProject> COMPLEXITY = new ParameterWithArbitraryUnit<SoftwareProject>(
-			"complexity",
-			"",
-			LevelOfMeasurement.ORDINAL,
-			"Complexity of the project. This complexity specifies the CoCoMo equation constants c1, c2 and c3",
-			SoftwareProject.class);
 	public static final ParameterWithArbitraryUnit<Double> C1 = new ParameterWithArbitraryUnit<Double>(
 			"c1", "", LevelOfMeasurement.RATIO,
 			"CoCoMo equation constant. This constant is set by complexity.",
@@ -85,7 +79,6 @@ public class BasicCoCoMoEvaluatorParameter {
 		ALL.add(TEAM_SIZE);
 		ALL.add(COSTS);
 		ALL.add(SALARY);
-		ALL.add(COMPLEXITY);
 		ALL.add(C1);
 		ALL.add(C2);
 		ALL.add(C3);

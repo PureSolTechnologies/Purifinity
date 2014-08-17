@@ -9,7 +9,6 @@ import static com.puresoltechnologies.purifinity.server.metrics.cocomo.intermedi
 import static com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.KSLOC;
 import static com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.PERSON_MONTH;
 import static com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.PERSON_YEARS;
-import static com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.PROJECT;
 import static com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.SALARY;
 import static com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.SCHEDULED_MONTH;
 import static com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluatorParameter.SCHEDULED_YEARS;
@@ -80,8 +79,6 @@ public class IntermediateCoCoMoFileResults extends IntermediateCoCoMoResults
 				COSTS));
 
 		row.put(SALARY.getName(), new MetricValue<Money>(getMoney(), SALARY));
-		row.put(PROJECT.getName(), new MetricValue<SoftwareProject>(
-				getProject(), PROJECT));
 		row.put(AI.getName(), new MetricValue<Double>(getProject().getAi(), AI));
 		row.put(BI.getName(), new MetricValue<Double>(getProject().getBi(), BI));
 		row.put(CI.getName(), new MetricValue<Double>(getProject().getCi(), CI));

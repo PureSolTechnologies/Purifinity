@@ -53,10 +53,6 @@ public class IntermediateCoCoMoEvaluatorParameter {
 	public static final ParameterWithArbitraryUnit<Money> SALARY = new ParameterWithArbitraryUnit<Money>(
 			"Salary", "Currency", LevelOfMeasurement.RATIO,
 			"Average developer salary.", Money.class);
-	public static final ParameterWithArbitraryUnit<SoftwareProject> PROJECT = new ParameterWithArbitraryUnit<>(
-			"project", "", LevelOfMeasurement.NOMINAL,
-			"Software project. Specifies the type of project.",
-			SoftwareProject.class);
 	public static final ParameterWithArbitraryUnit<Double> AI = new ParameterWithArbitraryUnit<Double>(
 			"ai",
 			"",
@@ -95,7 +91,6 @@ public class IntermediateCoCoMoEvaluatorParameter {
 		ALL.add(TEAM_SIZE);
 		ALL.add(COSTS);
 		ALL.add(SALARY);
-		ALL.add(PROJECT);
 		ALL.add(AI);
 		ALL.add(BI);
 		ALL.add(CI);

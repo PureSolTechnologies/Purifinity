@@ -11,7 +11,7 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 
 @Singleton
-public class SessionProducer {
+public class HalsteadMetricEvaluatorStoreSessionProducer {
 
 	@Inject
 	private Logger logger;
