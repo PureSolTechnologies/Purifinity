@@ -1,16 +1,19 @@
 package com.puresoltechnologies.purifinity.server.ui.system;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginService;
-import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
-import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorPluginInformation;
+import com.puresoltechnologies.purifinity.server.common.plugins.PluginInformation;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
+import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManager;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
+import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 
 @ApplicationScoped
@@ -18,19 +21,19 @@ import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryT
 public class SystemPluginsMBean {
 
 	@Inject
-	private AnalyzerPluginService analyzerPluginService;
+	private AnalyzerServiceManager analyzerPluginService;
 
 	@Inject
-	private EvaluatorPluginService evaluatorPluginService;
+	private EvaluatorServiceManager evaluatorPluginService;
 
 	@Inject
-	private RepositoryTypePluginService repositoryTypePluginService;
+	private RepositoryTypeServiceManager repositoryTypePluginService;
 
-	public Collection<AnalyzerPluginInformation> getAnalyzers() {
+	public Collection<AnalyzerServiceInformation> getAnalyzers() {
 		return analyzerPluginService.getServices();
 	}
 
-	public Collection<EvaluatorPluginInformation> getEvaluators() {
+	public Collection<EvaluatorServiceInformation> getEvaluators() {
 		return evaluatorPluginService.getServices();
 	}
 
@@ -38,4 +41,11 @@ public class SystemPluginsMBean {
 		return repositoryTypePluginService.getServices();
 	}
 
+	public Collection<PluginInformation> getPlugins() {
+		Set<PluginInformation> plugins = new LinkedHashSet<>();
+		plugins.addAll(analyzerPluginService.getPlugins());
+		plugins.addAll(evaluatorPluginService.getPlugins());
+		plugins.addAll(repositoryTypePluginService.getPlugins());
+		return plugins;
+	}
 }

@@ -30,12 +30,12 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessTransition;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
 @MessageDriven(name = "ProjectAnalysisQueueMBean",//
@@ -60,7 +60,7 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 	private FileStoreService fileStore;
 
 	@Inject
-	private AnalyzerPluginService analyzerPluginService;
+	private AnalyzerServiceManager analyzerPluginService;
 
 	@Inject
 	private AnalysisProcessStateTracker analysisProcessStateTracker;
@@ -151,7 +151,7 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 	private void createNewAnalysis(Date startTime, HashId hashId,
 			SourceCodeLocation sourceFile) throws AnalyzerException,
 			IOException, FileStoreException {
-		for (AnalyzerPluginInformation analyzerInformation : analyzerPluginService
+		for (AnalyzerServiceInformation analyzerInformation : analyzerPluginService
 				.getServices()) {
 			ProgrammingLanguageAnalyzer instance = analyzerPluginService
 					.createInstance(analyzerInformation.getJndiName());

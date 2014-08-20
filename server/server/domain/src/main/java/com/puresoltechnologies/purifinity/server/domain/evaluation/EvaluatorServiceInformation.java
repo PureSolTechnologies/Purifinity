@@ -10,7 +10,7 @@ import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 
-public class EvaluatorPluginInformation implements Serializable {
+public class EvaluatorServiceInformation implements Serializable {
 
     private static final long serialVersionUID = -1867488685418681896L;
 
@@ -23,7 +23,7 @@ public class EvaluatorPluginInformation implements Serializable {
     private final Set<Parameter<?>> parameters = new HashSet<>();
     private final Set<String> dependencies = new HashSet<>();
 
-    public EvaluatorPluginInformation(
+    public EvaluatorServiceInformation(
 	    @JsonProperty("id") String id,
 	    @JsonProperty("name") String name,
 	    @JsonProperty("pluginVersion") Version pluginVersion,

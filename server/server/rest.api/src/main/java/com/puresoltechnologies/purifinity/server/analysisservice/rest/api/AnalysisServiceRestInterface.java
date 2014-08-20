@@ -11,7 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 
 @Path("/")
@@ -20,7 +20,7 @@ public interface AnalysisServiceRestInterface {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("analyzers")
-	public Collection<AnalyzerPluginInformation> getAnalyzers() throws IOException;
+	public Collection<AnalyzerServiceInformation> getAnalyzers() throws IOException;
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

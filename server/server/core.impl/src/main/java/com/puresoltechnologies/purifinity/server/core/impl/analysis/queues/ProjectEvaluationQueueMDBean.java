@@ -23,8 +23,8 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.states.Analys
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessTransition;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginService;
-import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorPluginInformation;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
+import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
 @MessageDriven(name = "ProjectEvaluationQueueMBean",//
@@ -49,7 +49,7 @@ public class ProjectEvaluationQueueMDBean implements MessageListener {
 	private AnalysisProcessStateTracker analysisProcessStateTracker;
 
 	@Inject
-	private EvaluatorPluginService evaluatorPluginService;
+	private EvaluatorServiceManager evaluatorPluginService;
 
 	@Override
 	public void onMessage(Message message) {
@@ -98,7 +98,7 @@ public class ProjectEvaluationQueueMDBean implements MessageListener {
 	 */
 	private void evaluate(AnalysisRun analysisRun) throws InterruptedException,
 			EvaluationStoreException {
-		for (EvaluatorPluginInformation evaluatorInformation : evaluatorPluginService
+		for (EvaluatorServiceInformation evaluatorInformation : evaluatorPluginService
 				.getServicesSortedByDependency()) {
 			logger.info("Evaluator ");
 			Evaluator evaluator = evaluatorPluginService

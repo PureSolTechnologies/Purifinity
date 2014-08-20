@@ -6,22 +6,22 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.server.common.plugins.AbstractPluginRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginServiceRemote;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemotePlugin;
-import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorPluginInformation;
+import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-public class CodeDepthPluginRegistration extends AbstractPluginRegistration
-		implements EvaluatorRemotePlugin {
+public class CodeDepthServiceRegistration extends AbstractServiceRegistration
+		implements EvaluatorRemoteService {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"metrics.plugin", "metrics.ejb", Evaluator.class,
 			CodeDepthMetricEvaluator.class);
 
-	private static final EvaluatorPluginInformation INFORMATION = new EvaluatorPluginInformation(
+	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			CodeDepthMetric.ID, CodeDepthMetric.NAME,
 			CodeDepthMetric.PLUGIN_VERSION, JNDI_ADDRESS,
 			CodeDepthMetric.DESCRIPTION,
@@ -30,15 +30,16 @@ public class CodeDepthPluginRegistration extends AbstractPluginRegistration
 
 	@PostConstruct
 	public void registration() {
-		register(EvaluatorPluginServiceRemote.class,
-				EvaluatorPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
-				INFORMATION);
+		// FIXME
+		// register(EvaluatorPluginServiceRemote.class,
+		// EvaluatorPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
+		// INFORMATION);
 	}
 
 	@PreDestroy
 	public void unregistration() {
-		unregister(EvaluatorPluginServiceRemote.class,
-				EvaluatorPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS);
+		unregister(EvaluatorServiceManagerRemote.class,
+				EvaluatorServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
 	}
 
 	@Override

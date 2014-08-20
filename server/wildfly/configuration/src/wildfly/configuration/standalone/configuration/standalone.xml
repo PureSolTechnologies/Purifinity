@@ -28,6 +28,11 @@
 		<extension module="org.wildfly.extension.io" />
 		<extension module="org.wildfly.extension.undertow" />
 	</extensions>
+
+	<system-properties>
+		<property name="purifinity.home" value="\${purifinity.home}" />
+	</system-properties>
+
 	<management>
 		<security-realms>
 			<security-realm name="ManagementRealm">

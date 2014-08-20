@@ -9,24 +9,24 @@ import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventType;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class PluginServiceEvents {
+public class ServiceManagerEvents {
 
-	private static final String COMPONENT = "AnalyzerRegistration";
+	private static final String COMPONENT = "ServiceManager";
 
 	/**
 	 * Private constructor to avoid instantiation.
 	 */
-	private PluginServiceEvents() {
+	private ServiceManagerEvents() {
 	}
 
-	public static Event createStartupEvent(String pluginServiceName) {
+	public static Event createStartupEvent(String serviceManagerName) {
 		return new Event(COMPONENT, 1l, EventType.SYSTEM, EventSeverity.INFO,
-				"Plugin Service '" + pluginServiceName + "' was started.");
+				"Service Manager'" + serviceManagerName + "' was started.");
 	}
 
 	public static Event createShutdownEvent(String pluginServiceName) {
 		return new Event(COMPONENT, 2l, EventType.SYSTEM, EventSeverity.INFO,
-				"Plugin Service '" + pluginServiceName
+				"Service Manager '" + pluginServiceName
 						+ "'  is going to shut down.");
 	}
 

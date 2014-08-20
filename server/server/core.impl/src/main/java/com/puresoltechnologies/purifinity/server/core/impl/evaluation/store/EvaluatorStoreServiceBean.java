@@ -42,7 +42,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileM
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProjectMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorPluginService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.ValueSerializer;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreServiceRemote;
@@ -71,7 +71,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	private CassandraPreparedStatements cassandraPreparedStatements;
 
 	@Inject
-	private EvaluatorPluginService evaluatorPluginService;
+	private EvaluatorServiceManager evaluatorPluginService;
 
 	@Override
 	public boolean hasFileResults(HashId hashId, CodeRangeType codeRangeType,

@@ -25,7 +25,7 @@ import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
+import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManager;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 import com.puresoltechnologies.purifinity.server.preferences.PreferencesDefaults;
 import com.puresoltechnologies.purifinity.server.preferences.PreferencesNames;
@@ -41,7 +41,7 @@ public class NewProjectWizardMBean implements Serializable {
 	private Logger logger;
 
 	@Inject
-	private RepositoryTypePluginService repositoryTypePluginService;
+	private RepositoryTypeServiceManager repositoryTypePluginService;
 
 	@Inject
 	private AnalysisStore analysisStore;

@@ -5,15 +5,15 @@ import java.util.List;
 import javax.ejb.Local;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.server.common.plugins.PluginService;
-import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorPluginInformation;
+import com.puresoltechnologies.purifinity.server.common.plugins.ServiceManager;
+import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 
 /**
  * This is the interface for the internal analyzer registration.
  */
 @Local
-public interface EvaluatorPluginService extends
-	PluginService<EvaluatorPluginInformation> {
+public interface EvaluatorServiceManager extends
+	ServiceManager<EvaluatorServiceInformation> {
 
     /**
      * This method creates a {@link Evaluator} instance out of the jndi name.
@@ -39,9 +39,9 @@ public interface EvaluatorPluginService extends
      * This method returns the evaluators in order of their dependencies to each
      * other.
      * 
-     * @return A {@link List} of {@link EvaluatorPluginInformation} is returned.
+     * @return A {@link List} of {@link EvaluatorServiceInformation} is returned.
      */
-    public List<EvaluatorPluginInformation> getServicesSortedByDependency();
+    public List<EvaluatorServiceInformation> getServicesSortedByDependency();
 
     /**
      * This method returns the evaluator information for the evaluator with the
@@ -49,8 +49,8 @@ public interface EvaluatorPluginService extends
      * 
      * @param evaluatorId
      *            is the id of the evaluator.
-     * @return An {@link EvaluatorPluginInformation} object is returned.
+     * @return An {@link EvaluatorServiceInformation} object is returned.
      */
-    public EvaluatorPluginInformation getEvaluatorPluginInformation(
+    public EvaluatorServiceInformation getEvaluatorPluginInformation(
 	    String evaluatorId);
 }

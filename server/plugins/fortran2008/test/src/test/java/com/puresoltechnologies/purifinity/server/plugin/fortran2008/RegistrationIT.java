@@ -11,7 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisServiceClient;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 
 public class RegistrationIT extends AbstractJava7PluginClientTest {
 
@@ -29,10 +29,10 @@ public class RegistrationIT extends AbstractJava7PluginClientTest {
 
 	@Test
 	public void test() throws IOException {
-		Collection<AnalyzerPluginInformation> analyzers = client.getAnalyzers();
+		Collection<AnalyzerServiceInformation> analyzers = client.getAnalyzers();
 		assertNotNull(analyzers);
 		assertEquals(1, analyzers.size());
-		AnalyzerPluginInformation analyzer = analyzers.iterator().next();
+		AnalyzerServiceInformation analyzer = analyzers.iterator().next();
 		assertEquals("Fortran", analyzer.getName());
 		assertEquals("2008", analyzer.getVersion());
 	}

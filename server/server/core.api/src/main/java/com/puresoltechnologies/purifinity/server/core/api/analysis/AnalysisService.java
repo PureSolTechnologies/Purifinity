@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import javax.jms.JMSException;
 
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 
 /**
@@ -18,7 +18,7 @@ public interface AnalysisService {
 
 	public void triggerNewAnalysis(UUID projectUUID) throws JMSException;
 
-	public Collection<AnalyzerPluginInformation> getAnalyzers();
+	public Collection<AnalyzerServiceInformation> getAnalyzers();
 
 	public Collection<RepositoryType> getRepositoryTypes();
 

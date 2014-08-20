@@ -10,7 +10,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<purifinity.api.version>${project.version}</purifinity.api.version>
 		<!-- Databases -->
-		<cassandra.version>2.0.8</cassandra.version>
+		<cassandra.version>2.0.9</cassandra.version>
 		<cassandra.driver.version>2.0.2</cassandra.driver.version>
 		<titan.version>0.4.4</titan.version>
 		<!-- WildFly -->
@@ -26,11 +26,13 @@
 		<wildfly.memory.options>-Xms128m -Xmx512m -XX:MaxPermSize=256m</wildfly.memory.options>
 		<wildfly.options>${wildfly.memory.options} ${wildfly.debug.options}</wildfly.options>
 		<!-- Arquillian -->
-		<arquillian.version>1.1.4.Final</arquillian.version>
+		<arquillian.version>1.1.5.Final</arquillian.version>
 		<arquillian.test.dir>${project.build.directory}/wildfly</arquillian.test.dir>
 		<!-- Cargo -->
 		<cargo.dir>${work.dir}/cargo</cargo.dir>
 		<cargo.logging>medium</cargo.logging>
+		<!-- Purifinity Settings -->
+		<purifinity.home>${work.dir}/purifinity</purifinity.home>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -989,6 +991,9 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
 					<version>2.5</version>
+					<configuration>
+						<escapeString>\</escapeString>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>

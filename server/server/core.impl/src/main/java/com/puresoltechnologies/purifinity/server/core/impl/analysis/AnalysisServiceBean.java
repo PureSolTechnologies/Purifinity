@@ -13,10 +13,10 @@ import javax.jms.Queue;
 
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerPluginService;
-import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypePluginService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
+import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManager;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.queues.ProjectAnalysisStartQueue;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerPluginInformation;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
@@ -33,10 +33,10 @@ public class AnalysisServiceBean implements AnalysisService {
 	private JMSMessageSender messageSender;
 
 	@Inject
-	private AnalyzerPluginService analyzerRegistration;
+	private AnalyzerServiceManager analyzerRegistration;
 
 	@Inject
-	private RepositoryTypePluginService repositoryTypePluginService;
+	private RepositoryTypeServiceManager repositoryTypePluginService;
 
 	@PostConstruct
 	public void initialize() {
@@ -55,7 +55,7 @@ public class AnalysisServiceBean implements AnalysisService {
 	}
 
 	@Override
-	public Collection<AnalyzerPluginInformation> getAnalyzers() {
+	public Collection<AnalyzerServiceInformation> getAnalyzers() {
 		return analyzerRegistration.getServices();
 	}
 
