@@ -33,6 +33,6 @@ public class GITRepositoryTypeCreator {
 				"The password of the user to be used for login into the host.",
 				String.class));
 		return new RepositoryType(GITRepositoryLocation.class.getName(), "GIT",
-				"Remote GIT repository.", parameters);
+				"Remote GIT repository.", parameters, null, null, null, null);
 	}
 }

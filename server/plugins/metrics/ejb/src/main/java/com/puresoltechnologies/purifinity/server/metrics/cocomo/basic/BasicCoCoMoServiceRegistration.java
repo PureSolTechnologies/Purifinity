@@ -7,8 +7,8 @@ import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
@@ -24,7 +24,9 @@ public class BasicCoCoMoServiceRegistration extends AbstractServiceRegistration
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			BasicCoCoMoEvaluator.ID, BasicCoCoMoEvaluator.NAME,
 			BasicCoCoMoEvaluator.PLUGIN_VERSION, JNDI_ADDRESS,
-			BasicCoCoMoEvaluator.DESCRIPTION,
+			BasicCoCoMoEvaluator.DESCRIPTION, "/metrics.ui/cocomo/index",
+			"/metrics.ui/cocomo/config", "/metrics.ui/cocomo/project",
+			"/metrics.ui/cocomo/run",
 			BasicCoCoMoEvaluator.EVALUATED_QUALITY_CHARACTERISTICS,
 			BasicCoCoMoEvaluatorParameter.ALL,
 			BasicCoCoMoEvaluator.DEPENDENCIES);

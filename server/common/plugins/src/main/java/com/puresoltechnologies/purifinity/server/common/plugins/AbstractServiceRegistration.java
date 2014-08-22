@@ -1,8 +1,5 @@
 package com.puresoltechnologies.purifinity.server.common.plugins;
 
-import java.io.Serializable;
-import java.util.Properties;
-
 import javax.inject.Inject;
 import javax.naming.NamingException;
 
@@ -49,7 +46,7 @@ public abstract class AbstractServiceRegistration {
 	 * @throws IllegalStateException
 	 *             is thrown, if the registration process times out.
 	 */
-	protected <Information extends Serializable, RemoteService extends ServiceManager<Information>> void register(
+	protected <Information extends ServiceInformation, RemoteService extends ServiceManager<Information>> void register(
 			Class<? extends RemoteService> remoteService,
 			String remoteServiceJNDIName, PluginInformation pluginInformation,
 			String serviceJNDIName, Information information) {
@@ -68,7 +65,7 @@ public abstract class AbstractServiceRegistration {
 							.createRemoteEJBInstance(remoteService,
 									remoteServiceJNDIName);
 					registrator.registerService(pluginInformation,
-							serviceJNDIName, information, new Properties());
+							serviceJNDIName, information);
 					registered = true;
 					break;
 				} catch (IllegalStateException e) {
@@ -110,7 +107,7 @@ public abstract class AbstractServiceRegistration {
 	 * @throws IllegalStateException
 	 *             is thrown, if the registration process times out.
 	 */
-	protected <Information extends Serializable, RemoteService extends ServiceManager<Information>> void unregister(
+	protected <Information extends ServiceInformation, RemoteService extends ServiceManager<Information>> void unregister(
 			Class<? extends RemoteService> remoteService,
 			String remoteServiceJNDIName, String serviceJNDIName) {
 		try {

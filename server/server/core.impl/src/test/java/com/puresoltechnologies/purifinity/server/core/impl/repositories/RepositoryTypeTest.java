@@ -26,7 +26,7 @@ public class RepositoryTypeTest {
 				"parameterName", "parameterUnit", LevelOfMeasurement.NOMINAL,
 				"parameterDescription", Double.class));
 		RepositoryType repositoryType = new RepositoryType("className", "name",
-				"description", parameters);
+				"description", parameters, null, null, null, null);
 		checkSerialization(repositoryType);
 	}
 

@@ -7,8 +7,8 @@ import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
@@ -24,7 +24,9 @@ public class CodeDepthServiceRegistration extends AbstractServiceRegistration
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			CodeDepthMetric.ID, CodeDepthMetric.NAME,
 			CodeDepthMetric.PLUGIN_VERSION, JNDI_ADDRESS,
-			CodeDepthMetric.DESCRIPTION,
+			CodeDepthMetric.DESCRIPTION, "/metrics.ui/codedepth/index",
+			"/metrics.ui/codedepth/config", "/metrics.ui/codedepth/project",
+			"/metrics.ui/codedepth/run",
 			CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS,
 			CodeDepthMetricEvaluatorParameter.ALL, CodeDepthMetric.DEPENDENCIES);
 

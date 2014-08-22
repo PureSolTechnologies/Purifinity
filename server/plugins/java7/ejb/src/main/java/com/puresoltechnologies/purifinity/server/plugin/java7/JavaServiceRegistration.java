@@ -14,7 +14,7 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-public class JavaPluginRegistration extends AbstractServiceRegistration
+public class JavaServiceRegistration extends AbstractServiceRegistration
 		implements AnalyzerRemotePlugin {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
@@ -22,7 +22,9 @@ public class JavaPluginRegistration extends AbstractServiceRegistration
 			Java.class);
 	private static final AnalyzerServiceInformation INFORMATION = new AnalyzerServiceInformation(
 			Java.NAME, Java.VERSION, Java.PLUGIN_VERSION, JNDI_ADDRESS,
-			"This is a Java 7 programming language analyzer.");
+			"This is a Java 7 programming language analyzer.",
+			"/java7.ui/index", "/java7.ui/config", "/java7.ui/project",
+			"/java7.ui/run");
 
 	@PostConstruct
 	public void registraion() {

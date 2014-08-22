@@ -2,7 +2,6 @@ package com.puresoltechnologies.purifinity.server.core.impl.repositories;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
@@ -45,8 +44,8 @@ public class RepositoryTypeServiceManagerImpl extends
 	@PostConstruct
 	public void addDefaultRepositoryTypes() {
 		registerService(INFORMATION, "jndi:dir",
-				DirectoryRepositoryTypeCreator.create(), new Properties());
+				DirectoryRepositoryTypeCreator.create());
 		registerService(INFORMATION, "jndi:git",
-				GITRepositoryTypeCreator.create(), new Properties());
+				GITRepositoryTypeCreator.create());
 	}
 }

@@ -24,7 +24,7 @@
 				<p:button styleClass="accountBar" href="/account/configuration.jsf"
 					value="my account" rendered="#{loginMBean.isLoggedIn()}" />
 				<p:commandButton styleClass="accountBar" value="Logout"
-					actionListener="#{loginMBean.logout}"
+					actionListener="#{loginMBean.logout()}"
 					update="accountBarNotLoggedIn"
 					rendered="#{loginMBean.isLoggedIn()}" />
 			</h:form>

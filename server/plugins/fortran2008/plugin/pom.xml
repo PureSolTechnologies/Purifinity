@@ -18,6 +18,16 @@
 			<artifactId>fortran2008.ejb</artifactId>
 			<type>ejb</type>
 		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>fortran2008.ui</artifactId>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 	</dependencies>
 
 </project>

@@ -1,8 +1,6 @@
 package com.puresoltechnologies.purifinity.server.common.plugins;
 
-import java.io.Serializable;
 import java.util.Collection;
-import java.util.Properties;
 
 /**
  * This interface defines a service managers which are used for service
@@ -11,10 +9,10 @@ import java.util.Properties;
  * @author Rick-Rainer Ludwig
  *
  * @param <ServiceInfo>
- *            is a {@link Serializable} object which defines information about
- *            the service. This is up to the actual implementation.
+ *            is a {@link ServiceInformation} object which defines information
+ *            about the service. This is up to the actual implementation.
  */
-public interface ServiceManager<ServiceInfo extends Serializable> {
+public interface ServiceManager<ServiceInfo extends ServiceInformation> {
 
 	/**
 	 * This method is used for the registration of a service to the manager.
@@ -26,12 +24,9 @@ public interface ServiceManager<ServiceInfo extends Serializable> {
 	 *            is the JNDI name where to connect to the service.
 	 * @param serviceInformation
 	 *            is the information object which keeps the service information.
-	 * @param properties
-	 * @param interfaces
 	 */
 	public void registerService(PluginInformation pluginInformation,
-			String jndiName, ServiceInfo serviceInformation,
-			Properties properties, Class<?>... interfaces);
+			String jndiName, ServiceInfo serviceInformation);
 
 	/**
 	 * This method unregisters a service.

@@ -24,6 +24,6 @@ public class DirectoryRepositoryTypeCreator {
 		return new RepositoryType(DirectoryRepositoryLocation.class.getName(),
 				"Directory",
 				"Simple directory in the file system of the server.",
-				parameters);
+				parameters, null, null, null, null);
 	}
 }

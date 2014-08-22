@@ -7,8 +7,8 @@ import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
@@ -27,6 +27,10 @@ public class NormalizedMaintainabilityIndexServiceRegistration extends
 			NormalizedMaintainabilityIndexEvaluator.PLUGIN_VERSION,
 			JNDI_ADDRESS,
 			NormalizedMaintainabilityIndexEvaluator.DESCRIPTION,
+			"/metrics.ui/normalized-maintainability/index",
+			"/metrics.ui/normalized-maintainability/config",
+			"/metrics.ui/normalized-maintainability/project",
+			"/metrics.ui/normalized-maintainability/run",
 			NormalizedMaintainabilityIndexEvaluator.EVALUATED_QUALITY_CHARACTERISTICS,
 			NormalizedMaintainabilityIndexEvaluatorParameter.ALL,
 			NormalizedMaintainabilityIndexEvaluator.DEPENDENCIES);

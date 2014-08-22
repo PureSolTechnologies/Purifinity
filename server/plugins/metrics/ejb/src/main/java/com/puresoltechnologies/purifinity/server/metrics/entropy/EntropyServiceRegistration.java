@@ -7,8 +7,8 @@ import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
@@ -24,6 +24,8 @@ public class EntropyServiceRegistration extends AbstractServiceRegistration
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			EntropyMetric.ID, EntropyMetric.NAME, EntropyMetric.PLUGIN_VERSION,
 			JNDI_ADDRESS, EntropyMetric.DESCRIPTION,
+			"/metrics.ui/entropy/index", "/metrics.ui/entropy/config",
+			"/metrics.ui/entropy/project", "/metrics.ui/entropy/run",
 			EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS,
 			EntropyMetricEvaluatorParameter.ALL, EntropyMetric.DEPENDENCIES);
 

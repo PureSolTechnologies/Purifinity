@@ -7,8 +7,8 @@ import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
@@ -26,6 +26,10 @@ public class MaintainabilityIndexServiceRegistration extends
 			MaintainabilityIndexEvaluator.NAME,
 			MaintainabilityIndexEvaluator.PLUGIN_VERSION, JNDI_ADDRESS,
 			MaintainabilityIndexEvaluator.DESCRIPTION,
+			"/metrics.ui/maintainability/index",
+			"/metrics.ui/maintainability/config",
+			"/metrics.ui/maintainability/project",
+			"/metrics.ui/maintainability/run",
 			MaintainabilityIndexEvaluator.EVALUATED_QUALITY_CHARACTERISTICS,
 			MaintainabilityIndexEvaluatorParameter.ALL_FILE,
 			MaintainabilityIndexEvaluator.DEPENDENCIES);

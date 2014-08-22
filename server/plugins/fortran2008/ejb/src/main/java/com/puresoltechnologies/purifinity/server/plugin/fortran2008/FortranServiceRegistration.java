@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.plugin.c11;
+package com.puresoltechnologies.purifinity.server.plugin.fortran2008;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -14,21 +14,24 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-public class CPluginRegistration extends AbstractServiceRegistration implements
-		AnalyzerRemotePlugin {
+public class FortranServiceRegistration extends AbstractServiceRegistration
+		implements AnalyzerRemotePlugin {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
-			"c11.plugin", "c11.ejb", ProgrammingLanguageAnalyzer.class,
-			C11.class);
+			"fortran2008.plugin", "fortran2008.ejb",
+			ProgrammingLanguageAnalyzer.class, Fortran.class);
 	private static final AnalyzerServiceInformation INFORMATION = new AnalyzerServiceInformation(
-			C11.NAME, C11.VERSION, C11.PLUGIN_VERSION, JNDI_ADDRESS,
-			"This is a C11 programming language analyzer.");
+			Fortran.NAME, Fortran.VERSION, Fortran.PLUGIN_VERSION,
+			JNDI_ADDRESS,
+			"This is a Fortran 2008 programming language analyzer.",
+			"/fortran2008.ui/index", "/fortran2008.ui/config",
+			"/fortran2008.ui/project", "/fortran2008.ui/run");
 
 	@PostConstruct
 	public void registration() {
 		register(AnalyzerServiceManagerRemote.class,
-				AnalyzerServiceManagerRemote.JNDI_NAME, C11Plugin.INFORMATION,
-				JNDI_ADDRESS, INFORMATION);
+				AnalyzerServiceManagerRemote.JNDI_NAME,
+				FortranPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
 	}
 
 	@PreDestroy
@@ -39,6 +42,6 @@ public class CPluginRegistration extends AbstractServiceRegistration implements
 
 	@Override
 	public String getName() {
-		return C11.NAME;
+		return Fortran.NAME;
 	}
 }

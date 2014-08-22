@@ -1,12 +1,10 @@
 package com.puresoltechnologies.purifinity.server.common.plugins;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -17,7 +15,7 @@ import org.slf4j.Logger;
 
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
-public abstract class AbstractServiceManager<ServiceInfo extends Serializable>
+public abstract class AbstractServiceManager<ServiceInfo extends ServiceInformation>
 		implements ServiceManager<ServiceInfo> {
 
 	@Inject
@@ -64,8 +62,7 @@ public abstract class AbstractServiceManager<ServiceInfo extends Serializable>
 
 	@Override
 	public void registerService(PluginInformation pluginInformation,
-			String jndiName, ServiceInfo serviceInformation,
-			Properties properties, Class<?>... interfaces) {
+			String jndiName, ServiceInfo serviceInformation) {
 		logger.info("Register new service '" + jndiName + "' from plugin '"
 				+ pluginInformation.getName() + "'.");
 		jndiAddresses.add(jndiName);

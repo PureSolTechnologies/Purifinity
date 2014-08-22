@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.puresoltechnologies.purifinity.server</groupId>
+		<artifactId>java7</artifactId>
+		<version>0.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>java7.ui</artifactId>
+	<name>Purifinity Server: ${project.artifactId}</name>
+	<packaging>war</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>accountmanager.ui.web</artifactId>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>common.ui</artifactId>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>java7.ejb</artifactId>
+			<type>ejb</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>passwordstore.ui.web</artifactId>
+			<type>war</type>
+		</dependency>
+	</dependencies>
+
+</project>

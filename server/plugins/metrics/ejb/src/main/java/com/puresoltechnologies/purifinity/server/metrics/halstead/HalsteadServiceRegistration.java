@@ -7,8 +7,8 @@ import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
@@ -24,7 +24,9 @@ public class HalsteadServiceRegistration extends AbstractServiceRegistration
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			HalsteadMetric.ID, HalsteadMetric.NAME,
 			HalsteadMetric.PLUGIN_VERSION, JNDI_ADDRESS,
-			HalsteadMetric.DESCRIPTION,
+			HalsteadMetric.DESCRIPTION, "/metrics.ui/halstead/index",
+			"/metrics.ui/halstead/config", "/metrics.ui/halstead/project",
+			"/metrics.ui/halstead/run",
 			HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS,
 			HalsteadMetricEvaluatorParameter.ALL, HalsteadMetric.DEPENDENCIES);
 

@@ -7,8 +7,8 @@ import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
@@ -23,7 +23,9 @@ public class McCabeServiceRegistration extends AbstractServiceRegistration
 
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			McCabeMetric.ID, McCabeMetric.NAME, McCabeMetric.PLUGIN_VERSION,
-			JNDI_ADDRESS, McCabeMetric.DESCRIPTION,
+			JNDI_ADDRESS, McCabeMetric.DESCRIPTION, "/metrics.ui/mccabe/index",
+			"/metrics.ui/mccabe/config", "/metrics.ui/mccabe/project",
+			"/metrics.ui/mccabe/run",
 			McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS,
 			McCabeMetricEvaluatorParameter.ALL, McCabeMetric.DEPENDENCIES);
 
