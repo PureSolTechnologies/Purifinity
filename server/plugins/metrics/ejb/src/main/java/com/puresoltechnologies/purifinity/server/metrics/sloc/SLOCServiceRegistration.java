@@ -25,9 +25,9 @@ public class SLOCServiceRegistration extends AbstractServiceRegistration
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			SLOCMetricCalculator.ID, SLOCMetricCalculator.NAME,
 			SLOCMetricCalculator.PLUGIN_VERSION, JNDI_ADDRESS,
-			SLOCMetricCalculator.DESCRIPTION, "/metrics.ui/sloc/index",
-			"/metrics.ui/sloc/config", "/metrics.ui/sloc/project",
-			"/metrics.ui/sloc/run",
+			SLOCMetricCalculator.DESCRIPTION, "/metrics.ui/sloc/index.jsf",
+			"/metrics.ui/sloc/config.jsf", "/metrics.ui/sloc/project.jsf",
+			"/metrics.ui/sloc/run.jsf",
 			SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS,
 			SLOCEvaluatorParameter.ALL, SLOCMetricCalculator.DEPENDENCIES);
 

@@ -13,7 +13,10 @@
 					<p:dataTable var="plugin" value="#{systemPluginsMBean.plugins}">
 						<f:facet name="header">Deployed Plugins</f:facet>
 						<p:column headerText="Name">
-							<p:link outcome="#{plugin.pathToUI}" value="#{plugin.name}" />
+							<h:outputLink rendered="#{plugin.pathToUI != null}"
+								value="#{plugin.pathToUI}">#{plugin.name}</h:outputLink>
+							<h:outputText rendered="#{plugin.pathToUI == null}"
+								value="#{plugin.name}" />
 						</p:column>
 						<p:column headerText="Version">
 							<h:outputText value="#{plugin.version}" />
@@ -32,7 +35,10 @@
 					<p:dataTable var="analyzer" value="#{systemPluginsMBean.analyzers}">
 						<f:facet name="header">Installed Analyzers</f:facet>
 						<p:column headerText="Name">
-							<h:outputText value="#{analyzer.name} #{analyzer.version}" />
+							<h:outputLink rendered="#{analyzer.serviceURLPath != null}"
+								value="#{analyzer.serviceURLPath}">#{analyzer.name} #{analyzer.version}</h:outputLink>
+							<h:outputText rendered="#{analyzer.serviceURLPath == null}"
+								value="#{analyzer.name} #{analyzer.version}" />
 						</p:column>
 						<p:column headerText="Plugin Version">
 							<h:outputText value="#{analyzer.pluginVersion}" />
@@ -45,7 +51,10 @@
 						value="#{systemPluginsMBean.evaluators}">
 						<f:facet name="header">Installed Evaluators</f:facet>
 						<p:column headerText="Name">
-							<h:outputText value="#{evaluator.name}" />
+							<h:outputLink rendered="#{evaluator.serviceURLPath != null}"
+								value="#{evaluator.serviceURLPath}">#{evaluator.name}</h:outputLink>
+							<h:outputText rendered="#{evaluator.serviceURLPath == null}"
+								value="#{evaluator.name}" />
 						</p:column>
 						<p:column headerText="Plugin Version">
 							<h:outputText value="#{evaluator.pluginVersion}" />
@@ -58,7 +67,10 @@
 						value="#{systemPluginsMBean.repositoryTypes}">
 						<f:facet name="header">Installed Repository Types</f:facet>
 						<p:column headerText="Name">
-							<h:outputText value="#{repositoryType.name}" />
+							<h:outputLink rendered="#{repositoryType.serviceURLPath != null}"
+								value="#{repositoryType.serviceURLPath}">#{repositoryType.name}</h:outputLink>
+							<h:outputText rendered="#{repositoryType.serviceURLPath == null}"
+								value="#{repositoryType.name}" />
 						</p:column>
 						<p:column headerText="Description">
 							<h:outputText value="#{repositoryType.description}" />

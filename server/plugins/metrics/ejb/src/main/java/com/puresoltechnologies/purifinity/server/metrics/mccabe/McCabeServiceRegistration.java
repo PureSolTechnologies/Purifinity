@@ -23,9 +23,9 @@ public class McCabeServiceRegistration extends AbstractServiceRegistration
 
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			McCabeMetric.ID, McCabeMetric.NAME, McCabeMetric.PLUGIN_VERSION,
-			JNDI_ADDRESS, McCabeMetric.DESCRIPTION, "/metrics.ui/mccabe/index",
-			"/metrics.ui/mccabe/config", "/metrics.ui/mccabe/project",
-			"/metrics.ui/mccabe/run",
+			JNDI_ADDRESS, McCabeMetric.DESCRIPTION,
+			"/metrics.ui/mccabe/index.jsf", "/metrics.ui/mccabe/config.jsf",
+			"/metrics.ui/mccabe/project.jsf", "/metrics.ui/mccabe/run.jsf",
 			McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS,
 			McCabeMetricEvaluatorParameter.ALL, McCabeMetric.DEPENDENCIES);
 

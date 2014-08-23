@@ -22,8 +22,9 @@ public class CServiceRegistration extends AbstractServiceRegistration implements
 			C11.class);
 	private static final AnalyzerServiceInformation INFORMATION = new AnalyzerServiceInformation(
 			C11.NAME, C11.VERSION, C11.PLUGIN_VERSION, JNDI_ADDRESS,
-			"This is a C11 programming language analyzer.", "/c11.ui/index",
-			"/c11.ui/config", "/c11.ui/project", "/c11.ui/run");
+			"This is a C11 programming language analyzer.",
+			"/c11.ui/index.jsf", "/c11.ui/config.jsf", "/c11.ui/project.jsf",
+			"/c11.ui/run.jsf");
 
 	@PostConstruct
 	public void registration() {

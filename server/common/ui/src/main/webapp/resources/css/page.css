@@ -27,3 +27,19 @@ div.pageContainer {
 .pageTop {
 	vertical-align: middle;
 }
+
+h1 {
+	font-size: 18pt;
+}
+
+h2 {
+	font-size: 16pt;
+}
+
+h3 {
+	font-size: 14pt;
+}
+
+h4 {
+	font-size: 12pt;
+}

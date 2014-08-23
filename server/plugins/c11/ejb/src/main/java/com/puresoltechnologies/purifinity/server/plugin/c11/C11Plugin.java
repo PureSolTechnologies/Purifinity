@@ -21,7 +21,7 @@ public class C11Plugin {
 			throw new RuntimeException("Could not create vendor URL.", e);
 		}
 	}
-	private static final String PATH_TO_UI = "/index";
+	private static final String PATH_TO_UI = "/c11.ui";
 
 	public static final PluginInformation INFORMATION = new PluginInformation(
 			ID, NAME, VERSION, DESCRIPTION, VENDOR, VENDOR_URL, PATH_TO_UI);

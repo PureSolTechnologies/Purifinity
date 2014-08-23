@@ -1,0 +1,21 @@
+<ui:composition
+	template="/resources/templates/purifinity_template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<ui:define name="page_content">
+		<h1>Analyzer Settings</h1>
+		<p:dataTable var="analyzer" value="#{analyzerSettingsMBean.analyzers}">
+			<p:column headerText="Name" rendered="#{analyzer.configurationURLPath != null}">
+				<h:outputLink value="#{analyzer.configurationURLPath}">#{analyzer.name} #{analyzer.version}</h:outputLink>
+			</p:column>
+			<p:column headerText="Plugin Version" rendered="#{analyzer.configurationURLPath != null}">
+				<h:outputText value="#{analyzer.pluginVersion}" />
+			</p:column>
+			<p:column headerText="Description" rendered="#{analyzer.configurationURLPath != null}">
+				<h:outputText value="#{analyzer.description}" />
+			</p:column>
+		</p:dataTable>
+	</ui:define>
+</ui:composition>

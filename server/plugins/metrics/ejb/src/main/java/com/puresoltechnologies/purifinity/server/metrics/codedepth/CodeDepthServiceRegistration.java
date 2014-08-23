@@ -24,9 +24,10 @@ public class CodeDepthServiceRegistration extends AbstractServiceRegistration
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			CodeDepthMetric.ID, CodeDepthMetric.NAME,
 			CodeDepthMetric.PLUGIN_VERSION, JNDI_ADDRESS,
-			CodeDepthMetric.DESCRIPTION, "/metrics.ui/codedepth/index",
-			"/metrics.ui/codedepth/config", "/metrics.ui/codedepth/project",
-			"/metrics.ui/codedepth/run",
+			CodeDepthMetric.DESCRIPTION, "/metrics.ui/codedepth/index.jsf",
+			"/metrics.ui/codedepth/config.jsf",
+			"/metrics.ui/codedepth/project.jsf",
+			"/metrics.ui/codedepth/run.jsf",
 			CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS,
 			CodeDepthMetricEvaluatorParameter.ALL, CodeDepthMetric.DEPENDENCIES);
 

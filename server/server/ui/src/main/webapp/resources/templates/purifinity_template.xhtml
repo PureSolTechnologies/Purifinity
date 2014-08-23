@@ -31,14 +31,13 @@
 					<p:menuitem value="Defaults" outcome="/settings/defaults" />
 					<p:menuitem value="Users" outcome="/settings/users" />
 					<p:submenu label="Plugins">
-						<p:submenu label="Analyzers">
-						</p:submenu>
-						<p:submenu label="Evaluators">
-						</p:submenu>
+						<p:menuitem value="Analyzers" outcome="/settings/analyzers" />
+						<p:menuitem value="Evaluators" outcome="/settings/evaluators" />
 					</p:submenu>
 					<p:menuitem value="System" outcome="/settings/system" />
 					<p:menuitem value="Server" outcome="/settings/server" />
 				</p:submenu>
+				<p:menuitem value="Help" outcome="/help" />
 				<f:facet name="options">
 					<p:themeSwitcher id="themeSwitcher" style="width:165px"
 						effect="fade" value="#{themeSwitcherMBean.themeName}" var="t">

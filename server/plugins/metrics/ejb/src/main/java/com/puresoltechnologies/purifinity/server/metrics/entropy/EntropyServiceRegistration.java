@@ -24,8 +24,8 @@ public class EntropyServiceRegistration extends AbstractServiceRegistration
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			EntropyMetric.ID, EntropyMetric.NAME, EntropyMetric.PLUGIN_VERSION,
 			JNDI_ADDRESS, EntropyMetric.DESCRIPTION,
-			"/metrics.ui/entropy/index", "/metrics.ui/entropy/config",
-			"/metrics.ui/entropy/project", "/metrics.ui/entropy/run",
+			"/metrics.ui/entropy/index.jsf", "/metrics.ui/entropy/config.jsf",
+			"/metrics.ui/entropy/project.jsf", "/metrics.ui/entropy/run.jsf",
 			EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS,
 			EntropyMetricEvaluatorParameter.ALL, EntropyMetric.DEPENDENCIES);
 

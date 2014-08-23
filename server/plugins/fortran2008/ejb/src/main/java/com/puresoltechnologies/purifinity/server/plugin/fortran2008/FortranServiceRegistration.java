@@ -24,8 +24,8 @@ public class FortranServiceRegistration extends AbstractServiceRegistration
 			Fortran.NAME, Fortran.VERSION, Fortran.PLUGIN_VERSION,
 			JNDI_ADDRESS,
 			"This is a Fortran 2008 programming language analyzer.",
-			"/fortran2008.ui/index", "/fortran2008.ui/config",
-			"/fortran2008.ui/project", "/fortran2008.ui/run");
+			"/fortran2008.ui/index.jsf", "/fortran2008.ui/config.jsf",
+			"/fortran2008.ui/project.jsf", "/fortran2008.ui/run.jsf");
 
 	@PostConstruct
 	public void registration() {

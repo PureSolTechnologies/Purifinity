@@ -21,7 +21,7 @@ public class MetricsPlugin {
 			throw new RuntimeException("Could not create vendor URL.", e);
 		}
 	}
-	private static final String PATH_TO_UI = "/index";
+	private static final String PATH_TO_UI = "/metrics.ui";
 
 	public static final PluginInformation INFORMATION = new PluginInformation(
 			ID, NAME, VERSION, DESCRIPTION, VENDOR, VENDOR_URL, PATH_TO_UI);

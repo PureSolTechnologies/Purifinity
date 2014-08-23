@@ -24,9 +24,9 @@ public class BasicCoCoMoServiceRegistration extends AbstractServiceRegistration
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			BasicCoCoMoEvaluator.ID, BasicCoCoMoEvaluator.NAME,
 			BasicCoCoMoEvaluator.PLUGIN_VERSION, JNDI_ADDRESS,
-			BasicCoCoMoEvaluator.DESCRIPTION, "/metrics.ui/cocomo/index",
-			"/metrics.ui/cocomo/config", "/metrics.ui/cocomo/project",
-			"/metrics.ui/cocomo/run",
+			BasicCoCoMoEvaluator.DESCRIPTION, "/metrics.ui/cocomo/index.jsf",
+			"/metrics.ui/cocomo/config.jsf", "/metrics.ui/cocomo/project.jsf",
+			"/metrics.ui/cocomo/run.jsf",
 			BasicCoCoMoEvaluator.EVALUATED_QUALITY_CHARACTERISTICS,
 			BasicCoCoMoEvaluatorParameter.ALL,
 			BasicCoCoMoEvaluator.DEPENDENCIES);

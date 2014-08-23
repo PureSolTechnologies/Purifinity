@@ -23,8 +23,8 @@ public class JavaServiceRegistration extends AbstractServiceRegistration
 	private static final AnalyzerServiceInformation INFORMATION = new AnalyzerServiceInformation(
 			Java.NAME, Java.VERSION, Java.PLUGIN_VERSION, JNDI_ADDRESS,
 			"This is a Java 7 programming language analyzer.",
-			"/java7.ui/index", "/java7.ui/config", "/java7.ui/project",
-			"/java7.ui/run");
+			"/java7.ui/index.jsf", "/java7.ui/config.jsf",
+			"/java7.ui/project.jsf", "/java7.ui/run.jsf");
 
 	@PostConstruct
 	public void registraion() {

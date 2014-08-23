@@ -24,9 +24,9 @@ public class HalsteadServiceRegistration extends AbstractServiceRegistration
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			HalsteadMetric.ID, HalsteadMetric.NAME,
 			HalsteadMetric.PLUGIN_VERSION, JNDI_ADDRESS,
-			HalsteadMetric.DESCRIPTION, "/metrics.ui/halstead/index",
-			"/metrics.ui/halstead/config", "/metrics.ui/halstead/project",
-			"/metrics.ui/halstead/run",
+			HalsteadMetric.DESCRIPTION, "/metrics.ui/halstead/index.jsf",
+			"/metrics.ui/halstead/config.jsf",
+			"/metrics.ui/halstead/project.jsf", "/metrics.ui/halstead/run.jsf",
 			HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS,
 			HalsteadMetricEvaluatorParameter.ALL, HalsteadMetric.DEPENDENCIES);
 
