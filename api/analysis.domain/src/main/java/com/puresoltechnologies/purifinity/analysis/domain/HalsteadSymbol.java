@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.evaluation.api;
+package com.puresoltechnologies.purifinity.analysis.domain;
 
 public class HalsteadSymbol {
 

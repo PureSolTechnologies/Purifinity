@@ -5,9 +5,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
+import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -31,8 +33,9 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeR
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 
 @Stateless
@@ -40,6 +43,9 @@ import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator
 public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 
 	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+
+	@EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
+	private AnalyzerServiceManagerRemote analyzerServiceManager;
 
 	public McCabeMetricEvaluator() {
 		super(McCabeMetric.ID, McCabeMetric.NAME, McCabeMetric.DESCRIPTION);
@@ -51,28 +57,33 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 	}
 
 	@Override
+	public Set<Parameter<?>> getParameters() {
+		return McCabeMetricEvaluatorParameter.ALL;
+	}
+
+	@Override
 	protected FileMetrics processFile(AnalysisRun analysisRun,
 			CodeAnalysis analysis) throws InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-				.createInstance()) {
-			HashId hashId = analysis.getAnalysisInformation().getHashId();
-			SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
-					hashId).getSourceCodeLocation();
-			McCabeMetricFileResults results = new McCabeMetricFileResults(
-					McCabeMetric.ID, hashId, sourceCodeLocation, new Date());
-			ProgrammingLanguage language = programmingLanguages.findByName(
-					analysis.getLanguageName(), analysis.getLanguageVersion());
-			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-				McCabeMetric metric = new McCabeMetric(analysisRun, language,
-						codeRange);
-				execute(metric);
-				results.add(new McCabeMetricResult(sourceCodeLocation,
-						codeRange.getType(), codeRange.getCanonicalName(),
-						metric.getCyclomaticNumber(), metric.getQuality()));
-			}
-			return results;
+		HashId hashId = analysis.getAnalysisInformation().getHashId();
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.findTreeNode(hashId).getSourceCodeLocation();
+		McCabeMetricFileResults results = new McCabeMetricFileResults(
+				McCabeMetric.ID, hashId, sourceCodeLocation, new Date());
+		AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
+				.findByName(analysis.getLanguageName(),
+						analysis.getLanguageVersion());
+		ProgrammingLanguage language = analyzerServiceManager
+				.createInstance(analyzerServiceInformation.getJndiName());
+		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+			McCabeMetric metric = new McCabeMetric(analysisRun, language,
+					codeRange);
+			execute(metric);
+			results.add(new McCabeMetricResult(sourceCodeLocation, codeRange
+					.getType(), codeRange.getCanonicalName(), metric
+					.getCyclomaticNumber(), metric.getQuality()));
 		}
+		return results;
 	}
 
 	@Override

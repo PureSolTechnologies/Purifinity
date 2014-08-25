@@ -10,6 +10,7 @@ import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceR
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
+import com.puresoltechnologies.purifinity.server.metrics.MetricsPlugin;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
@@ -37,10 +38,9 @@ public class NormalizedMaintainabilityIndexServiceRegistration extends
 
 	@PostConstruct
 	public void registration() {
-		// FIXME
-		// register(EvaluatorPluginServiceRemote.class,
-		// EvaluatorPluginServiceRemote.JNDI_NAME, JNDI_ADDRESS,
-		// INFORMATION);
+		register(EvaluatorServiceManagerRemote.class,
+				EvaluatorServiceManagerRemote.JNDI_NAME,
+				MetricsPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
 	}
 
 	@PreDestroy

@@ -13,7 +13,7 @@ import com.puresoltechnologies.parsers.ust.terminal.Comment;
 import com.puresoltechnologies.parsers.ust.terminal.Operand;
 import com.puresoltechnologies.parsers.ust.terminal.Operator;
 import com.puresoltechnologies.parsers.ust.terminal.WhiteSpace;
-import com.puresoltechnologies.purifinity.server.metrics.spi.sloc.SLOCType;
+import com.puresoltechnologies.purifinity.analysis.domain.SLOCType;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.metrics.HalsteadMetricImpl;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.metrics.SLOCMetricImpl;
 

@@ -53,9 +53,6 @@ public class EntropyMetricEvaluatorParameter {
 
 	public static final Set<Parameter<?>> ALL = new HashSet<Parameter<?>>();
 	static {
-		ALL.add(SOURCE_CODE_LOCATION);
-		ALL.add(CODE_RANGE_TYPE);
-		ALL.add(CODE_RANGE_NAME);
 		ALL.add(N_DIFF);
 		ALL.add(N_TOTAL);
 		ALL.add(S);

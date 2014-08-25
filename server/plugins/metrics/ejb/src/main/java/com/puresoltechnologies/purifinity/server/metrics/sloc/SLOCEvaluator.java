@@ -6,9 +6,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
+import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -32,8 +34,9 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeR
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 
 /**
@@ -53,9 +56,10 @@ import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator
 @Remote(Evaluator.class)
 public class SLOCEvaluator extends AbstractMetricEvaluator {
 
-	private static final long serialVersionUID = -5093217611195212999L;
-
 	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+
+	@EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
+	private AnalyzerServiceManagerRemote analyzerServiceManager;
 
 	public SLOCEvaluator() {
 		super(SLOCMetricCalculator.ID, SLOCMetricCalculator.NAME,
@@ -68,6 +72,11 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	}
 
 	@Override
+	public Set<Parameter<?>> getParameters() {
+		return SLOCEvaluatorParameter.ALL;
+	}
+
+	@Override
 	protected FileMetrics processFile(AnalysisRun analysisRun,
 			CodeAnalysis analysis) throws InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
@@ -77,38 +86,35 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 		if (evaluatorStore.hasFileResults(hashId, SLOCMetricCalculator.ID)) {
 			return null;
 		}
+		AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
+				.findByName(analysis.getLanguageName(),
+						analysis.getLanguageVersion());
+		ProgrammingLanguage language = analyzerServiceManager
+				.createInstance(analyzerServiceInformation.getJndiName());
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.findTreeNode(hashId).getSourceCodeLocation();
+		GenericFileMetrics results = new GenericFileMetrics(
+				SLOCMetricCalculator.ID, hashId, sourceCodeLocation,
+				analysis.getStartTime(), SLOCEvaluatorParameter.ALL);
+		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+			SLOCMetricCalculator metric = new SLOCMetricCalculator(analysisRun,
+					language, codeRange);
+			execute(metric);
 
-		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-				.createInstance()) {
-			ProgrammingLanguage language = programmingLanguages.findByName(
-					analysis.getLanguageName(), analysis.getLanguageVersion());
-
-			SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
-					hashId).getSourceCodeLocation();
-			GenericFileMetrics results = new GenericFileMetrics(
-					SLOCMetricCalculator.ID, hashId, sourceCodeLocation,
-					analysis.getStartTime(), SLOCEvaluatorParameter.ALL);
-			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-				SLOCMetricCalculator metric = new SLOCMetricCalculator(
-						analysisRun, language, codeRange);
-				execute(metric);
-
-				Map<String, MetricValue<?>> values = new HashMap<>();
-				for (MetricValue<?> result : metric.getSLOCResult()
-						.getResults()) {
-					values.put(result.getParameter().getName(), result);
-				}
-				values.put(SourceCodeQualityParameter.getInstance().getName(),
-						new MetricValue<SourceCodeQuality>(metric.getQuality(),
-								SourceCodeQualityParameter.getInstance()));
-
-				results.addCodeRangeMetrics(new GenericCodeRangeMetrics(
-						sourceCodeLocation, codeRange.getType(), codeRange
-								.getCanonicalName(),
-						SLOCEvaluatorParameter.ALL, values));
+			Map<String, MetricValue<?>> values = new HashMap<>();
+			for (MetricValue<?> result : metric.getSLOCResult().getResults()) {
+				values.put(result.getParameter().getName(), result);
 			}
-			return results;
+			values.put(SourceCodeQualityParameter.getInstance().getName(),
+					new MetricValue<SourceCodeQuality>(metric.getQuality(),
+							SourceCodeQualityParameter.getInstance()));
+
+			results.addCodeRangeMetrics(new GenericCodeRangeMetrics(
+					sourceCodeLocation, codeRange.getType(), codeRange
+							.getCanonicalName(), SLOCEvaluatorParameter.ALL,
+					values));
 		}
+		return results;
 	}
 
 	@Override

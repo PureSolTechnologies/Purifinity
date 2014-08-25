@@ -7,63 +7,87 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.parsers.ust.AbstractProduction;
+import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parsers.ust.terminal.AbstractTerminal;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
+import com.puresoltechnologies.purifinity.analysis.domain.HalsteadSymbol;
+import com.puresoltechnologies.purifinity.analysis.domain.SLOCType;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
 
 public class CPP extends AbstractProgrammingLanguageAnalyzer {
 
-    public static final String[] FILE_SUFFIXES = { ".hpp", ".hxx", ".cpp",
-	    ".cxx" };
+	public static final String[] FILE_SUFFIXES = { ".hpp", ".hxx", ".cpp",
+			".cxx" };
 
-    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
-    private static CPP instance = null;
+	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+	private static CPP instance = null;
 
-    public static CPP getInstance() {
-	if (instance == null) {
-	    createInstance();
+	public static CPP getInstance() {
+		if (instance == null) {
+			createInstance();
+		}
+		return instance;
 	}
-	return instance;
-    }
 
-    private static synchronized void createInstance() {
-	if (instance == null) {
-	    instance = new CPP();
+	private static synchronized void createInstance() {
+		if (instance == null) {
+			instance = new CPP();
+		}
 	}
-    }
 
-    private CPP() {
-	super("C++", "11");
-    }
+	private CPP() {
+		super("C++", "11");
+	}
 
-    @Override
-    public LanguageGrammar getGrammar() {
-	return null;
-    }
+	@Override
+	public LanguageGrammar getGrammar() {
+		return null;
+	}
 
-    @Override
-    public <T> T getImplementation(Class<T> clazz) {
-	return null;
-    }
+	@Override
+	protected String[] getValidFileSuffixes() {
+		return FILE_SUFFIXES;
+	}
 
-    @Override
-    protected String[] getValidFileSuffixes() {
-	return FILE_SUFFIXES;
-    }
+	@Override
+	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+		return configurationParameters;
+	}
 
-    @Override
-    public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-	return configurationParameters;
-    }
+	@Override
+	public CodeAnalyzer createAnalyser(SourceCodeLocation source) {
+		return null;
+	}
 
-    @Override
-    public CodeAnalyzer createAnalyser(SourceCodeLocation source) {
-	return null;
-    }
+	@Override
+	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+		return null;
+	}
 
-    @Override
-    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-	return null;
-    }
+	@Override
+	public SLOCType getType(AbstractTerminal token) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean cascadingNode(UniversalSyntaxTree node) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int increasesCyclomaticComplexityBy(AbstractProduction production) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public HalsteadSymbol getHalsteadResult(AbstractTerminal node) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

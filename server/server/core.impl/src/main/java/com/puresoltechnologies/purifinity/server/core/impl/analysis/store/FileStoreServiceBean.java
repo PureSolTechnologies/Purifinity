@@ -114,7 +114,7 @@ public class FileStoreServiceBean implements FileStoreService,
 					"Could not load analyses for file with hash '" + hashId
 							+ "'");
 		}
-		while (!resultSet.isExhausted()) {
+		while (result != null) {
 			ByteBuffer byteBuffer = result.getBytes("analysis");
 			try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
 					byteBuffer.array(), byteBuffer.position(),

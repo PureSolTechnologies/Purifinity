@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.metrics.spi;
 import java.io.Serializable;
 
 import com.puresoltechnologies.parsers.ust.terminal.AbstractTerminal;
-import com.puresoltechnologies.purifinity.evaluation.api.HalsteadSymbol;
+import com.puresoltechnologies.purifinity.analysis.domain.HalsteadSymbol;
 
 /**
  * This interface is used to implement a part of the Halstead metric

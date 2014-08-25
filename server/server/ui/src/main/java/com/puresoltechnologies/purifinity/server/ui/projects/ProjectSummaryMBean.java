@@ -63,6 +63,10 @@ public class ProjectSummaryMBean implements Serializable {
 		return runs;
 	}
 
+	public int getNumberOfRuns() {
+		return runs.size();
+	}
+
 	public String getName() {
 		return project.getSettings().getName();
 	}

@@ -15,7 +15,6 @@ import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacte
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
-import com.puresoltechnologies.purifinity.server.metrics.spi.LanguageDependedCodeDepthMetric;
 
 /**
  * This metric looks for cascaded code blocks and finds the maximum. The code
@@ -47,7 +46,7 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 	private final AnalysisRun analysisRun;
 	private final List<MetricValue<?>> results = new ArrayList<>();
 	private final CodeRange codeRange;
-	private final LanguageDependedCodeDepthMetric langDepended;
+	private final ProgrammingLanguage language;
 	private int maxDepth = 0;
 
 	public CodeDepthMetric(AnalysisRun analysisRun,
@@ -55,8 +54,7 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 		super(NAME);
 		this.analysisRun = analysisRun;
 		this.codeRange = codeRange;
-		langDepended = language
-				.getImplementation(LanguageDependedCodeDepthMetric.class);
+		this.language = language;
 	}
 
 	@Override
@@ -91,7 +89,7 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 				UniversalSyntaxTree parent = node;
 				int depth = 0;
 				do {
-					if (langDepended.cascadingNode(parent)) {
+					if (language.cascadingNode(parent)) {
 						depth++;
 					}
 					parent = parent.getParent();

@@ -17,6 +17,7 @@ import java.util.Set;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
+import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.Version;
@@ -80,6 +81,11 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 	@Override
 	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
 		return CONFIGURATION_PARAMETERS;
+	}
+
+	@Override
+	public Set<Parameter<?>> getParameters() {
+		return BasicCoCoMoEvaluatorParameter.ALL;
 	}
 
 	public void setComplexity(SoftwareProject complexity) {

@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.ServiceLoader;
 import java.util.Set;
 
 import javax.ejb.Remote;
@@ -15,11 +13,20 @@ import javax.ejb.Stateless;
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.parsers.ust.AbstractProduction;
+import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parsers.ust.terminal.AbstractTerminal;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.HalsteadSymbol;
+import com.puresoltechnologies.purifinity.analysis.domain.SLOCType;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.plugin.java7.grammar.JavaGrammar;
+import com.puresoltechnologies.purifinity.server.plugin.java7.metrics.CodeDepthMetricImpl;
+import com.puresoltechnologies.purifinity.server.plugin.java7.metrics.HalsteadMetricImpl;
+import com.puresoltechnologies.purifinity.server.plugin.java7.metrics.McCabeMetricImpl;
+import com.puresoltechnologies.purifinity.server.plugin.java7.metrics.SLOCMetricImpl;
 
 /**
  * This is the base class for Java Programming Language. The lexical and
@@ -33,70 +40,78 @@ import com.puresoltechnologies.purifinity.server.plugin.java7.grammar.JavaGramma
 @Remote(ProgrammingLanguageAnalyzer.class)
 public class Java extends AbstractProgrammingLanguageAnalyzer {
 
-    public static final String NAME = "Java";
-    public static final String VERSION = "7";
-    public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
+	public static final String NAME = "Java";
+	public static final String VERSION = "7";
+	public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
 
-    public static final String[] FILE_SUFFIXES = { ".java" };
+	public static final String[] FILE_SUFFIXES = { ".java" };
 
-    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 
-    public Java() {
-	super(NAME, VERSION);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String[] getValidFileSuffixes() {
-	return FILE_SUFFIXES;
-    }
-
-    @Override
-    public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-	return configurationParameters;
-    }
-
-    @Override
-    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-	try {
-	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
-		    file));
-	    try {
-		return (CodeAnalyzer) ois.readObject();
-	    } finally {
-		ois.close();
-	    }
-	} catch (ClassNotFoundException e) {
-	    /*
-	     * XXX This needs to be null to go on with the language try out...
-	     * :-(
-	     */
-	    return null;
+	public Java() {
+		super(NAME, VERSION);
 	}
-    }
 
-    @Override
-    public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
-	return new JavaAnalyzer(sourceCodeLocation);
-    }
-
-    @Override
-    public LanguageGrammar getGrammar() {
-	return JavaGrammar.getInstance();
-    }
-
-    @Override
-    public <T> T getImplementation(Class<T> clazz) {
-	ServiceLoader<T> service = ServiceLoader.load(clazz);
-	Iterator<T> iterator = service.iterator();
-	T result = iterator.next();
-	if (iterator.hasNext()) {
-	    throw new RuntimeException(
-		    "There is more than one implementation available for '"
-			    + clazz.getName() + "'!");
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected String[] getValidFileSuffixes() {
+		return FILE_SUFFIXES;
 	}
-	return result;
-    }
+
+	@Override
+	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
+		return configurationParameters;
+	}
+
+	@Override
+	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+		try {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+					file));
+			try {
+				return (CodeAnalyzer) ois.readObject();
+			} finally {
+				ois.close();
+			}
+		} catch (ClassNotFoundException e) {
+			/*
+			 * XXX This needs to be null to go on with the language try out...
+			 * :-(
+			 */
+			return null;
+		}
+	}
+
+	@Override
+	public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
+		return new JavaAnalyzer(sourceCodeLocation);
+	}
+
+	@Override
+	public LanguageGrammar getGrammar() {
+		return JavaGrammar.getInstance();
+	}
+
+	@Override
+	public SLOCType getType(AbstractTerminal token) {
+		return new SLOCMetricImpl().getType(token);
+	}
+
+	@Override
+	public boolean cascadingNode(UniversalSyntaxTree node) {
+		return new CodeDepthMetricImpl().cascadingNode(node);
+	}
+
+	@Override
+	public int increasesCyclomaticComplexityBy(AbstractProduction production) {
+		return new McCabeMetricImpl()
+				.increasesCyclomaticComplexityBy(production);
+	}
+
+	@Override
+	public HalsteadSymbol getHalsteadResult(AbstractTerminal node) {
+		return new HalsteadMetricImpl().getHalsteadResult(node);
+	}
 }

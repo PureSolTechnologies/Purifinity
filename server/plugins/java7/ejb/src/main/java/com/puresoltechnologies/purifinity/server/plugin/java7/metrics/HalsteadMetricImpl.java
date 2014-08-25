@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.puresoltechnologies.parsers.ust.terminal.AbstractTerminal;
-import com.puresoltechnologies.purifinity.evaluation.api.HalsteadSymbol;
+import com.puresoltechnologies.purifinity.analysis.domain.HalsteadSymbol;
 import com.puresoltechnologies.purifinity.server.metrics.spi.LanguageDependedHalsteadMetric;
 
 /**

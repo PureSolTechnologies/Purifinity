@@ -59,6 +59,7 @@ public class EvaluationServiceSchema {
 						+ EVALUATION_FILE_METRICS_TABLE
 						+ " (time timestamp, "
 						+ "hashid varchar, "
+						+ "source_code_location varchar, "
 						+ "code_range_type varchar, "
 						+ "code_range_name varchar, "
 						+ "evaluator_id varchar, "

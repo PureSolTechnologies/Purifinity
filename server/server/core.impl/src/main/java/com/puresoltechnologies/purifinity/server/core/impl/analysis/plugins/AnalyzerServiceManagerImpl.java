@@ -24,4 +24,17 @@ public class AnalyzerServiceManagerImpl extends
 				ProgrammingLanguageAnalyzer.class, jndi);
 	}
 
+	@Override
+	public AnalyzerServiceInformation findByName(String languageName,
+			String languageVersion) {
+		for (AnalyzerServiceInformation analyzerServiceInformation : getServices()) {
+			if (analyzerServiceInformation.getName().equals(languageName)
+					&& analyzerServiceInformation.getVersion().equals(
+							languageVersion)) {
+				return analyzerServiceInformation;
+			}
+		}
+		return null;
+	}
+
 }

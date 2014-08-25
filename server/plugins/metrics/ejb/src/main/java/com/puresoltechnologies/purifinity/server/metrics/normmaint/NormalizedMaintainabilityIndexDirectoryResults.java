@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.server.metrics.normmaint;
 
-import static com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.ALL_DIRECTORY;
+import static com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.ALL;
 import static com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.QUALITY;
 import static com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.QUALITY_LEVEL;
 
@@ -37,7 +37,7 @@ public class NormalizedMaintainabilityIndexDirectoryResults extends
 
 	@Override
 	public Set<Parameter<?>> getParameters() {
-		return ALL_DIRECTORY;
+		return ALL;
 	}
 
 	@Override

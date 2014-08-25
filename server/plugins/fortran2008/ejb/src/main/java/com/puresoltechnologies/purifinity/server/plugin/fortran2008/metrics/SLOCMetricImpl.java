@@ -1,8 +1,8 @@
 package com.puresoltechnologies.purifinity.server.plugin.fortran2008.metrics;
 
 import com.puresoltechnologies.parsers.ust.terminal.AbstractTerminal;
+import com.puresoltechnologies.purifinity.analysis.domain.SLOCType;
 import com.puresoltechnologies.purifinity.server.metrics.spi.LanguageDependedSLOCMetric;
-import com.puresoltechnologies.purifinity.server.metrics.spi.sloc.SLOCType;
 
 public class SLOCMetricImpl implements LanguageDependedSLOCMetric {
 

@@ -4,9 +4,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
+import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -28,8 +30,9 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 
 /**
@@ -45,6 +48,9 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 
 	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 
+	@EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
+	private AnalyzerServiceManagerRemote analyzerServiceManager;
+
 	public CodeDepthMetricEvaluator() {
 		super(CodeDepthMetric.ID, CodeDepthMetric.NAME,
 				CodeDepthMetric.DESCRIPTION);
@@ -56,30 +62,35 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 	}
 
 	@Override
+	public Set<Parameter<?>> getParameters() {
+		return CodeDepthMetricEvaluatorParameter.ALL;
+	}
+
+	@Override
 	protected FileMetrics processFile(AnalysisRun analysisRun,
 			CodeAnalysis analysis) throws InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-				.createInstance()) {
-			ProgrammingLanguage language = programmingLanguages.findByName(
-					analysis.getLanguageName(), analysis.getLanguageVersion());
+		AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
+				.findByName(analysis.getLanguageName(),
+						analysis.getLanguageVersion());
+		ProgrammingLanguage language = analyzerServiceManager
+				.createInstance(analyzerServiceInformation.getJndiName());
 
-			HashId hashId = analysis.getAnalysisInformation().getHashId();
-			SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
-					hashId).getSourceCodeLocation();
-			CodeDepthFileResults results = new CodeDepthFileResults(
-					CodeDepthMetric.ID, hashId, sourceCodeLocation, new Date());
-			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-				CodeDepthMetric metric = new CodeDepthMetric(analysisRun,
-						language, codeRange);
-				execute(metric);
-				SourceCodeQuality quality = metric.getQuality();
-				results.add(new CodeDepthResult(sourceCodeLocation, codeRange
-						.getType(), codeRange.getCanonicalName(), metric
-						.getMaxDepth(), quality));
-			}
-			return results;
+		HashId hashId = analysis.getAnalysisInformation().getHashId();
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.findTreeNode(hashId).getSourceCodeLocation();
+		CodeDepthFileResults results = new CodeDepthFileResults(
+				CodeDepthMetric.ID, hashId, sourceCodeLocation, new Date());
+		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+			CodeDepthMetric metric = new CodeDepthMetric(analysisRun, language,
+					codeRange);
+			execute(metric);
+			SourceCodeQuality quality = metric.getQuality();
+			results.add(new CodeDepthResult(sourceCodeLocation, codeRange
+					.getType(), codeRange.getCanonicalName(), metric
+					.getMaxDepth(), quality));
 		}
+		return results;
 	}
 
 	@Override

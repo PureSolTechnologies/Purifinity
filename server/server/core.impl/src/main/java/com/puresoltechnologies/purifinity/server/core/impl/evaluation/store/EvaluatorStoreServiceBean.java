@@ -205,15 +205,17 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "INSERT INTO "
 						+ CassandraElementNames.EVALUATION_FILE_METRICS_TABLE
-						+ " (time, " + "hashid, " + "code_range_type, "
-						+ "code_range_name, " + "evaluator_id, "
-						+ "parameter_name, " + "value) VALUES "
-						+ "(?, ?, ?, ?, ?, ?, ?);");
+						+ " (time, " + "hashid, " + "source_code_location, "
+						+ "code_range_type, " + "code_range_name, "
+						+ "evaluator_id, " + "parameter_name, "
+						+ "value) VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?);");
 
 		Date time = metrics.getTime();
 		AnalysisInformation analysisInformation = codeAnalysis
 				.getAnalysisInformation();
 		HashId hashId = analysisInformation.getHashId();
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.findTreeNode(hashId).getSourceCodeLocation();
 		String evaluatorId = metrics.getEvaluatorId();
 		CodeRangeNameParameter codeRangeNameParameter = CodeRangeNameParameter
 				.getInstance();
@@ -231,14 +233,24 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 						|| parameterName.equals(codeRangeTypeParameterName)) {
 					continue;
 				}
-				String parameterUnit = parameter.getUnit();
 				Value<?> value = metric.getValue(parameter);
+				if (value == null) {
+					// There is not value assigned for the parameter. So we can
+					// safely skip it.
+					continue;
+				}
 				Object valueObject = value.getValue();
+				if (!Number.class.isAssignableFrom(valueObject.getClass())) {
+					// TODO what happens with the other values?
+					continue;
+				}
 				Double numericValue = ((Number) valueObject).doubleValue();
 				BoundStatement boundStatement = preparedStatement
-						.bind(time, hashId.toString(), codeRangeType.name(),
-								codeRangeName, evaluatorId, parameterName,
-								parameterUnit, numericValue);
+						.bind(time, hashId.toString(),
+								PropertiesUtils.toString(sourceCodeLocation
+										.getSerialization()), codeRangeType
+										.name(), codeRangeName, evaluatorId,
+								parameterName, numericValue);
 				session.execute(boundStatement);
 			}
 		}
@@ -322,6 +334,11 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 				boolean numeric = parameter.isNumeric();
 				String parameterType = parameter.getType().getName();
 				Value<?> value = metric.getValue(parameter);
+				if (value == null) {
+					// There is not value assigned for the parameter. So we can
+					// safely skip it.
+					continue;
+				}
 				Object valueObject = value.getValue();
 				Double numericValue = null;
 				String stringValue = null;
@@ -673,7 +690,6 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 			CodeRangeType codeRangeType = CodeRangeType.valueOf(result
 					.getString("code_range_type"));
 			String codeRangeName = result.getString("code_range_name");
-			double value = result.getDouble("value");
 			Map<String, Map<Parameter<?>, MetricValue<?>>> codeRangeTypeBuffer;
 			Map<Parameter<?>, MetricValue<?>> parameterBuffer;
 			if (buffer.containsKey(codeRangeType)) {
@@ -698,6 +714,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 				parameterBuffer = new HashMap<>();
 				codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);
 			}
+			double value = result.getDouble("value");
 			parameterBuffer.put(foundParameter, new MetricValue<Double>(value,
 					foundParameter));
 		}

@@ -23,12 +23,11 @@ import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.api.HalsteadSymbol;
+import com.puresoltechnologies.purifinity.analysis.domain.HalsteadSymbol;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
-import com.puresoltechnologies.purifinity.server.metrics.spi.LanguageDependedHalsteadMetric;
 
 public class HalsteadMetric extends CodeRangeEvaluator {
 
@@ -48,7 +47,7 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 	private final Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
 	private final Hashtable<String, Integer> operants = new Hashtable<String, Integer>();
 	private final CodeRange codeRange;
-	private final LanguageDependedHalsteadMetric langDepended;
+	private final ProgrammingLanguage language;
 
 	private HalsteadResult result;
 
@@ -57,8 +56,7 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 		super(NAME);
 		this.analysisRun = analysisRun;
 		this.codeRange = codeRange;
-		langDepended = language
-				.getImplementation(LanguageDependedHalsteadMetric.class);
+		this.language = language;
 	}
 
 	@Override
@@ -93,7 +91,7 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 			UniversalSyntaxTree node = iterator.getCurrentNode();
 			if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {
 				AbstractTerminal token = (AbstractTerminal) node;
-				HalsteadSymbol result = langDepended.getHalsteadResult(token);
+				HalsteadSymbol result = language.getHalsteadResult(token);
 				if (result.isCountable()) {
 					if (result.isOperator()) {
 						addOperator(result.getSymbol());

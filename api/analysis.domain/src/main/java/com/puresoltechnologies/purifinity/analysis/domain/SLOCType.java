@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.metrics.spi.sloc;
+package com.puresoltechnologies.purifinity.analysis.domain;
 
 /**
  * This enumeration lists all types of SLOC: blank lines, comment lines and

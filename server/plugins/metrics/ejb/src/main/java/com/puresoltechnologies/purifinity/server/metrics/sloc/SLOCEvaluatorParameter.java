@@ -61,9 +61,6 @@ public class SLOCEvaluatorParameter {
 
 	public static final Set<Parameter<?>> ALL = new HashSet<Parameter<?>>();
 	static {
-		ALL.add(SOURCE_CODE_LOCATION);
-		ALL.add(CODE_RANGE_TYPE);
-		ALL.add(CODE_RANGE_NAME);
 		ALL.add(PHY_LOC);
 		ALL.add(PRO_LOC);
 		ALL.add(COM_LOC);

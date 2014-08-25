@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.server.metrics.maintainability;
 
-import static com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.ALL_FILE;
+import static com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.ALL;
 import static com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI;
 import static com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI_CW;
 import static com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluatorParameter.MI_WOC;
@@ -67,7 +67,7 @@ public class MaintainabilityIndexFileResults extends AbstractMetrics implements
 
 	@Override
 	public Set<Parameter<?>> getParameters() {
-		return ALL_FILE;
+		return ALL;
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class MaintainabilityIndexFileResults extends AbstractMetrics implements
 			values.add(new GenericCodeRangeMetrics(result
 					.getSourceCodeLocation(), result.getCodeRangeType(), result
 					.getCodeRangeName(),
-					MaintainabilityIndexEvaluatorParameter.ALL_FILE, row));
+					MaintainabilityIndexEvaluatorParameter.ALL, row));
 		}
 		return values;
 	}

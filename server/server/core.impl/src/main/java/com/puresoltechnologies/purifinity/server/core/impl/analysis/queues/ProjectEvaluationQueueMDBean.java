@@ -100,7 +100,8 @@ public class ProjectEvaluationQueueMDBean implements MessageListener {
 			EvaluationStoreException {
 		for (EvaluatorServiceInformation evaluatorInformation : evaluatorPluginService
 				.getServicesSortedByDependency()) {
-			logger.info("Evaluator ");
+			logger.info("Starting evaluator " + evaluatorInformation.getName()
+					+ "...");
 			Evaluator evaluator = evaluatorPluginService
 					.createInstance(evaluatorInformation.getJndiName());
 			evaluator.evaluate(analysisRun, false);

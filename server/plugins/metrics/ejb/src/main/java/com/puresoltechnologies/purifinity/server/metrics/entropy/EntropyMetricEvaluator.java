@@ -9,6 +9,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -45,6 +46,11 @@ public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
 	@Override
 	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
 		return configurationParameters;
+	}
+
+	@Override
+	public Set<Parameter<?>> getParameters() {
+		return EntropyMetricEvaluatorParameter.ALL;
 	}
 
 	@Override

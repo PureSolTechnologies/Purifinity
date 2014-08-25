@@ -4,7 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.List;
+import java.util.Collection;
 import java.util.Properties;
 
 import javax.inject.Inject;
@@ -14,12 +14,12 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
 
 /**
@@ -33,6 +33,9 @@ public abstract class AbstractMetricTest extends AbstractServerTest {
 
 	@Inject
 	private AnalysisStoreService analysisStore;
+
+	@Inject
+	private AnalyzerServiceManager analyzerServiceManager;
 
 	@BeforeClass
 	public static void cleanCodeAnalysisDirectory() {
@@ -48,8 +51,8 @@ public abstract class AbstractMetricTest extends AbstractServerTest {
 	public void checkEnvironment() {
 		assertNotNull("Analysis store is null!", analysisStore);
 
-		List<ProgrammingLanguageAnalyzer> languages = ProgrammingLanguages
-				.createInstance().getAll();
+		Collection<AnalyzerServiceInformation> languages = analyzerServiceManager
+				.getServices();
 		assertNotNull("The list of languages is null!", languages);
 		assertTrue("No programming languages found!", languages.size() > 0);
 	}

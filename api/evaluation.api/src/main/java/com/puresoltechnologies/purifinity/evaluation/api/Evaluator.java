@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.evaluation.api;
 
 import java.util.Set;
 
+import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.Configurable;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
@@ -26,6 +27,12 @@ public interface Evaluator extends Configurable {
 	 *         information about the {@link Evaluator}.
 	 */
 	public EvaluatorInformation getInformation();
+
+	/**
+	 * 
+	 * @return
+	 */
+	public Set<Parameter<?>> getParameters();
 
 	/**
 	 * This method returns a list with quality characteristics which might be

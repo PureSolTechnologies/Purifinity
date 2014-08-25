@@ -5,6 +5,6 @@ import javax.ejb.Remote;
 @Remote
 public interface EvaluatorStoreServiceRemote extends EvaluatorStore {
 
-	String NAME = "java:global/server.app/server.core.impl/EvaluatorStoreServiceBean!com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreServiceRemote";
+	String JNDI_NAME = "java:global/server.app/server.core.impl/EvaluatorStoreServiceBean!com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreServiceRemote";
 
 }

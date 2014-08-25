@@ -4,10 +4,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -26,7 +28,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.ProgrammingLanguages;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
+import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 
 @Stateless
@@ -34,6 +37,9 @@ import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator
 public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 
 	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+
+	@EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
+	private AnalyzerServiceManagerRemote analyzerServiceManager;
 
 	@Inject
 	private HalsteadMetricEvaluatorStore halsteadMetricEvaluatorStore;
@@ -49,36 +55,41 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 	}
 
 	@Override
+	public Set<Parameter<?>> getParameters() {
+		return HalsteadMetricEvaluatorParameter.ALL;
+	}
+
+	@Override
 	protected GenericFileMetrics processFile(AnalysisRun analysisRun,
 			CodeAnalysis analysis) throws InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-		try (ProgrammingLanguages programmingLanguages = ProgrammingLanguages
-				.createInstance()) {
-			ProgrammingLanguage language = programmingLanguages.findByName(
-					analysis.getLanguageName(), analysis.getLanguageVersion());
+		AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
+				.findByName(analysis.getLanguageName(),
+						analysis.getLanguageVersion());
+		ProgrammingLanguage language = analyzerServiceManager
+				.createInstance(analyzerServiceInformation.getJndiName());
 
-			HashId hashId = analysis.getAnalysisInformation().getHashId();
-			SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
-					hashId).getSourceCodeLocation();
-			GenericFileMetrics results = new GenericFileMetrics(
-					HalsteadMetric.ID, hashId, sourceCodeLocation, new Date(),
-					HalsteadMetricEvaluatorParameter.ALL);
-			for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-				HalsteadMetric metric = new HalsteadMetric(analysisRun,
-						language, codeRange);
-				execute(metric);
-				HalsteadResult halsteadResults = metric.getHalsteadResults();
-				halsteadMetricEvaluatorStore.storeCodeRangeResults(hashId,
-						codeRange, halsteadResults);
-				results.addCodeRangeMetrics(new GenericCodeRangeMetrics(
-						sourceCodeLocation, codeRange.getType(), codeRange
-								.getCanonicalName(),
-						HalsteadMetricEvaluatorParameter.ALL, halsteadResults
-								.getResults()));
-				results.addQualityLevel(new QualityLevel(metric.getQuality()));
-			}
-			return results;
+		HashId hashId = analysis.getAnalysisInformation().getHashId();
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.findTreeNode(hashId).getSourceCodeLocation();
+		GenericFileMetrics results = new GenericFileMetrics(HalsteadMetric.ID,
+				hashId, sourceCodeLocation, new Date(),
+				HalsteadMetricEvaluatorParameter.ALL);
+		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+			HalsteadMetric metric = new HalsteadMetric(analysisRun, language,
+					codeRange);
+			execute(metric);
+			HalsteadResult halsteadResults = metric.getHalsteadResults();
+			halsteadMetricEvaluatorStore.storeCodeRangeResults(hashId,
+					codeRange, halsteadResults);
+			results.addCodeRangeMetrics(new GenericCodeRangeMetrics(
+					sourceCodeLocation, codeRange.getType(), codeRange
+							.getCanonicalName(),
+					HalsteadMetricEvaluatorParameter.ALL, halsteadResults
+							.getResults()));
+			results.addQualityLevel(new QualityLevel(metric.getQuality()));
 		}
+		return results;
 	}
 
 	@Override

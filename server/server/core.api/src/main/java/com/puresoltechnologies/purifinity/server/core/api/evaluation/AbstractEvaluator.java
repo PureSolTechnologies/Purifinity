@@ -13,7 +13,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,6 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileSto
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreServiceRemote;
-import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 /**
  * This interface is an abstract implementation for evaluators and the general
@@ -52,19 +51,23 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
  * <b>Extending implementations must not have mutable state!</b>
  * 
  * @author Rick-Rainer Ludwig
- * 
  */
 public abstract class AbstractEvaluator implements Evaluator {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(AbstractEvaluator.class);
 
-	private static final int EXECUTION_TIMEOUT_IN_SECONDS = 30;
+	private static final int EXECUTION_TIMEOUT_IN_SECONDS = 300;
 
 	private final Map<String, Object> properties = new HashMap<>();
 
+	@EJB(lookup = EvaluatorStoreServiceRemote.JNDI_NAME)
 	private EvaluatorStoreServiceRemote store;
+
+	@EJB(lookup = FileStoreServiceRemote.JNDI_NAME)
 	private FileStoreServiceRemote fileStore;
+
+	@EJB(lookup = DirectoryStoreServiceRemote.JNDI_NAME)
 	private DirectoryStoreServiceRemote directoryStore;
 
 	private final EvaluatorInformation information;
@@ -103,18 +106,6 @@ public abstract class AbstractEvaluator implements Evaluator {
 	abstract protected void storeProjectResults(AnalysisRun analysisRun,
 			AnalysisFileTree directoryNode, GenericProjectMetrics metrics)
 			throws EvaluationStoreException;
-
-	@PostConstruct
-	public final void construct() {
-		store = JndiUtils.createRemoteEJBInstance(
-				EvaluatorStoreServiceRemote.class,
-				EvaluatorStoreServiceRemote.NAME);
-		fileStore = JndiUtils.createRemoteEJBInstance(
-				FileStoreServiceRemote.class, FileStoreServiceRemote.JNDI_NAME);
-		directoryStore = JndiUtils.createRemoteEJBInstance(
-				DirectoryStoreServiceRemote.class,
-				DirectoryStoreServiceRemote.JNDI_NAME);
-	}
 
 	protected EvaluatorStore getEvaluatorStore() {
 		return store;

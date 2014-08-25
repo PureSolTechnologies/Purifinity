@@ -25,12 +25,11 @@ import com.puresoltechnologies.parsers.ust.terminal.AbstractTerminal;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.domain.SLOCType;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
-import com.puresoltechnologies.purifinity.server.metrics.spi.LanguageDependedSLOCMetric;
-import com.puresoltechnologies.purifinity.server.metrics.spi.sloc.SLOCType;
 
 /**
  * This class calculates a small statistics for a source code for source lines
@@ -102,18 +101,14 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 
 	private final AnalysisRun analysisRun;
 	private final CodeRange codeRange;
-	private final LanguageDependedSLOCMetric langDepended;
+	private final ProgrammingLanguage language;
 
 	public SLOCMetricCalculator(AnalysisRun analysisRun,
 			ProgrammingLanguage language, CodeRange codeRange) {
 		super(NAME);
 		this.analysisRun = analysisRun;
 		this.codeRange = codeRange;
-		langDepended = language
-				.getImplementation(LanguageDependedSLOCMetric.class);
-		if (langDepended == null) {
-			throw new RuntimeException();
-		}
+		this.language = language;
 	}
 
 	@Override
@@ -164,7 +159,7 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 			UniversalSyntaxTree node = iterator.getCurrentNode();
 			if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {
 				AbstractTerminal token = (AbstractTerminal) node;
-				SLOCType type = langDepended.getType(token);
+				SLOCType type = language.getType(token);
 				UniversalSyntaxTreeMetaData metaData = token.getMetaData();
 				int lineId = metaData.getLine() - lineOffset;
 				int lineNum = metaData.getLineNum();
