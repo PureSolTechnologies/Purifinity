@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.server.preferences;
 
+import java.util.Date;
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -57,10 +59,13 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	@Override
 	public void setValue(String group, String name, String value) {
 		PreparedStatement preparedStatement = preparedStatements
-				.getPreparedStatement(session,
-						"INSERT INTO preferences (group, name, value) VALUES (?, ?, ?);");
-		BoundStatement boundStatement = preparedStatement.bind(group, name,
-				value);
+				.getPreparedStatement(
+						session,
+						"INSERT INTO "
+								+ CassandraElementNames.PREFERENCES_TABLE
+								+ " (changed, changed_by, group, name, value) VALUES (?, ?, ?, ?, ?);");
+		BoundStatement boundStatement = preparedStatement.bind(new Date(),
+				"n/a", group, name, value);
 		session.execute(boundStatement);
 		logger.info("Wrote preference: '" + group + "/" + name + "'='" + value
 				+ "'");
@@ -96,4 +101,31 @@ public class PreferencesStoreImpl implements PreferencesStore {
 		return getValue(group, name, defaultValue).getValue();
 	}
 
+	@Override
+	public boolean isActive(String serviceId) {
+		PreparedStatement preparedStatement = preparedStatements
+				.getPreparedStatement(session, "SELECT active FROM "
+						+ CassandraElementNames.SERVICE_ACTIVATION_TABLE
+						+ " where service_id=?;");
+		BoundStatement boundStatement = preparedStatement.bind(serviceId);
+		ResultSet result = session.execute(boundStatement);
+		if (result.isExhausted()) {
+			return false;
+		}
+		return result.one().getBool(0);
+	}
+
+	@Override
+	public void setServiceActive(String serviceId, boolean active) {
+		PreparedStatement preparedStatement = preparedStatements
+				.getPreparedStatement(
+						session,
+						"INSERT INTO  "
+								+ CassandraElementNames.SERVICE_ACTIVATION_TABLE
+								+ " (changed, changed_by, service_id, active) VALUES (?, ?, ?, ?);");
+		BoundStatement boundStatement = preparedStatement.bind(new Date(),
+				"n/a", serviceId, active);
+		session.execute(boundStatement);
+		logger.info("Set service to active=" + active);
+	}
 }

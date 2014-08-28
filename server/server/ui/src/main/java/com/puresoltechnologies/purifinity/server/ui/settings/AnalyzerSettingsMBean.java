@@ -15,13 +15,25 @@ import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerService
 public class AnalyzerSettingsMBean {
 
 	@Inject
-	private AnalyzerServiceManager analyzerPluginService;
+	private AnalyzerServiceManager analyzerServiceManager;
 
 	public Collection<AnalyzerServiceInformation> getAnalyzers() {
-		return analyzerPluginService.getServices();
+		return analyzerServiceManager.getServices();
 	}
 
 	public Collection<PluginInformation> getPlugins() {
-		return analyzerPluginService.getPlugins();
+		return analyzerServiceManager.getPlugins();
+	}
+
+	public boolean isActivated(String analyzerId) {
+		return analyzerServiceManager.isActive(analyzerId);
+	}
+
+	public void activate(String analyzerId) {
+		analyzerServiceManager.setActive(analyzerId, true);
+	}
+
+	public void deactivate(String analyzerId) {
+		analyzerServiceManager.setActive(analyzerId, false);
 	}
 }

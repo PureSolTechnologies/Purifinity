@@ -51,12 +51,12 @@ public abstract class AbstractServiceRegistration {
 			String remoteServiceJNDIName, PluginInformation pluginInformation,
 			String serviceJNDIName, Information information) {
 		try {
-			logger.info("Try to register '" + getName() + "'...");
 			/*
 			 * Retries are implemented, because during startup and parallel
 			 * deployment the remote plugin registration might not be deployed
 			 * and started, yet.
 			 */
+			logger.info("Try to register '" + getName() + "'...");
 			int retried = 0;
 			boolean registered = false;
 			while (retried < DEFAULT_RETRY_COUNT) {

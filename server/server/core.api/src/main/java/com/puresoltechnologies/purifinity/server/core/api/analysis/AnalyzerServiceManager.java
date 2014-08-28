@@ -8,4 +8,8 @@ import javax.ejb.Local;
 @Local
 public interface AnalyzerServiceManager extends AnalyzerServiceManagerCommon {
 
+	public boolean isActive(String analyzerId);
+
+	public void setActive(String analyzerId, boolean active);
+
 }

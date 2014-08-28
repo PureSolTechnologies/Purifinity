@@ -71,4 +71,28 @@ public interface PreferencesStore {
 
 	public String getString(String group, String name, String defaultValue);
 
+	/**
+	 * This method checks whether a specified service is activated or not. This
+	 * setting is system wide!
+	 * 
+	 * @param serviceId
+	 *            is the id of the service to be checked.
+	 * @return <code>true</code> is returned if the service is known and
+	 *         activated. <code>false</code> is returned otherwise if the
+	 *         service is unknown or deactivated.
+	 */
+	public boolean isActive(String serviceId);
+
+	/**
+	 * This method sets the activation state of a service. This setting is
+	 * system wide!
+	 * 
+	 * @param serviceId
+	 *            is the id of the service to be set active or inactive.
+	 * @param active
+	 *            is set to <code>true</code> if the service is to be activated.
+	 *            <code>false</code> is to be set otherwise.
+	 */
+	public void setServiceActive(String serviceId, boolean active);
+
 }

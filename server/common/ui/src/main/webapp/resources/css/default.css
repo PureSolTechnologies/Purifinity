@@ -3,10 +3,10 @@
  * basics for all sites.
  */
 body {
-	background-color: black;
-	color: white;
+	background-color: white;
+	color: black;
 	display: block;
-	margin: 0pt;
+	margin: 3pt;
 	padding: 0pt;
 	font-family: Helvetica;
 	font-size: 10pt;

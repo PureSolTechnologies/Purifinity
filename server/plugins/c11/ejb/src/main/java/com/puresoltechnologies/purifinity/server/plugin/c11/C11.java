@@ -36,6 +36,7 @@ import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
 @Remote(ProgrammingLanguageAnalyzer.class)
 public class C11 extends AbstractProgrammingLanguageAnalyzer {
 
+	public static final String ID = C11.class.getName();
 	public static final String NAME = "C";
 	public static final String VERSION = "11";
 	public static final Version PLUGIN_VERSION = new Version(1, 0, 0);

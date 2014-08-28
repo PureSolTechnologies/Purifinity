@@ -21,7 +21,7 @@ public class CServiceRegistration extends AbstractServiceRegistration implements
 			"c11.plugin", "c11.ejb", ProgrammingLanguageAnalyzer.class,
 			C11.class);
 	private static final AnalyzerServiceInformation INFORMATION = new AnalyzerServiceInformation(
-			C11.NAME, C11.VERSION, C11.PLUGIN_VERSION, JNDI_ADDRESS,
+			C11.ID, C11.NAME, C11.VERSION, C11.PLUGIN_VERSION, JNDI_ADDRESS,
 			"This is a C11 programming language analyzer.",
 			"/c11.ui/index.jsf", "/c11.ui/config.jsf", "/c11.ui/project.jsf",
 			"/c11.ui/run.jsf");

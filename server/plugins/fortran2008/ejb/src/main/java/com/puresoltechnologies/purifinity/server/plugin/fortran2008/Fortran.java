@@ -32,6 +32,7 @@ import com.puresoltechnologies.purifinity.server.plugin.fortran2008.metrics.SLOC
 @Remote(ProgrammingLanguageAnalyzer.class)
 public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 
+	public static final String ID = Fortran.class.getName();
 	public static final String NAME = "Fortran";
 	public static final String VERSION = "2008";
 	public static final Version PLUGIN_VERSION = new Version(1, 0, 0);

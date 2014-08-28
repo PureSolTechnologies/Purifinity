@@ -21,8 +21,8 @@ public class JavaServiceRegistration extends AbstractServiceRegistration
 			"java7.plugin", "java7.ejb", ProgrammingLanguageAnalyzer.class,
 			Java.class);
 	private static final AnalyzerServiceInformation INFORMATION = new AnalyzerServiceInformation(
-			Java.NAME, Java.VERSION, Java.PLUGIN_VERSION, JNDI_ADDRESS,
-			"This is a Java 7 programming language analyzer.",
+			Java.ID, Java.NAME, Java.VERSION, Java.PLUGIN_VERSION,
+			JNDI_ADDRESS, "This is a Java 7 programming language analyzer.",
 			"/java7.ui/index.jsf", "/java7.ui/config.jsf",
 			"/java7.ui/project.jsf", "/java7.ui/run.jsf");
 

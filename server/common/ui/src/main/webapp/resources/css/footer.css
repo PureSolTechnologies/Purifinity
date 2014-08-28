@@ -1,6 +1,6 @@
 div.footer {
-	background-color: #303030;
-	color: gray;
+	background-color: white;
+	color: black;
 	text-align: center;
 	text-shadow: black 2px 2px 5px;
 	font-size: 10pt;
@@ -8,7 +8,7 @@ div.footer {
 }
 
 div.footer a {
-	color: gray;
+	color: black;
 }
 
 div.companyName {

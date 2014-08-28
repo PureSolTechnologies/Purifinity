@@ -2,7 +2,9 @@ package com.puresoltechnologies.purifinity.server.core.impl.evaluation.plugins;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.ejb.Singleton;
 import javax.inject.Inject;
@@ -14,6 +16,7 @@ import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceM
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
+import com.puresoltechnologies.purifinity.server.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
@@ -23,6 +26,11 @@ public class EvaluatorServiceManagerImpl extends
 
 	@Inject
 	private Logger logger;
+
+	@Inject
+	private PreferencesStore preferencesStore;
+
+	private final Map<String, Boolean> analyzerActivations = new HashMap<>();
 
 	public EvaluatorServiceManagerImpl() {
 		super("Evaluator Service Manager");
@@ -64,5 +72,22 @@ public class EvaluatorServiceManagerImpl extends
 			sorted.add(service);
 		}
 		return sorted;
+	}
+
+	@Override
+	public boolean isActive(String evaluatorId) {
+		Boolean active = analyzerActivations.get(evaluatorId);
+		if (active != null) {
+			return active;
+		}
+		active = preferencesStore.isActive(evaluatorId);
+		analyzerActivations.put(evaluatorId, active);
+		return active;
+	}
+
+	@Override
+	public void setActive(String evaluatorId, boolean active) {
+		preferencesStore.setServiceActive(evaluatorId, active);
+		analyzerActivations.put(evaluatorId, active);
 	}
 }

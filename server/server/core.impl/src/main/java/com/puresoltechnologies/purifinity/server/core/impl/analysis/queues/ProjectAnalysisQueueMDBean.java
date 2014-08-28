@@ -60,7 +60,7 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 	private FileStoreService fileStore;
 
 	@Inject
-	private AnalyzerServiceManager analyzerPluginService;
+	private AnalyzerServiceManager analyzerServiceManager;
 
 	@Inject
 	private AnalysisProcessStateTracker analysisProcessStateTracker;
@@ -111,7 +111,7 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 	}
 
 	private void analyze(AnalysisRunFileTree analysisRunFileTree) {
-		if (!analyzerPluginService.hasServices()) {
+		if (!analyzerServiceManager.hasServices()) {
 			throw new IllegalStateException(
 					"There is no analyzer installed. To run an analysis is not possible.");
 		}
@@ -151,16 +151,19 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 	private void createNewAnalysis(Date startTime, HashId hashId,
 			SourceCodeLocation sourceFile) throws AnalyzerException,
 			IOException, FileStoreException {
-		for (AnalyzerServiceInformation analyzerInformation : analyzerPluginService
+		for (AnalyzerServiceInformation analyzerInformation : analyzerServiceManager
 				.getServices()) {
-			ProgrammingLanguageAnalyzer instance = analyzerPluginService
-					.createInstance(analyzerInformation.getJndiName());
-			if (instance.isSuitable(sourceFile)) {
-				logger.info("'" + sourceFile.getHumanReadableLocationString()
-						+ "' is a suitable file for '" + instance.getName()
-						+ "'.");
-				CodeAnalysis codeAnalysis = instance.analyze(sourceFile);
-				fileStore.storeAnalysis(hashId, codeAnalysis);
+			if (analyzerServiceManager.isActive(analyzerInformation.getId())) {
+				ProgrammingLanguageAnalyzer instance = analyzerServiceManager
+						.createInstance(analyzerInformation.getJndiName());
+				if (instance.isSuitable(sourceFile)) {
+					logger.info("'"
+							+ sourceFile.getHumanReadableLocationString()
+							+ "' is a suitable file for '" + instance.getName()
+							+ "'.");
+					CodeAnalysis codeAnalysis = instance.analyze(sourceFile);
+					fileStore.storeAnalysis(hashId, codeAnalysis);
+				}
 			}
 		}
 	}

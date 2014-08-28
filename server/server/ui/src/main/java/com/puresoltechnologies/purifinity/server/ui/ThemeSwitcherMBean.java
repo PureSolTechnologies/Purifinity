@@ -17,57 +17,57 @@ import com.puresoltechnologies.purifinity.server.preferences.PreferencesValue;
 @ViewScoped
 public class ThemeSwitcherMBean implements Serializable {
 
-    private static final long serialVersionUID = -4611799892344805652L;
+	private static final long serialVersionUID = -4611799892344805652L;
 
-    private String themeName;
-    private List<Theme> themes;
+	private String themeName;
+	private List<Theme> themes;
 
-    @Inject
-    private PreferencesStore preferencesStore;
+	@Inject
+	private PreferencesStore preferencesStore;
 
-    @ManagedProperty("#{themeService}")
-    private ThemeService service;
+	@ManagedProperty("#{themeService}")
+	private ThemeService service;
 
-    @PostConstruct
-    public void init() {
-	themes = service.getThemes();
-	setDefaultTheme();
-    }
-
-    private void setDefaultTheme() {
-	PreferencesValue themeName = preferencesStore.getValue("default",
-		PreferencesNames.SYSTEM_WEB_UI_THEME, "afterdark");
-	for (Theme theme : themes) {
-	    if (themeName.getValue().equals(theme.getName())) {
-		this.themeName = theme.getName();
-		break;
-	    }
+	@PostConstruct
+	public void init() {
+		themes = service.getThemes();
+		setDefaultTheme();
 	}
-    }
 
-    public List<Theme> getThemes() {
-	return themes;
-    }
-
-    public void setService(ThemeService service) {
-	this.service = service;
-    }
-
-    public String getThemeName() {
-	if (themeName == null) {
-	    setDefaultTheme();
+	private void setDefaultTheme() {
+		PreferencesValue themeName = preferencesStore.getValue("default",
+				PreferencesNames.SYSTEM_WEB_UI_THEME, "sunny");
+		for (Theme theme : themes) {
+			if (themeName.getValue().equals(theme.getName())) {
+				this.themeName = theme.getName();
+				break;
+			}
+		}
 	}
-	return themeName;
-    }
 
-    public void setThemeName(String themeName) {
-	this.themeName = themeName;
-    }
-
-    public void save() {
-	if (themeName != null) {
-	    preferencesStore.setValue(PreferencesNames.DEFAULT_GROUP,
-		    PreferencesNames.SYSTEM_WEB_UI_THEME, themeName);
+	public List<Theme> getThemes() {
+		return themes;
 	}
-    }
+
+	public void setService(ThemeService service) {
+		this.service = service;
+	}
+
+	public String getThemeName() {
+		if (themeName == null) {
+			setDefaultTheme();
+		}
+		return themeName;
+	}
+
+	public void setThemeName(String themeName) {
+		this.themeName = themeName;
+	}
+
+	public void save() {
+		if (themeName != null) {
+			preferencesStore.setValue(PreferencesNames.DEFAULT_GROUP,
+					PreferencesNames.SYSTEM_WEB_UI_THEME, themeName);
+		}
+	}
 }

@@ -13,44 +13,49 @@ import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServ
  */
 @Local
 public interface EvaluatorServiceManager extends
-	ServiceManager<EvaluatorServiceInformation> {
+		ServiceManager<EvaluatorServiceInformation> {
 
-    /**
-     * This method creates a {@link Evaluator} instance out of the jndi name.
-     * This evaluator is actually a proxy via remoting to the plugin.
-     * 
-     * @param jndi
-     *            is the JNDI Name.
-     * @return An {@link Evaluator} proxy is returned.
-     */
-    public Evaluator createInstance(String jndi);
+	/**
+	 * This method creates a {@link Evaluator} instance out of the jndi name.
+	 * This evaluator is actually a proxy via remoting to the plugin.
+	 * 
+	 * @param jndi
+	 *            is the JNDI Name.
+	 * @return An {@link Evaluator} proxy is returned.
+	 */
+	public Evaluator createInstance(String jndi);
 
-    /**
-     * This method creates a {@link Evaluator} instance out of the evaluator id.
-     * This evaluator is actually a proxy via remoting to the plugin.
-     * 
-     * @param evaluatorId
-     *            is the id of the evaluator.
-     * @return An {@link Evaluator} proxy is returned.
-     */
-    public Evaluator createInstanceById(String evaluatorId);
+	/**
+	 * This method creates a {@link Evaluator} instance out of the evaluator id.
+	 * This evaluator is actually a proxy via remoting to the plugin.
+	 * 
+	 * @param evaluatorId
+	 *            is the id of the evaluator.
+	 * @return An {@link Evaluator} proxy is returned.
+	 */
+	public Evaluator createInstanceById(String evaluatorId);
 
-    /**
-     * This method returns the evaluators in order of their dependencies to each
-     * other.
-     * 
-     * @return A {@link List} of {@link EvaluatorServiceInformation} is returned.
-     */
-    public List<EvaluatorServiceInformation> getServicesSortedByDependency();
+	/**
+	 * This method returns the evaluators in order of their dependencies to each
+	 * other.
+	 * 
+	 * @return A {@link List} of {@link EvaluatorServiceInformation} is
+	 *         returned.
+	 */
+	public List<EvaluatorServiceInformation> getServicesSortedByDependency();
 
-    /**
-     * This method returns the evaluator information for the evaluator with the
-     * given id.
-     * 
-     * @param evaluatorId
-     *            is the id of the evaluator.
-     * @return An {@link EvaluatorServiceInformation} object is returned.
-     */
-    public EvaluatorServiceInformation getEvaluatorPluginInformation(
-	    String evaluatorId);
+	/**
+	 * This method returns the evaluator information for the evaluator with the
+	 * given id.
+	 * 
+	 * @param evaluatorId
+	 *            is the id of the evaluator.
+	 * @return An {@link EvaluatorServiceInformation} object is returned.
+	 */
+	public EvaluatorServiceInformation getEvaluatorPluginInformation(
+			String evaluatorId);
+
+	public boolean isActive(String evaluatorId);
+
+	public void setActive(String evaluatorId, boolean active);
 }

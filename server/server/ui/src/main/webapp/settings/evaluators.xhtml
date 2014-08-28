@@ -5,18 +5,35 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<ui:define name="page_content">
-		<h1>Evaluator Settings</h1>
-		<p:dataTable var="evaluator"
-			value="#{evaluatorSettingsMBean.evaluators}">
-			<p:column headerText="Name" rendered="#{evaluator.configurationURLPath != null}">
-				<h:outputLink value="#{evaluator.configurationURLPath}">#{evaluator.name}</h:outputLink>
-			</p:column>
-			<p:column headerText="Plugin Version" rendered="#{evaluator.configurationURLPath != null}">
-				<h:outputText value="#{evaluator.pluginVersion}" />
-			</p:column>
-			<p:column headerText="Description" rendered="#{evaluator.configurationURLPath != null}">
-				<h:outputText value="#{evaluator.description}" />
-			</p:column>
-		</p:dataTable>
+		<p:panel>
+			<h1>Evaluator Settings</h1>
+			<h:form>
+				<p:dataTable var="evaluator"
+					value="#{evaluatorSettingsMBean.evaluators}" id="evaluatorTable">
+					<p:column headerText="Activation">
+						<p:commandButton
+							rendered="#{evaluatorSettingsMBean.isActivated(evaluator.id)}"
+							value="Deactivate" update="evaluatorTable"
+							action="#{evaluatorSettingsMBean.deactivate(evaluator.id)}" />
+						<p:commandButton
+							rendered="#{!evaluatorSettingsMBean.isActivated(evaluator.id)}"
+							value="Activate" update="evaluatorTable"
+							action="#{evaluatorSettingsMBean.activate(evaluator.id)}" />
+					</p:column>
+					<p:column headerText="Name">
+						<h:outputLink value="#{evaluator.configurationURLPath}"
+							rendered="#{evaluator.configurationURLPath != null and evaluatorSettingsMBean.isActivated(evaluator.id)}">#{evaluator.name}</h:outputLink>
+						<h:outputText value="#{evaluator.name}"
+							rendered="#{evaluator.configurationURLPath == null or !evaluatorSettingsMBean.isActivated(evaluator.id)}" />
+					</p:column>
+					<p:column headerText="Plugin Version">
+						<h:outputText value="#{evaluator.pluginVersion}" />
+					</p:column>
+					<p:column headerText="Description">
+						<h:outputText value="#{evaluator.description}" />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</p:panel>
 	</ui:define>
 </ui:composition>

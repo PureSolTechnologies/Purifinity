@@ -24,4 +24,18 @@ public class EvaluatorSettingsMBean {
 	public Collection<PluginInformation> getPlugins() {
 		return evaluatorPluginService.getPlugins();
 	}
+
+	public boolean isActivated(String evaluatorId) {
+		return evaluatorPluginService.isActive(evaluatorId);
+
+	}
+
+	public void activate(String evaluatorId) {
+		evaluatorPluginService.setActive(evaluatorId, true);
+	}
+
+	public void deactivate(String evaluatorId) {
+		evaluatorPluginService.setActive(evaluatorId, false);
+	}
+
 }

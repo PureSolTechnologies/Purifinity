@@ -63,5 +63,4 @@ public class AnalysisServiceBean implements AnalysisService {
 	public Collection<RepositoryType> getRepositoryTypes() {
 		return repositoryTypePluginService.getServices();
 	}
-
 }

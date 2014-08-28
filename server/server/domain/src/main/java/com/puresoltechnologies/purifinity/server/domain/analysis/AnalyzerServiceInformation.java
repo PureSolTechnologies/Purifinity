@@ -9,6 +9,7 @@ public class AnalyzerServiceInformation implements ServiceInformation {
 
 	private static final long serialVersionUID = 8381755953924455072L;
 
+	private final String id;
 	private final String name;
 	private final String version;
 	private final Version pluginVersion;
@@ -19,7 +20,8 @@ public class AnalyzerServiceInformation implements ServiceInformation {
 	private final String projectURLPath;
 	private final String runURLPath;
 
-	public AnalyzerServiceInformation(@JsonProperty("name") String name,
+	public AnalyzerServiceInformation(@JsonProperty("id") String id,
+			@JsonProperty("name") String name,
 			@JsonProperty("version") String version,
 			@JsonProperty("pluginVersion") Version pluginVersion,
 			@JsonProperty("jndiName") String jndiName,
@@ -29,6 +31,7 @@ public class AnalyzerServiceInformation implements ServiceInformation {
 			@JsonProperty("projectURLPath") String projectURLPath,
 			@JsonProperty("runURLPath") String runURLPath) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.version = version;
 		this.pluginVersion = pluginVersion;
@@ -38,6 +41,10 @@ public class AnalyzerServiceInformation implements ServiceInformation {
 		this.configurationURLPath = configurationURLPath;
 		this.projectURLPath = projectURLPath;
 		this.runURLPath = runURLPath;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public String getName() {

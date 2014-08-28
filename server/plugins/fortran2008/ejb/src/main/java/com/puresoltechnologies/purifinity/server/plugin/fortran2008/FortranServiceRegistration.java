@@ -21,7 +21,7 @@ public class FortranServiceRegistration extends AbstractServiceRegistration
 			"fortran2008.plugin", "fortran2008.ejb",
 			ProgrammingLanguageAnalyzer.class, Fortran.class);
 	private static final AnalyzerServiceInformation INFORMATION = new AnalyzerServiceInformation(
-			Fortran.NAME, Fortran.VERSION, Fortran.PLUGIN_VERSION,
+			Fortran.ID, Fortran.NAME, Fortran.VERSION, Fortran.PLUGIN_VERSION,
 			JNDI_ADDRESS,
 			"This is a Fortran 2008 programming language analyzer.",
 			"/fortran2008.ui/index.jsf", "/fortran2008.ui/config.jsf",

@@ -100,11 +100,13 @@ public class ProjectEvaluationQueueMDBean implements MessageListener {
 			EvaluationStoreException {
 		for (EvaluatorServiceInformation evaluatorInformation : evaluatorPluginService
 				.getServicesSortedByDependency()) {
-			logger.info("Starting evaluator " + evaluatorInformation.getName()
-					+ "...");
-			Evaluator evaluator = evaluatorPluginService
-					.createInstance(evaluatorInformation.getJndiName());
-			evaluator.evaluate(analysisRun, false);
+			if (evaluatorPluginService.isActive(evaluatorInformation.getId())) {
+				logger.info("Starting evaluator "
+						+ evaluatorInformation.getName() + "...");
+				Evaluator evaluator = evaluatorPluginService
+						.createInstance(evaluatorInformation.getJndiName());
+				evaluator.evaluate(analysisRun, false);
+			}
 		}
 	}
 }

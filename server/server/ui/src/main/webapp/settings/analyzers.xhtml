@@ -5,17 +5,35 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 	<ui:define name="page_content">
-		<h1>Analyzer Settings</h1>
-		<p:dataTable var="analyzer" value="#{analyzerSettingsMBean.analyzers}">
-			<p:column headerText="Name" rendered="#{analyzer.configurationURLPath != null}">
-				<h:outputLink value="#{analyzer.configurationURLPath}">#{analyzer.name} #{analyzer.version}</h:outputLink>
-			</p:column>
-			<p:column headerText="Plugin Version" rendered="#{analyzer.configurationURLPath != null}">
-				<h:outputText value="#{analyzer.pluginVersion}" />
-			</p:column>
-			<p:column headerText="Description" rendered="#{analyzer.configurationURLPath != null}">
-				<h:outputText value="#{analyzer.description}" />
-			</p:column>
-		</p:dataTable>
+		<p:panel>
+			<h1>Analyzer Settings</h1>
+			<h:form>
+				<p:dataTable var="analyzer"
+					value="#{analyzerSettingsMBean.analyzers}" id="analyzerTable">
+					<p:column headerText="Activation">
+						<p:commandButton
+							rendered="#{analyzerSettingsMBean.isActivated(analyzer.id)}"
+							value="Deactivate" update="analyzerTable"
+							action="#{analyzerSettingsMBean.deactivate(analyzer.id)}" />
+						<p:commandButton
+							rendered="#{!analyzerSettingsMBean.isActivated(analyzer.id)}"
+							value="Activate" update="analyzerTable"
+							action="#{analyzerSettingsMBean.activate(analyzer.id)}" />
+					</p:column>
+					<p:column headerText="Name">
+						<h:outputLink value="#{analyzer.configurationURLPath}"
+							rendered="#{analyzer.configurationURLPath != null and analyzerSettingsMBean.isActivated(analyzer.id)}">#{analyzer.name} #{analyzer.version}</h:outputLink>
+						<h:outputText value="#{analyzer.name} #{analyzer.version}"
+							rendered="#{analyzer.configurationURLPath == null or !analyzerSettingsMBean.isActivated(analyzer.id)}" />
+					</p:column>
+					<p:column headerText="Plugin Version">
+						<h:outputText value="#{analyzer.pluginVersion}" />
+					</p:column>
+					<p:column headerText="Description">
+						<h:outputText value="#{analyzer.description}" />
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</p:panel>
 	</ui:define>
 </ui:composition>

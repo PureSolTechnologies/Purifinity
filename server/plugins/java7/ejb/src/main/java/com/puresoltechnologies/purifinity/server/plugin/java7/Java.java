@@ -40,6 +40,7 @@ import com.puresoltechnologies.purifinity.server.plugin.java7.metrics.SLOCMetric
 @Remote(ProgrammingLanguageAnalyzer.class)
 public class Java extends AbstractProgrammingLanguageAnalyzer {
 
+	public static final String ID = Java.class.getName();
 	public static final String NAME = "Java";
 	public static final String VERSION = "7";
 	public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
