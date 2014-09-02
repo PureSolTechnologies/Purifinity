@@ -12,7 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 @Path("/")
 public interface AnalysisServiceRestInterface {
@@ -25,7 +25,7 @@ public interface AnalysisServiceRestInterface {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("repositories")
-	public Collection<RepositoryType> getRepositoryTypes() throws IOException;
+	public Collection<RepositoryTypeServiceInformation> getRepositoryTypes() throws IOException;
 
 	@PUT
 	@Path("triggerAnalysis/{project_uuid}")

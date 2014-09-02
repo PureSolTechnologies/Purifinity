@@ -12,7 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresoltechnologies.purifinity.server.client.analysisservice.AnalysisServiceClient;
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 import com.puresoltechnologies.purifinity.server.test.AbstractPurifinityServerClientTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
@@ -39,7 +39,7 @@ public class RepositoryTypePluginServiceIT extends
 
 	@Test
 	public void test() throws IOException {
-		Collection<RepositoryType> repositoryTypes = client
+		Collection<RepositoryTypeServiceInformation> repositoryTypes = client
 				.getRepositoryTypes();
 		assertNotNull(repositoryTypes);
 		assertTrue(repositoryTypes.size() > 0);

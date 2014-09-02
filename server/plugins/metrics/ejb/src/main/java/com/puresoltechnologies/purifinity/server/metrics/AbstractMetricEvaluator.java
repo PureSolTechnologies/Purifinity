@@ -7,6 +7,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
 import com.puresoltechnologies.purifinity.evaluation.api.MetricEvaluator;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
@@ -28,7 +29,7 @@ public abstract class AbstractMetricEvaluator extends AbstractEvaluator
 		implements MetricEvaluator {
 
 	public AbstractMetricEvaluator(String id, String name, String description) {
-		super(id, name, description);
+		super(id, name, EvaluatorType.METRICS, description);
 	}
 
 	@Override

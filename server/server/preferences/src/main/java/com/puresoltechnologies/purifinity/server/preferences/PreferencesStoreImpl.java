@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 
 import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.ConsistencyLevel;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -35,6 +36,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 								+ CassandraElementNames.PREFERENCES_TABLE
 								+ " WHERE group=? AND name=?;");
 		BoundStatement boundStatement = preparedStatement.bind(group, name);
+		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
@@ -66,6 +68,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 								+ " (changed, changed_by, group, name, value) VALUES (?, ?, ?, ?, ?);");
 		BoundStatement boundStatement = preparedStatement.bind(new Date(),
 				"n/a", group, name, value);
+		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		session.execute(boundStatement);
 		logger.info("Wrote preference: '" + group + "/" + name + "'='" + value
 				+ "'");
@@ -108,6 +111,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 						+ CassandraElementNames.SERVICE_ACTIVATION_TABLE
 						+ " where service_id=?;");
 		BoundStatement boundStatement = preparedStatement.bind(serviceId);
+		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		ResultSet result = session.execute(boundStatement);
 		if (result.isExhausted()) {
 			return false;
@@ -125,6 +129,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 								+ " (changed, changed_by, service_id, active) VALUES (?, ?, ?, ?);");
 		BoundStatement boundStatement = preparedStatement.bind(new Date(),
 				"n/a", serviceId, active);
+		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		session.execute(boundStatement);
 		logger.info("Set service to active=" + active);
 	}

@@ -10,7 +10,7 @@ import javax.jms.JMSException;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisServiceRestInterface;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 public class AnalysisServiceRestService implements AnalysisServiceRestInterface {
 
@@ -23,7 +23,7 @@ public class AnalysisServiceRestService implements AnalysisServiceRestInterface 
 	}
 
 	@Override
-	public Collection<RepositoryType> getRepositoryTypes() throws IOException {
+	public Collection<RepositoryTypeServiceInformation> getRepositoryTypes() throws IOException {
 		return analysisService.getRepositoryTypes();
 	}
 

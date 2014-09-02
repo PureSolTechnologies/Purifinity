@@ -8,14 +8,16 @@ import javax.ejb.Singleton;
 
 import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceManager;
+import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginInformation;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManagerRemote;
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 @Singleton
+@EJBFacade
 public class RepositoryTypeServiceManagerImpl extends
-		AbstractServiceManager<RepositoryType> implements
+		AbstractServiceManager<RepositoryTypeServiceInformation> implements
 		RepositoryTypeServiceManager, RepositoryTypeServiceManagerRemote {
 
 	private static final String ID = RepositoryTypeServiceManagerImpl.class

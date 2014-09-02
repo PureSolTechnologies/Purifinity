@@ -14,15 +14,37 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractServiceRegistration {
+public abstract class AbstractServiceRegistration<T extends ServiceInformation> {
 
-	private static final int DEFAULT_RETRY_COUNT = 30;
-	private static final int DEFAULT_SLEEP = 1000;
+	@Inject
+	private ServiceManagerProxy serviceManagerProxy;
 
 	@Inject
 	private Logger logger;
 
+	/**
+	 * Returns the name of the service.
+	 * 
+	 * @return
+	 */
 	protected abstract String getName();
+
+	/**
+	 * Returns the {@link ServiceInformation} object of the service.
+	 * 
+	 * @return
+	 */
+	public abstract T getServiceInformation();
+
+	/**
+	 * This method writes the service registration into the database.
+	 */
+	protected abstract void registerInDatabase();
+
+	/**
+	 * This method removes the service registration from the database.
+	 */
+	protected abstract void unregisterInDatabase();
 
 	/**
 	 * This method is used to register a service from a plugin.
@@ -50,42 +72,9 @@ public abstract class AbstractServiceRegistration {
 			Class<? extends RemoteService> remoteService,
 			String remoteServiceJNDIName, PluginInformation pluginInformation,
 			String serviceJNDIName, Information information) {
-		try {
-			/*
-			 * Retries are implemented, because during startup and parallel
-			 * deployment the remote plugin registration might not be deployed
-			 * and started, yet.
-			 */
-			logger.info("Try to register '" + getName() + "'...");
-			int retried = 0;
-			boolean registered = false;
-			while (retried < DEFAULT_RETRY_COUNT) {
-				try {
-					RemoteService registrator = JndiUtils
-							.createRemoteEJBInstance(remoteService,
-									remoteServiceJNDIName);
-					registrator.registerService(pluginInformation,
-							serviceJNDIName, information);
-					registered = true;
-					break;
-				} catch (IllegalStateException e) {
-					logger.debug("'"
-							+ getName()
-							+ "' was not registered, yet. Plugin service was not found.");
-					Thread.sleep(DEFAULT_SLEEP);
-					retried++;
-				}
-			}
-			if (!registered) {
-				logger.error("'" + getName()
-						+ "' was not registered. Plugin service was not found.");
-				throw new IllegalStateException("Could not register plugin.");
-			}
-			logger.info("'" + getName() + "' was registered.");
-		} catch (InterruptedException e) {
-			throw new RuntimeException("Could not register service '"
-					+ getName() + "'.", e);
-		}
+		serviceManagerProxy.register(getName(), remoteService,
+				remoteServiceJNDIName, pluginInformation, serviceJNDIName,
+				information);
 	}
 
 	/**

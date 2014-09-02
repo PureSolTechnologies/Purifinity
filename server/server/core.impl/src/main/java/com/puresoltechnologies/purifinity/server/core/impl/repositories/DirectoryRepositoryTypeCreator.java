@@ -7,11 +7,11 @@ import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.DirectoryRepositoryLocation;
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 public class DirectoryRepositoryTypeCreator {
 
-	public static RepositoryType create() {
+	public static RepositoryTypeServiceInformation create() {
 		Map<String, Parameter<?>> parameters = new LinkedHashMap<>();
 		parameters
 				.put("Directory",
@@ -21,7 +21,7 @@ public class DirectoryRepositoryTypeCreator {
 								LevelOfMeasurement.NOMINAL,
 								"The directory the source code can be found in.",
 								String.class));
-		return new RepositoryType(DirectoryRepositoryLocation.class.getName(),
+		return new RepositoryTypeServiceInformation(DirectoryRepositoryLocation.class.getName(),
 				"Directory",
 				"Simple directory in the file system of the server.",
 				parameters, null, null, null, null);

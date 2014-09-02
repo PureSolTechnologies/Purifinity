@@ -7,14 +7,28 @@
 	xmlns:pst="http://puresoltechnologies.com/jsf">
 	<ui:define name="page_content">
 		<p:panel header="Metrics of #{projectsViewMBean.projectName}">
-			<p:layout style="min-width:800px;min-height:600px;">
-				<p:layoutUnit position="west" resizable="true" size="100"
-					minSize="150" maxSize="400">
-				</p:layoutUnit>
-				<p:layoutUnit position="center">
+			<p:tabView>
+				<p:tab title="Project Content">
+					<p:tree value="#{projectsEvaluationViewMBean.rootNode}" var="node"
+						dynamic="true" selectionMode="single">
+						<p:ajax event="select"
+							listener="#{projectsEvaluationViewMBean.onNodeSelect}" update="metrics"/>
+						<p:treeNode type="directory">
+							<h:outputText value="#{node.name}" />
+						</p:treeNode>
+						<p:treeNode type="file">
+							<h:outputText value="#{node.name}" />
+						</p:treeNode>
+					</p:tree>
+					<p:panel>
+						<h1>Metrics</h1>
+						<h:outputText id="metrics" value="#{projectsEvaluationViewMBean.selectedFileTree}"/>
+					</p:panel>
+				</p:tab>
+				<p:tab title="Plots">
 					<pst:plot2D />
-				</p:layoutUnit>
-			</p:layout>
+				</p:tab>
+			</p:tabView>
 		</p:panel>
 	</ui:define>
 </ui:composition>

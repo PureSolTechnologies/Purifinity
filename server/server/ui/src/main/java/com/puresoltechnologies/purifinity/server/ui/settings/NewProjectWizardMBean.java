@@ -26,7 +26,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSetting
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManager;
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 import com.puresoltechnologies.purifinity.server.preferences.PreferencesDefaults;
 import com.puresoltechnologies.purifinity.server.preferences.PreferencesNames;
 import com.puresoltechnologies.purifinity.server.preferences.PreferencesStore;
@@ -52,7 +52,7 @@ public class NewProjectWizardMBean implements Serializable {
 	private String projectName = null;
 	private String projectDescription = null;
 	private String repositoryTypeClass = null;
-	private RepositoryType repositoryType = null;
+	private RepositoryTypeServiceInformation repositoryType = null;
 	private final List<RepositorySetting> repositorySettings = new ArrayList<>();
 
 	public String getProjectName() {
@@ -88,8 +88,8 @@ public class NewProjectWizardMBean implements Serializable {
 		}
 	}
 
-	private RepositoryType findRepositoryTypeForClass(String repositoryTypeClass) {
-		for (RepositoryType repositoryType : repositoryTypePluginService
+	private RepositoryTypeServiceInformation findRepositoryTypeForClass(String repositoryTypeClass) {
+		for (RepositoryTypeServiceInformation repositoryType : repositoryTypePluginService
 				.getServices()) {
 			if (repositoryType.getClassName().equals(repositoryTypeClass)) {
 				return repositoryType;
@@ -105,7 +105,7 @@ public class NewProjectWizardMBean implements Serializable {
 
 	public Map<String, String> getRepositoryTypes() {
 		Map<String, String> repositoryTypes = new LinkedHashMap<>();
-		for (RepositoryType repositoryType : repositoryTypePluginService
+		for (RepositoryTypeServiceInformation repositoryType : repositoryTypePluginService
 				.getServices()) {
 			String name = repositoryType.getName();
 			String className = repositoryType.getClassName();

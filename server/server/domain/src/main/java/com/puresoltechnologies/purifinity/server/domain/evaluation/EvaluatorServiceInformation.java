@@ -7,6 +7,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.Version;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.server.common.plugins.ServiceInformation;
 
@@ -16,6 +17,7 @@ public class EvaluatorServiceInformation implements ServiceInformation {
 
 	private final String id;
 	private final String name;
+	private final EvaluatorType type;
 	private final Version pluginVersion;
 	private final String jndiName;
 	private final String description;
@@ -30,6 +32,7 @@ public class EvaluatorServiceInformation implements ServiceInformation {
 	public EvaluatorServiceInformation(
 			@JsonProperty("id") String id,
 			@JsonProperty("name") String name,
+			@JsonProperty("type") EvaluatorType type,
 			@JsonProperty("pluginVersion") Version pluginVersion,
 			@JsonProperty("jndiName") String jndiName,
 			@JsonProperty("description") String description,
@@ -43,6 +46,7 @@ public class EvaluatorServiceInformation implements ServiceInformation {
 		super();
 		this.id = id;
 		this.name = name;
+		this.type = type;
 		this.pluginVersion = pluginVersion;
 		this.jndiName = jndiName;
 		this.description = description;
@@ -61,6 +65,10 @@ public class EvaluatorServiceInformation implements ServiceInformation {
 
 	public String getName() {
 		return name;
+	}
+
+	public EvaluatorType getType() {
+		return type;
 	}
 
 	public Version getPluginVersion() {
@@ -101,7 +109,7 @@ public class EvaluatorServiceInformation implements ServiceInformation {
 	 * 
 	 * @return
 	 */
-	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	public Set<QualityCharacteristic> getQualityCharacteristics() {
 		return qualityCharacteristics;
 	}
 

@@ -15,7 +15,7 @@ import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.misc.JSONSerializer;
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 public class RepositoryTypeTest {
 
@@ -25,31 +25,31 @@ public class RepositoryTypeTest {
 		parameters.put("parameter1", new ParameterWithArbitraryUnit<Double>(
 				"parameterName", "parameterUnit", LevelOfMeasurement.NOMINAL,
 				"parameterDescription", Double.class));
-		RepositoryType repositoryType = new RepositoryType("className", "name",
+		RepositoryTypeServiceInformation repositoryType = new RepositoryTypeServiceInformation("className", "name",
 				"description", parameters, null, null, null, null);
 		checkSerialization(repositoryType);
 	}
 
 	@Test
 	public void testJSONSerializationDirectoryRepositoryType() throws Exception {
-		RepositoryType repositoryType = DirectoryRepositoryTypeCreator.create();
+		RepositoryTypeServiceInformation repositoryType = DirectoryRepositoryTypeCreator.create();
 		checkSerialization(repositoryType);
 	}
 
 	@Test
 	public void testJSONSerializationGITRepositoryType() throws Exception {
-		RepositoryType repositoryType = GITRepositoryTypeCreator.create();
+		RepositoryTypeServiceInformation repositoryType = GITRepositoryTypeCreator.create();
 		checkSerialization(repositoryType);
 	}
 
-	private void checkSerialization(RepositoryType repositoryType)
+	private void checkSerialization(RepositoryTypeServiceInformation repositoryType)
 			throws JsonGenerationException, JsonMappingException, IOException {
 		String serialized = JSONSerializer.toJSONString(repositoryType);
 		assertNotNull(serialized);
 		assertFalse(serialized.isEmpty());
 		System.out.println(serialized);
-		RepositoryType deserialized = JSONSerializer.fromJSONString(serialized,
-				RepositoryType.class);
+		RepositoryTypeServiceInformation deserialized = JSONSerializer.fromJSONString(serialized,
+				RepositoryTypeServiceInformation.class);
 		assertNotNull(deserialized);
 		assertEquals(repositoryType.getClassName(), deserialized.getClassName());
 		assertEquals(repositoryType.getName(), deserialized.getName());

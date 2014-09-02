@@ -6,8 +6,9 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
+import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluatorServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.MetricsPlugin;
@@ -15,15 +16,16 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-public class CodeDepthServiceRegistration extends AbstractServiceRegistration
-		implements EvaluatorRemoteService {
+@EJBFacade
+public class CodeDepthServiceRegistration extends
+		AbstractEvaluatorServiceRegistration {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"metrics.plugin", "metrics.ejb", Evaluator.class,
 			CodeDepthMetricEvaluator.class);
 
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
-			CodeDepthMetric.ID, CodeDepthMetric.NAME,
+			CodeDepthMetric.ID, CodeDepthMetric.NAME, EvaluatorType.METRICS,
 			CodeDepthMetric.PLUGIN_VERSION, JNDI_ADDRESS,
 			CodeDepthMetric.DESCRIPTION, "/metrics.ui/codedepth/index.jsf",
 			"/metrics.ui/codedepth/config.jsf",
@@ -50,4 +52,8 @@ public class CodeDepthServiceRegistration extends AbstractServiceRegistration
 		return CodeDepthMetric.NAME;
 	}
 
+	@Override
+	public EvaluatorServiceInformation getServiceInformation() {
+		return INFORMATION;
+	}
 }

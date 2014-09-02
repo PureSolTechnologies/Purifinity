@@ -14,7 +14,7 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorSe
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManager;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 @ApplicationScoped
 @ManagedBean
@@ -37,7 +37,7 @@ public class SystemPluginsMBean {
 		return evaluatorPluginService.getServices();
 	}
 
-	public Collection<RepositoryType> getRepositoryTypes() {
+	public Collection<RepositoryTypeServiceInformation> getRepositoryTypes() {
 		return repositoryTypePluginService.getServices();
 	}
 

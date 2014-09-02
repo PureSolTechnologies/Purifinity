@@ -6,16 +6,17 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
-import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerRemotePlugin;
+import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AbstractAnalyzerServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-public class JavaServiceRegistration extends AbstractServiceRegistration
-		implements AnalyzerRemotePlugin {
+@EJBFacade
+public class JavaServiceRegistration extends
+		AbstractAnalyzerServiceRegistration {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"java7.plugin", "java7.ejb", ProgrammingLanguageAnalyzer.class,
@@ -42,5 +43,10 @@ public class JavaServiceRegistration extends AbstractServiceRegistration
 	@Override
 	public String getName() {
 		return Java.NAME;
+	}
+
+	@Override
+	public AnalyzerServiceInformation getServiceInformation() {
+		return INFORMATION;
 	}
 }

@@ -6,7 +6,7 @@ import java.util.UUID;
 import javax.jms.JMSException;
 
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 /**
  * This is the interface for analysis service. This service provides information
@@ -20,6 +20,6 @@ public interface AnalysisService {
 
 	public Collection<AnalyzerServiceInformation> getAnalyzers();
 
-	public Collection<RepositoryType> getRepositoryTypes();
+	public Collection<RepositoryTypeServiceInformation> getRepositoryTypes();
 
 }

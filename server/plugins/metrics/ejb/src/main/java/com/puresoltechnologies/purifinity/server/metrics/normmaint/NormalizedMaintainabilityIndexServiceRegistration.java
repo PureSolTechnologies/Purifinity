@@ -6,8 +6,9 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
+import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluatorServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.MetricsPlugin;
@@ -15,8 +16,9 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
+@EJBFacade
 public class NormalizedMaintainabilityIndexServiceRegistration extends
-		AbstractServiceRegistration implements EvaluatorRemoteService {
+		AbstractEvaluatorServiceRegistration {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"metrics.plugin", "metrics.ejb", Evaluator.class,
@@ -25,6 +27,7 @@ public class NormalizedMaintainabilityIndexServiceRegistration extends
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			NormalizedMaintainabilityIndexEvaluator.ID,
 			NormalizedMaintainabilityIndexEvaluator.NAME,
+			EvaluatorType.METRICS,
 			NormalizedMaintainabilityIndexEvaluator.PLUGIN_VERSION,
 			JNDI_ADDRESS,
 			NormalizedMaintainabilityIndexEvaluator.DESCRIPTION,
@@ -54,4 +57,8 @@ public class NormalizedMaintainabilityIndexServiceRegistration extends
 		return NormalizedMaintainabilityIndexEvaluator.NAME;
 	}
 
+	@Override
+	public EvaluatorServiceInformation getServiceInformation() {
+		return INFORMATION;
+	}
 }

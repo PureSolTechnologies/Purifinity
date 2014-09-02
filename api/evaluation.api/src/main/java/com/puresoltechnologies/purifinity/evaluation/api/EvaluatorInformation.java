@@ -10,43 +10,58 @@ package com.puresoltechnologies.purifinity.evaluation.api;
  */
 public class EvaluatorInformation {
 
-    private final String id;
-    /**
-     * Contains the name of the evaluator.
-     */
-    private final String name;
-    /**
-     * Contains the description of the evaluator.
-     */
-    private final String description;
+	private final String id;
+	/**
+	 * Contains the name of the evaluator.
+	 */
+	private final String name;
+	/**
+	 * Contains the type of the evaluator.
+	 */
+	private final EvaluatorType evaluatorType;
+	/**
+	 * Contains the description of the evaluator.
+	 */
+	private final String description;
 
-    public EvaluatorInformation(String id, String name, String description) {
-	super();
-	this.id = id;
-	this.name = name;
-	this.description = description;
-    }
+	public EvaluatorInformation(String id, String name,
+			EvaluatorType evaluatorType, String description) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.evaluatorType = evaluatorType;
+		this.description = description;
+	}
 
-    public String getId() {
-	return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    /**
-     * Returns the name of the evaluator.
-     * 
-     * @return
-     */
-    public String getName() {
-	return name;
-    }
+	/**
+	 * Returns the name of the evaluator.
+	 * 
+	 * @return
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Returns the description of the evaluator.
-     * 
-     * @return
-     */
-    public String getDescription() {
-	return description;
-    }
+	/**
+	 * Returns the type classification of the evaluator.
+	 * 
+	 * @return A {@link EvaluatorType} constant is returned.
+	 */
+	public EvaluatorType getEvaluatorType() {
+		return evaluatorType;
+	}
+
+	/**
+	 * Returns the description of the evaluator.
+	 * 
+	 * @return
+	 */
+	public String getDescription() {
+		return description;
+	}
 
 }

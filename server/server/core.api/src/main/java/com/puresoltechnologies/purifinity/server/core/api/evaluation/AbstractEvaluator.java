@@ -27,6 +27,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
@@ -72,9 +73,10 @@ public abstract class AbstractEvaluator implements Evaluator {
 
 	private final EvaluatorInformation information;
 
-	public AbstractEvaluator(String id, String name, String description) {
+	public AbstractEvaluator(String id, String name, EvaluatorType type,
+			String description) {
 		super();
-		this.information = new EvaluatorInformation(id, name, description);
+		this.information = new EvaluatorInformation(id, name, type, description);
 	}
 
 	abstract protected FileMetrics readFileResults(HashId hashId)

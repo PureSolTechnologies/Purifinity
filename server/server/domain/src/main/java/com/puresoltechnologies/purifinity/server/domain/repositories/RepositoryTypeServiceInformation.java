@@ -14,7 +14,7 @@ import com.puresoltechnologies.purifinity.server.common.plugins.ServiceInformati
  * @author Rick-Rainer Ludwig
  * 
  */
-public class RepositoryType implements ServiceInformation {
+public class RepositoryTypeServiceInformation implements ServiceInformation {
 
 	private static final long serialVersionUID = 1607123633941143239L;
 
@@ -27,7 +27,8 @@ public class RepositoryType implements ServiceInformation {
 	private final String projectURLPath;
 	private final String runURLPath;
 
-	public RepositoryType(@JsonProperty("className") String className,
+	public RepositoryTypeServiceInformation(
+			@JsonProperty("className") String className,
 			@JsonProperty("name") String name,
 			@JsonProperty("description") String description,
 			@JsonProperty("parameters") Map<String, Parameter<?>> parameters,

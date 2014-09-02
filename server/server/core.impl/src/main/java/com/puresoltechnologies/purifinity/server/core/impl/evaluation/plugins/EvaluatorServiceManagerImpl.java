@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceManager;
+import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
@@ -20,6 +21,7 @@ import com.puresoltechnologies.purifinity.server.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
+@EJBFacade
 public class EvaluatorServiceManagerImpl extends
 		AbstractServiceManager<EvaluatorServiceInformation> implements
 		EvaluatorServiceManager, EvaluatorServiceManagerRemote {

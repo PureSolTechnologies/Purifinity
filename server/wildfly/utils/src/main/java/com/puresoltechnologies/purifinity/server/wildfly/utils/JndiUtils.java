@@ -45,9 +45,9 @@ public class JndiUtils {
 			throw new IllegalStateException("Could not find '" + jndiName
 					+ "'.");
 		} catch (InterruptedException e) {
-			throw new RuntimeException("Could not find '" + jndiName + "'.", e);
+			throw new RuntimeException("Could not find '" + jndiName
+					+ "' due to caught interrupt.", e);
 		}
-
 	}
 
 	/**

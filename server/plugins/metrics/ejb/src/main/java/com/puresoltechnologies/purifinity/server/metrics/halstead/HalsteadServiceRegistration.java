@@ -6,8 +6,9 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
+import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluatorServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.MetricsPlugin;
@@ -15,15 +16,16 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-public class HalsteadServiceRegistration extends AbstractServiceRegistration
-		implements EvaluatorRemoteService {
+@EJBFacade
+public class HalsteadServiceRegistration extends
+		AbstractEvaluatorServiceRegistration {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"metrics.plugin", "metrics.ejb", Evaluator.class,
 			HalsteadMetricEvaluator.class);
 
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
-			HalsteadMetric.ID, HalsteadMetric.NAME,
+			HalsteadMetric.ID, HalsteadMetric.NAME, EvaluatorType.METRICS,
 			HalsteadMetric.PLUGIN_VERSION, JNDI_ADDRESS,
 			HalsteadMetric.DESCRIPTION, "/metrics.ui/halstead/index.jsf",
 			"/metrics.ui/halstead/config.jsf",
@@ -49,4 +51,8 @@ public class HalsteadServiceRegistration extends AbstractServiceRegistration
 		return HalsteadMetric.NAME;
 	}
 
+	@Override
+	public EvaluatorServiceInformation getServiceInformation() {
+		return INFORMATION;
+	}
 }

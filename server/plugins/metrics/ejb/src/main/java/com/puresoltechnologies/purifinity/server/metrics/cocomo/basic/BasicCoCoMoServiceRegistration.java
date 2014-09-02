@@ -6,8 +6,9 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
+import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluatorServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.MetricsPlugin;
@@ -15,8 +16,9 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-public class BasicCoCoMoServiceRegistration extends AbstractServiceRegistration
-		implements EvaluatorRemoteService {
+@EJBFacade
+public class BasicCoCoMoServiceRegistration extends
+		AbstractEvaluatorServiceRegistration {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"metrics.plugin", "metrics.ejb", Evaluator.class,
@@ -24,10 +26,10 @@ public class BasicCoCoMoServiceRegistration extends AbstractServiceRegistration
 
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			BasicCoCoMoEvaluator.ID, BasicCoCoMoEvaluator.NAME,
-			BasicCoCoMoEvaluator.PLUGIN_VERSION, JNDI_ADDRESS,
-			BasicCoCoMoEvaluator.DESCRIPTION, "/metrics.ui/cocomo/index.jsf",
-			"/metrics.ui/cocomo/config.jsf", "/metrics.ui/cocomo/project.jsf",
-			"/metrics.ui/cocomo/run.jsf",
+			EvaluatorType.METRICS, BasicCoCoMoEvaluator.PLUGIN_VERSION,
+			JNDI_ADDRESS, BasicCoCoMoEvaluator.DESCRIPTION,
+			"/metrics.ui/cocomo/index.jsf", "/metrics.ui/cocomo/config.jsf",
+			"/metrics.ui/cocomo/project.jsf", "/metrics.ui/cocomo/run.jsf",
 			BasicCoCoMoEvaluator.EVALUATED_QUALITY_CHARACTERISTICS,
 			BasicCoCoMoEvaluatorParameter.ALL,
 			BasicCoCoMoEvaluator.DEPENDENCIES);
@@ -50,4 +52,8 @@ public class BasicCoCoMoServiceRegistration extends AbstractServiceRegistration
 		return BasicCoCoMoEvaluator.NAME;
 	}
 
+	@Override
+	public EvaluatorServiceInformation getServiceInformation() {
+		return INFORMATION;
+	}
 }

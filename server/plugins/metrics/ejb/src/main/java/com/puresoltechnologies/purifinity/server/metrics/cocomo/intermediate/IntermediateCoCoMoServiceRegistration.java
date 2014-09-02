@@ -6,8 +6,9 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
+import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluatorServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.MetricsPlugin;
@@ -15,8 +16,9 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
+@EJBFacade
 public class IntermediateCoCoMoServiceRegistration extends
-		AbstractServiceRegistration implements EvaluatorRemoteService {
+		AbstractEvaluatorServiceRegistration {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"metrics.plugin", "metrics.ejb", Evaluator.class,
@@ -24,8 +26,8 @@ public class IntermediateCoCoMoServiceRegistration extends
 
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
 			IntermediateCoCoMoEvaluator.ID, IntermediateCoCoMoEvaluator.NAME,
-			IntermediateCoCoMoEvaluator.PLUGIN_VERSION, JNDI_ADDRESS,
-			IntermediateCoCoMoEvaluator.DESCRIPTION,
+			EvaluatorType.METRICS, IntermediateCoCoMoEvaluator.PLUGIN_VERSION,
+			JNDI_ADDRESS, IntermediateCoCoMoEvaluator.DESCRIPTION,
 			"/metrics.ui/intermediate-cocomo/index.jsf",
 			"/metrics.ui/intermediate-cocomo/config.jsf",
 			"/metrics.ui/intermediate-cocomo/project.jsf",
@@ -52,4 +54,8 @@ public class IntermediateCoCoMoServiceRegistration extends
 		return IntermediateCoCoMoEvaluator.NAME;
 	}
 
+	@Override
+	public EvaluatorServiceInformation getServiceInformation() {
+		return INFORMATION;
+	}
 }

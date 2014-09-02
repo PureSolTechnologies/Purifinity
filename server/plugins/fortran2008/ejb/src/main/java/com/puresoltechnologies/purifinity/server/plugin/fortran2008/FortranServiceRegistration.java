@@ -6,16 +6,17 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
-import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerRemotePlugin;
+import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.AbstractAnalyzerServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-public class FortranServiceRegistration extends AbstractServiceRegistration
-		implements AnalyzerRemotePlugin {
+@EJBFacade
+public class FortranServiceRegistration extends
+		AbstractAnalyzerServiceRegistration {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"fortran2008.plugin", "fortran2008.ejb",
@@ -43,5 +44,10 @@ public class FortranServiceRegistration extends AbstractServiceRegistration
 	@Override
 	public String getName() {
 		return Fortran.NAME;
+	}
+
+	@Override
+	public AnalyzerServiceInformation getServiceInformation() {
+		return INFORMATION;
 	}
 }

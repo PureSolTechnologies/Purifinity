@@ -8,6 +8,7 @@ import com.puresoltechnologies.purifinity.server.database.cassandra.utils.Cassan
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 import com.puresoltechnologies.purifinity.server.ddl.analysisservice.AnalysisServiceDatabaseMigrator;
 import com.puresoltechnologies.purifinity.server.ddl.evaluationservice.EvaluationServiceDatabaseMigrator;
+import com.puresoltechnologies.purifinity.server.ddl.plugins.PluginsDatabaseMigrator;
 import com.puresoltechnologies.purifinity.server.ddl.preferences.PreferencesStoreDatabaseMigrator;
 import com.puresoltechnologies.purifinity.server.ddl.processes.ProcessStatesDatabaseMigrator;
 
@@ -62,11 +63,14 @@ public class DatabaseMigrator {
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT);
 		PreferencesStoreDatabaseMigrator preferencesStoreDatabaseMigrator = new PreferencesStoreDatabaseMigrator(
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT);
+		PluginsDatabaseMigrator pluginsDatabaseMigrator = new PluginsDatabaseMigrator(
+				CASSANDRA_HOST, CASSANDRA_CQL_PORT);
 		if (drop) {
 			analysisServiceDatabaseMigrator.drop();
 			evaluationServiceDatabaseMigrator.drop();
 			processStatesDatabaseMigrator.drop();
 			preferencesStoreDatabaseMigrator.drop();
+			pluginsDatabaseMigrator.drop();
 			dropTitanKeyspace((CassandraMigrationConnector) analysisServiceDatabaseMigrator
 					.getConnector());
 		}
@@ -75,6 +79,7 @@ public class DatabaseMigrator {
 			evaluationServiceDatabaseMigrator.migrate();
 			processStatesDatabaseMigrator.migrate();
 			preferencesStoreDatabaseMigrator.migrate();
+			pluginsDatabaseMigrator.migrate();
 		}
 	}
 

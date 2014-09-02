@@ -2,13 +2,15 @@ package com.puresoltechnologies.purifinity.server.common.plugins;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -24,9 +26,8 @@ public abstract class AbstractServiceManager<ServiceInfo extends ServiceInformat
 	@Inject
 	private EventLogger eventLogger;
 
-	private final Set<String> jndiAddresses = new HashSet<>();
-	private final Map<String, ServiceInfo> services = new HashMap<>();
-	private final Map<String, PluginInformation> plugins = new HashMap<>();
+	private final Map<String, ServiceInfo> services = new ConcurrentHashMap<>();
+	private final Map<String, PluginInformation> plugins = new ConcurrentHashMap<>();
 
 	private final String serviceManagerName;
 
@@ -54,18 +55,17 @@ public abstract class AbstractServiceManager<ServiceInfo extends ServiceInformat
 		// break;
 		// }
 		// }
-		jndiAddresses.clear();
 		services.clear();
 		eventLogger.logEvent(ServiceManagerEvents
 				.createShutdownEvent(serviceManagerName));
 	}
 
 	@Override
+	@Lock(LockType.WRITE)
 	public void registerService(PluginInformation pluginInformation,
 			String jndiName, ServiceInfo serviceInformation) {
 		logger.info("Register new service '" + jndiName + "' from plugin '"
 				+ pluginInformation.getName() + "'.");
-		jndiAddresses.add(jndiName);
 
 		services.put(jndiName, serviceInformation);
 		plugins.put(jndiName, pluginInformation);
@@ -73,18 +73,20 @@ public abstract class AbstractServiceManager<ServiceInfo extends ServiceInformat
 	}
 
 	@Override
+	@Lock(LockType.WRITE)
 	public void unregisterService(String jndiName) {
 		services.remove(jndiName);
 		plugins.remove(jndiName);
-		jndiAddresses.remove(jndiName);
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public boolean hasServices() {
 		return services.size() > 0;
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public Collection<ServiceInfo> getServices() {
 		return Collections.unmodifiableCollection(services.values());
 	}
@@ -96,6 +98,7 @@ public abstract class AbstractServiceManager<ServiceInfo extends ServiceInformat
 	 * @return A {@link Collection} of {@link PluginInformation} is returned.
 	 */
 	@Override
+	@Lock(LockType.READ)
 	public Collection<PluginInformation> getPlugins() {
 		Set<PluginInformation> plugins = new HashSet<>();
 		plugins.addAll(this.plugins.values());

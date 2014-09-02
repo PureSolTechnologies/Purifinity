@@ -11,7 +11,7 @@
 					action="#{projectsAnalysisViewMBean.triggerNewAnalysis(projectsViewMBean.projectUUID)}" />
 			</h:form>
 			<p:tabView>
-				<p:tab title="Analysis Content">
+				<p:tab title="Project Content">
 					<p:treeTable var="fsElement"
 						value="#{analysisContentTreeTableMBean.root}"
 						resizableColumns="true" liveResize="true" selectionMode="single">
@@ -37,9 +37,6 @@
 							<h:outputText value="#{fsElement.sourceLocation}" />
 						</p:column>
 					</p:treeTable>
-				</p:tab>
-				<p:tab title="Project Content">
-					<p:dataTable></p:dataTable>
 				</p:tab>
 				<p:tab title="Analyzed Files">
 					<p:dataTable></p:dataTable>

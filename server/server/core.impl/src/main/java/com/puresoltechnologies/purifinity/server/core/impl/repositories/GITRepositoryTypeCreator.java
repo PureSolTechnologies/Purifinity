@@ -7,11 +7,11 @@ import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.GITRepositoryLocation;
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryType;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 public class GITRepositoryTypeCreator {
 
-	public static RepositoryType create() {
+	public static RepositoryTypeServiceInformation create() {
 		Map<String, Parameter<?>> parameters = new LinkedHashMap<>();
 		parameters.put("Host", new ParameterWithArbitraryUnit<>("host", "",
 				LevelOfMeasurement.NOMINAL,
@@ -32,7 +32,7 @@ public class GITRepositoryTypeCreator {
 				"", LevelOfMeasurement.NOMINAL,
 				"The password of the user to be used for login into the host.",
 				String.class));
-		return new RepositoryType(GITRepositoryLocation.class.getName(), "GIT",
+		return new RepositoryTypeServiceInformation(GITRepositoryLocation.class.getName(), "GIT",
 				"Remote GIT repository.", parameters, null, null, null, null);
 	}
 }

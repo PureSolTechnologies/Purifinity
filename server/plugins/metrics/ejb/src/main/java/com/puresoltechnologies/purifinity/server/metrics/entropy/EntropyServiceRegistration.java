@@ -6,8 +6,9 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceRegistration;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorRemoteService;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
+import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluatorServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.MetricsPlugin;
@@ -15,17 +16,19 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-public class EntropyServiceRegistration extends AbstractServiceRegistration
-		implements EvaluatorRemoteService {
+@EJBFacade
+public class EntropyServiceRegistration extends
+		AbstractEvaluatorServiceRegistration {
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"metrics.plugin", "metrics.ejb", Evaluator.class,
 			EntropyMetricEvaluator.class);
 
 	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
-			EntropyMetric.ID, EntropyMetric.NAME, EntropyMetric.PLUGIN_VERSION,
-			JNDI_ADDRESS, EntropyMetric.DESCRIPTION,
-			"/metrics.ui/entropy/index.jsf", "/metrics.ui/entropy/config.jsf",
+			EntropyMetric.ID, EntropyMetric.NAME, EvaluatorType.METRICS,
+			EntropyMetric.PLUGIN_VERSION, JNDI_ADDRESS,
+			EntropyMetric.DESCRIPTION, "/metrics.ui/entropy/index.jsf",
+			"/metrics.ui/entropy/config.jsf",
 			"/metrics.ui/entropy/project.jsf", "/metrics.ui/entropy/run.jsf",
 			EntropyMetric.EVALUATED_QUALITY_CHARACTERISTICS,
 			EntropyMetricEvaluatorParameter.ALL, EntropyMetric.DEPENDENCIES);
@@ -48,4 +51,8 @@ public class EntropyServiceRegistration extends AbstractServiceRegistration
 		return EntropyMetric.NAME;
 	}
 
+	@Override
+	public EvaluatorServiceInformation getServiceInformation() {
+		return INFORMATION;
+	}
 }
