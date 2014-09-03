@@ -12,7 +12,7 @@
 					<p:tree value="#{projectsEvaluationViewMBean.rootNode}" var="node"
 						dynamic="true" selectionMode="single">
 						<p:ajax event="select"
-							listener="#{projectsEvaluationViewMBean.onNodeSelect}" update="metrics"/>
+							listener="#{projectsEvaluationViewMBean.onNodeSelect}"/>
 						<p:treeNode type="directory">
 							<h:outputText value="#{node.name}" />
 						</p:treeNode>
@@ -22,7 +22,7 @@
 					</p:tree>
 					<p:panel>
 						<h1>Metrics</h1>
-						<h:outputText id="metrics" value="#{projectsEvaluationViewMBean.selectedFileTree}"/>
+						<h:outputText value="#{projectsEvaluationViewMBean.selectedFileTree}"/>
 					</p:panel>
 				</p:tab>
 				<p:tab title="Plots">

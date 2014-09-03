@@ -1,14 +1,30 @@
+footer {
+	position: absolute;
+	height: 5em;
+	width: 100%;
+	z-index: -20;
+	height: 2em;
+}
+
 div.footer {
-	background-color: white;
-	color: black;
+	background-color: #303030;
+	color: white;
 	text-align: center;
 	text-shadow: black 2px 2px 5px;
 	font-size: 10pt;
 	text-align: center;
+	width: 100%;
+	margin: 0 auto;
+	position: fixed;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	height: 2em;
+	z-index: -15;
 }
 
 div.footer a {
-	color: black;
+	color: white;
 }
 
 div.companyName {

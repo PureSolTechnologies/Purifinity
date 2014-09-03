@@ -1,13 +1,9 @@
 package com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
-import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
-import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluatorServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
@@ -15,8 +11,6 @@ import com.puresoltechnologies.purifinity.server.metrics.MetricsPlugin;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
-@Startup
-@EJBFacade
 public class IntermediateCoCoMoServiceRegistration extends
 		AbstractEvaluatorServiceRegistration {
 
@@ -36,14 +30,12 @@ public class IntermediateCoCoMoServiceRegistration extends
 			IntermediateCoCoMoEvaluatorParameter.ALL,
 			IntermediateCoCoMoEvaluator.DEPENDENCIES);
 
-	@PostConstruct
 	public void registration() {
 		register(EvaluatorServiceManagerRemote.class,
 				EvaluatorServiceManagerRemote.JNDI_NAME,
 				MetricsPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
 	}
 
-	@PreDestroy
 	public void unregistration() {
 		unregister(EvaluatorServiceManagerRemote.class,
 				EvaluatorServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);

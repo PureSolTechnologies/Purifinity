@@ -2,14 +2,22 @@
  * This CSS file is used for central default settings which are to be used as
  * basics for all sites.
  */
+* {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 10pt;
+	text-decoration: none;
+	word-spacing: normal;
+	text-align: left;
+	letter-spacing: 0;
+	line-height: 1.5em;
+}
+
 body {
 	background-color: white;
-	color: black;
+	color: #303030;
 	display: block;
-	margin: 3pt;
-	padding: 0pt;
-	font-family: Helvetica;
-	font-size: 10pt;
+	margin: 0;
+	padding: 0;
 }
 
 /*

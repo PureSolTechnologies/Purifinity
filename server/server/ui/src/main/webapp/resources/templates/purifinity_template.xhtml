@@ -40,7 +40,7 @@
 				<p:menuitem value="Help" outcome="/help" />
 				<f:facet name="options">
 					<p:themeSwitcher id="themeSwitcher" style="width:165px"
-						effect="fade" value="#{themeSwitcherMBean.themeName}" var="t">
+						effect="fade" value="#{themeSwitcherMBean.themeName}" var="t" rendered="false">
 						<f:selectItem itemLabel="Choose Theme" itemValue="" />
 						<f:selectItems value="#{themeSwitcherMBean.themes}" var="theme"
 							itemLabel="${theme.displayName}" itemValue="#{theme.name}" />
