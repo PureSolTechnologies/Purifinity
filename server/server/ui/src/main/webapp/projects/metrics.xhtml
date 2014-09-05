@@ -6,13 +6,14 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:pst="http://puresoltechnologies.com/jsf">
 	<ui:define name="page_content">
+		<h1>Metrics of #{projectsViewMBean.projectName}</h1>
 		<p:panel header="Metrics of #{projectsViewMBean.projectName}">
 			<p:tabView>
 				<p:tab title="Project Content">
 					<p:tree value="#{projectsEvaluationViewMBean.rootNode}" var="node"
 						dynamic="true" selectionMode="single">
 						<p:ajax event="select"
-							listener="#{projectsEvaluationViewMBean.onNodeSelect}"/>
+							listener="#{projectsEvaluationViewMBean.onNodeSelect}" />
 						<p:treeNode type="directory">
 							<h:outputText value="#{node.name}" />
 						</p:treeNode>
@@ -20,10 +21,8 @@
 							<h:outputText value="#{node.name}" />
 						</p:treeNode>
 					</p:tree>
-					<p:panel>
-						<h1>Metrics</h1>
-						<h:outputText value="#{projectsEvaluationViewMBean.selectedFileTree}"/>
-					</p:panel>
+					<h:outputText
+						value="#{projectsEvaluationViewMBean.selectedFileTree}" />
 				</p:tab>
 				<p:tab title="Plots">
 					<pst:plot2D />

@@ -9,15 +9,25 @@
 		<h:outputStylesheet library="css" name="footer.css" />
 		<footer>
 			<div class="footer">
-				<p:link href="http://Purifinity.com" target="purifinity"
-					value="Purifinity" />
-				<h:outputLink value="http://www.puresol-technologies.com"
-					target="copyright">(c)
-				2012 <span class="companyNamePureSolPart">PureSol</span>
-					<span class="companyNameTechnologiesPart">Technologies</span>
-				</h:outputLink>
-				|
-				<p:link href="/license.jsf" value="License" />
+				<div class="footerSupportColumn">
+					<strong>Support</strong> <br />
+					<p:link href="/help.jsf" value="Help" />
+					<br />
+					<p:link href="http://bugs.puresol-technologies.com"
+						value="Bug Reporting" />
+				</div>
+				<div class="footerCopyrightColumn">
+					<strong>Purifinity</strong> <br /> &#169;&#160;<span
+						class="companyNamePureSolPart">PureSol</span>&#160;<span
+						class="companyNameTechnologiesPart">Technologies</span> 2009-2014
+					<br />
+					<p:link href="/license.jsf" value="Purifinity License Agreement" />
+					<br />
+					<p:link href="http://Purifinity.com" target="purifinity"
+						value="Purifinity Website" />
+					<br />
+					<p:link href="/license.jsf" value="PureSol Technologies Website" />
+				</div>
 			</div>
 		</footer>
 	</cc:implementation>

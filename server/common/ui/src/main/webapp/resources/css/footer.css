@@ -3,7 +3,8 @@ footer {
 	height: 5em;
 	width: 100%;
 	z-index: -20;
-	height: 2em;
+	height: 10em;
+	margin: auto;
 }
 
 div.footer {
@@ -14,13 +15,14 @@ div.footer {
 	font-size: 10pt;
 	text-align: center;
 	width: 100%;
-	margin: 0 auto;
+	margin: auto;
 	position: fixed;
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
-	height: 2em;
+	height: 10em;
 	z-index: -15;
+	position: fixed;
 }
 
 div.footer a {
@@ -38,4 +40,21 @@ span.companyNameTechnologiesPart {
 
 span.companyNamePureSolPart {
 	color: green;
+}
+
+div.footerSupportColumn {
+	float: left;
+	margin: 10pt;
+}
+
+div.footerCopyrightColumn {
+	float: right;
+	margin: 10pt;
+}
+
+div.footerSupportColumn strong {
+	font-size: 12pt;
+}
+div.footerCopyrightColumn strong {
+	font-size: 12pt;
 }
