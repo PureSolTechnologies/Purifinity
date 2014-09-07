@@ -31,3 +31,14 @@ body {
 svg {
 	overflow: hidden;
 }
+
+/*
+ * This style class is to be used by elements which contain floating elements.
+ */
+.floatContainer {
+	overflow: scroll;
+}
+
+.clear {
+	clear: both;
+}
