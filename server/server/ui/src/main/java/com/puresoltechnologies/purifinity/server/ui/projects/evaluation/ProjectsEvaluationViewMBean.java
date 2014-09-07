@@ -41,9 +41,13 @@ public class ProjectsEvaluationViewMBean implements Serializable {
 	@Inject
 	private EvaluatorServiceManager evaluatorServiceManager;
 
-	private TreeNode rootNode;
 	private final List<SelectItem> metricSelection = new ArrayList<>();
+	private final List<SelectItem> metricEvaluatorSelection = new ArrayList<>();
+
+	private TreeNode rootNode;
+	private TreeNode treeSelection;
 	private AnalysisFileTree selectedFileTree;
+	private String evaluatorId = null;
 
 	@PostConstruct
 	public void initialize() {
@@ -80,25 +84,6 @@ public class ProjectsEvaluationViewMBean implements Serializable {
 		}
 	}
 
-	private void initializeMetricsList() {
-		for (EvaluatorServiceInformation service : evaluatorServiceManager
-				.getServices()) {
-			if (service.getType() == EvaluatorType.METRICS) {
-				List<SelectItem> parameterSelection = new ArrayList<>();
-				for (Parameter<?> parameter : service.getParameters()) {
-					parameterSelection.add(new SelectItem(parameter, parameter
-							.getName(), parameter.getDescription()));
-				}
-				SelectItemGroup group = new SelectItemGroup(service.getName(),
-						service.getDescription(), false,
-						parameterSelection
-								.toArray(new SelectItem[parameterSelection
-										.size()]));
-				metricSelection.add(group);
-			}
-		}
-	}
-
 	private void addChildren(TreeNode parent, AnalysisFileTree analysisFileTree) {
 		List<AnalysisFileTree> children = analysisFileTree.getChildren();
 		Collections.sort(children, new Comparator<AnalysisFileTree>() {
@@ -118,12 +103,53 @@ public class ProjectsEvaluationViewMBean implements Serializable {
 		}
 	}
 
+	private void initializeMetricsList() {
+		for (EvaluatorServiceInformation service : evaluatorServiceManager
+				.getServices()) {
+			if (service.getType() == EvaluatorType.METRICS) {
+				metricEvaluatorSelection.add(new SelectItem(service.getId(),
+						service.getName(), service.getDescription()));
+				List<SelectItem> parameterSelection = new ArrayList<>();
+				for (Parameter<?> parameter : service.getParameters()) {
+					parameterSelection.add(new SelectItem(parameter, parameter
+							.getName(), parameter.getDescription()));
+				}
+				SelectItemGroup group = new SelectItemGroup(service.getName(),
+						service.getDescription(), false,
+						parameterSelection
+								.toArray(new SelectItem[parameterSelection
+										.size()]));
+				metricSelection.add(group);
+			}
+		}
+	}
+
+	public String getEvaluatorId() {
+		return evaluatorId;
+	}
+
+	public void setEvaluatorId(String evaluatorId) {
+		this.evaluatorId = evaluatorId;
+	}
+
+	public TreeNode getTreeSelection() {
+		return treeSelection;
+	}
+
+	public void setTreeSelection(TreeNode treeSelection) {
+		this.treeSelection = treeSelection;
+	}
+
 	public TreeNode getRootNode() {
 		return rootNode;
 	}
 
 	public List<SelectItem> getAvailableMetrics() {
 		return metricSelection;
+	}
+
+	public List<SelectItem> getAvailableMetricsEvaluators() {
+		return metricEvaluatorSelection;
 	}
 
 	public void onNodeSelect(NodeSelectEvent event) {

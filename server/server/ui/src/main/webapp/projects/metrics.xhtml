@@ -10,19 +10,28 @@
 		<p:panel header="Metrics of #{projectsViewMBean.projectName}">
 			<p:tabView>
 				<p:tab title="Project Content">
-					<p:tree value="#{projectsEvaluationViewMBean.rootNode}" var="node"
-						dynamic="true" selectionMode="single">
-						<p:ajax event="select"
-							listener="#{projectsEvaluationViewMBean.onNodeSelect}" />
-						<p:treeNode type="directory">
-							<h:outputText value="#{node.name}" />
-						</p:treeNode>
-						<p:treeNode type="file">
-							<h:outputText value="#{node.name}" />
-						</p:treeNode>
-					</p:tree>
-					<h:outputText
-						value="#{projectsEvaluationViewMBean.selectedFileTree}" />
+					<h:form>
+						<p:selectOneMenu id="metricEvaluatorSelection"
+							value="#{projectsEvaluationViewMBean.evaluatorId}">
+							<f:selectItem itemLabel="Select a Metric Evaluator" itemValue="" />
+							<f:selectItems
+								value="#{projectsEvaluationViewMBean.availableMetricsEvaluators}" />
+							<p:ajax update="metricsTable" />
+						</p:selectOneMenu>
+						<p:tree id="analysisContent"
+							value="#{projectsEvaluationViewMBean.rootNode}" var="node"
+							selectionMode="single"
+							selection="#{projectsEvaluationViewMBean.treeSelection}" style="float:left;">
+							<p:ajax event="select" update=":#{p:component('metricsTable')}" />
+							<p:treeNode type="directory">
+								<h:outputText value="#{node.name}" />
+							</p:treeNode>
+							<p:treeNode type="file">
+								<h:outputText value="#{node.name}" />
+							</p:treeNode>
+						</p:tree>
+						<p:dataTable id="metricsTable" style="float:right;width:60%;"></p:dataTable>
+					</h:form>
 				</p:tab>
 				<p:tab title="Plots">
 					<pst:plot2D />
