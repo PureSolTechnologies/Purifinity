@@ -18,20 +18,22 @@
 								value="#{projectsEvaluationViewMBean.availableMetricsEvaluators}" />
 							<p:ajax update="metricsTable" />
 						</p:selectOneMenu>
-						<p:tree id="analysisContent"
-							value="#{projectsEvaluationViewMBean.rootNode}" var="node"
-							selectionMode="single"
-							selection="#{projectsEvaluationViewMBean.treeSelection}"
-							style="float:left;">
-							<p:ajax event="select" update=":#{p:component('metricsTable')}" />
-							<p:treeNode type="directory">
-								<h:outputText value="#{node.name}" />
-							</p:treeNode>
-							<p:treeNode type="file">
-								<h:outputText value="#{node.name}" />
-							</p:treeNode>
-						</p:tree>
-						<p:dataTable id="metricsTable" style="float:right;width:60%;"></p:dataTable>
+						<p:outputPanel styleClass="floatContainer">
+							<p:tree id="analysisContent"
+								value="#{projectsEvaluationViewMBean.rootNode}" var="node"
+								selectionMode="single"
+								selection="#{projectsEvaluationViewMBean.treeSelection}"
+								style="float:left;">
+								<p:ajax event="select" update=":#{p:component('metricsTable')}" />
+								<p:treeNode type="directory">
+									<h:outputText value="#{node.name}" />
+								</p:treeNode>
+								<p:treeNode type="file">
+									<h:outputText value="#{node.name}" />
+								</p:treeNode>
+							</p:tree>
+							<p:dataTable id="metricsTable" style="float:right;"></p:dataTable>
+						</p:outputPanel>
 					</h:form>
 				</p:tab>
 				<p:tab title="Plots">

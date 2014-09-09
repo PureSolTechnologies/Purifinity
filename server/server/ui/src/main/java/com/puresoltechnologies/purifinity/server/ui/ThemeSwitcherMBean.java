@@ -36,7 +36,7 @@ public class ThemeSwitcherMBean implements Serializable {
 
 	private void setDefaultTheme() {
 		PreferencesValue themeName = preferencesStore.getValue("default",
-				PreferencesNames.SYSTEM_WEB_UI_THEME, "Purifinity");
+				PreferencesNames.SYSTEM_WEB_UI_THEME, "purifinity");
 		for (Theme theme : themes) {
 			if (themeName.getValue().equals(theme.getName())) {
 				this.themeName = theme.getName();
