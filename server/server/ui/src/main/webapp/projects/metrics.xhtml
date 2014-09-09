@@ -21,7 +21,8 @@
 						<p:tree id="analysisContent"
 							value="#{projectsEvaluationViewMBean.rootNode}" var="node"
 							selectionMode="single"
-							selection="#{projectsEvaluationViewMBean.treeSelection}" style="float:left;">
+							selection="#{projectsEvaluationViewMBean.treeSelection}"
+							style="float:left;">
 							<p:ajax event="select" update=":#{p:component('metricsTable')}" />
 							<p:treeNode type="directory">
 								<h:outputText value="#{node.name}" />
@@ -34,7 +35,16 @@
 					</h:form>
 				</p:tab>
 				<p:tab title="Plots">
-					<pst:plot2D />
+					<h:form>
+						<p:selectOneMenu id="metricSelectionForHistogramPlot"
+							value="#{projectsEvaluationViewMBean.evaluatorId}">
+							<f:selectItem itemLabel="Select a Metric Evaluator" itemValue="" />
+							<f:selectItems
+								value="#{projectsEvaluationViewMBean.availableMetricsEvaluators}" />
+							<p:ajax update="histogramPlot" />
+						</p:selectOneMenu>
+						<pst:plot2D id="histogramPlot"/>
+					</h:form>
 				</p:tab>
 			</p:tabView>
 		</p:panel>
