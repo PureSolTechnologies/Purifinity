@@ -1,0 +1,12 @@
+header.pageHeader {
+	background-color: #303030;
+	color: white;
+	text-align: center;
+	text-shadow: gray 2px 2px 5px;
+	font-size: 10pt;
+	text-align: center;
+}
+
+header.pageHeader a {
+	color: white;
+}

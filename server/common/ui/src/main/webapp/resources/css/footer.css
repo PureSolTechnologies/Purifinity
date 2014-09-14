@@ -1,31 +1,13 @@
-footer {
-	position: absolute;
-	height: 5em;
-	width: 100%;
-	z-index: -20;
-	height: 10em;
-	margin: auto;
-}
-
-div.footer {
+footer.pageFooter {
 	background-color: #303030;
 	color: white;
 	text-align: center;
-	text-shadow: black 2px 2px 5px;
+	text-shadow: gray 2px 2px 5px;
 	font-size: 10pt;
 	text-align: center;
-	width: 100%;
-	margin: auto;
-	position: fixed;
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	height: 10em;
-	z-index: -15;
-	position: fixed;
 }
 
-div.footer a {
+footer.pageFooter a {
 	color: white;
 }
 

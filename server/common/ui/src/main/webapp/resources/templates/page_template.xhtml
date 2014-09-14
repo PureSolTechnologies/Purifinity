@@ -6,8 +6,7 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:page="http://xmlns.jcp.org/jsf/composite/page"
-	xmlns:pst="http://xmlns.jcp.org/jsf/composite/puresoltechnologies">
+	xmlns:page="http://xmlns.jcp.org/jsf/composite/page">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<title>Purifinity Web Client</title>
@@ -16,21 +15,7 @@
 	<h:outputStylesheet library="css" name="default.css" />
 	<h:outputStylesheet library="css" name="page.css" />
 	<div class="page">
-		<div class="pageTop">
-			<table class="pageTop" width="100%">
-				<tr class="pageTop">
-					<td class="pageTop" align="left" width="1%"><h:outputLink
-							styleClass="pageTop" value="/index.jsf">
-							<h:outputText styleClass="pageTop" value="Purifinity" />
-						</h:outputLink></td>
-					<td class="pageTop" align="left"><pst:ajaxStatus /></td>
-					<td class="pageTop" align="left"><ui:insert name="page_top" /></td>
-					<td class="pageTop" align="right"><page:accountBar /></td>
-				</tr>
-			</table>
-			<p:growl sticky="false" life="5000" showSummary="true"
-				showDetail="true" />
-		</div>
+		<page:header />
 		<div class="pageMenu">
 			<ui:insert name="page_menu" />
 		</div>

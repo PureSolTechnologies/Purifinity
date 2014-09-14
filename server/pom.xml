@@ -10,8 +10,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<purifinity.api.version>${project.version}</purifinity.api.version>
 		<!-- Databases -->
-		<cassandra.version>2.0.9</cassandra.version>
-		<cassandra.driver.version>2.0.2</cassandra.driver.version>
+		<cassandra.version>2.1.0</cassandra.version>
+		<cassandra.driver.version>2.1.1</cassandra.driver.version>
 		<titan.version>0.4.4</titan.version>
 		<!-- WildFly -->
 		<wildfly.version>8.1.0.Final</wildfly.version>
