@@ -31,7 +31,9 @@ public class BreadcrumbRenderer extends Renderer {
 
 			ResponseWriter responseWriter = context.getResponseWriter();
 
-			responseWriter.writeText(pathInfo, null);
+			if (pathInfo != null) {
+				responseWriter.writeText(pathInfo, null);
+			}
 
 			boolean first = true;
 			for (NavigationItem item : breadcrumbItems) {
