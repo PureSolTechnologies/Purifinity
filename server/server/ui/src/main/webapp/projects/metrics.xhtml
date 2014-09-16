@@ -5,6 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:pst="http://puresoltechnologies.com/jsf">
+	<ui:param name="navigationItem" value="Projects" />
 	<ui:define name="page_content">
 		<h1>Metrics of #{projectsViewMBean.projectName}</h1>
 		<p:panel header="Metrics of #{projectsViewMBean.projectName}">
@@ -45,7 +46,7 @@
 								value="#{projectsEvaluationViewMBean.availableMetricsEvaluators}" />
 							<p:ajax update="histogramPlot" />
 						</p:selectOneMenu>
-						<pst:plot2D id="histogramPlot"/>
+						<pst:plot2D id="histogramPlot" />
 					</h:form>
 				</p:tab>
 			</p:tabView>

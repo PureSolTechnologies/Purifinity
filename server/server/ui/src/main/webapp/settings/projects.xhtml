@@ -18,6 +18,7 @@
 					<p:wizard flowListener="#{newProjectWizardMBean.onFlowProcess}">
 						<p:tab id="generalInformation" title="Information">
 							<p:panel header="General Information">
+								<p:messages />
 								<p:panelGrid columns="2">
 									<p:outputLabel value="Project Name:" for="projectName" />
 									<p:inputText id="projectName" required="true"
@@ -31,6 +32,7 @@
 						</p:tab>
 						<p:tab id="projectLocation" title="Location">
 							<p:panel header="Project Location">
+								<p:messages />
 								<p:panelGrid columns="2">
 									<p:outputLabel value="Repository Type:" for="repositoryType" />
 									<p:selectOneMenu id="repositoryType" required="true"
@@ -55,6 +57,7 @@
 						</p:tab>
 						<p:tab id="confirmation" title="Confirmation">
 							<p:panel header="Settings Confirmation">
+								<p:messages />
 								<p:panelGrid columns="2">
 									<p:outputLabel value="Project Name: *" for="projectNameText" />
 									<h:outputText id="projectNameText"
@@ -76,21 +79,22 @@
 					</p:wizard>
 				</p:dialog>
 			</h:form>
-			<h:form>
-				<p:dataTable id="projectsTable" var="project"
-					value="#{projectsTableMBean.projects}">
-					<f:facet name="header">List of Projects</f:facet>
-					<p:column headerText="Name">
-						<h:outputText value="" />
+			<p:dataTable id="projectsTable" var="project"
+				value="#{projectsTableMBean.projects}">
+				<f:facet name="header">List of Projects</f:facet>
+				<p:column headerText="Name">
+					<h:outputText value="" />
+					<h:form>
 						<p:link value="#{project.settings.name}" outcome="/projects/index">
 							<f:param name="project" value="#{project.information.UUID}" />
 						</p:link>
-
-					</p:column>
-					<p:column headerText="Description">
-						<h:outputText value="#{project.settings.description}" />
-					</p:column>
-					<p:column headerText="Edit Settings">
+					</h:form>
+				</p:column>
+				<p:column headerText="Description">
+					<h:outputText value="#{project.settings.description}" />
+				</p:column>
+				<p:column headerText="Edit Settings">
+					<h:form>
 						<p:commandButton value="Edit..." />
 						<p:commandButton value="Delete..."
 							actionListener="#{newProjectWizardMBean.delete(project.information.UUID)}"
@@ -105,9 +109,9 @@
 							<p:commandButton value="No" type="button"
 								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 						</p:confirmDialog>
-					</p:column>
-				</p:dataTable>
-			</h:form>
+					</h:form>
+				</p:column>
+			</p:dataTable>
 		</p:panel>
 	</ui:define>
 </ui:composition>

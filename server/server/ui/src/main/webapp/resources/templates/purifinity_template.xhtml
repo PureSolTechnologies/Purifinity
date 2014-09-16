@@ -7,47 +7,15 @@
 	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:page="http://xmlns.jcp.org/jsf/composite/page">
 	<ui:define name="page_menu">
-		<h:form id="menuForm">
-			<p:menubar>
-				<p:menuitem value="Overview" outcome="/index" />
-				<p:menuitem value="Dashboards" outcome="/dashboards/index" />
-				<p:submenu label="Projects">
-					<c:forEach var="project" items="#{projectsMBean.projects}">
-						<p:menuitem value="#{project.settings.name}"
-							outcome="/projects/index?project=#{project.information.UUID}" />
-					</c:forEach>
-				</p:submenu>
-				<p:submenu label="System">
-					<p:menuitem value="Information" outcome="/system/information" />
-					<p:menuitem value="Installed Plugins"
-						outcome="/system/installed_plugins" />
-					<p:separator />
-					<p:menuitem value="Graph Database" outcome="/system/graph_database" />
-				</p:submenu>
-				<p:submenu label="Settings">
-					<p:menuitem value="Projects" outcome="/settings/projects" />
-					<p:menuitem value="Dashboards" outcome="/settings/dashboards" />
-					<p:separator />
-					<p:menuitem value="Defaults" outcome="/settings/defaults" />
-					<p:menuitem value="Users" outcome="/settings/users" />
-					<p:submenu label="Plugins">
-						<p:menuitem value="Analyzers" outcome="/settings/analyzers" />
-						<p:menuitem value="Evaluators" outcome="/settings/evaluators" />
-					</p:submenu>
-					<p:menuitem value="System" outcome="/settings/system" />
-					<p:menuitem value="Server" outcome="/settings/server" />
-				</p:submenu>
-				<p:menuitem value="Help" outcome="/help" />
-				<f:facet name="options">
-					<p:themeSwitcher id="themeSwitcher" style="width:165px"
-						effect="fade" value="#{themeSwitcherMBean.themeName}" var="t" rendered="false">
-						<f:selectItem itemLabel="Choose Theme" itemValue="" />
-						<f:selectItems value="#{themeSwitcherMBean.themes}" var="theme"
-							itemLabel="${theme.displayName}" itemValue="#{theme.name}" />
-						<p:ajax listener="#{themeSwitcherMBean.save}" />
-					</p:themeSwitcher>
-				</f:facet>
-			</p:menubar>
+		<h:outputStylesheet library="css" name="menu.css" />
+		<h:form>
+			<div id="menuBar">
+				<ui:repeat var="item"
+					value="#{navigationMBean.getChildItems(navigationMBean.location)}">
+					<p:commandLink value="#{item.name}"
+						action="#{navigationMBean.navigateTo(item.id)}" />
+				</ui:repeat>
+			</div>
 		</h:form>
 	</ui:define>
 </ui:composition>
