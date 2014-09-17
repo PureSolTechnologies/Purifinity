@@ -13,12 +13,7 @@
 		<h:outputStylesheet library="css" name="responsivegrid.css" />
 		<header class="pageHeader section group">
 			<div class="col span_1_of_3">
-				<ui:repeat var="item"
-					value="#{navigationMBean.getBreadcrumbItems(navigationMBean.location)}">
-					<h:outputText rendered="#{item.parent != null}" value=" > " />
-					<p:commandLink value="#{item.name}"
-						action="#{navigationMBean.navigateTo(item.id)}" />
-				</ui:repeat>
+				<ui:insert name="breadcrumb" />
 			</div>
 			<div class="col span_1_of_3">
 				<ui:insert name="page_top" />

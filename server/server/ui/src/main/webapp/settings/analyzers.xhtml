@@ -4,6 +4,15 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<ui:define name="breadcrumb">
+		<p:link value="Purifinity" outcome="/index" />
+		<h:outputText value=" > " />
+		<p:link value="Settings" outcome="index" />
+		<h:outputText value=" > " />
+		<p:link value="Plugins" outcome="plugins" />
+		<h:outputText value=" > " />
+		<h:outputText value="Analzyers" />
+	</ui:define>
 	<ui:define name="page_content">
 		<p:panel>
 			<h1>Analyzer Settings</h1>

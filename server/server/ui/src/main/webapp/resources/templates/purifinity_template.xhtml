@@ -6,16 +6,4 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:c="http://java.sun.com/jstl/core"
 	xmlns:page="http://xmlns.jcp.org/jsf/composite/page">
-	<ui:define name="page_menu">
-		<h:outputStylesheet library="css" name="menu.css" />
-		<h:form>
-			<div id="menuBar">
-				<ui:repeat var="item"
-					value="#{navigationMBean.getChildItems(navigationMBean.location)}">
-					<p:commandLink value="#{item.name}"
-						action="#{navigationMBean.navigateTo(item.id)}" />
-				</ui:repeat>
-			</div>
-		</h:form>
-	</ui:define>
 </ui:composition>

@@ -4,6 +4,13 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	<ui:define name="breadcrumb">
+		<p:link value="Purifinity" outcome="/index" />
+		<h:outputText value=" > " />
+		<p:link value="System" outcome="index" />
+		<h:outputText value=" > " />
+		<h:outputText value="Graph Database" />
+	</ui:define>
 	<ui:define name="page_content">
 		<p:panel>
 			<h1>Graph Database View</h1>
