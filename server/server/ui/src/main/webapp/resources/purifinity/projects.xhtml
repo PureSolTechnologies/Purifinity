@@ -11,7 +11,7 @@
 			<p:dataTable var="project" value="#{projectsMBean.projects}">
 				<f:facet name="header">Projects</f:facet>
 				<p:column headerText="Name">
-					<p:link value="#{project.settings.name}" outcome="/projects/index">
+					<p:link value="#{project.settings.name}" outcome="/projects/summary">
 						<f:param name="project" value="#{project.information.UUID}" />
 					</p:link>
 				</p:column>

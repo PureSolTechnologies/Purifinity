@@ -9,8 +9,6 @@
 		<h:outputStylesheet library="css" name="accountBar.css" />
 		<div class="accountBar">
 			<h:form>
-				<h:outputText styleClass="accountBar" value="Welcome! Please login."
-					rendered="#{!loginMBean.isLoggedIn()}" />
 				<p:button styleClass="accountBar" outcome="/login_by_user"
 					value="login" rendered="#{!loginMBean.isLoggedIn()}" />
 				<p:button styleClass="accountBar" outcome="/create_account"
