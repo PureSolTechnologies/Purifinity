@@ -22,14 +22,14 @@ public class HalsteadMetricEvaluatorStoreSessionProducer {
 	@Produces
 	@Singleton
 	@HalsteadEvaluatorKeyspace
-	public Session getAnalysisSession() {
+	public Session getHalsteadEvaluatorSession() {
 		logger.info("Creating Cassandra Halstead Evaluator Session...");
 		Session session = cluster.connect(HalsteadEvaluatorKeyspace.NAME);
 		logger.info("Cassandra Halstead Evaluator Session created.");
 		return session;
 	}
 
-	public void closeEvaluationKeyspaceSession(
+	public void closeHalsteadEvaluatorSession(
 			@Disposes @HalsteadEvaluatorKeyspace Session session) {
 		session.close();
 	}

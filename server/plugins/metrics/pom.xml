@@ -13,6 +13,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>ddl</module>
 		<module>ejb</module>
 		<module>ui</module>
 		<module>plugin</module>
