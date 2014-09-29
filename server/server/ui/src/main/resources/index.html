@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html data-ng-app="purifinityApp">
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="description" content="Client for Purifinity server.">
+<meta name="author" content="PureSol Technologies">
+<link rel="icon" href="favicon.ico">
+
+<title>Purifinity Web Client</title>
+
+<!-- CSS includes -->
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.css" />
+<link rel="stylesheet" href="css/navbar-fixed-top.css" />
+
+<!-- AngularJS integration -->
+<script type="text/javascript" src="angular/angular.js"></script>
+<script type="text/javascript" src="angular/angular-route.js"></script>
+
+<!-- Custom JS scripts -->
+<script type="text/javascript" src="config/server.js"></script>
+<script type="text/javascript">
+	var purifinityApp = angular.module("purifinityApp", ["ngRoute"]);
+
+	purifinityApp.constant("baseURL", "http://" + server.host + ":" + server.port)
+	purifinityApp.config(function($routeProvider){
+		$routeProvider.when("/dashboards", {templateUrl: "/views/dashboards.html"});
+		$routeProvider.when("/projects", {templateUrl: "/views/projects.html"});
+		$routeProvider.when("/information", {templateUrl: "/views/information.html"});
+		$routeProvider.when("/help", {templateUrl: "/views/help.html"});
+		$routeProvider.otherwise({templateUrl: "/views/overview.html"});
+	});
+	purifinityApp.controller("menuCtrl", function($scope, $route, $routeParams, $location) {
+		$scope.$route = $route;
+		$scope.$location = $location;
+		$scope.$routeParams = $routeParams;
+		$scope.isActive = function (locationPath) {
+			if ($location.path() === locationPath) {
+				return "active";
+			}
+			return "";
+		}
+	});
+	purifinityApp
+			.controller(
+					"projectOverviewCtrl",
+					function($scope, $http, baseURL) {
+						$http(
+								{
+									method : 'GET',
+									url : baseURL
+											+ '/purifinityserver/rest/analysisstore/projects'
+								})
+								.success(
+										function(data, status, headers, config) {
+											$scope.projects = data;
+											localStorage
+													.setItem(
+															"/purifinityserver/rest/analysisstore/projects",
+															JSON
+																	.stringify(data));
+										})
+								.error(
+										function(data, status, error, headers,
+												config) {
+											var data = localStorage
+													.getItem("/purifinityserver/rest/analysisstore/projects");
+											if (data) {
+												$scope.warning = "Data was taken from local cache.";
+												$scope.projects = JSON
+														.parse(data);
+											} else {
+												$scope.error = error;
+											}
+										});
+					});
+</script>
+</head>
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Purifinity</a>
+			</div>
+			<div class="collapse navbar-collapse">
+				<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
+					<li class="{{isActive('')}}"><a href="#">Overview</a></li>
+					<li class="{{isActive('/dashboards')}}"><a href="#/dashboards">Dashboards</a></li>
+					<li class="{{isActive('/projects')}}"><a href="#/projects">Projects</a></li>
+					<li class="{{isActive('/information')}}"><a href="#/information">Information</a></li>
+					<li class="{{isActive('/help')}}"><a href="#/help">Help</a></li>
+				</ul>
+				<div class="navbar-form navbar-right">
+					<a href="admin.html" class="btn btn-default">Administration</a>
+				</div>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+
+	<span data-ng-view></span>
+
+	<span data-ng-include="'footer.html'"></span>
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="jquery/jquery-2.1.1.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -11,3 +11,4 @@ workspace
 *.lock
 *~
 dependency-reduced-pom.xml
+Thumbs.db
