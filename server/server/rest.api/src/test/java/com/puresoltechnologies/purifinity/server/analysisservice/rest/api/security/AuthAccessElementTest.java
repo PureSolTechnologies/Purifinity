@@ -12,18 +12,18 @@ import com.puresoltechnologies.commons.misc.JSONSerializer;
 
 public class AuthAccessElementTest {
 
-    @Test
-    public void test() throws JsonGenerationException, JsonMappingException,
-	    IOException {
-	AuthAccessElement authLoginElement = new AuthAccessElement("id",
-		"token", "permission");
+	@Test
+	public void test() throws JsonGenerationException, JsonMappingException,
+			IOException {
+		AuthElement authLoginElement = new AuthElement("id", "token",
+				"permission", "message");
 
-	String json = JSONSerializer.toJSONString(authLoginElement);
-	System.out.println(json);
-	assertNotNull(json);
-	AuthAccessElement unmarshalled = JSONSerializer.fromJSONString(json,
-		AuthAccessElement.class);
-	assertNotNull(unmarshalled);
-    }
+		String json = JSONSerializer.toJSONString(authLoginElement);
+		System.out.println(json);
+		assertNotNull(json);
+		AuthElement unmarshalled = JSONSerializer.fromJSONString(json,
+				AuthElement.class);
+		assertNotNull(unmarshalled);
+	}
 
 }
