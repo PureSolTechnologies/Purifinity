@@ -28,12 +28,35 @@
 
 	purifinityApp.constant("baseURL", "http://" + server.host + ":" + server.port)
 	purifinityApp.config(function($routeProvider){
+		$routeProvider.when("/login", {templateUrl:"signin.html"});
 		$routeProvider.when("/dashboards", {templateUrl: "/views/dashboards.html"});
 		$routeProvider.when("/projects", {templateUrl: "/views/projects.html"});
 		$routeProvider.when("/information", {templateUrl: "/views/information.html"});
 		$routeProvider.when("/help", {templateUrl: "/views/help.html"});
 		$routeProvider.otherwise({templateUrl: "/views/overview.html"});
 	});
+	purifinityApp.factory('authFactory', ['$rootScope', '$http', 
+		function ($rootScope, $http, baseURL) {
+			var authFactory = {
+				authData: undefined
+			};
+			authFactory.login = function (user) {
+				return $http.post(baseURL + '/purifinityserver/rest/auth/login', user);
+			};
+			return authFactory;
+		}
+	]);
+	purifinityApp.controller('loginCtrl', ['$scope', 'authFactory', 
+		function LoginCtrl($scope, authFactory) {
+			$scope.login = function (user) {
+			authFactory.login(user).success(function (data) {
+				authFactory.setAuthData(data);
+				// Redirect etc.
+			}).error(function () {
+				// Error handling
+			});
+	    };
+	}])
 	purifinityApp.controller("menuCtrl", function($scope, $route, $routeParams, $location) {
 		$scope.$route = $route;
 		$scope.$location = $location;
@@ -48,7 +71,7 @@
 	purifinityApp
 			.controller(
 					"projectOverviewCtrl",
-					function($scope, $http, baseURL) {
+					function($scope, $http, $location, baseURL) {
 						$http(
 								{
 									method : 'GET',
@@ -56,7 +79,7 @@
 											+ '/purifinityserver/rest/analysisstore/projects'
 								})
 								.success(
-										function(data, status, headers, config) {
+										function(data) {
 											$scope.projects = data;
 											localStorage
 													.setItem(
@@ -65,8 +88,11 @@
 																	.stringify(data));
 										})
 								.error(
-										function(data, status, error, headers,
-												config) {
+										function(data, status, error) {
+											if (status == 401) {
+												$location.path("login");
+												return;
+											}
 											var data = localStorage
 													.getItem("/purifinityserver/rest/analysisstore/projects");
 											if (data) {
@@ -97,7 +123,8 @@
 					<li class="{{isActive('')}}"><a href="#">Overview</a></li>
 					<li class="{{isActive('/dashboards')}}"><a href="#/dashboards">Dashboards</a></li>
 					<li class="{{isActive('/projects')}}"><a href="#/projects">Projects</a></li>
-					<li class="{{isActive('/information')}}"><a href="#/information">Information</a></li>
+					<li class="{{isActive('/information')}}"><a
+						href="#/information">Information</a></li>
 					<li class="{{isActive('/help')}}"><a href="#/help">Help</a></li>
 				</ul>
 				<div class="navbar-form navbar-right">
