@@ -23,32 +23,32 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class CORSFilter implements ContainerResponseFilter {
 
-	@Override
-	public void filter(ContainerRequestContext requestContext,
-			ContainerResponseContext responseContext) throws IOException {
-		MultivaluedMap<String, Object> headers = responseContext.getHeaders();
-		// Allow from all origins...
-		if (!headers.containsKey("Access-Control-Allow-Origin")) {
-			headers.add("Access-Control-Allow-Origin", "*");
-		}
-		// Allow changing the following headers...
-		if (!headers.containsKey("Access-Control-Allow-Headers")) {
-			headers.add("Access-Control-Allow-Headers",
-					"origin, content-type, accept, authorization");
-		}
-		// Allow credentials...
-		if (!headers.containsKey("Access-Control-Allow-Credentials")) {
-			headers.add("Access-Control-Allow-Credentials", "true");
-		}
-		// Allow methods...
-		if (!headers.containsKey("Access-Control-Allow-Methods")) {
-			headers.add("Access-Control-Allow-Methods",
-					"GET, POST, PUT, DELETE, OPTIONS, HEAD");
-		}
-		// Max 14 days...
-		if (!headers.containsKey("Access-Control-Max-Age")) {
-			headers.add("Access-Control-Max-Age", "1209600");
-		}
+    @Override
+    public void filter(ContainerRequestContext requestContext,
+	    ContainerResponseContext responseContext) throws IOException {
+	MultivaluedMap<String, Object> headers = responseContext.getHeaders();
+	// Allow from all origins...
+	if (!headers.containsKey("Access-Control-Allow-Origin")) {
+	    headers.add("Access-Control-Allow-Origin", "*");
 	}
+	// Allow changing the following headers...
+	if (!headers.containsKey("Access-Control-Allow-Headers")) {
+	    headers.add("Access-Control-Allow-Headers",
+		    "Content-Type, auth-id, auth-token");
+	}
+	// Allow credentials...
+	if (!headers.containsKey("Access-Control-Allow-Credentials")) {
+	    headers.add("Access-Control-Allow-Credentials", "true");
+	}
+	// Allow methods...
+	if (!headers.containsKey("Access-Control-Allow-Methods")) {
+	    headers.add("Access-Control-Allow-Methods",
+		    "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+	}
+	// Max 14 days...
+	if (!headers.containsKey("Access-Control-Max-Age")) {
+	    headers.add("Access-Control-Max-Age", "1209600");
+	}
+    }
 
 }

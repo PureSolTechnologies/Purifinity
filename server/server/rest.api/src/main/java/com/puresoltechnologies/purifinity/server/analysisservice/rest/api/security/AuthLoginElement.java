@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.analysisservice.rest.api.secur
 
 import java.io.Serializable;
 
+import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 public class AuthLoginElement implements Serializable {
@@ -11,6 +12,12 @@ public class AuthLoginElement implements Serializable {
     private final String username;
     private final String password;
 
+    public AuthLoginElement() {
+	username = null;
+	password = null;
+    }
+
+    @JsonCreator
     public AuthLoginElement(
 	    //
 	    @JsonProperty("username") String username,

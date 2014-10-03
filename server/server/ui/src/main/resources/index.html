@@ -36,28 +36,39 @@
 		$routeProvider.when("/help", {templateUrl: "/views/help.html"});
 		$routeProvider.otherwise({templateUrl: "/views/overview.html"});
 	});
-	purifinityApp.factory('authFactory', ['$rootScope', '$http', 
-		function ($rootScope, $http, baseURL) {
+	purifinityApp.factory('authFactory', ['$http', 'baseURL', 
+		function ($http, baseURL) {
 			var authFactory = {
 				authData: undefined
 			};
-			authFactory.login = function (user) {
-				return $http.post(baseURL + '/purifinityserver/rest/auth/login', user);
+			authFactory.login = function (username, password) {
+				return $http({method: "post",
+					url: baseURL + "/purifinityserver/rest/auth/login", 
+					data: {
+						username: username,
+						password: password
+					}
+				});
 			};
 			return authFactory;
 		}
 	]);
-	purifinityApp.controller('loginCtrl', ['$scope', 'authFactory', 
-		function LoginCtrl($scope, authFactory) {
-			$scope.login = function (user) {
-			authFactory.login(user).success(function (data) {
-				authFactory.setAuthData(data);
-				// Redirect etc.
-			}).error(function () {
+	purifinityApp.controller('loginCtrl',  
+		function loginCtrl($scope, $location, authFactory) {
+			$scope.message = authFactory.message;
+			$scope.username = undefined;
+			$scope.password = undefined;
+			$scope.login = function () {
+			authFactory.login($scope.username, $scope.password)
+			.success(function (data) {
+				authFactory.authData = data;
+				$location.path(authFactory.redirect);
+			})
+			.error(function () {
 				// Error handling
 			});
 	    };
-	}])
+	});
 	purifinityApp.controller("menuCtrl", function($scope, $route, $routeParams, $location) {
 		$scope.$route = $route;
 		$scope.$location = $location;
@@ -72,14 +83,24 @@
 	purifinityApp
 			.controller(
 					"projectOverviewCtrl",
-					function($scope, $http, $location, baseURL) {
+					function($scope, $http, $location, baseURL, authFactory) {
+						var authId = '';
+						var authToken = '';
+						if (authFactory.authData) {
+							authId = authFactory.authData.authId; 
+							authToken = authFactory.authData.authToken; 
+						}
 						$http(
 								{
 									method : 'GET',
 									url : baseURL
-											+ '/purifinityserver/rest/analysisstore/projects'
-								})
-								.success(
+											+ '/purifinityserver/rest/analysisstore/projects',
+									headers: {
+										'auth-id': authId,
+										'auth-token': authToken
+									}
+								}
+						).success(
 										function(data) {
 											$scope.projects = data;
 											localStorage
@@ -87,10 +108,12 @@
 															"/purifinityserver/rest/analysisstore/projects",
 															JSON
 																	.stringify(data));
-										})
-								.error(
+										}
+						).error(
 										function(data, status, error) {
 											if (status == 401) {
+												authFactory.message = data;
+												authFactory.redirect = "#";
 												$location.path("login");
 												return;
 											}
@@ -129,7 +152,11 @@
 					<li class="{{isActive('/help')}}"><a href="#/help">Help</a></li>
 				</ul>
 				<div class="navbar-form navbar-right">
-					<a href="admin.html" class="btn btn-default">Administration</a>
+					<a href="#/account"><span class="glyphicon glyphicon-user"></span></a> 
+					<a href="admin.html"><span
+						class="glyphicon glyphicon-wrench"></span></a>
+					<a href="admin.html"><span
+						class="glyphicon glyphicon-off"></span></a>
 				</div>
 			</div>
 			<!--/.nav-collapse -->
