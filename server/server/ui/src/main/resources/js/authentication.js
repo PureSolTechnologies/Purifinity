@@ -9,10 +9,9 @@
  * AngularJS application.
  */
 function addAuthFunctionality(angularApplication) {
-	angularApplication.factory('authFactory',
-			[ '$http', '$location', 'baseURL', authFactory ]);
-	angularApplication.controller('loginCtrl', loginCtrl);
-	angularApplication.controller('logoutCtrl', logoutCtrl);
+	angularApplication.factory('authFactory', [ '$http', '$location',
+			'baseURL', authFactory ]);
+	angularApplication.controller('authCtrl', authCtrl);
 }
 
 function authFactory($http, $location, baseURL) {
@@ -46,6 +45,8 @@ function authFactory($http, $location, baseURL) {
 					}
 					if (authFactory.redirect) {
 						$location.path(authFactory.redirect);
+					} else {
+						$location.path("#");
 					}
 				})//
 		.error(function(data, status) {
@@ -55,30 +56,46 @@ function authFactory($http, $location, baseURL) {
 		return authenticated;
 	};
 	authFactory.logout = function() {
-		return $http({
+		$http({
 			method : "post",
 			url : baseURL + "/purifinityserver/rest/auth/logout",
 			data : {
 				username : authFactory.authData.authId,
 				token : authFactory.authData.authToken
 			}
+		})//
+		.success(function(data, status) {
+			authFactory.authData = data;
+			localStorage.removeItem("purifinity-authentication");
+		})//
+		.error(function(data, status) {
+			authFactory.authData = undefined;
+			// Error handling
 		});
 	};
+	authFactory.isLoggedIn = function() {
+		if (authFactory.authData) {
+			return authFactory.authData.authToken;
+		} else {
+			return false;
+		}
+	}
 	return authFactory;
 }
 
-function loginCtrl($scope, authFactory) {
+function authCtrl($scope, authFactory) {
 	$scope.message = authFactory.message;
 	$scope.username = undefined;
 	$scope.password = undefined;
 	$scope.remember = undefined;
 	$scope.login = function() {
 		authFactory.login($scope.username, $scope.password, $scope.remember);
+		$scope.password = undefined;
 	};
-}
-
-function logoutCtrl($scope, $location, authFactory) {
 	$scope.logout = function() {
 		authFactory.logout();
-	}
+	};
+	$scope.isLoggedIn = function() {
+		return authFactory.isLoggedIn();
+	};
 }

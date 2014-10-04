@@ -23,9 +23,31 @@ import javax.ws.rs.ext.Provider;
 
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthElement;
 
+/**
+ * This class is an intercepter for REST services which checks for
+ * authentication and authorization.
+ * 
+ * The security for Web UI and AngularJS was described in several posts. The
+ * links to these posts are below.
+ * 
+ * @see Web 
+ *      http://bitsuppliers.com/securing-rest-resources-with-java-ee-7-and-jax
+ *      -rs -2-0 /
+ * @see Web 
+ *      http://www.developerscrappad.com/1814/java/java-ee/rest-jax-rs/java-ee
+ *      -7- jax
+ *      -rs-2-0-simple-rest-api-authentication-authorization-with-custom-http-
+ *      header /#sthash.ZvuVwQ2p.eaof
+ * @see Web 
+ *      http://www.aschua.de/blog/pairing-angularjs-and-javaee-for-authentication
+ *      /
+ * 
+ * @author Rick-Rainer Ludwig
+ *
+ */
 @Provider
 @Priority(Priorities.AUTHENTICATION)
-public class AuthSecurityInterceptor implements ContainerRequestFilter {
+public class AuthSecurityIntercepter implements ContainerRequestFilter {
 
     // 401 - Access denied
     private static final Response ACCESS_UNAUTHORIZED = Response
