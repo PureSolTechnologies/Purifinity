@@ -1,13 +1,11 @@
 package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl.security;
 
-import java.util.UUID;
-
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
-import javax.ws.rs.HeaderParam;
 
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthElement;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthLoginElement;
+import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthLogoutElement;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthenticationRestInterface;
 
 public class AuthenticationRestService implements AuthenticationRestInterface {
@@ -30,16 +28,14 @@ public class AuthenticationRestService implements AuthenticationRestInterface {
     }
 
     @Override
-    public AuthElement logout(
-	    //
-	    @HeaderParam("auth-id") String authId,
-	    @HeaderParam("auth-token") String authToken) {
+    public AuthElement logout(AuthLogoutElement logout) {
+	String username = logout.getUsername();
 	try {
-	    authService.logout(authId, UUID.fromString(authToken));
-	    return new AuthElement(authId, "", "", "User '" + authId
+	    authService.logout(username, logout.getToken());
+	    return new AuthElement(username, "", "", "User '" + username
 		    + "' was successfully logged out.");
 	} catch (LoginException e) {
-	    return new AuthElement(authId, "", "", "User '" + authId
+	    return new AuthElement(username, "", "", "User '" + username
 		    + "' could not be logged out. (Message: " + e.getMessage()
 		    + ")");
 	}

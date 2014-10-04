@@ -24,10 +24,11 @@
 
 <!-- Custom JS scripts -->
 <script type="text/javascript" src="config/server.js"></script>
+<script type="text/javascript" src="js/angularjs-ext.js"></script>
+<script type="text/javascript" src="js/purifinity-server.js"></script>
+<script type="text/javascript" src="js/authentication.js"></script>
 <script type="text/javascript">
 	var purifinityApp = angular.module("purifinityApp", ["ngRoute"]);
-
-	purifinityApp.constant("baseURL", "http://" + server.host + ":" + server.port)
 	purifinityApp.config(function($routeProvider){
 		$routeProvider.when("/login", {templateUrl:"signin.html"});
 		$routeProvider.when("/dashboards", {templateUrl: "/views/dashboards.html"});
@@ -36,50 +37,11 @@
 		$routeProvider.when("/help", {templateUrl: "/views/help.html"});
 		$routeProvider.otherwise({templateUrl: "/views/overview.html"});
 	});
-	purifinityApp.factory('authFactory', ['$http', 'baseURL', 
-		function ($http, baseURL) {
-			var authFactory = {
-				authData: undefined
-			};
-			authFactory.login = function (username, password) {
-				return $http({method: "post",
-					url: baseURL + "/purifinityserver/rest/auth/login", 
-					data: {
-						username: username,
-						password: password
-					}
-				});
-			};
-			return authFactory;
-		}
-	]);
-	purifinityApp.controller('loginCtrl',  
-		function loginCtrl($scope, $location, authFactory) {
-			$scope.message = authFactory.message;
-			$scope.username = undefined;
-			$scope.password = undefined;
-			$scope.login = function () {
-			authFactory.login($scope.username, $scope.password)
-			.success(function (data) {
-				authFactory.authData = data;
-				$location.path(authFactory.redirect);
-			})
-			.error(function () {
-				// Error handling
-			});
-	    };
-	});
-	purifinityApp.controller("menuCtrl", function($scope, $route, $routeParams, $location) {
-		$scope.$route = $route;
-		$scope.$location = $location;
-		$scope.$routeParams = $routeParams;
-		$scope.isActive = function (locationPath) {
-			if ($location.path() === locationPath) {
-				return "active";
-			}
-			return "";
-		}
-	});
+
+	addPurifinityServerFunctionality(purifinityApp);
+	addAuthFunctionality(purifinityApp);
+	addAngularJSExt(purifinityApp);
+	
 	purifinityApp
 			.controller(
 					"projectOverviewCtrl",
@@ -155,6 +117,8 @@
 					<a href="#/account"><span class="glyphicon glyphicon-user"></span></a> 
 					<a href="admin.html"><span
 						class="glyphicon glyphicon-wrench"></span></a>
+					<a href="#/login"><span
+						class="glyphicon glyphicon-pencil"></span></a>
 					<a href="admin.html"><span
 						class="glyphicon glyphicon-off"></span></a>
 				</div>

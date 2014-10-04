@@ -1,5 +1,25 @@
 <div class="container">
 	<div class="panel">
 		<h1>Projects</h1>
+		<p>Current projects:</p>
+		<div class="panel-body" data-ng-controller="projectOverviewCtrl">
+			<div class="alert alert-warning" data-ng-show="warning">{{warning}}</div>
+			<div class="alert alert-danger" data-ng-show="error">Error
+				({{error.status}}): List could not be loaded.</div>
+			<table class="table table-striped" data-ng-show="projects">
+				<thead>
+					<tr>
+						<th>UUID</th>
+						<th>Created</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="project in projects">
+						<td>{{project.uuid}}</td>
+						<td>{{project.creationTime}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
