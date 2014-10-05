@@ -2,17 +2,14 @@
  * This JavaScript files contains Angular JS functionality to be added to an
  * application to handle Authentication and Authorization against Purifinity
  * servers.
- */
-
-/**
+ *
  * This function adds Authentication and Authorization functionality to an
  * AngularJS application.
  */
-function addAuthFunctionality(angularApplication) {
-	angularApplication.factory('authFactory', [ '$http', '$location',
-			'baseURL', authFactory ]);
-	angularApplication.controller('authCtrl', authCtrl);
-}
+var authModule = angular.module("authService", [ "purifinityServer" ]);
+authModule.factory('authFactory', [ '$http', '$location', 'baseURL',
+		authFactory ]);
+authModule.controller('authCtrl', authCtrl);
 
 function authFactory($http, $location, baseURL) {
 	var authFactory = {

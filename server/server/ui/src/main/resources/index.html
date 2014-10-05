@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html data-ng-app="purifinityApp">
 <head>
+<base href="/index.html" />
 
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -30,70 +31,19 @@
 <script type="text/javascript" src="js/purifinity-server.js"></script>
 <script type="text/javascript" src="js/authentication.js"></script>
 <script type="text/javascript">
-	var purifinityApp = angular.module("purifinityApp", ["ngRoute"]);
-	purifinityApp.config(function($routeProvider){
+	var purifinityApp = angular.module("purifinityApp", ["ngRoute", "purifinityUI", "purifinityServer", "authService"]);
+	purifinityApp.config(function($routeProvider, $locationProvider){
+		$locationProvider.html5Mode(false);
 		$routeProvider.when("/login", {templateUrl:"/views/login.html"});
 		$routeProvider.when("/account", {templateUrl:"/views/account.html"});
 		$routeProvider.when("/dashboards", {templateUrl: "/views/dashboards.html"});
 		$routeProvider.when("/projects", {templateUrl: "/views/projects.html"});
 		$routeProvider.when("/projects/:project", {templateUrl: "/views/project/summary.html"});
+		$routeProvider.when("/projects/:project/:run", {templateUrl: "/views/project/summary.html"});
 		$routeProvider.when("/information", {templateUrl: "/views/information.html"});
 		$routeProvider.when("/help", {templateUrl: "/views/help.html"});
 		$routeProvider.otherwise({templateUrl: "/views/overview.html"});
-	});
-
-	addPurifinityServerFunctionality(purifinityApp);
-	addAuthFunctionality(purifinityApp);
-	addAngularJSExt(purifinityApp);
-	
-	purifinityApp
-			.controller(
-					"projectOverviewCtrl",
-					function($scope, $http, $location, baseURL, authFactory) {
-						var authId = '';
-						var authToken = '';
-						if (authFactory.authData) {
-							authId = authFactory.authData.authId; 
-							authToken = authFactory.authData.authToken; 
-						}
-						$http(
-								{
-									method : 'GET',
-									url : baseURL
-											+ '/purifinityserver/rest/analysisstore/projects',
-									headers: {
-										'auth-id': authId,
-										'auth-token': authToken
-									}
-								}
-						).success(
-										function(data) {
-											$scope.projects = data;
-											localStorage
-													.setItem(
-															"/purifinityserver/rest/analysisstore/projects",
-															JSON
-																	.stringify(data));
-										}
-						).error(
-										function(data, status, error) {
-											if (status == 401) {
-												authFactory.message = data;
-												authFactory.redirect = "/overview";
-												$location.path("/login");
-												return;
-											}
-											var data = localStorage
-													.getItem("/purifinityserver/rest/analysisstore/projects");
-											if (data) {
-												$scope.warning = "Data was taken from local cache.";
-												$scope.projects = JSON
-														.parse(data);
-											} else {
-												$scope.error = error;
-											}
-										});
-					});
+	});	
 </script>
 </head>
 <body>
@@ -106,7 +56,7 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Purifinity</a>
+				<a class="navbar-brand" href="/">Purifinity</a>
 			</div>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
@@ -119,11 +69,11 @@
 				</ul>
 				<div class="navbar-right" data-ng-controller="authCtrl">
 					<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
-						<li><a href="admin.html"><span
+						<li><a href="/admin.html"><span
 								class="glyphicon glyphicon-wrench"></span>&nbsp;Settings</a></li>
 						<li data-ng-show="isLoggedIn()" class="{{isActive('/account')}}"><a
 							href="#/account"><span class="glyphicon glyphicon-user"></span>&nbsp;Account</a></li>
-						<li data-ng-hide="isLoggedIn()"><a href="#/login"><span
+						<li data-ng-hide="isLoggedIn()"><a href="/login"><span
 								class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a></li>
 						<li data-ng-show="isLoggedIn()"><a href=""><span
 								class="glyphicon glyphicon-off" data-ng-show="isLoggedIn()"
