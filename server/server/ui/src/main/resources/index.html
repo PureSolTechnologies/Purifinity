@@ -13,8 +13,10 @@
 <title>Purifinity Web Client</title>
 
 <!-- CSS includes -->
-<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
-<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.css" />
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css" />
+<link rel="stylesheet"
+	href="bootstrap-select/css/bootstrap-select.min.css" />
 <link rel="stylesheet" href="css/navbar-fixed-top.css" />
 <link rel="stylesheet" href="css/login.css" />
 
@@ -30,9 +32,11 @@
 <script type="text/javascript">
 	var purifinityApp = angular.module("purifinityApp", ["ngRoute"]);
 	purifinityApp.config(function($routeProvider){
-		$routeProvider.when("/login", {templateUrl:"login.html"});
+		$routeProvider.when("/login", {templateUrl:"/views/login.html"});
+		$routeProvider.when("/account", {templateUrl:"/views/account.html"});
 		$routeProvider.when("/dashboards", {templateUrl: "/views/dashboards.html"});
 		$routeProvider.when("/projects", {templateUrl: "/views/projects.html"});
+		$routeProvider.when("/projects/:project", {templateUrl: "/views/project/summary.html"});
 		$routeProvider.when("/information", {templateUrl: "/views/information.html"});
 		$routeProvider.when("/help", {templateUrl: "/views/help.html"});
 		$routeProvider.otherwise({templateUrl: "/views/overview.html"});
@@ -115,10 +119,10 @@
 				</ul>
 				<div class="navbar-right" data-ng-controller="authCtrl">
 					<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
-						<li data-ng-show="isLoggedIn()"><a href="#/account"><span
-								class="glyphicon glyphicon-user"></span>&nbsp;Account</a></li>
 						<li><a href="admin.html"><span
 								class="glyphicon glyphicon-wrench"></span>&nbsp;Settings</a></li>
+						<li data-ng-show="isLoggedIn()" class="{{isActive('/account')}}"><a
+							href="#/account"><span class="glyphicon glyphicon-user"></span>&nbsp;Account</a></li>
 						<li data-ng-hide="isLoggedIn()"><a href="#/login"><span
 								class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a></li>
 						<li data-ng-show="isLoggedIn()"><a href=""><span
@@ -133,7 +137,7 @@
 
 	<span data-ng-view></span>
 
-	<span data-ng-include="'footer.html'"></span>
+	<span data-ng-include="'components/footer.html'"></span>
 
 	<!-- Bootstrap core JavaScript
     ================================================== -->
@@ -142,5 +146,6 @@
 	<script src="jquery/jquery-2.1.1.min.js"></script>
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script src="bootstrap-select/js/bootstrap-select.min.js"></script>
 </body>
 </html>

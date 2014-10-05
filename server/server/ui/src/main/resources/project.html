@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-ng-app="purifinityAdminApp">
+<html data-ng-app="purifinityProjectApp">
 <head>
 
 <meta charset="utf-8" />
@@ -10,7 +10,7 @@
 <meta name="author" content="PureSol Technologies">
 <link rel="icon" href="favicon.ico">
 
-<title>Purifinity Administration Client</title>
+<title>Purifinity Project Client</title>
 
 <!-- CSS includes -->
 <link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
@@ -28,19 +28,29 @@
 <script type="text/javascript" src="js/purifinity-server.js"></script>
 <script type="text/javascript" src="js/authentication.js"></script>
 <script type="text/javascript">
-	var adminApp = angular.module("purifinityAdminApp", ["ngRoute"]);
-	adminApp.config(function ($routeProvider) {
-		$routeProvider.when("/login", {templateUrl:"/views/login.html"});
-		$routeProvider.when("/dashboards", {templateUrl:"views/admin/dashboards.html"});
-		$routeProvider.when("/projects", {templateUrl:"views/admin/projects.html"});
-		$routeProvider.when("/settings", {templateUrl:"views/admin/settings.html"});
-		$routeProvider.when("/users", {templateUrl:"views/admin/users.html"});
-		$routeProvider.otherwise({redirectTo:"/dashboards"});
+	var projectApp = angular.module("purifinityProjectApp", ["ngRoute"],function($locationProvider) {
+      $locationProvider.html5Mode(true);
+    });
+	projectApp.config(function ($routeProvider) {
+		$routeProvider.when("/login", {templateUrl:"login.html"});
+		$routeProvider.when("/summary", {templateUrl:"views/project/summary.html"});
+		$routeProvider.when("/trends", {templateUrl:"views/project/trends.html"});
+		$routeProvider.when("/analysis", {templateUrl:"views/project/analysis.html"});
+		$routeProvider.when("/metrics", {templateUrl:"views/project/metrics.html"});
+		$routeProvider.when("/defects", {templateUrl:"views/project/defects.html"});
+		$routeProvider.when("/style_issues", {templateUrl:"views/project/style_issues.html"});
+		$routeProvider.otherwise({redirectTo:"/summary"});
 	});
 
-	addPurifinityServerFunctionality(adminApp);
-	addAuthFunctionality(adminApp);
-	addAngularJSExt(adminApp);	
+	addPurifinityServerFunctionality(projectApp);
+	addAuthFunctionality(projectApp);
+	addAngularJSExt(projectApp);
+
+	projectApp.controller("summaryCtrl", function($scope, $routeParams, $location, $route) {
+		var loc = $location;
+		$scope.test = $loc.search()['project'];
+	});
+	
 </script>
 </head>
 <body>
@@ -57,10 +67,13 @@
 			</div>
 			<div class="collapse navbar-collapse">
 				<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
-					<li class="{{isActive('/dashboards')}}"><a href="#/dashboards">Dashboards</a></li>
-					<li class="{{isActive('/projects')}}"><a href="#/projects">Projects</a></li>
-					<li class="{{isActive('/settings')}}"><a href="#/settings">Settings</a></li>
-					<li class="{{isActive('/users')}}"><a href="#/users">Users</a></li>
+					<li class="{{isActive('/summary')}}"><a href="#/summary">Summary</a></li>
+					<li class="{{isActive('/trends')}}"><a href="#/trends">Trends</a></li>
+					<li class="{{isActive('/analysis')}}"><a href="#/analysis">Analysis</a></li>
+					<li class="{{isActive('/metrics')}}"><a href="#/metrics">Metrics</a></li>
+					<li class="{{isActive('/defects')}}"><a href="#/defects">Defects</a></li>
+					<li class="{{isActive('/style_issues')}}"><a
+						href="#/style_issues">Style Issues</a></li>
 				</ul>
 				<div class="navbar-right">
 					<ul class="nav navbar-nav" data-ng-controller="authCtrl">
