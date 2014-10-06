@@ -13,46 +13,60 @@ var purifinityServer = angular.module("purifinityServer", []);
  */
 purifinityServer.constant("baseURL", "http://" + server.host + ":"
 		+ server.port)
+purifinityServer
+		.factory("purifinityServerConnector", purifinityServerConnector);
 purifinityServer.controller("projectListCtrl", projectListCtrl);
 
-function projectListCtrl($scope, $http, $location, baseURL, authFactory) {
-	var authId = '';
-	var authToken = '';
-	if (authFactory.authData) {
-		authId = authFactory.authData.authId;
-		authToken = authFactory.authData.authToken;
-	}
-	$http({
-		method : 'GET',
-		url : baseURL + '/purifinityserver/rest/analysisstore/projects',
-		headers : {
-			'auth-id' : authId,
-			'auth-token' : authToken
+function purifinityServerConnector($http, $location, baseURL, authFactory) {
+	return {
+		get : function(serviceURL, successCallback, errorCallback) {
+			var authId = '';
+			var authToken = '';
+			if (authFactory.authData) {
+				authId = authFactory.authData.authId;
+				authToken = authFactory.authData.authToken;
+			}
+			return $http({
+				method : 'GET',
+				url : baseURL + serviceURL,
+				headers : {
+					'auth-id' : authId,
+					'auth-token' : authToken
+				}
+			})
+			//
+			.success(function(data) {
+				localStorage.setItem(serviceURL, JSON.stringify(data));
+				successCallback(data);
+			})
+			//
+			.error(function(data, status, error) {
+				if (status == 401) {
+					authFactory.message = data;
+					authFactory.redirect = "/overview";
+					$location.path("/login");
+					return;
+				}
+				var data = localStorage.getItem(serviceURL);
+				errorCallback(data, status, error);
+			});
 		}
-	})
-			.success(
-					function(data) {
-						$scope.projects = data;
-						localStorage
-								.setItem(
-										"/purifinityserver/rest/analysisstore/projects",
-										JSON.stringify(data));
-					})
-			.error(
-					function(data, status, error) {
-						if (status == 401) {
-							authFactory.message = data;
-							authFactory.redirect = "/overview";
-							$location.path("/login");
-							return;
-						}
-						var data = localStorage
-								.getItem("/purifinityserver/rest/analysisstore/projects");
-						if (data) {
-							$scope.warning = "Data was taken from local cache.";
-							$scope.projects = JSON.parse(data);
-						} else {
-							$scope.error = error;
-						}
-					});
+	};
+}
+
+function projectListCtrl($scope, $location, purifinityServerConnector,
+		authFactory) {
+	purifinityServerConnector.get(
+			'/purifinityserver/rest/analysisstore/projects', //
+			function(data) {
+				$scope.projects = data;
+			}, // 
+			function(data, status, error) {
+				if (data) {
+					$scope.warning = "Data was taken from local cache.";
+					$scope.projects = JSON.parse(data);
+				} else {
+					$scope.error = error;
+				}
+			});
 }

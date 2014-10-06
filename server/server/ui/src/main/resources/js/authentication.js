@@ -17,6 +17,9 @@ function authFactory($http, $location, baseURL) {
 	};
 	/* Check local storage for authentication information. */
 	var data = localStorage.getItem("purifinity-authentication");
+	if (!data) {
+		data = sessionStorage.getItem("purifinity-authentication");
+	}
 	if (data) {
 		authFactory.authData = JSON.parse(data);
 	}
@@ -37,8 +40,11 @@ function authFactory($http, $location, baseURL) {
 					if (remember) {
 						localStorage.setItem("purifinity-authentication", JSON
 								.stringify(data));
+						sessionStorage.removeItem("purifinity-authentication");
 					} else {
 						localStorage.removeItem("purifinity-authentication");
+						sessionStorage.setItem("purifinity-authentication",
+								JSON.stringify(data));
 					}
 					if (authFactory.redirect) {
 						$location.path(authFactory.redirect);
@@ -53,6 +59,7 @@ function authFactory($http, $location, baseURL) {
 		return authenticated;
 	};
 	authFactory.logout = function() {
+		var test = "Test";
 		$http({
 			method : "post",
 			url : baseURL + "/purifinityserver/rest/auth/logout",

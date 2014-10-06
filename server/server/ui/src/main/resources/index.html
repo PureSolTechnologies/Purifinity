@@ -37,12 +37,21 @@
 		$routeProvider.when("/login", {templateUrl:"/views/login.html"});
 		$routeProvider.when("/account", {templateUrl:"/views/account.html"});
 		$routeProvider.when("/dashboards", {templateUrl: "/views/dashboards.html"});
-		$routeProvider.when("/projects", {templateUrl: "/views/projects.html"});
-		$routeProvider.when("/projects/:project", {templateUrl: "/views/project/summary.html"});
-		$routeProvider.when("/projects/:project/:run", {templateUrl: "/views/project/summary.html"});
+		$routeProvider.when("/projects", {templateUrl: "/views/projects.html", controller: "projectsCtrl"});
+		$routeProvider.when("/projects/:project", {templateUrl: "/views/projects.html", controller: "projectsCtrl"});
+		$routeProvider.when("/projects/:project/:run", {templateUrl: "/views/projects.html", controller: "projectsCtrl"});
+		$routeProvider.when("/projects/:project/:run/:mode", {templateUrl: "/views/projects.html", controller: "projectsCtrl"});
 		$routeProvider.when("/information", {templateUrl: "/views/information.html"});
 		$routeProvider.when("/help", {templateUrl: "/views/help.html"});
 		$routeProvider.otherwise({templateUrl: "/views/overview.html"});
+	});
+	purifinityApp.controller("projectsCtrl", function ($scope, $routeParams, baseURL, authFactory) {
+		$scope.projectId = $routeParams['project'];
+		$scope.runId = $routeParams['run'];
+		$scope.mode = $routeParams['mode'];
+		$scope.isSelected = function(uuid) {
+			return projectId == uuid;
+		};
 	});	
 </script>
 </head>
@@ -73,11 +82,12 @@
 								class="glyphicon glyphicon-wrench"></span>&nbsp;Settings</a></li>
 						<li data-ng-show="isLoggedIn()" class="{{isActive('/account')}}"><a
 							href="#/account"><span class="glyphicon glyphicon-user"></span>&nbsp;Account</a></li>
-						<li data-ng-hide="isLoggedIn()"><a href="/login"><span
+						<li data-ng-hide="isLoggedIn()"><a href="#/login"><span
 								class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a></li>
-						<li data-ng-show="isLoggedIn()"><a href=""><span
-								class="glyphicon glyphicon-off" data-ng-show="isLoggedIn()"
-								data-ng-click="logout()"></span>&nbsp;Logout</a></li>
+						<li data-ng-show="isLoggedIn()"><button class="btn btn-link"
+								data-ng-click="logout()">
+								<span class="glyphicon glyphicon-off"></span>&nbsp;Logout
+							</button></li>
 					</ul>
 				</div>
 			</div>

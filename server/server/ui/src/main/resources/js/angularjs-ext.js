@@ -28,7 +28,10 @@ function menuCtrl($scope, $route, $routeParams, $location) {
 	$scope.$location = $location;
 	$scope.$routeParams = $routeParams;
 	$scope.isActive = function(locationPath) {
-		if ($location.path() === locationPath) {
+		if ($location.path() == locationPath) {
+			return "active";
+		}
+		if ((locationPath.length > 4) && ($location.path().indexOf(locationPath) == 0)) {
 			return "active";
 		}
 		return "";
