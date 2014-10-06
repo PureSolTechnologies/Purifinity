@@ -23,13 +23,13 @@ function authFactory($http, $location, baseURL) {
 	if (data) {
 		authFactory.authData = JSON.parse(data);
 	}
-	authFactory.login = function(username, password, remember) {
+	authFactory.login = function(email, password, remember) {
 		var authenticated = false;
 		return $http({
 			method : "post",
 			url : baseURL + "/purifinityserver/rest/auth/login",
 			data : {
-				username : username,
+				email : email,
 				password : password
 			}
 		})//
@@ -64,7 +64,7 @@ function authFactory($http, $location, baseURL) {
 			method : "post",
 			url : baseURL + "/purifinityserver/rest/auth/logout",
 			data : {
-				username : authFactory.authData.authId,
+				email : authFactory.authData.authId,
 				token : authFactory.authData.authToken
 			}
 		})//
@@ -89,11 +89,11 @@ function authFactory($http, $location, baseURL) {
 
 function authCtrl($scope, authFactory) {
 	$scope.message = authFactory.message;
-	$scope.username = undefined;
+	$scope.email = undefined;
 	$scope.password = undefined;
 	$scope.remember = undefined;
 	$scope.login = function() {
-		authFactory.login($scope.username, $scope.password, $scope.remember);
+		authFactory.login($scope.email, $scope.password, $scope.remember);
 		$scope.password = undefined;
 	};
 	$scope.logout = function() {

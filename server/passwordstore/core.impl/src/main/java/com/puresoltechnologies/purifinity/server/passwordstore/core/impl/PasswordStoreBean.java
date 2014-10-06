@@ -5,25 +5,24 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
 import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordData;
+import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordEncrypter;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordStore;
+import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.db.PasswordStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordData;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordEncryptionException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordStrengthCalculator;
@@ -57,6 +56,40 @@ public class PasswordStoreBean implements PasswordStore {
     public static final String RETRIEVE_ACCOUNT_STATEMENT = "SELECT * FROM "
 	    + PASSWORD_TABLE_NAME + " WHERE email = ?";
 
+    private static final List<Character> validCharacters = new ArrayList<>();
+    static {
+	for (char c = '0'; c <= '9'; c++) {
+	    validCharacters.add(c);
+	}
+	for (char c = 'a'; c <= 'z'; c++) {
+	    validCharacters.add(c);
+	}
+	for (char c = 'A'; c <= 'Z'; c++) {
+	    validCharacters.add(c);
+	}
+	validCharacters.add('!');
+	validCharacters.add('#');
+	validCharacters.add('$');
+	validCharacters.add('%');
+	validCharacters.add('&');
+	validCharacters.add('*');
+	validCharacters.add('+');
+	validCharacters.add(',');
+	validCharacters.add('-');
+	validCharacters.add('.');
+	validCharacters.add('/');
+	validCharacters.add(':');
+	validCharacters.add(';');
+	validCharacters.add('<');
+	validCharacters.add('=');
+	validCharacters.add('>');
+	validCharacters.add('?');
+	validCharacters.add('@');
+	validCharacters.add('^');
+	validCharacters.add('|');
+	validCharacters.add('~');
+    }
+
     @Inject
     private SecurityKeyGenerator securityKeyGenerator;
 
@@ -69,51 +102,12 @@ public class PasswordStoreBean implements PasswordStore {
     @Inject
     private EventLogger eventLogger;
 
-    private Cluster cluster = null;
-    private Session session = null;
-    private PreparedStatement createAccountStatement = null;
-    private PreparedStatement activateAccountStatement = null;
-    private PreparedStatement changePasswordStatement = null;
-    private PreparedStatement retrieveUserByEmailStatement = null;
+    @Inject
+    @PasswordStoreKeyspace
+    private Session session;
 
-    @PostConstruct
-    public void connectAndInitialize() {
-	logger.debug("Connect PasswordStore to Cassandra...");
-	cluster = Cluster.builder().addContactPoints(CASSANDRA_HOST)
-		.withPort(CASSANDRA_CQL_PORT).build();
-	session = cluster.connect(PASSWORD_STORE_KEYSPACE_NAME);
-	logger.info("PasswordStore connected to Cassandra.");
-	createPreparedStatements();
-	eventLogger.logEvent(PasswordStoreEvents.createStartEvent());
-    }
-
-    private void createPreparedStatements() {
-
-	logger.info("Create prepared statement for '"
-		+ CREATE_ACCOUNT_STATEMENT + "'");
-	createAccountStatement = session.prepare(CREATE_ACCOUNT_STATEMENT);
-
-	logger.info("Create prepared statement for '"
-		+ ACTIVATE_ACCOUNT_STATEMENT + "'");
-	activateAccountStatement = session.prepare(ACTIVATE_ACCOUNT_STATEMENT);
-
-	logger.info("Create prepared statement for '"
-		+ CHANGE_PASSWORD_STATEMENT + "'");
-	changePasswordStatement = session.prepare(CHANGE_PASSWORD_STATEMENT);
-
-	logger.info("Create prepared statement for '"
-		+ RETRIEVE_ACCOUNT_STATEMENT + "'");
-	retrieveUserByEmailStatement = session
-		.prepare(RETRIEVE_ACCOUNT_STATEMENT);
-    }
-
-    @PreDestroy
-    public void disconnect() {
-	eventLogger.logEvent(PasswordStoreEvents.createStopEvent());
-	session.close();
-	cluster.close();
-	logger.info("PasswordStore disconnected.");
-    }
+    @Inject
+    private CassandraPreparedStatements preparedStatements;
 
     @Override
     public String createAccount(String email, String password)
@@ -133,8 +127,9 @@ public class PasswordStoreBean implements PasswordStore {
 	    throw new AccountCreationException(event.getEventId(),
 		    event.getMessage());
 	}
-	BoundStatement boundStatement = retrieveUserByEmailStatement
-		.bind(email);
+	PreparedStatement preparedStatement = preparedStatements
+		.getPreparedStatement(session, RETRIEVE_ACCOUNT_STATEMENT);
+	BoundStatement boundStatement = preparedStatement.bind(email);
 	ResultSet result = session.execute(boundStatement);
 	if (result.one() != null) {
 	    Event event = PasswordStoreEvents
@@ -157,7 +152,9 @@ public class PasswordStoreBean implements PasswordStore {
 	String activationKey = securityKeyGenerator.generate();
 	Date created = new Date();
 
-	boundStatement = createAccountStatement.bind(created, created, email,
+	preparedStatement = preparedStatements.getPreparedStatement(session,
+		CREATE_ACCOUNT_STATEMENT);
+	boundStatement = preparedStatement.bind(created, created, email,
 		passwordHash, activationKey);
 	session.execute(boundStatement);
 
@@ -190,8 +187,10 @@ public class PasswordStoreBean implements PasswordStore {
 		    event.getMessage());
 	}
 
-	BoundStatement boundStatement = activateAccountStatement.bind(
-		new Date(), email);
+	PreparedStatement preparedStatement = preparedStatements
+		.getPreparedStatement(session, ACTIVATE_ACCOUNT_STATEMENT);
+	BoundStatement boundStatement = preparedStatement.bind(new Date(),
+		email);
 	session.execute(boundStatement);
 
 	eventLogger.logEvent(PasswordStoreEvents.createAccountActivatedEvent(
@@ -200,8 +199,9 @@ public class PasswordStoreBean implements PasswordStore {
     }
 
     private Row getUserByEmail(String email) {
-	BoundStatement boundStatement = retrieveUserByEmailStatement
-		.bind(email);
+	PreparedStatement preparedStatement = preparedStatements
+		.getPreparedStatement(session, RETRIEVE_ACCOUNT_STATEMENT);
+	BoundStatement boundStatement = preparedStatement.bind(email);
 	ResultSet result = session.execute(boundStatement);
 	Row account = result.one();
 	return account;
@@ -270,8 +270,10 @@ public class PasswordStoreBean implements PasswordStore {
 	    eventLogger.logEvent(event);
 	    throw new RuntimeException(event.getMessage(), e);
 	}
-	BoundStatement boundStatement = changePasswordStatement.bind(
-		passwordHash, email);
+	PreparedStatement preparedStatement = preparedStatements
+		.getPreparedStatement(session, CHANGE_PASSWORD_STATEMENT);
+	BoundStatement boundStatement = preparedStatement.bind(passwordHash,
+		email);
 	session.execute(boundStatement);
 
 	eventLogger.logEvent(PasswordStoreEvents
@@ -301,8 +303,10 @@ public class PasswordStoreBean implements PasswordStore {
 	    eventLogger.logEvent(event);
 	    throw new RuntimeException(event.getMessage(), e);
 	}
-	BoundStatement boundStatement = changePasswordStatement.bind(
-		passwordHash, email);
+	PreparedStatement preparedStatement = preparedStatements
+		.getPreparedStatement(session, CHANGE_PASSWORD_STATEMENT);
+	BoundStatement boundStatement = preparedStatement.bind(passwordHash,
+		email);
 	session.execute(boundStatement);
 
 	eventLogger.logEvent(PasswordStoreEvents
@@ -311,37 +315,6 @@ public class PasswordStoreBean implements PasswordStore {
     }
 
     private String generatePassword() {
-	List<Character> validCharacters = new ArrayList<Character>();
-	for (char c = '0'; c <= '9'; c++) {
-	    validCharacters.add(c);
-	}
-	for (char c = 'a'; c <= 'z'; c++) {
-	    validCharacters.add(c);
-	}
-	for (char c = 'A'; c <= 'Z'; c++) {
-	    validCharacters.add(c);
-	}
-	validCharacters.add('!');
-	validCharacters.add('#');
-	validCharacters.add('$');
-	validCharacters.add('%');
-	validCharacters.add('&');
-	validCharacters.add('*');
-	validCharacters.add('+');
-	validCharacters.add(',');
-	validCharacters.add('-');
-	validCharacters.add('.');
-	validCharacters.add('/');
-	validCharacters.add(':');
-	validCharacters.add(';');
-	validCharacters.add('<');
-	validCharacters.add('=');
-	validCharacters.add('>');
-	validCharacters.add('?');
-	validCharacters.add('@');
-	validCharacters.add('^');
-	validCharacters.add('|');
-	validCharacters.add('~');
 	Random random = new Random();
 	StringBuilder builder;
 	do {

@@ -9,25 +9,25 @@ public class AuthLoginElement implements Serializable {
 
     private static final long serialVersionUID = 8044441747125956593L;
 
-    private final String username;
+    private final String email;
     private final String password;
 
     public AuthLoginElement() {
-	username = null;
+	email = null;
 	password = null;
     }
 
     @JsonCreator
     public AuthLoginElement(
 	    //
-	    @JsonProperty("username") String username,
+	    @JsonProperty("email") String email,
 	    @JsonProperty("password") String password) {
-	this.username = username;
+	this.email = email;
 	this.password = password;
     }
 
-    public String getUsername() {
-	return username;
+    public String getEmail() {
+	return email;
     }
 
     public String getPassword() {
@@ -40,8 +40,7 @@ public class AuthLoginElement implements Serializable {
 	int result = 1;
 	result = prime * result
 		+ ((password == null) ? 0 : password.hashCode());
-	result = prime * result
-		+ ((username == null) ? 0 : username.hashCode());
+	result = prime * result + ((email == null) ? 0 : email.hashCode());
 	return result;
     }
 
@@ -59,10 +58,10 @@ public class AuthLoginElement implements Serializable {
 		return false;
 	} else if (!password.equals(other.password))
 	    return false;
-	if (username == null) {
-	    if (other.username != null)
+	if (email == null) {
+	    if (other.email != null)
 		return false;
-	} else if (!username.equals(other.username))
+	} else if (!email.equals(other.email))
 	    return false;
 	return true;
     }

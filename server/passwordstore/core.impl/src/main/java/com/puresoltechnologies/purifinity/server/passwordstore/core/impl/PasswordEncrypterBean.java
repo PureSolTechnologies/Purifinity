@@ -2,9 +2,10 @@ package com.puresoltechnologies.purifinity.server.passwordstore.core.impl;
 
 import javax.ejb.Stateless;
 
-import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordData;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordEncrypter;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordData;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordEncryptionException;
+import com.puresoltechnologies.purifinity.server.passwordstore.utils.encrypt.Encrypter1;
 
 /**
  * This is the central place for oneway password encryption. The encrypter is

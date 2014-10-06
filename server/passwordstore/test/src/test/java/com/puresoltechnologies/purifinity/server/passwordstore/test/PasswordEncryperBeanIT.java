@@ -14,8 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordData;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordEncrypter;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordData;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordEncryptionException;
 
 @RunWith(Arquillian.class)

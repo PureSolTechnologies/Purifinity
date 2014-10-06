@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.passwordstore.core.api;
 
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordData;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordEncryptionException;
 
 /**

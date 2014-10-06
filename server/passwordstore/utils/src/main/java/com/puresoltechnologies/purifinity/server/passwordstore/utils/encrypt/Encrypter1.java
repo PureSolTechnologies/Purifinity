@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.passwordstore.core.impl;
+package com.puresoltechnologies.purifinity.server.passwordstore.utils.encrypt;
 
 import java.nio.charset.Charset;
 import java.security.MessageDigest;

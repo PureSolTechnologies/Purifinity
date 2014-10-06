@@ -1,10 +1,10 @@
-package com.puresoltechnologies.purifinity.server.passwordstore.core.impl;
+package com.puresoltechnologies.purifinity.server.passwordstore.utils.encrypt;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.EncryptionUtilities;
+import com.puresoltechnologies.purifinity.server.passwordstore.utils.encrypt.EncryptionUtilities;
 
 public class EncryptionUtilitiesTest {
 

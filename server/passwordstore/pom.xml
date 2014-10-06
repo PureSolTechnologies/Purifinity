@@ -21,6 +21,7 @@
 	</properties>
 
 	<modules>
+		<module>utils</module>
 		<module>ddl</module>
 		<module>domain</module>
 		<module>core.api</module>

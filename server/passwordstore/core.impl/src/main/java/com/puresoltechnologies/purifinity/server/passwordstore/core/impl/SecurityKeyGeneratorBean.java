@@ -2,6 +2,8 @@ package com.puresoltechnologies.purifinity.server.passwordstore.core.impl;
 
 import javax.ejb.Stateless;
 
+import com.puresoltechnologies.purifinity.server.passwordstore.utils.encrypt.EncryptionUtilities;
+
 
 /**
  * This bean manages the creation and

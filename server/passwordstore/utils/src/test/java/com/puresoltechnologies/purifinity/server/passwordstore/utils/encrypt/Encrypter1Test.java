@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.passwordstore.core.impl;
+package com.puresoltechnologies.purifinity.server.passwordstore.utils.encrypt;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.Encrypter1;
+import com.puresoltechnologies.purifinity.server.passwordstore.utils.encrypt.Encrypter1;
 
 public class Encrypter1Test {
 

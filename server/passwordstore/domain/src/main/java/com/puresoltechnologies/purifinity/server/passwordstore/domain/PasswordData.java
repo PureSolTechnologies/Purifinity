@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.passwordstore.core.api;
+package com.puresoltechnologies.purifinity.server.passwordstore.domain;
 
 /**
  * In lack of tuples we use this class to return the split date from an
