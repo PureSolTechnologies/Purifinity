@@ -7,9 +7,10 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.ejb.Singleton;
+import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
 
-import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
 
 @Singleton
 public class AuthServiceBean implements AuthService {
@@ -17,11 +18,12 @@ public class AuthServiceBean implements AuthService {
     // An authentication token storage which stores <auth_token>.
     private final Map<UUID, String> authorizationTokensStorage = new HashMap<>();
 
-    private final PasswordStoreClient passwordStore = new PasswordStoreClient();
+    @Inject
+    private AccountManager accountManager;
 
     @Override
     public String login(String email, String password) throws LoginException {
-	if (passwordStore.authenticate(email, password)) {
+	if (accountManager.authenticate(email, password)) {
 	    /**
 	     * Once all params are matched, the authToken will be generated and
 	     * will be stored in the authorizationTokensStorage. The authToken

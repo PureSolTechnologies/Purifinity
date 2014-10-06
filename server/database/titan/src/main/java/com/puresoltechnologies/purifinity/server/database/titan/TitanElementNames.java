@@ -51,5 +51,12 @@ public class TitanElementNames {
      */
     public static final String CREATION_TIME_PROPERTY = "time.creation";
     public static final String HAS_ANALYSIS_RUN_LABEL = "has_run";
+    /*
+     * User Management
+     */
+    public static final String USER_EMAIL_PROPERTY = "user_email";
+    public static final String USER_NAME_PROPERTY = "user_name";
+    public static final String ROLE_ID_PROPERTY = "role_id";
+    public static final String ROLE_NAME_PROPERTY = "role_name";
 
 }

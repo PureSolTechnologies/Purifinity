@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl.security;
 
+import javax.ejb.Stateful;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
 
@@ -8,6 +10,8 @@ import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.securi
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthLogoutElement;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthenticationRestInterface;
 
+@Stateful
+@SessionScoped
 public class AuthenticationRestService implements AuthenticationRestInterface {
 
     @Inject
@@ -18,8 +22,8 @@ public class AuthenticationRestService implements AuthenticationRestInterface {
 	String email = login.getEmail();
 	try {
 	    String token = authService.login(email, login.getPassword());
-	    return new AuthElement(email, token, "permission", "User '"
-		    + email + "' was successfully authenticated.");
+	    return new AuthElement(email, token, "permission", "User '" + email
+		    + "' was successfully authenticated.");
 	} catch (LoginException e) {
 	    return new AuthElement(email, "", "", "User '" + email
 		    + "' could not be authenticated. (Message: "

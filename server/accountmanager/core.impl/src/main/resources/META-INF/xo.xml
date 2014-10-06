@@ -1,0 +1,12 @@
+<v1:xo version="1.0" xmlns:v1="http://buschmais.com/xo/schema/v1.0">
+	<xo-unit name="Users">
+		<description>This is a eXtended Objects unit for the Titan datastore.
+		</description>
+		<url>titan-cassandra://localhost:9160/titan</url>
+		<provider><![CDATA[com.puresoltechnologies.xo.titan.api.TitanXOProvider]]></provider>
+		<types>
+			<type><![CDATA[com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UserVertex]]></type>
+			<type><![CDATA[com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex]]></type>
+		</types>
+	</xo-unit>
+</v1:xo>
