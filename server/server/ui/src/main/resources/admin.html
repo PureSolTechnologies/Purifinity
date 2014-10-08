@@ -38,10 +38,31 @@
 		$routeProvider.when("/dashboards", {templateUrl:"/views/admin/dashboards.html"});
 		$routeProvider.when("/projects", {templateUrl:"/views/admin/projects.html"});
 		$routeProvider.when("/settings", {templateUrl:"/views/admin/settings.html"});
-		$routeProvider.when("/users", {templateUrl:"/views/admin/users.html"});
+		$routeProvider.when("/users", {templateUrl:"/views/admin/users.html", controller: "usersCtrl"});
 		$routeProvider.otherwise({redirectTo:"/dashboards"});
 	});
 	adminApp.controller("usersCtrl", function($scope) {
+		$scope.mode = "users";
+		$scope.isMode = function(mode) {
+			return mode === $scope.mode ? "active" : "";
+		}
+		$scope.getUsersPartial = function() {
+			return "/views/admin/partials/" + $scope.mode + ".html";
+		}
+		$scope.setMode = function(mode) {
+			$scope.mode = mode;
+		}
+	});
+	adminApp.controller("userSettingsCtrl", function($scope) {
+		$scope.users = [];
+	});
+	adminApp.controller("roleSettingsCtrl", function($scope) {
+		$scope.roles = [
+				{"name": "Administrator",
+				 "roleId": "admin"},
+				{"name": "Developer",
+				 "roleId": "dev"}
+		];
 	});
 </script>
 </head>

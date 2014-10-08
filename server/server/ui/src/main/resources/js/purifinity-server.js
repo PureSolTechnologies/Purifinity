@@ -15,6 +15,8 @@ purifinityServer.constant("baseURL", "http://" + server.host + ":"
 		+ server.port)
 purifinityServer
 		.factory("purifinityServerConnector", purifinityServerConnector);
+purifinityServer.factory('authFactory', [ 'purifinityServerConnector',
+		userAdministratorFactory ]);
 purifinityServer.controller("projectListCtrl", projectListCtrl);
 
 function purifinityServerConnector($http, $location, baseURL, authFactory) {
@@ -35,9 +37,9 @@ function purifinityServerConnector($http, $location, baseURL, authFactory) {
 				}
 			})
 			//
-			.success(function(data) {
+			.success(function(data, status) {
 				localStorage.setItem(serviceURL, JSON.stringify(data));
-				successCallback(data);
+				successCallback(data, status);
 			})
 			//
 			.error(function(data, status, error) {
@@ -54,11 +56,36 @@ function purifinityServerConnector($http, $location, baseURL, authFactory) {
 	};
 }
 
+function userAdministratorFactory(purifinityServerConnector, setRoles, setError) {
+	var userAdministratorFactory = {};
+	userAdministratorFactory.getUsers = function() {
+		return purifinityServerConnector.get(
+				'/accountmanager/rest/users', //
+				function(data, status) {
+					setRoles(data)
+				}, //
+				function(data, status, error) {
+					setError(error);
+				});
+	};
+	userAdministratorFactory.getRoles = function() {
+		return purifinityServerConnector.get(
+				'/accountmanager/rest/roles', //
+				function(data, status) {
+					setRoles(data)
+				}, //
+				function(data, status, error) {
+					setError(error);
+				});
+	};
+	return userAdministratorFactory;
+}
+
 function projectListCtrl($scope, $location, purifinityServerConnector,
 		authFactory) {
 	purifinityServerConnector.get(
 			'/purifinityserver/rest/analysisstore/projects', //
-			function(data) {
+			function(data, status) {
 				$scope.projects = data;
 			}, // 
 			function(data, status, error) {

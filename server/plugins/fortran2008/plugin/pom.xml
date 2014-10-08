@@ -15,6 +15,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>accountmanager.core.api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>fortran2008.ejb</artifactId>
 			<type>ejb</type>
 		</dependency>

@@ -24,12 +24,17 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>accountmanager.core.impl</artifactId>
-			<type>ejb</type>
+			<artifactId>accountmanager.rest.impl</artifactId>
+			<type>war</type>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>accountmanager.login</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>accountmanager.core.impl</artifactId>
+			<type>ejb</type>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -77,8 +82,13 @@
 					<modules>
 						<webModule>
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<artifactId>accountmanager.rest.impl</artifactId>
+							<contextRoot>/accountmanager/rest</contextRoot>
+						</webModule>
+						<webModule>
+							<groupId>com.puresoltechnologies.purifinity.server</groupId>
 							<artifactId>accountmanager.ui.web</artifactId>
-							<contextRoot>/account</contextRoot>
+							<contextRoot>/accountmanager</contextRoot>
 						</webModule>
 						<webModule>
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>

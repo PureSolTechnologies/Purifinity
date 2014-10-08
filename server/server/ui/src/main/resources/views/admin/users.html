@@ -1,7 +1,16 @@
 <div class="container">
 	<h1>Users</h1>
-	<ul class="nav nav-tabs">
-		<li><button class="btn btn-link active">Roles</button></li>
-		<li><button class="btn btn-link">Users</button></li>
-	</ul>
+	<div class="panel">
+		<div class="panel-header">
+			<ul class="nav nav-tabs">
+				<li><button class="btn btn-link {{isMode('users')}}"
+						data-ng-click="setMode('users')">Users</button></li>
+				<li><button class="btn btn-link {{isMode('roles')}}"
+						data-ng-click="setMode('roles')">Roles</button></li>
+			</ul>
+		</div>
+		<div class="panel-body">
+			<div data-ng-include="getUsersPartial()"></div>
+		</div>
+	</div>
 </div>

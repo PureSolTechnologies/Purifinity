@@ -1,5 +1,9 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.core.api;
 
+import java.util.Set;
+
+import com.puresoltechnologies.purifinity.server.accountmanager.domain.Role;
+import com.puresoltechnologies.purifinity.server.accountmanager.domain.User;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordStore;
 
 /**
@@ -42,4 +46,17 @@ public interface AccountManagerCommon extends PasswordStore {
      */
     void createAccount(String email);
 
+    /**
+     * This method returns all roles currently provided.
+     * 
+     * @return A {@link Set} is returned containing {@link Role} objects.
+     */
+    public Set<Role> getRoles();
+
+    /**
+     * This method returns all setup users.
+     * 
+     * @return A {@link Set} of {@link User} is returned.
+     */
+    public Set<User> getUsers();
 }

@@ -5,6 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.Principal;
 import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.ejb.Local;
@@ -15,12 +17,16 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import com.buschmais.xo.api.Query.Result;
 import com.buschmais.xo.api.XOManager;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerRemote;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UserVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UsersXOManager;
 import com.puresoltechnologies.purifinity.server.accountmanager.domain.AccountManagerEvents;
+import com.puresoltechnologies.purifinity.server.accountmanager.domain.Role;
+import com.puresoltechnologies.purifinity.server.accountmanager.domain.User;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountCreationException;
@@ -151,5 +157,29 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	xoManager.currentTransaction().commit();
 	eventLogger.logEvent(AccountManagerEvents
 		.createAccountCreationEvent(email));
+    }
+
+    @Override
+    public Set<Role> getRoles() {
+	Result<RoleVertex> results = xoManager.createQuery(
+		"_().has('_xo_discriminator_RoleVertex')", RoleVertex.class)
+		.execute();
+	Set<Role> roles = new LinkedHashSet<>();
+	for (RoleVertex roleVertex : results) {
+	    roles.add(new Role(roleVertex.getRoleId(), roleVertex.getName()));
+	}
+	return roles;
+    }
+
+    @Override
+    public Set<User> getUsers() {
+	Result<UserVertex> results = xoManager.createQuery(
+		"_().has('_xo_discriminator_UserVertex')", UserVertex.class)
+		.execute();
+	Set<User> users = new LinkedHashSet<>();
+	for (UserVertex userVertex : results) {
+	    users.add(new User(userVertex.getEmail(), userVertex.getName()));
+	}
+	return users;
     }
 }

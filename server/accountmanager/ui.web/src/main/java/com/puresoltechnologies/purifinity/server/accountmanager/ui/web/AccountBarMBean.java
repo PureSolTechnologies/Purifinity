@@ -7,8 +7,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
-import com.puresoltechnologies.purifinity.server.accountmanager.ui.api.AccountManagerDelegatorMBean;
-
 @ManagedBean
 @SessionScoped
 public class AccountBarMBean implements Serializable {

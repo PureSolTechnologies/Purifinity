@@ -27,8 +27,8 @@
 		<module>core.impl</module>
 		<module>login</module>
 		<module>test</module>
-		<module>socket</module>
-		<module>ui.api</module>
+		<module>rest.api</module>
+		<module>rest.impl</module>
 		<module>ui.web</module>
 		<module>app</module>
 	</modules>

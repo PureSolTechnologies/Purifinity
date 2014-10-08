@@ -23,7 +23,7 @@
 		<server.data.directory>${work.dir}/data</server.data.directory>
 		<!-- wildfly.debug.options>-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</wildfly.debug.options -->
 		<wildfly.debug.options>-agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n</wildfly.debug.options>
-		<wildfly.memory.options>-Xms128m -Xmx512m -XX:MaxPermSize=256m</wildfly.memory.options>
+		<wildfly.memory.options>-Xms128m -Xmx512m</wildfly.memory.options>
 		<wildfly.options>${wildfly.memory.options} ${wildfly.debug.options}</wildfly.options>
 		<!-- Arquillian -->
 		<arquillian.version>1.1.5.Final</arquillian.version>
@@ -349,13 +349,19 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>accountmanager.socket</artifactId>
-				<type>war</type>
+				<artifactId>accountmanager.rest.api</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>accountmanager.ui.api</artifactId>
+				<artifactId>accountmanager.rest.impl</artifactId>
+				<version>${project.version}</version>
+				<type>war</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>accountmanager.socket</artifactId>
+				<type>war</type>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
