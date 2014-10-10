@@ -1,17 +1,32 @@
 /*
  * This JavaScript file contains a alerter module which provides the central
- * functionality for alerts, warnings, infos and the hint of re-used cached
- * data.
+ * functionality for dangers, warnings, infos, and successes.
  */
 var alerterModule = angular.module("alerterModule", [ "purifinityServer" ]);
-alerterModule.directive("clearAlerts", function(alerterFactory) {
+/*
+ * The clearAlerts directive provides a 'clear-alerts' directive for alerters
+ * ng-repeat to be used to clear all alerts to not be shown again.
+ */
+alerterModule.directive("clearAlerts", clearAlerts);
+/*
+ * The alerterFactory is the singleton instance which saves the alerts to be
+ * shown. This factory can be used by any controller, factory and module.
+ */
+alerterModule.factory("alerterFactory", alerterFactory);
+/*
+ * The alerterCtrl is the control for the alert messages to be shown in UI.
+ */
+alerterModule.controller("alerterCtrl", alerterCtrl);
+
+function clearAlerts(alerterFactory) {
 	return function(scope, element, attrs) {
 		if (scope.$last) {
 			alerterFactory.clear();
 		}
 	};
-});
-alerterModule.factory("alerterFactory", function() {
+}
+
+function alerterFactory() {
 	var alerter = {};
 	alerter.alerts = [];
 	/*
@@ -30,8 +45,9 @@ alerterModule.factory("alerterFactory", function() {
 		alerter.alerts = [];
 	};
 	return alerter;
-});
-alerterModule.controller("alerterCtrl", function($scope, alerterFactory) {
+}
+
+function alerterCtrl($scope, alerterFactory) {
 	$scope.alerts = alerterFactory.alerts;
 	/*
 	 * Type: info, danger, success, warning
@@ -42,4 +58,4 @@ alerterModule.controller("alerterCtrl", function($scope, alerterFactory) {
 	$scope.closeAlert = function(index) {
 		alerterFactory.closeAlert(index);
 	};
-});
+}
