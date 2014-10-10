@@ -1,0 +1,6 @@
+/* 
+ * This is a CSS fix for angular-ui as found at: http://angular-ui.github.io/bootstrap/
+ */
+.nav, .pagination, .carousel, .panel-title a {
+	cursor: pointer;
+}

@@ -15,11 +15,12 @@ purifinityServer.constant("baseURL", "http://" + server.host + ":"
 		+ server.port)
 purifinityServer
 		.factory("purifinityServerConnector", purifinityServerConnector);
-purifinityServer.factory('authFactory', [ 'purifinityServerConnector',
-		userAdministratorFactory ]);
+purifinityServer.factory('userAdministratorFactory', [
+		'purifinityServerConnector', userAdministratorFactory ]);
 purifinityServer.controller("projectListCtrl", projectListCtrl);
 
-function purifinityServerConnector($http, $location, baseURL, authFactory) {
+function purifinityServerConnector($http, $location, baseURL, authFactory,
+		alerterFactory) {
 	return {
 		get : function(serviceURL, successCallback, errorCallback) {
 			var authId = '';
@@ -44,7 +45,7 @@ function purifinityServerConnector($http, $location, baseURL, authFactory) {
 			//
 			.error(function(data, status, error) {
 				if (status == 401) {
-					authFactory.message = data;
+					alerterFactory.addAlert("info", data);
 					authFactory.redirect = "/overview";
 					$location.path("/login");
 					return;
@@ -56,33 +57,26 @@ function purifinityServerConnector($http, $location, baseURL, authFactory) {
 	};
 }
 
-function userAdministratorFactory(purifinityServerConnector, setRoles, setError) {
+function userAdministratorFactory(purifinityServerConnector) {
 	var userAdministratorFactory = {};
-	userAdministratorFactory.getUsers = function() {
-		return purifinityServerConnector.get(
-				'/accountmanager/rest/users', //
-				function(data, status) {
-					setRoles(data)
-				}, //
-				function(data, status, error) {
-					setError(error);
-				});
+	userAdministratorFactory.getUsers = function(success, error) {
+		return purifinityServerConnector.get('/accountmanager/rest/users',
+				success, error);
 	};
-	userAdministratorFactory.getRoles = function() {
-		return purifinityServerConnector.get(
-				'/accountmanager/rest/roles', //
-				function(data, status) {
-					setRoles(data)
-				}, //
-				function(data, status, error) {
-					setError(error);
-				});
+	userAdministratorFactory.getRoles = function(success, error) {
+		return purifinityServerConnector.get('/accountmanager/rest/roles', //
+		function(data, status) {
+			setRoles(data)
+		}, //
+		function(data, status, error) {
+			setError(error);
+		});
 	};
 	return userAdministratorFactory;
 }
 
 function projectListCtrl($scope, $location, purifinityServerConnector,
-		authFactory) {
+		authFactory, alerterFactory) {
 	purifinityServerConnector.get(
 			'/purifinityserver/rest/analysisstore/projects', //
 			function(data, status) {
@@ -90,10 +84,11 @@ function projectListCtrl($scope, $location, purifinityServerConnector,
 			}, // 
 			function(data, status, error) {
 				if (data) {
-					$scope.warning = "Data was taken from local cache.";
+					alerterFactory.addAlert("warning",
+							"Data was taken from local cache.");
 					$scope.projects = JSON.parse(data);
 				} else {
-					$scope.error = error;
+					alerterFactory.addAlert("danger", error);
 				}
 			});
 }

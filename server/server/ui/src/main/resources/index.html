@@ -19,19 +19,23 @@
 <link rel="stylesheet"
 	href="lib/bootstrap-select/css/bootstrap-select.min.css" />
 <link rel="stylesheet" href="css/navbar-fixed-top.css" />
+<link rel="stylesheet" href="css/angular-ui.css" />
 <link rel="stylesheet" href="css/login.css" />
 
 <!-- AngularJS integration -->
 <script type="text/javascript" src="lib/angular/angular.js"></script>
 <script type="text/javascript" src="lib/angular/angular-route.js"></script>
+<script type="text/javascript"
+	src="lib/angular-ui/ui-bootstrap-tpls-0.11.2.min.js"></script>
 
 <!-- Custom JS scripts -->
 <script type="text/javascript" src="config/server.js"></script>
 <script type="text/javascript" src="js/angularjs-ext.js"></script>
 <script type="text/javascript" src="js/purifinity-server.js"></script>
 <script type="text/javascript" src="js/authentication.js"></script>
+<script type="text/javascript" src="js/alerter.js"></script>
 <script type="text/javascript">
-	var purifinityApp = angular.module("purifinityApp", ["ngRoute", "purifinityUI", "purifinityServer", "authService"]);
+	var purifinityApp = angular.module("purifinityApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "authService", "alerterModule"]);
 	purifinityApp.config(function($routeProvider, $locationProvider){
 		$locationProvider.html5Mode(false);
 		$routeProvider.when("/login", {templateUrl:"/views/login.html"});
@@ -93,6 +97,11 @@
 			</div>
 			<!--/.nav-collapse -->
 		</div>
+	</div>
+
+	<div data-ng-controller="alerterCtrl">
+		<alert data-ng-repeat="alert in alerts" type="{{alert.type}}"
+			close="closeAlert($index)" clear-alerts>{{alert.message}}</alert>
 	</div>
 
 	<span data-ng-view></span>
