@@ -59,11 +59,9 @@
 	});
 	adminApp.controller("userSettingsCtrl", function($scope, userAdministratorFactory) {
 		$scope.users = undefined;
-		$scope.getUsers = function() {
-			userAdministratorFactory.getUsers(//
-					function(data, status) {$scope.users = data}, //
-					function(data, status, error) {})
-					};
+		userAdministratorFactory.getUsers(//
+			function(data, status) {$scope.users = data}, //
+			function(data, status, error) {});
 	});
 	adminApp.controller("roleSettingsCtrl", function($scope) {
 		$scope.roles = [

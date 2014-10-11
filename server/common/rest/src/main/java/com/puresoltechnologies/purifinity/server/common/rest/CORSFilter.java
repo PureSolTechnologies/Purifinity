@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl;
+package com.puresoltechnologies.purifinity.server.common.rest;
 
 import java.io.IOException;
 
