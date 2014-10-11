@@ -42,8 +42,14 @@ function alerterFactory() {
 		alerter.alerts.splice(index, 1);
 	};
 	alerter.clear = function() {
-		alerter.alerts = [];
+		alerter.alerts.splice(0, alerter.alerts.length)
 	};
+	alerter.hasAlerts = function() {
+		if (alerter.alerts == undefined) {
+			return false;
+		}
+		return alerter.alerts.length > 0;
+	}
 	return alerter;
 }
 
@@ -58,4 +64,10 @@ function alerterCtrl($scope, alerterFactory) {
 	$scope.closeAlert = function(index) {
 		alerterFactory.closeAlert(index);
 	};
+	$scope.clearAlerts = function() {
+		alerterFactory.clear();
+	};
+	$scope.hasAlerts = function() {
+		return alerterFactory.hasAlerts();
+	}
 }
