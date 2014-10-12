@@ -1,13 +1,35 @@
 <div class="container">
-	<h1>Users</h1>
-
 	<tabset> <tab heading="Users">
-	<div data-ng-controller="userSettingsCtrl">
+	<div data-ng-controller="addUserModalCtrl">
 		<h2>User Settings</h2>
-		<div class="panel">
-			<a href="#/users" class="btn btn-lg btn-success" data-toggle="modal"
-				data-target="#addUserModal">Add User...</a>
+		<div>
+			<script type="text/ng-template" id="addUserModalContent.html">
+ 				<div class="modal-header">
+            		<h3 class="modal-title">New User</h3>
+        		</div>
+        		<div class="modal-body">
+					<table>
+						<tbody>
+							<tr>
+								<td>Email:</td>
+								<td><input type="email" data-ng-model="items.email" class="form-control" placeholder="Email address" required autofocus/></td>
+							</tr>
+							<tr>
+								<td>Name:</td>
+								<td><input type="text" data-ng-model="items.name" class="form-control" placeholder="Name" required/></td>
+							</tr>
+						</tbody>
+					</table>
+        		</div>
+        		<div class="modal-footer">
+            		<button class="btn btn-primary" ng-click="ok()">OK</button>
+            		<button class="btn btn-default" ng-click="cancel()">Cancel</button>
+        		</div>
+			</script>
+			<button class="btn btn-default" ng-click="open()">Add User...</button>
 		</div>
+	</div>
+	<div data-ng-controller="userSettingsCtrl">
 		<table class="table table-striped table-hover table-bordered">
 			<thead>
 				<tr>
@@ -25,21 +47,6 @@
 				</tr>
 			</tbody>
 		</table>
-	</div>
-	<div class="modal fade" id="addUserModal" tabindex="-1">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">x</button>
-					<h4 class="modal-title" id="addUserModalLabel">Add User</h4>
-				</div>
-				<div class="modal-body"></div>
-				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary">OK</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				</div>
-			</div>
-		</div>
 	</div>
 	</tab> <tab heading="Roles">
 	<div data-ng-controller="roleSettingsCtrl">
