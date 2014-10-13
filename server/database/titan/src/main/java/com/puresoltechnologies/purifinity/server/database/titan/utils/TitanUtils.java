@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.database.titan;
+package com.puresoltechnologies.purifinity.server.database.titan.utils;
 
 import java.io.PrintStream;
 
