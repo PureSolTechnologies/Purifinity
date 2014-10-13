@@ -1,12 +1,12 @@
 package com.puresoltechnologies.purifinity.server.ddl.plugins;
 
-import static com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration.createKeyspace;
-import static com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration.createTable;
+import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createKeyspace;
+import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createTable;
 
 import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.purifinity.server.database.cassandra.PluginsKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
-import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrator;
+import com.puresoltechnologies.purifinity.server.database.migration.UniversalMigrator;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 
 public class PluginsSchema {
@@ -20,20 +20,20 @@ public class PluginsSchema {
 
 	private static final Version v100 = new Version(1, 0, 0);
 
-	public static void createSequence(DatabaseMigrator migrator)
+	public static void createSequence(UniversalMigrator migrator)
 			throws MigrationException {
 		checkAndCreateKeyspaces(migrator);
 		checkAndCreateAnalysisTables(migrator);
 	}
 
-	private static void checkAndCreateKeyspaces(DatabaseMigrator migrator)
+	private static void checkAndCreateKeyspaces(UniversalMigrator migrator)
 			throws MigrationException {
 		migrator.registerMigrationStep(createKeyspace(PluginsKeyspace.NAME,
 				v100, "Rick-Rainer Ludwig", "Keyspace for plugin system.",
 				ReplicationStrategy.SIMPLE_STRATEGY, 1));
 	}
 
-	private static void checkAndCreateAnalysisTables(DatabaseMigrator migrator)
+	private static void checkAndCreateAnalysisTables(UniversalMigrator migrator)
 			throws MigrationException {
 
 		migrator.registerMigrationStep(createTable(

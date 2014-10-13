@@ -6,16 +6,16 @@ public class MigrationStepMetadata {
 
 	private Version version;
 	private String developer;
-	private String keyspace;
+	private String component;
 	private String command;
 	private String comment;
 
 	public MigrationStepMetadata(Version version, String developer,
-			String keyspace, String command, String comment) {
+			String component, String command, String comment) {
 		super();
 		this.version = version;
 		this.developer = developer;
-		this.keyspace = keyspace;
+		this.component = component;
 		this.command = command;
 		this.comment = comment;
 	}
@@ -36,12 +36,12 @@ public class MigrationStepMetadata {
 		this.developer = developer;
 	}
 
-	public String getKeyspace() {
-		return keyspace;
+	public String getComponent() {
+		return component;
 	}
 
-	public void setKeyspace(String keyspace) {
-		this.keyspace = keyspace;
+	public void setComponent(String component) {
+		this.component = component;
 	}
 
 	public String getCommand() {

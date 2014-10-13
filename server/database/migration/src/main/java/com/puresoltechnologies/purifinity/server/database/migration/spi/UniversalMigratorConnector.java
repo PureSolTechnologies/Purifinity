@@ -1,16 +1,17 @@
-package com.puresoltechnologies.purifinity.server.database.migration;
+package com.puresoltechnologies.purifinity.server.database.migration.spi;
 
 import java.io.Closeable;
 import java.io.IOException;
 
+import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
+
 /**
- * This interface represents a single connector for a database for its
- * migration.
+ * This interface represents a single connector for a database, filesystem or
+ * service for its migration.
  * 
  * @author Rick-Rainer Ludwig
- * 
  */
-public interface DatabaseMigrationConnector extends Closeable {
+public interface UniversalMigratorConnector extends Closeable {
 
 	/**
 	 * This method is called during the initialization phase of the migrator.

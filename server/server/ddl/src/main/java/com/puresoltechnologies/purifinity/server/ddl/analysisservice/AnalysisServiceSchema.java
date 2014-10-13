@@ -1,26 +1,26 @@
 package com.puresoltechnologies.purifinity.server.ddl.analysisservice;
 
-import static com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration.createKeyspace;
-import static com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration.createTable;
+import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createKeyspace;
+import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createTable;
 
 import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
-import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrator;
+import com.puresoltechnologies.purifinity.server.database.migration.UniversalMigrator;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 
 public class AnalysisServiceSchema {
 
     private static final Version V_1_0_0 = new Version(1, 0, 0);
 
-    public static void createSequence(DatabaseMigrator migrator)
+    public static void createSequence(UniversalMigrator migrator)
 	    throws MigrationException {
 	checkAndCreateKeyspaces(migrator);
 	checkAndCreateAnalysisTables(migrator);
     }
 
-    private static void checkAndCreateKeyspaces(DatabaseMigrator migrator)
+    private static void checkAndCreateKeyspaces(UniversalMigrator migrator)
 	    throws MigrationException {
 	migrator.registerMigrationStep(createKeyspace(
 		AnalysisStoreKeyspace.NAME, V_1_0_0, "Rick-Rainer Ludwig",
@@ -28,7 +28,7 @@ public class AnalysisServiceSchema {
 		ReplicationStrategy.SIMPLE_STRATEGY, 1));
     }
 
-    private static void checkAndCreateAnalysisTables(DatabaseMigrator migrator)
+    private static void checkAndCreateAnalysisTables(UniversalMigrator migrator)
 	    throws MigrationException {
 	migrator.registerMigrationStep(createTable(AnalysisStoreKeyspace.NAME,
 		V_1_0_0, "Rick-Rainer Ludwig",

@@ -1,12 +1,12 @@
 package com.puresoltechnologies.purifinity.server.ddl.evaluationservice;
 
-import static com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration.createKeyspace;
-import static com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration.createTable;
+import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createKeyspace;
+import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createTable;
 
 import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
-import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrator;
+import com.puresoltechnologies.purifinity.server.database.migration.UniversalMigrator;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 
 public class EvaluationServiceSchema {
@@ -22,13 +22,13 @@ public class EvaluationServiceSchema {
 
 	private static final Version v100 = new Version(1, 0, 0);
 
-	public static void createSequence(DatabaseMigrator migrator)
+	public static void createSequence(UniversalMigrator migrator)
 			throws MigrationException {
 		checkAndCreateKeyspaces(migrator);
 		checkAndCreateEvaluationTables(migrator);
 	}
 
-	private static void checkAndCreateKeyspaces(DatabaseMigrator migrator)
+	private static void checkAndCreateKeyspaces(UniversalMigrator migrator)
 			throws MigrationException {
 		migrator.registerMigrationStep(createKeyspace(EVALUATION_KEYSPACE,
 				v100, "Rick-Rainer Ludwig",
@@ -36,7 +36,7 @@ public class EvaluationServiceSchema {
 				ReplicationStrategy.SIMPLE_STRATEGY, 1));
 	}
 
-	private static void checkAndCreateEvaluationTables(DatabaseMigrator migrator)
+	private static void checkAndCreateEvaluationTables(UniversalMigrator migrator)
 			throws MigrationException {
 		migrator.registerMigrationStep(createTable(
 				EVALUATION_KEYSPACE,

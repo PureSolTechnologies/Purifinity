@@ -2,12 +2,12 @@ package com.puresoltechnologies.purifinity.server.database.titan.utils;
 
 import java.io.IOException;
 
-import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrationConnector;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
+import com.puresoltechnologies.purifinity.server.database.migration.spi.UniversalMigratorConnector;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanGraphHelper;
 import com.thinkaurelius.titan.core.TitanGraph;
 
-public class TitanMigrationConnector implements DatabaseMigrationConnector {
+public class TitanMigrationConnector implements UniversalMigratorConnector {
 
     private TitanGraph titanGraph;
 

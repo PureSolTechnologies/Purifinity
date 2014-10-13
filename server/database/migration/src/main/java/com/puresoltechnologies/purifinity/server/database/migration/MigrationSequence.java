@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresoltechnologies.purifinity.server.database.migration.spi.UniversalMigratorConnector;
+import com.puresoltechnologies.purifinity.server.database.migration.spi.UniversalMigratorTracker;
+
 /**
  * This class is a compound implementaion of {@link MigrationStep} to bundle
  * several steps into a logical sequence which is run within migration step.
@@ -23,10 +26,11 @@ public class MigrationSequence implements MigrationStep {
 	}
 
 	@Override
-	public void migrate(DatabaseMigrationConnector connector)
-			throws IOException, MigrationException {
+	public void migrate(UniversalMigratorTracker tracker,
+			UniversalMigratorConnector connector) throws IOException,
+			MigrationException {
 		for (MigrationStep migrationStep : migrationSteps) {
-			migrationStep.migrate(connector);
+			migrationStep.migrate(tracker, connector);
 		}
 	}
 

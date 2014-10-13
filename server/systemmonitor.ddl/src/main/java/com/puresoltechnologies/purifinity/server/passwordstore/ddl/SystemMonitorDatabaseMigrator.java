@@ -3,14 +3,14 @@ package com.puresoltechnologies.purifinity.server.passwordstore.ddl;
 import java.io.IOException;
 
 import com.puresoltechnologies.commons.misc.Version;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigration;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraMigrationConnector;
+import com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration;
+import com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigratorConnector;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
-import com.puresoltechnologies.purifinity.server.database.migration.AbstractDatabaseMigrator;
-import com.puresoltechnologies.purifinity.server.database.migration.DatabaseMigrationConnector;
+import com.puresoltechnologies.purifinity.server.database.migration.AbstractUniversalMigrator;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
+import com.puresoltechnologies.purifinity.server.database.migration.spi.UniversalMigratorConnector;
 
-public class SystemMonitorDatabaseMigrator extends AbstractDatabaseMigrator {
+public class SystemMonitorDatabaseMigrator extends AbstractUniversalMigrator {
 
 	public static final String SYSTEM_MONITOR_KEYSPACE_NAME = "system_monitor";
 	public static final String CASSANDRA_HOST = "localhost";
@@ -20,7 +20,7 @@ public class SystemMonitorDatabaseMigrator extends AbstractDatabaseMigrator {
 	private static final String EVENTS_TABLE_NAME = "events";
 	private static final String METRICS_TABLE_NAME = "metrics";
 
-	protected SystemMonitorDatabaseMigrator(DatabaseMigrationConnector connector) {
+	protected SystemMonitorDatabaseMigrator(UniversalMigratorConnector connector) {
 		super(connector);
 	}
 
@@ -76,7 +76,7 @@ public class SystemMonitorDatabaseMigrator extends AbstractDatabaseMigrator {
 	}
 
 	public static void main(String[] args) {
-		CassandraMigrationConnector connector = new CassandraMigrationConnector(
+		CassandraMigratorConnector connector = new CassandraMigratorConnector(
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT);
 		try {
 			SystemMonitorDatabaseMigrator migrator = new SystemMonitorDatabaseMigrator(
