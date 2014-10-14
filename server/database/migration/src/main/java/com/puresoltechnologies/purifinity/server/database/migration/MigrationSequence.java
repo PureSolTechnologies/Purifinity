@@ -1,11 +1,8 @@
 package com.puresoltechnologies.purifinity.server.database.migration;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-
-import com.puresoltechnologies.purifinity.server.database.migration.spi.UniversalMigratorConnector;
-import com.puresoltechnologies.purifinity.server.database.migration.spi.UniversalMigratorTracker;
 
 /**
  * This class is a compound implementaion of {@link MigrationStep} to bundle
@@ -16,34 +13,47 @@ import com.puresoltechnologies.purifinity.server.database.migration.spi.Universa
  * @author Rick-Rainer Ludwig
  * 
  */
-public class MigrationSequence implements MigrationStep {
+public final class MigrationSequence implements MigrationStep {
 
-	private final List<MigrationStep> migrationSteps = new ArrayList<>();
+    private final List<MigrationStep> migrationSteps = new ArrayList<>();
 
-	@Override
-	public MigrationStepMetadata getMetadata() {
-		return null;
-	}
+    private final MigrationMetadata metadata;
 
-	@Override
-	public void migrate(UniversalMigratorTracker tracker,
-			UniversalMigratorConnector connector) throws IOException,
-			MigrationException {
-		for (MigrationStep migrationStep : migrationSteps) {
-			migrationStep.migrate(tracker, connector);
-		}
-	}
+    public MigrationSequence(MigrationMetadata metadata) {
+	super();
+	this.metadata = metadata;
+    }
 
-	/**
-	 * Adds a new {@link MigrationStep} at the end of the sequence.
-	 * 
-	 * @param migrationStep
-	 */
-	protected void registerMigrationStep(MigrationStep migrationStep) {
-		migrationSteps.add(migrationStep);
-	}
+    @Override
+    public MigrationMetadata getMetadata() {
+	return metadata;
+    }
 
-	public List<MigrationStep> getMigrationSteps() {
-		return migrationSteps;
-	}
+    @Override
+    public void migrate() {
+	// intentionally left empty
+    }
+
+    /**
+     * Adds a new {@link MigrationStep} at the end of the sequence.
+     * 
+     * @param migrationStep
+     */
+    public void registerMigrationStep(MigrationStep migrationStep) {
+	migrationSteps.add(migrationStep);
+    }
+
+    /**
+     * Adds new {@link MigrationStep}s at the end of the sequence.
+     * 
+     * @param migrationSteps
+     *            is a {@link Collection} of {@link MigrationStep}
+     */
+    public void registerMigrationSteps(List<MigrationStep> migrationSteps) {
+	this.migrationSteps.addAll(migrationSteps);
+    }
+
+    public List<MigrationStep> getMigrationSteps() {
+	return migrationSteps;
+    }
 }

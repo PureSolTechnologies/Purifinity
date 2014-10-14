@@ -1,38 +1,75 @@
-package com.puresoltechnologies.purifinity.server.ddl.analysisservice;
+package com.puresoltechnologies.purifinity.server.ddl;
 
 import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createKeyspace;
 import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createTable;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigratorConnector;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
-import com.puresoltechnologies.purifinity.server.database.migration.UniversalMigrator;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
+import com.puresoltechnologies.purifinity.server.database.migration.MigrationMetadata;
+import com.puresoltechnologies.purifinity.server.database.migration.MigrationSequence;
+import com.puresoltechnologies.purifinity.server.database.migration.MigrationStep;
+import com.puresoltechnologies.purifinity.server.database.migration.spi.UniversalMigratorConnector;
 
-public class AnalysisServiceSchema {
+public class AnalysisServiceDatabaseMigrator {
 
     private static final Version V_1_0_0 = new Version(1, 0, 0);
 
-    public static void createSequence(UniversalMigrator migrator)
+    private final CassandraMigratorConnector connector;
+
+    public AnalysisServiceDatabaseMigrator(CassandraMigratorConnector connector)
 	    throws MigrationException {
-	checkAndCreateKeyspaces(migrator);
-	checkAndCreateAnalysisTables(migrator);
+	this.connector = connector;
     }
 
-    private static void checkAndCreateKeyspaces(UniversalMigrator migrator)
+    public UniversalMigratorConnector getConnector() {
+	return connector;
+    }
+
+    public void drop() {
+	Cluster cluster = connector.getCluster();
+	Session session = cluster.connect();
+	try {
+	    session.execute("DROP KEYSPACE " + AnalysisStoreKeyspace.NAME);
+	} finally {
+	    session.close();
+	}
+    }
+
+    public MigrationSequence getSequence() throws MigrationException {
+	MigrationSequence sequence = new MigrationSequence(
+		new MigrationMetadata(V_1_0_0, "Rick-Rainer Ludwig",
+			"Analysis Service", "", "Version " + V_1_0_0
+				+ " sequence."));
+	sequence.registerMigrationSteps(checkAndCreateKeyspaces());
+	sequence.registerMigrationSteps(checkAndCreateAnalysisTables());
+	return sequence;
+    }
+
+    private List<MigrationStep> checkAndCreateKeyspaces()
 	    throws MigrationException {
-	migrator.registerMigrationStep(createKeyspace(
-		AnalysisStoreKeyspace.NAME, V_1_0_0, "Rick-Rainer Ludwig",
+	List<MigrationStep> steps = new ArrayList<>();
+	steps.add(createKeyspace(connector, AnalysisStoreKeyspace.NAME,
+		V_1_0_0, "Rick-Rainer Ludwig",
 		"Keyspace for analysis information",
 		ReplicationStrategy.SIMPLE_STRATEGY, 1));
+	return steps;
     }
 
-    private static void checkAndCreateAnalysisTables(UniversalMigrator migrator)
+    private List<MigrationStep> checkAndCreateAnalysisTables()
 	    throws MigrationException {
-	migrator.registerMigrationStep(createTable(AnalysisStoreKeyspace.NAME,
-		V_1_0_0, "Rick-Rainer Ludwig",
-		"Keeps settings of analysis projects.", "CREATE TABLE "
+	List<MigrationStep> steps = new ArrayList<>();
+	steps.add(createTable(connector, AnalysisStoreKeyspace.NAME, V_1_0_0,
+		"Rick-Rainer Ludwig", "Keeps settings of analysis projects.",
+		"CREATE TABLE "
 			+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
 			+ " (project_uuid uuid, " + "name varchar, "
 			+ "description varchar, "
@@ -44,9 +81,9 @@ public class AnalysisServiceSchema {
 			+ "repository_location map<text,text>, "
 			+ "PRIMARY KEY(project_uuid));"));
 
-	migrator.registerMigrationStep(createTable(AnalysisStoreKeyspace.NAME,
-		V_1_0_0, "Rick-Rainer Ludwig",
-		"Keeps settings of analysis runs.", "CREATE TABLE "
+	steps.add(createTable(connector, AnalysisStoreKeyspace.NAME, V_1_0_0,
+		"Rick-Rainer Ludwig", "Keeps settings of analysis runs.",
+		"CREATE TABLE "
 			+ CassandraElementNames.ANALYSIS_RUN_SETTINGS_TABLE
 			+ " (run_uuid uuid, " + "file_includes list<text>, "
 			+ "file_excludes list<text>, "
@@ -54,7 +91,8 @@ public class AnalysisServiceSchema {
 			+ "location_excludes list<text>, "
 			+ "ignore_hidden boolean, " + "PRIMARY KEY(run_uuid));"));
 
-	migrator.registerMigrationStep(createTable(
+	steps.add(createTable(
+		connector,
 		AnalysisStoreKeyspace.NAME,
 		V_1_0_0,
 		"Rick-Rainer Ludwig",
@@ -65,7 +103,8 @@ public class AnalysisServiceSchema {
 			+ " (time timestamp, hashid varchar, raw blob, size int, "
 			+ "PRIMARY KEY(hashid));"));
 
-	migrator.registerMigrationStep(createTable(
+	steps.add(createTable(
+		connector,
 		AnalysisStoreKeyspace.NAME,
 		V_1_0_0,
 		"Rick-Rainer Ludwig",
@@ -76,7 +115,8 @@ public class AnalysisServiceSchema {
 			+ " (time timestamp, hashid varchar, language varchar, language_version varchar, plugin_version varchar, duration bigint, successful boolean, analyzer_message text,"
 			+ "analysis blob, PRIMARY KEY(hashid, language, language_version));"));
 
-	migrator.registerMigrationStep(createTable(
+	steps.add(createTable(
+		connector,
 		AnalysisStoreKeyspace.NAME,
 		V_1_0_0,
 		"Rick-Rainer Ludwig",
@@ -85,7 +125,7 @@ public class AnalysisServiceSchema {
 			+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
 			+ " (run_uuid uuid, " + "persisted_tree blob, "
 			+ "PRIMARY KEY(run_uuid));"));
-
+	return steps;
     }
 
 }

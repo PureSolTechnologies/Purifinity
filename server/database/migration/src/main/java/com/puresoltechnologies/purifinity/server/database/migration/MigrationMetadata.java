@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.database.migration;
 
 import com.puresoltechnologies.commons.misc.Version;
 
-public class MigrationStepMetadata {
+public class MigrationMetadata {
 
 	private Version version;
 	private String developer;
@@ -10,7 +10,7 @@ public class MigrationStepMetadata {
 	private String command;
 	private String comment;
 
-	public MigrationStepMetadata(Version version, String developer,
+	public MigrationMetadata(Version version, String developer,
 			String component, String command, String comment) {
 		super();
 		this.version = version;
