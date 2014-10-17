@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 
 import com.buschmais.xo.api.Query.Result;
+import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.api.XOManager;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerRemote;
@@ -182,4 +183,25 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	}
 	return users;
     }
+
+    @Override
+    public void setUser(String email, User user) {
+	xoManager.currentTransaction().begin();
+	try {
+	    UserVertex userVertex = xoManager.find(UserVertex.class,
+		    user.getEmail()).getSingleResult();
+	    userVertex.setName(user.getName());
+	    xoManager.currentTransaction().commit();
+	} catch (XOException e) {
+	    xoManager.currentTransaction().rollback();
+	}
+    }
+
+    @Override
+    public User getUser(String email) {
+	UserVertex userVertex = xoManager.find(UserVertex.class, email)
+		.getSingleResult();
+	return new User(userVertex.getEmail(), userVertex.getName());
+    }
+
 }

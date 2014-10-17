@@ -15,11 +15,13 @@ import com.puresoltechnologies.purifinity.server.passwordstore.core.api.Password
 public interface AccountManagerCommon extends PasswordStore {
 
     /**
-     * This method returns the user email which was used to log in.
+     * This method is used to create a new empty account. This method is used
+     * once(!) after account activation.
      * 
-     * @return
+     * @param email
+     *            is the email address of the user which activated the account.
      */
-    public String getEmail();
+    void createAccount(String email);
 
     /**
      * This method returns the user name which can be used to express the user
@@ -38,15 +40,6 @@ public interface AccountManagerCommon extends PasswordStore {
     boolean isLoggedIn();
 
     /**
-     * This method is used to create a new empty account. This method is used
-     * once(!) after account activation.
-     * 
-     * @param email
-     *            is the email address of the user which activated the account.
-     */
-    void createAccount(String email);
-
-    /**
      * This method returns all roles currently provided.
      * 
      * @return A {@link Set} is returned containing {@link Role} objects.
@@ -59,4 +52,8 @@ public interface AccountManagerCommon extends PasswordStore {
      * @return A {@link Set} of {@link User} is returned.
      */
     public Set<User> getUsers();
+
+    public void setUser(String email, User user);
+
+    public User getUser(String email);
 }

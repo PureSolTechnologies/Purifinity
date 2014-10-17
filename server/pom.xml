@@ -360,12 +360,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>accountmanager.socket</artifactId>
-				<type>war</type>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>accountmanager.ui.web</artifactId>
 				<version>${project.version}</version>
 				<type>war</type>
@@ -836,6 +830,12 @@
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-jaxrs</artifactId>
+				<version>${resteasy.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jackson-provider</artifactId>
 				<version>${resteasy.version}</version>
 				<scope>provided</scope>
 			</dependency>

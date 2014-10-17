@@ -12,27 +12,27 @@ import com.puresoltechnologies.purifinity.server.accountmanager.core.api.Account
 @SessionScoped
 public class AccountManagerDelegatorMBean implements Serializable {
 
-	private static final long serialVersionUID = 4724997649418867363L;
+    private static final long serialVersionUID = 4724997649418867363L;
 
-	/**
-	 * Remote EJB lookup.
-	 * 
-	 * @see https
-	 *      ://docs.jboss.org/author/display/AS71/EJB+invocations+from+a+remote
-	 *      +client+using+JNDI
-	 */
-	@EJB(lookup = "ejb:accountmanager.app/accountmanager.core.impl//AccountManagerBean!com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerRemote?stateful")
-	private AccountManagerRemote accountManager;
+    /**
+     * Remote EJB lookup.
+     * 
+     * @see https 
+     *      ://docs.jboss.org/author/display/AS71/EJB+invocations+from+a+remote
+     *      +client+using+JNDI
+     */
+    @EJB(lookup = "ejb:accountmanager.app/accountmanager.core.impl//AccountManagerBean!com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerRemote?stateful")
+    private AccountManagerRemote accountManager;
 
-	public Object getName() {
-		return accountManager.getName();
-	}
+    public Object getName() {
+	return accountManager.getName();
+    }
 
-	public boolean isLoggedIn() {
-		return accountManager.isLoggedIn();
-	}
+    public boolean isLoggedIn() {
+	return accountManager.isLoggedIn();
+    }
 
-	public void createAccount(String email) {
-		accountManager.createAccount(email);
-	}
+    public void createAccount(String email) {
+	accountManager.createAccount(email);
+    }
 }
