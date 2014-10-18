@@ -8,8 +8,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import javax.ws.rs.InternalServerErrorException;
-
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -65,7 +63,7 @@ public class AccountManagerPasswordStoreIT extends
      * 
      * @throws AccountCreationException
      */
-    @Test(expected = InternalServerErrorException.class)
+    @Test
     public void testCreateAccountDuplicateEmail()
 	    throws AccountCreationException {
 	// the first account should be created normally...
@@ -87,7 +85,7 @@ public class AccountManagerPasswordStoreIT extends
      * 
      * @throws AccountCreationException
      */
-    @Test(expected = InternalServerErrorException.class)
+    @Test
     public void testCreateAccountTooWeakPassword()
 	    throws AccountCreationException {
 	try {
@@ -107,7 +105,7 @@ public class AccountManagerPasswordStoreIT extends
      * 
      * @throws AccountCreationException
      */
-    @Test(expected = InternalServerErrorException.class)
+    @Test
     public void testCreateAccountWithInvalidEmailAddress()
 	    throws AccountCreationException {
 	try {
@@ -130,7 +128,7 @@ public class AccountManagerPasswordStoreIT extends
 	proxy.activateAccount("ludwig@puresol-technologies.com", activationKey);
     }
 
-    @Test(expected = InternalServerErrorException.class)
+    @Test
     public void testActivateAccountWithInvalidActivationKey()
 	    throws AccountCreationException, AccountActivationException {
 	String activationKey = proxy.createAccount(EMAIL_ADDRESS,
@@ -225,7 +223,7 @@ public class AccountManagerPasswordStoreIT extends
 		+ "Wrong!", VALID_PASSWORD + "New!"));
     }
 
-    @Test(expected = InternalServerErrorException.class)
+    @Test
     public void testChangePasswordTooWeakPassword()
 	    throws AccountCreationException, AccountActivationException,
 	    PasswordChangeException {
@@ -260,7 +258,7 @@ public class AccountManagerPasswordStoreIT extends
 	assertTrue(passwordStoreClient.authenticate(EMAIL_ADDRESS, newPassword));
     }
 
-    @Test(expected = InternalServerErrorException.class)
+    @Test
     public void testResetPasswordWrongEmail() throws PasswordResetException {
 	try {
 	    proxy.resetPassword(EMAIL_ADDRESS);
