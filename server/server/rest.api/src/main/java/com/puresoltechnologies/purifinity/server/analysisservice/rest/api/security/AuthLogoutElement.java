@@ -6,11 +6,13 @@ import java.util.UUID;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
+
 public class AuthLogoutElement implements Serializable {
 
     private static final long serialVersionUID = 8044441747125956593L;
 
-    private final String email;
+    private final EmailAddress email;
     private final UUID token;
 
     public AuthLogoutElement() {
@@ -21,13 +23,13 @@ public class AuthLogoutElement implements Serializable {
     @JsonCreator
     public AuthLogoutElement(
 	    //
-	    @JsonProperty("email") String email,
+	    @JsonProperty("email") EmailAddress email,
 	    @JsonProperty("token") UUID token) {
 	this.email = email;
 	this.token = token;
     }
 
-    public String getEmail() {
+    public EmailAddress getEmail() {
 	return email;
     }
 

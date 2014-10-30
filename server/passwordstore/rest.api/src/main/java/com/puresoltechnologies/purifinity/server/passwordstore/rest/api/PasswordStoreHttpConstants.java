@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.passwordstore.rest;
+package com.puresoltechnologies.purifinity.server.passwordstore.rest.api;
 
 public class PasswordStoreHttpConstants {
 

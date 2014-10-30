@@ -5,6 +5,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
 
 @ManagedBean
@@ -26,7 +27,8 @@ public class ActivateAccountMBean {
 	try {
 	    PasswordStoreClient passwordStore = PasswordStoreClient
 		    .createInstance();
-	    email = passwordStore.activateAccount(email, activationKey);
+	    email = passwordStore.activatePassword(new EmailAddress(email),
+		    activationKey).getAddress();
 	    // accountManager.createAccount(email);
 	    return "account_activated";
 	} catch (Exception e) {

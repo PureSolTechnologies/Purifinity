@@ -21,7 +21,12 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthElement;
+import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
+import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
+import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSeverity;
+import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventType;
 
 /**
  * This class is an intercepter for REST services which checks for
@@ -50,13 +55,11 @@ import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.securi
 public class AuthSecurityIntercepter implements ContainerRequestFilter {
 
     // 401 - Access denied
-    private static final Response ACCESS_UNAUTHORIZED = Response
-	    .status(Response.Status.UNAUTHORIZED).entity("Not authorized.")
-	    .build();
+    private static final Response ACCESS_UNAUTHORIZED = Response.status(
+	    Response.Status.UNAUTHORIZED).build();
     // 403 - Forbidden
-    private static final Response FORBIDDEN = Response
-	    .status(Response.Status.UNAUTHORIZED).entity("Not allowed.")
-	    .build();
+    private static final Response FORBIDDEN = Response.status(
+	    Response.Status.UNAUTHORIZED).build();
 
     @Inject
     private AuthService authService;
@@ -67,27 +70,39 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
     @Context
     private ResourceInfo resourceInfo;
 
+    @Inject
+    private EventLogger eventLogger;
+
     @Override
     public void filter(ContainerRequestContext requestContext)
 	    throws IOException {
+	// Get AuthId and AuthToken from HTTP-Header.
+	EmailAddress email = new EmailAddress(
+		requestContext.getHeaderString(AuthElement.AUTH_ID_HEADER));
+	String authTokenString = requestContext
+		.getHeaderString(AuthElement.AUTH_TOKEN_HEADER);
 	// Get method invoked.
 	Method methodInvoked = resourceInfo.getResourceMethod();
 	if (methodInvoked.isAnnotationPresent(PermitAll.class)) {
 	    return;
 	} else {
-	    // Get AuthId and AuthToken from HTTP-Header.
-	    String authId = requestContext
-		    .getHeaderString(AuthElement.AUTH_ID_HEADER);
-	    String authTokenString = requestContext
-		    .getHeaderString(AuthElement.AUTH_TOKEN_HEADER);
-	    if ((authId == null) || (authTokenString == null)) {
+	    if ((email == null) || (email.getAddress() == null)
+		    || (email.getAddress().isEmpty())
+		    || (authTokenString == null) || (authTokenString.isEmpty())) {
 		requestContext.abortWith(ACCESS_UNAUTHORIZED);
+		eventLogger.logEvent(new Event("Authentication", 0,
+			EventType.SYSTEM, EventSeverity.WARNING,
+			"User was not authenticated, yet."));
 		return;
 	    }
 	    UUID authToken;
 	    try {
 		authToken = UUID.fromString(authTokenString);
 	    } catch (IllegalArgumentException e) {
+		eventLogger.logEvent(new Event("Authentication", 1,
+			EventType.SYSTEM, EventSeverity.WARNING,
+			"Invalid user token '" + authTokenString
+				+ "' for user '" + email + "'."));
 		requestContext.abortWith(ACCESS_UNAUTHORIZED);
 		return;
 	    }
@@ -98,13 +113,23 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
 		Set<String> rolesAllowed = new HashSet<>(
 			Arrays.asList(rolesAllowedAnnotation.value()));
 
-		if (!authService.isAuthorized(authId, authToken, rolesAllowed)) {
+		if (!authService.isAuthorized(email, authToken, rolesAllowed)) {
+		    eventLogger.logEvent(new Event("Authentication", 1,
+			    EventType.SYSTEM, EventSeverity.WARNING, "User '"
+				    + email + "' is not authorized for '"
+				    + methodInvoked.getDeclaringClass() + "."
+				    + methodInvoked.getName() + "'."));
 		    requestContext.abortWith(ACCESS_UNAUTHORIZED);
 		}
 		return;
-	    } else if (authService.isAuthorizedAdministrator(authId, authToken)) {
+	    } else if (authService.isAuthorizedAdministrator(email, authToken)) {
 		return;
 	    } else if (methodInvoked.isAnnotationPresent(DenyAll.class)) {
+		eventLogger.logEvent(new Event("Authentication", 1,
+			EventType.SYSTEM, EventSeverity.WARNING, "User '"
+				+ email + "' is not authorized for '"
+				+ methodInvoked.getDeclaringClass() + "."
+				+ methodInvoked.getName() + "'."));
 		requestContext.abortWith(FORBIDDEN);
 		return;
 	    }

@@ -11,8 +11,8 @@ import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.server.accountmanager.login.PasswordStoreLoginModule;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreBean;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountCreationException;
-import com.puresoltechnologies.purifinity.server.passwordstore.rest.PasswordStoreRestInterface;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
+import com.puresoltechnologies.purifinity.server.passwordstore.rest.api.PasswordStoreRestInterface;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
@@ -25,7 +25,7 @@ public abstract class AbstractAccountManagerServerTest extends AbstractServerTes
 	public static void addDeployments(JavaArchive javaArchive) {
 		javaArchive.addPackages(true, PasswordStoreClient.class.getPackage());
 		javaArchive.addPackages(true,
-				AccountCreationException.class.getPackage());
+				PasswordCreationException.class.getPackage());
 		javaArchive.addPackages(true, "org.jboss.resteasy");
 		javaArchive.addPackages(true,
 				PasswordStoreRestInterface.class.getPackage());

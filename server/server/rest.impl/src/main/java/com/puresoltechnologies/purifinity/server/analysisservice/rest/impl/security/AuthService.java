@@ -5,6 +5,9 @@ import java.util.UUID;
 
 import javax.security.auth.login.LoginException;
 
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.misc.types.Password;
+
 /**
  * This is the interface for the authenication service. This service is a proxy
  * for the actual implementation of authenication and authorization.
@@ -13,9 +16,11 @@ import javax.security.auth.login.LoginException;
  */
 public interface AuthService {
 
-    public String login(String email, String password) throws LoginException;
+    public String login(EmailAddress email, Password password)
+	    throws LoginException;
 
-    public void logout(String email, UUID authToken) throws LoginException;
+    public void logout(EmailAddress email, UUID authToken)
+	    throws LoginException;
 
     /**
      * This method checks whether a user was authenticated or not and whether it
@@ -28,9 +33,9 @@ public interface AuthService {
      * @param rolesAllowed
      * @return
      */
-    public boolean isAuthorized(String email, UUID authToken,
+    public boolean isAuthorized(EmailAddress email, UUID authToken,
 	    Set<String> rolesAllowed);
 
-    public boolean isAuthorizedAdministrator(String email, UUID authToken);
+    public boolean isAuthorizedAdministrator(EmailAddress email, UUID authToken);
 
 }

@@ -10,19 +10,22 @@ import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
 
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.misc.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
 
 @Singleton
 public class AuthServiceBean implements AuthService {
 
     // An authentication token storage which stores <auth_token>.
-    private final Map<UUID, String> authorizationTokensStorage = new HashMap<>();
+    private final Map<UUID, EmailAddress> authorizationTokensStorage = new HashMap<>();
 
     @Inject
     private AccountManager accountManager;
 
     @Override
-    public String login(String email, String password) throws LoginException {
+    public String login(EmailAddress email, Password password)
+	    throws LoginException {
 	if (accountManager.authenticate(email, password)) {
 	    /**
 	     * Once all params are matched, the authToken will be generated and
@@ -38,7 +41,8 @@ public class AuthServiceBean implements AuthService {
     }
 
     @Override
-    public void logout(String email, UUID authToken) throws LoginException {
+    public void logout(EmailAddress email, UUID authToken)
+	    throws LoginException {
 	if (authorizationTokensStorage.containsKey(authToken)
 		&& (authorizationTokensStorage.get(authToken).equals(email))) {
 	    authorizationTokensStorage.remove(authToken);
@@ -74,8 +78,8 @@ public class AuthServiceBean implements AuthService {
 	throw new GeneralSecurityException("Invalid authorization token.");
     }
 
-    private User findByEmailAndAuthToken(String email, UUID authToken) {
-	String userId = authorizationTokensStorage.get(authToken);
+    private User findByEmailAndAuthToken(EmailAddress email, UUID authToken) {
+	EmailAddress userId = authorizationTokensStorage.get(authToken);
 	if ((userId != null) && (userId.equals(email))) {
 	    return new User(email, "admin");
 	}
@@ -83,9 +87,9 @@ public class AuthServiceBean implements AuthService {
     }
 
     @Override
-    public boolean isAuthorized(String authId, UUID authToken,
+    public boolean isAuthorized(EmailAddress email, UUID authToken,
 	    Set<String> rolesAllowed) {
-	User user = findByEmailAndAuthToken(authId, authToken);
+	User user = findByEmailAndAuthToken(email, authToken);
 	if (user != null) {
 	    return rolesAllowed.contains(user.getAuthRole());
 	} else {
@@ -94,8 +98,8 @@ public class AuthServiceBean implements AuthService {
     }
 
     @Override
-    public boolean isAuthorizedAdministrator(String authId, UUID authToken) {
-	User user = findByEmailAndAuthToken(authId, authToken);
+    public boolean isAuthorizedAdministrator(EmailAddress email, UUID authToken) {
+	User user = findByEmailAndAuthToken(email, authToken);
 	return (user != null) && (user.getAuthRole().equals("admin"));
     }
 

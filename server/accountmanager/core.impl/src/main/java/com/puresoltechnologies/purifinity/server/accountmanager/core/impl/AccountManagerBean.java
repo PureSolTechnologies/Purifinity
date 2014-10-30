@@ -20,6 +20,8 @@ import org.slf4j.Logger;
 import com.buschmais.xo.api.Query.Result;
 import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.api.XOManager;
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.misc.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerRemote;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex;
@@ -29,9 +31,9 @@ import com.puresoltechnologies.purifinity.server.accountmanager.domain.AccountMa
 import com.puresoltechnologies.purifinity.server.accountmanager.domain.Role;
 import com.puresoltechnologies.purifinity.server.accountmanager.domain.User;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountActivationException;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountCreationException;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 
@@ -59,39 +61,41 @@ public class AccountManagerBean implements Serializable, AccountManager,
     private final PasswordStoreClient passwordStore = new PasswordStoreClient();
 
     @Override
-    public String createAccount(String email, String password)
-	    throws AccountCreationException {
+    public String createPassword(EmailAddress email, Password password)
+	    throws PasswordCreationException {
 	return passwordStore.createAccount(email, password);
     }
 
     @Override
-    public String activateAccount(String email, String activationKey)
-	    throws AccountActivationException {
-	String userId = passwordStore.activateAccount(email, activationKey);
+    public EmailAddress activatePassword(EmailAddress email,
+	    String activationKey) throws PasswordActivationException {
+	EmailAddress userId = passwordStore.activatePassword(email,
+		activationKey);
 	createAccount(email);
 	return userId;
     }
 
     @Override
-    public boolean authenticate(String email, String password) {
+    public boolean authenticate(EmailAddress email, Password password) {
 	return passwordStore.authenticate(email, password);
     }
 
     @Override
-    public boolean changePassword(String email, String oldPassword,
-	    String newPassword) throws PasswordChangeException {
+    public boolean changePassword(EmailAddress email, Password oldPassword,
+	    Password newPassword) throws PasswordChangeException {
 	return passwordStore.changePassword(email, oldPassword, newPassword);
     }
 
     @Override
-    public String resetPassword(String email) throws PasswordResetException {
+    public Password resetPassword(EmailAddress email)
+	    throws PasswordResetException {
 	return passwordStore.resetPassword(email);
     }
 
     @Override
-    public String getEmail() {
+    public EmailAddress getEmail() {
 	Principal principal = context.getCallerPrincipal();
-	return principal.getName();
+	return new EmailAddress(principal.getName());
     }
 
     @Override
@@ -149,12 +153,12 @@ public class AccountManagerBean implements Serializable, AccountManager,
     }
 
     @Override
-    public void createAccount(String email) {
+    public void createAccount(EmailAddress email) {
 	logger.debug("Creating user account for '" + email + "'...");
 	xoManager.currentTransaction().begin();
 	UserVertex user = xoManager.create(UserVertex.class);
 	user.setCreationTime(new Date());
-	user.setEmail(email);
+	user.setEmail(email.getAddress());
 	xoManager.currentTransaction().commit();
 	eventLogger.logEvent(AccountManagerEvents
 		.createAccountCreationEvent(email));
@@ -185,7 +189,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
     }
 
     @Override
-    public void setUser(String email, User user) {
+    public void setUser(EmailAddress email, User user) {
 	xoManager.currentTransaction().begin();
 	try {
 	    UserVertex userVertex = xoManager.find(UserVertex.class,
@@ -198,9 +202,9 @@ public class AccountManagerBean implements Serializable, AccountManager,
     }
 
     @Override
-    public User getUser(String email) {
-	UserVertex userVertex = xoManager.find(UserVertex.class, email)
-		.getSingleResult();
+    public User getUser(EmailAddress email) {
+	UserVertex userVertex = xoManager.find(UserVertex.class,
+		email.getAddress()).getSingleResult();
 	return new User(userVertex.getEmail(), userVertex.getName());
     }
 

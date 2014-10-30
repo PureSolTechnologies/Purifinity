@@ -15,12 +15,14 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.misc.types.Password;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordEncrypter;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordStore;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.db.PasswordStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountActivationException;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountCreationException;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordData;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordEncryptionException;
@@ -110,39 +112,40 @@ public class PasswordStoreBean implements PasswordStore {
     private CassandraPreparedStatements preparedStatements;
 
     @Override
-    public String createAccount(String email, String password)
-	    throws AccountCreationException {
+    public String createPassword(EmailAddress email, Password password)
+	    throws PasswordCreationException {
 	logger.info("An account for '" + email + "' is going to be created...");
-	if (!EmailAddressValidator.validate(email)) {
+	if (!EmailAddressValidator.validate(email.getAddress())) {
 	    Event event = PasswordStoreEvents
 		    .createInvalidEmailAddressErrorEvent(email);
 	    eventLogger.logEvent(event);
-	    throw new AccountCreationException(event.getEventId(),
+	    throw new PasswordCreationException(event.getEventId(),
 		    event.getMessage());
 	}
-	if (!PasswordStrengthCalculator.validate(password)) {
+	if (!PasswordStrengthCalculator.validate(password.getPassword())) {
 	    Event event = PasswordStoreEvents
 		    .createPasswordTooWeakErrorEvent(email);
 	    eventLogger.logEvent(event);
-	    throw new AccountCreationException(event.getEventId(),
+	    throw new PasswordCreationException(event.getEventId(),
 		    event.getMessage());
 	}
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(session, RETRIEVE_ACCOUNT_STATEMENT);
-	BoundStatement boundStatement = preparedStatement.bind(email);
+	BoundStatement boundStatement = preparedStatement.bind(email
+		.getAddress());
 	ResultSet result = session.execute(boundStatement);
 	if (result.one() != null) {
 	    Event event = PasswordStoreEvents
 		    .createAccountAlreadyExistsErrorEvent(email);
 	    eventLogger.logEvent(event);
-	    throw new AccountCreationException(event.getEventId(),
+	    throw new PasswordCreationException(event.getEventId(),
 		    event.getMessage());
 	}
 
 	String passwordHash;
 	try {
-	    passwordHash = passwordEncrypter.encryptPassword(password)
-		    .toString();
+	    passwordHash = passwordEncrypter.encryptPassword(
+		    password.getPassword()).toString();
 	} catch (PasswordEncryptionException e) {
 	    Event event = PasswordStoreEvents
 		    .createPasswordEncryptionErrorEvent(email, e);
@@ -154,8 +157,8 @@ public class PasswordStoreBean implements PasswordStore {
 
 	preparedStatement = preparedStatements.getPreparedStatement(session,
 		CREATE_ACCOUNT_STATEMENT);
-	boundStatement = preparedStatement.bind(created, created, email,
-		passwordHash, activationKey);
+	boundStatement = preparedStatement.bind(created, created,
+		email.getAddress(), passwordHash, activationKey);
 	session.execute(boundStatement);
 
 	eventLogger.logEvent(PasswordStoreEvents.createAccountCreationEvent(
@@ -164,8 +167,8 @@ public class PasswordStoreBean implements PasswordStore {
     }
 
     @Override
-    public String activateAccount(String email, String activationKey)
-	    throws AccountActivationException {
+    public EmailAddress activatePassword(EmailAddress email, String activationKey)
+	    throws PasswordActivationException {
 	logger.info("Account for user '" + email + "' is to be activated...");
 
 	Row account = getUserByEmail(email);
@@ -174,7 +177,7 @@ public class PasswordStoreBean implements PasswordStore {
 	    Event event = PasswordStoreEvents
 		    .createAccountAlreadyActivatedEvent(email);
 	    eventLogger.logEvent(event);
-	    throw new AccountActivationException(event.getEventId(),
+	    throw new PasswordActivationException(event.getEventId(),
 		    event.getMessage());
 	}
 
@@ -183,14 +186,14 @@ public class PasswordStoreBean implements PasswordStore {
 	    Event event = PasswordStoreEvents
 		    .createInvalidActivationKeyErrorEvent(email);
 	    eventLogger.logEvent(event);
-	    throw new AccountActivationException(event.getEventId(),
+	    throw new PasswordActivationException(event.getEventId(),
 		    event.getMessage());
 	}
 
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(session, ACTIVATE_ACCOUNT_STATEMENT);
 	BoundStatement boundStatement = preparedStatement.bind(new Date(),
-		email);
+		email.getAddress());
 	session.execute(boundStatement);
 
 	eventLogger.logEvent(PasswordStoreEvents.createAccountActivatedEvent(
@@ -198,19 +201,20 @@ public class PasswordStoreBean implements PasswordStore {
 	return email;
     }
 
-    private Row getUserByEmail(String email) {
+    private Row getUserByEmail(EmailAddress email) {
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(session, RETRIEVE_ACCOUNT_STATEMENT);
-	BoundStatement boundStatement = preparedStatement.bind(email);
+	BoundStatement boundStatement = preparedStatement.bind(email
+		.getAddress());
 	ResultSet result = session.execute(boundStatement);
 	Row account = result.one();
 	return account;
     }
 
     @Override
-    public boolean authenticate(String email, String password) {
+    public boolean authenticate(EmailAddress email, Password password) {
 	try {
-	    logger.info(email, "Authenticating user '" + email + "'...");
+	    logger.info("Authenticating user '" + email + "'...");
 	    Row account = getUserByEmail(email);
 	    if (account == null) {
 		eventLogger
@@ -225,7 +229,8 @@ public class PasswordStoreBean implements PasswordStore {
 				.createUserAuthenticationFailedAccountNotActiveEvent(email));
 		return false;
 	    }
-	    boolean authenticated = passwordEncrypter.checkPassword(password,
+	    boolean authenticated = passwordEncrypter.checkPassword(
+		    password.getPassword(),
 		    PasswordData.fromString(account.getString("password")));
 	    if (authenticated) {
 		eventLogger.logEvent(PasswordStoreEvents
@@ -244,8 +249,8 @@ public class PasswordStoreBean implements PasswordStore {
     }
 
     @Override
-    public boolean changePassword(String email, String oldPassword,
-	    String newPassword) throws PasswordChangeException {
+    public boolean changePassword(EmailAddress email, Password oldPassword,
+	    Password newPassword) throws PasswordChangeException {
 	logger.info("Password for user '" + email
 		+ "' is going to be changed...");
 	if (!authenticate(email, oldPassword)) {
@@ -253,7 +258,7 @@ public class PasswordStoreBean implements PasswordStore {
 		    .createPasswordChangeFailedNotAuthenticatedEvent(email));
 	    return false;
 	}
-	if (!PasswordStrengthCalculator.validate(newPassword)) {
+	if (!PasswordStrengthCalculator.validate(newPassword.getPassword())) {
 	    Event event = PasswordStoreEvents
 		    .createPasswordChangeFailedPasswordTooWeakEvent(email);
 	    eventLogger.logEvent(event);
@@ -262,8 +267,8 @@ public class PasswordStoreBean implements PasswordStore {
 	}
 	String passwordHash;
 	try {
-	    passwordHash = passwordEncrypter.encryptPassword(newPassword)
-		    .toString();
+	    passwordHash = passwordEncrypter.encryptPassword(
+		    newPassword.getPassword()).toString();
 	} catch (PasswordEncryptionException e) {
 	    Event event = PasswordStoreEvents
 		    .createPasswordEncryptionErrorEvent(email, e);
@@ -273,7 +278,7 @@ public class PasswordStoreBean implements PasswordStore {
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(session, CHANGE_PASSWORD_STATEMENT);
 	BoundStatement boundStatement = preparedStatement.bind(passwordHash,
-		email);
+		email.getAddress());
 	session.execute(boundStatement);
 
 	eventLogger.logEvent(PasswordStoreEvents
@@ -282,7 +287,8 @@ public class PasswordStoreBean implements PasswordStore {
     }
 
     @Override
-    public String resetPassword(String email) throws PasswordResetException {
+    public Password resetPassword(EmailAddress email)
+	    throws PasswordResetException {
 	logger.info("Password for user '" + email + "' is going to be reset...");
 	Row account = getUserByEmail(email);
 	if (account == null) {
@@ -306,12 +312,12 @@ public class PasswordStoreBean implements PasswordStore {
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(session, CHANGE_PASSWORD_STATEMENT);
 	BoundStatement boundStatement = preparedStatement.bind(passwordHash,
-		email);
+		email.getAddress());
 	session.execute(boundStatement);
 
 	eventLogger.logEvent(PasswordStoreEvents
 		.createPasswordResetEvent(email));
-	return password;
+	return new Password(password);
     }
 
     private String generatePassword() {

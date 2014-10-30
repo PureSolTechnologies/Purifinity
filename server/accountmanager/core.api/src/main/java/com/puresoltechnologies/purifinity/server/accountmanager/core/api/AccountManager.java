@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.core.api;
 
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
+
 public interface AccountManager extends AccountManagerCommon {
 
     /**
@@ -7,6 +9,6 @@ public interface AccountManager extends AccountManagerCommon {
      * 
      * @return
      */
-    public String getEmail();
+    public EmailAddress getEmail();
 
 }

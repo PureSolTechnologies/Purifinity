@@ -6,6 +6,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerRemote;
 
 @ManagedBean(name = "accountManagerDelegatorMBean")
@@ -33,6 +34,6 @@ public class AccountManagerDelegatorMBean implements Serializable {
     }
 
     public void createAccount(String email) {
-	accountManager.createAccount(email);
+	accountManager.createAccount(new EmailAddress(email));
     }
 }

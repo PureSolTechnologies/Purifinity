@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.accountmanager.core.api;
 
 import java.util.Set;
 
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.accountmanager.domain.Role;
 import com.puresoltechnologies.purifinity.server.accountmanager.domain.User;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordStore;
@@ -21,7 +22,7 @@ public interface AccountManagerCommon extends PasswordStore {
      * @param email
      *            is the email address of the user which activated the account.
      */
-    void createAccount(String email);
+    void createAccount(EmailAddress email);
 
     /**
      * This method returns the user name which can be used to express the user
@@ -53,7 +54,7 @@ public interface AccountManagerCommon extends PasswordStore {
      */
     public Set<User> getUsers();
 
-    public void setUser(String email, User user);
+    public void setUser(EmailAddress email, User user);
 
-    public User getUser(String email);
+    public User getUser(EmailAddress email);
 }

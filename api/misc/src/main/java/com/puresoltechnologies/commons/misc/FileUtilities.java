@@ -13,6 +13,8 @@ import java.text.DecimalFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresoltechnologies.commons.math.MetricPrefix;
+
 /**
  * This class contains several static methods for easier access to standard
  * functionality.
@@ -185,6 +187,6 @@ public class FileUtilities {
 	DecimalFormat format = new DecimalFormat("#.##");
 	doubleSize = doubleSize / Math.pow(1024.0, unitCounter);
 	return format.format(doubleSize)
-		+ FileSizes.values()[unitCounter].toString();
+		+ MetricPrefix.values()[unitCounter].toString();
     }
 }

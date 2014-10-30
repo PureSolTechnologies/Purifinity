@@ -5,6 +5,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
 
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthElement;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthLoginElement;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthLogoutElement;
@@ -19,7 +20,7 @@ public class AuthenticationRestService implements AuthenticationRestInterface {
 
     @Override
     public AuthElement login(AuthLoginElement login) {
-	String email = login.getEmail();
+	EmailAddress email = login.getEmail();
 	try {
 	    String token = authService.login(email, login.getPassword());
 	    return new AuthElement(email, token, "permission", "User '" + email
@@ -33,13 +34,13 @@ public class AuthenticationRestService implements AuthenticationRestInterface {
 
     @Override
     public AuthElement logout(AuthLogoutElement logout) {
-	String username = logout.getEmail();
+	EmailAddress email = logout.getEmail();
 	try {
-	    authService.logout(username, logout.getToken());
-	    return new AuthElement(username, "", "", "User '" + username
+	    authService.logout(email, logout.getToken());
+	    return new AuthElement(email, "", "", "User '" + email
 		    + "' was successfully logged out.");
 	} catch (LoginException e) {
-	    return new AuthElement(username, "", "", "User '" + username
+	    return new AuthElement(email, "", "", "User '" + email
 		    + "' could not be logged out. (Message: " + e.getMessage()
 		    + ")");
 	}

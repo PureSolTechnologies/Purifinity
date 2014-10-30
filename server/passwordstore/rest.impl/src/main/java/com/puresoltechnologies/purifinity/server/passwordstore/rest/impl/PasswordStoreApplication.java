@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.passwordstore.rest;
+package com.puresoltechnologies.purifinity.server.passwordstore.rest.impl;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

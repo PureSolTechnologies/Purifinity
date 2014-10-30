@@ -18,28 +18,31 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.misc.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountActivationException;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountCreationException;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Ignore
 public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
 
-    private static final String EMAIL = "ludwig@puresol-technologies.com";
-    private static final String PASSWORD = "!234Qwer";
+    private static final EmailAddress EMAIL = new EmailAddress(
+	    "ludwig@puresol-technologies.com");
+    private static final Password PASSWORD = new Password("!234Qwer");
 
     @Inject
     private AccountManager accountManager;
 
     @Before
-    public void setup() throws AccountCreationException,
-	    AccountActivationException {
+    public void setup() throws PasswordCreationException,
+	    PasswordActivationException {
 	PasswordStoreClient passwordStoreClient = new PasswordStoreClient();
 	String activationKey = passwordStoreClient.createAccount(EMAIL,
 		PASSWORD);
-	passwordStoreClient.activateAccount(EMAIL, activationKey);
+	passwordStoreClient.activatePassword(EMAIL, activationKey);
 
 	assertNotNull(accountManager);
 	cleanupPasswordStoreDatabase();
@@ -55,10 +58,12 @@ public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
 			    throws IOException, UnsupportedCallbackException {
 			for (Callback callback : callbacks) {
 			    if (callback instanceof NameCallback) {
-				((NameCallback) callback).setName(EMAIL);
+				((NameCallback) callback).setName(EMAIL
+					.getAddress());
 			    } else if (callback instanceof PasswordCallback) {
 				((PasswordCallback) callback)
-					.setPassword(PASSWORD.toCharArray());
+					.setPassword(PASSWORD.getPassword()
+						.toCharArray());
 			    } else {
 				throw new UnsupportedCallbackException(
 					callback, "Callback is not supported!");
@@ -77,7 +82,7 @@ public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
 
     @Test
     public void testCreateEmptyAccount() {
-	String email = "email@address.com";
+	EmailAddress email = new EmailAddress("email@address.com");
 	accountManager.createAccount(email);
     }
 }

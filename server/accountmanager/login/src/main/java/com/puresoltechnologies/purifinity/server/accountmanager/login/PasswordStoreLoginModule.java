@@ -17,6 +17,8 @@ import javax.security.auth.spi.LoginModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.misc.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerPrincipalImpl;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.CallerPrincipalGroup;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.NamePrincipal;
@@ -48,92 +50,93 @@ import com.puresoltechnologies.purifinity.server.passwordstore.client.RolesGroup
  */
 public class PasswordStoreLoginModule implements LoginModule {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(PasswordStoreLoginModule.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(PasswordStoreLoginModule.class);
 
-	private Subject subject = null;
-	private CallbackHandler callbackHander = null;
-	private Map<String, ?> sharedState = null;
-	private Map<String, ?> options = null;
-	private boolean loggedIn = false;
+    private Subject subject = null;
+    private CallbackHandler callbackHander = null;
+    private Map<String, ?> sharedState = null;
+    private Map<String, ?> options = null;
+    private boolean loggedIn = false;
 
-	private final NamePrincipal userPrincipal = new NamePrincipal("User");
-	private final RolesGroup rolesGroup = new RolesGroup();
-	private final CallerPrincipalGroup callerPrincipalGroup = new CallerPrincipalGroup();
-	private AccountManagerPrincipalImpl userNamePrincipal;
+    private final NamePrincipal userPrincipal = new NamePrincipal("User");
+    private final RolesGroup rolesGroup = new RolesGroup();
+    private final CallerPrincipalGroup callerPrincipalGroup = new CallerPrincipalGroup();
+    private AccountManagerPrincipalImpl userNamePrincipal;
 
-	@Override
-	public void initialize(Subject subject, CallbackHandler callbackHandler,
-			Map<String, ?> sharedState, Map<String, ?> options) {
-		this.subject = subject;
-		this.callbackHander = callbackHandler;
-		this.sharedState = sharedState;
-		this.options = options;
+    @Override
+    public void initialize(Subject subject, CallbackHandler callbackHandler,
+	    Map<String, ?> sharedState, Map<String, ?> options) {
+	this.subject = subject;
+	this.callbackHander = callbackHandler;
+	this.sharedState = sharedState;
+	this.options = options;
+    }
+
+    @Override
+    public boolean login() throws LoginException {
+	try {
+	    loggedIn = false;
+	    NameCallback nameCallback = new NameCallback("Email");
+	    PasswordCallback passwordCallback = new PasswordCallback(
+		    "Password", false);
+	    Callback[] callbacks = new Callback[] { nameCallback,
+		    passwordCallback };
+	    callbackHander.handle(callbacks);
+	    EmailAddress email = new EmailAddress(nameCallback.getName());
+	    Password password = new Password(passwordCallback.getPassword()
+		    .toString());
+	    PasswordStoreClient passwordStore = PasswordStoreClient
+		    .createInstance();
+	    loggedIn = passwordStore.authenticate(email, password);
+	    if (loggedIn) {
+		userNamePrincipal = new AccountManagerPrincipalImpl(email);
+	    } else {
+		userNamePrincipal = null;
+	    }
+	    return loggedIn;
+	} catch (IOException e) {
+	    logger.error(e.getMessage(), e);
+	    throw new LoginException("IO exception occured!");
+	} catch (UnsupportedCallbackException e) {
+	    logger.error(e.getMessage(), e);
+	    throw new LoginException("Unsupported callback used!");
 	}
+    }
 
-	@Override
-	public boolean login() throws LoginException {
-		try {
-			loggedIn = false;
-			NameCallback nameCallback = new NameCallback("Email");
-			PasswordCallback passwordCallback = new PasswordCallback(
-					"Password", false);
-			Callback[] callbacks = new Callback[] { nameCallback,
-					passwordCallback };
-			callbackHander.handle(callbacks);
-			String email = nameCallback.getName();
-			String password = new String(passwordCallback.getPassword());
-			PasswordStoreClient passwordStore = PasswordStoreClient
-					.createInstance();
-			loggedIn = passwordStore.authenticate(email, password);
-			if (loggedIn) {
-				userNamePrincipal = new AccountManagerPrincipalImpl(email);
-			} else {
-				userNamePrincipal = null;
-			}
-			return loggedIn;
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new LoginException("IO exception occured!");
-		} catch (UnsupportedCallbackException e) {
-			logger.error(e.getMessage(), e);
-			throw new LoginException("Unsupported callback used!");
-		}
+    @Override
+    public boolean commit() throws LoginException {
+	Set<Principal> principals = subject.getPrincipals();
+	if (loggedIn) {
+	    principals.add(userPrincipal);
+	    principals.add(rolesGroup);
+	    rolesGroup.addMember(userPrincipal);
+	    principals.add(callerPrincipalGroup);
+	    callerPrincipalGroup.addMember(userNamePrincipal);
+	} else {
+	    principals.remove(userPrincipal);
+	    principals.remove(rolesGroup);
+	    rolesGroup.removeMember(userPrincipal);
+	    principals.remove(callerPrincipalGroup);
+	    callerPrincipalGroup.removeMember(userNamePrincipal);
 	}
+	return true;
+    }
 
-	@Override
-	public boolean commit() throws LoginException {
-		Set<Principal> principals = subject.getPrincipals();
-		if (loggedIn) {
-			principals.add(userPrincipal);
-			principals.add(rolesGroup);
-			rolesGroup.addMember(userPrincipal);
-			principals.add(callerPrincipalGroup);
-			callerPrincipalGroup.addMember(userNamePrincipal);
-		} else {
-			principals.remove(userPrincipal);
-			principals.remove(rolesGroup);
-			rolesGroup.removeMember(userPrincipal);
-			principals.remove(callerPrincipalGroup);
-			callerPrincipalGroup.removeMember(userNamePrincipal);
-		}
-		return true;
-	}
+    @Override
+    public boolean abort() throws LoginException {
+	return true;
+    }
 
-	@Override
-	public boolean abort() throws LoginException {
-		return true;
-	}
-
-	@Override
-	public boolean logout() throws LoginException {
-		Set<Principal> principals = subject.getPrincipals();
-		principals.remove(userPrincipal);
-		principals.remove(rolesGroup);
-		rolesGroup.removeMember(userPrincipal);
-		principals.remove(callerPrincipalGroup);
-		callerPrincipalGroup.removeMember(userNamePrincipal);
-		return true;
-	}
+    @Override
+    public boolean logout() throws LoginException {
+	Set<Principal> principals = subject.getPrincipals();
+	principals.remove(userPrincipal);
+	principals.remove(rolesGroup);
+	rolesGroup.removeMember(userPrincipal);
+	principals.remove(callerPrincipalGroup);
+	callerPrincipalGroup.removeMember(userNamePrincipal);
+	return true;
+    }
 
 }

@@ -5,19 +5,19 @@ package com.puresoltechnologies.purifinity.server.passwordstore.domain;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class AccountActivationException extends Exception {
+public class PasswordActivationException extends Exception {
 
 	private static final long serialVersionUID = 5052037298425784708L;
 
 	private final long eventId;
 
-	public AccountActivationException(long eventId, String message,
+	public PasswordActivationException(long eventId, String message,
 			Throwable cause) {
 		super(message, cause);
 		this.eventId = eventId;
 	}
 
-	public AccountActivationException(long eventId, String message) {
+	public PasswordActivationException(long eventId, String message) {
 		super(message);
 		this.eventId = eventId;
 	}

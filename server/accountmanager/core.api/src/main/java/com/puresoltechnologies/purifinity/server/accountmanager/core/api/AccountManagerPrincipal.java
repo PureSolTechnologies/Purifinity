@@ -5,9 +5,9 @@ import java.security.Principal;
 
 public interface AccountManagerPrincipal extends Principal, Serializable {
 
-	@Override
-	public String getName();
+    @Override
+    public String getName();
 
-	public String getRealName();
+    public String getRealName();
 
 }

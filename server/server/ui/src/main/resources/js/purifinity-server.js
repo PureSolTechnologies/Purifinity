@@ -43,16 +43,19 @@ function purifinityServerConnector($http, $location, baseURL, authFactory,
 				successCallback(data, status);
 			})
 			//
-			.error(function(data, status, error) {
-				if (status == 401) {
-					alerterFactory.addAlert("info", data);
-					authFactory.redirect = "/overview";
-					$location.path("/login");
-					return;
-				}
-				var data = localStorage.getItem(serviceURL);
-				errorCallback(data, status, error);
-			});
+			.error(
+					function(data, status, error) {
+						if (status == 401) {
+							alerterFactory.addAlert("info", data);
+							authFactory.redirect = "/overview";
+							$location.path("/login");
+							return;
+						}
+						alerterFactory.addAlert("error", "HTTP Status: "
+								+ status + "\n" + data);
+						var data = localStorage.getItem(serviceURL);
+						errorCallback(data, status, error);
+					});
 		}
 	};
 }
