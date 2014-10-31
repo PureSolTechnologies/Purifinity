@@ -66,7 +66,7 @@ public class FileSearchTest {
 	System.out.println(regExpString);
 	Pattern pattern = Pattern.compile(regExpString);
 	assertTrue(pattern.matcher("abc.xyz").matches());
-	assertFalse(pattern.matcher("\\abc.xyz").matches());
+	assertFalse(pattern.matcher(File.separator + "abc.xyz").matches());
     }
 
     @Test
