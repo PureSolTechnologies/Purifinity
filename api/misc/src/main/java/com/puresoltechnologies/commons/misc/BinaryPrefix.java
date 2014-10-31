@@ -18,6 +18,21 @@ public enum BinaryPrefix {
 	    "T", "Tera"), PETA("P", "Peta"), EXA("E", "Exa"), ZETTA("Z",
 	    "Zetta"), YOTTA("Y", "Yotta");
 
+    public static BinaryPrefix getSuitablePrefix(long size) {
+	if (size == 0) {
+	    return ONE;
+	}
+	size = Math.abs(size);
+	BinaryPrefix[] values = BinaryPrefix.values();
+	for (int pos = 1; pos < values.length; pos++) {
+	    if (values[pos].getBinaryFactor().compareTo(
+		    BigInteger.valueOf(size)) > 0) {
+		return values[pos - 1];
+	    }
+	}
+	return YOTTA;
+    }
+
     private final String unit;
     private final String name;
     private final BigInteger binaryFactor;

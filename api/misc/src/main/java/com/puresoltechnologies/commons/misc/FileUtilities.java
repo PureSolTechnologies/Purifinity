@@ -13,8 +13,6 @@ import java.text.DecimalFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.math.MetricPrefix;
-
 /**
  * This class contains several static methods for easier access to standard
  * functionality.
@@ -174,19 +172,14 @@ public class FileUtilities {
      * '1MB' and so forth.
      * 
      * @param size
-     *            is the size of the file to be converted into a {@link String}.
+     *            is the size of the file in Byte to be converted into a
+     *            {@link String}.
      * @return A {@link String} is returned.
      */
     public static String createHumanReadableSizeString(long size) {
-	double doubleSize = size;
-	int unitCounter = 0;
-	while (size >= 1024) {
-	    unitCounter++;
-	    size /= 1024;
-	}
 	DecimalFormat format = new DecimalFormat("#.##");
-	doubleSize = doubleSize / Math.pow(1024.0, unitCounter);
-	return format.format(doubleSize)
-		+ MetricPrefix.values()[unitCounter].toString();
+	BinaryPrefix prefix = BinaryPrefix.getSuitablePrefix(size);
+	double doubleSize = size / prefix.getBinaryFactor().doubleValue();
+	return format.format(doubleSize) + prefix.getUnit() + "B";
     }
 }
