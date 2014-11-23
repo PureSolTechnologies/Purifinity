@@ -42,9 +42,13 @@ public final class EmailAddress implements Serializable {
      */
     public static void validate(String address)
 	    throws IllegalEmailAddressException {
+	if (address == null) {
+	    throw new IllegalEmailAddressException(address,
+		    "Email address is null.");
+	}
 	if (address.length() > 254) {
 	    throw new IllegalEmailAddressException(address,
-		    "Total address is longer than 254 characters.");
+		    "Email address is longer than 254 characters.");
 	}
 	String[] parts = address.split("@");
 	try {

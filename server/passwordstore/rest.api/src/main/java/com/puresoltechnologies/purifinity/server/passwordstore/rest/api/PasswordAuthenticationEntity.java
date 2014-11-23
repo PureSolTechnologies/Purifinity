@@ -25,7 +25,7 @@ public class PasswordAuthenticationEntity implements Serializable {
 
     @JsonCreator
     public PasswordAuthenticationEntity(
-	    @JsonProperty("emailAddress") EmailAddress email,
+	    @JsonProperty("email") EmailAddress email,
 	    @JsonProperty("password") Password password) {
 	super();
 	this.email = email;

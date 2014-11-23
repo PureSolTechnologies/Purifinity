@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>common.utils</artifactId>
-	<name>Purifinity Framework: ${project.artifa-ctId}</name>
+	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>jar</packaging>
 
 	<dependencies>

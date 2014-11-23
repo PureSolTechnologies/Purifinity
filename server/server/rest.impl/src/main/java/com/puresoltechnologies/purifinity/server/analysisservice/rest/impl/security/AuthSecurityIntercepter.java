@@ -77,8 +77,12 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext)
 	    throws IOException {
 	// Get AuthId and AuthToken from HTTP-Header.
-	EmailAddress email = new EmailAddress(
-		requestContext.getHeaderString(AuthElement.AUTH_ID_HEADER));
+	EmailAddress email = null;
+	String emailAddressString = requestContext
+		.getHeaderString(AuthElement.AUTH_ID_HEADER);
+	if (emailAddressString != null) {
+	    email = new EmailAddress(emailAddressString);
+	}
 	String authTokenString = requestContext
 		.getHeaderString(AuthElement.AUTH_TOKEN_HEADER);
 	// Get method invoked.
