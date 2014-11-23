@@ -8,6 +8,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<com.puresoltechnologies.commons.version>0.1.0-SNAPSHOT</com.puresoltechnologies.commons.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity.api</groupId>
@@ -187,16 +188,6 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>osgi</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>trees</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
 				<artifactId>parsers</artifactId>
 				<version>${project.version}</version>
@@ -225,6 +216,17 @@
 				<groupId>com.puresoltechnologies.purifinity.api</groupId>
 				<artifactId>store.api</artifactId>
 				<version>${project.version}</version>
+			</dependency>
+			<!-- External PureSol Technologies Libraries -->
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>osgi</artifactId>
+				<version>${com.puresoltechnologies.commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>trees</artifactId>
+				<version>${com.puresoltechnologies.commons.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
 			<dependency>
@@ -412,11 +414,8 @@
 	</reporting>
 
 	<modules>
-		<module>osgi</module>
 		<module>math</module>
 		<module>math.bundle</module>
-		<module>trees</module>
-		<module>trees.bundle</module>
 		<module>misc</module>
 		<module>misc.bundle</module>
 		<module>parsers</module>

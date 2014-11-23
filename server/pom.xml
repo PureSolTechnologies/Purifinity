@@ -9,6 +9,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<purifinity.api.version>${project.version}</purifinity.api.version>
+		<com.puresoltechnologies.commons.version>0.1.0-SNAPSHOT</com.puresoltechnologies.commons.version>
+		
 		<!-- Databases -->
 		<cassandra.driver.version>2.1.2</cassandra.driver.version>
 		<titan.version>0.5.1</titan.version>
@@ -664,16 +666,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>osgi</artifactId>
-				<version>${purifinity.api.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>trees</artifactId>
-				<version>${purifinity.api.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>utils</artifactId>
 				<version>${purifinity.api.version}</version>
 			</dependency>
@@ -716,6 +708,17 @@
 				<groupId>com.puresoltechnologies.xo</groupId>
 				<artifactId>xo-titan</artifactId>
 				<version>0.2.0-SNAPSHOT</version>
+			</dependency>
+			<!-- External PureSol Technologies Libraries -->
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>osgi</artifactId>
+				<version>${com.puresoltechnologies.commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>trees</artifactId>
+				<version>${com.puresoltechnologies.commons.version}</version>
 			</dependency>
 			<!-- =========================== -->
 			<!-- Specific external libraries -->
