@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.core.api;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.types.EmailAddress;
 
 public class AccountManagerPrincipalImpl implements AccountManagerPrincipal {
 

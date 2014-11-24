@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl.secu
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.types.EmailAddress;
 
 public class User implements Serializable {
 

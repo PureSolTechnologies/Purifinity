@@ -18,8 +18,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
-import com.puresoltechnologies.commons.misc.types.Password;
+import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;

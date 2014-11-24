@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.HashUtilities;
-import com.puresoltechnologies.commons.misc.Version;
+import com.puresoltechnologies.commons.types.Version;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;

@@ -6,8 +6,8 @@ import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
 import org.jboss.resteasy.plugins.providers.RegisterBuiltin;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
-import com.puresoltechnologies.commons.misc.types.Password;
+import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;

@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.systemmonitor.events;
 
 import java.util.Date;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.types.EmailAddress;
 
 /**
  * This class contains the data for an event to be logged bz the event logger.

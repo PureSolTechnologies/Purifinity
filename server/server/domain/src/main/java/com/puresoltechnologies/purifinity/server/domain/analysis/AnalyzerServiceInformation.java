@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.domain.analysis;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.puresoltechnologies.commons.misc.Version;
+import com.puresoltechnologies.commons.types.Version;
 import com.puresoltechnologies.purifinity.server.common.plugins.ServiceInformation;
 
 public class AnalyzerServiceInformation implements ServiceInformation {

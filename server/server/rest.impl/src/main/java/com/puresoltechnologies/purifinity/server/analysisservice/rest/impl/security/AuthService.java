@@ -5,8 +5,8 @@ import java.util.UUID;
 
 import javax.security.auth.login.LoginException;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
-import com.puresoltechnologies.commons.misc.types.Password;
+import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.commons.types.Password;
 
 /**
  * This is the interface for the authenication service. This service is a proxy

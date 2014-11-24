@@ -7,7 +7,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.misc.TimeAwareness;
-import com.puresoltechnologies.commons.misc.Version;
+import com.puresoltechnologies.commons.types.Version;
 
 /**
  * This class is for keeping a list of analyzed files within ProjectAnalyzer.

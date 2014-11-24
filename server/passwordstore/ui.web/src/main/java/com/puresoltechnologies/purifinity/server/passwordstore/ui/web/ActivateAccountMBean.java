@@ -5,7 +5,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
 
 @ManagedBean

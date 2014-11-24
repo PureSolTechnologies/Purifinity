@@ -7,8 +7,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
-import com.puresoltechnologies.commons.misc.types.Password;
+import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;

@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.StopWatch;
-import com.puresoltechnologies.commons.misc.Version;
+import com.puresoltechnologies.commons.types.Version;
 import com.puresoltechnologies.parsers.lexer.Lexer;
 import com.puresoltechnologies.parsers.lexer.LexerException;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
@@ -47,74 +47,74 @@ import com.puresoltechnologies.purifinity.server.test.lang.grammar.TestLanguageG
  */
 public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(TestLanguageAnalyser.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(TestLanguageAnalyser.class);
 
-    private CodeAnalysis fileAnalysis;
+	private CodeAnalysis fileAnalysis;
 
-    public TestLanguageAnalyser(SourceCodeLocation sourceCodeLocation) {
-	super(sourceCodeLocation, TestLanguageGrammar.getInstance());
-    }
-
-    @Override
-    public void analyze() throws AnalyzerException {
-	try {
-	    fileAnalysis = null;
-	    Date date = new Date();
-	    StopWatch watch = new StopWatch();
-	    watch.start();
-	    SourceCode sourceCode = getSource().getSourceCode();
-	    Lexer lexer = getGrammar().getLexer();
-	    TokenStream tokenStream = lexer.lex(sourceCode);
-	    Parser parser = getGrammar().getParser();
-	    parser.parse(tokenStream);
-	    watch.stop();
-	    CompilationUnit compilationUnit = null; // TODO
-	    long timeEffort = Math.round(watch.getSeconds() * 1000.0);
-	    TestLanguage language = TestLanguage.getInstance();
-	    fileAnalysis = new CodeAnalysis(date, timeEffort,
-		    language.getName(), language.getVersion(),
-		    new AnalysisInformation(sourceCode.getHashId(), date,
-			    timeEffort, true, language.getName(), language
-				    .getVersion(), Version.valueOf("1.0.0")),
-		    getAnalyzableCodeRanges(compilationUnit), compilationUnit);
-
-	} catch (LexerException | ParserException | IOException e) {
-	    throw new AnalyzerException(this, e);
+	public TestLanguageAnalyser(SourceCodeLocation sourceCodeLocation) {
+		super(sourceCodeLocation, TestLanguageGrammar.getInstance());
 	}
-	return;
-    }
 
-    @Override
-    public boolean persist(File file) {
-	try {
-	    persist(this, file);
-	    return true;
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	    return false;
+	@Override
+	public void analyze() throws AnalyzerException {
+		try {
+			fileAnalysis = null;
+			Date date = new Date();
+			StopWatch watch = new StopWatch();
+			watch.start();
+			SourceCode sourceCode = getSource().getSourceCode();
+			Lexer lexer = getGrammar().getLexer();
+			TokenStream tokenStream = lexer.lex(sourceCode);
+			Parser parser = getGrammar().getParser();
+			parser.parse(tokenStream);
+			watch.stop();
+			CompilationUnit compilationUnit = null; // TODO
+			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
+			TestLanguage language = TestLanguage.getInstance();
+			fileAnalysis = new CodeAnalysis(date, timeEffort,
+					language.getName(), language.getVersion(),
+					new AnalysisInformation(sourceCode.getHashId(), date,
+							timeEffort, true, language.getName(), language
+									.getVersion(), Version.valueOf("1.0.0")),
+					getAnalyzableCodeRanges(compilationUnit), compilationUnit);
+
+		} catch (LexerException | ParserException | IOException e) {
+			throw new AnalyzerException(this, e);
+		}
+		return;
 	}
-    }
 
-    private List<CodeRange> getAnalyzableCodeRanges(UniversalSyntaxTree ust) {
-	List<CodeRange> result = new ArrayList<CodeRange>();
-	result.add(new CodeRange("", "", CodeRangeType.FILE, ust));
-	return result;
-    }
-
-    private <T> void persist(T object, File file) throws IOException {
-	ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-		new FileOutputStream(file));
-	try {
-	    objectOutputStream.writeObject(object);
-	} finally {
-	    objectOutputStream.close();
+	@Override
+	public boolean persist(File file) {
+		try {
+			persist(this, file);
+			return true;
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			return false;
+		}
 	}
-    }
 
-    @Override
-    public CodeAnalysis getAnalysis() {
-	return fileAnalysis;
-    }
+	private List<CodeRange> getAnalyzableCodeRanges(UniversalSyntaxTree ust) {
+		List<CodeRange> result = new ArrayList<CodeRange>();
+		result.add(new CodeRange("", "", CodeRangeType.FILE, ust));
+		return result;
+	}
+
+	private <T> void persist(T object, File file) throws IOException {
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+				new FileOutputStream(file));
+		try {
+			objectOutputStream.writeObject(object);
+		} finally {
+			objectOutputStream.close();
+		}
+	}
+
+	@Override
+	public CodeAnalysis getAnalysis() {
+		return fileAnalysis;
+	}
 
 }

@@ -5,7 +5,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthElement;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthLoginElement;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthLogoutElement;

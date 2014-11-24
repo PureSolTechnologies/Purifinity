@@ -7,8 +7,8 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.misc.JSONSerializer;
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
-import com.puresoltechnologies.commons.misc.types.Password;
+import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.passwordstore.rest.api.PasswordAuthenticationEntity;
 
 public class PasswordAuthenticationEntityTest {

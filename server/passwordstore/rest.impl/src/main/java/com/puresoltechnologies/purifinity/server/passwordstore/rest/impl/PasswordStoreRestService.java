@@ -2,8 +2,8 @@ package com.puresoltechnologies.purifinity.server.passwordstore.rest.impl;
 
 import javax.inject.Inject;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
-import com.puresoltechnologies.commons.misc.types.Password;
+import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordStore;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;

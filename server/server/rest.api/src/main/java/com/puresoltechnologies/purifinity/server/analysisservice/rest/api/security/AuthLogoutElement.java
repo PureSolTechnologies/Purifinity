@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.types.EmailAddress;
 
 public class AuthLogoutElement implements Serializable {
 

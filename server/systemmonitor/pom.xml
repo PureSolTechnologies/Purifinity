@@ -60,6 +60,10 @@
 			<artifactId>logger</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>types</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 		</dependency>

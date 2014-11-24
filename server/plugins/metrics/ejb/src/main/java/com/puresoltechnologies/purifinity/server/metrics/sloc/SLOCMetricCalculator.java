@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.math.statistics.Statistics;
-import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.commons.trees.TreeIterator;
+import com.puresoltechnologies.commons.types.Version;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTreeMetaData;
 import com.puresoltechnologies.parsers.ust.terminal.AbstractTerminal;

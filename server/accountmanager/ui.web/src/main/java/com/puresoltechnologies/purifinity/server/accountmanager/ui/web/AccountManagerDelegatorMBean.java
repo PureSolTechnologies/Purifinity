@@ -6,7 +6,7 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerRemote;
 
 @ManagedBean(name = "accountManagerDelegatorMBean")

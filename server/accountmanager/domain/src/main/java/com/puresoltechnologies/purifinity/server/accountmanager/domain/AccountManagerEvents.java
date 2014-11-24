@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.domain;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSeverity;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventType;

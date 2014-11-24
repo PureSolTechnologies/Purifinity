@@ -12,7 +12,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.common.test.PerformanceTest;
 import com.puresoltechnologies.purifinity.server.common.test.PerformanceTestResult;
 import com.puresoltechnologies.purifinity.server.common.test.PerformanceTester;

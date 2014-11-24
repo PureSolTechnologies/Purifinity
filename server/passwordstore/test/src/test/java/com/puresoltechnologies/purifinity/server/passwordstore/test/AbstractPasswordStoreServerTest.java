@@ -11,7 +11,7 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
+import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreBean;
 import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreDatabaseHelper;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;

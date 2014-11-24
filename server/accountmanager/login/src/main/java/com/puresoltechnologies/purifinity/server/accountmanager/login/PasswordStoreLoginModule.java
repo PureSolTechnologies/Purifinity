@@ -17,8 +17,8 @@ import javax.security.auth.spi.LoginModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
-import com.puresoltechnologies.commons.misc.types.Password;
+import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerPrincipalImpl;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.CallerPrincipalGroup;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.NamePrincipal;

@@ -720,6 +720,11 @@
 				<artifactId>trees</artifactId>
 				<version>${com.puresoltechnologies.commons.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>types</artifactId>
+				<version>${com.puresoltechnologies.commons.version}</version>
+			</dependency>
 			<!-- =========================== -->
 			<!-- Specific external libraries -->
 			<!-- =========================== -->

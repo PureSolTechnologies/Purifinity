@@ -10,8 +10,8 @@ import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
 
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
-import com.puresoltechnologies.commons.misc.types.Password;
+import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
 
 @Singleton

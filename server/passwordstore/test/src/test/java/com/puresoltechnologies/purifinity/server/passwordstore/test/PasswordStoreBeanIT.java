@@ -16,8 +16,8 @@ import org.junit.Test;
 
 import com.datastax.driver.core.Row;
 import com.puresoltechnologies.commons.misc.IntrospectionUtilities;
-import com.puresoltechnologies.commons.misc.types.EmailAddress;
-import com.puresoltechnologies.commons.misc.types.Password;
+import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordStore;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.AccountState;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreEvents;

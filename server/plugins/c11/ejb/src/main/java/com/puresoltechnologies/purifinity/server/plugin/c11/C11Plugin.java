@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.plugin.c11;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.puresoltechnologies.commons.misc.Version;
+import com.puresoltechnologies.commons.types.Version;
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginInformation;
 
 public class C11Plugin {

@@ -15,8 +15,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.misc.Version;
 import com.puresoltechnologies.commons.trees.TreeIterator;
+import com.puresoltechnologies.commons.types.Version;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.ust.terminal.AbstractTerminal;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
