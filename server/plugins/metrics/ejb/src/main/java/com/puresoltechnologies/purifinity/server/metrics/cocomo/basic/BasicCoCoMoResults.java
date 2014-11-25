@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.puresoltechnologies.commons.types.Money;
+import com.puresoltechnologies.commons.money.Money;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 

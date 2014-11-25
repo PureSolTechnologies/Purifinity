@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.puresoltechnologies.commons.types.Money;
+import com.puresoltechnologies.commons.money.Money;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 

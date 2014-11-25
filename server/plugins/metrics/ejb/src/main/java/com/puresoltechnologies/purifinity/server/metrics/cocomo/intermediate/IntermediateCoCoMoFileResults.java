@@ -23,7 +23,7 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.types.Money;
+import com.puresoltechnologies.commons.money.Money;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
