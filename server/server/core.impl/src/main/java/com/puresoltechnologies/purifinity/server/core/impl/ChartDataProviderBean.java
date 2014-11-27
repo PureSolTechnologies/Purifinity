@@ -19,7 +19,7 @@ import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.os.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.server.core.api.ChartDataProvider;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.ValueSerializer;

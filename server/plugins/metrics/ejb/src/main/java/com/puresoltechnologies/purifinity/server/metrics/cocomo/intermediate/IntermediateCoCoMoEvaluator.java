@@ -19,7 +19,7 @@ import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.ConfigurationParameter;
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.os.HashId;
 import com.puresoltechnologies.commons.types.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;

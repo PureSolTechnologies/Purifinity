@@ -13,8 +13,8 @@ import javax.ws.rs.NotAcceptableException;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.IntrospectionUtilities;
 import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.commons.types.IntrospectionUtilities;
 import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreEvents;
@@ -25,246 +25,246 @@ import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordRe
 
 public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 
-    private static final EmailAddress EMAIL_ADDRESS = new EmailAddress(
-	    "ludwig@puresol-technologies.com");
-    private static final EmailAddress INVALID_EMAIL_ADDRESS = new EmailAddress(
-	    "ludwig@puresol-technologies.com");
-    static {
-	try {
-	    IntrospectionUtilities.setField(INVALID_EMAIL_ADDRESS, "localPart",
-		    "");
-	    IntrospectionUtilities.setField(INVALID_EMAIL_ADDRESS, "address",
-		    "puresol-technologies.com");
-	} catch (SecurityException | NoSuchFieldException
-		| IllegalArgumentException | IllegalAccessException e) {
-	    throw new RuntimeException("Could not initialize test!", e);
+	private static final EmailAddress EMAIL_ADDRESS = new EmailAddress(
+			"ludwig@puresol-technologies.com");
+	private static final EmailAddress INVALID_EMAIL_ADDRESS = new EmailAddress(
+			"ludwig@puresol-technologies.com");
+	static {
+		try {
+			IntrospectionUtilities.setField(INVALID_EMAIL_ADDRESS, "localPart",
+					"");
+			IntrospectionUtilities.setField(INVALID_EMAIL_ADDRESS, "address",
+					"puresol-technologies.com");
+		} catch (SecurityException | NoSuchFieldException
+				| IllegalArgumentException | IllegalAccessException e) {
+			throw new RuntimeException("Could not initialize test!", e);
+		}
+
+	}
+	private static final Password VALID_PASSWORD = new Password(
+			"IAmAPassword!:-)3");
+	private static final Password TOO_WEAK_PASSWORD = new Password("123456");
+
+	private final PasswordStoreClient restClient = new PasswordStoreClient();
+
+	@Before
+	public void setup() throws SQLException, IOException {
+		assertNotNull(restClient);
+		cleanupPasswordStoreDatabase();
 	}
 
-    }
-    private static final Password VALID_PASSWORD = new Password(
-	    "IAmAPassword!:-)3");
-    private static final Password TOO_WEAK_PASSWORD = new Password("123456");
-
-    private final PasswordStoreClient restClient = new PasswordStoreClient();
-
-    @Before
-    public void setup() throws SQLException, IOException {
-	assertNotNull(restClient);
-	cleanupPasswordStoreDatabase();
-    }
-
-    @Test
-    public void testCreateAccount() throws PasswordCreationException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
-		VALID_PASSWORD);
-	assertNotNull(activationKey);
-	assertFalse(activationKey.isEmpty());
-    }
-
-    /**
-     * We create here two account with the same email address. We expect here an
-     * AccountCreationException with an embedded message about the duplicate
-     * email address.
-     * 
-     * @throws PasswordCreationException
-     */
-    @Test(expected = NotAcceptableException.class)
-    public void testCreateAccountDuplicateEmail()
-	    throws PasswordCreationException {
-	// the first account should be created normally...
-	restClient.createAccount(EMAIL_ADDRESS, VALID_PASSWORD);
-	try {
-	    // now we expect an error...
-	    restClient.createAccount(EMAIL_ADDRESS, VALID_PASSWORD);
-	} catch (PasswordCreationException e) {
-	    assertEquals(PasswordStoreEvents
-		    .createAccountAlreadyExistsErrorEvent(EMAIL_ADDRESS)
-		    .getMessage(), e.getMessage());
-	    throw e;
+	@Test
+	public void testCreateAccount() throws PasswordCreationException {
+		String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
+		assertNotNull(activationKey);
+		assertFalse(activationKey.isEmpty());
 	}
-    }
 
-    /**
-     * For a trival password we expect a {@link PasswordCreationException} here
-     * with an embedded message about a too weak password.
-     * 
-     * @throws PasswordCreationException
-     */
-    @Test(expected = NotAcceptableException.class)
-    public void testCreateAccountTooWeakPassword()
-	    throws PasswordCreationException {
-	try {
-	    restClient.createAccount(EMAIL_ADDRESS, TOO_WEAK_PASSWORD);
-	} catch (PasswordCreationException e) {
-	    assertEquals(
-		    PasswordStoreEvents.createPasswordTooWeakErrorEvent(
-			    EMAIL_ADDRESS).getMessage(), e.getMessage());
-	    throw e;
+	/**
+	 * We create here two account with the same email address. We expect here an
+	 * AccountCreationException with an embedded message about the duplicate
+	 * email address.
+	 * 
+	 * @throws PasswordCreationException
+	 */
+	@Test(expected = NotAcceptableException.class)
+	public void testCreateAccountDuplicateEmail()
+			throws PasswordCreationException {
+		// the first account should be created normally...
+		restClient.createAccount(EMAIL_ADDRESS, VALID_PASSWORD);
+		try {
+			// now we expect an error...
+			restClient.createAccount(EMAIL_ADDRESS, VALID_PASSWORD);
+		} catch (PasswordCreationException e) {
+			assertEquals(PasswordStoreEvents
+					.createAccountAlreadyExistsErrorEvent(EMAIL_ADDRESS)
+					.getMessage(), e.getMessage());
+			throw e;
+		}
 	}
-    }
 
-    /**
-     * For an invalid email address we expect an
-     * {@link PasswordCreationException} with an embedded message about the
-     * invalid email address.
-     * 
-     * @throws PasswordCreationException
-     */
-    @Test(expected = NotAcceptableException.class)
-    public void testCreateAccountWithInvalidEmailAddress()
-	    throws PasswordCreationException {
-	try {
-	    restClient.createAccount(INVALID_EMAIL_ADDRESS, TOO_WEAK_PASSWORD);
-	} catch (PasswordCreationException e) {
-	    assertEquals(PasswordStoreEvents
-		    .createInvalidEmailAddressErrorEvent(INVALID_EMAIL_ADDRESS)
-		    .getMessage(), e.getMessage());
-	    throw e;
+	/**
+	 * For a trival password we expect a {@link PasswordCreationException} here
+	 * with an embedded message about a too weak password.
+	 * 
+	 * @throws PasswordCreationException
+	 */
+	@Test(expected = NotAcceptableException.class)
+	public void testCreateAccountTooWeakPassword()
+			throws PasswordCreationException {
+		try {
+			restClient.createAccount(EMAIL_ADDRESS, TOO_WEAK_PASSWORD);
+		} catch (PasswordCreationException e) {
+			assertEquals(
+					PasswordStoreEvents.createPasswordTooWeakErrorEvent(
+							EMAIL_ADDRESS).getMessage(), e.getMessage());
+			throw e;
+		}
 	}
-    }
 
-    @Test
-    public void testActivateAccount() throws PasswordActivationException,
-	    PasswordCreationException {
-	String activationKey = restClient.createAccount(new EmailAddress(
-		"ludwig@puresol-technologies.com"), new Password(
-		"12dqwec1241`S@#R~"));
-	assertNotNull(activationKey);
-	assertFalse(activationKey.isEmpty());
-	restClient.activatePassword(new EmailAddress(
-		"ludwig@puresol-technologies.com"), activationKey);
-    }
-
-    @Test(expected = NotAcceptableException.class)
-    public void testActivateAccountWithInvalidActivationKey()
-	    throws PasswordCreationException, PasswordActivationException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
-		VALID_PASSWORD);
-
-	try {
-	    restClient
-		    .activatePassword(EMAIL_ADDRESS, activationKey + "Wrong!");
-	} catch (PasswordActivationException e) {
-	    assertEquals(PasswordStoreEvents
-		    .createInvalidActivationKeyErrorEvent(EMAIL_ADDRESS)
-		    .getMessage(), e.getMessage());
-	    throw e;
+	/**
+	 * For an invalid email address we expect an
+	 * {@link PasswordCreationException} with an embedded message about the
+	 * invalid email address.
+	 * 
+	 * @throws PasswordCreationException
+	 */
+	@Test(expected = NotAcceptableException.class)
+	public void testCreateAccountWithInvalidEmailAddress()
+			throws PasswordCreationException {
+		try {
+			restClient.createAccount(INVALID_EMAIL_ADDRESS, TOO_WEAK_PASSWORD);
+		} catch (PasswordCreationException e) {
+			assertEquals(PasswordStoreEvents
+					.createInvalidEmailAddressErrorEvent(INVALID_EMAIL_ADDRESS)
+					.getMessage(), e.getMessage());
+			throw e;
+		}
 	}
-    }
 
-    @Test
-    public void testAuthenticate() throws PasswordCreationException,
-	    PasswordActivationException {
-	String activationInformation = restClient.createAccount(EMAIL_ADDRESS,
-		VALID_PASSWORD);
-	restClient.activatePassword(EMAIL_ADDRESS, activationInformation);
-	assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
-    }
-
-    @Test
-    public void testAuthenticateWrongEmail() throws PasswordCreationException,
-	    PasswordActivationException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
-		VALID_PASSWORD);
-	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
-	assertFalse(restClient.authenticate(new EmailAddress(EMAIL_ADDRESS
-		+ "Wrong"), VALID_PASSWORD));
-    }
-
-    @Test
-    public void testAuthenticateWrongPassword()
-	    throws PasswordCreationException, PasswordActivationException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
-		VALID_PASSWORD);
-	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
-	assertFalse(restClient.authenticate(EMAIL_ADDRESS, new Password(
-		VALID_PASSWORD + "Wrong!")));
-    }
-
-    @Test
-    public void testAuthenticateWrongEmailAndPassword()
-	    throws PasswordCreationException, PasswordActivationException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
-		VALID_PASSWORD);
-	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
-	assertFalse(restClient.authenticate(new EmailAddress(EMAIL_ADDRESS
-		+ "Wrong"), new Password(VALID_PASSWORD + "Wrong!")));
-    }
-
-    @Test
-    public void testChangePassword() throws PasswordCreationException,
-	    PasswordActivationException, PasswordChangeException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
-		VALID_PASSWORD);
-	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
-	assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
-	assertTrue(restClient.changePassword(EMAIL_ADDRESS, VALID_PASSWORD,
-		new Password(VALID_PASSWORD + "New!")));
-	assertTrue(restClient.authenticate(EMAIL_ADDRESS, new Password(
-		VALID_PASSWORD + "New!")));
-    }
-
-    @Test
-    public void testChangePasswordWrongEmail()
-	    throws PasswordCreationException, PasswordActivationException,
-	    PasswordChangeException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
-		VALID_PASSWORD);
-	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
-	assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
-	assertFalse(restClient.changePassword(new EmailAddress(EMAIL_ADDRESS
-		+ "Wrong"), VALID_PASSWORD, new Password(VALID_PASSWORD
-		+ "New!")));
-    }
-
-    @Test
-    public void testChangePasswordWrongPassword()
-	    throws PasswordCreationException, PasswordActivationException,
-	    PasswordChangeException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
-		VALID_PASSWORD);
-	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
-	assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
-	assertFalse(restClient.changePassword(EMAIL_ADDRESS, new Password(
-		VALID_PASSWORD + "Wrong!"), new Password(VALID_PASSWORD
-		+ "New!")));
-    }
-
-    @Test(expected = NotAcceptableException.class)
-    public void testChangePasswordTooWeakPassword()
-	    throws PasswordCreationException, PasswordActivationException,
-	    PasswordChangeException {
-	try {
-	    String activationKey = restClient.createAccount(EMAIL_ADDRESS,
-		    VALID_PASSWORD);
-	    restClient.activatePassword(EMAIL_ADDRESS, activationKey);
-	    assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
-	    restClient.changePassword(EMAIL_ADDRESS, VALID_PASSWORD,
-		    TOO_WEAK_PASSWORD);
-	} catch (PasswordChangeException e) {
-	    assertEquals(
-		    PasswordStoreEvents
-			    .createPasswordChangeFailedPasswordTooWeakEvent(
-				    EMAIL_ADDRESS).getMessage(), e.getMessage());
-	    assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
-	    throw e;
+	@Test
+	public void testActivateAccount() throws PasswordActivationException,
+			PasswordCreationException {
+		String activationKey = restClient.createAccount(new EmailAddress(
+				"ludwig@puresol-technologies.com"), new Password(
+				"12dqwec1241`S@#R~"));
+		assertNotNull(activationKey);
+		assertFalse(activationKey.isEmpty());
+		restClient.activatePassword(new EmailAddress(
+				"ludwig@puresol-technologies.com"), activationKey);
 	}
-    }
 
-    @Test
-    public void testResetPassword() throws PasswordCreationException,
-	    PasswordActivationException, PasswordResetException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
-		VALID_PASSWORD);
-	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
-	assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
-	Password newPassword = restClient.resetPassword(EMAIL_ADDRESS);
-	assertTrue(restClient.authenticate(EMAIL_ADDRESS, newPassword));
-    }
+	@Test(expected = NotAcceptableException.class)
+	public void testActivateAccountWithInvalidActivationKey()
+			throws PasswordCreationException, PasswordActivationException {
+		String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
 
-    @Test(expected = NotAcceptableException.class)
-    public void testResetPasswordWrongEmail() throws PasswordResetException {
-	restClient.resetPassword(EMAIL_ADDRESS);
-    }
+		try {
+			restClient
+					.activatePassword(EMAIL_ADDRESS, activationKey + "Wrong!");
+		} catch (PasswordActivationException e) {
+			assertEquals(PasswordStoreEvents
+					.createInvalidActivationKeyErrorEvent(EMAIL_ADDRESS)
+					.getMessage(), e.getMessage());
+			throw e;
+		}
+	}
+
+	@Test
+	public void testAuthenticate() throws PasswordCreationException,
+			PasswordActivationException {
+		String activationInformation = restClient.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
+		restClient.activatePassword(EMAIL_ADDRESS, activationInformation);
+		assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
+	}
+
+	@Test
+	public void testAuthenticateWrongEmail() throws PasswordCreationException,
+			PasswordActivationException {
+		String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
+		restClient.activatePassword(EMAIL_ADDRESS, activationKey);
+		assertFalse(restClient.authenticate(new EmailAddress(EMAIL_ADDRESS
+				+ "Wrong"), VALID_PASSWORD));
+	}
+
+	@Test
+	public void testAuthenticateWrongPassword()
+			throws PasswordCreationException, PasswordActivationException {
+		String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
+		restClient.activatePassword(EMAIL_ADDRESS, activationKey);
+		assertFalse(restClient.authenticate(EMAIL_ADDRESS, new Password(
+				VALID_PASSWORD + "Wrong!")));
+	}
+
+	@Test
+	public void testAuthenticateWrongEmailAndPassword()
+			throws PasswordCreationException, PasswordActivationException {
+		String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
+		restClient.activatePassword(EMAIL_ADDRESS, activationKey);
+		assertFalse(restClient.authenticate(new EmailAddress(EMAIL_ADDRESS
+				+ "Wrong"), new Password(VALID_PASSWORD + "Wrong!")));
+	}
+
+	@Test
+	public void testChangePassword() throws PasswordCreationException,
+			PasswordActivationException, PasswordChangeException {
+		String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
+		restClient.activatePassword(EMAIL_ADDRESS, activationKey);
+		assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
+		assertTrue(restClient.changePassword(EMAIL_ADDRESS, VALID_PASSWORD,
+				new Password(VALID_PASSWORD + "New!")));
+		assertTrue(restClient.authenticate(EMAIL_ADDRESS, new Password(
+				VALID_PASSWORD + "New!")));
+	}
+
+	@Test
+	public void testChangePasswordWrongEmail()
+			throws PasswordCreationException, PasswordActivationException,
+			PasswordChangeException {
+		String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
+		restClient.activatePassword(EMAIL_ADDRESS, activationKey);
+		assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
+		assertFalse(restClient.changePassword(new EmailAddress(EMAIL_ADDRESS
+				+ "Wrong"), VALID_PASSWORD, new Password(VALID_PASSWORD
+				+ "New!")));
+	}
+
+	@Test
+	public void testChangePasswordWrongPassword()
+			throws PasswordCreationException, PasswordActivationException,
+			PasswordChangeException {
+		String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
+		restClient.activatePassword(EMAIL_ADDRESS, activationKey);
+		assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
+		assertFalse(restClient.changePassword(EMAIL_ADDRESS, new Password(
+				VALID_PASSWORD + "Wrong!"), new Password(VALID_PASSWORD
+				+ "New!")));
+	}
+
+	@Test(expected = NotAcceptableException.class)
+	public void testChangePasswordTooWeakPassword()
+			throws PasswordCreationException, PasswordActivationException,
+			PasswordChangeException {
+		try {
+			String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+					VALID_PASSWORD);
+			restClient.activatePassword(EMAIL_ADDRESS, activationKey);
+			assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
+			restClient.changePassword(EMAIL_ADDRESS, VALID_PASSWORD,
+					TOO_WEAK_PASSWORD);
+		} catch (PasswordChangeException e) {
+			assertEquals(
+					PasswordStoreEvents
+							.createPasswordChangeFailedPasswordTooWeakEvent(
+									EMAIL_ADDRESS).getMessage(), e.getMessage());
+			assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
+			throw e;
+		}
+	}
+
+	@Test
+	public void testResetPassword() throws PasswordCreationException,
+			PasswordActivationException, PasswordResetException {
+		String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+				VALID_PASSWORD);
+		restClient.activatePassword(EMAIL_ADDRESS, activationKey);
+		assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
+		Password newPassword = restClient.resetPassword(EMAIL_ADDRESS);
+		assertTrue(restClient.authenticate(EMAIL_ADDRESS, newPassword));
+	}
+
+	@Test(expected = NotAcceptableException.class)
+	public void testResetPasswordWrongEmail() throws PasswordResetException {
+		restClient.resetPassword(EMAIL_ADDRESS);
+	}
 
 }

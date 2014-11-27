@@ -16,7 +16,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import com.puresoltechnologies.commons.misc.StringUtils;
+import com.puresoltechnologies.commons.types.StringUtils;
 
 /**
  * This class contains utilities and simplifying helper functions for RSA

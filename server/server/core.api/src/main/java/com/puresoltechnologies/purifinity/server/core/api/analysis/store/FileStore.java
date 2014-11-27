@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.core.api.analysis.store;
 import java.io.InputStream;
 import java.util.List;
 
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.os.HashId;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 

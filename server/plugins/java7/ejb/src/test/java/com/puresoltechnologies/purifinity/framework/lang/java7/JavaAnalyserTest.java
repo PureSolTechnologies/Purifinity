@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.PathUtils;
+import com.puresoltechnologies.commons.os.PathUtils;
 import com.puresoltechnologies.parsers.source.SourceFileLocation;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.server.plugin.java7.JavaAnalyzer;

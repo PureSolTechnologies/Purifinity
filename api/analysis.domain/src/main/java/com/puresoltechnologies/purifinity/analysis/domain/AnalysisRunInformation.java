@@ -6,8 +6,8 @@ import java.util.UUID;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.commons.misc.TimeAwareness;
+import com.puresoltechnologies.commons.os.FileSearchConfiguration;
 
 /**
  * This interface represents a single analysis run for a project.

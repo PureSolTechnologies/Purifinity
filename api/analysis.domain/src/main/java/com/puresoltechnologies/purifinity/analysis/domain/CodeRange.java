@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.analysis.domain;
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.commons.misc.ObjectUtilities;
+import com.puresoltechnologies.commons.types.ObjectUtilities;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 
 /**

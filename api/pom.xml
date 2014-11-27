@@ -193,6 +193,11 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.puresoltechnologies.parsers</groupId>
+				<artifactId>ust</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.api</groupId>
 				<artifactId>analysis.api</artifactId>
 				<version>${project.version}</version>
@@ -218,6 +223,11 @@
 				<version>${project.version}</version>
 			</dependency>
 			<!-- External PureSol Technologies Libraries -->
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>os</artifactId>
+				<version>${com.puresoltechnologies.commons.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>osgi</artifactId>
@@ -425,6 +435,7 @@
 		<module>misc.bundle</module>
 		<module>parsers</module>
 		<module>parsers.bundle</module>
+		<module>ust</module>
 		<module>analysis.domain</module>
 		<module>analysis.domain.bundle</module>
 		<module>analysis.api</module>

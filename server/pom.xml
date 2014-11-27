@@ -717,6 +717,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>os</artifactId>
+				<version>${com.puresoltechnologies.commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>osgi</artifactId>
 				<version>${com.puresoltechnologies.commons.version}</version>
 			</dependency>

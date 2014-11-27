@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.metrics;
 
 import java.util.UUID;
 
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.os.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;

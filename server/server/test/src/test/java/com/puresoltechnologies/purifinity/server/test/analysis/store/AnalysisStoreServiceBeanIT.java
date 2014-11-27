@@ -16,7 +16,7 @@ import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.os.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;

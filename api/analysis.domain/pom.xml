@@ -14,11 +14,19 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>misc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>types</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.parsers</groupId>
 			<artifactId>parsers</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.parsers</groupId>
+			<artifactId>ust</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>

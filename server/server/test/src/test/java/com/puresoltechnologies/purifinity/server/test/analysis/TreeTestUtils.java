@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.puresoltechnologies.commons.misc.HashAlgorithm;
-import com.puresoltechnologies.commons.misc.HashCodeGenerator;
-import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.misc.HashUtilities;
+import com.puresoltechnologies.commons.os.HashAlgorithm;
+import com.puresoltechnologies.commons.os.HashCodeGenerator;
+import com.puresoltechnologies.commons.os.HashId;
+import com.puresoltechnologies.commons.os.HashUtilities;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.server.common.utils.io.FileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;

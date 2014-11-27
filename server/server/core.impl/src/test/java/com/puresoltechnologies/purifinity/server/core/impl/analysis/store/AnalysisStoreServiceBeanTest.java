@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.HashAlgorithm;
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.os.HashAlgorithm;
+import com.puresoltechnologies.commons.os.HashId;
 
 public class AnalysisStoreServiceBeanTest {
 

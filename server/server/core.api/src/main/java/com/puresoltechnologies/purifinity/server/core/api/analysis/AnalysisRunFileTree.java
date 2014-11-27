@@ -6,7 +6,7 @@ import java.util.List;
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.os.HashId;
 import com.puresoltechnologies.commons.trees.Tree;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 

@@ -20,7 +20,7 @@ import org.primefaces.event.FlowEvent;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.os.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStore;
@@ -88,7 +88,8 @@ public class NewProjectWizardMBean implements Serializable {
 		}
 	}
 
-	private RepositoryTypeServiceInformation findRepositoryTypeForClass(String repositoryTypeClass) {
+	private RepositoryTypeServiceInformation findRepositoryTypeForClass(
+			String repositoryTypeClass) {
 		for (RepositoryTypeServiceInformation repositoryType : repositoryTypePluginService
 				.getServices()) {
 			if (repositoryType.getClassName().equals(repositoryTypeClass)) {

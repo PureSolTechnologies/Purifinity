@@ -18,7 +18,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.misc.StopWatch;
+import com.puresoltechnologies.commons.os.StopWatch;
 import com.puresoltechnologies.commons.trees.TreePrinter;
 import com.puresoltechnologies.parsers.source.SourceFileLocation;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;

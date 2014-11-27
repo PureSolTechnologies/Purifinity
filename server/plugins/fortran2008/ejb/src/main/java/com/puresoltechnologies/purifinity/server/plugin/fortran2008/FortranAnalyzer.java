@@ -21,7 +21,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.misc.StopWatch;
+import com.puresoltechnologies.commons.os.StopWatch;
 import com.puresoltechnologies.commons.trees.TreeException;
 import com.puresoltechnologies.commons.trees.TreeVisitor;
 import com.puresoltechnologies.commons.trees.TreeWalker;
@@ -53,128 +53,128 @@ import com.puresoltechnologies.purifinity.server.plugin.fortran2008.ust.ProgramC
  */
 public class FortranAnalyzer extends AbstractCodeAnalyzer {
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(FortranAnalyzer.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(FortranAnalyzer.class);
 
-    private CodeAnalysis fileAnalysis;
+	private CodeAnalysis fileAnalysis;
 
-    public FortranAnalyzer(SourceCodeLocation sourceCodeLocation) {
-	super(sourceCodeLocation, FortranGrammar.getInstance());
-    }
-
-    @Override
-    public void analyze() throws AnalyzerException {
-	try {
-	    fileAnalysis = null;
-	    Date date = new Date();
-	    StopWatch watch = new StopWatch();
-	    watch.start();
-	    SourceCode sourceCode = getSource().getSourceCode();
-	    TokenStream tokenStream = preConditioningAndLexing(sourceCode);
-	    Parser parser = getGrammar().getParser();
-	    ParserTree parserTree = parser.parse(tokenStream);
-	    watch.stop();
-	    CompilationUnit program = ProgramCreator.create(parserTree);
-	    long timeEffort = Math.round(watch.getSeconds() * 1000.0);
-	    AnalysisInformation analyzedFile = new AnalysisInformation(
-		    sourceCode.getHashId(), date, timeEffort, true,
-		    Fortran.NAME, Fortran.VERSION, Fortran.PLUGIN_VERSION);
-	    fileAnalysis = new CodeAnalysis(date, timeEffort, Fortran.NAME,
-		    Fortran.VERSION, analyzedFile,
-		    getAnalyzableCodeRanges(program), program);
-	} catch (ParserException | IOException e) {
-	    throw new AnalyzerException(this, e);
+	public FortranAnalyzer(SourceCodeLocation sourceCodeLocation) {
+		super(sourceCodeLocation, FortranGrammar.getInstance());
 	}
-    }
 
-    private TokenStream preConditioningAndLexing(SourceCode sourceCode)
-	    throws AnalyzerException {
-	try {
-	    FortranPreConditioner preconditioner = new FortranPreConditioner(
-		    sourceCode);
-	    return preconditioner.scan(getGrammar().getLexer());
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	    throw new AnalyzerException(this);
-	} catch (LexerException e) {
-	    logger.error(e.getMessage(), e);
-	    throw new AnalyzerException(this);
-	}
-    }
-
-    @Override
-    public boolean persist(File file) {
-	try {
-	    ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-		    new FileOutputStream(file));
-	    try {
-		objectOutputStream.writeObject(this);
-	    } finally {
-		objectOutputStream.close();
-	    }
-	    return true;
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	    return false;
-	}
-    }
-
-    private List<CodeRange> getAnalyzableCodeRanges(
-	    UniversalSyntaxTree parserTree) {
-	final List<CodeRange> result = new ArrayList<CodeRange>();
-	result.add(new CodeRange("", "", CodeRangeType.FILE, parserTree));
-	TreeWalker<UniversalSyntaxTree> walker = new TreeWalker<UniversalSyntaxTree>(
-		parserTree);
-	walker.walk(new TreeVisitor<UniversalSyntaxTree>() {
-
-	    @Override
-	    public WalkingAction visit(UniversalSyntaxTree tree) {
+	@Override
+	public void analyze() throws AnalyzerException {
 		try {
-		    if ("main-program".equals(tree.getName())) {
-			String name = tree.getChild("program-stmt")
-				.getChildren("NAME_LITERAL").get(1)
-				.getContent();
-			result.add(new CodeRange(name, name,
-				CodeRangeType.PROGRAM, tree));
-		    } else if ("function-subprogram".equals(tree.getName())) {
-			String name = tree.getChild("function-stmt")
-				.getChildren("NAME_LITERAL").get(1)
-				.getContent();
-			result.add(new CodeRange(name, name,
-				CodeRangeType.FUNCTION, tree));
-		    } else if ("subroutine-subprogram".equals(tree.getName())) {
-			String name = tree.getChild("subroutine-stmt")
-				.getChildren("NAME_LITERAL").get(1)
-				.getContent();
-			result.add(new CodeRange(name, name,
-				CodeRangeType.SUBROUTINE, tree));
-		    } else if ("module".equals(tree.getName())) {
-			String name = tree.getChild("module-stmt")
-				.getChildren("NAME_LITERAL").get(1)
-				.getContent();
-			result.add(new CodeRange(name, name,
-				CodeRangeType.MODULE, tree));
-		    } else if ("submodule".equals(tree.getName())) {
-			String name = tree.getChild("submodule-stmt")
-				.getChildren("NAME_LITERAL").get(1)
-				.getContent();
-			result.add(new CodeRange(name, name,
-				CodeRangeType.MODULE, tree));
-		    }
-		    return WalkingAction.PROCEED;
-		} catch (TreeException e) {
-		    logger.error(e.getMessage(), e);
-		    return WalkingAction.ABORT;
+			fileAnalysis = null;
+			Date date = new Date();
+			StopWatch watch = new StopWatch();
+			watch.start();
+			SourceCode sourceCode = getSource().getSourceCode();
+			TokenStream tokenStream = preConditioningAndLexing(sourceCode);
+			Parser parser = getGrammar().getParser();
+			ParserTree parserTree = parser.parse(tokenStream);
+			watch.stop();
+			CompilationUnit program = ProgramCreator.create(parserTree);
+			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
+			AnalysisInformation analyzedFile = new AnalysisInformation(
+					sourceCode.getHashId(), date, timeEffort, true,
+					Fortran.NAME, Fortran.VERSION, Fortran.PLUGIN_VERSION);
+			fileAnalysis = new CodeAnalysis(date, timeEffort, Fortran.NAME,
+					Fortran.VERSION, analyzedFile,
+					getAnalyzableCodeRanges(program), program);
+		} catch (ParserException | IOException e) {
+			throw new AnalyzerException(this, e);
 		}
-	    }
+	}
 
-	});
-	return result;
-    }
+	private TokenStream preConditioningAndLexing(SourceCode sourceCode)
+			throws AnalyzerException {
+		try {
+			FortranPreConditioner preconditioner = new FortranPreConditioner(
+					sourceCode);
+			return preconditioner.scan(getGrammar().getLexer());
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			throw new AnalyzerException(this);
+		} catch (LexerException e) {
+			logger.error(e.getMessage(), e);
+			throw new AnalyzerException(this);
+		}
+	}
 
-    @Override
-    public CodeAnalysis getAnalysis() {
-	return fileAnalysis;
-    }
+	@Override
+	public boolean persist(File file) {
+		try {
+			ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+					new FileOutputStream(file));
+			try {
+				objectOutputStream.writeObject(this);
+			} finally {
+				objectOutputStream.close();
+			}
+			return true;
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			return false;
+		}
+	}
+
+	private List<CodeRange> getAnalyzableCodeRanges(
+			UniversalSyntaxTree parserTree) {
+		final List<CodeRange> result = new ArrayList<CodeRange>();
+		result.add(new CodeRange("", "", CodeRangeType.FILE, parserTree));
+		TreeWalker<UniversalSyntaxTree> walker = new TreeWalker<UniversalSyntaxTree>(
+				parserTree);
+		walker.walk(new TreeVisitor<UniversalSyntaxTree>() {
+
+			@Override
+			public WalkingAction visit(UniversalSyntaxTree tree) {
+				try {
+					if ("main-program".equals(tree.getName())) {
+						String name = tree.getChild("program-stmt")
+								.getChildren("NAME_LITERAL").get(1)
+								.getContent();
+						result.add(new CodeRange(name, name,
+								CodeRangeType.PROGRAM, tree));
+					} else if ("function-subprogram".equals(tree.getName())) {
+						String name = tree.getChild("function-stmt")
+								.getChildren("NAME_LITERAL").get(1)
+								.getContent();
+						result.add(new CodeRange(name, name,
+								CodeRangeType.FUNCTION, tree));
+					} else if ("subroutine-subprogram".equals(tree.getName())) {
+						String name = tree.getChild("subroutine-stmt")
+								.getChildren("NAME_LITERAL").get(1)
+								.getContent();
+						result.add(new CodeRange(name, name,
+								CodeRangeType.SUBROUTINE, tree));
+					} else if ("module".equals(tree.getName())) {
+						String name = tree.getChild("module-stmt")
+								.getChildren("NAME_LITERAL").get(1)
+								.getContent();
+						result.add(new CodeRange(name, name,
+								CodeRangeType.MODULE, tree));
+					} else if ("submodule".equals(tree.getName())) {
+						String name = tree.getChild("submodule-stmt")
+								.getChildren("NAME_LITERAL").get(1)
+								.getContent();
+						result.add(new CodeRange(name, name,
+								CodeRangeType.MODULE, tree));
+					}
+					return WalkingAction.PROCEED;
+				} catch (TreeException e) {
+					logger.error(e.getMessage(), e);
+					return WalkingAction.ABORT;
+				}
+			}
+
+		});
+		return result;
+	}
+
+	@Override
+	public CodeAnalysis getAnalysis() {
+		return fileAnalysis;
+	}
 
 }

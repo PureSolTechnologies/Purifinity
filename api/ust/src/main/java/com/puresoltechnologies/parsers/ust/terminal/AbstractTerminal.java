@@ -2,7 +2,7 @@ package com.puresoltechnologies.parsers.ust.terminal;
 
 import java.util.List;
 
-import com.puresoltechnologies.commons.misc.StringUtils;
+import com.puresoltechnologies.commons.types.StringUtils;
 import com.puresoltechnologies.parsers.ust.AbstractUniversalSyntaxTreeNode;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTreeMetaData;

@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import com.buschmais.xo.api.ResultIterable;
 import com.buschmais.xo.api.XOManager;
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.os.HashId;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreServiceRemote;

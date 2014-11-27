@@ -21,7 +21,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.misc.StopWatch;
+import com.puresoltechnologies.commons.os.StopWatch;
 import com.puresoltechnologies.commons.trees.TreeException;
 import com.puresoltechnologies.commons.trees.TreeVisitor;
 import com.puresoltechnologies.commons.trees.TreeWalker;
@@ -58,104 +58,104 @@ import com.puresoltechnologies.purifinity.server.plugin.java7.ust.CompilationUni
  */
 public class JavaAnalyzer extends AbstractCodeAnalyzer {
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(JavaAnalyzer.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(JavaAnalyzer.class);
 
-    private CodeAnalysis fileAnalysis;
+	private CodeAnalysis fileAnalysis;
 
-    public JavaAnalyzer(SourceCodeLocation sourceCodeLocation) {
-	super(sourceCodeLocation, JavaGrammar.getInstance());
-    }
-
-    @Override
-    public void analyze() throws AnalyzerException {
-	try {
-	    fileAnalysis = null;
-	    Date date = new Date();
-	    StopWatch watch = new StopWatch();
-	    watch.start();
-	    SourceCode sourceCode = getSource().getSourceCode();
-	    Lexer lexer = getGrammar().getLexer();
-	    TokenStream tokenStream = lexer.lex(sourceCode);
-	    Parser parser = getGrammar().getParser();
-	    ParserTree parserTree = parser.parse(tokenStream);
-	    watch.stop();
-	    CompilationUnit compilationUnit = CompilationUnitCreator
-		    .create(parserTree);
-	    long timeEffort = watch.getMilliseconds();
-	    AnalysisInformation analyzedFile = new AnalysisInformation(
-		    sourceCode.getHashId(), date, timeEffort, true, Java.NAME,
-		    Java.VERSION, Java.PLUGIN_VERSION);
-	    fileAnalysis = new CodeAnalysis(date, timeEffort, Java.NAME,
-		    Java.VERSION, analyzedFile,
-		    getAnalyzableCodeRanges(compilationUnit), compilationUnit);
-	} catch (LexerException | ParserException | IOException e) {
-	    throw new AnalyzerException(this, e);
+	public JavaAnalyzer(SourceCodeLocation sourceCodeLocation) {
+		super(sourceCodeLocation, JavaGrammar.getInstance());
 	}
-	return;
-    }
 
-    @Override
-    public CodeAnalysis getAnalysis() {
-	return fileAnalysis;
-    }
-
-    @Override
-    public boolean persist(File file) {
-	try {
-	    persist(this, file);
-	    return true;
-	} catch (IOException e) {
-	    logger.error(e.getMessage(), e);
-	    return false;
-	}
-    }
-
-    private List<CodeRange> getAnalyzableCodeRanges(UniversalSyntaxTree ust) {
-	final List<CodeRange> result = new ArrayList<CodeRange>();
-	result.add(new CodeRange("", "", CodeRangeType.FILE, ust));
-
-	TreeWalker<UniversalSyntaxTree> walker = new TreeWalker<UniversalSyntaxTree>(
-		ust);
-	walker.walk(new TreeVisitor<UniversalSyntaxTree>() {
-	    @Override
-	    public WalkingAction visit(UniversalSyntaxTree tree) {
+	@Override
+	public void analyze() throws AnalyzerException {
 		try {
-		    if (NormalClassDeclaration.is(tree)) {
-			result.add(new NormalClassDeclaration(tree)
-				.getCodeRange());
-		    } else if (EnumDeclaration.is(tree)) {
-			result.add(new EnumDeclaration(tree).getCodeRange());
-		    } else if (NormalInterfaceDeclaration.is(tree)) {
-			result.add(new NormalInterfaceDeclaration(tree)
-				.getCodeRange());
-		    } else if (AnnotationTypeDeclaration.is(tree)) {
-			result.add(new AnnotationTypeDeclaration(tree)
-				.getCodeRange());
-		    } else if (ConstructorDeclaration.is(tree)) {
-			result.add(new ConstructorDeclaration(tree)
-				.getCodeRange());
-		    } else if (MethodDeclaration.is(tree)) {
-			result.add(new MethodDeclaration(tree).getCodeRange());
-		    }
-		    return WalkingAction.PROCEED;
-		} catch (TreeException e) {
-		    logger.error(e.getMessage(), e);
-		    return WalkingAction.ABORT;
+			fileAnalysis = null;
+			Date date = new Date();
+			StopWatch watch = new StopWatch();
+			watch.start();
+			SourceCode sourceCode = getSource().getSourceCode();
+			Lexer lexer = getGrammar().getLexer();
+			TokenStream tokenStream = lexer.lex(sourceCode);
+			Parser parser = getGrammar().getParser();
+			ParserTree parserTree = parser.parse(tokenStream);
+			watch.stop();
+			CompilationUnit compilationUnit = CompilationUnitCreator
+					.create(parserTree);
+			long timeEffort = watch.getMilliseconds();
+			AnalysisInformation analyzedFile = new AnalysisInformation(
+					sourceCode.getHashId(), date, timeEffort, true, Java.NAME,
+					Java.VERSION, Java.PLUGIN_VERSION);
+			fileAnalysis = new CodeAnalysis(date, timeEffort, Java.NAME,
+					Java.VERSION, analyzedFile,
+					getAnalyzableCodeRanges(compilationUnit), compilationUnit);
+		} catch (LexerException | ParserException | IOException e) {
+			throw new AnalyzerException(this, e);
 		}
-	    }
-	});
-	return result;
-    }
-
-    private <T> void persist(T object, File file) throws IOException {
-	ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-		new FileOutputStream(file));
-	try {
-	    objectOutputStream.writeObject(object);
-	} finally {
-	    objectOutputStream.close();
+		return;
 	}
-    }
+
+	@Override
+	public CodeAnalysis getAnalysis() {
+		return fileAnalysis;
+	}
+
+	@Override
+	public boolean persist(File file) {
+		try {
+			persist(this, file);
+			return true;
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+			return false;
+		}
+	}
+
+	private List<CodeRange> getAnalyzableCodeRanges(UniversalSyntaxTree ust) {
+		final List<CodeRange> result = new ArrayList<CodeRange>();
+		result.add(new CodeRange("", "", CodeRangeType.FILE, ust));
+
+		TreeWalker<UniversalSyntaxTree> walker = new TreeWalker<UniversalSyntaxTree>(
+				ust);
+		walker.walk(new TreeVisitor<UniversalSyntaxTree>() {
+			@Override
+			public WalkingAction visit(UniversalSyntaxTree tree) {
+				try {
+					if (NormalClassDeclaration.is(tree)) {
+						result.add(new NormalClassDeclaration(tree)
+								.getCodeRange());
+					} else if (EnumDeclaration.is(tree)) {
+						result.add(new EnumDeclaration(tree).getCodeRange());
+					} else if (NormalInterfaceDeclaration.is(tree)) {
+						result.add(new NormalInterfaceDeclaration(tree)
+								.getCodeRange());
+					} else if (AnnotationTypeDeclaration.is(tree)) {
+						result.add(new AnnotationTypeDeclaration(tree)
+								.getCodeRange());
+					} else if (ConstructorDeclaration.is(tree)) {
+						result.add(new ConstructorDeclaration(tree)
+								.getCodeRange());
+					} else if (MethodDeclaration.is(tree)) {
+						result.add(new MethodDeclaration(tree).getCodeRange());
+					}
+					return WalkingAction.PROCEED;
+				} catch (TreeException e) {
+					logger.error(e.getMessage(), e);
+					return WalkingAction.ABORT;
+				}
+			}
+		});
+		return result;
+	}
+
+	private <T> void persist(T object, File file) throws IOException {
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+				new FileOutputStream(file));
+		try {
+			objectOutputStream.writeObject(object);
+		} finally {
+			objectOutputStream.close();
+		}
+	}
 
 }
