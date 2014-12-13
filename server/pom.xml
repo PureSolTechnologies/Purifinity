@@ -16,8 +16,8 @@
 		<cassandra.driver.version>2.1.2</cassandra.driver.version>
 		<titan.version>0.5.1</titan.version>
 		<!-- WildFly -->
-		<wildfly.version>8.1.0.Final</wildfly.version>
-		<resteasy.version>3.0.8.Final</resteasy.version>
+		<wildfly.version>8.2.0.Final</wildfly.version>
+		<resteasy.version>3.0.10.Final</resteasy.version>
 		<mojarra.version>2.2.6</mojarra.version>
 		<!-- WildFly settings -->
 		<wildfly.http.port>8080</wildfly.http.port>
