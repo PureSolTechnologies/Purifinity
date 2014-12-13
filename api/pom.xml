@@ -8,7 +8,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<com.puresoltechnologies.commons.version>0.1.0-SNAPSHOT</com.puresoltechnologies.commons.version>
+		<commons.version>0.3.0</commons.version>
+		<parsers.version>0.3.0</parsers.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity.api</groupId>
@@ -189,11 +190,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
-				<artifactId>parsers</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.parsers</groupId>
 				<artifactId>ust</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -226,22 +222,27 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>os</artifactId>
-				<version>${com.puresoltechnologies.commons.version}</version>
+				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>osgi</artifactId>
-				<version>${com.puresoltechnologies.commons.version}</version>
+				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>trees</artifactId>
-				<version>${com.puresoltechnologies.commons.version}</version>
+				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>types</artifactId>
-				<version>${com.puresoltechnologies.commons.version}</version>
+				<version>${commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.parsers</groupId>
+				<artifactId>parsers</artifactId>
+				<version>${parsers.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
 			<dependency>
@@ -433,8 +434,6 @@
 		<module>math.bundle</module>
 		<module>misc</module>
 		<module>misc.bundle</module>
-		<module>parsers</module>
-		<module>parsers.bundle</module>
 		<module>ust</module>
 		<module>analysis.domain</module>
 		<module>analysis.domain.bundle</module>

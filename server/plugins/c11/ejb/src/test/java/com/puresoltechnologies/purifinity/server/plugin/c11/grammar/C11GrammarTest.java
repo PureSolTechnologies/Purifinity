@@ -14,7 +14,6 @@ import org.junit.Test;
 import com.puresoltechnologies.parsers.grammar.Grammar;
 import com.puresoltechnologies.parsers.grammar.GrammarConverter;
 import com.puresoltechnologies.parsers.grammar.GrammarFile;
-import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
 
 public class C11GrammarTest {
 
@@ -32,7 +31,7 @@ public class C11GrammarTest {
 			GrammarFile file = new GrammarFile(stream);
 			try {
 				GrammarConverter grammarConverter = new GrammarConverter(
-						file.getAST());
+						file.getParserTree());
 				Grammar grammar = grammarConverter.getGrammar();
 				assertNotNull(grammar);
 			} finally {
