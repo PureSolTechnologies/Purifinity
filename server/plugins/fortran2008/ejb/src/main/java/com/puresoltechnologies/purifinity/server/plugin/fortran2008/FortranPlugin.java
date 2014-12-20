@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.plugin.fortran2008;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.puresoltechnologies.commons.types.Version;
+import com.puresoltechnologies.commons.versioning.Version;
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginInformation;
 
 public class FortranPlugin {

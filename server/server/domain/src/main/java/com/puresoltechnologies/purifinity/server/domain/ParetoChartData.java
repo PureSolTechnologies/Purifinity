@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.commons.os.HashId;
+import com.puresoltechnologies.commons.misc.HashId;
 
 /**
  * This value object contains the data for a Histogram Chart. A histogram chart

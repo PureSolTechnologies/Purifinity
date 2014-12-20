@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.os.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.server.common.utils.io.FileSearch;
 import com.puresoltechnologies.purifinity.server.common.utils.io.FileTree;
 

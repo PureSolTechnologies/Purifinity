@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.misc.ConfigurationParameter;
+import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.AbstractProduction;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;

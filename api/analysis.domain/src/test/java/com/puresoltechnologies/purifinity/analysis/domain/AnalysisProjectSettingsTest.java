@@ -9,8 +9,8 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.JSONSerializer;
-import com.puresoltechnologies.commons.os.FileSearchConfiguration;
+import com.puresoltechnologies.commons.math.JSONSerializer;
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 
 public class AnalysisProjectSettingsTest {
 

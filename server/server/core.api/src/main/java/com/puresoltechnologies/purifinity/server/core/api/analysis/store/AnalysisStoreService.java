@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.core.api.analysis.store;
 import java.util.Map;
 import java.util.UUID;
 
-import com.puresoltechnologies.commons.os.HashId;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 

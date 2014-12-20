@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import com.puresoltechnologies.commons.os.HashId;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.FileStoreRestInterface;

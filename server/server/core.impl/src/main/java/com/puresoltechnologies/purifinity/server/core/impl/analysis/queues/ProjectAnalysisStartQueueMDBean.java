@@ -16,7 +16,7 @@ import javax.jms.MessageListener;
 import javax.jms.Queue;
 import javax.jms.TextMessage;
 
-import com.puresoltechnologies.commons.misc.JSONSerializer;
+import com.puresoltechnologies.commons.math.JSONSerializer;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;

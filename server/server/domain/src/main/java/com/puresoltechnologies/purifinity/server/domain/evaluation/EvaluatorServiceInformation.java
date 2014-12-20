@@ -6,7 +6,7 @@ import java.util.Set;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.types.Version;
+import com.puresoltechnologies.commons.versioning.Version;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.server.common.plugins.ServiceInformation;

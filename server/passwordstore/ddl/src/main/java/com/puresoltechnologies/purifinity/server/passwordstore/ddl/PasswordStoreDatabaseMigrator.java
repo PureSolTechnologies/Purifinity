@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.commons.types.Version;
+import com.puresoltechnologies.commons.versioning.Version;
 import com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration;
 import com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigratorConnector;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;

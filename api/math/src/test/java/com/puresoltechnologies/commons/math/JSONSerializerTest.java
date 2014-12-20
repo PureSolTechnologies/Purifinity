@@ -1,4 +1,4 @@
-package com.puresoltechnologies.commons.misc;
+package com.puresoltechnologies.commons.math;
 
 import static org.junit.Assert.assertEquals;
 
@@ -8,8 +8,6 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
-
-import com.puresoltechnologies.commons.misc.JSONSerializer;
 
 public class JSONSerializerTest {
 

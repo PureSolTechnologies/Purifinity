@@ -1,4 +1,4 @@
-package com.puresoltechnologies.commons.misc;
+package com.puresoltechnologies.commons.math;
 
 import java.io.IOException;
 

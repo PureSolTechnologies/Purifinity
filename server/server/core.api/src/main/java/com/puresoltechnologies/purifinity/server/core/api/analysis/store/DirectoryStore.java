@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.core.api.analysis.store;
 
 import java.util.List;
 
-import com.puresoltechnologies.commons.os.HashId;
+import com.puresoltechnologies.commons.misc.HashId;
 
 /**
  * This is the interface for a directory store. Directories are collections of

@@ -14,11 +14,15 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>math</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>misc</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>types</artifactId>
+			<artifactId>versioning</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.parsers</groupId>

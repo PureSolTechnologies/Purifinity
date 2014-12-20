@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.commons.types.Version;
+import com.puresoltechnologies.commons.versioning.Version;
 import com.puresoltechnologies.purifinity.server.database.cassandra.PluginsKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigratorConnector;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;

@@ -21,7 +21,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.os.StopWatch;
+import com.puresoltechnologies.commons.misc.StopWatch;
 import com.puresoltechnologies.commons.trees.TreeException;
 import com.puresoltechnologies.commons.trees.TreeVisitor;
 import com.puresoltechnologies.commons.trees.TreeWalker;

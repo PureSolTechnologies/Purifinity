@@ -23,10 +23,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>os</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>trees</artifactId>
 		</dependency>
 		<dependency>

@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.puresoltechnologies.commons.os.LineTerminator;
+import com.puresoltechnologies.commons.misc.LineTerminator;
 import com.puresoltechnologies.commons.trees.TreeException;
 import com.puresoltechnologies.parsers.parser.ParserException;
 import com.puresoltechnologies.parsers.parser.ParserTree;

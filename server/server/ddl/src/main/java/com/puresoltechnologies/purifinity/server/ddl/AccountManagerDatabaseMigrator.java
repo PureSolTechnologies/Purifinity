@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
-import com.puresoltechnologies.commons.types.Version;
+import com.puresoltechnologies.commons.versioning.Version;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationMetadata;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationSequence;

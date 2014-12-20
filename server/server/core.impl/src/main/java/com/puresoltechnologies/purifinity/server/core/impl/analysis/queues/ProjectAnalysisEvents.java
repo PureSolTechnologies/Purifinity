@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.core.impl.analysis.queues;
 
 import java.util.UUID;
 
-import com.puresoltechnologies.commons.os.HashId;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSeverity;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventType;

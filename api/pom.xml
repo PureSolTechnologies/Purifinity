@@ -8,8 +8,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<commons.version>0.3.0</commons.version>
-		<parsers.version>0.3.0</parsers.version>
+		<commons.version>0.4.0-SNAPSHOT</commons.version>
+		<parsers.version>0.4.0-SNAPSHOT</parsers.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity.api</groupId>
@@ -184,11 +184,6 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>misc</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
 				<artifactId>ust</artifactId>
 				<version>${project.version}</version>
@@ -221,7 +216,7 @@
 			<!-- External PureSol Technologies Libraries -->
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>os</artifactId>
+				<artifactId>misc</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
@@ -237,6 +232,11 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>types</artifactId>
+				<version>${commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>versioning</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
@@ -432,8 +432,6 @@
 	<modules>
 		<module>math</module>
 		<module>math.bundle</module>
-		<module>misc</module>
-		<module>misc.bundle</module>
 		<module>ust</module>
 		<module>analysis.domain</module>
 		<module>analysis.domain.bundle</module>

@@ -11,10 +11,10 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
+import com.puresoltechnologies.commons.math.JSONSerializer;
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
-import com.puresoltechnologies.commons.misc.JSONSerializer;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 public class RepositoryTypeTest {
@@ -25,31 +25,36 @@ public class RepositoryTypeTest {
 		parameters.put("parameter1", new ParameterWithArbitraryUnit<Double>(
 				"parameterName", "parameterUnit", LevelOfMeasurement.NOMINAL,
 				"parameterDescription", Double.class));
-		RepositoryTypeServiceInformation repositoryType = new RepositoryTypeServiceInformation("className", "name",
-				"description", parameters, null, null, null, null);
+		RepositoryTypeServiceInformation repositoryType = new RepositoryTypeServiceInformation(
+				"className", "name", "description", parameters, null, null,
+				null, null);
 		checkSerialization(repositoryType);
 	}
 
 	@Test
 	public void testJSONSerializationDirectoryRepositoryType() throws Exception {
-		RepositoryTypeServiceInformation repositoryType = DirectoryRepositoryTypeCreator.create();
+		RepositoryTypeServiceInformation repositoryType = DirectoryRepositoryTypeCreator
+				.create();
 		checkSerialization(repositoryType);
 	}
 
 	@Test
 	public void testJSONSerializationGITRepositoryType() throws Exception {
-		RepositoryTypeServiceInformation repositoryType = GITRepositoryTypeCreator.create();
+		RepositoryTypeServiceInformation repositoryType = GITRepositoryTypeCreator
+				.create();
 		checkSerialization(repositoryType);
 	}
 
-	private void checkSerialization(RepositoryTypeServiceInformation repositoryType)
+	private void checkSerialization(
+			RepositoryTypeServiceInformation repositoryType)
 			throws JsonGenerationException, JsonMappingException, IOException {
 		String serialized = JSONSerializer.toJSONString(repositoryType);
 		assertNotNull(serialized);
 		assertFalse(serialized.isEmpty());
 		System.out.println(serialized);
-		RepositoryTypeServiceInformation deserialized = JSONSerializer.fromJSONString(serialized,
-				RepositoryTypeServiceInformation.class);
+		RepositoryTypeServiceInformation deserialized = JSONSerializer
+				.fromJSONString(serialized,
+						RepositoryTypeServiceInformation.class);
 		assertNotNull(deserialized);
 		assertEquals(repositoryType.getClassName(), deserialized.getClassName());
 		assertEquals(repositoryType.getName(), deserialized.getName());

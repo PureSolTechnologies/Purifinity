@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.os.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 
 public class FileSearchConfigurationTest {
 

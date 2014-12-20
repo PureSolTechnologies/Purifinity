@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.commons.os.HashId;
+import com.puresoltechnologies.commons.misc.HashId;
 
 public class HistogramChartData implements Serializable {
 

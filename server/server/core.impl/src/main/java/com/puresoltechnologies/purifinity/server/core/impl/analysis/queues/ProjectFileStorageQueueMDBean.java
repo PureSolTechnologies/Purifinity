@@ -18,8 +18,8 @@ import javax.jms.Queue;
 
 import org.slf4j.Logger;
 
-import com.puresoltechnologies.commons.misc.JSONSerializer;
-import com.puresoltechnologies.commons.os.HashId;
+import com.puresoltechnologies.commons.math.JSONSerializer;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;

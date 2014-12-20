@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.server.database.migration;
 
-import com.puresoltechnologies.commons.types.Version;
+import com.puresoltechnologies.commons.versioning.Version;
 
 public class MigrationMetadata {
 

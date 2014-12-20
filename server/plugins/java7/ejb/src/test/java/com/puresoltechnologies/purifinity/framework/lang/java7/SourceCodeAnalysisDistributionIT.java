@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.framework.lang.java7;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.os.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.grammar.Grammar;
 import com.puresoltechnologies.parsers.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;

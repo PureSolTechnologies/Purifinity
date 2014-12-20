@@ -9,8 +9,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<purifinity.api.version>${project.version}</purifinity.api.version>
-		<commons.version>0.3.0</commons.version>
-		<parsers.version>0.3.0</parsers.version>
+		<commons.version>0.4.0-SNAPSHOT</commons.version>
+		<parsers.version>0.4.0-SNAPSHOT</parsers.version>
 		
 		<!-- Databases -->
 		<cassandra.driver.version>2.1.2</cassandra.driver.version>
@@ -662,11 +662,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>misc</artifactId>
-				<version>${purifinity.api.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>utils</artifactId>
 				<version>${purifinity.api.version}</version>
 			</dependency>
@@ -708,12 +703,12 @@
 			<!-- External PureSol Technologies Libraries -->
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>money</artifactId>
+				<artifactId>misc</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>os</artifactId>
+				<artifactId>money</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
@@ -729,6 +724,11 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>types</artifactId>
+				<version>${commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.commons</groupId>
+				<artifactId>versioning</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>

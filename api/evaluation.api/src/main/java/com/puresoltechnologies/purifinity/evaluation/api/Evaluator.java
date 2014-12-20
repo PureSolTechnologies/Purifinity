@@ -2,8 +2,8 @@ package com.puresoltechnologies.purifinity.evaluation.api;
 
 import java.util.Set;
 
+import com.puresoltechnologies.commons.math.Configurable;
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.misc.Configurable;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 

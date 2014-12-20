@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.analysis.api;
 
 import java.io.IOException;
 
-import com.puresoltechnologies.commons.misc.Configurable;
+import com.puresoltechnologies.commons.math.Configurable;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 

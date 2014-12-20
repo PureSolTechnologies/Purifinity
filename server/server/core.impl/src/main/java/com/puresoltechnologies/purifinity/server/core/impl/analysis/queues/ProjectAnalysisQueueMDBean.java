@@ -17,8 +17,8 @@ import javax.jms.Queue;
 
 import org.slf4j.Logger;
 
-import com.puresoltechnologies.commons.misc.JSONSerializer;
-import com.puresoltechnologies.commons.os.HashId;
+import com.puresoltechnologies.commons.math.JSONSerializer;
+import com.puresoltechnologies.commons.misc.HashId;
 import com.puresoltechnologies.commons.trees.TreeVisitor;
 import com.puresoltechnologies.commons.trees.TreeWalker;
 import com.puresoltechnologies.commons.trees.WalkingAction;

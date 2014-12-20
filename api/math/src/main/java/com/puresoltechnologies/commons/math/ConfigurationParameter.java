@@ -1,9 +1,6 @@
-package com.puresoltechnologies.commons.misc;
+package com.puresoltechnologies.commons.math;
 
 import java.util.Properties;
-
-import com.puresoltechnologies.commons.math.LevelOfMeasurement;
-import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 
 /**
  * This class specifies a single configuration parameter.
