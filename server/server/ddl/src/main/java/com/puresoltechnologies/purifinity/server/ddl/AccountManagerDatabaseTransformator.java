@@ -1,19 +1,15 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
 import com.puresoltechnologies.commons.versioning.Version;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationMetadata;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationSequence;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationStep;
-import com.puresoltechnologies.purifinity.server.database.migration.spi.UniversalMigratorConnector;
+import com.puresoltechnologies.genesis.transformation.spi.Transformator;
 
-public class AccountManagerDatabaseMigrator {
+public class AccountManagerDatabaseTransformator implements Transformator {
 
 	private static final Version V_1_0_0 = new Version(1, 0, 0);
 
 	private final UniversalMigratorConnector connector;
 
-	protected AccountManagerDatabaseMigrator(
+	protected AccountManagerDatabaseTransformator(
 			UniversalMigratorConnector connector) {
 		this.connector = connector;
 	}

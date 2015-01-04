@@ -1,23 +1,16 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
-import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createKeyspace;
-import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createTable;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.versioning.Version;
+import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
+import com.puresoltechnologies.genesis.transformation.spi.Transformator;
 import com.puresoltechnologies.purifinity.server.database.cassandra.PluginsKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigratorConnector;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationMetadata;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationSequence;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationStep;
 
-public class PluginsDatabaseMigrator {
+public class PluginsDatabaseTransformator implements Transformator {
 
 	private static final String PLUGINS_TABLE = "plugins";
 	private static final String ANALYZERS_TABLE = "analyzsers";
@@ -30,7 +23,7 @@ public class PluginsDatabaseMigrator {
 
 	private final CassandraMigratorConnector connector;
 
-	public PluginsDatabaseMigrator(CassandraMigratorConnector connector)
+	public PluginsDatabaseTransformator(CassandraMigratorConnector connector)
 			throws MigrationException {
 		this.connector = connector;
 	}

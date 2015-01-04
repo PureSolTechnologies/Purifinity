@@ -1,18 +1,15 @@
 package com.puresoltechnologies.purifinity.server.metrics.ddl;
 
-import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createTable;
+import java.util.Set;
 
 import com.puresoltechnologies.commons.versioning.Version;
-import com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration;
-import com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigratorConnector;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationMetadata;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationSequence;
-import com.puresoltechnologies.purifinity.server.database.migration.Migrator;
-import com.puresoltechnologies.purifinity.server.database.migration.spi.UniversalMigratorConnector;
+import com.puresoltechnologies.genesis.commons.TransformationMetadata;
+import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraMigration;
+import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
+import com.puresoltechnologies.genesis.transformation.spi.Transformator;
 
-public class MetricsDatabaseMigrator {
+public class MetricsDatabaseTransformator implements Transformator {
 
 	public static final String HALSTEAD_EVALUATOR_KEYSPACE_NAME = "halstead_evaluator";
 	public static final String CASSANDRA_HOST = "localhost";
@@ -27,13 +24,20 @@ public class MetricsDatabaseMigrator {
 
 	private final UniversalMigratorConnector connector;
 
-	protected MetricsDatabaseMigrator(UniversalMigratorConnector connector) {
+	protected MetricsDatabaseTransformator(UniversalMigratorConnector connector) {
 		this.connector = connector;
 	}
 
-	private MigrationSequence migrateVersion100() throws MigrationException {
-		MigrationSequence sequence = new MigrationSequence(
-				new MigrationMetadata(V_1_0_0, "Rick-Rainer Ludwig",
+	@Override
+	public Set<TransformationSequence> getSequences() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private TransformationSequence migrateVersion100()
+			throws MigrationException {
+		TransformationSequence sequence = new TransformationSequence(
+				new TransformationMetadata(V_1_0_0, "Rick-Rainer Ludwig",
 						"Metrics Plugin", "", "Version " + V_1_0_0
 								+ " sequence."));
 		sequence.registerMigrationStep(CassandraMigration.createKeyspace(
@@ -75,7 +79,7 @@ public class MetricsDatabaseMigrator {
 	public static void main(String[] args) throws Exception {
 		try (CassandraMigratorConnector connector = new CassandraMigratorConnector(
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT)) {
-			MetricsDatabaseMigrator metricsDatabaseSchema = new MetricsDatabaseMigrator(
+			MetricsDatabaseTransformator metricsDatabaseSchema = new MetricsDatabaseTransformator(
 					connector);
 			try (Migrator migrator = new Migrator()) {
 				migrator.runMigration(metricsDatabaseSchema.migrateVersion100());

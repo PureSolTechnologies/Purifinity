@@ -1,16 +1,11 @@
 package com.puresoltechnologies.purifinity.server.passwordstore.ddl;
 
 import com.puresoltechnologies.commons.versioning.Version;
-import com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration;
-import com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigratorConnector;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationMetadata;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationSequence;
-import com.puresoltechnologies.purifinity.server.database.migration.Migrator;
-import com.puresoltechnologies.purifinity.server.database.migration.spi.UniversalMigratorConnector;
+import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraMigration;
+import com.puresoltechnologies.genesis.transformation.spi.Transformator;
 
-public class SystemMonitorDatabaseMigrator {
+public class SystemMonitorDatabaseTransformator implements Transformator {
 
 	public static final String SYSTEM_MONITOR_KEYSPACE_NAME = "system_monitor";
 	public static final String CASSANDRA_HOST = "localhost";
@@ -22,7 +17,8 @@ public class SystemMonitorDatabaseMigrator {
 
 	private final UniversalMigratorConnector connector;
 
-	protected SystemMonitorDatabaseMigrator(UniversalMigratorConnector connector) {
+	protected SystemMonitorDatabaseTransformator(
+			UniversalMigratorConnector connector) {
 		this.connector = connector;
 	}
 
@@ -84,7 +80,7 @@ public class SystemMonitorDatabaseMigrator {
 	public static void main(String[] args) throws Exception {
 		try (CassandraMigratorConnector connector = new CassandraMigratorConnector(
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT)) {
-			SystemMonitorDatabaseMigrator systemMonitorSchema = new SystemMonitorDatabaseMigrator(
+			SystemMonitorDatabaseTransformator systemMonitorSchema = new SystemMonitorDatabaseTransformator(
 					connector);
 			try (Migrator migrator = new Migrator()) {
 				migrator.runMigration(systemMonitorSchema.migrateVersion100());

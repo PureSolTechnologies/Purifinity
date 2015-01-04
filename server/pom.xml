@@ -11,6 +11,7 @@
 		<purifinity.api.version>${project.version}</purifinity.api.version>
 		<commons.version>0.4.0-SNAPSHOT</commons.version>
 		<parsers.version>0.4.0-SNAPSHOT</parsers.version>
+		<genesis.version>0.1.0-SNAPSHOT</genesis.version>
 		
 		<!-- Databases -->
 		<cassandra.driver.version>2.1.2</cassandra.driver.version>
@@ -440,11 +441,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.migration</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>database.titan</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -661,11 +657,6 @@
 				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>utils</artifactId>
-				<version>${purifinity.api.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.api</groupId>
 				<artifactId>analysis.api</artifactId>
 				<version>${purifinity.api.version}</version>
@@ -730,6 +721,21 @@
 				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>versioning</artifactId>
 				<version>${commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.genesis</groupId>
+				<artifactId>controller</artifactId>
+				<version>${genesis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.genesis</groupId>
+				<artifactId>tracker.cassandra</artifactId>
+				<version>${genesis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.genesis</groupId>
+				<artifactId>transformation.cassandra</artifactId>
+				<version>${genesis.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>

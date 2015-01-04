@@ -5,13 +5,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
+import com.puresoltechnologies.commons.misc.AbstractProgressObservable;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
-import com.puresoltechnologies.purifinity.server.common.utils.progress.AbstractProgressObservable;
 
 /**
  * This interface is meant for evaluators which perform operations on ASTs or in

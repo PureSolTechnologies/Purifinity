@@ -3,8 +3,8 @@ package com.puresoltechnologies.purifinity.server.accountmanager.domain.statemod
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.purifinity.server.common.utils.statemodel.State;
-import com.puresoltechnologies.purifinity.server.common.utils.statemodel.Transition;
+import com.puresoltechnologies.commons.misc.statemodel.State;
+import com.puresoltechnologies.commons.misc.statemodel.Transition;
 
 public enum AccountState implements State<AccountState> {
 

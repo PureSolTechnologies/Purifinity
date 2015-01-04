@@ -3,8 +3,8 @@ package com.puresoltechnologies.purifinity.server.core.api.analysis.states;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.purifinity.server.common.utils.statemodel.State;
-import com.puresoltechnologies.purifinity.server.common.utils.statemodel.Transition;
+import com.puresoltechnologies.commons.misc.statemodel.State;
+import com.puresoltechnologies.commons.misc.statemodel.Transition;
 
 public enum AnalysisProcessState implements State<AnalysisProcessState> {
 

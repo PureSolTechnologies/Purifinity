@@ -51,15 +51,15 @@ public class DatabaseMigrator {
 	try (CassandraMigratorConnector connector = new CassandraMigratorConnector(
 		CASSANDRA_HOST, CASSANDRA_CQL_PORT)) {
 	    try (Migrator migrator = new Migrator()) {
-		AnalysisServiceDatabaseMigrator analysisServiceDatabaseMigrator = new AnalysisServiceDatabaseMigrator(
+		AnalysisServiceDatabaseTransformator analysisServiceDatabaseMigrator = new AnalysisServiceDatabaseTransformator(
 			connector);
-		EvaluationServiceDatabaseMigrator evaluationServiceDatabaseMigrator = new EvaluationServiceDatabaseMigrator(
+		EvaluationServiceDatabaseTransformator evaluationServiceDatabaseMigrator = new EvaluationServiceDatabaseTransformator(
 			connector);
-		ProcessStatesDatabaseMigrator processStatesDatabaseMigrator = new ProcessStatesDatabaseMigrator(
+		ProcessStatesDatabaseTransformator processStatesDatabaseMigrator = new ProcessStatesDatabaseTransformator(
 			connector);
-		PreferencesStoreDatabaseMigrator preferencesStoreDatabaseMigrator = new PreferencesStoreDatabaseMigrator(
+		PreferencesStoreDatabaseTransformator preferencesStoreDatabaseMigrator = new PreferencesStoreDatabaseTransformator(
 			connector);
-		PluginsDatabaseMigrator pluginsDatabaseMigrator = new PluginsDatabaseMigrator(
+		PluginsDatabaseTransformator pluginsDatabaseMigrator = new PluginsDatabaseTransformator(
 			connector);
 		if (drop) {
 		    analysisServiceDatabaseMigrator.drop();

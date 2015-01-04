@@ -1,32 +1,24 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
-import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createKeyspace;
-import static com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigration.createTable;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.versioning.Version;
+import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
+import com.puresoltechnologies.genesis.transformation.spi.Transformator;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.migration.CassandraMigratorConnector;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.ReplicationStrategy;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationException;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationMetadata;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationSequence;
-import com.puresoltechnologies.purifinity.server.database.migration.MigrationStep;
-import com.puresoltechnologies.purifinity.server.database.migration.spi.UniversalMigratorConnector;
 
-public class AnalysisServiceDatabaseMigrator {
+public class AnalysisServiceDatabaseTransformator implements Transformator {
 
 	private static final Version V_1_0_0 = new Version(1, 0, 0);
 
 	private final CassandraMigratorConnector connector;
 
-	public AnalysisServiceDatabaseMigrator(CassandraMigratorConnector connector)
-			throws MigrationException {
+	public AnalysisServiceDatabaseTransformator(
+			CassandraMigratorConnector connector) throws MigrationException {
 		this.connector = connector;
 	}
 

@@ -17,7 +17,7 @@ import com.puresoltechnologies.purifinity.server.database.migration.MigrationMet
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationSequence;
 import com.puresoltechnologies.purifinity.server.database.migration.MigrationStep;
 
-public class PreferencesStoreDatabaseMigrator {
+public class PreferencesStoreDatabaseTransformator implements Transformator {
 
 	private static final String PREFERENCES_TABLE = "preferences";
 	private static final String USER_PREFERENCES_TABLE = "user_preferences";
@@ -29,8 +29,8 @@ public class PreferencesStoreDatabaseMigrator {
 
 	private final CassandraMigratorConnector connector;
 
-	public PreferencesStoreDatabaseMigrator(CassandraMigratorConnector connector)
-			throws MigrationException {
+	public PreferencesStoreDatabaseTransformator(
+			CassandraMigratorConnector connector) throws MigrationException {
 		this.connector = connector;
 	}
 

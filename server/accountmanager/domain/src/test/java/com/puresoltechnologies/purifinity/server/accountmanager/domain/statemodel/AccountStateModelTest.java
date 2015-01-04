@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.common.utils.statemodel.Transition;
+import com.puresoltechnologies.commons.misc.statemodel.Transition;
 
 public class AccountStateModelTest {
 

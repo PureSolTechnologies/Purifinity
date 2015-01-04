@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.accountmanager.domain.statemod
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.purifinity.server.common.utils.statemodel.AbstractStateModel;
+import com.puresoltechnologies.commons.misc.statemodel.AbstractStateModel;
 
 public class AccountStateModel extends AbstractStateModel<AccountState> {
 

@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.domain.statemodel;
 
-import com.puresoltechnologies.purifinity.server.common.utils.statemodel.Transition;
+import com.puresoltechnologies.commons.misc.statemodel.Transition;
 
 public enum AccountTransition implements Transition<AccountState> {
 
