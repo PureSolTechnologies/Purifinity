@@ -3,10 +3,9 @@ package com.puresoltechnologies.purifinity.server.accountmanager.domain.statemod
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.misc.statemodel.State;
-import com.puresoltechnologies.commons.misc.statemodel.Transition;
+import com.puresoltechnologies.statemodel.State;
 
-public enum AccountState implements State<AccountState> {
+public enum AccountState implements State<AccountState, AccountTransition> {
 
 	START {
 
@@ -21,8 +20,8 @@ public enum AccountState implements State<AccountState> {
 		}
 
 		@Override
-		public Set<Transition<AccountState>> getTransitions() {
-			Set<Transition<AccountState>> transitions = new HashSet<Transition<AccountState>>();
+		public Set<AccountTransition> getTransitions() {
+			Set<AccountTransition> transitions = new HashSet<>();
 			transitions.add(AccountTransition.CREATE);
 			return transitions;
 		}
@@ -40,8 +39,8 @@ public enum AccountState implements State<AccountState> {
 		}
 
 		@Override
-		public Set<Transition<AccountState>> getTransitions() {
-			Set<Transition<AccountState>> transitions = new HashSet<Transition<AccountState>>();
+		public Set<AccountTransition> getTransitions() {
+			Set<AccountTransition> transitions = new HashSet<AccountTransition>();
 			transitions.add(AccountTransition.ACTIVATE);
 			transitions.add(AccountTransition.LOCK);
 			transitions.add(AccountTransition.DELETE);
@@ -61,8 +60,8 @@ public enum AccountState implements State<AccountState> {
 		}
 
 		@Override
-		public Set<Transition<AccountState>> getTransitions() {
-			Set<Transition<AccountState>> transitions = new HashSet<Transition<AccountState>>();
+		public Set<AccountTransition> getTransitions() {
+			Set<AccountTransition> transitions = new HashSet<>();
 			transitions.add(AccountTransition.DEACTIVATE);
 			transitions.add(AccountTransition.LOCK);
 			return transitions;
@@ -81,8 +80,8 @@ public enum AccountState implements State<AccountState> {
 		}
 
 		@Override
-		public Set<Transition<AccountState>> getTransitions() {
-			Set<Transition<AccountState>> transitions = new HashSet<Transition<AccountState>>();
+		public Set<AccountTransition> getTransitions() {
+			Set<AccountTransition> transitions = new HashSet<>();
 			transitions.add(AccountTransition.REACTIVATE);
 			transitions.add(AccountTransition.LOCK);
 			transitions.add(AccountTransition.DELETE);
@@ -102,8 +101,8 @@ public enum AccountState implements State<AccountState> {
 		}
 
 		@Override
-		public Set<Transition<AccountState>> getTransitions() {
-			Set<Transition<AccountState>> transitions = new HashSet<Transition<AccountState>>();
+		public Set<AccountTransition> getTransitions() {
+			Set<AccountTransition> transitions = new HashSet<>();
 			transitions.add(AccountTransition.UNLOCK);
 			transitions.add(AccountTransition.DELETE);
 			return transitions;
@@ -122,10 +121,23 @@ public enum AccountState implements State<AccountState> {
 		}
 
 		@Override
-		public Set<Transition<AccountState>> getTransitions() {
-			return new HashSet<Transition<AccountState>>();
+		public Set<AccountTransition> getTransitions() {
+			return new HashSet<AccountTransition>();
+		}
+
+		@Override
+		public Set<AccountTransition> getEdges() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	},
 	;
 
+	public abstract String getDescription();
+
+	@Override
+	public Set<AccountTransition> getEdges() {
+		throw new IllegalStateException(
+				"This state model does not support graph traversals.");
+	}
 }

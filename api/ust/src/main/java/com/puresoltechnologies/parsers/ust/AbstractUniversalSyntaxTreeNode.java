@@ -1,9 +1,12 @@
 package com.puresoltechnologies.parsers.ust;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import com.puresoltechnologies.commons.trees.TreeException;
+import com.puresoltechnologies.trees.TreeException;
+import com.puresoltechnologies.trees.TreeLink;
 
 public abstract class AbstractUniversalSyntaxTreeNode implements
 		UniversalSyntaxTree {
@@ -70,6 +73,16 @@ public abstract class AbstractUniversalSyntaxTreeNode implements
 	@Override
 	public final boolean hasChildren() {
 		return children.size() > 0;
+	}
+
+	@Override
+	public Set<TreeLink<UniversalSyntaxTree>> getEdges() {
+		Set<TreeLink<UniversalSyntaxTree>> edges = new HashSet<>();
+		edges.add(new TreeLink<UniversalSyntaxTree>(parent, this));
+		for (UniversalSyntaxTree child : children) {
+			edges.add(new TreeLink<>(this, child));
+		}
+		return edges;
 	}
 
 	@Override

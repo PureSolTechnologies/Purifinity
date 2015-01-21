@@ -16,7 +16,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;

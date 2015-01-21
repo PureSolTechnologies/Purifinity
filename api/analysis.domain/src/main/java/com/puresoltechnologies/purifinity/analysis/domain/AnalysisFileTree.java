@@ -3,20 +3,24 @@ package com.puresoltechnologies.purifinity.analysis.domain;
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 
-import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.trees.Tree;
-import com.puresoltechnologies.commons.trees.TreeVisitor;
-import com.puresoltechnologies.commons.trees.TreeWalker;
-import com.puresoltechnologies.commons.trees.WalkingAction;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.trees.TreeLink;
+import com.puresoltechnologies.trees.TreeNode;
+import com.puresoltechnologies.trees.TreeVisitor;
+import com.puresoltechnologies.trees.TreeWalker;
+import com.puresoltechnologies.trees.WalkingAction;
 
-public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
+public class AnalysisFileTree implements TreeNode<AnalysisFileTree>,
+		Serializable {
 
 	private static final long serialVersionUID = 294965469645813244L;
 
@@ -103,6 +107,17 @@ public class AnalysisFileTree implements Tree<AnalysisFileTree>, Serializable {
 	@JsonManagedReference
 	public final List<AnalysisFileTree> getChildren() {
 		return children;
+	}
+
+	@Override
+	@JsonIgnore
+	public Set<TreeLink<AnalysisFileTree>> getEdges() {
+		Set<TreeLink<AnalysisFileTree>> edges = new HashSet<>();
+		edges.add(new TreeLink<AnalysisFileTree>(parent, this));
+		for (AnalysisFileTree child : children) {
+			edges.add(new TreeLink<>(this, child));
+		}
+		return edges;
 	}
 
 	@Override

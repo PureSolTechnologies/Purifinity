@@ -6,7 +6,7 @@ import java.util.Properties;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 
 /**
  * This immutable value object contains the settings of an analysis.

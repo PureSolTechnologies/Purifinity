@@ -7,8 +7,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.statemodel.Transition;
-
 public class AccountStateModelTest {
 
 	@Test
@@ -16,7 +14,7 @@ public class AccountStateModelTest {
 		AccountStateModel stateModel = new AccountStateModel();
 		AccountState startState = stateModel.getStartState();
 		assertEquals(AccountState.START, startState);
-		Set<Transition<AccountState>> transitions = startState.getTransitions();
+		Set<AccountTransition> transitions = startState.getTransitions();
 		assertTrue("Start state must have one transition!",
 				transitions.size() > 0);
 
@@ -29,7 +27,7 @@ public class AccountStateModelTest {
 		assertEquals(1, endStates.size());
 		AccountState endState = endStates.iterator().next();
 		assertEquals(AccountState.DELETED, endState);
-		Set<Transition<AccountState>> transitions = endState.getTransitions();
+		Set<AccountTransition> transitions = endState.getTransitions();
 		assertEquals("End state must not have any transition!", 0,
 				transitions.size());
 	}

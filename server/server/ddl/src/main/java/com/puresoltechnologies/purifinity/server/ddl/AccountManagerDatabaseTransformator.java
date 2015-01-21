@@ -1,40 +1,80 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
-import com.puresoltechnologies.commons.versioning.Version;
-import com.puresoltechnologies.genesis.transformation.spi.Transformator;
+import java.util.HashSet;
+import java.util.Set;
 
-public class AccountManagerDatabaseTransformator implements Transformator {
+import com.puresoltechnologies.genesis.commons.SequenceMetadata;
+import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
+import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
+import com.puresoltechnologies.versioning.Version;
+import com.puresoltechnologies.versioning.VersionRange;
 
-	private static final Version V_1_0_0 = new Version(1, 0, 0);
+public class AccountManagerDatabaseTransformator implements
+		ComponentTransformator {
 
-	private final UniversalMigratorConnector connector;
+	public static final String ACCOUNT_MANAGER_KEYSPACE_NAME = "account_manager";
+	public static final String CASSANDRA_HOST = "localhost";
+	public static final int CASSANDRA_CQL_PORT = 9042;
 
-	protected AccountManagerDatabaseTransformator(
-			UniversalMigratorConnector connector) {
-		this.connector = connector;
+	@Override
+	public String getComponentName() {
+		return "AccountManager";
 	}
 
-	public void drop() {
+	@Override
+	public boolean isHostBased() {
+		return false;
 	}
 
-	public MigrationSequence getSequence() {
-		MigrationSequence sequence = new MigrationSequence(
-				new MigrationMetadata(V_1_0_0, "Rick-Rainer Ludwig",
-						"Account Manager", "", "Version " + V_1_0_0
-								+ " sequence."));
-		sequence.registerMigrationStep(new MigrationStep() {
+	@Override
+	public Set<TransformationSequence> getSequences() {
+		Set<TransformationSequence> sequences = new HashSet<>();
+		sequences.add(migrateVersion0_3_0_pre());
+		sequences.add(migrateVersion0_3_0());
+		return sequences;
+	}
 
-			@Override
-			public void migrate() throws MigrationException {
+	/**
+	 * This pre version is used to create the keyspace.
+	 * 
+	 * @return
+	 */
+	private TransformationSequence migrateVersion0_3_0_pre() {
+		Version startVersion = new Version(0, 0, 0);
+		Version targetVersion = new Version(0, 3, 0, "pre");
+		VersionRange versionRange = new VersionRange(targetVersion, true, null,
+				false);
+		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
+				startVersion, versionRange);
+		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
+				CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
 
-			}
+		sequence.appendTransformation(CassandraStandardMigrations.createKeyspace(
+				sequence.getSession(),
+				metadata,
+				ACCOUNT_MANAGER_KEYSPACE_NAME,
+				"Rick-Rainer Ludwig",
+				"This keyspace keeps the account information for all users and groups.",
+				ReplicationStrategy.SIMPLE_STRATEGY, 3));
 
-			@Override
-			public MigrationMetadata getMetadata() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-		});
 		return sequence;
 	}
+
+	private TransformationSequence migrateVersion0_3_0() {
+		Version startVersion = new Version(0, 3, 0, "pre");
+		Version targetVersion = new Version(0, 3, 0);
+		VersionRange versionRange = new VersionRange(targetVersion, true, null,
+				false);
+		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
+				startVersion, versionRange);
+		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
+				CASSANDRA_HOST, CASSANDRA_CQL_PORT,
+				ACCOUNT_MANAGER_KEYSPACE_NAME, metadata);
+
+		return sequence;
+	}
+
 }

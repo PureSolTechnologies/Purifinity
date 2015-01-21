@@ -21,8 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.StopWatch;
+import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.parser.ParserException;
-import com.puresoltechnologies.parsers.parser.ParserTree;
 import com.puresoltechnologies.parsers.parser.packrat.PackratParser;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -60,7 +60,7 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 			SourceCode sourceCode = getSource().getSourceCode();
 			watch.start();
 			PackratParser packratParser = new PackratParser(getGrammar());
-			ParserTree parserTree = packratParser.parse(sourceCode);
+			ParseTreeNode parserTree = packratParser.parse(sourceCode);
 			watch.stop();
 			CompilationUnit compilationUnit = TranslationUnitCreator
 					.create(parserTree);
@@ -93,7 +93,7 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 		}
 	}
 
-	private List<CodeRange> getAnalyzableCodeRanges(ParserTree parserTree) {
+	private List<CodeRange> getAnalyzableCodeRanges(ParseTreeNode parserTree) {
 		throw new IllegalStateException("No implemented, yet!");
 	}
 

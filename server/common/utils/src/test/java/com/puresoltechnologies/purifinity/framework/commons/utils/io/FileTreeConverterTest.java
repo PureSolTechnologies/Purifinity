@@ -9,9 +9,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.trees.TreePrinter;
 import com.puresoltechnologies.purifinity.server.common.utils.io.FileTree;
 import com.puresoltechnologies.purifinity.server.common.utils.io.FileTreeConverter;
+import com.puresoltechnologies.trees.TreePrinter;
 
 public class FileTreeConverterTest {
 

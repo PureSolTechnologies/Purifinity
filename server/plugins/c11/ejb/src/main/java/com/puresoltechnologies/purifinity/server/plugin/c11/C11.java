@@ -11,7 +11,6 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
-import com.puresoltechnologies.commons.versioning.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.AbstractProduction;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
@@ -23,6 +22,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.HalsteadSymbol;
 import com.puresoltechnologies.purifinity.analysis.domain.SLOCType;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * This is the base class for Java Programming Language. The lexical and

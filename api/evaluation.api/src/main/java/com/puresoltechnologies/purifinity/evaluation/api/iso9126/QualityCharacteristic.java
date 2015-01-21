@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.misc.JARUtilities;
+import com.puresoltechnologies.commons.misc.io.JARUtilities;
 
 /**
  * This enumeration contains a list of all quality characteristics which are

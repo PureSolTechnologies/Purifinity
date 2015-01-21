@@ -3,9 +3,10 @@ package com.puresoltechnologies.purifinity.server.accountmanager.domain.statemod
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.misc.statemodel.AbstractStateModel;
+import com.puresoltechnologies.statemodel.AbstractStateModel;
 
-public class AccountStateModel extends AbstractStateModel<AccountState> {
+public class AccountStateModel extends
+		AbstractStateModel<AccountState, AccountTransition> {
 
 	@Override
 	public AccountState getStartState() {
@@ -17,5 +18,11 @@ public class AccountStateModel extends AbstractStateModel<AccountState> {
 		Set<AccountState> endStates = new HashSet<>();
 		endStates.add(AccountState.DELETED);
 		return endStates;
+	}
+
+	@Override
+	public Set<AccountState> getVertices() {
+		throw new IllegalStateException(
+				"This state model does not support graph traversals.");
 	}
 }

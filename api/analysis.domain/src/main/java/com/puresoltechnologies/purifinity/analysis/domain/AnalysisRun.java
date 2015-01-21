@@ -10,12 +10,12 @@ import java.util.UUID;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.trees.TreeVisitor;
-import com.puresoltechnologies.commons.trees.TreeWalker;
-import com.puresoltechnologies.commons.trees.WalkingAction;
+import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.trees.TreeVisitor;
+import com.puresoltechnologies.trees.TreeWalker;
+import com.puresoltechnologies.trees.WalkingAction;
 
 /**
  * This class is an implementation of {@link AnalysisRun}.

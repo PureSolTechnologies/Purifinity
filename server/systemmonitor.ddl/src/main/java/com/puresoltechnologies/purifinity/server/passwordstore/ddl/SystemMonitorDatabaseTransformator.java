@@ -1,11 +1,20 @@
 package com.puresoltechnologies.purifinity.server.passwordstore.ddl;
 
-import com.puresoltechnologies.commons.versioning.Version;
-import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraMigration;
-import com.puresoltechnologies.genesis.transformation.spi.Transformator;
+import java.util.HashSet;
+import java.util.Set;
 
-public class SystemMonitorDatabaseTransformator implements Transformator {
+import com.puresoltechnologies.genesis.commons.SequenceMetadata;
+import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
+import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
+import com.puresoltechnologies.versioning.Version;
+import com.puresoltechnologies.versioning.VersionRange;
+
+public class SystemMonitorDatabaseTransformator implements
+		ComponentTransformator {
 
 	public static final String SYSTEM_MONITOR_KEYSPACE_NAME = "system_monitor";
 	public static final String CASSANDRA_HOST = "localhost";
@@ -15,53 +24,85 @@ public class SystemMonitorDatabaseTransformator implements Transformator {
 	private static final String EVENTS_TABLE_NAME = "events";
 	private static final String METRICS_TABLE_NAME = "metrics";
 
-	private final UniversalMigratorConnector connector;
-
-	protected SystemMonitorDatabaseTransformator(
-			UniversalMigratorConnector connector) {
-		this.connector = connector;
+	@Override
+	public String getComponentName() {
+		return "SystemMonitor";
 	}
 
-	private MigrationSequence migrateVersion100() throws MigrationException {
-		Version v100 = new Version(1, 0, 0);
-		MigrationSequence sequence = new MigrationSequence(
-				new MigrationMetadata(v100, "Rick-Rainer Ludwig",
-						"System Monitor", "", "Version " + v100 + " sequence."));
-		sequence.registerMigrationStep(CassandraMigration.createKeyspace(
-				connector, SYSTEM_MONITOR_KEYSPACE_NAME, v100,
+	@Override
+	public boolean isHostBased() {
+		return false;
+	}
+
+	@Override
+	public Set<TransformationSequence> getSequences() {
+		Set<TransformationSequence> sequences = new HashSet<>();
+		sequences.add(migrateVersion0_3_0_pre());
+		sequences.add(migrateVersion0_3_0());
+		return sequences;
+	}
+
+	/**
+	 * This pre version is used to create the keyspace.
+	 * 
+	 * @return
+	 */
+	private TransformationSequence migrateVersion0_3_0_pre() {
+		Version startVersion = new Version(0, 0, 0);
+		Version targetVersion = new Version(0, 3, 0, "pre");
+		VersionRange versionRange = new VersionRange(targetVersion, true, null,
+				false);
+		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
+				startVersion, versionRange);
+		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
+				CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
+		sequence.appendTransformation(CassandraStandardMigrations.createKeyspace(
+				sequence.getSession(),
+				metadata,
+				SYSTEM_MONITOR_KEYSPACE_NAME,
 				"Rick-Rainer Ludwig",
-				"Keeps the system status information and event logs.",
+				"This keyspace keeps the system status information and event logs.",
 				ReplicationStrategy.SIMPLE_STRATEGY, 3));
+		return sequence;
+	}
+
+	private TransformationSequence migrateVersion0_3_0() {
+		Version startVersion = new Version(0, 3, 0, "pre");
+		Version targetVersion = new Version(0, 3, 0);
+		VersionRange versionRange = new VersionRange(targetVersion, true, null,
+				false);
+		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
+				startVersion, versionRange);
+		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
+				CASSANDRA_HOST, CASSANDRA_CQL_PORT,
+				SYSTEM_MONITOR_KEYSPACE_NAME, metadata);
 
 		String description = "This is the table for the event log.";
-		sequence.registerMigrationStep(CassandraMigration
-				.createTable(
-						connector,
-						SYSTEM_MONITOR_KEYSPACE_NAME,
-						v100,
-						"Rick-Rainer Ludwig",
-						description,
-						"CREATE TABLE "
-								+ EVENTS_TABLE_NAME //
-								+ " (time timestamp, " //
-								+ "component ascii," //
-								+ "event_id bigint," //
-								+ "server ascii," //
-								+ "type ascii, " //
-								+ "severity ascii, "
-								+ "message text, "//
-								+ "user varchar, "
-								+ "user_id bigint," //
-								+ "client ascii, " //
-								+ "exception_message ascii, "
-								+ "exception_stacktrace ascii, "//
-								+ "PRIMARY KEY (server, time, severity, type, component, event_id, message))"
-								+ "WITH comment='" + description + "';"));
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence.getSession(),
+				metadata,
+				"Rick-Rainer Ludwig",
+				"CREATE TABLE "
+						+ EVENTS_TABLE_NAME //
+						+ " (time timestamp, " //
+						+ "component ascii," //
+						+ "event_id bigint," //
+						+ "server ascii," //
+						+ "type ascii, " //
+						+ "severity ascii, "
+						+ "message text, "//
+						+ "user varchar, "
+						+ "user_id bigint," //
+						+ "client ascii, " //
+						+ "exception_message ascii, "
+						+ "exception_stacktrace ascii, "//
+						+ "PRIMARY KEY (server, time, severity, type, component, event_id, message))"
+						+ "WITH comment='" + description + "';", description));
 
 		description = "This is the table for metrics and KPIs.";
-		sequence.registerMigrationStep(CassandraMigration.createTable(
-				connector, SYSTEM_MONITOR_KEYSPACE_NAME, v100,
-				"Rick-Rainer Ludwig", description, "CREATE TABLE "
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence.getSession(), metadata, "Rick-Raienr Ludwig",
+				"CREATE TABLE "
 						+ METRICS_TABLE_NAME //
 						+ " (time timestamp, " //
 						+ "server ascii," //
@@ -73,18 +114,7 @@ public class SystemMonitorDatabaseTransformator implements Transformator {
 						+ "integer_value varint, "//
 						+ "level_of_measurement ascii, "
 						+ "PRIMARY KEY (server, time, name))"
-						+ "WITH comment='" + description + "';"));
+						+ "WITH comment='" + description + "';", description));
 		return sequence;
-	}
-
-	public static void main(String[] args) throws Exception {
-		try (CassandraMigratorConnector connector = new CassandraMigratorConnector(
-				CASSANDRA_HOST, CASSANDRA_CQL_PORT)) {
-			SystemMonitorDatabaseTransformator systemMonitorSchema = new SystemMonitorDatabaseTransformator(
-					connector);
-			try (Migrator migrator = new Migrator()) {
-				migrator.runMigration(systemMonitorSchema.migrateVersion100());
-			}
-		}
 	}
 }

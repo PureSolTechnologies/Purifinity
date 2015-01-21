@@ -12,10 +12,11 @@
 		<commons.version>0.4.0-SNAPSHOT</commons.version>
 		<parsers.version>0.4.0-SNAPSHOT</parsers.version>
 		<genesis.version>0.1.0-SNAPSHOT</genesis.version>
+		<graphs.version>0.4.0-SNAPSHOT</graphs.version>
 		
 		<!-- Databases -->
 		<cassandra.driver.version>2.1.2</cassandra.driver.version>
-		<titan.version>0.5.1</titan.version>
+		<titan.version>0.5.3</titan.version>
 		<!-- WildFly -->
 		<wildfly.version>8.2.0.Final</wildfly.version>
 		<resteasy.version>3.0.10.Final</resteasy.version>
@@ -709,17 +710,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>trees</artifactId>
-				<version>${commons.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>types</artifactId>
-				<version>${commons.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>versioning</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
@@ -738,9 +729,24 @@
 				<version>${genesis.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.puresoltechnologies.graphs</groupId>
+				<artifactId>statemodel</artifactId>
+				<version>${graphs.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.graphs</groupId>
+				<artifactId>trees</artifactId>
+				<version>${graphs.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
 				<artifactId>parsers</artifactId>
 				<version>${parsers.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.versioning</groupId>
+				<artifactId>versioning</artifactId>
+				<version>1.0.0</version>
 			</dependency>
 			<!-- =========================== -->
 			<!-- Specific external libraries -->

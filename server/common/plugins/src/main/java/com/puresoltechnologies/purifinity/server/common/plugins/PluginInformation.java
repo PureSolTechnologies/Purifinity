@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.common.plugins;
 import java.io.Serializable;
 import java.net.URL;
 
-import com.puresoltechnologies.commons.versioning.Version;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * This interface is used to provide information about a plugin.

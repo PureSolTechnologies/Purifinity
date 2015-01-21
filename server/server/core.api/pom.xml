@@ -30,6 +30,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>database.cassandra</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>server.domain</artifactId>
 		</dependency>
 		<dependency>

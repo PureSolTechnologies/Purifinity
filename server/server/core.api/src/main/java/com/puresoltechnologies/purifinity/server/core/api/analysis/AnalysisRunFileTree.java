@@ -1,16 +1,19 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 
-import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.trees.Tree;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.trees.TreeLink;
+import com.puresoltechnologies.trees.TreeNode;
 
-public class AnalysisRunFileTree implements Tree<AnalysisRunFileTree> {
+public class AnalysisRunFileTree implements TreeNode<AnalysisRunFileTree> {
 
 	private HashId hashId = null;
 
@@ -77,6 +80,16 @@ public class AnalysisRunFileTree implements Tree<AnalysisRunFileTree> {
 	@JsonManagedReference
 	public List<AnalysisRunFileTree> getChildren() {
 		return children;
+	}
+
+	@Override
+	public Set<TreeLink<AnalysisRunFileTree>> getEdges() {
+		Set<TreeLink<AnalysisRunFileTree>> edges = new HashSet<>();
+		edges.add(new TreeLink<AnalysisRunFileTree>(parent, this));
+		for (AnalysisRunFileTree child : children) {
+			edges.add(new TreeLink<>(this, child));
+		}
+		return edges;
 	}
 
 	public void setName(String name) {

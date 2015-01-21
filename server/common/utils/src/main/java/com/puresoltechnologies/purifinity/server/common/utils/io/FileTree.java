@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.commons.trees.AbstractTreeImpl;
+import com.puresoltechnologies.trees.TreeNodeImpl;
 
 /**
  * This is a special implementation of a tree for files. This tree can be used
@@ -13,7 +13,7 @@ import com.puresoltechnologies.commons.trees.AbstractTreeImpl;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FileTree extends AbstractTreeImpl<FileTree> implements
+public class FileTree extends TreeNodeImpl<FileTree> implements
 		Comparable<FileTree> {
 
 	public static List<File> getFileListFromFileTree(File baseDirectory,

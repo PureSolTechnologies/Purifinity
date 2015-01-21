@@ -12,8 +12,8 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.math.JSONSerializer;
-import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 
 public class AnalysisRunTest {

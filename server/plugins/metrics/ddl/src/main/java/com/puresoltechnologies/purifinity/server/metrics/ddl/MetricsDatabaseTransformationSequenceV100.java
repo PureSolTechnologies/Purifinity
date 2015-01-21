@@ -3,13 +3,13 @@ package com.puresoltechnologies.purifinity.server.metrics.ddl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.commons.versioning.Version;
-import com.puresoltechnologies.commons.versioning.VersionRange;
 import com.puresoltechnologies.genesis.commons.TransformationMetadata;
 import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraMigration;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationStep;
+import com.puresoltechnologies.versioning.Version;
+import com.puresoltechnologies.versioning.VersionRange;
 
 public class MetricsDatabaseTransformationSequenceV100 implements
 		TransformationSequence {
@@ -58,7 +58,7 @@ public class MetricsDatabaseTransformationSequenceV100 implements
 				new TransformationMetadata(V_1_0_0, "Rick-Rainer Ludwig",
 						"Metrics Plugin", "", "Version " + V_1_0_0
 								+ " sequence."));
-		sequence.registerMigrationStep(CassandraMigration.createKeyspace(
+		sequence.registerMigrationStep(CassandraStandardMigrations.createKeyspace(
 				connector, HALSTEAD_EVALUATOR_KEYSPACE_NAME, V_1_0_0,
 				"Rick-Rainer Ludwig", "Keeps the user passwords.",
 				ReplicationStrategy.SIMPLE_STRATEGY, 3));

@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;

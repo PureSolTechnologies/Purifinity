@@ -10,6 +10,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<commons.version>0.4.0-SNAPSHOT</commons.version>
 		<parsers.version>0.4.0-SNAPSHOT</parsers.version>
+		<graphs.version>0.4.0-SNAPSHOT</graphs.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity.api</groupId>
@@ -226,23 +227,23 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>trees</artifactId>
-				<version>${commons.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
 				<artifactId>types</artifactId>
 				<version>${commons.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>versioning</artifactId>
-				<version>${commons.version}</version>
+				<groupId>com.puresoltechnologies.graphs</groupId>
+				<artifactId>trees</artifactId>
+				<version>${graphs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
 				<artifactId>parsers</artifactId>
 				<version>${parsers.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.versioning</groupId>
+				<artifactId>versioning</artifactId>
+				<version>1.0.0</version>
 			</dependency>
 			<!-- Specific external libraries -->
 			<dependency>

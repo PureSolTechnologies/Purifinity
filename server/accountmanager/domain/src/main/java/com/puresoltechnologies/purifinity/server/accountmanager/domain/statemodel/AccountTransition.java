@@ -1,8 +1,10 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.domain.statemodel;
 
-import com.puresoltechnologies.commons.misc.statemodel.Transition;
+import com.puresoltechnologies.graph.Pair;
+import com.puresoltechnologies.statemodel.Transition;
 
-public enum AccountTransition implements Transition<AccountState> {
+public enum AccountTransition implements
+		Transition<AccountState, AccountTransition> {
 
 	CREATE {
 
@@ -17,7 +19,7 @@ public enum AccountTransition implements Transition<AccountState> {
 		}
 
 		@Override
-		public AccountState getFinalState() {
+		public AccountState getTargetState() {
 			return AccountState.CREATED;
 		}
 	},
@@ -34,7 +36,7 @@ public enum AccountTransition implements Transition<AccountState> {
 		}
 
 		@Override
-		public AccountState getFinalState() {
+		public AccountState getTargetState() {
 			return AccountState.ACTIVATED;
 		}
 	},
@@ -51,7 +53,7 @@ public enum AccountTransition implements Transition<AccountState> {
 		}
 
 		@Override
-		public AccountState getFinalState() {
+		public AccountState getTargetState() {
 			return AccountState.DEACTIVATED;
 		}
 	},
@@ -68,7 +70,7 @@ public enum AccountTransition implements Transition<AccountState> {
 		}
 
 		@Override
-		public AccountState getFinalState() {
+		public AccountState getTargetState() {
 			return AccountState.ACTIVATED;
 		}
 	},
@@ -85,7 +87,7 @@ public enum AccountTransition implements Transition<AccountState> {
 		}
 
 		@Override
-		public AccountState getFinalState() {
+		public AccountState getTargetState() {
 			return AccountState.LOCKED;
 		}
 	},
@@ -102,7 +104,7 @@ public enum AccountTransition implements Transition<AccountState> {
 		}
 
 		@Override
-		public AccountState getFinalState() {
+		public AccountState getTargetState() {
 			return AccountState.DEACTIVATED;
 		}
 	},
@@ -119,10 +121,18 @@ public enum AccountTransition implements Transition<AccountState> {
 		}
 
 		@Override
-		public AccountState getFinalState() {
+		public AccountState getTargetState() {
 			return AccountState.DELETED;
 		}
+
 	},
 	;
 
+	public abstract String getDescription();
+
+	@Override
+	public Pair<AccountState> getVertices() {
+		throw new IllegalStateException(
+				"This state model does not support graph traversals.");
+	}
 }

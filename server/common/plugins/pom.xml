@@ -13,10 +13,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>versioning</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>logger</artifactId>
 		</dependency>
@@ -27,6 +23,10 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>wildfly.utils</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.versioning</groupId>
+			<artifactId>versioning</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

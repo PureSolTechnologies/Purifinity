@@ -21,6 +21,10 @@
 			<artifactId>systemmonitor</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.graphs</groupId>
+			<artifactId>statemodel</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-jaxrs</artifactId>
 		</dependency>

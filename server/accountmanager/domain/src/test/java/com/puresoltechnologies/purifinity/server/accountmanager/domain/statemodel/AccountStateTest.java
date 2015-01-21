@@ -7,8 +7,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.statemodel.Transition;
-
 public class AccountStateTest {
 
 	@Test
@@ -19,7 +17,7 @@ public class AccountStateTest {
 	@Test
 	public void testStartState() {
 		AccountState state = AccountState.START;
-		Set<Transition<AccountState>> transitions = state.getTransitions();
+		Set<AccountTransition> transitions = state.getTransitions();
 		assertEquals(1, transitions.size());
 		assertTrue(transitions.contains(AccountTransition.CREATE));
 	}
@@ -27,7 +25,7 @@ public class AccountStateTest {
 	@Test
 	public void testCreatedState() {
 		AccountState state = AccountState.CREATED;
-		Set<Transition<AccountState>> transitions = state.getTransitions();
+		Set<AccountTransition> transitions = state.getTransitions();
 		assertEquals(3, transitions.size());
 		assertTrue(transitions.contains(AccountTransition.ACTIVATE));
 		assertTrue(transitions.contains(AccountTransition.LOCK));
@@ -37,7 +35,7 @@ public class AccountStateTest {
 	@Test
 	public void testActivatedState() {
 		AccountState state = AccountState.ACTIVATED;
-		Set<Transition<AccountState>> transitions = state.getTransitions();
+		Set<AccountTransition> transitions = state.getTransitions();
 		assertEquals(2, transitions.size());
 		assertTrue(transitions.contains(AccountTransition.DEACTIVATE));
 		assertTrue(transitions.contains(AccountTransition.LOCK));
@@ -46,7 +44,7 @@ public class AccountStateTest {
 	@Test
 	public void testDeactivatedState() {
 		AccountState state = AccountState.DEACTIVATED;
-		Set<Transition<AccountState>> transitions = state.getTransitions();
+		Set<AccountTransition> transitions = state.getTransitions();
 		assertEquals(3, transitions.size());
 		assertTrue(transitions.contains(AccountTransition.REACTIVATE));
 		assertTrue(transitions.contains(AccountTransition.LOCK));
@@ -56,7 +54,7 @@ public class AccountStateTest {
 	@Test
 	public void testLockedState() {
 		AccountState state = AccountState.LOCKED;
-		Set<Transition<AccountState>> transitions = state.getTransitions();
+		Set<AccountTransition> transitions = state.getTransitions();
 		assertEquals(2, transitions.size());
 		assertTrue(transitions.contains(AccountTransition.UNLOCK));
 		assertTrue(transitions.contains(AccountTransition.DELETE));
@@ -65,7 +63,7 @@ public class AccountStateTest {
 	@Test
 	public void testDeletedState() {
 		AccountState state = AccountState.DELETED;
-		Set<Transition<AccountState>> transitions = state.getTransitions();
+		Set<AccountTransition> transitions = state.getTransitions();
 		assertEquals(0, transitions.size());
 	}
 

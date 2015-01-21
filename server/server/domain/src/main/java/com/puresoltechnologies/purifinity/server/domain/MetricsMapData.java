@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 
 /**
  * This value object contains the data for a Metric Map. A metric map just needs

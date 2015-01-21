@@ -2,12 +2,12 @@ package com.puresoltechnologies.purifinity.analysis.api;
 
 import java.io.Serializable;
 
-import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.trees.AbstractTreeImpl;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.trees.TreeNodeImpl;
 
-public class CodeLocationTree extends AbstractTreeImpl<CodeLocationTree>
-		implements Serializable {
+public class CodeLocationTree extends TreeNodeImpl<CodeLocationTree> implements
+		Serializable {
 
 	private static final long serialVersionUID = 1954594925844560921L;
 

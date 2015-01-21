@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 
 public class GenericDirectoryMetrics extends AbstractMetrics implements
 		DirectoryMetrics {

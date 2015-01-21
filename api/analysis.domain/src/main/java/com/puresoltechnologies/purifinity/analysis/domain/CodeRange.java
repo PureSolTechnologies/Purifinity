@@ -1,8 +1,8 @@
 package com.puresoltechnologies.purifinity.analysis.domain;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-import com.puresoltechnologies.commons.types.ObjectUtilities;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 
 /**
@@ -48,8 +48,7 @@ public final class CodeRange implements Serializable, Comparable<CodeRange> {
 		this.canonicalName = canonicalName;
 		this.type = type;
 		this.ust = ust;
-		hashcode = ObjectUtilities.calculateConstantHashCode(simpleName, type,
-				ust);
+		hashcode = Objects.hash(simpleName, type, ust);
 	}
 
 	public String getSimpleName() {
