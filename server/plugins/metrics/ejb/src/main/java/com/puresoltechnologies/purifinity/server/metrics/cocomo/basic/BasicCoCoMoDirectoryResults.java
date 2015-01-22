@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.commons.money.Money;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;

@@ -1,19 +1,18 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
+import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
 import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
-import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.ProcessStatesKeyspace;
 import com.puresoltechnologies.versioning.Version;
 import com.puresoltechnologies.versioning.VersionRange;
@@ -24,16 +23,6 @@ public class ProcessStatesDatabaseTransformator implements
 	private static final String PROCESSES_KEYSPACE = ProcessStatesKeyspace.NAME;
 
 	private static final String ANALYSIS_PROCESS_TABLE = "analysis_process";
-
-	public void drop() {
-		Cluster cluster = connector.getCluster();
-		Session session = cluster.connect();
-		try {
-			session.execute("DROP KEYSPACE " + ProcessStatesKeyspace.NAME);
-		} finally {
-			session.close();
-		}
-	}
 
 	public static final String CASSANDRA_HOST = "localhost";
 	public static final int CASSANDRA_CQL_PORT = 9042;
@@ -72,9 +61,8 @@ public class ProcessStatesDatabaseTransformator implements
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
 
 		sequence.appendTransformation(CassandraStandardMigrations
-				.createKeyspace(sequence.getSession(), metadata,
-						AnalysisStoreKeyspace.NAME, "Rick-Rainer Ludwig",
-						"Keyspace for analysis information",
+				.createKeyspace(sequence, PROCESSES_KEYSPACE,
+						"Rick-Rainer Ludwig", "Keyspace for process states",
 						ReplicationStrategy.SIMPLE_STRATEGY, 3));
 
 		return sequence;
@@ -88,34 +76,26 @@ public class ProcessStatesDatabaseTransformator implements
 		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
 				startVersion, versionRange);
 		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-				CASSANDRA_HOST, CASSANDRA_CQL_PORT, AnalysisStoreKeyspace.NAME,
+				CASSANDRA_HOST, CASSANDRA_CQL_PORT, PROCESSES_KEYSPACE,
 				metadata);
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence,
+				"Rick-Rainer Ludwig",
+				"CREATE TABLE "
+						+ ANALYSIS_PROCESS_TABLE
+						+ " (started timestamp, project_uuid uuid, run_uuid uuid, state text, last_progress timestamp,"
+						+ "PRIMARY KEY(project_uuid));",
+				"Keeps states about the running analysis processes."));
 
 		return sequence;
 	}
 
-	private List<MigrationStep> checkAndCreateKeyspaces()
-			throws MigrationException {
-		List<MigrationStep> steps = new ArrayList<>();
-		steps.add(createKeyspace(connector, PROCESSES_KEYSPACE, v100,
-				"Rick-Rainer Ludwig", "Keyspace for process states",
-				ReplicationStrategy.SIMPLE_STRATEGY, 1));
-		return steps;
-	}
-
-	private List<MigrationStep> checkAndCreateAnalysisTables()
-			throws MigrationException {
-		List<MigrationStep> steps = new ArrayList<>();
-		steps.add(createTable(
-				connector,
-				PROCESSES_KEYSPACE,
-				v100,
-				"Rick-Rainer Ludwig",
-				"Keeps states about the running analysis processes.",
-				"CREATE TABLE "
-						+ ANALYSIS_PROCESS_TABLE
-						+ " (started timestamp, project_uuid uuid, run_uuid uuid, state text, last_progress timestamp,"
-						+ "PRIMARY KEY(project_uuid));"));
-		return steps;
+	@Override
+	public void dropAll() {
+		try (Cluster cluster = CassandraUtils.connectCluster()) {
+			try (Session session = cluster.connect()) {
+				session.execute("DROP KEYSPACE " + ProcessStatesKeyspace.NAME);
+			}
+		}
 	}
 }

@@ -3,7 +3,10 @@ package com.puresoltechnologies.purifinity.server.passwordstore.ddl;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
+import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
 import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
@@ -56,13 +59,13 @@ public class SystemMonitorDatabaseTransformator implements
 				startVersion, versionRange);
 		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
-		sequence.appendTransformation(CassandraStandardMigrations.createKeyspace(
-				sequence.getSession(),
-				metadata,
-				SYSTEM_MONITOR_KEYSPACE_NAME,
-				"Rick-Rainer Ludwig",
-				"This keyspace keeps the system status information and event logs.",
-				ReplicationStrategy.SIMPLE_STRATEGY, 3));
+		sequence.appendTransformation(CassandraStandardMigrations
+				.createKeyspace(
+						sequence,
+						SYSTEM_MONITOR_KEYSPACE_NAME,
+						"Rick-Rainer Ludwig",
+						"This keyspace keeps the system status information and event logs.",
+						ReplicationStrategy.SIMPLE_STRATEGY, 3));
 		return sequence;
 	}
 
@@ -79,8 +82,7 @@ public class SystemMonitorDatabaseTransformator implements
 
 		String description = "This is the table for the event log.";
 		sequence.appendTransformation(new CassandraCQLTransformationStep(
-				sequence.getSession(),
-				metadata,
+				sequence,
 				"Rick-Rainer Ludwig",
 				"CREATE TABLE "
 						+ EVENTS_TABLE_NAME //
@@ -101,8 +103,7 @@ public class SystemMonitorDatabaseTransformator implements
 
 		description = "This is the table for metrics and KPIs.";
 		sequence.appendTransformation(new CassandraCQLTransformationStep(
-				sequence.getSession(), metadata, "Rick-Raienr Ludwig",
-				"CREATE TABLE "
+				sequence, "Rick-Raienr Ludwig", "CREATE TABLE "
 						+ METRICS_TABLE_NAME //
 						+ " (time timestamp, " //
 						+ "server ascii," //
@@ -116,5 +117,14 @@ public class SystemMonitorDatabaseTransformator implements
 						+ "PRIMARY KEY (server, time, name))"
 						+ "WITH comment='" + description + "';", description));
 		return sequence;
+	}
+
+	@Override
+	public void dropAll() {
+		try (Cluster cluster = CassandraUtils.connectCluster()) {
+			try (Session session = cluster.connect()) {
+				session.execute("DROP KEYSPACE " + SYSTEM_MONITOR_KEYSPACE_NAME);
+			}
+		}
 	}
 }

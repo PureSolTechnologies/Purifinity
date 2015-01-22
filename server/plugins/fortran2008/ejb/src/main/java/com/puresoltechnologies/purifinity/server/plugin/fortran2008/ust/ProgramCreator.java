@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.puresoltechnologies.parsers.lexer.Token;
 import com.puresoltechnologies.parsers.lexer.TokenMetaData;
-import com.puresoltechnologies.parsers.parser.ParserTree;
+import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.ust.CompilationUnit;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.ust.UnspecialistProduction;
@@ -22,23 +22,23 @@ public class ProgramCreator {
 	private static final SLOCMetricImpl slocMetricImpl = new SLOCMetricImpl();
 	private static final HalsteadMetricImpl halsteadMetricImpl = new HalsteadMetricImpl();
 
-	public static CompilationUnit create(ParserTree parserTree) {
+	public static CompilationUnit create(ParseTreeNode ParseTreeNode) {
 		List<UniversalSyntaxTree> ustChildren = new ArrayList<>();
-		for (ParserTree child : parserTree.getChildren()) {
+		for (ParseTreeNode child : ParseTreeNode.getChildren()) {
 			UniversalSyntaxTree childNode = createNode(child);
 			if (childNode != null) {
 				ustChildren.add(childNode);
 			}
 		}
-		return new CompilationUnit(parserTree.getName(), parserTree.getText(),
-				ustChildren);
+		return new CompilationUnit(ParseTreeNode.getName(),
+				ParseTreeNode.getText(), ustChildren);
 	}
 
-	private static UniversalSyntaxTree createNode(ParserTree node) {
+	private static UniversalSyntaxTree createNode(ParseTreeNode node) {
 		Token token = node.getToken();
 		if (token == null) {
 			List<UniversalSyntaxTree> ustChildren = new ArrayList<>();
-			for (ParserTree child : node.getChildren()) {
+			for (ParseTreeNode child : node.getChildren()) {
 				UniversalSyntaxTree childNode = createNode(child);
 				if (childNode != null) {
 					ustChildren.add(childNode);

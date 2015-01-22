@@ -7,7 +7,7 @@ import java.util.Date;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 
 public class CoCoMoFileResultsTest {

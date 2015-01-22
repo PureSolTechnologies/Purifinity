@@ -1,54 +1,88 @@
 package com.puresoltechnologies.purifinity.server.metrics.ddl;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.genesis.commons.TransformationMetadata;
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
+import com.puresoltechnologies.genesis.commons.SequenceMetadata;
+import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
 import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.versioning.Version;
+import com.puresoltechnologies.versioning.VersionRange;
 
-public class MetricsDatabaseTransformator implements Transformator {
+public class MetricsDatabaseTransformator implements ComponentTransformator {
 
 	public static final String HALSTEAD_EVALUATOR_KEYSPACE_NAME = "halstead_evaluator";
 	public static final String CASSANDRA_HOST = "localhost";
 	public static final int CASSANDRA_CQL_PORT = 9042;
 	public static final String RESULTS_TABLE_NAME = "results";
 
-	private static final Version V_1_0_0 = new Version(1, 0, 0);
-
 	private static final String FILE_RESULTS_TABLE = "file_results";
 	private static final String DIRECTORY_RESULTS_TABLE = "directory_results";
 	private static final String PROJECT_RESULTS_TABLE = "project_results";
 
-	private final UniversalMigratorConnector connector;
+	@Override
+	public String getComponentName() {
+		return "MetricsPlugin";
+	}
 
-	protected MetricsDatabaseTransformator(UniversalMigratorConnector connector) {
-		this.connector = connector;
+	@Override
+	public boolean isHostBased() {
+		return false;
 	}
 
 	@Override
 	public Set<TransformationSequence> getSequences() {
-		// TODO Auto-generated method stub
-		return null;
+		Set<TransformationSequence> sequences = new HashSet<>();
+		sequences.add(migrateVersion0_3_0_pre());
+		sequences.add(migrateVersion0_3_0());
+		return sequences;
 	}
 
-	private TransformationSequence migrateVersion100()
-			throws MigrationException {
-		TransformationSequence sequence = new TransformationSequence(
-				new TransformationMetadata(V_1_0_0, "Rick-Rainer Ludwig",
-						"Metrics Plugin", "", "Version " + V_1_0_0
-								+ " sequence."));
-		sequence.registerMigrationStep(CassandraStandardMigrations.createKeyspace(
-				connector, HALSTEAD_EVALUATOR_KEYSPACE_NAME, V_1_0_0,
-				"Rick-Rainer Ludwig", "Keeps the user passwords.",
-				ReplicationStrategy.SIMPLE_STRATEGY, 3));
-		sequence.registerMigrationStep(createTable(
-				connector,
-				HALSTEAD_EVALUATOR_KEYSPACE_NAME,
-				V_1_0_0,
+	/**
+	 * This pre version is used to create the keyspace.
+	 * 
+	 * @return
+	 */
+	private TransformationSequence migrateVersion0_3_0_pre() {
+		Version startVersion = new Version(0, 0, 0);
+		Version targetVersion = new Version(0, 3, 0, "pre");
+		VersionRange versionRange = new VersionRange(targetVersion, true, null,
+				false);
+		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
+				startVersion, versionRange);
+		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
+				CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
+		sequence.appendTransformation(CassandraStandardMigrations
+				.createKeyspace(
+						sequence,
+						HALSTEAD_EVALUATOR_KEYSPACE_NAME,
+						"Rick-Rainer Ludwig",
+						"This keyspace keeps the detailed results of halstaed evaluations like the found operators and operands and their count.",
+						ReplicationStrategy.SIMPLE_STRATEGY, 3));
+		return sequence;
+	}
+
+	private TransformationSequence migrateVersion0_3_0() {
+		Version startVersion = new Version(0, 3, 0, "pre");
+		Version targetVersion = new Version(0, 3, 0);
+		VersionRange versionRange = new VersionRange(targetVersion, true, null,
+				false);
+		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
+				startVersion, versionRange);
+		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
+				CASSANDRA_HOST, CASSANDRA_CQL_PORT,
+				HALSTEAD_EVALUATOR_KEYSPACE_NAME, metadata);
+
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence,
 				"Rick-Rainer Ludwig",
-				"Keeps directory results for Halstead evaluator.",
 				"CREATE TABLE "
 						+ FILE_RESULTS_TABLE
 						+ " (hashid varchar, "
@@ -56,33 +90,33 @@ public class MetricsDatabaseTransformator implements Transformator {
 						+ "code_range_name varchar, "
 						+ "operators map<text,int>, "
 						+ "operands map<text,int>, "
-						+ "PRIMARY KEY(hashid, code_range_type, code_range_name));"));
-		sequence.registerMigrationStep(createTable(connector,
-				HALSTEAD_EVALUATOR_KEYSPACE_NAME, V_1_0_0,
-				"Rick-Rainer Ludwig",
-				"Keeps directory results for Halstead evaluator.",
-				"CREATE TABLE " + DIRECTORY_RESULTS_TABLE
-						+ " (hashid varchar, " + "operators map<text,int>, "
-						+ "operands map<text,int>, " + "PRIMARY KEY(hashid));"));
-		sequence.registerMigrationStep(createTable(connector,
-				HALSTEAD_EVALUATOR_KEYSPACE_NAME, V_1_0_0,
-				"Rick-Rainer Ludwig",
-				"Keeps project results for Halstead evaluator.",
-				"CREATE TABLE " + PROJECT_RESULTS_TABLE
-						+ " (project_uuid uuid, " + "operators map<text,int>, "
+						+ "PRIMARY KEY(hashid, code_range_type, code_range_name));",
+				"Keeps directory results for Halstead evaluator."));
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
+						+ DIRECTORY_RESULTS_TABLE + " (hashid varchar, "
+						+ "operators map<text,int>, "
+						+ "operands map<text,int>, " + "PRIMARY KEY(hashid));",
+				"Keeps directory results for Halstead evaluator."));
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
+						+ PROJECT_RESULTS_TABLE + " (project_uuid uuid, "
+						+ "operators map<text,int>, "
 						+ "operands map<text,int>, "
-						+ "PRIMARY KEY(project_uuid));"));
+						+ "PRIMARY KEY(project_uuid));",
+				"Keeps project results for Halstead evaluator."));
+
 		return sequence;
 	}
 
-	public static void main(String[] args) throws Exception {
-		try (CassandraMigratorConnector connector = new CassandraMigratorConnector(
-				CASSANDRA_HOST, CASSANDRA_CQL_PORT)) {
-			MetricsDatabaseTransformator metricsDatabaseSchema = new MetricsDatabaseTransformator(
-					connector);
-			try (Migrator migrator = new Migrator()) {
-				migrator.runMigration(metricsDatabaseSchema.migrateVersion100());
+	@Override
+	public void dropAll() {
+		try (Cluster cluster = CassandraUtils.connectCluster()) {
+			try (Session session = cluster.connect()) {
+				session.execute("DROP KEYSPACE "
+						+ HALSTEAD_EVALUATOR_KEYSPACE_NAME);
 			}
 		}
+
 	}
 }

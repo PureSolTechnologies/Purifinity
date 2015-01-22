@@ -1,9 +1,9 @@
 package com.puresoltechnologies.purifinity.server.plugin.java7.grammar.parts;
 
-import com.puresoltechnologies.commons.trees.TreeException;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
+import com.puresoltechnologies.trees.TreeException;
 
 public class AnnotationTypeDeclaration {
 

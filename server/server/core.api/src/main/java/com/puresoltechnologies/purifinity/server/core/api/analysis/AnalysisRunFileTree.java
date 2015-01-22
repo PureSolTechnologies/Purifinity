@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
@@ -83,6 +84,7 @@ public class AnalysisRunFileTree implements TreeNode<AnalysisRunFileTree> {
 	}
 
 	@Override
+	@JsonIgnore
 	public Set<TreeLink<AnalysisRunFileTree>> getEdges() {
 		Set<TreeLink<AnalysisRunFileTree>> edges = new HashSet<>();
 		edges.add(new TreeLink<AnalysisRunFileTree>(parent, this));

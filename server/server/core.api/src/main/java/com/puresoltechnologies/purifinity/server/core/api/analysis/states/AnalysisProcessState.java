@@ -3,10 +3,10 @@ package com.puresoltechnologies.purifinity.server.core.api.analysis.states;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.misc.statemodel.State;
-import com.puresoltechnologies.commons.misc.statemodel.Transition;
+import com.puresoltechnologies.statemodel.State;
 
-public enum AnalysisProcessState implements State<AnalysisProcessState> {
+public enum AnalysisProcessState implements
+		State<AnalysisProcessState, AnalysisProcessTransition> {
 
 	QUEUED_FOR_START {
 		@Override
@@ -20,8 +20,8 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		}
 
 		@Override
-		public Set<Transition<AnalysisProcessState>> getTransitions() {
-			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
+		public Set<AnalysisProcessTransition> getTransitions() {
+			Set<AnalysisProcessTransition> transitions = new HashSet<AnalysisProcessTransition>();
 			transitions.add(AnalysisProcessTransition.QUEUE_FOR_STORAGE);
 			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
@@ -39,8 +39,8 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		}
 
 		@Override
-		public Set<Transition<AnalysisProcessState>> getTransitions() {
-			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
+		public Set<AnalysisProcessTransition> getTransitions() {
+			Set<AnalysisProcessTransition> transitions = new HashSet<AnalysisProcessTransition>();
 			transitions.add(AnalysisProcessTransition.START_STORAGE);
 			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
@@ -58,8 +58,8 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		}
 
 		@Override
-		public Set<Transition<AnalysisProcessState>> getTransitions() {
-			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
+		public Set<AnalysisProcessTransition> getTransitions() {
+			Set<AnalysisProcessTransition> transitions = new HashSet<AnalysisProcessTransition>();
 			transitions.add(AnalysisProcessTransition.QUEUE_FOR_ANALYSIS);
 			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
@@ -77,8 +77,8 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		}
 
 		@Override
-		public Set<Transition<AnalysisProcessState>> getTransitions() {
-			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
+		public Set<AnalysisProcessTransition> getTransitions() {
+			Set<AnalysisProcessTransition> transitions = new HashSet<AnalysisProcessTransition>();
 			transitions.add(AnalysisProcessTransition.START_ANALYSIS);
 			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
@@ -96,8 +96,8 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		}
 
 		@Override
-		public Set<Transition<AnalysisProcessState>> getTransitions() {
-			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
+		public Set<AnalysisProcessTransition> getTransitions() {
+			Set<AnalysisProcessTransition> transitions = new HashSet<AnalysisProcessTransition>();
 			transitions.add(AnalysisProcessTransition.QUEUE_FOR_EVALUATION);
 			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
@@ -115,8 +115,8 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		}
 
 		@Override
-		public Set<Transition<AnalysisProcessState>> getTransitions() {
-			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
+		public Set<AnalysisProcessTransition> getTransitions() {
+			Set<AnalysisProcessTransition> transitions = new HashSet<AnalysisProcessTransition>();
 			transitions.add(AnalysisProcessTransition.START_EVALUATION);
 			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
@@ -134,8 +134,8 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		}
 
 		@Override
-		public Set<Transition<AnalysisProcessState>> getTransitions() {
-			Set<Transition<AnalysisProcessState>> transitions = new HashSet<Transition<AnalysisProcessState>>();
+		public Set<AnalysisProcessTransition> getTransitions() {
+			Set<AnalysisProcessTransition> transitions = new HashSet<AnalysisProcessTransition>();
 			transitions.add(AnalysisProcessTransition.FINISH);
 			transitions.add(AnalysisProcessTransition.FAIL);
 			return transitions;
@@ -153,8 +153,8 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		}
 
 		@Override
-		public Set<Transition<AnalysisProcessState>> getTransitions() {
-			return new HashSet<Transition<AnalysisProcessState>>();
+		public Set<AnalysisProcessTransition> getTransitions() {
+			return new HashSet<AnalysisProcessTransition>();
 		}
 	},
 	ABORTED {
@@ -169,8 +169,8 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		}
 
 		@Override
-		public Set<Transition<AnalysisProcessState>> getTransitions() {
-			return new HashSet<Transition<AnalysisProcessState>>();
+		public Set<AnalysisProcessTransition> getTransitions() {
+			return new HashSet<AnalysisProcessTransition>();
 		}
 	},
 	FAILED {
@@ -185,9 +185,16 @@ public enum AnalysisProcessState implements State<AnalysisProcessState> {
 		}
 
 		@Override
-		public Set<Transition<AnalysisProcessState>> getTransitions() {
-			return new HashSet<Transition<AnalysisProcessState>>();
+		public Set<AnalysisProcessTransition> getTransitions() {
+			return new HashSet<AnalysisProcessTransition>();
 		}
 	};
 
+	public abstract String getDescription();
+
+	@Override
+	public Set<AnalysisProcessTransition> getEdges() {
+		throw new IllegalStateException(
+				"This state model does not support graph traversals.");
+	}
 }

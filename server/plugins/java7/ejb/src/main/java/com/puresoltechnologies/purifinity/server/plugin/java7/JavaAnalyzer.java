@@ -22,16 +22,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.StopWatch;
-import com.puresoltechnologies.commons.trees.TreeException;
-import com.puresoltechnologies.commons.trees.TreeVisitor;
-import com.puresoltechnologies.commons.trees.TreeWalker;
-import com.puresoltechnologies.commons.trees.WalkingAction;
 import com.puresoltechnologies.parsers.lexer.Lexer;
 import com.puresoltechnologies.parsers.lexer.LexerException;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
+import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.parser.Parser;
 import com.puresoltechnologies.parsers.parser.ParserException;
-import com.puresoltechnologies.parsers.parser.ParserTree;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.CompilationUnit;
@@ -50,6 +46,10 @@ import com.puresoltechnologies.purifinity.server.plugin.java7.grammar.parts.Meth
 import com.puresoltechnologies.purifinity.server.plugin.java7.grammar.parts.NormalClassDeclaration;
 import com.puresoltechnologies.purifinity.server.plugin.java7.grammar.parts.NormalInterfaceDeclaration;
 import com.puresoltechnologies.purifinity.server.plugin.java7.ust.CompilationUnitCreator;
+import com.puresoltechnologies.trees.TreeException;
+import com.puresoltechnologies.trees.TreeVisitor;
+import com.puresoltechnologies.trees.TreeWalker;
+import com.puresoltechnologies.trees.WalkingAction;
 
 /**
  * 
@@ -78,7 +78,7 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 			Lexer lexer = getGrammar().getLexer();
 			TokenStream tokenStream = lexer.lex(sourceCode);
 			Parser parser = getGrammar().getParser();
-			ParserTree parserTree = parser.parse(tokenStream);
+			ParseTreeNode parserTree = parser.parse(tokenStream);
 			watch.stop();
 			CompilationUnit compilationUnit = CompilationUnitCreator
 					.create(parserTree);

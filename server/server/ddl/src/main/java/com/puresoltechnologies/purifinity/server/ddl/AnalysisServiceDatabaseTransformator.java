@@ -1,14 +1,14 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
+import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
 import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
@@ -21,19 +21,8 @@ import com.puresoltechnologies.versioning.VersionRange;
 public class AnalysisServiceDatabaseTransformator implements
 		ComponentTransformator {
 
-
 	public static final String CASSANDRA_HOST = "localhost";
 	public static final int CASSANDRA_CQL_PORT = 9042;
-
-	public void drop() {
-		Cluster cluster = connector.getCluster();
-		Session session = cluster.connect();
-		try {
-			session.execute("DROP KEYSPACE " + AnalysisStoreKeyspace.NAME);
-		} finally {
-			session.close();
-		}
-	}
 
 	@Override
 	public String getComponentName() {
@@ -69,8 +58,8 @@ public class AnalysisServiceDatabaseTransformator implements
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
 
 		sequence.appendTransformation(CassandraStandardMigrations
-				.createKeyspace(sequence.getSession(), metadata,
-						AnalysisStoreKeyspace.NAME, "Rick-Rainer Ludwig",
+				.createKeyspace(sequence, AnalysisStoreKeyspace.NAME,
+						"Rick-Rainer Ludwig",
 						"Keyspace for analysis information",
 						ReplicationStrategy.SIMPLE_STRATEGY, 3));
 
@@ -88,15 +77,8 @@ public class AnalysisServiceDatabaseTransformator implements
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT, AnalysisStoreKeyspace.NAME,
 				metadata);
 
-		return sequence;
-	}
-
-	private List<MigrationStep> checkAndCreateAnalysisTables()
-			throws MigrationException {
-		List<MigrationStep> steps = new ArrayList<>();
-		steps.add(createTable(connector, AnalysisStoreKeyspace.NAME, V_1_0_0,
-				"Rick-Rainer Ludwig", "Keeps settings of analysis projects.",
-				"CREATE TABLE "
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 						+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
 						+ " (project_uuid uuid, " + "name varchar, "
 						+ "description varchar, "
@@ -106,53 +88,57 @@ public class AnalysisServiceDatabaseTransformator implements
 						+ "location_excludes list<text>, "
 						+ "ignore_hidden boolean, "
 						+ "repository_location map<text,text>, "
-						+ "PRIMARY KEY(project_uuid));"));
+						+ "PRIMARY KEY(project_uuid));",
+				"Keeps settings of analysis projects."));
 
-		steps.add(createTable(connector, AnalysisStoreKeyspace.NAME, V_1_0_0,
-				"Rick-Rainer Ludwig", "Keeps settings of analysis runs.",
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence,
+				"Rick-Rainer Ludwig",
 				"CREATE TABLE "
 						+ CassandraElementNames.ANALYSIS_RUN_SETTINGS_TABLE
 						+ " (run_uuid uuid, " + "file_includes list<text>, "
 						+ "file_excludes list<text>, "
 						+ "location_includes list<text>, "
 						+ "location_excludes list<text>, "
-						+ "ignore_hidden boolean, " + "PRIMARY KEY(run_uuid));"));
+						+ "ignore_hidden boolean, " + "PRIMARY KEY(run_uuid));",
+				"Keeps settings of analysis runs."));
 
-		steps.add(createTable(
-				connector,
-				AnalysisStoreKeyspace.NAME,
-				V_1_0_0,
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence,
 				"Rick-Rainer Ludwig",
-				"Keeps analysis information for analyzed and unanalyzed "
-						+ "files and their raw data.",
 				"CREATE TABLE "
 						+ CassandraElementNames.ANALYSIS_FILES_TABLE
 						+ " (time timestamp, hashid varchar, raw blob, size int, "
-						+ "PRIMARY KEY(hashid));"));
-
-		steps.add(createTable(
-				connector,
-				AnalysisStoreKeyspace.NAME,
-				V_1_0_0,
-				"Rick-Rainer Ludwig",
+						+ "PRIMARY KEY(hashid));",
 				"Keeps analysis information for analyzed and unanalyzed "
-						+ "files and their raw data.",
+						+ "files and their raw data."));
+
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence,
+				"Rick-Rainer Ludwig",
 				"CREATE TABLE "
 						+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
 						+ " (time timestamp, hashid varchar, language varchar, language_version varchar, plugin_version varchar, duration bigint, successful boolean, analyzer_message text,"
-						+ "analysis blob, PRIMARY KEY(hashid, language, language_version));"));
+						+ "analysis blob, PRIMARY KEY(hashid, language, language_version));",
+				"Keeps analysis information for analyzed and unanalyzed "
+						+ "files and their raw data."));
 
-		steps.add(createTable(
-				connector,
-				AnalysisStoreKeyspace.NAME,
-				V_1_0_0,
-				"Rick-Rainer Ludwig",
-				"Keeps a cache for analysis file trees for performance optimization.",
-				"CREATE TABLE "
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 						+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE
 						+ " (run_uuid uuid, " + "persisted_tree blob, "
-						+ "PRIMARY KEY(run_uuid));"));
-		return steps;
+						+ "PRIMARY KEY(run_uuid));",
+				"Keeps a cache for analysis file trees for performance optimization."));
+
+		return sequence;
 	}
 
+	@Override
+	public void dropAll() {
+		try (Cluster cluster = CassandraUtils.connectCluster()) {
+			try (Session session = cluster.connect()) {
+				session.execute("DROP KEYSPACE " + AnalysisStoreKeyspace.NAME);
+			}
+		}
+	}
 }

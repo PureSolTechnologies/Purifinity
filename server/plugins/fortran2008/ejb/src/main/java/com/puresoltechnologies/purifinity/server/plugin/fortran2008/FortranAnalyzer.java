@@ -22,15 +22,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.StopWatch;
-import com.puresoltechnologies.commons.trees.TreeException;
-import com.puresoltechnologies.commons.trees.TreeVisitor;
-import com.puresoltechnologies.commons.trees.TreeWalker;
-import com.puresoltechnologies.commons.trees.WalkingAction;
 import com.puresoltechnologies.parsers.lexer.LexerException;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
+import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.parser.Parser;
 import com.puresoltechnologies.parsers.parser.ParserException;
-import com.puresoltechnologies.parsers.parser.ParserTree;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.CompilationUnit;
@@ -43,6 +39,10 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractCodeAnalyzer;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.grammar.FortranGrammar;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.ust.ProgramCreator;
+import com.puresoltechnologies.trees.TreeException;
+import com.puresoltechnologies.trees.TreeVisitor;
+import com.puresoltechnologies.trees.TreeWalker;
+import com.puresoltechnologies.trees.WalkingAction;
 
 /**
  * This is the Fortran analyzer to scan and parse source files in Fortran source
@@ -72,9 +72,9 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 			SourceCode sourceCode = getSource().getSourceCode();
 			TokenStream tokenStream = preConditioningAndLexing(sourceCode);
 			Parser parser = getGrammar().getParser();
-			ParserTree parserTree = parser.parse(tokenStream);
+			ParseTreeNode ParseTreeNode = parser.parse(tokenStream);
 			watch.stop();
-			CompilationUnit program = ProgramCreator.create(parserTree);
+			CompilationUnit program = ProgramCreator.create(ParseTreeNode);
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 			AnalysisInformation analyzedFile = new AnalysisInformation(
 					sourceCode.getHashId(), date, timeEffort, true,
@@ -120,11 +120,11 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 	}
 
 	private List<CodeRange> getAnalyzableCodeRanges(
-			UniversalSyntaxTree parserTree) {
+			UniversalSyntaxTree ParseTreeNode) {
 		final List<CodeRange> result = new ArrayList<CodeRange>();
-		result.add(new CodeRange("", "", CodeRangeType.FILE, parserTree));
+		result.add(new CodeRange("", "", CodeRangeType.FILE, ParseTreeNode));
 		TreeWalker<UniversalSyntaxTree> walker = new TreeWalker<UniversalSyntaxTree>(
-				parserTree);
+				ParseTreeNode);
 		walker.walk(new TreeVisitor<UniversalSyntaxTree>() {
 
 			@Override

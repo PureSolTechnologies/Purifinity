@@ -18,7 +18,7 @@ import javax.inject.Inject;
 import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;

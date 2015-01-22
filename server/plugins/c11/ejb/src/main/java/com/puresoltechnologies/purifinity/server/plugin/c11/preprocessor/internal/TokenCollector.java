@@ -1,12 +1,12 @@
 package com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor.internal;
 
-import com.puresoltechnologies.commons.trees.TreeVisitor;
-import com.puresoltechnologies.commons.trees.WalkingAction;
 import com.puresoltechnologies.parsers.lexer.Token;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
-import com.puresoltechnologies.parsers.parser.ParserTree;
+import com.puresoltechnologies.parsers.parser.ParseTreeNode;
+import com.puresoltechnologies.trees.TreeVisitor;
+import com.puresoltechnologies.trees.WalkingAction;
 
-public class TokenCollector implements TreeVisitor<ParserTree> {
+public class TokenCollector implements TreeVisitor<ParseTreeNode> {
 
 	private final TokenStream tokenStream = new TokenStream();
 	private final StringBuffer stringBuffer = new StringBuffer();
@@ -20,7 +20,7 @@ public class TokenCollector implements TreeVisitor<ParserTree> {
 	}
 
 	@Override
-	public WalkingAction visit(ParserTree tree) {
+	public WalkingAction visit(ParseTreeNode tree) {
 		Token token = tree.getToken();
 		if (token != null) {
 			tokenStream.add(token);

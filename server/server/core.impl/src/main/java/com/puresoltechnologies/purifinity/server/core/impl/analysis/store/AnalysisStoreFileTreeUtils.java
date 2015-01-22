@@ -15,8 +15,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.versioning.Version;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
@@ -33,6 +32,7 @@ import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.Fil
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * This class contains functionality for {@link AnalysisFileTree}s in Titan

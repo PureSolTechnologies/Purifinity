@@ -1,19 +1,18 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
+import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
 import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
-import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.PluginsKeyspace;
 import com.puresoltechnologies.versioning.Version;
 import com.puresoltechnologies.versioning.VersionRange;
@@ -26,16 +25,6 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 	private static final String EVALUATOR_PARAMETERS_TABLE = "evaluator_parameters";
 	private static final String REPOSITORY_TYPES_TABLE = "repository_types";
 	private static final String REPOSITORY_TYPE_PARAMETERS_TABLE = "repository_type_parameters";
-
-	public void drop() {
-		Cluster cluster = connector.getCluster();
-		Session session = cluster.connect();
-		try {
-			session.execute("DROP KEYSPACE " + PluginsKeyspace.NAME);
-		} finally {
-			session.close();
-		}
-	}
 
 	public static final String CASSANDRA_HOST = "localhost";
 	public static final int CASSANDRA_CQL_PORT = 9042;
@@ -74,9 +63,8 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
 
 		sequence.appendTransformation(CassandraStandardMigrations
-				.createKeyspace(sequence.getSession(), metadata,
-						AnalysisStoreKeyspace.NAME, "Rick-Rainer Ludwig",
-						"Keyspace for analysis information",
+				.createKeyspace(sequence, PluginsKeyspace.NAME,
+						"Rick-Rainer Ludwig", "Keyspace for plugin system.",
 						ReplicationStrategy.SIMPLE_STRATEGY, 3));
 
 		return sequence;
@@ -90,50 +78,32 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
 				startVersion, versionRange);
 		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-				CASSANDRA_HOST, CASSANDRA_CQL_PORT, AnalysisStoreKeyspace.NAME,
+				CASSANDRA_HOST, CASSANDRA_CQL_PORT, PluginsKeyspace.NAME,
 				metadata);
 
-		return sequence;
-	}
-
-	private List<MigrationStep> checkAndCreateKeyspaces()
-			throws MigrationException {
-		List<MigrationStep> steps = new ArrayList<>();
-		steps.add(createKeyspace(connector, PluginsKeyspace.NAME, v100,
-				"Rick-Rainer Ludwig", "Keyspace for plugin system.",
-				ReplicationStrategy.SIMPLE_STRATEGY, 1));
-		return steps;
-	}
-
-	private List<MigrationStep> checkAndCreateAnalysisTables()
-			throws MigrationException {
-		List<MigrationStep> steps = new ArrayList<>();
-		steps.add(createTable(
-				connector,
-				PluginsKeyspace.NAME,
-				v100,
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence,
 				"Rick-Rainer Ludwig",
-				"Keeps information about installed plugins.",
 				"CREATE TABLE "
 						+ PLUGINS_TABLE
 						+ " (changed timestamp, changed_by text, id text, name text, version text, description text, vendor text, vendor_url text, path_to_ui text, "
-						+ "PRIMARY KEY(id, version));"));
+						+ "PRIMARY KEY(id, version));",
+				"Keeps information about installed plugins."));
 
-		steps.add(createTable(connector, PluginsKeyspace.NAME, v100,
-				"Rick-Rainer Ludwig",
-				"Keeps information about installed analyzers.", "CREATE TABLE "
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 						+ ANALYZERS_TABLE + " (changed timestamp, "
 						+ "changed_by text, " + "id text, " + "name text, "
 						+ "version text, " + "plugin_id text, "
 						+ "plugin_version text, " + "jndi_name text, "
 						+ "description text, " + "service_url text, "
 						+ "configuration_url text, " + "project_url text, "
-						+ "run_url text," + "PRIMARY KEY(id, version));"));
+						+ "run_url text," + "PRIMARY KEY(id, version));",
+				"Keeps information about installed analyzers."));
 
-		steps.add(createTable(connector, PluginsKeyspace.NAME, v100,
-				"Rick-Rainer Ludwig",
-				"Keeps information about the installed evaluators.",
-				"CREATE TABLE " + EVALUATORS_TABLE + " (changed timestamp, "
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
+						+ EVALUATORS_TABLE + " (changed timestamp, "
 						+ "changed_by text, " + "id text, " + "name text, "
 						+ "type text, " + "plugin_id text, "
 						+ "plugin_version text, " + "jndi_name text, "
@@ -141,40 +111,47 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 						+ "configuration_url text, " + "project_url text, "
 						+ "run_url text, "
 						+ "quality_characteristics set<text>, "
-						+ " dependencies set<text>, " + "PRIMARY KEY(id));"));
+						+ " dependencies set<text>, " + "PRIMARY KEY(id));",
+				"Keeps information about the installed evaluators."));
 
-		steps.add(createTable(
-				connector,
-				PluginsKeyspace.NAME,
-				v100,
-				"Rick-Rainer Ludwig",
-				"Keeps information about the provided parameters of evaluators.",
-				"CREATE TABLE " + EVALUATOR_PARAMETERS_TABLE
-						+ " (changed timestamp, " + "changed_by text, "
-						+ "evaluator_id text, " + "name text, " + "unit text, "
-						+ "description text, " + "level_of_measurement text, "
-						+ "type text, " + "numeric boolean, "
-						+ "PRIMARY KEY(evaluator_id, name));"));
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
+						+ EVALUATOR_PARAMETERS_TABLE + " (changed timestamp, "
+						+ "changed_by text, " + "evaluator_id text, "
+						+ "name text, " + "unit text, " + "description text, "
+						+ "level_of_measurement text, " + "type text, "
+						+ "numeric boolean, "
+						+ "PRIMARY KEY(evaluator_id, name));",
+				"Keeps information about the provided parameters of evaluators."));
 
-		steps.add(createTable(connector, PluginsKeyspace.NAME, v100,
-				"Rick-Rainer Ludwig",
-				"Keeps information about the installed evaluators.",
-				"CREATE TABLE " + REPOSITORY_TYPES_TABLE
-						+ " (changed timestamp, " + "changed_by text, "
-						+ "class_name text, " + "name text, "
-						+ "plugin_id text, " + "plugin_version text, "
-						+ "description text, " + "PRIMARY KEY(class_name));"));
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
+						+ REPOSITORY_TYPES_TABLE + " (changed timestamp, "
+						+ "changed_by text, " + "class_name text, "
+						+ "name text, " + "plugin_id text, "
+						+ "plugin_version text, " + "description text, "
+						+ "PRIMARY KEY(class_name));",
+				"Keeps information about the installed evaluators."));
 
-		steps.add(createTable(connector, PluginsKeyspace.NAME, v100,
-				"Rick-Rainer Ludwig",
-				"Keeps information about the installed evaluators.",
-				"CREATE TABLE " + REPOSITORY_TYPE_PARAMETERS_TABLE
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
+						+ REPOSITORY_TYPE_PARAMETERS_TABLE
 						+ " (changed timestamp, " + "changed_by text, "
 						+ "class_name text, " + "name text, " + "unit text, "
 						+ "description text, " + "level_of_measurement text, "
 						+ "type text, " + "numeric boolean, "
-						+ "PRIMARY KEY(class_name, name));"));
-		return steps;
+						+ "PRIMARY KEY(class_name, name));",
+				"Keeps information about the installed evaluators."));
+
+		return sequence;
 	}
 
+	@Override
+	public void dropAll() {
+		try (Cluster cluster = CassandraUtils.connectCluster()) {
+			try (Session session = cluster.connect()) {
+				session.execute("DROP KEYSPACE " + PluginsKeyspace.NAME);
+			}
+		}
+	}
 }

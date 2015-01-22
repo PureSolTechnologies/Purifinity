@@ -5,22 +5,22 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.trees.SearchVisitor;
-import com.puresoltechnologies.commons.trees.TreeSearchCriterion;
-import com.puresoltechnologies.commons.trees.TreeWalker;
 import com.puresoltechnologies.parsers.grammar.Grammar;
-import com.puresoltechnologies.parsers.parser.ParserTree;
+import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.parser.packrat.PackratParser;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
+import com.puresoltechnologies.trees.SearchVisitor;
+import com.puresoltechnologies.trees.TreeSearchCriterion;
+import com.puresoltechnologies.trees.TreeWalker;
 
 public class C11PreprocessorParserTest {
 
-	private ParserTree checkParser(String... lines) throws Exception {
+	private ParseTreeNode checkParser(String... lines) throws Exception {
 		SourceCode sourceCode = SourceCode.fromStringArray(lines);
 
 		C11PreprocessorParser parser = new C11PreprocessorParser();
-		ParserTree ast = parser.parse(sourceCode);
+		ParseTreeNode ast = parser.parse(sourceCode);
 
 		assertNotNull(ast);
 		return ast;
@@ -33,22 +33,22 @@ public class C11PreprocessorParserTest {
 		C11PreprocessorParser.setLineTerminatorToVisible(production);
 		System.out.println(production.toString());
 		PackratParser parser = new PackratParser(production);
-		ParserTree ast = parser.parse(SourceCode.fromStringArray(lines));
+		ParseTreeNode ast = parser.parse(SourceCode.fromStringArray(lines));
 		assertContainsNode(productionName, ast);
 	}
 
-	private void assertContainsNode(final String nodeName, ParserTree tree) {
-		TreeSearchCriterion<ParserTree> criterion = new TreeSearchCriterion<ParserTree>() {
+	private void assertContainsNode(final String nodeName, ParseTreeNode tree) {
+		TreeSearchCriterion<ParseTreeNode> criterion = new TreeSearchCriterion<ParseTreeNode>() {
 
 			@Override
-			public boolean accepted(ParserTree node) {
+			public boolean accepted(ParseTreeNode node) {
 				if (node.getName().equals(nodeName)) {
 					return true;
 				}
 				return false;
 			}
 		};
-		SearchVisitor<ParserTree> searchVisitor = new SearchVisitor<ParserTree>(
+		SearchVisitor<ParseTreeNode> searchVisitor = new SearchVisitor<ParseTreeNode>(
 				criterion);
 		TreeWalker.walk(searchVisitor, tree);
 		assertEquals(1, searchVisitor.getSearchResult().size());
@@ -182,7 +182,7 @@ public class C11PreprocessorParserTest {
 
 	@Test
 	public void testSimpleEmptyIfDef() throws Exception {
-		ParserTree tree = checkParser("#ifdef TEST\n", "#endif\n");
+		ParseTreeNode tree = checkParser("#ifdef TEST\n", "#endif\n");
 		assertContainsNode("if-section", tree);
 	}
 

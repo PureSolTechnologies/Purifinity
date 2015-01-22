@@ -17,6 +17,10 @@
 			<artifactId>math</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.graphs</groupId>
+			<artifactId>statemodel</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.api</groupId>
 			<artifactId>analysis.domain</artifactId>
 		</dependency>

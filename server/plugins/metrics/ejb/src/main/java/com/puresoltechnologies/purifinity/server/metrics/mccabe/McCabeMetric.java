@@ -15,8 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.trees.TreeIterator;
-import com.puresoltechnologies.commons.versioning.Version;
 import com.puresoltechnologies.parsers.ust.AbstractProduction;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
@@ -26,6 +24,8 @@ import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacte
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
+import com.puresoltechnologies.trees.TreeIterator;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * This class calculates the cyclomatic number v(G) from a code range.

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.puresoltechnologies.commons.trees.TreeException;
 import com.puresoltechnologies.parsers.grammar.Grammar;
 import com.puresoltechnologies.parsers.grammar.GrammarException;
 import com.puresoltechnologies.parsers.grammar.GrammarReader;
@@ -18,12 +17,13 @@ import com.puresoltechnologies.parsers.lexer.LexerException;
 import com.puresoltechnologies.parsers.lexer.RegExpLexer;
 import com.puresoltechnologies.parsers.lexer.Token;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
+import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.parser.ParserException;
-import com.puresoltechnologies.parsers.parser.ParserTree;
 import com.puresoltechnologies.parsers.parser.packrat.PackratParser;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCodeLine;
 import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
+import com.puresoltechnologies.trees.TreeException;
 
 public class C11PreprocessorParser {
 
@@ -125,14 +125,14 @@ public class C11PreprocessorParser {
 		}
 	}
 
-	public ParserTree parse(SourceCode soureCode) throws TreeException,
+	public ParseTreeNode parse(SourceCode soureCode) throws TreeException,
 			ParserException {
-		ParserTree tree = new ParserTree("preprocessing-file");
+		ParseTreeNode tree = new ParseTreeNode("preprocessing-file");
 		parse(tree, soureCode, 0);
 		return tree;
 	}
 
-	private int parse(ParserTree tree, SourceCode sourceCode, int currentLine)
+	private int parse(ParseTreeNode tree, SourceCode sourceCode, int currentLine)
 			throws TreeException, ParserException {
 		List<SourceCodeLine> lines = sourceCode.getLines();
 		int lineCount = 0;
@@ -160,16 +160,16 @@ public class C11PreprocessorParser {
 		return lineCount;
 	}
 
-	private int parseIfSection(ParserTree tree, SourceCode sourceCode,
+	private int parseIfSection(ParseTreeNode tree, SourceCode sourceCode,
 			int lineNum) throws TreeException, ParserException {
-		ParserTree ifSection = new ParserTree("if-section");
+		ParseTreeNode ifSection = new ParseTreeNode("if-section");
 		tree.addChild(ifSection);
 		int lineCount = 0;
 		parseNonTextLine(ifGroup, ifSection, sourceCode, lineNum);
-		ParserTree ifGroupTree = ifSection.getChild("if-group");
+		ParseTreeNode ifGroupTree = ifSection.getChild("if-group");
 		lineCount++;
 		// parse group
-		ParserTree group = new ParserTree("group");
+		ParseTreeNode group = new ParseTreeNode("group");
 		int lines = parse(group, sourceCode, lineNum + lineCount);
 		if (lines > 0) {
 			ifGroupTree.addChild(group);
@@ -178,12 +178,12 @@ public class C11PreprocessorParser {
 		do {
 			if (parseOptional(elifGroupParser, ifSection, sourceCode, lineNum
 					+ lineCount) > 0) {
-				List<ParserTree> elifGroups = ifSection
+				List<ParseTreeNode> elifGroups = ifSection
 						.getChildren("elif-group");
-				ParserTree elifGroup = elifGroups.get(elifGroups.size() - 1);
+				ParseTreeNode elifGroup = elifGroups.get(elifGroups.size() - 1);
 				lineCount++;
 				// parse group
-				group = new ParserTree("group");
+				group = new ParseTreeNode("group");
 				lines = parse(group, sourceCode, lineNum + lineCount);
 				if (lines > 0) {
 					elifGroup.addChild(group);
@@ -195,10 +195,10 @@ public class C11PreprocessorParser {
 		} while (true);
 		if (parseOptional(elseGroupParser, ifSection, sourceCode, lineNum
 				+ lineCount) > 0) {
-			ParserTree elseGroup = ifSection.getChild("else-group");
+			ParseTreeNode elseGroup = ifSection.getChild("else-group");
 			lineCount++;
 			// parse group
-			group = new ParserTree("group");
+			group = new ParseTreeNode("group");
 			lines = parse(group, sourceCode, lineNum + lineCount);
 			if (lines > 0) {
 				elseGroup.addChild(group);
@@ -211,18 +211,19 @@ public class C11PreprocessorParser {
 		return lineCount;
 	}
 
-	private int parseContolLine(ParserTree tree, SourceCode sourceCode,
+	private int parseContolLine(ParseTreeNode tree, SourceCode sourceCode,
 			int lineNum) throws TreeException, ParserException {
 		return parseNonTextLine(controlLineParser, tree, sourceCode, lineNum);
 	}
 
-	private int parseNonDirectiveLine(ParserTree tree, SourceCode sourceCode,
-			int lineNum) throws TreeException, ParserException {
+	private int parseNonDirectiveLine(ParseTreeNode tree,
+			SourceCode sourceCode, int lineNum) throws TreeException,
+			ParserException {
 		return parseNonTextLine(nonDirectiveLineParser, tree, sourceCode,
 				lineNum);
 	}
 
-	private int parseTextLine(ParserTree tree, SourceCode sourceCode,
+	private int parseTextLine(ParseTreeNode tree, SourceCode sourceCode,
 			int lineNum) throws TreeException, ParserException {
 
 		List<SourceCodeLine> lines = sourceCode.getLines();
@@ -249,20 +250,20 @@ public class C11PreprocessorParser {
 		 * grammar.
 		 */
 		if (!hasVisibleTokens(codeToParse)) {
-			ParserTree textLine = new ParserTree("text-line");
+			ParseTreeNode textLine = new ParseTreeNode("text-line");
 			TokenStream tokenStream = tokenize(codeToParse);
 			for (Token token : tokenStream) {
-				textLine.addChild(new ParserTree(token));
+				textLine.addChild(new ParseTreeNode(token));
 			}
 			tree.addChild(textLine);
 			return lineCount;
 		}
-		ParserTree parserTree = textGroupParser.parse(codeToParse);
-		tree.addChildren(parserTree.getChildren());
+		ParseTreeNode ParseTreeNode = textGroupParser.parse(codeToParse);
+		tree.addChildren(ParseTreeNode.getChildren());
 		return lineCount;
 	}
 
-	private int parseOptional(PackratParser parser, ParserTree tree,
+	private int parseOptional(PackratParser parser, ParseTreeNode tree,
 			SourceCode sourceCode, int lineNum) throws TreeException {
 		try {
 			return parseNonTextLine(parser, tree, sourceCode, lineNum);
@@ -271,7 +272,7 @@ public class C11PreprocessorParser {
 		}
 	}
 
-	private int parseNonTextLine(PackratParser parser, ParserTree tree,
+	private int parseNonTextLine(PackratParser parser, ParseTreeNode tree,
 			SourceCode sourceCode, int lineNum) throws TreeException,
 			ParserException {
 		List<SourceCodeLine> lines = sourceCode.getLines();
@@ -287,8 +288,8 @@ public class C11PreprocessorParser {
 			codeToParse.addSourceCodeLine(line);
 			lineCount++;
 		} while (line.getLine().endsWith("\\\n"));
-		ParserTree parserTree = parser.parse(codeToParse);
-		tree.addChildren(parserTree.getChildren());
+		ParseTreeNode ParseTreeNode = parser.parse(codeToParse);
+		tree.addChildren(ParseTreeNode.getChildren());
 		return lineCount;
 	}
 

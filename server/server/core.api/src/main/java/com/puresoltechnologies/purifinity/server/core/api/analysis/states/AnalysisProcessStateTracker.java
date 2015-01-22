@@ -3,8 +3,6 @@ package com.puresoltechnologies.purifinity.server.core.api.analysis.states;
 import java.util.List;
 import java.util.UUID;
 
-import com.puresoltechnologies.commons.misc.statemodel.Transition;
-
 public interface AnalysisProcessStateTracker {
 
 	public void startProcess(UUID projectUUID);
@@ -14,7 +12,7 @@ public interface AnalysisProcessStateTracker {
 	public AnalysisProcessStatusInformation readProcessState(UUID projectUUID);
 
 	public boolean changeProcessState(UUID projectUUID, UUID runUUID,
-			Transition<AnalysisProcessState> transition);
+			AnalysisProcessTransition transition);
 
 	public void stopProcess(UUID projectUUID);
 }

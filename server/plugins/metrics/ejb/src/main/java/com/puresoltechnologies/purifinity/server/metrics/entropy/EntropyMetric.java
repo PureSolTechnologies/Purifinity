@@ -21,7 +21,6 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.versioning.Version;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
@@ -30,6 +29,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetric;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * This class calculates entropy and redundancy for a code range. The entropy is

@@ -11,7 +11,6 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
-import com.puresoltechnologies.commons.versioning.Version;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.AbstractProduction;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
@@ -27,6 +26,7 @@ import com.puresoltechnologies.purifinity.server.plugin.fortran2008.metrics.Code
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.metrics.HalsteadMetricImpl;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.metrics.McCabeMetricImpl;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.metrics.SLOCMetricImpl;
+import com.puresoltechnologies.versioning.Version;
 
 @Stateless
 @Remote(ProgrammingLanguageAnalyzer.class)

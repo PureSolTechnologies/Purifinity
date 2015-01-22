@@ -6,13 +6,13 @@ import java.net.URL;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 
-import com.puresoltechnologies.commons.versioning.Version;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceManager;
 import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginInformation;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
+import com.puresoltechnologies.versioning.Version;
 
 @Singleton
 @EJBFacade

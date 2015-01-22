@@ -7,8 +7,8 @@ import java.io.IOException;
 import org.junit.Test;
 
 import com.puresoltechnologies.parsers.grammar.Grammar;
+import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.parser.ParserException;
-import com.puresoltechnologies.parsers.parser.ParserTree;
 import com.puresoltechnologies.parsers.parser.packrat.PackratParser;
 import com.puresoltechnologies.parsers.source.FixedCodeLocation;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -110,7 +110,7 @@ public class JavaPackratParserTest {
 	@Test
 	public void testJavaFile() throws Throwable {
 		PackratParser parser = createParser();
-		ParserTree tree = parser
+		ParseTreeNode tree = parser
 				.parse(new SourceFileLocation(
 						"src/test/java/com/puresoltechnologies/purifinity/framework/lang/java7",
 						"JavaPackratParserTest.java").getSourceCode());

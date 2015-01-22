@@ -8,15 +8,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.trees.TreeException;
-import com.puresoltechnologies.commons.trees.TreeVisitor;
-import com.puresoltechnologies.commons.trees.TreeWalker;
-import com.puresoltechnologies.commons.trees.WalkingAction;
 import com.puresoltechnologies.parsers.grammar.token.Visibility;
 import com.puresoltechnologies.parsers.lexer.Token;
 import com.puresoltechnologies.parsers.lexer.TokenMetaData;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
-import com.puresoltechnologies.parsers.parser.ParserTree;
+import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.preprocessor.PreprocessorException;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCodeLine;
@@ -28,6 +24,10 @@ import com.puresoltechnologies.purifinity.server.plugin.c11.C11PreprocessorExpre
 import com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor.C11Preprocessor;
 import com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor.DefinedMacros;
 import com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor.IncludeDirectories;
+import com.puresoltechnologies.trees.TreeException;
+import com.puresoltechnologies.trees.TreeVisitor;
+import com.puresoltechnologies.trees.TreeWalker;
+import com.puresoltechnologies.trees.WalkingAction;
 
 /**
  * <pre>
@@ -44,7 +44,7 @@ import com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor.Include
  * @author Rick-Rainer Ludwig
  * 
  */
-public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
+public class TreeMacroProcessor implements TreeVisitor<ParseTreeNode> {
 
 	private static final String IDENTIFIER_TOKEN_NAME = "identifier";
 
@@ -66,10 +66,10 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	 */
 	private final SourceCode sourceCode = new SourceCode();
 	/**
-	 * This field contains the original {@link ParserTree} of the source file
+	 * This field contains the original {@link ParseTreeNode} of the source file
 	 * which is now to be processed.
 	 */
-	private final ParserTree tree;
+	private final ParseTreeNode tree;
 	/**
 	 * This field contains the current nesting depth. This is needed to check
 	 * for the maximum nesting depth to avoid recursive endless loops.
@@ -90,7 +90,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	 * trees.
 	 * 
 	 * @param tree
-	 *            is the {@link ParserTree} to be processed.
+	 *            is the {@link ParseTreeNode} to be processed.
 	 * @param includeDirectories
 	 *            is the object which contains the include directories to be
 	 *            used during #include statements.
@@ -102,7 +102,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	 *            is the current nesting depth which is used to check for the
 	 *            maximum nesting depth to avoid recursive endless loops.
 	 */
-	public TreeMacroProcessor(ParserTree tree,
+	public TreeMacroProcessor(ParseTreeNode tree,
 			IncludeDirectories includeDirectories, DefinedMacros definedMacros,
 			int nestingDepth) {
 		super();
@@ -120,7 +120,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	 */
 	public void process() throws PreprocessorException {
 		walkingResult = null;
-		new TreeWalker<ParserTree>(tree).walk(this);
+		new TreeWalker<ParseTreeNode>(tree).walk(this);
 		if (walkingResult != null) {
 			throw walkingResult;
 		}
@@ -138,11 +138,11 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 
 	/**
 	 * This method walks over {@link #tree} and invokes the methods
-	 * {@link #processProduction(ParserTree)} and {@link #processToken(Token)}
-	 * to perform the actual processing tasks.
+	 * {@link #processProduction(ParseTreeNode)} and
+	 * {@link #processToken(Token)} to perform the actual processing tasks.
 	 */
 	@Override
-	public WalkingAction visit(ParserTree tree) {
+	public WalkingAction visit(ParseTreeNode tree) {
 		try {
 			Token token = tree.getToken();
 			if (token == null) {
@@ -172,7 +172,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	 * @throws TreeException
 	 * @throws PreprocessorException
 	 */
-	private WalkingAction processProduction(ParserTree tree)
+	private WalkingAction processProduction(ParseTreeNode tree)
 			throws TreeException, PreprocessorException {
 		if ("control-line".equals(tree.getName())) {
 			return processControlLine(tree);
@@ -192,11 +192,11 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		}
 	}
 
-	private WalkingAction processControlLine(ParserTree tree)
+	private WalkingAction processControlLine(ParseTreeNode tree)
 			throws TreeException {
 		try {
-			List<ParserTree> children = tree.getChildren();
-			ParserTree controlCommand = children.get(0);
+			List<ParseTreeNode> children = tree.getChildren();
+			ParseTreeNode controlCommand = children.get(0);
 			if (controlCommand.getText().equals("#include")) {
 				return include(tree);
 			} else if (controlCommand.getText().equals("#define")) {
@@ -219,7 +219,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	 * @return
 	 * @throws PreprocessorException
 	 */
-	private WalkingAction processTextLine(ParserTree tree)
+	private WalkingAction processTextLine(ParseTreeNode tree)
 			throws PreprocessorException {
 		TokenCollector visitor = new TokenCollector();
 		TreeWalker.walk(visitor, tree);
@@ -262,9 +262,9 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		return true;
 	}
 
-	private WalkingAction processIfSection(ParserTree ifSection)
+	private WalkingAction processIfSection(ParseTreeNode ifSection)
 			throws TreeException, PreprocessorException {
-		ParserTree ifGroup = ifSection.getChild("if-group");
+		ParseTreeNode ifGroup = ifSection.getChild("if-group");
 		if (evaluateValidity(ifGroup)) {
 			TreeMacroProcessor processor = new TreeMacroProcessor(
 					ifGroup.getChild("group"), includeDirectories,
@@ -273,8 +273,8 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 			sourceCode.addSourceCode(processor.sourceCode);
 			return WalkingAction.LEAVE_BRANCH;
 		}
-		List<ParserTree> elifGroups = ifSection.getChildren("elif-group");
-		for (ParserTree elifGroup : elifGroups) {
+		List<ParseTreeNode> elifGroups = ifSection.getChildren("elif-group");
+		for (ParseTreeNode elifGroup : elifGroups) {
 			if (evaluateValidity(elifGroup)) {
 				TreeMacroProcessor processor = new TreeMacroProcessor(
 						elifGroup.getChild("group"), includeDirectories,
@@ -284,7 +284,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 				return WalkingAction.LEAVE_BRANCH;
 			}
 		}
-		ParserTree elseGroup = ifSection.getChild("else-group");
+		ParseTreeNode elseGroup = ifSection.getChild("else-group");
 		if (elseGroup != null) {
 			TreeMacroProcessor processor = new TreeMacroProcessor(
 					elseGroup.getChild("group"), includeDirectories,
@@ -295,22 +295,23 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		return WalkingAction.LEAVE_BRANCH;
 	}
 
-	private boolean evaluateValidity(ParserTree evaluation)
+	private boolean evaluateValidity(ParseTreeNode evaluation)
 			throws TreeException, PreprocessorException {
 		if (evaluation.hasChild("PP_IFDEF")) {
-			ParserTree identifier = evaluation.getChild("identifier");
+			ParseTreeNode identifier = evaluation.getChild("identifier");
 			if (definedMacros.isDefined(identifier.getText())) {
 				return true;
 			}
 		} else if (evaluation.hasChild("PP_IFNDEF")) {
-			ParserTree identifier = evaluation.getChild("identifier");
+			ParseTreeNode identifier = evaluation.getChild("identifier");
 			if (!definedMacros.isDefined(identifier.getText())) {
 				return true;
 			}
 		} else if (evaluation.hasChild("PP_IF")
 				|| evaluation.hasChild("PP_ELIF")) {
 			// #if and #elif
-			ParserTree expression = evaluation.getChild("constant-expression");
+			ParseTreeNode expression = evaluation
+					.getChild("constant-expression");
 			C11PreprocessorExpressionEvaluator evaluator = new C11PreprocessorExpressionEvaluator(
 					expression, definedMacros);
 			try {
@@ -331,8 +332,8 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		return false;
 	}
 
-	private WalkingAction define(ParserTree tree) throws TreeException {
-		List<ParserTree> children = tree.getChildren();
+	private WalkingAction define(ParseTreeNode tree) throws TreeException {
+		List<ParseTreeNode> children = tree.getChildren();
 		if ((children.size() >= 4)
 				&& (children.get(3).getName().equals("LPAREN"))) {
 			return defineFunctionLikeMacro(tree);
@@ -341,8 +342,8 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		}
 	}
 
-	private WalkingAction undefine(ParserTree tree) throws TreeException {
-		ParserTree identifier = tree.getChild("identifier");
+	private WalkingAction undefine(ParseTreeNode tree) throws TreeException {
+		ParseTreeNode identifier = tree.getChild("identifier");
 		definedMacros.undefine(identifier.getText());
 		return WalkingAction.LEAVE_BRANCH;
 	}
@@ -355,9 +356,9 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 	 * @throws TreeException
 	 * @throws PreprocessorException
 	 */
-	private WalkingAction include(ParserTree tree) throws TreeException,
+	private WalkingAction include(ParseTreeNode tree) throws TreeException,
 			PreprocessorException {
-		ParserTree headerName = tree.getChild("pp-tokens")
+		ParseTreeNode headerName = tree.getChild("pp-tokens")
 				.getChild("preprocessing-token").getChild("header-name");
 		String includeFile = headerName.getText();
 		/*
@@ -371,7 +372,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		return WalkingAction.LEAVE_BRANCH;
 	}
 
-	private WalkingAction defineObjectLikeMacro(ParserTree tree)
+	private WalkingAction defineObjectLikeMacro(ParseTreeNode tree)
 			throws TreeException {
 		String macroName = tree.getChild(IDENTIFIER_TOKEN_NAME).getText();
 		TokenStream replacement = createReplacement(tree);
@@ -379,14 +380,14 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		return WalkingAction.LEAVE_BRANCH;
 	}
 
-	private WalkingAction defineFunctionLikeMacro(ParserTree tree)
+	private WalkingAction defineFunctionLikeMacro(ParseTreeNode tree)
 			throws TreeException {
 		String macroName = tree.getChild(IDENTIFIER_TOKEN_NAME).getText();
 		final List<String> parameters = new ArrayList<String>();
-		ParserTree parameterList = tree.getChild("identifier-list");
-		TreeVisitor<ParserTree> visitor = new TreeVisitor<ParserTree>() {
+		ParseTreeNode parameterList = tree.getChild("identifier-list");
+		TreeVisitor<ParseTreeNode> visitor = new TreeVisitor<ParseTreeNode>() {
 			@Override
-			public WalkingAction visit(ParserTree tree) {
+			public WalkingAction visit(ParseTreeNode tree) {
 				Token token = tree.getToken();
 				if (token != null) {
 					if (IDENTIFIER_TOKEN_NAME.equals(token.getName())) {
@@ -410,25 +411,25 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		return WalkingAction.LEAVE_BRANCH;
 	}
 
-	private TokenStream createReplacement(ParserTree defineStatement)
+	private TokenStream createReplacement(ParseTreeNode defineStatement)
 			throws TreeException {
 		final TokenStream replacement = new TokenStream();
 		/*
 		 * Check for relevant white spaces...
 		 */
-		List<ParserTree> defineChildren = defineStatement.getChildren();
+		List<ParseTreeNode> defineChildren = defineStatement.getChildren();
 		int startIndex;
 		if (defineStatement.hasChild("RPAREN")) {
-			ParserTree rparenToken = defineStatement.getChild("RPAREN");
+			ParseTreeNode rparenToken = defineStatement.getChild("RPAREN");
 			startIndex = defineChildren.indexOf(rparenToken) + 1;
 		} else {
-			ParserTree identifierToken = defineStatement
+			ParseTreeNode identifierToken = defineStatement
 					.getChild(IDENTIFIER_TOKEN_NAME);
 			startIndex = defineChildren.indexOf(identifierToken) + 1;
 		}
 		boolean skipedWhiteSpace = false;
 		for (int i = startIndex; i < defineChildren.size(); i++) {
-			ParserTree child = defineChildren.get(i);
+			ParseTreeNode child = defineChildren.get(i);
 			if (child.getName().equals("replacement-list")) {
 				break;
 			}
@@ -450,9 +451,9 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 		/*
 		 * Get replacement list.
 		 */
-		TreeVisitor<ParserTree> visitor = new TreeVisitor<ParserTree>() {
+		TreeVisitor<ParseTreeNode> visitor = new TreeVisitor<ParseTreeNode>() {
 			@Override
-			public WalkingAction visit(ParserTree tree) {
+			public WalkingAction visit(ParseTreeNode tree) {
 				Token token = tree.getToken();
 				if (token != null) {
 					if ((!"WhiteSpace".equals(token.getName()))
@@ -463,7 +464,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParserTree> {
 				return WalkingAction.PROCEED;
 			}
 		};
-		ParserTree replacementList = defineStatement
+		ParseTreeNode replacementList = defineStatement
 				.getChild("replacement-list");
 		TreeWalker.walk(visitor, replacementList);
 		return replacement;

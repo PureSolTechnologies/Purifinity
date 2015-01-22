@@ -2,13 +2,12 @@ package com.puresoltechnologies.purifinity.server.ui.projects.analysis;
 
 import java.util.List;
 
-import com.puresoltechnologies.commons.misc.FileUtilities;
+import com.puresoltechnologies.commons.misc.io.FileUtilities;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 
 public class AnalysisContentTreeNodeObject {
-
 	private final AnalysisFileTree analysisFileTree;
 	private final String type;
 

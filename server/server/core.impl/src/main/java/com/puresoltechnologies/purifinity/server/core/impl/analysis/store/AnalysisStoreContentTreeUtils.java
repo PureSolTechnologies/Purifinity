@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import com.buschmais.xo.api.ResultIterable;
 import com.buschmais.xo.api.ResultIterator;
 import com.buschmais.xo.api.XOManager;
-import com.puresoltechnologies.commons.misc.HashId;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex;

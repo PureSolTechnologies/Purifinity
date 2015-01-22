@@ -8,11 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.BoundStatement;
+import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
 import com.puresoltechnologies.genesis.commons.TransformationException;
 import com.puresoltechnologies.genesis.commons.TransformationMetadata;
+import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
 import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
@@ -25,7 +27,8 @@ import com.puresoltechnologies.purifinity.server.passwordstore.utils.encrypt.Enc
 import com.puresoltechnologies.versioning.Version;
 import com.puresoltechnologies.versioning.VersionRange;
 
-public class PasswordStoreDatabaseTransformator implements ComponentTransformator {
+public class PasswordStoreDatabaseTransformator implements
+		ComponentTransformator {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(PasswordStoreDatabaseTransformator.class);
@@ -66,8 +69,8 @@ public class PasswordStoreDatabaseTransformator implements ComponentTransformato
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
 
 		sequence.appendTransformation(CassandraStandardMigrations
-				.createKeyspace(sequence.getSession(), metadata,
-						PASSWORD_STORE_KEYSPACE_NAME, "Rick-Rainer Ludwig",
+				.createKeyspace(sequence, PASSWORD_STORE_KEYSPACE_NAME,
+						"Rick-Rainer Ludwig",
 						"This keyspace keeps the user passwords.",
 						ReplicationStrategy.SIMPLE_STRATEGY, 3));
 
@@ -87,8 +90,7 @@ public class PasswordStoreDatabaseTransformator implements ComponentTransformato
 
 		String description = "This table contains the authentication data and the state of the account.";
 		sequence.appendTransformation(new CassandraCQLTransformationStep(
-				sequence.getSession(), metadata, "Rick-Rainer Ludwig",
-				"CREATE TABLE "
+				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 						+ PASSWORD_TABLE_NAME//
 						+ " (created timestamp, " //
 						+ "last_modified timestamp, " //
@@ -100,8 +102,8 @@ public class PasswordStoreDatabaseTransformator implements ComponentTransformato
 						+ description + "';", description));
 
 		sequence.appendTransformation(CassandraStandardMigrations.createIndex(
-				sequence.getSession(), metadata, "Rick-Rainer Ludwig",
-				"Secondary index on state.", PASSWORD_TABLE_NAME, "state"));
+				sequence, "Rick-Rainer Ludwig", "Secondary index on state.",
+				PASSWORD_TABLE_NAME, "state"));
 
 		sequence.appendTransformation(new TransformationStep() {
 			@Override
@@ -141,4 +143,12 @@ public class PasswordStoreDatabaseTransformator implements ComponentTransformato
 		return sequence;
 	}
 
+	@Override
+	public void dropAll() {
+		try (Cluster cluster = CassandraUtils.connectCluster()) {
+			try (Session session = cluster.connect()) {
+				session.execute("DROP KEYSPACE " + PASSWORD_STORE_KEYSPACE_NAME);
+			}
+		}
+	}
 }

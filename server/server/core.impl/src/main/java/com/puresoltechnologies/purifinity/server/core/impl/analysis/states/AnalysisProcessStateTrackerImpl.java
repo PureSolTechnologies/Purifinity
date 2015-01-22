@@ -12,10 +12,10 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.commons.misc.statemodel.Transition;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessState;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStatusInformation;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessTransition;
 import com.puresoltechnologies.purifinity.server.database.cassandra.ProcessStatesKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 
@@ -100,7 +100,7 @@ public class AnalysisProcessStateTrackerImpl implements
 
 	@Override
 	public boolean changeProcessState(UUID projectUUID, UUID runUUID,
-			Transition<AnalysisProcessState> transition) {
+			AnalysisProcessTransition transition) {
 		AnalysisProcessStatusInformation statusInformation = readProcessState(projectUUID);
 		if (statusInformation == null) {
 			return false;

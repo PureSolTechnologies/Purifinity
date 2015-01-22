@@ -19,8 +19,7 @@ import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.versioning.Version;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
@@ -38,6 +37,7 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.Evalu
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluatorParameter;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * This class calculates the CoCoMo for a set number of sloc and a given average

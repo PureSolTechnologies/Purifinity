@@ -18,10 +18,7 @@ import javax.jms.Queue;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.math.JSONSerializer;
-import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.trees.TreeVisitor;
-import com.puresoltechnologies.commons.trees.TreeWalker;
-import com.puresoltechnologies.commons.trees.WalkingAction;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
@@ -37,6 +34,9 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileSto
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
+import com.puresoltechnologies.trees.TreeVisitor;
+import com.puresoltechnologies.trees.TreeWalker;
+import com.puresoltechnologies.trees.WalkingAction;
 
 @MessageDriven(name = "ProjectAnalysisQueueMBean",//
 activationConfig = {//

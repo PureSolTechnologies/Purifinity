@@ -3,7 +3,10 @@ package com.puresoltechnologies.purifinity.server.ddl;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
+import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
 import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
@@ -52,13 +55,13 @@ public class AccountManagerDatabaseTransformator implements
 		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
 				CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
 
-		sequence.appendTransformation(CassandraStandardMigrations.createKeyspace(
-				sequence.getSession(),
-				metadata,
-				ACCOUNT_MANAGER_KEYSPACE_NAME,
-				"Rick-Rainer Ludwig",
-				"This keyspace keeps the account information for all users and groups.",
-				ReplicationStrategy.SIMPLE_STRATEGY, 3));
+		sequence.appendTransformation(CassandraStandardMigrations
+				.createKeyspace(
+						sequence,
+						ACCOUNT_MANAGER_KEYSPACE_NAME,
+						"Rick-Rainer Ludwig",
+						"This keyspace keeps the account information for all users and groups.",
+						ReplicationStrategy.SIMPLE_STRATEGY, 3));
 
 		return sequence;
 	}
@@ -77,4 +80,13 @@ public class AccountManagerDatabaseTransformator implements
 		return sequence;
 	}
 
+	@Override
+	public void dropAll() {
+		try (Cluster cluster = CassandraUtils.connectCluster()) {
+			try (Session session = cluster.connect()) {
+				session.execute("DROP KEYSPACE "
+						+ ACCOUNT_MANAGER_KEYSPACE_NAME);
+			}
+		}
+	}
 }

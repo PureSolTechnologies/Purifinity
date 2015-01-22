@@ -1,21 +1,21 @@
 package com.puresoltechnologies.purifinity.server.plugin.c11;
 
-import com.puresoltechnologies.commons.trees.TreeException;
-import com.puresoltechnologies.parsers.parser.ParserTree;
+import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.parsers.ust.eval.Value;
 import com.puresoltechnologies.parsers.ust.eval.ValueTypeException;
 import com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor.DefinedMacros;
 import com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor.internal.Macro;
+import com.puresoltechnologies.trees.TreeException;
 
 public class C11PreprocessorExpressionEvaluator {
 
-	private final ParserTree expression;
+	private final ParseTreeNode expression;
 
 	private final DefinedMacros definedMacros;
 	private Value result;
 
-	public C11PreprocessorExpressionEvaluator(ParserTree expression,
+	public C11PreprocessorExpressionEvaluator(ParseTreeNode expression,
 			DefinedMacros definedMacros) {
 		this.expression = expression;
 		this.definedMacros = definedMacros;
@@ -30,7 +30,7 @@ public class C11PreprocessorExpressionEvaluator {
 		result = evaluate(expression);
 	}
 
-	private Value evaluate(ParserTree expression)
+	private Value evaluate(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		String nodeName = expression.getName();
 		if ("expression".equals(nodeName)) {
@@ -78,7 +78,7 @@ public class C11PreprocessorExpressionEvaluator {
 		}
 	}
 
-	private Value evaluateConstant(ParserTree expression)
+	private Value evaluateConstant(ParseTreeNode expression)
 			throws NumberFormatException, TreeException {
 		if (expression.hasChild("integer-constant")) {
 			return new Value("int", Integer.valueOf(expression.getChild(
@@ -92,10 +92,10 @@ public class C11PreprocessorExpressionEvaluator {
 		}
 	}
 
-	private Value evaluatePrimaryExpression(ParserTree expression)
+	private Value evaluatePrimaryExpression(ParseTreeNode expression)
 			throws TreeException, UniversalSyntaxTreeEvaluationException {
 		if (expression.hasChild("identifier")) {
-			ParserTree identifier = expression.getChild("identifier");
+			ParseTreeNode identifier = expression.getChild("identifier");
 			String identifierName = identifier.getText();
 			if (definedMacros.isDefined(identifierName)) {
 				Value value = generateValue(identifierName);
@@ -113,7 +113,7 @@ public class C11PreprocessorExpressionEvaluator {
 		}
 	}
 
-	private Value evaluatePostfixExpression(ParserTree expression)
+	private Value evaluatePostfixExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		if (expression.hasChild("primary-expression")) {
 			return evaluate(expression.getChild("primary-expression"));
@@ -123,7 +123,7 @@ public class C11PreprocessorExpressionEvaluator {
 		}
 	}
 
-	private Value evaluateUnaryExpression(ParserTree expression)
+	private Value evaluateUnaryExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		if (expression.hasChild("postfix-expression")) {
 			return evaluate(expression.getChild("postfix-expression"));
@@ -133,7 +133,7 @@ public class C11PreprocessorExpressionEvaluator {
 		}
 	}
 
-	private Value evaluateCastExpression(ParserTree expression)
+	private Value evaluateCastExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		if (expression.hasChild("unary-expression")) {
 			return evaluate(expression.getChild("unary-expression"));
@@ -143,7 +143,7 @@ public class C11PreprocessorExpressionEvaluator {
 		}
 	}
 
-	private Value evaluateMultiplicativeExpression(ParserTree expression)
+	private Value evaluateMultiplicativeExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		Value result = evaluate(expression.getChild("cast-expression"));
 		if (expression.hasChild("multiplicative-expression")) {
@@ -160,7 +160,7 @@ public class C11PreprocessorExpressionEvaluator {
 		return result;
 	}
 
-	private Value evaluateAdditiveExpression(ParserTree expression)
+	private Value evaluateAdditiveExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		Value result = evaluate(expression
 				.getChild("multiplicative-expression"));
@@ -175,7 +175,7 @@ public class C11PreprocessorExpressionEvaluator {
 		return result;
 	}
 
-	private Value evaluateShiftExpression(ParserTree expression)
+	private Value evaluateShiftExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		Value result = evaluate(expression.getChild("additive-expression"));
 		if (expression.hasChild("shift-expression")) {
@@ -189,7 +189,7 @@ public class C11PreprocessorExpressionEvaluator {
 		return result;
 	}
 
-	private Value evaluateRelationalExpression(ParserTree expression)
+	private Value evaluateRelationalExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		Value result = evaluate(expression.getChild("shift-expression"));
 		if (expression.hasChild("relational-expression")) {
@@ -211,7 +211,7 @@ public class C11PreprocessorExpressionEvaluator {
 		return result;
 	}
 
-	private Value evaluateEqualityExpression(ParserTree expression)
+	private Value evaluateEqualityExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		Value result = evaluate(expression.getChild("relational-expression"));
 		if (expression.hasChild("equality-expression")) {
@@ -225,7 +225,7 @@ public class C11PreprocessorExpressionEvaluator {
 		return result;
 	}
 
-	private Value evaluateAndExpression(ParserTree expression)
+	private Value evaluateAndExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		Value result = evaluate(expression.getChild("equality-expression"));
 		if (expression.hasChild("AND-expression")) {
@@ -235,7 +235,7 @@ public class C11PreprocessorExpressionEvaluator {
 		return result;
 	}
 
-	private Value evaluateExclusiveOrExpression(ParserTree expression)
+	private Value evaluateExclusiveOrExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		Value result = evaluate(expression.getChild("AND-expression"));
 		if (expression.hasChild("exclusive-OR-expression")) {
@@ -246,7 +246,7 @@ public class C11PreprocessorExpressionEvaluator {
 		return result;
 	}
 
-	private Value evaluateInclusiveOrExpression(ParserTree expression)
+	private Value evaluateInclusiveOrExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		Value result = evaluate(expression.getChild("exclusive-OR-expression"));
 		if (expression.hasChild("inclusive-OR-expression")) {
@@ -257,7 +257,7 @@ public class C11PreprocessorExpressionEvaluator {
 		return result;
 	}
 
-	private Value evaluateLogicalAndExpression(ParserTree expression)
+	private Value evaluateLogicalAndExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		try {
 			if (expression.hasChild("logical-AND-expression")) {
@@ -273,7 +273,7 @@ public class C11PreprocessorExpressionEvaluator {
 		}
 	}
 
-	private Value evaluateLogicalOrExpression(ParserTree expression)
+	private Value evaluateLogicalOrExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		try {
 			if (expression.hasChild("logical-OR-expression")) {
@@ -289,7 +289,7 @@ public class C11PreprocessorExpressionEvaluator {
 		}
 	}
 
-	private Value evaluateConditionalExpression(ParserTree expression)
+	private Value evaluateConditionalExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		try {
 			Value logicalOrExpressionResult = evaluate(expression
@@ -309,12 +309,12 @@ public class C11PreprocessorExpressionEvaluator {
 		}
 	}
 
-	private Value evaluateConstantExpression(ParserTree expression)
+	private Value evaluateConstantExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		return evaluate(expression.getChild("conditional-expression"));
 	}
 
-	private Value evaluateAssignmentExpression(ParserTree expression)
+	private Value evaluateAssignmentExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		if (expression.hasChild("conditional-expression")) {
 			return evaluate(expression.getChild("conditional-expression"));
@@ -324,7 +324,7 @@ public class C11PreprocessorExpressionEvaluator {
 		}
 	}
 
-	private Value evaluateExpression(ParserTree expression)
+	private Value evaluateExpression(ParseTreeNode expression)
 			throws UniversalSyntaxTreeEvaluationException, TreeException {
 		if (expression.hasChild("assignment-expression")) {
 			return evaluate(expression.getChild("assignment-expression"));

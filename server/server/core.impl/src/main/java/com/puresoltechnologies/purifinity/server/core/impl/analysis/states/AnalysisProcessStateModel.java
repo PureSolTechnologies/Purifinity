@@ -3,11 +3,12 @@ package com.puresoltechnologies.purifinity.server.core.impl.analysis.states;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.misc.statemodel.AbstractStateModel;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessState;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessTransition;
+import com.puresoltechnologies.statemodel.AbstractStateModel;
 
 public class AnalysisProcessStateModel extends
-		AbstractStateModel<AnalysisProcessState> {
+		AbstractStateModel<AnalysisProcessState, AnalysisProcessTransition> {
 
 	public AnalysisProcessStateModel() {
 		super();
@@ -29,6 +30,12 @@ public class AnalysisProcessStateModel extends
 		endStates.add(AnalysisProcessState.ABORTED);
 		endStates.add(AnalysisProcessState.FAILED);
 		return endStates;
+	}
+
+	@Override
+	public Set<AnalysisProcessState> getVertices() {
+		throw new IllegalStateException(
+				"This state model does not support graph traversals.");
 	}
 
 }

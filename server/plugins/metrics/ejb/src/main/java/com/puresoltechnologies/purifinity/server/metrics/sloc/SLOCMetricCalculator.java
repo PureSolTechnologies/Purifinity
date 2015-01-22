@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.math.statistics.Statistics;
-import com.puresoltechnologies.commons.trees.TreeIterator;
-import com.puresoltechnologies.commons.versioning.Version;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTreeMetaData;
 import com.puresoltechnologies.parsers.ust.terminal.AbstractTerminal;
@@ -30,6 +28,8 @@ import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacte
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
+import com.puresoltechnologies.trees.TreeIterator;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * This class calculates a small statistics for a source code for source lines

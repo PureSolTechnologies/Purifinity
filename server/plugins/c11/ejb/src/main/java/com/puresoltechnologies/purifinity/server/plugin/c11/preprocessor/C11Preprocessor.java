@@ -3,16 +3,16 @@ package com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import com.puresoltechnologies.commons.misc.LineTerminator;
-import com.puresoltechnologies.commons.trees.TreeException;
+import com.puresoltechnologies.commons.misc.io.LineTerminator;
+import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.parser.ParserException;
-import com.puresoltechnologies.parsers.parser.ParserTree;
 import com.puresoltechnologies.parsers.preprocessor.Preprocessor;
 import com.puresoltechnologies.parsers.preprocessor.PreprocessorException;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCodeLine;
 import com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor.internal.C11PreprocessorParser;
 import com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor.internal.TreeMacroProcessor;
+import com.puresoltechnologies.trees.TreeException;
 
 /**
  * This is a C preprocessor on basis on C11 grammar.
@@ -194,7 +194,7 @@ public class C11Preprocessor implements Preprocessor {
 			throws PreprocessorException {
 		try {
 			C11PreprocessorParser parser = new C11PreprocessorParser();
-			ParserTree ast = parser.parse(sourceCode);
+			ParseTreeNode ast = parser.parse(sourceCode);
 			TreeMacroProcessor processor = new TreeMacroProcessor(ast,
 					includeDirectories, definedMacros, nestingDepth);
 			processor.process();

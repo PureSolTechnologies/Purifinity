@@ -1,9 +1,10 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis.states;
 
-import com.puresoltechnologies.commons.misc.statemodel.Transition;
+import com.puresoltechnologies.graph.Pair;
+import com.puresoltechnologies.statemodel.Transition;
 
 public enum AnalysisProcessTransition implements
-		Transition<AnalysisProcessState> {
+		Transition<AnalysisProcessState, AnalysisProcessTransition> {
 
 	QUEUE_FOR_STORAGE {
 		@Override
@@ -17,7 +18,7 @@ public enum AnalysisProcessTransition implements
 		}
 
 		@Override
-		public AnalysisProcessState getFinalState() {
+		public AnalysisProcessState getTargetState() {
 			return AnalysisProcessState.QUEUED_FOR_STORAGE;
 		}
 	},
@@ -33,7 +34,7 @@ public enum AnalysisProcessTransition implements
 		}
 
 		@Override
-		public AnalysisProcessState getFinalState() {
+		public AnalysisProcessState getTargetState() {
 			return AnalysisProcessState.STORING;
 		}
 	},
@@ -49,7 +50,7 @@ public enum AnalysisProcessTransition implements
 		}
 
 		@Override
-		public AnalysisProcessState getFinalState() {
+		public AnalysisProcessState getTargetState() {
 			return AnalysisProcessState.QUEUED_FOR_ANALYSIS;
 		}
 	},
@@ -65,7 +66,7 @@ public enum AnalysisProcessTransition implements
 		}
 
 		@Override
-		public AnalysisProcessState getFinalState() {
+		public AnalysisProcessState getTargetState() {
 			return AnalysisProcessState.ANALYZING;
 		}
 	},
@@ -81,7 +82,7 @@ public enum AnalysisProcessTransition implements
 		}
 
 		@Override
-		public AnalysisProcessState getFinalState() {
+		public AnalysisProcessState getTargetState() {
 			return AnalysisProcessState.QUEUED_FOR_EVALUATION;
 		}
 	},
@@ -97,7 +98,7 @@ public enum AnalysisProcessTransition implements
 		}
 
 		@Override
-		public AnalysisProcessState getFinalState() {
+		public AnalysisProcessState getTargetState() {
 			return AnalysisProcessState.EVALUATING;
 		}
 	},
@@ -113,7 +114,7 @@ public enum AnalysisProcessTransition implements
 		}
 
 		@Override
-		public AnalysisProcessState getFinalState() {
+		public AnalysisProcessState getTargetState() {
 			return AnalysisProcessState.FINISHED;
 		}
 	},
@@ -129,7 +130,7 @@ public enum AnalysisProcessTransition implements
 		}
 
 		@Override
-		public AnalysisProcessState getFinalState() {
+		public AnalysisProcessState getTargetState() {
 			return AnalysisProcessState.ABORTED;
 		}
 	},
@@ -145,9 +146,16 @@ public enum AnalysisProcessTransition implements
 		}
 
 		@Override
-		public AnalysisProcessState getFinalState() {
+		public AnalysisProcessState getTargetState() {
 			return AnalysisProcessState.FAILED;
 		}
 	};
 
+	public abstract String getDescription();
+
+	@Override
+	public Pair<AnalysisProcessState> getVertices() {
+		throw new IllegalStateException(
+				"This state model does not support graph traversals.");
+	}
 }

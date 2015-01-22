@@ -19,15 +19,15 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.HashId;
-import com.puresoltechnologies.commons.misc.HashUtilities;
-import com.puresoltechnologies.commons.versioning.Version;
+import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.commons.misc.hash.HashUtilities;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
+import com.puresoltechnologies.versioning.Version;
 
 public class FileStoreIT extends AbstractAnalysisStoreServiceServerTest {
 

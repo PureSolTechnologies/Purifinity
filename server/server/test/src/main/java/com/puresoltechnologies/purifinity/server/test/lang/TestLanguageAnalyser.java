@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.StopWatch;
-import com.puresoltechnologies.commons.versioning.Version;
 import com.puresoltechnologies.parsers.lexer.Lexer;
 import com.puresoltechnologies.parsers.lexer.LexerException;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
@@ -39,6 +38,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractCodeAnalyzer;
 import com.puresoltechnologies.purifinity.server.test.lang.grammar.TestLanguageGrammar;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * 

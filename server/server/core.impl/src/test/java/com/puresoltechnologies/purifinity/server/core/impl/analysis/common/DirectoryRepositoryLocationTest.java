@@ -12,7 +12,7 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.misc.FileSearchConfiguration;
+import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 
 public class DirectoryRepositoryLocationTest {
