@@ -29,6 +29,10 @@
 			<artifactId>transformation.cassandra</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.genesis</groupId>
+			<artifactId>controller</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<scope>compile</scope>

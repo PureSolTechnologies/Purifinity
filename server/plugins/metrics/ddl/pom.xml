@@ -17,6 +17,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.genesis</groupId>
+			<artifactId>controller</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.genesis</groupId>
 			<artifactId>transformation.cassandra</artifactId>
 		</dependency>
 		<dependency>
@@ -48,7 +52,7 @@
 					<transformers>
 						<transformer
 							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-							<mainClass>com.puresoltechnologies.purifinity.server.metrics.ddl.MetricsDatabaseMigrator</mainClass>
+							<mainClass>com.puresoltechnologies.purifinity.server.metrics.ddl.MetricsPluginDatabaseMigrator</mainClass>
 						</transformer>
 					</transformers>
 				</configuration>
