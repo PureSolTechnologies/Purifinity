@@ -26,7 +26,7 @@ public class AnalysisServiceDatabaseTransformator implements
 
 	@Override
 	public String getComponentName() {
-		return "AccountManager";
+		return "AnalysisStore";
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class AnalysisServiceDatabaseTransformator implements
 				.createKeyspace(sequence, AnalysisStoreKeyspace.NAME,
 						"Rick-Rainer Ludwig",
 						"Keyspace for analysis information",
-						ReplicationStrategy.SIMPLE_STRATEGY, 3));
+						ReplicationStrategy.SIMPLE_STRATEGY, 1));
 
 		return sequence;
 	}

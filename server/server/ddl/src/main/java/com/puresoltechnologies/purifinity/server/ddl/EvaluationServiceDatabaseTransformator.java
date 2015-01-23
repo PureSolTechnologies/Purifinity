@@ -34,7 +34,7 @@ public class EvaluationServiceDatabaseTransformator implements
 
 	@Override
 	public String getComponentName() {
-		return "AccountManager";
+		return "EvaluationStore";
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class EvaluationServiceDatabaseTransformator implements
 				.createKeyspace(sequence, EVALUATION_KEYSPACE,
 						"Rick-Rainer Ludwig",
 						"Keyspace for evaluation information",
-						ReplicationStrategy.SIMPLE_STRATEGY, 3));
+						ReplicationStrategy.SIMPLE_STRATEGY, 1));
 
 		return sequence;
 	}

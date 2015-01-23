@@ -29,7 +29,7 @@ public class ProcessStatesDatabaseTransformator implements
 
 	@Override
 	public String getComponentName() {
-		return "AccountManager";
+		return "ProcessMonitor";
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class ProcessStatesDatabaseTransformator implements
 		sequence.appendTransformation(CassandraStandardMigrations
 				.createKeyspace(sequence, PROCESSES_KEYSPACE,
 						"Rick-Rainer Ludwig", "Keyspace for process states",
-						ReplicationStrategy.SIMPLE_STRATEGY, 3));
+						ReplicationStrategy.SIMPLE_STRATEGY, 1));
 
 		return sequence;
 	}

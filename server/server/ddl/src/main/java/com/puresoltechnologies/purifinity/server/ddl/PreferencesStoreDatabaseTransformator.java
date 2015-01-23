@@ -31,7 +31,7 @@ public class PreferencesStoreDatabaseTransformator implements
 
 	@Override
 	public String getComponentName() {
-		return "AccountManager";
+		return "PreferencesStore";
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class PreferencesStoreDatabaseTransformator implements
 		sequence.appendTransformation(CassandraStandardMigrations
 				.createKeyspace(sequence, PreferencesStoreKeyspace.NAME,
 						"Rick-Rainer Ludwig", "Keyspace for preferences",
-						ReplicationStrategy.SIMPLE_STRATEGY, 3));
+						ReplicationStrategy.SIMPLE_STRATEGY, 1));
 
 		return sequence;
 	}

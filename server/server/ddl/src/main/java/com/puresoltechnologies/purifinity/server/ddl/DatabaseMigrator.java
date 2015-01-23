@@ -42,14 +42,12 @@ public class DatabaseMigrator {
 				migrate = true;
 			}
 		}
-		try (GenesisController migrator = new GenesisController()) {
-			if (drop) {
-				migrator.dropAll();
-				dropTitanKeyspace();
-			}
-			if (migrate) {
-				migrator.transform();
-			}
+		if (drop) {
+			GenesisController.runDropAll();
+			dropTitanKeyspace();
+		}
+		if (migrate) {
+			GenesisController.runTransform();
 		}
 	}
 }

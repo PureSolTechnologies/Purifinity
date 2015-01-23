@@ -65,7 +65,7 @@ public class MetricsDatabaseTransformator implements ComponentTransformator {
 						HALSTEAD_EVALUATOR_KEYSPACE_NAME,
 						"Rick-Rainer Ludwig",
 						"This keyspace keeps the detailed results of halstaed evaluations like the found operators and operands and their count.",
-						ReplicationStrategy.SIMPLE_STRATEGY, 3));
+						ReplicationStrategy.SIMPLE_STRATEGY, 1));
 		return sequence;
 	}
 

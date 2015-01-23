@@ -61,7 +61,7 @@ public class AccountManagerDatabaseTransformator implements
 						ACCOUNT_MANAGER_KEYSPACE_NAME,
 						"Rick-Rainer Ludwig",
 						"This keyspace keeps the account information for all users and groups.",
-						ReplicationStrategy.SIMPLE_STRATEGY, 3));
+						ReplicationStrategy.SIMPLE_STRATEGY, 1));
 
 		return sequence;
 	}

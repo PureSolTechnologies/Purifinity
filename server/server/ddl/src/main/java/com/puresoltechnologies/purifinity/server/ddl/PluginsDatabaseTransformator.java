@@ -31,7 +31,7 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 
 	@Override
 	public String getComponentName() {
-		return "AccountManager";
+		return "PluginsDatabase";
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 		sequence.appendTransformation(CassandraStandardMigrations
 				.createKeyspace(sequence, PluginsKeyspace.NAME,
 						"Rick-Rainer Ludwig", "Keyspace for plugin system.",
-						ReplicationStrategy.SIMPLE_STRATEGY, 3));
+						ReplicationStrategy.SIMPLE_STRATEGY, 1));
 
 		return sequence;
 	}

@@ -65,7 +65,7 @@ public class SystemMonitorDatabaseTransformator implements
 						SYSTEM_MONITOR_KEYSPACE_NAME,
 						"Rick-Rainer Ludwig",
 						"This keyspace keeps the system status information and event logs.",
-						ReplicationStrategy.SIMPLE_STRATEGY, 3));
+						ReplicationStrategy.SIMPLE_STRATEGY, 1));
 		return sequence;
 	}
 

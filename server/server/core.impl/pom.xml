@@ -58,6 +58,10 @@
 			<artifactId>wildfly.utils</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>money</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.xo</groupId>
 			<artifactId>xo-titan</artifactId>
 		</dependency>

@@ -72,7 +72,7 @@ public class PasswordStoreDatabaseTransformator implements
 				.createKeyspace(sequence, PASSWORD_STORE_KEYSPACE_NAME,
 						"Rick-Rainer Ludwig",
 						"This keyspace keeps the user passwords.",
-						ReplicationStrategy.SIMPLE_STRATEGY, 3));
+						ReplicationStrategy.SIMPLE_STRATEGY, 1));
 
 		return sequence;
 	}
