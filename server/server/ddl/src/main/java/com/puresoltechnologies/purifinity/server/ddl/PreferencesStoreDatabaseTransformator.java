@@ -129,7 +129,7 @@ public class PreferencesStoreDatabaseTransformator implements
 	public void dropAll() {
 		try (Cluster cluster = CassandraUtils.connectCluster()) {
 			try (Session session = cluster.connect()) {
-				session.execute("DROP KEYSPACE "
+				session.execute("DROP KEYSPACE IF EXISTS "
 						+ PreferencesStoreKeyspace.NAME);
 			}
 		}

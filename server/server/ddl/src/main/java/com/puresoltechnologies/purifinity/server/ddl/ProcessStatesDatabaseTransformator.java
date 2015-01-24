@@ -94,7 +94,8 @@ public class ProcessStatesDatabaseTransformator implements
 	public void dropAll() {
 		try (Cluster cluster = CassandraUtils.connectCluster()) {
 			try (Session session = cluster.connect()) {
-				session.execute("DROP KEYSPACE " + ProcessStatesKeyspace.NAME);
+				session.execute("DROP KEYSPACE IF EXISTS "
+						+ ProcessStatesKeyspace.NAME);
 			}
 		}
 	}

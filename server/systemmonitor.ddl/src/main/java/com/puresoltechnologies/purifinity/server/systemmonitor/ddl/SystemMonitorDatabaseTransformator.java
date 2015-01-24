@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.passwordstore.ddl;
+package com.puresoltechnologies.purifinity.server.systemmonitor.ddl;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -123,7 +123,8 @@ public class SystemMonitorDatabaseTransformator implements
 	public void dropAll() {
 		try (Cluster cluster = CassandraUtils.connectCluster()) {
 			try (Session session = cluster.connect()) {
-				session.execute("DROP KEYSPACE " + SYSTEM_MONITOR_KEYSPACE_NAME);
+				session.execute("DROP KEYSPACE IF EXISTS "
+						+ SYSTEM_MONITOR_KEYSPACE_NAME);
 			}
 		}
 	}

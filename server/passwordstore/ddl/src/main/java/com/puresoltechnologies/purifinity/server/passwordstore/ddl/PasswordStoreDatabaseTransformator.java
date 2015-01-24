@@ -143,7 +143,8 @@ public class PasswordStoreDatabaseTransformator implements
 	public void dropAll() {
 		try (Cluster cluster = CassandraUtils.connectCluster()) {
 			try (Session session = cluster.connect()) {
-				session.execute("DROP KEYSPACE " + PASSWORD_STORE_KEYSPACE_NAME);
+				session.execute("DROP KEYSPACE IF EXISTS "
+						+ PASSWORD_STORE_KEYSPACE_NAME);
 			}
 		}
 	}

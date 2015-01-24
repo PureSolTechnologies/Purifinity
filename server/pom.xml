@@ -704,6 +704,11 @@
 				<version>${genesis.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.puresoltechnologies.genesis</groupId>
+				<artifactId>transformation.titan</artifactId>
+				<version>${genesis.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.puresoltechnologies.graphs</groupId>
 				<artifactId>statemodel</artifactId>
 				<version>${graphs.version}</version>

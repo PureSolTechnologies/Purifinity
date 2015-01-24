@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.passwordstore.ddl;
+package com.puresoltechnologies.purifinity.server.systemmonitor.ddl;
 
 import com.puresoltechnologies.genesis.controller.GenesisController;
 

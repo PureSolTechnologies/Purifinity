@@ -150,7 +150,8 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 	public void dropAll() {
 		try (Cluster cluster = CassandraUtils.connectCluster()) {
 			try (Session session = cluster.connect()) {
-				session.execute("DROP KEYSPACE " + PluginsKeyspace.NAME);
+				session.execute("DROP KEYSPACE IF EXISTS "
+						+ PluginsKeyspace.NAME);
 			}
 		}
 	}

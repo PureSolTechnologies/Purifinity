@@ -137,7 +137,8 @@ public class AnalysisServiceDatabaseTransformator implements
 	public void dropAll() {
 		try (Cluster cluster = CassandraUtils.connectCluster()) {
 			try (Session session = cluster.connect()) {
-				session.execute("DROP KEYSPACE " + AnalysisStoreKeyspace.NAME);
+				session.execute("DROP KEYSPACE IF EXISTS "
+						+ AnalysisStoreKeyspace.NAME);
 			}
 		}
 	}
