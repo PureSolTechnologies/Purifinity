@@ -110,26 +110,22 @@ public class PasswordStoreDatabaseTransformator implements
 			public void transform() throws TransformationException {
 				logger.info("Add first administrator account.");
 				Session session = sequence.getSession();
-				try {
-					PreparedStatement preparedStatement = session
-							.prepare("INSERT INTO "
-									+ PASSWORD_TABLE_NAME//
-									+ " (created, " //
-									+ "last_modified, " //
-									+ "email," //
-									+ "password, " //
-									+ "state, "
-									+ "activation_key) VALUES (?,?,?,?,?,?) ");
-					Date now = new Date();
-					PasswordData passwordData = new PasswordData(1, Encrypter1
-							.encrypt("password"));
-					BoundStatement boundStatement = preparedStatement.bind(now,
-							now, "ludwig@puresol-technologies.com",
-							passwordData.toString(), "ACTIVE", "");
-					session.execute(boundStatement);
-				} finally {
-					session.close();
-				}
+				PreparedStatement preparedStatement = session
+						.prepare("INSERT INTO "
+								+ PASSWORD_TABLE_NAME//
+								+ " (created, " //
+								+ "last_modified, " //
+								+ "email," //
+								+ "password, " //
+								+ "state, "
+								+ "activation_key) VALUES (?,?,?,?,?,?) ");
+				Date now = new Date();
+				PasswordData passwordData = new PasswordData(1, Encrypter1
+						.encrypt("password"));
+				BoundStatement boundStatement = preparedStatement.bind(now,
+						now, "ludwig@puresol-technologies.com",
+						passwordData.toString(), "ACTIVE", "");
+				session.execute(boundStatement);
 			}
 
 			@Override
