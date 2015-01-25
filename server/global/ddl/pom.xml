@@ -12,7 +12,7 @@
 	<name>Purifinity Server: ${project.artifactId}</name>
 
 	<dependencies>
-		<!-- dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>accountmanager.ddl</artifactId>
 		</dependency>
@@ -23,15 +23,15 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>passwordstore.ddl</artifactId>
-		</dependency -->
+		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>server.ddl</artifactId>
 		</dependency>
-		<!-- dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>systemmonitor.ddl</artifactId>
-		</dependency -->
+		</dependency>
 		<dependency>
 		<groupId>com.puresoltechnologies.genesis</groupId>
 		<artifactId>controller</artifactId>
@@ -90,6 +90,7 @@
 							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 							<mainClass>com.puresoltechnologies.genesis.controller.GenesisController</mainClass>
 						</transformer>
+						<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
 					</transformers>
 				</configuration>
 			</plugin>

@@ -11,6 +11,7 @@ import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
+import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
 import com.puresoltechnologies.genesis.commons.TransformationException;
 import com.puresoltechnologies.genesis.commons.TransformationMetadata;
@@ -25,7 +26,6 @@ import com.puresoltechnologies.genesis.transformation.spi.TransformationStep;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordData;
 import com.puresoltechnologies.purifinity.server.passwordstore.utils.encrypt.Encrypter1;
 import com.puresoltechnologies.versioning.Version;
-import com.puresoltechnologies.versioning.VersionRange;
 
 public class PasswordStoreDatabaseTransformator implements
 		ComponentTransformator {
@@ -61,8 +61,8 @@ public class PasswordStoreDatabaseTransformator implements
 	private TransformationSequence migrateVersion0_3_0_pre() {
 		Version startVersion = new Version(0, 0, 0);
 		Version targetVersion = new Version(0, 3, 0, "pre");
-		VersionRange versionRange = new VersionRange(targetVersion, true, null,
-				false);
+		ProvidedVersionRange versionRange = new ProvidedVersionRange(
+				targetVersion, null);
 		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
 				startVersion, versionRange);
 		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
@@ -80,8 +80,8 @@ public class PasswordStoreDatabaseTransformator implements
 	private TransformationSequence migrateVersion0_3_0() {
 		Version startVersion = new Version(0, 3, 0, "pre");
 		Version targetVersion = new Version(0, 3, 0);
-		VersionRange versionRange = new VersionRange(targetVersion, true, null,
-				false);
+		ProvidedVersionRange versionRange = new ProvidedVersionRange(
+				targetVersion, null);
 		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
 				startVersion, versionRange);
 		CassandraTransformationSequence sequence = new CassandraTransformationSequence(

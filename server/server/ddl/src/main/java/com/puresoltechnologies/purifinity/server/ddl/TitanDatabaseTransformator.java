@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
+import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
 import com.puresoltechnologies.genesis.commons.TransformationException;
 import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
@@ -13,7 +14,6 @@ import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence
 import com.puresoltechnologies.genesis.transformation.titan.AbstractTitanTransformationStep;
 import com.puresoltechnologies.genesis.transformation.titan.TitanTransformationSequence;
 import com.puresoltechnologies.versioning.Version;
-import com.puresoltechnologies.versioning.VersionRange;
 
 public class TitanDatabaseTransformator implements ComponentTransformator {
 
@@ -39,8 +39,8 @@ public class TitanDatabaseTransformator implements ComponentTransformator {
 	private TransformationSequence migrateVersion0_3_0() {
 		Version startVersion = new Version(0, 0, 0);
 		Version targetVersion = new Version(0, 3, 0);
-		VersionRange versionRange = new VersionRange(targetVersion, true, null,
-				false);
+		ProvidedVersionRange versionRange = new ProvidedVersionRange(
+				targetVersion, null);
 		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
 				startVersion, versionRange);
 		TitanTransformationSequence sequence = new TitanTransformationSequence(
