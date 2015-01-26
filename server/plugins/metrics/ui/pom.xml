@@ -15,24 +15,9 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>accountmanager.ui.web</artifactId>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>common.ui</artifactId>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>metrics.ejb</artifactId>
 			<type>ejb</type>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>passwordstore.ui.web</artifactId>
-			<type>war</type>
 		</dependency>
 	</dependencies>
 

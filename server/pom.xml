@@ -344,12 +344,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>accountmanager.ui.web</artifactId>
-				<version>${project.version}</version>
-				<type>war</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>c11.ejb</artifactId>
 				<version>${project.version}</version>
 				<type>ejb</type>
@@ -391,12 +385,6 @@
 				<artifactId>common.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>common.ui</artifactId>
-				<version>${project.version}</version>
-				<type>war</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -537,12 +525,6 @@
 				<artifactId>passwordstore.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>passwordstore.ui.web</artifactId>
-				<version>${project.version}</version>
-				<type>war</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -812,18 +794,6 @@
 				<groupId>com.sun.faces</groupId>
 				<artifactId>jsf-impl</artifactId>
 				<version>${mojarra.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.primefaces</groupId>
-				<artifactId>primefaces</artifactId>
-				<version>5.0</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.primefaces.themes</groupId>
-				<artifactId>all-themes</artifactId>
-				<version>1.0.10</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>

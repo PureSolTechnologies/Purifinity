@@ -30,7 +30,6 @@
 		<module>rest.impl</module>
 		<module>client</module>
 		<module>test</module>
-		<module>ui.web</module>
 		<module>app</module>
 	</modules>
 </project>

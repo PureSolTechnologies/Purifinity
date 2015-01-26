@@ -15,11 +15,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>common.ui</artifactId>
-			<type>war</type>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>passwordstore.client</artifactId>
 		</dependency>
 		<dependency>
@@ -35,11 +30,6 @@
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>accountmanager.core.impl</artifactId>
 			<type>ejb</type>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>accountmanager.ui.web</artifactId>
-			<type>war</type>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -61,16 +51,6 @@
 			<artifactId>server.ui</artifactId>
 			<type>war</type>
 		</dependency>
-		<dependency>
-			<groupId>org.primefaces</groupId>
-			<artifactId>primefaces</artifactId>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.primefaces.themes</groupId>
-			<artifactId>all-themes</artifactId>
-			<scope>runtime</scope>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -87,11 +67,6 @@
 						</webModule>
 						<webModule>
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>
-							<artifactId>accountmanager.ui.web</artifactId>
-							<contextRoot>/accountmanager</contextRoot>
-						</webModule>
-						<webModule>
-							<groupId>com.puresoltechnologies.purifinity.server</groupId>
 							<artifactId>server.rest.impl</artifactId>
 							<contextRoot>/purifinityserver/rest</contextRoot>
 						</webModule>
@@ -103,7 +78,7 @@
 						<webModule>
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>
 							<artifactId>server.ui</artifactId>
-							<contextRoot>/purifinity</contextRoot>
+							<contextRoot>/</contextRoot>
 						</webModule>
 					</modules>
 				</configuration>

@@ -29,7 +29,6 @@
 		<module>test</module>
 		<module>rest.api</module>
 		<module>rest.impl</module>
-		<module>ui.web</module>
 		<module>app</module>
 	</modules>
 </project>

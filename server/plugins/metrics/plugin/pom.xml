@@ -27,11 +27,6 @@
 			<artifactId>metrics.ui</artifactId>
 			<type>war</type>
 		</dependency>
-		<dependency>
-			<groupId>org.primefaces</groupId>
-			<artifactId>primefaces</artifactId>
-			<scope>runtime</scope>
-		</dependency>
 	</dependencies>
 
 </project>
