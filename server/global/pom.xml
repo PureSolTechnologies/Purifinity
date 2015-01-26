@@ -14,5 +14,6 @@
 
 	<modules>
 		<module>ddl</module>
+		<module>test</module>
 	</modules>
 </project>

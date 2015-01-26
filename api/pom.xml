@@ -8,9 +8,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<commons.version>0.4.0-SNAPSHOT</commons.version>
+		<commons.version>0.4.0</commons.version>
 		<parsers.version>0.4.0-SNAPSHOT</parsers.version>
-		<graphs.version>0.4.0-SNAPSHOT</graphs.version>
+		<graphs.version>0.4.0</graphs.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity.api</groupId>

@@ -9,10 +9,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<purifinity.api.version>${project.version}</purifinity.api.version>
-		<commons.version>0.4.0-SNAPSHOT</commons.version>
+		<commons.version>0.4.0</commons.version>
 		<parsers.version>0.4.0-SNAPSHOT</parsers.version>
-		<genesis.version>0.1.0-SNAPSHOT</genesis.version>
-		<graphs.version>0.4.0-SNAPSHOT</graphs.version>
+		<genesis.version>0.1.0</genesis.version>
+		<graphs.version>0.4.0</graphs.version>
 
 		<!-- Databases -->
 		<cassandra.driver.version>2.1.2</cassandra.driver.version>
@@ -1311,7 +1311,6 @@
 		<module>client.bundle</module>
 		<module>plugins</module>
 		<module>global</module>
-		<module>test</module>
 	</modules>
 
 </project>
