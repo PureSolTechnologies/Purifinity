@@ -27,17 +27,17 @@ public class AuthServiceBean implements AuthService {
     public String login(EmailAddress email, Password password)
 	    throws LoginException {
 	if (accountManager.authenticate(email, password)) {
-	    /**
-	     * Once all params are matched, the authToken will be generated and
-	     * will be stored in the authorizationTokensStorage. The authToken
-	     * will be needed for every REST API invocation and is only valid
-	     * within the login session
+	    /*
+	     * Once all parameters are matched, the authToken will be generated
+	     * and will be stored in the authorizationTokensStorage. The
+	     * authToken will be needed for every REST API invocation and is
+	     * only valid within the login session
 	     */
 	    UUID authToken = UUID.randomUUID();
 	    authorizationTokensStorage.put(authToken, email);
 	    return authToken.toString();
 	}
-	throw new LoginException("Don't Come Here Again!");
+	throw new LoginException("Authentication information are invalid.");
     }
 
     @Override
@@ -74,7 +74,6 @@ public class AuthServiceBean implements AuthService {
 	    authorizationTokensStorage.remove(authToken);
 	    return;
 	}
-
 	throw new GeneralSecurityException("Invalid authorization token.");
     }
 

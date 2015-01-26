@@ -78,7 +78,7 @@
 						<webModule>
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>
 							<artifactId>server.ui</artifactId>
-							<contextRoot>/</contextRoot>
+							<contextRoot>/purifinity</contextRoot>
 						</webModule>
 					</modules>
 				</configuration>

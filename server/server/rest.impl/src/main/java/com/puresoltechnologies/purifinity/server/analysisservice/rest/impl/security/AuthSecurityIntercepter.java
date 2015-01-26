@@ -59,7 +59,7 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
 	    Response.Status.UNAUTHORIZED).build();
     // 403 - Forbidden
     private static final Response FORBIDDEN = Response.status(
-	    Response.Status.UNAUTHORIZED).build();
+	    Response.Status.FORBIDDEN).build();
 
     @Inject
     private AuthService authService;
@@ -76,67 +76,76 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext)
 	    throws IOException {
-	// Get AuthId and AuthToken from HTTP-Header.
-	EmailAddress email = null;
-	String emailAddressString = requestContext
-		.getHeaderString(AuthElement.AUTH_ID_HEADER);
-	if (emailAddressString != null) {
-	    email = new EmailAddress(emailAddressString);
-	}
-	String authTokenString = requestContext
-		.getHeaderString(AuthElement.AUTH_TOKEN_HEADER);
 	// Get method invoked.
 	Method methodInvoked = resourceInfo.getResourceMethod();
+	// Check if open method...
 	if (methodInvoked.isAnnotationPresent(PermitAll.class)) {
+	    // Method is globally permitted, so we proceed without interactions.
 	    return;
-	} else {
-	    if ((email == null) || (email.getAddress() == null)
-		    || (email.getAddress().isEmpty())
-		    || (authTokenString == null) || (authTokenString.isEmpty())) {
-		requestContext.abortWith(ACCESS_UNAUTHORIZED);
-		eventLogger.logEvent(new Event("Authentication", 0,
-			EventType.SYSTEM, EventSeverity.WARNING,
-			"User was not authenticated, yet."));
-		return;
-	    }
-	    UUID authToken;
-	    try {
-		authToken = UUID.fromString(authTokenString);
-	    } catch (IllegalArgumentException e) {
-		eventLogger.logEvent(new Event("Authentication", 1,
-			EventType.SYSTEM, EventSeverity.WARNING,
-			"Invalid user token '" + authTokenString
-				+ "' for user '" + email + "'."));
-		requestContext.abortWith(ACCESS_UNAUTHORIZED);
-		return;
-	    }
-	    if (methodInvoked.isAnnotationPresent(RolesAllowed.class)) {
+	}
+	// Get email address and AuthToken from HTTP-Header.
+	String emailAddressString = requestContext
+		.getHeaderString(AuthElement.AUTH_ID_HEADER);
+	String authTokenString = requestContext
+		.getHeaderString(AuthElement.AUTH_TOKEN_HEADER);
+	if ((emailAddressString == null) || (emailAddressString.isEmpty())
+		|| (authTokenString == null) || (authTokenString.isEmpty())) {
+	    requestContext.abortWith(ACCESS_UNAUTHORIZED);
+	    eventLogger.logEvent(new Event("Authentication", 0,
+		    EventType.SYSTEM, EventSeverity.WARNING,
+		    "User was not authenticated, yet."));
+	    return;
+	}
+	// Check email address format and convert it...
+	EmailAddress email;
+	try {
+	    email = new EmailAddress(emailAddressString);
+	} catch (IllegalArgumentException e) {
+	    eventLogger.logEvent(new Event("Authentication", 1,
+		    EventType.SYSTEM, EventSeverity.WARNING,
+		    "Invalid email address '" + emailAddressString
+			    + "' provided."));
+	    requestContext.abortWith(ACCESS_UNAUTHORIZED);
+	    return;
+	}
+	// Check authentication token and convert it...
+	UUID authToken;
+	try {
+	    authToken = UUID.fromString(authTokenString);
+	} catch (IllegalArgumentException e) {
+	    eventLogger.logEvent(new Event("Authentication", 1,
+		    EventType.SYSTEM, EventSeverity.WARNING,
+		    "Invalid user token '" + authTokenString + "' for user '"
+			    + email + "'."));
+	    requestContext.abortWith(ACCESS_UNAUTHORIZED);
+	    return;
+	}
+	if (methodInvoked.isAnnotationPresent(RolesAllowed.class)) {
 
-		RolesAllowed rolesAllowedAnnotation = methodInvoked
-			.getAnnotation(RolesAllowed.class);
-		Set<String> rolesAllowed = new HashSet<>(
-			Arrays.asList(rolesAllowedAnnotation.value()));
+	    RolesAllowed rolesAllowedAnnotation = methodInvoked
+		    .getAnnotation(RolesAllowed.class);
+	    Set<String> rolesAllowed = new HashSet<>(
+		    Arrays.asList(rolesAllowedAnnotation.value()));
 
-		if (!authService.isAuthorized(email, authToken, rolesAllowed)) {
-		    eventLogger.logEvent(new Event("Authentication", 1,
-			    EventType.SYSTEM, EventSeverity.WARNING, "User '"
-				    + email + "' is not authorized for '"
-				    + methodInvoked.getDeclaringClass() + "."
-				    + methodInvoked.getName() + "'."));
-		    requestContext.abortWith(ACCESS_UNAUTHORIZED);
-		}
-		return;
-	    } else if (authService.isAuthorizedAdministrator(email, authToken)) {
-		return;
-	    } else if (methodInvoked.isAnnotationPresent(DenyAll.class)) {
+	    if (!authService.isAuthorized(email, authToken, rolesAllowed)) {
 		eventLogger.logEvent(new Event("Authentication", 1,
 			EventType.SYSTEM, EventSeverity.WARNING, "User '"
 				+ email + "' is not authorized for '"
 				+ methodInvoked.getDeclaringClass() + "."
 				+ methodInvoked.getName() + "'."));
-		requestContext.abortWith(FORBIDDEN);
-		return;
+		requestContext.abortWith(ACCESS_UNAUTHORIZED);
 	    }
+	    return;
+	} else if (authService.isAuthorizedAdministrator(email, authToken)) {
+	    return;
+	} else if (methodInvoked.isAnnotationPresent(DenyAll.class)) {
+	    eventLogger.logEvent(new Event("Authentication", 1,
+		    EventType.SYSTEM, EventSeverity.WARNING, "User '" + email
+			    + "' is not authorized for '"
+			    + methodInvoked.getDeclaringClass() + "."
+			    + methodInvoked.getName() + "'."));
+	    requestContext.abortWith(FORBIDDEN);
+	    return;
 	}
 	/*
 	 * ATTENTION(!): DUE TO SECURITY REASONS, ALL REST METHODS ARE DENIED

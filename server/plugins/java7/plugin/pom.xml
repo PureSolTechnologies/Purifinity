@@ -22,11 +22,6 @@
 			<artifactId>java7.ejb</artifactId>
 			<type>ejb</type>
 		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>java7.ui</artifactId>
-			<type>war</type>
-		</dependency>
 	</dependencies>
 
 </project>

@@ -5,15 +5,12 @@ import java.io.Serializable;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.puresoltechnologies.commons.types.EmailAddress;
-import com.puresoltechnologies.commons.types.Password;
-
 public class AuthLoginElement implements Serializable {
 
     private static final long serialVersionUID = 8044441747125956593L;
 
-    private final EmailAddress email;
-    private final Password password;
+    private final String email;
+    private final String password;
 
     public AuthLoginElement() {
 	email = null;
@@ -23,17 +20,17 @@ public class AuthLoginElement implements Serializable {
     @JsonCreator
     public AuthLoginElement(
 	    //
-	    @JsonProperty("email") EmailAddress email,
-	    @JsonProperty("password") Password password) {
+	    @JsonProperty("email") String email,
+	    @JsonProperty("password") String password) {
 	this.email = email;
 	this.password = password;
     }
 
-    public EmailAddress getEmail() {
+    public String getEmail() {
 	return email;
     }
 
-    public Password getPassword() {
+    public String getPassword() {
 	return password;
     }
 

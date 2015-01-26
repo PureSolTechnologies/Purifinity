@@ -29,8 +29,8 @@ function authFactory($http, $location, baseURL) {
 			method : "post",
 			url : baseURL + "/purifinityserver/rest/auth/login",
 			data : {
-				email : {address : email},
-				password : {password : password}
+				email : email,
+				password : password
 			}
 		})//
 		.success(

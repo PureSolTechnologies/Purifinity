@@ -356,12 +356,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>c11.ui</artifactId>
-				<version>${project.version}</version>
-				<type>war</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>client</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -427,12 +421,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>fortran2008.ui</artifactId>
-				<version>${project.version}</version>
-				<type>war</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>java7.ejb</artifactId>
 				<version>${project.version}</version>
 				<type>ejb</type>
@@ -442,12 +430,6 @@
 				<artifactId>java7.plugin</artifactId>
 				<version>${project.version}</version>
 				<type>ear</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>java7.ui</artifactId>
-				<version>${project.version}</version>
-				<type>war</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -469,12 +451,6 @@
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>metrics.plugin</artifactId>
 				<type>ear</type>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>metrics.ui</artifactId>
-				<type>war</type>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

@@ -22,11 +22,6 @@
 			<artifactId>c11.ejb</artifactId>
 			<type>ejb</type>
 		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>c11.ui</artifactId>
-			<type>war</type>
-		</dependency>
 	</dependencies>
 
 </project>
