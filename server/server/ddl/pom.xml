@@ -70,7 +70,7 @@
 						</executions>
 						<configuration>
 							<includeProjectDependencies>true</includeProjectDependencies>
-							<mainClass>com.puresoltechnologies.purifinity.server.ddl.DatabaseMigrator</mainClass>
+							<mainClass>com.puresoltechnologies.genesis.controller.GenesisController</mainClass>
 						</configuration>
 					</plugin>
 				</plugins>
