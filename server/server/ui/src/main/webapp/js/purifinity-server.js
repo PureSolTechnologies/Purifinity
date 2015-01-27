@@ -83,7 +83,11 @@ function projectListCtrl($scope, $location, purifinityServerConnector,
 	purifinityServerConnector.get(
 			'/purifinityserver/rest/analysisstore/projects', //
 			function(data, status) {
-				$scope.projects = data;
+				if (data && Objects.keys(data).length > 0) {
+					$scope.projects = data;
+				} else {
+					$scope.projects = [];
+				}
 			}, // 
 			function(data, status, error) {
 				if (data) {

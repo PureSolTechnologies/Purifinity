@@ -59,7 +59,9 @@ function alerterCtrl($scope, alerterFactory) {
 	 * Type: info, danger, success, warning
 	 */
 	$scope.addAlert = function(type, message) {
-		alerterFactory.addAlert(type, message);
+		if (type && message) {
+			alerterFactory.addAlert(type, message);
+		}
 	}
 	$scope.closeAlert = function(index) {
 		alerterFactory.closeAlert(index);

@@ -5,8 +5,6 @@ import java.io.Serializable;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.puresoltechnologies.commons.types.EmailAddress;
-
 public class AuthElement implements Serializable {
 
     private static final long serialVersionUID = -2226392567855828037L;
@@ -14,7 +12,7 @@ public class AuthElement implements Serializable {
     public static final String AUTH_ID_HEADER = "auth-id";
     public static final String AUTH_TOKEN_HEADER = "auth-token";
 
-    private final EmailAddress email;
+    private final String authId;
     private final String authToken;
     private final String authPermission;
     private final String authMessage;
@@ -22,18 +20,18 @@ public class AuthElement implements Serializable {
     @JsonCreator
     public AuthElement(
 	    //
-	    @JsonProperty("email") EmailAddress email,
+	    @JsonProperty("authId") String authId,
 	    @JsonProperty("authToken") String authToken,
 	    @JsonProperty("authPermission") String authPermission,
 	    @JsonProperty("authMessage") String authMessage) {
-	this.email = email;
+	this.authId = authId;
 	this.authToken = authToken;
 	this.authPermission = authPermission;
 	this.authMessage = authMessage;
     }
 
-    public EmailAddress getEmail() {
-	return email;
+    public String getAuthId() {
+	return authId;
     }
 
     public String getAuthToken() {
@@ -52,7 +50,7 @@ public class AuthElement implements Serializable {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + ((email == null) ? 0 : email.hashCode());
+	result = prime * result + ((authId == null) ? 0 : authId.hashCode());
 	result = prime * result
 		+ ((authMessage == null) ? 0 : authMessage.hashCode());
 	result = prime * result
@@ -71,10 +69,10 @@ public class AuthElement implements Serializable {
 	if (getClass() != obj.getClass())
 	    return false;
 	AuthElement other = (AuthElement) obj;
-	if (email == null) {
-	    if (other.email != null)
+	if (authId == null) {
+	    if (other.authId != null)
 		return false;
-	} else if (!email.equals(other.email))
+	} else if (!authId.equals(other.authId))
 	    return false;
 	if (authMessage == null) {
 	    if (other.authMessage != null)

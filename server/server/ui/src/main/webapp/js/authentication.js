@@ -64,7 +64,7 @@ function authFactory($http, $location, baseURL) {
 			method : "post",
 			url : baseURL + "/purifinityserver/rest/auth/logout",
 			data : {
-				email : authFactory.authData.authId,
+				authId : authFactory.authData.authId,
 				token : authFactory.authData.authToken
 			}
 		})//
@@ -89,6 +89,7 @@ function authFactory($http, $location, baseURL) {
 
 function authCtrl($scope, authFactory) {
 	$scope.message = authFactory.message;
+	$scope.authId = undefined;
 	$scope.email = undefined;
 	$scope.password = undefined;
 	$scope.remember = undefined;

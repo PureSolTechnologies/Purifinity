@@ -21,10 +21,10 @@ public class AuthenticationRestService implements AuthenticationRestInterface {
 	try {
 	    String token = authService.login(email,
 		    new Password(login.getPassword()));
-	    return new AuthElement(email, token, "permission", "User '" + email
-		    + "' was successfully authenticated.");
+	    return new AuthElement(email.getAddress(), token, "permission",
+		    "User '" + email + "' was successfully authenticated.");
 	} catch (LoginException e) {
-	    return new AuthElement(email, "", "", "User '" + email
+	    return new AuthElement(email.getAddress(), "", "", "User '" + email
 		    + "' could not be authenticated. (Message: "
 		    + e.getMessage() + ")");
 	}
@@ -32,13 +32,13 @@ public class AuthenticationRestService implements AuthenticationRestInterface {
 
     @Override
     public AuthElement logout(AuthLogoutElement logout) {
-	EmailAddress email = new EmailAddress(logout.getEmail());
+	EmailAddress email = new EmailAddress(logout.getAuthId());
 	try {
 	    authService.logout(email, logout.getToken());
-	    return new AuthElement(email, "", "", "User '" + email
+	    return new AuthElement(email.getAddress(), "", "", "User '" + email
 		    + "' was successfully logged out.");
 	} catch (LoginException e) {
-	    return new AuthElement(email, "", "", "User '" + email
+	    return new AuthElement(email.getAddress(), "", "", "User '" + email
 		    + "' could not be logged out. (Message: " + e.getMessage()
 		    + ")");
 	}

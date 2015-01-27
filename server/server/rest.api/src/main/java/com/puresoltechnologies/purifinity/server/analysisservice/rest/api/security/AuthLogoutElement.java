@@ -10,25 +10,25 @@ public class AuthLogoutElement implements Serializable {
 
     private static final long serialVersionUID = 8044441747125956593L;
 
-    private final String email;
+    private final String authId;
     private final UUID token;
 
     public AuthLogoutElement() {
-	email = null;
+	authId = null;
 	token = null;
     }
 
     @JsonCreator
     public AuthLogoutElement(
 	    //
-	    @JsonProperty("email") String email,
+	    @JsonProperty("authId") String authId,
 	    @JsonProperty("token") UUID token) {
-	this.email = email;
+	this.authId = authId;
 	this.token = token;
     }
 
-    public String getEmail() {
-	return email;
+    public String getAuthId() {
+	return authId;
     }
 
     public UUID getToken() {
@@ -40,7 +40,7 @@ public class AuthLogoutElement implements Serializable {
 	final int prime = 31;
 	int result = 1;
 	result = prime * result + ((token == null) ? 0 : token.hashCode());
-	result = prime * result + ((email == null) ? 0 : email.hashCode());
+	result = prime * result + ((authId == null) ? 0 : authId.hashCode());
 	return result;
     }
 
@@ -58,10 +58,10 @@ public class AuthLogoutElement implements Serializable {
 		return false;
 	} else if (!token.equals(other.token))
 	    return false;
-	if (email == null) {
-	    if (other.email != null)
+	if (authId == null) {
+	    if (other.authId != null)
 		return false;
-	} else if (!email.equals(other.email))
+	} else if (!authId.equals(other.authId))
 	    return false;
 	return true;
     }

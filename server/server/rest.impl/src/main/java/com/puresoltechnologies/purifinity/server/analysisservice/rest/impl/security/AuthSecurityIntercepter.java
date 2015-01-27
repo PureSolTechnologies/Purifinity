@@ -83,13 +83,13 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
 	    // Method is globally permitted, so we proceed without interactions.
 	    return;
 	}
-	// Get email address and AuthToken from HTTP-Header.
-	String emailAddressString = requestContext
+	// Get AuthId and AuthToken from HTTP-Header.
+	String authIdString = requestContext
 		.getHeaderString(AuthElement.AUTH_ID_HEADER);
 	String authTokenString = requestContext
 		.getHeaderString(AuthElement.AUTH_TOKEN_HEADER);
-	if ((emailAddressString == null) || (emailAddressString.isEmpty())
-		|| (authTokenString == null) || (authTokenString.isEmpty())) {
+	if ((authIdString == null) || (authIdString.isEmpty()) || (authTokenString == null)
+		|| (authTokenString.isEmpty())) {
 	    requestContext.abortWith(ACCESS_UNAUTHORIZED);
 	    eventLogger.logEvent(new Event("Authentication", 0,
 		    EventType.SYSTEM, EventSeverity.WARNING,
@@ -99,12 +99,11 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
 	// Check email address format and convert it...
 	EmailAddress email;
 	try {
-	    email = new EmailAddress(emailAddressString);
+	    email = new EmailAddress(authIdString);
 	} catch (IllegalArgumentException e) {
 	    eventLogger.logEvent(new Event("Authentication", 1,
 		    EventType.SYSTEM, EventSeverity.WARNING,
-		    "Invalid email address '" + emailAddressString
-			    + "' provided."));
+		    "Invalid email address '" + authIdString + "' provided."));
 	    requestContext.abortWith(ACCESS_UNAUTHORIZED);
 	    return;
 	}
