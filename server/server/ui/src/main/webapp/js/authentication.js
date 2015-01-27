@@ -6,23 +6,16 @@
  * This function adds Authentication and Authorization functionality to an
  * AngularJS application.
  */
-var authModule = angular.module("authService", [ "purifinityServer" ]);
+var authModule = angular.module("authenticationModule", [ "purifinityServer" ]);
 authModule.factory('authFactory', [ '$http', '$location', 'baseURL',
 		authFactory ]);
-authModule.controller('authCtrl', authCtrl);
+authModule.controller('loginCtrl', loginCtrl);
 
 function authFactory($http, $location, baseURL) {
-	var authFactory = {
-		authData : undefined
-	};
-	/* Check local storage for authentication information. */
-	var data = localStorage.getItem("purifinity-authentication");
-	if (!data) {
-		data = sessionStorage.getItem("purifinity-authentication");
-	}
-	if (data) {
-		authFactory.authData = JSON.parse(data);
-	}
+	var authFactory = {};
+	/* Initialize authData from storage. */
+	authFactory.authData = loadAuthData();
+	/* Login functionality */
 	authFactory.login = function(email, password, remember) {
 		var authenticated = false;
 		return $http({
@@ -36,16 +29,9 @@ function authFactory($http, $location, baseURL) {
 		.success(
 				function(data, status) {
 					authFactory.authData = data;
+					authFactory.authData.email = email;
 					authenticated = true;
-					if (remember) {
-						localStorage.setItem("purifinity-authentication", JSON
-								.stringify(data));
-						sessionStorage.removeItem("purifinity-authentication");
-					} else {
-						localStorage.removeItem("purifinity-authentication");
-						sessionStorage.setItem("purifinity-authentication",
-								JSON.stringify(data));
-					}
+					storeAuthData(authFactory.authData, remember);
 					if (authFactory.redirect) {
 						$location.path(authFactory.redirect);
 					} else {
@@ -58,6 +44,7 @@ function authFactory($http, $location, baseURL) {
 		});
 		return authenticated;
 	};
+	/* Logout functionality */
 	authFactory.logout = function() {
 		var test = "Test";
 		$http({
@@ -70,13 +57,14 @@ function authFactory($http, $location, baseURL) {
 		})//
 		.success(function(data, status) {
 			authFactory.authData = data;
-			localStorage.removeItem("purifinity-authentication");
+			removeAuthData();
 		})//
 		.error(function(data, status) {
 			authFactory.authData = undefined;
 			// Error handling
 		});
 	};
+	/* Check for login functionality */
 	authFactory.isLoggedIn = function() {
 		if (authFactory.authData) {
 			return authFactory.authData.authToken;
@@ -87,7 +75,10 @@ function authFactory($http, $location, baseURL) {
 	return authFactory;
 }
 
-function authCtrl($scope, authFactory) {
+/**
+ * This function is the controller for the login box and logout box.
+ */
+function loginCtrl($scope, authFactory) {
 	$scope.message = authFactory.message;
 	$scope.authId = undefined;
 	$scope.email = undefined;
@@ -103,4 +94,36 @@ function authCtrl($scope, authFactory) {
 	$scope.isLoggedIn = function() {
 		return authFactory.isLoggedIn();
 	};
+}
+
+/**
+ * This function reads authentication data from storage.
+ */
+function loadAuthData() {
+	var data = localStorage.getItem("purifinity-authentication");
+	if (!data) {
+		data = sessionStorage.getItem("purifinity-authentication");
+	}
+	if (data) {
+		 return JSON.parse(data);
+	}
+	return undefined;
+}
+
+/**
+ * This function write authentication data to storage.
+ */
+function storeAuthData(authData, remember) {
+	if (remember) {
+		localStorage.setItem("purifinity-authentication", JSON.stringify(authData));
+		sessionStorage.removeItem("purifinity-authentication");
+	} else {
+		localStorage.removeItem("purifinity-authentication");
+		sessionStorage.setItem("purifinity-authentication", JSON.stringify(authData));
+	}
+}
+
+function removeAuthData() {
+	localStorage.removeItem("purifinity-authentication");
+	sessionStorage.removeItem("purifinity-authentication");
 }

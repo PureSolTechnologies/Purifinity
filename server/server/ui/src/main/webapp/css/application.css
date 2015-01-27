@@ -1,0 +1,15 @@
+div.navbar {
+	border-top: 2pt solid #408020;
+	border-left: 2pt solid #408020;
+	border-right: 2pt solid #804020;
+}
+
+html {
+	background-color: #c0c0c0;
+}
+
+body {
+	border-left: 2pt solid #408020;
+	border-right: 2pt solid #804020;
+	border-bottom: 2pt solid #804020;
+}

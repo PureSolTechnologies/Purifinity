@@ -33,10 +33,12 @@ function alerterFactory() {
 	 * Type: info, danger, success, warning
 	 */
 	alerter.addAlert = function(type, message) {
-		alerter.alerts.push({
-			type : type,
-			message : message
-		});
+		if (type && message) {
+			alerter.alerts.push({
+				type : type,
+				message : message
+			});
+		}
 	}
 	alerter.closeAlert = function(index) {
 		alerter.alerts.splice(index, 1);
