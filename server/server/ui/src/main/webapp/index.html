@@ -36,9 +36,10 @@
 <script type="text/javascript" src="js/angularjs-ext.js"></script>
 <script type="text/javascript" src="js/purifinity-server.js"></script>
 <script type="text/javascript" src="js/authentication.js"></script>
+<script type="text/javascript" src="js/project-manager.js"></script>
 <script type="text/javascript" src="js/alerter.js"></script>
 <script type="text/javascript">
-	var purifinityApp = angular.module("purifinityApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "authenticationModule", "alerterModule"]);
+	var purifinityApp = angular.module("purifinityApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "authenticationModule", "projectManagerModule", "alerterModule"]);
 	purifinityApp.config(function($routeProvider, $locationProvider){
 		$locationProvider.html5Mode(false);
 		$routeProvider.when("/login", {templateUrl:"/views/login.html"});
@@ -52,14 +53,6 @@
 		$routeProvider.when("/help", {templateUrl: "/views/help.html"});
 		$routeProvider.otherwise({templateUrl: "/views/overview.html"});
 	});
-	purifinityApp.controller("projectsCtrl", function ($scope, $routeParams, baseURL, authFactory) {
-		$scope.projectId = $routeParams['project'];
-		$scope.runId = $routeParams['run'];
-		$scope.mode = $routeParams['mode'];
-		$scope.isSelected = function(uuid) {
-			return projectId == uuid;
-		};
-	});	
 </script>
 </head>
 <body>

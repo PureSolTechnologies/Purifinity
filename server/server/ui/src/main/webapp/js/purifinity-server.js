@@ -15,9 +15,6 @@ purifinityServer.constant("baseURL", "http://" + server.host + ":"
 		+ server.port)
 purifinityServer
 		.factory("purifinityServerConnector", purifinityServerConnector);
-purifinityServer.factory('userAdministratorFactory', [
-		'purifinityServerConnector', userAdministratorFactory ]);
-purifinityServer.controller("projectListCtrl", projectListCtrl);
 
 function purifinityServerConnector($http, $location, baseURL, authFactory,
 		alerterFactory) {
@@ -58,44 +55,4 @@ function purifinityServerConnector($http, $location, baseURL, authFactory,
 					});
 		}
 	};
-}
-
-function userAdministratorFactory(purifinityServerConnector) {
-	var userAdministratorFactory = {};
-	userAdministratorFactory.getUsers = function(success, error) {
-		return purifinityServerConnector.get('/accountmanager/rest/users',
-				success, error);
-	};
-	userAdministratorFactory.getRoles = function(success, error) {
-		return purifinityServerConnector.get('/accountmanager/rest/roles', //
-		function(data, status) {
-			setRoles(data)
-		}, //
-		function(data, status, error) {
-			setError(error);
-		});
-	};
-	return userAdministratorFactory;
-}
-
-function projectListCtrl($scope, $location, purifinityServerConnector,
-		authFactory, alerterFactory) {
-	purifinityServerConnector.get(
-			'/purifinityserver/rest/analysisstore/projects', //
-			function(data, status) {
-				if (data && Objects.keys(data).length > 0) {
-					$scope.projects = data;
-				} else {
-					$scope.projects = [];
-				}
-			}, // 
-			function(data, status, error) {
-				if (data) {
-					alerterFactory.addAlert("warning",
-							"Data was taken from local cache.");
-					$scope.projects = JSON.parse(data);
-				} else {
-					alerterFactory.addAlert("danger", error);
-				}
-			});
 }

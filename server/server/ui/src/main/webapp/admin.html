@@ -36,75 +36,19 @@
 <script type="text/javascript" src="js/angularjs-ext.js"></script>
 <script type="text/javascript" src="js/purifinity-server.js"></script>
 <script type="text/javascript" src="js/authentication.js"></script>
+<script type="text/javascript" src="js/account-manager.js"></script>
+<script type="text/javascript" src="js/project-manager.js"></script>
 <script type="text/javascript" src="js/alerter.js"></script>
 <script type="text/javascript">
-	var adminApp = angular.module("purifinityAdminApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "authenticationModule", "alerterModule"]);
+	var adminApp = angular.module("purifinityAdminApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "authenticationModule", "accountManagerModule", "projectManagerModule", "alerterModule"]);
 	adminApp.config(function ($routeProvider, $locationProvider) {
 		$locationProvider.html5Mode(false);
 		$routeProvider.when("/login", {templateUrl:"/views/login.html"});
 		$routeProvider.when("/dashboards", {templateUrl:"/views/admin/dashboards.html"});
 		$routeProvider.when("/projects", {templateUrl:"/views/admin/projects.html"});
 		$routeProvider.when("/settings", {templateUrl:"/views/admin/settings.html"});
-		$routeProvider.when("/users", {templateUrl:"/views/admin/users.html", controller: "usersCtrl"});
+		$routeProvider.when("/users", {templateUrl:"/views/admin/users.html", controller: "usersViewCtrl"});
 		$routeProvider.otherwise({redirectTo:"/dashboards"});
-	});
-	adminApp.controller("usersCtrl", function($scope) {
-		$scope.mode = "users";
-		$scope.isMode = function(mode) {
-			return mode === $scope.mode ? "active" : "";
-		}
-		$scope.getUsersPartial = function() {
-			return "/views/admin/partials/" + $scope.mode + ".html";
-		}
-		$scope.setMode = function(mode) {
-			$scope.mode = mode;
-		}
-	});
-	adminApp.controller("userSettingsCtrl", function($scope, userAdministratorFactory) {
-		$scope.users = undefined;
-		userAdministratorFactory.getUsers(//
-			function(data, status) {$scope.users = data}, //
-			function(data, status, error) {});
-	});
-	adminApp.controller("addUserModalCtrl",function($scope, $modal, $log) {
-		  $scope.items = {
-				  name:"", 
-				  email:""};
-		  $scope.open = function (size) {
-		    var modalInstance = $modal.open({
-		      templateUrl: 'addUserModalContent.html',
-		      controller: 'addUserModalInstanceCtrl',
-		      size: size,
-		      resolve: {
-		        items: function () {
-		          return $scope.items;
-		        }
-		      }
-		    });
-		    
-		    modalInstance.result.then(function (items) {
-		      $scope.items = items;
-		    }, function () {
-		      $log.info('Modal dismissed at: ' + new Date());
-		    })
-		};
-	});
-	adminApp.controller("addUserModalInstanceCtrl",function($scope, $modalInstance, items) {
-		  $scope.items = items;
-		  $scope.ok = function () {
-		    $modalInstance.close($scope.items);
-		  };
-		  $scope.cancel = function () {
-		    $modalInstance.dismiss('cancel');
-		  };
-	});
-	adminApp.controller("roleSettingsCtrl", function($scope) {
-		$scope.roles = [
-				{"name": "Administrator",
-				 "roleId": "admin"},
-				{"name": "Developer",
-				 "roleId": "dev"}
-		];
 	});
 </script>
 </head>
