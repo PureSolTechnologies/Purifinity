@@ -8,9 +8,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Priority;
-import javax.annotation.security.DenyAll;
-import javax.annotation.security.PermitAll;
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Priorities;
@@ -23,6 +20,9 @@ import javax.ws.rs.ext.Provider;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthElement;
+import com.puresoltechnologies.purifinity.server.common.rest.security.DenyAll;
+import com.puresoltechnologies.purifinity.server.common.rest.security.PermitAll;
+import com.puresoltechnologies.purifinity.server.common.rest.security.RolesAllowed;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSeverity;
@@ -88,8 +88,8 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
 		.getHeaderString(AuthElement.AUTH_ID_HEADER);
 	String authTokenString = requestContext
 		.getHeaderString(AuthElement.AUTH_TOKEN_HEADER);
-	if ((authIdString == null) || (authIdString.isEmpty()) || (authTokenString == null)
-		|| (authTokenString.isEmpty())) {
+	if ((authIdString == null) || (authIdString.isEmpty())
+		|| (authTokenString == null) || (authTokenString.isEmpty())) {
 	    requestContext.abortWith(ACCESS_UNAUTHORIZED);
 	    eventLogger.logEvent(new Event("Authentication", 0,
 		    EventType.SYSTEM, EventSeverity.WARNING,
@@ -124,7 +124,7 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
 	    RolesAllowed rolesAllowedAnnotation = methodInvoked
 		    .getAnnotation(RolesAllowed.class);
 	    Set<String> rolesAllowed = new HashSet<>(
-		    Arrays.asList(rolesAllowedAnnotation.value()));
+		    Arrays.asList(rolesAllowedAnnotation.roles()));
 
 	    if (!authService.isAuthorized(email, authToken, rolesAllowed)) {
 		eventLogger.logEvent(new Event("Authentication", 1,
