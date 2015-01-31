@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V5.0//EN" "../docbook.dtd">
-<section xmlns="http://docbook.org/ns/docbook" version="5.0">
-	<title xml:id="AvailableLanguages">Available Languages</title>
-	<para>In this section the references to installed languages aka.
-		analyzers are shown.</para>
-</section>
