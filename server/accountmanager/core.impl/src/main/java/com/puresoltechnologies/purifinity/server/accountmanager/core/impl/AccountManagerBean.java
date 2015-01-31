@@ -166,8 +166,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
 
     @Override
     public Set<Role> getRoles() {
-	Result<RoleVertex> results = xoManager.createQuery(
-		"_().has('_xo_discriminator_RoleVertex')", RoleVertex.class)
+	Result<RoleVertex> results = xoManager.createQuery(RoleVertex.class)
 		.execute();
 	Set<Role> roles = new LinkedHashSet<>();
 	for (RoleVertex roleVertex : results) {
@@ -178,8 +177,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
 
     @Override
     public Set<User> getUsers() {
-	Result<UserVertex> results = xoManager.createQuery(
-		"_().has('_xo_discriminator_UserVertex')", UserVertex.class)
+	Result<UserVertex> results = xoManager.createQuery(UserVertex.class)
 		.execute();
 	Set<User> users = new LinkedHashSet<>();
 	for (UserVertex userVertex : results) {

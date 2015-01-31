@@ -23,8 +23,9 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
     @Override
     public String createPassword(PasswordCreationEntity entity)
 	    throws PasswordCreationException {
-	return passwordStore.createPassword(entity.getEmail(),
-		entity.getPassword());
+	return passwordStore.createPassword(
+		new EmailAddress(entity.getEmail()),
+		new Password(entity.getPassword()));
     }
 
     @Override
@@ -36,8 +37,8 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
 
     @Override
     public boolean authenticate(PasswordAuthenticationEntity entity) {
-	return passwordStore.authenticate(entity.getEmail(),
-		entity.getPassword());
+	return passwordStore.authenticate(new EmailAddress(entity.getEmail()),
+		new Password(entity.getPassword()));
     }
 
     @Override
@@ -48,8 +49,8 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
     }
 
     @Override
-    public Password resetPassword(EmailAddress emailAddress)
+    public Password resetPassword(String emailAddress)
 	    throws PasswordResetException {
-	return passwordStore.resetPassword(emailAddress);
+	return passwordStore.resetPassword(new EmailAddress(emailAddress));
     }
 }

@@ -47,13 +47,14 @@ public class PasswordStoreClient {
 
     public String createAccount(EmailAddress email, Password password)
 	    throws PasswordCreationException {
-	return proxy
-		.createPassword(new PasswordCreationEntity(email, password));
+	PasswordCreationEntity passwordCreationEntity = new PasswordCreationEntity(email
+			.getAddress(), password.getPassword());
+	return proxy.createPassword(passwordCreationEntity);
     }
 
     public boolean authenticate(EmailAddress email, Password password) {
-	return proxy.authenticate(new PasswordAuthenticationEntity(email,
-		password));
+	return proxy.authenticate(new PasswordAuthenticationEntity(email
+		.getAddress(), password.getPassword()));
     }
 
     public EmailAddress activatePassword(EmailAddress email,
@@ -70,6 +71,6 @@ public class PasswordStoreClient {
 
     public Password resetPassword(EmailAddress email)
 	    throws PasswordResetException {
-	return proxy.resetPassword(email);
+	return proxy.resetPassword(email.getAddress());
     }
 }

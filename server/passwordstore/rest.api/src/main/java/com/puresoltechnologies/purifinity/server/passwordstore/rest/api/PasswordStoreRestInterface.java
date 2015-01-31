@@ -53,6 +53,6 @@ public interface PasswordStoreRestInterface {
     @Path("resetPassword")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Password resetPassword(EmailAddress emailAddress)
+    public Password resetPassword(String emailAddress)
 	    throws PasswordResetException;
 }

@@ -18,13 +18,8 @@ function userAdministratorFactory(purifinityServerConnector) {
 				success, error);
 	};
 	userAdministratorFactory.getRoles = function(success, error) {
-		return purifinityServerConnector.get('/accountmanager/rest/roles', //
-		function(data, status) {
-			setRoles(data)
-		}, //
-		function(data, status, error) {
-			setError(error);
-		});
+		return purifinityServerConnector.get('/accountmanager/rest/roles',
+				success, error);
 	};
 	return userAdministratorFactory;
 }
@@ -53,19 +48,19 @@ function usersViewCtrl($scope) {
 }
 
  function addUserModalCtrl($scope, $modal, $log) {
-	  $scope.items = {
-			  name:"", 
-			  email:""};
-	  $scope.open = function (size) {
-	    var modalInstance = $modal.open({
-	      templateUrl: 'addUserModalContent.html',
-	      controller: 'addUserModalInstanceCtrl',
-	      size: size,
-	      resolve: {
-	        items: function () {
-	          return $scope.items;
-	        }
-	      }
+	$scope.items = {
+					name:"", 
+					email:""};
+	$scope.open = function (size) {
+		var modalInstance = $modal.open({
+			templateUrl: 'addUserModalContent.html',
+			controller: 'addUserModalInstanceCtrl',
+			size: size, 
+			resolve: {
+				items: function () {
+					return $scope.items;
+				}
+			}
 	    });
 	    
 	    modalInstance.result.then(function (items) {
@@ -84,13 +79,29 @@ function addUserModalInstanceCtrl($scope, $modalInstance, items) {
 	  $scope.cancel = function () {
 	    $modalInstance.dismiss('cancel');
 	  };
+	$scope.disableOK = function() {
+		if (!$scope.items.password) {
+			return true;
+		}
+		if (!$scope.items.password2) {
+			return true;
+		}
+		if ($scope.items.password != $scope.items.password2) {
+			return true;
+		}
+		if (!$scope.items.email) {
+			return true;
+		}
+		if (!$scope.items.name) {
+			return true;
+		}
+		return false;
+	}
 }
 
-function roleSettingsCtrl($scope) {
-	$scope.roles = [
-			{"name": "Administrator",
-			 "roleId": "admin"},
-			{"name": "Developer",
-			 "roleId": "dev"}
-	];
+function roleSettingsCtrl($scope, userAdministratorFactory) {
+	$scope.roles = undefined;
+	userAdministratorFactory.getRoles(//
+		function(data, status) {$scope.roles = data}, //
+		function(data, status, error) {});
 }

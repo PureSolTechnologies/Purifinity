@@ -17,51 +17,53 @@ import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordRe
 
 public class AccountManagerRestService implements AccountManagerRestInterface {
 
-	@Inject
-	private AccountManager accountManager;
+    @Inject
+    private AccountManager accountManager;
 
-	@Override
-	public Set<User> getUsers() {
-		return accountManager.getUsers();
-	}
+    @Override
+    public Set<User> getUsers() {
+	return accountManager.getUsers();
+    }
 
-	@Override
-	public Set<Role> getRoles() {
-		return accountManager.getRoles();
-	}
+    @Override
+    public Set<Role> getRoles() {
+	return accountManager.getRoles();
+    }
 
-	@Override
-	public void setUser(EmailAddress email, User user) {
-		accountManager.setUser(email, user);
-	}
+    @Override
+    public void setUser(EmailAddress email, User user) {
+	accountManager.setUser(email, user);
+    }
 
-	@Override
-	public User getUser(EmailAddress email) {
-		return accountManager.getUser(email);
-	}
+    @Override
+    public User getUser(EmailAddress email) {
+	return accountManager.getUser(email);
+    }
 
-	@Override
-	public String createAccount(EmailAddress email, Password password)
-			throws PasswordCreationException {
-		return accountManager.createPassword(email, password);
-	}
+    @Override
+    public String createAccount(String email, String password)
+	    throws PasswordCreationException {
+	return accountManager.createPassword(new EmailAddress(email),
+		new Password(password));
+    }
 
-	@Override
-	public EmailAddress activateAccount(EmailAddress email, String activationKey)
-			throws PasswordActivationException {
-		return accountManager.activatePassword(email, activationKey);
-	}
+    @Override
+    public EmailAddress activateAccount(String email, String activationKey)
+	    throws PasswordActivationException {
+	return accountManager.activatePassword(new EmailAddress(email),
+		activationKey);
+    }
 
-	@Override
-	public boolean changePassword(EmailAddress email, Password oldPassword,
-			Password newPassword) throws PasswordChangeException {
-		return accountManager.changePassword(email, oldPassword, newPassword);
-	}
+    @Override
+    public boolean changePassword(String email, String oldPassword,
+	    String newPassword) throws PasswordChangeException {
+	return accountManager.changePassword(new EmailAddress(email),
+		new Password(oldPassword), new Password(newPassword));
+    }
 
-	@Override
-	public Password resetPassword(EmailAddress email)
-			throws PasswordResetException {
-		return accountManager.resetPassword(email);
-	}
+    @Override
+    public Password resetPassword(String email) throws PasswordResetException {
+	return accountManager.resetPassword(new EmailAddress(email));
+    }
 
 }

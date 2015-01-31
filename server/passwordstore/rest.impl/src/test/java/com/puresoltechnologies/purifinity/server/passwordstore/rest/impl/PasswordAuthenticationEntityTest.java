@@ -7,18 +7,16 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.math.JSONSerializer;
-import com.puresoltechnologies.commons.types.EmailAddress;
-import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.passwordstore.rest.api.PasswordAuthenticationEntity;
 
 public class PasswordAuthenticationEntityTest {
 
-	@Test
-	public void test() throws JsonGenerationException, JsonMappingException,
-			IOException {
-		PasswordAuthenticationEntity entity = new PasswordAuthenticationEntity(
-				new EmailAddress("a@a.de"), new Password("pw"));
-		String jsonString = JSONSerializer.toJSONString(entity);
-		System.out.println(jsonString);
-	}
+    @Test
+    public void test() throws JsonGenerationException, JsonMappingException,
+	    IOException {
+	PasswordAuthenticationEntity entity = new PasswordAuthenticationEntity(
+		"a@a.de", "pw");
+	String jsonString = JSONSerializer.toJSONString(entity);
+	System.out.println(jsonString);
+    }
 }
