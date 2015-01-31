@@ -12,28 +12,18 @@
 	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>ejb</packaging>
 
-	<profiles>
-		<profile>
-			<id>it</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-failsafe-plugin</artifactId>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
-
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>common.utils</artifactId>
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>types</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>common.test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>common.utils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -44,8 +34,9 @@
 			<artifactId>logger</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>types</artifactId>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>systemmonitor.ddl</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

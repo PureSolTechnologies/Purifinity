@@ -8,6 +8,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	
 		<purifinity.api.version>${project.version}</purifinity.api.version>
 		<commons.version>0.4.0</commons.version>
 		<parsers.version>0.4.0-SNAPSHOT</parsers.version>
@@ -128,10 +130,36 @@
 		<profile>
 			<id>it</id>
 			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.codehaus.mojo</groupId>
+							<artifactId>exec-maven-plugin</artifactId>
+							<executions>
+								<execution>
+									<id>genesis</id>
+									<phase>pre-integration-test</phase>
+									<goals>
+										<goal>java</goal>
+									</goals>
+									<configuration>
+										<includeProjectDependencies>true</includeProjectDependencies>
+										<mainClass>com.puresoltechnologies.genesis.controller.GenesisController</mainClass>
+										<arguments>
+											<argument>--drop</argument>
+											<argument>--migrate</argument>
+										</arguments>
+									</configuration>
+								</execution>
+							</executions>
+						</plugin>
+					</plugins>
+				</pluginManagement>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>2.18.1</version>
 						<executions>
 							<execution>
 								<goals>
@@ -986,6 +1014,11 @@
 							<Embed-StripGroup>true</Embed-StripGroup>
 						</instructions>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.6.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>

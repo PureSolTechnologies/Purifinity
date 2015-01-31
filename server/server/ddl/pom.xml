@@ -58,24 +58,13 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-failsafe-plugin</artifactId>
-					</plugin>
-					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
 						<executions>
 							<execution>
-								<phase>integration-test</phase>
-								<goals>
-									<goal>java</goal>
-								</goals>
+								<id>genesis</id>
 							</execution>
 						</executions>
-						<configuration>
-							<includeProjectDependencies>true</includeProjectDependencies>
-							<mainClass>com.puresoltechnologies.genesis.controller.GenesisController</mainClass>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>
