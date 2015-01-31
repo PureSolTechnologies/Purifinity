@@ -12,14 +12,6 @@
 	<name>Purifinity Server: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
-	<properties>
-		<passwordstore.jdbc.host>localhost</passwordstore.jdbc.host>
-		<passwordstore.jdbc.port>5432</passwordstore.jdbc.port>
-		<passwordstore.jdbc.database>passwordstore</passwordstore.jdbc.database>
-		<passwordstore.jdbc.user>liquibase</passwordstore.jdbc.user>
-		<passwordstore.jdbc.password>liquibase</passwordstore.jdbc.password>
-	</properties>
-
 	<modules>
 		<module>utils</module>
 		<module>ddl</module>

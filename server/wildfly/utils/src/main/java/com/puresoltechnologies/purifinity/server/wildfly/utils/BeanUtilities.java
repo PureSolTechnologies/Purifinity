@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.wildfly.utils;
 
+import java.lang.annotation.Annotation;
 import java.util.Set;
 
 import javax.enterprise.context.spi.CreationalContext;
@@ -33,12 +34,12 @@ public final class BeanUtilities {
      * @return A managed bean of the specified type is returned.
      */
     @SuppressWarnings("unchecked")
-    public static <T> T getBean(Class<T> type) {
+    public static <T> T getBean(Class<T> type, Annotation... qualifiers) {
 	if (beanManager == null) {
 	    getBeanManager();
 	}
 
-	Set<Bean<?>> beans = beanManager.getBeans(type);
+	Set<Bean<?>> beans = beanManager.getBeans(type, qualifiers);
 
 	if (beans.size() > 1) {
 	    throw new RuntimeException(

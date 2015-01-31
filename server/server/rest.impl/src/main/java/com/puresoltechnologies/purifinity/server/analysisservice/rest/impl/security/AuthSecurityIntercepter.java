@@ -23,10 +23,10 @@ import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.securi
 import com.puresoltechnologies.purifinity.server.common.rest.security.DenyAll;
 import com.puresoltechnologies.purifinity.server.common.rest.security.PermitAll;
 import com.puresoltechnologies.purifinity.server.common.rest.security.RolesAllowed;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSeverity;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventType;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.Event;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventSeverity;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventType;
 
 /**
  * This class is an intercepter for REST services which checks for
@@ -71,7 +71,7 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
     private ResourceInfo resourceInfo;
 
     @Inject
-    private EventLogger eventLogger;
+    private EventLoggerRemote eventLogger;
 
     @Override
     public void filter(ContainerRequestContext requestContext)

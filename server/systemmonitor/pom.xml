@@ -10,53 +10,14 @@
 
 	<artifactId>systemmonitor</artifactId>
 	<name>Purifinity Server: ${project.artifactId}</name>
-	<packaging>ejb</packaging>
+	<packaging>pom</packaging>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>types</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>common.test</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>common.utils</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>database.cassandra</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>logger</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>systemmonitor.ddl</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.weld.se</groupId>
-			<artifactId>weld-se</artifactId>
-			<version>1.1.19.Final</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.cargo</groupId>
-				<artifactId>cargo-maven2-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
+	<modules>
+		<module>ddl</module>
+		<module>core.api</module>
+		<module>core.impl</module>
+		<module>client</module>
+		<module>test</module>
+		<module>app</module>
+	</modules>
 </project>

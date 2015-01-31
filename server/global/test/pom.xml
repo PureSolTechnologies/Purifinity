@@ -52,6 +52,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>systemmonitor.app</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>wildfly.test</artifactId>
 		</dependency>
 		<dependency>
@@ -105,6 +110,14 @@
 						</deployable>
 						<deployable>
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<artifactId>passwordstore.app</artifactId>
+							<type>ear</type>
+							<properties>
+								<name>passwordstore.app.ear</name>
+							</properties>
+						</deployable>
+						<deployable>
+							<groupId>com.puresoltechnologies.purifinity.server</groupId>
 							<artifactId>server.app</artifactId>
 							<type>ear</type>
 							<properties>
@@ -113,10 +126,10 @@
 						</deployable>
 						<deployable>
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>
-							<artifactId>passwordstore.app</artifactId>
+							<artifactId>systemmonitor.app</artifactId>
 							<type>ear</type>
 							<properties>
-								<name>passwordstore.app.ear</name>
+								<name>systemmonitor.app.ear</name>
 							</properties>
 						</deployable>
 					</deployables>

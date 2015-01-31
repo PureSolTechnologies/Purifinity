@@ -18,7 +18,7 @@ import com.puresoltechnologies.purifinity.server.domain.HistogramChartData;
 import com.puresoltechnologies.purifinity.server.socket.api.HistogramChartDataEncoder;
 import com.puresoltechnologies.purifinity.server.socket.api.HistogramChartDataRequest;
 import com.puresoltechnologies.purifinity.server.socket.api.HistogramChartDataRequestDecoder;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
 @ServerEndpoint(value = "/dataprovider/charts/histogramchart", //
 encoders = { HistogramChartDataEncoder.class }, //
@@ -27,42 +27,42 @@ decoders = { HistogramChartDataRequestDecoder.class }//
 @Stateless
 public class HistogramChartDataProviderSocket {
 
-	@Inject
-	private Logger logger;
+    @Inject
+    private Logger logger;
 
-	@Inject
-	private EventLogger eventLogger;
+    @Inject
+    private EventLoggerRemote eventLogger;
 
-	@Inject
-	private ChartDataProvider chartDataProvider;
+    @Inject
+    private ChartDataProvider chartDataProvider;
 
-	@OnOpen
-	public void open(Session session, EndpointConfig config) {
-		eventLogger.logEvent(PurifinityServerSocketEvents
-				.createSocketOpenedEvent());
-	}
+    @OnOpen
+    public void open(Session session, EndpointConfig config) {
+	eventLogger.logEvent(PurifinityServerSocketEvents
+		.createSocketOpenedEvent());
+    }
 
-	@OnClose
-	public void close(Session session, CloseReason reason) {
-		String reasonPhrase = reason != null ? reason.getReasonPhrase()
-				: "<no reason provided>";
-		eventLogger.logEvent(PurifinityServerSocketEvents
-				.createSocketCloseEvent(reasonPhrase));
-	}
+    @OnClose
+    public void close(Session session, CloseReason reason) {
+	String reasonPhrase = reason != null ? reason.getReasonPhrase()
+		: "<no reason provided>";
+	eventLogger.logEvent(PurifinityServerSocketEvents
+		.createSocketCloseEvent(reasonPhrase));
+    }
 
-	@OnMessage
-	public HistogramChartData getHistogramChartData(Session session,
-			HistogramChartDataRequest request) {
-		logger.info("Got request for histogram chart data.");
-		return chartDataProvider.loadHistogramChartData(
-				request.getAnalysisProject(), request.getAnalysisRun(),
-				request.getEvaluatorName(), request.getParameter(),
-				request.getCodeRangeType());
-	}
+    @OnMessage
+    public HistogramChartData getHistogramChartData(Session session,
+	    HistogramChartDataRequest request) {
+	logger.info("Got request for histogram chart data.");
+	return chartDataProvider.loadHistogramChartData(
+		request.getAnalysisProject(), request.getAnalysisRun(),
+		request.getEvaluatorName(), request.getParameter(),
+		request.getCodeRangeType());
+    }
 
-	@OnError
-	public void handleError(Session session, Throwable throwable) {
-		eventLogger.logEvent(PurifinityServerSocketEvents
-				.createSocketErrorEvent(throwable));
-	}
+    @OnError
+    public void handleError(Session session, Throwable throwable) {
+	eventLogger.logEvent(PurifinityServerSocketEvents
+		.createSocketErrorEvent(throwable));
+    }
 }

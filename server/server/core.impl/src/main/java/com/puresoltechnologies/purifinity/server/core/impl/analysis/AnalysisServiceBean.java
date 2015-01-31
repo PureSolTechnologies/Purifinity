@@ -18,49 +18,49 @@ import com.puresoltechnologies.purifinity.server.core.api.repositories.Repositor
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.queues.ProjectAnalysisStartQueue;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
 @Stateless
 public class AnalysisServiceBean implements AnalysisService {
 
-	@Resource(mappedName = ProjectAnalysisStartQueue.NAME)
-	private Queue projectAnalysisStartQueue;
+    @Resource(mappedName = ProjectAnalysisStartQueue.NAME)
+    private Queue projectAnalysisStartQueue;
 
-	@Inject
-	private EventLogger eventLogger;
+    @Inject
+    private EventLoggerRemote eventLogger;
 
-	@Inject
-	private JMSMessageSender messageSender;
+    @Inject
+    private JMSMessageSender messageSender;
 
-	@Inject
-	private AnalyzerServiceManager analyzerRegistration;
+    @Inject
+    private AnalyzerServiceManager analyzerRegistration;
 
-	@Inject
-	private RepositoryTypeServiceManager repositoryTypePluginService;
+    @Inject
+    private RepositoryTypeServiceManager repositoryTypePluginService;
 
-	@PostConstruct
-	public void initialize() {
-		eventLogger.logEvent(AnalysisServiceEvents.createStartupEvent());
-	}
+    @PostConstruct
+    public void initialize() {
+	eventLogger.logEvent(AnalysisServiceEvents.createStartupEvent());
+    }
 
-	@PreDestroy
-	public void shutdown() {
-		eventLogger.logEvent(AnalysisServiceEvents.createShutdownEvent());
-	}
+    @PreDestroy
+    public void shutdown() {
+	eventLogger.logEvent(AnalysisServiceEvents.createShutdownEvent());
+    }
 
-	@Override
-	public void triggerNewAnalysis(UUID projectUUID) throws JMSException {
-		messageSender.sendMessage(projectAnalysisStartQueue,
-				projectUUID.toString());
-	}
+    @Override
+    public void triggerNewAnalysis(UUID projectUUID) throws JMSException {
+	messageSender.sendMessage(projectAnalysisStartQueue,
+		projectUUID.toString());
+    }
 
-	@Override
-	public Collection<AnalyzerServiceInformation> getAnalyzers() {
-		return analyzerRegistration.getServices();
-	}
+    @Override
+    public Collection<AnalyzerServiceInformation> getAnalyzers() {
+	return analyzerRegistration.getServices();
+    }
 
-	@Override
-	public Collection<RepositoryTypeServiceInformation> getRepositoryTypes() {
-		return repositoryTypePluginService.getServices();
-	}
+    @Override
+    public Collection<RepositoryTypeServiceInformation> getRepositoryTypes() {
+	return repositoryTypePluginService.getServices();
+    }
 }

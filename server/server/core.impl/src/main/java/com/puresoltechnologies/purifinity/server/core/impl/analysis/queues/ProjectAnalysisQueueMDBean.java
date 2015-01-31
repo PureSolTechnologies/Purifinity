@@ -33,138 +33,138 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.states.Analys
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 import com.puresoltechnologies.trees.TreeVisitor;
 import com.puresoltechnologies.trees.TreeWalker;
 import com.puresoltechnologies.trees.WalkingAction;
 
 @MessageDriven(name = "ProjectAnalysisQueueMBean",//
 activationConfig = {//
-		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = ProjectAnalysisQueue.TYPE), //
-		@ActivationConfigProperty(propertyName = "destination", propertyValue = ProjectAnalysisQueue.NAME), //
-		@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") //
+	@ActivationConfigProperty(propertyName = "destinationType", propertyValue = ProjectAnalysisQueue.TYPE), //
+	@ActivationConfigProperty(propertyName = "destination", propertyValue = ProjectAnalysisQueue.NAME), //
+	@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") //
 }//
 )
 public class ProjectAnalysisQueueMDBean implements MessageListener {
 
-	@Inject
-	private Logger logger;
+    @Inject
+    private Logger logger;
 
-	@Inject
-	private EventLogger eventLogger;
+    @Inject
+    private EventLoggerRemote eventLogger;
 
-	@Resource(mappedName = ProjectEvaluationQueue.NAME)
-	private Queue projectEvaluationQueue;
+    @Resource(mappedName = ProjectEvaluationQueue.NAME)
+    private Queue projectEvaluationQueue;
 
-	@Inject
-	private FileStoreService fileStore;
+    @Inject
+    private FileStoreService fileStore;
 
-	@Inject
-	private AnalyzerServiceManager analyzerServiceManager;
+    @Inject
+    private AnalyzerServiceManager analyzerServiceManager;
 
-	@Inject
-	private AnalysisProcessStateTracker analysisProcessStateTracker;
+    @Inject
+    private AnalysisProcessStateTracker analysisProcessStateTracker;
 
-	@Inject
-	private JMSMessageSender messageSender;
+    @Inject
+    private JMSMessageSender messageSender;
 
-	@Override
-	public void onMessage(Message message) {
-		try {
-			MapMessage mapMessage = (MapMessage) message;
-			AnalysisProject analysisProject = JSONSerializer.fromJSONString(
-					mapMessage.getString("AnalysisProject"),
-					AnalysisProject.class);
-			AnalysisRunInformation analysisRunInformation = JSONSerializer
-					.fromJSONString(
-							mapMessage.getString("AnalysisRunInformation"),
-							AnalysisRunInformation.class);
-			AnalysisRunFileTree analysisRunFileTree = JSONSerializer
-					.fromJSONString(
-							mapMessage.getString("AnalysisRunFileTree"),
-							AnalysisRunFileTree.class);
+    @Override
+    public void onMessage(Message message) {
+	try {
+	    MapMessage mapMessage = (MapMessage) message;
+	    AnalysisProject analysisProject = JSONSerializer.fromJSONString(
+		    mapMessage.getString("AnalysisProject"),
+		    AnalysisProject.class);
+	    AnalysisRunInformation analysisRunInformation = JSONSerializer
+		    .fromJSONString(
+			    mapMessage.getString("AnalysisRunInformation"),
+			    AnalysisRunInformation.class);
+	    AnalysisRunFileTree analysisRunFileTree = JSONSerializer
+		    .fromJSONString(
+			    mapMessage.getString("AnalysisRunFileTree"),
+			    AnalysisRunFileTree.class);
 
-			analysisProcessStateTracker.changeProcessState(
-					analysisRunInformation.getProjectUUID(),
-					analysisRunInformation.getRunUUID(),
-					AnalysisProcessTransition.START_ANALYSIS);
+	    analysisProcessStateTracker.changeProcessState(
+		    analysisRunInformation.getProjectUUID(),
+		    analysisRunInformation.getRunUUID(),
+		    AnalysisProcessTransition.START_ANALYSIS);
 
-			analyze(analysisRunFileTree);
+	    analyze(analysisRunFileTree);
 
-			analysisProcessStateTracker.changeProcessState(
-					analysisRunInformation.getProjectUUID(),
-					analysisRunInformation.getRunUUID(),
-					AnalysisProcessTransition.QUEUE_FOR_EVALUATION);
+	    analysisProcessStateTracker.changeProcessState(
+		    analysisRunInformation.getProjectUUID(),
+		    analysisRunInformation.getRunUUID(),
+		    AnalysisProcessTransition.QUEUE_FOR_EVALUATION);
 
-			Map<String, String> stringMap = new HashMap<>();
-			stringMap.put("AnalysisProject",
-					JSONSerializer.toJSONString(analysisProject));
-			stringMap.put("AnalysisRunInformation",
-					JSONSerializer.toJSONString(analysisRunInformation));
+	    Map<String, String> stringMap = new HashMap<>();
+	    stringMap.put("AnalysisProject",
+		    JSONSerializer.toJSONString(analysisProject));
+	    stringMap.put("AnalysisRunInformation",
+		    JSONSerializer.toJSONString(analysisRunInformation));
 
-			messageSender.sendMessage(projectEvaluationQueue, stringMap);
-		} catch (JMSException | IOException e) {
-			// An issue occurred, re-queue the request.
-			eventLogger.logEvent(ProjectAnalysisEvents.createGeneralError(e));
-			throw new RuntimeException("Could not analyze the project.", e);
-		}
+	    messageSender.sendMessage(projectEvaluationQueue, stringMap);
+	} catch (JMSException | IOException e) {
+	    // An issue occurred, re-queue the request.
+	    eventLogger.logEvent(ProjectAnalysisEvents.createGeneralError(e));
+	    throw new RuntimeException("Could not analyze the project.", e);
 	}
+    }
 
-	private void analyze(AnalysisRunFileTree analysisRunFileTree) {
-		if (!analyzerServiceManager.hasServices()) {
-			throw new IllegalStateException(
-					"There is no analyzer installed. To run an analysis is not possible.");
-		}
-		TreeWalker.walk(new TreeVisitor<AnalysisRunFileTree>() {
-
-			@Override
-			public WalkingAction visit(AnalysisRunFileTree tree) {
-				if (tree.isFile()) {
-					analyze(tree.getHashId(), tree.getSourceCodeLocation());
-				}
-				return WalkingAction.PROCEED;
-			}
-		}, analysisRunFileTree);
+    private void analyze(AnalysisRunFileTree analysisRunFileTree) {
+	if (!analyzerServiceManager.hasServices()) {
+	    throw new IllegalStateException(
+		    "There is no analyzer installed. To run an analysis is not possible.");
 	}
+	TreeWalker.walk(new TreeVisitor<AnalysisRunFileTree>() {
 
-	private void analyze(HashId hashId, SourceCodeLocation sourceCodeLocation) {
-		try {
-			if (!fileStore.wasAnalyzed(hashId)) {
-				Date startTime = new Date();
-				createNewAnalysis(startTime, hashId, sourceCodeLocation);
-			}
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
+	    @Override
+	    public WalkingAction visit(AnalysisRunFileTree tree) {
+		if (tree.isFile()) {
+		    analyze(tree.getHashId(), tree.getSourceCodeLocation());
 		}
-	}
+		return WalkingAction.PROCEED;
+	    }
+	}, analysisRunFileTree);
+    }
 
-	/**
-	 * This method creates a new analysis.
-	 * 
-	 * @param hashId
-	 * @param sourceFile
-	 * @return
-	 * @throws AnalyzerException
-	 * @throws IOException
-	 * @throws FileStoreException
-	 */
-	private void createNewAnalysis(Date startTime, HashId hashId,
-			SourceCodeLocation sourceFile) throws AnalyzerException,
-			IOException, FileStoreException {
-		for (AnalyzerServiceInformation analyzerInformation : analyzerServiceManager
-				.getServices()) {
-			if (analyzerServiceManager.isActive(analyzerInformation.getId())) {
-				ProgrammingLanguageAnalyzer instance = analyzerServiceManager
-						.createInstance(analyzerInformation.getJndiName());
-				if (instance.isSuitable(sourceFile)) {
-					logger.info("'"
-							+ sourceFile.getHumanReadableLocationString()
-							+ "' is a suitable file for '" + instance.getName()
-							+ "'.");
-					CodeAnalysis codeAnalysis = instance.analyze(sourceFile);
-					fileStore.storeAnalysis(hashId, codeAnalysis);
-				}
-			}
-		}
+    private void analyze(HashId hashId, SourceCodeLocation sourceCodeLocation) {
+	try {
+	    if (!fileStore.wasAnalyzed(hashId)) {
+		Date startTime = new Date();
+		createNewAnalysis(startTime, hashId, sourceCodeLocation);
+	    }
+	} catch (Exception e) {
+	    logger.error(e.getMessage(), e);
 	}
+    }
+
+    /**
+     * This method creates a new analysis.
+     * 
+     * @param hashId
+     * @param sourceFile
+     * @return
+     * @throws AnalyzerException
+     * @throws IOException
+     * @throws FileStoreException
+     */
+    private void createNewAnalysis(Date startTime, HashId hashId,
+	    SourceCodeLocation sourceFile) throws AnalyzerException,
+	    IOException, FileStoreException {
+	for (AnalyzerServiceInformation analyzerInformation : analyzerServiceManager
+		.getServices()) {
+	    if (analyzerServiceManager.isActive(analyzerInformation.getId())) {
+		ProgrammingLanguageAnalyzer instance = analyzerServiceManager
+			.createInstance(analyzerInformation.getJndiName());
+		if (instance.isSuitable(sourceFile)) {
+		    logger.info("'"
+			    + sourceFile.getHumanReadableLocationString()
+			    + "' is a suitable file for '" + instance.getName()
+			    + "'.");
+		    CodeAnalysis codeAnalysis = instance.analyze(sourceFile);
+		    fileStore.storeAnalysis(hashId, codeAnalysis);
+		}
+	    }
+	}
+    }
 }

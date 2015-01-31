@@ -18,7 +18,7 @@ import com.puresoltechnologies.purifinity.server.domain.PurifinityServerStatus;
 import com.puresoltechnologies.purifinity.server.socket.api.PurifinityServerStatusEncoder;
 import com.puresoltechnologies.purifinity.server.socket.api.PurifinityServerStatusRequest;
 import com.puresoltechnologies.purifinity.server.socket.api.PurifinityServerStatusRequestDecoder;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
 @ServerEndpoint(value = "/socket", //
 encoders = { PurifinityServerStatusEncoder.class }, //
@@ -27,39 +27,39 @@ decoders = { PurifinityServerStatusRequestDecoder.class }//
 @Stateless
 public class PurifinityServerSocket {
 
-	@Inject
-	private Logger logger;
+    @Inject
+    private Logger logger;
 
-	@Inject
-	private EventLogger eventLogger;
+    @Inject
+    private EventLoggerRemote eventLogger;
 
-	@Inject
-	private PurifinityServer purifinityServer;
+    @Inject
+    private PurifinityServer purifinityServer;
 
-	@OnOpen
-	public void open(Session session, EndpointConfig config) {
-		eventLogger.logEvent(PurifinityServerSocketEvents
-				.createSocketOpenedEvent());
-	}
+    @OnOpen
+    public void open(Session session, EndpointConfig config) {
+	eventLogger.logEvent(PurifinityServerSocketEvents
+		.createSocketOpenedEvent());
+    }
 
-	@OnClose
-	public void close(Session session, CloseReason reason) {
-		String reasonPhrase = reason != null ? reason.getReasonPhrase()
-				: "<no reason provided>";
-		eventLogger.logEvent(PurifinityServerSocketEvents
-				.createSocketCloseEvent(reasonPhrase));
-	}
+    @OnClose
+    public void close(Session session, CloseReason reason) {
+	String reasonPhrase = reason != null ? reason.getReasonPhrase()
+		: "<no reason provided>";
+	eventLogger.logEvent(PurifinityServerSocketEvents
+		.createSocketCloseEvent(reasonPhrase));
+    }
 
-	@OnMessage
-	public PurifinityServerStatus getServerStatus(Session session,
-			PurifinityServerStatusRequest request) {
-		logger.info("Got request for status.");
-		return purifinityServer.getStatus();
-	}
+    @OnMessage
+    public PurifinityServerStatus getServerStatus(Session session,
+	    PurifinityServerStatusRequest request) {
+	logger.info("Got request for status.");
+	return purifinityServer.getStatus();
+    }
 
-	@OnError
-	public void handleError(Session session, Throwable throwable) {
-		eventLogger.logEvent(PurifinityServerSocketEvents
-				.createSocketErrorEvent(throwable));
-	}
+    @OnError
+    public void handleError(Session session, Throwable throwable) {
+	eventLogger.logEvent(PurifinityServerSocketEvents
+		.createSocketErrorEvent(throwable));
+    }
 }

@@ -12,7 +12,7 @@ import javax.jms.TextMessage;
 
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessTransition;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
 /**
  * This message driven beans gets all analysis requests for triggering the
@@ -33,7 +33,7 @@ activationConfig = {//
 public class ProjectAnalysisStartDLQMDBean implements MessageListener {
 
     @Inject
-    private EventLogger eventLogger;
+    private EventLoggerRemote eventLogger;
     @Inject
     private AnalysisProcessStateTracker analysisProcessStateTracker;
 

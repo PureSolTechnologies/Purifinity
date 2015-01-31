@@ -18,7 +18,7 @@ import com.puresoltechnologies.purifinity.server.domain.ParetoChartData;
 import com.puresoltechnologies.purifinity.server.socket.api.ParetoChartDataEncoder;
 import com.puresoltechnologies.purifinity.server.socket.api.ParetoChartDataRequest;
 import com.puresoltechnologies.purifinity.server.socket.api.ParetoChartDataRequestDecoder;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
 @ServerEndpoint(value = "/dataprovider/charts/paretochart", //
 encoders = { ParetoChartDataEncoder.class }, //
@@ -27,42 +27,42 @@ decoders = { ParetoChartDataRequestDecoder.class }//
 @Stateless
 public class ParetoChartDataProviderSocket {
 
-	@Inject
-	private Logger logger;
+    @Inject
+    private Logger logger;
 
-	@Inject
-	private EventLogger eventLogger;
+    @Inject
+    private EventLoggerRemote eventLogger;
 
-	@Inject
-	private ChartDataProvider chartDataProvider;
+    @Inject
+    private ChartDataProvider chartDataProvider;
 
-	@OnOpen
-	public void open(Session session, EndpointConfig config) {
-		eventLogger.logEvent(PurifinityServerSocketEvents
-				.createSocketOpenedEvent());
-	}
+    @OnOpen
+    public void open(Session session, EndpointConfig config) {
+	eventLogger.logEvent(PurifinityServerSocketEvents
+		.createSocketOpenedEvent());
+    }
 
-	@OnClose
-	public void close(Session session, CloseReason reason) {
-		String reasonPhrase = reason != null ? reason.getReasonPhrase()
-				: "<no reason provided>";
-		eventLogger.logEvent(PurifinityServerSocketEvents
-				.createSocketCloseEvent(reasonPhrase));
-	}
+    @OnClose
+    public void close(Session session, CloseReason reason) {
+	String reasonPhrase = reason != null ? reason.getReasonPhrase()
+		: "<no reason provided>";
+	eventLogger.logEvent(PurifinityServerSocketEvents
+		.createSocketCloseEvent(reasonPhrase));
+    }
 
-	@OnMessage
-	public ParetoChartData getParetoChartData(Session session,
-			ParetoChartDataRequest request) {
-		logger.info("Got request for pareto chart data.");
-		return chartDataProvider.loadParetoChartData(
-				request.getAnalysisProject(), request.getAnalysisRun(),
-				request.getEvaluatorName(), request.getParameter(),
-				request.getCodeRangeType());
-	}
+    @OnMessage
+    public ParetoChartData getParetoChartData(Session session,
+	    ParetoChartDataRequest request) {
+	logger.info("Got request for pareto chart data.");
+	return chartDataProvider.loadParetoChartData(
+		request.getAnalysisProject(), request.getAnalysisRun(),
+		request.getEvaluatorName(), request.getParameter(),
+		request.getCodeRangeType());
+    }
 
-	@OnError
-	public void handleError(Session session, Throwable throwable) {
-		eventLogger.logEvent(PurifinityServerSocketEvents
-				.createSocketErrorEvent(throwable));
-	}
+    @OnError
+    public void handleError(Session session, Throwable throwable) {
+	eventLogger.logEvent(PurifinityServerSocketEvents
+		.createSocketErrorEvent(throwable));
+    }
 }

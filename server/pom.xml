@@ -9,7 +9,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-	
+
 		<purifinity.api.version>${project.version}</purifinity.api.version>
 		<commons.version>0.4.0</commons.version>
 		<parsers.version>0.4.0-SNAPSHOT</parsers.version>
@@ -169,7 +169,8 @@
 							</execution>
 						</executions>
 						<configuration>
-							<forkMode>always</forkMode>
+							<forkCount>1</forkCount>
+							<reuseForks>false</reuseForks>
 						</configuration>
 					</plugin>
 				</plugins>
@@ -608,8 +609,25 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>systemmonitor</artifactId>
+				<artifactId>systemmonitor.app</artifactId>
 				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>systemmonitor.client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>systemmonitor.core.api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>systemmonitor.core.impl</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -981,41 +999,6 @@
 					</executions>
 				</plugin>
 				<plugin>
-					<groupId>org.apache.felix</groupId>
-					<artifactId>maven-bundle-plugin</artifactId>
-					<version>2.3.7</version>
-					<extensions>true</extensions>
-					<configuration>
-						<manifestLocation>META-INF</manifestLocation>
-						<instructions>
-							<Specification-Title>${project.name}</Specification-Title>
-							<Specification-Version>${project.version}</Specification-Version>
-							<Specification-Vendor>${project.organization.name}</Specification-Vendor>
-							<Implementation-Title>${project.groupId}:${project.artifactId}</Implementation-Title>
-							<Implementation-Version>${project.version}</Implementation-Version>
-							<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
-							<Vendor-URL>${project.organization.url}</Vendor-URL>
-							<Project-URL>${project.url}</Project-URL>
-							<!-- The Bundle-SymbolicName is fixed in this way. Otherwise Tycho 
-								will not find the bundle. -->
-							<Bundle-SymbolicName>${bundle.namespace}.bundle</Bundle-SymbolicName>
-							<Bundle-Name>${bundle.namespace}.bundle</Bundle-Name>
-							<Bundle-Version>${project.version}</Bundle-Version>
-							<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
-							<!-- assume public classes are in the top package, and private classes 
-								are under ".internal" -->
-							<Export-Package>${bundle.namespace}.*;version="${project.version}"</Export-Package>
-							<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
-							<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
-							<!-- embed compile/runtime dependencies using path that matches the 
-								copied dependency folder -->
-							<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
-							<Embed-Directory>dependencies</Embed-Directory>
-							<Embed-StripGroup>true</Embed-StripGroup>
-						</instructions>
-					</configuration>
-				</plugin>
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
 					<version>2.6.1</version>
@@ -1282,12 +1265,9 @@
 		<module>logger</module>
 		<module>database</module>
 		<module>systemmonitor</module>
-		<module>systemmonitor.ddl</module>
 		<module>passwordstore</module>
 		<module>accountmanager</module>
 		<module>server</module>
-		<module>client</module>
-		<module>client.bundle</module>
 		<module>plugins</module>
 		<module>global</module>
 	</modules>

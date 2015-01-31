@@ -2,9 +2,9 @@ package com.puresoltechnologies.purifinity.server.passwordstore.core.impl;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordEncryptionException;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventSeverity;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventType;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.Event;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventSeverity;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventType;
 
 /**
  * This class provides factory methods for EventLogger events.

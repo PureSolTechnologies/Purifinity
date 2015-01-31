@@ -22,15 +22,15 @@ import com.puresoltechnologies.purifinity.server.passwordstore.core.api.Password
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordStore;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.db.PasswordStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordData;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordEncryptionException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordStrengthCalculator;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.Event;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.EmailAddressValidator;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.Event;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
 /**
  * This is the central implementation of the {@link PasswordStore}.
@@ -102,7 +102,7 @@ public class PasswordStoreBean implements PasswordStore {
     private Logger logger;
 
     @Inject
-    private EventLogger eventLogger;
+    private EventLoggerRemote eventLogger;
 
     @Inject
     @PasswordStoreKeyspace
@@ -167,8 +167,8 @@ public class PasswordStoreBean implements PasswordStore {
     }
 
     @Override
-    public EmailAddress activatePassword(EmailAddress email, String activationKey)
-	    throws PasswordActivationException {
+    public EmailAddress activatePassword(EmailAddress email,
+	    String activationKey) throws PasswordActivationException {
 	logger.info("Account for user '" + email + "' is to be activated...");
 
 	Row account = getUserByEmail(email);

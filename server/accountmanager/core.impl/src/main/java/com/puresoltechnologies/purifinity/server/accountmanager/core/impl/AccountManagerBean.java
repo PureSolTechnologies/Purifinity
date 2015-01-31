@@ -35,7 +35,7 @@ import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordAc
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
-import com.puresoltechnologies.purifinity.server.systemmonitor.events.EventLogger;
+import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
 @Stateful
 @Local(AccountManager.class)
@@ -49,7 +49,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
     private Logger logger;
 
     @Inject
-    private EventLogger eventLogger;
+    private EventLoggerRemote eventLogger;
 
     @Resource
     private SessionContext context;
