@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security;
+package com.puresoltechnologies.purifinity.server.common.rest.security;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -9,20 +9,21 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.math.JSONSerializer;
+import com.puresoltechnologies.purifinity.server.common.rest.security.AuthLoginElement;
 
-public class AuthElementTest {
+public class AuthLoginElementTest {
 
     @Test
     public void test() throws JsonGenerationException, JsonMappingException,
 	    IOException {
-	AuthElement authLoginElement = new AuthElement("email@example.com",
-		"token", "permission", "message");
+	AuthLoginElement authLoginElement = new AuthLoginElement(
+		"name@example.com", "pass");
 
 	String json = JSONSerializer.toJSONString(authLoginElement);
 	System.out.println(json);
 	assertNotNull(json);
-	AuthElement unmarshalled = JSONSerializer.fromJSONString(json,
-		AuthElement.class);
+	AuthLoginElement unmarshalled = JSONSerializer.fromJSONString(json,
+		AuthLoginElement.class);
 	assertNotNull(unmarshalled);
     }
 

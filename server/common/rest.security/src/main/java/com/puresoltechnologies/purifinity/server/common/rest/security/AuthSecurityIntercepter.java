@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl.security;
+package com.puresoltechnologies.purifinity.server.common.rest.security;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Priority;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +20,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.puresoltechnologies.commons.types.EmailAddress;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthElement;
-import com.puresoltechnologies.purifinity.server.common.rest.security.DenyAll;
-import com.puresoltechnologies.purifinity.server.common.rest.security.PermitAll;
-import com.puresoltechnologies.purifinity.server.common.rest.security.RolesAllowed;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.Event;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventSeverity;
@@ -54,12 +55,25 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventType;
 @Priority(Priorities.AUTHENTICATION)
 public class AuthSecurityIntercepter implements ContainerRequestFilter {
 
+    private static final Logger logger = LoggerFactory
+	    .getLogger(AuthSecurityIntercepter.class);
+
     // 401 - Access denied
     private static final Response ACCESS_UNAUTHORIZED = Response.status(
 	    Response.Status.UNAUTHORIZED).build();
     // 403 - Forbidden
     private static final Response FORBIDDEN = Response.status(
 	    Response.Status.FORBIDDEN).build();
+
+    @PostConstruct
+    public void postConstruct() {
+	logger.info("REST security is enabled.");
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+	logger.info("REST security is disabled.");
+    }
 
     @Inject
     private AuthService authService;

@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl.security;
+package com.puresoltechnologies.purifinity.server.common.rest.security;
 
 import java.util.Set;
 import java.util.UUID;

@@ -1,14 +1,10 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl.security;
+package com.puresoltechnologies.purifinity.server.common.rest.security;
 
 import javax.inject.Inject;
 import javax.security.auth.login.LoginException;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.commons.types.Password;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthElement;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthLoginElement;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthLogoutElement;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security.AuthenticationRestInterface;
 
 public class AuthenticationRestService implements AuthenticationRestInterface {
 

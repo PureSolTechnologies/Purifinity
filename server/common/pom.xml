@@ -17,6 +17,7 @@
 		<module>plugins</module>
 		<module>jms</module>
 		<module>rest</module>
+		<module>rest.security</module>
 		<module>test</module>
 	</modules>
 </project>

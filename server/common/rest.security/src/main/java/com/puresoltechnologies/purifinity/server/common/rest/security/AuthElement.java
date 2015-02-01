@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.rest.api.security;
+package com.puresoltechnologies.purifinity.server.common.rest.security;
 
 import java.io.Serializable;
 
