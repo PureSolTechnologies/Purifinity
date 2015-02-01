@@ -35,11 +35,10 @@
 <script type="text/javascript" src="config/server.js"></script>
 <script type="text/javascript" src="js/angularjs-ext.js"></script>
 <script type="text/javascript" src="js/purifinity-server.js"></script>
-<script type="text/javascript" src="js/authentication.js"></script>
 <script type="text/javascript" src="js/project-manager.js"></script>
 <script type="text/javascript" src="js/alerter.js"></script>
 <script type="text/javascript">
-	var purifinityApp = angular.module("purifinityApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "authenticationModule", "projectManagerModule", "alerterModule"]);
+	var purifinityApp = angular.module("purifinityApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "projectManager", "alerter"]);
 	purifinityApp.config(function($routeProvider, $locationProvider){
 		$locationProvider.html5Mode(false);
 		$routeProvider.when("/login", {templateUrl:"/views/login.html"});

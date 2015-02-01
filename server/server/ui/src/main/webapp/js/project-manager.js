@@ -2,12 +2,12 @@
  * This JavaScript files contains Angular JS functionality to be added to an
  * application to handle user accounts for Purifinity.
  */
-var projectManagerModule = angular.module("projectManagerModule", [ "purifinityServer" ]);
+var projectManagerModule = angular.module("projectManager", [ "purifinityServer" ]);
 projectManagerModule.controller("projectListCtrl", projectListCtrl);
 projectManagerModule.controller("projectsCtrl", projectsCtrl);	
 
 function projectListCtrl($scope, $location, purifinityServerConnector,
-		authFactory, alerterFactory) {
+		alerterFactory) {
 	purifinityServerConnector.get(
 			'/purifinityserver/rest/analysisstore/projects', //
 			function(data, status) {
@@ -28,7 +28,7 @@ function projectListCtrl($scope, $location, purifinityServerConnector,
 			});
 }
 
-function projectsCtrl($scope, $routeParams, baseURL, authFactory) {
+function projectsCtrl($scope, $routeParams, baseURL) {
 	$scope.projectId = $routeParams['project'];
 	$scope.runId = $routeParams['run'];
 	$scope.mode = $routeParams['mode'];

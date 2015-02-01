@@ -2,7 +2,7 @@
  * This JavaScript file contains a alerter module which provides the central
  * functionality for dangers, warnings, infos, and successes.
  */
-var alerterModule = angular.module("alerterModule", [ "purifinityServer" ]);
+var alerterModule = angular.module("alerter", [ "purifinityServer" ]);
 /*
  * The clearAlerts directive provides a 'clear-alerts' directive for alerters
  * ng-repeat to be used to clear all alerts to not be shown again.

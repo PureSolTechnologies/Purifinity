@@ -2,7 +2,7 @@
  * This JavaScript files contains Angular JS functionality to be added to an
  * application to handle user accounts for Purifinity.
  */
-var accountManagerModule = angular.module("accountManagerModule", [ "purifinityServer" ]);
+var accountManagerModule = angular.module("accountManager", [ "purifinityServer" ]);
 purifinityServer.factory('userAdministratorFactory', [
 		'purifinityServerConnector', userAdministratorFactory ]);
 accountManagerModule.controller("usersViewCtrl", usersViewCtrl);
