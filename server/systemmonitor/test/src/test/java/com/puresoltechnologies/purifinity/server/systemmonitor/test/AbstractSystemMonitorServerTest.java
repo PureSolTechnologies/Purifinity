@@ -5,7 +5,8 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
-public class AbstractSystemMonitorServerTest extends AbstractServerTest {
+public abstract class AbstractSystemMonitorServerTest extends
+	AbstractServerTest {
 
     @EnhanceDeployment
     public static final void enhanceDeployment(JavaArchive archive) {

@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
-import com.puresoltechnologies.xo.titan.api.annotation.Gremlin;
 import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
 import com.puresoltechnologies.xo.titan.api.annotation.Property;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
@@ -15,7 +14,6 @@ import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
  * @author Rick-Rainer Ludwig
  */
 @VertexDefinition(UserVertex.NAME)
-@Gremlin(value = "_().has('_xo_discriminator_" + UserVertex.NAME + "')")
 public interface UserVertex {
 
     public static final String NAME = "user";

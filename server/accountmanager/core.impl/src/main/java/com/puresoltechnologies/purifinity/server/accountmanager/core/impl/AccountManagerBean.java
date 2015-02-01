@@ -166,8 +166,9 @@ public class AccountManagerBean implements Serializable, AccountManager,
 
     @Override
     public Set<Role> getRoles() {
-	Result<RoleVertex> results = xoManager.createQuery(RoleVertex.class)
-		.execute();
+	Result<RoleVertex> results = xoManager.createQuery(
+		"_().has('_xo_discriminator_" + RoleVertex.NAME + "')",
+		RoleVertex.class).execute();
 	Set<Role> roles = new LinkedHashSet<>();
 	for (RoleVertex roleVertex : results) {
 	    roles.add(new Role(roleVertex.getRoleId(), roleVertex.getName()));
@@ -177,8 +178,9 @@ public class AccountManagerBean implements Serializable, AccountManager,
 
     @Override
     public Set<User> getUsers() {
-	Result<UserVertex> results = xoManager.createQuery(UserVertex.class)
-		.execute();
+	Result<UserVertex> results = xoManager.createQuery(
+		"_().has('_xo_discriminator_" + UserVertex.NAME + "')",
+		UserVertex.class).execute();
 	Set<User> users = new LinkedHashSet<>();
 	for (UserVertex userVertex : results) {
 	    users.add(new User(userVertex.getEmail(), userVertex.getName()));
