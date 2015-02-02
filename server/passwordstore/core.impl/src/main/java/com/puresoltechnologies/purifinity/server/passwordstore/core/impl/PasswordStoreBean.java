@@ -21,6 +21,7 @@ import com.puresoltechnologies.purifinity.server.database.cassandra.utils.Cassan
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordEncrypter;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordStore;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.db.PasswordStoreKeyspace;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountState;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;

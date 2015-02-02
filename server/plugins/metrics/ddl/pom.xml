@@ -61,20 +61,9 @@
 				<artifactId>maven-shade-plugin</artifactId>
 				<executions>
 					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
+						<id>genesis</id>
 					</execution>
 				</executions>
-				<configuration>
-					<transformers>
-						<transformer
-							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-							<mainClass>com.puresoltechnologies.purifinity.server.metrics.ddl.MetricsPluginDatabaseMigrator</mainClass>
-						</transformer>
-					</transformers>
-				</configuration>
 			</plugin>
 		</plugins>
 	</build>

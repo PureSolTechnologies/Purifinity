@@ -90,7 +90,7 @@ public class AccountManagerDatabaseTransformator implements
 		CASSANDRA_HOST, metadata);
 
 	sequence.appendTransformation(new AbstractTitanTransformationStep(
-		sequence, "Rick-Rainer Ludwig", "Creates the standard user.") {
+		sequence, "Rick-Rainer Ludwig", "Creates the standard users.") {
 
 	    @Override
 	    public void transform() throws TransformationException {
@@ -103,11 +103,64 @@ public class AccountManagerDatabaseTransformator implements
 			    "ludwig@puresol-technologies.com");
 		    userVertex.setProperty("user_name", "Rick-Rainer Ludwig");
 		    userVertex.setProperty("time.creation", new Date());
+
+		    userVertex = titanGraph.addVertex();
+		    userVertex.setProperty("_xo_discriminator_user", "user");
+		    userVertex.setProperty("user_email",
+			    "administrator@puresol-technologies.com");
+		    userVertex
+			    .setProperty("user_name", "Default Administrator");
+		    userVertex.setProperty("time.creation", new Date());
+
+		    userVertex = titanGraph.addVertex();
+		    userVertex.setProperty("_xo_discriminator_user", "user");
+		    userVertex.setProperty("user_email",
+			    "engineer@puresol-technologies.com");
+		    userVertex.setProperty("user_name", "Default Engineer");
+		    userVertex.setProperty("time.creation", new Date());
+
+		    userVertex = titanGraph.addVertex();
+		    userVertex.setProperty("_xo_discriminator_user", "user");
+		    userVertex.setProperty("user_email",
+			    "user@puresol-technologies.com");
+		    userVertex.setProperty("user_name", "Default User");
+		    userVertex.setProperty("time.creation", new Date());
+
 		    titanGraph.commit();
 		} catch (Exception e) {
 		    titanGraph.rollback();
 		    throw new TransformationException(
 			    "Could not create default user in Titan database.",
+			    e);
+		}
+	    }
+	});
+
+	sequence.appendTransformation(new AbstractTitanTransformationStep(
+		sequence, "Rick-Rainer Ludwig", "Creates the standard roles.") {
+
+	    @Override
+	    public void transform() throws TransformationException {
+		TitanGraph titanGraph = getTitanGraph();
+		titanGraph.buildTransaction();
+		try {
+		    for (Roles role : Roles.values()) {
+			TitanVertex administratorRoleVertex = titanGraph
+				.addVertex();
+			administratorRoleVertex.setProperty(
+				"_xo_discriminator_role", "role");
+			administratorRoleVertex.setProperty("role_id",
+				role.getId());
+			administratorRoleVertex.setProperty("role_name",
+				role.getName());
+			administratorRoleVertex.setProperty("time.creation",
+				new Date());
+		    }
+		    titanGraph.commit();
+		} catch (Exception e) {
+		    titanGraph.rollback();
+		    throw new TransformationException(
+			    "Could not create default roles in Titan database.",
 			    e);
 		}
 	    }
