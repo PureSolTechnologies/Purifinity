@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo;
 
 import java.util.Date;
-import java.util.List;
 
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
 import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
@@ -35,6 +34,6 @@ public interface UserVertex {
 
     public void setCreationTime(Date time);
 
-    public List<RoleVertex> getAnalysisRuns();
+    public RoleVertex getRole();
 
 }

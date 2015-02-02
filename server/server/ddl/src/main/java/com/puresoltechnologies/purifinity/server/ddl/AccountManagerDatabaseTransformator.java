@@ -1,26 +1,22 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
+import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
-import com.puresoltechnologies.genesis.commons.TransformationException;
 import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
 import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
-import com.puresoltechnologies.genesis.transformation.titan.AbstractTitanTransformationStep;
 import com.puresoltechnologies.genesis.transformation.titan.TitanTransformationSequence;
 import com.puresoltechnologies.purifinity.server.accountmanager.domain.Roles;
 import com.puresoltechnologies.versioning.Version;
-import com.thinkaurelius.titan.core.TitanGraph;
-import com.thinkaurelius.titan.core.TitanVertex;
 
 public class AccountManagerDatabaseTransformator implements
 	ComponentTransformator {
@@ -89,112 +85,34 @@ public class AccountManagerDatabaseTransformator implements
 	TitanTransformationSequence sequence = new TitanTransformationSequence(
 		CASSANDRA_HOST, metadata);
 
-	sequence.appendTransformation(new AbstractTitanTransformationStep(
-		sequence, "Rick-Rainer Ludwig", "Creates the standard users.") {
+	sequence.appendTransformation(new AddRoleStep(sequence,
+		Roles.UNPRIVILEGED, "Rick-Rainer Ludwig",
+		"Create unprivileged role."));
+	sequence.appendTransformation(new AddRoleStep(sequence, Roles.ENGINEER,
+		"Rick-Rainer Ludwig", "Creates the engineer role."));
+	sequence.appendTransformation(new AddRoleStep(sequence,
+		Roles.ADMINISTRATOR, "Rick-Rainer Ludwig",
+		"Creates the administrator role."));
 
-	    @Override
-	    public void transform() throws TransformationException {
-		TitanGraph titanGraph = getTitanGraph();
-		titanGraph.buildTransaction();
-		try {
-		    TitanVertex userVertex = titanGraph.addVertex();
-		    userVertex.setProperty("_xo_discriminator_user", "user");
-		    userVertex.setProperty("user_email",
-			    "ludwig@puresol-technologies.com");
-		    userVertex.setProperty("user_name", "Rick-Rainer Ludwig");
-		    userVertex.setProperty("time.creation", new Date());
+	sequence.appendTransformation(new AddUserStep(sequence,
+		new EmailAddress("user@puresol-technologies.com"),
+		"Unprivileged User", Roles.UNPRIVILEGED, "Rick-Rainer Ludwig",
+		"Create unprivileged user."));
 
-		    userVertex = titanGraph.addVertex();
-		    userVertex.setProperty("_xo_discriminator_user", "user");
-		    userVertex.setProperty("user_email",
-			    "administrator@puresol-technologies.com");
-		    userVertex
-			    .setProperty("user_name", "Default Administrator");
-		    userVertex.setProperty("time.creation", new Date());
+	sequence.appendTransformation(new AddUserStep(sequence,
+		new EmailAddress("engineer@puresol-technologies.com"),
+		"Engineer", Roles.ENGINEER, "Rick-Rainer Ludwig",
+		"Create engineer."));
 
-		    userVertex = titanGraph.addVertex();
-		    userVertex.setProperty("_xo_discriminator_user", "user");
-		    userVertex.setProperty("user_email",
-			    "engineer@puresol-technologies.com");
-		    userVertex.setProperty("user_name", "Default Engineer");
-		    userVertex.setProperty("time.creation", new Date());
+	sequence.appendTransformation(new AddUserStep(sequence,
+		new EmailAddress("administrator@puresol-technologies.com"),
+		"Administrator", Roles.ADMINISTRATOR, "Rick-Rainer Ludwig",
+		"Create administrator."));
 
-		    userVertex = titanGraph.addVertex();
-		    userVertex.setProperty("_xo_discriminator_user", "user");
-		    userVertex.setProperty("user_email",
-			    "user@puresol-technologies.com");
-		    userVertex.setProperty("user_name", "Default User");
-		    userVertex.setProperty("time.creation", new Date());
-
-		    titanGraph.commit();
-		} catch (Exception e) {
-		    titanGraph.rollback();
-		    throw new TransformationException(
-			    "Could not create default user in Titan database.",
-			    e);
-		}
-	    }
-	});
-
-	sequence.appendTransformation(new AbstractTitanTransformationStep(
-		sequence, "Rick-Rainer Ludwig", "Creates the standard roles.") {
-
-	    @Override
-	    public void transform() throws TransformationException {
-		TitanGraph titanGraph = getTitanGraph();
-		titanGraph.buildTransaction();
-		try {
-		    for (Roles role : Roles.values()) {
-			TitanVertex administratorRoleVertex = titanGraph
-				.addVertex();
-			administratorRoleVertex.setProperty(
-				"_xo_discriminator_role", "role");
-			administratorRoleVertex.setProperty("role_id",
-				role.getId());
-			administratorRoleVertex.setProperty("role_name",
-				role.getName());
-			administratorRoleVertex.setProperty("time.creation",
-				new Date());
-		    }
-		    titanGraph.commit();
-		} catch (Exception e) {
-		    titanGraph.rollback();
-		    throw new TransformationException(
-			    "Could not create default roles in Titan database.",
-			    e);
-		}
-	    }
-	});
-
-	sequence.appendTransformation(new AbstractTitanTransformationStep(
-		sequence, "Rick-Rainer Ludwig", "Creates the standard roles.") {
-
-	    @Override
-	    public void transform() throws TransformationException {
-		TitanGraph titanGraph = getTitanGraph();
-		titanGraph.buildTransaction();
-		try {
-		    for (Roles role : Roles.values()) {
-			TitanVertex administratorRoleVertex = titanGraph
-				.addVertex();
-			administratorRoleVertex.setProperty(
-				"_xo_discriminator_role", "role");
-			administratorRoleVertex.setProperty("role_id",
-				role.getId());
-			administratorRoleVertex.setProperty("role_name",
-				role.getName());
-			administratorRoleVertex.setProperty("time.creation",
-				new Date());
-		    }
-		    titanGraph.commit();
-		} catch (Exception e) {
-		    titanGraph.rollback();
-		    throw new TransformationException(
-			    "Could not create default roles in Titan database.",
-			    e);
-		}
-	    }
-	});
+	sequence.appendTransformation(new AddUserStep(sequence,
+		new EmailAddress("ludwig@puresol-technologies.com"),
+		"Rick-Rainer Ludwig", Roles.ADMINISTRATOR,
+		"Rick-Rainer Ludwig", "Create first user."));
 
 	return sequence;
     }
