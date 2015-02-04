@@ -24,12 +24,12 @@ import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerRemote;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.api.Role;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.api.User;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UserVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UsersXOManager;
 import com.puresoltechnologies.purifinity.server.accountmanager.domain.AccountManagerEvents;
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.Role;
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.User;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
@@ -156,34 +156,54 @@ public class AccountManagerBean implements Serializable, AccountManager,
     public void createAccount(EmailAddress email) {
 	logger.debug("Creating user account for '" + email + "'...");
 	xoManager.currentTransaction().begin();
-	UserVertex user = xoManager.create(UserVertex.class);
-	user.setCreationTime(new Date());
-	user.setEmail(email.getAddress());
-	xoManager.currentTransaction().commit();
-	eventLogger.logEvent(AccountManagerEvents
-		.createAccountCreationEvent(email));
+	try {
+	    UserVertex user = xoManager.create(UserVertex.class);
+	    user.setCreationTime(new Date());
+	    user.setEmail(email.getAddress());
+	    xoManager.currentTransaction().commit();
+	    eventLogger.logEvent(AccountManagerEvents
+		    .createAccountCreationEvent(email));
+	} catch (XOException e) {
+	    xoManager.currentTransaction().rollback();
+	    throw e;
+	}
     }
 
     @Override
     public Set<Role> getRoles() {
-	Result<RoleVertex> results = xoManager.createQuery(
-		"_().has('_xo_discriminator_" + RoleVertex.NAME + "')",
-		RoleVertex.class).execute();
 	Set<Role> roles = new LinkedHashSet<>();
-	for (RoleVertex roleVertex : results) {
-	    roles.add(new Role(roleVertex.getRoleId(), roleVertex.getName()));
+	xoManager.currentTransaction().begin();
+	try {
+	    Result<RoleVertex> results = xoManager.createQuery(
+		    "_().has('_xo_discriminator_" + RoleVertex.NAME + "')",
+		    RoleVertex.class).execute();
+	    for (Object roleVertex : results) {
+		Role role = (Role) roleVertex;
+		roles.add(new Role(role.getId(), role.getName()));
+	    }
+	} finally {
+	    xoManager.currentTransaction().rollback();
 	}
 	return roles;
     }
 
     @Override
     public Set<User> getUsers() {
-	Result<UserVertex> results = xoManager.createQuery(
-		"_().has('_xo_discriminator_" + UserVertex.NAME + "')",
-		UserVertex.class).execute();
 	Set<User> users = new LinkedHashSet<>();
-	for (UserVertex userVertex : results) {
-	    users.add(new User(userVertex.getEmail(), userVertex.getName()));
+	xoManager.currentTransaction().begin();
+	try {
+	    Result<UserVertex> results = xoManager.createQuery(
+		    "_().has('_xo_discriminator_" + UserVertex.NAME + "')",
+		    UserVertex.class).execute();
+	    for (UserVertex userVertex : results) {
+		RoleVertex roleVertex = userVertex.getRole();
+		Role role = new Role(roleVertex.getId(), roleVertex.getName());
+		User user = new User(new EmailAddress(userVertex.getEmail()),
+			userVertex.getName(), role);
+		users.add(user);
+	    }
+	} finally {
+	    xoManager.currentTransaction().rollback();
 	}
 	return users;
     }
@@ -198,14 +218,24 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	    xoManager.currentTransaction().commit();
 	} catch (XOException e) {
 	    xoManager.currentTransaction().rollback();
+	    throw e;
 	}
     }
 
     @Override
     public User getUser(EmailAddress email) {
-	UserVertex userVertex = xoManager.find(UserVertex.class,
-		email.getAddress()).getSingleResult();
-	return new User(userVertex.getEmail(), userVertex.getName());
+	xoManager.currentTransaction().begin();
+	try {
+	    UserVertex userVertex = xoManager.find(UserVertex.class,
+		    email.getAddress()).getSingleResult();
+	    RoleVertex roleVertex = userVertex.getRole();
+	    Role role = new Role(roleVertex.getId(), roleVertex.getName());
+	    User user = new User(new EmailAddress(userVertex.getEmail()),
+		    userVertex.getName(), role);
+	    return user;
+	} finally {
+	    xoManager.currentTransaction().rollback();
+	}
     }
 
 }

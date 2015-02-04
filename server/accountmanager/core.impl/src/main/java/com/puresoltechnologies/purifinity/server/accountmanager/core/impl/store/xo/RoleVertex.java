@@ -20,9 +20,9 @@ public interface RoleVertex {
 
     @Indexed(unique = true)
     @Property(TitanElementNames.ROLE_ID_PROPERTY)
-    public String getRoleId();
+    public String getId();
 
-    public void setRoleId(String roleId);
+    public void setId(String id);
 
     @Indexed(unique = true)
     @Property(TitanElementNames.ROLE_NAME_PROPERTY)

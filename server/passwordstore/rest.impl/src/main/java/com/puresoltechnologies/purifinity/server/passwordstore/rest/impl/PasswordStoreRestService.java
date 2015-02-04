@@ -1,8 +1,13 @@
 package com.puresoltechnologies.purifinity.server.passwordstore.rest.impl;
 
 import javax.inject.Inject;
+import javax.ws.rs.NotAcceptableException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.commons.types.IllegalEmailAddressException;
 import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordStore;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
@@ -17,15 +22,24 @@ import com.puresoltechnologies.purifinity.server.passwordstore.rest.api.Password
 
 public class PasswordStoreRestService implements PasswordStoreRestInterface {
 
+    private static final Logger logger = LoggerFactory
+	    .getLogger(PasswordStoreRestService.class);
+
     @Inject
     private PasswordStore passwordStore;
 
     @Override
     public String createPassword(PasswordCreationEntity entity)
 	    throws PasswordCreationException {
-	return passwordStore.createPassword(
-		new EmailAddress(entity.getEmail()),
-		new Password(entity.getPassword()));
+	try {
+	    EmailAddress emailAddress = new EmailAddress(entity.getEmail());
+	    Password password = new Password(entity.getPassword());
+	    return passwordStore.createPassword(emailAddress, password);
+	} catch (IllegalEmailAddressException e) {
+	    logger.error("Could not create password.", e);
+	    throw new NotAcceptableException("Invalid email address '"
+		    + entity.getEmail() + "'.");
+	}
     }
 
     @Override

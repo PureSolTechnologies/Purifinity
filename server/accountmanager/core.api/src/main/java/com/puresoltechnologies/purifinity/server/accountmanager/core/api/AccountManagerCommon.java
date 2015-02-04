@@ -3,8 +3,6 @@ package com.puresoltechnologies.purifinity.server.accountmanager.core.api;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.Role;
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.User;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordStore;
 
 /**

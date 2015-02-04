@@ -47,8 +47,8 @@ public class PasswordStoreClient {
 
     public String createAccount(EmailAddress email, Password password)
 	    throws PasswordCreationException {
-	PasswordCreationEntity passwordCreationEntity = new PasswordCreationEntity(email
-			.getAddress(), password.getPassword());
+	PasswordCreationEntity passwordCreationEntity = new PasswordCreationEntity(
+		email.getAddress(), password.getPassword());
 	return proxy.createPassword(passwordCreationEntity);
     }
 

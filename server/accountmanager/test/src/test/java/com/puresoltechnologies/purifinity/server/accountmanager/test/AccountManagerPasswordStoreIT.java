@@ -279,7 +279,7 @@ public class AccountManagerPasswordStoreIT extends
 	proxy.activateAccount(EMAIL_ADDRESS, activationKey);
 	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
 		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
-	Password newPassword = proxy.resetPassword(EMAIL_ADDRESS);
+	Password newPassword = new Password(proxy.resetPassword(EMAIL_ADDRESS));
 	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
 		EMAIL_ADDRESS), newPassword));
     }

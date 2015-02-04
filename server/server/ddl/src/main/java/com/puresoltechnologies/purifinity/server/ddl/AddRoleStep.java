@@ -5,15 +5,15 @@ import java.util.Date;
 import com.puresoltechnologies.genesis.commons.TransformationException;
 import com.puresoltechnologies.genesis.transformation.titan.AbstractTitanTransformationStep;
 import com.puresoltechnologies.genesis.transformation.titan.TitanTransformationSequence;
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.Roles;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanVertex;
 
 public class AddRoleStep extends AbstractTitanTransformationStep {
 
-    private final Roles role;
+    private final SupportedRoles role;
 
-    public AddRoleStep(TitanTransformationSequence sequence, Roles role,
+    public AddRoleStep(TitanTransformationSequence sequence, SupportedRoles role,
 	    String developer, String comment) {
 	super(sequence, developer, "Add role " + role.getName(), comment);
 	this.role = role;

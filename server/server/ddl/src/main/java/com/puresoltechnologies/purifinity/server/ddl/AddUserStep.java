@@ -7,7 +7,7 @@ import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.genesis.commons.TransformationException;
 import com.puresoltechnologies.genesis.transformation.titan.AbstractTitanTransformationStep;
 import com.puresoltechnologies.genesis.transformation.titan.TitanTransformationSequence;
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.Roles;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanVertex;
 import com.tinkerpop.blueprints.Vertex;
@@ -16,10 +16,10 @@ public class AddUserStep extends AbstractTitanTransformationStep {
 
     private final EmailAddress userEmail;
     private final String userName;
-    private final Roles role;
+    private final SupportedRoles role;
 
     public AddUserStep(TitanTransformationSequence sequence,
-	    EmailAddress userEmail, String userName, Roles role,
+	    EmailAddress userEmail, String userName, SupportedRoles role,
 	    String developer, String comment) {
 	super(sequence, developer, "Add user " + userEmail.getAddress(),
 		comment);

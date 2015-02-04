@@ -28,6 +28,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>systemmonitor.app</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>wildfly.test</artifactId>
 		</dependency>
 		<dependency>
@@ -70,6 +75,18 @@
 			<plugin>
 				<groupId>org.codehaus.cargo</groupId>
 				<artifactId>cargo-maven2-plugin</artifactId>
+				<configuration>
+					<deployables>
+						<deployable>
+							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<artifactId>systemmonitor.app</artifactId>
+							<type>ear</type>
+							<properties>
+								<name>systemmonitor.app.ear</name>
+							</properties>
+						</deployable>
+					</deployables>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

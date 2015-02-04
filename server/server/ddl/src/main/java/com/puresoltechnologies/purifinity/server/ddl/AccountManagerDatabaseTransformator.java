@@ -15,7 +15,7 @@ import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransfo
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.genesis.transformation.titan.TitanTransformationSequence;
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.Roles;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
 import com.puresoltechnologies.versioning.Version;
 
 public class AccountManagerDatabaseTransformator implements
@@ -86,32 +86,32 @@ public class AccountManagerDatabaseTransformator implements
 		CASSANDRA_HOST, metadata);
 
 	sequence.appendTransformation(new AddRoleStep(sequence,
-		Roles.UNPRIVILEGED, "Rick-Rainer Ludwig",
+		SupportedRoles.UNPRIVILEGED, "Rick-Rainer Ludwig",
 		"Create unprivileged role."));
-	sequence.appendTransformation(new AddRoleStep(sequence, Roles.ENGINEER,
+	sequence.appendTransformation(new AddRoleStep(sequence, SupportedRoles.ENGINEER,
 		"Rick-Rainer Ludwig", "Creates the engineer role."));
 	sequence.appendTransformation(new AddRoleStep(sequence,
-		Roles.ADMINISTRATOR, "Rick-Rainer Ludwig",
+		SupportedRoles.ADMINISTRATOR, "Rick-Rainer Ludwig",
 		"Creates the administrator role."));
 
 	sequence.appendTransformation(new AddUserStep(sequence,
 		new EmailAddress("user@puresol-technologies.com"),
-		"Unprivileged User", Roles.UNPRIVILEGED, "Rick-Rainer Ludwig",
+		"Unprivileged User", SupportedRoles.UNPRIVILEGED, "Rick-Rainer Ludwig",
 		"Create unprivileged user."));
 
 	sequence.appendTransformation(new AddUserStep(sequence,
 		new EmailAddress("engineer@puresol-technologies.com"),
-		"Engineer", Roles.ENGINEER, "Rick-Rainer Ludwig",
+		"Engineer", SupportedRoles.ENGINEER, "Rick-Rainer Ludwig",
 		"Create engineer."));
 
 	sequence.appendTransformation(new AddUserStep(sequence,
 		new EmailAddress("administrator@puresol-technologies.com"),
-		"Administrator", Roles.ADMINISTRATOR, "Rick-Rainer Ludwig",
+		"Administrator", SupportedRoles.ADMINISTRATOR, "Rick-Rainer Ludwig",
 		"Create administrator."));
 
 	sequence.appendTransformation(new AddUserStep(sequence,
 		new EmailAddress("ludwig@puresol-technologies.com"),
-		"Rick-Rainer Ludwig", Roles.ADMINISTRATOR,
+		"Rick-Rainer Ludwig", SupportedRoles.ADMINISTRATOR,
 		"Rick-Rainer Ludwig", "Create first user."));
 
 	return sequence;

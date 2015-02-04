@@ -13,6 +13,8 @@ import javax.security.auth.login.LoginException;
 import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.api.User;
 
 @Singleton
 public class AuthServiceBean implements AuthService {
@@ -80,7 +82,7 @@ public class AuthServiceBean implements AuthService {
     private User findByEmailAndAuthToken(EmailAddress email, UUID authToken) {
 	EmailAddress userId = authorizationTokensStorage.get(authToken);
 	if ((userId != null) && (userId.equals(email))) {
-	    return new User(email, "admin");
+	    return accountManager.getUser(email);
 	}
 	return null;
     }
@@ -90,7 +92,7 @@ public class AuthServiceBean implements AuthService {
 	    Set<String> rolesAllowed) {
 	User user = findByEmailAndAuthToken(email, authToken);
 	if (user != null) {
-	    return rolesAllowed.contains(user.getAuthRole());
+	    return rolesAllowed.contains(user.getRole().getId());
 	} else {
 	    return false;
 	}
@@ -99,7 +101,9 @@ public class AuthServiceBean implements AuthService {
     @Override
     public boolean isAuthorizedAdministrator(EmailAddress email, UUID authToken) {
 	User user = findByEmailAndAuthToken(email, authToken);
-	return (user != null) && (user.getAuthRole().equals("admin"));
+	return (user != null)
+		&& (SupportedRoles.ADMINISTRATOR.getId().equals(user.getRole()
+			.getId()));
     }
 
 }

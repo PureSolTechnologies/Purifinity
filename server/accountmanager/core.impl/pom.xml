@@ -42,8 +42,8 @@
 			<artifactId>systemmonitor.client</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.xo</groupId>
-			<artifactId>xo-titan</artifactId>
+			<groupId>com.puresoltechnologies.extended-objects</groupId>
+			<artifactId>titan</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

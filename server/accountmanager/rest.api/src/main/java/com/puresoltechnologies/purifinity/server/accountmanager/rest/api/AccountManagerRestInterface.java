@@ -11,10 +11,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.puresoltechnologies.commons.types.EmailAddress;
-import com.puresoltechnologies.commons.types.Password;
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.Role;
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.User;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
@@ -36,12 +32,12 @@ public interface AccountManagerRestInterface {
     @PUT
     @Path("users/{email}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void setUser(@PathParam("email") EmailAddress email, User user);
+    public void setUser(@PathParam("email") String email, User user);
 
     @GET
     @Path("users/{email}")
     @Produces(MediaType.APPLICATION_JSON)
-    public User getUser(@PathParam("email") EmailAddress email);
+    public User getUser(@PathParam("email") String email);
 
     @PUT
     @Path("users")
@@ -54,7 +50,7 @@ public interface AccountManagerRestInterface {
     @Path("users/{email}/activate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public EmailAddress activateAccount(@PathParam("email") String email,
+    public String activateAccount(@PathParam("email") String email,
 	    String activationKey) throws PasswordActivationException;
 
     @POST
@@ -68,7 +64,7 @@ public interface AccountManagerRestInterface {
     @POST
     @Path("users/{email}/reset")
     @Produces(MediaType.APPLICATION_JSON)
-    public Password resetPassword(@PathParam("email") String email)
+    public String resetPassword(@PathParam("email") String email)
 	    throws PasswordResetException;
 
 }

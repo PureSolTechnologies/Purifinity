@@ -11,9 +11,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.Role;
-import com.puresoltechnologies.purifinity.server.accountmanager.domain.User;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.AccountManagerRestInterface;
+import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.Role;
+import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.User;
 
 public class AccountManagerRestServiceIT extends
 	AbstractAccountManagerClientTest {
