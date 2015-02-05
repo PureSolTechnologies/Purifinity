@@ -54,9 +54,9 @@ public class TitanElementNames {
     /*
      * User Management
      */
-    public static final String USER_EMAIL_PROPERTY = "user_email";
-    public static final String USER_NAME_PROPERTY = "user_name";
-    public static final String ROLE_ID_PROPERTY = "role_id";
-    public static final String ROLE_NAME_PROPERTY = "role_name";
+    public static final String USER_EMAIL_PROPERTY = "user.email";
+    public static final String USER_NAME_PROPERTY = "user.name";
+    public static final String ROLE_ID_PROPERTY = "role.id";
+    public static final String ROLE_NAME_PROPERTY = "role.name";
 
 }

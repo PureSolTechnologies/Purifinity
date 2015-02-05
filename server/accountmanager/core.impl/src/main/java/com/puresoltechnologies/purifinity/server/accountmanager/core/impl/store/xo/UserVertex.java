@@ -23,7 +23,6 @@ public interface UserVertex {
 
     public void setEmail(String email);
 
-    @Indexed(unique = true)
     @Property(TitanElementNames.USER_NAME_PROPERTY)
     public String getName();
 

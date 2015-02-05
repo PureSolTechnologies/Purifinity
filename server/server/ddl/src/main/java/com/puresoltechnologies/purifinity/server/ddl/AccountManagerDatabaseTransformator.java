@@ -8,15 +8,24 @@ import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
+import com.puresoltechnologies.genesis.commons.TransformationException;
 import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
 import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
+import com.puresoltechnologies.genesis.transformation.titan.AbstractTitanTransformationStep;
 import com.puresoltechnologies.genesis.transformation.titan.TitanTransformationSequence;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
+import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
 import com.puresoltechnologies.versioning.Version;
+import com.thinkaurelius.titan.core.Cardinality;
+import com.thinkaurelius.titan.core.Multiplicity;
+import com.thinkaurelius.titan.core.PropertyKey;
+import com.thinkaurelius.titan.core.TitanGraph;
+import com.thinkaurelius.titan.core.schema.TitanManagement;
+import com.tinkerpop.blueprints.Vertex;
 
 public class AccountManagerDatabaseTransformator implements
 	ComponentTransformator {
@@ -85,19 +94,67 @@ public class AccountManagerDatabaseTransformator implements
 	TitanTransformationSequence sequence = new TitanTransformationSequence(
 		CASSANDRA_HOST, metadata);
 
+	sequence.appendTransformation(new AbstractTitanTransformationStep(
+		sequence,
+		"Rick-Rainer Ludwig",
+		"Create indizes for Account manager.",
+		"All indizes are added which improve performance and stability of account manager.") {
+
+	    @Override
+	    public void transform() throws TransformationException {
+		TitanGraph titanGraph = getTitanGraph();
+		try {
+		    TitanManagement managementSystem = titanGraph
+			    .getManagementSystem();
+		    try {
+			managementSystem.makeEdgeLabel("belongsTo")
+				.multiplicity(Multiplicity.MANY2ONE).make();
+			PropertyKey roleIdProperty = managementSystem
+				.makePropertyKey(
+					TitanElementNames.ROLE_ID_PROPERTY)
+				.dataType(String.class)
+				.cardinality(Cardinality.SINGLE).make();
+			managementSystem
+				.buildIndex(
+					TitanElementNames.ROLE_ID_PROPERTY
+						+ ".Index", Vertex.class)
+				.addKey(roleIdProperty).unique()
+				.buildCompositeIndex();
+			PropertyKey userEmailProperty = managementSystem
+				.makePropertyKey(
+					TitanElementNames.USER_EMAIL_PROPERTY)
+				.dataType(String.class)
+				.cardinality(Cardinality.SINGLE).make();
+			managementSystem
+				.buildIndex(
+					TitanElementNames.USER_EMAIL_PROPERTY
+						+ ".Index", Vertex.class)
+				.addKey(userEmailProperty).unique()
+				.buildCompositeIndex();
+		    } finally {
+			managementSystem.commit();
+		    }
+		} finally {
+		    titanGraph.commit();
+		}
+
+	    }
+	});
+
 	sequence.appendTransformation(new AddRoleStep(sequence,
 		SupportedRoles.UNPRIVILEGED, "Rick-Rainer Ludwig",
 		"Create unprivileged role."));
-	sequence.appendTransformation(new AddRoleStep(sequence, SupportedRoles.ENGINEER,
-		"Rick-Rainer Ludwig", "Creates the engineer role."));
+	sequence.appendTransformation(new AddRoleStep(sequence,
+		SupportedRoles.ENGINEER, "Rick-Rainer Ludwig",
+		"Creates the engineer role."));
 	sequence.appendTransformation(new AddRoleStep(sequence,
 		SupportedRoles.ADMINISTRATOR, "Rick-Rainer Ludwig",
 		"Creates the administrator role."));
 
 	sequence.appendTransformation(new AddUserStep(sequence,
 		new EmailAddress("user@puresol-technologies.com"),
-		"Unprivileged User", SupportedRoles.UNPRIVILEGED, "Rick-Rainer Ludwig",
-		"Create unprivileged user."));
+		"Unprivileged User", SupportedRoles.UNPRIVILEGED,
+		"Rick-Rainer Ludwig", "Create unprivileged user."));
 
 	sequence.appendTransformation(new AddUserStep(sequence,
 		new EmailAddress("engineer@puresol-technologies.com"),
@@ -106,14 +163,13 @@ public class AccountManagerDatabaseTransformator implements
 
 	sequence.appendTransformation(new AddUserStep(sequence,
 		new EmailAddress("administrator@puresol-technologies.com"),
-		"Administrator", SupportedRoles.ADMINISTRATOR, "Rick-Rainer Ludwig",
-		"Create administrator."));
+		"Administrator", SupportedRoles.ADMINISTRATOR,
+		"Rick-Rainer Ludwig", "Create administrator."));
 
 	sequence.appendTransformation(new AddUserStep(sequence,
 		new EmailAddress("ludwig@puresol-technologies.com"),
 		"Rick-Rainer Ludwig", SupportedRoles.ADMINISTRATOR,
 		"Rick-Rainer Ludwig", "Create first user."));
-
 	return sequence;
     }
 

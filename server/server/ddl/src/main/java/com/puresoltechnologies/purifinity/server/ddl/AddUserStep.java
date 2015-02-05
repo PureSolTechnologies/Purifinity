@@ -8,6 +8,7 @@ import com.puresoltechnologies.genesis.commons.TransformationException;
 import com.puresoltechnologies.genesis.transformation.titan.AbstractTitanTransformationStep;
 import com.puresoltechnologies.genesis.transformation.titan.TitanTransformationSequence;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
+import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
 import com.thinkaurelius.titan.core.TitanGraph;
 import com.thinkaurelius.titan.core.TitanVertex;
 import com.tinkerpop.blueprints.Vertex;
@@ -35,13 +36,17 @@ public class AddUserStep extends AbstractTitanTransformationStep {
 	try {
 	    TitanVertex userVertex = titanGraph.addVertex();
 	    userVertex.setProperty("_xo_discriminator_user", "user");
-	    userVertex.setProperty("user_email", userEmail.getAddress());
-	    userVertex.setProperty("user_name", userName);
-	    userVertex.setProperty("time.creation", new Date());
+	    userVertex.setProperty(TitanElementNames.USER_EMAIL_PROPERTY,
+		    userEmail.getAddress());
+	    userVertex.setProperty(TitanElementNames.USER_NAME_PROPERTY,
+		    userName);
+	    userVertex.setProperty(TitanElementNames.CREATION_TIME_PROPERTY,
+		    new Date());
 
 	    @SuppressWarnings("unchecked")
 	    Iterable<Vertex> roles = titanGraph.query()
-		    .has("role_id", role.getId()).vertices();
+		    .has(TitanElementNames.ROLE_ID_PROPERTY, role.getId())
+		    .vertices();
 	    Iterator<Vertex> roleIterator = roles.iterator();
 	    if (!roleIterator.hasNext()) {
 		throw new TransformationException("No role vertex for "

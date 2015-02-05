@@ -17,8 +17,10 @@
 		<graphs.version>0.4.0</graphs.version>
 
 		<!-- Databases -->
-		<cassandra.driver.version>2.1.2</cassandra.driver.version>
+		<cassandra.driver.version>2.1.4</cassandra.driver.version>
 		<titan.version>0.5.3</titan.version>
+		<xo-titan.version>0.3.0-SNAPSHOT</xo-titan.version>
+		
 		<!-- WildFly -->
 		<wildfly.version>8.2.0.Final</wildfly.version>
 		<resteasy.version>3.0.10.Final</resteasy.version>
