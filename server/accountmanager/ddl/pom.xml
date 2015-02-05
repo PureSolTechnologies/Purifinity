@@ -13,6 +13,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresoltechnologies.genesis</groupId>
+			<artifactId>controller</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>database.cassandra</artifactId>
 		</dependency>
