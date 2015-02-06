@@ -3,6 +3,7 @@ package com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store
 import java.util.Date;
 
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
+import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;
 import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
 import com.puresoltechnologies.xo.titan.api.annotation.Property;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
@@ -33,6 +34,8 @@ public interface UserVertex {
 
     public void setCreationTime(Date time);
 
+    @Outgoing
+    @BelongsTo
     public RoleVertex getRole();
 
 }

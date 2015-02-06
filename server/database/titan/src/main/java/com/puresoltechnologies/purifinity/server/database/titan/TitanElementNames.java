@@ -34,6 +34,7 @@ public class TitanElementNames {
     public static final String TREE_ELEMENT_SOURCE_CODE_LOCATION = "tree.element.source.location";
     public static final String CONTAINS_FILE_LABEL = "containsFile";
     public static final String CONTAINS_DIRECTORY_LABEL = "containsDirectory";
+    public static final String BELONGS_TO_LABEL = "belongsTo";
     /*
      * ANALYSIS
      */

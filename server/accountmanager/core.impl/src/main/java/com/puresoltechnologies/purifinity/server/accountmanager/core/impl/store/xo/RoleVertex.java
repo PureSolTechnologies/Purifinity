@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
+import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Incoming;
 import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
 import com.puresoltechnologies.xo.titan.api.annotation.Property;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
@@ -35,6 +36,8 @@ public interface RoleVertex {
 
     public void setCreationTime(Date time);
 
+    @Incoming
+    @BelongsTo
     public List<UserVertex> getUsersWithRole();
 
 }

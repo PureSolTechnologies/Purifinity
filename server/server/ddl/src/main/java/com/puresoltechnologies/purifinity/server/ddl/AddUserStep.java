@@ -57,7 +57,7 @@ public class AddUserStep extends AbstractTitanTransformationStep {
 		throw new TransformationException("Multiple role vertices for "
 			+ role.getName() + " were found.");
 	    }
-	    userVertex.addEdge("belongsTo", roleVertex);
+	    userVertex.addEdge(TitanElementNames.BELONGS_TO_LABEL, roleVertex);
 
 	    titanGraph.commit();
 	} catch (Exception e) {

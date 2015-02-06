@@ -177,9 +177,8 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	    Result<RoleVertex> results = xoManager.createQuery(
 		    "_().has('_xo_discriminator_" + RoleVertex.NAME + "')",
 		    RoleVertex.class).execute();
-	    for (Object roleVertex : results) {
-		Role role = (Role) roleVertex;
-		roles.add(new Role(role.getId(), role.getName()));
+	    for (RoleVertex roleVertex : results) {
+		roles.add(new Role(roleVertex.getId(), roleVertex.getName()));
 	    }
 	} finally {
 	    xoManager.currentTransaction().rollback();
