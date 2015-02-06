@@ -73,4 +73,8 @@ public class PasswordStoreClient {
 	    throws PasswordResetException {
 	return proxy.resetPassword(email.getAddress());
     }
+
+    public void deletePassword(String emailAddress) {
+	proxy.deletePassword(emailAddress);
+    }
 }

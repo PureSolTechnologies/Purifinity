@@ -76,6 +76,11 @@ public class AccountManagerRestService implements AccountManagerRestInterface {
     }
 
     @Override
+    public void removeAccount(String email) {
+	accountManager.removePassword(new EmailAddress(email));
+    }
+
+    @Override
     public boolean changePassword(String email, String oldPassword,
 	    String newPassword) throws PasswordChangeException {
 	return accountManager.changePassword(new EmailAddress(email),

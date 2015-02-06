@@ -67,4 +67,9 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
 	    throws PasswordResetException {
 	return passwordStore.resetPassword(new EmailAddress(emailAddress));
     }
+
+    @Override
+    public void deletePassword(String emailAddress) {
+	passwordStore.removePassword(new EmailAddress(emailAddress));
+    }
 }

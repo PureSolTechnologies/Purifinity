@@ -3,6 +3,7 @@ package com.puresoltechnologies.purifinity.server.accountmanager.rest.api;
 import java.util.Set;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -52,6 +53,10 @@ public interface AccountManagerRestInterface {
     @Produces(MediaType.APPLICATION_JSON)
     public String activateAccount(@PathParam("email") String email,
 	    String activationKey) throws PasswordActivationException;
+
+    @DELETE
+    @Path("users/{email}")
+    public void removeAccount(@PathParam("email") String email);
 
     @POST
     @Path("users/{email}/passwd")

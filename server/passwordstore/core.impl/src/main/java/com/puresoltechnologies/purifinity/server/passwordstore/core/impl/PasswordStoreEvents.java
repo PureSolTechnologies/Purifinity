@@ -176,4 +176,10 @@ public class PasswordStoreEvents {
 			+ email + "' due to non exsiting account!");
     }
 
+    public static Event createPasswordDeleteEvent(EmailAddress email) {
+	return new Event(COMPONENT, 22, EventType.USER_ACTION,
+		EventSeverity.INFO, "Password deleted for user '" + email
+			+ "'.");
+    }
+
 }

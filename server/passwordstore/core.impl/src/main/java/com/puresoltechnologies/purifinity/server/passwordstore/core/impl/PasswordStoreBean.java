@@ -58,6 +58,8 @@ public class PasswordStoreBean implements PasswordStore {
 	    + PASSWORD_TABLE_NAME + " SET password = ? WHERE email = ?";
     public static final String RETRIEVE_ACCOUNT_STATEMENT = "SELECT * FROM "
 	    + PASSWORD_TABLE_NAME + " WHERE email = ?";
+    public static final String DELETE_ACCOUNT_STATEMENT = "DELETE FROM "
+	    + PASSWORD_TABLE_NAME + " WHERE email = ?";
 
     private static final List<Character> validCharacters = new ArrayList<>();
     static {
@@ -332,5 +334,18 @@ public class PasswordStoreBean implements PasswordStore {
 	    }
 	} while (!PasswordStrengthCalculator.validate(builder.toString()));
 	return builder.toString();
+    }
+
+    @Override
+    public void removePassword(EmailAddress email) {
+	PreparedStatement preparedStatement = preparedStatements
+		.getPreparedStatement(session, DELETE_ACCOUNT_STATEMENT);
+	BoundStatement boundStatement = preparedStatement.bind(email
+		.getAddress());
+	session.execute(boundStatement);
+
+	eventLogger.logEvent(PasswordStoreEvents
+		.createPasswordDeleteEvent(email));
+
     }
 }
