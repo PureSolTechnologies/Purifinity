@@ -40,6 +40,15 @@ function purifinityServerConnector($http, $location, authService, httpRequests, 
 		}
 		return httpRequests.get(baseURL + serviceURL, authId, authToken, successCallback, errorCallback);
 	};
+	factory.put = function(serviceURL, data, successCallback, errorCallback) {
+		var authId = '';
+		var authToken = '';
+		if (authService.authData) {
+			authId = authService.authData.authId;
+			authToken = authService.authData.authToken;
+		}
+		return httpRequests.put(baseURL + serviceURL, data, authId, authToken, successCallback, errorCallback);
+	};
 	factory.post = function(serviceURL, data, successCallback, errorCallback) {
 		var authId = '';
 		var authToken = '';
@@ -48,6 +57,15 @@ function purifinityServerConnector($http, $location, authService, httpRequests, 
 			authToken = authService.authData.authToken;
 		}
 		return httpRequests.post(baseURL + serviceURL, data, authId, authToken, successCallback, errorCallback);
+	};
+	factory.del = function(serviceURL, errorCallback) {
+		var authId = '';
+		var authToken = '';
+		if (authService.authData) {
+			authId = authService.authData.authId;
+			authToken = authService.authData.authToken;
+		}
+		return httpRequests.del(baseURL + serviceURL, authId, authToken, successCallback, errorCallback);
 	};
 	return factory;
 }
@@ -79,8 +97,7 @@ function httpRequests($http, $location, alerterFactory) {
 					$location.path("/login");
 					return;
 				}
-				alerterFactory.addAlert("error", "HTTP Status: "
-						+ status + "\n" + data);
+				alerterFactory.addAlert("error", "HTTP Status: " + status + "\n" + data);
 				var data = localStorage.getItem(url);
 				errorCallback(data, status, error);
 			}
@@ -100,7 +117,65 @@ function httpRequests($http, $location, alerterFactory) {
 		)
 		.success(
 			function(data, status) {
-				localStorage.setItem(url, JSON.stringify(data));
+				successCallback(data, status);
+			}
+		)
+		.error(
+			function(data, status, error) {
+				if (status == 401) {
+					alerterFactory.addAlert("info", data);
+					authService.redirect = $location;
+					$location.path("/login");
+					return;
+				}
+				alerterFactory.addAlert("error", "HTTP Status: " + status + "\n" + data);
+				errorCallback(data, status, error);
+			}
+		);
+	}
+	service.put = function(url, data, authId, authToken, successCallback, errorCallback) {
+		return $http(
+			{
+				method : 'PUT',
+				url : url,
+				headers : {
+					'auth-id' : authId,
+					'auth-token' : authToken
+				},
+				data: data
+			}
+		)
+		.success(
+			function(data, status) {
+				successCallback(data, status);
+			}
+		)
+		.error(
+			function(data, status, error) {
+				if (status == 401) {
+					alerterFactory.addAlert("info", data);
+					authService.redirect = $location;
+					$location.path("/login");
+					return;
+				}
+				alerterFactory.addAlert("error", "HTTP Status: " + status + "\n" + data);
+				errorCallback(data, status, error);
+			}
+		);
+	}
+	service.del = function(url, authId, authToken, successCallback, errorCallback) {
+		return $http(
+			{
+				method : 'DELETE',
+				url : url,
+				headers : {
+					'auth-id' : authId,
+					'auth-token' : authToken
+				}
+			}
+		)
+		.success(
+			function(data, status) {
 				successCallback(data, status);
 			}
 		)
@@ -114,7 +189,6 @@ function httpRequests($http, $location, alerterFactory) {
 				}
 				alerterFactory.addAlert("error", "HTTP Status: "
 						+ status + "\n" + data);
-				var data = localStorage.getItem(url);
 				errorCallback(data, status, error);
 			}
 		);

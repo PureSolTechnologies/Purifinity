@@ -17,6 +17,16 @@ function userAdministratorFactory(purifinityServerConnector) {
 		return purifinityServerConnector.get('/accountmanager/rest/users',
 				success, error);
 	};
+	userAdministratorFactory.createAccount = function(email, password, success, error) {
+		var data = {};
+		return purifinityServerConnector.put(data, '/accountmanager/rest/users',
+				success, error);
+	};
+	userAdministratorFactory.deleteAccount = function(email, success, error) {
+		var data = {};
+		return purifinityServerConnector.del(data, '/accountmanager/rest/users/' + email,
+				success, error);
+	};
 	userAdministratorFactory.getRoles = function(success, error) {
 		return purifinityServerConnector.get('/accountmanager/rest/roles',
 				success, error);
@@ -45,6 +55,14 @@ function usersViewCtrl($scope) {
 	userAdministratorFactory.getUsers(//
 		function(data, status) {$scope.users = data}, //
 		function(data, status, error) {});
+	$scope.deleteUser = function (email) {
+		userAdministratorFactory.deleteAccount(email, 
+			function (data, status) {
+			},
+			function (data, status, error) {
+			}
+		);
+	}
 }
 
  function addUserModalCtrl($scope, $modal, $log) {
