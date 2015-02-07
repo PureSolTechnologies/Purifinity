@@ -7,39 +7,38 @@ import org.junit.BeforeClass;
 
 import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreBean;
+import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
+import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreTester;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractClientTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
 public abstract class AbstractPasswordStoreClientTest extends
-		AbstractClientTest {
+	AbstractClientTest {
 
-	private static Cluster cluster;
-	private static Session session;
+    private static Cluster cluster;
+    private static Session session;
 
-	@BeforeClass
-	public static void connectCassandra() {
-		cluster = Cluster.builder()
-				.addContactPoint(PasswordStoreBean.CASSANDRA_HOST)
-				.withPort(PasswordStoreBean.CASSANDRA_CQL_PORT).build();
-		session = cluster
-				.connect(PasswordStoreBean.PASSWORD_STORE_KEYSPACE_NAME);
-		cleanupPasswordStoreDatabase();
+    @BeforeClass
+    public static void connectCassandra() {
+	cluster = CassandraClusterHelper.connect();
+	session = PasswordStoreTester.connectKeyspace(cluster);
+	PasswordStoreTester.cleanupDatabase(session);
+    }
+
+    @AfterClass
+    public static void disconnectCassandra() {
+	if (session != null) {
+	    session.close();
+	    session = null;
 	}
-
-	@AfterClass
-	public static void disconnectCassandra() {
-		session.close();
-		cluster.close();
+	if (cluster != null) {
+	    cluster.close();
+	    cluster = null;
 	}
+    }
 
-	public static final void cleanupPasswordStoreDatabase() {
-		session.execute("TRUNCATE " + PasswordStoreBean.PASSWORD_TABLE_NAME
-				+ ";");
-	}
-
-	@EnhanceDeployment
-	public static void additionalResources(JavaArchive javaArchive) {
-		javaArchive.addPackages(true, HttpEntity.class.getPackage());
-	}
+    @EnhanceDeployment
+    public static void additionalResources(JavaArchive javaArchive) {
+	javaArchive.addPackages(true, HttpEntity.class.getPackage());
+    }
 }

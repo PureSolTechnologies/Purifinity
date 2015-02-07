@@ -64,7 +64,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
     @Override
     public String createPassword(EmailAddress email, Password password)
 	    throws PasswordCreationException {
-	return passwordStore.createAccount(email, password);
+	return passwordStore.createPassword(email, password);
     }
 
     @Override
@@ -230,9 +230,8 @@ public class AccountManagerBean implements Serializable, AccountManager,
 		    email.getAddress()).getSingleResult();
 	    RoleVertex roleVertex = userVertex.getRole();
 	    Role role = new Role(roleVertex.getId(), roleVertex.getName());
-	    User user = new User(new EmailAddress(userVertex.getEmail()),
+	    return new User(new EmailAddress(userVertex.getEmail()),
 		    userVertex.getName(), role);
-	    return user;
 	} finally {
 	    xoManager.currentTransaction().rollback();
 	}
@@ -240,7 +239,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
 
     @Override
     public void removePassword(EmailAddress email) {
-	passwordStore.deletePassword(email.getAddress());
+	passwordStore.removePassword(email);
 	ResultIterable<UserVertex> userVertex = xoManager.find(
 		UserVertex.class, email.getAddress());
 	xoManager.delete(userVertex);

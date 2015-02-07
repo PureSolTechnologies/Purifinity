@@ -12,8 +12,9 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreBean;
-import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreDatabaseHelper;
+import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreTester;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
@@ -31,16 +32,10 @@ public abstract class AbstractPasswordStoreServerTest extends
 
     @Before
     public void connectCassandra() {
-	cluster = Cluster.builder()
-		.addContactPoint(PasswordStoreBean.CASSANDRA_HOST)
-		.withPort(PasswordStoreBean.CASSANDRA_CQL_PORT).build();
+	cluster = CassandraClusterHelper.connect();
 	assertNotNull("Cassandra cluster was not connected.", cluster);
-	session = cluster
-		.connect(PasswordStoreBean.PASSWORD_STORE_KEYSPACE_NAME);
-	assertNotNull("Session for '"
-		+ PasswordStoreBean.PASSWORD_STORE_KEYSPACE_NAME
-		+ "' was not opened.", session);
-	PasswordStoreDatabaseHelper.cleanPasswordStore(cluster);
+	session = PasswordStoreTester.connectKeyspace(cluster);
+	PasswordStoreTester.cleanupDatabase(session);
     }
 
     @After
@@ -60,14 +55,11 @@ public abstract class AbstractPasswordStoreServerTest extends
     }
 
     protected Row readAccoutFromDatabase(EmailAddress email) {
-	try (Session session = cluster.connect()) {
-	    String accountQuery = "SELECT * FROM "
-		    + PasswordStoreBean.PASSWORD_STORE_KEYSPACE_NAME + "."
-		    + PasswordStoreBean.PASSWORD_TABLE_NAME + " WHERE email=?;";
-	    PreparedStatement preparedStatement = session.prepare(accountQuery);
-	    BoundStatement account = preparedStatement.bind(email.getAddress());
-	    return session.execute(account).one();
-	}
+	String accountQuery = "SELECT * FROM "
+		+ PasswordStoreBean.PASSWORD_TABLE_NAME + " WHERE email=?;";
+	PreparedStatement preparedStatement = session.prepare(accountQuery);
+	BoundStatement account = preparedStatement.bind(email.getAddress());
+	return session.execute(account).one();
     }
 
 }

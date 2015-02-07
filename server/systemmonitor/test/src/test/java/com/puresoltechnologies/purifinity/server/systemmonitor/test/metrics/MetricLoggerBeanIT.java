@@ -8,13 +8,11 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import org.junit.After;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
-import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.metrics.MetricLoggerBean;
 import com.puresoltechnologies.purifinity.server.systemmonitor.test.AbstractSystemMonitorServerTest;
 import com.puresoltechnologies.server.systemmonitor.core.api.metrics.MetricLogger;
 
@@ -22,11 +20,6 @@ public class MetricLoggerBeanIT extends AbstractSystemMonitorServerTest {
 
     @Inject
     private MetricLogger metricLogger;
-
-    @After
-    public void tearDown() {
-	((MetricLoggerBean) metricLogger).disconnect();
-    }
 
     @Test
     public void testSingleEntry() {
@@ -71,6 +64,6 @@ public class MetricLoggerBeanIT extends AbstractSystemMonitorServerTest {
 	double speed = NUMBER_OF_THREADS * NUMBER_OF_EVENTS_PER_THREAD
 		* SECOND_TO_MILLIS / (double) (stop - start);
 	System.out.println("MetricLogger speed: " + speed + " metrics/s");
-	assertTrue(speed > 500);
+	assertTrue("Speed minimum not reached.", speed > 250);
     }
 }

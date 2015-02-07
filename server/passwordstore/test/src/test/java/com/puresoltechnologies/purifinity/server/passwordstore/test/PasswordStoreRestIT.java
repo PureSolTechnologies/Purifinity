@@ -20,12 +20,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.datastax.driver.core.Cluster;
 import com.puresoltechnologies.commons.math.JSONSerializer;
+import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
 import com.puresoltechnologies.purifinity.server.passwordstore.rest.api.PasswordCreationEntity;
+import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreTester;
 
 public class PasswordStoreRestIT extends AbstractPasswordStoreClientTest {
 
-    private static final String EMAIL_ADDRESS = "ludwig@puresol-technologies.com";
+    private static final String EMAIL_ADDRESS = "newaccount@puresol-technologies.com";
     private static final String INVALID_EMAIL_ADDRESS = "@puresol-technologies.com";
     private static final String VALID_PASSWORD = "IAmAPassword!:-)3";
     private static final String TOO_WEAK_PASSWORD = "123456";
@@ -34,6 +37,9 @@ public class PasswordStoreRestIT extends AbstractPasswordStoreClientTest {
 
     @Before
     public void setup() {
+	try (Cluster cluster = CassandraClusterHelper.connect()) {
+	    PasswordStoreTester.cleanupDatabase(cluster);
+	}
 	httpClient = HttpClientBuilder.create().build();
     }
 

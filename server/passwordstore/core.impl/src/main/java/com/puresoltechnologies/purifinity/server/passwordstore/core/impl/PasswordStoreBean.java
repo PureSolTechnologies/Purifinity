@@ -42,9 +42,6 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerR
 @Stateless
 public class PasswordStoreBean implements PasswordStore {
 
-    public static final String PASSWORD_STORE_KEYSPACE_NAME = "password_store";
-    public static final String CASSANDRA_HOST = "localhost";
-    public static final int CASSANDRA_CQL_PORT = 9042;
     public static final String PASSWORD_TABLE_NAME = "passwords";
 
     public static final String CREATE_ACCOUNT_STATEMENT = "INSERT INTO "

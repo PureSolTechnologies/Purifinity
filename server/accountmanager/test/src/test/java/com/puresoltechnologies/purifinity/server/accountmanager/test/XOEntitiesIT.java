@@ -18,21 +18,41 @@ import com.buschmais.xo.api.bootstrap.XO;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UserVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UsersXOManager;
+import com.puresoltechnologies.purifinity.server.database.titan.TitanGraphHelper;
+import com.thinkaurelius.titan.core.TitanGraph;
+import com.tinkerpop.blueprints.Vertex;
 
 public class XOEntitiesIT {
 
     private static XOManagerFactory xoManagerFactory;
+    private static TitanGraph titanGraph;
+
     private XOManager xoManager;
 
     @BeforeClass
     public static void connecXO() {
 	xoManagerFactory = XO
 		.createXOManagerFactory(UsersXOManager.XO_UNIT_NAME);
+	titanGraph = TitanGraphHelper.connect();
+    }
+
+    @AfterClass
+    public static void disconnect() {
+	titanGraph.shutdown();
     }
 
     @Before
     public void createXOManager() {
 	xoManager = xoManagerFactory.createXOManager();
+	Iterable<Vertex> vertices = titanGraph.query().vertices();
+	int counter = 0;
+	for (Vertex vertex : vertices) {
+	    counter++;
+	    for (String key : vertex.getPropertyKeys()) {
+		System.out.println(key + ": " + vertex.getProperty(key));
+	    }
+	}
+	assertEquals(7, counter);
     }
 
     @Test

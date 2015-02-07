@@ -5,42 +5,27 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import javax.ws.rs.NotAcceptableException;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.datastax.driver.core.Cluster;
 import com.puresoltechnologies.commons.types.EmailAddress;
-import com.puresoltechnologies.commons.types.IntrospectionUtilities;
 import com.puresoltechnologies.commons.types.Password;
+import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreEvents;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
+import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreTester;
 
 public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 
     private static final EmailAddress EMAIL_ADDRESS = new EmailAddress(
-	    "ludwig@puresol-technologies.com");
-    private static final EmailAddress INVALID_EMAIL_ADDRESS = new EmailAddress(
-	    "ludwig@puresol-technologies.com");
-    static {
-	try {
-	    IntrospectionUtilities.setField(INVALID_EMAIL_ADDRESS, "localPart",
-		    "");
-	    IntrospectionUtilities.setField(INVALID_EMAIL_ADDRESS, "address",
-		    "puresol-technologies.com");
-	} catch (SecurityException | NoSuchFieldException
-		| IllegalArgumentException | IllegalAccessException e) {
-	    throw new RuntimeException("Could not initialize test!", e);
-	}
-
-    }
+	    "newaccount@puresol-technologies.com");
     private static final Password VALID_PASSWORD = new Password(
 	    "IAmAPassword!:-)3");
     private static final Password TOO_WEAK_PASSWORD = new Password("123456");
@@ -48,14 +33,16 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
     private final PasswordStoreClient restClient = new PasswordStoreClient();
 
     @Before
-    public void setup() throws SQLException, IOException {
+    public void setup() {
 	assertNotNull(restClient);
-	cleanupPasswordStoreDatabase();
+	try (Cluster cluster = CassandraClusterHelper.connect()) {
+	    PasswordStoreTester.cleanupDatabase(cluster);
+	}
     }
 
     @Test
     public void testCreateAccount() throws PasswordCreationException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+	String activationKey = restClient.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	assertNotNull(activationKey);
 	assertFalse(activationKey.isEmpty());
@@ -72,9 +59,9 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
     public void testCreateAccountDuplicateEmail()
 	    throws PasswordCreationException {
 	// the first account should be created normally...
-	restClient.createAccount(EMAIL_ADDRESS, VALID_PASSWORD);
+	restClient.createPassword(EMAIL_ADDRESS, VALID_PASSWORD);
 	// now we expect an error...
-	restClient.createAccount(EMAIL_ADDRESS, VALID_PASSWORD);
+	restClient.createPassword(EMAIL_ADDRESS, VALID_PASSWORD);
     }
 
     /**
@@ -87,7 +74,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
     public void testCreateAccountTooWeakPassword()
 	    throws PasswordCreationException {
 	try {
-	    restClient.createAccount(EMAIL_ADDRESS, TOO_WEAK_PASSWORD);
+	    restClient.createPassword(EMAIL_ADDRESS, TOO_WEAK_PASSWORD);
 	} catch (PasswordCreationException e) {
 	    assertEquals(
 		    PasswordStoreEvents.createPasswordTooWeakErrorEvent(
@@ -96,42 +83,21 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 	}
     }
 
-    /**
-     * For an invalid email address we expect an
-     * {@link PasswordCreationException} with an embedded message about the
-     * invalid email address.
-     * 
-     * @throws PasswordCreationException
-     */
-    @Test(expected = NotAcceptableException.class)
-    public void testCreateAccountWithInvalidEmailAddress()
-	    throws PasswordCreationException {
-	try {
-	    restClient.createAccount(INVALID_EMAIL_ADDRESS, TOO_WEAK_PASSWORD);
-	} catch (PasswordCreationException e) {
-	    assertEquals(PasswordStoreEvents
-		    .createInvalidEmailAddressErrorEvent(INVALID_EMAIL_ADDRESS)
-		    .getMessage(), e.getMessage());
-	    throw e;
-	}
-    }
-
     @Test
     public void testActivateAccount() throws PasswordActivationException,
 	    PasswordCreationException {
-	String activationKey = restClient.createAccount(new EmailAddress(
-		"ludwig@puresol-technologies.com"), new Password(
-		"12dqwec1241`S@#R~"));
+	String activationKey = restClient.createPassword(EMAIL_ADDRESS,
+		new Password("12dqwec1241`S@#R~"));
 	assertNotNull(activationKey);
 	assertFalse(activationKey.isEmpty());
-	restClient.activatePassword(new EmailAddress(
-		"ludwig@puresol-technologies.com"), activationKey);
+	assertEquals(EMAIL_ADDRESS,
+		restClient.activatePassword(EMAIL_ADDRESS, activationKey));
     }
 
     @Test(expected = NotAcceptableException.class)
     public void testActivateAccountWithInvalidActivationKey()
 	    throws PasswordCreationException, PasswordActivationException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+	String activationKey = restClient.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 
 	try {
@@ -148,7 +114,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
     @Test
     public void testAuthenticate() throws PasswordCreationException,
 	    PasswordActivationException {
-	String activationInformation = restClient.createAccount(EMAIL_ADDRESS,
+	String activationInformation = restClient.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	restClient.activatePassword(EMAIL_ADDRESS, activationInformation);
 	assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
@@ -157,7 +123,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
     @Test
     public void testAuthenticateWrongEmail() throws PasswordCreationException,
 	    PasswordActivationException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+	String activationKey = restClient.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
 	assertFalse(restClient.authenticate(new EmailAddress(EMAIL_ADDRESS
@@ -167,7 +133,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
     @Test
     public void testAuthenticateWrongPassword()
 	    throws PasswordCreationException, PasswordActivationException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+	String activationKey = restClient.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
 	assertFalse(restClient.authenticate(EMAIL_ADDRESS, new Password(
@@ -177,7 +143,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
     @Test
     public void testAuthenticateWrongEmailAndPassword()
 	    throws PasswordCreationException, PasswordActivationException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+	String activationKey = restClient.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
 	assertFalse(restClient.authenticate(new EmailAddress(EMAIL_ADDRESS
@@ -187,7 +153,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
     @Test
     public void testChangePassword() throws PasswordCreationException,
 	    PasswordActivationException, PasswordChangeException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+	String activationKey = restClient.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
 	assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
@@ -201,7 +167,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
     public void testChangePasswordWrongEmail()
 	    throws PasswordCreationException, PasswordActivationException,
 	    PasswordChangeException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+	String activationKey = restClient.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
 	assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
@@ -214,7 +180,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
     public void testChangePasswordWrongPassword()
 	    throws PasswordCreationException, PasswordActivationException,
 	    PasswordChangeException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+	String activationKey = restClient.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
 	assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
@@ -228,7 +194,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 	    throws PasswordCreationException, PasswordActivationException,
 	    PasswordChangeException {
 	try {
-	    String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+	    String activationKey = restClient.createPassword(EMAIL_ADDRESS,
 		    VALID_PASSWORD);
 	    restClient.activatePassword(EMAIL_ADDRESS, activationKey);
 	    assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
@@ -247,7 +213,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
     @Test
     public void testResetPassword() throws PasswordCreationException,
 	    PasswordActivationException, PasswordResetException {
-	String activationKey = restClient.createAccount(EMAIL_ADDRESS,
+	String activationKey = restClient.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
 	assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
@@ -260,4 +226,16 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
 	restClient.resetPassword(EMAIL_ADDRESS);
     }
 
+    @Test
+    public void testRemovePassword() throws PasswordCreationException,
+	    PasswordActivationException {
+	String activationKey = restClient.createPassword(EMAIL_ADDRESS,
+		VALID_PASSWORD);
+	assertFalse(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
+	restClient.activatePassword(EMAIL_ADDRESS, activationKey);
+	assertTrue(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
+
+	restClient.removePassword(EMAIL_ADDRESS);
+	assertFalse(restClient.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
+    }
 }

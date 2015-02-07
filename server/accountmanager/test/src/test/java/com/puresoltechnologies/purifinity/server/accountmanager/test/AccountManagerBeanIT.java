@@ -30,7 +30,7 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
 
     private static final EmailAddress EMAIL = new EmailAddress(
-	    "ludwig@puresol-technologies.com");
+	    "newaccount@puresol-technologies.com");
     private static final Password PASSWORD = new Password("!234Qwer");
 
     @Inject
@@ -39,13 +39,12 @@ public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
     @Before
     public void setup() throws PasswordCreationException,
 	    PasswordActivationException {
+	assertNotNull(accountManager);
+
 	PasswordStoreClient passwordStoreClient = new PasswordStoreClient();
-	String activationKey = passwordStoreClient.createAccount(EMAIL,
+	String activationKey = passwordStoreClient.createPassword(EMAIL,
 		PASSWORD);
 	passwordStoreClient.activatePassword(EMAIL, activationKey);
-
-	assertNotNull(accountManager);
-	cleanupPasswordStoreDatabase();
     }
 
     @Test

@@ -5,9 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.sql.SQLException;
-
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -16,7 +13,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
-import com.puresoltechnologies.commons.types.IntrospectionUtilities;
 import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.AccountManagerRestInterface;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
@@ -30,19 +26,8 @@ public class AccountManagerPasswordStoreIT extends
 	AbstractAccountManagerClientTest {
 
     private static final String EMAIL_ADDRESS = "ludwig@puresol-technologies.com";
-    private static final String INVALID_EMAIL_ADDRESS = "ludwig@puresol-technologies.com";
-    static {
-	try {
-	    IntrospectionUtilities.setField(INVALID_EMAIL_ADDRESS, "localPart",
-		    "");
-	    IntrospectionUtilities.setField(INVALID_EMAIL_ADDRESS, "address",
-		    "puresol-technologies.com");
-	} catch (SecurityException | NoSuchFieldException
-		| IllegalArgumentException | IllegalAccessException e) {
-	    throw new RuntimeException("Could not initialize test!", e);
-	}
+    private static final String INVALID_EMAIL_ADDRESS = "@puresol-technologies.com";
 
-    }
     private static final String VALID_PASSWORD = "IAmAPassword!:-)3";
     private static final String TOO_WEAK_PASSWORD = "123456";
 
@@ -58,9 +43,8 @@ public class AccountManagerPasswordStoreIT extends
     }
 
     @Before
-    public void setup() throws SQLException, IOException {
+    public void setup() {
 	assertNotNull(proxy);
-	cleanupPasswordStoreDatabase();
     }
 
     @Test

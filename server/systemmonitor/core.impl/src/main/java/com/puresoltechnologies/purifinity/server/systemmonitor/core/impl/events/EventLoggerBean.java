@@ -14,10 +14,9 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 
 import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
-import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.SystemMonitorConstants;
+import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.SystemMonitorKeyspace;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.Event;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLogger;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
@@ -33,7 +32,7 @@ public class EventLoggerBean implements EventLogger, EventLoggerRemote {
 
     private static final long serialVersionUID = -4162895953533068913L;
 
-    private static final String EVENTS_TABLE_NAME = "events";
+    public static final String EVENTS_TABLE_NAME = "events";
     private static final String LOG_EVENT_STATEMENT = "INSERT INTO "
 	    + EVENTS_TABLE_NAME
 	    + " (time, component, event_id, server, type, severity, message, user, user_id, client, exception_message, exception_stacktrace)"
@@ -52,27 +51,20 @@ public class EventLoggerBean implements EventLogger, EventLoggerRemote {
     }
 
     @Inject
-    private Cluster cluster;
-
+    @SystemMonitorKeyspace
     private Session session = null;
+
     private PreparedStatement preparedLogEventStatement = null;
 
     @PostConstruct
-    private void connectAndInitialize() {
-	logger.debug("Connect EventLogger to Cassandra...");
-	session = cluster
-		.connect(SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME);
-	logger.debug("Session is connected.");
-	logger.info("EventLogger connected to Cassandra.");
+    public void prepareStatements() {
 	preparedLogEventStatement = session.prepare(LOG_EVENT_STATEMENT);
+	logEvent(EventLoggerEvents.createStartEvent());
     }
 
     @PreDestroy
-    private void disconnect() {
-	logger.debug("EventLogger is going to disconnet from Cassandra...");
-	session.close();
-	logger.debug("Session was closed.");
-	logger.info("EventLogger disconnected.");
+    public void disconnect() {
+	logEvent(EventLoggerEvents.createStopEvent());
     }
 
     private String getStackTrace(Throwable throwable) {

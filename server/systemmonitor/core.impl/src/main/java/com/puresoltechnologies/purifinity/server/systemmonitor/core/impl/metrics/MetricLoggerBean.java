@@ -14,12 +14,11 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 
 import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.Value;
-import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.SystemMonitorConstants;
+import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.SystemMonitorKeyspace;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLogger;
 import com.puresoltechnologies.server.systemmonitor.core.api.metrics.MetricLogger;
 import com.puresoltechnologies.server.systemmonitor.core.api.metrics.MetricLoggerRemote;
@@ -35,7 +34,7 @@ public class MetricLoggerBean implements MetricLogger, MetricLoggerRemote {
 
     private static final long serialVersionUID = -4162895953533068913L;
 
-    private static final String METRICS_TABLE_NAME = "metrics";
+    public static final String METRICS_TABLE_NAME = "metrics";
 
     @Inject
     private Logger logger;
@@ -52,37 +51,25 @@ public class MetricLoggerBean implements MetricLogger, MetricLoggerRemote {
 	}
     }
 
-    private Cluster cluster = null;
+    @Inject
+    @SystemMonitorKeyspace
     private Session session = null;
+
     private PreparedStatement preparedStatement;
 
     @PostConstruct
     public void createStatements() {
-	logger.debug("Connect MetricLogger to Cassandra...");
-	cluster = Cluster.builder()
-		.addContactPoints(SystemMonitorConstants.CASSANDRA_HOST)
-		.withPort(SystemMonitorConstants.CASSANDRA_CQL_PORT).build();
-	session = cluster
-		.connect(SystemMonitorConstants.SYSTEM_MONITOR_KEYSPACE_NAME);
-	logger.info("MetricLogger connected to Cassandra.");
-	createPreparedStatements();
-	eventLogger.logEvent(MetricLoggerEvents.createStartEvent());
-    }
-
-    private void createPreparedStatements() {
 	preparedStatement = session
 		.prepare("INSERT INTO "
 			+ METRICS_TABLE_NAME
 			+ " (time, server, name, unit, type, description, decimal_value, integer_value, level_of_measurement)"
 			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	eventLogger.logEvent(MetricLoggerEvents.createStartEvent());
     }
 
     @PreDestroy
     public void disconnect() {
 	eventLogger.logEvent(MetricLoggerEvents.createStopEvent());
-	session.close();
-	cluster.close();
-	logger.info("MetricsLogger disconnected.");
     }
 
     @Override

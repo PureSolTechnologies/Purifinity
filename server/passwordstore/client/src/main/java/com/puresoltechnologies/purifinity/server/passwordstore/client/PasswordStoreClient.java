@@ -45,7 +45,7 @@ public class PasswordStoreClient {
 	proxy = webTarget.proxy(PasswordStoreRestInterface.class);
     }
 
-    public String createAccount(EmailAddress email, Password password)
+    public String createPassword(EmailAddress email, Password password)
 	    throws PasswordCreationException {
 	PasswordCreationEntity passwordCreationEntity = new PasswordCreationEntity(
 		email.getAddress(), password.getPassword());
@@ -74,7 +74,7 @@ public class PasswordStoreClient {
 	return proxy.resetPassword(email.getAddress());
     }
 
-    public void deletePassword(String emailAddress) {
-	proxy.deletePassword(emailAddress);
+    public void removePassword(EmailAddress emailAddress) {
+	proxy.deletePassword(emailAddress.getAddress());
     }
 }

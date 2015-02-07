@@ -76,6 +76,6 @@ public class EventLoggerBeanIT extends AbstractSystemMonitorServerTest {
 
 	double speed = performanceResult.getSpeed();
 	System.out.println("EventLogger speed: " + speed + " events/s");
-	assertTrue(speed > 100);
+	assertTrue(speed > 250);
     }
 }

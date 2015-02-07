@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.events;
+package com.puresoltechnologies.purifinity.server.systemmonitor.core.impl;
 
 import java.util.Set;
 
