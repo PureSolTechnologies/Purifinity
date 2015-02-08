@@ -44,7 +44,7 @@ public interface AccountManagerRestInterface {
     @Path("users")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String createAccount(String email, String password)
+    public String createAccount(CreateAccountEntity createAccountEntity)
 	    throws PasswordCreationException;
 
     @POST
@@ -63,7 +63,7 @@ public interface AccountManagerRestInterface {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public boolean changePassword(@PathParam("email") String email,
-	    String oldPassword, String newPassword)
+	    ChangePasswordEntity changePasswordEntity)
 	    throws PasswordChangeException;
 
     @POST

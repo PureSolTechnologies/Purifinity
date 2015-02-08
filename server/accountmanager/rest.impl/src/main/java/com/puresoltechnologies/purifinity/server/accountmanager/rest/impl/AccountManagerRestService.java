@@ -9,6 +9,8 @@ import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.AccountManagerRestInterface;
+import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.ChangePasswordEntity;
+import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.CreateAccountEntity;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.Role;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.User;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
@@ -62,10 +64,13 @@ public class AccountManagerRestService implements AccountManagerRestInterface {
     }
 
     @Override
-    public String createAccount(String email, String password)
+    public String createAccount(CreateAccountEntity entity)
 	    throws PasswordCreationException {
-	return accountManager.createPassword(new EmailAddress(email),
-		new Password(password));
+	EmailAddress emailAddress = new EmailAddress(entity.getEmail());
+	Password password = new Password(entity.getPassword());
+	String email = accountManager.createPassword(emailAddress, password);
+	accountManager.createAccount(emailAddress, entity.getRoleId());
+	return email;
     }
 
     @Override
@@ -81,10 +86,11 @@ public class AccountManagerRestService implements AccountManagerRestInterface {
     }
 
     @Override
-    public boolean changePassword(String email, String oldPassword,
-	    String newPassword) throws PasswordChangeException {
+    public boolean changePassword(String email, ChangePasswordEntity entity)
+	    throws PasswordChangeException {
 	return accountManager.changePassword(new EmailAddress(email),
-		new Password(oldPassword), new Password(newPassword));
+		new Password(entity.getOldPassword()),
+		new Password(entity.getNewPassword()));
     }
 
     @Override

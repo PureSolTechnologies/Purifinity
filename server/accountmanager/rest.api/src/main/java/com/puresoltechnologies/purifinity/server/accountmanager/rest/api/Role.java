@@ -59,4 +59,8 @@ public class Role {
 	return true;
     }
 
+    @Override
+    public String toString() {
+	return name + " (" + id + ")";
+    }
 }

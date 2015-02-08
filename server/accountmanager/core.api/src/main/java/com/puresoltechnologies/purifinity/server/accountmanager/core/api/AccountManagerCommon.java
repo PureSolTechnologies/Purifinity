@@ -19,8 +19,11 @@ public interface AccountManagerCommon extends PasswordStore {
      * 
      * @param email
      *            is the email address of the user which activated the account.
+     * @param roleId
+     *            is the roleId of the role which is to be assigned to the new
+     *            account.
      */
-    void createAccount(EmailAddress email);
+    void createAccount(EmailAddress email, String roleId);
 
     /**
      * This method returns the user name which can be used to express the user

@@ -27,6 +27,7 @@ import com.puresoltechnologies.purifinity.server.accountmanager.core.api.Account
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerRemote;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.Role;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.User;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.BelongsToGroup;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UserVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UsersXOManager;
@@ -72,7 +73,6 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	    String activationKey) throws PasswordActivationException {
 	EmailAddress userId = passwordStore.activatePassword(email,
 		activationKey);
-	createAccount(email);
 	return userId;
     }
 
@@ -154,13 +154,18 @@ public class AccountManagerBean implements Serializable, AccountManager,
     }
 
     @Override
-    public void createAccount(EmailAddress email) {
+    public void createAccount(EmailAddress email, String roleId) {
 	logger.debug("Creating user account for '" + email + "'...");
 	xoManager.currentTransaction().begin();
 	try {
 	    UserVertex user = xoManager.create(UserVertex.class);
 	    user.setCreationTime(new Date());
 	    user.setEmail(email.getAddress());
+
+	    RoleVertex roleVertex = xoManager.find(RoleVertex.class, roleId)
+		    .getSingleResult();
+	    xoManager.create(user, BelongsToGroup.class, roleVertex);
+
 	    xoManager.currentTransaction().commit();
 	    eventLogger.logEvent(AccountManagerEvents
 		    .createAccountCreationEvent(email));

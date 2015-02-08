@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.AccountManagerRestInterface;
+import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.CreateAccountEntity;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.Role;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.User;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
@@ -47,7 +48,8 @@ public class AccountManagerRestServiceIT extends
 
     @Test
     public void test() throws PasswordCreationException {
-	String account = proxy.createAccount("abcde@abc.de", "Abc123!§$%");
+	String account = proxy.createAccount(new CreateAccountEntity(
+		"abcde@abc.de", "Abc123!§$%", "engineer"));
 	Set<User> users = proxy.getUsers();
 	assertEquals(5, users.size());
 	proxy.removeAccount(account);

@@ -2,7 +2,6 @@ package com.puresoltechnologies.purifinity.server.accountmanager.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -10,11 +9,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.buschmais.xo.api.ResultIterable;
-import com.buschmais.xo.api.ResultIterator;
+import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.XOManagerFactory;
 import com.buschmais.xo.api.bootstrap.XO;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.BelongsToGroup;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UserVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UsersXOManager;
@@ -39,6 +38,7 @@ public class XOEntitiesIT {
     @AfterClass
     public static void disconnect() {
 	titanGraph.shutdown();
+	xoManagerFactory.close();
     }
 
     @Before
@@ -55,31 +55,60 @@ public class XOEntitiesIT {
 	assertEquals(7, counter);
     }
 
-    @Test
-    public void test() {
-	ResultIterable<UserVertex> results = xoManager.find(UserVertex.class,
-		"ludwig@puresol-technologies.com");
-	ResultIterator<UserVertex> iterator = results.iterator();
-	assertTrue(iterator.hasNext());
-	UserVertex user = iterator.next();
-	assertEquals("ludwig@puresol-technologies.com", user.getEmail());
-	assertEquals("Rick-Rainer Ludwig", user.getName());
-	RoleVertex role = user.getRole();
-	assertNotNull(role);
-	assertEquals("administrator", role.getId());
-	assertEquals("Administrator", role.getName());
-	assertNotNull(role.getUsersWithRole());
-	assertEquals(2, role.getUsersWithRole().size());
-    }
-
     @After
     public void closeXOManager() {
 	xoManager.close();
     }
 
-    @AfterClass
-    public static void closeXO() {
-	xoManagerFactory.close();
+    @Test
+    public void testUserVertex() {
+	xoManager.currentTransaction().begin();
+	try {
+	    UserVertex user = xoManager.find(UserVertex.class,
+		    "ludwig@puresol-technologies.com").getSingleResult();
+	    assertEquals("ludwig@puresol-technologies.com", user.getEmail());
+	    assertEquals("Rick-Rainer Ludwig", user.getName());
+	    RoleVertex role = user.getRole();
+	    assertNotNull(role);
+	    assertEquals("administrator", role.getId());
+	    assertEquals("Administrator", role.getName());
+	    assertNotNull(role.getUsers());
+	    assertEquals(2, role.getUsers().size());
+	} finally {
+	    xoManager.currentTransaction().rollback();
+	}
+    }
+
+    @Test
+    public void testRoleVertex() {
+	xoManager.currentTransaction().begin();
+	try {
+	    RoleVertex administratorVertex = xoManager.find(RoleVertex.class,
+		    "administrator").getSingleResult();
+	    assertNotNull(administratorVertex);
+	    RoleVertex engineerVertex = xoManager.find(RoleVertex.class,
+		    "engineer").getSingleResult();
+	    assertNotNull(engineerVertex);
+	    RoleVertex unprivilegedVertex = xoManager.find(RoleVertex.class,
+		    "unprivileged").getSingleResult();
+	    assertNotNull(unprivilegedVertex);
+	} finally {
+	    xoManager.currentTransaction().rollback();
+
+	}
+    }
+
+    @Test
+    public void testCreateUser() {
+	xoManager.currentTransaction().begin();
+	try {
+	    UserVertex userVertex = xoManager.create(UserVertex.class);
+	    RoleVertex roleVertex = xoManager.create(RoleVertex.class);
+	    xoManager.create(userVertex, BelongsToGroup.class, roleVertex);
+	    xoManager.currentTransaction().commit();
+	} catch (XOException e) {
+	    xoManager.currentTransaction().rollback();
+	}
     }
 
 }

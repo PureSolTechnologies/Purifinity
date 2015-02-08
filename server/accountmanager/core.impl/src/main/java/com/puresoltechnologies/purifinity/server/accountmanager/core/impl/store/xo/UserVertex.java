@@ -35,7 +35,7 @@ public interface UserVertex {
     public void setCreationTime(Date time);
 
     @Outgoing
-    @BelongsTo
+    @BelongsToGroup
     public RoleVertex getRole();
 
 }

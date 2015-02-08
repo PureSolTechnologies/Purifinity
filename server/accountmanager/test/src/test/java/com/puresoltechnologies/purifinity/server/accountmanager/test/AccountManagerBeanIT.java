@@ -82,6 +82,6 @@ public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
     @Test
     public void testCreateEmptyAccount() {
 	EmailAddress email = new EmailAddress("email@address.com");
-	accountManager.createAccount(email);
+	accountManager.createAccount(email, "engineer");
     }
 }

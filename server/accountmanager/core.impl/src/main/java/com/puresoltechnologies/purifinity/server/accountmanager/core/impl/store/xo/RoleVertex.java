@@ -25,7 +25,6 @@ public interface RoleVertex {
 
     public void setId(String id);
 
-    @Indexed(unique = true)
     @Property(TitanElementNames.ROLE_NAME_PROPERTY)
     public String getName();
 
@@ -37,7 +36,7 @@ public interface RoleVertex {
     public void setCreationTime(Date time);
 
     @Incoming
-    @BelongsTo
-    public List<UserVertex> getUsersWithRole();
+    @BelongsToGroup
+    public List<UserVertex> getUsers();
 
 }
