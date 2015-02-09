@@ -88,6 +88,9 @@ public class AccountManagerTester {
     }
 
     public static boolean isDefaultRole(String roleId) {
+	if (roleId == null) {
+	    return false;
+	}
 	if (roleId.equals("unprivileged") || roleId.equals("engineer")
 		|| roleId.equals("administrator")) {
 	    return true;

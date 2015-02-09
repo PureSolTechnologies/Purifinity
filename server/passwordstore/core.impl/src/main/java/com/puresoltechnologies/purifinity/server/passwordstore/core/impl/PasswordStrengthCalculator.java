@@ -24,7 +24,7 @@
  * 		http://justwild.us/examples/password/
  */
 
-package com.puresoltechnologies.purifinity.server.passwordstore.domain;
+package com.puresoltechnologies.purifinity.server.passwordstore.core.impl;
 
 import java.io.IOException;
 import java.io.InputStream;

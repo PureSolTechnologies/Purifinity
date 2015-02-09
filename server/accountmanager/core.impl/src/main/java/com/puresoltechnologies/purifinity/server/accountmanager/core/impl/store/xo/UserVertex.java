@@ -38,4 +38,6 @@ public interface UserVertex {
     @BelongsToGroup
     public RoleVertex getRole();
 
+    public void setRole(RoleVertex role);
+
 }

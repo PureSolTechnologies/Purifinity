@@ -7,7 +7,7 @@ package com.puresoltechnologies.purifinity.server.passwordstore.domain;
  * @author Rick-Rainer Ludwig
  * 
  */
-public enum AccountState {
+public enum PasswordState {
 
 	/**
 	 * This account is just created, but not yet activated.
@@ -28,7 +28,7 @@ public enum AccountState {
 
 	private final int value;
 
-	private AccountState(int value) {
+	private PasswordState(int value) {
 		this.value = value;
 	}
 
@@ -36,8 +36,8 @@ public enum AccountState {
 		return value;
 	}
 
-	public static AccountState fromValue(int value) {
-		for (AccountState status : values()) {
+	public static PasswordState fromValue(int value) {
+		for (PasswordState status : values()) {
 			if (value == status.getValue()) {
 				return status;
 			}

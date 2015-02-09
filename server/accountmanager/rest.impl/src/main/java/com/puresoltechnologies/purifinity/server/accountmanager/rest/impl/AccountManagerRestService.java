@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerException;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.AccountManagerRestInterface;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.ChangePasswordEntity;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.CreateAccountEntity;
@@ -64,25 +65,25 @@ public class AccountManagerRestService implements AccountManagerRestInterface {
     }
 
     @Override
-    public String createAccount(CreateAccountEntity entity)
-	    throws PasswordCreationException {
-	EmailAddress emailAddress = new EmailAddress(entity.getEmail());
-	Password password = new Password(entity.getPassword());
-	String email = accountManager.createPassword(emailAddress, password);
-	accountManager.createAccount(emailAddress, entity.getRoleId());
-	return email;
-    }
-
-    @Override
-    public String activateAccount(String email, String activationKey)
-	    throws PasswordActivationException {
-	return accountManager.activatePassword(new EmailAddress(email),
-		activationKey).getAddress();
+    public void createAccount(CreateAccountEntity entity)
+	    throws AccountManagerException {
+	try {
+	    EmailAddress emailAddress = new EmailAddress(entity.getEmail());
+	    Password password = new Password(entity.getPassword());
+	    String activationKey;
+	    activationKey = accountManager.createPassword(emailAddress,
+		    password);
+	    accountManager.activatePassword(emailAddress, activationKey);
+	    accountManager.createAccount(emailAddress, entity.getRoleId());
+	} catch (PasswordCreationException | PasswordActivationException e) {
+	    throw new AccountManagerException("Could not create account '"
+		    + entity.getEmail() + "'.", e);
+	}
     }
 
     @Override
     public void removeAccount(String email) {
-	accountManager.removePassword(new EmailAddress(email));
+	accountManager.deletePassword(new EmailAddress(email));
     }
 
     @Override

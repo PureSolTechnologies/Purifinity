@@ -93,6 +93,9 @@ public class PasswordStoreTester {
     }
 
     public static boolean isDefaultAccount(String email) {
+	if (email == null) {
+	    return false;
+	}
 	if (!email.endsWith("@puresol-technologies.com")) {
 	    return false;
 	}

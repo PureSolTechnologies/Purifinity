@@ -8,18 +8,19 @@ import static org.junit.Assert.assertTrue;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.commons.types.Password;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerException;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.AccountManagerRestInterface;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.ChangePasswordEntity;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.CreateAccountEntity;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreEvents;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
@@ -27,21 +28,30 @@ import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordRe
 public class AccountManagerPasswordStoreIT extends
 	AbstractAccountManagerClientTest {
 
-    private static final String EMAIL_ADDRESS = "ludwig@puresol-technologies.com";
+    private static final String EMAIL_ADDRESS = "newaccount@puresol-technologies.com";
     private static final String INVALID_EMAIL_ADDRESS = "@puresol-technologies.com";
 
     private static final String VALID_PASSWORD = "IAmAPassword!:-)3";
     private static final String TOO_WEAK_PASSWORD = "123456";
 
-    private static final PasswordStoreClient passwordStoreClient = new PasswordStoreClient();
-    private static AccountManagerRestInterface proxy = null;
+    private static PasswordStoreClient passwordStoreClient;
+    private static ResteasyClient client;
+    private static AccountManagerRestInterface proxy;
 
     @BeforeClass
     public static void createRestClient() {
-	ResteasyClient client = new ResteasyClientBuilder().build();
+	passwordStoreClient = new PasswordStoreClient();
+
+	client = new ResteasyClientBuilder().build();
 	ResteasyWebTarget webTarget = client
 		.target("http://localhost:8080/accountmanager/rest");
 	proxy = webTarget.proxy(AccountManagerRestInterface.class);
+    }
+
+    @AfterClass
+    public static void destroyRestClient() {
+	client.close();
+	passwordStoreClient.close();
     }
 
     @Before
@@ -50,11 +60,9 @@ public class AccountManagerPasswordStoreIT extends
     }
 
     @Test
-    public void testCreateAccount() throws PasswordCreationException {
-	String activationKey = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
-	assertNotNull(activationKey);
-	assertFalse(activationKey.isEmpty());
+    public void testCreateAccount() throws AccountManagerException {
+	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
+		VALID_PASSWORD, "engineer"));
     }
 
     /**
@@ -66,7 +74,7 @@ public class AccountManagerPasswordStoreIT extends
      */
     @Test
     public void testCreateAccountDuplicateEmail()
-	    throws PasswordCreationException {
+	    throws AccountManagerException {
 	// the first account should be created normally...
 	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
 		VALID_PASSWORD, "engineer"));
@@ -74,7 +82,7 @@ public class AccountManagerPasswordStoreIT extends
 	    // now we expect an error...
 	    proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
 		    VALID_PASSWORD, "engineer"));
-	} catch (PasswordCreationException e) {
+	} catch (AccountManagerException e) {
 	    assertEquals(
 		    PasswordStoreEvents.createAccountAlreadyExistsErrorEvent(
 			    new EmailAddress(EMAIL_ADDRESS)).getMessage(),
@@ -91,11 +99,11 @@ public class AccountManagerPasswordStoreIT extends
      */
     @Test
     public void testCreateAccountTooWeakPassword()
-	    throws PasswordCreationException {
+	    throws AccountManagerException {
 	try {
 	    proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
 		    TOO_WEAK_PASSWORD, "engineer"));
-	} catch (PasswordCreationException e) {
+	} catch (AccountManagerException e) {
 	    assertEquals(
 		    PasswordStoreEvents.createPasswordTooWeakErrorEvent(
 			    new EmailAddress(EMAIL_ADDRESS)).getMessage(),
@@ -113,11 +121,11 @@ public class AccountManagerPasswordStoreIT extends
      */
     @Test
     public void testCreateAccountWithInvalidEmailAddress()
-	    throws PasswordCreationException {
+	    throws AccountManagerException {
 	try {
 	    proxy.createAccount(new CreateAccountEntity(INVALID_EMAIL_ADDRESS,
-		    TOO_WEAK_PASSWORD, "engineer"));
-	} catch (PasswordCreationException e) {
+		    VALID_PASSWORD, "engineer"));
+	} catch (AccountManagerException e) {
 	    assertEquals(
 		    PasswordStoreEvents.createInvalidEmailAddressErrorEvent(
 			    new EmailAddress(INVALID_EMAIL_ADDRESS))
@@ -127,82 +135,26 @@ public class AccountManagerPasswordStoreIT extends
     }
 
     @Test
-    public void testActivateAccount() throws PasswordActivationException,
-	    PasswordCreationException {
-	EmailAddress email = new EmailAddress("ludwig@puresol-technologies.com");
-	Password password = new Password("12dqwec1241`S@#R~");
-	String activationKey = proxy.createAccount(new CreateAccountEntity(
-		email.getAddress(), password.getPassword(), "engineer"));
-	assertNotNull(activationKey);
-	assertFalse(activationKey.isEmpty());
-	proxy.activateAccount(email.getAddress(), activationKey);
-    }
-
-    @Test
-    public void testActivateAccountWithInvalidActivationKey()
-	    throws PasswordCreationException, PasswordActivationException {
-	String activationKey = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
-
-	try {
-	    proxy.activateAccount(EMAIL_ADDRESS, activationKey + "Wrong!");
-	} catch (PasswordActivationException e) {
-	    assertEquals(
-		    PasswordStoreEvents.createInvalidActivationKeyErrorEvent(
-			    new EmailAddress(EMAIL_ADDRESS)).getMessage(),
-		    e.getMessage());
-	    throw e;
-	}
-    }
-
-    @Test
-    public void testAuthenticate() throws PasswordCreationException,
-	    PasswordActivationException {
-	String activationInformation = proxy
-		.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
-			VALID_PASSWORD, "engineer"));
-	proxy.activateAccount(EMAIL_ADDRESS, activationInformation);
+    public void testAuthenticate() throws AccountManagerException {
+	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
+		VALID_PASSWORD, "engineer"));
 	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
 		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
     }
 
     @Test
-    public void testAuthenticateWrongEmail() throws PasswordCreationException,
-	    PasswordActivationException {
-	String activationKey = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
-	proxy.activateAccount(EMAIL_ADDRESS, activationKey);
-	assertFalse(passwordStoreClient.authenticate(
-		new EmailAddress("Wrong!"), new Password(VALID_PASSWORD)));
-    }
-
-    @Test
-    public void testAuthenticateWrongPassword()
-	    throws PasswordCreationException, PasswordActivationException {
-	String activationKey = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
-	proxy.activateAccount(EMAIL_ADDRESS, activationKey);
+    public void testAuthenticateWrongPassword() throws AccountManagerException {
+	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
+		VALID_PASSWORD, "engineer"));
 	assertFalse(passwordStoreClient.authenticate(new EmailAddress(
 		EMAIL_ADDRESS), new Password(VALID_PASSWORD + "Wrong!")));
     }
 
     @Test
-    public void testAuthenticateWrongEmailAndPassword()
-	    throws PasswordCreationException, PasswordActivationException {
-	String activationKey = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
-	proxy.activateAccount(EMAIL_ADDRESS, activationKey);
-	assertFalse(passwordStoreClient.authenticate(new EmailAddress(
-		EMAIL_ADDRESS + "Wrong!"), new Password(VALID_PASSWORD
-		+ "Wrong!")));
-    }
-
-    @Test
-    public void testChangePassword() throws PasswordCreationException,
-	    PasswordActivationException, PasswordChangeException {
-	String activationKey = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
-	proxy.activateAccount(EMAIL_ADDRESS, activationKey);
+    public void testChangePassword() throws AccountManagerException,
+	    PasswordChangeException {
+	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
+		VALID_PASSWORD, "engineer"));
 	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
 		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
 	String newPassword = VALID_PASSWORD + "New!";
@@ -213,12 +165,10 @@ public class AccountManagerPasswordStoreIT extends
     }
 
     @Test
-    public void testChangePasswordWrongEmail()
-	    throws PasswordCreationException, PasswordActivationException,
+    public void testChangePasswordWrongEmail() throws AccountManagerException,
 	    PasswordChangeException {
-	String activationKey = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
-	proxy.activateAccount(EMAIL_ADDRESS, activationKey);
+	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
+		VALID_PASSWORD, "engineer"));
 	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
 		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
 	assertFalse(proxy.changePassword(EMAIL_ADDRESS + "Wrong!",
@@ -228,11 +178,9 @@ public class AccountManagerPasswordStoreIT extends
 
     @Test
     public void testChangePasswordWrongPassword()
-	    throws PasswordCreationException, PasswordActivationException,
-	    PasswordChangeException {
-	String activationKey = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
-	proxy.activateAccount(EMAIL_ADDRESS, activationKey);
+	    throws AccountManagerException, PasswordChangeException {
+	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
+		VALID_PASSWORD, "engineer"));
 	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
 		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
 	assertFalse(proxy.changePassword(EMAIL_ADDRESS,
@@ -242,12 +190,10 @@ public class AccountManagerPasswordStoreIT extends
 
     @Test
     public void testChangePasswordTooWeakPassword()
-	    throws PasswordCreationException, PasswordActivationException,
-	    PasswordChangeException {
+	    throws AccountManagerException, PasswordChangeException {
 	try {
-	    String activationKey = proxy.createAccount(new CreateAccountEntity(
-		    EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
-	    proxy.activateAccount(EMAIL_ADDRESS, activationKey);
+	    proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
+		    VALID_PASSWORD, "engineer"));
 	    assertTrue(passwordStoreClient.authenticate(new EmailAddress(
 		    EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
 	    proxy.changePassword(EMAIL_ADDRESS, new ChangePasswordEntity(
@@ -265,11 +211,10 @@ public class AccountManagerPasswordStoreIT extends
     }
 
     @Test
-    public void testResetPassword() throws PasswordCreationException,
-	    PasswordActivationException, PasswordResetException {
-	String activationKey = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
-	proxy.activateAccount(EMAIL_ADDRESS, activationKey);
+    public void testResetPassword() throws AccountManagerException,
+	    PasswordResetException {
+	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
+		VALID_PASSWORD, "engineer"));
 	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
 		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
 	Password newPassword = new Password(proxy.resetPassword(EMAIL_ADDRESS));

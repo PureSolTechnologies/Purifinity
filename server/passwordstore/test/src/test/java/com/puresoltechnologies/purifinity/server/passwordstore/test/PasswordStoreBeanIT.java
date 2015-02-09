@@ -19,7 +19,7 @@ import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.api.PasswordStore;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreEvents;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountState;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordState;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
@@ -62,8 +62,8 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 	assertEquals(EMAIL_ADDRESS.getAddress(), account.getString("email"));
 	assertNotNull(account.getString("password"));
 	assertFalse(account.getString("password").isEmpty());
-	assertEquals(AccountState.CREATED,
-		AccountState.valueOf(account.getString("state")));
+	assertEquals(PasswordState.CREATED,
+		PasswordState.valueOf(account.getString("state")));
     }
 
     /**
@@ -91,8 +91,8 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 	    assertNotNull(account);
 	    assertNotNull(account.getString("password"));
 	    assertFalse(account.getString("password").isEmpty());
-	    assertEquals(AccountState.CREATED,
-		    AccountState.valueOf(account.getString("state")));
+	    assertEquals(PasswordState.CREATED,
+		    PasswordState.valueOf(account.getString("state")));
 	    throw e;
 	}
     }
@@ -127,14 +127,14 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 
 	Row account = readAccoutFromDatabase(EMAIL_ADDRESS);
 
-	assertEquals(AccountState.CREATED,
-		AccountState.valueOf(account.getString("state")));
+	assertEquals(PasswordState.CREATED,
+		PasswordState.valueOf(account.getString("state")));
 
 	passwordStore.activatePassword(EMAIL_ADDRESS, activationKey);
 
 	account = readAccoutFromDatabase(EMAIL_ADDRESS);
-	assertEquals(AccountState.ACTIVE,
-		AccountState.valueOf(account.getString("state")));
+	assertEquals(PasswordState.ACTIVE,
+		PasswordState.valueOf(account.getString("state")));
     }
 
     @Test(expected = PasswordActivationException.class)
@@ -145,8 +145,8 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 
 	Row account = readAccoutFromDatabase(EMAIL_ADDRESS);
 
-	assertEquals(AccountState.CREATED,
-		AccountState.valueOf(account.getString("state")));
+	assertEquals(PasswordState.CREATED,
+		PasswordState.valueOf(account.getString("state")));
 
 	try {
 	    passwordStore.activatePassword(EMAIL_ADDRESS, activationKey
@@ -159,8 +159,8 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 	    assertNotNull(account);
 	    assertNotNull(account.getString("password"));
 	    assertFalse(account.getString("password").isEmpty());
-	    assertEquals(AccountState.CREATED,
-		    AccountState.valueOf(account.getString("state")));
+	    assertEquals(PasswordState.CREATED,
+		    PasswordState.valueOf(account.getString("state")));
 	    throw e;
 	}
     }
@@ -314,7 +314,7 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
 	passwordStore.activatePassword(EMAIL_ADDRESS, activationKey);
 	assertTrue(passwordStore.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
 
-	passwordStore.removePassword(EMAIL_ADDRESS);
+	passwordStore.deletePassword(EMAIL_ADDRESS);
 	assertFalse(passwordStore.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
     }
 }

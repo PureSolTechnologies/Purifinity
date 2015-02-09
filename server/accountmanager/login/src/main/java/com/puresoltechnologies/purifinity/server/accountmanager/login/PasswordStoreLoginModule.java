@@ -86,15 +86,15 @@ public class PasswordStoreLoginModule implements LoginModule {
 	    EmailAddress email = new EmailAddress(nameCallback.getName());
 	    Password password = new Password(passwordCallback.getPassword()
 		    .toString());
-	    PasswordStoreClient passwordStore = PasswordStoreClient
-		    .createInstance();
-	    loggedIn = passwordStore.authenticate(email, password);
-	    if (loggedIn) {
-		userNamePrincipal = new AccountManagerPrincipalImpl(email);
-	    } else {
-		userNamePrincipal = null;
+	    try (PasswordStoreClient passwordStore = new PasswordStoreClient()) {
+		loggedIn = passwordStore.authenticate(email, password);
+		if (loggedIn) {
+		    userNamePrincipal = new AccountManagerPrincipalImpl(email);
+		} else {
+		    userNamePrincipal = null;
+		}
+		return loggedIn;
 	    }
-	    return loggedIn;
 	} catch (IOException e) {
 	    logger.error(e.getMessage(), e);
 	    throw new LoginException("IO exception occured!");

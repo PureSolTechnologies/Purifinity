@@ -15,7 +15,7 @@ import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandar
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountState;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordState;
 import com.puresoltechnologies.versioning.Version;
 
 public class PasswordStoreDatabaseTransformator implements
@@ -95,22 +95,22 @@ public class PasswordStoreDatabaseTransformator implements
 
 	sequence.appendTransformation(new AddUserStep(sequence,
 		new EmailAddress("user@puresol-technologies.com"), "password",
-		AccountState.ACTIVE, "Rick-Rainer Ludwig",
+		PasswordState.ACTIVE, "Rick-Rainer Ludwig",
 		"Create default user account."));
 
 	sequence.appendTransformation(new AddUserStep(sequence,
 		new EmailAddress("engineer@puresol-technologies.com"),
-		"password", AccountState.ACTIVE, "Rick-Rainer Ludwig",
+		"password", PasswordState.ACTIVE, "Rick-Rainer Ludwig",
 		"Create default engineer account."));
 
 	sequence.appendTransformation(new AddUserStep(sequence,
 		new EmailAddress("administrator@puresol-technologies.com"),
-		"password", AccountState.ACTIVE, "Rick-Rainer Ludwig",
+		"password", PasswordState.ACTIVE, "Rick-Rainer Ludwig",
 		"Create default administrator account."));
 
 	sequence.appendTransformation(new AddUserStep(sequence,
 		new EmailAddress("ludwig@puresol-technologies.com"),
-		"password", AccountState.ACTIVE, "Rick-Rainer Ludwig",
+		"password", PasswordState.ACTIVE, "Rick-Rainer Ludwig",
 		"Creates first user account."));
 
 	return sequence;

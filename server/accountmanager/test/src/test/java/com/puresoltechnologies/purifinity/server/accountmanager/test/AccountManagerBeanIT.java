@@ -41,10 +41,11 @@ public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
 	    PasswordActivationException {
 	assertNotNull(accountManager);
 
-	PasswordStoreClient passwordStoreClient = new PasswordStoreClient();
-	String activationKey = passwordStoreClient.createPassword(EMAIL,
-		PASSWORD);
-	passwordStoreClient.activatePassword(EMAIL, activationKey);
+	try (PasswordStoreClient passwordStoreClient = new PasswordStoreClient()) {
+	    String activationKey = passwordStoreClient.createPassword(EMAIL,
+		    PASSWORD);
+	    passwordStoreClient.activatePassword(EMAIL, activationKey);
+	}
     }
 
     @Test

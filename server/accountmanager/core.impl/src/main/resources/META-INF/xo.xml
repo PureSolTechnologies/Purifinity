@@ -7,7 +7,6 @@
 		<types>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UserVertex]]></type>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex]]></type>
-			<type><![CDATA[com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.BelongsToGroup]]></type>
 		</types>
 	</xo-unit>
 </v1:xo>

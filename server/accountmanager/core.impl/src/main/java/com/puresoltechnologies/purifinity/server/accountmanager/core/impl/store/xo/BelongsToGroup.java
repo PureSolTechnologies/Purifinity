@@ -9,5 +9,4 @@ import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition;
 @EdgeDefinition(TitanElementNames.BELONGS_TO_GROUP_LABEL)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BelongsToGroup {
-
 }

@@ -13,7 +13,6 @@ import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.XOManagerFactory;
 import com.buschmais.xo.api.bootstrap.XO;
-import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.BelongsToGroup;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UserVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UsersXOManager;
@@ -43,6 +42,7 @@ public class XOEntitiesIT {
 
     @Before
     public void createXOManager() {
+	AccountManagerTester.cleanupDatabase();
 	xoManager = xoManagerFactory.createXOManager();
 	Iterable<Vertex> vertices = titanGraph.query().vertices();
 	int counter = 0;
@@ -104,7 +104,7 @@ public class XOEntitiesIT {
 	try {
 	    UserVertex userVertex = xoManager.create(UserVertex.class);
 	    RoleVertex roleVertex = xoManager.create(RoleVertex.class);
-	    xoManager.create(userVertex, BelongsToGroup.class, roleVertex);
+	    userVertex.setRole(roleVertex);
 	    xoManager.currentTransaction().commit();
 	} catch (XOException e) {
 	    xoManager.currentTransaction().rollback();

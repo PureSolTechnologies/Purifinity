@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.passwordstore.domain;
+package com.puresoltechnologies.purifinity.server.passwordstore.core.impl;
 
 public enum PasswordStrength {
 

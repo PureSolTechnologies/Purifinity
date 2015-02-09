@@ -13,7 +13,7 @@ import com.puresoltechnologies.genesis.commons.TransformationException;
 import com.puresoltechnologies.genesis.commons.TransformationMetadata;
 import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationStep;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.AccountState;
+import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordState;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordData;
 import com.puresoltechnologies.purifinity.server.passwordstore.utils.encrypt.Encrypter1;
 
@@ -25,12 +25,12 @@ public class AddUserStep implements TransformationStep {
     private final CassandraTransformationSequence sequence;
     private final EmailAddress user;
     private final String password;
-    private final AccountState state;
+    private final PasswordState state;
     private final String developer;
     private final String comment;
 
     public AddUserStep(CassandraTransformationSequence sequence,
-	    EmailAddress user, String password, AccountState state,
+	    EmailAddress user, String password, PasswordState state,
 	    String developer, String comment) {
 	super();
 	this.sequence = sequence;

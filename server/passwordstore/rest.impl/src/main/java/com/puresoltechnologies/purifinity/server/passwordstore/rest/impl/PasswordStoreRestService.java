@@ -57,9 +57,14 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
 
     @Override
     public boolean changePassword(PasswordChangeEntity entity)
-	    throws PasswordChangeException {
-	return passwordStore.changePassword(entity.getEmail(),
-		entity.getOldPassword(), entity.getNewPassword());
+	    throws NotAcceptableException {
+	try {
+	    return passwordStore.changePassword(entity.getEmail(),
+		    entity.getOldPassword(), entity.getNewPassword());
+	} catch (PasswordChangeException e) {
+	    throw new NotAcceptableException("Could not change password for '"
+		    + entity.getEmail() + "'.", e);
+	}
     }
 
     @Override
@@ -70,6 +75,6 @@ public class PasswordStoreRestService implements PasswordStoreRestInterface {
 
     @Override
     public void deletePassword(String emailAddress) {
-	passwordStore.removePassword(new EmailAddress(emailAddress));
+	passwordStore.deletePassword(new EmailAddress(emailAddress));
     }
 }

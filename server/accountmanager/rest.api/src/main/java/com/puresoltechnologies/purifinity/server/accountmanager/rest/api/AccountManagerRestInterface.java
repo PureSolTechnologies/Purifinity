@@ -12,9 +12,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
+import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
-import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
 
 @Path("/")
@@ -44,15 +43,8 @@ public interface AccountManagerRestInterface {
     @Path("users")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String createAccount(CreateAccountEntity createAccountEntity)
-	    throws PasswordCreationException;
-
-    @POST
-    @Path("users/{email}/activate")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public String activateAccount(@PathParam("email") String email,
-	    String activationKey) throws PasswordActivationException;
+    public void createAccount(CreateAccountEntity createAccountEntity)
+	    throws AccountManagerException;
 
     @DELETE
     @Path("users/{email}")

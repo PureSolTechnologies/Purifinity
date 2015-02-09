@@ -109,6 +109,6 @@ public interface PasswordStore {
      *            is the email address of the user whose password is to be
      *            removed.
      */
-    public void removePassword(EmailAddress email);
+    public void deletePassword(EmailAddress email);
 
 }

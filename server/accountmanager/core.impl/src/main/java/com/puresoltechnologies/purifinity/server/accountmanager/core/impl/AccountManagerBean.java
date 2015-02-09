@@ -8,12 +8,15 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
+import javax.ws.rs.NotAcceptableException;
 
 import org.slf4j.Logger;
 
@@ -27,7 +30,6 @@ import com.puresoltechnologies.purifinity.server.accountmanager.core.api.Account
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerRemote;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.Role;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.User;
-import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.BelongsToGroup;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UserVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UsersXOManager;
@@ -60,7 +62,17 @@ public class AccountManagerBean implements Serializable, AccountManager,
     @UsersXOManager
     private XOManager xoManager;
 
-    private final PasswordStoreClient passwordStore = new PasswordStoreClient();
+    private PasswordStoreClient passwordStore;
+
+    @PostConstruct
+    public void postConstruct() {
+	passwordStore = new PasswordStoreClient();
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+	passwordStore.close();
+    }
 
     @Override
     public String createPassword(EmailAddress email, Password password)
@@ -84,7 +96,12 @@ public class AccountManagerBean implements Serializable, AccountManager,
     @Override
     public boolean changePassword(EmailAddress email, Password oldPassword,
 	    Password newPassword) throws PasswordChangeException {
-	return passwordStore.changePassword(email, oldPassword, newPassword);
+	try {
+	    return passwordStore
+		    .changePassword(email, oldPassword, newPassword);
+	} catch (NotAcceptableException e) {
+	    throw new PasswordChangeException("Could not change password.", e);
+	}
     }
 
     @Override
@@ -164,7 +181,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
 
 	    RoleVertex roleVertex = xoManager.find(RoleVertex.class, roleId)
 		    .getSingleResult();
-	    xoManager.create(user, BelongsToGroup.class, roleVertex);
+	    user.setRole(roleVertex);
 
 	    xoManager.currentTransaction().commit();
 	    eventLogger.logEvent(AccountManagerEvents
@@ -243,8 +260,8 @@ public class AccountManagerBean implements Serializable, AccountManager,
     }
 
     @Override
-    public void removePassword(EmailAddress email) {
-	passwordStore.removePassword(email);
+    public void deletePassword(EmailAddress email) {
+	passwordStore.deletePassword(email);
 	ResultIterable<UserVertex> userVertex = xoManager.find(
 		UserVertex.class, email.getAddress());
 	xoManager.delete(userVertex);

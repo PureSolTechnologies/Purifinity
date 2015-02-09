@@ -7,23 +7,13 @@ package com.puresoltechnologies.purifinity.server.passwordstore.domain;
  */
 public class PasswordActivationException extends Exception {
 
-	private static final long serialVersionUID = 5052037298425784708L;
+    private static final long serialVersionUID = 5052037298425784708L;
 
-	private final long eventId;
+    public PasswordActivationException(String message, Throwable cause) {
+	super(message, cause);
+    }
 
-	public PasswordActivationException(long eventId, String message,
-			Throwable cause) {
-		super(message, cause);
-		this.eventId = eventId;
-	}
-
-	public PasswordActivationException(long eventId, String message) {
-		super(message);
-		this.eventId = eventId;
-	}
-
-	public long getEventId() {
-		return eventId;
-	}
-
+    public PasswordActivationException(String message) {
+	super(message);
+    }
 }
