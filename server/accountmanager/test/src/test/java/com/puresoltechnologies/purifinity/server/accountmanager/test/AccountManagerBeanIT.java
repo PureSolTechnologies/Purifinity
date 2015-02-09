@@ -15,7 +15,6 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
@@ -26,7 +25,6 @@ import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordAc
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
-@Ignore
 public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
 
     private static final EmailAddress EMAIL = new EmailAddress(

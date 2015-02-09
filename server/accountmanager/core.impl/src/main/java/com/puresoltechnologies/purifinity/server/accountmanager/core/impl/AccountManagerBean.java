@@ -16,7 +16,6 @@ import javax.ejb.Remote;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
-import javax.ws.rs.NotAcceptableException;
 
 import org.slf4j.Logger;
 
@@ -83,9 +82,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
     @Override
     public EmailAddress activatePassword(EmailAddress email,
 	    String activationKey) throws PasswordActivationException {
-	EmailAddress userId = passwordStore.activatePassword(email,
-		activationKey);
-	return userId;
+	return passwordStore.activatePassword(email, activationKey);
     }
 
     @Override
@@ -96,12 +93,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
     @Override
     public boolean changePassword(EmailAddress email, Password oldPassword,
 	    Password newPassword) throws PasswordChangeException {
-	try {
-	    return passwordStore
-		    .changePassword(email, oldPassword, newPassword);
-	} catch (NotAcceptableException e) {
-	    throw new PasswordChangeException("Could not change password.", e);
-	}
+	return passwordStore.changePassword(email, oldPassword, newPassword);
     }
 
     @Override
@@ -123,21 +115,9 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	    Method method = principal.getClass().getMethod("getRealName");
 	    Object name = method.invoke(principal);
 	    return name.toString();
-	} catch (ClassCastException e) {
-	    e.printStackTrace();
-	    return "unauthenticated";
-	} catch (SecurityException e) {
-	    e.printStackTrace();
-	    return "unauthenticated";
-	} catch (NoSuchMethodException e) {
-	    return "unauthenticated";
-	} catch (IllegalArgumentException e) {
-	    e.printStackTrace();
-	    return "unauthenticated";
-	} catch (IllegalAccessException e) {
-	    e.printStackTrace();
-	    return "unauthenticated";
-	} catch (InvocationTargetException e) {
+	} catch (ClassCastException | SecurityException | NoSuchMethodException
+		| IllegalArgumentException | IllegalAccessException
+		| InvocationTargetException e) {
 	    e.printStackTrace();
 	    return "unauthenticated";
 	}
@@ -150,21 +130,9 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	    Method method = principal.getClass().getMethod("getRealName");
 	    Object name = method.invoke(principal);
 	    return !(name.toString().isEmpty());
-	} catch (ClassCastException e) {
-	    e.printStackTrace();
-	    return false;
-	} catch (SecurityException e) {
-	    e.printStackTrace();
-	    return false;
-	} catch (NoSuchMethodException e) {
-	    return false;
-	} catch (IllegalArgumentException e) {
-	    e.printStackTrace();
-	    return false;
-	} catch (IllegalAccessException e) {
-	    e.printStackTrace();
-	    return false;
-	} catch (InvocationTargetException e) {
+	} catch (ClassCastException | SecurityException | NoSuchMethodException
+		| IllegalArgumentException | IllegalAccessException
+		| InvocationTargetException e) {
 	    e.printStackTrace();
 	    return false;
 	}
@@ -172,9 +140,9 @@ public class AccountManagerBean implements Serializable, AccountManager,
 
     @Override
     public void createAccount(EmailAddress email, String roleId) {
-	logger.debug("Creating user account for '" + email + "'...");
 	xoManager.currentTransaction().begin();
 	try {
+	    logger.debug("Creating user account for '" + email + "'...");
 	    UserVertex user = xoManager.create(UserVertex.class);
 	    user.setCreationTime(new Date());
 	    user.setEmail(email.getAddress());
@@ -194,26 +162,26 @@ public class AccountManagerBean implements Serializable, AccountManager,
 
     @Override
     public Set<Role> getRoles() {
-	Set<Role> roles = new LinkedHashSet<>();
 	xoManager.currentTransaction().begin();
 	try {
+	    Set<Role> roles = new LinkedHashSet<>();
 	    Result<RoleVertex> results = xoManager.createQuery(
 		    "_().has('_xo_discriminator_" + RoleVertex.NAME + "')",
 		    RoleVertex.class).execute();
 	    for (RoleVertex roleVertex : results) {
 		roles.add(new Role(roleVertex.getId(), roleVertex.getName()));
 	    }
+	    return roles;
 	} finally {
 	    xoManager.currentTransaction().rollback();
 	}
-	return roles;
     }
 
     @Override
     public Set<User> getUsers() {
-	Set<User> users = new LinkedHashSet<>();
 	xoManager.currentTransaction().begin();
 	try {
+	    Set<User> users = new LinkedHashSet<>();
 	    Result<UserVertex> results = xoManager.createQuery(
 		    "_().has('_xo_discriminator_" + UserVertex.NAME + "')",
 		    UserVertex.class).execute();
@@ -224,10 +192,10 @@ public class AccountManagerBean implements Serializable, AccountManager,
 			userVertex.getName(), role);
 		users.add(user);
 	    }
+	    return users;
 	} finally {
 	    xoManager.currentTransaction().rollback();
 	}
-	return users;
     }
 
     @Override
@@ -261,9 +229,16 @@ public class AccountManagerBean implements Serializable, AccountManager,
 
     @Override
     public void deletePassword(EmailAddress email) {
-	passwordStore.deletePassword(email);
-	ResultIterable<UserVertex> userVertex = xoManager.find(
-		UserVertex.class, email.getAddress());
-	xoManager.delete(userVertex);
+	xoManager.currentTransaction().begin();
+	try {
+	    passwordStore.deletePassword(email);
+	    ResultIterable<UserVertex> userVertex = xoManager.find(
+		    UserVertex.class, email.getAddress());
+	    xoManager.delete(userVertex);
+	    xoManager.currentTransaction().commit();
+	} catch (XOException e) {
+	    xoManager.currentTransaction().rollback();
+	    throw e;
+	}
     }
 }
