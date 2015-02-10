@@ -84,8 +84,8 @@ public class PasswordStoreLoginModule implements LoginModule {
 		    passwordCallback };
 	    callbackHander.handle(callbacks);
 	    EmailAddress email = new EmailAddress(nameCallback.getName());
-	    Password password = new Password(passwordCallback.getPassword()
-		    .toString());
+	    Password password = new Password(String.valueOf(passwordCallback
+		    .getPassword()));
 	    try (PasswordStoreClient passwordStore = new PasswordStoreClient()) {
 		loggedIn = passwordStore.authenticate(email, password);
 		if (loggedIn) {

@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import javax.ws.rs.NotAcceptableException;
+
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.jboss.resteasy.client.jaxrs.ResteasyWebTarget;
@@ -222,18 +224,9 @@ public class AccountManagerPasswordStoreIT extends
 		EMAIL_ADDRESS), newPassword));
     }
 
-    @Test
+    @Test(expected = NotAcceptableException.class)
     public void testResetPasswordWrongEmail() throws PasswordResetException {
-	try {
-	    proxy.resetPassword(EMAIL_ADDRESS);
-	} catch (PasswordResetException e) {
-	    assertEquals(
-		    PasswordStoreEvents
-			    .createPasswordResetFailedUnknownAccountEvent(
-				    new EmailAddress(EMAIL_ADDRESS))
-			    .getMessage(), e.getMessage());
-	    throw e;
-	}
+	proxy.resetPassword(EMAIL_ADDRESS);
     }
 
 }

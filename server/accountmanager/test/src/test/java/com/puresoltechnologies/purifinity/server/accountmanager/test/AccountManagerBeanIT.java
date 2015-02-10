@@ -20,10 +20,8 @@ import org.junit.Test;
 import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
-import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
-import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
 
@@ -39,11 +37,9 @@ public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
 	    PasswordActivationException {
 	assertNotNull(accountManager);
 
-	try (PasswordStoreClient passwordStoreClient = new PasswordStoreClient()) {
-	    String activationKey = passwordStoreClient.createPassword(EMAIL,
-		    PASSWORD);
-	    passwordStoreClient.activatePassword(EMAIL, activationKey);
-	}
+	String activationKey = accountManager.createPassword(EMAIL, PASSWORD);
+	accountManager.activatePassword(EMAIL, activationKey);
+	accountManager.createAccount(EMAIL, "engineer");
     }
 
     @Test
@@ -70,10 +66,6 @@ public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
 		    }
 		});
 	loginContext.login();
-	AccountManager accountManager = JndiUtils
-		.createRemoteEJBInstance(
-			AccountManager.class,
-			"java:app/accountmanager.core.impl/AccountManagerBean!com.puresol.accountmanager.core.api.AccountManager");
 	assertEquals(EMAIL, accountManager.getEmail());
 	loginContext.logout();
     }
