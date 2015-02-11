@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.commons.types.IllegalEmailAddressException;
 import com.puresoltechnologies.commons.types.Password;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManager;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.AccountManagerException;
@@ -89,9 +90,13 @@ public class AccountManagerRestService implements AccountManagerRestInterface {
     @Override
     public boolean changePassword(String email, ChangePasswordEntity entity)
 	    throws PasswordChangeException {
-	return accountManager.changePassword(new EmailAddress(email),
-		new Password(entity.getOldPassword()),
-		new Password(entity.getNewPassword()));
+	try {
+	    return accountManager.changePassword(new EmailAddress(email),
+		    new Password(entity.getOldPassword()),
+		    new Password(entity.getNewPassword()));
+	} catch (IllegalEmailAddressException e) {
+	    throw new PasswordChangeException("Could not change password.", e);
+	}
     }
 
     @Override

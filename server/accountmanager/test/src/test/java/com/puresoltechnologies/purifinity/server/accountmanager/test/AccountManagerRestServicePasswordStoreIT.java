@@ -1,6 +1,5 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -22,12 +21,11 @@ import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.Account
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.ChangePasswordEntity;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.CreateAccountEntity;
 import com.puresoltechnologies.purifinity.server.passwordstore.client.PasswordStoreClient;
-import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreEvents;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordChangeException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
 
-public class AccountManagerPasswordStoreIT extends
+public class AccountManagerRestServicePasswordStoreIT extends
 	AbstractAccountManagerClientTest {
 
     private static final String EMAIL_ADDRESS = "newaccount@puresol-technologies.com";
@@ -74,23 +72,15 @@ public class AccountManagerPasswordStoreIT extends
      * 
      * @throws PasswordCreationException
      */
-    @Test
+    @Test(expected = NotAcceptableException.class)
     public void testCreateAccountDuplicateEmail()
 	    throws AccountManagerException {
 	// the first account should be created normally...
 	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
 		VALID_PASSWORD, "engineer"));
-	try {
-	    // now we expect an error...
-	    proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
-		    VALID_PASSWORD, "engineer"));
-	} catch (AccountManagerException e) {
-	    assertEquals(
-		    PasswordStoreEvents.createAccountAlreadyExistsErrorEvent(
-			    new EmailAddress(EMAIL_ADDRESS)).getMessage(),
-		    e.getMessage());
-	    throw e;
-	}
+	// now we expect an error...
+	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
+		VALID_PASSWORD, "engineer"));
     }
 
     /**
@@ -99,19 +89,11 @@ public class AccountManagerPasswordStoreIT extends
      * 
      * @throws PasswordCreationException
      */
-    @Test
+    @Test(expected = NotAcceptableException.class)
     public void testCreateAccountTooWeakPassword()
 	    throws AccountManagerException {
-	try {
-	    proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
-		    TOO_WEAK_PASSWORD, "engineer"));
-	} catch (AccountManagerException e) {
-	    assertEquals(
-		    PasswordStoreEvents.createPasswordTooWeakErrorEvent(
-			    new EmailAddress(EMAIL_ADDRESS)).getMessage(),
-		    e.getMessage());
-	    throw e;
-	}
+	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
+		TOO_WEAK_PASSWORD, "engineer"));
     }
 
     /**
@@ -121,19 +103,11 @@ public class AccountManagerPasswordStoreIT extends
      * 
      * @throws PasswordCreationException
      */
-    @Test
+    @Test(expected = NotAcceptableException.class)
     public void testCreateAccountWithInvalidEmailAddress()
 	    throws AccountManagerException {
-	try {
-	    proxy.createAccount(new CreateAccountEntity(INVALID_EMAIL_ADDRESS,
-		    VALID_PASSWORD, "engineer"));
-	} catch (AccountManagerException e) {
-	    assertEquals(
-		    PasswordStoreEvents.createInvalidEmailAddressErrorEvent(
-			    new EmailAddress(INVALID_EMAIL_ADDRESS))
-			    .getMessage(), e.getMessage());
-	    throw e;
-	}
+	proxy.createAccount(new CreateAccountEntity(INVALID_EMAIL_ADDRESS,
+		VALID_PASSWORD, "engineer"));
     }
 
     @Test
@@ -166,7 +140,7 @@ public class AccountManagerPasswordStoreIT extends
 		EMAIL_ADDRESS), new Password(newPassword)));
     }
 
-    @Test
+    @Test(expected = NotAcceptableException.class)
     public void testChangePasswordWrongEmail() throws AccountManagerException,
 	    PasswordChangeException {
 	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
@@ -190,26 +164,15 @@ public class AccountManagerPasswordStoreIT extends
 			VALID_PASSWORD + "New!")));
     }
 
-    @Test
+    @Test(expected = NotAcceptableException.class)
     public void testChangePasswordTooWeakPassword()
 	    throws AccountManagerException, PasswordChangeException {
-	try {
-	    proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
-		    VALID_PASSWORD, "engineer"));
-	    assertTrue(passwordStoreClient.authenticate(new EmailAddress(
-		    EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
-	    proxy.changePassword(EMAIL_ADDRESS, new ChangePasswordEntity(
-		    VALID_PASSWORD, TOO_WEAK_PASSWORD));
-	} catch (PasswordChangeException e) {
-	    assertEquals(
-		    PasswordStoreEvents
-			    .createPasswordChangeFailedPasswordTooWeakEvent(
-				    new EmailAddress(EMAIL_ADDRESS))
-			    .getMessage(), e.getMessage());
-	    assertTrue(passwordStoreClient.authenticate(new EmailAddress(
-		    EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
-	    throw e;
-	}
+	proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
+		VALID_PASSWORD, "engineer"));
+	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
+		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
+	proxy.changePassword(EMAIL_ADDRESS, new ChangePasswordEntity(
+		VALID_PASSWORD, TOO_WEAK_PASSWORD));
     }
 
     @Test
