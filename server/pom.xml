@@ -20,7 +20,8 @@
 		<cassandra.driver.version>2.1.4</cassandra.driver.version>
 		<titan.version>0.5.3</titan.version>
 		<xo-titan.version>0.3.0-SNAPSHOT</xo-titan.version>
-		
+		<xo.version>0.4.5</xo.version>
+
 		<!-- WildFly -->
 		<wildfly.version>8.2.0.Final</wildfly.version>
 		<resteasy.version>3.0.10.Final</resteasy.version>
@@ -786,6 +787,11 @@
 				<scope>provided</scope>
 			</dependency>
 			<!-- Databases -->
+			<dependency>
+				<groupId>com.buschmais.xo</groupId>
+				<artifactId>xo.api</artifactId>
+				<version>${xo.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>com.datastax.cassandra</groupId>
 				<artifactId>cassandra-driver-core</artifactId>

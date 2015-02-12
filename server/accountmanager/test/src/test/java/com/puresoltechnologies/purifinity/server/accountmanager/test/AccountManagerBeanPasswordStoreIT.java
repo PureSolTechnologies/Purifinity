@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import javax.ejb.EJBException;
 import javax.inject.Inject;
 
 import org.junit.After;
@@ -63,7 +64,7 @@ public class AccountManagerBeanPasswordStoreIT extends
      * @throws PasswordCreationException
      * @throws PasswordActivationException
      */
-    @Test(expected = AccountManagerException.class)
+    @Test(expected = EJBException.class)
     public void testCreateAccountDuplicateEmail()
 	    throws AccountManagerException, PasswordCreationException,
 	    PasswordActivationException {

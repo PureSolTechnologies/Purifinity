@@ -39,6 +39,7 @@ import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCh
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
+import com.thinkaurelius.titan.core.SchemaViolationException;
 
 @Stateful
 @Local(AccountManager.class)
@@ -154,6 +155,9 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	    xoManager.currentTransaction().commit();
 	    eventLogger.logEvent(AccountManagerEvents
 		    .createAccountCreationEvent(email));
+	} catch (SchemaViolationException e) {
+	    throw new XOException(
+		    "Could not create new account. Account already exists?", e);
 	} catch (XOException e) {
 	    xoManager.currentTransaction().rollback();
 	    throw e;

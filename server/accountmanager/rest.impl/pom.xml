@@ -37,6 +37,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.buschmais.xo</groupId>
+			<artifactId>xo.api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-jaxrs</artifactId>
 		</dependency>
