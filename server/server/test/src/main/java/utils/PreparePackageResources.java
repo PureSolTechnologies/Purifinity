@@ -22,68 +22,59 @@ import com.puresoltechnologies.purifinity.server.test.lang.grammar.TestLanguageG
 
 public class PreparePackageResources {
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(PreparePackageResources.class);
+    private static final Logger logger = LoggerFactory
+	    .getLogger(PreparePackageResources.class);
 
-	public static void main(String args[]) {
-		try {
-			PackageBuilderUtils.createPackageDirectory(PackageDirectory.RES,
-					new File(TestLanguageGrammar.GRAMMAR_RESOURCE)
-							.getParentFile());
+    public static void main(String args[]) {
+	try {
+	    PackageBuilderUtils.createPackageDirectory(PackageDirectory.RES,
+		    new File(TestLanguageGrammar.GRAMMAR_RESOURCE)
+			    .getParentFile());
 
-			logger.info("Reading and persisting grammar...");
-			InputStream grammerResource = TestLanguageGrammar.class
-					.getResourceAsStream(TestLanguageGrammar.GRAMMAR_RESOURCE);
-			if (grammerResource == null) {
-				throw new RuntimeException(
-						"Could not open test language grammar '"
-								+ TestLanguageGrammar.GRAMMAR_RESOURCE + "'!");
-			}
-			try {
-				GrammarReader grammarReader = new GrammarReader(grammerResource);
-				try {
-					Grammar grammar = grammarReader.getGrammar();
-					PackageBuilderUtils
-							.persistObject(
-									PackageDirectory.RES,
-									new File(
-											TestLanguageGrammar.PERSISTED_GRAMMAR_RESOURCE),
-									grammar);
-					logger.info("done.");
-
-					logger.info("Creating lexer...");
-					Lexer lexer = LexerFactory.create(grammar);
-					PackageBuilderUtils
-							.persistObject(
-									PackageDirectory.RES,
-									new File(
-											TestLanguageGrammar.PERSISTED_LEXER_RESOURCE),
-									lexer);
-					logger.info("done.");
-
-					logger.info("Creating parser...");
-					Parser parser = ParserFactory.create(grammar);
-					PackageBuilderUtils
-							.persistObject(
-									PackageDirectory.RES,
-									new File(
-											TestLanguageGrammar.PERSISTED_PARSER_RESOURCE),
-									parser);
-					logger.info("done.");
-				} finally {
-					grammarReader.close();
-				}
-			} finally {
-				grammerResource.close();
-			}
-		} catch (GrammarException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (LexerFactoryException e) {
-			e.printStackTrace();
-		} catch (ParserFactoryException e) {
-			e.printStackTrace();
+	    logger.info("Reading and persisting grammar...");
+	    try (InputStream grammerResource = TestLanguageGrammar.class
+		    .getResourceAsStream(TestLanguageGrammar.GRAMMAR_RESOURCE);) {
+		if (grammerResource == null) {
+		    throw new RuntimeException(
+			    "Could not open test language grammar '"
+				    + TestLanguageGrammar.GRAMMAR_RESOURCE
+				    + "'!");
 		}
+		try (GrammarReader grammarReader = new GrammarReader(
+			grammerResource);) {
+		    Grammar grammar = grammarReader.getGrammar();
+		    PackageBuilderUtils
+			    .persistObject(
+				    PackageDirectory.RES,
+				    new File(
+					    TestLanguageGrammar.PERSISTED_GRAMMAR_RESOURCE),
+				    grammar);
+		    logger.info("done.");
+
+		    logger.info("Creating lexer...");
+		    Lexer lexer = LexerFactory.create(grammar);
+		    PackageBuilderUtils
+			    .persistObject(
+				    PackageDirectory.RES,
+				    new File(
+					    TestLanguageGrammar.PERSISTED_LEXER_RESOURCE),
+				    lexer);
+		    logger.info("done.");
+
+		    logger.info("Creating parser...");
+		    Parser parser = ParserFactory.create(grammar);
+		    PackageBuilderUtils
+			    .persistObject(
+				    PackageDirectory.RES,
+				    new File(
+					    TestLanguageGrammar.PERSISTED_PARSER_RESOURCE),
+				    parser);
+		    logger.info("done.");
+		}
+	    }
+	} catch (GrammarException | IOException | LexerFactoryException
+		| ParserFactoryException e) {
+	    e.printStackTrace();
 	}
+    }
 }

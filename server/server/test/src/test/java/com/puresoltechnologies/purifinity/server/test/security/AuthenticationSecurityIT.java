@@ -9,10 +9,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.test.AbstractPurifinityServerClientTest;
+import com.puresoltechnologies.purifinity.server.test.AbstractPurifinityServerRestClientTest;
 
 public class AuthenticationSecurityIT extends
-	AbstractPurifinityServerClientTest {
+	AbstractPurifinityServerRestClientTest {
 
     @Test
     public void testAuthentication() throws IOException {

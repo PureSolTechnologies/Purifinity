@@ -20,7 +20,7 @@ import com.puresoltechnologies.purifinity.server.socket.api.PurifinityServerStat
 import com.puresoltechnologies.purifinity.server.socket.api.PurifinityServerStatusRequestDecoder;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
-@ServerEndpoint(value = "/socket", //
+@ServerEndpoint(value = "/server", //
 encoders = { PurifinityServerStatusEncoder.class }, //
 decoders = { PurifinityServerStatusRequestDecoder.class }//
 )

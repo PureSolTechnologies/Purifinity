@@ -12,18 +12,18 @@ import com.puresoltechnologies.purifinity.server.domain.PurifinityServerStatus;
 
 public class PurifinityServerBeanIT extends AbstractPurifinityServerServerTest {
 
-	@Inject
-	private PurifinityServer purifinityServer;
+    @Inject
+    private PurifinityServer purifinityServer;
 
-	@Before
-	public void checkConditions() {
-		assertNotNull(purifinityServer);
-	}
+    @Before
+    public void checkConditions() {
+	assertNotNull(purifinityServer);
+    }
 
-	@Test
-	public void testLogger() {
-		PurifinityServerStatus status = purifinityServer.getStatus();
-		assertNotNull(status);
-	}
+    @Test
+    public void testGetStatus() {
+	PurifinityServerStatus status = purifinityServer.getStatus();
+	assertNotNull(status);
+    }
 
 }

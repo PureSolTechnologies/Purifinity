@@ -65,16 +65,6 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
     private static final Response FORBIDDEN = Response.status(
 	    Response.Status.FORBIDDEN).build();
 
-    @PostConstruct
-    public void postConstruct() {
-	logger.info("REST security is enabled.");
-    }
-
-    @PreDestroy
-    public void preDestroy() {
-	logger.info("REST security is disabled.");
-    }
-
     @Inject
     private AuthService authService;
 
@@ -86,6 +76,16 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
 
     @Inject
     private EventLoggerRemote eventLogger;
+
+    @PostConstruct
+    public void postConstruct() {
+	logger.info("REST security is enabled.");
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+	logger.info("REST security is disabled.");
+    }
 
     @Override
     public void filter(ContainerRequestContext requestContext)
