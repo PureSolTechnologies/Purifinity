@@ -17,8 +17,7 @@
 			</thead>
 			<tbody>
 				<tr data-ng-repeat="project in projects">
-					<td><a
-						href="#/projects/{{project.information.uuid}}"
+					<td><a href="#/projects/{{project.information.uuid}}"
 						data-toggle="tooltip"
 						title="Project ID:{{project.information.uuid}}">{{project.settings.name}}</a></td>
 					<td>{{project.information.creationTime | date: "yyyy-MM-dd
@@ -28,6 +27,17 @@
 			</tbody>
 		</table>
 	</div>
-
-	<h2>Running Analyzes</h2>
+	<div class="container">
+		<div class="row">
+			<div class="lg-col-4">
+				<span data-ng-include="'components/progress.html'"></span>
+			</div>
+			<div class="lg-col-4">
+				<span data-ng-include="'components/loggedInUsers.html'"></span>
+			</div>
+			<div class="lg-col-4">
+				<span data-ng-include="'components/serverStatus.html'"></span>
+			</div>
+		</div>
+	</div>
 </div>

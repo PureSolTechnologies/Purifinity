@@ -55,7 +55,7 @@ public class PasswordEncryperBeanIT extends AbstractPasswordStoreServerTest {
 		speed));
 	assertTrue(
 		"It is assumed that more than 200 encryptions are possible. It's not!",
-		speed > 200);
+		speed > 150);
     }
 
 }
