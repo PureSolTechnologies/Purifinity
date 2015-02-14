@@ -27,7 +27,6 @@ import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordDa
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordEncryptionException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordState;
-import com.puresoltechnologies.purifinity.server.wildfly.utils.EmailAddressValidator;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.Event;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
@@ -113,12 +112,6 @@ public class PasswordStoreBean implements PasswordStore {
     public String createPassword(EmailAddress email, Password password)
 	    throws PasswordCreationException {
 	logger.info("An account for '" + email + "' is going to be created...");
-	if (!EmailAddressValidator.validate(email.getAddress())) {
-	    Event event = PasswordStoreEvents
-		    .createInvalidEmailAddressErrorEvent(email);
-	    eventLogger.logEvent(event);
-	    throw new PasswordCreationException(event.getMessage());
-	}
 	if (!PasswordStrengthCalculator.validate(password.getPassword())) {
 	    Event event = PasswordStoreEvents
 		    .createPasswordTooWeakErrorEvent(email);
