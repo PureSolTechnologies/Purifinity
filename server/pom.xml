@@ -18,7 +18,7 @@
 
 		<!-- Databases -->
 		<cassandra.driver.version>2.1.4</cassandra.driver.version>
-		<titan.version>0.5.3</titan.version>
+		<titan.version>0.5.4</titan.version>
 		<xo-titan.version>0.3.0-SNAPSHOT</xo-titan.version>
 		<xo.version>0.4.5</xo.version>
 
