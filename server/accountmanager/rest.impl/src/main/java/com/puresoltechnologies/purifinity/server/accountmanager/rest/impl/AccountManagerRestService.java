@@ -4,6 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.commons.types.IllegalEmailAddressException;
@@ -24,6 +28,9 @@ public class AccountManagerRestService implements AccountManagerRestInterface {
 
     @Inject
     private AccountManager accountManager;
+
+    @Context
+    private UriInfo uriInfo;
 
     @Override
     public Set<User> getUsers() {
@@ -66,7 +73,7 @@ public class AccountManagerRestService implements AccountManagerRestInterface {
     }
 
     @Override
-    public void createAccount(CreateAccountEntity entity)
+    public Response createAccount(CreateAccountEntity entity)
 	    throws AccountManagerException {
 	try {
 	    EmailAddress emailAddress = new EmailAddress(entity.getEmail());
@@ -76,6 +83,10 @@ public class AccountManagerRestService implements AccountManagerRestInterface {
 		    password);
 	    accountManager.activatePassword(emailAddress, activationKey);
 	    accountManager.createAccount(emailAddress, entity.getRoleId());
+	    ResponseBuilder response = Response.created(uriInfo
+		    .getAbsolutePathBuilder().path(emailAddress.getAddress())
+		    .build());
+	    return response.build();
 	} catch (PasswordCreationException | PasswordActivationException e) {
 	    throw new AccountManagerException("Could not create account '"
 		    + entity.getEmail() + "'.", e);
