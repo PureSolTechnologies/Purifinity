@@ -28,7 +28,7 @@ function accountManager(purifinityServerConnector) {
 	};
 	accountManager.deleteAccount = function(email, success, error) {
 		var data = {};
-		return purifinityServerConnector.del(data, '/accountmanager/rest/users/' + email,
+		return purifinityServerConnector.del('/accountmanager/rest/users/' + email,  
 				success, error);
 	};
 	accountManager.getRoles = function(success, error) {
@@ -62,6 +62,9 @@ function usersViewCtrl($scope) {
 	$scope.deleteUser = function (email) {
 		accountManager.deleteAccount(email, 
 			function (data, status) {
+				accountManager.getUsers(//
+					function(data, status) {$scope.users = data}, //
+					function(data, status, error) {});
 			},
 			function (data, status, error) {
 			}

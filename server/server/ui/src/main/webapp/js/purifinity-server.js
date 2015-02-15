@@ -58,7 +58,7 @@ function purifinityServerConnector($http, $location, authService, httpRequests, 
 		}
 		return httpRequests.post(baseURL + serviceURL, data, authId, authToken, successCallback, errorCallback);
 	};
-	factory.del = function(serviceURL, errorCallback) {
+	factory.del = function(serviceURL, successCallback, errorCallback) {
 		var authId = '';
 		var authToken = '';
 		if (authService.authData) {

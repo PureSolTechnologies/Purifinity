@@ -61,8 +61,10 @@
 				<tr data-ng-repeat="user in users">
 					<td>{{user.email}}</td>
 					<td>{{user.name}}</td>
-					<td><button class="btn btn-default">Edit...</button>
-						<button class="btn btn-default" data-ng-click="deleteUser(user.email)">Delete...</button></td>
+					<td>
+						<button class="btn btn-default">Edit...</button>
+						<button class="btn btn-default" data-ng-click="deleteUser(user.email)">Delete...</button>
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -80,8 +82,8 @@
 			<tbody>
 				<tr data-ng-repeat="role in roles">
 					<td>{{role.name}}</td>
-					<td><button class="btn btn-default">Edit...</button>
-						<button class="btn btn-default">Delete...</button></td>
+					<td><button class="btn btn-default" disabled="true">Edit...</button>
+						<button class="btn btn-default" disabled="true">Delete...</button></td>
 				</tr>
 			</tbody>
 		</table>

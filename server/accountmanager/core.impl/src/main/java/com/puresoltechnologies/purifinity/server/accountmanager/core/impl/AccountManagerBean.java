@@ -20,7 +20,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 
 import com.buschmais.xo.api.Query.Result;
-import com.buschmais.xo.api.ResultIterable;
 import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.api.XOManager;
 import com.puresoltechnologies.commons.types.EmailAddress;
@@ -236,8 +235,8 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	xoManager.currentTransaction().begin();
 	try {
 	    passwordStore.deletePassword(email);
-	    ResultIterable<UserVertex> userVertex = xoManager.find(
-		    UserVertex.class, email.getAddress());
+	    UserVertex userVertex = xoManager.find(UserVertex.class,
+		    email.getAddress()).getSingleResult();
 	    xoManager.delete(userVertex);
 	    xoManager.currentTransaction().commit();
 	} catch (XOException e) {
