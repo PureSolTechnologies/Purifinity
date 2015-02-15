@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.SessionContext;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordRe
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 import com.thinkaurelius.titan.core.SchemaViolationException;
 
-@Stateful
+@Stateless
 @Local(AccountManager.class)
 @Remote(AccountManagerRemote.class)
 public class AccountManagerBean implements Serializable, AccountManager,

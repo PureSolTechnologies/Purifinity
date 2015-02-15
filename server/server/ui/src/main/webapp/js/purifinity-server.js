@@ -268,6 +268,11 @@ function loginCtrl($scope, authService) {
 	$scope.password = undefined;
 	$scope.remember = undefined;
 	$scope.login = function() {
+		if ($scope.email.indexOf('@') <= -1) {
+			if (authenticationSettings.defaultDomain) {
+				$scope.email = $scope.email + authenticationSettings.defaultDomain;
+			}
+		}
 		authService.login($scope.email, $scope.password, $scope.remember);
 		$scope.password = undefined;
 	};
