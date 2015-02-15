@@ -1,0 +1,40 @@
+<div class="modal-header">
+	<h3 class="modal-title">Add User</h3>
+</div>
+<div class="modal-body">
+	<table>
+		<tbody class="two-column-form">
+			<tr>
+				<td>Email:</td>
+				<td><input type="email" data-ng-model="items.email" class="form-control" placeholder="Email address" required autofocus/></td>
+			</tr>
+			<tr>
+				<td>Name:</td>
+				<td><input type="text" data-ng-model="items.name" class="form-control" placeholder="Name" required/></td>
+			</tr>
+			<tr>
+				<td>Password:</td>
+				<td><input type="text" data-ng-model="items.password" class="form-control" placeholder="Password" required/></td>
+			</tr>
+			<tr>
+				<td>Password Check:</td>
+				<td><input type="text" data-ng-model="items.password2" class="form-control" placeholder="Repeat password" required/></td>
+			</tr>
+			<tr>
+				<td>Role:</td>
+				<td>
+					<select id="roleList" data-ng-model="items.roleId" title="Role Selecion" class="selectpicker show-tick form-control">
+						<option value="">Select a analysis run</option>
+						<option data-ng-repeat="role in roles" value="{{role.id}}">
+							{{role.name}}
+						</option>
+					</select>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+<div class="modal-footer">
+	<button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
+	<button class="btn btn-primary" data-ng-click="ok()" data-ng-disabled="disableOK()">OK</button>
+</div>

@@ -53,7 +53,8 @@ public class AccountManagerBeanPasswordStoreIT extends
 	String activationKey = accountManager.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	accountManager.activatePassword(EMAIL_ADDRESS, activationKey);
-	accountManager.createAccount(EMAIL_ADDRESS, "engineer");
+	accountManager.createAccount(EMAIL_ADDRESS, EMAIL_ADDRESS.getAddress(),
+		"engineer");
     }
 
     /**
@@ -71,9 +72,11 @@ public class AccountManagerBeanPasswordStoreIT extends
 	String activationKey = accountManager.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	accountManager.activatePassword(EMAIL_ADDRESS, activationKey);
-	accountManager.createAccount(EMAIL_ADDRESS, "engineer");
+	accountManager.createAccount(EMAIL_ADDRESS, EMAIL_ADDRESS.getAddress(),
+		"engineer");
 	// now we expect an error...
-	accountManager.createAccount(EMAIL_ADDRESS, "engineer");
+	accountManager.createAccount(EMAIL_ADDRESS, EMAIL_ADDRESS.getAddress(),
+		"engineer");
     }
 
     /**
@@ -94,7 +97,8 @@ public class AccountManagerBeanPasswordStoreIT extends
 	String activationKey = accountManager.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	accountManager.activatePassword(EMAIL_ADDRESS, activationKey);
-	accountManager.createAccount(EMAIL_ADDRESS, "engineer");
+	accountManager.createAccount(EMAIL_ADDRESS, EMAIL_ADDRESS.getAddress(),
+		"engineer");
 	assertTrue(accountManager.authenticate(EMAIL_ADDRESS, VALID_PASSWORD));
     }
 
@@ -104,7 +108,8 @@ public class AccountManagerBeanPasswordStoreIT extends
 	String activationKey = accountManager.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	accountManager.activatePassword(EMAIL_ADDRESS, activationKey);
-	accountManager.createAccount(EMAIL_ADDRESS, "engineer");
+	accountManager.createAccount(EMAIL_ADDRESS, EMAIL_ADDRESS.getAddress(),
+		"engineer");
 	assertFalse(passwordStoreClient.authenticate(EMAIL_ADDRESS,
 		new Password(VALID_PASSWORD.getPassword() + "Wrong!")));
     }
@@ -116,7 +121,8 @@ public class AccountManagerBeanPasswordStoreIT extends
 	String activationKey = accountManager.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	accountManager.activatePassword(EMAIL_ADDRESS, activationKey);
-	accountManager.createAccount(EMAIL_ADDRESS, "engineer");
+	accountManager.createAccount(EMAIL_ADDRESS, EMAIL_ADDRESS.getAddress(),
+		"engineer");
 	assertTrue(passwordStoreClient.authenticate(EMAIL_ADDRESS,
 		VALID_PASSWORD));
 	String newPassword = VALID_PASSWORD.getPassword() + "New!";
@@ -133,7 +139,8 @@ public class AccountManagerBeanPasswordStoreIT extends
 	String activationKey = accountManager.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	accountManager.activatePassword(EMAIL_ADDRESS, activationKey);
-	accountManager.createAccount(EMAIL_ADDRESS, "engineer");
+	accountManager.createAccount(EMAIL_ADDRESS, EMAIL_ADDRESS.getAddress(),
+		"engineer");
 	assertTrue(passwordStoreClient.authenticate(EMAIL_ADDRESS,
 		VALID_PASSWORD));
 	assertFalse(accountManager.changePassword(EMAIL_ADDRESS, new Password(
@@ -148,7 +155,8 @@ public class AccountManagerBeanPasswordStoreIT extends
 	String activationKey = accountManager.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	accountManager.activatePassword(EMAIL_ADDRESS, activationKey);
-	accountManager.createAccount(EMAIL_ADDRESS, "engineer");
+	accountManager.createAccount(EMAIL_ADDRESS, EMAIL_ADDRESS.getAddress(),
+		"engineer");
 	assertTrue(passwordStoreClient.authenticate(EMAIL_ADDRESS,
 		VALID_PASSWORD));
 	accountManager.changePassword(EMAIL_ADDRESS, VALID_PASSWORD,
@@ -162,7 +170,8 @@ public class AccountManagerBeanPasswordStoreIT extends
 	String activationKey = accountManager.createPassword(EMAIL_ADDRESS,
 		VALID_PASSWORD);
 	accountManager.activatePassword(EMAIL_ADDRESS, activationKey);
-	accountManager.createAccount(EMAIL_ADDRESS, "engineer");
+	accountManager.createAccount(EMAIL_ADDRESS, EMAIL_ADDRESS.getAddress(),
+		"engineer");
 	assertTrue(passwordStoreClient.authenticate(EMAIL_ADDRESS,
 		VALID_PASSWORD));
 	Password newPassword = accountManager.resetPassword(EMAIL_ADDRESS);

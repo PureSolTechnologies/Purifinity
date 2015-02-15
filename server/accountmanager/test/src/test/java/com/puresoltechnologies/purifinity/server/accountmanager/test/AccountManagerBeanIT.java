@@ -40,7 +40,7 @@ public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
 
 	String activationKey = accountManager.createPassword(EMAIL, PASSWORD);
 	accountManager.activatePassword(EMAIL, activationKey);
-	accountManager.createAccount(EMAIL, "engineer");
+	accountManager.createAccount(EMAIL, EMAIL.getAddress(), "engineer");
     }
 
     @Test
@@ -76,6 +76,6 @@ public class AccountManagerBeanIT extends AbstractAccountManagerServerTest {
     @Test
     public void testCreateEmptyAccount() {
 	EmailAddress email = new EmailAddress("email@address.com");
-	accountManager.createAccount(email, "engineer");
+	accountManager.createAccount(email, email.getAddress(), "engineer");
     }
 }

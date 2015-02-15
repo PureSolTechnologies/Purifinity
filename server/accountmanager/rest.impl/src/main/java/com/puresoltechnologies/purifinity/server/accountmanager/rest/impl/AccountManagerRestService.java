@@ -17,6 +17,7 @@ import com.puresoltechnologies.purifinity.server.accountmanager.core.api.Account
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.AccountManagerRestInterface;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.ChangePasswordEntity;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.CreateAccountEntity;
+import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.EditAccountEntity;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.Role;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.User;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordActivationException;
@@ -78,11 +79,11 @@ public class AccountManagerRestService implements AccountManagerRestInterface {
 	try {
 	    EmailAddress emailAddress = new EmailAddress(entity.getEmail());
 	    Password password = new Password(entity.getPassword());
-	    String activationKey;
-	    activationKey = accountManager.createPassword(emailAddress,
+	    String activationKey = accountManager.createPassword(emailAddress,
 		    password);
 	    accountManager.activatePassword(emailAddress, activationKey);
-	    accountManager.createAccount(emailAddress, entity.getRoleId());
+	    accountManager.createAccount(emailAddress, entity.getName(),
+		    entity.getRoleId());
 	    ResponseBuilder response = Response.created(uriInfo
 		    .getAbsolutePathBuilder().path(emailAddress.getAddress())
 		    .build());
@@ -91,6 +92,13 @@ public class AccountManagerRestService implements AccountManagerRestInterface {
 	    throw new AccountManagerException("Could not create account '"
 		    + entity.getEmail() + "'.", e);
 	}
+    }
+
+    @Override
+    public void alterAccount(String email, EditAccountEntity entity)
+	    throws AccountManagerException {
+	accountManager.alterAccount(new EmailAddress(email), entity.getName(),
+		entity.getRoleId());
     }
 
     @Override

@@ -46,6 +46,12 @@ public interface AccountManagerRestInterface {
     public Response createAccount(CreateAccountEntity createAccountEntity)
 	    throws AccountManagerException;
 
+    @POST
+    @Path("users/{email}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void alterAccount(@PathParam("email") String email,
+	    EditAccountEntity entity) throws AccountManagerException;
+
     @DELETE
     @Path("users/{email}")
     public void removeAccount(@PathParam("email") String email);
