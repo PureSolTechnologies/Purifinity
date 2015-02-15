@@ -13,3 +13,8 @@ body {
 	border-right: 2pt solid #804020;
 	border-bottom: 2pt solid #804020;
 }
+
+tbody.two-column-form > tr > td{
+	margin: 5pt;
+	padding: 5pt;
+}

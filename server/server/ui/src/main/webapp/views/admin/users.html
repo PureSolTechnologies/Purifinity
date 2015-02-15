@@ -9,7 +9,7 @@
         		</div>
         		<div class="modal-body">
 					<table>
-						<tbody>
+						<tbody class="two-column-form">
 							<tr>
 								<td>Email:</td>
 								<td><input type="email" data-ng-model="items.email" class="form-control" placeholder="Email address" required autofocus/></td>
@@ -25,6 +25,17 @@
 							<tr>
 								<td>Password Check:</td>
 								<td><input type="text" data-ng-model="items.password2" class="form-control" placeholder="Repeat password" required/></td>
+							</tr>
+							<tr>
+								<td>Role:</td>
+								<td>
+									<select id="roleList" data-ng-model="items.roleId" title="Role Selecion" class="selectpicker show-tick form-control">
+										<option value="">Select a analysis run</option>
+										<option data-ng-repeat="role in roles" value="{{role.id}}">
+											{{role.name}}
+										</option>
+									</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>

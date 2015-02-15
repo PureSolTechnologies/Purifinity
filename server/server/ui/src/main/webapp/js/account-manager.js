@@ -2,36 +2,40 @@
  * This JavaScript files contains Angular JS functionality to be added to an
  * application to handle user accounts for Purifinity.
  */
-var accountManagerModule = angular.module("accountManager", [ "purifinityServer" ]);
-purifinityServer.factory('userAdministratorFactory', [
-		'purifinityServerConnector', userAdministratorFactory ]);
+var accountManagerModule = angular.module("accountManagerModule", [ "purifinityServer" ]);
+purifinityServer.factory('accountManager', [
+		'purifinityServerConnector', accountManager ]);
 accountManagerModule.controller("usersViewCtrl", usersViewCtrl);
 accountManagerModule.controller("userSettingsCtrl", userSettingsCtrl);
 accountManagerModule.controller("addUserModalCtrl", addUserModalCtrl);
 accountManagerModule.controller("addUserModalInstanceCtrl", addUserModalInstanceCtrl);
 accountManagerModule.controller("roleSettingsCtrl", roleSettingsCtrl);
 
-function userAdministratorFactory(purifinityServerConnector) {
-	var userAdministratorFactory = {};
-	userAdministratorFactory.getUsers = function(success, error) {
+function accountManager(purifinityServerConnector) {
+	var accountManager = {};
+	accountManager.getUsers = function(success, error) {
 		return purifinityServerConnector.get('/accountmanager/rest/users',
 				success, error);
 	};
-	userAdministratorFactory.createAccount = function(email, password, success, error) {
-		var data = {};
-		return purifinityServerConnector.put(data, '/accountmanager/rest/users',
+	accountManager.createAccount = function(email, password, roleId, success, error) {
+		var data = {
+			email: email,
+			password: password,
+			roleId: roleId
+		};
+		return purifinityServerConnector.put('/accountmanager/rest/users', data, 
 				success, error);
 	};
-	userAdministratorFactory.deleteAccount = function(email, success, error) {
+	accountManager.deleteAccount = function(email, success, error) {
 		var data = {};
 		return purifinityServerConnector.del(data, '/accountmanager/rest/users/' + email,
 				success, error);
 	};
-	userAdministratorFactory.getRoles = function(success, error) {
+	accountManager.getRoles = function(success, error) {
 		return purifinityServerConnector.get('/accountmanager/rest/roles',
 				success, error);
 	};
-	return userAdministratorFactory;
+	return accountManager;
 }
 
 function usersViewCtrl($scope) {
@@ -50,13 +54,13 @@ function usersViewCtrl($scope) {
 	}
 }
 
- function userSettingsCtrl($scope, userAdministratorFactory) {
+ function userSettingsCtrl($scope, accountManager) {
 	$scope.users = undefined;
-	userAdministratorFactory.getUsers(//
+	accountManager.getUsers(//
 		function(data, status) {$scope.users = data}, //
 		function(data, status, error) {});
 	$scope.deleteUser = function (email) {
-		userAdministratorFactory.deleteAccount(email, 
+		accountManager.deleteAccount(email, 
 			function (data, status) {
 			},
 			function (data, status, error) {
@@ -89,14 +93,24 @@ function usersViewCtrl($scope) {
 	};
 }
 
-function addUserModalInstanceCtrl($scope, $modalInstance, items) {
-	  $scope.items = items;
-	  $scope.ok = function () {
+function addUserModalInstanceCtrl($scope, $modalInstance, items, accountManager) {
+	$scope.items = items;
+	$scope.roles = undefined;
+	accountManager.getRoles(//
+		function(data, status) {$scope.roles = data}, //
+		function(data, status, error) {});
+	$scope.ok = function () {
 	    $modalInstance.close($scope.items);
-	  };
-	  $scope.cancel = function () {
+		accountManager.createAccount($scope.items.email, $scope.items.password, $scope.items.roleId, 
+					function (data, status) {
+			},
+			function (data, status, error) {
+			}
+		);
+	};
+	$scope.cancel = function () {
 	    $modalInstance.dismiss('cancel');
-	  };
+	};
 	$scope.disableOK = function() {
 		if (!$scope.items.password) {
 			return true;
@@ -117,9 +131,9 @@ function addUserModalInstanceCtrl($scope, $modalInstance, items) {
 	}
 }
 
-function roleSettingsCtrl($scope, userAdministratorFactory) {
+function roleSettingsCtrl($scope, accountManager) {
 	$scope.roles = undefined;
-	userAdministratorFactory.getRoles(//
+	accountManager.getRoles(//
 		function(data, status) {$scope.roles = data}, //
 		function(data, status, error) {});
 }
