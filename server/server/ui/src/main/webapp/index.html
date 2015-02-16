@@ -109,6 +109,24 @@
 
 	<span data-ng-view></span>
 
+	<div class="container">
+		<div class="monitor" onload="connectSocket()">
+			<span class="title">Server Status</span>
+			<span id="open">Not connected</span>
+			<span id="output"></span>
+		</div>
+		<script language="javascript" type="text/javascript">
+			websocket = new WebSocket("ws://" + server.host + ":" + server.port + "/purifinityserver/socket/status");
+			websocket.onopen = function (event) {
+				document.getElementById("open").innerHTML = "Opened";
+			}
+			websocket.onmessage = function (event) {
+			var outputElement = document.getElementById("output");
+				outputElement.innerHTML = event.data;
+			}
+		</script>
+	</div>
+
 	<span data-ng-include="'components/footer.html'"></span>
 
 	<!-- Bootstrap core JavaScript

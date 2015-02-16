@@ -1,0 +1,16 @@
+<html>
+<body>
+	Open: <span id="open"></span><br/>
+	OUT: <span id="output"></span>
+	<script language="javascript" type="text/javascript">
+		websocket = new WebSocket("ws://192.168.0.100:8080/purifinityserver/socket/status");
+		websocket.onopen = function (event) {
+			document.getElementById("open").innerHTML = "Opened";
+		}
+		websocket.onmessage = function (event) {
+			var outputElement = document.getElementById("output");
+			outputElement.innerHTML = event.data;
+		}
+	</script>
+</body>
+</html>

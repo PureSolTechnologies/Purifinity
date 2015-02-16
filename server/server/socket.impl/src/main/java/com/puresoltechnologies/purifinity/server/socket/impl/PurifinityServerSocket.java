@@ -18,18 +18,10 @@ import javax.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.purifinity.server.core.api.PurifinityServer;
-import com.puresoltechnologies.purifinity.server.domain.PurifinityServerStatus;
-import com.puresoltechnologies.purifinity.server.socket.api.PurifinityServerStatusEncoder;
-import com.puresoltechnologies.purifinity.server.socket.api.PurifinityServerStatusRequest;
-import com.puresoltechnologies.purifinity.server.socket.api.PurifinityServerStatusRequestDecoder;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
-@ServerEndpoint(value = "/server", //
-encoders = { PurifinityServerStatusEncoder.class }, //
-decoders = { PurifinityServerStatusRequestDecoder.class }//
-)
+@ServerEndpoint(value = "/status")
 @Singleton
-// @Startup
 public class PurifinityServerSocket {
 
     @Inject
@@ -59,10 +51,9 @@ public class PurifinityServerSocket {
     }
 
     @OnMessage
-    public PurifinityServerStatus getServerStatus(
-	    PurifinityServerStatusRequest request) {
-	logger.info("Got request for status.");
-	return purifinityServer.getStatus();
+    public String getServerStatus(String request) {
+	logger.debug("Got request for status.");
+	return getStatus();
     }
 
     @OnError
@@ -75,7 +66,7 @@ public class PurifinityServerSocket {
     public void periodicUpdate() {
 	if (session != null) {
 	    logger.trace("Periodic status update...");
-	    PurifinityServerStatus status = purifinityServer.getStatus();
+	    String status = getStatus();
 	    for (Session client : session.getOpenSessions()) {
 		try {
 		    client.getBasicRemote().sendObject(status);
@@ -84,5 +75,9 @@ public class PurifinityServerSocket {
 		}
 	    }
 	}
+    }
+
+    private String getStatus() {
+	return "Hello, World!";
     }
 }
