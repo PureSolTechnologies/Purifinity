@@ -1,8 +1,12 @@
 package com.puresoltechnologies.purifinity.server.socket.impl;
 
-import javax.ejb.Stateless;
+import java.io.IOException;
+
+import javax.ejb.Schedule;
+import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.websocket.CloseReason;
+import javax.websocket.EncodeException;
 import javax.websocket.EndpointConfig;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -24,7 +28,8 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerR
 encoders = { PurifinityServerStatusEncoder.class }, //
 decoders = { PurifinityServerStatusRequestDecoder.class }//
 )
-@Stateless
+@Singleton
+// @Startup
 public class PurifinityServerSocket {
 
     @Inject
@@ -36,14 +41,17 @@ public class PurifinityServerSocket {
     @Inject
     private PurifinityServer purifinityServer;
 
+    private Session session = null;
+
     @OnOpen
     public void open(Session session, EndpointConfig config) {
+	this.session = session;
 	eventLogger.logEvent(PurifinityServerSocketEvents
 		.createSocketOpenedEvent());
     }
 
     @OnClose
-    public void close(Session session, CloseReason reason) {
+    public void close(CloseReason reason) {
 	String reasonPhrase = reason != null ? reason.getReasonPhrase()
 		: "<no reason provided>";
 	eventLogger.logEvent(PurifinityServerSocketEvents
@@ -51,15 +59,30 @@ public class PurifinityServerSocket {
     }
 
     @OnMessage
-    public PurifinityServerStatus getServerStatus(Session session,
+    public PurifinityServerStatus getServerStatus(
 	    PurifinityServerStatusRequest request) {
 	logger.info("Got request for status.");
 	return purifinityServer.getStatus();
     }
 
     @OnError
-    public void handleError(Session session, Throwable throwable) {
+    public void handleError(Throwable throwable) {
 	eventLogger.logEvent(PurifinityServerSocketEvents
 		.createSocketErrorEvent(throwable));
+    }
+
+    @Schedule(hour = "*", minute = "*", second = "*/10")
+    public void periodicUpdate() {
+	if (session != null) {
+	    logger.trace("Periodic status update...");
+	    PurifinityServerStatus status = purifinityServer.getStatus();
+	    for (Session client : session.getOpenSessions()) {
+		try {
+		    client.getBasicRemote().sendObject(status);
+		} catch (IOException | EncodeException | NullPointerException e) {
+		    logger.error("Could not send status message.", e);
+		}
+	    }
+	}
     }
 }

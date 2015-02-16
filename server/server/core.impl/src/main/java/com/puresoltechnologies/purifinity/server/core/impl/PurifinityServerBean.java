@@ -10,9 +10,9 @@ import com.puresoltechnologies.purifinity.server.domain.PurifinityServerStatus;
  */
 public class PurifinityServerBean implements PurifinityServer {
 
-	@Override
-	public PurifinityServerStatus getStatus() {
-		return new PurifinityServerStatus();
-	}
+    @Override
+    public PurifinityServerStatus getStatus() {
+	return new PurifinityServerStatus();
+    }
 
 }
