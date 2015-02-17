@@ -18,12 +18,3 @@ tbody.two-column-form > tr > td{
 	margin: 5pt;
 	padding: 5pt;
 }
-
-.monitor {
-	border: 1pt solid #804020;
-}
-
-.monitor > .title {
-	font-size: 12pt;
-	font-weight: bolder;
-}
