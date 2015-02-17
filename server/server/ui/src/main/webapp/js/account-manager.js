@@ -3,7 +3,7 @@
  * application to handle user accounts for Purifinity.
  */
 var accountManagerModule = angular.module("accountManagerModule", [ "purifinityServer" ]);
-purifinityServer.factory('accountManager', [
+accountManagerModule.factory('accountManager', [
 		'purifinityServerConnector', accountManager ]);
 accountManagerModule.controller("usersViewCtrl", usersViewCtrl);
 accountManagerModule.controller("userSettingsCtrl", userSettingsCtrl);

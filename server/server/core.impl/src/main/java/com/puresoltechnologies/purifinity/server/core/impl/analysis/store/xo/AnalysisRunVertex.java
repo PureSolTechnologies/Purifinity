@@ -20,9 +20,9 @@ public interface AnalysisRunVertex {
 
     @Indexed(unique = true)
     @Property(TitanElementNames.ANALYSIS_RUN_ID_PROPERTY)
-    public long getRunId();
+    public Long getRunId();
 
-    public void setRunId(long runId);
+    public void setRunId(Long runId);
 
     @Property(TitanElementNames.CREATION_TIME_PROPERTY)
     public Date getCreationTime();
