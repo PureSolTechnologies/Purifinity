@@ -31,71 +31,70 @@ import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
  */
 public abstract class AbstractMetricTest extends AbstractServerTest {
 
-	@Inject
-	private AnalysisStoreService analysisStore;
+    @Inject
+    private AnalysisStoreService analysisStore;
 
-	@Inject
-	private AnalyzerServiceManager analyzerServiceManager;
+    @Inject
+    private AnalyzerServiceManager analyzerServiceManager;
 
-	@BeforeClass
-	public static void cleanCodeAnalysisDirectory() {
-		File codeAnalysisDirectory = null;
-		assertNotNull("Storage directory is not available.",
-				codeAnalysisDirectory);
-		// if (codeAnalysisDirectory.exists()) {
-		// DirectoryUtilities.deleteDirectoryRecursivly(codeAnalysisDirectory);
-		// }
-	}
+    @BeforeClass
+    public static void cleanCodeAnalysisDirectory() {
+	File codeAnalysisDirectory = null;
+	assertNotNull("Storage directory is not available.",
+		codeAnalysisDirectory);
+	// if (codeAnalysisDirectory.exists()) {
+	// DirectoryUtilities.deleteDirectoryRecursivly(codeAnalysisDirectory);
+	// }
+    }
 
-	@Before
-	public void checkEnvironment() {
-		assertNotNull("Analysis store is null!", analysisStore);
+    @Before
+    public void checkEnvironment() {
+	assertNotNull("Analysis store is null!", analysisStore);
 
-		Collection<AnalyzerServiceInformation> languages = analyzerServiceManager
-				.getServices();
-		assertNotNull("The list of languages is null!", languages);
-		assertTrue("No programming languages found!", languages.size() > 0);
-	}
+	Collection<AnalyzerServiceInformation> languages = analyzerServiceManager
+		.getServices();
+	assertNotNull("The list of languages is null!", languages);
+	assertTrue("No programming languages found!", languages.size() > 0);
+    }
 
-	private AnalysisProjectInformation analysisProjectInformation;
+    private AnalysisProjectInformation analysisProjectInformation;
 
-	private final File directory;
-	private final FileSearchConfiguration fileSearchConfiguration;
+    private final File directory;
+    private final FileSearchConfiguration fileSearchConfiguration;
 
-	public AbstractMetricTest(File directory,
-			FileSearchConfiguration fileSearchConfiguration) {
-		super();
-		assertNotNull("Project directory is null.", directory);
-		assertTrue("Project directory '" + directory + "' is not existing.",
-				directory.exists());
-		this.directory = directory;
-		System.out.println("Test test project directory is '" + directory
-				+ "'...");
-		assertNotNull("Search configuration is null.", fileSearchConfiguration);
-		this.fileSearchConfiguration = fileSearchConfiguration;
-	}
+    public AbstractMetricTest(File directory,
+	    FileSearchConfiguration fileSearchConfiguration) {
+	super();
+	assertNotNull("Project directory is null.", directory);
+	assertTrue("Project directory '" + directory + "' is not existing.",
+		directory.exists());
+	this.directory = directory;
+	System.out.println("Test test project directory is '" + directory
+		+ "'...");
+	assertNotNull("Search configuration is null.", fileSearchConfiguration);
+	this.fileSearchConfiguration = fileSearchConfiguration;
+    }
 
-	@Before
-	public final void setup() throws AnalysisStoreException {
-		Properties properties = new Properties();
-		properties.setProperty("directory", directory.getPath());
-		analysisProjectInformation = analysisStore
-				.createAnalysisProject(new AnalysisProjectSettings(
-						"TestProject",
-						"This project was created for testing purposes.",
-						fileSearchConfiguration, properties));
-		assertNotNull("Analysis project was not created and is null.",
-				analysisProjectInformation);
-	}
+    @Before
+    public final void setup() throws AnalysisStoreException {
+	Properties properties = new Properties();
+	properties.setProperty("directory", directory.getPath());
+	analysisProjectInformation = analysisStore.createAnalysisProject(
+		"test_project", new AnalysisProjectSettings("TestProject",
+			"This project was created for testing purposes.",
+			fileSearchConfiguration, properties));
+	assertNotNull("Analysis project was not created and is null.",
+		analysisProjectInformation);
+    }
 
-	@After
-	public final void destroy() throws AnalysisStoreException {
-		analysisStore.removeAnalysisProject(analysisProjectInformation
-				.getUUID());
-	}
+    @After
+    public final void destroy() throws AnalysisStoreException {
+	analysisStore.removeAnalysisProject(analysisProjectInformation
+		.getProjectId());
+    }
 
-	protected AnalysisProjectInformation getAnalysisProject() {
-		return analysisProjectInformation;
-	}
+    protected AnalysisProjectInformation getAnalysisProject() {
+	return analysisProjectInformation;
+    }
 
 }

@@ -19,10 +19,10 @@ public interface AnalysisRunVertex {
     public static final String NAME = "analysis_run";
 
     @Indexed(unique = true)
-    @Property(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY)
-    public String getRunUUID();
+    @Property(TitanElementNames.ANALYSIS_RUN_ID_PROPERTY)
+    public long getRunId();
 
-    public void setRunUUID(String uuid);
+    public void setRunId(long runId);
 
     @Property(TitanElementNames.CREATION_TIME_PROPERTY)
     public Date getCreationTime();

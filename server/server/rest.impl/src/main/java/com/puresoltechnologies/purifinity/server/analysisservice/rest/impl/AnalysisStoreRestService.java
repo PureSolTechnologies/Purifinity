@@ -2,7 +2,6 @@ package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -19,109 +18,108 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.store.Analysi
 
 public class AnalysisStoreRestService implements AnalysisStoreRestInterface {
 
-	@Inject
-	private AnalysisStoreService analysisStore;
+    @Inject
+    private AnalysisStoreService analysisStore;
 
-	@Override
-	public AnalysisProjectInformation createAnalysisProject(
-			AnalysisProjectSettings settings) throws AnalysisStoreException {
-		return analysisStore.createAnalysisProject(settings);
-	}
+    @Override
+    public AnalysisProjectInformation createAnalysisProject(String identifier,
+	    AnalysisProjectSettings settings) throws AnalysisStoreException {
+	return analysisStore.createAnalysisProject(identifier, settings);
+    }
 
-	@Override
-	public List<AnalysisProjectInformation> readAllAnalysisProjectInformation()
-			throws AnalysisStoreException {
-		return analysisStore.readAllAnalysisProjectInformation();
-	}
+    @Override
+    public List<AnalysisProjectInformation> readAllAnalysisProjectInformation()
+	    throws AnalysisStoreException {
+	return analysisStore.readAllAnalysisProjectInformation();
+    }
 
-	@Override
-	public List<AnalysisProject> readAllAnalysisProjects()
-			throws AnalysisStoreException {
-		return analysisStore.readAllAnalysisProjects();
-	}
+    @Override
+    public List<AnalysisProject> readAllAnalysisProjects()
+	    throws AnalysisStoreException {
+	return analysisStore.readAllAnalysisProjects();
+    }
 
-	@Override
-	public AnalysisProjectInformation readAnalysisProjectInformation(
-			UUID projectUUID) throws AnalysisStoreException {
-		return analysisStore.readAnalysisProjectInformation(projectUUID);
-	}
+    @Override
+    public AnalysisProjectInformation readAnalysisProjectInformation(
+	    String projectId) throws AnalysisStoreException {
+	return analysisStore.readAnalysisProjectInformation(projectId);
+    }
 
-	@Override
-	public void removeAnalysisProject(UUID projectUUID)
-			throws AnalysisStoreException {
-		analysisStore.removeAnalysisProject(projectUUID);
-	}
+    @Override
+    public void removeAnalysisProject(String projectId)
+	    throws AnalysisStoreException {
+	analysisStore.removeAnalysisProject(projectId);
+    }
 
-	@Override
-	public AnalysisProjectSettings readAnalysisProjectSettings(UUID projectUUID)
-			throws AnalysisStoreException {
-		return analysisStore.readAnalysisProjectSettings(projectUUID);
-	}
+    @Override
+    public AnalysisProjectSettings readAnalysisProjectSettings(String projectId)
+	    throws AnalysisStoreException {
+	return analysisStore.readAnalysisProjectSettings(projectId);
+    }
 
-	@Override
-	public void updateAnalysisProjectSettings(UUID projectUUID,
-			AnalysisProjectSettings settings) throws AnalysisStoreException {
-		analysisStore.updateAnalysisProjectSettings(projectUUID, settings);
-	}
+    @Override
+    public void updateAnalysisProjectSettings(String projectId,
+	    AnalysisProjectSettings settings) throws AnalysisStoreException {
+	analysisStore.updateAnalysisProjectSettings(projectId, settings);
+    }
 
-	@Override
-	public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
-			throws AnalysisStoreException {
-		return analysisStore.readAllRunInformation(projectUUID);
-	}
+    @Override
+    public List<AnalysisRunInformation> readAllRunInformation(String projectId)
+	    throws AnalysisStoreException {
+	return analysisStore.readAllRunInformation(projectId);
+    }
 
-	@Override
-	public AnalysisRun readAnalysisRun(UUID projectUUID, UUID analysisRunUUID)
-			throws AnalysisStoreException {
-		AnalysisRunInformation information = analysisStore
-				.readAnalysisRunInformation(projectUUID, analysisRunUUID);
-		return analysisStore.readAnalysisRun(information);
-	}
+    @Override
+    public AnalysisRun readAnalysisRun(String projectId, long runId)
+	    throws AnalysisStoreException {
+	AnalysisRunInformation information = analysisStore
+		.readAnalysisRunInformation(projectId, runId);
+	return analysisStore.readAnalysisRun(information);
+    }
 
-	@Override
-	public AnalysisRunInformation readAnalysisRunInformation(UUID projectUUID,
-			UUID analysisRunUUID) throws AnalysisStoreException {
-		return analysisStore.readAnalysisRunInformation(projectUUID,
-				analysisRunUUID);
-	}
+    @Override
+    public AnalysisRunInformation readAnalysisRunInformation(String projectId,
+	    long runId) throws AnalysisStoreException {
+	return analysisStore.readAnalysisRunInformation(projectId, runId);
+    }
 
-	@Override
-	public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)
-			throws AnalysisStoreException {
-		return analysisStore.readLastAnalysisRun(projectUUID);
-	}
+    @Override
+    public AnalysisRunInformation readLastAnalysisRun(String projectId)
+	    throws AnalysisStoreException {
+	return analysisStore.readLastAnalysisRun(projectId);
+    }
 
-	@Override
-	public void removeAnalysisRun(UUID projectUUID, UUID analysisRunUUID)
-			throws AnalysisStoreException {
-		analysisStore.removeAnalysisRun(projectUUID, analysisRunUUID);
-	}
+    @Override
+    public void removeAnalysisRun(String projectId, long runId)
+	    throws AnalysisStoreException {
+	analysisStore.removeAnalysisRun(projectId, runId);
+    }
 
-	@Override
-	public FileSearchConfiguration readSearchConfiguration(UUID analysisRunUUID)
-			throws AnalysisStoreException {
-		return analysisStore.readSearchConfiguration(analysisRunUUID);
-	}
+    @Override
+    public FileSearchConfiguration readSearchConfiguration(String projectId,
+	    long runId) throws AnalysisStoreException {
+	return analysisStore.readSearchConfiguration(projectId, runId);
+    }
 
-	@Override
-	public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
-			throws AnalysisStoreException {
-		return analysisStore.readAnalysisFileTree(projectUUID, runUUID);
-	}
+    @Override
+    public AnalysisFileTree readAnalysisFileTree(String projectId, long runId)
+	    throws AnalysisStoreException {
+	return analysisStore.readAnalysisFileTree(projectId, runId);
+    }
 
-	@Override
-	public AnalysisProject readAnalysisProject(UUID projectUUID)
-			throws AnalysisStoreException {
-		return analysisStore.readAnalysisProject(projectUUID);
-	}
+    @Override
+    public AnalysisProject readAnalysisProject(String projectId)
+	    throws AnalysisStoreException {
+	return analysisStore.readAnalysisProject(projectId);
+    }
 
-	@Override
-	public AnalysisRunInformation createAnalysisRun(UUID analysisProjectUUID,
-			Date startTime, long duration, String description,
-			FileSearchConfiguration fileSearchConfiguration)
-			throws AnalysisStoreException {
-		return analysisStore.createAnalysisRun(analysisProjectUUID, startTime,
-				duration, description, fileSearchConfiguration);
-	}
+    @Override
+    public AnalysisRunInformation createAnalysisRun(String projectId,
+	    Date startTime, long duration, String description,
+	    FileSearchConfiguration fileSearchConfiguration)
+	    throws AnalysisStoreException {
+	return analysisStore.createAnalysisRun(projectId, startTime, duration,
+		description, fileSearchConfiguration);
+    }
 
 }

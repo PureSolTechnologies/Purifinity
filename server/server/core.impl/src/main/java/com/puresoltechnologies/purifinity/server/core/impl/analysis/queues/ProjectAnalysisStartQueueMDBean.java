@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
@@ -66,26 +65,26 @@ public class ProjectAnalysisStartQueueMDBean implements MessageListener {
     public void onMessage(Message message) {
 	try {
 	    TextMessage textMessage = (TextMessage) message;
-	    UUID uuid = UUID.fromString(textMessage.getText());
+	    String projectId = textMessage.getText();
 
-	    if (analysisProcessStateTracker.readProcessState(uuid) != null) {
+	    if (analysisProcessStateTracker.readProcessState(projectId) != null) {
 		/*
 		 * There is already a process running for the project, so we
 		 * re-queue here.
 		 */
 		messageSender.sendMessageWithDelay(projectAnalysisStartQueue,
-			uuid.toString(), 60000);
+			projectId.toString(), 60000);
 		/*
 		 * We finish here and let the re-delivery do the job.
 		 */
 		return;
 	    }
-	    analysisProcessStateTracker.startProcess(uuid);
+	    analysisProcessStateTracker.startProcess(projectId);
 
 	    AnalysisProject analysisProject = analysisStore
-		    .readAnalysisProject(uuid);
+		    .readAnalysisProject(projectId);
 	    eventLogger.logEvent(ProjectAnalysisEvents
-		    .createQueueAnalysisEvent(uuid, analysisProject
+		    .createQueueAnalysisEvent(projectId, analysisProject
 			    .getSettings().getName()));
 
 	    // TODO the actual logic for the collision avoidance is still
@@ -93,7 +92,7 @@ public class ProjectAnalysisStartQueueMDBean implements MessageListener {
 
 	    AnalysisRunInformation analysisRunInformation = analysisStore
 		    .createAnalysisRun(analysisProject.getInformation()
-			    .getUUID(), new Date(), 0, "", analysisProject
+			    .getProjectId(), new Date(), 0, "", analysisProject
 			    .getSettings().getFileSearchConfiguration());
 
 	    Map<String, String> stringMap = new HashMap<>();
@@ -102,8 +101,8 @@ public class ProjectAnalysisStartQueueMDBean implements MessageListener {
 	    stringMap.put("AnalysisRunInformation",
 		    JSONSerializer.toJSONString(analysisRunInformation));
 
-	    analysisProcessStateTracker.changeProcessState(uuid,
-		    analysisRunInformation.getRunUUID(),
+	    analysisProcessStateTracker.changeProcessState(projectId,
+		    analysisRunInformation.getRunId(),
 		    AnalysisProcessTransition.QUEUE_FOR_STORAGE);
 	    messageSender.sendMessage(projectFileStorageQueue, stringMap);
 	} catch (JMSException | AnalysisStoreException | IOException e) {

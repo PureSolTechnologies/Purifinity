@@ -85,15 +85,15 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 			    AnalysisRunFileTree.class);
 
 	    analysisProcessStateTracker.changeProcessState(
-		    analysisRunInformation.getProjectUUID(),
-		    analysisRunInformation.getRunUUID(),
+		    analysisRunInformation.getProjectId(),
+		    analysisRunInformation.getRunId(),
 		    AnalysisProcessTransition.START_ANALYSIS);
 
 	    analyze(analysisRunFileTree);
 
 	    analysisProcessStateTracker.changeProcessState(
-		    analysisRunInformation.getProjectUUID(),
-		    analysisRunInformation.getRunUUID(),
+		    analysisRunInformation.getProjectId(),
+		    analysisRunInformation.getRunId(),
 		    AnalysisProcessTransition.QUEUE_FOR_EVALUATION);
 
 	    Map<String, String> stringMap = new HashMap<>();

@@ -1,18 +1,17 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis.states;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface AnalysisProcessStateTracker {
 
-	public void startProcess(UUID projectUUID);
+    public void startProcess(String projectId);
 
-	public List<AnalysisProcessStatusInformation> readProcessStates();
+    public List<AnalysisProcessStatusInformation> readProcessStates();
 
-	public AnalysisProcessStatusInformation readProcessState(UUID projectUUID);
+    public AnalysisProcessStatusInformation readProcessState(String projectId);
 
-	public boolean changeProcessState(UUID projectUUID, UUID runUUID,
-			AnalysisProcessTransition transition);
+    public boolean changeProcessState(String projectId, long runId,
+	    AnalysisProcessTransition transition);
 
-	public void stopProcess(UUID projectUUID);
+    public void stopProcess(String projectId);
 }

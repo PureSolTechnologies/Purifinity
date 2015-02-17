@@ -5,13 +5,13 @@ public class TitanElementNames {
     /*
      * ANALYSIS PROJECTS
      */
-    public static final String ANALYSIS_PROJECT_UUID_PROPERTY = "analysis.project.uuid";
+    public static final String ANALYSIS_PROJECT_ID_PROPERTY = "analysis.project.id";
     public static final String ANALYSIS_PROJECT_NAME_PROPERTY = "analysis.project.name";
     public static final String ANALYSIS_PROJECT_DESCRIPTION_PROPERTY = "analysis.project.description";
     /*
      * ANALYSIS RUNS
      */
-    public static final String ANALYSIS_RUN_UUID_PROPERTY = "analysis.run.uuid";
+    public static final String ANALYSIS_RUN_ID_PROPERTY = "analysis.run.id";
     public static final String ANALYSIS_RUN_START_TIME_PROPERTY = "analysis.run.time.start";
     public static final String ANALYSIS_RUN_DURATION_PROPERTY = "analysis.run.time.duration";
     public static final String ANALYSIS_RUN_DESCRIPTION_PROPERTY = "analysis.run.description";

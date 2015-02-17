@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.UUID;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -58,6 +57,7 @@ import com.puresoltechnologies.trees.TreeWalker;
 import com.puresoltechnologies.trees.WalkingAction;
 import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
 import com.thinkaurelius.titan.core.TitanGraph;
+import com.thinkaurelius.titan.core.TitanGraphQuery;
 import com.tinkerpop.blueprints.Vertex;
 
 @Stateless
@@ -111,7 +111,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     private XOManager xoManager;
 
     @Override
-    public AnalysisProjectInformation createAnalysisProject(
+    public AnalysisProjectInformation createAnalysisProject(String projectId,
 	    AnalysisProjectSettings settings) throws AnalysisStoreException {
 	XOTransaction currentTransaction = xoManager.currentTransaction();
 	boolean active = currentTransaction.isActive();
@@ -122,11 +122,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    eventLogger.logEvent(new Event(COMPONENT_NAME, 0x01,
 		    EventType.USER_ACTION, EventSeverity.INFO,
 		    "Create project..."));
-	    UUID projectUUID = UUID.randomUUID();
 	    Date creationTime = new Date();
-	    createAnalysisProjectVertex(projectUUID, creationTime);
-	    storeProjectAnalysisSettings(projectUUID, settings);
-	    return new AnalysisProjectInformation(projectUUID, creationTime);
+	    createAnalysisProjectVertex(projectId, creationTime);
+	    storeProjectAnalysisSettings(projectId, settings);
+	    return new AnalysisProjectInformation(projectId, creationTime);
 	} catch (RuntimeException e) {
 	    if (!active) {
 		currentTransaction.rollback();
@@ -140,14 +139,14 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
     }
 
-    private void createAnalysisProjectVertex(UUID projectUUID, Date creationTime) {
+    private void createAnalysisProjectVertex(String projectId, Date creationTime) {
 	AnalysisProjectVertex analysisProject = xoManager
 		.create(AnalysisProjectVertex.class);
-	analysisProject.setProjectUUID(projectUUID.toString());
+	analysisProject.setProjectId(projectId);
 	analysisProject.setCreationTime(creationTime);
     }
 
-    private void storeProjectAnalysisSettings(UUID projectUUID,
+    private void storeProjectAnalysisSettings(String projectId,
 	    AnalysisProjectSettings settings) {
 	String name = settings.getName();
 	String description = settings.getDescription();
@@ -157,12 +156,12 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
 		.getPreparedStatement(session, "INSERT INTO "
 			+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
-			+ " (project_uuid, name, description, "
+			+ " (project_id, name, description, "
 			+ "file_includes, file_excludes, "
 			+ "location_includes, location_excludes, "
 			+ "ignore_hidden, repository_location) "
 			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-	BoundStatement bound = preparedStatement.bind(projectUUID, name,
+	BoundStatement bound = preparedStatement.bind(projectId, name,
 		description, fileSearchConfiguration.getFileIncludes(),
 		fileSearchConfiguration.getFileExcludes(),
 		fileSearchConfiguration.getLocationIncludes(),
@@ -180,20 +179,20 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    return projects;
 	}
 	try {
-	    Iterable<Vertex> vertices = graph
-		    .query()
-		    .has(TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
+	    TitanGraphQuery<?> query = graph.query().has(
+		    TitanStoreSession.XO_DISCRIMINATORS_PROPERTY
 			    + AnalysisProjectVertex.NAME,
-			    AnalysisProjectVertex.NAME).vertices();
+		    AnalysisProjectVertex.NAME);
+	    Iterable<Vertex> vertices = query.vertices();
 	    Iterator<Vertex> vertexIterator = vertices.iterator();
 	    while (vertexIterator.hasNext()) {
 		Vertex vertex = vertexIterator.next();
-		UUID uuid = UUID
-			.fromString((String) vertex
-				.getProperty(TitanElementNames.ANALYSIS_PROJECT_UUID_PROPERTY));
+		String projectId = vertex
+			.getProperty(TitanElementNames.ANALYSIS_PROJECT_ID_PROPERTY);
 		Date creationTime = (Date) vertex
 			.getProperty(TitanElementNames.CREATION_TIME_PROPERTY);
-		projects.add(new AnalysisProjectInformation(uuid, creationTime));
+		projects.add(new AnalysisProjectInformation(projectId,
+			creationTime));
 	    }
 	    return projects;
 	} finally {
@@ -207,14 +206,14 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	List<AnalysisProject> projects = new ArrayList<>();
 	List<AnalysisProjectInformation> allProjectInformation = readAllAnalysisProjectInformation();
 	for (AnalysisProjectInformation information : allProjectInformation) {
-	    projects.add(readAnalysisProject(information.getUUID()));
+	    projects.add(readAnalysisProject(information.getProjectId()));
 	}
 	return projects;
     }
 
     @Override
     public AnalysisProjectInformation readAnalysisProjectInformation(
-	    UUID projectUUID) throws AnalysisStoreException {
+	    String projectId) throws AnalysisStoreException {
 	XOTransaction currentTransaction = xoManager.currentTransaction();
 	boolean active = currentTransaction.isActive();
 	if (!active) {
@@ -222,9 +221,9 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 	try {
 	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
-		    .findAnalysisProjectVertex(xoManager, projectUUID);
+		    .findAnalysisProjectVertex(xoManager, projectId);
 	    Date creationTime = analysisProjectVertex.getCreationTime();
-	    return new AnalysisProjectInformation(projectUUID, creationTime);
+	    return new AnalysisProjectInformation(projectId, creationTime);
 	} finally {
 	    if (!active) {
 		currentTransaction.rollback();
@@ -233,34 +232,34 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     }
 
     @Override
-    public void removeAnalysisProject(UUID projectUUID)
+    public void removeAnalysisProject(String projectId)
 	    throws AnalysisStoreException {
 	// delete analysis runs first
-	List<AnalysisRunInformation> runs = readAllRunInformation(projectUUID);
+	List<AnalysisRunInformation> runs = readAllRunInformation(projectId);
 	for (AnalysisRunInformation run : runs) {
-	    removeAnalysisRun(projectUUID, run.getRunUUID());
+	    removeAnalysisRun(projectId, run.getRunId());
 	}
 	// delete project
-	deleteProject(projectUUID);
+	deleteProject(projectId);
     }
 
-    private void deleteProject(UUID projectUUID) throws AnalysisStoreException {
+    private void deleteProject(String projectId) throws AnalysisStoreException {
 	AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
-		.findAnalysisProjectVertex(xoManager, projectUUID);
+		.findAnalysisProjectVertex(xoManager, projectId);
 	xoManager.delete(analysisProjectVertex);
-	analysisStoreCassandraUtils.removeProjectSettings(projectUUID);
+	analysisStoreCassandraUtils.removeProjectSettings(projectId);
     }
 
     @Override
-    public AnalysisProjectSettings readAnalysisProjectSettings(UUID projectUUID)
+    public AnalysisProjectSettings readAnalysisProjectSettings(String projectId)
 	    throws AnalysisStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
 		.getPreparedStatement(
 			session,
 			"SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location FROM "
 				+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
-				+ " WHERE project_uuid=?");
-	BoundStatement boundStatement = preparedStatement.bind(projectUUID);
+				+ " WHERE project_id=?");
+	BoundStatement boundStatement = preparedStatement.bind(projectId);
 	ResultSet resultSet = session.execute(boundStatement);
 	Row result = resultSet.one();
 	if (result == null) {
@@ -292,13 +291,13 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     }
 
     @Override
-    public void updateAnalysisProjectSettings(UUID projectUUID,
+    public void updateAnalysisProjectSettings(String projectId,
 	    AnalysisProjectSettings settings) throws AnalysisStoreException {
-	storeProjectAnalysisSettings(projectUUID, settings);
+	storeProjectAnalysisSettings(projectId, settings);
     }
 
     @Override
-    public List<AnalysisRunInformation> readAllRunInformation(UUID projectUUID)
+    public List<AnalysisRunInformation> readAllRunInformation(String projectId)
 	    throws AnalysisStoreException {
 	XOTransaction currentTransaction = xoManager.currentTransaction();
 	boolean active = currentTransaction.isActive();
@@ -307,7 +306,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 	try {
 	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
-		    .findAnalysisProjectVertex(xoManager, projectUUID);
+		    .findAnalysisProjectVertex(xoManager, projectId);
 
 	    List<ProjectToRunEdge> analysisRuns = analysisProjectVertex
 		    .getAnalysisRuns();
@@ -315,13 +314,14 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    List<AnalysisRunInformation> allRunInformation = new ArrayList<>();
 	    for (ProjectToRunEdge edge : analysisRuns) {
 		AnalysisRunVertex run = edge.getRun();
-		UUID runUUID = UUID.fromString(run.getRunUUID());
+		long runId = System.currentTimeMillis();
 		Date startTime = run.getStartTime();
 		long duration = run.getDuration();
 		String description = run.getDescription();
-		FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(runUUID);
-		allRunInformation.add(new AnalysisRunInformation(projectUUID,
-			runUUID, startTime, duration, description,
+		FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(
+			projectId, runId);
+		allRunInformation.add(new AnalysisRunInformation(projectId,
+			runId, startTime, duration, description,
 			fileSearchConfiguration));
 	    }
 	    return allRunInformation;
@@ -333,7 +333,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     }
 
     @Override
-    public AnalysisRunInformation createAnalysisRun(UUID analysisProjectUUID,
+    public AnalysisRunInformation createAnalysisRun(String projectId,
 	    Date startTime, long duration, String description,
 	    FileSearchConfiguration fileSearchConfiguration)
 	    throws AnalysisStoreException {
@@ -344,20 +344,20 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 	try {
 	    Date creationTime = new Date();
-	    UUID runUUID = UUID.randomUUID();
+	    long runId = System.currentTimeMillis();
 
 	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
-		    .findAnalysisProjectVertex(xoManager, analysisProjectUUID);
+		    .findAnalysisProjectVertex(xoManager, projectId);
 
 	    AnalysisStoreTitanUtils.createAnalysisRunVertex(xoManager,
-		    analysisProjectVertex, runUUID, creationTime, startTime,
+		    analysisProjectVertex, runId, creationTime, startTime,
 		    duration, description);
 
-	    analysisStoreCassandraUtils.writeAnalysisRunSettings(runUUID,
-		    fileSearchConfiguration);
+	    analysisStoreCassandraUtils.writeAnalysisRunSettings(projectId,
+		    runId, fileSearchConfiguration);
 
-	    return new AnalysisRunInformation(analysisProjectUUID, runUUID,
-		    startTime, duration, description, fileSearchConfiguration);
+	    return new AnalysisRunInformation(projectId, runId, startTime,
+		    duration, description, fileSearchConfiguration);
 	} catch (AnalysisStoreException e) {
 	    if (!active) {
 		currentTransaction.rollback();
@@ -372,8 +372,8 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     }
 
     @Override
-    public AnalysisRunInformation readAnalysisRunInformation(UUID projectUUID,
-	    UUID runUUID) throws AnalysisStoreException {
+    public AnalysisRunInformation readAnalysisRunInformation(String projectId,
+	    long runId) throws AnalysisStoreException {
 	XOTransaction currentTransaction = xoManager.currentTransaction();
 	boolean active = currentTransaction.isActive();
 	if (!active) {
@@ -381,22 +381,23 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 	try {
 	    AnalysisRunVertex run = AnalysisStoreTitanUtils
-		    .findAnalysisRunVertex(xoManager, runUUID);
+		    .findAnalysisRunVertex(xoManager, runId);
 	    if (run == null) {
 		return null;
 	    }
-	    UUID uuidRead = UUID.fromString(run.getRunUUID());
-	    if (!runUUID.equals(uuidRead)) {
-		throw new AnalysisStoreException("Anaysis run for '" + runUUID
+	    long runIdRead = run.getRunId();
+	    if (runId != runIdRead) {
+		throw new AnalysisStoreException("Anaysis run for '" + runId
 			+ "' was not found, but a vertex with run_uuid='"
-			+ uuidRead + "'. Database is inconsistent!");
+			+ runIdRead + "'. Database is inconsistent!");
 	    }
 	    Date startTime = run.getStartTime();
 	    long duration = run.getDuration();
 	    String description = run.getDescription();
-	    FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(runUUID);
+	    FileSearchConfiguration fileSearchConfiguration = readSearchConfiguration(
+		    projectId, runId);
 
-	    return new AnalysisRunInformation(projectUUID, runUUID, startTime,
+	    return new AnalysisRunInformation(projectId, runId, startTime,
 		    duration, description, fileSearchConfiguration);
 	} finally {
 	    if (!active) {
@@ -406,9 +407,9 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     }
 
     @Override
-    public AnalysisRunInformation readLastAnalysisRun(UUID projectUUID)
+    public AnalysisRunInformation readLastAnalysisRun(String projectId)
 	    throws AnalysisStoreException {
-	List<AnalysisRunInformation> allRunInformation = readAllRunInformation(projectUUID);
+	List<AnalysisRunInformation> allRunInformation = readAllRunInformation(projectId);
 	Date time = null;
 	AnalysisRunInformation lastRun = null;
 	for (AnalysisRunInformation runInformation : allRunInformation) {
@@ -422,7 +423,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     }
 
     @Override
-    public void removeAnalysisRun(UUID projectUUID, UUID runUUID)
+    public void removeAnalysisRun(String projectId, long runId)
 	    throws AnalysisStoreException {
 	XOTransaction currentTransaction = xoManager.currentTransaction();
 	boolean active = currentTransaction.isActive();
@@ -431,7 +432,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 	try {
 	    AnalysisRunVertex analysisRunVertex = AnalysisStoreTitanUtils
-		    .findAnalysisRunVertex(xoManager, runUUID);
+		    .findAnalysisRunVertex(xoManager, runId);
 	    FileTreeDirectoryVertex rootDirectory = analysisRunVertex
 		    .getRootDirectory();
 	    ContentTreeRootVertex contentRoot = analysisRunVertex
@@ -440,13 +441,12 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    // remove analysis run vertex
 	    xoManager.delete(analysisRunVertex);
 	    // clear caches
-	    analysisStoreCacheUtils
-		    .clearAnalysisRunCaches(projectUUID, runUUID);
+	    analysisStoreCacheUtils.clearAnalysisRunCaches(projectId, runId);
 	    // remove run settings
-	    analysisStoreCassandraUtils.removeAnalysisRunSettings(projectUUID,
-		    runUUID);
+	    analysisStoreCassandraUtils.removeAnalysisRunSettings(projectId,
+		    runId);
 	    // remove analysis run results
-	    bigTableUtils.removeAnalysisRunResults(projectUUID, runUUID);
+	    bigTableUtils.removeAnalysisRunResults(projectId, runId);
 	    // cleanup content tree
 	    analysisStoreContentTreeUtils.checkAndRemoveAnalysisRunContent(
 		    xoManager, contentRoot);
@@ -463,15 +463,16 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     }
 
     @Override
-    public FileSearchConfiguration readSearchConfiguration(UUID runUUID)
-	    throws AnalysisStoreException {
+    public FileSearchConfiguration readSearchConfiguration(String projectId,
+	    long runId) throws AnalysisStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
 		.getPreparedStatement(
 			session,
 			"SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
 				+ CassandraElementNames.ANALYSIS_RUN_SETTINGS_TABLE
-				+ " WHERE run_uuid=?");
-	BoundStatement boundStatement = preparedStatement.bind(runUUID);
+				+ " WHERE project_id=? AND run_id=?");
+	BoundStatement boundStatement = preparedStatement
+		.bind(projectId, runId);
 	ResultSet resultSet = session.execute(boundStatement);
 	Row result = resultSet.one();
 	if (result == null) {
@@ -491,7 +492,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     }
 
     @Override
-    public AnalysisFileTree readAnalysisFileTree(UUID projectUUID, UUID runUUID)
+    public AnalysisFileTree readAnalysisFileTree(String projectId, long runId)
 	    throws AnalysisStoreException {
 	XOTransaction currentTransaction = xoManager.currentTransaction();
 	boolean active = currentTransaction.isActive();
@@ -500,15 +501,15 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 	try {
 	    AnalysisFileTree analysisFileTree = analysisStoreCacheUtils
-		    .readCachedAnalysisFileTree(projectUUID, runUUID);
+		    .readCachedAnalysisFileTree(projectId, runId);
 	    if (analysisFileTree != null) {
 		return analysisFileTree;
 	    }
 	    AnalysisRunVertex analysisRunVertex = AnalysisStoreTitanUtils
-		    .findAnalysisRunVertex(xoManager, runUUID);
+		    .findAnalysisRunVertex(xoManager, runId);
 	    analysisFileTree = analysisStoreFileTreeUtils
 		    .createAnalysisFileTree(analysisRunVertex);
-	    analysisStoreCacheUtils.cacheAnalysisFileTree(projectUUID, runUUID,
+	    analysisStoreCacheUtils.cacheAnalysisFileTree(projectId, runId,
 		    analysisFileTree);
 	    return analysisFileTree;
 	} catch (AnalysisStoreException e) {
@@ -524,10 +525,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     }
 
     @Override
-    public AnalysisProject readAnalysisProject(UUID projectUUID)
+    public AnalysisProject readAnalysisProject(String projectId)
 	    throws AnalysisStoreException {
-	AnalysisProjectInformation information = readAnalysisProjectInformation(projectUUID);
-	AnalysisProjectSettings settings = readAnalysisProjectSettings(projectUUID);
+	AnalysisProjectInformation information = readAnalysisProjectInformation(projectId);
+	AnalysisProjectSettings settings = readAnalysisProjectSettings(projectId);
 	return new AnalysisProject(information, settings);
     }
 
@@ -535,13 +536,13 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     public AnalysisRun readAnalysisRun(AnalysisRunInformation information)
 	    throws AnalysisStoreException {
 	AnalysisFileTree analysisFileTree = readAnalysisFileTree(
-		information.getProjectUUID(), information.getRunUUID());
+		information.getProjectId(), information.getRunId());
 	return new AnalysisRun(information, analysisFileTree);
     }
 
     @Override
     public AnalysisRunFileTree createAndStoreFileAndContentTree(
-	    UUID projectUUID, UUID runUUID, String rootNodeName,
+	    String projectId, long runId, String rootNodeName,
 	    Map<SourceCodeLocation, HashId> storedSources)
 	    throws AnalysisStoreException {
 	XOTransaction currentTransaction = xoManager.currentTransaction();
@@ -553,7 +554,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    AnalysisRunFileTree fileTree = convertToAnalysisRunFileTree(
 		    storedSources, rootNodeName);
 	    AnalysisRunVertex analysisRunVertex = AnalysisStoreTitanUtils
-		    .findAnalysisRunVertex(xoManager, runUUID);
+		    .findAnalysisRunVertex(xoManager, runId);
 	    analysisStoreContentTreeUtils.addContentTree(xoManager, fileTree,
 		    analysisRunVertex);
 	    analysisStoreFileTreeUtils.addFileTree(xoManager, fileTree,

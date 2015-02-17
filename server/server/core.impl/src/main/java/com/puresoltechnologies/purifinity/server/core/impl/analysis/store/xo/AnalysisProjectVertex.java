@@ -19,10 +19,10 @@ public interface AnalysisProjectVertex {
     public static final String NAME = "analysis_project";
 
     @Indexed(unique = true)
-    @Property(TitanElementNames.ANALYSIS_PROJECT_UUID_PROPERTY)
-    public String getProjectUUID();
+    @Property(TitanElementNames.ANALYSIS_PROJECT_ID_PROPERTY)
+    public String getProjectId();
 
-    public void setProjectUUID(String uuid);
+    public void setProjectId(String projectId);
 
     @Property(TitanElementNames.CREATION_TIME_PROPERTY)
     public Date getCreationTime();

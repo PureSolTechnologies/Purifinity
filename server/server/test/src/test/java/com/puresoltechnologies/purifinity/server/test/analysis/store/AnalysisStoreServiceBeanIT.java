@@ -8,7 +8,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -55,15 +54,14 @@ public class AnalysisStoreServiceBeanIT extends
 	AnalysisProjectSettings settings = createProjectSettings();
 
 	AnalysisProjectInformation information = analysisStoreService
-		.createAnalysisProject(settings);
+		.createAnalysisProject("TestProject", settings);
 	assertNotNull(information);
 
 	Date date = information.getCreationTime();
 	assertNotNull(date);
 	assertTrue(date.getTime() >= start.getTime());
 
-	UUID uuid = information.getUUID();
-	assertNotNull(uuid);
+	assertEquals("TestProject", information.getProjectId());
     }
 
     @Test
@@ -71,7 +69,7 @@ public class AnalysisStoreServiceBeanIT extends
 	AnalysisProjectSettings settings = createProjectSettings();
 
 	AnalysisProjectInformation information = analysisStoreService
-		.createAnalysisProject(settings);
+		.createAnalysisProject("TestProject2", settings);
 	assertNotNull(information);
 
 	List<AnalysisProjectInformation> projects = analysisStoreService
@@ -82,7 +80,7 @@ public class AnalysisStoreServiceBeanIT extends
 	AnalysisProjectInformation readInformation = projects.get(0);
 	assertEquals(information.getCreationTime(),
 		readInformation.getCreationTime());
-	assertEquals(information.getUUID(), readInformation.getUUID());
+	assertEquals(information.getProjectId(), readInformation.getProjectId());
     }
 
     @Test
@@ -95,14 +93,14 @@ public class AnalysisStoreServiceBeanIT extends
 
 	AnalysisProjectSettings settings = createProjectSettings();
 	AnalysisProjectInformation information = analysisStoreService
-		.createAnalysisProject(settings);
+		.createAnalysisProject("TestProject3", settings);
 	assertNotNull(information);
 
 	projects = analysisStoreService.readAllAnalysisProjectInformation();
 	assertNotNull(projects);
 	assertEquals(1, projects.size());
 
-	analysisStoreService.removeAnalysisProject(information.getUUID());
+	analysisStoreService.removeAnalysisProject(information.getProjectId());
 
 	projects = analysisStoreService.readAllAnalysisProjectInformation();
 	assertNotNull(projects);

@@ -1,7 +1,5 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis.queues;
 
-import java.util.UUID;
-
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.inject.Inject;
@@ -41,9 +39,9 @@ public class ProjectAnalysisStartDLQMDBean implements MessageListener {
     public void onMessage(Message message) {
 	try {
 	    TextMessage textMessage = (TextMessage) message;
-	    UUID uuid = UUID.fromString(textMessage.getText());
+	    String projectId = textMessage.getText();
 
-	    analysisProcessStateTracker.changeProcessState(uuid, null,
+	    analysisProcessStateTracker.changeProcessState(projectId, 0,
 		    AnalysisProcessTransition.FAIL);
 	} catch (JMSException e) {
 	    // An issue occurred, re-queue the request.

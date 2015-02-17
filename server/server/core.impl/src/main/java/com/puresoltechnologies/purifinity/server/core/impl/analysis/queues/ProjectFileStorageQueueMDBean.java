@@ -85,16 +85,16 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 			    AnalysisRunInformation.class);
 
 	    analysisProcessStateTracker.changeProcessState(
-		    analysisRunInformation.getProjectUUID(),
-		    analysisRunInformation.getRunUUID(),
+		    analysisRunInformation.getProjectId(),
+		    analysisRunInformation.getRunId(),
 		    AnalysisProcessTransition.START_STORAGE);
 
 	    Map<SourceCodeLocation, HashId> storedSources = storeFilesInStore(analysisProject
 		    .getSettings());
 	    AnalysisRunFileTree fileTree = analysisStoreService
 		    .createAndStoreFileAndContentTree(
-			    analysisRunInformation.getProjectUUID(),
-			    analysisRunInformation.getRunUUID(),
+			    analysisRunInformation.getProjectId(),
+			    analysisRunInformation.getRunId(),
 			    analysisProject.getSettings().getName(),
 			    storedSources);
 
@@ -107,8 +107,8 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 		    JSONSerializer.toJSONString(fileTree));
 
 	    analysisProcessStateTracker.changeProcessState(
-		    analysisRunInformation.getProjectUUID(),
-		    analysisRunInformation.getRunUUID(),
+		    analysisRunInformation.getProjectId(),
+		    analysisRunInformation.getRunId(),
 		    AnalysisProcessTransition.QUEUE_FOR_ANALYSIS);
 	    messageSender.sendMessage(projectAnalysisQueue, stringMap);
 	} catch (JMSException | IOException | AnalysisStoreException e) {

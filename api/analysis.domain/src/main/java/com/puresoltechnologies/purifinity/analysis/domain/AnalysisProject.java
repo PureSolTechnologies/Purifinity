@@ -29,7 +29,7 @@ public class AnalysisProject implements Serializable {
 
 	@Override
 	public String toString() {
-		return getSettings().getName() + ": (" + getInformation().getUUID()
+		return getSettings().getName() + ": (" + getInformation().getProjectId()
 				+ ")";
 	}
 }

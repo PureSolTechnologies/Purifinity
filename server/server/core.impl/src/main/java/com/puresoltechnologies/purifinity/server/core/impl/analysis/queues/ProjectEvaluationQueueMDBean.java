@@ -64,24 +64,24 @@ public class ProjectEvaluationQueueMDBean implements MessageListener {
 			    AnalysisRunInformation.class);
 
 	    analysisProcessStateTracker.changeProcessState(
-		    analysisRunInformation.getProjectUUID(),
-		    analysisRunInformation.getRunUUID(),
+		    analysisRunInformation.getProjectId(),
+		    analysisRunInformation.getRunId(),
 		    AnalysisProcessTransition.START_EVALUATION);
 
 	    AnalysisFileTree analysisFileTree;
 	    analysisFileTree = analysisStore.readAnalysisFileTree(
-		    analysisRunInformation.getProjectUUID(),
-		    analysisRunInformation.getRunUUID());
+		    analysisRunInformation.getProjectId(),
+		    analysisRunInformation.getRunId());
 	    AnalysisRun analysisRun = new AnalysisRun(analysisRunInformation,
 		    analysisFileTree);
 	    evaluate(analysisRun);
 
 	    analysisProcessStateTracker.changeProcessState(
-		    analysisRunInformation.getProjectUUID(),
-		    analysisRunInformation.getRunUUID(),
+		    analysisRunInformation.getProjectId(),
+		    analysisRunInformation.getRunId(),
 		    AnalysisProcessTransition.FINISH);
 	    analysisProcessStateTracker.stopProcess(analysisRunInformation
-		    .getProjectUUID());
+		    .getProjectId());
 	} catch (InterruptedException | EvaluationStoreException | JMSException
 		| AnalysisStoreException | IOException e) {
 	    // An issue occurred, re-queue the request.

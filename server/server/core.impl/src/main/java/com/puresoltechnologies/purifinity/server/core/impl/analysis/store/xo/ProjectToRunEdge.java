@@ -15,8 +15,8 @@ public interface ProjectToRunEdge {
     @Incoming
     public AnalysisRunVertex getRun();
 
-    @Property(TitanElementNames.ANALYSIS_RUN_UUID_PROPERTY)
-    public String getRunUUID();
+    @Property(TitanElementNames.ANALYSIS_RUN_ID_PROPERTY)
+    public long getRunId();
 
-    public void setRunUUID(String uuid);
+    public void setRunId(long runId);
 }

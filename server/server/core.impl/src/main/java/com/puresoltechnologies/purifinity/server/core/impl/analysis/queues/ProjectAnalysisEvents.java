@@ -1,7 +1,5 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis.queues;
 
-import java.util.UUID;
-
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.Event;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventSeverity;
@@ -24,9 +22,9 @@ public class ProjectAnalysisEvents {
 	return event;
     }
 
-    public static Event createQueueAnalysisEvent(UUID uuid, String name) {
+    public static Event createQueueAnalysisEvent(String projectId, String name) {
 	return new Event(COMPONENT_NAME, 0x01, EventType.SYSTEM,
-		EventSeverity.INFO, "Project '" + name + "' (" + uuid
+		EventSeverity.INFO, "Project '" + name + "' (" + projectId
 			+ ") is going to be queued for analysis.");
     }
 
