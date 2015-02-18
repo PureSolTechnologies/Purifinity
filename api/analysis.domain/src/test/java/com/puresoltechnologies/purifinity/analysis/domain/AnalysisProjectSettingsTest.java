@@ -11,25 +11,35 @@ import org.junit.Test;
 
 import com.puresoltechnologies.commons.math.JSONSerializer;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
+import com.puresoltechnologies.parsers.source.RepositoryLocation;
 
 public class AnalysisProjectSettingsTest {
 
-	@Test
-	public void test() throws JsonGenerationException, JsonMappingException,
-			IOException {
-		List<String> dirIncludes = new ArrayList<>();
-		List<String> dirExcludes = new ArrayList<>();
-		List<String> fileIncludes = new ArrayList<>();
-		List<String> fileExcludes = new ArrayList<>();
-		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
-				dirIncludes, dirExcludes, fileIncludes, fileExcludes, true);
-		AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
-				"Description", fileSearchConfiguration, new Properties());
+    @Test
+    public void testSerialization() throws JsonGenerationException,
+	    JsonMappingException, IOException {
+	List<String> dirIncludes = new ArrayList<>();
+	dirIncludes.add("src");
+	List<String> dirExcludes = new ArrayList<>();
+	dirExcludes.add("target");
+	List<String> fileIncludes = new ArrayList<>();
+	fileIncludes.add("*.java");
+	List<String> fileExcludes = new ArrayList<>();
+	fileExcludes.add("*~");
+	FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
+		dirIncludes, dirExcludes, fileIncludes, fileExcludes, true);
+	Properties repositoryLocation = new Properties();
+	repositoryLocation.put(RepositoryLocation.REPOSITORY_LOCATION_NAME,
+		"Git");
+	repositoryLocation.put(RepositoryLocation.REPOSITORY_LOCATION_CLASS,
+		"GitRepository");
+	AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
+		"Description", fileSearchConfiguration, repositoryLocation);
 
-		String jsonString = JSONSerializer.toJSONString(settings);
-		System.out.println(jsonString);
-		AnalysisProjectSettings fromJSONString = JSONSerializer.fromJSONString(
-				jsonString, AnalysisProjectSettings.class);
-		System.out.println(fromJSONString);
-	}
+	String jsonString = JSONSerializer.toJSONString(settings);
+	System.out.println(jsonString);
+	AnalysisProjectSettings fromJSONString = JSONSerializer.fromJSONString(
+		jsonString, AnalysisProjectSettings.class);
+	System.out.println(fromJSONString);
+    }
 }

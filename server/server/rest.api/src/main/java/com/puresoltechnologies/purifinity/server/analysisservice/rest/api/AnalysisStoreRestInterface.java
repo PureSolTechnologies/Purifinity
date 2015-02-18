@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.analysisservice.rest.api;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSetting
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 @Path("analysisstore")
 public interface AnalysisStoreRestInterface {
@@ -137,4 +139,9 @@ public interface AnalysisStoreRestInterface {
 	    @QueryParam("description") @DefaultValue("") String description,
 	    FileSearchConfiguration fileSearchConfiguration)
 	    throws AnalysisStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("repositories")
+    public Collection<RepositoryTypeServiceInformation> getRepositoryTypes();
 }

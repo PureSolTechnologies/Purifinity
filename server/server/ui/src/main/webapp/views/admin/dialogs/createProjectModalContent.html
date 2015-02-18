@@ -5,15 +5,75 @@
 	<table>
 		<tbody class="two-column-form">
 			<tr>
-				<td>Identifier:</td>
-				<td><input type="text" data-ng-model="items.id" class="form-control" placeholder="Identifier" required autofocus/></td>
+				<td><label for="projectIdentifier" title="Identifier used for internal reference and usage in URLs.">Identifier:</label></td>
+				<td><input id="projectIdentifier" type="text" data-ng-model="items.id" class="form-control" placeholder="Identifier" required autofocus/></td>
 			</tr>
 			<tr>
-				<td>Name:</td>
-				<td><input type="text" data-ng-model="items.name" class="form-control" placeholder="Name" required/></td>
+				<td><label for="projectName" title="Name of project to be used in UI and reports.">Name:</label></td>
+				<td><input id="projectName" type="text" data-ng-model="items.name" class="form-control" placeholder="Name" required/></td>
+			</tr>
+			<tr>
+				<td><label for="projectDescription" title="Description of project to be used in reports.">Description:</label></td>
+				<td><input id="projectDescription" type="text" data-ng-model="items.description" class="form-control" placeholder="Description"/></td>
 			</tr>
 		</tbody>
 	</table>
+	<tabset>
+		<tab heading="Repository Location">
+			<p>
+				The repository location specifies where and how to find the sources to be analysed.
+			</p>
+			<label for="repositoryType" title="Selection for the repository type to get sources from.">Repository Type</label><br/>
+			<select id="repositoryType" title="Project Selection"
+				class="selectpicker show-tick form-control"
+				data-ng-model="items.repositoryTypeClassName">
+				<option value="">Select a repository type</option>
+				<option data-ng-repeat="repositoryType in repositoryTypes" value="{{repositoryType.className}}">
+					{{repositoryType.name}}
+				</option>
+			</select>
+			<table>
+				<tbody class="two-column-form">
+					<tr>
+						<th>Parameter Name</th>
+						<th>Description</th>
+						<th>Value</th>
+					</tr>
+					<tr	data-ng-repeat="property in repositoryTypeProperties">
+						<td>{{property.uiName}}</td>
+						<td>{{property.description}}</td>
+						<td><input type="text" class="form-control" placeholder="to be set" data-ng-model="items.repositoryTypeProperties[property.name]"/></td>
+					</tr>
+				</tbody>
+			</table>
+		</tab>
+		<tab heading="File Selection">
+			<p>
+				The directory and file includes and excludes defined which files are to be analysed and which to be neglected. 
+				Include patterns always precede excludes.
+			</p>
+			<table>
+				<tbody class="two-column-form">
+					<tr>
+						<td><label for="directoryIncludes" title="Specifies a list of patterns for directories to be scanned in any case.">Directory Includes:</label></td>
+						<td><input id="directoryIncludes" type="text" data-ng-model="items.directoryIncludes" class="form-control" placeholder="Directory Includes"/></td>
+					</tr>
+					<tr>
+						<td><label for="directoryExcludes" title="Specifies a list of patterns for directories to be excluded for scans.">Directory Excludes:</label></td>
+						<td><input id="directoryExcludes" type="text" data-ng-model="items.directoryExcludes" class="form-control" placeholder="Directory Excludes"/></td>
+					</tr>
+					<tr>
+						<td><label for="fileIncludes" title="Specifies a list of patterns for file to be scanned in any case.">File Includes:</label></td>
+						<td><input id="fileIncludes" type="text" data-ng-model="items.fileIncludes" class="form-control" placeholder="File Includes"/></td>
+					</tr>
+					<tr>
+						<td><label for="fileExcludes" title="Specifies a list of patterns for files to be excluded for scans.">File Excludes:</label></td>
+						<td><input id="fileExcludes" type="text" data-ng-model="items.fileExcludes" class="form-control" placeholder="File Excludes"/></td>
+					</tr>
+				</tbody>
+			</table>
+		</tab>
+	</tabset>
 </div>
 <div class="modal-footer">
 	<button class="btn btn-default" data-ng-click="cancel()">Cancel</button>

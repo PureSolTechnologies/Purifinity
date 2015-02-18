@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -15,11 +16,16 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation
 import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisStoreRestInterface;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManager;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 public class AnalysisStoreRestService implements AnalysisStoreRestInterface {
 
     @Inject
     private AnalysisStoreService analysisStore;
+
+    @Inject
+    private RepositoryTypeServiceManager repositoryTypeServiceManager;
 
     @Override
     public AnalysisProjectInformation createAnalysisProject(String identifier,
@@ -122,4 +128,8 @@ public class AnalysisStoreRestService implements AnalysisStoreRestInterface {
 		description, fileSearchConfiguration);
     }
 
+    @Override
+    public Collection<RepositoryTypeServiceInformation> getRepositoryTypes() {
+	return repositoryTypeServiceManager.getServices();
+    }
 }

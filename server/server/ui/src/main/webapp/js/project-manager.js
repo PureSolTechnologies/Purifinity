@@ -24,6 +24,10 @@ function projectManager(purifinityServerConnector) {
 	};
 	projectManager.deleteProject = function(id, success, error) {
 	};
+	projectManager.getRepositoryTypes = function(success, error) {
+		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/repositories',
+				success, error);
+	};
 	return projectManager;
 }
 
@@ -100,7 +104,16 @@ function projectsCtrl($scope, $routeParams, baseURL) {
 function createProjectModalCtrl($scope, $modal, $log) {
 	$scope.items = {
 					id: "", 
-					name: ""};
+					name: "",
+					description: "",
+					directoryIncludes: "",
+					directoryExcludes: "",
+					fileIncludes: "",
+					fileExcludes: "",
+					ignoreHidden: true,
+					repositoryTypeClassName: "",
+					repositoryTypeProperties: {}
+					};
 	$scope.open = function () {
 		var modalInstance = $modal.open({
 			templateUrl: 'views/admin/dialogs/createProjectModalContent.html',
@@ -122,7 +135,24 @@ function createProjectModalCtrl($scope, $modal, $log) {
 
 function createProjectModalInstanceCtrl($scope, $modalInstance, items, projectManager) {
 	$scope.items = items;
-	$scope.roles = undefined;
+	$scope.repositoryTypes = undefined;
+	projectManager.getRepositoryTypes(
+		function(data, status) {$scope.repositoryTypes = data}, //
+		function(data, status, error) {});
+	$scope.$watch('items.repositoryTypeClassName', function(oldValue, newValue) {
+		var key;
+		for (key in $scope.repositoryTypes) {
+			var repositoryType = $scope.repositoryTypes[key];
+			if (repositoryType.className == items.repositoryTypeClassName) {
+				$scope.repositoryTypeProperties = {};
+				var name;
+				for (name in repositoryType.parameters) {
+					$scope.repositoryTypeProperties[name] = repositoryType.parameters[name];
+					$scope.repositoryTypeProperties[name].uiName = name;
+				}
+			}
+		}
+	});
 	$scope.ok = function () {
 	    $modalInstance.close($scope.items);
 	};
