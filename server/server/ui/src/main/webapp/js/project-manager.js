@@ -169,17 +169,20 @@ function createProjectModalInstanceCtrl($scope, $modalInstance, items, projectMa
 			"name": items.name,
 			"description": items.description,
 			"fileSearchConfiguration":{
-				"locationIncludes":["src"],
-				"locationExcludes":["target"],
-				"fileIncludes":["*.java"],
-				"fileExcludes":["*~"],
-				"ignoreHidden":true
+				"locationIncludes": items.directoryIncludes.split(";"),
+				"locationExcludes": items.directoryExcludes.split(";"),
+				"fileIncludes": items.fileIncludes.split(";"),
+				"fileExcludes": items.fileExcludes.split(";"),
+				"ignoreHidden": items.ignoreHidden
 			},
 			"repositoryLocation":{
-				"repository.class": "GitRepository",
-				"repository.name": "Git"
+				"repository.class": items.repositoryTypeClassName
 			}
 		};
+		var key;
+		for (key in items.repositoryTypeProperties) {
+			projectSettings.repositoryLocation[key] = items.repositoryTypeProperties[key];
+		}
 		projectManager.createProject(items.id, projectSettings,
 			function(data, status) {}, //
 			function(data, status, error) {});

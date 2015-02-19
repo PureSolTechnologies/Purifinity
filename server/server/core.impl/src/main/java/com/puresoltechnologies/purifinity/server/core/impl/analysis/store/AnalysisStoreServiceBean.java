@@ -251,6 +251,9 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 		    .findAnalysisProjectVertex(xoManager, projectId);
 	    xoManager.delete(analysisProjectVertex);
 	    analysisStoreCassandraUtils.removeProjectSettings(projectId);
+	    eventLogger.logEvent(new Event(COMPONENT_NAME, 0x01,
+		    EventType.USER_ACTION, EventSeverity.INFO,
+		    "Deleted project '" + projectId + "'"));
 	    xoManager.currentTransaction().commit();
 	} catch (XOException e) {
 	    xoManager.currentTransaction().rollback();
