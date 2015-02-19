@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis;
 
 import java.util.Collection;
-import java.util.UUID;
 
 import javax.jms.JMSException;
 
@@ -16,10 +15,10 @@ import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryT
  */
 public interface AnalysisService {
 
-	public void triggerNewAnalysis(UUID projectUUID) throws JMSException;
+    public void triggerNewRun(String projectId) throws JMSException;
 
-	public Collection<AnalyzerServiceInformation> getAnalyzers();
+    public Collection<AnalyzerServiceInformation> getAnalyzers();
 
-	public Collection<RepositoryTypeServiceInformation> getRepositoryTypes();
+    public Collection<RepositoryTypeServiceInformation> getRepositoryTypes();
 
 }

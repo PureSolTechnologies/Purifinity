@@ -443,23 +443,27 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	try {
 	    AnalysisRunVertex analysisRunVertex = AnalysisStoreTitanUtils
 		    .findAnalysisRunVertex(xoManager, runId);
-	    FileTreeDirectoryVertex rootDirectory = analysisRunVertex
-		    .getRootDirectory();
-	    ContentTreeRootVertex contentRoot = analysisRunVertex
-		    .getContentRoot();
-	    analysisStoreFileTreeUtils.deleteFileTree(xoManager, rootDirectory);
-	    // remove analysis run vertex
-	    xoManager.delete(analysisRunVertex);
-	    // clear caches
-	    analysisStoreCacheUtils.clearAnalysisRunCaches(projectId, runId);
-	    // remove run settings
-	    analysisStoreCassandraUtils.removeAnalysisRunSettings(projectId,
-		    runId);
-	    // remove analysis run results
-	    bigTableUtils.removeAnalysisRunResults(projectId, runId);
-	    // cleanup content tree
-	    analysisStoreContentTreeUtils.checkAndRemoveAnalysisRunContent(
-		    xoManager, contentRoot);
+	    if (analysisRunVertex != null) {
+		FileTreeDirectoryVertex rootDirectory = analysisRunVertex
+			.getRootDirectory();
+		ContentTreeRootVertex contentRoot = analysisRunVertex
+			.getContentRoot();
+		analysisStoreFileTreeUtils.deleteFileTree(xoManager,
+			rootDirectory);
+		// remove analysis run vertex
+		xoManager.delete(analysisRunVertex);
+		// clear caches
+		analysisStoreCacheUtils
+			.clearAnalysisRunCaches(projectId, runId);
+		// remove run settings
+		analysisStoreCassandraUtils.removeAnalysisRunSettings(
+			projectId, runId);
+		// remove analysis run results
+		bigTableUtils.removeAnalysisRunResults(projectId, runId);
+		// cleanup content tree
+		analysisStoreContentTreeUtils.checkAndRemoveAnalysisRunContent(
+			xoManager, contentRoot);
+	    }
 	} catch (AnalysisStoreException e) {
 	    if (!active) {
 		currentTransaction.rollback();

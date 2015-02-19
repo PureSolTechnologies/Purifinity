@@ -1,27 +1,23 @@
 <div class="container">
 	<h1>Projects</h1>
-	<div class="row">
-		<div class="col-xs-6 col-md-3 col-lg-2"	data-ng-controller="projectListCtrl">
-			<label for="projectList" title="Selection for project to show.">Projects:</label>
-			<!--  -->
-			<select id="projectList" title="Project Selection" class="selectpicker show-tick form-control">
-				<option value="" data-ng-if="!projectId">Select a project</option>
-				<option data-ng-repeat="project in projects"
-					selected="{{isSelected(project.information.id)}}"
-					value="{{project.information.id}}">{{project.settings.name}}</option>
-			</select>
-		</div>
-		<div class="col-xs-6 col-md-3 col-lg-2">
-			<label for="runList" title="Runs:">Runs:</label>
-			<!--  -->
-			<select id="runList" title="Analysis Run Selection"
-				class="selectpicker show-tick form-control">
-				<option value="">Select a analysis run</option>
-				<option value="1">Run 1</option>
-				<option value="2">Run 2</option>
-				<option value="3">Run 3</option>
-				<option value="4">Run 4</option>
-			</select>
-		</div>
+	<div data-ng-controller="projectListCtrl">
+		<table class="table table-striped table-hover table-bordered">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Description</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr data-ng-repeat="project in projects">
+					<td><a href="/projects/{{project.information.projectId}}">{{project.settings.name}}</a></td>
+					<td>{{project.settings.description}}</td>
+					<td>
+						<button class="btn btn-default" data-ng-click="triggerNewRun(project.information.projectId)">New Run...</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>

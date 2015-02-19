@@ -3,8 +3,7 @@
  * application to handle user accounts for Purifinity.
  */
 var projectManagerModule = angular.module("projectManagerModule", [ "purifinityServer" ]);
-accountManagerModule.factory('projectManager', [
-		'purifinityServerConnector', projectManager ]);
+projectManagerModule.factory('projectManager', ['purifinityServerConnector', projectManager ]);
 projectManagerModule.controller("projectListCtrl", projectListCtrl);
 projectManagerModule.controller("projectsCtrl", projectsCtrl);	
 projectManagerModule.controller("projectSettingsCtrl", projectSettingsCtrl);	
@@ -22,6 +21,10 @@ function projectManager(purifinityServerConnector) {
 		return purifinityServerConnector.put('/purifinityserver/rest/analysisstore/projects/' + identifier, projectSettings,
 				success, error);
 	};
+	projectManager.triggerNewRun = function(identifier, success, error) {
+		return purifinityServerConnector.put('/purifinityserver/rest/analysisservice/projects/' + identifier, "",
+				success, error);
+	};
 	projectManager.editProject = function(id, name, success, error) {
 	};
 	projectManager.deleteProject = function(identifier, success, error) {
@@ -35,26 +38,23 @@ function projectManager(purifinityServerConnector) {
 	return projectManager;
 }
 
-function projectListCtrl($scope, $location, purifinityServerConnector,
-		alerterFactory) {
-	purifinityServerConnector.get(
-			'/purifinityserver/rest/analysisstore/projects', //
-			function(data, status) {
-				if (data) {
-					$scope.projects = data;
-				} else {
-					$scope.projects = [];
-				}
-			}, // 
-			function(data, status, error) {
-				if (data) {
-					alerterFactory.addAlert("warning",
-							"Data was taken from local cache.");
-					$scope.projects = JSON.parse(data);
-				} else {
-					alerterFactory.addAlert("danger", error);
-				}
-			});
+function projectListCtrl($scope, projectManager) {
+	$scope.projects = {};
+	projectManager.getProjects(//
+		function(data, status) {
+			$scope.projects = data;
+			if (!$scope.projects) {
+				$scope.projects = {};
+			}
+		}, //
+		function(data, status, error) {});
+	$scope.triggerNewRun = function(id) {
+		projectManager.triggerNewRun(id, 
+			function (data, status) {},
+			function (data, status, error) {}
+		);
+	}
+
 }
 
 function projectsCtrl($scope, $routeParams, baseURL) {
@@ -66,7 +66,7 @@ function projectsCtrl($scope, $routeParams, baseURL) {
 	};
 }
 
-  function projectSettingsCtrl($scope, $modal, $log, projectManager) {
+function projectSettingsCtrl($scope, $modal, $log, projectManager) {
 	$scope.projects = {};
 	projectManager.getProjects(//
 		function(data, status) {

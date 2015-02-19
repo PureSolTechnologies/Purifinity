@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis;
 
 import java.util.Collection;
-import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -49,9 +48,8 @@ public class AnalysisServiceBean implements AnalysisService {
     }
 
     @Override
-    public void triggerNewAnalysis(UUID projectUUID) throws JMSException {
-	messageSender.sendMessage(projectAnalysisStartQueue,
-		projectUUID.toString());
+    public void triggerNewRun(String projectId) throws JMSException {
+	messageSender.sendMessage(projectAnalysisStartQueue, projectId);
     }
 
     @Override
