@@ -17,6 +17,7 @@ import java.util.Properties;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.XOTransaction;
 import com.datastax.driver.core.BoundStatement;
@@ -244,10 +245,16 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     }
 
     private void deleteProject(String projectId) throws AnalysisStoreException {
-	AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
-		.findAnalysisProjectVertex(xoManager, projectId);
-	xoManager.delete(analysisProjectVertex);
-	analysisStoreCassandraUtils.removeProjectSettings(projectId);
+	xoManager.currentTransaction().begin();
+	try {
+	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils
+		    .findAnalysisProjectVertex(xoManager, projectId);
+	    xoManager.delete(analysisProjectVertex);
+	    analysisStoreCassandraUtils.removeProjectSettings(projectId);
+	    xoManager.currentTransaction().commit();
+	} catch (XOException e) {
+	    xoManager.currentTransaction().rollback();
+	}
     }
 
     @Override

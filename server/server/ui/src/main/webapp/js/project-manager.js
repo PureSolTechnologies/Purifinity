@@ -18,11 +18,15 @@ function projectManager(purifinityServerConnector) {
 		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects',
 				success, error);
 	};
-	projectManager.createProject = function(id, name, success, error) {
+	projectManager.createProject = function(identifier, projectSettings, success, error) {
+		return purifinityServerConnector.put('/purifinityserver/rest/analysisstore/projects/' + identifier, projectSettings,
+				success, error);
 	};
 	projectManager.editProject = function(id, name, success, error) {
 	};
-	projectManager.deleteProject = function(id, success, error) {
+	projectManager.deleteProject = function(identifier, success, error) {
+		return purifinityServerConnector.del('/purifinityserver/rest/analysisstore/projects/' + identifier,
+				success, error);
 	};
 	projectManager.getRepositoryTypes = function(success, error) {
 		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/repositories',
@@ -63,9 +67,14 @@ function projectsCtrl($scope, $routeParams, baseURL) {
 }
 
   function projectSettingsCtrl($scope, $modal, $log, projectManager) {
-	$scope.projects = undefined;
+	$scope.projects = {};
 	projectManager.getProjects(//
-		function(data, status) {$scope.projects = data}, //
+		function(data, status) {
+			$scope.projects = data;
+			if (!$scope.projects) {
+				$scope.projects = {};
+			}
+		}, //
 		function(data, status, error) {});
 	$scope.items = {
 					id: "",
@@ -155,6 +164,25 @@ function createProjectModalInstanceCtrl($scope, $modalInstance, items, projectMa
 	});
 	$scope.ok = function () {
 	    $modalInstance.close($scope.items);
+		var items = $scope.items;
+		var projectSettings = {
+			"name": items.name,
+			"description": items.description,
+			"fileSearchConfiguration":{
+				"locationIncludes":["src"],
+				"locationExcludes":["target"],
+				"fileIncludes":["*.java"],
+				"fileExcludes":["*~"],
+				"ignoreHidden":true
+			},
+			"repositoryLocation":{
+				"repository.class": "GitRepository",
+				"repository.name": "Git"
+			}
+		};
+		projectManager.createProject(items.id, projectSettings,
+			function(data, status) {}, //
+			function(data, status, error) {});
 	};
 	$scope.cancel = function () {
 	    $modalInstance.dismiss('cancel');

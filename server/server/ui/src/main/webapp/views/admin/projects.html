@@ -14,14 +14,19 @@
 			<thead>
 				<tr>
 					<th>Name</th>
+					<th>Identifier</th>
+					<th>Description</th>
+					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr data-ng-repeat="project in projects">
-					<td>{{project.name}}</td>
+					<td>{{project.settings.name}}</td>
+					<td>{{project.information.projectId}}</td>
+					<td>{{project.settings.description}}</td>
 					<td>
 						<button class="btn btn-default" data-ng-click="openEditProject(project)">Edit...</button>
-						<button class="btn btn-default" data-ng-click="deleteProject(project.id)">Delete...</button>
+						<button class="btn btn-default" data-ng-click="deleteProject(project.information.projectId)">Delete...</button>
 					</td>
 				</tr>
 			</tbody>
