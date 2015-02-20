@@ -10,6 +10,7 @@ accountManagerModule.controller("userSettingsCtrl", userSettingsCtrl);
 accountManagerModule.controller("addUserModalInstanceCtrl", addUserModalInstanceCtrl);
 accountManagerModule.controller("editUserModalInstanceCtrl", editUserModalInstanceCtrl);
 accountManagerModule.controller("roleSettingsCtrl", roleSettingsCtrl);
+accountManagerModule.controller("accountViewCtrl", accountViewCtrl);
 
 function accountManager(purifinityServerConnector) {
 	var accountManager = {};
@@ -42,6 +43,10 @@ function accountManager(purifinityServerConnector) {
 	};
 	accountManager.getRoles = function(success, error) {
 		return purifinityServerConnector.get('/accountmanager/rest/roles',
+				success, error);
+	};
+	accountManager.getUser = function(email, success, error) {
+		return purifinityServerConnector.get('/accountmanager/rest/users/' + email,
 				success, error);
 	};
 	return accountManager;
@@ -194,5 +199,12 @@ function roleSettingsCtrl($scope, accountManager) {
 	$scope.roles = undefined;
 	accountManager.getRoles(//
 		function(data, status) {$scope.roles = data}, //
+		function(data, status, error) {});
+}
+
+function accountViewCtrl($scope, accountManager, authService) {
+	$scope.email = authService.authData.authId;
+	accountManager.getUser($scope.email,
+		function(data, status) {$scope.user = data;}, 
 		function(data, status, error) {});
 }

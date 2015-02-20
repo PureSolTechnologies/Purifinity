@@ -36,10 +36,11 @@
 <script type="text/javascript" src="config/authentication.js"></script>
 <script type="text/javascript" src="js/angularjs-ext.js"></script>
 <script type="text/javascript" src="js/purifinity-server.js"></script>
+<script type="text/javascript" src="js/account-manager.js"></script>
 <script type="text/javascript" src="js/project-manager.js"></script>
 <script type="text/javascript" src="js/alerter.js"></script>
 <script type="text/javascript">
-	var purifinityApp = angular.module("purifinityApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "projectManagerModule", "alerter"]);
+	var purifinityApp = angular.module("purifinityApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "accountManagerModule", "projectManagerModule", "alerter"]);
 	purifinityApp.config(function($routeProvider, $locationProvider){
 		$locationProvider.html5Mode(false);
 		$routeProvider.when("/login", {templateUrl:"/views/login.html"});
@@ -64,7 +65,7 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="/">Purifinity</a>
+			<span class="navbar-brand"><a href="/"><img src="images/logos/logo2.png" width="100" title="Purifinity"/></a></span>
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav" data-ng-controller="menuCtrl">

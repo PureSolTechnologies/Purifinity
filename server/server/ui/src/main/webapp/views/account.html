@@ -1,3 +1,24 @@
-<div class="container">
+<div class="container" data-ng-controller="accountViewCtrl">
 	<h1>Account Settings</h1>
+	<table class="table table-striped table-hover table-bordered">
+		<tbody>
+			<tr>
+				<td>
+					<button class="btn btn-default" data-ng-click="changeUserName(user)">Name</button>
+				</td>
+				<td>
+					{{user.name}}
+				</td>
+			</tr>
+			<tr>
+				<td>Email</td>
+				<td>{{user.email}}</td>
+			</tr>
+			<tr>
+				<td>Role</td>
+				<td>{{user.role.name}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<button class="btn btn-default" data-ng-click="changeUserName(user)">Change Password...</button>
 </div>
