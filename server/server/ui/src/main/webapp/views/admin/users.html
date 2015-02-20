@@ -1,12 +1,12 @@
-<div class="container">
+<div class="container" data-ng-controller="userSettingsCtrl">
 	<tabset> <tab heading="Users">
 	<h2>User Settings</h2>
-	<div data-ng-controller="addUserModalCtrl">
+	<div>
 		<script type="text/ng-template" id="addUserModalContent.html">
 		</script>
-		<button class="btn btn-default" ng-click="open()">Add User...</button>
+		<button class="btn btn-default" ng-click="openAddUser()">Add User...</button>
 	</div>
-	<div data-ng-controller="userSettingsCtrl">
+	<div>
 		<div>
 			<script type="text/ng-template" id="editUserModalContent.html">
 			</script>
@@ -14,15 +14,17 @@
 		<table class="table table-striped table-hover table-bordered">
 			<thead>
 				<tr>
-					<th>Email</th>
 					<th>Name</th>
+					<th>Role</th>
+					<th>Email</th>
 					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr data-ng-repeat="user in users">
-					<td>{{user.email}}</td>
 					<td>{{user.name}}</td>
+					<td>{{user.role.name}}</td>
+					<td>{{user.email}}</td>
 					<td>
 						<button class="btn btn-default" data-ng-click="openEditUser(user)">Edit...</button>
 						<button class="btn btn-default" data-ng-click="deleteUser(user.email)">Delete...</button>

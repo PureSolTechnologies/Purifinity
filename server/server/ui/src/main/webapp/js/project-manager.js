@@ -7,7 +7,6 @@ projectManagerModule.factory('projectManager', ['purifinityServerConnector', pro
 projectManagerModule.controller("projectListCtrl", projectListCtrl);
 projectManagerModule.controller("projectsCtrl", projectsCtrl);	
 projectManagerModule.controller("projectSettingsCtrl", projectSettingsCtrl);	
-projectManagerModule.controller("createProjectModalCtrl", createProjectModalCtrl);
 projectManagerModule.controller("createProjectModalInstanceCtrl", createProjectModalInstanceCtrl);
 projectManagerModule.controller("editProjectModalInstanceCtrl", editProjectModalInstanceCtrl);
 
@@ -76,23 +75,58 @@ function projectSettingsCtrl($scope, $modal, $log, projectManager) {
 			}
 		}, //
 		function(data, status, error) {});
-	$scope.items = {
+	$scope.createItems = {
+					id: "", 
+					name: "",
+					description: "",
+					directoryIncludes: "",
+					directoryExcludes: "",
+					fileIncludes: "",
+					fileExcludes: "",
+					ignoreHidden: true,
+					repositoryTypeClassName: "",
+					repositoryTypeProperties: {}
+					};
+	$scope.openCreateProject = function () {
+		var modalInstance = $modal.open({
+			templateUrl: 'views/admin/dialogs/createProjectModalContent.html',
+			controller: 'createProjectModalInstanceCtrl',
+			resolve: {
+				items: function () {
+					return $scope.createItems;
+				}
+			}
+	    });
+	    
+	    modalInstance.result.then(function (items) {
+			$scope.createItems = items;
+			projectManager.getProjects(//
+				function(data, status) {$scope.projects = data}, //
+				function(data, status, error) {});
+		}, function () {
+	      $log.info('Modal dismissed at: ' + new Date());
+	    })
+	};
+	$scope.editItems = {
 					id: "",
 					name: ""};
 	$scope.openEditProject = function (user) {
-		$scope.items.id = user.id;
-		$scope.items.name = user.name;
+		$scope.editItems.id = user.id;
+		$scope.editItems.name = user.name;
 		var modalInstance = $modal.open({
 			templateUrl: 'views/admin/dialogs/editProjectModalContent.html',
 			controller: 'editProjectModalInstanceCtrl',
 			resolve: {
 				items: function () {
-					return $scope.items;
+					return $scope.editItems;
 				}
 			}
 	    });	    
 	    modalInstance.result.then(function (items) {
-	      $scope.items = items;
+			$scope.editItems = items;
+			projectManager.getProjects(//
+				function(data, status) {$scope.projects = data}, //
+				function(data, status, error) {});
 	    }, function () {
 	      $log.info('Modal dismissed at: ' + new Date());
 	    })
@@ -108,38 +142,6 @@ function projectSettingsCtrl($scope, $modal, $log, projectManager) {
 			}
 		);
 	}
-}
-
-function createProjectModalCtrl($scope, $modal, $log) {
-	$scope.items = {
-					id: "", 
-					name: "",
-					description: "",
-					directoryIncludes: "",
-					directoryExcludes: "",
-					fileIncludes: "",
-					fileExcludes: "",
-					ignoreHidden: true,
-					repositoryTypeClassName: "",
-					repositoryTypeProperties: {}
-					};
-	$scope.open = function () {
-		var modalInstance = $modal.open({
-			templateUrl: 'views/admin/dialogs/createProjectModalContent.html',
-			controller: 'createProjectModalInstanceCtrl',
-			resolve: {
-				items: function () {
-					return $scope.items;
-				}
-			}
-	    });
-	    
-	    modalInstance.result.then(function (items) {
-	      $scope.items = items;
-	    }, function () {
-	      $log.info('Modal dismissed at: ' + new Date());
-	    })
-	};
 }
 
 function createProjectModalInstanceCtrl($scope, $modalInstance, items, projectManager) {

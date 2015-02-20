@@ -274,7 +274,6 @@ function loginCtrl($scope, authService) {
 			}
 		}
 		authService.login($scope.email, $scope.password, $scope.remember);
-		$scope.password = undefined;
 	};
 	$scope.logout = function() {
 		authService.logout();

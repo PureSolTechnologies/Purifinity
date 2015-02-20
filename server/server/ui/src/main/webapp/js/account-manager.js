@@ -7,7 +7,6 @@ accountManagerModule.factory('accountManager', [
 		'purifinityServerConnector', accountManager ]);
 accountManagerModule.controller("usersViewCtrl", usersViewCtrl);
 accountManagerModule.controller("userSettingsCtrl", userSettingsCtrl);
-accountManagerModule.controller("addUserModalCtrl", addUserModalCtrl);
 accountManagerModule.controller("addUserModalInstanceCtrl", addUserModalInstanceCtrl);
 accountManagerModule.controller("editUserModalInstanceCtrl", editUserModalInstanceCtrl);
 accountManagerModule.controller("roleSettingsCtrl", roleSettingsCtrl);
@@ -69,25 +68,53 @@ function usersViewCtrl($scope) {
 	accountManager.getUsers(//
 		function(data, status) {$scope.users = data}, //
 		function(data, status, error) {});
-	$scope.items = {
+	$scope.addItems = {
+					name:"", 
+					email:"",
+					password:"",
+					roleId:""};
+	$scope.openAddUser = function () {
+		var modalInstance = $modal.open({
+			templateUrl: 'views/admin/dialogs/addUserModalContent.html',
+			controller: 'addUserModalInstanceCtrl',
+			resolve: {
+				items: function () {
+					return $scope.addItems;
+				}
+			}
+	    });
+	    
+	    modalInstance.result.then(function (items) {
+			$scope.addItems = items;
+			accountManager.getUsers(//
+				function(data, status) {$scope.users = data}, //
+				function(data, status, error) {});
+	    }, function () {
+	      $log.info('Modal dismissed at: ' + new Date());
+	    })
+	};
+	$scope.editItems = {
 					email: "",
 					name: "", 
 					roleId: ""};
 	$scope.openEditUser = function (user) {
-		$scope.items.email = user.email;
-		$scope.items.name = user.name;
-		$scope.items.roleId = user.role.id;
+		$scope.editItems.email = user.email;
+		$scope.editItems.name = user.name;
+		$scope.editItems.roleId = user.role.id;
 		var modalInstance = $modal.open({
 			templateUrl: 'views/admin/dialogs/editUserModalContent.html',
 			controller: 'editUserModalInstanceCtrl',
 			resolve: {
 				items: function () {
-					return $scope.items;
+					return $scope.editItems;
 				}
 			}
 	    });	    
 	    modalInstance.result.then(function (items) {
-	      $scope.items = items;
+			$scope.editItems = items;
+			accountManager.getUsers(//
+				function(data, status) {$scope.users = data}, //
+				function(data, status, error) {});
 	    }, function () {
 	      $log.info('Modal dismissed at: ' + new Date());
 	    })
@@ -103,31 +130,6 @@ function usersViewCtrl($scope) {
 			}
 		);
 	}
-}
-
- function addUserModalCtrl($scope, $modal, $log) {
-	$scope.items = {
-					name:"", 
-					email:"",
-					password:"",
-					roleId:""};
-	$scope.open = function () {
-		var modalInstance = $modal.open({
-			templateUrl: 'views/admin/dialogs/addUserModalContent.html',
-			controller: 'addUserModalInstanceCtrl',
-			resolve: {
-				items: function () {
-					return $scope.items;
-				}
-			}
-	    });
-	    
-	    modalInstance.result.then(function (items) {
-	      $scope.items = items;
-	    }, function () {
-	      $log.info('Modal dismissed at: ' + new Date());
-	    })
-	};
 }
 
 function addUserModalInstanceCtrl($scope, $modalInstance, items, accountManager) {

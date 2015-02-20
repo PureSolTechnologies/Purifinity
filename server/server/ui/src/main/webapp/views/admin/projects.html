@@ -1,11 +1,11 @@
-<div class="container">
+<div class="container" data-ng-controller="projectSettingsCtrl">
 	<h1>Projects</h1>
-	<div data-ng-controller="createProjectModalCtrl">
+	<div>
 		<script type="text/ng-template" id="createProjectModalContent.html">
 		</script>
-		<button class="btn btn-default" ng-click="open()">Create Project...</button>
+		<button class="btn btn-default" ng-click="openCreateProject()">Create Project...</button>
 	</div>
-	<div data-ng-controller="projectSettingsCtrl">
+	<div>
 		<div>
 			<script type="text/ng-template" id="editProjectModalContent.html">
 			</script>
