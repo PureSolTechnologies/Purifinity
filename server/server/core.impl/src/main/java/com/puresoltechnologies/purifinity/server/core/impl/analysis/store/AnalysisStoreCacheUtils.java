@@ -90,14 +90,17 @@ public class AnalysisStoreCacheUtils {
     public void cacheAnalysisFileTree(String projectId, long runId,
 	    AnalysisFileTree analysisFileTree) {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
-		.getPreparedStatement(session, "INSERT INTO "
-			+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
-			+ " (project_id, run_id, persisted_tree) VALUES (?, ?)");
+		.getPreparedStatement(
+			session,
+			"INSERT INTO "
+				+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
+				+ " (project_id, run_id, persisted_tree) VALUES (?, ?, ?)");
 	try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 	    try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
 		    byteArrayOutputStream)) {
 		objectOutputStream.writeObject(analysisFileTree);
-		BoundStatement boundStatement = preparedStatement.bind(runId);
+		BoundStatement boundStatement = preparedStatement.bind(
+			projectId, runId);
 		boundStatement.setBytes("persisted_tree",
 			ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
 		session.execute(boundStatement);
