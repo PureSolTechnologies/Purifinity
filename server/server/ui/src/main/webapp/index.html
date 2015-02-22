@@ -46,10 +46,6 @@
 		$routeProvider.when("/login", {templateUrl:"/views/login.html"});
 		$routeProvider.when("/account", {templateUrl:"/views/account.html"});
 		$routeProvider.when("/dashboards", {templateUrl: "/views/dashboards.html"});
-		$routeProvider.when("/projects", {templateUrl: "/views/projects.html", controller: "projectsCtrl"});
-		$routeProvider.when("/projects/:project", {templateUrl: "/views/projects.html", controller: "projectsCtrl"});
-		$routeProvider.when("/projects/:project/:run", {templateUrl: "/views/projects.html", controller: "projectsCtrl"});
-		$routeProvider.when("/projects/:project/:run/:mode", {templateUrl: "/views/projects.html", controller: "projectsCtrl"});
 		$routeProvider.when("/information", {templateUrl: "/views/information.html"});
 		$routeProvider.when("/help", {templateUrl: "/views/help.html"});
 		$routeProvider.otherwise({templateUrl: "/views/overview.html"});
@@ -71,7 +67,6 @@
 			<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
 				<li class="{{isActive('')}}"><a href="#">Overview</a></li>
 				<li class="{{isActive('/dashboards')}}"><a href="#/dashboards">Dashboards</a></li>
-				<li class="{{isActive('/projects')}}"><a href="#/projects">Projects</a></li>
 				<li class="{{isActive('/information')}}"><a
 					href="#/information">Information</a></li>
 				<li class="{{isActive('/help')}}"><a href="#/help">Help</a></li>
@@ -96,13 +91,13 @@
 		</div>
 	</div>
 
-	<div class="row" data-ng-controller="alerterCtrl" ng-show="hasAlerts()">
+	<div class="row" data-ng-controller="alerterCtrl" ng-show="hasAlerts()" ng-cloak>
 		<div
-			class="col-lg-1 col-lg-offset-4 col-md-2 col-md-offset-2 col-sm-4">
+			class="col-lg-1 col-lg-offset-4 col-md-2 col-md-offset-2 col-sm-4" ng-cloak>
 			<button class="btn btn-default" data-ng-click="clearAlerts()">Clear
 				All</button>
 		</div>
-		<div class="col-lg-3 col-md-6 col-sm-8">
+		<div class="col-lg-3 col-md-6 col-sm-8" ng-cloak>
 			<alert data-ng-repeat="alert in alerts" type="{{alert.type}}"
 				close="closeAlert($index)" data-ng-cloak>{{alert.message}}</alert>
 		</div>
@@ -110,21 +105,6 @@
 
 	<span data-ng-view></span>
 
-	<hr/>
-	
-	<div class="container">
-		<div class="row">
-			<div class="col-md-1"></div>
-			<div class="col-md-2 btn-default" onclick="window.open('/status.html', 'Processes...', 'width=320,height=200')">Processes...</div>
-			<div class="col-md-2"></div>
-			<div class="col-md-2 btn-default" onclick="window.open('/status.html', 'Purifinity Monitor...', 'width=320,height=200')">Purifinity Monitor...</div>
-			<div class="col-md-2"></div>
-			<div class="col-md-2 btn-default" onclick="window.open('/status.html', 'Purifinity Log...', 'width=320,height=200')">Purifinity Log...</div>
-			<div class="col-md-1"></div>
-		</div>
-		</div>
-	</div>
-	
 	<span data-ng-include="'components/footer.html'"></span>
 	
 	<!-- Bootstrap core JavaScript

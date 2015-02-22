@@ -21,6 +21,7 @@ purifinityServer.factory('authService', [ '$http', '$location', 'httpRequests', 
 purifinityServer.factory('httpRequests', [ '$http', '$location', 'alerterFactory', httpRequests ]);
 
 purifinityServer.controller('loginCtrl', loginCtrl);
+purifinityServer.controller('serverStatusCtrl', serverStatusCtrl);
 		
 function authURLs(baseURL, authAPI) {
 	var urls = {};
@@ -313,4 +314,74 @@ function storeAuthData(authData, remember) {
 function removeAuthData() {
 	localStorage.removeItem("purifinity-authentication");
 	sessionStorage.removeItem("purifinity-authentication");
+}
+
+function serverStatusCtrl($scope) {
+	$scope.connection = "Not Connected.";
+	$scope.error = undefined;
+	var websocket = new WebSocket("ws://" + server.host + ":" + server.port + "/purifinityserver/socket/status");
+	websocket.onopen = function (event) {
+		$scope.connection = "Connected.";
+		$scope.$apply();
+		websocket.send('sendStatus');
+	}
+	websocket.onclose = function (event) {
+		$scope.connection = "Connection closed.";
+		$scope.$apply();
+	}
+	websocket.onmessage = function (event) {
+		$scope.status = JSON.parse(event.data);
+		$scope.$apply();
+	}
+	websocket.onerror = function (event) {
+		$scope.error = event;
+		$scope.$apply();
+	}
+	$scope.getUptimeString = function() {
+		if (!$scope.status) {
+			return "";
+		}
+		var milliseconds = $scope.status.uptime;
+		if (milliseconds < 1000) {
+			return milliseconds + "ms";
+		}
+		var seconds = Math.floor(milliseconds / 1000);
+		milliseconds = milliseconds % 1000;
+		if (seconds < 60) {
+			return seconds + "s";
+		}
+		var minutes = Math.floor(seconds / 60);
+		seconds = seconds % 60;
+		if (minutes < 60) {
+			return minutes + "min " + seconds + "s";
+		}
+		var hours = Math.floor(minutes / 60);
+		minutes = minutes % 60;
+		if (hours < 24) {
+			return hours + "hr " + minutes + "min " + seconds + "s";
+		}
+		var days = Math.floor(hours / 24);
+		hours = hours % 24;
+		return days + "days " + hours + "hr " + minutes + "min " + seconds + "s";
+	};
+	$scope.getMemorySeverity = function() {
+		var usage = $scope.status.usedMemory / $scope.status.maxMemory;
+		if (usage < 0.75) {
+			return "progress-bar-success";
+		}
+		if (usage < 0.9) {
+			return "progress-bar-warning";
+		}
+		return "progress-bar-danger";
+	};
+	$scope.getCPUSeverity = function() {
+		var usage = $scope.status.usedCPU / $scope.status.maxCPU;
+		if (usage < 0.75) {
+			return "progress-bar-success";
+		}
+		if (usage < 0.9) {
+			return "progress-bar-warning";
+		}
+		return "progress-bar-danger";
+	};
 }

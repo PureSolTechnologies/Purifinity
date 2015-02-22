@@ -1,17 +1,17 @@
 package com.puresoltechnologies.purifinity.server.socket.api;
 
 import java.io.IOException;
-import java.io.Reader;
+import java.io.Writer;
 
-import javax.websocket.DecodeException;
-import javax.websocket.Decoder;
+import javax.websocket.EncodeException;
+import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
 import com.puresoltechnologies.commons.math.JSONSerializer;
 import com.puresoltechnologies.purifinity.server.domain.PurifinityServerStatus;
 
-public class PurifinityServerStatusDecoder implements
-	Decoder.TextStream<PurifinityServerStatus> {
+public class PurifinityServerStatusEncoder implements
+	Encoder.TextStream<PurifinityServerStatus> {
 
     @Override
     public void init(EndpointConfig config) {
@@ -22,9 +22,9 @@ public class PurifinityServerStatusDecoder implements
     }
 
     @Override
-    public PurifinityServerStatus decode(Reader reader) throws DecodeException,
-	    IOException {
-	return JSONSerializer.fromJSONString(reader,
-		PurifinityServerStatus.class);
+    public void encode(PurifinityServerStatus object, Writer writer)
+	    throws EncodeException, IOException {
+	String jsonString = JSONSerializer.toJSONString(object);
+	writer.write(jsonString);
     }
 }

@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.core.api;
 
 import com.puresoltechnologies.purifinity.server.domain.PurifinityServerStatus;
 
+
 /**
  * This is the central API for the Purifinity server implementation.
  * 

@@ -156,6 +156,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	    eventLogger.logEvent(AccountManagerEvents
 		    .createAccountCreationEvent(email));
 	} catch (SchemaViolationException e) {
+	    xoManager.currentTransaction().rollback();
 	    throw new XOException(
 		    "Could not create new account. Account already exists?", e);
 	} catch (XOException e) {
@@ -168,7 +169,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
     public void alterAccount(EmailAddress email, String name, String roleId) {
 	xoManager.currentTransaction().begin();
 	try {
-	    logger.debug("Editign user account for '" + email + "'...");
+	    logger.debug("Editing user account for '" + email + "'...");
 	    UserVertex user = xoManager.find(UserVertex.class,
 		    email.getAddress()).getSingleResult();
 	    user.setName(name);
@@ -181,6 +182,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	    eventLogger.logEvent(AccountManagerEvents
 		    .alterAccountCreationEvent(email));
 	} catch (SchemaViolationException e) {
+	    xoManager.currentTransaction().rollback();
 	    throw new XOException(
 		    "Could not create new account. Account already exists?", e);
 	} catch (XOException e) {
@@ -260,10 +262,10 @@ public class AccountManagerBean implements Serializable, AccountManager,
     public void deletePassword(EmailAddress email) {
 	xoManager.currentTransaction().begin();
 	try {
-	    passwordStore.deletePassword(email);
 	    UserVertex userVertex = xoManager.find(UserVertex.class,
 		    email.getAddress()).getSingleResult();
 	    xoManager.delete(userVertex);
+	    passwordStore.deletePassword(email);
 	    xoManager.currentTransaction().commit();
 	} catch (XOException e) {
 	    xoManager.currentTransaction().rollback();
