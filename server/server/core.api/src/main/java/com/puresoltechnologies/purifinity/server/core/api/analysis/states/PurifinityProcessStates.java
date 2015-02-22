@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.domain;
+package com.puresoltechnologies.purifinity.server.core.api.analysis.states;
 
 import java.util.ArrayList;
 import java.util.Collections;

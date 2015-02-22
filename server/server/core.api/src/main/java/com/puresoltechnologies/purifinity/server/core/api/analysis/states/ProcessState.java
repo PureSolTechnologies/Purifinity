@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.domain;
+package com.puresoltechnologies.purifinity.server.core.api.analysis.states;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -19,7 +19,8 @@ public class ProcessState implements Serializable, Comparable<ProcessState> {
 
     private static final long serialVersionUID = 1L;
 
-    private final String processName;
+    private final String name;
+    private final AnalysisProcessState status;
     private final int current;
     private final int max;
     private final String unit;
@@ -28,27 +29,35 @@ public class ProcessState implements Serializable, Comparable<ProcessState> {
      * Default constructor for Jackson.
      */
     public ProcessState() {
-	processName = null;
+	name = null;
+	status = null;
 	current = -1;
 	max = -1;
 	unit = null;
     }
 
     @JsonCreator
-    public ProcessState(@JsonProperty("processName") String processName,
+    public ProcessState(
+	    @JsonProperty("name") String name,//
+	    @JsonProperty("status") AnalysisProcessState status,
 	    @JsonProperty("current") int current, //
 	    @JsonProperty("max") int max, //
 	    @JsonProperty("unit") String unit) {
 	super();
-	this.processName = Objects.requireNonNull(processName,
-		"processName must not be null.");
+	this.name = Objects.requireNonNull(name, "name must not be null.");
+	this.status = Objects
+		.requireNonNull(status, "status must not be null.");
 	this.max = max;
 	this.current = current;
 	this.unit = Objects.requireNonNull(unit, "unit must not be null.");
     }
 
-    public String getProcessName() {
-	return processName;
+    public String getName() {
+	return name;
+    }
+
+    public AnalysisProcessState getStatus() {
+	return status;
     }
 
     public int getCurrent() {
@@ -69,8 +78,8 @@ public class ProcessState implements Serializable, Comparable<ProcessState> {
 	int result = 1;
 	result = prime * result + current;
 	result = prime * result + max;
-	result = prime * result
-		+ ((processName == null) ? 0 : processName.hashCode());
+	result = prime * result + ((name == null) ? 0 : name.hashCode());
+	result = prime * result + ((status == null) ? 0 : status.hashCode());
 	result = prime * result + ((unit == null) ? 0 : unit.hashCode());
 	return result;
     }
@@ -88,10 +97,15 @@ public class ProcessState implements Serializable, Comparable<ProcessState> {
 	    return false;
 	if (max != other.max)
 	    return false;
-	if (processName == null) {
-	    if (other.processName != null)
+	if (name == null) {
+	    if (other.name != null)
 		return false;
-	} else if (!processName.equals(other.processName))
+	} else if (!name.equals(other.name))
+	    return false;
+	if (status == null) {
+	    if (other.status != null)
+		return false;
+	} else if (!status.equals(other.status))
 	    return false;
 	if (unit == null) {
 	    if (other.unit != null)
@@ -103,11 +117,15 @@ public class ProcessState implements Serializable, Comparable<ProcessState> {
 
     @Override
     public int compareTo(ProcessState o) {
-	return this.getProcessName().compareTo(o.getProcessName());
+	int nameComparison = name.compareTo(o.name);
+	if (nameComparison != 0) {
+	    return nameComparison;
+	}
+	return status.compareTo(o.status);
     }
 
     @Override
     public String toString() {
-	return processName + " " + current + "/" + max + " " + unit;
+	return name + " (" + status + ") " + current + "/" + max + " " + unit;
     }
 }

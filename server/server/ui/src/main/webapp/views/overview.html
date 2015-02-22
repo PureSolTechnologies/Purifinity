@@ -40,46 +40,29 @@
 				</table>
 			</div>
 			
-			<h4>Processes</h4>
-			<table class="table">
-				<tbody>
-					<tr>
-						<th>Process 1: evaluating</th>
-						<td>
-								<div class="progress-bar" role="progressbar" aria-valuenow="70"
-									aria-valuemin="0" aria-valuemax="100" style="width:98%">
-									98% Complete
+			<span data-ng-controller="processStatesCtrl">
+				<h4>Processes</h4>
+				{{processes.time | date: "yyyy-MM-dd HH:mm:ss"}}
+				<table class="table">
+					<tbody>
+						<tr data-ng-repeat="state in processes.processStates">
+							<td width="50%"><b>{{state.name}}</b> ({{state.status}})</td>
+							<td>
+								<div class="progress">
+									<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{state.current}}"
+										aria-valuemin="0" aria-valuemax="{{state.max}}" style="width:{{state.current / state.max * 100}}%">
+										{{state.current / state.max * 100}}%
+									</div>
 								</div>
-						</td>
-					</tr>
-					<tr>
-						<th>Process 2: analyzing</th>
-						<td>
-							<span class="progress">
-								<div class="progress-bar" role="progressbar" aria-valuenow="70"
-									aria-valuemin="0" aria-valuemax="100" style="width:25%">
-									25% Complete
-								</div>
-							</span>						
-						</td>
-					</tr>
-					<tr>
-						<th>Process 3: storing</th>
-						<td>
-							<span class="progress">
-								<div class="progress-bar" role="progressbar" aria-valuenow="70"
-									aria-valuemin="0" aria-valuemax="100" style="width:70%">
-									<span>70% Complete</span>
-								</div>
-							</span>
-						</td>
-					</tr>
-					<tr>
-						<th></th>
-						<td></td>
-					</tr>
-				</tbody>
-			</table>
+							</td>
+						</tr>
+						<tr>
+							<th width="50%"></th>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</span>
 		</div>		
 	</div>
 </div>

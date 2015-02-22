@@ -8,7 +8,7 @@ import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
 import com.puresoltechnologies.commons.math.JSONSerializer;
-import com.puresoltechnologies.purifinity.server.domain.PurifinityProcessStates;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.states.PurifinityProcessStates;
 
 public class PurifinityProcessStatesEncoder implements
 	Encoder.TextStream<PurifinityProcessStates> {

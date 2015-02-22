@@ -58,7 +58,8 @@ public class AnalysisStoreCacheUtils {
 		.getPreparedStatement(session, "SELECT persisted_tree FROM "
 			+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
 			+ " WHERE project_id=? AND  run_id=?");
-	BoundStatement boundStatement = preparedStatement.bind(runId);
+	BoundStatement boundStatement = preparedStatement
+		.bind(projectId, runId);
 	ResultSet resultSet = session.execute(boundStatement);
 	Row result = resultSet.one();
 	if (result == null) {

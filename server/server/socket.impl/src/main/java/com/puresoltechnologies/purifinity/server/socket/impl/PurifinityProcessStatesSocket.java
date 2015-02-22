@@ -1,8 +1,11 @@
 package com.puresoltechnologies.purifinity.server.socket.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
+import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.websocket.CloseReason;
@@ -20,10 +23,10 @@ import org.slf4j.Logger;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStatusInformation;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.states.ProcessState;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.states.PurifinityProcessStates;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.domain.ProcessState;
-import com.puresoltechnologies.purifinity.server.domain.PurifinityProcessStates;
 import com.puresoltechnologies.purifinity.server.socket.api.PurifinityProcessStatesDecoder;
 import com.puresoltechnologies.purifinity.server.socket.api.PurifinityProcessStatesEncoder;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
@@ -78,29 +81,34 @@ public class PurifinityProcessStatesSocket {
     }
 
     private PurifinityProcessStates getProgresses() {
-	List<AnalysisProcessStatusInformation> processStates = processStateTracker
-		.readProcessStates();
-	PurifinityProcessStates purifinityProcessStates = new PurifinityProcessStates();
-	for (AnalysisProcessStatusInformation processStatusInformation : processStates) {
+	Date time = new Date();
+	List<ProcessState> processStates = new ArrayList<ProcessState>();
+	for (AnalysisProcessStatusInformation processStatusInformation : processStateTracker
+		.readProcessStates()) {
 	    String projectId = processStatusInformation.getProjectId();
 	    try {
 		AnalysisProjectSettings projectSettings;
 		projectSettings = analysisStore
 			.readAnalysisProjectSettings(projectId);
-		new ProcessState(projectSettings.getName() + ": "
-			+ processStatusInformation.getState().getName(), -1,
-			100, "files");
+
+		ProcessState processState = new ProcessState(
+			projectSettings.getName(),
+			processStatusInformation.getState(), -1, 100, "files");
+		processStates.add(processState);
 	    } catch (AnalysisStoreException e) {
 		logger.error("Could not read project settings for project '"
 			+ projectId + "'.", e);
 	    }
 	}
+	PurifinityProcessStates purifinityProcessStates = new PurifinityProcessStates(
+		time, processStates);
 	return purifinityProcessStates;
     }
 
+    @Schedule(hour = "*", minute = "*", second = "*/5")
     public void sendUpdate() {
 	if (session != null) {
-	    logger.trace("Send process progresses update...");
+	    logger.trace("Send process progress updates...");
 	    PurifinityProcessStates states = getProgresses();
 	    for (Session client : session.getOpenSessions()) {
 		try {

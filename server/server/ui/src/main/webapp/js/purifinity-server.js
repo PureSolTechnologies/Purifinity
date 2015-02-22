@@ -22,7 +22,8 @@ purifinityServer.factory('httpRequests', [ '$http', '$location', 'alerterFactory
 
 purifinityServer.controller('loginCtrl', loginCtrl);
 purifinityServer.controller('serverStatusCtrl', serverStatusCtrl);
-		
+purifinityServer.controller('processStatesCtrl', processStatesCtrl);
+
 function authURLs(baseURL, authAPI) {
 	var urls = {};
 	urls.login = baseURL + authAPI + "/login";
@@ -390,4 +391,28 @@ function serverStatusCtrl($scope) {
 		}
 		return "progress-bar-danger";
 	};
+}
+
+
+function processStatesCtrl($scope) {
+	$scope.connection = "Not Connected.";
+	$scope.error = undefined;
+	var websocket = new WebSocket("ws://" + server.host + ":" + server.port + "/purifinityserver/socket/processes");
+	websocket.onopen = function (event) {
+		$scope.connection = "Connected.";
+		$scope.$apply();
+		websocket.send('sendProcessStates');
+	}
+	websocket.onclose = function (event) {
+		$scope.connection = "Connection closed.";
+		$scope.$apply();
+	}
+	websocket.onmessage = function (event) {
+		$scope.processes = JSON.parse(event.data);
+		$scope.$apply();
+	}
+	websocket.onerror = function (event) {
+		$scope.error = event;
+		$scope.$apply();
+	}
 }
