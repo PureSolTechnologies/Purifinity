@@ -38,7 +38,7 @@ public class HistogramChartDataProviderSocket {
 
     @OnOpen
     public void open(Session session, EndpointConfig config) {
-	eventLogger.logEvent(PurifinityServerSocketEvents
+	eventLogger.logEvent(PurifinityServerStatusSocketEvents
 		.createSocketOpenedEvent());
     }
 
@@ -46,7 +46,7 @@ public class HistogramChartDataProviderSocket {
     public void close(Session session, CloseReason reason) {
 	String reasonPhrase = reason != null ? reason.getReasonPhrase()
 		: "<no reason provided>";
-	eventLogger.logEvent(PurifinityServerSocketEvents
+	eventLogger.logEvent(PurifinityServerStatusSocketEvents
 		.createSocketCloseEvent(reasonPhrase));
     }
 
@@ -62,7 +62,7 @@ public class HistogramChartDataProviderSocket {
 
     @OnError
     public void handleError(Session session, Throwable throwable) {
-	eventLogger.logEvent(PurifinityServerSocketEvents
+	eventLogger.logEvent(PurifinityServerStatusSocketEvents
 		.createSocketErrorEvent(throwable));
     }
 }

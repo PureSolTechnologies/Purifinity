@@ -29,7 +29,7 @@ encoders = { PurifinityServerStatusEncoder.class }, //
 decoders = { PurifinityServerStatusDecoder.class }//
 )
 @Singleton
-public class PurifinityServerSocket {
+public class PurifinityServerStatusSocket {
 
     @Inject
     private Logger logger;
@@ -45,7 +45,7 @@ public class PurifinityServerSocket {
     @OnOpen
     public void open(Session session, EndpointConfig config) {
 	this.session = session;
-	eventLogger.logEvent(PurifinityServerSocketEvents
+	eventLogger.logEvent(PurifinityServerStatusSocketEvents
 		.createSocketOpenedEvent());
     }
 
@@ -53,7 +53,7 @@ public class PurifinityServerSocket {
     public void close(CloseReason reason) {
 	String reasonPhrase = reason != null ? reason.getReasonPhrase()
 		: "<no reason provided>";
-	eventLogger.logEvent(PurifinityServerSocketEvents
+	eventLogger.logEvent(PurifinityServerStatusSocketEvents
 		.createSocketCloseEvent(reasonPhrase));
     }
 
@@ -65,7 +65,7 @@ public class PurifinityServerSocket {
 
     @OnError
     public void handleError(Throwable throwable) {
-	eventLogger.logEvent(PurifinityServerSocketEvents
+	eventLogger.logEvent(PurifinityServerStatusSocketEvents
 		.createSocketErrorEvent(throwable));
     }
 

@@ -1,0 +1,44 @@
+			<h4>System Health</h4>
+			<span data-ng-controller="serverStatusCtrl">
+			<table class="table">
+				<tbody>
+					<tr>
+						<td>Connection</td>
+						<td>{{connection}}</td>
+					</tr>
+					<tr data-ng-show="error">
+						<td>Error</td>
+						<td>{{error}}</td>
+					</tr>
+					<tr>
+						<td>Server Start</td>
+						<td>{{status.startTime | date: "yyyy-MM-dd HH:mm:ss"}}</td>
+					</tr>
+					<tr>
+						<td>Uptime</td>
+						<td>{{getUptimeString()}}</td>
+					</tr>
+					<tr>
+						<td>Memory</td>
+						<td>
+							<div class="progress">
+								<div class="progress-bar progress-bar-striped {{getMemorySeverity()}}" role="progressbar" aria-valuenow="{{status.usedMemory}}"
+									aria-valuemin="0" aria-valuemax="{{status.maxMemory}}" style="width:{{status.usedMemory/status.maxMemory*100}}%">
+									<span>{{status.usedMemory/status.maxMemory*100 | number: 1}}%</span>
+								</div>
+							</div>						
+						</td>
+					</tr>
+					<tr>
+						<td>CPU Usage</td>
+						<td>
+							<div class="progress">
+								<div class="progress-bar progress-bar-striped {{getCPUSeverity()}}" role="progressbar" aria-valuenow="{{status.usedCPU}}"
+									aria-valuemin="0" aria-valuemax="{{status.maxMemory}}" style="width:{{status.usedCPU/status.maxCPU*100}}%">
+									<span>{{status.usedCPU/status.maxCPU*100 | number: 1}}%</span>
+								</div>
+							</div>						
+						</td>
+					</tr>
+				</tbody>
+			</table>

@@ -365,6 +365,9 @@ function serverStatusCtrl($scope) {
 		return days + "days " + hours + "hr " + minutes + "min " + seconds + "s";
 	};
 	$scope.getMemorySeverity = function() {
+		if (!$scope.status || !$scope.status.usedMemory || !$scope.status.maxMemory) {
+			return "";
+		}
 		var usage = $scope.status.usedMemory / $scope.status.maxMemory;
 		if (usage < 0.75) {
 			return "progress-bar-success";
@@ -375,6 +378,9 @@ function serverStatusCtrl($scope) {
 		return "progress-bar-danger";
 	};
 	$scope.getCPUSeverity = function() {
+		if (!$scope.status || !$scope.status.usedCPU || !$scope.status.maxCPU) {
+			return "";
+		}
 		var usage = $scope.status.usedCPU / $scope.status.maxCPU;
 		if (usage < 0.75) {
 			return "progress-bar-success";

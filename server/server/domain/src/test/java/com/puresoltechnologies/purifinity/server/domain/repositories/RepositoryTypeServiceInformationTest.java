@@ -14,6 +14,7 @@ import com.puresoltechnologies.commons.math.JSONSerializer;
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 public class RepositoryTypeServiceInformationTest {
 

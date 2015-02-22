@@ -6,18 +6,18 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventType;
 
 /**
  * This class contains the events which are sent by
- * {@link PurifinityServerSocket}.
+ * {@link PurifinityProcessStatesSocket}.
  * 
  * @author Rick-Rainer Ludwig
  */
-public class PurifinityServerSocketEvents {
+public class PurifinityProgressSocketEvents {
 
-    public static final String COMPONENT = "PurifinityServerSocket";
+    public static final String COMPONENT = "PurifinityProgressSocket";
 
     /**
      * Private constructor to avoid instantiation.
      */
-    private PurifinityServerSocketEvents() {
+    private PurifinityProgressSocketEvents() {
     }
 
     public static Event createSocketOpenedEvent() {

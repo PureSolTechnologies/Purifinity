@@ -17,6 +17,9 @@ public class PurifinityServerStatus implements Serializable {
     private final int usedCPU;
     private final int maxCPU;
 
+    /**
+     * Default constructor for Jackson.
+     */
     public PurifinityServerStatus() {
 	this.startTime = -1;
 	this.uptime = -1;

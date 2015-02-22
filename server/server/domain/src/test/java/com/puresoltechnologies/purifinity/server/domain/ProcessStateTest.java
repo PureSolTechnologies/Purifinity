@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.domain.repositories;
+package com.puresoltechnologies.purifinity.server.domain;
 
 import static org.junit.Assert.assertEquals;
 
@@ -9,19 +9,18 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
 import com.puresoltechnologies.commons.math.JSONSerializer;
-import com.puresoltechnologies.purifinity.server.domain.PurifinityServerStatus;
 
-public class PurifinityServerStatusTest {
+public class ProcessStateTest {
 
     @Test
     public void testSerialization() throws JsonGenerationException,
 	    JsonMappingException, IOException {
-	PurifinityServerStatus information = new PurifinityServerStatus(1l, 2l,
-		3l, 4l, 5l, 6, 7);
+	ProcessState information = new ProcessState("Project: storing", 50,
+		100, "unit");
 	String serialized = JSONSerializer.toJSONString(information);
 	System.out.println(serialized);
-	PurifinityServerStatus deserialized = JSONSerializer.fromJSONString(
-		serialized, PurifinityServerStatus.class);
+	ProcessState deserialized = JSONSerializer.fromJSONString(serialized,
+		ProcessState.class);
 	assertEquals(information, deserialized);
     }
 
