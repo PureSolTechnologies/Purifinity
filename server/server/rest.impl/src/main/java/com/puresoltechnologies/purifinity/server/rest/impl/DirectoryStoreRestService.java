@@ -1,13 +1,13 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl;
+package com.puresoltechnologies.purifinity.server.rest.impl;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.DirectoryStoreRestInterface;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreService;
+import com.puresoltechnologies.purifinity.server.rest.api.DirectoryStoreRestInterface;
 
 public class DirectoryStoreRestService implements DirectoryStoreRestInterface {
 

@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.rest.api;
+package com.puresoltechnologies.purifinity.server.rest.api;
 
 import java.util.List;
 

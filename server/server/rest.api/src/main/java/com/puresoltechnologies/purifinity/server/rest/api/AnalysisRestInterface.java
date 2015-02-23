@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.rest.api;
+package com.puresoltechnologies.purifinity.server.rest.api;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -12,8 +12,8 @@ import javax.ws.rs.core.MediaType;
 
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 
-@Path("analysisservice")
-public interface AnalysisServiceRestInterface {
+@Path("analysis")
+public interface AnalysisRestInterface {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

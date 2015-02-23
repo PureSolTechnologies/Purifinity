@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.analysisservice.rest.impl;
+package com.puresoltechnologies.purifinity.server.rest.impl;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -6,11 +6,11 @@ import java.util.Collection;
 import javax.inject.Inject;
 import javax.jms.JMSException;
 
-import com.puresoltechnologies.purifinity.server.analysisservice.rest.api.AnalysisServiceRestInterface;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
+import com.puresoltechnologies.purifinity.server.rest.api.AnalysisRestInterface;
 
-public class AnalysisServiceRestService implements AnalysisServiceRestInterface {
+public class AnalysisRestService implements AnalysisRestInterface {
 
     @Inject
     private AnalysisService analysisService;

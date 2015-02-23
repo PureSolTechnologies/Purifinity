@@ -31,7 +31,7 @@ function projectManager(purifinityServerConnector) {
 				success, error);
 	};
 	projectManager.getRepositoryTypes = function(success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/repositories',
+		return purifinityServerConnector.get('/purifinityserver/rest/repositories/types',
 				success, error);
 	};
 	return projectManager;

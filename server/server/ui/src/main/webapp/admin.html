@@ -37,10 +37,11 @@
 <script type="text/javascript" src="js/angularjs-ext.js"></script>
 <script type="text/javascript" src="js/purifinity-server.js"></script>
 <script type="text/javascript" src="js/account-manager.js"></script>
+<script type="text/javascript" src="js/plugin-manager.js"></script>
 <script type="text/javascript" src="js/project-manager.js"></script>
 <script type="text/javascript" src="js/alerter.js"></script>
 <script type="text/javascript">
-	var adminApp = angular.module("purifinityAdminApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "accountManagerModule", "projectManagerModule", "alerter"]);
+	var adminApp = angular.module("purifinityAdminApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "accountManagerModule", "pluginManagerModule", "projectManagerModule", "alerter"]);
 	adminApp.config(function ($routeProvider, $locationProvider) {
 		$locationProvider.html5Mode(false);
 		$routeProvider.when("/login", {templateUrl:"/views/login.html"});

@@ -222,7 +222,7 @@ function authService($http, $location, httpRequests, authURLs, purifinityServerC
 					$location.path("/");
 				}
 			}, //
-			function(data, status) {
+			function(data, status, error) {
 				service.authData = undefined;
 				authenticated = false;
 				removeAuthData();
@@ -242,7 +242,7 @@ function authService($http, $location, httpRequests, authURLs, purifinityServerC
 				service.authData = undefined;
 				removeAuthData();
 			},
-			function(data, status) {
+			function(data, status, error) {
 				service.authData = undefined;
 				removeAuthData();
 				// Error handling
