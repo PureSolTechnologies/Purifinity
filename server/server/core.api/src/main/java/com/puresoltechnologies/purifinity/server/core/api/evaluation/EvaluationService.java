@@ -1,7 +1,9 @@
 package com.puresoltechnologies.purifinity.server.core.api.evaluation;
 
 import java.util.Collection;
+import java.util.Set;
 
+import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 
 /**
@@ -13,5 +15,11 @@ import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServ
 public interface EvaluationService {
 
     public Collection<EvaluatorServiceInformation> getEvaluators();
+
+    public EvaluatorServiceInformation getEvaluator(String evaluatorId);
+
+    public Set<ConfigurationParameter<?>> getConfiguration(String evaluatorId);
+
+    public void setActive(String evaluatorId, boolean enabled);
 
 }

@@ -6,6 +6,47 @@
 				TODO
 			</div>
 		</tab>
+		<tab heading="Plugin Activation" data-ng-controller="pluginActivationCtrl">
+			<div class="row">
+				<div class="col-xs-12">
+					Settings in this section are plugin settings which may also override system defaults.
+				</div>
+			</div>
+			<h3>Analyzers</h3>
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Plugin Name</th>
+						<th>Description</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="analyzer in analyzers">
+						<td>{{analyzer.name}}</td>
+						<td>{{analyzer.description}}</td>
+						<td><button class="btn btn-success" ng-click="status.open = !status.open">Toggle last panel</button></td>
+					</tr>
+				</tbody>
+			</table>
+			<h3>Evaluators</h3>
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Plugin Name</th>
+						<th>Description</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="evaluator in evaluators">
+						<td>{{evaluator.name}}</td>
+						<td>{{evaluator.description}}</td>
+						<td><button class="btn btn-danger" ng-click="status.open = !status.open">Toggle last panel</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</tab>
 		<tab heading="Plugin Settings">
 			<p>Settings in this section are plugin settings which may also override system defaults.</p>
 			<div class="row" data-ng-controller="pluginSettingsCtrl">

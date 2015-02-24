@@ -50,135 +50,135 @@ import com.puresoltechnologies.versioning.Version;
 @Remote(Evaluator.class)
 public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 
-	public static final String ID = IntermediateCoCoMoEvaluator.class.getName();
+    public static final String ID = IntermediateCoCoMoEvaluator.class.getName();
 
-	public static final String NAME = "Intermediate COst COnstruction MOdel";
+    public static final String NAME = "Intermediate COst COnstruction MOdel";
 
-	public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
+    public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
 
-	public static final String DESCRIPTION = "The Intermediate COst COnstruction MOdel is a simple way "
-			+ "to estimate the construction costs of a "
-			+ "software project by couting the physical lines of code.";
+    public static final String DESCRIPTION = "The Intermediate COst COnstruction MOdel is a simple way "
+	    + "to estimate the construction costs of a "
+	    + "software project by couting the physical lines of code.";
 
-	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<>();
-	public static final Set<String> DEPENDENCIES = new HashSet<>();
-	static {
-		DEPENDENCIES.add(SLOCMetricCalculator.ID);
-	}
+    public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<>();
+    public static final Set<String> DEPENDENCIES = new HashSet<>();
+    static {
+	DEPENDENCIES.add(SLOCMetricCalculator.ID);
+    }
 
-	private static final Set<ConfigurationParameter<?>> CONFIGURATION_PARAMETERS = new HashSet<>();
+    private static final Set<ConfigurationParameter<?>> CONFIGURATION_PARAMETERS = new HashSet<>();
 
-	private SoftwareProject project = SoftwareProject.SEMI_DETACHED;
-	private int averageSalary = 56286;
-	private String currency = "USD";
+    private SoftwareProject project = SoftwareProject.SEMI_DETACHED;
+    private int averageSalary = 56286;
+    private String currency = "USD";
 
-	public IntermediateCoCoMoEvaluator() {
-		super(ID, NAME, DESCRIPTION);
-	}
+    public IntermediateCoCoMoEvaluator() {
+	super(ID, NAME, DESCRIPTION);
+    }
 
-	@Override
-	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-		return CONFIGURATION_PARAMETERS;
-	}
+    @Override
+    public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	return CONFIGURATION_PARAMETERS;
+    }
 
-	@Override
-	public Set<Parameter<?>> getParameters() {
-		return IntermediateCoCoMoEvaluatorParameter.ALL;
-	}
+    @Override
+    public Set<Parameter<?>> getParameters() {
+	return IntermediateCoCoMoEvaluatorParameter.ALL;
+    }
 
-	public void setComplexity(SoftwareProject project) {
-		this.project = project;
-	}
+    public void setComplexity(SoftwareProject project) {
+	this.project = project;
+    }
 
-	public void setAverageSalary(int averageSalary, String currency) {
-		this.averageSalary = averageSalary;
-		this.currency = currency;
-	}
+    public void setAverageSalary(int averageSalary, String currency) {
+	this.averageSalary = averageSalary;
+	this.currency = currency;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return EVALUATED_QUALITY_CHARACTERISTICS;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 
-	@Override
-	protected FileMetrics processFile(AnalysisRun analysisRun,
-			CodeAnalysis analysis) throws EvaluationStoreException {
-		HashId hashId = analysis.getAnalysisInformation().getHashId();
-		EvaluatorStore evaluatorStore = getEvaluatorStore();
-		if (evaluatorStore.hasFileResults(hashId, SLOCMetricCalculator.ID)) {
-			GenericFileMetrics slocResults = evaluatorStore.readFileResults(
-					hashId, SLOCMetricCalculator.ID);
-			SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
-					hashId).getSourceCodeLocation();
-			for (GenericCodeRangeMetrics results : slocResults.getValues()) {
-				if (results.getCodeRangeType().equals(CodeRangeType.FILE)) {
-					int phyLoc = results.getValue(
-							SLOCEvaluatorParameter.PHY_LOC).getValue();
-					IntermediateCoCoMoFileResults fileResults = new IntermediateCoCoMoFileResults(
-							IntermediateCoCoMoEvaluator.ID, hashId,
-							sourceCodeLocation, new Date());
-					fileResults.setAverageSalary(averageSalary, currency);
-					fileResults.setProject(project);
-					fileResults.setSloc(phyLoc);
-					return fileResults;
-				}
-			}
+    @Override
+    protected FileMetrics processFile(AnalysisRun analysisRun,
+	    CodeAnalysis analysis) throws EvaluationStoreException {
+	HashId hashId = analysis.getAnalysisInformation().getHashId();
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
+	if (evaluatorStore.hasFileResults(hashId, SLOCMetricCalculator.ID)) {
+	    GenericFileMetrics slocResults = evaluatorStore.readFileResults(
+		    hashId, SLOCMetricCalculator.ID);
+	    SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
+		    hashId).getSourceCodeLocation();
+	    for (GenericCodeRangeMetrics results : slocResults.getValues()) {
+		if (results.getCodeRangeType().equals(CodeRangeType.FILE)) {
+		    int phyLoc = results.getValue(
+			    SLOCEvaluatorParameter.PHY_LOC).getValue();
+		    IntermediateCoCoMoFileResults fileResults = new IntermediateCoCoMoFileResults(
+			    IntermediateCoCoMoEvaluator.ID, hashId,
+			    sourceCodeLocation, new Date());
+		    fileResults.setAverageSalary(averageSalary, currency);
+		    fileResults.setProject(project);
+		    fileResults.setSloc(phyLoc);
+		    return fileResults;
 		}
-		return null;
+	    }
 	}
+	return null;
+    }
 
-	@Override
-	protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
-			AnalysisFileTree directory) throws InterruptedException,
-			EvaluationStoreException {
-		int phyLoc = 0;
-		EvaluatorStore evaluatorStore = getEvaluatorStore();
-		for (AnalysisFileTree child : directory.getChildren()) {
-			HashId hashId = child.getHashId();
-			if (child.isFile()) {
-				if (evaluatorStore.hasFileResults(hashId, getInformation()
-						.getId())) {
-					GenericFileMetrics fileResults = evaluatorStore
-							.readFileResults(hashId, getInformation().getId());
-					for (GenericCodeRangeMetrics metrics : fileResults
-							.getValues()) {
-						if (metrics.getCodeRangeType().equals(
-								CodeRangeType.FILE)) {
-							phyLoc += metrics.getValue(
-									SLOCEvaluatorParameter.PHY_LOC).getValue();
-							break;
-						}
-					}
-				}
-			} else {
-				if (evaluatorStore.hasDirectoryResults(hashId, getInformation()
-						.getId())) {
-					GenericDirectoryMetrics directoryResults = evaluatorStore
-							.readDirectoryResults(hashId, getInformation()
-									.getId());
-					phyLoc += (Integer) directoryResults.getValues()
-							.get(SLOCEvaluatorParameter.PHY_LOC.getName())
-							.getValue();
-				}
+    @Override
+    protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
+	    AnalysisFileTree directory) throws InterruptedException,
+	    EvaluationStoreException {
+	int phyLoc = 0;
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
+	for (AnalysisFileTree child : directory.getChildren()) {
+	    HashId hashId = child.getHashId();
+	    if (child.isFile()) {
+		if (evaluatorStore.hasFileResults(hashId, getInformation()
+			.getId())) {
+		    GenericFileMetrics fileResults = evaluatorStore
+			    .readFileResults(hashId, getInformation().getId());
+		    for (GenericCodeRangeMetrics metrics : fileResults
+			    .getValues()) {
+			if (metrics.getCodeRangeType().equals(
+				CodeRangeType.FILE)) {
+			    phyLoc += metrics.getValue(
+				    SLOCEvaluatorParameter.PHY_LOC).getValue();
+			    break;
 			}
+		    }
 		}
-		IntermediateCoCoMoDirectoryResults directoryResults = new IntermediateCoCoMoDirectoryResults(
-				IntermediateCoCoMoEvaluator.ID, directory.getHashId(),
-				new Date());
-		directoryResults.setAverageSalary(averageSalary, currency);
-		directoryResults.setProject(project);
-		directoryResults.setSloc(phyLoc);
-		return directoryResults;
+	    } else {
+		if (evaluatorStore.hasDirectoryResults(hashId, getInformation()
+			.getId())) {
+		    GenericDirectoryMetrics directoryResults = evaluatorStore
+			    .readDirectoryResults(hashId, getInformation()
+				    .getId());
+		    phyLoc += (Integer) directoryResults.getValues()
+			    .get(SLOCEvaluatorParameter.PHY_LOC.getName())
+			    .getValue();
+		}
+	    }
 	}
+	IntermediateCoCoMoDirectoryResults directoryResults = new IntermediateCoCoMoDirectoryResults(
+		IntermediateCoCoMoEvaluator.ID, directory.getHashId(),
+		new Date());
+	directoryResults.setAverageSalary(averageSalary, currency);
+	directoryResults.setProject(project);
+	directoryResults.setSloc(phyLoc);
+	return directoryResults;
+    }
 
-	@Override
-	protected DirectoryMetrics processProject(AnalysisRun analysisRun,
-			boolean enableReevaluation) throws InterruptedException,
-			EvaluationStoreException {
-		AnalysisFileTree directory = analysisRun.getFileTree();
-		return processDirectory(analysisRun, directory);
-	}
+    @Override
+    protected DirectoryMetrics processProject(AnalysisRun analysisRun,
+	    boolean enableReevaluation) throws InterruptedException,
+	    EvaluationStoreException {
+	AnalysisFileTree directory = analysisRun.getFileTree();
+	return processDirectory(analysisRun, directory);
+    }
 }

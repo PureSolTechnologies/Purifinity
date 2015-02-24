@@ -13,9 +13,9 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
  * 
  */
 public interface ProgrammingLanguageAnalyzer extends ProgrammingLanguage,
-		AnalyzerStore, Configurable {
+	AnalyzerStore, Configurable {
 
-	public CodeAnalysis analyze(SourceCodeLocation sourceCodeLocation)
-			throws AnalyzerException, IOException;
+    public CodeAnalysis analyze(SourceCodeLocation sourceCodeLocation)
+	    throws AnalyzerException, IOException;
 
 }

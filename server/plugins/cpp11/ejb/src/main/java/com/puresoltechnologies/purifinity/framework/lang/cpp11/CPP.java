@@ -15,79 +15,84 @@ import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.domain.HalsteadSymbol;
 import com.puresoltechnologies.purifinity.analysis.domain.SLOCType;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.server.common.plugins.PluginActivatedParameter;
 
 public class CPP extends AbstractProgrammingLanguageAnalyzer {
 
-	public static final String[] FILE_SUFFIXES = { ".hpp", ".hxx", ".cpp",
-			".cxx" };
+    public static final String[] FILE_SUFFIXES = { ".hpp", ".hxx", ".cpp",
+	    ".cxx" };
 
-	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
-	private static CPP instance = null;
+    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+    static {
+	configurationParameters.add(new PluginActivatedParameter());
+    }
 
-	public static CPP getInstance() {
-		if (instance == null) {
-			createInstance();
-		}
-		return instance;
+    private static CPP instance = null;
+
+    public static CPP getInstance() {
+	if (instance == null) {
+	    createInstance();
 	}
+	return instance;
+    }
 
-	private static synchronized void createInstance() {
-		if (instance == null) {
-			instance = new CPP();
-		}
+    private static synchronized void createInstance() {
+	if (instance == null) {
+	    instance = new CPP();
 	}
+    }
 
-	private CPP() {
-		super("C++", "11");
-	}
+    private CPP() {
+	super("C++", "11");
+    }
 
-	@Override
-	public LanguageGrammar getGrammar() {
-		return null;
-	}
+    @Override
+    public LanguageGrammar getGrammar() {
+	return null;
+    }
 
-	@Override
-	protected String[] getValidFileSuffixes() {
-		return FILE_SUFFIXES;
-	}
+    @Override
+    protected String[] getValidFileSuffixes() {
+	return FILE_SUFFIXES;
+    }
 
-	@Override
-	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-		return configurationParameters;
-	}
+    @Override
+    public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	return configurationParameters;
+    }
 
-	@Override
-	public CodeAnalyzer createAnalyser(SourceCodeLocation source) {
-		return null;
-	}
+    @Override
+    public CodeAnalyzer createAnalyser(SourceCodeLocation source) {
+	return null;
+    }
 
-	@Override
-	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-		return null;
-	}
+    @Override
+    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+	return null;
+    }
 
-	@Override
-	public SLOCType getType(AbstractTerminal token) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public SLOCType getType(AbstractTerminal token) {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
-	@Override
-	public boolean cascadingNode(UniversalSyntaxTree node) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean cascadingNode(UniversalSyntaxTree node) {
+	// TODO Auto-generated method stub
+	return false;
+    }
 
-	@Override
-	public int increasesCyclomaticComplexityBy(AbstractProduction production) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int increasesCyclomaticComplexityBy(AbstractProduction production) {
+	// TODO Auto-generated method stub
+	return 0;
+    }
 
-	@Override
-	public HalsteadSymbol getHalsteadResult(AbstractTerminal node) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public HalsteadSymbol getHalsteadResult(AbstractTerminal node) {
+	// TODO Auto-generated method stub
+	return null;
+    }
 
 }

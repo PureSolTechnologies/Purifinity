@@ -21,20 +21,20 @@ public interface Configurable {
 	 * @return A {@link Set} of {@link ConfigurationParameter} is returned
 	 *         specifying the parameters for configuration.
 	 */
-	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters();
+	public Set<ConfigurationParameter<?>> getConfigurationParameters();
 
 	/**
 	 * This method is used to set a parameter in the class.
 	 * 
 	 * @param parameter
 	 *            is the {@link ConfigurationParameter} retrieved from
-	 *            {@link #getAvailableConfigurationParameters()}.
+	 *            {@link #getConfigurationParameters()}.
 	 * @param value
 	 *            is the value to be set.
 	 * @throws IllegalArgumentException
 	 *             may be thrown if the parameter does not fit the list of
 	 *             parameter retieved from
-	 *             {@link #getAvailableConfigurationParameters()}, but this is
+	 *             {@link #getConfigurationParameters()}, but this is
 	 *             up to the actual implementation.
 	 */
 	public <T> void setConfigurationParameter(
@@ -45,7 +45,7 @@ public interface Configurable {
 	 * 
 	 * @param parameter
 	 *            is the {@link ConfigurationParameter} retrieved from
-	 *            {@link #getAvailableConfigurationParameters()}.
+	 *            {@link #getConfigurationParameters()}.
 	 * @return The value which was set by
 	 *         {@link #setConfigurationParameter(ConfigurationParameter, Object)}
 	 *         is returned. If no value (or null) was set the default value of
@@ -53,7 +53,7 @@ public interface Configurable {
 	 * @throws IllegalArgumentException
 	 *             may be thrown if the parameter does not fit the list of
 	 *             parameter retieved from
-	 *             {@link #getAvailableConfigurationParameters()}, but this is
+	 *             {@link #getConfigurationParameters()}, but this is
 	 *             up to the actual implementation.
 	 */
 	public <T> T getConfigurationParameter(ConfigurationParameter<T> parameter);

@@ -35,4 +35,16 @@ public class RepositoryServiceBean implements RepositoryService {
     public Collection<RepositoryTypeServiceInformation> getRepositoryTypes() {
 	return repositoryTypePluginService.getServices();
     }
+
+    @Override
+    public RepositoryTypeServiceInformation getRepositoryType(
+	    String repositoryTypeId) {
+	for (RepositoryTypeServiceInformation information : repositoryTypePluginService
+		.getServices()) {
+	    if (information.getId().equals(repositoryTypeId)) {
+		return information;
+	    }
+	}
+	return null;
+    }
 }

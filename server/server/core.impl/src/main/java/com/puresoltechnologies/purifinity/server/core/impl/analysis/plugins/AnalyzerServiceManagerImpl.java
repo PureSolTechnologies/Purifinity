@@ -20,54 +20,63 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 @Singleton
 @EJBFacade
 public class AnalyzerServiceManagerImpl extends
-		AbstractServiceManager<AnalyzerServiceInformation> implements
-		AnalyzerServiceManager, AnalyzerServiceManagerRemote {
+	AbstractServiceManager<AnalyzerServiceInformation> implements
+	AnalyzerServiceManager, AnalyzerServiceManagerRemote {
 
-	@Inject
-	private PreferencesStore preferencesStore;
+    @Inject
+    private PreferencesStore preferencesStore;
 
-	private final Map<String, Boolean> analyzerActivations = new HashMap<>();
+    private final Map<String, Boolean> analyzerActivations = new HashMap<>();
 
-	public AnalyzerServiceManagerImpl() {
-		super("Analyzer Service Manager");
+    public AnalyzerServiceManagerImpl() {
+	super("Analyzer Service Manager");
+    }
+
+    @Override
+    public ProgrammingLanguageAnalyzer createInstance(String jndi) {
+	return JndiUtils.createRemoteEJBInstance(
+		ProgrammingLanguageAnalyzer.class, jndi);
+    }
+
+    @Override
+    public AnalyzerServiceInformation findByName(String languageName,
+	    String languageVersion) {
+	for (AnalyzerServiceInformation analyzerServiceInformation : getServices()) {
+	    if (analyzerServiceInformation.getName().equals(languageName)
+		    && analyzerServiceInformation.getVersion().equals(
+			    languageVersion)) {
+		return analyzerServiceInformation;
+	    }
 	}
+	return null;
+    }
 
-	@Override
-	public ProgrammingLanguageAnalyzer createInstance(String jndi) {
-		return JndiUtils.createRemoteEJBInstance(
-				ProgrammingLanguageAnalyzer.class, jndi);
+    @Override
+    @Lock(LockType.READ)
+    public boolean isActive(String analyzerId) {
+	Boolean active = analyzerActivations.get(analyzerId);
+	if (active != null) {
+	    return active;
 	}
+	active = preferencesStore.isActive(analyzerId);
+	analyzerActivations.put(analyzerId, active);
+	return active;
+    }
 
-	@Override
-	public AnalyzerServiceInformation findByName(String languageName,
-			String languageVersion) {
-		for (AnalyzerServiceInformation analyzerServiceInformation : getServices()) {
-			if (analyzerServiceInformation.getName().equals(languageName)
-					&& analyzerServiceInformation.getVersion().equals(
-							languageVersion)) {
-				return analyzerServiceInformation;
-			}
-		}
-		return null;
+    @Override
+    @Lock(LockType.WRITE)
+    public void setActive(String analyzerId, boolean active) {
+	preferencesStore.setServiceActive(analyzerId, active);
+	analyzerActivations.put(analyzerId, active);
+    }
+
+    @Override
+    public ProgrammingLanguageAnalyzer createInstanceById(String analyzerId) {
+	for (AnalyzerServiceInformation analyzer : getServices()) {
+	    if (analyzer.getId().equals(analyzerId)) {
+		return createInstance(analyzer.getJndiName());
+	    }
 	}
-
-	@Override
-	@Lock(LockType.READ)
-	public boolean isActive(String analyzerId) {
-		Boolean active = analyzerActivations.get(analyzerId);
-		if (active != null) {
-			return active;
-		}
-		active = preferencesStore.isActive(analyzerId);
-		analyzerActivations.put(analyzerId, active);
-		return active;
-	}
-
-	@Override
-	@Lock(LockType.WRITE)
-	public void setActive(String analyzerId, boolean active) {
-		preferencesStore.setServiceActive(analyzerId, active);
-		analyzerActivations.put(analyzerId, active);
-	}
-
+	return null;
+    }
 }

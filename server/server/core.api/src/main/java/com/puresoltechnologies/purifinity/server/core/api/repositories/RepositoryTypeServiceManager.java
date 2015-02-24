@@ -7,6 +7,6 @@ import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryT
 
 @Local
 public interface RepositoryTypeServiceManager extends
-		ServiceManager<RepositoryTypeServiceInformation> {
+	ServiceManager<RepositoryTypeServiceInformation> {
 
 }

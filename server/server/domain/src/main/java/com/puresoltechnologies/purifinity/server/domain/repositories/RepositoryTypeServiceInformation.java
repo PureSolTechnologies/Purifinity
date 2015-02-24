@@ -18,7 +18,7 @@ public class RepositoryTypeServiceInformation implements ServiceInformation {
 
     private static final long serialVersionUID = 1607123633941143239L;
 
-    private final String className;
+    private final String id;
     private final String name;
     private final String description;
     private final Map<String, Parameter<?>> parameters = new LinkedHashMap<>();
@@ -28,7 +28,7 @@ public class RepositoryTypeServiceInformation implements ServiceInformation {
     private final String runURLPath;
 
     public RepositoryTypeServiceInformation() {
-	className = null;
+	id = null;
 	name = null;
 	description = null;
 	serviceURLPath = null;
@@ -37,8 +37,7 @@ public class RepositoryTypeServiceInformation implements ServiceInformation {
 	runURLPath = null;
     }
 
-    public RepositoryTypeServiceInformation(
-	    @JsonProperty("className") String className,
+    public RepositoryTypeServiceInformation(@JsonProperty("id") String id,
 	    @JsonProperty("name") String name,
 	    @JsonProperty("description") String description,
 	    @JsonProperty("parameters") Map<String, Parameter<?>> parameters,
@@ -47,7 +46,7 @@ public class RepositoryTypeServiceInformation implements ServiceInformation {
 	    @JsonProperty("projectURLPath") String projectURLPath,
 	    @JsonProperty("runURLPath") String runURLPath) {
 	super();
-	this.className = className;
+	this.id = id;
 	this.name = name;
 	this.description = description;
 	this.parameters.putAll(parameters);
@@ -57,8 +56,8 @@ public class RepositoryTypeServiceInformation implements ServiceInformation {
 	this.runURLPath = runURLPath;
     }
 
-    public String getClassName() {
-	return className;
+    public String getId() {
+	return id;
     }
 
     public String getName() {
@@ -97,8 +96,7 @@ public class RepositoryTypeServiceInformation implements ServiceInformation {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result
-		+ ((className == null) ? 0 : className.hashCode());
+	result = prime * result + ((id == null) ? 0 : id.hashCode());
 	result = prime
 		* result
 		+ ((configurationURLPath == null) ? 0 : configurationURLPath
@@ -126,10 +124,10 @@ public class RepositoryTypeServiceInformation implements ServiceInformation {
 	if (getClass() != obj.getClass())
 	    return false;
 	RepositoryTypeServiceInformation other = (RepositoryTypeServiceInformation) obj;
-	if (className == null) {
-	    if (other.className != null)
+	if (id == null) {
+	    if (other.id != null)
 		return false;
-	} else if (!className.equals(other.className))
+	} else if (!id.equals(other.id))
 	    return false;
 	if (configurationURLPath == null) {
 	    if (other.configurationURLPath != null)
@@ -171,6 +169,6 @@ public class RepositoryTypeServiceInformation implements ServiceInformation {
 
     @Override
     public String toString() {
-	return name + " (" + className + ")";
+	return name + " (" + id + ")";
     }
 }

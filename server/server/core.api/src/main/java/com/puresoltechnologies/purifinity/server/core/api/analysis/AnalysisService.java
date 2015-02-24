@@ -1,9 +1,11 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.jms.JMSException;
 
+import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 
 /**
@@ -17,5 +19,11 @@ public interface AnalysisService {
     public void triggerNewRun(String projectId) throws JMSException;
 
     public Collection<AnalyzerServiceInformation> getAnalyzers();
+
+    public AnalyzerServiceInformation getAnalyzer(String analyzerId);
+
+    public Set<ConfigurationParameter<?>> getConfiguration(String analyzerId);
+
+    public void setActive(String analyzerId, boolean enabled);
 
 }

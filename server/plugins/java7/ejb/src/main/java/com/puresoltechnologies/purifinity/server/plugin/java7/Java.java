@@ -21,6 +21,7 @@ import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyz
 import com.puresoltechnologies.purifinity.analysis.domain.HalsteadSymbol;
 import com.puresoltechnologies.purifinity.analysis.domain.SLOCType;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.server.common.plugins.PluginActivatedParameter;
 import com.puresoltechnologies.purifinity.server.plugin.java7.grammar.JavaGrammar;
 import com.puresoltechnologies.purifinity.server.plugin.java7.metrics.CodeDepthMetricImpl;
 import com.puresoltechnologies.purifinity.server.plugin.java7.metrics.HalsteadMetricImpl;
@@ -40,79 +41,82 @@ import com.puresoltechnologies.versioning.Version;
 @Remote(ProgrammingLanguageAnalyzer.class)
 public class Java extends AbstractProgrammingLanguageAnalyzer {
 
-	public static final String ID = Java.class.getName();
-	public static final String NAME = "Java";
-	public static final String VERSION = "7";
-	public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
+    public static final String ID = Java.class.getName();
+    public static final String NAME = "Java";
+    public static final String VERSION = "7";
+    public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
 
-	public static final String[] FILE_SUFFIXES = { ".java" };
+    public static final String[] FILE_SUFFIXES = { ".java" };
 
-	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+    static {
+	configurationParameters.add(new PluginActivatedParameter());
+    }
 
-	public Java() {
-		super(NAME, VERSION);
+    public Java() {
+	super(NAME, VERSION);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String[] getValidFileSuffixes() {
+	return FILE_SUFFIXES;
+    }
+
+    @Override
+    public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	return configurationParameters;
+    }
+
+    @Override
+    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+	try {
+	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+		    file));
+	    try {
+		return (CodeAnalyzer) ois.readObject();
+	    } finally {
+		ois.close();
+	    }
+	} catch (ClassNotFoundException e) {
+	    /*
+	     * XXX This needs to be null to go on with the language try out...
+	     * :-(
+	     */
+	    return null;
 	}
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	protected String[] getValidFileSuffixes() {
-		return FILE_SUFFIXES;
-	}
+    @Override
+    public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
+	return new JavaAnalyzer(sourceCodeLocation);
+    }
 
-	@Override
-	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-		return configurationParameters;
-	}
+    @Override
+    public LanguageGrammar getGrammar() {
+	return JavaGrammar.getInstance();
+    }
 
-	@Override
-	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-		try {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
-					file));
-			try {
-				return (CodeAnalyzer) ois.readObject();
-			} finally {
-				ois.close();
-			}
-		} catch (ClassNotFoundException e) {
-			/*
-			 * XXX This needs to be null to go on with the language try out...
-			 * :-(
-			 */
-			return null;
-		}
-	}
+    @Override
+    public SLOCType getType(AbstractTerminal token) {
+	return new SLOCMetricImpl().getType(token);
+    }
 
-	@Override
-	public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
-		return new JavaAnalyzer(sourceCodeLocation);
-	}
+    @Override
+    public boolean cascadingNode(UniversalSyntaxTree node) {
+	return new CodeDepthMetricImpl().cascadingNode(node);
+    }
 
-	@Override
-	public LanguageGrammar getGrammar() {
-		return JavaGrammar.getInstance();
-	}
+    @Override
+    public int increasesCyclomaticComplexityBy(AbstractProduction production) {
+	return new McCabeMetricImpl()
+		.increasesCyclomaticComplexityBy(production);
+    }
 
-	@Override
-	public SLOCType getType(AbstractTerminal token) {
-		return new SLOCMetricImpl().getType(token);
-	}
-
-	@Override
-	public boolean cascadingNode(UniversalSyntaxTree node) {
-		return new CodeDepthMetricImpl().cascadingNode(node);
-	}
-
-	@Override
-	public int increasesCyclomaticComplexityBy(AbstractProduction production) {
-		return new McCabeMetricImpl()
-				.increasesCyclomaticComplexityBy(production);
-	}
-
-	@Override
-	public HalsteadSymbol getHalsteadResult(AbstractTerminal node) {
-		return new HalsteadMetricImpl().getHalsteadResult(node);
-	}
+    @Override
+    public HalsteadSymbol getHalsteadResult(AbstractTerminal node) {
+	return new HalsteadMetricImpl().getHalsteadResult(node);
+    }
 }

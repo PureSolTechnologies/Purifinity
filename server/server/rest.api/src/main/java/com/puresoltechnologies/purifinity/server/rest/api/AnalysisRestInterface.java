@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.rest.api;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Set;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -10,6 +11,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 
 @Path("analysis")
@@ -24,5 +26,25 @@ public interface AnalysisRestInterface {
     @PUT
     @Path("projects/{project_id}")
     void triggerNewRun(@PathParam("project_id") String projectId);
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("analyzers/{id}")
+    public AnalyzerServiceInformation getAnalyzer(
+	    @PathParam("id") String analyzerId);
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("analyzers/{id}/configuration")
+    public Set<ConfigurationParameter<?>> getConfiguration(
+	    @PathParam("id") String analyzerId);
+
+    @PUT
+    @Path("analyzers/{id}/enable")
+    public void enable(@PathParam("id") String analyzerId);
+
+    @PUT
+    @Path("analyzers/{id}/disable")
+    public void disable(@PathParam("id") String analyzerId);
 
 }

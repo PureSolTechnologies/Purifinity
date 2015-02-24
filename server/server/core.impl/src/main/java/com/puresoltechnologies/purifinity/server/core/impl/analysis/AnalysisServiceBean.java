@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis;
 
 import java.util.Collection;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -10,6 +11,7 @@ import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 
+import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
@@ -58,5 +60,27 @@ public class AnalysisServiceBean implements AnalysisService {
     @Override
     public Collection<AnalyzerServiceInformation> getAnalyzers() {
 	return analyzerRegistration.getServices();
+    }
+
+    @Override
+    public AnalyzerServiceInformation getAnalyzer(String analyzerId) {
+	for (AnalyzerServiceInformation information : analyzerRegistration
+		.getServices()) {
+	    if (information.getId().equals(analyzerId)) {
+		return information;
+	    }
+	}
+	return null;
+    }
+
+    @Override
+    public Set<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
+	return analyzerRegistration.createInstanceById(analyzerId)
+		.getConfigurationParameters();
+    }
+
+    @Override
+    public void setActive(String analyzerId, boolean active) {
+	analyzerRegistration.setActive(analyzerId, active);
     }
 }

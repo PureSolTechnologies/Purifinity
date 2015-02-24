@@ -14,4 +14,7 @@ public interface RepositoryService {
 
     public Collection<RepositoryTypeServiceInformation> getRepositoryTypes();
 
+    public RepositoryTypeServiceInformation getRepositoryType(
+	    String repositoryTypeId);
+
 }

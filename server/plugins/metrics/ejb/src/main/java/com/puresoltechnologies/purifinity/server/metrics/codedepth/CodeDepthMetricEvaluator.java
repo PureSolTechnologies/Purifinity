@@ -46,112 +46,112 @@ import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator
 @Remote(Evaluator.class)
 public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 
-	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
 
-	@EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
-	private AnalyzerServiceManagerRemote analyzerServiceManager;
+    @EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
+    private AnalyzerServiceManagerRemote analyzerServiceManager;
 
-	public CodeDepthMetricEvaluator() {
-		super(CodeDepthMetric.ID, CodeDepthMetric.NAME,
-				CodeDepthMetric.DESCRIPTION);
+    public CodeDepthMetricEvaluator() {
+	super(CodeDepthMetric.ID, CodeDepthMetric.NAME,
+		CodeDepthMetric.DESCRIPTION);
+    }
+
+    @Override
+    public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	return configurationParameters;
+    }
+
+    @Override
+    public Set<Parameter<?>> getParameters() {
+	return CodeDepthMetricEvaluatorParameter.ALL;
+    }
+
+    @Override
+    protected FileMetrics processFile(AnalysisRun analysisRun,
+	    CodeAnalysis analysis) throws InterruptedException,
+	    UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
+	AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
+		.findByName(analysis.getLanguageName(),
+			analysis.getLanguageVersion());
+	ProgrammingLanguage language = analyzerServiceManager
+		.createInstance(analyzerServiceInformation.getJndiName());
+
+	HashId hashId = analysis.getAnalysisInformation().getHashId();
+	SourceCodeLocation sourceCodeLocation = analysisRun
+		.findTreeNode(hashId).getSourceCodeLocation();
+	CodeDepthFileResults results = new CodeDepthFileResults(
+		CodeDepthMetric.ID, hashId, sourceCodeLocation, new Date());
+	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+	    CodeDepthMetric metric = new CodeDepthMetric(analysisRun, language,
+		    codeRange);
+	    execute(metric);
+	    SourceCodeQuality quality = metric.getQuality();
+	    results.add(new CodeDepthResult(sourceCodeLocation, codeRange
+		    .getType(), codeRange.getCanonicalName(), metric
+		    .getMaxDepth(), quality));
 	}
+	return results;
+    }
 
-	@Override
-	public Set<ConfigurationParameter<?>> getAvailableConfigurationParameters() {
-		return configurationParameters;
-	}
+    @Override
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 
-	@Override
-	public Set<Parameter<?>> getParameters() {
-		return CodeDepthMetricEvaluatorParameter.ALL;
-	}
-
-	@Override
-	protected FileMetrics processFile(AnalysisRun analysisRun,
-			CodeAnalysis analysis) throws InterruptedException,
-			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-		AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
-				.findByName(analysis.getLanguageName(),
-						analysis.getLanguageVersion());
-		ProgrammingLanguage language = analyzerServiceManager
-				.createInstance(analyzerServiceInformation.getJndiName());
-
-		HashId hashId = analysis.getAnalysisInformation().getHashId();
-		SourceCodeLocation sourceCodeLocation = analysisRun
-				.findTreeNode(hashId).getSourceCodeLocation();
-		CodeDepthFileResults results = new CodeDepthFileResults(
-				CodeDepthMetric.ID, hashId, sourceCodeLocation, new Date());
-		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-			CodeDepthMetric metric = new CodeDepthMetric(analysisRun, language,
-					codeRange);
-			execute(metric);
-			SourceCodeQuality quality = metric.getQuality();
-			results.add(new CodeDepthResult(sourceCodeLocation, codeRange
-					.getType(), codeRange.getCanonicalName(), metric
-					.getMaxDepth(), quality));
+    @Override
+    protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
+	    AnalysisFileTree directory) throws InterruptedException,
+	    EvaluationStoreException {
+	CodeDepthDirectoryResults directoryResults = new CodeDepthDirectoryResults(
+		CodeDepthMetric.ID, directory.getHashId(), new Date(),
+		new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
+		directory.getName());
+	int maxDepth = 0;
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
+	for (AnalysisFileTree child : directory.getChildren()) {
+	    QualityLevel childLevel;
+	    if (child.isFile()) {
+		GenericFileMetrics fileResults = evaluatorStore
+			.readFileResults(child.getHashId(), CodeDepthMetric.ID);
+		if (fileResults == null) {
+		    continue;
 		}
-		return results;
-	}
-
-	@Override
-	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
-	}
-
-	@Override
-	protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
-			AnalysisFileTree directory) throws InterruptedException,
-			EvaluationStoreException {
-		CodeDepthDirectoryResults directoryResults = new CodeDepthDirectoryResults(
-				CodeDepthMetric.ID, directory.getHashId(), new Date(),
-				new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
-				directory.getName());
-		int maxDepth = 0;
-		EvaluatorStore evaluatorStore = getEvaluatorStore();
-		for (AnalysisFileTree child : directory.getChildren()) {
-			QualityLevel childLevel;
-			if (child.isFile()) {
-				GenericFileMetrics fileResults = evaluatorStore
-						.readFileResults(child.getHashId(), CodeDepthMetric.ID);
-				if (fileResults == null) {
-					continue;
-				}
-				childLevel = fileResults.getQualityLevel();
-				for (GenericCodeRangeMetrics result : fileResults.getValues()) {
-					maxDepth = Math
-							.max(maxDepth,
-									result.getValue(
-											CodeDepthMetricEvaluatorParameter.MAX_DEPTH)
-											.getValue());
-				}
-			} else {
-				GenericDirectoryMetrics childDirectoryResults = evaluatorStore
-						.readDirectoryResults(child.getHashId(),
-								CodeDepthMetric.ID);
-				if (childDirectoryResults == null) {
-					continue;
-				}
-				childLevel = childDirectoryResults.getQualityLevel();
-				maxDepth = Math
-						.max(maxDepth,
-								(Integer) childDirectoryResults
-										.getValues()
-										.get(CodeDepthMetricEvaluatorParameter.MAX_DEPTH
-												.getName()).getValue());
-			}
-			if (childLevel != null) {
-				directoryResults.addQualityLevel(childLevel);
-				directoryResults.setMaxDepth(maxDepth);
-			}
+		childLevel = fileResults.getQualityLevel();
+		for (GenericCodeRangeMetrics result : fileResults.getValues()) {
+		    maxDepth = Math
+			    .max(maxDepth,
+				    result.getValue(
+					    CodeDepthMetricEvaluatorParameter.MAX_DEPTH)
+					    .getValue());
 		}
-		return directoryResults;
+	    } else {
+		GenericDirectoryMetrics childDirectoryResults = evaluatorStore
+			.readDirectoryResults(child.getHashId(),
+				CodeDepthMetric.ID);
+		if (childDirectoryResults == null) {
+		    continue;
+		}
+		childLevel = childDirectoryResults.getQualityLevel();
+		maxDepth = Math
+			.max(maxDepth,
+				(Integer) childDirectoryResults
+					.getValues()
+					.get(CodeDepthMetricEvaluatorParameter.MAX_DEPTH
+						.getName()).getValue());
+	    }
+	    if (childLevel != null) {
+		directoryResults.addQualityLevel(childLevel);
+		directoryResults.setMaxDepth(maxDepth);
+	    }
 	}
+	return directoryResults;
+    }
 
-	@Override
-	protected DirectoryMetrics processProject(AnalysisRun analysisRun,
-			boolean enableReevaluation) throws InterruptedException,
-			EvaluationStoreException {
-		AnalysisFileTree directory = analysisRun.getFileTree();
-		return processDirectory(analysisRun, directory);
-	}
+    @Override
+    protected DirectoryMetrics processProject(AnalysisRun analysisRun,
+	    boolean enableReevaluation) throws InterruptedException,
+	    EvaluationStoreException {
+	AnalysisFileTree directory = analysisRun.getFileTree();
+	return processDirectory(analysisRun, directory);
+    }
 }

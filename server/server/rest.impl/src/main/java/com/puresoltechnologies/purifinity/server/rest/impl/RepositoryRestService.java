@@ -19,4 +19,10 @@ public class RepositoryRestService implements RepositoryRestInterface {
 	    throws IOException {
 	return repositoryService.getRepositoryTypes();
     }
+
+    @Override
+    public RepositoryTypeServiceInformation getRepository(
+	    String repositoryTypeId) {
+	return repositoryService.getRepositoryType(repositoryTypeId);
+    }
 }

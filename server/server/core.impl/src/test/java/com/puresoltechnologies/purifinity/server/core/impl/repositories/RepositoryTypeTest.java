@@ -56,7 +56,7 @@ public class RepositoryTypeTest {
 				.fromJSONString(serialized,
 						RepositoryTypeServiceInformation.class);
 		assertNotNull(deserialized);
-		assertEquals(repositoryType.getClassName(), deserialized.getClassName());
+		assertEquals(repositoryType.getId(), deserialized.getId());
 		assertEquals(repositoryType.getName(), deserialized.getName());
 		assertEquals(repositoryType.getDescription(),
 				deserialized.getDescription());

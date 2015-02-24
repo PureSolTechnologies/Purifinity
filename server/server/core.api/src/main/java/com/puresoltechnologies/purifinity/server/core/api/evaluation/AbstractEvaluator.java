@@ -129,7 +129,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 	@Override
 	public final <T> T getConfigurationParameter(
 			ConfigurationParameter<T> parameter) {
-		if (!getAvailableConfigurationParameters().contains(parameter)) {
+		if (!getConfigurationParameters().contains(parameter)) {
 			throw new IllegalArgumentException("The parameter '" + parameter
 					+ "' is not known.");
 		}
@@ -141,7 +141,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 	@Override
 	public final <T> void setConfigurationParameter(
 			ConfigurationParameter<T> parameter, T value) {
-		if (!getAvailableConfigurationParameters().contains(parameter)) {
+		if (!getConfigurationParameters().contains(parameter)) {
 			throw new IllegalArgumentException("The parameter '" + parameter
 					+ "' is not known.");
 		}
