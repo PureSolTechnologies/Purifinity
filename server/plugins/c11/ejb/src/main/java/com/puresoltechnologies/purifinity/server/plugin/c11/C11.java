@@ -44,9 +44,9 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 
     public static final String[] FILE_SUFFIXES = { ".h", ".c" };
 
-    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+    public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
     static {
-	configurationParameters.add(new PluginActivatedParameter());
+	PARAMETERS.add(new PluginActivatedParameter());
     }
 
     public C11() {
@@ -63,7 +63,7 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 
     @Override
     public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return configurationParameters;
+	return PARAMETERS;
     }
 
     @Override

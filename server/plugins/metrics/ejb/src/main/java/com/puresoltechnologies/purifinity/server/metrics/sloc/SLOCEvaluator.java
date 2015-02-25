@@ -2,7 +2,6 @@ package com.puresoltechnologies.purifinity.server.metrics.sloc;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -56,8 +55,6 @@ import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator
 @Remote(Evaluator.class)
 public class SLOCEvaluator extends AbstractMetricEvaluator {
 
-    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
-
     @EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
     private AnalyzerServiceManagerRemote analyzerServiceManager;
 
@@ -68,7 +65,7 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 
     @Override
     public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return configurationParameters;
+	return SLOCMetricCalculator.PARAMETERS;
     }
 
     @Override

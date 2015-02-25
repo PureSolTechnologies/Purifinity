@@ -4,17 +4,18 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Test;
 
+import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.math.JSONSerializer;
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
 
 public class RepositoryTypeServiceInformationTest {
 
@@ -30,8 +31,8 @@ public class RepositoryTypeServiceInformationTest {
 		String.class));
 	RepositoryTypeServiceInformation information = new RepositoryTypeServiceInformation(
 		"nameOfClass", "nameOfType", "descriptionOfType", parameters,
-		"serviceURLPath", "configurationURLPath", "projectURLPath",
-		"runURLPath");
+		new HashSet<ConfigurationParameter<?>>(), "serviceURLPath",
+		"configurationURLPath", "projectURLPath", "runURLPath");
 	String serialized = JSONSerializer.toJSONString(information);
 	System.out.println(serialized);
 	RepositoryTypeServiceInformation deserialized = JSONSerializer

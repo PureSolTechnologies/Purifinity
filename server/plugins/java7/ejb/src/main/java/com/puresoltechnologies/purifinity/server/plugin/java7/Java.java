@@ -48,9 +48,9 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 
     public static final String[] FILE_SUFFIXES = { ".java" };
 
-    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+    public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
     static {
-	configurationParameters.add(new PluginActivatedParameter());
+	PARAMETERS.add(new PluginActivatedParameter());
     }
 
     public Java() {
@@ -67,7 +67,7 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 
     @Override
     public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return configurationParameters;
+	return PARAMETERS;
     }
 
     @Override

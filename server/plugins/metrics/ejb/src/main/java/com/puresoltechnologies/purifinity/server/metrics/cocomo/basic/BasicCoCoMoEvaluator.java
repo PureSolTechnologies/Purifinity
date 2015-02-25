@@ -67,7 +67,7 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 	DEPENDENCIES.add(SLOCMetricCalculator.ID);
     }
 
-    private static final Set<ConfigurationParameter<?>> CONFIGURATION_PARAMETERS = new HashSet<>();
+    public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
 
     private SoftwareProject complexity = SoftwareProject.LOW;
     private int averageSalary = 56286;
@@ -80,7 +80,7 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 
     @Override
     public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return CONFIGURATION_PARAMETERS;
+	return PARAMETERS;
     }
 
     @Override

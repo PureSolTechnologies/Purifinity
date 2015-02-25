@@ -49,6 +49,7 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
     public static final String NAME = "Maintainability Index";
     public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
     public static final String DESCRIPTION = "Maintainability Index calculation.";
+    public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
     public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
     static {
 	EVALUATED_QUALITY_CHARACTERISTICS
@@ -65,15 +66,13 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 	DEPENDENCIES.add(HalsteadMetric.ID);
     }
 
-    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
-
     public MaintainabilityIndexEvaluator() {
 	super(ID, NAME, DESCRIPTION);
     }
 
     @Override
     public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return configurationParameters;
+	return PARAMETERS;
     }
 
     @Override

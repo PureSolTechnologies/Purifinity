@@ -13,7 +13,7 @@
 		<purifinity.api.version>${project.version}</purifinity.api.version>
 		<commons.version>0.5.0-SNAPSHOT</commons.version>
 		<parsers.version>0.4.0-SNAPSHOT</parsers.version>
-		<genesis.version>0.1.1</genesis.version>
+		<genesis.version>0.2.0-SNAPSHOT</genesis.version>
 		<graphs.version>0.4.0</graphs.version>
 
 		<!-- Databases -->

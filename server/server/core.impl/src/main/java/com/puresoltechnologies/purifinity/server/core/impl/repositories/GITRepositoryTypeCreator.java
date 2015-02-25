@@ -1,8 +1,10 @@
 package com.puresoltechnologies.purifinity.server.core.impl.repositories;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
@@ -11,28 +13,31 @@ import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryT
 
 public class GITRepositoryTypeCreator {
 
-	public static RepositoryTypeServiceInformation create() {
-		Map<String, Parameter<?>> parameters = new LinkedHashMap<>();
-		parameters.put("Host", new ParameterWithArbitraryUnit<>("host", "",
+    public static RepositoryTypeServiceInformation create() {
+	Map<String, Parameter<?>> parameters = new LinkedHashMap<>();
+	parameters.put("Host", new ParameterWithArbitraryUnit<>("host", "",
+		LevelOfMeasurement.NOMINAL,
+		"The host where the repository is to be retrieved from.",
+		String.class));
+	parameters
+		.put("Port",
+			new ParameterWithArbitraryUnit<>(
+				"port",
+				"",
 				LevelOfMeasurement.NOMINAL,
-				"The host where the repository is to be retrieved from.",
-				String.class));
-		parameters
-				.put("Port",
-						new ParameterWithArbitraryUnit<>(
-								"port",
-								"",
-								LevelOfMeasurement.NOMINAL,
-								"The port of the host where the repository is to be retrieved from.",
-								Integer.class));
-		parameters.put("User", new ParameterWithArbitraryUnit<>("user", "",
-				LevelOfMeasurement.NOMINAL,
-				"The user to be used for login into the host.", String.class));
-		parameters.put("Password", new ParameterWithArbitraryUnit<>("password",
-				"", LevelOfMeasurement.NOMINAL,
-				"The password of the user to be used for login into the host.",
-				String.class));
-		return new RepositoryTypeServiceInformation(GITRepositoryLocation.class.getName(), "GIT",
-				"Remote GIT repository.", parameters, null, null, null, null);
-	}
+				"The port of the host where the repository is to be retrieved from.",
+				Integer.class));
+	parameters.put("User", new ParameterWithArbitraryUnit<>("user", "",
+		LevelOfMeasurement.NOMINAL,
+		"The user to be used for login into the host.", String.class));
+	parameters.put("Password", new ParameterWithArbitraryUnit<>("password",
+		"", LevelOfMeasurement.NOMINAL,
+		"The password of the user to be used for login into the host.",
+		String.class));
+	return new RepositoryTypeServiceInformation(
+		GITRepositoryLocation.class.getName(), "GIT",
+		"Remote GIT repository.", parameters,
+		new HashSet<ConfigurationParameter<?>>(), null, null, null,
+		null);
+    }
 }

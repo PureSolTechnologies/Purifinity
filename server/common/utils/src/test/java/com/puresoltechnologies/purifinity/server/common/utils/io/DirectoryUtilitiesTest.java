@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.framework.commons.utils.io;
+package com.puresoltechnologies.purifinity.server.common.utils.io;
 
 import static org.junit.Assert.assertTrue;
 

@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.metrics.mccabe;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -42,8 +41,6 @@ import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator
 @Remote(Evaluator.class)
 public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 
-    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
-
     @EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
     private AnalyzerServiceManagerRemote analyzerServiceManager;
 
@@ -53,7 +50,7 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 
     @Override
     public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return configurationParameters;
+	return McCabeMetric.PARAMETERS;
     }
 
     @Override

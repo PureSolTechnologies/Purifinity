@@ -1,10 +1,13 @@
 package com.puresoltechnologies.purifinity.server.domain.repositories;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonProperty;
 
+import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.server.common.plugins.ServiceInformation;
 
@@ -22,6 +25,7 @@ public class RepositoryTypeServiceInformation implements ServiceInformation {
     private final String name;
     private final String description;
     private final Map<String, Parameter<?>> parameters = new LinkedHashMap<>();
+    private final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
     private final String serviceURLPath;
     private final String configurationURLPath;
     private final String projectURLPath;
@@ -37,10 +41,12 @@ public class RepositoryTypeServiceInformation implements ServiceInformation {
 	runURLPath = null;
     }
 
-    public RepositoryTypeServiceInformation(@JsonProperty("id") String id,
+    public RepositoryTypeServiceInformation(
+	    @JsonProperty("id") String id,
 	    @JsonProperty("name") String name,
 	    @JsonProperty("description") String description,
 	    @JsonProperty("parameters") Map<String, Parameter<?>> parameters,
+	    @JsonProperty("configurationParameters") Set<ConfigurationParameter<?>> configurationParameters,
 	    @JsonProperty("serviceURLPath") String serviceURLPath,
 	    @JsonProperty("configurationURLPath") String configurationURLPath,
 	    @JsonProperty("projectURLPath") String projectURLPath,
@@ -50,6 +56,7 @@ public class RepositoryTypeServiceInformation implements ServiceInformation {
 	this.name = name;
 	this.description = description;
 	this.parameters.putAll(parameters);
+	this.configurationParameters.addAll(configurationParameters);
 	this.serviceURLPath = serviceURLPath;
 	this.configurationURLPath = configurationURLPath;
 	this.projectURLPath = projectURLPath;
@@ -70,6 +77,11 @@ public class RepositoryTypeServiceInformation implements ServiceInformation {
 
     public Map<String, Parameter<?>> getParameters() {
 	return parameters;
+    }
+
+    @Override
+    public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	return configurationParameters;
     }
 
     @Override

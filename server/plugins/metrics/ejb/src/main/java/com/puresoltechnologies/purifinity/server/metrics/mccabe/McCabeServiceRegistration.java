@@ -12,39 +12,39 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 public class McCabeServiceRegistration extends
-		AbstractEvaluatorServiceRegistration {
+	AbstractEvaluatorServiceRegistration {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
-			"metrics.plugin", "metrics.ejb", Evaluator.class,
-			McCabeMetricEvaluator.class);
+    private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
+	    "metrics.plugin", "metrics.ejb", Evaluator.class,
+	    McCabeMetricEvaluator.class);
 
-	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
-			McCabeMetric.ID, McCabeMetric.NAME, EvaluatorType.METRICS,
-			McCabeMetric.PLUGIN_VERSION, JNDI_ADDRESS,
-			McCabeMetric.DESCRIPTION, "/metrics.ui/mccabe/index.jsf",
-			"/metrics.ui/mccabe/config.jsf", "/metrics.ui/mccabe/project.jsf",
-			"/metrics.ui/mccabe/run.jsf",
-			McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS,
-			McCabeMetricEvaluatorParameter.ALL, McCabeMetric.DEPENDENCIES);
+    private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
+	    McCabeMetric.ID, McCabeMetric.NAME, EvaluatorType.METRICS,
+	    McCabeMetric.PLUGIN_VERSION, JNDI_ADDRESS,
+	    McCabeMetric.DESCRIPTION, McCabeMetric.PARAMETERS,
+	    "/metrics.ui/mccabe/index.jsf", "/metrics.ui/mccabe/config.jsf",
+	    "/metrics.ui/mccabe/project.jsf", "/metrics.ui/mccabe/run.jsf",
+	    McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS,
+	    McCabeMetricEvaluatorParameter.ALL, McCabeMetric.DEPENDENCIES);
 
-	public void registration() {
-		register(EvaluatorServiceManagerRemote.class,
-				EvaluatorServiceManagerRemote.JNDI_NAME,
-				MetricsPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
-	}
+    public void registration() {
+	register(EvaluatorServiceManagerRemote.class,
+		EvaluatorServiceManagerRemote.JNDI_NAME,
+		MetricsPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
+    }
 
-	public void unregistration() {
-		unregister(EvaluatorServiceManagerRemote.class,
-				EvaluatorServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
-	}
+    public void unregistration() {
+	unregister(EvaluatorServiceManagerRemote.class,
+		EvaluatorServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
+    }
 
-	@Override
-	public String getName() {
-		return McCabeMetric.NAME;
-	}
+    @Override
+    public String getName() {
+	return McCabeMetric.NAME;
+    }
 
-	@Override
-	public EvaluatorServiceInformation getServiceInformation() {
-		return INFORMATION;
-	}
+    @Override
+    public EvaluatorServiceInformation getServiceInformation() {
+	return INFORMATION;
+    }
 }

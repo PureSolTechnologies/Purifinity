@@ -30,6 +30,10 @@
 			<artifactId>trees</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.versioning</groupId>
+			<artifactId>versioning</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
@@ -46,5 +50,36 @@
 			<artifactId>junit</artifactId>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.9.1</version>
+				<executions>
+					<execution>
+						<id>addBuildYear</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>timestamp-property</goal>
+						</goals>
+						<configuration>
+							<name>project.buildYear</name>
+							<pattern>yyyy</pattern>
+							<units>year</units>
+							<offset>0</offset>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 </project>

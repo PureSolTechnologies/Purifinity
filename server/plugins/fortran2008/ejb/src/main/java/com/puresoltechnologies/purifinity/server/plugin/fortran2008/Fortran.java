@@ -41,9 +41,9 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
     public static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
 	    ".f95", ".for" };
 
-    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+    public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
     static {
-	configurationParameters.add(new PluginActivatedParameter());
+	PARAMETERS.add(new PluginActivatedParameter());
     }
 
     private SourceForm sourceForm = SourceForm.FREE_FORM;
@@ -59,7 +59,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 
     @Override
     public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return configurationParameters;
+	return PARAMETERS;
     }
 
     @Override

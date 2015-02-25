@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.metrics.codedepth;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.ejb.EJB;
@@ -46,8 +45,6 @@ import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator
 @Remote(Evaluator.class)
 public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 
-    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
-
     @EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
     private AnalyzerServiceManagerRemote analyzerServiceManager;
 
@@ -58,7 +55,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 
     @Override
     public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return configurationParameters;
+	return CodeDepthMetric.PARAMETERS;
     }
 
     @Override

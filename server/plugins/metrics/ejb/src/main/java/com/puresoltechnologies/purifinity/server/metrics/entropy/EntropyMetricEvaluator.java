@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.metrics.entropy;
 
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,8 +33,6 @@ import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadResult
 @Remote(Evaluator.class)
 public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
 
-    private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
-
     @Inject
     private HalsteadMetricEvaluatorStore halsteadMetricEvaluatorStore;
 
@@ -45,7 +42,7 @@ public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
 
     @Override
     public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return configurationParameters;
+	return EntropyMetric.PARAMETERS;
     }
 
     @Override

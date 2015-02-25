@@ -31,7 +31,7 @@ public interface EvaluationRestInterface {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("analyzers/{id}/configuration")
+    @Path("evaluators/{id}/configuration")
     public Set<ConfigurationParameter<?>> getConfiguration(
 	    @PathParam("id") String evaluatorId);
 
