@@ -34,7 +34,7 @@ function pluginManager(purifinityServerConnector) {
 		purifinityServerConnector.put('/purifinityserver/rest/analysis/analyzers/' + analyzerId + "/disable",
 				success, error);	
 	}
-	pluginManager.isAnalyzerEnabled = function(analyzerId, success, error) {
+	pluginManager.isEvaluatorEnabled = function(analyzerId, success, error) {
 		return purifinityServerConnector.get('/purifinityserver/rest/evaluation/evaluators/' + analyzerId + "/enabled",
 				success, error);
 	};

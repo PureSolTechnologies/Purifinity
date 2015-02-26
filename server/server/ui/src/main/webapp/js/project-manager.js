@@ -21,7 +21,7 @@ function projectManager(purifinityServerConnector) {
 				success, error);
 	};
 	projectManager.triggerNewRun = function(identifier, success, error) {
-		return purifinityServerConnector.put('/purifinityserver/rest/analysisservice/projects/' + identifier, "",
+		return purifinityServerConnector.put('/purifinityserver/rest/analysis/projects/' + identifier, "",
 				success, error);
 	};
 	projectManager.editProject = function(id, name, success, error) {
