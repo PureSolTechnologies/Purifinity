@@ -35,6 +35,10 @@ public interface EvaluationRestInterface {
     public Set<ConfigurationParameter<?>> getConfiguration(
 	    @PathParam("id") String evaluatorId);
 
+    @GET
+    @Path("evaluators/{id}/enabled")
+    public boolean isEnabled(@PathParam("id") String evaluatorId);
+
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("evaluators/{id}/enable")

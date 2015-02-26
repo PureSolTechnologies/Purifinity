@@ -25,7 +25,11 @@
 					<tr data-ng-repeat="analyzer in analyzers">
 						<td>{{analyzer.name}}</td>
 						<td>{{analyzer.description}}</td>
-						<td><button class="btn btn-success" ng-click="status.open = !status.open">Toggle last panel</button></td>
+						<td>
+							<button class="btn {{getAnalyzerButtonClass(analyzer.id)}}" data-ng-value="analyzerActivation[analyzer.id]" data-ng-click="toggleAnalyzerActivation(analyzer.id)">
+								{{getAnalyzerButtonText(analyzer.id)}}
+							</button>
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -42,7 +46,11 @@
 					<tr data-ng-repeat="evaluator in evaluators">
 						<td>{{evaluator.name}}</td>
 						<td>{{evaluator.description}}</td>
-						<td><button class="btn btn-danger" ng-click="status.open = !status.open">Toggle last panel</button></td>
+						<td>
+							<button class="btn {{getEvaluatorButtonClass(evaluator.id)}}" data-ng-value="evaluatorActivation[evaluator.id]" data-ng-click="toggleEvaluatorActivation(evaluator.id)">
+								{{getEvaluatorButtonText(evaluator.id)}}
+							</button>
+						</td>
 					</tr>
 				</tbody>
 			</table>

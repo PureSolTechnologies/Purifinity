@@ -80,6 +80,11 @@ public class AnalysisServiceBean implements AnalysisService {
     }
 
     @Override
+    public boolean isEnabled(String analyzerId) {
+	return analyzerRegistration.isActive(analyzerId);
+    }
+
+    @Override
     public void setActive(String analyzerId, boolean active) {
 	analyzerRegistration.setActive(analyzerId, active);
     }

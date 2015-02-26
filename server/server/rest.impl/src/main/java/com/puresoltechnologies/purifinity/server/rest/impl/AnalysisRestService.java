@@ -44,6 +44,11 @@ public class AnalysisRestService implements AnalysisRestInterface {
     }
 
     @Override
+    public boolean isEnabled(String analyzerId) {
+	return analysisService.isEnabled(analyzerId);
+    }
+
+    @Override
     public void enable(String analyzerId) {
 	analysisService.setActive(analyzerId, true);
     }

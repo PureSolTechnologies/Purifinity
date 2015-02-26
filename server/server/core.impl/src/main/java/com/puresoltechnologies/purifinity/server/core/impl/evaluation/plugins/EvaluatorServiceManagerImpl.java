@@ -16,8 +16,8 @@ import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceM
 import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
-import com.puresoltechnologies.purifinity.server.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton

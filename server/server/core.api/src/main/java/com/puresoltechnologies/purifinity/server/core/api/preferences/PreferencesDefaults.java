@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.preferences;
+package com.puresoltechnologies.purifinity.server.core.api.preferences;
 
 public class PreferencesDefaults {
 

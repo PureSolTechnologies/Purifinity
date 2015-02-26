@@ -56,6 +56,11 @@ public class EvaluationServiceBean implements EvaluationService {
     }
 
     @Override
+    public boolean isEnabled(String evaluatorId) {
+	return evaluatorRegistration.isActive(evaluatorId);
+    }
+
+    @Override
     public void setActive(String evaluatorId, boolean active) {
 	evaluatorRegistration.setActive(evaluatorId, active);
     }

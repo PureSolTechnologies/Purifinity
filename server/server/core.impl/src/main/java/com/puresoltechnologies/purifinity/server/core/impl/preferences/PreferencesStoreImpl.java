@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.preferences;
+package com.puresoltechnologies.purifinity.server.core.impl.preferences;
 
 import java.util.Date;
 
@@ -12,6 +12,8 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesValue;
 import com.puresoltechnologies.purifinity.server.database.cassandra.PreferencesStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;

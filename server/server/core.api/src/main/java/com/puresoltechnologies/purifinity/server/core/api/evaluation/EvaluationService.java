@@ -20,6 +20,8 @@ public interface EvaluationService {
 
     public Set<ConfigurationParameter<?>> getConfiguration(String evaluatorId);
 
+    public boolean isEnabled(String evaluatorId);
+
     public void setActive(String evaluatorId, boolean enabled);
 
 }

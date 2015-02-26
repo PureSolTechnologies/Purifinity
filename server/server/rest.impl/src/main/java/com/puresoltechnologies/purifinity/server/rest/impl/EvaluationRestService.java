@@ -33,6 +33,11 @@ public class EvaluationRestService implements EvaluationRestInterface {
     }
 
     @Override
+    public boolean isEnabled(String evaluatorId) {
+	return evaluationService.isEnabled(evaluatorId);
+    }
+
+    @Override
     public void enable(String evaluatorId) {
 	evaluationService.setActive(evaluatorId, true);
     }

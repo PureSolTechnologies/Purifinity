@@ -24,6 +24,8 @@ public interface AnalysisService {
 
     public Set<ConfigurationParameter<?>> getConfiguration(String analyzerId);
 
+    public boolean isEnabled(String analyzerId);
+
     public void setActive(String analyzerId, boolean enabled);
 
 }

@@ -39,6 +39,10 @@ public interface AnalysisRestInterface {
     public Set<ConfigurationParameter<?>> getConfiguration(
 	    @PathParam("id") String analyzerId);
 
+    @GET
+    @Path("analyzers/{id}/enabled")
+    public boolean isEnabled(@PathParam("id") String analyzerId);
+
     @PUT
     @Path("analyzers/{id}/enable")
     public void enable(@PathParam("id") String analyzerId);

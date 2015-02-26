@@ -1,6 +1,6 @@
 /*
  * This JavaScript files contains Angular JS functionality to be added to an
- * application to handle user accounts for Purifinity.
+ * application to handle projects for Purifinity.
  */
 var projectManagerModule = angular.module("projectManagerModule", [ "purifinityServer" ]);
 projectManagerModule.factory('projectManager', ['purifinityServerConnector', projectManager ]);
@@ -84,7 +84,7 @@ function projectSettingsCtrl($scope, $modal, $log, projectManager) {
 					fileIncludes: "",
 					fileExcludes: "",
 					ignoreHidden: true,
-					repositoryTypeClassName: "",
+					repositoryTypeId: "",
 					repositoryTypeProperties: {}
 					};
 	$scope.openCreateProject = function () {
@@ -150,11 +150,11 @@ function createProjectModalInstanceCtrl($scope, $modalInstance, items, projectMa
 	projectManager.getRepositoryTypes(
 		function(data, status) {$scope.repositoryTypes = data}, //
 		function(data, status, error) {});
-	$scope.$watch('items.repositoryTypeClassName', function(oldValue, newValue) {
+	$scope.$watch('items.repositoryTypeId', function(oldValue, newValue) {
 		var key;
 		for (key in $scope.repositoryTypes) {
 			var repositoryType = $scope.repositoryTypes[key];
-			if (repositoryType.className == items.repositoryTypeClassName) {
+			if (repositoryType.id == items.repositoryTypeId) {
 				$scope.repositoryTypeProperties = {};
 				var name;
 				for (name in repositoryType.parameters) {
@@ -178,7 +178,7 @@ function createProjectModalInstanceCtrl($scope, $modalInstance, items, projectMa
 				"ignoreHidden": items.ignoreHidden
 			},
 			"repositoryLocation":{
-				"repository.class": items.repositoryTypeClassName
+				"repository.class": items.repositoryTypeId
 			}
 		};
 		var key;

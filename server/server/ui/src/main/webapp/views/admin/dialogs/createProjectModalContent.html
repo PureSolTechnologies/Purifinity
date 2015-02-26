@@ -31,9 +31,9 @@
 			<label for="repositoryType" title="Selection for the repository type to get sources from.">Repository Type</label><br/>
 			<select id="repositoryType" title="Project Selection"
 				class="selectpicker show-tick form-control"
-				data-ng-model="items.repositoryTypeClassName">
+				data-ng-model="items.repositoryTypeId">
 				<option value="">Select a repository type</option>
-				<option data-ng-repeat="repositoryType in repositoryTypes" value="{{repositoryType.className}}">
+				<option data-ng-repeat="repositoryType in repositoryTypes" value="{{repositoryType.id}}">
 					{{repositoryType.name}}
 				</option>
 			</select>
