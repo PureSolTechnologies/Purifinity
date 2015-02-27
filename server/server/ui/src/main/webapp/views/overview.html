@@ -27,14 +27,12 @@
 					<tbody>
 						<tr data-ng-repeat="project in projects">
 							<td>?</td>
-							<td><a href="#/projects/{{project.information.id}}"
-								data-toggle="tooltip"
-								title="Project ID:{{project.information.id}}">{{project.settings.name}}</a></td>
+							<td><a href data-ng-click="showProject(project)"
+								title="Project ID: {{project.information.projectId}}">{{project.settings.name}}</a></td>
 							<td>{{project.information.creationTime | date: "yyyy-MM-dd HH:mm:ss"}}</td>
 							<td>{{project.settings.description}}</td>
-							<td>
+							<td width="5%">
 								<button class="btn btn-primary" data-ng-click="triggerNewRun(project.information.projectId)">New Run...</button>
-								<button class="btn btn-danger">Abort Run...</button>
 							</td>
 						</tr>
 					</tbody>
@@ -47,7 +45,7 @@
 				<table class="table">
 					<tbody>
 						<tr data-ng-repeat="state in processes.processStates">
-							<td width="50%"><b>{{state.name}}</b> ({{state.status}})</td>
+							<td width="30%"><b>{{state.name}}</b> ({{state.status}})</td>
 							<td>
 								<div class="progress">
 									<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{state.current}}"
@@ -56,9 +54,13 @@
 									</div>
 								</div>
 							</td>
+							<td width="5%">
+								<button class="btn btn-danger">Abort Run...</button>
+							</td>
 						</tr>
 						<tr>
-							<th width="50%"></th>
+							<td></td>
+							<td></td>
 							<td></td>
 						</tr>
 					</tbody>

@@ -16,6 +16,10 @@ function projectManager(purifinityServerConnector) {
 		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects',
 				success, error);
 	};
+	projectManager.getLastRun = function(projectId, success, error) {
+		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects/' + projectId + '/lastrun',
+				success, error);
+	};
 	projectManager.createProject = function(identifier, projectSettings, success, error) {
 		return purifinityServerConnector.put('/purifinityserver/rest/analysisstore/projects/' + identifier, projectSettings,
 				success, error);
@@ -37,7 +41,7 @@ function projectManager(purifinityServerConnector) {
 	return projectManager;
 }
 
-function projectListCtrl($scope, projectManager) {
+function projectListCtrl($scope, $location, projectManager) {
 	$scope.projects = {};
 	projectManager.getProjects(//
 		function(data, status) {
@@ -53,7 +57,16 @@ function projectListCtrl($scope, projectManager) {
 			function (data, status, error) {}
 		);
 	}
-
+	$scope.showProject = function(project) {
+		window.localStorage.setItem("project.active", JSON.stringify(project));
+		projectManager.getLastRun(project.information.projectId,//
+			function(data, status) {
+				window.localStorage.setItem("project.run.active", JSON.stringify(data));
+			}, //
+			function(data, status, error) {}
+		);
+		window.location = "/project.html";
+	}
 }
 
 function projectsCtrl($scope, $routeParams, baseURL) {

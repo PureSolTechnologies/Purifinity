@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-ng-app="purifinityApp">
+<html data-ng-app="projectApp">
 <head>
 <base href="index.html" />
 
@@ -40,15 +40,16 @@
 <script type="text/javascript" src="js/project-manager.js"></script>
 <script type="text/javascript" src="js/alerter.js"></script>
 <script type="text/javascript">
-	var purifinityApp = angular.module("purifinityApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "accountManagerModule", "projectManagerModule", "alerter"]);
-	purifinityApp.config(function($routeProvider, $locationProvider){
+	var projectApp = angular.module("projectApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "accountManagerModule", "projectManagerModule", "alerter"]);
+	projectApp.config(function($routeProvider, $locationProvider){
 		$locationProvider.html5Mode(false);
-		$routeProvider.when("/login", {templateUrl:"/views/login.html"});
-		$routeProvider.when("/account", {templateUrl:"/views/account.html"});
-		$routeProvider.when("/dashboards", {templateUrl: "/views/dashboards.html"});
-		$routeProvider.when("/information", {templateUrl: "/views/information.html"});
-		$routeProvider.when("/help", {templateUrl: "/views/help.html"});
-		$routeProvider.otherwise({templateUrl: "/views/overview.html"});
+		$routeProvider.when("/analysis", {templateUrl: "/views/project/analysis.html"});
+		$routeProvider.when("/defects", {templateUrl: "/views/project/defects.html"});
+		$routeProvider.when("/style_issues", {templateUrl: "/views/project/style_issues.html"});
+		$routeProvider.when("/metrics", {templateUrl: "/views/project/metrics.html"});
+		$routeProvider.when("/trends", {templateUrl: "/views/project/trends.html"});
+		$routeProvider.when("/help", {templateUrl: "/views/project/help.html"});
+		$routeProvider.otherwise({templateUrl: "/views/project/summary.html"});
 	});
 </script>
 </head>
@@ -65,16 +66,20 @@
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
-				<li class="{{isActive('')}}"><a href="#">Overview</a></li>
-				<li class="{{isActive('/dashboards')}}"><a href="#/dashboards">Dashboards</a></li>
-				<li class="{{isActive('/information')}}"><a
-					href="#/information">Information</a></li>
+				<li>
+					Project: {{activeProject.settings.name}}<br/>
+					Run: Latest ({{activeRun.runId | date: 'yyyy-MM-dd HH:mm:ss'}})
+				</li>
+				<li class="{{isActive('')}}"><a href="project.html#">Summary</a></li>
+				<li class="{{isActive('/analysis')}}"><a href="project.html#/analysis">Analysis</a></li>
+				<li class="{{isActive('/defects')}}"><a href="project.html#/defects">Defects</a></li>
+				<li class="{{isActive('/style_issues')}}"><a href="project.html#/style_issues">Style Issues</a></li>
+				<li class="{{isActive('/metrics')}}"><a href="project.html#/metrics">Metrics</a></li>
+				<li class="{{isActive('/trends')}}"><a href="project.html#/trends">Trends</a></li>
 				<li class="{{isActive('/help')}}"><a href="#/help">Help</a></li>
 			</ul>
 			<div class="navbar-right" data-ng-controller="loginCtrl">
 				<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
-					<li><a href="/admin.html"><span
-							class="glyphicon glyphicon-wrench"></span>&nbsp;Administration</a></li>
 					<li data-ng-show="isLoggedIn()">
 						<a href="/#/account"><span class="glyphicon glyphicon-user"></span>&nbsp;Account</a>
 					</li>

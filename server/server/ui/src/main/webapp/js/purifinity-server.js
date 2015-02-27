@@ -320,23 +320,25 @@ function removeAuthData() {
 function serverStatusCtrl($scope) {
 	$scope.connection = "Not Connected.";
 	$scope.error = undefined;
-	var websocket = new WebSocket("ws://" + server.host + ":" + server.port + "/purifinityserver/socket/status");
-	websocket.onopen = function (event) {
-		$scope.connection = "Connected.";
-		$scope.$apply();
-		websocket.send('sendStatus');
-	}
-	websocket.onclose = function (event) {
-		$scope.connection = "Connection closed.";
-		$scope.$apply();
-	}
-	websocket.onmessage = function (event) {
-		$scope.status = JSON.parse(event.data);
-		$scope.$apply();
-	}
-	websocket.onerror = function (event) {
-		$scope.error = event;
-		$scope.$apply();
+	if (!$scope.websocket) {
+		$scope.websocket = new WebSocket("ws://" + server.host + ":" + server.port + "/purifinityserver/socket/status");
+		$scope.websocket.onopen = function (event) {
+			$scope.connection = "Connected.";
+			$scope.$apply();
+			$scope.websocket.send('sendStatus');
+		}
+		$scope.websocket.onclose = function (event) {
+			$scope.connection = "Connection closed.";
+			$scope.$apply();
+		}
+		$scope.websocket.onmessage = function (event) {
+			$scope.status = JSON.parse(event.data);
+			$scope.$apply();
+		}
+		$scope.websocket.onerror = function (event) {
+			$scope.error = event;
+			$scope.$apply();
+		}
 	}
 	$scope.getUptimeString = function() {
 		if (!$scope.status) {
@@ -397,22 +399,24 @@ function serverStatusCtrl($scope) {
 function processStatesCtrl($scope) {
 	$scope.connection = "Not Connected.";
 	$scope.error = undefined;
-	var websocket = new WebSocket("ws://" + server.host + ":" + server.port + "/purifinityserver/socket/processes");
-	websocket.onopen = function (event) {
-		$scope.connection = "Connected.";
-		$scope.$apply();
-		websocket.send('sendProcessStates');
-	}
-	websocket.onclose = function (event) {
-		$scope.connection = "Connection closed.";
-		$scope.$apply();
-	}
-	websocket.onmessage = function (event) {
-		$scope.processes = JSON.parse(event.data);
-		$scope.$apply();
-	}
-	websocket.onerror = function (event) {
-		$scope.error = event;
-		$scope.$apply();
+	if (!$scope.websocket) {
+		$scope.websocket = new WebSocket("ws://" + server.host + ":" + server.port + "/purifinityserver/socket/processes");
+		$scope.websocket.onopen = function (event) {
+			$scope.connection = "Connected.";
+			$scope.$apply();
+			$scope.websocket.send('sendProcessStates');
+		}
+		$scope.websocket.onclose = function (event) {
+			$scope.connection = "Connection closed.";
+			$scope.$apply();
+		}
+		$scope.websocket.onmessage = function (event) {
+			$scope.processes = JSON.parse(event.data);
+			$scope.$apply();
+		}
+		$scope.websocket.onerror = function (event) {
+			$scope.error = event;
+			$scope.$apply();
+		}
 	}
 }

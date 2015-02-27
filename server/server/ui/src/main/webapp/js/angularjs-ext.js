@@ -36,4 +36,6 @@ function menuCtrl($scope, $route, $routeParams, $location) {
 		}
 		return "";
 	}
+	$scope.activeProject = JSON.parse(window.localStorage.getItem("project.active"));
+	$scope.activeRun = JSON.parse(window.localStorage.getItem("project.run.active"));
 }
