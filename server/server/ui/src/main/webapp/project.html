@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html data-ng-app="projectApp">
 <head>
-<base href="index.html" />
+<base href="project.html" />
 
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -40,21 +40,83 @@
 <script type="text/javascript" src="js/project-manager.js"></script>
 <script type="text/javascript" src="js/alerter.js"></script>
 <script type="text/javascript">
-	var projectApp = angular.module("projectApp", ["ngRoute", "ui.bootstrap", "purifinityUI", "purifinityServer", "accountManagerModule", "projectManagerModule", "alerter"]);
+	var projectApp = angular.module("projectApp", [
+		"ngRoute",
+		"ui.bootstrap",
+		"purifinityUI",
+		"purifinityServer",
+		"accountManagerModule",
+		"projectManagerModule",
+		"alerter"
+	]);
 	projectApp.config(function($routeProvider, $locationProvider){
 		$locationProvider.html5Mode(false);
-		$routeProvider.when("/analysis", {templateUrl: "/views/project/analysis.html"});
-		$routeProvider.when("/defects", {templateUrl: "/views/project/defects.html"});
-		$routeProvider.when("/style_issues", {templateUrl: "/views/project/style_issues.html"});
-		$routeProvider.when("/metrics", {templateUrl: "/views/project/metrics.html"});
-		$routeProvider.when("/trends", {templateUrl: "/views/project/trends.html"});
-		$routeProvider.when("/help", {templateUrl: "/views/project/help.html"});
-		$routeProvider.otherwise({templateUrl: "/views/project/summary.html"});
+		$routeProvider.when("/summary/:projectId", {templateUrl: "/views/project/summary.html"});
+		$routeProvider.when("/analysis/:projectId", {templateUrl: "/views/project/analysis.html"});
+		$routeProvider.when("/defects/:projectId", {templateUrl: "/views/project/defects.html"});
+		$routeProvider.when("/style_issues/:projectId", {templateUrl: "/views/project/style_issues.html"});
+		$routeProvider.when("/metrics/:projectId", {templateUrl: "/views/project/metrics.html"});
+		$routeProvider.when("/trends/:projectId", {templateUrl: "/views/project/trends.html"});
+		$routeProvider.when("/summary/:projectId", {templateUrl: "/views/project/summary.html"});
+		$routeProvider.when("/analysis/:projectId", {templateUrl: "/views/project/analysis.html"});
+		$routeProvider.when("/defects/:projectId", {templateUrl: "/views/project/defects.html"});
+		$routeProvider.when("/style_issues/:projectId", {templateUrl: "/views/project/style_issues.html"});
+		$routeProvider.when("/metrics/:projectId", {templateUrl: "/views/project/metrics.html"});
+		$routeProvider.when("/trends/:projectId", {templateUrl: "/views/project/trends.html"});
+		$routeProvider.when("/runs/:projectId", {templateUrl: "/views/project/runs.html"});
+		$routeProvider.otherwise({redirectTo: function() {window.location = "/";}});
+	});
+	projectApp.controller("analysisBrowserCtrl", function($scope, $routeParams, projectManager) {
+		$scope.project = undefined;
+		$scope.run = undefined;
+		projectManager.getProject($routeParams.projectId,
+			function(data, status) {
+				$scope.project = data;
+			},
+			function(data, status, error) {
+			}
+		);
+		projectManager.getLastRun($routeParams.projectId,
+			function(data, status) {
+				$scope.run = data;
+			$scope.path = [ $scope.project.settings.name ];
+			$scope.fileTree = {};
+			projectManager.getAnalysisFileTree(
+				$scope.project.information.projectId,
+				$scope.run.runId,
+				function(data, status) {
+					$scope.fileTree = data;
+				},
+				function(data, status, error) {}
+				);
+				$scope.currentDirectory = $scope.fileTree;
+			},
+			function(data, status, error) {
+			}
+		);
+	});
+	projectApp.controller("runListCtrl", function($scope, $routeParams, projectManager) {
+		$scope.project = undefined;
+		$scope.runs = undefined;
+		projectManager.getProject($routeParams.projectId,
+			function(data, status) {
+				$scope.project = data;
+			},
+			function(data, status, error) {
+			}
+		);
+		projectManager.readAllRunInformation($routeParams.projectId,
+			function(data, status) {
+				$scope.runs = data;
+			},
+			function(data, status, error) {
+			}
+		);
 	});
 </script>
 </head>
 <body>
-	<div class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="navbar navbar-default navbar-fixed-top" role="navigation" data-ng-controller="menuCtrl">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target=".navbar-collapse">
@@ -62,21 +124,20 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<span class="navbar-brand"><a href="/"><img src="images/logos/logo2.png" width="100" title="Purifinity"/></a></span>
+			<span class="navbar-brand">
+				<a href="/"><img src="images/logos/logo2.png" width="100" title="Purifinity"/></a> Project View: {{$routeParams.projectId}}
+			</span>
 		</div>
 		<div class="collapse navbar-collapse">
-			<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
-				<li>
-					Project: {{activeProject.settings.name}}<br/>
-					Run: Latest ({{activeRun.runId | date: 'yyyy-MM-dd HH:mm:ss'}})
-				</li>
-				<li class="{{isActive('')}}"><a href="project.html#">Summary</a></li>
-				<li class="{{isActive('/analysis')}}"><a href="project.html#/analysis">Analysis</a></li>
-				<li class="{{isActive('/defects')}}"><a href="project.html#/defects">Defects</a></li>
-				<li class="{{isActive('/style_issues')}}"><a href="project.html#/style_issues">Style Issues</a></li>
-				<li class="{{isActive('/metrics')}}"><a href="project.html#/metrics">Metrics</a></li>
-				<li class="{{isActive('/trends')}}"><a href="project.html#/trends">Trends</a></li>
-				<li class="{{isActive('/help')}}"><a href="#/help">Help</a></li>
+			<ul class="nav navbar-nav">
+				<li class="{{isActive('/summary')}}"><a href="#/summary/{{$routeParams.projectId}}">Summary</a></li>
+				<li class="{{isActive('/analysis')}}"><a href="#/analysis/{{$routeParams.projectId}}">Analysis</a></li>
+				<li class="{{isActive('/defects')}}"><a href="#/defects/{{$routeParams.projectId}}">Defects</a></li>
+				<li class="{{isActive('/style_issues')}}"><a href="#/style_issues/{{$routeParams.projectId}}">Style Issues</a></li>
+				<li class="{{isActive('/metrics')}}"><a href="#/metrics/{{$routeParams.projectId}}">Metrics</a></li>
+				<li class="{{isActive('/trends')}}"><a href="#/trends/{{$routeParams.projectId}}">Trends</a></li>
+				<li class="{{isActive('/runs')}}"><a href="#/runs/{{$routeParams.projectId}}">Runs</a></li>
+				<li class="{{isActive('/help')}}"><a href="/#/help">Help</a></li>
 			</ul>
 			<div class="navbar-right" data-ng-controller="loginCtrl">
 				<ul class="nav navbar-nav" data-ng-controller="menuCtrl">

@@ -324,7 +324,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    List<AnalysisRunInformation> allRunInformation = new ArrayList<>();
 	    for (ProjectToRunEdge edge : analysisRuns) {
 		AnalysisRunVertex run = edge.getRun();
-		long runId = System.currentTimeMillis();
+		long runId = run.getRunId();
 		Date startTime = run.getStartTime();
 		long duration = run.getDuration();
 		String description = run.getDescription();

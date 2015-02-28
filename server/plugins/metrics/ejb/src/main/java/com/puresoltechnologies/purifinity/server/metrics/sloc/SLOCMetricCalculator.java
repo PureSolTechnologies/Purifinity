@@ -142,7 +142,7 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
     private void setup() {
 	sloc = null;
 	lineResults.clear();
-	for (int i = 0; i < codeRange.getUniversalSyntaxTree().getMetaData()
+	for (int i = 0; i < codeRange.getUST().getMetaData()
 		.getLineNum(); i++) {
 	    lineResults.add(new LineResults());
 	}
@@ -155,8 +155,8 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 
     private void gatherData() {
 	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
-		codeRange.getUniversalSyntaxTree());
-	int lineOffset = codeRange.getUniversalSyntaxTree().getMetaData()
+		codeRange.getUST());
+	int lineOffset = codeRange.getUST().getMetaData()
 		.getLine();
 	do {
 	    UniversalSyntaxTree node = iterator.getCurrentNode();

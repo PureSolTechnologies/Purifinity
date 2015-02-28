@@ -85,7 +85,7 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 	fireStarted("Starting evaluation.", 1);
 	maxDepth = 0;
 	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
-		getCodeRange().getUniversalSyntaxTree());
+		getCodeRange().getUST());
 	do {
 	    UniversalSyntaxTree node = iterator.getCurrentNode();
 	    if (!node.hasChildren()) {
@@ -97,7 +97,7 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 		    }
 		    parent = parent.getParent();
 		} while ((parent != null)
-			&& (parent != getCodeRange().getUniversalSyntaxTree()));
+			&& (parent != getCodeRange().getUST()));
 		if (depth > maxDepth) {
 		    maxDepth = depth;
 		}

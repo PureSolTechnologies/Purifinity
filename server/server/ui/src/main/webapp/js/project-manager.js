@@ -16,8 +16,16 @@ function projectManager(purifinityServerConnector) {
 		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects',
 				success, error);
 	};
+	projectManager.getProject = function(projectId, success, error) {
+		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects/' + projectId,
+				success, error);
+	};
 	projectManager.getLastRun = function(projectId, success, error) {
 		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects/' + projectId + '/lastrun',
+				success, error);
+	};
+	projectManager.getRun = function(projectId, runId, success, error) {
+		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects/' + projectId + '/runs/' + runId,
 				success, error);
 	};
 	projectManager.createProject = function(identifier, projectSettings, success, error) {
@@ -38,6 +46,14 @@ function projectManager(purifinityServerConnector) {
 		return purifinityServerConnector.get('/purifinityserver/rest/repositories/types',
 				success, error);
 	};
+	projectManager.readAllRunInformation = function(projectId, success, error) {
+		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects/' + projectId + '/runs',
+				success, error);
+	};
+	projectManager.getAnalysisFileTree = function(projectId, runId, success, error) {
+		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects/' + projectId + '/runs/' + runId + '/filetree',
+				success, error);
+	};
 	return projectManager;
 }
 
@@ -56,16 +72,6 @@ function projectListCtrl($scope, $location, projectManager) {
 			function (data, status) {},
 			function (data, status, error) {}
 		);
-	}
-	$scope.showProject = function(project) {
-		window.localStorage.setItem("project.active", JSON.stringify(project));
-		projectManager.getLastRun(project.information.projectId,//
-			function(data, status) {
-				window.localStorage.setItem("project.run.active", JSON.stringify(data));
-			}, //
-			function(data, status, error) {}
-		);
-		window.location = "/project.html";
 	}
 }
 

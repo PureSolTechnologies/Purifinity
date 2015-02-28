@@ -88,7 +88,7 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 
     private void createHashtables() {
 	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
-		codeRange.getUniversalSyntaxTree());
+		codeRange.getUST());
 	do {
 	    UniversalSyntaxTree node = iterator.getCurrentNode();
 	    if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {

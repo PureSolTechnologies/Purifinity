@@ -1,3 +1,16 @@
-<div class="container">
-	<h1>Analysis</h1>
+<div class="container" data-ng-controller="analysisBrowserCtrl">
+	<ol class="breadcrumb">
+		<li data-ng-repeat="directory in path"><a href data-ng-click="chdir(directory)">{{directory}}</a></li>
+	</ol>
+	<table class="table table-striped table-hover table-bordered">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Size</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	
 </div>

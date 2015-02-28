@@ -90,7 +90,7 @@ public class McCabeMetric extends CodeRangeEvaluator {
 	fireStarted("Evaluation started.", 1);
 	cyclomaticNumber = 1;
 	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
-		codeRange.getUniversalSyntaxTree());
+		codeRange.getUST());
 	do {
 	    UniversalSyntaxTree node = iterator.getCurrentNode();
 	    if (AbstractProduction.class.isAssignableFrom(node.getClass())) {
