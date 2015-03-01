@@ -10,7 +10,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<commons.version>0.5.0-SNAPSHOT</commons.version>
 		<parsers.version>0.4.0-SNAPSHOT</parsers.version>
-		<graphs.version>0.4.0</graphs.version>
+		<graphs.version>0.5.0-SNAPSHOT</graphs.version>
+		<com.fasterxml.jackson.version>2.4.1</com.fasterxml.jackson.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity.api</groupId>
@@ -257,16 +258,9 @@
 				<version>3.2</version>
 			</dependency>
 			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-core-asl</artifactId>
-				<version>1.9.13</version>
-				<!-- This dependency needs to be provided by the container or application -->
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-jaxrs</artifactId>
-				<version>1.9.13</version>
+				<groupId>com.fasterxml.jackson.jaxrs</groupId>
+				<artifactId>jackson-jaxrs-base</artifactId>
+				<version>${com.fasterxml.jackson.version}</version>
 				<!-- This dependency needs to be provided by the container or application -->
 				<scope>provided</scope>
 			</dependency>

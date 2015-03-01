@@ -7,8 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;

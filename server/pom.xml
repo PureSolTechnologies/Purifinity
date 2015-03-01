@@ -14,7 +14,7 @@
 		<commons.version>0.5.0-SNAPSHOT</commons.version>
 		<parsers.version>0.4.0-SNAPSHOT</parsers.version>
 		<genesis.version>0.2.0-SNAPSHOT</genesis.version>
-		<graphs.version>0.4.0</graphs.version>
+		<graphs.version>0.5.0-SNAPSHOT</graphs.version>
 
 		<!-- Databases -->
 		<cassandra.driver.version>2.1.4</cassandra.driver.version>
@@ -842,15 +842,9 @@
 			</dependency>
 			<!-- REST library -->
 			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-jaxrs</artifactId>
-				<version>1.9.13</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-mapper-asl</artifactId>
-				<version>1.9.13</version>
+				<groupId>com.fasterxml.jackson.jaxrs</groupId>
+				<artifactId>jackson-jaxrs-base</artifactId>
+				<version>2.4.1</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -867,7 +861,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
-				<artifactId>resteasy-jackson-provider</artifactId>
+				<artifactId>resteasy-jackson2-provider</artifactId>
 				<version>${resteasy.version}</version>
 				<scope>provided</scope>
 			</dependency>

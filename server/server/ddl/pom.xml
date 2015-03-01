@@ -41,8 +41,8 @@
 			<artifactId>transformation.titan</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-base</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>

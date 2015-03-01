@@ -3,8 +3,7 @@ package com.puresoltechnologies.purifinity.server.domain.analysis;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.server.common.plugins.ServiceInformation;
 import com.puresoltechnologies.versioning.Version;

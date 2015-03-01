@@ -2,8 +2,8 @@ package com.puresoltechnologies.purifinity.server.accountmanager.rest.api;
 
 import java.util.Objects;
 
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * This class represents a single role.

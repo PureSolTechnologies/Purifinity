@@ -2,9 +2,9 @@ package com.puresoltechnologies.commons.math;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.annotate.JsonTypeInfo;
-import org.codehaus.jackson.annotate.JsonTypeInfo.As;
-import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 /**
  * <p>
@@ -24,17 +24,17 @@ import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
 @JsonTypeInfo(use = Id.CLASS, include = As.PROPERTY, property = "class")
 public interface Value<T> extends Serializable {
 
-	/**
-	 * This method returns the stored value.
-	 * 
-	 * @return An object of type T is returned.
-	 */
-	public T getValue();
+    /**
+     * This method returns the stored value.
+     * 
+     * @return An object of type T is returned.
+     */
+    public T getValue();
 
-	/**
-	 * This method returns the corresponding parameter.
-	 * 
-	 * @return An object of type {@link Parameter} is returned.
-	 */
-	public Parameter<T> getParameter();
+    /**
+     * This method returns the corresponding parameter.
+     * 
+     * @return An object of type {@link Parameter} is returned.
+     */
+    public Parameter<T> getParameter();
 }

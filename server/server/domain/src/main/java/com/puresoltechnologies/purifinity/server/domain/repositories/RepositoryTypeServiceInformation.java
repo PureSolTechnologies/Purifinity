@@ -5,8 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.server.common.plugins.ServiceInformation;

@@ -3,8 +3,7 @@ package com.puresoltechnologies.purifinity.analysis.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.misc.TimeAwareness;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 

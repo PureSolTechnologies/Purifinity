@@ -23,12 +23,23 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-jaxrs</artifactId>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-base</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>jaxrs-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<!-- XXX This dependency is not correct here, but currently needed for 
+				testing. -->
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>math</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

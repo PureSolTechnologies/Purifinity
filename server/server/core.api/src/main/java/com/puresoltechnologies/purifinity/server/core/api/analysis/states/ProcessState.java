@@ -3,8 +3,8 @@ package com.puresoltechnologies.purifinity.server.core.api.analysis.states;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * This class contains information about a single process state.

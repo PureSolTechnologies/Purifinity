@@ -6,8 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import org.codehaus.jackson.annotate.JsonCreator;
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PurifinityProcessStates {
 

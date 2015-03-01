@@ -65,8 +65,8 @@
 			<artifactId>httpclient</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jackson-provider</artifactId>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-base</artifactId>
 		</dependency>
 	</dependencies>
 

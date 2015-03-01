@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.analysis.domain;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.codehaus.jackson.annotate.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * This is the central interface for information about a single analysis.
