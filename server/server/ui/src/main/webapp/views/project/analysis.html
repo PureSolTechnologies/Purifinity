@@ -1,16 +1,43 @@
 <div class="container" data-ng-controller="analysisBrowserCtrl">
 	<ol class="breadcrumb">
-		<li data-ng-repeat="directory in path"><a href data-ng-click="chdir(directory)">{{directory}}</a></li>
+		<li data-ng-repeat="directory in path"><a href data-ng-click="setDir(directory)">{{directory.name}}</a></li>
 	</ol>
 	<table class="table table-striped table-hover table-bordered">
 		<thead>
 			<tr>
 				<th>Name</th>
 				<th>Size</th>
+				<th>Size Recursive</th>
+				<th>Analyzes</th>
 			</tr>
 		</thead>
 		<tbody>
+			<tr data-ng-show="path.length > 1">
+				<td><a href data-ng-click="chdir('..')">..</a></td>
+				<td></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr data-ng-repeat="content in currentDirectory.children">
+				<td data-ng-hide="content.file" 
+					id="{{content.hashId}}" data-toggle="tooltip" title="{{content.hashId.algorithm}}:{{content.hashId.hash}}">
+					<a href data-ng-click="chdir(content.name)">{{content.name}}</a>
+				</td>
+				<td data-ng-show="content.file"
+					id="{{content.hashId}}" data-toggle="tooltip" title="{{content.hashId.algorithm}}:{{content.hashId.hash}}">
+					{{content.name}}
+				</td>
+				<td>{{content.size}}</td>
+				<td>{{content.sizeRecursive}}</td>
+				<td data-ng-hide="content.analyzedCodes.length > 0">
+				</td>
+				<td data-ng-show="content.analyzedCodes.length > 0">
+					<div data-ng-repeat="analysis in content.analyzedCodes"
+						id="eval{{content.hashId}}" data-toggle="tooltip" title="{{analysis.languageName}} {{analysis.languageVersion}} plugin {{analysis.pluginVersion.major}}.{{analysis.pluginVersion.minor}}.{{analysis.pluginVersion.patch}}">
+						{{analysis.languageName}} {{analysis.languageVersion}} ({{analysis.startTime | date: "yyyy-MM-dd HH:mm:ss"}}, {{analysis.duration}}ms)
+					</div>
+				</td>
+			</tr>
 		</tbody>
 	</table>
-	
 </div>

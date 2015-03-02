@@ -1,4 +1,4 @@
 var server = {
-	host : "192.168.0.100",
+	host : "localhost",
 	port : 8080
 }

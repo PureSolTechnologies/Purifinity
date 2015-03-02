@@ -69,31 +69,53 @@
 	projectApp.controller("analysisBrowserCtrl", function($scope, $routeParams, projectManager) {
 		$scope.project = undefined;
 		$scope.run = undefined;
+		$scope.path = [];
 		projectManager.getProject($routeParams.projectId,
 			function(data, status) {
 				$scope.project = data;
-			},
-			function(data, status, error) {
-			}
-		);
-		projectManager.getLastRun($routeParams.projectId,
-			function(data, status) {
-				$scope.run = data;
-			$scope.path = [ $scope.project.settings.name ];
-			$scope.fileTree = {};
-			projectManager.getAnalysisFileTree(
-				$scope.project.information.projectId,
-				$scope.run.runId,
-				function(data, status) {
-					$scope.fileTree = data;
-				},
-				function(data, status, error) {}
+				projectManager.getLastRun($routeParams.projectId,
+					function(data, status) {
+						$scope.run = data;
+						$scope.fileTree = {};
+						projectManager.getAnalysisFileTree(
+							$scope.project.information.projectId,
+							$scope.run.runId,
+							function(data, status) {
+								$scope.fileTree = data;
+								$scope.currentDirectory = $scope.fileTree;
+								$scope.path.push($scope.currentDirectory);
+							},
+							function(data, status, error) {}
+						);
+					},
+					function(data, status, error) {}
 				);
-				$scope.currentDirectory = $scope.fileTree;
 			},
-			function(data, status, error) {
-			}
+			function(data, status, error) {}
 		);
+		$scope.chdir = function(dir) {
+			if  (dir == "..") {
+				if ($scope.path.length > 1) {
+					$scope.path.pop();
+					$scope.currentDirectory = $scope.path[$scope.path.length - 1];
+				} 
+				return;
+			}
+			for (key in $scope.currentDirectory.children) {
+				if ($scope.currentDirectory.children[key].name == dir) {
+					var newDirectory = $scope.currentDirectory.children[key];
+					$scope.path.push(newDirectory);
+					$scope.currentDirectory = newDirectory;
+					return;
+				}
+			}
+		}
+		$scope.setDir = function(dir) {
+			while (($scope.path.length > 1) && ($scope.path[$scope.path.length - 1] !== dir)) {
+				$scope.path.pop();
+			}
+			$scope.currentDirectory = $scope.path[$scope.path.length - 1];
+		}
 	});
 	projectApp.controller("runListCtrl", function($scope, $routeParams, projectManager) {
 		$scope.project = undefined;
@@ -181,5 +203,6 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
 	<script src="lib/bootstrap-select/js/bootstrap-select.min.js"></script>
+	<script src="js/enable-tooltips.js"></script>
 </body>
 </html>
