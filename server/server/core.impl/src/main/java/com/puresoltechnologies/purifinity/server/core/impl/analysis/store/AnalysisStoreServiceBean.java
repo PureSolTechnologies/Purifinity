@@ -571,7 +571,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 		    .findAnalysisRunVertex(xoManager, runId);
 	    analysisStoreContentTreeUtils.addContentTree(xoManager, fileTree,
 		    analysisRunVertex);
-	    analysisStoreFileTreeUtils.addFileTree(xoManager, fileTree,
+	    analysisStoreFileTreeUtils.storeAndSetFileTree(xoManager, fileTree,
 		    analysisRunVertex);
 	    return fileTree;
 	} catch (AnalysisStoreException e) {

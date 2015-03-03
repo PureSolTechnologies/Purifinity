@@ -5,7 +5,6 @@ import java.util.List;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Incoming;
 import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;
-import com.puresoltechnologies.xo.titan.api.annotation.Indexed;
 import com.puresoltechnologies.xo.titan.api.annotation.Property;
 import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
 
@@ -14,7 +13,6 @@ public interface FileTreeDirectoryVertex {
 
     public static final String NAME = "file_tree_directory_node";
 
-    @Indexed(unique = true)
     @Property(TitanElementNames.TREE_FS_ELEMENT_HASH)
     public String getHashId();
 
