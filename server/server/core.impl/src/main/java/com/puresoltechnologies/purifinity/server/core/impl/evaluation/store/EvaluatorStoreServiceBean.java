@@ -32,10 +32,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
-import com.puresoltechnologies.purifinity.evaluation.api.QualityLevelParameter;
-import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
-import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
@@ -160,7 +156,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 			session,
 			"SELECT hashid FROM "
 				+ CassandraElementNames.EVALUATION_PROJECT_METRICS_TABLE
-				+ " WHERE project_uuid=? AND run_uuid=? AND evaluator_id=? AND parameter_name=?");
+				+ " WHERE project_id=? AND run_id=? AND evaluator_id=? AND parameter_name=?");
 	BoundStatement boundStatement = preparedStatement.bind(projectUUID,
 		runUUID, evaluatorId, parameterName);
 	ResultSet result = session.execute(boundStatement);
@@ -185,7 +181,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 			session,
 			"SELECT hashid FROM "
 				+ CassandraElementNames.EVALUATION_PROJECT_METRICS_TABLE
-				+ " WHERE project_uuid=? AND run_uuid=? AND evaluator_id=?");
+				+ " WHERE project_id=? AND run_id=? AND evaluator_id=?");
 	BoundStatement boundStatement = preparedStatement.bind(projectUUID,
 		runUUID, evaluatorId);
 	ResultSet result = session.execute(boundStatement);
@@ -265,8 +261,8 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 			"INSERT INTO "
 				+ CassandraElementNames.EVALUATION_METRICS_TABLE
 				+ " (time,"
-				+ "project_uuid, "
-				+ "run_uuid, "
+				+ "project_id, "
+				+ "run_id, "
 				+ "hashid, "
 				+ "internal_directory, "
 				+ "file_name, "
@@ -276,8 +272,6 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 				+ "evaluator_name, "
 				+ "code_range_name, "
 				+ "code_range_type, "
-				+ "quality, "
-				+ "quality_level, "
 				+ "parameter_name, "
 				+ "parameter_unit, "
 				+ "numeric, "
@@ -286,7 +280,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 				+ "string_value, "
 				+ "level_of_measurement, "
 				+ "parameter_description ) VALUES "
-				+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+				+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 	Date time = metrics.getTime();
 	String projectId = analysisRun.getInformation().getProjectId();
@@ -313,16 +307,6 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	    String codeRangeName = metric.getCodeRangeName();
 	    CodeRangeType codeRangeType = metric.getCodeRangeType();
 
-	    Value<SourceCodeQuality> sourceCodeQualityValue = metric
-		    .getValue(SourceCodeQualityParameter.getInstance());
-	    SourceCodeQuality quality = sourceCodeQualityValue != null ? sourceCodeQualityValue
-		    .getValue() : SourceCodeQuality.UNSPECIFIED;
-	    Value<QualityLevel> qualityLevelValue = metric
-		    .getValue(QualityLevelParameter.getInstance());
-	    Double qualityLevelDouble = (qualityLevelValue != null ? qualityLevelValue
-		    .getValue().getLevel() : null);
-	    Float qualityLevel = qualityLevelDouble != null ? qualityLevelDouble
-		    .floatValue() : null;
 	    for (Parameter<?> parameter : metrics.getParameters()) {
 		String parameterName = parameter.getName();
 		if (parameterName.equals(codeRangeNameParameterName)
@@ -350,11 +334,10 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 			projectId, runId, hashId.toString(), internalPath,
 			fileName, sourceCodeLocation, languageName,
 			languageVersion, evaluatorId, codeRangeName,
-			codeRangeType.name(), quality.name(), qualityLevel,
-			parameterName, parameterUnit, numeric, parameterType,
-			numericValue, stringValue, parameter
-				.getLevelOfMeasurement().name(), parameter
-				.getDescription());
+			codeRangeType.name(), parameterName, parameterUnit,
+			numeric, parameterType, numericValue, stringValue,
+			parameter.getLevelOfMeasurement().name(),
+			parameter.getDescription());
 		session.execute(boundStatement);
 	    }
 	}
@@ -376,8 +359,8 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 			"INSERT INTO "
 				+ CassandraElementNames.EVALUATION_DIRECTORY_METRICS_TABLE
 				+ " (time, " + "hashid, " + "evaluator_id, "
-				+ "parameter_name, " + "value) VALUES "
-				+ "(?, ?, ?, ?, ?);");
+				+ "parameter_name, " + "parameter_unit, "
+				+ "value) VALUES " + "(?, ?, ?, ?, ?, ?);");
 
 	Date time = metrics.getTime();
 	HashId hashId = analysisFileTree.getHashId();
@@ -412,28 +395,16 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
     public void storeMetricsInBigTable(AnalysisRun analysisRun,
 	    AnalysisFileTree directory, GenericDirectoryMetrics metrics) {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
-		.getPreparedStatement(
-			session,
-			"INSERT INTO "
-				+ CassandraElementNames.EVALUATION_METRICS_TABLE
-				+ " (time, "
-				+ "project_uuid, "
-				+ "run_uuid, "
-				+ "hashid, "
-				+ "internal_directory, "
-				+ "file_name, "
-				+ "evaluator_name, "
-				+ "quality, "
-				+ "quality_level, "
-				+ "parameter_name, "
-				+ "parameter_unit, "
-				+ "numeric, "
-				+ "parameter_type, "
-				+ "numeric_value, "
-				+ "string_value, "
-				+ "level_of_measurement, "
-				+ "parameter_description) VALUES "
-				+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		.getPreparedStatement(session, "INSERT INTO "
+			+ CassandraElementNames.EVALUATION_METRICS_TABLE
+			+ " (time, " + "project_id, " + "run_id, " + "hashid, "
+			+ "internal_directory, " + "file_name, "
+			+ "evaluator_name, " + "parameter_name, "
+			+ "parameter_unit, " + "numeric, " + "parameter_type, "
+			+ "numeric_value, " + "string_value, "
+			+ "level_of_measurement, "
+			+ "parameter_description) VALUES "
+			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 	Date time = metrics.getTime();
 	String projectId = analysisRun.getInformation().getProjectId();
@@ -447,23 +418,6 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	String evaluatorId = metrics.getEvaluatorId();
 
 	Map<String, MetricValue<?>> values = metrics.getValues();
-	@SuppressWarnings("unchecked")
-	MetricValue<SourceCodeQuality> sourceCodeQualityValue = (MetricValue<SourceCodeQuality>) values
-		.get(SourceCodeQualityParameter.getInstance());
-	SourceCodeQuality quality = sourceCodeQualityValue != null ? sourceCodeQualityValue
-		.getValue() : SourceCodeQuality.UNSPECIFIED;
-	@SuppressWarnings("unchecked")
-	MetricValue<QualityLevel> qualityLevelValue = (MetricValue<QualityLevel>) values
-		.get(QualityLevelParameter.getInstance());
-	Double qualityLevelDouble = null;
-	if (qualityLevelValue != null) {
-	    QualityLevel l = qualityLevelValue.getValue();
-	    if (l != null) {
-		qualityLevelDouble = l.getLevel();
-	    }
-	}
-	Float qualityLevel = qualityLevelDouble != null ? qualityLevelDouble
-		.floatValue() : null;
 	for (Parameter<?> parameter : metrics.getParameters()) {
 	    String parameterName = parameter.getName();
 	    MetricValue<?> value = values.get(parameter);
@@ -481,11 +435,10 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		}
 		BoundStatement boundStatement = preparedStatement.bind(time,
 			projectId, runId, directory.getHashId().toString(),
-			internalPath, fileName, evaluatorId, quality.name(),
-			qualityLevel, parameterName, parameterUnit, numeric,
-			parameterType, numericValue, stringValue, parameter
-				.getLevelOfMeasurement().name(), parameter
-				.getDescription());
+			internalPath, fileName, evaluatorId, parameterName,
+			parameterUnit, numeric, parameterType, numericValue,
+			stringValue, parameter.getLevelOfMeasurement().name(),
+			parameter.getDescription());
 		session.execute(boundStatement);
 	    }
 	}
@@ -506,7 +459,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 			session,
 			"INSERT INTO "
 				+ CassandraElementNames.EVALUATION_DIRECTORY_METRICS_TABLE
-				+ " (time, " + "project_uuid, " + "run_uuid, "
+				+ " (time, " + "project_id, " + "run_id, "
 				+ "evaluator_id, " + "parameter_name, "
 				+ "value) VALUES " + "(?, ?, ?, ?, ?, ?);");
 
@@ -545,28 +498,16 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
     public void storeMetricsInBigTable(AnalysisRun analysisRun,
 	    AnalysisFileTree directory, GenericProjectMetrics metrics) {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
-		.getPreparedStatement(
-			session,
-			"INSERT INTO "
-				+ CassandraElementNames.EVALUATION_METRICS_TABLE
-				+ " (time, "
-				+ "project_uuid, "
-				+ "run_uuid, "
-				+ "hashid, "
-				+ "internal_directory, "
-				+ "file_name, "
-				+ "evaluator_name, "
-				+ "quality, "
-				+ "quality_level, "
-				+ "parameter_name, "
-				+ "parameter_unit, "
-				+ "numeric, "
-				+ "parameter_type, "
-				+ "numeric_value, "
-				+ "string_value, "
-				+ "level_of_measurement, "
-				+ "parameter_description) VALUES "
-				+ "( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		.getPreparedStatement(session, "INSERT INTO "
+			+ CassandraElementNames.EVALUATION_METRICS_TABLE
+			+ " (time, " + "project_id, " + "run_id, " + "hashid, "
+			+ "internal_directory, " + "file_name, "
+			+ "evaluator_name, " + "parameter_name, "
+			+ "parameter_unit, " + "numeric, " + "parameter_type, "
+			+ "numeric_value, " + "string_value, "
+			+ "level_of_measurement, "
+			+ "parameter_description) VALUES "
+			+ "( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 	Date time = metrics.getTime();
 	String projectId = analysisRun.getInformation().getProjectId();
@@ -580,23 +521,6 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	String evaluatorId = metrics.getEvaluatorId();
 
 	Map<String, MetricValue<?>> values = metrics.getValues();
-	@SuppressWarnings("unchecked")
-	Value<SourceCodeQuality> sourceCodeQualityValue = (Value<SourceCodeQuality>) values
-		.get(SourceCodeQualityParameter.getInstance());
-	SourceCodeQuality quality = sourceCodeQualityValue != null ? sourceCodeQualityValue
-		.getValue() : SourceCodeQuality.UNSPECIFIED;
-	@SuppressWarnings("unchecked")
-	Value<QualityLevel> qualityLevelValue = (Value<QualityLevel>) values
-		.get(QualityLevelParameter.getInstance());
-	Double qualityLevelDouble = null;
-	if (qualityLevelValue != null) {
-	    QualityLevel l = qualityLevelValue.getValue();
-	    if (l != null) {
-		qualityLevelDouble = l.getLevel();
-	    }
-	}
-	Float qualityLevel = qualityLevelDouble != null ? qualityLevelDouble
-		.floatValue() : null;
 	for (Parameter<?> parameter : metrics.getParameters()) {
 	    String parameterName = parameter.getName();
 	    MetricValue<?> value = values.get(parameter);
@@ -614,11 +538,10 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		}
 		BoundStatement boundStatement = preparedStatement.bind(time,
 			projectId, runId, directory.getHashId().toString(),
-			internalPath, fileName, evaluatorId, quality.name(),
-			qualityLevel, parameterName, parameterUnit, numeric,
-			parameterType, numericValue, stringValue, parameter
-				.getLevelOfMeasurement().name(), parameter
-				.getDescription());
+			internalPath, fileName, evaluatorId, parameterName,
+			parameterUnit, numeric, parameterType, numericValue,
+			stringValue, parameter.getLevelOfMeasurement().name(),
+			parameter.getDescription());
 		session.execute(boundStatement);
 	    }
 	}
@@ -668,12 +591,10 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		}
 	    }
 	    String parameterName = result.getString("parameter_name");
-	    Parameter<Double> foundParameter = null;
+	    Parameter<?> foundParameter = null;
 	    for (Parameter<?> parameter : parameters) {
 		if (parameter.getName().equals(parameterName)) {
-		    @SuppressWarnings("unchecked")
-		    Parameter<Double> p = (Parameter<Double>) parameter;
-		    foundParameter = p;
+		    foundParameter = parameter;
 		}
 	    }
 	    if (foundParameter == null) {
@@ -710,8 +631,32 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);
 	    }
 	    double value = result.getDouble("value");
-	    parameterBuffer.put(foundParameter, new MetricValue<Double>(value,
-		    foundParameter));
+	    if (foundParameter.getType().equals(Double.class)) {
+		parameterBuffer.put(foundParameter, new MetricValue<Double>(
+			value, (Parameter<Double>) foundParameter));
+	    } else if (foundParameter.getType().equals(Float.class)) {
+		parameterBuffer.put(foundParameter, new MetricValue<Float>(
+			(float) value, (Parameter<Float>) foundParameter));
+	    } else if (foundParameter.getType().equals(Byte.class)) {
+		parameterBuffer.put(foundParameter, new MetricValue<Byte>(
+			((Double) value).byteValue(),
+			(Parameter<Byte>) foundParameter));
+	    } else if (foundParameter.getType().equals(Short.class)) {
+		parameterBuffer.put(foundParameter, new MetricValue<Short>(
+			((Double) value).shortValue(),
+			(Parameter<Short>) foundParameter));
+	    } else if (foundParameter.getType().equals(Integer.class)) {
+		parameterBuffer.put(foundParameter, new MetricValue<Integer>(
+			((Double) value).intValue(),
+			(Parameter<Integer>) foundParameter));
+	    } else if (foundParameter.getType().equals(Long.class)) {
+		parameterBuffer.put(foundParameter, new MetricValue<Long>(
+			((Double) value).longValue(),
+			(Parameter<Long>) foundParameter));
+	    } else {
+		parameterBuffer.put(foundParameter, new MetricValue<Double>(
+			value, (Parameter<Double>) foundParameter));
+	    }
 	}
 
 	GenericFileMetrics fileMetrics = new GenericFileMetrics(evaluatorId,
@@ -744,11 +689,11 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		.getPreparedStatement(
 			session,
 			"SELECT "
-				+ "time timestamp, "
-				+ "hashid varchar, "
-				+ "evaluator_id varchar, "
-				+ "parameter_name varchar, "
-				+ "value double "
+				+ "time, "
+				+ "hashid, "
+				+ "evaluator_id, "
+				+ "parameter_name, "
+				+ "value "
 				+ "FROM "
 				+ CassandraElementNames.EVALUATION_DIRECTORY_METRICS_TABLE
 				+ " WHERE hashid=? AND evaluator_id=?");
@@ -780,12 +725,12 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		.getPreparedStatement(
 			session,
 			"SELECT "
-				+ "time timestamp, "
-				+ "project_uuid UUID, "
-				+ "run_uuid UUID, "
-				+ "evaluator_id varchar, "
-				+ "parameter_name varchar, "
-				+ "value double "
+				+ "time, "
+				+ "project_id, "
+				+ "run_id, "
+				+ "evaluator_id, "
+				+ "parameter_name, "
+				+ "value "
 				+ "FROM "
 				+ CassandraElementNames.EVALUATION_PROJECT_METRICS_TABLE
 				+ " WHERE hashid=? AND evaluator_id=?");

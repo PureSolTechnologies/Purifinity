@@ -22,10 +22,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
@@ -78,7 +76,7 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 	    execute(metric);
 	    results.add(new McCabeMetricResult(sourceCodeLocation, codeRange
 		    .getType(), codeRange.getCanonicalName(), metric
-		    .getCyclomaticNumber(), metric.getQuality()));
+		    .getCyclomaticNumber()));
 	}
 	return results;
     }
@@ -144,9 +142,7 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 			CodeRangeType.DIRECTORY, directory.getName(),
 			(Integer) values.get(
 				McCabeMetricEvaluatorParameter.VG.getName())
-				.getValue(), (SourceCodeQuality) values.get(
-				SourceCodeQualityParameter.getInstance()
-					.getName()).getValue());
+				.getValue());
 	    } else {
 		results = McCabeMetricDirectoryResults.combine(results, result);
 	    }
@@ -162,8 +158,6 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 			new UnspecifiedSourceCodeLocation(),
 			CodeRangeType.DIRECTORY, directory.getName(), result
 				.getValue(McCabeMetricEvaluatorParameter.VG)
-				.getValue(), result.getValue(
-				SourceCodeQualityParameter.getInstance())
 				.getValue());
 	    } else {
 		results = McCabeMetricDirectoryResults.combine(results, result);

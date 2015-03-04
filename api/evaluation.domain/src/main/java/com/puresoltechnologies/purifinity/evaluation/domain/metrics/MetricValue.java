@@ -5,13 +5,13 @@ import java.io.Serializable;
 import com.puresoltechnologies.commons.math.GeneralValue;
 import com.puresoltechnologies.commons.math.Parameter;
 
-public class MetricValue<T extends Comparable<T> & Serializable> extends
-		GeneralValue<T> {
+public class MetricValue<T extends Number & Comparable<T> & Serializable>
+	extends GeneralValue<T> {
 
-	private static final long serialVersionUID = -4016034567082563563L;
+    private static final long serialVersionUID = -4016034567082563563L;
 
-	public MetricValue(T value, Parameter<T> property) {
-		super(value, property);
-	}
+    public MetricValue(T value, Parameter<T> property) {
+	super(value, property);
+    }
 
 }

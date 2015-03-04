@@ -23,10 +23,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
@@ -102,9 +100,6 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	    for (MetricValue<?> result : metric.getSLOCResult().getResults()) {
 		values.put(result.getParameter().getName(), result);
 	    }
-	    values.put(SourceCodeQualityParameter.getInstance().getName(),
-		    new MetricValue<SourceCodeQuality>(metric.getQuality(),
-			    SourceCodeQualityParameter.getInstance()));
 
 	    results.addCodeRangeMetrics(new GenericCodeRangeMetrics(
 		    sourceCodeLocation, codeRange.getType(), codeRange

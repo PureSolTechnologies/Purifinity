@@ -14,61 +14,61 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 
 public class GenericCodeRangeMetrics implements Serializable {
 
-	private static final long serialVersionUID = -598831823857817995L;
-	private final SourceCodeLocation sourceCodeLocation;
-	private final CodeRangeType codeRangeType;
-	private final String codeRangeName;
-	private final Set<Parameter<?>> parameters = new HashSet<>();
-	private final Map<String, MetricValue<?>> values = new HashMap<>();
+    private static final long serialVersionUID = -598831823857817995L;
+    private final SourceCodeLocation sourceCodeLocation;
+    private final CodeRangeType codeRangeType;
+    private final String codeRangeName;
+    private final Set<Parameter<?>> parameters = new HashSet<>();
+    private final Map<String, MetricValue<?>> values = new HashMap<>();
 
-	public GenericCodeRangeMetrics(SourceCodeLocation sourceCodeLocation,
-			CodeRangeType codeRangeType, String codeRangeName,
-			Set<Parameter<?>> parameters, Map<String, MetricValue<?>> values) {
-		super();
-		this.sourceCodeLocation = sourceCodeLocation;
-		this.codeRangeType = codeRangeType;
-		this.codeRangeName = codeRangeName;
-		this.parameters.addAll(parameters);
-		this.values.putAll(values);
-	}
+    public GenericCodeRangeMetrics(SourceCodeLocation sourceCodeLocation,
+	    CodeRangeType codeRangeType, String codeRangeName,
+	    Set<Parameter<?>> parameters, Map<String, MetricValue<?>> values) {
+	super();
+	this.sourceCodeLocation = sourceCodeLocation;
+	this.codeRangeType = codeRangeType;
+	this.codeRangeName = codeRangeName;
+	this.parameters.addAll(parameters);
+	this.values.putAll(values);
+    }
 
-	public GenericCodeRangeMetrics(SourceCodeLocation sourceCodeLocation,
-			CodeRangeType codeRangeType, String codeRangeName,
-			Set<Parameter<?>> parameters, Collection<MetricValue<?>> values) {
-		super();
-		this.sourceCodeLocation = sourceCodeLocation;
-		this.codeRangeType = codeRangeType;
-		this.codeRangeName = codeRangeName;
-		this.parameters.addAll(parameters);
-		for (MetricValue<?> value : values) {
-			this.values.put(value.getParameter().getName(), value);
-		}
+    public GenericCodeRangeMetrics(SourceCodeLocation sourceCodeLocation,
+	    CodeRangeType codeRangeType, String codeRangeName,
+	    Set<Parameter<?>> parameters, Collection<MetricValue<?>> values) {
+	super();
+	this.sourceCodeLocation = sourceCodeLocation;
+	this.codeRangeType = codeRangeType;
+	this.codeRangeName = codeRangeName;
+	this.parameters.addAll(parameters);
+	for (MetricValue<?> value : values) {
+	    this.values.put(value.getParameter().getName(), value);
 	}
+    }
 
-	public SourceCodeLocation getSourceCodeLocation() {
-		return sourceCodeLocation;
-	}
+    public SourceCodeLocation getSourceCodeLocation() {
+	return sourceCodeLocation;
+    }
 
-	public CodeRangeType getCodeRangeType() {
-		return codeRangeType;
-	}
+    public CodeRangeType getCodeRangeType() {
+	return codeRangeType;
+    }
 
-	public String getCodeRangeName() {
-		return codeRangeName;
-	}
+    public String getCodeRangeName() {
+	return codeRangeName;
+    }
 
-	public Set<Parameter<?>> getParameters() {
-		return parameters;
-	}
+    public Set<Parameter<?>> getParameters() {
+	return parameters;
+    }
 
-	public Map<String, MetricValue<?>> getValues() {
-		return values;
-	}
+    public Map<String, MetricValue<?>> getValues() {
+	return values;
+    }
 
-	public <T> Value<T> getValue(Parameter<T> parameter) {
-		@SuppressWarnings("unchecked")
-		Value<T> t = (Value<T>) values.get(parameter.getName());
-		return t;
-	}
+    public <T> Value<T> getValue(Parameter<T> parameter) {
+	@SuppressWarnings("unchecked")
+	Value<T> t = (Value<T>) values.get(parameter.getName());
+	return t;
+    }
 
 }
