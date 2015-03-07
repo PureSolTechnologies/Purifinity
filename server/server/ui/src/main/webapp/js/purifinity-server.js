@@ -396,7 +396,7 @@ function serverStatusCtrl($scope) {
 }
 
 
-function processStatesCtrl($scope) {
+function processStatesCtrl($scope, purifinityServerConnector) {
 	$scope.connection = "Not Connected.";
 	$scope.error = undefined;
 	if (!$scope.websocket) {
@@ -419,4 +419,10 @@ function processStatesCtrl($scope) {
 			$scope.$apply();
 		}
 	}
+	$scope.abortRun = function(projectId) {
+		purifinityServerConnector.put('/purifinityserver/rest/analysis/projects/' + projectId + '/abort', "",
+			function(data, status){},
+			function(data, status, error) {}
+		);
+	};
 }

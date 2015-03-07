@@ -36,6 +36,7 @@
 						id="eval{{content.hashId}}" data-toggle="tooltip" title="{{analysis.languageName}} {{analysis.languageVersion}} plugin {{analysis.pluginVersion.major}}.{{analysis.pluginVersion.minor}}.{{analysis.pluginVersion.patch}}">
 						{{analysis.languageName}} {{analysis.languageVersion}} ({{analysis.startTime | date: "yyyy-MM-dd HH:mm:ss"}}, {{analysis.duration}}ms)
 					</div>
+					{{content.analyzedCodes}}
 				</td>
 			</tr>
 		</tbody>
