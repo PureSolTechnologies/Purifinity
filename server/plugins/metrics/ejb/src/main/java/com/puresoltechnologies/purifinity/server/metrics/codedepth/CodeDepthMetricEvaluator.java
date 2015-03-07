@@ -8,7 +8,6 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
-import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
@@ -22,13 +21,13 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
@@ -59,7 +58,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public Set<Parameter<?>> getParameters() {
+    public Set<MetricParameter<?>> getParameters() {
 	return CodeDepthMetricEvaluatorParameter.ALL;
     }
 
@@ -106,14 +105,12 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 	int maxDepth = 0;
 	EvaluatorStore evaluatorStore = getEvaluatorStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
-	    QualityLevel childLevel;
 	    if (child.isFile()) {
 		GenericFileMetrics fileResults = evaluatorStore
 			.readFileResults(child.getHashId(), CodeDepthMetric.ID);
 		if (fileResults == null) {
 		    continue;
 		}
-		childLevel = fileResults.getQualityLevel();
 		for (GenericCodeRangeMetrics result : fileResults.getValues()) {
 		    maxDepth = Math
 			    .max(maxDepth,
@@ -128,7 +125,6 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 		if (childDirectoryResults == null) {
 		    continue;
 		}
-		childLevel = childDirectoryResults.getQualityLevel();
 		maxDepth = Math
 			.max(maxDepth,
 				(Integer) childDirectoryResults
@@ -136,10 +132,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 					.get(CodeDepthMetricEvaluatorParameter.MAX_DEPTH
 						.getName()).getValue());
 	    }
-	    if (childLevel != null) {
-		directoryResults.addQualityLevel(childLevel);
-		directoryResults.setMaxDepth(maxDepth);
-	    }
+	    directoryResults.setMaxDepth(maxDepth);
 	}
 	return directoryResults;
     }

@@ -3,9 +3,9 @@ package com.puresoltechnologies.purifinity.evaluation.api;
 import java.util.Set;
 
 import com.puresoltechnologies.commons.math.Configurable;
-import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 
 /**
  * This is the central interface for an evaluator. An evaluator is responsible
@@ -32,7 +32,7 @@ public interface Evaluator extends Configurable {
      * 
      * @return
      */
-    public Set<Parameter<?>> getParameters();
+    public Set<MetricParameter<?>> getParameters();
 
     /**
      * This method returns a list with quality characteristics which might be

@@ -91,7 +91,7 @@ public class PurifinityProcessStatesSocket {
 		projectSettings = analysisStore
 			.readAnalysisProjectSettings(projectId);
 
-		ProcessState processState = new ProcessState(
+		ProcessState processState = new ProcessState(projectId,
 			projectSettings.getName(),
 			processStatusInformation.getState(), -1, 100, "files");
 		processStates.add(processState);

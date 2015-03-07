@@ -8,7 +8,6 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
-import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
@@ -17,14 +16,12 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.evaluation.api.QualityLevelParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluator;
@@ -67,7 +64,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends
     }
 
     @Override
-    public Set<Parameter<?>> getParameters() {
+    public Set<MetricParameter<?>> getParameters() {
 	return NormalizedMaintainabilityIndexEvaluatorParameter.ALL;
     }
 
@@ -129,35 +126,9 @@ public class NormalizedMaintainabilityIndexEvaluator extends
     protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
-	QualityLevel qualityLevel = null;
-	EvaluatorStore evaluatorStore = getEvaluatorStore();
-	for (AnalysisFileTree child : directory.getChildren()) {
-	    if (child.isFile()) {
-		GenericFileMetrics results = evaluatorStore.readFileResults(
-			child.getHashId(), getInformation().getId());
-		if (results != null) {
-		    for (GenericCodeRangeMetrics result : results.getValues()) {
-			qualityLevel = QualityLevel.combine(
-				qualityLevel,
-				result.getValue(
-					QualityLevelParameter.getInstance())
-					.getValue());
-		    }
-		}
-	    } else {
-		GenericDirectoryMetrics results = evaluatorStore
-			.readDirectoryResults(child.getHashId(),
-				getInformation().getId());
-		if (results != null) {
-		    qualityLevel = QualityLevel.combine(qualityLevel,
-			    results.getQualityLevel());
-		}
-	    }
-	}
 	NormalizedMaintainabilityIndexDirectoryResults finalResults = new NormalizedMaintainabilityIndexDirectoryResults(
 		NormalizedMaintainabilityIndexEvaluator.ID,
 		directory.getHashId(), new Date());
-	finalResults.addQualityLevel(qualityLevel);
 	return finalResults;
     }
 

@@ -7,8 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 
@@ -18,12 +16,13 @@ public class GenericCodeRangeMetrics implements Serializable {
     private final SourceCodeLocation sourceCodeLocation;
     private final CodeRangeType codeRangeType;
     private final String codeRangeName;
-    private final Set<Parameter<?>> parameters = new HashSet<>();
+    private final Set<MetricParameter<?>> parameters = new HashSet<>();
     private final Map<String, MetricValue<?>> values = new HashMap<>();
 
     public GenericCodeRangeMetrics(SourceCodeLocation sourceCodeLocation,
 	    CodeRangeType codeRangeType, String codeRangeName,
-	    Set<Parameter<?>> parameters, Map<String, MetricValue<?>> values) {
+	    Set<MetricParameter<?>> parameters,
+	    Map<String, MetricValue<?>> values) {
 	super();
 	this.sourceCodeLocation = sourceCodeLocation;
 	this.codeRangeType = codeRangeType;
@@ -34,7 +33,8 @@ public class GenericCodeRangeMetrics implements Serializable {
 
     public GenericCodeRangeMetrics(SourceCodeLocation sourceCodeLocation,
 	    CodeRangeType codeRangeType, String codeRangeName,
-	    Set<Parameter<?>> parameters, Collection<MetricValue<?>> values) {
+	    Set<MetricParameter<?>> parameters,
+	    Collection<MetricValue<?>> values) {
 	super();
 	this.sourceCodeLocation = sourceCodeLocation;
 	this.codeRangeType = codeRangeType;
@@ -57,7 +57,7 @@ public class GenericCodeRangeMetrics implements Serializable {
 	return codeRangeName;
     }
 
-    public Set<Parameter<?>> getParameters() {
+    public Set<MetricParameter<?>> getParameters() {
 	return parameters;
     }
 
@@ -65,10 +65,10 @@ public class GenericCodeRangeMetrics implements Serializable {
 	return values;
     }
 
-    public <T> Value<T> getValue(Parameter<T> parameter) {
+    public <T extends Number & Serializable & Comparable<T>> MetricValue<T> getValue(
+	    MetricParameter<T> parameter) {
 	@SuppressWarnings("unchecked")
-	Value<T> t = (Value<T>) values.get(parameter.getName());
+	MetricValue<T> t = (MetricValue<T>) values.get(parameter.getName());
 	return t;
     }
-
 }

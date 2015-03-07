@@ -27,7 +27,7 @@ public class AnalysisProcessStateModel extends
 	public Set<AnalysisProcessState> getEndStates() {
 		Set<AnalysisProcessState> endStates = new HashSet<>();
 		endStates.add(AnalysisProcessState.FINISHED);
-		endStates.add(AnalysisProcessState.ABORTED);
+		endStates.add(AnalysisProcessState.ABORT_REQUESTED);
 		endStates.add(AnalysisProcessState.FAILED);
 		return endStates;
 	}

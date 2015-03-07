@@ -10,15 +10,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 
 public class CodeDepthFileResults extends AbstractMetrics implements
 	FileMetrics {
@@ -49,12 +48,6 @@ public class CodeDepthFileResults extends AbstractMetrics implements
 
     public void add(CodeDepthResult result) {
 	results.add(result);
-	QualityLevel qualityLevel = getQualityLevel();
-	if (qualityLevel == null) {
-	    setQualityLevel(new QualityLevel(result.getQuality()));
-	} else {
-	    qualityLevel.add(result.getQuality());
-	}
     }
 
     public List<CodeDepthResult> getResults() {
@@ -62,7 +55,7 @@ public class CodeDepthFileResults extends AbstractMetrics implements
     }
 
     @Override
-    public Set<Parameter<?>> getParameters() {
+    public Set<MetricParameter<?>> getParameters() {
 	return ALL;
     }
 

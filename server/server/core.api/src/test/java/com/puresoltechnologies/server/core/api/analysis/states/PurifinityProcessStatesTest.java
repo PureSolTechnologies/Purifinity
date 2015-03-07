@@ -22,9 +22,9 @@ public class PurifinityProcessStatesTest {
     public void testSerialization() throws JsonGenerationException,
 	    JsonMappingException, IOException {
 	List<ProcessState> states = new ArrayList<ProcessState>();
-	states.add(new ProcessState("process1,", AnalysisProcessState.STORING,
-		10, 100, "unit1"));
-	states.add(new ProcessState("process2,",
+	states.add(new ProcessState("pid1", "process1,",
+		AnalysisProcessState.STORING, 10, 100, "unit1"));
+	states.add(new ProcessState("pid2", "process2,",
 		AnalysisProcessState.ANALYZING, 20, 100, "unit2"));
 	PurifinityProcessStates information = new PurifinityProcessStates(
 		new Date(), states);

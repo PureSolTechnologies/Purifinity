@@ -18,6 +18,8 @@ public interface AnalysisService {
 
     public void triggerNewRun(String projectId) throws JMSException;
 
+    public void abortCurrentRun(String projectId);
+
     public Collection<AnalyzerServiceInformation> getAnalyzers();
 
     public AnalyzerServiceInformation getAnalyzer(String analyzerId);

@@ -15,6 +15,9 @@ import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStatusInformation;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessTransition;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManager;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.queues.ProjectAnalysisStartQueue;
@@ -42,6 +45,9 @@ public class AnalysisServiceBean implements AnalysisService {
     @Inject
     private RepositoryTypeServiceManager repositoryTypePluginService;
 
+    @Inject
+    private AnalysisProcessStateTracker processTracker;
+
     @PostConstruct
     public void initialize() {
 	eventLogger.logEvent(AnalysisServiceEvents.createStartupEvent());
@@ -55,6 +61,15 @@ public class AnalysisServiceBean implements AnalysisService {
     @Override
     public void triggerNewRun(String projectId) throws JMSException {
 	messageSender.sendMessage(projectAnalysisStartQueue, projectId);
+    }
+
+    @Override
+    public void abortCurrentRun(String projectId) {
+	AnalysisProcessStatusInformation processState = processTracker
+		.readProcessState(projectId);
+	long runId = processState.getRunId();
+	processTracker.changeProcessState(projectId, runId,
+		AnalysisProcessTransition.REQUEST_ABORT);
     }
 
     @Override

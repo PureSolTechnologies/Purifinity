@@ -34,6 +34,11 @@ public class AnalysisRestService implements AnalysisRestInterface {
     }
 
     @Override
+    public void abortCurrentRun(String projectId) {
+	analysisService.abortCurrentRun(projectId);
+    }
+
+    @Override
     public AnalyzerServiceInformation getAnalyzer(String analyzerId) {
 	return analysisService.getAnalyzer(analyzerId);
     }

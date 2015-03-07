@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 
 public class MaintainabilityIndexDirectoryResults extends AbstractMetrics
 	implements DirectoryMetrics {
@@ -32,7 +32,7 @@ public class MaintainabilityIndexDirectoryResults extends AbstractMetrics
     }
 
     @Override
-    public Set<Parameter<?>> getParameters() {
+    public Set<MetricParameter<?>> getParameters() {
 	return ALL;
     }
 
@@ -40,4 +40,5 @@ public class MaintainabilityIndexDirectoryResults extends AbstractMetrics
     public Map<String, MetricValue<?>> getValues() {
 	return new HashMap<>();
     }
+
 }

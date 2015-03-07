@@ -17,7 +17,7 @@ public class ProcessStateTest {
     @Test
     public void testSerialization() throws JsonGenerationException,
 	    JsonMappingException, IOException {
-	ProcessState information = new ProcessState("Project",
+	ProcessState information = new ProcessState("pid", "Project",
 		AnalysisProcessState.STORING, 50, 100, "unit");
 	String serialized = JSONSerializer.toJSONString(information);
 	System.out.println(serialized);

@@ -27,6 +27,10 @@ public interface AnalysisRestInterface {
     @Path("projects/{project_id}")
     void triggerNewRun(@PathParam("project_id") String projectId);
 
+    @PUT
+    @Path("projects/{project_id}/abort")
+    void abortCurrentRun(@PathParam("project_id") String projectId);
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("analyzers/{id}")

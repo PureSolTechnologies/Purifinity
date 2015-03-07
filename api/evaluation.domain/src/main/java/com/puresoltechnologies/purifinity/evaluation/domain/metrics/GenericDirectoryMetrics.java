@@ -15,13 +15,13 @@ public class GenericDirectoryMetrics extends AbstractMetrics implements
 
     private static final long serialVersionUID = -7071488619641043222L;
 
-    private final Set<Parameter<?>> parameters = new LinkedHashSet<>();
+    private final Set<MetricParameter<?>> parameters = new LinkedHashSet<>();
     private final Map<String, MetricValue<?>> values = new HashMap<>();
 
     private final HashId hashId;
 
     public GenericDirectoryMetrics(String evaluatorId, HashId hashId,
-	    Date time, Set<Parameter<?>> parameters,
+	    Date time, Set<MetricParameter<?>> parameters,
 	    Map<String, MetricValue<?>> values) {
 	super(evaluatorId, time);
 	this.hashId = hashId;
@@ -35,7 +35,7 @@ public class GenericDirectoryMetrics extends AbstractMetrics implements
     }
 
     @Override
-    public Set<Parameter<?>> getParameters() {
+    public Set<MetricParameter<?>> getParameters() {
 	return parameters;
     }
 

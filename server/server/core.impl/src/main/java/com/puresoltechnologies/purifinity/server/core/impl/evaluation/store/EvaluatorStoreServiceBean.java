@@ -20,7 +20,6 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
@@ -37,9 +36,9 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirec
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProjectMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.ValueSerializer;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.SourceCodeLocationCreator;
@@ -223,24 +222,20 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	    String codeRangeName = metric.getCodeRangeName();
 	    CodeRangeType codeRangeType = metric.getCodeRangeType();
 
-	    for (Parameter<?> parameter : metrics.getParameters()) {
+	    for (MetricParameter<?> parameter : metrics.getParameters()) {
 		String parameterName = parameter.getName();
 		if (parameterName.equals(codeRangeNameParameterName)
 			|| parameterName.equals(codeRangeTypeParameterName)) {
 		    continue;
 		}
-		Value<?> value = metric.getValue(parameter);
+		MetricValue<? extends Number> value = metric
+			.getValue(parameter);
 		if (value == null) {
 		    // There is not value assigned for the parameter. So we can
 		    // safely skip it.
 		    continue;
 		}
-		Object valueObject = value.getValue();
-		if (!Number.class.isAssignableFrom(valueObject.getClass())) {
-		    // TODO what happens with the other values?
-		    continue;
-		}
-		Double numericValue = ((Number) valueObject).doubleValue();
+		double numericValue = value.getValue().doubleValue();
 		BoundStatement boundStatement = preparedStatement
 			.bind(time, hashId.toString(),
 				PropertiesUtils.toString(sourceCodeLocation
@@ -274,13 +269,11 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 				+ "code_range_type, "
 				+ "parameter_name, "
 				+ "parameter_unit, "
-				+ "numeric, "
 				+ "parameter_type, "
-				+ "numeric_value, "
-				+ "string_value, "
+				+ "value, "
 				+ "level_of_measurement, "
 				+ "parameter_description ) VALUES "
-				+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+				+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 	Date time = metrics.getTime();
 	String projectId = analysisRun.getInformation().getProjectId();
@@ -307,37 +300,30 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	    String codeRangeName = metric.getCodeRangeName();
 	    CodeRangeType codeRangeType = metric.getCodeRangeType();
 
-	    for (Parameter<?> parameter : metrics.getParameters()) {
+	    for (MetricParameter<?> parameter : metrics.getParameters()) {
 		String parameterName = parameter.getName();
 		if (parameterName.equals(codeRangeNameParameterName)
 			|| parameterName.equals(codeRangeTypeParameterName)) {
 		    continue;
 		}
 		String parameterUnit = parameter.getUnit();
-		boolean numeric = parameter.isNumeric();
 		String parameterType = parameter.getType().getName();
-		Value<?> value = metric.getValue(parameter);
+		MetricValue<? extends Number> value = metric
+			.getValue(parameter);
 		if (value == null) {
 		    // There is not value assigned for the parameter. So we can
 		    // safely skip it.
 		    continue;
 		}
-		Object valueObject = value.getValue();
-		Double numericValue = null;
-		String stringValue = null;
-		if (numeric) {
-		    numericValue = ((Number) valueObject).doubleValue();
-		} else {
-		    stringValue = ValueSerializer.toString(value);
-		}
+		double numericValue = value.getValue().doubleValue();
 		BoundStatement boundStatement = preparedStatement.bind(time,
 			projectId, runId, hashId.toString(), internalPath,
 			fileName, sourceCodeLocation, languageName,
 			languageVersion, evaluatorId, codeRangeName,
 			codeRangeType.name(), parameterName, parameterUnit,
-			numeric, parameterType, numericValue, stringValue,
-			parameter.getLevelOfMeasurement().name(),
-			parameter.getDescription());
+			parameterType, numericValue, parameter
+				.getLevelOfMeasurement().name(), parameter
+				.getDescription());
 		session.execute(boundStatement);
 	    }
 	}
@@ -381,8 +367,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		    continue;
 		}
 		String parameterUnit = parameter.getUnit();
-		Object valueObject = value.getValue();
-		Double numericValue = ((Number) valueObject).doubleValue();
+		double numericValue = value.getValue().doubleValue();
 		BoundStatement boundStatement = preparedStatement.bind(time,
 			hashId.toString(), evaluatorId, parameterName,
 			parameterUnit, numericValue);
@@ -400,11 +385,10 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 			+ " (time, " + "project_id, " + "run_id, " + "hashid, "
 			+ "internal_directory, " + "file_name, "
 			+ "evaluator_name, " + "parameter_name, "
-			+ "parameter_unit, " + "numeric, " + "parameter_type, "
-			+ "numeric_value, " + "string_value, "
+			+ "parameter_unit, " + "parameter_type, " + "value, "
 			+ "level_of_measurement, "
 			+ "parameter_description) VALUES "
-			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 	Date time = metrics.getTime();
 	String projectId = analysisRun.getInformation().getProjectId();
@@ -423,22 +407,14 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	    MetricValue<?> value = values.get(parameter);
 	    if (value != null) {
 		String parameterUnit = parameter.getUnit();
-		boolean numeric = parameter.isNumeric();
 		String parameterType = parameter.getType().getName();
-		Double numericValue = null;
-		String stringValue = null;
-		if (numeric) {
-		    Object valueObject = value.getValue();
-		    numericValue = ((Number) valueObject).doubleValue();
-		} else {
-		    stringValue = ValueSerializer.toString(value);
-		}
+		double numericValue = value.getValue().doubleValue();
 		BoundStatement boundStatement = preparedStatement.bind(time,
 			projectId, runId, directory.getHashId().toString(),
 			internalPath, fileName, evaluatorId, parameterName,
-			parameterUnit, numeric, parameterType, numericValue,
-			stringValue, parameter.getLevelOfMeasurement().name(),
-			parameter.getDescription());
+			parameterUnit, parameterType, numericValue, parameter
+				.getLevelOfMeasurement().name(), parameter
+				.getDescription());
 		session.execute(boundStatement);
 	    }
 	}
@@ -484,8 +460,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		    continue;
 		}
 		String parameterUnit = parameter.getUnit();
-		Object valueObject = value.getValue();
-		Double numericValue = ((Number) valueObject).doubleValue();
+		double numericValue = value.getValue().doubleValue();
 		BoundStatement boundStatement = preparedStatement.bind(time,
 			projectId, runId, evaluatorId, parameterName,
 			parameterUnit, numericValue);
@@ -503,11 +478,10 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 			+ " (time, " + "project_id, " + "run_id, " + "hashid, "
 			+ "internal_directory, " + "file_name, "
 			+ "evaluator_name, " + "parameter_name, "
-			+ "parameter_unit, " + "numeric, " + "parameter_type, "
-			+ "numeric_value, " + "string_value, "
+			+ "parameter_unit, " + "parameter_type, " + "value, "
 			+ "level_of_measurement, "
 			+ "parameter_description) VALUES "
-			+ "( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+			+ "( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 	Date time = metrics.getTime();
 	String projectId = analysisRun.getInformation().getProjectId();
@@ -526,22 +500,14 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	    MetricValue<?> value = values.get(parameter);
 	    if (value != null) {
 		String parameterUnit = parameter.getUnit();
-		boolean numeric = parameter.isNumeric();
 		String parameterType = parameter.getType().getName();
-		Double numericValue = null;
-		String stringValue = null;
-		if (numeric) {
-		    Object valueObject = value.getValue();
-		    numericValue = ((Number) valueObject).doubleValue();
-		} else {
-		    stringValue = ValueSerializer.toString(value);
-		}
+		double numericValue = value.getValue().doubleValue();
 		BoundStatement boundStatement = preparedStatement.bind(time,
 			projectId, runId, directory.getHashId().toString(),
 			internalPath, fileName, evaluatorId, parameterName,
-			parameterUnit, numeric, parameterType, numericValue,
-			stringValue, parameter.getLevelOfMeasurement().name(),
-			parameter.getDescription());
+			parameterUnit, parameterType, numericValue, parameter
+				.getLevelOfMeasurement().name(), parameter
+				.getDescription());
 		session.execute(boundStatement);
 	    }
 	}
@@ -560,7 +526,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	BoundStatement boundStatement = preparedStatement.bind(
 		hashId.toString(), evaluatorId);
 	ResultSet resultSet = session.execute(boundStatement);
-	Set<Parameter<?>> parameters = evaluatorPluginService
+	Set<MetricParameter<?>> parameters = evaluatorPluginService
 		.getEvaluatorPluginInformation(evaluatorId).getParameters();
 	Date time = null;
 	SourceCodeLocation sourceCodeLocation = null;
@@ -700,7 +666,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	BoundStatement boundStatement = preparedStatement.bind(
 		hashId.toString(), evaluatorId);
 	ResultSet resultSet = session.execute(boundStatement);
-	Set<Parameter<?>> parameters = new HashSet<Parameter<?>>();
+	Set<MetricParameter<?>> parameters = new HashSet<>();
 	Date time = null;
 	while (resultSet.isExhausted()) {
 	    Row result = resultSet.one();
@@ -709,10 +675,8 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		time = result.getDate("time");
 	    }
 	}
-	// GenericMetrics metrics = new
-	// GenericMetrics(SourceCodeLocationCreator.createFromSerialization(properties),
-	// codeRangeType, codeRangeName, parameters, values);
-	Map<String, MetricValue<?>> metrics = null;
+	// FIXME: The correct values need to be added!
+	Map<String, MetricValue<?>> metrics = new HashMap<>();
 	GenericDirectoryMetrics directoryMetrics = new GenericDirectoryMetrics(
 		evaluatorId, hashId, time, parameters, metrics);
 	return directoryMetrics;
@@ -737,7 +701,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	BoundStatement boundStatement = preparedStatement.bind(projectUUID,
 		runUUID, evaluatorId);
 	ResultSet resultSet = session.execute(boundStatement);
-	Set<Parameter<?>> parameters = new HashSet<Parameter<?>>();
+	Set<MetricParameter<?>> parameters = new HashSet<>();
 	Date time = null;
 	while (resultSet.isExhausted()) {
 	    Row result = resultSet.one();

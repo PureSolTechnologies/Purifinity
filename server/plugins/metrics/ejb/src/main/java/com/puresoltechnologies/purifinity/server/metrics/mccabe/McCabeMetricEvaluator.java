@@ -9,7 +9,6 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
-import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
@@ -23,13 +22,13 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
@@ -52,7 +51,7 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public Set<Parameter<?>> getParameters() {
+    public Set<MetricParameter<?>> getParameters() {
 	return McCabeMetricEvaluatorParameter.ALL;
     }
 
@@ -90,7 +89,6 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
     protected GenericDirectoryMetrics processDirectory(AnalysisRun analysisRun,
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
-	QualityLevel qualityLevel = null;
 	McCabeMetricResult metricResults = null;
 	EvaluatorStore evaluatorStore = getEvaluatorStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
@@ -107,8 +105,6 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 			    break;
 			}
 		    }
-		    qualityLevel = QualityLevel.combine(qualityLevel,
-			    results.getQualityLevel());
 		}
 	    } else {
 		if (evaluatorStore.hasDirectoryResults(child.getHashId(),
@@ -117,8 +113,6 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 			    .readDirectoryResults(child.getHashId(),
 				    getInformation().getId());
 		    metricResults = combine(directory, metricResults, results);
-		    qualityLevel = QualityLevel.combine(qualityLevel,
-			    results.getQualityLevel());
 		}
 	    }
 	}
@@ -128,7 +122,6 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 	GenericDirectoryMetrics finalResults = new GenericDirectoryMetrics(
 		McCabeMetric.ID, directory.getHashId(), new Date(),
 		McCabeMetricEvaluatorParameter.ALL, metricResults.getValues());
-	finalResults.addQualityLevel(qualityLevel);
 	return finalResults;
     }
 

@@ -34,10 +34,8 @@
 			<artifactId>javaee-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.jboss.weld.se</groupId>
-			<artifactId>weld-se</artifactId>
-			<version>1.1.19.Final</version>
-			<scope>test</scope>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
 		</dependency>
 	</dependencies>
 

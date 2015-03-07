@@ -9,7 +9,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
-import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
@@ -21,12 +20,11 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetricEvaluatorStore;
-import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadQuality;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadResult;
 
 @Stateless
@@ -46,7 +44,7 @@ public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public Set<Parameter<?>> getParameters() {
+    public Set<MetricParameter<?>> getParameters() {
 	return EntropyMetricEvaluatorParameter.ALL;
     }
 
@@ -67,8 +65,7 @@ public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
 			    codeRange.getCanonicalName());
 	    EntropyMetricResult result = calculateEntropyResult(halstead);
 	    results.add(new EntropyResult(sourceCodeLocation, codeRange
-		    .getType(), codeRange.getCanonicalName(), result,
-		    EntropyQuality.get(codeRange.getType(), result)));
+		    .getType(), codeRange.getCanonicalName(), result));
 	}
 	return results;
     }
@@ -127,30 +124,6 @@ public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
 		directory.getHashId(), new Date(),
 		new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
 		directory.getName());
-	for (AnalysisFileTree child : directory.getChildren()) {
-	    QualityLevel childLevel;
-	    if (child.isFile()) {
-		HalsteadResult fileResults = halsteadMetricEvaluatorStore
-			.readCodeRangeResults(child.getHashId(),
-				CodeRangeType.FILE, child.getName());
-		if (fileResults == null) {
-		    continue;
-		}
-		childLevel = new QualityLevel(HalsteadQuality.get(
-			CodeRangeType.FILE, fileResults));
-	    } else {
-		HalsteadResult childDirectoryResults = halsteadMetricEvaluatorStore
-			.readDirectoryResults(child.getHashId());
-		if (childDirectoryResults == null) {
-		    continue;
-		}
-		childLevel = new QualityLevel(HalsteadQuality.get(
-			CodeRangeType.DIRECTORY, childDirectoryResults));
-	    }
-	    if (childLevel != null) {
-		directoryResults.addQualityLevel(childLevel);
-	    }
-	}
 	directoryResults.setEntropyResult(entropyResult);
 	return directoryResults;
     }

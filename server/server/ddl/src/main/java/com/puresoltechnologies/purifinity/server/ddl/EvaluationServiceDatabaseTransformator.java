@@ -86,16 +86,36 @@ public class EvaluationServiceDatabaseTransformator implements
 		metadata);
 
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence, "Rick-Rainer Ludwig",
+		sequence,
+		"Rick-Rainer Ludwig",
 
-		"CREATE TABLE " + EVALUATION_PARAMETERS_TABLE
-			+ " (time timestamp, " + "evaluator_id varchar, "
+		"CREATE TABLE "
+			+ EVALUATION_PARAMETERS_TABLE
+			+ " (time timestamp, "
+			+ "evaluator_id varchar, "
+			+ "evaluator_name varchar, "
+			+ "evaluator_version varchar, "
+			+ "plugin_id varchar, "
+			+ "plugin_name varchar, "
+			+ "plugin_version varchar, "
+			+ "vendor varchar, "
+			+ "vendor_url varchar, "
+			+ "plugin_ui_path varchar, "
 			+ "parameter_name varchar, "
 			+ "parameter_unit varchar, "
 			+ "level_of_measurement varchar, "
-			+ "parameter_description varchar, " + "value double, "
-			+ "PRIMARY KEY(evaluator_id, parameter_name))",
+			+ "parameter_description varchar, "
+			+ "PRIMARY KEY(evaluator_id, evaluator_version, parameter_name))",
 		"This table contains all available parameters of all evaluators."));
+
+	sequence.appendTransformation(new CassandraCQLTransformationStep(
+		sequence,
+		"Rick-Rainer Ludwig",
+
+		"CREATE INDEX parameters_vendor_idx ON "
+			+ EVALUATION_PARAMETERS_TABLE + " (vendor)",
+		"This index is used to search for parameters and evaluators of certain vendors."));
+
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence,
 		"Rick-Rainer Ludwig",
@@ -153,10 +173,8 @@ public class EvaluationServiceDatabaseTransformator implements
 			+ "code_range_type varchar, "
 			+ "parameter_name varchar, "
 			+ "parameter_unit varchar, "
-			+ "numeric boolean, "
 			+ "parameter_type varchar, "
-			+ "numeric_value double, "
-			+ "string_value varchar, "
+			+ "value double, "
 			+ "level_of_measurement varchar, "
 			+ "parameter_description varchar, "
 			+ "PRIMARY KEY(project_id, run_id, evaluator_name, parameter_name, code_range_type, hashid, code_range_name));",

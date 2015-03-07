@@ -19,6 +19,7 @@ public class ProcessState implements Serializable, Comparable<ProcessState> {
 
     private static final long serialVersionUID = 1L;
 
+    private final String processId;
     private final String name;
     private final AnalysisProcessState status;
     private final int current;
@@ -29,6 +30,7 @@ public class ProcessState implements Serializable, Comparable<ProcessState> {
      * Default constructor for Jackson.
      */
     public ProcessState() {
+	processId = null;
 	name = null;
 	status = null;
 	current = -1;
@@ -38,18 +40,24 @@ public class ProcessState implements Serializable, Comparable<ProcessState> {
 
     @JsonCreator
     public ProcessState(
+	    @JsonProperty("processId") String processId,
 	    @JsonProperty("name") String name,//
 	    @JsonProperty("status") AnalysisProcessState status,
 	    @JsonProperty("current") int current, //
 	    @JsonProperty("max") int max, //
 	    @JsonProperty("unit") String unit) {
 	super();
+	this.processId = processId;
 	this.name = Objects.requireNonNull(name, "name must not be null.");
 	this.status = Objects
 		.requireNonNull(status, "status must not be null.");
 	this.max = max;
 	this.current = current;
 	this.unit = Objects.requireNonNull(unit, "unit must not be null.");
+    }
+
+    public String getProcessId() {
+	return processId;
     }
 
     public String getName() {
@@ -79,6 +87,8 @@ public class ProcessState implements Serializable, Comparable<ProcessState> {
 	result = prime * result + current;
 	result = prime * result + max;
 	result = prime * result + ((name == null) ? 0 : name.hashCode());
+	result = prime * result
+		+ ((processId == null) ? 0 : processId.hashCode());
 	result = prime * result + ((status == null) ? 0 : status.hashCode());
 	result = prime * result + ((unit == null) ? 0 : unit.hashCode());
 	return result;
@@ -102,10 +112,12 @@ public class ProcessState implements Serializable, Comparable<ProcessState> {
 		return false;
 	} else if (!name.equals(other.name))
 	    return false;
-	if (status == null) {
-	    if (other.status != null)
+	if (processId == null) {
+	    if (other.processId != null)
 		return false;
-	} else if (!status.equals(other.status))
+	} else if (!processId.equals(other.processId))
+	    return false;
+	if (status != other.status)
 	    return false;
 	if (unit == null) {
 	    if (other.unit != null)

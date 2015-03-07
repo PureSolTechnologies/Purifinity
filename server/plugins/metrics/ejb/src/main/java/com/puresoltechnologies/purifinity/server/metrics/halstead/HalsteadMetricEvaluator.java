@@ -9,7 +9,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
-import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
@@ -27,6 +26,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
@@ -52,7 +52,7 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public Set<Parameter<?>> getParameters() {
+    public Set<MetricParameter<?>> getParameters() {
 	return HalsteadMetricEvaluatorParameter.ALL;
     }
 
@@ -84,7 +84,6 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 			    .getCanonicalName(),
 		    HalsteadMetricEvaluatorParameter.ALL, halsteadResults
 			    .getResults()));
-	    results.addQualityLevel(new QualityLevel(metric.getQuality()));
 	}
 	return results;
     }
@@ -134,7 +133,6 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 	HalsteadMetricDirectoryResults finalResults = new HalsteadMetricDirectoryResults(
 		HalsteadMetric.ID, directory.getHashId(), new Date(),
 		metricResults);
-	finalResults.addQualityLevel(qualityLevel);
 	return finalResults;
     }
 

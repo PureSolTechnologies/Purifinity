@@ -10,7 +10,6 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
-import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
@@ -24,13 +23,13 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
@@ -67,7 +66,7 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public Set<Parameter<?>> getParameters() {
+    public Set<MetricParameter<?>> getParameters() {
 	return SLOCEvaluatorParameter.ALL;
     }
 
@@ -118,7 +117,6 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
     protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
-	QualityLevel qualityLevel = null;
 	SLOCResult metricResults = null;
 	EvaluatorStore evaluatorStore = getEvaluatorStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
@@ -135,8 +133,6 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 			    break;
 			}
 		    }
-		    qualityLevel = QualityLevel.combine(qualityLevel,
-			    results.getQualityLevel());
 		}
 	    } else {
 		if (evaluatorStore.hasDirectoryResults(child.getHashId(),
@@ -145,8 +141,6 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 			    .readDirectoryResults(child.getHashId(),
 				    getInformation().getId());
 		    metricResults = combine(directory, metricResults, results);
-		    qualityLevel = QualityLevel.combine(qualityLevel,
-			    results.getQualityLevel());
 		}
 	    }
 	}
@@ -158,7 +152,6 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	GenericDirectoryMetrics finalResults = new GenericDirectoryMetrics(
 		SLOCMetricCalculator.ID, directory.getHashId(), new Date(),
 		SLOCEvaluatorParameter.ALL, metrics);
-	finalResults.addQualityLevel(qualityLevel);
 	return finalResults;
     }
 
