@@ -8,6 +8,9 @@ import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
@@ -34,6 +37,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServi
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
+import com.puresoltechnologies.purifinity.server.metrics.sloc.db.SLOCEvaluatorDAO;
 
 /**
  * This evaluator evaluates the Source Lines Of Code metrics which counts the
@@ -52,8 +56,14 @@ import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator
 @Remote(Evaluator.class)
 public class SLOCEvaluator extends AbstractMetricEvaluator {
 
+    @Inject
+    private Logger logger;
+
     @EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
     private AnalyzerServiceManagerRemote analyzerServiceManager;
+
+    @Inject
+    private SLOCEvaluatorDAO slocEvaluatorDAO;
 
     public SLOCEvaluator() {
 	super(SLOCMetricCalculator.ID, SLOCMetricCalculator.NAME,
@@ -76,10 +86,6 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	    UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 	AnalysisInformation analyzedFile = analysis.getAnalysisInformation();
 	HashId hashId = analyzedFile.getHashId();
-	EvaluatorStore evaluatorStore = getEvaluatorStore();
-	if (evaluatorStore.hasFileResults(hashId, SLOCMetricCalculator.ID)) {
-	    return null;
-	}
 	AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
 		.findByName(analysis.getLanguageName(),
 			analysis.getLanguageVersion());
@@ -90,6 +96,8 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	GenericFileMetrics results = new GenericFileMetrics(
 		SLOCMetricCalculator.ID, hashId, sourceCodeLocation,
 		analysis.getStartTime(), SLOCEvaluatorParameter.ALL);
+	logger.info("Process file '"
+		+ sourceCodeLocation.getHumanReadableLocationString() + "'...");
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    SLOCMetricCalculator metric = new SLOCMetricCalculator(analysisRun,
 		    language, codeRange);
@@ -104,7 +112,12 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 		    sourceCodeLocation, codeRange.getType(), codeRange
 			    .getCanonicalName(), SLOCEvaluatorParameter.ALL,
 		    values));
+
+	    slocEvaluatorDAO.storeFileResults(hashId, codeRange,
+		    metric.getSLOCResult());
 	}
+	logger.info("Finished file '"
+		+ sourceCodeLocation.getHumanReadableLocationString() + "'.");
 	return results;
     }
 

@@ -93,11 +93,11 @@ public class SLOCEvaluatorDatabaseTransformator implements
 			+ "comLOC int, "
 			+ "blLOC int, "
 			+ "line_length_count int, "
-			+ "line_length_min int, "
-			+ "line_length_max int, "
-			+ "line_length_avg float, "
-			+ "line_length_median float, "
-			+ "line_length_stdDev float, "
+			+ "line_length_min double, "
+			+ "line_length_max double, "
+			+ "line_length_avg double, "
+			+ "line_length_median double, "
+			+ "line_length_stdDev double, "
 			+ "PRIMARY KEY(hashid, code_range_type, code_range_name));",
 		"Keeps directory results for Halstead evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
