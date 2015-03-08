@@ -9,8 +9,6 @@ import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.math.statistics.Statistics;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.api.SourceCodeQualityParameter;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
@@ -136,10 +134,6 @@ public class SLOCResult implements Serializable {
 	Statistics lineStatistics = new Statistics(phyLOC.getValue(),
 		min.getValue(), max.getValue(), avg.getValue(),
 		median.getValue(), stdDev.getValue());
-
-	@SuppressWarnings("unchecked")
-	Value<SourceCodeQuality> sourceCodeQuality = (Value<SourceCodeQuality>) result
-		.get(SourceCodeQualityParameter.getInstance());
 
 	SLOCMetric metric = new SLOCMetric(phyLOC.getValue(),
 		proLOC.getValue(), comLOC.getValue(), blLOC.getValue(),

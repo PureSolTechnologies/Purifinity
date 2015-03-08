@@ -78,11 +78,9 @@ public class HalsteadMetric extends CodeRangeEvaluator {
      * {@inheritDoc}
      */
     @Override
-    public Boolean call() {
-	fireStarted("Start evaluation.", 1);
+    public boolean run() {
 	createHashtables();
 	calculateValues();
-	fireDone("Finished evaluation.", true);
 	return true;
     }
 

@@ -75,7 +75,7 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    HalsteadMetric metric = new HalsteadMetric(analysisRun, language,
 		    codeRange);
-	    execute(metric);
+	    metric.run();
 	    HalsteadResult halsteadResults = metric.getHalsteadResults();
 	    halsteadMetricEvaluatorStore.storeCodeRangeResults(hashId,
 		    codeRange, halsteadResults);

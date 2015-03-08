@@ -28,8 +28,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
@@ -93,7 +93,7 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    SLOCMetricCalculator metric = new SLOCMetricCalculator(analysisRun,
 		    language, codeRange);
-	    execute(metric);
+	    metric.run();
 
 	    Map<String, MetricValue<?>> values = new HashMap<>();
 	    for (MetricValue<?> result : metric.getSLOCResult().getResults()) {

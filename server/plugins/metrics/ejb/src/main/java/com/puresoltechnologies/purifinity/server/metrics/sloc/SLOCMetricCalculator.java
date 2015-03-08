@@ -131,19 +131,16 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
      * {@inheritDoc}
      */
     @Override
-    public Boolean call() {
-	fireStarted("Evaluation started.", 1);
+    public boolean run() {
 	setup();
 	count();
-	fireDone("Finished evaluation.", true);
 	return true;
     }
 
     private void setup() {
 	sloc = null;
 	lineResults.clear();
-	for (int i = 0; i < codeRange.getUST().getMetaData()
-		.getLineNum(); i++) {
+	for (int i = 0; i < codeRange.getUST().getMetaData().getLineNum(); i++) {
 	    lineResults.add(new LineResults());
 	}
     }
@@ -156,8 +153,7 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
     private void gatherData() {
 	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
 		codeRange.getUST());
-	int lineOffset = codeRange.getUST().getMetaData()
-		.getLine();
+	int lineOffset = codeRange.getUST().getMetaData().getLine();
 	do {
 	    UniversalSyntaxTree node = iterator.getCurrentNode();
 	    if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {

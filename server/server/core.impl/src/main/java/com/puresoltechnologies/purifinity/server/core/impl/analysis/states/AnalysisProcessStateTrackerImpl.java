@@ -52,7 +52,7 @@ public class AnalysisProcessStateTrackerImpl implements
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(
 			session,
-			"SELECT project_id, run_id, state, started, last_progress FROM analysis_process;");
+			"SELECT project_id, run_id, state, started, last_progress, step, current, max FROM analysis_process;");
 	BoundStatement boundStatement = preparedStatement.bind();
 	ResultSet resultSet = session.execute(boundStatement);
 	List<AnalysisProcessStatusInformation> information = new ArrayList<>();
@@ -63,10 +63,13 @@ public class AnalysisProcessStateTrackerImpl implements
 	    String stateString = row.getString(2);
 	    Date started = row.getDate(3);
 	    Date lastProgress = row.getDate(4);
+	    String step = row.getString(5);
+	    int current = row.getInt(6);
+	    int max = row.getInt(7);
 	    AnalysisProcessState state = AnalysisProcessState
 		    .valueOf(stateString);
 	    information.add(new AnalysisProcessStatusInformation(started,
-		    projectId, runId, state, lastProgress));
+		    projectId, runId, state, lastProgress, step, current, max));
 	}
 	return information;
     }
@@ -76,7 +79,7 @@ public class AnalysisProcessStateTrackerImpl implements
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(
 			session,
-			"SELECT run_id, state, started, last_progress FROM analysis_process WHERE project_id=?;");
+			"SELECT run_id, state, started, last_progress, step, current, max FROM analysis_process WHERE project_id=?;");
 	BoundStatement boundStatement = preparedStatement.bind(projectId);
 	ResultSet resultSet = session.execute(boundStatement);
 	if (resultSet.isExhausted()) {
@@ -93,8 +96,11 @@ public class AnalysisProcessStateTrackerImpl implements
 	AnalysisProcessState state = AnalysisProcessState.valueOf(stateString);
 	Date started = row.getDate(2);
 	Date lastProgress = row.getDate(3);
+	String step = row.getString(4);
+	int current = row.getInt(5);
+	int max = row.getInt(6);
 	return new AnalysisProcessStatusInformation(started, projectId, runId,
-		state, lastProgress);
+		state, lastProgress, step, current, max);
     }
 
     @Override
@@ -122,6 +128,18 @@ public class AnalysisProcessStateTrackerImpl implements
 			"INSERT INTO analysis_process (project_id, run_id, state, last_progress) VALUES (?, ?, ?, ?);");
 	BoundStatement boundStatement = preparedStatement.bind(projectId,
 		runId, state.name(), new Date());
+	session.execute(boundStatement);
+    }
+
+    @Override
+    public void changeProcessProgress(String projectId, String step,
+	    int current, int max) {
+	PreparedStatement preparedStatement = preparedStatements
+		.getPreparedStatement(
+			session,
+			"UPDATE analysis_process SET step=?, current=?, max=?, last_progress=? WHERE project_id = ?;");
+	BoundStatement boundStatement = preparedStatement.bind(step, current,
+		max, new Date(), projectId);
 	session.execute(boundStatement);
     }
 

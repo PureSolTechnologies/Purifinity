@@ -74,15 +74,13 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
      * {@inheritDoc}
      */
     @Override
-    public Boolean call() {
+    public boolean run() {
 	boolean retVal = calculate();
 	recreateResultsList();
-	fireDone("Evaluation finished.", retVal);
 	return retVal;
     }
 
     private boolean calculate() {
-	fireStarted("Starting evaluation.", 1);
 	maxDepth = 0;
 	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
 		getCodeRange().getUST());

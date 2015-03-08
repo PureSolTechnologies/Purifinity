@@ -12,15 +12,22 @@ public class AnalysisProcessStatusInformation implements Serializable {
     private final long runId;
     private final AnalysisProcessState state;
     private final Date lastProgress;
+    private final String step;
+    private final int current;
+    private final int max;
 
     public AnalysisProcessStatusInformation(Date started, String projectId,
-	    long runId, AnalysisProcessState state, Date lastProgress) {
+	    long runId, AnalysisProcessState state, Date lastProgress,
+	    String step, int current, int max) {
 	super();
 	this.started = started;
 	this.projectId = projectId;
 	this.runId = runId;
 	this.state = state;
 	this.lastProgress = lastProgress;
+	this.step = step;
+	this.current = current;
+	this.max = max;
     }
 
     public Date getStarted() {
@@ -41,6 +48,18 @@ public class AnalysisProcessStatusInformation implements Serializable {
 
     public Date getLastProgress() {
 	return lastProgress;
+    }
+
+    public String getStep() {
+	return step;
+    }
+
+    public int getCurrent() {
+	return current;
+    }
+
+    public int getMax() {
+	return max;
     }
 
 }

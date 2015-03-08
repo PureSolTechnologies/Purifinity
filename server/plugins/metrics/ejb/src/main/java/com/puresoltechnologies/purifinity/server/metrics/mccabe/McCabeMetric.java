@@ -80,14 +80,13 @@ public class McCabeMetric extends CodeRangeEvaluator {
     }
 
     @Override
-    public Boolean call() {
+    public boolean run() {
 	boolean retVal = calculate();
 	createResultsList();
 	return retVal;
     }
 
     private boolean calculate() {
-	fireStarted("Evaluation started.", 1);
 	cyclomaticNumber = 1;
 	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
 		codeRange.getUST());
@@ -99,7 +98,6 @@ public class McCabeMetric extends CodeRangeEvaluator {
 			.increasesCyclomaticComplexityBy(production);
 	    }
 	} while (iterator.goForward());
-	fireDone("Evaluation finished.", true);
 	return true;
     }
 

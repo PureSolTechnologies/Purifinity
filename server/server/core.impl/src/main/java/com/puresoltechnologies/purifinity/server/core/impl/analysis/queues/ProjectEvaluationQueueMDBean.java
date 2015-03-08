@@ -68,10 +68,10 @@ public class ProjectEvaluationQueueMDBean implements MessageListener {
 		    analysisRunInformation.getRunId(),
 		    AnalysisProcessTransition.START_EVALUATION);
 
-	    AnalysisFileTree analysisFileTree;
-	    analysisFileTree = analysisStore.readAnalysisFileTree(
-		    analysisRunInformation.getProjectId(),
-		    analysisRunInformation.getRunId());
+	    AnalysisFileTree analysisFileTree = analysisStore
+		    .readAnalysisFileTree(
+			    analysisRunInformation.getProjectId(),
+			    analysisRunInformation.getRunId());
 	    AnalysisRun analysisRun = new AnalysisRun(analysisRunInformation,
 		    analysisFileTree);
 	    evaluate(analysisRun);

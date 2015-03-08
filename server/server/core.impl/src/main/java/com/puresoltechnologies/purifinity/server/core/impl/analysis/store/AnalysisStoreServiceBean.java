@@ -508,17 +508,17 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     @Override
     public AnalysisFileTree readAnalysisFileTree(String projectId, long runId)
 	    throws AnalysisStoreException {
+	AnalysisFileTree analysisFileTree = analysisStoreCacheUtils
+		.readCachedAnalysisFileTree(projectId, runId);
+	if (analysisFileTree != null) {
+	    return analysisFileTree;
+	}
 	XOTransaction currentTransaction = xoManager.currentTransaction();
 	boolean active = currentTransaction.isActive();
 	if (!active) {
 	    currentTransaction.begin();
 	}
 	try {
-	    AnalysisFileTree analysisFileTree = analysisStoreCacheUtils
-		    .readCachedAnalysisFileTree(projectId, runId);
-	    if (analysisFileTree != null) {
-		return analysisFileTree;
-	    }
 	    AnalysisRunVertex analysisRunVertex = AnalysisStoreTitanUtils
 		    .findAnalysisRunVertex(xoManager, runId);
 	    analysisFileTree = analysisStoreFileTreeUtils

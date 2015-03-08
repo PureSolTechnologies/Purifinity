@@ -13,5 +13,8 @@ public interface AnalysisProcessStateTracker {
     public boolean changeProcessState(String projectId, long runId,
 	    AnalysisProcessTransition transition);
 
+    public void changeProcessProgress(String projectId, String step,
+	    int current, int max);
+
     public void stopProcess(String projectId);
 }

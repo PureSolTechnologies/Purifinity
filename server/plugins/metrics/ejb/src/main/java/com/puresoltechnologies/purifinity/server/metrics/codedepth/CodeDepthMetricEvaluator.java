@@ -80,7 +80,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    CodeDepthMetric metric = new CodeDepthMetric(analysisRun, language,
 		    codeRange);
-	    execute(metric);
+	    metric.run();
 	    SourceCodeQuality quality = metric.getQuality();
 	    results.add(new CodeDepthResult(sourceCodeLocation, codeRange
 		    .getType(), codeRange.getCanonicalName(), metric

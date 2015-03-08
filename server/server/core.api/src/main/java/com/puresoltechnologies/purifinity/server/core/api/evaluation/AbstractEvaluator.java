@@ -5,13 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.ejb.EJB;
 
@@ -57,8 +50,6 @@ public abstract class AbstractEvaluator implements Evaluator {
 
     private static final Logger logger = LoggerFactory
 	    .getLogger(AbstractEvaluator.class);
-
-    private static final int EXECUTION_TIMEOUT_IN_SECONDS = 3600;
 
     private final Map<String, Object> properties = new HashMap<>();
 
@@ -316,30 +307,6 @@ public abstract class AbstractEvaluator implements Evaluator {
 			    directoryResults);
 		}
 	    }
-	}
-    }
-
-    /**
-     * This method is used to explicitly start evaluations.
-     * 
-     * @param evaluator
-     * @return
-     * @throws InterruptedException
-     * @throws UniversalSyntaxTreeEvaluationException
-     */
-    protected <T> T execute(Callable<T> evaluator) throws InterruptedException,
-	    UniversalSyntaxTreeEvaluationException {
-	try {
-	    ExecutorService executor = Executors.newSingleThreadExecutor();
-	    Future<T> future = executor.submit(evaluator);
-	    executor.shutdown();
-	    return future.get(EXECUTION_TIMEOUT_IN_SECONDS, TimeUnit.SECONDS);
-	} catch (ExecutionException e) {
-	    throw new UniversalSyntaxTreeEvaluationException(
-		    "Error during evaluation.", e);
-	} catch (TimeoutException e) {
-	    throw new UniversalSyntaxTreeEvaluationException(
-		    "Timeout during evaluation.", e);
 	}
     }
 

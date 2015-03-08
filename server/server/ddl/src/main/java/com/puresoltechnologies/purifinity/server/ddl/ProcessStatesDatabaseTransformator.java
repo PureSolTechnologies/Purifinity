@@ -83,7 +83,7 @@ public class ProcessStatesDatabaseTransformator implements
 		"Rick-Rainer Ludwig",
 		"CREATE TABLE "
 			+ ANALYSIS_PROCESS_TABLE
-			+ " (started timestamp, project_id ascii, run_id bigint, state text, last_progress timestamp,"
+			+ " (started timestamp, project_id ascii, run_id bigint, state text, last_progress timestamp, step text, current int, max int, "
 			+ "PRIMARY KEY(project_id));",
 		"Keeps states about the running analysis processes."));
 

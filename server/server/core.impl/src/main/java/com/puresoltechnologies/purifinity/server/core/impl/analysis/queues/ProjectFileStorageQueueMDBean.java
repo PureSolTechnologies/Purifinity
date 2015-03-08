@@ -89,12 +89,14 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 		    analysisRunInformation.getRunId(),
 		    AnalysisProcessTransition.START_STORAGE);
 
-	    Map<SourceCodeLocation, HashId> storedSources = storeFilesInStore(analysisProject
-		    .getSettings());
+	    Map<SourceCodeLocation, HashId> storedSources = storeFilesInStore(
+		    analysisProject.getSettings(), analysisRunInformation);
+	    analysisProcessStateTracker.changeProcessProgress(
+		    analysisRunInformation.getProjectId(),
+		    "Creating file tree in database.", 0, 1);
 	    AnalysisRunFileTree fileTree = analysisStoreService
-		    .createAndStoreFileAndContentTree(
-			    analysisRunInformation.getProjectId(),
-			    analysisRunInformation.getRunId(),
+		    .createAndStoreFileAndContentTree(analysisRunInformation
+			    .getProjectId(), analysisRunInformation.getRunId(),
 			    analysisProject.getSettings().getName(),
 			    storedSources);
 
@@ -125,12 +127,14 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
      * @param projectSettings
      *            is a {@link AnalysisProjectSettings} object representing the
      *            analysis project.
+     * @param analysisRunInformation
      * @return A {@link Map} is returned containing a mapping of the
      *         {@link SourceCodeLocation}s to the {@link HashId}s calculated
      *         during storage.
      */
     private Map<SourceCodeLocation, HashId> storeFilesInStore(
-	    AnalysisProjectSettings projectSettings) {
+	    AnalysisProjectSettings projectSettings,
+	    AnalysisRunInformation analysisRunInformation) {
 	logger.debug("Start file storage for project '"
 		+ projectSettings.getName() + "'.");
 	Map<SourceCodeLocation, HashId> storedSources = new HashMap<SourceCodeLocation, HashId>();
@@ -139,11 +143,19 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 			.getRepositoryLocation());
 	List<SourceCodeLocation> sourceCodeLocations = repository
 		.getSourceCodes(projectSettings.getFileSearchConfiguration());
-	for (SourceCodeLocation sourceCodeLocation : sourceCodeLocations) {
+	for (int i = 0; i < sourceCodeLocations.size(); ++i) {
+	    SourceCodeLocation sourceCodeLocation = sourceCodeLocations.get(i);
+	    analysisProcessStateTracker.changeProcessProgress(
+		    analysisRunInformation.getProjectId(),
+		    sourceCodeLocation.getHumanReadableLocationString(), i,
+		    sourceCodeLocations.size());
 	    HashId hashId = storeFile(projectSettings, repository,
 		    sourceCodeLocation);
 	    storedSources.put(sourceCodeLocation, hashId);
 	}
+	analysisProcessStateTracker.changeProcessProgress(
+		analysisRunInformation.getProjectId(), "",
+		sourceCodeLocations.size(), sourceCodeLocations.size());
 	return storedSources;
     }
 
