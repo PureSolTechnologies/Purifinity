@@ -5,11 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.puresoltechnologies.commons.math.Value;
 import com.puresoltechnologies.commons.math.statistics.Statistics;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 
@@ -71,34 +69,6 @@ public class SLOCResult implements Serializable {
 	return new SLOCResult(left.sourceCodeLocation, left.codeRangeType,
 		left.codeRangeName, new SLOCMetric(phyLOC, proLOC, comLOC,
 			blLOC, lineStatistics));
-    }
-
-    public static SLOCResult valueOf(GenericCodeRangeMetrics result) {
-	MetricValue<Integer> phyLOC = result
-		.getValue(SLOCEvaluatorParameter.PHY_LOC);
-	MetricValue<Integer> proLOC = result
-		.getValue(SLOCEvaluatorParameter.PRO_LOC);
-	MetricValue<Integer> comLOC = result
-		.getValue(SLOCEvaluatorParameter.COM_LOC);
-	MetricValue<Integer> blLOC = result
-		.getValue(SLOCEvaluatorParameter.BL_LOC);
-
-	MetricValue<Integer> min = result.getValue(SLOCEvaluatorParameter.MIN);
-	MetricValue<Integer> max = result.getValue(SLOCEvaluatorParameter.MAX);
-	MetricValue<Double> median = result
-		.getValue(SLOCEvaluatorParameter.MEDIAN);
-	Value<Double> avg = result.getValue(SLOCEvaluatorParameter.AVG);
-	Value<Double> stdDev = result.getValue(SLOCEvaluatorParameter.STD_DEV);
-	Statistics lineStatistics = new Statistics(phyLOC.getValue(),
-		min.getValue(), max.getValue(), avg.getValue(),
-		median.getValue(), stdDev.getValue());
-
-	SLOCMetric metric = new SLOCMetric(phyLOC.getValue(),
-		proLOC.getValue(), comLOC.getValue(), blLOC.getValue(),
-		lineStatistics);
-
-	return new SLOCResult(result.getSourceCodeLocation(),
-		result.getCodeRangeType(), result.getCodeRangeName(), metric);
     }
 
     public static SLOCResult valueOf(GenericDirectoryMetrics directoryResult) {

@@ -86,6 +86,8 @@ public class SLOCEvaluatorDatabaseTransformator implements
 		"CREATE TABLE "
 			+ FILE_RESULTS_TABLE
 			+ " (hashid varchar, "
+			+ "evaluator_id varchar, "
+			+ "source_code_location varchar, "
 			+ "code_range_type varchar, "
 			+ "code_range_name varchar, "
 			+ "phyLOC int, "
@@ -103,10 +105,11 @@ public class SLOCEvaluatorDatabaseTransformator implements
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ DIRECTORY_RESULTS_TABLE + " (hashid varchar, "
-			+ "phyLOC int, " + "proLOC int, " + "comLOC int, "
-			+ "blLOC int, " + "line_length_count int, "
-			+ "line_length_min int, " + "line_length_max int, "
-			+ "line_length_avg float, "
+			+ "evaluator_id varchar, "
+			+ "source_code_location varchar, " + "phyLOC int, "
+			+ "proLOC int, " + "comLOC int, " + "blLOC int, "
+			+ "line_length_count int, " + "line_length_min int, "
+			+ "line_length_max int, " + "line_length_avg float, "
 			+ "line_length_median float, "
 			+ "line_length_stdDev float, "
 			+ "PRIMARY KEY(hashid));",
@@ -114,10 +117,11 @@ public class SLOCEvaluatorDatabaseTransformator implements
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ PROJECT_RESULTS_TABLE + " (project_id ascii, "
-			+ "phyLOC int, " + "proLOC int, " + "comLOC int, "
-			+ "blLOC int, " + "line_length_count int, "
-			+ "line_length_min int, " + "line_length_max int, "
-			+ "line_length_avg float, "
+			+ "evaluator_id varchar, "
+			+ "source_code_location varchar, " + "phyLOC int, "
+			+ "proLOC int, " + "comLOC int, " + "blLOC int, "
+			+ "line_length_count int, " + "line_length_min int, "
+			+ "line_length_max int, " + "line_length_avg float, "
 			+ "line_length_median float, "
 			+ "line_length_stdDev float, "
 			+ "PRIMARY KEY(project_id));",

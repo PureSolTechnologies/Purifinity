@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.core.impl.analysis.common;
+package com.puresoltechnologies.purifinity.server.core.api.analysis.common;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

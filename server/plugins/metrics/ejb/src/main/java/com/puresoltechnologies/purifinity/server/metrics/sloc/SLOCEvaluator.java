@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.metrics.sloc;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -136,10 +137,10 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	    if (child.isFile()) {
 		if (evaluatorStore.hasFileResults(child.getHashId(),
 			getInformation().getId())) {
-		    GenericFileMetrics results = evaluatorStore
+		    List<SLOCResult> results = slocEvaluatorDAO
 			    .readFileResults(child.getHashId(),
 				    getInformation().getId());
-		    for (GenericCodeRangeMetrics result : results.getValues()) {
+		    for (SLOCResult result : results) {
 			if (result.getCodeRangeType() == CodeRangeType.FILE) {
 			    metricResults = combine(directory, metricResults,
 				    result);
@@ -169,13 +170,12 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
     }
 
     private SLOCResult combine(AnalysisFileTree directory, SLOCResult results,
-	    GenericCodeRangeMetrics result) {
+	    SLOCResult result) {
 	if (result != null) {
 	    if (results == null) {
-		results = SLOCResult.valueOf(result);
+		results = result;
 	    } else {
-		results = SLOCResult.combine(results,
-			SLOCResult.valueOf(result));
+		results = SLOCResult.combine(results, result);
 	    }
 	}
 	return results;
