@@ -16,10 +16,10 @@ import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.versioning.Version;
 
-public class HalsteadEvaluatorDatabaseTransformator implements
+public class McCabeMetricEvaluatorDatabaseTransformator implements
 	ComponentTransformator {
 
-    public static final String HALSTEAD_EVALUATOR_KEYSPACE_NAME = "halstead_evaluator";
+    public static final String MCCABE_EVALUATOR_KEYSPACE_NAME = "mccabe_evaluator";
     public static final String CASSANDRA_HOST = "localhost";
     public static final int CASSANDRA_CQL_PORT = 9042;
 
@@ -29,7 +29,7 @@ public class HalsteadEvaluatorDatabaseTransformator implements
 
     @Override
     public String getComponentName() {
-	return "HalsteadEvaluator";
+	return "McCabeEvaluator";
     }
 
     @Override
@@ -62,9 +62,9 @@ public class HalsteadEvaluatorDatabaseTransformator implements
 	sequence.appendTransformation(CassandraStandardMigrations
 		.createKeyspace(
 			sequence,
-			HALSTEAD_EVALUATOR_KEYSPACE_NAME,
+			MCCABE_EVALUATOR_KEYSPACE_NAME,
 			"Rick-Rainer Ludwig",
-			"This keyspace keeps the detailed results of halstaed evaluations like the found operators and operands and their count.",
+			"This keyspace keeps the detailed results of McCabe Metric evaluations.",
 			ReplicationStrategy.SIMPLE_STRATEGY, 1));
 	return sequence;
     }
@@ -78,7 +78,7 @@ public class HalsteadEvaluatorDatabaseTransformator implements
 		startVersion, versionRange);
 	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
 		CASSANDRA_HOST, CASSANDRA_CQL_PORT,
-		HALSTEAD_EVALUATOR_KEYSPACE_NAME, metadata);
+		MCCABE_EVALUATOR_KEYSPACE_NAME, metadata);
 
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence,
@@ -90,26 +90,21 @@ public class HalsteadEvaluatorDatabaseTransformator implements
 			+ "source_code_location varchar, "
 			+ "code_range_type varchar, "
 			+ "code_range_name varchar, "
-			+ "operators map<text,int>, "
-			+ "operands map<text,int>, "
+			+ "vg int, "
 			+ "PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name));",
-		"Keeps directory results for Halstead evaluator."));
+		"Keeps directory results for McCabe Metric evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ DIRECTORY_RESULTS_TABLE + " (hashid varchar, "
-			+ "evaluator_id varchar, "
-			+ "operators map<text,int>, "
-			+ "operands map<text,int>, "
+			+ "evaluator_id varchar, " + "vg int, "
 			+ "PRIMARY KEY(hashid, evaluator_id));",
-		"Keeps directory results for Halstead evaluator."));
+		"Keeps directory results for McCabe Metric evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ PROJECT_RESULTS_TABLE + " (project_id ascii, "
-			+ "evaluator_id varchar, "
-			+ "operators map<text,int>, "
-			+ "operands map<text,int>, "
+			+ "evaluator_id varchar, " + "vg int, "
 			+ "PRIMARY KEY(project_id, evaluator_id));",
-		"Keeps project results for Halstead evaluator."));
+		"Keeps project results for McCabe Metric evaluator."));
 
 	return sequence;
     }
@@ -119,7 +114,7 @@ public class HalsteadEvaluatorDatabaseTransformator implements
 	try (Cluster cluster = CassandraUtils.connectCluster()) {
 	    try (Session session = cluster.connect()) {
 		session.execute("DROP KEYSPACE IF EXISTS "
-			+ HALSTEAD_EVALUATOR_KEYSPACE_NAME);
+			+ MCCABE_EVALUATOR_KEYSPACE_NAME);
 	    }
 	}
 

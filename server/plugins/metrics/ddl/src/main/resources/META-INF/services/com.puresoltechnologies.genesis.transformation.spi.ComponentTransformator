@@ -1,2 +1,3 @@
 com.puresoltechnologies.purifinity.server.metrics.ddl.SLOCEvaluatorDatabaseTransformator
+com.puresoltechnologies.purifinity.server.metrics.ddl.McCabeMetricEvaluatorDatabaseTransformator
 com.puresoltechnologies.purifinity.server.metrics.ddl.HalsteadEvaluatorDatabaseTransformator

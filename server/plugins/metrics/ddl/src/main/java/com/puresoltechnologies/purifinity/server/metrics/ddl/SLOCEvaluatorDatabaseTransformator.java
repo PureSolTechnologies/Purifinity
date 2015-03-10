@@ -101,7 +101,7 @@ public class SLOCEvaluatorDatabaseTransformator implements
 			+ "line_length_median double, "
 			+ "line_length_stdDev double, "
 			+ "PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name));",
-		"Keeps directory results for Halstead evaluator."));
+		"Keeps directory results for SLOC evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ DIRECTORY_RESULTS_TABLE + " (hashid varchar, "
@@ -114,7 +114,7 @@ public class SLOCEvaluatorDatabaseTransformator implements
 			+ "line_length_median double, "
 			+ "line_length_stdDev double, "
 			+ "PRIMARY KEY(hashid, evaluator_id));",
-		"Keeps directory results for Halstead evaluator."));
+		"Keeps directory results for SLOC evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ PROJECT_RESULTS_TABLE + " (project_id ascii, "
@@ -127,7 +127,7 @@ public class SLOCEvaluatorDatabaseTransformator implements
 			+ "line_length_median double, "
 			+ "line_length_stdDev double, "
 			+ "PRIMARY KEY(project_id, evaluator_id));",
-		"Keeps project results for Halstead evaluator."));
+		"Keeps project results for SLOC evaluator."));
 
 	return sequence;
     }

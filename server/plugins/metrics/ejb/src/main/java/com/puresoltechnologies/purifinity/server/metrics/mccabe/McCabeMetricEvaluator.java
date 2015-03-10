@@ -1,12 +1,13 @@
 package com.puresoltechnologies.purifinity.server.metrics.mccabe;
 
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
@@ -24,15 +25,13 @@ import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
+import com.puresoltechnologies.purifinity.server.metrics.mccabe.db.McCabeMetricEvaluatorDAO;
 
 @Stateless
 @Remote(Evaluator.class)
@@ -40,6 +39,9 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 
     @EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
     private AnalyzerServiceManagerRemote analyzerServiceManager;
+
+    @Inject
+    private McCabeMetricEvaluatorDAO mcCabeMetricEvaluatorDAO;
 
     public McCabeMetricEvaluator() {
 	super(McCabeMetric.ID, McCabeMetric.NAME, McCabeMetric.DESCRIPTION);
@@ -73,9 +75,12 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 	    McCabeMetric metric = new McCabeMetric(analysisRun, language,
 		    codeRange);
 	    metric.run();
-	    results.add(new McCabeMetricResult(sourceCodeLocation, codeRange
-		    .getType(), codeRange.getCanonicalName(), metric
-		    .getCyclomaticNumber()));
+	    McCabeMetricResult mcCabeResult = new McCabeMetricResult(
+		    sourceCodeLocation, codeRange.getType(),
+		    codeRange.getCanonicalName(), metric.getCyclomaticNumber());
+	    results.add(mcCabeResult);
+	    mcCabeMetricEvaluatorDAO.storeFileResults(hashId,
+		    sourceCodeLocation, codeRange, mcCabeResult);
 	}
 	return results;
     }
@@ -89,16 +94,16 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
     protected GenericDirectoryMetrics processDirectory(AnalysisRun analysisRun,
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
-	McCabeMetricResult metricResults = null;
 	EvaluatorStore evaluatorStore = getEvaluatorStore();
+	McCabeMetricResult metricResults = null;
 	for (AnalysisFileTree child : directory.getChildren()) {
+	    HashId childHashId = child.getHashId();
 	    if (child.isFile()) {
-		if (evaluatorStore.hasFileResults(child.getHashId(),
-			getInformation().getId())) {
-		    GenericFileMetrics results = evaluatorStore
-			    .readFileResults(child.getHashId(),
-				    getInformation().getId());
-		    for (GenericCodeRangeMetrics result : results.getValues()) {
+		if (evaluatorStore.hasFileResults(childHashId, getInformation()
+			.getId())) {
+		    List<McCabeMetricResult> results = mcCabeMetricEvaluatorDAO
+			    .readFileResults(childHashId);
+		    for (McCabeMetricResult result : results) {
 			if (result.getCodeRangeType() == CodeRangeType.FILE) {
 			    metricResults = combine(directory, metricResults,
 				    result);
@@ -107,11 +112,10 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 		    }
 		}
 	    } else {
-		if (evaluatorStore.hasDirectoryResults(child.getHashId(),
+		if (evaluatorStore.hasDirectoryResults(childHashId,
 			getInformation().getId())) {
-		    GenericDirectoryMetrics results = evaluatorStore
-			    .readDirectoryResults(child.getHashId(),
-				    getInformation().getId());
+		    McCabeMetricResult results = mcCabeMetricEvaluatorDAO
+			    .readDirectoryResults(childHashId);
 		    metricResults = combine(directory, metricResults, results);
 		}
 	    }
@@ -122,38 +126,22 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 	GenericDirectoryMetrics finalResults = new GenericDirectoryMetrics(
 		McCabeMetric.ID, directory.getHashId(), new Date(),
 		McCabeMetricEvaluatorParameter.ALL, metricResults.getValues());
+	mcCabeMetricEvaluatorDAO.storeDirectoryResults(directory.getHashId(),
+		metricResults);
 	return finalResults;
     }
 
     private McCabeMetricResult combine(AnalysisFileTree directory,
-	    McCabeMetricResult results, GenericDirectoryMetrics result) {
+	    McCabeMetricResult results, McCabeMetricResult result) {
 	if (result != null) {
 	    if (results == null) {
-		Map<String, MetricValue<?>> values = result.getValues();
 		results = new McCabeMetricResult(
 			new UnspecifiedSourceCodeLocation(),
 			CodeRangeType.DIRECTORY, directory.getName(),
-			(Integer) values.get(
-				McCabeMetricEvaluatorParameter.VG.getName())
-				.getValue());
+			result.getCyclomaticComplexity());
 	    } else {
-		results = McCabeMetricDirectoryResults.combine(results, result);
-	    }
-	}
-	return results;
-    }
-
-    private McCabeMetricResult combine(AnalysisFileTree directory,
-	    McCabeMetricResult results, GenericCodeRangeMetrics result) {
-	if (result != null) {
-	    if (results == null) {
-		results = new McCabeMetricResult(
-			new UnspecifiedSourceCodeLocation(),
-			CodeRangeType.DIRECTORY, directory.getName(), result
-				.getValue(McCabeMetricEvaluatorParameter.VG)
-				.getValue());
-	    } else {
-		results = McCabeMetricDirectoryResults.combine(results, result);
+		results = McCabeMetricDirectoryResults.combine(results,
+			result);
 	    }
 	}
 	return results;

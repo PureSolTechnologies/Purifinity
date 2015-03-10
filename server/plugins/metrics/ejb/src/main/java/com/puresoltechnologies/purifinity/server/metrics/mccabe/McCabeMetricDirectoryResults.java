@@ -8,10 +8,8 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 
 public class McCabeMetricDirectoryResults extends AbstractMcCabeMetricResults
 	implements DirectoryMetrics {
@@ -48,17 +46,9 @@ public class McCabeMetricDirectoryResults extends AbstractMcCabeMetricResults
     }
 
     public static McCabeMetricResult combine(McCabeMetricResult left,
-	    GenericCodeRangeMetrics right) {
+	    McCabeMetricResult results2) {
 	int vG = left.getCyclomaticComplexity()
-		+ right.getValue(McCabeMetricEvaluatorParameter.VG).getValue();
-	return new McCabeMetricResult(left.getSourceCodeLocation(),
-		left.getCodeRangeType(), left.getCodeRangeName(), vG);
-    }
-
-    public static McCabeMetricResult combine(McCabeMetricResult left,
-	    GenericDirectoryMetrics right) {
-	int vG = left.getCyclomaticComplexity()
-		+ right.getValue(McCabeMetricEvaluatorParameter.VG).getValue();
+		+ results2.getCyclomaticComplexity();
 	return new McCabeMetricResult(left.getSourceCodeLocation(),
 		left.getCodeRangeType(), left.getCodeRangeName(), vG);
     }
