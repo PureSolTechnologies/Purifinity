@@ -22,7 +22,7 @@ import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.HalsteadSymbol;
+import com.puresoltechnologies.purifinity.analysis.domain.HalsteadLabels;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
@@ -91,12 +91,13 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 	    UniversalSyntaxTree node = iterator.getCurrentNode();
 	    if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {
 		AbstractTerminal token = (AbstractTerminal) node;
-		HalsteadSymbol result = language.getHalsteadResult(token);
-		if (result.isCountable()) {
-		    if (result.isOperator()) {
-			addOperator(result.getSymbol());
+		if (token.hasLabel(HalsteadLabels.RELEVANT)) {
+		    if (token.hasLabel(HalsteadLabels.OPERATOR)) {
+			addOperator((String) token.getProperties().get(
+				HalsteadLabels.SYMBOL));
 		    } else {
-			addOperant(result.getSymbol());
+			addOperant((String) token.getProperties().get(
+				HalsteadLabels.SYMBOL));
 		    }
 		}
 	    }

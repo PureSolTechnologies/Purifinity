@@ -26,6 +26,7 @@ public class AnalyzerServiceManagerImpl extends
     @Inject
     private PreferencesStore preferencesStore;
 
+    private final Map<String, ProgrammingLanguageAnalyzer> programmingLanguageAnalyzers = new HashMap<>();
     private final Map<String, Boolean> analyzerActivations = new HashMap<>();
 
     public AnalyzerServiceManagerImpl() {
@@ -33,9 +34,16 @@ public class AnalyzerServiceManagerImpl extends
     }
 
     @Override
-    public ProgrammingLanguageAnalyzer createInstance(String jndi) {
-	return JndiUtils.createRemoteEJBInstance(
-		ProgrammingLanguageAnalyzer.class, jndi);
+    @Lock(LockType.WRITE)
+    public ProgrammingLanguageAnalyzer getInstance(String jndi) {
+	ProgrammingLanguageAnalyzer programmingLanguageAnalyzer = programmingLanguageAnalyzers
+		.get(jndi);
+	if (programmingLanguageAnalyzer == null) {
+	    programmingLanguageAnalyzer = JndiUtils.createRemoteEJBInstance(
+		    ProgrammingLanguageAnalyzer.class, jndi);
+	    programmingLanguageAnalyzers.put(jndi, programmingLanguageAnalyzer);
+	}
+	return programmingLanguageAnalyzer;
     }
 
     @Override
@@ -71,10 +79,10 @@ public class AnalyzerServiceManagerImpl extends
     }
 
     @Override
-    public ProgrammingLanguageAnalyzer createInstanceById(String analyzerId) {
+    public ProgrammingLanguageAnalyzer getInstanceById(String analyzerId) {
 	for (AnalyzerServiceInformation analyzer : getServices()) {
 	    if (analyzer.getId().equals(analyzerId)) {
-		return createInstance(analyzer.getJndiName());
+		return getInstance(analyzer.getJndiName());
 	    }
 	}
 	return null;

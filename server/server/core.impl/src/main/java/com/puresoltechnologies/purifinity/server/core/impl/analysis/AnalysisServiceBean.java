@@ -90,7 +90,7 @@ public class AnalysisServiceBean implements AnalysisService {
 
     @Override
     public Set<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
-	return analyzerRegistration.createInstanceById(analyzerId)
+	return analyzerRegistration.getInstanceById(analyzerId)
 		.getConfigurationParameters();
     }
 

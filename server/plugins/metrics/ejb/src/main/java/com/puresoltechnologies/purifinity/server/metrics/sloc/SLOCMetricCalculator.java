@@ -158,19 +158,18 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 	    UniversalSyntaxTree node = iterator.getCurrentNode();
 	    if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {
 		AbstractTerminal token = (AbstractTerminal) node;
-		SLOCType type = language.getType(token);
 		UniversalSyntaxTreeMetaData metaData = token.getMetaData();
 		int lineId = metaData.getLine() - lineOffset;
 		int lineNum = metaData.getLineNum();
 		for (int line = lineId; line < lineId + lineNum; line++) {
-		    if (type == SLOCType.COMMENT) {
+		    if (token.hasLabel(SLOCType.COMMENT.getLabel())) {
 			// Additional check due to end-of-line comments contain
 			// an additional line break
 			if ((!token.getContent().endsWith("\n"))
 				|| (line < lineId + lineNum - 1)) {
 			    lineResults.get(line).setComments(true);
 			}
-		    } else if (type == SLOCType.PRODUCTIVE) {
+		    } else if (token.hasLabel(SLOCType.PRODUCTIVE.getLabel())) {
 			lineResults.get(line).setProductiveContent(true);
 		    }
 		}

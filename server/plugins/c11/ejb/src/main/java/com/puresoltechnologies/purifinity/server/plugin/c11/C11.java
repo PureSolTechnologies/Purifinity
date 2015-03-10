@@ -12,14 +12,9 @@ import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.parsers.ust.AbstractProduction;
-import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
-import com.puresoltechnologies.parsers.ust.terminal.AbstractTerminal;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
-import com.puresoltechnologies.purifinity.analysis.domain.HalsteadSymbol;
-import com.puresoltechnologies.purifinity.analysis.domain.SLOCType;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginActivatedParameter;
 import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
@@ -95,27 +90,4 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 	return C11Grammar.getInstance();
     }
 
-    @Override
-    public SLOCType getType(AbstractTerminal token) {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    public boolean cascadingNode(UniversalSyntaxTree node) {
-	// TODO Auto-generated method stub
-	return false;
-    }
-
-    @Override
-    public int increasesCyclomaticComplexityBy(AbstractProduction production) {
-	// TODO Auto-generated method stub
-	return 0;
-    }
-
-    @Override
-    public HalsteadSymbol getHalsteadResult(AbstractTerminal node) {
-	// TODO Auto-generated method stub
-	return null;
-    }
 }

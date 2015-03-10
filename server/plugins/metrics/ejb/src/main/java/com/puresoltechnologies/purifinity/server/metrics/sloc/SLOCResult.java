@@ -8,7 +8,6 @@ import java.util.Map;
 import com.puresoltechnologies.commons.math.statistics.Statistics;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 
 public class SLOCResult implements Serializable {
@@ -69,47 +68,6 @@ public class SLOCResult implements Serializable {
 	return new SLOCResult(left.sourceCodeLocation, left.codeRangeType,
 		left.codeRangeName, new SLOCMetric(phyLOC, proLOC, comLOC,
 			blLOC, lineStatistics));
-    }
-
-    public static SLOCResult valueOf(GenericDirectoryMetrics directoryResult) {
-	Map<String, MetricValue<?>> result = directoryResult.getValues();
-	@SuppressWarnings("unchecked")
-	MetricValue<Integer> phyLOC = (MetricValue<Integer>) result
-		.get(SLOCEvaluatorParameter.PHY_LOC.getName());
-	@SuppressWarnings("unchecked")
-	MetricValue<Integer> proLOC = (MetricValue<Integer>) result
-		.get(SLOCEvaluatorParameter.PRO_LOC.getName());
-	@SuppressWarnings("unchecked")
-	MetricValue<Integer> comLOC = (MetricValue<Integer>) result
-		.get(SLOCEvaluatorParameter.COM_LOC.getName());
-	@SuppressWarnings("unchecked")
-	MetricValue<Integer> blLOC = (MetricValue<Integer>) result
-		.get(SLOCEvaluatorParameter.BL_LOC.getName());
-
-	@SuppressWarnings("unchecked")
-	MetricValue<Integer> min = (MetricValue<Integer>) result
-		.get(SLOCEvaluatorParameter.MIN.getName());
-	@SuppressWarnings("unchecked")
-	MetricValue<Integer> max = (MetricValue<Integer>) result
-		.get(SLOCEvaluatorParameter.MAX.getName());
-	@SuppressWarnings("unchecked")
-	MetricValue<Double> median = (MetricValue<Double>) result
-		.get(SLOCEvaluatorParameter.MEDIAN.getName());
-	@SuppressWarnings("unchecked")
-	MetricValue<Double> avg = (MetricValue<Double>) result
-		.get(SLOCEvaluatorParameter.AVG.getName());
-	@SuppressWarnings("unchecked")
-	MetricValue<Double> stdDev = (MetricValue<Double>) result
-		.get(SLOCEvaluatorParameter.STD_DEV.getName());
-	Statistics lineStatistics = new Statistics(phyLOC.getValue(),
-		min.getValue(), max.getValue(), avg.getValue(),
-		median.getValue(), stdDev.getValue());
-
-	SLOCMetric metric = new SLOCMetric(phyLOC.getValue(),
-		proLOC.getValue(), comLOC.getValue(), blLOC.getValue(),
-		lineStatistics);
-	// XXX The 'null' and "" in the next line are strange...
-	return new SLOCResult(null, CodeRangeType.DIRECTORY, "", metric);
     }
 
     public static Map<String, MetricValue<?>> toGenericMetrics(SLOCResult sloc) {

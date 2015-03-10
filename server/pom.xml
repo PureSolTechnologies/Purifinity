@@ -14,7 +14,7 @@
 		<commons.version>0.6.0-SNAPSHOT</commons.version>
 		<parsers.version>0.4.0</parsers.version>
 		<genesis.version>0.2.0</genesis.version>
-		<graphs.version>0.4.0</graphs.version>
+		<graphs.version>0.5.0-SNAPSHOT</graphs.version>
 
 		<!-- Databases -->
 		<cassandra.driver.version>2.1.4</cassandra.driver.version>

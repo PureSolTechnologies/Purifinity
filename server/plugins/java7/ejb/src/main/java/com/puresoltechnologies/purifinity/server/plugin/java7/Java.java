@@ -12,21 +12,12 @@ import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.parsers.ust.AbstractProduction;
-import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
-import com.puresoltechnologies.parsers.ust.terminal.AbstractTerminal;
 import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
-import com.puresoltechnologies.purifinity.analysis.domain.HalsteadSymbol;
-import com.puresoltechnologies.purifinity.analysis.domain.SLOCType;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginActivatedParameter;
 import com.puresoltechnologies.purifinity.server.plugin.java7.grammar.JavaGrammar;
-import com.puresoltechnologies.purifinity.server.plugin.java7.metrics.CodeDepthMetricImpl;
-import com.puresoltechnologies.purifinity.server.plugin.java7.metrics.HalsteadMetricImpl;
-import com.puresoltechnologies.purifinity.server.plugin.java7.metrics.McCabeMetricImpl;
-import com.puresoltechnologies.purifinity.server.plugin.java7.metrics.SLOCMetricImpl;
 import com.puresoltechnologies.versioning.Version;
 
 /**
@@ -97,26 +88,5 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
     @Override
     public LanguageGrammar getGrammar() {
 	return JavaGrammar.getInstance();
-    }
-
-    @Override
-    public SLOCType getType(AbstractTerminal token) {
-	return new SLOCMetricImpl().getType(token);
-    }
-
-    @Override
-    public boolean cascadingNode(UniversalSyntaxTree node) {
-	return new CodeDepthMetricImpl().cascadingNode(node);
-    }
-
-    @Override
-    public int increasesCyclomaticComplexityBy(AbstractProduction production) {
-	return new McCabeMetricImpl()
-		.increasesCyclomaticComplexityBy(production);
-    }
-
-    @Override
-    public HalsteadSymbol getHalsteadResult(AbstractTerminal node) {
-	return new HalsteadMetricImpl().getHalsteadResult(node);
     }
 }

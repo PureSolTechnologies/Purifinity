@@ -22,7 +22,7 @@ public interface AnalyzerServiceManagerCommon extends
 	 * @return An {@link ProgrammingLanguageAnalyzer} compliant proxy is
 	 *         returned.
 	 */
-	public ProgrammingLanguageAnalyzer createInstance(String jndi);
+	public ProgrammingLanguageAnalyzer getInstance(String jndi);
 
 	/**
 	 * This method looks for the analyzer for a given language.

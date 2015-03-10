@@ -26,7 +26,7 @@ public class CodeDepthMetricImpl implements LanguageDependedCodeDepthMetric {
 	}
 
 	@Override
-	public boolean cascadingNode(UniversalSyntaxTree node) {
+	public boolean isCascading(UniversalSyntaxTree node) {
 		return blockNames.contains(node.getName());
 	}
 

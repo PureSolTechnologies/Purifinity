@@ -9,16 +9,21 @@ package com.puresoltechnologies.purifinity.analysis.domain;
  */
 public enum SLOCType {
 
-	BLANK("bl"), COMMENT("com"), PRODUCTIVE("pro"), PHYSICAL("phy");
+    BLANK("bl"), COMMENT("com"), PRODUCTIVE("pro"), PHYSICAL("phy");
 
-	private final String sign;
+    private final String sign;
+    private final String label;
 
-	private SLOCType(String sign) {
-		this.sign = sign;
-	}
+    private SLOCType(String sign) {
+	this.sign = sign;
+	this.label = sign + "LOC";
+    }
 
-	public String getSign() {
-		return sign;
-	}
+    public String getSign() {
+	return sign;
+    }
 
+    public String getLabel() {
+	return label;
+    }
 }

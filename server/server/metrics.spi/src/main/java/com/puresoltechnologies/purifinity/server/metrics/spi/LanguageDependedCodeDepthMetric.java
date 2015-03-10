@@ -24,6 +24,6 @@ public interface LanguageDependedCodeDepthMetric extends Serializable {
 	 * @return If true is returned the current node is a part of the language
 	 *         specification which build an own structural block.
 	 */
-	public boolean cascadingNode(UniversalSyntaxTree node);
+	public boolean isCascading(UniversalSyntaxTree node);
 
 }

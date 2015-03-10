@@ -100,31 +100,33 @@ public class SLOCEvaluatorDatabaseTransformator implements
 			+ "line_length_avg double, "
 			+ "line_length_median double, "
 			+ "line_length_stdDev double, "
-			+ "PRIMARY KEY(hashid, code_range_type, code_range_name));",
+			+ "PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name));",
 		"Keeps directory results for Halstead evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ DIRECTORY_RESULTS_TABLE + " (hashid varchar, "
-			+ "evaluator_id varchar, "
-			+ "source_code_location varchar, " + "phyLOC int, "
+			+ "evaluator_id varchar, " + "phyLOC int, "
 			+ "proLOC int, " + "comLOC int, " + "blLOC int, "
-			+ "line_length_count int, " + "line_length_min int, "
-			+ "line_length_max int, " + "line_length_avg float, "
-			+ "line_length_median float, "
-			+ "line_length_stdDev float, "
-			+ "PRIMARY KEY(hashid));",
+			+ "line_length_count int, "
+			+ "line_length_min double, "
+			+ "line_length_max double, "
+			+ "line_length_avg double, "
+			+ "line_length_median double, "
+			+ "line_length_stdDev double, "
+			+ "PRIMARY KEY(hashid, evaluator_id));",
 		"Keeps directory results for Halstead evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ PROJECT_RESULTS_TABLE + " (project_id ascii, "
-			+ "evaluator_id varchar, "
-			+ "source_code_location varchar, " + "phyLOC int, "
+			+ "evaluator_id varchar, " + "phyLOC int, "
 			+ "proLOC int, " + "comLOC int, " + "blLOC int, "
-			+ "line_length_count int, " + "line_length_min int, "
-			+ "line_length_max int, " + "line_length_avg float, "
-			+ "line_length_median float, "
-			+ "line_length_stdDev float, "
-			+ "PRIMARY KEY(project_id));",
+			+ "line_length_count int, "
+			+ "line_length_min double, "
+			+ "line_length_max double, "
+			+ "line_length_avg double, "
+			+ "line_length_median double, "
+			+ "line_length_stdDev double, "
+			+ "PRIMARY KEY(project_id, evaluator_id));",
 		"Keeps project results for Halstead evaluator."));
 
 	return sequence;

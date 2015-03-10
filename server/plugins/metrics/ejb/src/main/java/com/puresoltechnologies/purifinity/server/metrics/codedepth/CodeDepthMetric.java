@@ -9,6 +9,7 @@ import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeDepthLabels;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
@@ -90,7 +91,7 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 		UniversalSyntaxTree parent = node;
 		int depth = 0;
 		do {
-		    if (language.cascadingNode(parent)) {
+		    if (parent.hasLabel(CodeDepthLabels.CASCADING)) {
 			depth++;
 		    }
 		    parent = parent.getParent();

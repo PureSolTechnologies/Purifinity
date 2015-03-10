@@ -21,6 +21,7 @@ import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.domain.McCabeLabels;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
@@ -94,8 +95,8 @@ public class McCabeMetric extends CodeRangeEvaluator {
 	    UniversalSyntaxTree node = iterator.getCurrentNode();
 	    if (AbstractProduction.class.isAssignableFrom(node.getClass())) {
 		AbstractProduction production = (AbstractProduction) node;
-		cyclomaticNumber += language
-			.increasesCyclomaticComplexityBy(production);
+		cyclomaticNumber += (Integer) production.getProperties().get(
+			McCabeLabels.VG);
 	    }
 	} while (iterator.goForward());
 	return true;

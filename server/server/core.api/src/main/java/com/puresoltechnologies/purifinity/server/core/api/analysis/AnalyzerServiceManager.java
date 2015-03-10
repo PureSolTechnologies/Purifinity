@@ -24,6 +24,6 @@ public interface AnalyzerServiceManager extends AnalyzerServiceManagerCommon {
      *            is the id of the evaluator.
      * @return An {@link Evaluator} proxy is returned.
      */
-    public ProgrammingLanguageAnalyzer createInstanceById(String analyzerId);
+    public ProgrammingLanguageAnalyzer getInstanceById(String analyzerId);
 
 }

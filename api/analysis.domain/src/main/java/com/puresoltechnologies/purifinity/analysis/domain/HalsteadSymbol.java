@@ -2,19 +2,19 @@ package com.puresoltechnologies.purifinity.analysis.domain;
 
 public class HalsteadSymbol {
 
-	private final boolean countable;
+	private final boolean relevant;
 	private final boolean operator;
 	private final String symbol;
 
-	public HalsteadSymbol(boolean countable, boolean operator, String symbol) {
+	public HalsteadSymbol(boolean relevant, boolean operator, String symbol) {
 		super();
-		this.countable = countable;
+		this.relevant = relevant;
 		this.operator = operator;
 		this.symbol = symbol;
 	}
 
-	public boolean isCountable() {
-		return countable;
+	public boolean isRelevant() {
+		return relevant;
 	}
 
 	public boolean isOperator() {

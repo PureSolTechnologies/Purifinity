@@ -91,7 +91,7 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 		.findByName(analysis.getLanguageName(),
 			analysis.getLanguageVersion());
 	ProgrammingLanguage language = analyzerServiceManager
-		.createInstance(analyzerServiceInformation.getJndiName());
+		.getInstance(analyzerServiceInformation.getJndiName());
 	SourceCodeLocation sourceCodeLocation = analysisRun
 		.findTreeNode(hashId).getSourceCodeLocation();
 	GenericFileMetrics results = new GenericFileMetrics(
@@ -114,8 +114,8 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 			    .getCanonicalName(), SLOCEvaluatorParameter.ALL,
 		    values));
 
-	    slocEvaluatorDAO.storeFileResults(hashId, codeRange,
-		    metric.getSLOCResult());
+	    slocEvaluatorDAO.storeFileResults(hashId, sourceCodeLocation,
+		    codeRange, metric.getSLOCResult());
 	}
 	logger.info("Finished file '"
 		+ sourceCodeLocation.getHumanReadableLocationString() + "'.");
@@ -131,15 +131,15 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
     protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
-	SLOCResult metricResults = null;
 	EvaluatorStore evaluatorStore = getEvaluatorStore();
+	HashId hashId = directory.getHashId();
+	SLOCResult metricResults = null;
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    if (child.isFile()) {
 		if (evaluatorStore.hasFileResults(child.getHashId(),
 			getInformation().getId())) {
 		    List<SLOCResult> results = slocEvaluatorDAO
-			    .readFileResults(child.getHashId(),
-				    getInformation().getId());
+			    .readFileResults(child.getHashId());
 		    for (SLOCResult result : results) {
 			if (result.getCodeRangeType() == CodeRangeType.FILE) {
 			    metricResults = combine(directory, metricResults,
@@ -151,20 +151,23 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	    } else {
 		if (evaluatorStore.hasDirectoryResults(child.getHashId(),
 			getInformation().getId())) {
-		    GenericDirectoryMetrics results = evaluatorStore
-			    .readDirectoryResults(child.getHashId(),
-				    getInformation().getId());
-		    metricResults = combine(directory, metricResults, results);
+		    SLOCResult slocResult = slocEvaluatorDAO
+			    .readDirectoryResults(hashId);
+		    metricResults = combine(directory, metricResults,
+			    slocResult);
 		}
 	    }
 	}
 	if (metricResults == null) {
 	    return null;
 	}
+
+	slocEvaluatorDAO.storeDirectoryResults(hashId, metricResults);
+
 	Map<String, MetricValue<?>> metrics = SLOCResult
 		.toGenericMetrics(metricResults);
 	GenericDirectoryMetrics finalResults = new GenericDirectoryMetrics(
-		SLOCMetricCalculator.ID, directory.getHashId(), new Date(),
+		SLOCMetricCalculator.ID, hashId, new Date(),
 		SLOCEvaluatorParameter.ALL, metrics);
 	return finalResults;
     }
@@ -176,19 +179,6 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 		results = result;
 	    } else {
 		results = SLOCResult.combine(results, result);
-	    }
-	}
-	return results;
-    }
-
-    private SLOCResult combine(AnalysisFileTree directory, SLOCResult results,
-	    GenericDirectoryMetrics result) {
-	if (result != null) {
-	    if (results == null) {
-		results = SLOCResult.valueOf(result);
-	    } else {
-		results = SLOCResult.combine(results,
-			SLOCResult.valueOf(result));
 	    }
 	}
 	return results;
