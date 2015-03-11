@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.server.metrics.entropy;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,15 +25,16 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMet
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
-import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetricEvaluatorStore;
+import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetricResult;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadResult;
+import com.puresoltechnologies.purifinity.server.metrics.halstead.db.HalsteadMetricsEvaluatorDAO;
 
 @Stateless
 @Remote(Evaluator.class)
 public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
 
     @Inject
-    private HalsteadMetricEvaluatorStore halsteadMetricEvaluatorStore;
+    private HalsteadMetricsEvaluatorDAO halsteadMetricEvaluatorDAO;
 
     public EntropyMetricEvaluator() {
 	super(EntropyMetric.ID, EntropyMetric.NAME, EntropyMetric.DESCRIPTION);
@@ -56,18 +58,26 @@ public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
 	SourceCodeLocation sourceCodeLocation = analysisRun
 		.findTreeNode(hashId).getSourceCodeLocation();
 
-	EntropyFileResults results = new EntropyFileResults(hashId,
+	EntropyFileResults entropyResults = new EntropyFileResults(hashId,
 		sourceCodeLocation, new Date());
 
+	List<HalsteadMetricResult> halsteadMetricResults = halsteadMetricEvaluatorDAO
+		.readFileResults(hashId);
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    HalsteadResult halstead = halsteadMetricEvaluatorStore
-		    .readCodeRangeResults(hashId, codeRange.getType(),
-			    codeRange.getCanonicalName());
-	    EntropyMetricResult result = calculateEntropyResult(halstead);
-	    results.add(new EntropyResult(sourceCodeLocation, codeRange
-		    .getType(), codeRange.getCanonicalName(), result));
+	    for (HalsteadMetricResult halsteadMetricResult : halsteadMetricResults) {
+		if (halsteadMetricResult.getCodeRangeType().equals(
+			codeRange.getType())
+			&& halsteadMetricResult.getCodeRangeName().equals(
+				codeRange.getCanonicalName())) {
+		    EntropyMetricResult entropyResult = calculateEntropyResult(halsteadMetricResult
+			    .getHalsteadResult());
+		    entropyResults.add(new EntropyResult(sourceCodeLocation,
+			    codeRange.getType(), codeRange.getCanonicalName(),
+			    entropyResult));
+		}
+	    }
 	}
-	return results;
+	return entropyResults;
     }
 
     /**
@@ -114,12 +124,13 @@ public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
     protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
-	HalsteadResult halsteadDirectoryResults = halsteadMetricEvaluatorStore
+	HalsteadMetricResult halsteadDirectoryResults = halsteadMetricEvaluatorDAO
 		.readDirectoryResults(directory.getHashId());
 	if (halsteadDirectoryResults == null) {
 	    return null;
 	}
-	EntropyMetricResult entropyResult = calculateEntropyResult(halsteadDirectoryResults);
+	EntropyMetricResult entropyResult = calculateEntropyResult(halsteadDirectoryResults
+		.getHalsteadResult());
 	EntropyDirectoryResults directoryResults = new EntropyDirectoryResults(
 		directory.getHashId(), new Date(),
 		new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,

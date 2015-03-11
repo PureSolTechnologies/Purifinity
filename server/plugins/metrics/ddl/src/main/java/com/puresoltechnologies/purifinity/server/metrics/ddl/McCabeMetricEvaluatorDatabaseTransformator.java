@@ -19,7 +19,7 @@ import com.puresoltechnologies.versioning.Version;
 public class McCabeMetricEvaluatorDatabaseTransformator implements
 	ComponentTransformator {
 
-    public static final String MCCABE_EVALUATOR_KEYSPACE_NAME = "mccabe_evaluator";
+    public static final String MCCABE_METRICS_KEYSPACE_NAME = "mccabe_metrics";
     public static final String CASSANDRA_HOST = "localhost";
     public static final int CASSANDRA_CQL_PORT = 9042;
 
@@ -29,7 +29,7 @@ public class McCabeMetricEvaluatorDatabaseTransformator implements
 
     @Override
     public String getComponentName() {
-	return "McCabeEvaluator";
+	return "McCabeMetricEvaluator";
     }
 
     @Override
@@ -62,7 +62,7 @@ public class McCabeMetricEvaluatorDatabaseTransformator implements
 	sequence.appendTransformation(CassandraStandardMigrations
 		.createKeyspace(
 			sequence,
-			MCCABE_EVALUATOR_KEYSPACE_NAME,
+			MCCABE_METRICS_KEYSPACE_NAME,
 			"Rick-Rainer Ludwig",
 			"This keyspace keeps the detailed results of McCabe Metric evaluations.",
 			ReplicationStrategy.SIMPLE_STRATEGY, 1));
@@ -78,7 +78,7 @@ public class McCabeMetricEvaluatorDatabaseTransformator implements
 		startVersion, versionRange);
 	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
 		CASSANDRA_HOST, CASSANDRA_CQL_PORT,
-		MCCABE_EVALUATOR_KEYSPACE_NAME, metadata);
+		MCCABE_METRICS_KEYSPACE_NAME, metadata);
 
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence,
@@ -114,7 +114,7 @@ public class McCabeMetricEvaluatorDatabaseTransformator implements
 	try (Cluster cluster = CassandraUtils.connectCluster()) {
 	    try (Session session = cluster.connect()) {
 		session.execute("DROP KEYSPACE IF EXISTS "
-			+ MCCABE_EVALUATOR_KEYSPACE_NAME);
+			+ MCCABE_METRICS_KEYSPACE_NAME);
 	    }
 	}
 

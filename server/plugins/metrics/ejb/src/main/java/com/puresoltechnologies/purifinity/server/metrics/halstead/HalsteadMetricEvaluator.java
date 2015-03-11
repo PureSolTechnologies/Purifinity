@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.server.metrics.halstead;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.EJB;
@@ -22,7 +23,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
@@ -30,6 +30,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParame
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
+import com.puresoltechnologies.purifinity.server.metrics.halstead.db.HalsteadMetricsEvaluatorDAO;
 
 @Stateless
 @Remote(Evaluator.class)
@@ -39,7 +40,7 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
     private AnalyzerServiceManagerRemote analyzerServiceManager;
 
     @Inject
-    private HalsteadMetricEvaluatorStore halsteadMetricEvaluatorStore;
+    private HalsteadMetricsEvaluatorDAO halsteadMetricEvaluatorDAO;
 
     public HalsteadMetricEvaluator() {
 	super(HalsteadMetric.ID, HalsteadMetric.NAME,
@@ -76,13 +77,13 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 	    HalsteadMetric metric = new HalsteadMetric(analysisRun, language,
 		    codeRange);
 	    metric.run();
-	    HalsteadResult halsteadResults = metric.getHalsteadResults();
-	    halsteadMetricEvaluatorStore.storeCodeRangeResults(hashId,
-		    codeRange, halsteadResults);
+	    HalsteadResult halsteadResult = metric.getHalsteadResults();
+	    halsteadMetricEvaluatorDAO.storeFileResults(hashId,
+		    sourceCodeLocation, codeRange, halsteadResult);
 	    results.addCodeRangeMetrics(new GenericCodeRangeMetrics(
 		    sourceCodeLocation, codeRange.getType(), codeRange
 			    .getCanonicalName(),
-		    HalsteadMetricEvaluatorParameter.ALL, halsteadResults
+		    HalsteadMetricEvaluatorParameter.ALL, halsteadResult
 			    .getResults()));
 	}
 	return results;
@@ -97,33 +98,24 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
     protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
-	QualityLevel qualityLevel = null;
 	HalsteadMetricResult metricResults = null;
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    if (child.isFile()) {
-		HalsteadResult fileResults = halsteadMetricEvaluatorStore
-			.readCodeRangeResults(child.getHashId(),
-				CodeRangeType.FILE, child.getName());
-		if (fileResults != null) {
-		    metricResults = combine(directory, metricResults,
-			    fileResults);
-		    qualityLevel = QualityLevel.combine(
-			    qualityLevel,
-			    new QualityLevel(HalsteadQuality.get(
-				    CodeRangeType.FILE, fileResults)));
+		List<HalsteadMetricResult> results = halsteadMetricEvaluatorDAO
+			.readFileResults(child.getHashId());
+		for (HalsteadMetricResult result : results) {
+		    if (result.getCodeRangeType() == CodeRangeType.FILE) {
+			metricResults = combine(directory, metricResults,
+				result.getHalsteadResult());
+			break;
+		    }
 		}
 	    } else {
-		HalsteadResult directoryResults = halsteadMetricEvaluatorStore
+		HalsteadMetricResult directoryResults = halsteadMetricEvaluatorDAO
 			.readDirectoryResults(child.getHashId());
 		if (directoryResults != null) {
 		    metricResults = combine(directory, metricResults,
-			    directoryResults);
-		    qualityLevel = QualityLevel
-			    .combine(
-				    qualityLevel,
-				    new QualityLevel(HalsteadQuality.get(
-					    CodeRangeType.DIRECTORY,
-					    directoryResults)));
+			    directoryResults.getHalsteadResult());
 		}
 	    }
 	}
@@ -144,13 +136,11 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 	    if (results == null) {
 		results = new HalsteadMetricResult(
 			new UnspecifiedSourceCodeLocation(),
-			CodeRangeType.DIRECTORY, node.getName(), result,
-			HalsteadQuality.get(codeRangeType, result));
+			CodeRangeType.DIRECTORY, node.getName(), result);
 	    } else {
 		results = HalsteadMetricResult.combine(results,
 			new HalsteadMetricResult(node.getSourceCodeLocation(),
-				codeRangeType, node.getName(), result,
-				HalsteadQuality.get(codeRangeType, result)));
+				codeRangeType, node.getName(), result));
 	    }
 	}
 	return results;

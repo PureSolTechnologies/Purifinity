@@ -16,10 +16,10 @@ import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.versioning.Version;
 
-public class HalsteadEvaluatorDatabaseTransformator implements
+public class HalsteadMetricEvaluatorDatabaseTransformator implements
 	ComponentTransformator {
 
-    public static final String HALSTEAD_EVALUATOR_KEYSPACE_NAME = "halstead_evaluator";
+    public static final String HALSTEAD_METRICS_KEYSPACE_NAME = "halstead_metrics";
     public static final String CASSANDRA_HOST = "localhost";
     public static final int CASSANDRA_CQL_PORT = 9042;
 
@@ -29,7 +29,7 @@ public class HalsteadEvaluatorDatabaseTransformator implements
 
     @Override
     public String getComponentName() {
-	return "HalsteadEvaluator";
+	return "HalsteadMetricEvaluator";
     }
 
     @Override
@@ -62,7 +62,7 @@ public class HalsteadEvaluatorDatabaseTransformator implements
 	sequence.appendTransformation(CassandraStandardMigrations
 		.createKeyspace(
 			sequence,
-			HALSTEAD_EVALUATOR_KEYSPACE_NAME,
+			HALSTEAD_METRICS_KEYSPACE_NAME,
 			"Rick-Rainer Ludwig",
 			"This keyspace keeps the detailed results of halstaed evaluations like the found operators and operands and their count.",
 			ReplicationStrategy.SIMPLE_STRATEGY, 1));
@@ -78,7 +78,7 @@ public class HalsteadEvaluatorDatabaseTransformator implements
 		startVersion, versionRange);
 	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
 		CASSANDRA_HOST, CASSANDRA_CQL_PORT,
-		HALSTEAD_EVALUATOR_KEYSPACE_NAME, metadata);
+		HALSTEAD_METRICS_KEYSPACE_NAME, metadata);
 
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence,
@@ -92,6 +92,19 @@ public class HalsteadEvaluatorDatabaseTransformator implements
 			+ "code_range_name varchar, "
 			+ "operators map<text,int>, "
 			+ "operands map<text,int>, "
+			+ "differentOperators int, "
+			+ "differentOperands int, "
+			+ "totalOperators int, "
+			+ "totalOperands int, "
+			+ "vocabularySize int, "
+			+ "programLength int, "
+			+ "halsteadLength double, "
+			+ "halsteadVolume double, "
+			+ "difficulty double, "
+			+ "programLevel double, "
+			+ "implementationEffort double, "
+			+ "implementationTime double, "
+			+ "estimatedBugs double, "
 			+ "PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name));",
 		"Keeps directory results for Halstead evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
@@ -100,6 +113,15 @@ public class HalsteadEvaluatorDatabaseTransformator implements
 			+ "evaluator_id varchar, "
 			+ "operators map<text,int>, "
 			+ "operands map<text,int>, "
+			+ "differentOperators int, "
+			+ "differentOperands int, " + "totalOperators int, "
+			+ "totalOperands int, " + "vocabularySize int, "
+			+ "programLength int, " + "halsteadLength double, "
+			+ "halsteadVolume double, " + "difficulty double, "
+			+ "programLevel double, "
+			+ "implementationEffort double, "
+			+ "implementationTime double, "
+			+ "estimatedBugs double, "
 			+ "PRIMARY KEY(hashid, evaluator_id));",
 		"Keeps directory results for Halstead evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
@@ -108,6 +130,15 @@ public class HalsteadEvaluatorDatabaseTransformator implements
 			+ "evaluator_id varchar, "
 			+ "operators map<text,int>, "
 			+ "operands map<text,int>, "
+			+ "differentOperators int, "
+			+ "differentOperands int, " + "totalOperators int, "
+			+ "totalOperands int, " + "vocabularySize int, "
+			+ "programLength int, " + "halsteadLength double, "
+			+ "halsteadVolume double, " + "difficulty double, "
+			+ "programLevel double, "
+			+ "implementationEffort double, "
+			+ "implementationTime double, "
+			+ "estimatedBugs double, "
 			+ "PRIMARY KEY(project_id, evaluator_id));",
 		"Keeps project results for Halstead evaluator."));
 
@@ -119,7 +150,7 @@ public class HalsteadEvaluatorDatabaseTransformator implements
 	try (Cluster cluster = CassandraUtils.connectCluster()) {
 	    try (Session session = cluster.connect()) {
 		session.execute("DROP KEYSPACE IF EXISTS "
-			+ HALSTEAD_EVALUATOR_KEYSPACE_NAME);
+			+ HALSTEAD_METRICS_KEYSPACE_NAME);
 	    }
 	}
 

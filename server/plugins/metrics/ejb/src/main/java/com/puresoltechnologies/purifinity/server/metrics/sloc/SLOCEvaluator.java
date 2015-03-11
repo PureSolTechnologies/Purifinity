@@ -38,7 +38,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServi
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
-import com.puresoltechnologies.purifinity.server.metrics.sloc.db.SLOCEvaluatorDAO;
+import com.puresoltechnologies.purifinity.server.metrics.sloc.db.SLOCMetricEvaluatorDAO;
 
 /**
  * This evaluator evaluates the Source Lines Of Code metrics which counts the
@@ -64,7 +64,7 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
     private AnalyzerServiceManagerRemote analyzerServiceManager;
 
     @Inject
-    private SLOCEvaluatorDAO slocEvaluatorDAO;
+    private SLOCMetricEvaluatorDAO slocEvaluatorDAO;
 
     public SLOCEvaluator() {
 	super(SLOCMetricCalculator.ID, SLOCMetricCalculator.NAME,

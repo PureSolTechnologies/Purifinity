@@ -16,10 +16,10 @@ import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.versioning.Version;
 
-public class SLOCEvaluatorDatabaseTransformator implements
+public class SLOCMetricEvaluatorDatabaseTransformator implements
 	ComponentTransformator {
 
-    public static final String SLOC_EVALUATOR_KEYSPACE_NAME = "sloc_evaluator";
+    public static final String SLOC_METRICS_KEYSPACE_NAME = "sloc_metrics";
     public static final String CASSANDRA_HOST = "localhost";
     public static final int CASSANDRA_CQL_PORT = 9042;
 
@@ -29,7 +29,7 @@ public class SLOCEvaluatorDatabaseTransformator implements
 
     @Override
     public String getComponentName() {
-	return "SLOCEvaluator";
+	return "SLOCMetricEvaluator";
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SLOCEvaluatorDatabaseTransformator implements
 	sequence.appendTransformation(CassandraStandardMigrations
 		.createKeyspace(
 			sequence,
-			SLOC_EVALUATOR_KEYSPACE_NAME,
+			SLOC_METRICS_KEYSPACE_NAME,
 			"Rick-Rainer Ludwig",
 			"This keyspace keeps the detailed results of SLOC evaluations.",
 			ReplicationStrategy.SIMPLE_STRATEGY, 1));
@@ -77,8 +77,8 @@ public class SLOCEvaluatorDatabaseTransformator implements
 	SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
 		startVersion, versionRange);
 	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-		CASSANDRA_HOST, CASSANDRA_CQL_PORT,
-		SLOC_EVALUATOR_KEYSPACE_NAME, metadata);
+		CASSANDRA_HOST, CASSANDRA_CQL_PORT, SLOC_METRICS_KEYSPACE_NAME,
+		metadata);
 
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence,
@@ -137,7 +137,7 @@ public class SLOCEvaluatorDatabaseTransformator implements
 	try (Cluster cluster = CassandraUtils.connectCluster()) {
 	    try (Session session = cluster.connect()) {
 		session.execute("DROP KEYSPACE IF EXISTS "
-			+ SLOC_EVALUATOR_KEYSPACE_NAME);
+			+ SLOC_METRICS_KEYSPACE_NAME);
 	    }
 	}
 

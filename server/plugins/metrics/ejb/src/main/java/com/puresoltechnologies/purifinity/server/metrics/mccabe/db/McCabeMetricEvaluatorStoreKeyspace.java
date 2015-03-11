@@ -16,6 +16,6 @@ import javax.inject.Qualifier;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface McCabeMetricEvaluatorStoreKeyspace {
 
-    public static final String NAME = "mccabe_evaluator";
+    public static final String NAME = "mccabe_metrics";
 
 }

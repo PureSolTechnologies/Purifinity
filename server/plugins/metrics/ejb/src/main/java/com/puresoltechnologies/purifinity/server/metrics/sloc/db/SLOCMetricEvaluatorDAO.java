@@ -23,7 +23,7 @@ import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCResult;
 
-public class SLOCEvaluatorDAO {
+public class SLOCMetricEvaluatorDAO {
 
     @Inject
     @SLOCEvaluatorStoreKeyspace
