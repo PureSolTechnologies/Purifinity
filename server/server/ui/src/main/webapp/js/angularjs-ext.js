@@ -7,8 +7,9 @@
  * 
  * @angularApplication is the AngularJS application which is to be enhanced.
  */
-var purifinityUI = angular.module("purifinityUI", []);
+var purifinityUI = angular.module("purifinityUI", ["pluginManagerModule"]);
 purifinityUI.controller("menuCtrl", menuCtrl);
+purifinityUI.directive("evaluatorSelection", evaluatorSelection);
 
 /**
  * This is a menu controller to have a chance to mark items as active in a
@@ -36,4 +37,27 @@ function menuCtrl($scope, $route, $routeParams, $location) {
 		}
 		return "";
 	}
+}
+
+function evaluatorSelection() {
+	return {
+		restrict: "E",
+		link: function(scope, element, attrs) {
+			attrs["ngBind"];
+		},
+		scope: {
+			evaluatorSelection: '=ngModel'
+		},
+		controller : function($scope, pluginManager) {
+			$scope.evaluators = {};
+			pluginManager.getEvaluators(
+				function(data, status) {
+					$scope.evaluators = data;
+					$scope.evaluators.sort(function(l, r) {return (l.name < r.name)? - 1 : ((l.name > r.name)? 1 : 0);});
+				}, 
+				function(data, status, error) {}
+			);
+		},
+		templateUrl: "/js/evaluatorSelection.html"
+	};
 }

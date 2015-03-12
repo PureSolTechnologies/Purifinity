@@ -38,6 +38,8 @@
 <script type="text/javascript" src="js/purifinity-server.js"></script>
 <script type="text/javascript" src="js/account-manager.js"></script>
 <script type="text/javascript" src="js/project-manager.js"></script>
+<script type="text/javascript" src="js/plugin-manager.js"></script>
+<script type="text/javascript" src="js/project-metrics.js"></script>
 <script type="text/javascript" src="js/alerter.js"></script>
 <script type="text/javascript">
 	var projectApp = angular.module("projectApp", [
@@ -47,6 +49,8 @@
 		"purifinityServer",
 		"accountManagerModule",
 		"projectManagerModule",
+		"pluginManagerModule",
+		"projectMetricsModule",
 		"alerter"
 	]);
 	projectApp.config(function($routeProvider, $locationProvider){

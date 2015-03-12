@@ -97,7 +97,7 @@ function pluginActivationCtrl($scope, pluginManager) {
 		function(data, status) {
 			$scope.evaluators = data;
 			$scope.evaluators.forEach(function(evaluator) {
-				pluginManager.isAnalyzerEnabled(evaluator.id, 
+				pluginManager.isEvaluatorEnabled(evaluator.id, 
 					function(data, status) {
 						$scope.evaluatorActivation[evaluator.id] = data;
 					},
