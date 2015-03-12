@@ -1,10 +1,10 @@
 <div class="container">
-	<h1>Metrics</h1>
 	<tabset>
 		<tab heading="File System Tree" data-ng-controller="fileSystemMetrics">
-			<p>Browse metrics via file system.</p>
+			<p>Here metrics can be browsed via file system selection.</p>
 			<evaluator-selection data-ng-model="selectedEvaluator"></evaluator-selection>
-			<p>Hope, you enjoy it. Selection: {{selectedEvaluator}}</p>
+			<p>Evaluator selection: {{selectedEvaluator}}</p>
+			<tree-table data-ng-model="metricsTreeTable"></tree-table>
 		</tab>
 		<tab heading="Tree Map">
 		</tab>
