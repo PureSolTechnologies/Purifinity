@@ -5,21 +5,19 @@ analysisUIModule.controller("runListCtrl", runListCtrl);
 function analysisBrowserCtrl($scope, $routeParams, projectManager) {
 	$scope.project = undefined;
 	$scope.run = undefined;
-	$scope.path = [];
+	$scope.analysisFileTree = [];
 	projectManager.getProject($routeParams.projectId,
 		function(data, status) {
 			$scope.project = data;
 			projectManager.getLastRun($routeParams.projectId,
 				function(data, status) {
 					$scope.run = data;
-					$scope.fileTree = {};
 					projectManager.getAnalysisFileTree(
 						$scope.project.information.projectId,
 						$scope.run.runId,
 						function(data, status) {
-							$scope.fileTree = data;
-							$scope.currentDirectory = $scope.fileTree;
-							$scope.path.push($scope.currentDirectory);
+							$scope.analysisFileTree = convertAnalysisFileTree(data);
+							$scope.analysisFileTree.columns = [ "Name", "Size", "Size Recursive", "Analyses" ];
 						},
 						function(data, status, error) {}
 					);
@@ -29,30 +27,46 @@ function analysisBrowserCtrl($scope, $routeParams, projectManager) {
 		},
 		function(data, status, error) {}
 	);
-	$scope.chdir = function(dir) {
-		if  (dir == "..") {
-			if ($scope.path.length > 1) {
-				$scope.path.pop();
-				$scope.currentDirectory = $scope.path[$scope.path.length - 1];
-			} 
-			return;
-		}
-		for (key in $scope.currentDirectory.children) {
-			if ($scope.currentDirectory.children[key].name == dir) {
-				var newDirectory = $scope.currentDirectory.children[key];
-				$scope.path.push(newDirectory);
-				$scope.currentDirectory = newDirectory;
-				return;
-			}
-		}
-	}
-	$scope.setDir = function(dir) {
-		while (($scope.path.length > 1) && ($scope.path[$scope.path.length - 1] !== dir)) {
-			$scope.path.pop();
-		}
-		$scope.currentDirectory = $scope.path[$scope.path.length - 1];
-	}
 };
+
+
+function convertAnalysisFileTree(fileTree) {
+	var treeTableData = {};
+	treeTableData.name = fileTree.name;
+	treeTableData.id = fileTree.hashId.algorithm + ":" + fileTree.hashId.hash;
+	treeTableData.columns = [
+		{name : fileTree.size},
+		{name : fileTree.sizeRecursive},
+		{name : fileTree.analyzedCodes}
+	];
+	if (fileTree.children.length > 0) {
+		treeTableData.children = [];
+		fileTree.children.sort(function(l, r) {
+			if ((l.children) && (l.children.length > 0)) {
+				if ((r.children) && (r.children.length > 0)) {
+					return strcmp(l.name.toUpperCase(), r.name.toUpperCase());
+				}
+				return -1;
+			} else {
+				if ((r.children) && (r.children.length > 0)) {
+					return 1;
+				}
+				return strcmp(l.name.toUpperCase(), r.name.toUpperCase());
+			}
+		});
+		fileTree.children.forEach(function(child) {
+			treeTableData.children.push(convertAnalysisFileTree(child));
+		});
+		treeTableData.imageUrl = '/images/icons/FatCow_Icons16x16/folder.png';
+	} else {
+		treeTableData.imageUrl = '/images/icons/FatCow_Icons16x16/document_green.png';
+	}
+	return treeTableData;
+}
+
+function strcmp(s1, s2) {
+	return (s1 < s2)? - 1 : ((s1 > s2)? 1 : 0);
+}
 
 function runListCtrl($scope, $routeParams, projectManager) {
 	$scope.project = undefined;

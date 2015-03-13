@@ -6,7 +6,6 @@ function fileSystemMetrics($scope, $routeParams, projectManager) {
 	$scope.metricsTreeTable = {};
 	$scope.project = {};
 	$scope.run = {};
-	$scope.fileTree = {};
 	projectManager.getProject($routeParams.projectId,
 		function(data, status) {
 			$scope.project = data;
@@ -17,8 +16,7 @@ function fileSystemMetrics($scope, $routeParams, projectManager) {
 						$scope.project.information.projectId,
 						$scope.run.runId,
 						function(data, status) {
-							$scope.fileTree = data;
-							$scope.metricsTreeTable = convertFileTree($scope.fileTree);
+							$scope.metricsTreeTable = convertFileTreeForMetrics(data);
 							$scope.metricsTreeTable.columns = [ "Name", "Metrics..." ];
 						},
 						function(data, status, error) {}
@@ -31,7 +29,7 @@ function fileSystemMetrics($scope, $routeParams, projectManager) {
 	);
 }
 
-function convertFileTree(fileTree) {
+function convertFileTreeForMetrics(fileTree) {
 	var treeTableData = {};
 	treeTableData.name = fileTree.name;
 	treeTableData.id = fileTree.hashId.algorithm + ":" + fileTree.hashId.hash;
@@ -57,7 +55,7 @@ function convertFileTree(fileTree) {
 			}
 		});
 		fileTree.children.forEach(function(child) {
-			treeTableData.children.push(convertFileTree(child));
+			treeTableData.children.push(convertFileTreeForMetrics(child));
 		});
 		treeTableData.imageUrl = '/images/icons/FatCow_Icons16x16/folder.png';
 	} else {
