@@ -1,3 +1,3 @@
 $(document).ready(function() {
-		$('#tooltipLink').tooltop();
+		$('#tooltipLink').tooltip();
 });

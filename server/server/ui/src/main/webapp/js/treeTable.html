@@ -1,0 +1,34 @@
+<ol class="breadcrumb">
+	<li data-ng-repeat="folder in path">
+		<a href data-ng-click="setDir(folder)"><img data-ng-show="{{folder.imageUrl}}" src="{{folder.imageUrl}}" /> {{folder.name}}</a>
+	</li>
+</ol>
+<table class="table table-striped table-hover table-bordered">
+	<thead>
+		<tr>
+			<th data-ng-repeat="column in treeTableData.columns">{{column}}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr data-ng-show="path.length > 1">
+			<td>
+				<a href data-ng-click="chdir('..')"><img src="/images/icons/FatCow_Icons16x16/bullet_arrow_up.png" /> ..</a>
+			</td>
+		</tr>
+		<tr data-ng-repeat="content in currentFolder.children">
+			<td>
+				<a data-ng-show="content.children" href data-ng-click="chdir(content.name)">
+					<img data-ng-show="{{content.imageUrl}}" src="{{content.imageUrl}}" />
+					{{content.name}}
+				</a>
+				<span data-ng-hide="content.children">
+					<img data-ng-show="{{content.imageUrl}}" src="{{content.imageUrl}}" />
+					{{content.name}}
+				</span>
+			</td>
+			<td data-ng-repeat = "contentColumn in content.columns">
+				{{contentColumn.name}}
+			</td>
+		</tr>
+	</tbody>
+</table>

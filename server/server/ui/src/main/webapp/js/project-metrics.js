@@ -1,39 +1,71 @@
-var projectMetricsModule = angular.module("projectMetricsModule", ["pluginManagerModule"]);
+var projectMetricsModule = angular.module("projectMetricsModule", ["projectManagerModule", "pluginManagerModule"]);
 projectMetricsModule.controller("fileSystemMetrics", fileSystemMetrics);
 
-function fileSystemMetrics($scope) {
+function fileSystemMetrics($scope, $routeParams, projectManager) {
 	$scope.selectedEvaluator = undefined;
-	$scope.metricsTreeTable = {
-		columns : [ "name", "col2", "col3" ],
-		id : "id1",
-		name : "root",
-		children: [
-			{
-				id : "id1",
-				name : "name1"
-			},
-			{
-				id : "id2",
-				name : "name2"
-			},
-			{
-				id : "id3",
-				name : "name3",
-				children: [
-					{
-						id : "id1",
-						name : "name1"
-					},
-					{
-						id : "id2",
-						name : "name2"
-					},
-					{
-						id : "id3",
-						name : "name3"
-					}
-				]
+	$scope.metricsTreeTable = {};
+	$scope.project = {};
+	$scope.run = {};
+	$scope.fileTree = {};
+	projectManager.getProject($routeParams.projectId,
+		function(data, status) {
+			$scope.project = data;
+			projectManager.getLastRun($routeParams.projectId,
+				function(data, status) {
+					$scope.run = data;
+					projectManager.getAnalysisFileTree(
+						$scope.project.information.projectId,
+						$scope.run.runId,
+						function(data, status) {
+							$scope.fileTree = data;
+							$scope.metricsTreeTable = convertFileTree($scope.fileTree);
+							$scope.metricsTreeTable.columns = [ "Name", "Metrics..." ];
+						},
+						function(data, status, error) {}
+					);
+				},
+				function(data, status, error) {}
+			);
+		},
+		function(data, status, error) {}
+	);
+}
+
+function convertFileTree(fileTree) {
+	var treeTableData = {};
+	treeTableData.name = fileTree.name;
+	treeTableData.id = fileTree.hashId.algorithm + ":" + fileTree.hashId.hash;
+	treeTableData.columns = [
+		{
+			name : "column",
+			id : "id"
+		}
+	];
+	if (fileTree.children.length > 0) {
+		treeTableData.children = [];
+		fileTree.children.sort(function(l, r) {
+			if ((l.children) && (l.children.length > 0)) {
+				if ((r.children) && (r.children.length > 0)) {
+					return strcmp(l.name.toUpperCase(), r.name.toUpperCase());
+				}
+				return -1;
+			} else {
+				if ((r.children) && (r.children.length > 0)) {
+					return 1;
+				}
+				return strcmp(l.name.toUpperCase(), r.name.toUpperCase());
 			}
-		]
-	};
+		});
+		fileTree.children.forEach(function(child) {
+			treeTableData.children.push(convertFileTree(child));
+		});
+		treeTableData.imageUrl = '/images/icons/FatCow_Icons16x16/folder.png';
+	} else {
+		treeTableData.imageUrl = '/images/icons/FatCow_Icons16x16/document_green.png';
+	}
+	return treeTableData;
+}
+
+function strcmp(s1, s2) {
+	return (s1 < s2)? - 1 : ((s1 > s2)? 1 : 0);
 }
