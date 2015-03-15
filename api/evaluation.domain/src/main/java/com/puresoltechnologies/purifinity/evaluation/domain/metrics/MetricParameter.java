@@ -18,6 +18,13 @@ import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 public class MetricParameter<T extends Number & Serializable & Comparable<T>>
 	extends ParameterWithArbitraryUnit<T> {
 
+    public static MetricParameter<?> create(String parameterName,
+	    String parameterUnit, LevelOfMeasurement levelOfMeasurement,
+	    String parameterDescription, Class<?> type) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
     private static final long serialVersionUID = -2759994739756661433L;
 
     public MetricParameter(String name, String unit,

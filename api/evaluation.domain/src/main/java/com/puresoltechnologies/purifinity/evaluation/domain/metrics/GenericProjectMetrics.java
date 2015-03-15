@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 public class GenericProjectMetrics extends AbstractMetrics implements
 	ProjectMetrics {
@@ -15,27 +14,27 @@ public class GenericProjectMetrics extends AbstractMetrics implements
     private final Set<MetricParameter<?>> parameters = new LinkedHashSet<>();
     private final Map<String, MetricValue<?>> values = new HashMap<>();
 
-    private final UUID projectUUID;
-    private final UUID runUUID;
+    private final String projectId;
+    private final long runId;
 
-    public GenericProjectMetrics(String evaluatorId, UUID projectUUID,
-	    UUID runUUID, Date time, Set<MetricParameter<?>> parameters,
+    public GenericProjectMetrics(String evaluatorId, String projectId,
+	    long runId, Date time, Set<MetricParameter<?>> parameters,
 	    Map<String, MetricValue<?>> values) {
 	super(evaluatorId, time);
-	this.projectUUID = projectUUID;
-	this.runUUID = runUUID;
+	this.projectId = projectId;
+	this.runId = runId;
 	this.parameters.addAll(parameters);
 	this.values.putAll(values);
     }
 
     @Override
-    public UUID getProjectUUID() {
-	return projectUUID;
+    public String getProjectId() {
+	return projectId;
     }
 
     @Override
-    public UUID getRunUUID() {
-	return runUUID;
+    public long getRunId() {
+	return runId;
     }
 
     @Override

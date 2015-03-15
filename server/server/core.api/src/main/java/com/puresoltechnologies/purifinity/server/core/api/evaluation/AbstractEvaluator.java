@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import javax.ejb.EJB;
 
@@ -90,10 +89,10 @@ public abstract class AbstractEvaluator implements Evaluator {
 	    AnalysisFileTree directoryNode, GenericDirectoryMetrics metrics)
 	    throws EvaluationStoreException;
 
-    abstract protected ProjectMetrics readProjectResults(UUID projectUUID,
-	    UUID runUUID) throws EvaluationStoreException;
+    abstract protected ProjectMetrics readProjectResults(String projectId,
+	    long runId) throws EvaluationStoreException;
 
-    abstract protected boolean hasProjectResults(UUID projectUUID, UUID runUUID)
+    abstract protected boolean hasProjectResults(String projectId, long runId)
 	    throws EvaluationStoreException;
 
     abstract protected void storeProjectResults(AnalysisRun analysisRun,
