@@ -23,13 +23,15 @@ import com.puresoltechnologies.commons.math.statistics.Statistics;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
+import com.puresoltechnologies.versioning.Version;
 
 public abstract class AbstractSLOCResults extends AbstractMetrics {
 
     private static final long serialVersionUID = -7340562001522028390L;
 
-    public AbstractSLOCResults(String evaluatorId, Date time) {
-	super(evaluatorId, time);
+    public AbstractSLOCResults(String evaluatorId, Version evaluatorVersion,
+	    Date time) {
+	super(evaluatorId, evaluatorVersion, time);
     }
 
     protected Map<String, Value<?>> convertToRow(SLOCResult result) {

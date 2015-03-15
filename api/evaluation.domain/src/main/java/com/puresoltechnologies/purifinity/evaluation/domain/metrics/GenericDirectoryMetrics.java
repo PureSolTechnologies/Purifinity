@@ -7,8 +7,11 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.versioning.Version;
 
 public class GenericDirectoryMetrics extends AbstractMetrics implements
 	DirectoryMetrics {
@@ -20,10 +23,15 @@ public class GenericDirectoryMetrics extends AbstractMetrics implements
 
     private final HashId hashId;
 
-    public GenericDirectoryMetrics(String evaluatorId, HashId hashId,
-	    Date time, Set<MetricParameter<?>> parameters,
-	    Map<String, MetricValue<?>> values) {
-	super(evaluatorId, time);
+    @JsonCreator
+    public GenericDirectoryMetrics(
+	    @JsonProperty("evaluatorId") String evaluatorId,
+	    @JsonProperty("evaluatorVersion") Version evaluatorVersion,
+	    @JsonProperty("hashId") HashId hashId,
+	    @JsonProperty("time") Date time,
+	    @JsonProperty("parameters") Set<MetricParameter<?>> parameters,
+	    @JsonProperty("values") Map<String, MetricValue<?>> values) {
+	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
 	this.parameters.addAll(parameters);
 	this.values.putAll(values);
@@ -49,6 +57,44 @@ public class GenericDirectoryMetrics extends AbstractMetrics implements
     @Override
     public Map<String, MetricValue<?>> getValues() {
 	return values;
+    }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = super.hashCode();
+	result = prime * result + ((hashId == null) ? 0 : hashId.hashCode());
+	result = prime * result
+		+ ((parameters == null) ? 0 : parameters.hashCode());
+	result = prime * result + ((values == null) ? 0 : values.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (!super.equals(obj))
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	GenericDirectoryMetrics other = (GenericDirectoryMetrics) obj;
+	if (hashId == null) {
+	    if (other.hashId != null)
+		return false;
+	} else if (!hashId.equals(other.hashId))
+	    return false;
+	if (parameters == null) {
+	    if (other.parameters != null)
+		return false;
+	} else if (!parameters.equals(other.parameters))
+	    return false;
+	if (values == null) {
+	    if (other.values != null)
+		return false;
+	} else if (!values.equals(other.values))
+	    return false;
+	return true;
     }
 
 }

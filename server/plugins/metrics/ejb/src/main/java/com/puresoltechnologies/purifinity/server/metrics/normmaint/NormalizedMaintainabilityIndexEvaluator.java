@@ -55,7 +55,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends
     }
 
     public NormalizedMaintainabilityIndexEvaluator() {
-	super(ID, NAME, DESCRIPTION);
+	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
     }
 
     @Override
@@ -76,7 +76,8 @@ public class NormalizedMaintainabilityIndexEvaluator extends
 	SourceCodeLocation sourceCodeLocation = analysisRun
 		.findTreeNode(hashId).getSourceCodeLocation();
 	NormalizedMaintainabilityIndexFileResults results = new NormalizedMaintainabilityIndexFileResults(
-		NormalizedMaintainabilityIndexEvaluator.ID, hashId,
+		NormalizedMaintainabilityIndexEvaluator.ID,
+		NormalizedMaintainabilityIndexEvaluator.PLUGIN_VERSION, hashId,
 		sourceCodeLocation, new Date());
 
 	EvaluatorStore evaluatorStore = getEvaluatorStore();
@@ -128,6 +129,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends
 	    EvaluationStoreException {
 	NormalizedMaintainabilityIndexDirectoryResults finalResults = new NormalizedMaintainabilityIndexDirectoryResults(
 		NormalizedMaintainabilityIndexEvaluator.ID,
+		NormalizedMaintainabilityIndexEvaluator.PLUGIN_VERSION,
 		directory.getHashId(), new Date());
 	return finalResults;
     }

@@ -1,9 +1,10 @@
-var projectMetricsModule = angular.module("projectMetricsModule", ["projectManagerModule", "pluginManagerModule"]);
+var projectMetricsModule = angular.module("projectMetricsModule", ["projectManagerModule", "pluginManagerModule", "purifinityServer"]);
 projectMetricsModule.controller("fileSystemMetrics", fileSystemMetrics);
 
-function fileSystemMetrics($scope, $routeParams, projectManager) {
+function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServerConnector) {
 	$scope.selectedEvaluator = undefined;
 	$scope.metricsTreeTable = {};
+	$scope.metrics = {};
 	$scope.project = {};
 	$scope.run = {};
 	projectManager.getProject($routeParams.projectId,
@@ -27,6 +28,16 @@ function fileSystemMetrics($scope, $routeParams, projectManager) {
 		},
 		function(data, status, error) {}
 	);
+	$scope.$watch('selectedEvaluator', function(newValue, oldValue) {
+		if ($scope.project.information && $scope.run.runId && newValue) {
+			purifinityServerConnector.get('/purifinityserver/rest/evaluatorstore/metrics/' + $scope.project.information.projectId + '/' + $scope.run.runId + '/' + newValue, 
+				function(data, status) {
+					$scope.metrics = data;
+				}, 
+				function(data, status, error) {}
+			);
+		}
+	});
 }
 
 function convertFileTreeForMetrics(fileTree) {

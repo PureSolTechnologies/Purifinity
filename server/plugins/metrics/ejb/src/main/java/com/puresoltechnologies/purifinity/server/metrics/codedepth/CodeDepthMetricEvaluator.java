@@ -49,7 +49,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 
     public CodeDepthMetricEvaluator() {
 	super(CodeDepthMetric.ID, CodeDepthMetric.NAME,
-		CodeDepthMetric.DESCRIPTION);
+		CodeDepthMetric.PLUGIN_VERSION, CodeDepthMetric.DESCRIPTION);
     }
 
     @Override
@@ -76,7 +76,8 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 	SourceCodeLocation sourceCodeLocation = analysisRun
 		.findTreeNode(hashId).getSourceCodeLocation();
 	CodeDepthFileResults results = new CodeDepthFileResults(
-		CodeDepthMetric.ID, hashId, sourceCodeLocation, new Date());
+		CodeDepthMetric.ID, CodeDepthMetric.PLUGIN_VERSION, hashId,
+		sourceCodeLocation, new Date());
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    CodeDepthMetric metric = new CodeDepthMetric(analysisRun, language,
 		    codeRange);
@@ -99,7 +100,8 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
 	CodeDepthDirectoryResults directoryResults = new CodeDepthDirectoryResults(
-		CodeDepthMetric.ID, directory.getHashId(), new Date(),
+		CodeDepthMetric.ID, CodeDepthMetric.PLUGIN_VERSION,
+		directory.getHashId(), new Date(),
 		new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
 		directory.getName());
 	int maxDepth = 0;

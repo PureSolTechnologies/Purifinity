@@ -44,7 +44,8 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
     private McCabeMetricEvaluatorDAO mcCabeMetricEvaluatorDAO;
 
     public McCabeMetricEvaluator() {
-	super(McCabeMetric.ID, McCabeMetric.NAME, McCabeMetric.DESCRIPTION);
+	super(McCabeMetric.ID, McCabeMetric.NAME, McCabeMetric.PLUGIN_VERSION,
+		McCabeMetric.DESCRIPTION);
     }
 
     @Override
@@ -65,7 +66,8 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 	SourceCodeLocation sourceCodeLocation = analysisRun
 		.findTreeNode(hashId).getSourceCodeLocation();
 	McCabeMetricFileResults results = new McCabeMetricFileResults(
-		McCabeMetric.ID, hashId, sourceCodeLocation, new Date());
+		McCabeMetric.ID, McCabeMetric.PLUGIN_VERSION, hashId,
+		sourceCodeLocation, new Date());
 	AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
 		.findByName(analysis.getLanguageName(),
 			analysis.getLanguageVersion());
@@ -124,7 +126,8 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 	    return null;
 	}
 	GenericDirectoryMetrics finalResults = new GenericDirectoryMetrics(
-		McCabeMetric.ID, directory.getHashId(), new Date(),
+		McCabeMetric.ID, McCabeMetric.PLUGIN_VERSION,
+		directory.getHashId(), new Date(),
 		McCabeMetricEvaluatorParameter.ALL, metricResults.getValues());
 	mcCabeMetricEvaluatorDAO.storeDirectoryResults(directory.getHashId(),
 		metricResults);
@@ -140,8 +143,7 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 			CodeRangeType.DIRECTORY, directory.getName(),
 			result.getCyclomaticComplexity());
 	    } else {
-		results = McCabeMetricDirectoryResults.combine(results,
-			result);
+		results = McCabeMetricDirectoryResults.combine(results, result);
 	    }
 	}
 	return results;

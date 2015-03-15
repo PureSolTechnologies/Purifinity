@@ -8,13 +8,15 @@ import java.util.Map;
 
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.versioning.Version;
 
 public abstract class AbstractMcCabeMetricResults extends AbstractMetrics {
 
     private static final long serialVersionUID = 8270749745560040672L;
 
-    public AbstractMcCabeMetricResults(String evaluatorId, Date time) {
-	super(evaluatorId, time);
+    public AbstractMcCabeMetricResults(String evaluatorId,
+	    Version evaluatorVersion, Date time) {
+	super(evaluatorId, evaluatorVersion, time);
     }
 
     protected Map<String, MetricValue<?>> convertToRow(McCabeMetricResult result) {

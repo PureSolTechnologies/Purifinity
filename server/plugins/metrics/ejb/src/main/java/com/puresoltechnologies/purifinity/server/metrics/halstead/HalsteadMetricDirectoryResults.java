@@ -8,8 +8,9 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.versioning.Version;
 
 public class HalsteadMetricDirectoryResults extends AbstractHalsteadResults
 	implements DirectoryMetrics {
@@ -19,9 +20,10 @@ public class HalsteadMetricDirectoryResults extends AbstractHalsteadResults
     private final HashId hashId;
     private final HalsteadMetricResult result;
 
-    public HalsteadMetricDirectoryResults(String evaluatorId, HashId hashId,
-	    Date time, HalsteadMetricResult result) {
-	super(evaluatorId, time);
+    public HalsteadMetricDirectoryResults(String evaluatorId,
+	    Version evaluatorVersion, HashId hashId, Date time,
+	    HalsteadMetricResult result) {
+	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
 	if (result == null) {
 	    throw new IllegalArgumentException("Result must not be null!");

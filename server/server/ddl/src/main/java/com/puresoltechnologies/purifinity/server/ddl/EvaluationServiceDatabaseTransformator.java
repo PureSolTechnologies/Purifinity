@@ -92,9 +92,9 @@ public class EvaluationServiceDatabaseTransformator implements
 		"CREATE TABLE "
 			+ EVALUATION_PARAMETERS_TABLE
 			+ " (time timestamp, "
-			+ "evaluator_id varchar, "
+			+ "evaluator_id ascii, "
 			+ "evaluator_name varchar, "
-			+ "evaluator_version varchar, "
+			+ "evaluator_version ascii, "
 			+ "plugin_id varchar, "
 			+ "plugin_name varchar, "
 			+ "plugin_version varchar, "
@@ -103,7 +103,8 @@ public class EvaluationServiceDatabaseTransformator implements
 			+ "plugin_ui_path varchar, "
 			+ "parameter_name varchar, "
 			+ "parameter_unit varchar, "
-			+ "level_of_measurement varchar, "
+			+ "parameter_type ascii, "
+			+ "level_of_measurement ascii, "
 			+ "parameter_description varchar, "
 			+ "PRIMARY KEY(evaluator_id, evaluator_version, parameter_name))",
 		"This table contains all available parameters of all evaluators."));
@@ -122,22 +123,30 @@ public class EvaluationServiceDatabaseTransformator implements
 		"CREATE TABLE "
 			+ EVALUATION_FILE_METRICS_TABLE
 			+ " (time timestamp, "
-			+ "hashid varchar, "
+			+ "hashid ascii, "
 			+ "source_code_location varchar, "
-			+ "code_range_type varchar, "
+			+ "code_range_type ascii, "
 			+ "code_range_name varchar, "
-			+ "evaluator_id varchar, "
+			+ "evaluator_id ascii, "
+			+ "evaluator_version ascii, "
 			+ "parameter_name varchar, "
 			+ "parameter_unit varchar, "
+			+ "parameter_description varchar, "
+			+ "parameter_type ascii, "
+			+ "level_of_measurement ascii, "
 			+ "value double, "
 			+ "PRIMARY KEY(hashid, evaluator_id, parameter_name, code_range_type, code_range_name))",
 		"Keeps metrics for single files and their code ranges."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ EVALUATION_DIRECTORY_METRICS_TABLE
-			+ " (time timestamp, " + "hashid varchar, "
-			+ "evaluator_id varchar, " + "parameter_name varchar, "
-			+ "parameter_unit varchar, " + "value double, "
+			+ " (time timestamp, " + "hashid ascii, "
+			+ "evaluator_id ascii, " + "evaluator_version ascii, "
+			+ "parameter_name varchar, "
+			+ "parameter_unit varchar, "
+			+ "parameter_description varchar, "
+			+ "parameter_type ascii, "
+			+ "level_of_measurement ascii, " + "value double, "
 			+ "PRIMARY KEY(hashid, evaluator_id, parameter_name))",
 		"Keeps metrics for single files and their code ranges."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
@@ -146,13 +155,17 @@ public class EvaluationServiceDatabaseTransformator implements
 		"CREATE TABLE "
 			+ EVALUATION_PROJECT_METRICS_TABLE
 			+ " (time timestamp, "
-			+ "project_uuid UUID, "
-			+ "run_uuid UUID, "
-			+ "evaluator_id varchar, "
+			+ "project_id ascii, "
+			+ "run_id bigint, "
+			+ "evaluator_id ascii, "
+			+ "evaluator_version ascii, "
 			+ "parameter_name varchar, "
 			+ "parameter_unit varchar, "
+			+ "parameter_description varchar, "
+			+ "parameter_type ascii, "
+			+ "level_of_measurement ascii, "
 			+ "value double, "
-			+ "PRIMARY KEY(project_uuid, run_uuid, evaluator_id, parameter_name))",
+			+ "PRIMARY KEY(project_id, run_id, evaluator_id, parameter_name))",
 		"Keeps metrics for single files and their code ranges."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence,
@@ -162,22 +175,23 @@ public class EvaluationServiceDatabaseTransformator implements
 			+ " (time timestamp, "
 			+ "project_id ascii, "
 			+ "run_id bigint, "
-			+ "hashid varchar, "
+			+ "evaluator_id ascii, "
+			+ "evaluator_version ascii, "
+			+ "hashid ascii, "
 			+ "internal_directory varchar, "
 			+ "file_name varchar, "
 			+ "source_code_location varchar, "
 			+ "language_name varchar, "
 			+ "language_version varchar, "
-			+ "evaluator_name varchar, "
 			+ "code_range_name varchar, "
-			+ "code_range_type varchar, "
+			+ "code_range_type ascii, "
 			+ "parameter_name varchar, "
 			+ "parameter_unit varchar, "
-			+ "parameter_type varchar, "
+			+ "parameter_type ascii, "
 			+ "value double, "
-			+ "level_of_measurement varchar, "
+			+ "level_of_measurement ascii, "
 			+ "parameter_description varchar, "
-			+ "PRIMARY KEY(project_id, run_id, evaluator_name, parameter_name, code_range_type, hashid, code_range_name));",
+			+ "PRIMARY KEY(project_id, run_id, evaluator_id, parameter_name, code_range_type, hashid, code_range_name));",
 		"Keeps the metrics in a big table for efficient retrieval."));
 
 	return sequence;

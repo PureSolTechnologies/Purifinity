@@ -108,7 +108,7 @@ public class AnalysisServiceDatabaseTransformator implements
 		"Rick-Rainer Ludwig",
 		"CREATE TABLE "
 			+ CassandraElementNames.ANALYSIS_FILES_TABLE
-			+ " (time timestamp, hashid varchar, raw blob, size int, "
+			+ " (time timestamp, hashid ascii, raw blob, size int, "
 			+ "PRIMARY KEY(hashid));",
 		"Keeps analysis information for analyzed and unanalyzed "
 			+ "files and their raw data."));
@@ -118,7 +118,7 @@ public class AnalysisServiceDatabaseTransformator implements
 		"Rick-Rainer Ludwig",
 		"CREATE TABLE "
 			+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
-			+ " (time timestamp, hashid varchar, language varchar, language_version varchar, plugin_version varchar, duration bigint, successful boolean, analyzer_message text,"
+			+ " (time timestamp, hashid ascii, language varchar, language_version varchar, plugin_version varchar, duration bigint, successful boolean, analyzer_message text,"
 			+ "analysis blob, PRIMARY KEY(hashid, language, language_version));",
 		"Keeps analysis information for analyzed and unanalyzed "
 			+ "files and their raw data."));

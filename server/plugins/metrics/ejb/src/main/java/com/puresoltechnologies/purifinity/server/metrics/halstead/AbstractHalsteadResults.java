@@ -20,13 +20,15 @@ import java.util.Map;
 
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.versioning.Version;
 
 public abstract class AbstractHalsteadResults extends AbstractMetrics {
 
     private static final long serialVersionUID = 7911283186514371553L;
 
-    public AbstractHalsteadResults(String evaluatorId, Date time) {
-	super(evaluatorId, time);
+    public AbstractHalsteadResults(String evaluatorId,
+	    Version evaluatorVersion, Date time) {
+	super(evaluatorId, evaluatorVersion, time);
     }
 
     protected Map<String, MetricValue<?>> convertToRow(

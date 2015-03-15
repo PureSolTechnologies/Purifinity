@@ -44,7 +44,7 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 
     public HalsteadMetricEvaluator() {
 	super(HalsteadMetric.ID, HalsteadMetric.NAME,
-		HalsteadMetric.DESCRIPTION);
+		HalsteadMetric.PLUGIN_VERSION, HalsteadMetric.DESCRIPTION);
     }
 
     @Override
@@ -71,8 +71,8 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 	SourceCodeLocation sourceCodeLocation = analysisRun
 		.findTreeNode(hashId).getSourceCodeLocation();
 	GenericFileMetrics results = new GenericFileMetrics(HalsteadMetric.ID,
-		hashId, sourceCodeLocation, new Date(),
-		HalsteadMetricEvaluatorParameter.ALL);
+		HalsteadMetric.PLUGIN_VERSION, hashId, sourceCodeLocation,
+		new Date(), HalsteadMetricEvaluatorParameter.ALL);
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    HalsteadMetric metric = new HalsteadMetric(analysisRun, language,
 		    codeRange);
@@ -123,8 +123,8 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 	    return null;
 	}
 	HalsteadMetricDirectoryResults finalResults = new HalsteadMetricDirectoryResults(
-		HalsteadMetric.ID, directory.getHashId(), new Date(),
-		metricResults);
+		HalsteadMetric.ID, HalsteadMetric.PLUGIN_VERSION,
+		directory.getHashId(), new Date(), metricResults);
 	return finalResults;
     }
 

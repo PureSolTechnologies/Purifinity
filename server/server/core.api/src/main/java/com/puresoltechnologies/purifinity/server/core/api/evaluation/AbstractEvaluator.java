@@ -34,6 +34,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileSto
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreServiceRemote;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * This interface is an abstract implementation for evaluators and the general
@@ -63,10 +64,11 @@ public abstract class AbstractEvaluator implements Evaluator {
 
     private final EvaluatorInformation information;
 
-    public AbstractEvaluator(String id, String name, EvaluatorType type,
-	    String description) {
+    public AbstractEvaluator(String id, String name, Version version,
+	    EvaluatorType type, String description) {
 	super();
-	this.information = new EvaluatorInformation(id, name, type, description);
+	this.information = new EvaluatorInformation(id, name, version, type,
+		description);
     }
 
     abstract protected FileMetrics readFileResults(HashId hashId)
@@ -246,7 +248,8 @@ public abstract class AbstractEvaluator implements Evaluator {
 			    fileAnalysis);
 		    if (fileResults != null) {
 			GenericFileMetrics metrics = new GenericFileMetrics(
-				getInformation().getId(), hashId,
+				getInformation().getId(), getInformation()
+					.getVersion(), hashId,
 				fileResults.getSourceCodeLocation(),
 				new Date(), fileResults.getParameters(),
 				fileResults.getValues());
@@ -294,7 +297,8 @@ public abstract class AbstractEvaluator implements Evaluator {
 			analysisRun, directoryNode);
 		if (directoryResults != null) {
 		    GenericDirectoryMetrics metrics = new GenericDirectoryMetrics(
-			    getInformation().getId(), hashId, new Date(),
+			    getInformation().getId(), getInformation()
+				    .getVersion(), hashId, new Date(),
 			    directoryResults.getParameters(),
 			    directoryResults.getValues());
 		    storeDirectoryResults(analysisRun, directoryNode, metrics);
@@ -313,9 +317,10 @@ public abstract class AbstractEvaluator implements Evaluator {
 	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
 	    FileMetrics fileResults) {
 	GenericFileMetrics metrics = new GenericFileMetrics(getInformation()
-		.getId(), fileResults.getHashId(),
-		fileResults.getSourceCodeLocation(), new Date(),
-		fileResults.getParameters(), fileResults.getValues());
+		.getId(), getInformation().getVersion(),
+		fileResults.getHashId(), fileResults.getSourceCodeLocation(),
+		new Date(), fileResults.getParameters(),
+		fileResults.getValues());
 	getEvaluatorStore().storeMetricsInBigTable(analysisRun, fileAnalysis,
 		metrics);
     }
@@ -324,9 +329,9 @@ public abstract class AbstractEvaluator implements Evaluator {
 	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
 	    DirectoryMetrics directoryResults) {
 	GenericDirectoryMetrics metrics = new GenericDirectoryMetrics(
-		getInformation().getId(), directoryResults.getHashId(),
-		new Date(), directoryResults.getParameters(),
-		directoryResults.getValues());
+		getInformation().getId(), getInformation().getVersion(),
+		directoryResults.getHashId(), new Date(),
+		directoryResults.getParameters(), directoryResults.getValues());
 	getEvaluatorStore().storeMetricsInBigTable(analysisRun, directoryNode,
 		metrics);
     }

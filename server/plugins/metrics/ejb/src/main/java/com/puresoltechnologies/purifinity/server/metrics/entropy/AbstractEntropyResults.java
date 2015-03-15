@@ -21,7 +21,7 @@ public abstract class AbstractEntropyResults extends AbstractMetrics {
     private static final long serialVersionUID = 2241293026079625803L;
 
     public AbstractEntropyResults(Date time) {
-	super(EntropyMetric.ID, time);
+	super(EntropyMetric.ID, EntropyMetric.PLUGIN_VERSION, time);
     }
 
     protected Map<String, MetricValue<?>> convertToRow(EntropyResult result) {

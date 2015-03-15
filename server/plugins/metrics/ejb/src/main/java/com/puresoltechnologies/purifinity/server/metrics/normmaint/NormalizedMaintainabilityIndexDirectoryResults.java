@@ -10,8 +10,9 @@ import java.util.Set;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.versioning.Version;
 
 public class NormalizedMaintainabilityIndexDirectoryResults extends
 	AbstractMetrics implements DirectoryMetrics {
@@ -21,8 +22,8 @@ public class NormalizedMaintainabilityIndexDirectoryResults extends
     private final HashId hashId;
 
     public NormalizedMaintainabilityIndexDirectoryResults(String evaluatorId,
-	    HashId hashId, Date time) {
-	super(evaluatorId, time);
+	    Version evaluatorVersion, HashId hashId, Date time) {
+	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
     }
 

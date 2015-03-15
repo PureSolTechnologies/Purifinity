@@ -1,7 +1,5 @@
 package com.puresoltechnologies.purifinity.server.core.api.evaluation.store;
 
-import java.util.List;
-
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
@@ -13,6 +11,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProjectMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericRunMetrics;
 
 /**
  * This is a store for a single evaluator. THis stores can be changed depending
@@ -127,6 +126,6 @@ public interface EvaluatorStore {
     public void storeMetricsInBigTable(AnalysisRun analysisRun,
 	    AnalysisFileTree directory, GenericProjectMetrics metrics);
 
-    public List<GenericFileMetrics> readRunMetrics(String projectId,
-	    long runId, String evaluatorId) throws EvaluationStoreException;
+    public GenericRunMetrics readRunMetrics(String projectId, long runId,
+	    String evaluatorId) throws EvaluationStoreException;
 }

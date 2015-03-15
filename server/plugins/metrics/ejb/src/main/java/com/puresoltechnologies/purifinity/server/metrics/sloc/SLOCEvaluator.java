@@ -68,6 +68,7 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 
     public SLOCEvaluator() {
 	super(SLOCMetricCalculator.ID, SLOCMetricCalculator.NAME,
+		SLOCMetricCalculator.PLUGIN_VERSION,
 		SLOCMetricCalculator.DESCRIPTION);
     }
 
@@ -95,8 +96,9 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	SourceCodeLocation sourceCodeLocation = analysisRun
 		.findTreeNode(hashId).getSourceCodeLocation();
 	GenericFileMetrics results = new GenericFileMetrics(
-		SLOCMetricCalculator.ID, hashId, sourceCodeLocation,
-		analysis.getStartTime(), SLOCEvaluatorParameter.ALL);
+		SLOCMetricCalculator.ID, SLOCMetricCalculator.PLUGIN_VERSION,
+		hashId, sourceCodeLocation, analysis.getStartTime(),
+		SLOCEvaluatorParameter.ALL);
 	logger.info("Process file '"
 		+ sourceCodeLocation.getHumanReadableLocationString() + "'...");
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
@@ -167,8 +169,8 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	Map<String, MetricValue<?>> metrics = SLOCResult
 		.toGenericMetrics(metricResults);
 	GenericDirectoryMetrics finalResults = new GenericDirectoryMetrics(
-		SLOCMetricCalculator.ID, hashId, new Date(),
-		SLOCEvaluatorParameter.ALL, metrics);
+		SLOCMetricCalculator.ID, SLOCMetricCalculator.PLUGIN_VERSION,
+		hashId, new Date(), SLOCEvaluatorParameter.ALL, metrics);
 	return finalResults;
     }
 

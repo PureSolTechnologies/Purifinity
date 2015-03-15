@@ -10,6 +10,7 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.versioning.Version;
 
 public class McCabeMetricDirectoryResults extends AbstractMcCabeMetricResults
 	implements DirectoryMetrics {
@@ -19,9 +20,10 @@ public class McCabeMetricDirectoryResults extends AbstractMcCabeMetricResults
     private final HashId hashId;
     private final McCabeMetricResult result;
 
-    public McCabeMetricDirectoryResults(String evaluatorId, HashId hashId,
-	    Date time, McCabeMetricResult result) {
-	super(evaluatorId, time);
+    public McCabeMetricDirectoryResults(String evaluatorId,
+	    Version evaluatorVersion, HashId hashId, Date time,
+	    McCabeMetricResult result) {
+	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
 	this.result = result;
     }

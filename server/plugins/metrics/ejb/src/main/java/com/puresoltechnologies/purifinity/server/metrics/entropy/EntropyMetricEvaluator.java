@@ -37,7 +37,8 @@ public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
     private HalsteadMetricsEvaluatorDAO halsteadMetricEvaluatorDAO;
 
     public EntropyMetricEvaluator() {
-	super(EntropyMetric.ID, EntropyMetric.NAME, EntropyMetric.DESCRIPTION);
+	super(EntropyMetric.ID, EntropyMetric.NAME,
+		EntropyMetric.PLUGIN_VERSION, EntropyMetric.DESCRIPTION);
     }
 
     @Override

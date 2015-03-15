@@ -73,7 +73,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
     private String currency = "USD";
 
     public IntermediateCoCoMoEvaluator() {
-	super(ID, NAME, DESCRIPTION);
+	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
     }
 
     @Override
@@ -118,7 +118,8 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 		    int phyLoc = results.getValue(
 			    SLOCEvaluatorParameter.PHY_LOC).getValue();
 		    IntermediateCoCoMoFileResults fileResults = new IntermediateCoCoMoFileResults(
-			    IntermediateCoCoMoEvaluator.ID, hashId,
+			    IntermediateCoCoMoEvaluator.ID,
+			    IntermediateCoCoMoEvaluator.PLUGIN_VERSION, hashId,
 			    sourceCodeLocation, new Date());
 		    fileResults.setAverageSalary(averageSalary, currency);
 		    fileResults.setProject(project);
@@ -166,8 +167,9 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 	    }
 	}
 	IntermediateCoCoMoDirectoryResults directoryResults = new IntermediateCoCoMoDirectoryResults(
-		IntermediateCoCoMoEvaluator.ID, directory.getHashId(),
-		new Date());
+		IntermediateCoCoMoEvaluator.ID,
+		IntermediateCoCoMoEvaluator.PLUGIN_VERSION,
+		directory.getHashId(), new Date());
 	directoryResults.setAverageSalary(averageSalary, currency);
 	directoryResults.setProject(project);
 	directoryResults.setSloc(phyLoc);

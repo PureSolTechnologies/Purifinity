@@ -17,8 +17,9 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.versioning.Version;
 
 public class NormalizedMaintainabilityIndexFileResults extends AbstractMetrics
 	implements FileMetrics {
@@ -31,8 +32,9 @@ public class NormalizedMaintainabilityIndexFileResults extends AbstractMetrics
     private final SourceCodeLocation sourceCodeLocation;
 
     public NormalizedMaintainabilityIndexFileResults(String evaluatorId,
-	    HashId hashId, SourceCodeLocation sourceCodeLocation, Date time) {
-	super(evaluatorId, time);
+	    Version evaluatorVersion, HashId hashId,
+	    SourceCodeLocation sourceCodeLocation, Date time) {
+	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
 	this.sourceCodeLocation = sourceCodeLocation;
     }

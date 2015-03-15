@@ -6,6 +6,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.puresoltechnologies.versioning.Version;
+
 public class GenericProjectMetrics extends AbstractMetrics implements
 	ProjectMetrics {
 
@@ -17,10 +19,11 @@ public class GenericProjectMetrics extends AbstractMetrics implements
     private final String projectId;
     private final long runId;
 
-    public GenericProjectMetrics(String evaluatorId, String projectId,
-	    long runId, Date time, Set<MetricParameter<?>> parameters,
+    public GenericProjectMetrics(String evaluatorId, Version evaluatorVersion,
+	    String projectId, long runId, Date time,
+	    Set<MetricParameter<?>> parameters,
 	    Map<String, MetricValue<?>> values) {
-	super(evaluatorId, time);
+	super(evaluatorId, evaluatorVersion, time);
 	this.projectId = projectId;
 	this.runId = runId;
 	this.parameters.addAll(parameters);

@@ -13,8 +13,9 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.versioning.Version;
 
 public class CodeDepthDirectoryResults extends AbstractMetrics implements
 	DirectoryMetrics {
@@ -27,10 +28,11 @@ public class CodeDepthDirectoryResults extends AbstractMetrics implements
     private final String codeRangeName;
     private int maxDepth;
 
-    public CodeDepthDirectoryResults(String evaluatorId, HashId hashId,
-	    Date time, SourceCodeLocation sourceCodeLocation,
-	    CodeRangeType codeRangeType, String codeRangeName) {
-	super(evaluatorId, time);
+    public CodeDepthDirectoryResults(String evaluatorId,
+	    Version evaluatorVersion, HashId hashId, Date time,
+	    SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
+	    String codeRangeName) {
+	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
 	this.sourceCodeLocation = sourceCodeLocation;
 	this.codeRangeType = codeRangeType;

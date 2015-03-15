@@ -64,7 +64,7 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
     }
 
     public MaintainabilityIndexEvaluator() {
-	super(ID, NAME, DESCRIPTION);
+	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
     }
 
     @Override
@@ -87,8 +87,9 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 		.findTreeNode(hashId).getSourceCodeLocation();
 
 	MaintainabilityIndexFileResults results = new MaintainabilityIndexFileResults(
-		MaintainabilityIndexEvaluator.ID, hashId, sourceCodeLocation,
-		new Date());
+		MaintainabilityIndexEvaluator.ID,
+		MaintainabilityIndexEvaluator.PLUGIN_VERSION, hashId,
+		sourceCodeLocation, new Date());
 
 	EvaluatorStore evaluatorStore = getEvaluatorStore();
 	GenericFileMetrics slocFileResults = evaluatorStore.readFileResults(
@@ -177,8 +178,9 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
 	MaintainabilityIndexDirectoryResults finalResults = new MaintainabilityIndexDirectoryResults(
-		MaintainabilityIndexEvaluator.ID, directory.getHashId(),
-		new Date());
+		MaintainabilityIndexEvaluator.ID,
+		MaintainabilityIndexEvaluator.PLUGIN_VERSION,
+		directory.getHashId(), new Date());
 	return finalResults;
     }
 

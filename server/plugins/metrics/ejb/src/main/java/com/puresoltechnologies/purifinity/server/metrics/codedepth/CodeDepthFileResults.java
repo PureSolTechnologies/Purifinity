@@ -16,8 +16,9 @@ import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.versioning.Version;
 
 public class CodeDepthFileResults extends AbstractMetrics implements
 	FileMetrics {
@@ -29,9 +30,9 @@ public class CodeDepthFileResults extends AbstractMetrics implements
     private final HashId hashId;
     private final SourceCodeLocation sourceCodeLocation;
 
-    public CodeDepthFileResults(String evaluatorId, HashId hashId,
-	    SourceCodeLocation sourceCodeLocation, Date time) {
-	super(evaluatorId, time);
+    public CodeDepthFileResults(String evaluatorId, Version evaluatorVersion,
+	    HashId hashId, SourceCodeLocation sourceCodeLocation, Date time) {
+	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
 	this.sourceCodeLocation = sourceCodeLocation;
     }

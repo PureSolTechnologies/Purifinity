@@ -21,8 +21,9 @@ import java.util.Set;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.commons.money.Money;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.versioning.Version;
 
 public class BasicCoCoMoDirectoryResults extends BasicCoCoMoResults implements
 	DirectoryMetrics {
@@ -31,9 +32,9 @@ public class BasicCoCoMoDirectoryResults extends BasicCoCoMoResults implements
 
     private final HashId hashId;
 
-    public BasicCoCoMoDirectoryResults(String evaluatorId, HashId hashId,
-	    Date time) {
-	super(evaluatorId, time);
+    public BasicCoCoMoDirectoryResults(String evaluatorId,
+	    Version evaluatorVersion, HashId hashId, Date time) {
+	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
     }
 

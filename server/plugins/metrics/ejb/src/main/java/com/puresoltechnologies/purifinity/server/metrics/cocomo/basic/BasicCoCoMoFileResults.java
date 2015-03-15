@@ -26,8 +26,9 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.versioning.Version;
 
 public class BasicCoCoMoFileResults extends BasicCoCoMoResults implements
 	FileMetrics {
@@ -37,9 +38,9 @@ public class BasicCoCoMoFileResults extends BasicCoCoMoResults implements
     private final HashId hashId;
     private final SourceCodeLocation sourceCodeLocation;
 
-    public BasicCoCoMoFileResults(String evaluatorId, HashId hashId,
-	    SourceCodeLocation sourceCodeLocation, Date time) {
-	super(evaluatorId, time);
+    public BasicCoCoMoFileResults(String evaluatorId, Version evaluatorVersion,
+	    HashId hashId, SourceCodeLocation sourceCodeLocation, Date time) {
+	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
 	this.sourceCodeLocation = sourceCodeLocation;
     }

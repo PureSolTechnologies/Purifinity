@@ -14,6 +14,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileM
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProjectMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * This is an abstract implementation of special metric evaluator.
@@ -26,8 +27,9 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEva
 public abstract class AbstractMetricEvaluator extends AbstractEvaluator
 	implements MetricEvaluator {
 
-    public AbstractMetricEvaluator(String id, String name, String description) {
-	super(id, name, EvaluatorType.METRICS, description);
+    public AbstractMetricEvaluator(String id, String name, Version version,
+	    String description) {
+	super(id, name, version, EvaluatorType.METRICS, description);
     }
 
     @Override
