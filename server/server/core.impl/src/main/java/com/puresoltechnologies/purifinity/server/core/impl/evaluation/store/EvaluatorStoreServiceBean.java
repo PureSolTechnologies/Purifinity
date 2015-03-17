@@ -244,7 +244,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter
 		.getInstance();
 	String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
-	for (GenericCodeRangeMetrics metric : metrics.getValues()) {
+	for (GenericCodeRangeMetrics metric : metrics.getCodeRangeMetrics()) {
 	    String codeRangeName = metric.getCodeRangeName();
 	    CodeRangeType codeRangeType = metric.getCodeRangeType();
 
@@ -319,8 +319,8 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	File pathFile = analysisTreeNode.getPathFile(false);
 	String internalPath = pathFile.getParent();
 	String fileName = pathFile.getName();
-	String sourceCodeLocation = analysisTreeNode.getSourceCodeLocation()
-		.getHumanReadableLocationString();
+	String sourceCodeLocation = PropertiesUtils.toString(analysisTreeNode
+		.getSourceCodeLocation().getSerialization());
 	String languageName = codeAnalysis.getLanguageName();
 	String languageVersion = codeAnalysis.getLanguageVersion();
 	String evaluatorId = metrics.getEvaluatorId();
@@ -331,7 +331,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter
 		.getInstance();
 	String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
-	for (GenericCodeRangeMetrics metric : metrics.getValues()) {
+	for (GenericCodeRangeMetrics metric : metrics.getCodeRangeMetrics()) {
 	    String codeRangeName = metric.getCodeRangeName();
 	    CodeRangeType codeRangeType = metric.getCodeRangeType();
 
@@ -602,18 +602,8 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 				    + hashId.toString());
 		}
 	    }
-	    Version alternateEvaluatorVersion = Version.valueOf(result
-		    .getString("evaluator_version"));
-	    if (evaluatorVersion == null) {
-		evaluatorVersion = alternateEvaluatorVersion;
-	    } else {
-		if (!evaluatorVersion.equals(alternateEvaluatorVersion)) {
-		    throw new EvaluationStoreException(
-			    "Evaluator versions are different for evaluatorId="
-				    + evaluatorId + " and hashId="
-				    + hashId.toString());
-		}
-	    }
+	    evaluatorVersion = getEvaluatorVersionAndCheckConsistency(result,
+		    hashId, evaluatorId, evaluatorVersion);
 	    String parameterName = result.getString("parameter_name");
 	    MetricParameter<?> metricsParameter = extractParameter(result);
 	    if (metricsParameter == null) {
@@ -755,7 +745,8 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	    String evaluatorId) throws EvaluationStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements
 		.getPreparedStatement(session, "SELECT " + "time, "
-			+ "hashid, " + "code_range_name, "
+			+ "hashid, " + "evaluator_version, "
+			+ "code_range_name, " + "source_code_location, "
 			+ "code_range_type, " + "parameter_name, "
 			+ "parameter_unit, " + "parameter_type, " + "value, "
 			+ "level_of_measurement, "
@@ -769,50 +760,22 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 
 	Map<HashId, Set<MetricParameter<?>>> parametersBuffer = new HashMap<>();
 	Map<HashId, CodeRangeType> hashIdTypes = new HashMap<>();
-	Date time = null;
+	Date minTime = null;
+	Map<HashId, Date> timeBuffer = new HashMap<HashId, Date>();
 	Version evaluatorVersion = null;
 	Map<HashId, SourceCodeLocation> sourceCodeLocationBuffer = new HashMap<>();
 	Map<HashId, Map<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>>> buffer = new HashMap<>();
 	while (!resultSet.isExhausted()) {
 	    Row result = resultSet.one();
 	    HashId hashId = HashId.valueOf(result.getString("hashid"));
-	    if (time == null) {
-		time = result.getDate("time");
-	    } else {
-		if (!time.equals(result.getDate("time"))) {
-		    throw new EvaluationStoreException(
-			    "Times are different for evaluatorId="
-				    + evaluatorId + " and hashId="
-				    + hashId.toString());
-		}
-	    }
-	    SourceCodeLocation alternateSourceCodeLocation = extractSourceCodeLocation(result);
-	    SourceCodeLocation sourceCodeLocation = sourceCodeLocationBuffer
-		    .get(hashId);
-	    if (sourceCodeLocation == null) {
-		sourceCodeLocation = alternateSourceCodeLocation;
-		sourceCodeLocationBuffer.put(hashId, sourceCodeLocation);
-	    } else {
-		if (!sourceCodeLocation.equals(alternateSourceCodeLocation)) {
-		    throw new EvaluationStoreException(
-			    "Source code locations are different for evaluatorId="
-				    + evaluatorId + " and hashId="
-				    + hashId.toString());
-		}
-	    }
-	    Version alternateEvaluatorVersion = Version.valueOf(result
-		    .getString("evaluator_version"));
-	    if (evaluatorVersion == null) {
-		evaluatorVersion = alternateEvaluatorVersion;
-	    } else {
-		if (!evaluatorVersion.equals(alternateEvaluatorVersion)) {
-		    throw new EvaluationStoreException(
-			    "Evaluator versions are different for evaluatorId="
-				    + evaluatorId + " and hashId="
-				    + hashId.toString());
-		}
-	    }
-	    String parameterName = result.getString("parameter_name");
+	    Date time = getTimeAndCheckConsistency(evaluatorId, timeBuffer,
+		    result, hashId);
+	    minTime = minTime == null ? time : (minTime.getTime() <= time
+		    .getTime() ? minTime : time);
+	    getSourceCodeLocationAndCheckConsistency(result, hashId,
+		    evaluatorId, sourceCodeLocationBuffer);
+	    evaluatorVersion = getEvaluatorVersionAndCheckConsistency(result,
+		    hashId, evaluatorId, evaluatorVersion);
 	    MetricParameter<?> metricsParameter = extractParameter(result);
 	    if (metricsParameter == null) {
 		continue;
@@ -838,15 +801,15 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		buffer.put(hashId, hashIdBuffer);
 	    }
 	    Map<Parameter<?>, MetricValue<?>> parameterBuffer;
-	    if (buffer.containsKey(codeRangeType)) {
-		Map<String, Map<Parameter<?>, MetricValue<?>>> codeRangeTypeBuffer = hashIdBuffer
-			.get(codeRangeType);
-		if (codeRangeTypeBuffer.containsKey(codeRangeName)) {
-		    parameterBuffer = codeRangeTypeBuffer.get(codeRangeName);
+	    Map<String, Map<Parameter<?>, MetricValue<?>>> codeRangeTypeBuffer = hashIdBuffer
+		    .get(codeRangeType);
+	    if (codeRangeTypeBuffer != null) {
+		parameterBuffer = codeRangeTypeBuffer.get(codeRangeName);
+		if (parameterBuffer != null) {
 		    if (parameterBuffer.containsKey(metricsParameter)) {
 			throw new EvaluationStoreException(
 				"Multiple parameters with same name '"
-					+ parameterName
+					+ metricsParameter.getName()
 					+ "' are different for evaluatorId="
 					+ evaluatorId + " and hashId="
 					+ hashId.toString());
@@ -856,10 +819,10 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		    codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);
 		}
 	    } else {
-		Map<String, Map<Parameter<?>, MetricValue<?>>> codeRangeTypeBuffer = new HashMap<>();
+		codeRangeTypeBuffer = new HashMap<>();
+		hashIdBuffer.put(codeRangeType, codeRangeTypeBuffer);
 		parameterBuffer = new HashMap<>();
 		codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);
-		hashIdBuffer.put(codeRangeType, codeRangeTypeBuffer);
 	    }
 	    double value = result.getDouble("value");
 	    MetricValue<?> metricValue = MetricValue.create(metricsParameter,
@@ -872,7 +835,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	    allParameters.addAll(parameters);
 	}
 	GenericRunMetrics metrics = new GenericRunMetrics(evaluatorId,
-		evaluatorVersion, time, allParameters);
+		evaluatorVersion, minTime, allParameters);
 	for (HashId hashId : buffer.keySet()) {
 	    if (hashIdTypes.get(hashId) == CodeRangeType.FILE) {
 		SourceCodeLocation sourceCodeLocation = sourceCodeLocationBuffer
@@ -883,7 +846,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 			.get(hashId);
 		GenericFileMetrics fileMetrics = new GenericFileMetrics(
 			evaluatorId, evaluatorVersion, hashId,
-			sourceCodeLocation, time, parameters);
+			sourceCodeLocation, timeBuffer.get(hashId), parameters);
 		for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> codeRangeTypeEntry : hashIdBuffer
 			.entrySet()) {
 		    CodeRangeType codeRangeType = codeRangeTypeEntry.getKey();
@@ -908,5 +871,63 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 	}
 
 	return metrics;
+    }
+
+    private Date getTimeAndCheckConsistency(String evaluatorId,
+	    Map<HashId, Date> timeBuffer, Row result, HashId hashId)
+	    throws EvaluationStoreException {
+	// Get time, check consistency and get min time
+	Date time = timeBuffer.get(hashId);
+	if (time == null) {
+	    time = result.getDate("time");
+	    timeBuffer.put(hashId, time);
+	} else {
+	    if (!time.equals(result.getDate("time"))) {
+		throw new EvaluationStoreException(
+			"Times are different for evaluatorId=" + evaluatorId
+				+ " and hashId=" + hashId.toString());
+	    }
+	}
+	return time;
+    }
+
+    private void getSourceCodeLocationAndCheckConsistency(Row result,
+	    HashId hashId, String evaluatorId,
+	    Map<HashId, SourceCodeLocation> sourceCodeLocationBuffer)
+	    throws EvaluationStoreException {
+	// Get source code location and check for consistency
+	SourceCodeLocation alternateSourceCodeLocation = extractSourceCodeLocation(result);
+	SourceCodeLocation sourceCodeLocation = sourceCodeLocationBuffer
+		.get(hashId);
+	if (sourceCodeLocation == null) {
+	    sourceCodeLocation = alternateSourceCodeLocation;
+	    sourceCodeLocationBuffer.put(hashId, sourceCodeLocation);
+	} else {
+	    if (!sourceCodeLocation.equals(alternateSourceCodeLocation)) {
+		throw new EvaluationStoreException(
+			"Source code locations are different for evaluatorId="
+				+ evaluatorId + " and hashId="
+				+ hashId.toString());
+	    }
+	}
+    }
+
+    private Version getEvaluatorVersionAndCheckConsistency(Row result,
+	    HashId hashId, String evaluatorId, Version evaluatorVersion)
+	    throws EvaluationStoreException {
+	// Get evaluator version and check consistency
+	Version alternateEvaluatorVersion = Version.valueOf(result
+		.getString("evaluator_version"));
+	if (evaluatorVersion == null) {
+	    evaluatorVersion = alternateEvaluatorVersion;
+	} else {
+	    if (!evaluatorVersion.equals(alternateEvaluatorVersion)) {
+		throw new EvaluationStoreException(
+			"Evaluator versions are different for evaluatorId="
+				+ evaluatorId + " and hashId="
+				+ hashId.toString());
+	    }
+	}
+	return evaluatorVersion;
     }
 }

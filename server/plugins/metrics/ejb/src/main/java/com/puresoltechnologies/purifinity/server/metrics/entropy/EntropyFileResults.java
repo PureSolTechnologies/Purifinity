@@ -52,7 +52,7 @@ public class EntropyFileResults extends AbstractEntropyResults implements
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getValues() {
+    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
 	List<GenericCodeRangeMetrics> values = new ArrayList<>();
 	for (EntropyResult result : results) {
 	    Map<String, MetricValue<?>> row = convertToRow(result);

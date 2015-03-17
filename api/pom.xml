@@ -11,6 +11,7 @@
 		<commons.version>0.6.0-SNAPSHOT</commons.version>
 		<parsers.version>0.5.0-SNAPSHOT</parsers.version>
 		<graphs.version>0.5.0-SNAPSHOT</graphs.version>
+		<versioning.version>1.1.0</versioning.version>
 		<com.fasterxml.jackson.version>2.4.1</com.fasterxml.jackson.version>
 	</properties>
 
@@ -244,7 +245,7 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.versioning</groupId>
 				<artifactId>versioning</artifactId>
-				<version>1.0.0</version>
+				<version>${versioning.version}</version>
 			</dependency>
 			<!-- Specific external libraries -->
 			<dependency>

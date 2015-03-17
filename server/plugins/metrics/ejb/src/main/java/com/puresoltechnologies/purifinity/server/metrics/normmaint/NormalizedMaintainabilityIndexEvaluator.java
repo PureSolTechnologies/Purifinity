@@ -108,7 +108,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends
 	    GenericFileMetrics maintainabilityIndexFileResults,
 	    CodeRange codeRange) {
 	for (GenericCodeRangeMetrics t : maintainabilityIndexFileResults
-		.getValues()) {
+		.getCodeRangeMetrics()) {
 	    if ((t.getCodeRangeType() == codeRange.getType())
 		    && (t.getCodeRangeName().equals(codeRange
 			    .getCanonicalName()))) {

@@ -113,7 +113,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 		if (fileResults == null) {
 		    continue;
 		}
-		for (GenericCodeRangeMetrics result : fileResults.getValues()) {
+		for (GenericCodeRangeMetrics result : fileResults.getCodeRangeMetrics()) {
 		    maxDepth = Math
 			    .max(maxDepth,
 				    result.getValue(

@@ -58,7 +58,7 @@ public class HalsteadMetricFileResults extends AbstractHalsteadResults
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getValues() {
+    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
 	List<GenericCodeRangeMetrics> values = new ArrayList<>();
 	for (HalsteadMetricResult result : results) {
 	    Map<String, MetricValue<?>> row = convertToRow(result);

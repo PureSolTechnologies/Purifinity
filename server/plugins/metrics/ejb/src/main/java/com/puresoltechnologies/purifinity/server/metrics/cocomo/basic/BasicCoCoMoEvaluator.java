@@ -115,7 +115,7 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 		    hashId, SLOCMetricCalculator.ID);
 	    SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
 		    hashId).getSourceCodeLocation();
-	    for (GenericCodeRangeMetrics results : slocResults.getValues()) {
+	    for (GenericCodeRangeMetrics results : slocResults.getCodeRangeMetrics()) {
 		if (results.getCodeRangeType() == CodeRangeType.FILE) {
 		    int phyLoc = results.getValue(
 			    SLOCEvaluatorParameter.PHY_LOC).getValue();
@@ -147,7 +147,7 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 		    GenericFileMetrics fileResults = evaluatorStore
 			    .readFileResults(hashId, SLOCMetricCalculator.ID);
 		    for (GenericCodeRangeMetrics metrics : fileResults
-			    .getValues()) {
+			    .getCodeRangeMetrics()) {
 			if (metrics.getCodeRangeType().equals(
 				CodeRangeType.FILE)) {
 			    phyLoc += metrics.getValue(

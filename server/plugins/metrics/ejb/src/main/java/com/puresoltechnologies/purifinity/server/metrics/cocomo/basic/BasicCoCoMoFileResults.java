@@ -61,7 +61,7 @@ public class BasicCoCoMoFileResults extends BasicCoCoMoResults implements
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getValues() {
+    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
 	Map<String, MetricValue<?>> row = new HashMap<>();
 	row.put(KSLOC.getName(), new MetricValue<Double>(getKsloc(), KSLOC));
 	row.put(PERSON_MONTH.getName(), new MetricValue<Double>(

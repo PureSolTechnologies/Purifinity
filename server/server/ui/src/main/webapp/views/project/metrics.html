@@ -1,13 +1,17 @@
-<div class="container">
-	<tabset>
-		<tab heading="File System Tree" data-ng-controller="fileSystemMetrics">
-			<p>Here metrics can be browsed via file system selection.</p>
-			<evaluator-selection data-ng-model="selectedEvaluator"></evaluator-selection>
-			<tree-table data-ng-model="metricsTreeTable"></tree-table>
-		</tab>
-		<tab heading="Tree Map">
-		</tab>
-		<tab heading="Graphs">
-		</tab>
-	</tabset>
+<div class="container" data-ng-controller="fileSystemMetrics">
+	<div class="row">
+		<evaluator-selection data-ng-model="selectedEvaluator"></evaluator-selection>
+	</div>
+	<div class="row">
+		<tabset>
+			<tab heading="File System Tree">
+				<p>Here metrics can be browsed via file system selection.</p>
+				<tree-table data-ng-model="metricsTreeTable"></tree-table>
+			</tab>
+			<tab heading="Tree Map">
+			</tab>
+			<tab heading="Graphs">
+			</tab>
+		</tabset>
+	</div>
 </div>

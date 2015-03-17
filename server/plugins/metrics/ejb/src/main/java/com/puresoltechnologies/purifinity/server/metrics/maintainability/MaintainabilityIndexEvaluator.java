@@ -157,7 +157,7 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
     private GenericCodeRangeMetrics findFileResult(
 	    GenericFileMetrics slocFileResults, CodeRange codeRange) {
 	if (slocFileResults != null) {
-	    for (GenericCodeRangeMetrics t : slocFileResults.getValues()) {
+	    for (GenericCodeRangeMetrics t : slocFileResults.getCodeRangeMetrics()) {
 		if ((t.getCodeRangeType() == codeRange.getType())
 			&& (t.getCodeRangeName().equals(codeRange
 				.getCanonicalName()))) {

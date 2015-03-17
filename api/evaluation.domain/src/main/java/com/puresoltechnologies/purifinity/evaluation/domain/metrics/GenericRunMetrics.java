@@ -62,7 +62,7 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
 	return fileMetrics;
     }
 
-    public Map<HashId, GenericDirectoryMetrics> getDirectoriesMetrics() {
+    public Map<HashId, GenericDirectoryMetrics> getDirectoryMetrics() {
 	return directoriesMetrics;
     }
 

@@ -252,7 +252,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 					.getVersion(), hashId,
 				fileResults.getSourceCodeLocation(),
 				new Date(), fileResults.getParameters(),
-				fileResults.getValues());
+				fileResults.getCodeRangeMetrics());
 			storeFileResults(analysisRun, fileAnalysis, metrics);
 		    }
 		} else {
@@ -320,7 +320,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 		.getId(), getInformation().getVersion(),
 		fileResults.getHashId(), fileResults.getSourceCodeLocation(),
 		new Date(), fileResults.getParameters(),
-		fileResults.getValues());
+		fileResults.getCodeRangeMetrics());
 	getEvaluatorStore().storeMetricsInBigTable(analysisRun, fileAnalysis,
 		metrics);
     }

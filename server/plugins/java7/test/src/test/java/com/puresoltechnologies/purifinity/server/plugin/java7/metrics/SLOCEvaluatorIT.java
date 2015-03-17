@@ -107,7 +107,7 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
     }
 
     private void checkEvaluationResults(GenericFileMetrics fileResults) {
-	List<GenericCodeRangeMetrics> results = fileResults.getValues();
+	List<GenericCodeRangeMetrics> results = fileResults.getCodeRangeMetrics();
 	assertNotNull("No results list was returned.", results);
 	assertEquals("The number of code ranges does not match.", 4,
 		results.size());

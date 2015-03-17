@@ -64,7 +64,7 @@ public class MaintainabilityIndexFileResults extends AbstractMetrics implements
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getValues() {
+    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
 	List<GenericCodeRangeMetrics> values = new ArrayList<>();
 
 	for (MaintainabilityIndexFileResult result : results) {

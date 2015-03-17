@@ -17,7 +17,7 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
     private static final long serialVersionUID = -3838440751773878139L;
 
     private final Set<MetricParameter<?>> parameters = new LinkedHashSet<>();
-    private final List<GenericCodeRangeMetrics> values = new ArrayList<>();
+    private final List<GenericCodeRangeMetrics> codeRangeMetrics = new ArrayList<>();
 
     private final HashId hashId;
     private final SourceCodeLocation sourceCodeLocation;
@@ -34,16 +34,16 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
     @JsonCreator
     public GenericFileMetrics(
 	    @JsonProperty("evaluatorId") String evaluatorId,
-	    @JsonProperty("evaluatorId") Version evaluatorVersion,
+	    @JsonProperty("evaluatorVersion") Version evaluatorVersion,
 	    @JsonProperty("hashId") HashId hashId,
 	    @JsonProperty("sourceCodeLocation") SourceCodeLocation sourceCodeLocation,
 	    @JsonProperty("time") Date time,
 	    @JsonProperty("parameters") Set<MetricParameter<?>> parameters,
-	    @JsonProperty("values") List<GenericCodeRangeMetrics> values) {
+	    @JsonProperty("codeRangeMetrics") List<GenericCodeRangeMetrics> codeRangeMetrics) {
 	this(evaluatorId, evaluatorVersion, hashId, sourceCodeLocation, time,
 		parameters);
 	this.parameters.addAll(parameters);
-	this.values.addAll(values);
+	this.codeRangeMetrics.addAll(codeRangeMetrics);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
     }
 
     public void addCodeRangeMetrics(GenericCodeRangeMetrics metrics) {
-	values.add(metrics);
+	codeRangeMetrics.add(metrics);
     }
 
     @Override
@@ -66,8 +66,8 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getValues() {
-	return values;
+    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
+	return codeRangeMetrics;
     }
 
     @Override
@@ -81,7 +81,9 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
 		* result
 		+ ((sourceCodeLocation == null) ? 0 : sourceCodeLocation
 			.hashCode());
-	result = prime * result + ((values == null) ? 0 : values.hashCode());
+	result = prime
+		* result
+		+ ((codeRangeMetrics == null) ? 0 : codeRangeMetrics.hashCode());
 	return result;
     }
 
@@ -109,10 +111,10 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
 		return false;
 	} else if (!sourceCodeLocation.equals(other.sourceCodeLocation))
 	    return false;
-	if (values == null) {
-	    if (other.values != null)
+	if (codeRangeMetrics == null) {
+	    if (other.codeRangeMetrics != null)
 		return false;
-	} else if (!values.equals(other.values))
+	} else if (!codeRangeMetrics.equals(other.codeRangeMetrics))
 	    return false;
 	return true;
     }

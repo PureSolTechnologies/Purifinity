@@ -58,7 +58,7 @@ public class McCabeMetricFileResults extends AbstractMcCabeMetricResults
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getValues() {
+    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
 	List<GenericCodeRangeMetrics> values = new ArrayList<>();
 	for (McCabeMetricResult result : results) {
 	    Map<String, MetricValue<?>> row = convertToRow(result);

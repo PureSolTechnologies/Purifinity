@@ -61,7 +61,7 @@ public class CodeDepthFileResults extends AbstractMetrics implements
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getValues() {
+    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
 	List<GenericCodeRangeMetrics> values = new ArrayList<>();
 
 	for (CodeDepthResult result : results) {

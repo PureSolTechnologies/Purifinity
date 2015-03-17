@@ -63,7 +63,7 @@ public class NormalizedMaintainabilityIndexFileResults extends AbstractMetrics
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getValues() {
+    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
 	List<GenericCodeRangeMetrics> values = new ArrayList<>();
 	for (NormalizedMaintainabilityIndexFileResult result : results) {
 	    NormalizedMaintainabilityIndexResult mi = result

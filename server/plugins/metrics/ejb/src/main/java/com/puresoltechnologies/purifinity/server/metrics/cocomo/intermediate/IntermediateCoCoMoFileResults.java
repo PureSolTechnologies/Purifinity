@@ -63,7 +63,7 @@ public class IntermediateCoCoMoFileResults extends IntermediateCoCoMoResults
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getValues() {
+    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
 	Map<String, MetricValue<?>> row = new HashMap<>();
 
 	row.put(KSLOC.getName(), new MetricValue<Double>(getKsloc(), KSLOC));

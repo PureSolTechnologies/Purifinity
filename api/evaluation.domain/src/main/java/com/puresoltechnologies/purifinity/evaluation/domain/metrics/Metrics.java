@@ -11,7 +11,7 @@ public interface Metrics extends EvaluationResults {
     /**
      * This method returns a {@link List} of {@link Parameter} which contains
      * the definitions of all parameters which are returned by
-     * {@link #getValues()}.
+     * {@link #getCodeRangeMetrics()}.
      * 
      * @return A {@link List} of {@link Parameter} is returned containing the
      *         definitions.
