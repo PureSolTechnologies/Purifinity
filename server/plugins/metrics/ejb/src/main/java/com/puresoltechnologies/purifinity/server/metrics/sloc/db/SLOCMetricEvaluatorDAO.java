@@ -19,11 +19,12 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.common.SourceCodeLocationCreator;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
+import com.puresoltechnologies.purifinity.server.metrics.MetricsDAO;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCResult;
 
-public class SLOCMetricEvaluatorDAO {
+public class SLOCMetricEvaluatorDAO implements MetricsDAO<SLOCResult> {
 
     @Inject
     @SLOCEvaluatorStoreKeyspace
@@ -32,9 +33,10 @@ public class SLOCMetricEvaluatorDAO {
     @Inject
     private CassandraPreparedStatements preparedStatements;
 
+    @Override
     public void storeFileResults(HashId hashId,
 	    SourceCodeLocation sourceCodeLocation, CodeRange codeRange,
-	    SLOCMetric slocMetric) {
+	    SLOCResult slocResult) {
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(
 			session,
@@ -54,6 +56,7 @@ public class SLOCMetricEvaluatorDAO {
 				+ "line_length_median, "
 				+ "line_length_stdDev) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+	SLOCMetric slocMetric = slocResult.getSLOCMetric();
 	Statistics lineStatistics = slocMetric.getLineStatistics();
 	BoundStatement boundStatement = preparedStatement
 		.bind(hashId.toString(), SLOCMetricCalculator.ID,
@@ -68,8 +71,20 @@ public class SLOCMetricEvaluatorDAO {
 	session.execute(boundStatement);
     }
 
+    @Override
+    public boolean hasFileResults(HashId hashId) {
+	PreparedStatement preparedStatement = preparedStatements
+		.getPreparedStatement(session, "SELECT "
+			+ "hashid FROM file_results "
+			+ "WHERE hashid=? AND evaluator_id=?;");
+	BoundStatement boundStatement = preparedStatement.bind(
+		hashId.toString(), SLOCMetricCalculator.ID);
+	ResultSet resultSet = session.execute(boundStatement);
+	return resultSet.one() != null;
+    }
+
+    @Override
     public List<SLOCResult> readFileResults(HashId hashId) {
-	List<SLOCResult> slocResults = new ArrayList<>();
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(session, "SELECT "
 			+ "source_code_location, " + "code_range_type, "
@@ -82,6 +97,10 @@ public class SLOCMetricEvaluatorDAO {
 	BoundStatement boundStatement = preparedStatement.bind(
 		hashId.toString(), SLOCMetricCalculator.ID);
 	ResultSet resultSet = session.execute(boundStatement);
+	if (resultSet.isExhausted()) {
+	    return null;
+	}
+	List<SLOCResult> slocResults = new ArrayList<>();
 	while (!resultSet.isExhausted()) {
 	    Row row = resultSet.one();
 	    Properties sourceCodeLocationProperties = PropertiesUtils
@@ -112,6 +131,7 @@ public class SLOCMetricEvaluatorDAO {
 	return slocResults;
     }
 
+    @Override
     public void storeDirectoryResults(HashId hashId, SLOCResult slocResult) {
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(
@@ -141,6 +161,19 @@ public class SLOCMetricEvaluatorDAO {
 	session.execute(boundStatement);
     }
 
+    @Override
+    public boolean hasDirectoryResults(HashId hashId) {
+	PreparedStatement preparedStatement = preparedStatements
+		.getPreparedStatement(session, "SELECT "
+			+ "hashid FROM directory_results "
+			+ "WHERE hashid=? AND evaluator_id=?;");
+	BoundStatement boundStatement = preparedStatement.bind(
+		hashId.toString(), SLOCMetricCalculator.ID);
+	ResultSet resultSet = session.execute(boundStatement);
+	return resultSet.one() != null;
+    }
+
+    @Override
     public SLOCResult readDirectoryResults(HashId hashId) {
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(session, "SELECT " + "phyLOC, "
@@ -174,6 +207,5 @@ public class SLOCMetricEvaluatorDAO {
 	SLOCResult slocResult = new SLOCResult(null, CodeRangeType.DIRECTORY,
 		"", slocMetric);
 	return slocResult;
-
     }
 }

@@ -35,7 +35,6 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileM
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.db.SLOCMetricEvaluatorDAO;
@@ -116,8 +115,11 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 			    .getCanonicalName(), SLOCEvaluatorParameter.ALL,
 		    values));
 
+	    SLOCResult result = new SLOCResult(sourceCodeLocation,
+		    codeRange.getType(), codeRange.getCanonicalName(),
+		    metric.getSLOCResult());
 	    slocEvaluatorDAO.storeFileResults(hashId, sourceCodeLocation,
-		    codeRange, metric.getSLOCResult());
+		    codeRange, result);
 	}
 	logger.info("Finished file '"
 		+ sourceCodeLocation.getHumanReadableLocationString() + "'.");
@@ -133,13 +135,11 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
     protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
-	EvaluatorStore evaluatorStore = getEvaluatorStore();
 	HashId hashId = directory.getHashId();
 	SLOCResult metricResults = null;
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    if (child.isFile()) {
-		if (evaluatorStore.hasFileResults(child.getHashId(),
-			getInformation().getId())) {
+		if (slocEvaluatorDAO.hasFileResults(child.getHashId())) {
 		    List<SLOCResult> results = slocEvaluatorDAO
 			    .readFileResults(child.getHashId());
 		    for (SLOCResult result : results) {
@@ -151,10 +151,9 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 		    }
 		}
 	    } else {
-		if (evaluatorStore.hasDirectoryResults(child.getHashId(),
-			getInformation().getId())) {
+		if (slocEvaluatorDAO.hasDirectoryResults(child.getHashId())) {
 		    SLOCResult slocResult = slocEvaluatorDAO
-			    .readDirectoryResults(hashId);
+			    .readDirectoryResults(child.getHashId());
 		    metricResults = combine(directory, metricResults,
 			    slocResult);
 		}

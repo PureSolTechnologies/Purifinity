@@ -17,7 +17,7 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
 
     private final Set<MetricParameter<?>> parameters = new HashSet<>();
     private final Map<HashId, GenericFileMetrics> fileMetrics = new HashMap<>();
-    private final Map<HashId, GenericDirectoryMetrics> directoriesMetrics = new HashMap<>();
+    private final Map<HashId, GenericDirectoryMetrics> directoryMetrics = new HashMap<>();
 
     public GenericRunMetrics(String evaluatorId, Version evaluatorVersion,
 	    Date time, Set<MetricParameter<?>> parameters) {
@@ -40,7 +40,7 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
 	    this.fileMetrics.putAll(fileMetrics);
 	}
 	if (directoryMetrics != null) {
-	    this.directoriesMetrics.putAll(directoryMetrics);
+	    this.directoryMetrics.putAll(directoryMetrics);
 	}
     }
 
@@ -54,7 +54,7 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
     }
 
     public void add(GenericDirectoryMetrics directoryMetrics) {
-	this.directoriesMetrics.put(directoryMetrics.getHashId(),
+	this.directoryMetrics.put(directoryMetrics.getHashId(),
 		directoryMetrics);
     }
 
@@ -63,7 +63,7 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
     }
 
     public Map<HashId, GenericDirectoryMetrics> getDirectoryMetrics() {
-	return directoriesMetrics;
+	return directoryMetrics;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
 	int result = super.hashCode();
 	result = prime
 		* result
-		+ ((directoriesMetrics == null) ? 0 : directoriesMetrics
+		+ ((directoryMetrics == null) ? 0 : directoryMetrics
 			.hashCode());
 	result = prime * result
 		+ ((fileMetrics == null) ? 0 : fileMetrics.hashCode());
@@ -90,10 +90,10 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
 	if (getClass() != obj.getClass())
 	    return false;
 	GenericRunMetrics other = (GenericRunMetrics) obj;
-	if (directoriesMetrics == null) {
-	    if (other.directoriesMetrics != null)
+	if (directoryMetrics == null) {
+	    if (other.directoryMetrics != null)
 		return false;
-	} else if (!directoriesMetrics.equals(other.directoriesMetrics))
+	} else if (!directoryMetrics.equals(other.directoryMetrics))
 	    return false;
 	if (fileMetrics == null) {
 	    if (other.fileMetrics != null)

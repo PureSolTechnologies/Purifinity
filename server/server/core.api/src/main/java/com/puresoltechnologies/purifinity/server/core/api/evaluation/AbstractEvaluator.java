@@ -258,7 +258,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 		} else {
 		    FileMetrics fileResults = readFileResults(hashId);
 		    if (fileResults != null) {
-			storeMetricsInBigTable(analysisRun, fileAnalysis, this,
+			storeMetricsInBigTable(analysisRun, fileAnalysis,
 				fileResults);
 		    }
 		}
@@ -306,7 +306,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 	    } else {
 		DirectoryMetrics directoryResults = readDirectoryResults(hashId);
 		if (directoryResults != null) {
-		    storeMetricsInBigTable(analysisRun, directoryNode, this,
+		    storeMetricsInBigTable(analysisRun, directoryNode,
 			    directoryResults);
 		}
 	    }
@@ -314,8 +314,7 @@ public abstract class AbstractEvaluator implements Evaluator {
     }
 
     protected final void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    CodeAnalysis fileAnalysis, AbstractEvaluator evaluator,
-	    FileMetrics fileResults) {
+	    CodeAnalysis fileAnalysis, FileMetrics fileResults) {
 	GenericFileMetrics metrics = new GenericFileMetrics(getInformation()
 		.getId(), getInformation().getVersion(),
 		fileResults.getHashId(), fileResults.getSourceCodeLocation(),
@@ -326,8 +325,7 @@ public abstract class AbstractEvaluator implements Evaluator {
     }
 
     protected final void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    AnalysisFileTree directoryNode, AbstractEvaluator evaluator,
-	    DirectoryMetrics directoryResults) {
+	    AnalysisFileTree directoryNode, DirectoryMetrics directoryResults) {
 	GenericDirectoryMetrics metrics = new GenericDirectoryMetrics(
 		getInformation().getId(), getInformation().getVersion(),
 		directoryResults.getHashId(), new Date(),

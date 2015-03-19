@@ -191,7 +191,7 @@ public class EvaluationServiceDatabaseTransformator implements
 			+ "value double, "
 			+ "level_of_measurement ascii, "
 			+ "parameter_description varchar, "
-			+ "PRIMARY KEY(project_id, run_id, evaluator_id, parameter_name, code_range_type, hashid, code_range_name));",
+			+ "PRIMARY KEY((project_id, run_id), evaluator_id, parameter_name, code_range_type, hashid, code_range_name));",
 		"Keeps the metrics in a big table for efficient retrieval."));
 
 	return sequence;
