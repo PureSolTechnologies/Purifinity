@@ -6,20 +6,21 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 
-public interface MetricsDAO<MetricsType> {
+public interface MetricsDAO<FileMetricsType, DirectoryMetricsType> {
 
     public void storeFileResults(HashId hashId,
 	    SourceCodeLocation sourceCodeLocation, CodeRange codeRange,
-	    MetricsType slocMetric);
+	    FileMetricsType slocMetric);
 
     public boolean hasFileResults(HashId hashId);
 
-    public List<MetricsType> readFileResults(HashId hashId);
+    public List<FileMetricsType> readFileResults(HashId hashId);
 
-    public void storeDirectoryResults(HashId hashId, MetricsType slocResult);
+    public void storeDirectoryResults(HashId hashId,
+	    DirectoryMetricsType slocResult);
 
     public boolean hasDirectoryResults(HashId hashId);
 
-    public MetricsType readDirectoryResults(HashId hashId);
+    public DirectoryMetricsType readDirectoryResults(HashId hashId);
 
 }

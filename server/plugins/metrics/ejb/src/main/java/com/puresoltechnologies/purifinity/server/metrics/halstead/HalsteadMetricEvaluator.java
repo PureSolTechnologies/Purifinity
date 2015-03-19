@@ -78,8 +78,13 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 		    codeRange);
 	    metric.run();
 	    HalsteadResult halsteadResult = metric.getHalsteadResults();
-	    halsteadMetricEvaluatorDAO.storeFileResults(hashId,
-		    sourceCodeLocation, codeRange, halsteadResult);
+	    halsteadMetricEvaluatorDAO.storeFileResults(
+		    hashId,
+		    sourceCodeLocation,
+		    codeRange,
+		    new HalsteadMetricResult(sourceCodeLocation, codeRange
+			    .getType(), codeRange.getCanonicalName(),
+			    halsteadResult));
 	    results.addCodeRangeMetrics(new GenericCodeRangeMetrics(
 		    sourceCodeLocation, codeRange.getType(), codeRange
 			    .getCanonicalName(),
@@ -122,6 +127,10 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 	if (metricResults == null) {
 	    return null;
 	}
+
+	halsteadMetricEvaluatorDAO.storeDirectoryResults(directory.getHashId(),
+		metricResults);
+
 	HalsteadMetricDirectoryResults finalResults = new HalsteadMetricDirectoryResults(
 		HalsteadMetric.ID, HalsteadMetric.PLUGIN_VERSION,
 		directory.getHashId(), new Date(), metricResults);

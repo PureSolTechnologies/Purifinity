@@ -19,12 +19,13 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.common.SourceCodeLocationCreator;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
+import com.puresoltechnologies.purifinity.server.metrics.MetricsDAO;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetric;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetricResult;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadResult;
-import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
 
-public class HalsteadMetricsEvaluatorDAO {
+public class HalsteadMetricsEvaluatorDAO implements
+	MetricsDAO<HalsteadMetricResult, HalsteadMetricResult> {
 
     @Inject
     @HalsteadMetricEvaluatorStoreKeyspace
@@ -33,9 +34,10 @@ public class HalsteadMetricsEvaluatorDAO {
     @Inject
     private CassandraPreparedStatements preparedStatements;
 
+    @Override
     public void storeFileResults(HashId hashId,
 	    SourceCodeLocation sourceCodeLocation, CodeRange codeRange,
-	    HalsteadResult halsteadResult) {
+	    HalsteadMetricResult halsteadMetricResult) {
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(
 			session,
@@ -60,6 +62,8 @@ public class HalsteadMetricsEvaluatorDAO {
 				+ "implementationTime, "
 				+ "estimatedBugs) "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+	HalsteadResult halsteadResult = halsteadMetricResult
+		.getHalsteadResult();
 	BoundStatement boundStatement = preparedStatement
 		.bind(hashId.toString(), HalsteadMetric.ID, PropertiesUtils
 			.toString(sourceCodeLocation.getSerialization()),
@@ -82,6 +86,7 @@ public class HalsteadMetricsEvaluatorDAO {
 	session.execute(boundStatement);
     }
 
+    @Override
     public List<HalsteadMetricResult> readFileResults(HashId hashId) {
 	List<HalsteadMetricResult> halsteadMetricResults = new ArrayList<>();
 	PreparedStatement preparedStatement = preparedStatements
@@ -97,7 +102,7 @@ public class HalsteadMetricsEvaluatorDAO {
 			+ "estimatedBugs " + "FROM file_results "
 			+ "WHERE hashid=? AND evaluator_id=?;");
 	BoundStatement boundStatement = preparedStatement.bind(
-		hashId.toString(), SLOCMetricCalculator.ID);
+		hashId.toString(), HalsteadMetric.ID);
 	ResultSet resultSet = session.execute(boundStatement);
 	while (!resultSet.isExhausted()) {
 	    Row row = resultSet.one();
@@ -139,6 +144,7 @@ public class HalsteadMetricsEvaluatorDAO {
 	return halsteadMetricResults;
     }
 
+    @Override
     public void storeDirectoryResults(HashId hashId,
 	    HalsteadMetricResult halsteadMetricResult) {
 	PreparedStatement preparedStatement = preparedStatements
@@ -183,6 +189,7 @@ public class HalsteadMetricsEvaluatorDAO {
 	session.execute(boundStatement);
     }
 
+    @Override
     public HalsteadMetricResult readDirectoryResults(HashId hashId) {
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(session, "SELECT " + "operators, "
@@ -196,7 +203,7 @@ public class HalsteadMetricsEvaluatorDAO {
 			+ "FROM directory_results "
 			+ "WHERE hashid=? AND evaluator_id=?;");
 	BoundStatement boundStatement = preparedStatement.bind(
-		hashId.toString(), SLOCMetricCalculator.ID);
+		hashId.toString(), HalsteadMetric.ID);
 	ResultSet resultSet = session.execute(boundStatement);
 	if (resultSet.isExhausted()) {
 	    return null;
@@ -228,5 +235,29 @@ public class HalsteadMetricsEvaluatorDAO {
 		null, CodeRangeType.DIRECTORY, "", halsteadResult);
 	return halsteadMetricResult;
 
+    }
+
+    @Override
+    public boolean hasFileResults(HashId hashId) {
+	PreparedStatement preparedStatement = preparedStatements
+		.getPreparedStatement(session, "SELECT "
+			+ "hashid FROM file_results "
+			+ "WHERE hashid=? AND evaluator_id=?;");
+	BoundStatement boundStatement = preparedStatement.bind(
+		hashId.toString(), HalsteadMetric.ID);
+	ResultSet resultSet = session.execute(boundStatement);
+	return !resultSet.isExhausted();
+    }
+
+    @Override
+    public boolean hasDirectoryResults(HashId hashId) {
+	PreparedStatement preparedStatement = preparedStatements
+		.getPreparedStatement(session, "SELECT "
+			+ "hashid FROM directory_results "
+			+ "WHERE hashid=? AND evaluator_id=?;");
+	BoundStatement boundStatement = preparedStatement.bind(
+		hashId.toString(), HalsteadMetric.ID);
+	ResultSet resultSet = session.execute(boundStatement);
+	return !resultSet.isExhausted();
     }
 }
