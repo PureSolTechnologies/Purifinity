@@ -25,6 +25,7 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
@@ -130,6 +131,13 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 		    fileResults.setAverageSalary(averageSalary, currency);
 		    fileResults.setComplexity(complexity);
 		    fileResults.setSloc(phyLoc);
+		    CodeRange codeRange = new CodeRange(
+			    results.getCodeRangeName(),
+			    results.getCodeRangeName(),
+			    results.getCodeRangeType(),
+			    analysis.getUniversalSyntaxTree());
+		    basicCoCoMoEvaluatorDAO.storeFileResults(hashId,
+			    sourceCodeLocation, codeRange, fileResults);
 		    return fileResults;
 		}
 	    }
@@ -164,12 +172,14 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 		}
 	    }
 	}
+	HashId hashId = directory.getHashId();
 	BasicCoCoMoDirectoryResults directoryResults = new BasicCoCoMoDirectoryResults(
 		BasicCoCoMoEvaluator.ID, BasicCoCoMoEvaluator.PLUGIN_VERSION,
-		directory.getHashId(), new Date());
+		hashId, new Date());
 	directoryResults.setAverageSalary(averageSalary, currency);
 	directoryResults.setComplexity(complexity);
 	directoryResults.setSloc(phyLoc);
+	basicCoCoMoEvaluatorDAO.storeDirectoryResults(hashId, directoryResults);
 	return directoryResults;
     }
 

@@ -1,21 +1,13 @@
-/***************************************************************************
- *
- *   CoCoMo.java
- *   -------------------
- *   copyright            : (c) 2009 by PureSol-Technologies
- *   author               : Rick-Rainer Ludwig
- *   email                : ludwig@puresol-technologies.com
- *
- ***************************************************************************/
-
 package com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
@@ -23,20 +15,19 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
-import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluatorParameter;
+import com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.db.IntermediateCoCoMoEvaluatorDAO;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
+import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCResult;
+import com.puresoltechnologies.purifinity.server.metrics.sloc.db.SLOCMetricEvaluatorDAO;
 import com.puresoltechnologies.versioning.Version;
 
 /**
@@ -67,6 +58,12 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
     }
 
     public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
+
+    @Inject
+    private IntermediateCoCoMoEvaluatorDAO intermediateCoCoMoEvaluatorDAO;
+
+    @Inject
+    private SLOCMetricEvaluatorDAO slocMetricEvaluatorDAO;
 
     private SoftwareProject project = SoftwareProject.SEMI_DETACHED;
     private int averageSalary = 56286;
@@ -107,16 +104,15 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
     protected FileMetrics processFile(AnalysisRun analysisRun,
 	    CodeAnalysis analysis) throws EvaluationStoreException {
 	HashId hashId = analysis.getAnalysisInformation().getHashId();
-	EvaluatorStore evaluatorStore = getEvaluatorStore();
-	if (evaluatorStore.hasFileResults(hashId, SLOCMetricCalculator.ID)) {
-	    GenericFileMetrics slocResults = evaluatorStore.readFileResults(
-		    hashId, SLOCMetricCalculator.ID);
+	if (slocMetricEvaluatorDAO.hasFileResults(hashId)) {
+	    List<SLOCResult> slocResults = slocMetricEvaluatorDAO
+		    .readFileResults(hashId);
 	    SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(
 		    hashId).getSourceCodeLocation();
-	    for (GenericCodeRangeMetrics results : slocResults.getCodeRangeMetrics()) {
-		if (results.getCodeRangeType().equals(CodeRangeType.FILE)) {
-		    int phyLoc = results.getValue(
-			    SLOCEvaluatorParameter.PHY_LOC).getValue();
+	    for (SLOCResult results : slocResults) {
+		CodeRangeType codeRangeType = results.getCodeRangeType();
+		if (codeRangeType.equals(CodeRangeType.FILE)) {
+		    int phyLoc = results.getSLOCMetric().getPhyLOC();
 		    IntermediateCoCoMoFileResults fileResults = new IntermediateCoCoMoFileResults(
 			    IntermediateCoCoMoEvaluator.ID,
 			    IntermediateCoCoMoEvaluator.PLUGIN_VERSION, hashId,
@@ -124,6 +120,13 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 		    fileResults.setAverageSalary(averageSalary, currency);
 		    fileResults.setProject(project);
 		    fileResults.setSloc(phyLoc);
+		    CodeRange codeRange = new CodeRange(
+			    results.getCodeRangeName(),
+			    results.getCodeRangeName(),
+			    results.getCodeRangeType(),
+			    analysis.getUniversalSyntaxTree());
+		    intermediateCoCoMoEvaluatorDAO.storeFileResults(hashId,
+			    sourceCodeLocation, codeRange, fileResults);
 		    return fileResults;
 		}
 	    }
@@ -136,43 +139,37 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 	    AnalysisFileTree directory) throws InterruptedException,
 	    EvaluationStoreException {
 	int phyLoc = 0;
-	EvaluatorStore evaluatorStore = getEvaluatorStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    HashId hashId = child.getHashId();
 	    if (child.isFile()) {
-		if (evaluatorStore.hasFileResults(hashId, getInformation()
-			.getId())) {
-		    GenericFileMetrics fileResults = evaluatorStore
-			    .readFileResults(hashId, getInformation().getId());
-		    for (GenericCodeRangeMetrics metrics : fileResults
-			    .getCodeRangeMetrics()) {
+		if (slocMetricEvaluatorDAO.hasFileResults(hashId)) {
+		    List<SLOCResult> fileResults = slocMetricEvaluatorDAO
+			    .readFileResults(hashId);
+		    for (SLOCResult metrics : fileResults) {
 			if (metrics.getCodeRangeType().equals(
 				CodeRangeType.FILE)) {
-			    phyLoc += metrics.getValue(
-				    SLOCEvaluatorParameter.PHY_LOC).getValue();
+			    phyLoc += metrics.getSLOCMetric().getPhyLOC();
 			    break;
 			}
 		    }
 		}
 	    } else {
-		if (evaluatorStore.hasDirectoryResults(hashId, getInformation()
-			.getId())) {
-		    GenericDirectoryMetrics directoryResults = evaluatorStore
-			    .readDirectoryResults(hashId, getInformation()
-				    .getId());
-		    phyLoc += (Integer) directoryResults.getValues()
-			    .get(SLOCEvaluatorParameter.PHY_LOC.getName())
-			    .getValue();
+		if (slocMetricEvaluatorDAO.hasDirectoryResults(hashId)) {
+		    SLOCResult directoryResults = slocMetricEvaluatorDAO
+			    .readDirectoryResults(hashId);
+		    phyLoc += directoryResults.getSLOCMetric().getPhyLOC();
 		}
 	    }
 	}
+	HashId hashId = directory.getHashId();
 	IntermediateCoCoMoDirectoryResults directoryResults = new IntermediateCoCoMoDirectoryResults(
 		IntermediateCoCoMoEvaluator.ID,
-		IntermediateCoCoMoEvaluator.PLUGIN_VERSION,
-		directory.getHashId(), new Date());
+		IntermediateCoCoMoEvaluator.PLUGIN_VERSION, hashId, new Date());
 	directoryResults.setAverageSalary(averageSalary, currency);
 	directoryResults.setProject(project);
 	directoryResults.setSloc(phyLoc);
+	intermediateCoCoMoEvaluatorDAO.storeDirectoryResults(hashId,
+		directoryResults);
 	return directoryResults;
     }
 

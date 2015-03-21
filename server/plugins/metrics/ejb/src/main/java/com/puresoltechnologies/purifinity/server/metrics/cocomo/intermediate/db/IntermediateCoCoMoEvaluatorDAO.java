@@ -1,8 +1,11 @@
-package com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.db;
+package com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.db;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.inject.Inject;
@@ -19,16 +22,20 @@ import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.common.SourceCodeLocationCreator;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 import com.puresoltechnologies.purifinity.server.metrics.MetricsDAO;
-import com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.BasicCoCoMoDirectoryResults;
-import com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.BasicCoCoMoEvaluator;
-import com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.BasicCoCoMoFileResults;
-import com.puresoltechnologies.purifinity.server.metrics.cocomo.basic.SoftwareProject;
+import com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.IntermediateCOCOMOAttribute;
+import com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.IntermediateCoCoMoDirectoryResults;
+import com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.IntermediateCoCoMoEvaluator;
+import com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.IntermediateCoCoMoFileResults;
+import com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.IntermediateCoCoMoResults;
+import com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.Rating;
+import com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.SoftwareProject;
 
-public class BasicCoCoMoEvaluatorDAO implements
-	MetricsDAO<BasicCoCoMoFileResults, BasicCoCoMoDirectoryResults> {
+public class IntermediateCoCoMoEvaluatorDAO
+	implements
+	MetricsDAO<IntermediateCoCoMoFileResults, IntermediateCoCoMoDirectoryResults> {
 
     @Inject
-    @BasicCoCoMoEvaluatorStoreKeyspace
+    @IntermediateCoCoMoEvaluatorStoreKeyspace
     private Session session;
 
     @Inject
@@ -37,7 +44,7 @@ public class BasicCoCoMoEvaluatorDAO implements
     @Override
     public void storeFileResults(HashId hashId,
 	    SourceCodeLocation sourceCodeLocation, CodeRange codeRange,
-	    BasicCoCoMoFileResults fileResults) {
+	    IntermediateCoCoMoFileResults fileResults) {
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(
 			session,
@@ -54,17 +61,15 @@ public class BasicCoCoMoEvaluatorDAO implements
 				+ "scheduledYears, "
 				+ "teamSize, "
 				+ "estimatedCosts, "
-				+ "c1, "
-				+ "c2, "
-				+ "c3, "
-				+ "complexity, "
+				+ "project, "
 				+ "averageSalary, "
-				+ "currency) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-
+				+ "currency, "
+				+ "attributes) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+	Map<String, String> attributes = attributesToMap(fileResults);
 	BoundStatement boundStatement = preparedStatement
 		.bind(hashId.toString(),
-			BasicCoCoMoEvaluator.ID, //
+			IntermediateCoCoMoEvaluator.ID, //
 			PropertiesUtils.toString(sourceCodeLocation
 				.getSerialization()), //
 			codeRange.getType().name(), //
@@ -77,27 +82,35 @@ public class BasicCoCoMoEvaluatorDAO implements
 			fileResults.getScheduledYears(),//
 			fileResults.getTeamSize(),//
 			fileResults.getEstimatedCosts(),//
-			fileResults.getC1(),//
-			fileResults.getC2(),//
-			fileResults.getC3(),//
-			fileResults.getComplexity().name(),//
+			fileResults.getProject().name(),//
 			fileResults.getAverageSalary(),//
-			fileResults.getCurrency()//
-		);
+			fileResults.getCurrency(),//
+			attributes);
 	session.execute(boundStatement);
     }
 
+    private Map<String, String> attributesToMap(
+	    IntermediateCoCoMoResults fileResults) {
+	Map<String, String> attributes = new HashMap<>();
+	for (Entry<IntermediateCOCOMOAttribute, Rating> attributeEntry : fileResults
+		.getAttributes().entrySet()) {
+	    attributes.put(attributeEntry.getKey().getName(), attributeEntry
+		    .getValue().name());
+	}
+	return attributes;
+    }
+
     @Override
-    public List<BasicCoCoMoFileResults> readFileResults(HashId hashId) {
-	List<BasicCoCoMoFileResults> fileResults = new ArrayList<>();
+    public List<IntermediateCoCoMoFileResults> readFileResults(HashId hashId) {
+	List<IntermediateCoCoMoFileResults> fileResults = new ArrayList<>();
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(session, "SELECT "
-			+ "source_code_location, " + "phyLOC, "
-			+ "complexity, " + "averageSalary, " + "currency "
+			+ "source_code_location, " + "phyLOC, " + "project, "
+			+ "averageSalary, " + "currency, " + "attributes "
 			+ "FROM file_results "
 			+ "WHERE hashid=? AND evaluator_id=?;");
 	BoundStatement boundStatement = preparedStatement.bind(
-		hashId.toString(), BasicCoCoMoEvaluator.ID);
+		hashId.toString(), IntermediateCoCoMoEvaluator.ID);
 	ResultSet resultSet = session.execute(boundStatement);
 	while (!resultSet.isExhausted()) {
 	    Row row = resultSet.one();
@@ -106,26 +119,40 @@ public class BasicCoCoMoEvaluatorDAO implements
 	    SourceCodeLocation sourceCodeLocation = SourceCodeLocationCreator
 		    .createFromSerialization(sourceCodeLocationProperties);
 	    int phyLOC = row.getInt(1);
-	    SoftwareProject complexity = SoftwareProject.valueOf(row
-		    .getString(2));
+	    SoftwareProject project = SoftwareProject.valueOf(row.getString(2));
 	    double averageSalary = row.getDouble(3);
 	    String currency = row.getString(4);
+	    Map<String, String> attributeMap = row.getMap(5, String.class,
+		    String.class);
+	    Map<IntermediateCOCOMOAttribute, Rating> attributes = mapToAttributes(attributeMap);
 
-	    BasicCoCoMoFileResults results = new BasicCoCoMoFileResults(
-		    BasicCoCoMoEvaluator.ID,
-		    BasicCoCoMoEvaluator.PLUGIN_VERSION, hashId,
+	    IntermediateCoCoMoFileResults results = new IntermediateCoCoMoFileResults(
+		    IntermediateCoCoMoEvaluator.ID,
+		    IntermediateCoCoMoEvaluator.PLUGIN_VERSION, hashId,
 		    sourceCodeLocation, new Date());
 	    results.setAverageSalary(averageSalary, currency);
-	    results.setComplexity(complexity);
+	    results.setProject(project);
 	    results.setSloc(phyLOC);
+	    results.setAttributes(attributes);
 	    fileResults.add(results);
 	}
 	return fileResults;
     }
 
+    private Map<IntermediateCOCOMOAttribute, Rating> mapToAttributes(
+	    Map<String, String> attributeMap) {
+	Map<IntermediateCOCOMOAttribute, Rating> attributes = new HashMap<>();
+	for (Entry<String, String> attributeMapEntry : attributeMap.entrySet()) {
+	    attributes.put(IntermediateCOCOMOAttribute
+		    .valueOf(attributeMapEntry.getKey()), Rating
+		    .valueOf(attributeMapEntry.getValue()));
+	}
+	return attributes;
+    }
+
     @Override
     public void storeDirectoryResults(HashId hashId,
-	    BasicCoCoMoDirectoryResults directoryResult) {
+	    IntermediateCoCoMoDirectoryResults directoryResult) {
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(
 			session,
@@ -139,15 +166,14 @@ public class BasicCoCoMoEvaluatorDAO implements
 				+ "scheduledYears, "
 				+ "teamSize, "
 				+ "estimatedCosts, "
-				+ "c1, "
-				+ "c2, "
-				+ "c3, "
-				+ "complexity, "
+				+ "project, "
 				+ "averageSalary, "
-				+ "currency) "
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+				+ "currency, "
+				+ "attributes) "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+	Map<String, String> attributes = attributesToMap(directoryResult);
 	BoundStatement boundStatement = preparedStatement.bind(
-		hashId.toString(), BasicCoCoMoEvaluator.ID,
+		hashId.toString(), IntermediateCoCoMoEvaluator.ID,
 		directoryResult.getPhyLOC(),//
 		directoryResult.getKsloc(),//
 		directoryResult.getPersonMonth(),//
@@ -156,25 +182,22 @@ public class BasicCoCoMoEvaluatorDAO implements
 		directoryResult.getScheduledYears(),//
 		directoryResult.getTeamSize(),//
 		directoryResult.getEstimatedCosts(),//
-		directoryResult.getC1(),//
-		directoryResult.getC2(),//
-		directoryResult.getC3(),//
-		directoryResult.getComplexity().name(),//
+		directoryResult.getProject().name(),//
 		directoryResult.getAverageSalary(),//
-		directoryResult.getCurrency()//
-		);
+		directoryResult.getCurrency(),//
+		attributes);
 	session.execute(boundStatement);
     }
 
     @Override
-    public BasicCoCoMoDirectoryResults readDirectoryResults(HashId hashId) {
+    public IntermediateCoCoMoDirectoryResults readDirectoryResults(HashId hashId) {
 	PreparedStatement preparedStatement = preparedStatements
 		.getPreparedStatement(session, "SELECT " + "phyLOC, "
-			+ "complexity, " + "averageSalary, " + "currency "
-			+ "FROM directory_results "
+			+ "project, " + "averageSalary, " + "currency, "
+			+ "attributes " + "FROM directory_results "
 			+ "WHERE hashid=? AND evaluator_id=?;");
 	BoundStatement boundStatement = preparedStatement.bind(
-		hashId.toString(), BasicCoCoMoEvaluator.ID);
+		hashId.toString(), IntermediateCoCoMoEvaluator.ID);
 	ResultSet resultSet = session.execute(boundStatement);
 	if (resultSet.isExhausted()) {
 	    return null;
@@ -182,16 +205,20 @@ public class BasicCoCoMoEvaluatorDAO implements
 	Row row = resultSet.one();
 
 	int phyLOC = row.getInt(0);
-	SoftwareProject complexity = SoftwareProject.valueOf(row.getString(1));
+	SoftwareProject project = SoftwareProject.valueOf(row.getString(1));
 	double averageSalary = row.getDouble(2);
 	String currency = row.getString(3);
+	Map<String, String> attributeMap = row.getMap(4, String.class,
+		String.class);
+	Map<IntermediateCOCOMOAttribute, Rating> attributes = mapToAttributes(attributeMap);
 
-	BasicCoCoMoDirectoryResults results = new BasicCoCoMoDirectoryResults(
-		BasicCoCoMoEvaluator.ID, BasicCoCoMoEvaluator.PLUGIN_VERSION,
-		hashId, new Date());
+	IntermediateCoCoMoDirectoryResults results = new IntermediateCoCoMoDirectoryResults(
+		IntermediateCoCoMoEvaluator.ID,
+		IntermediateCoCoMoEvaluator.PLUGIN_VERSION, hashId, new Date());
 	results.setAverageSalary(averageSalary, currency);
-	results.setComplexity(complexity);
+	results.setProject(project);
 	results.setSloc(phyLOC);
+	results.setAttributes(attributes);
 	return results;
     }
 
@@ -202,7 +229,7 @@ public class BasicCoCoMoEvaluatorDAO implements
 			+ "hashid FROM file_results "
 			+ "WHERE hashid=? AND evaluator_id=?;");
 	BoundStatement boundStatement = preparedStatement.bind(
-		hashId.toString(), BasicCoCoMoEvaluator.ID);
+		hashId.toString(), IntermediateCoCoMoEvaluator.ID);
 	ResultSet resultSet = session.execute(boundStatement);
 	return !resultSet.isExhausted();
     }
@@ -214,7 +241,7 @@ public class BasicCoCoMoEvaluatorDAO implements
 			+ "hashid FROM directory_results "
 			+ "WHERE hashid=? AND evaluator_id=?;");
 	BoundStatement boundStatement = preparedStatement.bind(
-		hashId.toString(), BasicCoCoMoEvaluator.ID);
+		hashId.toString(), IntermediateCoCoMoEvaluator.ID);
 	ResultSet resultSet = session.execute(boundStatement);
 	return !resultSet.isExhausted();
     }

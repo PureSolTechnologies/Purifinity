@@ -232,4 +232,13 @@ public abstract class IntermediateCoCoMoResults extends AbstractMetrics {
 	attributes.put(attribute, rating);
 	refresh();
     }
+
+    public void setAttributes(
+	    Map<IntermediateCOCOMOAttribute, Rating> attributes) {
+	this.attributes.putAll(attributes);
+    }
+
+    public Map<IntermediateCOCOMOAttribute, Rating> getAttributes() {
+	return attributes;
+    }
 }
