@@ -105,7 +105,7 @@ public class BasicCoCoMoEvaluatorDatabaseTransformator implements
 			+ "averageSalary double, "
 			+ "currency ascii, "
 			+ "PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name));",
-		"Keeps directory results for McCabe Metric evaluator."));
+		"Keeps directory results for Basic CoCoMo Evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ DIRECTORY_RESULTS_TABLE + " (hashid varchar, "
@@ -117,7 +117,7 @@ public class BasicCoCoMoEvaluatorDatabaseTransformator implements
 			+ "c2 double, " + "c3 double, " + "complexity ascii, "
 			+ "averageSalary double, " + "currency ascii, "
 			+ "PRIMARY KEY(hashid, evaluator_id));",
-		"Keeps directory results for McCabe Metric evaluator."));
+		"Keeps directory results for Basic CoCoMo Evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ PROJECT_RESULTS_TABLE + " (project_id ascii, "
@@ -129,7 +129,7 @@ public class BasicCoCoMoEvaluatorDatabaseTransformator implements
 			+ "c2 double, " + "c3 double, " + "complexity ascii, "
 			+ "averageSalary double, " + "currency ascii, "
 			+ "PRIMARY KEY(project_id, evaluator_id));",
-		"Keeps project results for McCabe Metric evaluator."));
+		"Keeps project results for Basic CoCoMo Evaluator."));
 
 	return sequence;
     }

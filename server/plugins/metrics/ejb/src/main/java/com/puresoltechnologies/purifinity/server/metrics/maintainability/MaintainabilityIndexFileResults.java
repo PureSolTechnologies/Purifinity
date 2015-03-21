@@ -14,7 +14,6 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
@@ -76,7 +75,6 @@ public class MaintainabilityIndexFileResults extends AbstractMetrics implements
 	    row.put(MI_CW.getName(), new MetricValue<Double>(mi.getMIcw(),
 		    MI_CW));
 	    row.put(MI.getName(), new MetricValue<Double>(mi.getMI(), MI));
-	    SourceCodeQuality quality = result.getQuality();
 	    values.add(new GenericCodeRangeMetrics(result
 		    .getSourceCodeLocation(), result.getCodeRangeType(), result
 		    .getCodeRangeName(),

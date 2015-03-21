@@ -16,10 +16,10 @@ import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.versioning.Version;
 
-public class IntermediateCoCoMoEvaluatorDatabaseTransformator implements
+public class MaintainabilityIndexEvaluatorDatabaseTransformator implements
 	ComponentTransformator {
 
-    public static final String INTERMEDIATE_COCOMO_KEYSPACE_NAME = "intermediate_cocomo";
+    public static final String MAINTAINABILITY_INDIZES_KEYSPACE_NAME = "maintainability_indizes";
     public static final String CASSANDRA_HOST = "localhost";
     public static final int CASSANDRA_CQL_PORT = 9042;
 
@@ -29,7 +29,7 @@ public class IntermediateCoCoMoEvaluatorDatabaseTransformator implements
 
     @Override
     public String getComponentName() {
-	return "IntermediateCoCoMoEvaluator";
+	return "MaintainabilityIndexEvaluator";
     }
 
     @Override
@@ -62,9 +62,9 @@ public class IntermediateCoCoMoEvaluatorDatabaseTransformator implements
 	sequence.appendTransformation(CassandraStandardMigrations
 		.createKeyspace(
 			sequence,
-			INTERMEDIATE_COCOMO_KEYSPACE_NAME,
+			MAINTAINABILITY_INDIZES_KEYSPACE_NAME,
 			"Rick-Rainer Ludwig",
-			"This keyspace keeps the detailed results of Intermediate CoCoMo evaluations.",
+			"This keyspace keeps the detailed results of McCabe Metric evaluations.",
 			ReplicationStrategy.SIMPLE_STRATEGY, 1));
 	return sequence;
     }
@@ -78,7 +78,7 @@ public class IntermediateCoCoMoEvaluatorDatabaseTransformator implements
 		startVersion, versionRange);
 	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
 		CASSANDRA_HOST, CASSANDRA_CQL_PORT,
-		INTERMEDIATE_COCOMO_KEYSPACE_NAME, metadata);
+		MAINTAINABILITY_INDIZES_KEYSPACE_NAME, metadata);
 
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence,
@@ -90,44 +90,25 @@ public class IntermediateCoCoMoEvaluatorDatabaseTransformator implements
 			+ "source_code_location varchar, "
 			+ "code_range_type varchar, "
 			+ "code_range_name varchar, "
-			+ "phyLOC int, "
-			+ "ksloc double, "
-			+ "personMonth double, "
-			+ "personYears double, "
-			+ "scheduledMonth double, "
-			+ "scheduledYears double, "
-			+ "teamSize double, "
-			+ "estimatedCosts double, "
-			+ "project ascii, "
-			+ "averageSalary double, "
-			+ "currency ascii, "
-			+ "attributes map<text,text>, "
+			+ "MIwoc double, "
+			+ "MIcw double, "
+			+ "MI double, "
 			+ "PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name));",
-		"Keeps directory results for Intermediate CoCoMo Evaluator."));
+		"Keeps directory results for McCabe Metric evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ DIRECTORY_RESULTS_TABLE + " (hashid varchar, "
-			+ "evaluator_id varchar, " + "phyLOC int, "
-			+ "ksloc double, " + "personMonth double, "
-			+ "personYears double, " + "scheduledMonth double, "
-			+ "scheduledYears double, " + "teamSize double, "
-			+ "estimatedCosts double, " + "project ascii, "
-			+ "averageSalary double, " + "currency ascii, "
-			+ "attributes map<text,text>, "
+			+ "evaluator_id varchar, " + "MIwoc double, "
+			+ "MIcw double, " + "MI double, "
 			+ "PRIMARY KEY(hashid, evaluator_id));",
-		"Keeps directory results for Intermediate CoCoMo Evaluator."));
+		"Keeps directory results for McCabe Metric evaluator."));
 	sequence.appendTransformation(new CassandraCQLTransformationStep(
 		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
 			+ PROJECT_RESULTS_TABLE + " (project_id ascii, "
-			+ "evaluator_id varchar, " + "phyLOC int, "
-			+ "ksloc double, " + "personMonth double, "
-			+ "personYears double, " + "scheduledMonth double, "
-			+ "scheduledYears double, " + "teamSize double, "
-			+ "estimatedCosts double, " + "project ascii, "
-			+ "averageSalary double, " + "currency ascii, "
-			+ "attributes map<text,text>, "
+			+ "evaluator_id varchar, " + "MIwoc double, "
+			+ "MIcw double, " + "MI double, "
 			+ "PRIMARY KEY(project_id, evaluator_id));",
-		"Keeps project results for Intermediate CoCoMo Evaluator."));
+		"Keeps project results for McCabe Metric evaluator."));
 
 	return sequence;
     }
@@ -137,7 +118,7 @@ public class IntermediateCoCoMoEvaluatorDatabaseTransformator implements
 	try (Cluster cluster = CassandraUtils.connectCluster()) {
 	    try (Session session = cluster.connect()) {
 		session.execute("DROP KEYSPACE IF EXISTS "
-			+ INTERMEDIATE_COCOMO_KEYSPACE_NAME);
+			+ MAINTAINABILITY_INDIZES_KEYSPACE_NAME);
 	    }
 	}
 

@@ -28,6 +28,7 @@ import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetric
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetricResult;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadResult;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.db.HalsteadMetricsEvaluatorDAO;
+import com.puresoltechnologies.purifinity.server.metrics.maintainability.db.MaintainabilityIndexEvaluatorDAO;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetric;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetricResult;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.db.McCabeMetricEvaluatorDAO;
@@ -71,6 +72,9 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 
     @Inject
     private HalsteadMetricsEvaluatorDAO halsteadMetricsEvaluatorDAO;
+
+    @Inject
+    private MaintainabilityIndexEvaluatorDAO maintainabilityIndexEvaluatorDAO;
 
     public MaintainabilityIndexEvaluator() {
 	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
@@ -127,9 +131,12 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 	    double MIcw = 50 * Math.sin(Math.sqrt(2.4 * comLOC / phyLOC));
 	    MaintainabilityIndexResult result = new MaintainabilityIndexResult(
 		    MIwoc, MIcw);
-	    results.add(new MaintainabilityIndexFileResult(sourceCodeLocation,
-		    codeRange.getType(), codeRange.getCanonicalName(), result,
-		    MaintainabilityQuality.get(codeRange.getType(), result)));
+	    MaintainabilityIndexFileResult fileResult = new MaintainabilityIndexFileResult(
+		    sourceCodeLocation, codeRange.getType(),
+		    codeRange.getCanonicalName(), result);
+	    maintainabilityIndexEvaluatorDAO.storeFileResults(hashId,
+		    sourceCodeLocation, codeRange, fileResult);
+	    results.add(fileResult);
 	}
 	return results;
     }

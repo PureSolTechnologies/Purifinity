@@ -3,3 +3,4 @@ com.puresoltechnologies.purifinity.server.metrics.ddl.McCabeMetricEvaluatorDatab
 com.puresoltechnologies.purifinity.server.metrics.ddl.HalsteadMetricEvaluatorDatabaseTransformator
 com.puresoltechnologies.purifinity.server.metrics.ddl.BasicCoCoMoEvaluatorDatabaseTransformator
 com.puresoltechnologies.purifinity.server.metrics.ddl.IntermediateCoCoMoEvaluatorDatabaseTransformator
+com.puresoltechnologies.purifinity.server.metrics.ddl.MaintainabilityIndexEvaluatorDatabaseTransformator

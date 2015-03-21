@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.metrics.normmaint;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Remote;
@@ -20,16 +21,12 @@ import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
-import com.puresoltechnologies.purifinity.server.metrics.halstead.db.HalsteadMetricsEvaluatorDAO;
 import com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluator;
-import com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
-import com.puresoltechnologies.purifinity.server.metrics.mccabe.db.McCabeMetricEvaluatorDAO;
-import com.puresoltechnologies.purifinity.server.metrics.sloc.db.SLOCMetricEvaluatorDAO;
+import com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexFileResult;
+import com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexResult;
+import com.puresoltechnologies.purifinity.server.metrics.maintainability.db.MaintainabilityIndexEvaluatorDAO;
 import com.puresoltechnologies.versioning.Version;
 
 @Stateless
@@ -59,13 +56,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends
     }
 
     @Inject
-    private SLOCMetricEvaluatorDAO slocMetricEvaluatorDAO;
-
-    @Inject
-    private McCabeMetricEvaluatorDAO mcCabeMetricEvaluatorDAO;
-
-    @Inject
-    private HalsteadMetricsEvaluatorDAO halsteadMetricsEvaluatorDAO;
+    private MaintainabilityIndexEvaluatorDAO maintainabilityIndexEvaluatorDAO;
 
     public NormalizedMaintainabilityIndexEvaluator() {
 	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
@@ -93,18 +84,17 @@ public class NormalizedMaintainabilityIndexEvaluator extends
 		NormalizedMaintainabilityIndexEvaluator.PLUGIN_VERSION, hashId,
 		sourceCodeLocation, new Date());
 
-	EvaluatorStore evaluatorStore = getEvaluatorStore();
-	GenericFileMetrics maintainabilityFileResults = evaluatorStore
-		.readFileResults(hashId, MaintainabilityIndexEvaluator.ID);
+	List<MaintainabilityIndexFileResult> maintainabilityFileResults = maintainabilityIndexEvaluatorDAO
+		.readFileResults(hashId);
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    GenericCodeRangeMetrics maintainabilityIndexFileResult = findFileResult(
+	    MaintainabilityIndexFileResult maintainabilityIndexFileResult = findFileResult(
 		    maintainabilityFileResults, codeRange);
 
-	    double miWoc = maintainabilityIndexFileResult.getValue(
-		    MaintainabilityIndexEvaluatorParameter.MI_WOC).getValue();
-	    double miCw = maintainabilityIndexFileResult.getValue(
-		    MaintainabilityIndexEvaluatorParameter.MI_CW).getValue();
+	    MaintainabilityIndexResult maintainabilityIndexResult = maintainabilityIndexFileResult
+		    .getMaintainabilityIndexResult();
+	    double miWoc = maintainabilityIndexResult.getMIwoc();
+	    double miCw = maintainabilityIndexResult.getMIcw();
 	    NormalizedMaintainabilityIndexResult result = new NormalizedMaintainabilityIndexResult(
 		    miWoc, miCw);
 
@@ -117,14 +107,12 @@ public class NormalizedMaintainabilityIndexEvaluator extends
 	return results;
     }
 
-    private GenericCodeRangeMetrics findFileResult(
-	    GenericFileMetrics maintainabilityIndexFileResults,
+    private MaintainabilityIndexFileResult findFileResult(
+	    List<MaintainabilityIndexFileResult> maintainabilityFileResults,
 	    CodeRange codeRange) {
-	for (GenericCodeRangeMetrics t : maintainabilityIndexFileResults
-		.getCodeRangeMetrics()) {
+	for (MaintainabilityIndexFileResult t : maintainabilityFileResults) {
 	    if ((t.getCodeRangeType() == codeRange.getType())
-		    && (t.getCodeRangeName().equals(codeRange
-			    .getCanonicalName()))) {
+		    && (t.getCodeRangeName().equals(codeRange.getSimpleName()))) {
 		return t;
 	    }
 	}
