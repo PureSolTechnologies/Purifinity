@@ -2,10 +2,12 @@ package com.puresoltechnologies.purifinity.server.metrics.maintainability;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
@@ -20,21 +22,19 @@ import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetric;
-import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetricEvaluatorParameter;
-import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetricFileResults;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetricResult;
+import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadResult;
+import com.puresoltechnologies.purifinity.server.metrics.halstead.db.HalsteadMetricsEvaluatorDAO;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetric;
-import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetricEvaluatorParameter;
-import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetricFileResults;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetricResult;
-import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluatorParameter;
+import com.puresoltechnologies.purifinity.server.metrics.mccabe.db.McCabeMetricEvaluatorDAO;
+import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
+import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCResult;
+import com.puresoltechnologies.purifinity.server.metrics.sloc.db.SLOCMetricEvaluatorDAO;
 import com.puresoltechnologies.versioning.Version;
 
 @Stateless
@@ -62,6 +62,15 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 	DEPENDENCIES.add(McCabeMetric.ID);
 	DEPENDENCIES.add(HalsteadMetric.ID);
     }
+
+    @Inject
+    private SLOCMetricEvaluatorDAO slocMetricEvaluatorDAO;
+
+    @Inject
+    private McCabeMetricEvaluatorDAO mcCabeMetricEvaluatorDAO;
+
+    @Inject
+    private HalsteadMetricsEvaluatorDAO halsteadMetricsEvaluatorDAO;
 
     public MaintainabilityIndexEvaluator() {
 	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
@@ -91,31 +100,28 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 		MaintainabilityIndexEvaluator.PLUGIN_VERSION, hashId,
 		sourceCodeLocation, new Date());
 
-	EvaluatorStore evaluatorStore = getEvaluatorStore();
-	GenericFileMetrics slocFileResults = evaluatorStore.readFileResults(
-		hashId, SLOCMetricCalculator.ID);
-	GenericFileMetrics mcCabeFileResults = evaluatorStore.readFileResults(
-		hashId, McCabeMetric.ID);
-	GenericFileMetrics halsteadFileResults = evaluatorStore
-		.readFileResults(hashId, HalsteadMetric.ID);
+	List<SLOCResult> slocFileResults = slocMetricEvaluatorDAO
+		.readFileResults(hashId);
+	List<McCabeMetricResult> mcCabeFileResults = mcCabeMetricEvaluatorDAO
+		.readFileResults(hashId);
+	List<HalsteadMetricResult> halsteadFileResults = halsteadMetricsEvaluatorDAO
+		.readFileResults(hashId);
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    GenericCodeRangeMetrics slocCodeRangeResult = findFileResult(
+	    SLOCResult slocCodeRangeResult = findSLOCMetricResult(
 		    slocFileResults, codeRange);
-	    GenericCodeRangeMetrics mcCabeCodeRangeResult = findFileResult(
+	    McCabeMetricResult mcCabeCodeRangeResult = findMcCabeMetricResult(
 		    mcCabeFileResults, codeRange);
-	    GenericCodeRangeMetrics halsteadCodeRangeResult = findFileResult(
+	    HalsteadMetricResult halsteadCodeRangeResult = findHalsteadMetricResult(
 		    halsteadFileResults, codeRange);
 
-	    int phyLOC = slocCodeRangeResult.getValue(
-		    SLOCEvaluatorParameter.PHY_LOC).getValue();
-	    int comLOC = slocCodeRangeResult.getValue(
-		    SLOCEvaluatorParameter.COM_LOC).getValue();
-	    int vG = mcCabeCodeRangeResult.getValue(
-		    McCabeMetricEvaluatorParameter.VG).getValue();
-	    double hv = halsteadCodeRangeResult.getValue(
-		    HalsteadMetricEvaluatorParameter.HALSTEAD_VOLUMNE)
-		    .getValue();
+	    SLOCMetric slocMetric = slocCodeRangeResult.getSLOCMetric();
+	    int phyLOC = slocMetric.getPhyLOC();
+	    int comLOC = slocMetric.getComLOC();
+	    int vG = mcCabeCodeRangeResult.getCyclomaticComplexity();
+	    HalsteadResult halsteadResult = halsteadCodeRangeResult
+		    .getHalsteadResult();
+	    double hv = halsteadResult.getHalsteadVolume();
 	    double MIwoc = 171.0 - 5.2 * Math.log(hv) - 0.23 * vG - 16.2
 		    * Math.log(phyLOC * 100.0 / 171.0);
 	    double MIcw = 50 * Math.sin(Math.sqrt(2.4 * comLOC / phyLOC));
@@ -128,13 +134,13 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 	return results;
     }
 
-    private McCabeMetricResult findFileResult(
-	    McCabeMetricFileResults mcCabeFileResults, CodeRange codeRange) {
-	if (mcCabeFileResults != null) {
-	    for (McCabeMetricResult t : mcCabeFileResults.getResults()) {
+    private SLOCResult findSLOCMetricResult(List<SLOCResult> slocFileResults,
+	    CodeRange codeRange) {
+	if (slocFileResults != null) {
+	    for (SLOCResult t : slocFileResults) {
 		if ((t.getCodeRangeType() == codeRange.getType())
 			&& (t.getCodeRangeName().equals(codeRange
-				.getCanonicalName()))) {
+				.getSimpleName()))) {
 		    return t;
 		}
 	    }
@@ -142,25 +148,27 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 	return null;
     }
 
-    private HalsteadMetricResult findFileResult(
-	    HalsteadMetricFileResults halsteadFileResults, CodeRange codeRange) {
-	for (HalsteadMetricResult t : halsteadFileResults.getResults()) {
-	    if ((t.getCodeRangeType() == codeRange.getType())
-		    && (t.getCodeRangeName().equals(codeRange
-			    .getCanonicalName()))) {
-		return t;
+    private McCabeMetricResult findMcCabeMetricResult(
+	    List<McCabeMetricResult> mcCabeFileResults, CodeRange codeRange) {
+	if (mcCabeFileResults != null) {
+	    for (McCabeMetricResult t : mcCabeFileResults) {
+		if ((t.getCodeRangeType() == codeRange.getType())
+			&& (t.getCodeRangeName().equals(codeRange
+				.getSimpleName()))) {
+		    return t;
+		}
 	    }
 	}
 	return null;
     }
 
-    private GenericCodeRangeMetrics findFileResult(
-	    GenericFileMetrics slocFileResults, CodeRange codeRange) {
-	if (slocFileResults != null) {
-	    for (GenericCodeRangeMetrics t : slocFileResults.getCodeRangeMetrics()) {
+    private HalsteadMetricResult findHalsteadMetricResult(
+	    List<HalsteadMetricResult> halsteadFileResults, CodeRange codeRange) {
+	if (halsteadFileResults != null) {
+	    for (HalsteadMetricResult t : halsteadFileResults) {
 		if ((t.getCodeRangeType() == codeRange.getType())
 			&& (t.getCodeRangeName().equals(codeRange
-				.getCanonicalName()))) {
+				.getSimpleName()))) {
 		    return t;
 		}
 	    }

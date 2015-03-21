@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
@@ -24,8 +25,11 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileM
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
+import com.puresoltechnologies.purifinity.server.metrics.halstead.db.HalsteadMetricsEvaluatorDAO;
 import com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.maintainability.MaintainabilityIndexEvaluatorParameter;
+import com.puresoltechnologies.purifinity.server.metrics.mccabe.db.McCabeMetricEvaluatorDAO;
+import com.puresoltechnologies.purifinity.server.metrics.sloc.db.SLOCMetricEvaluatorDAO;
 import com.puresoltechnologies.versioning.Version;
 
 @Stateless
@@ -53,6 +57,15 @@ public class NormalizedMaintainabilityIndexEvaluator extends
     static {
 	DEPENDENCIES.add(MaintainabilityIndexEvaluator.ID);
     }
+
+    @Inject
+    private SLOCMetricEvaluatorDAO slocMetricEvaluatorDAO;
+
+    @Inject
+    private McCabeMetricEvaluatorDAO mcCabeMetricEvaluatorDAO;
+
+    @Inject
+    private HalsteadMetricsEvaluatorDAO halsteadMetricsEvaluatorDAO;
 
     public NormalizedMaintainabilityIndexEvaluator() {
 	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
