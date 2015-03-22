@@ -30,8 +30,15 @@
 				<tree-table data-ng-model="metricsTreeTable"></tree-table>
 			</tab>
 			<tab heading="Tree Map">
+				<p>Treemap for metrics.</p>
+				<div data-ng-controller="treeMapCtrl">
+					<tree-map map-data="mapData"></tree-map>
+				</div>
 			</tab>
 			<tab heading="Graphs">
+				<div data-ng-controller="barChartCtrl">
+					<bar-chart chart-data="barData" ></bar-chart>
+				</div>
 			</tab>
 		</tabset>
 	</div>
