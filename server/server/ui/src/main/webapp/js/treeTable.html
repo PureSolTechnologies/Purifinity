@@ -10,7 +10,10 @@
 			</th>
 		</tr>
 		<tr>
-			<th data-ng-repeat="columnHeader in treeTableData.columnHeaders">{{columnHeader.name}}</th>
+			<th data-ng-repeat="columnHeader in treeTableData.columnHeaders" data-toggle="tooltip" title="{{columnHeader.tooltip}}">{{columnHeader.name}}</th>
+			
+			
+			
 		</tr>
 	</thead>
 	<tbody>

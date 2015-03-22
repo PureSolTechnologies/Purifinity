@@ -3,6 +3,7 @@ projectMetricsModule.controller("fileSystemMetrics", fileSystemMetrics);
 
 function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServerConnector) {
 	$scope.selectedEvaluator = undefined;
+	$scope.fileTree = undefined;
 	$scope.metricsTreeTable = {};
 	$scope.metrics = {};
 	$scope.project = {};
@@ -17,8 +18,9 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 						$scope.project.information.projectId,
 						$scope.run.runId,
 						function(data, status) {
+							$scope.fileTree = data;
 							$scope.metricsTreeTable = convertFileTreeForMetrics(data);
-							$scope.metricsTreeTable.columnHeaders = [ {name: "Name"} ];
+							$scope.metricsTreeTable.columnHeaders = [ {name: "Name", tooltip: "Name of file or folder"} ];
 						},
 						function(data, status, error) {}
 					);
@@ -34,9 +36,13 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 				function(data, status) {
 					$scope.metrics = data;
 					applyMetricsToFileTree($scope.metricsTreeTable, $scope.metrics, $scope.metrics.parameters);
-					$scope.metricsTreeTable.columnHeaders = [ {name: "Name"} ];
+					$scope.metricsTreeTable.columnHeaders = [ {name: "Name", tooltip: "Name of file or folder"} ];
 					$scope.metrics.parameters.forEach(function(parameter) {
-						$scope.metricsTreeTable.columnHeaders.push( {name: parameter.name} );
+						var name = parameter.name;
+						if (parameter.unit) {
+							name += " [" + parameter.unit +"]";
+						}
+						$scope.metricsTreeTable.columnHeaders.push( {name: name, tooltip: parameter.description} );
 					});
 				}, 
 				function(data, status, error) {}

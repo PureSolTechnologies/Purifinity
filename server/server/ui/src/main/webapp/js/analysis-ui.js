@@ -18,10 +18,10 @@ function analysisBrowserCtrl($scope, $routeParams, projectManager) {
 						function(data, status) {
 							$scope.analysisFileTree = convertAnalysisFileTree(data);
 							$scope.analysisFileTree.columnHeaders = [ 
-								{name: "Name"}, 
-								{name: "Size"}, 
-								{name: "Size Recursive"}, 
-								{name: "Analyses"} 
+								{name: "Name", tooltip: "Name of file or folder"}, 
+								{name: "Size", tooltip: "Size of file or size of folder without sub folders."}, 
+								{name: "Size Recursive", tooltip: "Size of file or size of folder including sub folders."}, 
+								{name: "Analyses", tooltip: "Successful analyses."} 
 							];
 						},
 						function(data, status, error) {}
