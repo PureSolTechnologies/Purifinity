@@ -120,6 +120,17 @@ public class EvaluatorServiceManagerImpl extends
 		}
 	    }
 	}
+	if (logger.isWarnEnabled()) {
+	    StringBuilder builder = new StringBuilder();
+	    for (EvaluatorServiceInformation evaluator : evaluators) {
+		if (builder.length() > 0) {
+		    builder.append(", ");
+		}
+		builder.append(evaluator.getName());
+	    }
+	    logger.warn("The following evaluators were not provided due to missing dependencies: "
+		    + builder.toString());
+	}
 	return sortedEvaluators;
     }
 
