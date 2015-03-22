@@ -9,6 +9,8 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -65,6 +67,9 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
     }
 
     @Inject
+    private Logger logger;
+
+    @Inject
     private SLOCMetricEvaluatorDAO slocMetricEvaluatorDAO;
 
     @Inject
@@ -114,10 +119,25 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    SLOCResult slocCodeRangeResult = findSLOCMetricResult(
 		    slocFileResults, codeRange);
+	    if (slocCodeRangeResult == null) {
+		logger.warn("No SLOC result available for '" + hashId
+			+ "', yet.");
+		continue;
+	    }
 	    McCabeMetricResult mcCabeCodeRangeResult = findMcCabeMetricResult(
 		    mcCabeFileResults, codeRange);
+	    if (mcCabeCodeRangeResult == null) {
+		logger.warn("No McCabe Metric result available for '" + hashId
+			+ "', yet.");
+		continue;
+	    }
 	    HalsteadMetricResult halsteadCodeRangeResult = findHalsteadMetricResult(
 		    halsteadFileResults, codeRange);
+	    if (halsteadCodeRangeResult == null) {
+		logger.warn("No Halstead Metric result available for '"
+			+ hashId + "', yet.");
+		continue;
+	    }
 
 	    SLOCMetric slocMetric = slocCodeRangeResult.getSLOCMetric();
 	    int phyLOC = slocMetric.getPhyLOC();

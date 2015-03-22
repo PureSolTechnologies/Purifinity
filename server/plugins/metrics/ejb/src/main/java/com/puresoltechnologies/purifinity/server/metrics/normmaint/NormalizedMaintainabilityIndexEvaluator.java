@@ -9,6 +9,8 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -56,6 +58,9 @@ public class NormalizedMaintainabilityIndexEvaluator extends
     }
 
     @Inject
+    private Logger logger;
+
+    @Inject
     private MaintainabilityIndexEvaluatorDAO maintainabilityIndexEvaluatorDAO;
 
     public NormalizedMaintainabilityIndexEvaluator() {
@@ -86,6 +91,11 @@ public class NormalizedMaintainabilityIndexEvaluator extends
 
 	List<MaintainabilityIndexFileResult> maintainabilityFileResults = maintainabilityIndexEvaluatorDAO
 		.readFileResults(hashId);
+	if (maintainabilityFileResults == null) {
+	    logger.warn("No Maintainability Index result available for '"
+		    + hashId + "', yet.");
+	    return results;
+	}
 
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    MaintainabilityIndexFileResult maintainabilityIndexFileResult = findFileResult(

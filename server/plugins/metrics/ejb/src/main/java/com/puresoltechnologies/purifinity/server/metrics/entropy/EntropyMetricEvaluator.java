@@ -9,6 +9,8 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -32,6 +34,9 @@ import com.puresoltechnologies.purifinity.server.metrics.halstead.db.HalsteadMet
 @Stateless
 @Remote(Evaluator.class)
 public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
+
+    @Inject
+    private Logger logger;
 
     @Inject
     private HalsteadMetricsEvaluatorDAO halsteadMetricEvaluatorDAO;
@@ -64,6 +69,11 @@ public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
 
 	List<HalsteadMetricResult> halsteadMetricResults = halsteadMetricEvaluatorDAO
 		.readFileResults(hashId);
+	if (halsteadMetricResults == null) {
+	    logger.warn("No Halstead Metric result available for '" + hashId
+		    + "', yet.");
+	    return entropyResults;
+	}
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    for (HalsteadMetricResult halsteadMetricResult : halsteadMetricResults) {
 		if (halsteadMetricResult.getCodeRangeType().equals(

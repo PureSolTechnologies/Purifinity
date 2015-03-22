@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.common.plugins;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -88,7 +87,7 @@ public abstract class AbstractServiceManager<ServiceInfo extends ServiceInformat
     @Override
     @Lock(LockType.READ)
     public Collection<ServiceInfo> getServices() {
-	return Collections.unmodifiableCollection(services.values());
+	return new HashSet<>(services.values());
     }
 
     /**

@@ -3,8 +3,11 @@ package com.puresoltechnologies.purifinity.server.core.impl.evaluation.plugins;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.ejb.Lock;
 import javax.ejb.LockType;
@@ -87,14 +90,37 @@ public class EvaluatorServiceManagerImpl extends
 
     @Override
     public List<EvaluatorServiceInformation> getServicesSortedByDependency() {
-	List<EvaluatorServiceInformation> sorted = new ArrayList<>();
-	Collection<EvaluatorServiceInformation> services = getServices();
-	for (EvaluatorServiceInformation service : services) {
-	    logger.warn("!!!!!!!! NO DEPENDENCY CHECK !!!!!!!!");
-	    // FIXME add sorting
-	    sorted.add(service);
+	return sortEvaluators(getServices());
+    }
+
+    private List<EvaluatorServiceInformation> sortEvaluators(
+	    Collection<EvaluatorServiceInformation> evaluators) {
+	List<EvaluatorServiceInformation> sortedEvaluators = new ArrayList<>();
+	Set<String> foundDependencies = new HashSet<>();
+	boolean changed = true;
+	while ((!evaluators.isEmpty()) && (changed)) {
+	    changed = false;
+	    Iterator<EvaluatorServiceInformation> evaluatorIterator = evaluators
+		    .iterator();
+	    while (evaluatorIterator.hasNext()) {
+		EvaluatorServiceInformation evaluator = evaluatorIterator
+			.next();
+		boolean ok = true;
+		for (String dependency : evaluator.getDependencies()) {
+		    if (!foundDependencies.contains(dependency)) {
+			ok = false;
+			break;
+		    }
+		}
+		if (ok) {
+		    sortedEvaluators.add(evaluator);
+		    foundDependencies.add(evaluator.getId());
+		    evaluatorIterator.remove();
+		    changed = true;
+		}
+	    }
 	}
-	return sorted;
+	return sortedEvaluators;
     }
 
     @Override

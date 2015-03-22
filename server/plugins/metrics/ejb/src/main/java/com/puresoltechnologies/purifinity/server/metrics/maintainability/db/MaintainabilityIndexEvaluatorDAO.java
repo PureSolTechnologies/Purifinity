@@ -80,8 +80,8 @@ public class MaintainabilityIndexEvaluatorDAO
 	    CodeRangeType codeRangeType = CodeRangeType.valueOf(row
 		    .getString(1));
 	    String codeRangeName = row.getString(2);
-	    int miWoc = row.getInt(3);
-	    int miCw = row.getInt(4);
+	    double miWoc = row.getDouble(3);
+	    double miCw = row.getDouble(4);
 	    MaintainabilityIndexResult result = new MaintainabilityIndexResult(
 		    miWoc, miCw);
 	    MaintainabilityIndexFileResult maintainabilityIndexFileResult = new MaintainabilityIndexFileResult(
