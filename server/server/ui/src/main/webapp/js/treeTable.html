@@ -4,13 +4,13 @@
 			<td colspan="{{treeTableData.columns.length}}" style="padding:0pt;margin:0pt;">
 				<ol class="breadcrumb" style="padding:0.5em;margin:0pt;">
 					<li data-ng-repeat="folder in path">
-						<a href data-ng-click="setDir(folder)"><img data-ng-show="folder.imageUrl" data-ng-src="{{folder.imageUrl}}" /> {{folder.name}}</a>
+						<a href data-ng-click="setDir(folder)"><img data-ng-show="folder.imageUrl" data-ng-src="{{folder.imageUrl}}" /> {{folder.content}}</a>
 					</li>
 				</ol>
 			</th>
 		</tr>
 		<tr>
-			<th data-ng-repeat="column in treeTableData.columns">{{column}}</th>
+			<th data-ng-repeat="columnHeader in treeTableData.columnHeaders">{{columnHeader.name}}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -24,15 +24,15 @@
 			<td>
 				<a data-ng-show="content.children" href data-ng-click="chdir(content.name)">
 					<img data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />
-					{{content.name}}
+					{{content.content}}
 				</a>
 				<span data-ng-hide="content.children">
 					<img data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />
-					{{content.name}}
+					{{content.content}}
 				</span>
 			</td>
 			<td data-ng-repeat = "contentColumn in content.columns">
-				{{contentColumn.name}}
+				{{contentColumn.content}}
 			</td>
 		</tr>
 	</tbody>

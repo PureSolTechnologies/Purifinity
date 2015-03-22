@@ -17,7 +17,12 @@ function analysisBrowserCtrl($scope, $routeParams, projectManager) {
 						$scope.run.runId,
 						function(data, status) {
 							$scope.analysisFileTree = convertAnalysisFileTree(data);
-							$scope.analysisFileTree.columns = [ "Name", "Size", "Size Recursive", "Analyses" ];
+							$scope.analysisFileTree.columnHeaders = [ 
+								{name: "Name"}, 
+								{name: "Size"}, 
+								{name: "Size Recursive"}, 
+								{name: "Analyses"} 
+							];
 						},
 						function(data, status, error) {}
 					);
@@ -32,12 +37,12 @@ function analysisBrowserCtrl($scope, $routeParams, projectManager) {
 
 function convertAnalysisFileTree(fileTree) {
 	var treeTableData = {};
-	treeTableData.name = fileTree.name;
+	treeTableData.content = fileTree.name;
 	treeTableData.id = fileTree.hashId.algorithm + ":" + fileTree.hashId.hash;
 	treeTableData.columns = [
-		{name : fileTree.size},
-		{name : fileTree.sizeRecursive},
-		{name : fileTree.analyzedCodes}
+		{content : fileTree.size},
+		{content : fileTree.sizeRecursive},
+		{content : fileTree.analyzedCodes}
 	];
 	if (fileTree.children.length > 0) {
 		treeTableData.children = [];

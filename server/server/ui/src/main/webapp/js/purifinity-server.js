@@ -87,7 +87,6 @@ function httpRequests($http, $location, alerterFactory) {
 		)
 		.success(
 			function(data, status) {
-				localStorage.setItem(url, JSON.stringify(data));
 				successCallback(data, status);
 			}
 		)

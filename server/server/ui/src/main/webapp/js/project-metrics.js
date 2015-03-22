@@ -18,7 +18,7 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 						$scope.run.runId,
 						function(data, status) {
 							$scope.metricsTreeTable = convertFileTreeForMetrics(data);
-							$scope.metricsTreeTable.columns = [ "Name" ];
+							$scope.metricsTreeTable.columnHeaders = [ {name: "Name"} ];
 						},
 						function(data, status, error) {}
 					);
@@ -34,9 +34,9 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 				function(data, status) {
 					$scope.metrics = data;
 					applyMetricsToFileTree($scope.metricsTreeTable, $scope.metrics, $scope.metrics.parameters);
-					$scope.metricsTreeTable.columns = [ "Name" ];
+					$scope.metricsTreeTable.columnHeaders = [ {name: "Name"} ];
 					$scope.metrics.parameters.forEach(function(parameter) {
-						$scope.metricsTreeTable.columns.push(parameter.name);
+						$scope.metricsTreeTable.columnHeaders.push( {name: parameter.name} );
 					});
 				}, 
 				function(data, status, error) {}
@@ -47,7 +47,7 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 
 function convertFileTreeForMetrics(fileTree) {
 	var treeTableData = {};
-	treeTableData.name = fileTree.name;
+	treeTableData.content = fileTree.name;
 	treeTableData.id = fileTree.hashId.algorithmName + ":" + fileTree.hashId.hash;
 	treeTableData.columns = [];
 	if (fileTree.children.length > 0) {
@@ -83,11 +83,11 @@ function applyMetricsToFileTree(treeTableData, runMetrics, parameters) {
 		if (directoryMetrics) {
 			found = true;
 			parameters.forEach(function(parameter){
-				var value = metric.values[parameter.name];
+				var value = directoryMetrics.values[parameter.name];
 				if (value) {
-					treeTableData.columns.push({name:value.value});
+					treeTableData.columns.push({content:value.value});
 				} else {
-					treeTableData.columns.push({name:"n/a"});
+					treeTableData.columns.push({content:"n/a"});
 				}
 			});			
 		}
@@ -103,9 +103,9 @@ function applyMetricsToFileTree(treeTableData, runMetrics, parameters) {
 					parameters.forEach(function(parameter){
 						var value = metric.values[parameter.name];
 						if (value) {
-							treeTableData.columns.push({name:value.value});
+							treeTableData.columns.push({content:value.value});
 						} else {
-							treeTableData.columns.push({name:"n/a"});
+							treeTableData.columns.push({content:"n/a"});
 						}
 					});
 				}
@@ -114,7 +114,7 @@ function applyMetricsToFileTree(treeTableData, runMetrics, parameters) {
 	}
 	if (!found) {
 		parameters.forEach(function(parameter){
-			treeTableData.columns.push({name:""});
+			treeTableData.columns.push({content:""});
 		});
 	}
 }
