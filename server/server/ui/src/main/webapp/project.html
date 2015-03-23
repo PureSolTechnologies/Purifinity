@@ -23,15 +23,11 @@
 <link rel="stylesheet" href="css/opensans.css" />
 <link rel="stylesheet" href="css/login.css" />
 <link rel="stylesheet" href="css/logo.css" />
-<link rel="stylesheet" href="css/d3js.css" />
 
 <!-- AngularJS integration -->
 <script type="text/javascript" src="lib/angular/angular.js"></script>
 <script type="text/javascript" src="lib/angular/angular-route.js"></script>
 <script type="text/javascript" src="lib/angular-ui/ui-bootstrap-tpls-0.12.1.min.js"></script>
-
-<!-- D3.js -->
-<script type="text/javascript" src="lib/d3/d3.min.js"></script>
 
 <!-- Custom JS scripts -->
 <script type="text/javascript" src="config/server.js"></script>
@@ -61,7 +57,7 @@
 		"analysisUIModule",
 		"evaluationUIModule",
 		"alerter",
-		"d3jsUIModule"
+		"d3Module"
 	]);
 	projectApp.config(function($routeProvider, $locationProvider){
 		$locationProvider.html5Mode(false);
