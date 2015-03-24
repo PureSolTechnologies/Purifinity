@@ -1,15 +1,17 @@
 var projectMetricsModule = angular.module("projectMetricsModule", ["projectManagerModule", "pluginManagerModule", "purifinityServer"]);
 projectMetricsModule.controller("fileSystemMetrics", fileSystemMetrics);
 projectMetricsModule.controller("treeMapCtrl", treeMapCtrl);
-projectMetricsModule.controller("barChartCtrl", barChartCtrl);
 
 function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServerConnector) {
 	$scope.selectedEvaluator = undefined;
+	$scope.codeRangeType = {selected : undefined};
 	$scope.fileTree = undefined;
 	$scope.metricsTreeTable = {};
 	$scope.metrics = {};
 	$scope.project = {};
 	$scope.run = {};
+	$scope.codeRangeTypes = [];
+	$scope.barData = [];
 	projectManager.getProject($routeParams.projectId,
 		function(data, status) {
 			$scope.project = data;
@@ -36,6 +38,21 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 		if ($scope.project.information && $scope.run.runId && newValue) {
 			purifinityServerConnector.get('/purifinityserver/rest/evaluatorstore/metrics/' + $scope.project.information.projectId + '/' + $scope.run.runId + '/' + newValue, 
 				function(data, status) {
+					var types = new Set();
+					types.add('DIRECTORY');
+					types.add('FILE');
+					for (var hashid in data.fileMetrics) {
+						var fileResults = data.fileMetrics[hashid];
+						fileResults.codeRangeMetrics.forEach(function (metrics) {
+							types.add(metrics.codeRangeType);
+						});							
+					}
+					$scope.codeRangeTypes = [];
+					for (var type of types) {
+						$scope.codeRangeTypes.push({name:type});
+					}
+					$scope.codeRangeTypes.sort();
+					$scope.selectedCodeRangeType = [];
 					$scope.metrics = data;
 					applyMetricsToFileTree($scope.metricsTreeTable, $scope.metrics, $scope.metrics.parameters);
 					$scope.metricsTreeTable.columnHeaders = [ {name: "Name", tooltip: "Name of file or folder"} ];
@@ -51,6 +68,19 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 			);
 		}
 	});
+	$scope.$watch('codeRangeType.selected', function(newValue, oldValue) {
+		if (newValue == 'DIRECTORY') {
+			for (var hashid in $scope.metrics.directoryMetrics) {
+				var metric = $scope.metrics.directoryMetrics[hashid];
+			}
+		} else {
+			for (var hashid in $scope.metrics.fileMetrics) {
+				var codeRangeMetrics = $scope.metrics.directoryMetrics[hashid];
+				codeRangeMetrics.forEach(function (metric) {
+				});
+			}
+		}
+	}, true);
 }
 
 function convertFileTreeForMetrics(fileTree) {
@@ -129,10 +159,6 @@ function applyMetricsToFileTree(treeTableData, runMetrics, parameters) {
 
 function strcmp(s1, s2) {
 	return (s1 < s2)? - 1 : ((s1 > s2)? 1 : 0);
-}
-
-function barChartCtrl($scope) {
-	$scope.barData = [10,20,30,40,60];
 }
 
 function treeMapCtrl($scope) {

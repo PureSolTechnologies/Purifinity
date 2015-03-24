@@ -36,9 +36,31 @@
 				</div>
 			</tab>
 			<tab heading="Graphs">
-				<div data-ng-controller="barChartCtrl">
-					<bar-chart chart-data="barData" ></bar-chart>
-				</div>
+				<select 
+					id="codeRangeTypeSelectorForGraphs" 
+					title="Code Range Type Selector"
+					class="selectpicker show-tick form-control"	
+					data-ng-model="codeRangeType.selected">
+					<option 
+						data-ng-repeat="codeRangeType in codeRangeTypes" 
+						value="{{codeRangeType.name}}">
+						{{codeRangeType.name}}
+					</option>
+				</select>
+				<tabset>
+					<tab heading="Histograms">
+						<div >
+							<div data-ng-repeat="parameter in metrics.parameters">
+								<h4>{{parameter.name}}</h4>
+								<bar-chart chart-data="barData" ></bar-chart>
+							</div>
+						</div>
+					</tab>
+					<tab heading="Pareto Charts">
+					</tab>
+					<tab heading="Cummulative Distribution">
+					</tab>
+				</tabset>
 			</tab>
 		</tabset>
 	</div>
