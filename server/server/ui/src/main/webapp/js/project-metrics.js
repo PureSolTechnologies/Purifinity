@@ -38,6 +38,7 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 		if ($scope.project.information && $scope.run.runId && newValue) {
 			purifinityServerConnector.get('/purifinityserver/rest/evaluatorstore/metrics/' + $scope.project.information.projectId + '/' + $scope.run.runId + '/' + newValue, 
 				function(data, status) {
+					$scope.barData = [];
 					var types = new Set();
 					types.add('DIRECTORY');
 					types.add('FILE');
@@ -67,17 +68,36 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 				function(data, status, error) {}
 			);
 		}
-	});
+	}, true);
 	$scope.$watch('codeRangeType.selected', function(newValue, oldValue) {
+		$scope.barData = [];
 		if (newValue == 'DIRECTORY') {
 			for (var hashid in $scope.metrics.directoryMetrics) {
 				var metric = $scope.metrics.directoryMetrics[hashid];
+				for (var valueName in metric.values) {
+					var value = metric.values[valueName];
+					if (!$scope.barData[value.parameter.name]) {
+						$scope.barData[value.parameter.name] = [];
+					}
+					$scope.barData[value.parameter.name].push({name:value.parameter.name,value: value.value});
+				}
 			}
 		} else {
 			for (var hashid in $scope.metrics.fileMetrics) {
-				var codeRangeMetrics = $scope.metrics.directoryMetrics[hashid];
-				codeRangeMetrics.forEach(function (metric) {
-				});
+				var codeRangeMetrics = $scope.metrics.fileMetrics[hashid].codeRangeMetrics;
+				if (codeRangeMetrics) {
+					codeRangeMetrics.forEach(function (metric) {
+						if (metric.codeRangeType == $scope.codeRangeType.selected) {
+							for (var valueName in metric.values) {
+								var value = metric.values[valueName];
+								if (!$scope.barData[value.parameter.name]) {
+									$scope.barData[value.parameter.name] = [];
+								}
+								$scope.barData[value.parameter.name].push({name:metric.codeRangeName,value: value.value});
+							}
+						}
+					});
+				}
 			}
 		}
 	}, true);

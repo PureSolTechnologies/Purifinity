@@ -1,6 +1,6 @@
 var d3Module = angular.module("d3Module", []);
 d3Module.factory('d3Service', ['$document', '$q', '$rootScope', d3Service]);
-d3Module.directive("barChart", ['d3Service', barChart]);
+d3Module.directive("barChart", ['d3Service', '$window', barChart]);
 d3Module.directive("treeMap", ['d3Service', treeMap]);
 
 function d3Service($document, $q, $rootScope) {
@@ -35,7 +35,7 @@ function d3Service($document, $q, $rootScope) {
 	};
 }
 
-function barChart(d3Service) {
+function barChart(d3Service, $window) {
 	return {
 		restrict: 'E',
 		replace: false,
@@ -43,26 +43,39 @@ function barChart(d3Service) {
 		link: function (scope, element, attrs) {
 			d3Service.d3().then(
 				function (d3) {
-					//in D3, any selection[0] contains the group
-					//selection[0][0] is the DOM node	
-					//but we won't need that this time
-					var chart = d3.select(element[0]);
-					//to our original directive markup bars-chart
-					//we add a div with out chart stling and bind each
-					//data entry to the chart
-					chart.append("div")
-						.attr("class", "chart")
-						.selectAll('div')
-						.data(scope.data)
-						.enter()
-						.append("div")
-						.transition()
-						.ease("elastic")
-						.style("width", function(d) { return d.value + "%"; })
-						.text(function(d) { return d.name + ": " + d.value + "%"; });
-					//a little of magic: setting it's width based
-					//on the data value (d)
-					//and text all with a smooth transition
+					var chart = d3.select(element[0]).append("div")
+							.attr("class", "chart");
+
+					// watch for data changes and re-render
+					scope.$watch('data', function(newVals, oldVals) {
+						return scope.render(newVals);
+					}, true);
+					
+					// Browser onresize event
+					window.onresize = function() {
+						scope.$apply();
+					};
+
+					 // Watch for resize event
+					scope.$watch(function() {
+						return angular.element($window)[0].innerWidth;
+					}, function() {
+						scope.render(scope.data);
+					});
+
+					scope.render = function(data) {
+						if (data) {
+							// our custom d3 code
+							chart.selectAll('div')
+								.data(data)
+								.enter()
+								.append("div")
+								.transition()
+								.ease("elastic")
+								.style("width", function(d) { return d.value + "%"; })
+								.text(function(d) { return d.name + ": " + d.value + "%"; });
+						}
+					}
 				}
 			);
 		}

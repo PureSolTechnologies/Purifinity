@@ -52,7 +52,7 @@
 						<div >
 							<div data-ng-repeat="parameter in metrics.parameters">
 								<h4>{{parameter.name}}</h4>
-								<bar-chart chart-data="barData" ></bar-chart>
+								<bar-chart chart-data="barData[parameter.name]" ></bar-chart>
 							</div>
 						</div>
 					</tab>
