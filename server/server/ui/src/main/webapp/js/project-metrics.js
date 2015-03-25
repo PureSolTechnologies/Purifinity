@@ -101,6 +101,9 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 			}
 		}
 	}, true);
+	$scope.showClick  = function(item) {
+		alert(item);
+	};
 }
 
 function convertFileTreeForMetrics(fileTree) {

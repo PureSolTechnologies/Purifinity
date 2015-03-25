@@ -41,6 +41,7 @@
 					title="Code Range Type Selector"
 					class="selectpicker show-tick form-control"	
 					data-ng-model="codeRangeType.selected">
+					<option value="">Select an Code Range Type</option>
 					<option 
 						data-ng-repeat="codeRangeType in codeRangeTypes" 
 						value="{{codeRangeType.name}}">
@@ -49,14 +50,20 @@
 				</select>
 				<tabset>
 					<tab heading="Histograms">
-						<div >
+						<div>
 							<div data-ng-repeat="parameter in metrics.parameters">
 								<h4>{{parameter.name}}</h4>
-								<bar-chart chart-data="barData[parameter.name]" ></bar-chart>
+								<bar-chart on-click="showClick(item)" data="barData[parameter.name]" ></bar-chart>
 							</div>
 						</div>
 					</tab>
 					<tab heading="Pareto Charts">
+						<div>
+							<div data-ng-repeat="parameter in metrics.parameters">
+								<h4>{{parameter.name}}</h4>
+								<bar-chart on-click="showClick(item)" data="barData[parameter.name]" ></bar-chart>
+							</div>
+						</div>
 					</tab>
 					<tab heading="Cummulative Distribution">
 					</tab>

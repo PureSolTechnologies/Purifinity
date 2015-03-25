@@ -39,13 +39,22 @@ function barChart(d3Service, $window) {
 	return {
 		restrict: 'E',
 		replace: false,
-		scope: {data: '=chartData'},
+		scope: {
+			data: '=',
+			onClick: '&' // parent execution binding
+		},
 		link: function (scope, element, attrs) {
 			d3Service.d3().then(
 				function (d3) {
-					var chart = d3.select(element[0]).append("div")
-							.attr("class", "chart");
+					var svg = d3.select(element[0])
+						.append("svg")
+						.attr("class", "chart")
+						.style('width', '100%');
 
+					var margin = parseInt(attrs.margin) || 20,
+						barHeight = parseInt(attrs.barHeight) || 20,
+						barPadding = parseInt(attrs.barPadding) || 5;
+		  
 					// watch for data changes and re-render
 					scope.$watch('data', function(newVals, oldVals) {
 						return scope.render(newVals);
@@ -64,17 +73,65 @@ function barChart(d3Service, $window) {
 					});
 
 					scope.render = function(data) {
-						if (data) {
-							// our custom d3 code
-							chart.selectAll('div')
-								.data(data)
-								.enter()
-								.append("div")
-								.transition()
-								.ease("elastic")
-								.style("width", function(d) { return d.value + "%"; })
-								.text(function(d) { return d.name + ": " + d.value + "%"; });
+						// remove all previous items before render
+						svg.selectAll('*').remove();
+						if (!data) {
+							return;
 						}
+						// setup variables
+						var width = d3.select(element[0]).node().offsetWidth - margin,
+						// calculate the height
+						height = scope.data.length * (barHeight + barPadding),
+						// Use the category20() scale function for multicolor support
+						color = d3.scale.category20(),
+						// our xScale
+						xScale = d3.scale.linear()
+							.domain([0, d3.max(data, function(d) {
+								return d.value;
+							})])
+							.range([0, width]);
+
+						// set the height based on the calculations above
+						svg.attr('height', height);
+
+						data.sort(function(l,r) { 
+							return -1 * (l.value - r.value); 
+						});
+						//create the rectangles for the bar chart
+						svg.selectAll('rect')
+						.data(data)
+						.enter()
+						.append('rect')
+						.on('click', function(d,i) {
+							return scope.onClick({item: d});
+						})
+						.attr('height', barHeight)
+						.attr('width', 140)
+						.attr('x', Math.round(margin/2))
+						.attr('y', function(d,i) {
+							return i * (barHeight + barPadding);
+						})
+						.attr('fill', function(d) { return color(d.value); })
+						.transition()
+						.duration(1000)
+						.attr('width', function(d) {
+							return xScale(d.value);
+						});
+						svg.selectAll('text')
+						.data(data)
+						.enter()
+						.append('text')
+						.on('click', function(d,i) {
+							return scope.onClick({item: d});
+						})
+						.attr('fill', '#fff')
+						.attr('y', function(d,i) {
+							return i * (barHeight + barPadding) + 15;
+						})
+						.attr('x', 15)
+						.text(function(d) {
+							return d.name + " (value: " + d.value + ")";
+						});
 					}
 				}
 			);
