@@ -52,7 +52,31 @@ function projectManager(purifinityServerConnector) {
 	};
 	projectManager.getAnalysisFileTree = function(projectId, runId, success, error) {
 		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects/' + projectId + '/runs/' + runId + '/filetree',
-				success, error);
+			function (data, status) {
+				data.files = {};
+				data.directories = {};
+				var searchFileTree = function (tree) {
+					var hashId = tree.hashId.algorithmName + ":" + tree.hashId.hash;
+					if (tree.file) {
+						data.files[hashId] = tree;
+					} else {
+						data.directories[hashId] = tree;
+					}
+					if (tree.children.length > 0) {
+						tree.children.forEach(searchFileTree);
+					}
+				}
+				searchFileTree(data);
+				data.getFile = function(hashid) {
+					return this.files[hashid];
+				}
+				data.getDirectory = function(hashid) {
+					return this.directories[hashid];
+				}
+				success(data, status);
+			}, 
+			error
+		);
 	};
 	return projectManager;
 }

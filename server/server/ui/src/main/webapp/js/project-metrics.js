@@ -4,14 +4,17 @@ projectMetricsModule.controller("treeMapCtrl", treeMapCtrl);
 
 function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServerConnector) {
 	$scope.selectedEvaluator = undefined;
-	$scope.codeRangeType = {selected : undefined};
+	$scope.selection = {
+		codeRangeType: undefined,
+		parameter: undefined
+	};
 	$scope.fileTree = undefined;
 	$scope.metricsTreeTable = {};
 	$scope.metrics = {};
 	$scope.project = {};
 	$scope.run = {};
 	$scope.codeRangeTypes = [];
-	$scope.barData = [];
+	$scope.paretoData = [];
 	projectManager.getProject($routeParams.projectId,
 		function(data, status) {
 			$scope.project = data;
@@ -35,10 +38,15 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 		function(data, status, error) {}
 	);
 	$scope.$watch('selectedEvaluator', function(newValue, oldValue) {
+		$scope.paretoData = [];
+		$scope.selection.codeRangeType =  undefined;
+		$scope.selection.parameter = undefined;
+		if (newValue == oldValue) {
+			return;
+		}
 		if ($scope.project.information && $scope.run.runId && newValue) {
 			purifinityServerConnector.get('/purifinityserver/rest/evaluatorstore/metrics/' + $scope.project.information.projectId + '/' + $scope.run.runId + '/' + newValue, 
 				function(data, status) {
-					$scope.barData = [];
 					var types = new Set();
 					types.add('DIRECTORY');
 					types.add('FILE');
@@ -69,37 +77,55 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 			);
 		}
 	}, true);
-	$scope.$watch('codeRangeType.selected', function(newValue, oldValue) {
-		$scope.barData = [];
-		if (newValue == 'DIRECTORY') {
-			for (var hashid in $scope.metrics.directoryMetrics) {
-				var metric = $scope.metrics.directoryMetrics[hashid];
+	$scope.recalculateChartData = function() {
+		if ((!$scope.selection.codeRangeType) || (!$scope.selection.parameter)) {
+			$scope.paretoData = [];
+			return;
+		}
+		var newData = [];
+		if ($scope.selection.codeRangeType == 'DIRECTORY') {
+			for (var hashId in $scope.metrics.directoryMetrics) {
+				var metric = $scope.metrics.directoryMetrics[hashId];
+				var directory = $scope.fileTree.getDirectory(hashId);
 				for (var valueName in metric.values) {
 					var value = metric.values[valueName];
-					if (!$scope.barData[value.parameter.name]) {
-						$scope.barData[value.parameter.name] = [];
+					if (!newData[value.parameter.name]) {
+						newData[value.parameter.name] = [];
 					}
-					$scope.barData[value.parameter.name].push({name:value.parameter.name,value: value.value});
+					newData[value.parameter.name].push({name:directory.name + ":" + value.parameter.name,value: value.value});
 				}
 			}
 		} else {
-			for (var hashid in $scope.metrics.fileMetrics) {
-				var codeRangeMetrics = $scope.metrics.fileMetrics[hashid].codeRangeMetrics;
+			for (var hashId in $scope.metrics.fileMetrics) {
+				var codeRangeMetrics = $scope.metrics.fileMetrics[hashId].codeRangeMetrics;
+				var file = $scope.fileTree.getFile(hashId);
 				if (codeRangeMetrics) {
 					codeRangeMetrics.forEach(function (metric) {
-						if (metric.codeRangeType == $scope.codeRangeType.selected) {
+						if (metric.codeRangeType == $scope.selection.codeRangeType) {
 							for (var valueName in metric.values) {
 								var value = metric.values[valueName];
-								if (!$scope.barData[value.parameter.name]) {
-									$scope.barData[value.parameter.name] = [];
+								if (!newData[value.parameter.name]) {
+									newData[value.parameter.name] = [];
 								}
-								$scope.barData[value.parameter.name].push({name:metric.codeRangeName,value: value.value});
+								newData[value.parameter.name].push({name: file.name + ":" + metric.codeRangeName, value: value.value});
 							}
 						}
 					});
 				}
 			}
 		}
+		for (var key in newData) {
+			newData[key].sort(function(l,r) { 
+				return -1 * (l.value - r.value); 
+			});
+		}
+		$scope.paretoData = newData;
+	};
+	$scope.$watchGroup(['selection.codeRangeType', 'selection.parameter'], function(newValue, oldValue) {
+		if (newValue == oldValue) {
+			return;
+		}
+		$scope.recalculateChartData();
 	}, true);
 	$scope.showClick  = function(item) {
 		alert(item);

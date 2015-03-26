@@ -36,34 +36,46 @@
 				</div>
 			</tab>
 			<tab heading="Graphs">
-				<select 
-					id="codeRangeTypeSelectorForGraphs" 
-					title="Code Range Type Selector"
-					class="selectpicker show-tick form-control"	
-					data-ng-model="codeRangeType.selected">
-					<option value="">Select an Code Range Type</option>
-					<option 
-						data-ng-repeat="codeRangeType in codeRangeTypes" 
-						value="{{codeRangeType.name}}">
-						{{codeRangeType.name}}
-					</option>
-				</select>
+				<div class="row">
+					<div class="col-md-6">
+						<select 
+							id="codeRangeTypeSelectorForGraphs" 
+							title="Code Range Type Selector"
+							class="selectpicker show-tick form-control"	
+							data-ng-model="selection.codeRangeType">
+							<option value="">Select a Code Range Type</option>
+							<option 
+								data-ng-repeat="codeRangeType in codeRangeTypes" 
+								value="{{codeRangeType.name}}">
+								{{codeRangeType.name}}
+							</option>
+						</select>
+					</div>
+					<div class="col-md-6">
+						<select 
+							id="codeRangeTypeSelectorForGraphs" 
+							title="Code Range Type Selector"
+							class="selectpicker show-tick form-control"	
+							data-ng-model="selection.parameter">
+							<option value="">Select a Parameter</option>
+							<option 
+								data-ng-repeat="parameter in metrics.parameters" 
+								value="{{parameter.name}}">
+								{{parameter.name}}
+							</option>
+						</select>
+					</div>
+				</div>
 				<tabset>
-					<tab heading="Histograms">
-						<div>
-							<div data-ng-repeat="parameter in metrics.parameters">
-								<h4>{{parameter.name}}</h4>
-								<bar-chart on-click="showClick(item)" data="barData[parameter.name]" ></bar-chart>
-							</div>
+					<tab heading="Pareto Charts">
+						<div class="row">
+							<h4>{{selection.parameter}}</h4>
+						</div>
+						<div class="row">
+							<vertical-pareto-chart on-click="showClick(item)" data="paretoData[selection.parameter]" ></vertical-pareto-chart>
 						</div>
 					</tab>
-					<tab heading="Pareto Charts">
-						<div>
-							<div data-ng-repeat="parameter in metrics.parameters">
-								<h4>{{parameter.name}}</h4>
-								<bar-chart on-click="showClick(item)" data="barData[parameter.name]" ></bar-chart>
-							</div>
-						</div>
+					<tab heading="Histograms">
 					</tab>
 					<tab heading="Cummulative Distribution">
 					</tab>
