@@ -6,8 +6,8 @@ import org.junit.Test;
 
 public class FullServerIT extends AbstractFullServerClientTest {
 
-	@Test
-	public void test() {
-		assertTrue(true);
-	}
+    @Test
+    public void test() {
+	assertTrue(true);
+    }
 }

@@ -67,15 +67,17 @@
 					</div>
 				</div>
 				<tabset>
-					<tab heading="Pareto Charts">
-						<div class="row">
-							<h4>{{selection.parameter}}</h4>
-						</div>
-						<div class="row">
-							<vertical-pareto-chart on-click="showClick(item)" data="paretoData[selection.parameter]" ></vertical-pareto-chart>
-						</div>
+					<tab heading="Vertical Pareto Chart">
+						<h4>{{selection.parameter}}</h4>
+						<vertical-pareto-chart on-click="showClick(item)" data="paretoData[selection.parameter]" ></vertical-pareto-chart>
 					</tab>
-					<tab heading="Histograms">
+					<tab heading="Pareto Chart">
+						<h4>{{selection.parameter}}</h4>
+						<pareto-chart on-click="showClick(item)" data="paretoData[selection.parameter]" ></pareto-chart>
+					</tab>
+					<tab heading="Histogram Chart">
+						<h4>{{selection.parameter}}</h4>
+						<histogram-chart on-click="showClick(item)" data="paretoData[selection.parameter]" ></histogram-chart>
 					</tab>
 					<tab heading="Cummulative Distribution">
 					</tab>
