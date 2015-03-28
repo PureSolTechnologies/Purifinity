@@ -8,7 +8,7 @@ function treeTable() {
 			treeTableData: '=ngModel'
 		},
 		controller : treeTableCtrl,
-		templateUrl: "/js/treeTable.html"
+		templateUrl: "js/treeTable.html"
 	};
 }
 

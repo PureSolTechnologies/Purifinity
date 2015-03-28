@@ -57,7 +57,7 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 						});							
 					}
 					$scope.codeRangeTypes = [];
-					for (var type of types) {
+					for (var type in types) {
 						$scope.codeRangeTypes.push({name:type});
 					}
 					$scope.codeRangeTypes.sort();
@@ -155,9 +155,9 @@ function convertFileTreeForMetrics(fileTree) {
 		fileTree.children.forEach(function(child) {
 			treeTableData.children.push(convertFileTreeForMetrics(child));
 		});
-		treeTableData.imageUrl = '/images/icons/FatCow_Icons16x16/folder.png';
+		treeTableData.imageUrl = 'images/icons/FatCow_Icons16x16/folder.png';
 	} else {
-		treeTableData.imageUrl = '/images/icons/FatCow_Icons16x16/document_green.png';
+		treeTableData.imageUrl = 'images/icons/FatCow_Icons16x16/document_green.png';
 	}
 	return treeTableData;
 }

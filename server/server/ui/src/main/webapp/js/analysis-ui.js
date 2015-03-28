@@ -62,9 +62,9 @@ function convertAnalysisFileTree(fileTree) {
 		fileTree.children.forEach(function(child) {
 			treeTableData.children.push(convertAnalysisFileTree(child));
 		});
-		treeTableData.imageUrl = '/images/icons/FatCow_Icons16x16/folder.png';
+		treeTableData.imageUrl = 'images/icons/FatCow_Icons16x16/folder.png';
 	} else {
-		treeTableData.imageUrl = '/images/icons/FatCow_Icons16x16/document_green.png';
+		treeTableData.imageUrl = 'images/icons/FatCow_Icons16x16/document_green.png';
 	}
 	return treeTableData;
 }
