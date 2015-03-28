@@ -1,38 +1,60 @@
-<div class="container" data-ng-controller="fileSystemMetrics">
-	<div class="row">
-		<evaluator-selection data-ng-model="selectedEvaluator"></evaluator-selection>
+<div data-ng-controller="fileSystemMetrics">
+	<div class="container" >
+		<div class="row">
+			<div class="col-md-12">
+				<evaluator-selection data-ng-model="selectedEvaluator"></evaluator-selection>
+			</div>
+		</div>
 	</div>
-	<div class="row">
+	<div class="container" >
 		<tabset>
 			<tab heading="Project Metrics">
-				<p>This tab contains the metrics for the whole project.</p>
-				<table class="table table-striped table-hover table-bordered">
-					<thead>
-						<tr>
-							<th>Parameter</th>
-							<th>Value</th>
-							<th>Unit</th>
-							<th>Description</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr data-ng-repeat="parameter in metrics.parameters">
-							<td>{{parameter.name}}</td>
-							<td>{{metrics.directoryMetrics[fileTree.hashId.algorithmName+":"+fileTree.hashId.hash].values[parameter.name].value}}</td>
-							<td>{{parameter.unit}}</td>
-							<td>{{parameter.description}}</td>
-						</tr>
-					</tbody>
-				</table>
+				<div class="row">
+					<div class="col-md-12">
+						<p>This tab contains the metrics for the whole project.</p>
+						<table class="table table-striped table-hover table-bordered">
+							<thead>
+								<tr>
+									<th>Parameter</th>
+									<th>Value</th>
+									<th>Unit</th>
+									<th>Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr data-ng-repeat="parameter in metrics.parameters">
+									<td>{{parameter.name}}</td>
+									<td>{{metrics.directoryMetrics[fileTree.hashId.algorithmName+":"+fileTree.hashId.hash].values[parameter.name].value}}</td>
+									<td>{{parameter.unit}}</td>
+									<td>{{parameter.description}}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</tab>
 			<tab heading="File System Tree">
-				<p>Here metrics can be browsed via file system selection.</p>
-				<tree-table data-ng-model="metricsTreeTable"></tree-table>
+				<div class="row">
+					<div class="col-md-12">
+						<p>Here metrics can be browsed via file system selection.</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<tree-table data-ng-model="metricsTreeTable"></tree-table>
+					</div>
+				</div>
 			</tab>
 			<tab heading="Tree Map">
-				<p>Treemap for metrics.</p>
-				<div data-ng-controller="treeMapCtrl">
-					<tree-map map-data="mapData"></tree-map>
+				<div class="row">
+					<div class="col-md-2">
+						<p>Treemap for metrics.</p>
+					</div>
+					<div class="col-md-10">
+						<div data-ng-controller="treeMapCtrl">
+							<tree-map map-data="mapData"></tree-map>
+						</div>
+					</div>
 				</div>
 			</tab>
 			<tab heading="Graphs">

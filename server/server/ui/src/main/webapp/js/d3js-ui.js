@@ -6,7 +6,7 @@ d3Module.factory('d3Service', ['$document', '$q', '$rootScope', d3Service]);
 d3Module.directive("verticalParetoChart", ['d3Service', '$window', verticalParetoChart]);
 d3Module.directive("paretoChart", ['d3Service', '$window', paretoChart]);
 d3Module.directive("histogramChart", ['d3Service', '$window', histogramChart]);
-d3Module.directive("treeMap", ['d3Service', treeMap]);
+d3Module.directive("treeMap", ['d3Service', '$window', treeMap]);
 
 /*
  * This d3Service is used for lacy loading of d3.js. 
@@ -416,7 +416,7 @@ function histogramChart(d3Service, $window) {
 	};
 }
 
-function treeMap(d3Service) {
+function treeMap(d3Service, $window) {
 	return {
 		restrict: 'E',
 		replace: false,
@@ -424,47 +424,73 @@ function treeMap(d3Service) {
 		link: function (scope, element, attrs) {
 			d3Service.d3().then(
 				function (d3) {
-					var chart = d3.select(element[0]);
-	
-					var w = window.innerWidth
-						|| document.documentElement.clientWidth
-						|| document.body.clientWidth;
-	
-					var h = window.innerHeight
-						|| document.documentElement.clientHeight
-						|| document.body.clientHeight;
-	
-					var width = w * 0.66;
-					var height = width * 0.6;
-					var color = d3.scale.category20c();
-	
-					var treemap = d3.layout.treemap()
-						.size([width, height])
-						.sticky(true)
-						.value(function(d) { return d.size; });
+					var chart = d3.select(element[0])
+						.append("div")
+						.attr("class", "chart")
+						.style('width', '100%');
+					
+					var margin = parseInt(attrs.margin) || 30;
+				
+					// watch for data changes and re-render
+					scope.$watch('data', function(newVals, oldVals) {
+						return scope.render(newVals);
+					}, true);
+					
+					// Browser onresize event
+					window.onresize = function() {
+						scope.$apply();
+					};
+
+					// Watch for resize event
+					scope.$watch(function() {
+						return angular.element($window)[0].innerWidth;
+					}, function() {
+						scope.render(scope.data);
+					});
+
+					scope.render = function(data) {
+						// remove all previous items before render
+						chart.selectAll('*').remove();
+						if (!data) {
+							return;
+						}
+						// setup variables
+						var width = d3.select(element[0]).node().offsetWidth - 2 * margin;
+						if (width <= 0) {
+							return;
+						}
+						// calculate the height
+						var height = Math.round(width / 2) - 2 * margin;
+
+						var color = d3.scale.category20c();
+		
+						var treemap = d3.layout.treemap()
+							.size([width, height])
+							.sticky(true)
+							.value(function(d) { return d.size; });
+				
+						var treeMapDiv = document.getElementById("treeMap");
+						var div = chart.append("div")
+							.style("position", "relative")
+							.style("height", height)
+							.style("left", "0px")
+							.style("top", "0px");
 			
-					var treeMapDiv = document.getElementById("treeMap");
-					var div = chart.append("div")
-						.style("position", "relative")
-						.style("width", width + "px")
-						.style("height", height + "px")
-						.style("left", "0px")
-						.style("top", "0px");
+						scope.position = function () {
+							this.style("left", function(d) { return d.x + "px"; })
+								.style("top", function(d) { return d.y + "px"; })
+								.style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
+								.style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+						}
 			
-					scope.position = function () {
-						this.style("left", function(d) { return d.x + "px"; })
-							.style("top", function(d) { return d.y + "px"; })
-							.style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
-							.style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
+						var node = div.datum(scope.data).selectAll(".node")
+							.data(treemap.nodes)
+							.enter().append("div")
+							.attr("class", "node")
+							.call(scope.position)
+							.style("background", function(d) { return d.children ? color(d.name) : null; })
+							.text(function(d) { return d.children ? null : d.name; });
 					}
-			
-					var node = div.datum(scope.data).selectAll(".node")
-						.data(treemap.nodes)
-						.enter().append("div")
-						.attr("class", "node")
-						.call(scope.position)
-						.style("background", function(d) { return d.children ? color(d.name) : null; })
-						.text(function(d) { return d.children ? null : d.name; });
 				}
 			);
 		}
