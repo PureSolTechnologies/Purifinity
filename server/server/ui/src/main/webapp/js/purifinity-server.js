@@ -380,10 +380,10 @@ function serverStatusCtrl($scope) {
 		return "progress-bar-danger";
 	};
 	$scope.getCPUSeverity = function() {
-		if (!$scope.status || !$scope.status.usedCPU || !$scope.status.maxCPU) {
+		var usage = $scope.getCPUUsage();
+		if (usage === "n/a") {
 			return "";
 		}
-		var usage = $scope.status.usedCPU / $scope.status.maxCPU;
 		if (usage < 0.75) {
 			return "progress-bar-success";
 		}
@@ -391,6 +391,12 @@ function serverStatusCtrl($scope) {
 			return "progress-bar-warning";
 		}
 		return "progress-bar-danger";
+	};
+	$scope.getCPUUsage = function() {
+		if (!$scope.status || !$scope.status.averageLoad || ($scope.status.averageLoad < 0) || !$scope.status.availableCPUs) {
+			return "n/a";
+		}
+		return $scope.status.averageLoad / $scope.status.availableCPUs;
 	};
 }
 

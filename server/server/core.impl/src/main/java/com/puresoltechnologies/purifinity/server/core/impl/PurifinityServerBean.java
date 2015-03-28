@@ -14,25 +14,25 @@ import com.puresoltechnologies.purifinity.server.domain.PurifinityServerStatus;
  */
 public class PurifinityServerBean implements PurifinityServer {
 
-    private OperatingSystemMXBean operatingSystemMXBean = ManagementFactory
-	    .getOperatingSystemMXBean();
-    private RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+	private final OperatingSystemMXBean operatingSystemMXBean = ManagementFactory
+			.getOperatingSystemMXBean();
+	private final RuntimeMXBean runtimeMXBean = ManagementFactory
+			.getRuntimeMXBean();
 
-    @Override
-    public PurifinityServerStatus getStatus() {
-	long startTime = runtimeMXBean.getStartTime();
-	long uptime = runtimeMXBean.getUptime();
-	int availableProcessors = operatingSystemMXBean
-		.getAvailableProcessors();
-	double systemLoadAverage = operatingSystemMXBean.getSystemLoadAverage();
+	@Override
+	public PurifinityServerStatus getStatus() {
+		long startTime = runtimeMXBean.getStartTime();
+		long uptime = runtimeMXBean.getUptime();
+		int availableProcessors = operatingSystemMXBean
+				.getAvailableProcessors();
+		double systemLoadAverage = operatingSystemMXBean.getSystemLoadAverage();
 
-	long freeMemory = Runtime.getRuntime().freeMemory();
-	long totalMemory = Runtime.getRuntime().totalMemory();
-	long maxMemory = Runtime.getRuntime().maxMemory();
+		long freeMemory = Runtime.getRuntime().freeMemory();
+		long totalMemory = Runtime.getRuntime().totalMemory();
+		long maxMemory = Runtime.getRuntime().maxMemory();
 
-	int maxPerformance = availableProcessors * 100;
-	return new PurifinityServerStatus(startTime, uptime, totalMemory
-		- freeMemory, totalMemory, maxMemory,
-		(int) (systemLoadAverage * maxPerformance), maxPerformance);
-    }
+		return new PurifinityServerStatus(startTime, uptime, totalMemory
+				- freeMemory, totalMemory, maxMemory, systemLoadAverage,
+				availableProcessors);
+	}
 }

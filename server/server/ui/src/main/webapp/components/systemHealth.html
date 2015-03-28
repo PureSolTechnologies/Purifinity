@@ -30,12 +30,12 @@
 				</td>
 			</tr>
 			<tr>
-				<td>CPU Usage</td>
+				<td>CPU Usage<br/>({{status.availableCPUs}} processors)</td>
 				<td>
 					<div class="progress">
-						<div class="progress-bar progress-bar-striped {{getCPUSeverity()}}" role="progressbar" aria-valuenow="{{status.usedCPU}}"
-							aria-valuemin="0" aria-valuemax="{{status.maxMemory}}" style="width:{{status.usedCPU/status.maxCPU*100}}%">
-							<span>{{status.usedCPU/status.maxCPU*100 | number: 1}}%</span>
+						<div class="progress-bar progress-bar-striped {{getCPUSeverity()}}" role="progressbar" aria-valuenow="{{getCPUUsage()*100}}"
+							aria-valuemin="0" aria-valuemax="{{status.availableCPUs * 100}}" style="width:{{getCPUUsage()*100}}%">
+							<span>{{getCPUUsage()*100 | number: 1}}%</span>
 						</div>
 					</div>						
 				</td>

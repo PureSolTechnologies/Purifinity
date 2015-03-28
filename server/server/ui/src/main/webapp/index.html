@@ -49,12 +49,12 @@
 	]);
 	purifinityApp.config(function($routeProvider, $locationProvider){
 		$locationProvider.html5Mode(false);
-		$routeProvider.when("/login", {templateUrl:"/views/login.html"});
-		$routeProvider.when("/account", {templateUrl:"/views/account.html"});
-		$routeProvider.when("/dashboards", {templateUrl: "/views/dashboards.html"});
-		$routeProvider.when("/information", {templateUrl: "/views/information.html"});
-		$routeProvider.when("/help", {templateUrl: "/views/help.html"});
-		$routeProvider.otherwise({templateUrl: "/views/overview.html"});
+		$routeProvider.when("/login", {templateUrl:"views/login.html"});
+		$routeProvider.when("/account", {templateUrl:"views/account.html"});
+		$routeProvider.when("/dashboards", {templateUrl: "views/dashboards.html"});
+		$routeProvider.when("/information", {templateUrl: "views/information.html"});
+		$routeProvider.when("/help", {templateUrl: "views/help.html"});
+		$routeProvider.otherwise({templateUrl: "views/overview.html"});
 	});
 </script>
 </head>
@@ -67,7 +67,7 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<span class="navbar-brand"><a href="/"><img src="images/logos/logo2.png" width="100" title="Purifinity"/></a></span>
+			<span class="navbar-brand"><a href="."><img src="images/logos/logo2.png" width="100" title="Purifinity"/></a></span>
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
@@ -78,10 +78,10 @@
 			</ul>
 			<div class="navbar-right" data-ng-controller="loginCtrl">
 				<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
-					<li><a href="/admin.html"><span
+					<li><a href="admin.html"><span
 							class="glyphicon glyphicon-wrench"></span>&nbsp;Administration</a></li>
 					<li data-ng-show="isLoggedIn()">
-						<a href="/#/account"><span class="glyphicon glyphicon-user"></span>&nbsp;Account</a>
+						<a href="#/account"><span class="glyphicon glyphicon-user"></span>&nbsp;Account</a>
 					</li>
 					<li data-ng-hide="isLoggedIn()">
 						<a href="#/login"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a>
@@ -96,13 +96,13 @@
 		</div>
 	</div>
 
-	<div class="row" data-ng-controller="alerterCtrl" ng-show="hasAlerts()" ng-cloak>
+	<div class="row" data-ng-controller="alerterCtrl" data-ng-show="hasAlerts()" data-ng-cloak>
 		<div
-			class="col-lg-1 col-lg-offset-4 col-md-2 col-md-offset-2 col-sm-4" ng-cloak>
+			class="col-lg-1 col-lg-offset-4 col-md-2 col-md-offset-2 col-sm-4" data-ng-cloak>
 			<button class="btn btn-default" data-ng-click="clearAlerts()">Clear
 				All</button>
 		</div>
-		<div class="col-lg-3 col-md-6 col-sm-8" ng-cloak>
+		<div class="col-lg-3 col-md-6 col-sm-8" data-ng-cloak>
 			<alert data-ng-repeat="alert in alerts" type="{{alert.type}}"
 				close="closeAlert($index)" data-ng-cloak>{{alert.message}}</alert>
 		</div>
