@@ -2,7 +2,6 @@
 .settings
 .classpath
 .project
-bin
 target
 felix-cache
 workspace

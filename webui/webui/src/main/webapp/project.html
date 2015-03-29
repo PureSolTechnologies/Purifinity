@@ -72,6 +72,8 @@
 		$routeProvider.when("/defects/:projectId", {templateUrl: "views/project/defects.html"});
 		$routeProvider.when("/style_issues/:projectId", {templateUrl: "views/project/style_issues.html"});
 		$routeProvider.when("/metrics/:projectId", {templateUrl: "views/project/metrics.html"});
+		$routeProvider.when("/design/:projectId", {templateUrl: "views/project/design.html"});
+		$routeProvider.when("/architecture/:projectId", {templateUrl: "views/project/architecture.html"});
 		$routeProvider.when("/trends/:projectId", {templateUrl: "views/project/trends.html"});
 		$routeProvider.when("/runs/:projectId", {templateUrl: "views/project/runs.html"});
 		$routeProvider.otherwise({redirectTo: function() {window.location = "/";}});
@@ -96,8 +98,10 @@
 				<li class="{{isActive('/summary')}}"><a href="#/summary/{{$routeParams.projectId}}">Summary</a></li>
 				<li class="{{isActive('/analysis')}}"><a href="#/analysis/{{$routeParams.projectId}}">Analysis</a></li>
 				<li class="{{isActive('/defects')}}"><a href="#/defects/{{$routeParams.projectId}}">Defects</a></li>
-				<li class="{{isActive('/style_issues')}}"><a href="#/style_issues/{{$routeParams.projectId}}">Style Issues</a></li>
+				<li class="{{isActive('/style_issues')}}"><a href="#/style_issues/{{$routeParams.projectId}}">Style</a></li>
 				<li class="{{isActive('/metrics')}}"><a href="#/metrics/{{$routeParams.projectId}}">Metrics</a></li>
+				<li class="{{isActive('/design')}}"><a href="#/metrics/{{$routeParams.projectId}}">Design</a></li>
+				<li class="{{isActive('/architecture')}}"><a href="#/metrics/{{$routeParams.projectId}}">Architecture</a></li>
 				<li class="{{isActive('/trends')}}"><a href="#/trends/{{$routeParams.projectId}}">Trends</a></li>
 				<li class="{{isActive('/runs')}}"><a href="#/runs/{{$routeParams.projectId}}">Runs</a></li>
 				<li class="{{isActive('/help')}}"><a href="./#/help">Help</a></li>

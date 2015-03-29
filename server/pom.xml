@@ -109,8 +109,6 @@
 			<name>libs-snapshot</name>
 			<url>http://repo/libs-snapshot</url>
 		</repository>
-		<!-- repository> <id>WildFly</id> <name>WildFly</name> <url>https://repository.jboss.org/nexus/content/groups/public</url> 
-			</repository -->
 	</repositories>
 
 	<pluginRepositories>
@@ -803,18 +801,6 @@
 				<artifactId>wildfly-server</artifactId>
 				<version>${wildfly.version}</version>
 				<type>zip</type>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.faces</groupId>
-				<artifactId>jsf-api</artifactId>
-				<version>${mojarra.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.faces</groupId>
-				<artifactId>jsf-impl</artifactId>
-				<version>${mojarra.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>

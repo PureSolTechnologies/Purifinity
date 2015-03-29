@@ -8,14 +8,20 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Purifinity -->
+		<purifinity.version>0.3.0-SNAPSHOT</purifinity.version>
+		<!-- WildFly -->
+		<wildfly.version>8.2.0.Final</wildfly.version>
+		<!-- Cassandra -->
+		<cassandra.version>2.0.13</cassandra.version>
 	</properties>
 
-	<groupId>com.puresoltechnologies.purifinity.webui</groupId>
-	<artifactId>webui-parent</artifactId>
+	<groupId>com.puresoltechnologies.purifinity.distribution</groupId>
+	<artifactId>distribution-parent</artifactId>
 	<version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Purifinity Web UI: ${project.artifactId}</name>
+	<name>Purifinity Distribution: ${project.artifactId}</name>
 	<description>This Maven project and all its sub-projects contain the web UI of Purifinity.</description>
 
 	<inceptionYear>2009</inceptionYear>
@@ -113,6 +119,88 @@
 		</pluginRepository>
 	</pluginRepositories>
 
+	<dependencyManagement>
+		<dependencies>
+			<!-- ========== -->
+			<!-- Purifinity -->
+			<!-- ========== -->
+			<!-- DDL -->
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>global.ddl</artifactId>
+				<version>${purifinity.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<!-- Application -->
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>passwordstore.app</artifactId>
+				<version>${purifinity.version}</version>
+				<type>ear</type>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>server.app</artifactId>
+				<version>${purifinity.version}</version>
+				<type>ear</type>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>systemmonitor.app</artifactId>
+				<version>${purifinity.version}</version>
+				<type>ear</type>
+				<scope>runtime</scope>
+			</dependency>
+			<!-- Plugins -->
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>fortran2008.plugin</artifactId>
+				<version>${purifinity.version}</version>
+				<type>ear</type>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>java7.plugin</artifactId>
+				<version>${purifinity.version}</version>
+				<type>ear</type>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>metrics.plugin</artifactId>
+				<version>${purifinity.version}</version>
+				<type>ear</type>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.webui</groupId>
+				<artifactId>webui</artifactId>
+				<version>${purifinity.version}</version>
+				<type>zip</type>
+				<classifier>bin</classifier>
+				<scope>runtime</scope>
+			</dependency>
+			<!-- WildFly -->
+			<dependency>
+				<groupId>org.wildfly</groupId>
+				<artifactId>wildfly-server</artifactId>
+				<version>${wildfly.version}</version>
+				<type>zip</type>
+				<scope>runtime</scope>
+			</dependency>
+			<!-- Cassandra -->
+			<dependency>
+				<groupId>org.apache.cassandra</groupId>
+				<artifactId>cassandra</artifactId>
+				<version>${cassandra.version}</version>
+				<classifier>bin</classifier>
+				<type>tar.gz</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<pluginManagement>
@@ -130,6 +218,7 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.4.2</version>
 				<configuration>
+					<tagNameFormat>distribution-v@{project.version}</tagNameFormat>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 				</configuration>
 			</plugin>
@@ -149,6 +238,6 @@
 	</build>
 
 	<modules>
-		<module>webui</module>
+		<module>community</module>
 	</modules>
 </project>
