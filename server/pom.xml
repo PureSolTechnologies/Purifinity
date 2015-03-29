@@ -603,12 +603,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>server.ui</artifactId>
-				<version>${project.version}</version>
-				<type>war</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>systemmonitor.app</artifactId>
 				<version>${project.version}</version>
 				<type>ear</type>

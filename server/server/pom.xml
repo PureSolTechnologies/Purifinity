@@ -22,7 +22,6 @@
 		<module>rest.impl</module>
 		<module>socket.api</module>
 		<module>socket.impl</module>
-		<module>ui</module>
 		<module>app</module>
 		<module>test</module>
 	</modules>

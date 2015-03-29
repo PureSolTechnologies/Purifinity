@@ -51,11 +51,6 @@
 			<artifactId>server.socket.impl</artifactId>
 			<type>war</type>
 		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>server.ui</artifactId>
-			<type>war</type>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -79,11 +74,6 @@
 							<groupId>com.puresoltechnologies.purifinity.server</groupId>
 							<artifactId>server.socket.impl</artifactId>
 							<contextRoot>/purifinityserver/socket</contextRoot>
-						</webModule>
-						<webModule>
-							<groupId>com.puresoltechnologies.purifinity.server</groupId>
-							<artifactId>server.ui</artifactId>
-							<contextRoot>/purifinity</contextRoot>
 						</webModule>
 					</modules>
 				</configuration>
