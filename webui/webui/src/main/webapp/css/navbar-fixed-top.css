@@ -1,10 +1,3 @@
 body {
 	padding-top: 70px;
 }
-
-/*
- * The next correction corrects the placement of a button in navigation bar.
- */
-.nav>li>button {
-	height: 50px
-}
