@@ -34,7 +34,7 @@ function analysisBrowserCtrl($scope, $routeParams, projectManager) {
 function convertAnalysisFileTree(fileTree) {
     var treeTableData = {};
     treeTableData.content = fileTree.name;
-    treeTableData.id = fileTree.hashId.algorithm + ":" + fileTree.hashId.hash;
+    treeTableData.id = fileTree.hashId.algorithmName + ":" + fileTree.hashId.hash;
     var analyses = "";
     fileTree.analyzedCodes.forEach(function(analysis) {
 	if (analyses.length > 0) {

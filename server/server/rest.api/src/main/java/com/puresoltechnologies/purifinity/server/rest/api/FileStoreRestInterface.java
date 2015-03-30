@@ -43,13 +43,13 @@ public interface FileStoreRestInterface {
 			throws FileStoreException;
 
 	@GET
-	@Path("files/{hashId}/analysis")
+	@Path("files/{hashId}/analyses")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<CodeAnalysis> loadAnalyses(@PathParam("hashId") HashId hashId)
 			throws FileStoreException;
 
 	@PUT
-	@Path("files/{hashId}/analysis")
+	@Path("files/{hashId}/analyses")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void storeAnalysis(@PathParam("hashId") HashId hashId,
 			CodeAnalysis analysis) throws FileStoreException;

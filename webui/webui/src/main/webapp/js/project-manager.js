@@ -13,23 +13,23 @@ projectManagerModule.controller("editProjectModalInstanceCtrl", editProjectModal
 function projectManager(purifinityServerConnector) {
 	var projectManager = {};
 	projectManager.getProjects = function(success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects',
+		return purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects',
 				success, error);
 	};
 	projectManager.getProject = function(projectId, success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects/' + projectId,
+		return purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId,
 				success, error);
 	};
 	projectManager.getLastRun = function(projectId, success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects/' + projectId + '/lastrun',
+		return purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/lastrun',
 				success, error);
 	};
 	projectManager.getRun = function(projectId, runId, success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects/' + projectId + '/runs/' + runId,
+		return purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/runs/' + runId,
 				success, error);
 	};
 	projectManager.createProject = function(identifier, projectSettings, success, error) {
-		return purifinityServerConnector.put('/purifinityserver/rest/analysisstore/projects/' + identifier, projectSettings,
+		return purifinityServerConnector.put('/purifinityserver/rest/projectmanager/projects/' + identifier, projectSettings,
 				success, error);
 	};
 	projectManager.triggerNewRun = function(identifier, success, error) {
@@ -39,7 +39,7 @@ function projectManager(purifinityServerConnector) {
 	projectManager.editProject = function(id, name, success, error) {
 	};
 	projectManager.deleteProject = function(identifier, success, error) {
-		return purifinityServerConnector.del('/purifinityserver/rest/analysisstore/projects/' + identifier,
+		return purifinityServerConnector.del('/purifinityserver/rest/projectmanager/projects/' + identifier,
 				success, error);
 	};
 	projectManager.getRepositoryTypes = function(success, error) {
@@ -47,11 +47,11 @@ function projectManager(purifinityServerConnector) {
 				success, error);
 	};
 	projectManager.readAllRunInformation = function(projectId, success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects/' + projectId + '/runs',
+		return purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/runs',
 				success, error);
 	};
 	projectManager.getAnalysisFileTree = function(projectId, runId, success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/analysisstore/projects/' + projectId + '/runs/' + runId + '/filetree',
+		return purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/runs/' + runId + '/filetree',
 			function (data, status) {
 				data.files = {};
 				data.directories = {};
