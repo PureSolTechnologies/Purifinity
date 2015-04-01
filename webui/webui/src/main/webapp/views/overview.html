@@ -33,7 +33,7 @@
 									{{project.settings.name}}
 								</a>
 							</td>
-							<td>{{project.information.creationTime | date: "yyyy-MM-dd HH:mm:ss"}}</td>
+							<td>{{project.information.creationTime | defaultDate}}</td>
 							<td>{{project.settings.description}}</td>
 							<td width="5%">
 								<button class="btn btn-primary" data-ng-click="triggerNewRun(project.information.projectId)">New Run...</button>
@@ -45,7 +45,7 @@
 			
 			<div data-ng-controller="processStatesCtrl">
 				<h4>Processes</h4>
-				{{processes.time | date: "yyyy-MM-dd HH:mm:ss"}}
+				{{processes.time | defaultDate}}
 				<table class="table">
 					<tbody>
 						<tr data-ng-repeat="state in processes.processStates">

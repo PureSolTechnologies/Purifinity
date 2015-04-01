@@ -61,7 +61,7 @@ public class FileStoreServiceBean implements FileStoreService,
 						HashUtilities.getDefaultMessageDigestAlgorithm(),
 						hashString);
 
-				PreparedStatement preparedStmt = cassandraPreparedStatements
+				PreparedStatement preparedStatement = cassandraPreparedStatements
 						.getPreparedStatement(
 								session,
 								"INSERT INTO "
@@ -69,8 +69,8 @@ public class FileStoreServiceBean implements FileStoreService,
 										+ " (time, hashid, raw, size) VALUES (?, ?, ?, ?)");
 				byte[] array = buffer.toByteArray();
 				ByteBuffer byteBuffer = ByteBuffer.wrap(array);
-				BoundStatement boundStatement = preparedStmt.bind(new Date(),
-						hashId.toString());
+				BoundStatement boundStatement = preparedStatement.bind(
+						new Date(), hashId.toString());
 				boundStatement.setBytes("raw", byteBuffer);
 				boundStatement.setInt("size", buffer.size());
 				session.execute(boundStatement);
@@ -83,9 +83,13 @@ public class FileStoreServiceBean implements FileStoreService,
 
 	@Override
 	public InputStream readRawFile(HashId hashId) throws FileStoreException {
-		ResultSet resultSet = session.execute("SELECT raw FROM "
-				+ CassandraElementNames.ANALYSIS_FILES_TABLE
-				+ " WHERE hashid='" + hashId.toString() + "'");
+		PreparedStatement preparedStatement = cassandraPreparedStatements
+				.getPreparedStatement(session, "SELECT raw FROM "
+						+ CassandraElementNames.ANALYSIS_FILES_TABLE
+						+ " WHERE hashid=?");
+		BoundStatement boundStatement = preparedStatement.bind(hashId
+				.toString());
+		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
 			throw new FileStoreException("Could not find file with hash id '"
@@ -104,16 +108,20 @@ public class FileStoreServiceBean implements FileStoreService,
 	@Override
 	public List<CodeAnalysis> loadAnalyses(HashId hashId)
 			throws FileStoreException {
-		List<CodeAnalysis> analyses = new ArrayList<>();
-		ResultSet resultSet = session.execute("SELECT analysis FROM "
-				+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
-				+ " WHERE hashid='" + hashId.toString() + "'");
+		PreparedStatement preparedStatement = cassandraPreparedStatements
+				.getPreparedStatement(session, "SELECT analysis FROM "
+						+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
+						+ " WHERE hashid=?");
+		BoundStatement boundStatement = preparedStatement.bind(hashId
+				.toString());
+		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
 			throw new FileStoreException(
 					"Could not load analyses for file with hash '" + hashId
 							+ "'");
 		}
+		List<CodeAnalysis> analyses = new ArrayList<>();
 		while (result != null) {
 			ByteBuffer byteBuffer = result.getBytes("analysis");
 			try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
@@ -171,11 +179,14 @@ public class FileStoreServiceBean implements FileStoreService,
 
 	@Override
 	public final boolean isAvailable(HashId hashId) {
-		ResultSet resultSet = session.execute("SELECT hashid FROM "
-				+ CassandraElementNames.ANALYSIS_FILES_TABLE
-				+ " WHERE hashid='" + hashId.toString() + "'");
-		Row result = resultSet.one();
-		return result != null;
+		PreparedStatement preparedStatement = cassandraPreparedStatements
+				.getPreparedStatement(session, "SELECT hashid FROM "
+						+ CassandraElementNames.ANALYSIS_FILES_TABLE
+						+ " WHERE hashid=?");
+		BoundStatement boundStatement = preparedStatement.bind(hashId
+				.toString());
+		ResultSet resultSet = session.execute(boundStatement);
+		return !resultSet.isExhausted();
 	}
 
 	@Override
@@ -192,9 +203,13 @@ public class FileStoreServiceBean implements FileStoreService,
 
 	@Override
 	public final boolean wasAnalyzed(HashId hashId) {
-		ResultSet resultSet = session.execute("SELECT analysis FROM "
-				+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
-				+ " WHERE hashid='" + hashId.toString() + "'");
+		PreparedStatement preparedStatement = cassandraPreparedStatements
+				.getPreparedStatement(session, "SELECT analysis FROM "
+						+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
+						+ " WHERE hashid=?");
+		BoundStatement boundStatement = preparedStatement.bind(hashId
+				.toString());
+		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		return (result != null) && (result.getBytes("analysis") != null);
 	}

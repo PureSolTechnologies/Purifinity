@@ -34,7 +34,7 @@ public class FileStoreRestService implements FileStoreRestInterface {
 
 	@Override
 	public SourceCode readSourceCode(HashId hashId) throws FileStoreException {
-		return fileStore.readSourceCode(null);
+		return fileStore.readSourceCode(hashId);
 	}
 
 	@Override

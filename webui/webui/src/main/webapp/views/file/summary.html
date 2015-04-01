@@ -13,14 +13,17 @@
     </thead>
     <tbody>
       <tr data-ng-repeat="analysis in analyses">
-	<td>{{analysis.startTime | date: "yyyy-MM-dd HH:mm:ss"}}</td>
+	<td>{{analysis.startTime | defaultDate}}</td>
 	<td>{{analysis.languageName}} {{analysis.languageVersion}}</td>
-	<td>{{analysis.analysisInformation.pluginVersion.major}}.{{analysis.analysisInformation.pluginVersion.minor}}.{{analysis.analysisInformation.pluginVersion.patch}}</td>
+	<td>{{analysis.analysisInformation.pluginVersion | version}}</td>
 	<td>{{analysis.duration}}ms</td>
-	<td>{{analysis.analysisInformation.successful}}</td>
+	<td><span ng-bind-html="analysis.analysisInformation.successful | successfulMark"></span></td>
 	<td>{{analysis.analysisInformation.analyzerErrorMessage}}</td>
       </tr>
     </tbody>
   </table>
+  <h4>SourceCode:</h4>
+  {{sourceCode}}
+  <h4>Analyses</h4>
   {{analyses}}
 </div>

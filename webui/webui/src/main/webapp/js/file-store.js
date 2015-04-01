@@ -11,7 +11,7 @@ function fileStore(purifinityServerConnector) {
 	return purifinityServerConnector.get('/purifinityserver/rest/filestore/files/' + hashId + '/available',
 					     success, error);
     };
-    fileStore.readSource = function(hashId, success, error) {
+    fileStore.readSourceCode = function(hashId, success, error) {
 	return purifinityServerConnector.get('/purifinityserver/rest/filestore/files/' + hashId + '/sourcecode',
 					     success, error);
     };

@@ -7,8 +7,11 @@
  * 
  * @angularApplication is the AngularJS application which is to be enhanced.
  */
-var purifinityUI = angular.module("purifinityUI", []);
+var purifinityUI = angular.module("purifinityUI", ['ngSanitize']);
 purifinityUI.controller("menuCtrl", menuCtrl);
+purifinityUI.filter("defaultDate", defaultDateFilter);
+purifinityUI.filter("version", versionFilter);
+purifinityUI.filter("successfulMark", successfulMarkFilter);
 
 /**
  * This is a menu controller to have a chance to mark items as active in a
@@ -36,4 +39,43 @@ function menuCtrl($scope, $route, $routeParams, $location) {
 		}
 		return "";
 	}
+}
+
+function defaultDateFilter($filter) {
+    return function (value) {
+	if ((value instanceof Date) && (!isNaN(date.valueOf()))) {
+	    return $filter('date')(value, 'yyyy-MM-dd HH:mm:ss');
+	}
+	return value;
+    }
+}
+
+function versionFilter() {
+    return function(version) {
+	if ((typeof version.major === "number") && (typeof version.minor === "number") && (typeof version.patch === "number")) {
+	    var versionString = version.major + "." + version.minor + "." + version.patch;
+	    if (typeof version.preReleaseInformation === "string") {
+		versionString += "-" + version.preReleaseInformation;
+	    }
+	    if (typeof version.buildMetadata === "string") {
+		versionString += "+" + version.buildMetadata;
+	    }
+	    return versionString;
+	}
+	return version;
+    }
+}
+
+function successfulMarkFilter($sce) {
+    return function(successful) {
+	var mark = '<div style="position:relative;">' +
+	    '<img src="/images/icons/FatCow_Icons16x16/source_code.png" />';
+	if (successful) {
+	    mark += '<img style="position:absolute;top:6px;left:6px;" src="/images/icons/FatCow_Icons16x16/bullet_valid.png" />';		
+	} else {
+	    mark += '<img style="position:absolute;top:6px;left:6px;" src="/images/icons/FatCow_Icons16x16/bullet_error.png" />';		
+	}
+	mark += '</div>';
+	return $sce.trustAsHtml(mark);
+    }
 }
