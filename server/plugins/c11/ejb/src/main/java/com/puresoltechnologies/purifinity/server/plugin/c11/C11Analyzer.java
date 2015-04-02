@@ -67,7 +67,7 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 			AnalysisInformation analyzedFile = new AnalysisInformation(
 					sourceCode.getHashId(), date, timeEffort, true, C11.NAME,
-					C11.VERSION, C11.PLUGIN_VERSION);
+					C11.VERSION, C11.ID, C11.PLUGIN_VERSION);
 			fileAnalysis = new CodeAnalysis(date, timeEffort, C11.NAME,
 					C11.VERSION, analyzedFile,
 					this.getAnalyzableCodeRanges(parserTree), compilationUnit);

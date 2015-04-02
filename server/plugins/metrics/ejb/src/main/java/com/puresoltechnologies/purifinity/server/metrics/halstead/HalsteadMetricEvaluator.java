@@ -16,6 +16,7 @@ import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
@@ -36,130 +37,132 @@ import com.puresoltechnologies.purifinity.server.metrics.halstead.db.HalsteadMet
 @Remote(Evaluator.class)
 public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 
-    @EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
-    private AnalyzerServiceManagerRemote analyzerServiceManager;
+	@EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
+	private AnalyzerServiceManagerRemote analyzerServiceManager;
 
-    @Inject
-    private HalsteadMetricsEvaluatorDAO halsteadMetricEvaluatorDAO;
+	@Inject
+	private HalsteadMetricsEvaluatorDAO halsteadMetricEvaluatorDAO;
 
-    public HalsteadMetricEvaluator() {
-	super(HalsteadMetric.ID, HalsteadMetric.NAME,
-		HalsteadMetric.PLUGIN_VERSION, HalsteadMetric.DESCRIPTION);
-    }
-
-    @Override
-    public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return HalsteadMetric.PARAMETERS;
-    }
-
-    @Override
-    public Set<MetricParameter<?>> getParameters() {
-	return HalsteadMetricEvaluatorParameter.ALL;
-    }
-
-    @Override
-    protected GenericFileMetrics processFile(AnalysisRun analysisRun,
-	    CodeAnalysis analysis) throws InterruptedException,
-	    UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-	AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
-		.findByName(analysis.getLanguageName(),
-			analysis.getLanguageVersion());
-	ProgrammingLanguage language = analyzerServiceManager
-		.getInstance(analyzerServiceInformation.getJndiName());
-
-	HashId hashId = analysis.getAnalysisInformation().getHashId();
-	SourceCodeLocation sourceCodeLocation = analysisRun
-		.findTreeNode(hashId).getSourceCodeLocation();
-	GenericFileMetrics results = new GenericFileMetrics(HalsteadMetric.ID,
-		HalsteadMetric.PLUGIN_VERSION, hashId, sourceCodeLocation,
-		new Date(), HalsteadMetricEvaluatorParameter.ALL);
-	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    HalsteadMetric metric = new HalsteadMetric(analysisRun, language,
-		    codeRange);
-	    metric.run();
-	    HalsteadResult halsteadResult = metric.getHalsteadResults();
-	    halsteadMetricEvaluatorDAO.storeFileResults(
-		    hashId,
-		    sourceCodeLocation,
-		    codeRange,
-		    new HalsteadMetricResult(sourceCodeLocation, codeRange
-			    .getType(), codeRange.getCanonicalName(),
-			    halsteadResult));
-	    results.addCodeRangeMetrics(new GenericCodeRangeMetrics(
-		    sourceCodeLocation, codeRange.getType(), codeRange
-			    .getCanonicalName(),
-		    HalsteadMetricEvaluatorParameter.ALL, halsteadResult
-			    .getResults()));
+	public HalsteadMetricEvaluator() {
+		super(HalsteadMetric.ID, HalsteadMetric.NAME,
+				HalsteadMetric.PLUGIN_VERSION, HalsteadMetric.DESCRIPTION);
 	}
-	return results;
-    }
 
-    @Override
-    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS;
-    }
+	@Override
+	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+		return HalsteadMetric.PARAMETERS;
+	}
 
-    @Override
-    protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
-	    AnalysisFileTree directory) throws InterruptedException,
-	    EvaluationStoreException {
-	HalsteadMetricResult metricResults = null;
-	for (AnalysisFileTree child : directory.getChildren()) {
-	    if (child.isFile()) {
-		List<HalsteadMetricResult> results = halsteadMetricEvaluatorDAO
-			.readFileResults(child.getHashId());
-		for (HalsteadMetricResult result : results) {
-		    if (result.getCodeRangeType() == CodeRangeType.FILE) {
-			metricResults = combine(directory, metricResults,
-				result.getHalsteadResult());
-			break;
-		    }
+	@Override
+	public Set<MetricParameter<?>> getParameters() {
+		return HalsteadMetricEvaluatorParameter.ALL;
+	}
+
+	@Override
+	protected GenericFileMetrics processFile(AnalysisRun analysisRun,
+			CodeAnalysis analysis) throws InterruptedException,
+			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
+		AnalysisInformation analysisInformation = analysis
+				.getAnalysisInformation();
+		AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
+				.findByName(analysisInformation.getLanguageName(),
+						analysisInformation.getLanguageVersion());
+		ProgrammingLanguage language = analyzerServiceManager
+				.getInstance(analyzerServiceInformation.getJndiName());
+
+		HashId hashId = analysisInformation.getHashId();
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.findTreeNode(hashId).getSourceCodeLocation();
+		GenericFileMetrics results = new GenericFileMetrics(HalsteadMetric.ID,
+				HalsteadMetric.PLUGIN_VERSION, hashId, sourceCodeLocation,
+				new Date(), HalsteadMetricEvaluatorParameter.ALL);
+		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+			HalsteadMetric metric = new HalsteadMetric(analysisRun, language,
+					codeRange);
+			metric.run();
+			HalsteadResult halsteadResult = metric.getHalsteadResults();
+			halsteadMetricEvaluatorDAO.storeFileResults(
+					hashId,
+					sourceCodeLocation,
+					codeRange,
+					new HalsteadMetricResult(sourceCodeLocation, codeRange
+							.getType(), codeRange.getCanonicalName(),
+							halsteadResult));
+			results.addCodeRangeMetrics(new GenericCodeRangeMetrics(
+					sourceCodeLocation, codeRange.getType(), codeRange
+							.getCanonicalName(),
+					HalsteadMetricEvaluatorParameter.ALL, halsteadResult
+							.getResults()));
 		}
-	    } else {
-		HalsteadMetricResult directoryResults = halsteadMetricEvaluatorDAO
-			.readDirectoryResults(child.getHashId());
-		if (directoryResults != null) {
-		    metricResults = combine(directory, metricResults,
-			    directoryResults.getHalsteadResult());
+		return results;
+	}
+
+	@Override
+	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+	}
+
+	@Override
+	protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
+			AnalysisFileTree directory) throws InterruptedException,
+			EvaluationStoreException {
+		HalsteadMetricResult metricResults = null;
+		for (AnalysisFileTree child : directory.getChildren()) {
+			if (child.isFile()) {
+				List<HalsteadMetricResult> results = halsteadMetricEvaluatorDAO
+						.readFileResults(child.getHashId());
+				for (HalsteadMetricResult result : results) {
+					if (result.getCodeRangeType() == CodeRangeType.FILE) {
+						metricResults = combine(directory, metricResults,
+								result.getHalsteadResult());
+						break;
+					}
+				}
+			} else {
+				HalsteadMetricResult directoryResults = halsteadMetricEvaluatorDAO
+						.readDirectoryResults(child.getHashId());
+				if (directoryResults != null) {
+					metricResults = combine(directory, metricResults,
+							directoryResults.getHalsteadResult());
+				}
+			}
 		}
-	    }
+		if (metricResults == null) {
+			return null;
+		}
+
+		halsteadMetricEvaluatorDAO.storeDirectoryResults(directory.getHashId(),
+				metricResults);
+
+		HalsteadMetricDirectoryResults finalResults = new HalsteadMetricDirectoryResults(
+				HalsteadMetric.ID, HalsteadMetric.PLUGIN_VERSION,
+				directory.getHashId(), new Date(), metricResults);
+		return finalResults;
 	}
-	if (metricResults == null) {
-	    return null;
+
+	private HalsteadMetricResult combine(AnalysisFileTree node,
+			HalsteadMetricResult results, HalsteadResult result) {
+		if (result != null) {
+			CodeRangeType codeRangeType = node.isFile() ? CodeRangeType.FILE
+					: CodeRangeType.DIRECTORY;
+			if (results == null) {
+				results = new HalsteadMetricResult(
+						new UnspecifiedSourceCodeLocation(),
+						CodeRangeType.DIRECTORY, node.getName(), result);
+			} else {
+				results = HalsteadMetricResult.combine(results,
+						new HalsteadMetricResult(node.getSourceCodeLocation(),
+								codeRangeType, node.getName(), result));
+			}
+		}
+		return results;
 	}
 
-	halsteadMetricEvaluatorDAO.storeDirectoryResults(directory.getHashId(),
-		metricResults);
-
-	HalsteadMetricDirectoryResults finalResults = new HalsteadMetricDirectoryResults(
-		HalsteadMetric.ID, HalsteadMetric.PLUGIN_VERSION,
-		directory.getHashId(), new Date(), metricResults);
-	return finalResults;
-    }
-
-    private HalsteadMetricResult combine(AnalysisFileTree node,
-	    HalsteadMetricResult results, HalsteadResult result) {
-	if (result != null) {
-	    CodeRangeType codeRangeType = node.isFile() ? CodeRangeType.FILE
-		    : CodeRangeType.DIRECTORY;
-	    if (results == null) {
-		results = new HalsteadMetricResult(
-			new UnspecifiedSourceCodeLocation(),
-			CodeRangeType.DIRECTORY, node.getName(), result);
-	    } else {
-		results = HalsteadMetricResult.combine(results,
-			new HalsteadMetricResult(node.getSourceCodeLocation(),
-				codeRangeType, node.getName(), result));
-	    }
+	@Override
+	protected DirectoryMetrics processProject(AnalysisRun analysisRun,
+			boolean enableReevaluation) throws InterruptedException,
+			EvaluationStoreException {
+		AnalysisFileTree directory = analysisRun.getFileTree();
+		return processDirectory(analysisRun, directory);
 	}
-	return results;
-    }
-
-    @Override
-    protected DirectoryMetrics processProject(AnalysisRun analysisRun,
-	    boolean enableReevaluation) throws InterruptedException,
-	    EvaluationStoreException {
-	AnalysisFileTree directory = analysisRun.getFileTree();
-	return processDirectory(analysisRun, directory);
-    }
 }

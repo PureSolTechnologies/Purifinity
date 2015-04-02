@@ -31,8 +31,14 @@
 	  {{content.content}}
 	</a>
 	<span data-ng-hide="content.children">
-	  <img data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />
-	  {{content.content}}
+	  <a data-ng-show="content.link" href="{{content.link}}">
+	    <img data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />
+	    {{content.content}}
+	  </a>
+	  <span data-ng-hide="content.link">
+	    <img data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />
+	    {{content.content}}
+	  </span>
 	</span>
       </td>
       <td data-ng-repeat = "contentColumn in content.columns">

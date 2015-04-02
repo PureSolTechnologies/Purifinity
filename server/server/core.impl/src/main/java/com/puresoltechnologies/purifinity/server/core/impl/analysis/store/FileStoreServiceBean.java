@@ -110,7 +110,7 @@ public class FileStoreServiceBean implements FileStoreService,
 			throws FileStoreException {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "SELECT analysis FROM "
-						+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
+						+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
 						+ " WHERE hashid=?");
 		BoundStatement boundStatement = preparedStatement.bind(hashId
 				.toString());
@@ -149,15 +149,16 @@ public class FileStoreServiceBean implements FileStoreService,
 				.getPreparedStatement(
 						session,
 						"INSERT INTO "
-								+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
-								+ " (time, hashid, language, language_version, plugin_version, analyzer_message, successful, duration, analysis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+								+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
+								+ " (time, hashid, language, language_version, analyzer_id, analyzer_version, analyzer_message, successful, duration, analysis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 		AnalysisInformation analysisInformation = fileAnalysis
 				.getAnalysisInformation();
 		BoundStatement boundStatement = preparedStatement.bind(
 				analysisInformation.getStartTime(), hashId.toString(),
 				analysisInformation.getLanguageName(), analysisInformation
 						.getLanguageVersion().toString(), analysisInformation
-						.getPluginVersion().toString(), analysisInformation
+						.getAnalyzerId(), analysisInformation
+						.getAnalyzerVersion().toString(), analysisInformation
 						.getAnalyzerErrorMessage(), analysisInformation
 						.isSuccessful(), analysisInformation.getDuration());
 		try {
@@ -205,7 +206,7 @@ public class FileStoreServiceBean implements FileStoreService,
 	public final boolean wasAnalyzed(HashId hashId) {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "SELECT analysis FROM "
-						+ CassandraElementNames.ANALYSIS_ANALYZES_TABLE
+						+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
 						+ " WHERE hashid=?");
 		BoundStatement boundStatement = preparedStatement.bind(hashId
 				.toString());

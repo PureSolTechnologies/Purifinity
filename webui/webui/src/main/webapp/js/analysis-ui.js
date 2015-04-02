@@ -68,6 +68,7 @@ function convertAnalysisFileTree(fileTree) {
 	treeTableData.imageUrl = 'images/icons/FatCow_Icons16x16/folder.png';
     } else {
 	treeTableData.imageUrl = 'images/icons/FatCow_Icons16x16/document_green.png';
+	treeTableData.link = "/file.html#/summary/" + treeTableData.id;
     }
     return treeTableData;
 }

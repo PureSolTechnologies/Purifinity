@@ -85,7 +85,7 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 			long timeEffort = watch.getMilliseconds();
 			AnalysisInformation analyzedFile = new AnalysisInformation(
 					sourceCode.getHashId(), date, timeEffort, true, Java.NAME,
-					Java.VERSION, Java.PLUGIN_VERSION);
+					Java.VERSION, Java.ID, Java.PLUGIN_VERSION);
 			fileAnalysis = new CodeAnalysis(date, timeEffort, Java.NAME,
 					Java.VERSION, analyzedFile,
 					getAnalyzableCodeRanges(compilationUnit), compilationUnit);

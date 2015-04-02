@@ -76,7 +76,8 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 					language.getName(), language.getVersion(),
 					new AnalysisInformation(sourceCode.getHashId(), date,
 							timeEffort, true, language.getName(), language
-									.getVersion(), Version.valueOf("1.0.0")),
+									.getVersion(), "analyzerId", Version
+									.valueOf("1.0.0")),
 					getAnalyzableCodeRanges(compilationUnit), compilationUnit);
 
 		} catch (LexerException | ParserException | IOException e) {

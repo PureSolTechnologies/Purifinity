@@ -43,10 +43,7 @@ function menuCtrl($scope, $route, $routeParams, $location) {
 
 function defaultDateFilter($filter) {
     return function (value) {
-	if ((value instanceof Date) && (!isNaN(date.valueOf()))) {
-	    return $filter('date')(value, 'yyyy-MM-dd HH:mm:ss');
-	}
-	return value;
+	return $filter('date')(value, 'yyyy-MM-dd HH:mm:ss');
     }
 }
 

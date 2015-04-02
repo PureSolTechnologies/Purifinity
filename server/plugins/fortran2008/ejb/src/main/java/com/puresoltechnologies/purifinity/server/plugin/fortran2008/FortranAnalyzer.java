@@ -78,7 +78,8 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
 			AnalysisInformation analyzedFile = new AnalysisInformation(
 					sourceCode.getHashId(), date, timeEffort, true,
-					Fortran.NAME, Fortran.VERSION, Fortran.PLUGIN_VERSION);
+					Fortran.NAME, Fortran.VERSION, Fortran.ID,
+					Fortran.PLUGIN_VERSION);
 			fileAnalysis = new CodeAnalysis(date, timeEffort, Fortran.NAME,
 					Fortran.VERSION, analyzedFile,
 					getAnalyzableCodeRanges(program), program);

@@ -56,141 +56,142 @@ import com.puresoltechnologies.purifinity.server.metrics.sloc.db.SLOCMetricEvalu
 @Remote(Evaluator.class)
 public class SLOCEvaluator extends AbstractMetricEvaluator {
 
-    @Inject
-    private Logger logger;
+	@Inject
+	private Logger logger;
 
-    @EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
-    private AnalyzerServiceManagerRemote analyzerServiceManager;
+	@EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
+	private AnalyzerServiceManagerRemote analyzerServiceManager;
 
-    @Inject
-    private SLOCMetricEvaluatorDAO slocEvaluatorDAO;
+	@Inject
+	private SLOCMetricEvaluatorDAO slocEvaluatorDAO;
 
-    public SLOCEvaluator() {
-	super(SLOCMetricCalculator.ID, SLOCMetricCalculator.NAME,
-		SLOCMetricCalculator.PLUGIN_VERSION,
-		SLOCMetricCalculator.DESCRIPTION);
-    }
-
-    @Override
-    public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return SLOCMetricCalculator.PARAMETERS;
-    }
-
-    @Override
-    public Set<MetricParameter<?>> getParameters() {
-	return SLOCEvaluatorParameter.ALL;
-    }
-
-    @Override
-    protected FileMetrics processFile(AnalysisRun analysisRun,
-	    CodeAnalysis analysis) throws InterruptedException,
-	    UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-	AnalysisInformation analyzedFile = analysis.getAnalysisInformation();
-	HashId hashId = analyzedFile.getHashId();
-	AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
-		.findByName(analysis.getLanguageName(),
-			analysis.getLanguageVersion());
-	ProgrammingLanguage language = analyzerServiceManager
-		.getInstance(analyzerServiceInformation.getJndiName());
-	SourceCodeLocation sourceCodeLocation = analysisRun
-		.findTreeNode(hashId).getSourceCodeLocation();
-	GenericFileMetrics results = new GenericFileMetrics(
-		SLOCMetricCalculator.ID, SLOCMetricCalculator.PLUGIN_VERSION,
-		hashId, sourceCodeLocation, analysis.getStartTime(),
-		SLOCEvaluatorParameter.ALL);
-	logger.info("Process file '"
-		+ sourceCodeLocation.getHumanReadableLocationString() + "'...");
-	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    SLOCMetricCalculator metric = new SLOCMetricCalculator(analysisRun,
-		    language, codeRange);
-	    metric.run();
-
-	    Map<String, MetricValue<?>> values = new HashMap<>();
-	    for (MetricValue<?> result : metric.getSLOCResult().getResults()) {
-		values.put(result.getParameter().getName(), result);
-	    }
-
-	    results.addCodeRangeMetrics(new GenericCodeRangeMetrics(
-		    sourceCodeLocation, codeRange.getType(), codeRange
-			    .getCanonicalName(), SLOCEvaluatorParameter.ALL,
-		    values));
-
-	    SLOCResult result = new SLOCResult(sourceCodeLocation,
-		    codeRange.getType(), codeRange.getCanonicalName(),
-		    metric.getSLOCResult());
-	    slocEvaluatorDAO.storeFileResults(hashId, sourceCodeLocation,
-		    codeRange, result);
+	public SLOCEvaluator() {
+		super(SLOCMetricCalculator.ID, SLOCMetricCalculator.NAME,
+				SLOCMetricCalculator.PLUGIN_VERSION,
+				SLOCMetricCalculator.DESCRIPTION);
 	}
-	logger.info("Finished file '"
-		+ sourceCodeLocation.getHumanReadableLocationString() + "'.");
-	return results;
-    }
 
-    @Override
-    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS;
-    }
+	@Override
+	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+		return SLOCMetricCalculator.PARAMETERS;
+	}
 
-    @Override
-    protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
-	    AnalysisFileTree directory) throws InterruptedException,
-	    EvaluationStoreException {
-	HashId hashId = directory.getHashId();
-	SLOCResult metricResults = null;
-	for (AnalysisFileTree child : directory.getChildren()) {
-	    if (child.isFile()) {
-		if (slocEvaluatorDAO.hasFileResults(child.getHashId())) {
-		    List<SLOCResult> results = slocEvaluatorDAO
-			    .readFileResults(child.getHashId());
-		    for (SLOCResult result : results) {
-			if (result.getCodeRangeType() == CodeRangeType.FILE) {
-			    metricResults = combine(directory, metricResults,
-				    result);
-			    break;
+	@Override
+	public Set<MetricParameter<?>> getParameters() {
+		return SLOCEvaluatorParameter.ALL;
+	}
+
+	@Override
+	protected FileMetrics processFile(AnalysisRun analysisRun,
+			CodeAnalysis analysis) throws InterruptedException,
+			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
+		AnalysisInformation analysisInformation = analysis
+				.getAnalysisInformation();
+		HashId hashId = analysisInformation.getHashId();
+		AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
+				.findByName(analysisInformation.getLanguageName(),
+						analysisInformation.getLanguageVersion());
+		ProgrammingLanguage language = analyzerServiceManager
+				.getInstance(analyzerServiceInformation.getJndiName());
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.findTreeNode(hashId).getSourceCodeLocation();
+		GenericFileMetrics results = new GenericFileMetrics(
+				SLOCMetricCalculator.ID, SLOCMetricCalculator.PLUGIN_VERSION,
+				hashId, sourceCodeLocation, analysis.getStartTime(),
+				SLOCEvaluatorParameter.ALL);
+		logger.info("Process file '"
+				+ sourceCodeLocation.getHumanReadableLocationString() + "'...");
+		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+			SLOCMetricCalculator metric = new SLOCMetricCalculator(analysisRun,
+					language, codeRange);
+			metric.run();
+
+			Map<String, MetricValue<?>> values = new HashMap<>();
+			for (MetricValue<?> result : metric.getSLOCResult().getResults()) {
+				values.put(result.getParameter().getName(), result);
 			}
-		    }
+
+			results.addCodeRangeMetrics(new GenericCodeRangeMetrics(
+					sourceCodeLocation, codeRange.getType(), codeRange
+							.getCanonicalName(), SLOCEvaluatorParameter.ALL,
+					values));
+
+			SLOCResult result = new SLOCResult(sourceCodeLocation,
+					codeRange.getType(), codeRange.getCanonicalName(),
+					metric.getSLOCResult());
+			slocEvaluatorDAO.storeFileResults(hashId, sourceCodeLocation,
+					codeRange, result);
 		}
-	    } else {
-		if (slocEvaluatorDAO.hasDirectoryResults(child.getHashId())) {
-		    SLOCResult slocResult = slocEvaluatorDAO
-			    .readDirectoryResults(child.getHashId());
-		    metricResults = combine(directory, metricResults,
-			    slocResult);
+		logger.info("Finished file '"
+				+ sourceCodeLocation.getHumanReadableLocationString() + "'.");
+		return results;
+	}
+
+	@Override
+	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS;
+	}
+
+	@Override
+	protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
+			AnalysisFileTree directory) throws InterruptedException,
+			EvaluationStoreException {
+		HashId hashId = directory.getHashId();
+		SLOCResult metricResults = null;
+		for (AnalysisFileTree child : directory.getChildren()) {
+			if (child.isFile()) {
+				if (slocEvaluatorDAO.hasFileResults(child.getHashId())) {
+					List<SLOCResult> results = slocEvaluatorDAO
+							.readFileResults(child.getHashId());
+					for (SLOCResult result : results) {
+						if (result.getCodeRangeType() == CodeRangeType.FILE) {
+							metricResults = combine(directory, metricResults,
+									result);
+							break;
+						}
+					}
+				}
+			} else {
+				if (slocEvaluatorDAO.hasDirectoryResults(child.getHashId())) {
+					SLOCResult slocResult = slocEvaluatorDAO
+							.readDirectoryResults(child.getHashId());
+					metricResults = combine(directory, metricResults,
+							slocResult);
+				}
+			}
 		}
-	    }
+		if (metricResults == null) {
+			return null;
+		}
+
+		slocEvaluatorDAO.storeDirectoryResults(hashId, metricResults);
+
+		Map<String, MetricValue<?>> metrics = SLOCResult
+				.toGenericMetrics(metricResults);
+		GenericDirectoryMetrics finalResults = new GenericDirectoryMetrics(
+				SLOCMetricCalculator.ID, SLOCMetricCalculator.PLUGIN_VERSION,
+				hashId, new Date(), SLOCEvaluatorParameter.ALL, metrics);
+		return finalResults;
 	}
-	if (metricResults == null) {
-	    return null;
+
+	private SLOCResult combine(AnalysisFileTree directory, SLOCResult results,
+			SLOCResult result) {
+		if (result != null) {
+			if (results == null) {
+				results = result;
+			} else {
+				results = SLOCResult.combine(results, result);
+			}
+		}
+		return results;
 	}
 
-	slocEvaluatorDAO.storeDirectoryResults(hashId, metricResults);
-
-	Map<String, MetricValue<?>> metrics = SLOCResult
-		.toGenericMetrics(metricResults);
-	GenericDirectoryMetrics finalResults = new GenericDirectoryMetrics(
-		SLOCMetricCalculator.ID, SLOCMetricCalculator.PLUGIN_VERSION,
-		hashId, new Date(), SLOCEvaluatorParameter.ALL, metrics);
-	return finalResults;
-    }
-
-    private SLOCResult combine(AnalysisFileTree directory, SLOCResult results,
-	    SLOCResult result) {
-	if (result != null) {
-	    if (results == null) {
-		results = result;
-	    } else {
-		results = SLOCResult.combine(results, result);
-	    }
+	@Override
+	protected DirectoryMetrics processProject(AnalysisRun analysisRun,
+			boolean enableReevaluation) throws InterruptedException,
+			EvaluationStoreException {
+		AnalysisFileTree directory = analysisRun.getFileTree();
+		return processDirectory(analysisRun, directory);
 	}
-	return results;
-    }
-
-    @Override
-    protected DirectoryMetrics processProject(AnalysisRun analysisRun,
-	    boolean enableReevaluation) throws InterruptedException,
-	    EvaluationStoreException {
-	AnalysisFileTree directory = analysisRun.getFileTree();
-	return processDirectory(analysisRun, directory);
-    }
 
 }
