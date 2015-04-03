@@ -18,6 +18,7 @@ div.sourceCode {
     border: 1pt gray solid;
     padding: 10pt;
     background-color: #ffffd0;
+    box-shadow: 5px 5px 5px #808080;
 }
 
 td.lineNumber {

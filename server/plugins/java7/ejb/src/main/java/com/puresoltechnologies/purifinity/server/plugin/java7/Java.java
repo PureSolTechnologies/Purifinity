@@ -16,7 +16,7 @@ import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
-import com.puresoltechnologies.purifinity.server.common.plugins.PluginActivatedParameter;
+import com.puresoltechnologies.purifinity.server.common.utils.BuildInformation;
 import com.puresoltechnologies.purifinity.server.plugin.java7.grammar.JavaGrammar;
 import com.puresoltechnologies.versioning.Version;
 
@@ -32,61 +32,58 @@ import com.puresoltechnologies.versioning.Version;
 @Remote(ProgrammingLanguageAnalyzer.class)
 public class Java extends AbstractProgrammingLanguageAnalyzer {
 
-    public static final String ID = Java.class.getName();
-    public static final String NAME = "Java";
-    public static final String VERSION = "7";
-    public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
+	public static final String ID = Java.class.getName();
+	public static final String NAME = "Java";
+	public static final String VERSION = "7";
+	public static final Version PLUGIN_VERSION = BuildInformation.getVersion();
 
-    public static final String[] FILE_SUFFIXES = { ".java" };
+	public static final String[] FILE_SUFFIXES = { ".java" };
 
-    public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
-    static {
-	PARAMETERS.add(new PluginActivatedParameter());
-    }
+	public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
 
-    public Java() {
-	super(NAME, VERSION);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected String[] getValidFileSuffixes() {
-	return FILE_SUFFIXES;
-    }
-
-    @Override
-    public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return PARAMETERS;
-    }
-
-    @Override
-    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-	try {
-	    ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
-		    file));
-	    try {
-		return (CodeAnalyzer) ois.readObject();
-	    } finally {
-		ois.close();
-	    }
-	} catch (ClassNotFoundException e) {
-	    /*
-	     * XXX This needs to be null to go on with the language try out...
-	     * :-(
-	     */
-	    return null;
+	public Java() {
+		super(NAME, VERSION);
 	}
-    }
 
-    @Override
-    public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
-	return new JavaAnalyzer(sourceCodeLocation);
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected String[] getValidFileSuffixes() {
+		return FILE_SUFFIXES;
+	}
 
-    @Override
-    public LanguageGrammar getGrammar() {
-	return JavaGrammar.getInstance();
-    }
+	@Override
+	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+		return PARAMETERS;
+	}
+
+	@Override
+	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+		try {
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
+					file));
+			try {
+				return (CodeAnalyzer) ois.readObject();
+			} finally {
+				ois.close();
+			}
+		} catch (ClassNotFoundException e) {
+			/*
+			 * XXX This needs to be null to go on with the language try out...
+			 * :-(
+			 */
+			return null;
+		}
+	}
+
+	@Override
+	public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
+		return new JavaAnalyzer(sourceCodeLocation);
+	}
+
+	@Override
+	public LanguageGrammar getGrammar() {
+		return JavaGrammar.getInstance();
+	}
 }

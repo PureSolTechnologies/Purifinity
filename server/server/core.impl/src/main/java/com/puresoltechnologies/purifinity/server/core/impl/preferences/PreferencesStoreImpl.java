@@ -44,10 +44,8 @@ public class PreferencesStoreImpl implements PreferencesStore {
 		if (result == null) {
 			return null;
 		}
-		PreferencesValue value = new PreferencesValue(result.getDate(0),
-				result.getString(1), group, name, result.getString(2));
-		logger.info("Read preference: " + value.toString());
-		return value;
+		return new PreferencesValue(result.getDate(0), result.getString(1),
+				group, name, result.getString(2));
 	}
 
 	@Override
@@ -107,7 +105,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	}
 
 	@Override
-	public boolean isActive(String serviceId) {
+	public boolean isServiceActive(String serviceId) {
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(session, "SELECT active FROM "
 						+ CassandraElementNames.SERVICE_ACTIVATION_TABLE

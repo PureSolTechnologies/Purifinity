@@ -64,8 +64,7 @@
   fileApp.config(function($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(false);
   $routeProvider.when("/summary/:hashId", {templateUrl: "views/file/summary.html"});
-  $routeProvider.when("/analysis/:hashId", {redirectTo: "summary/:hashId"});
-  $routeProvider.when("/analysis/:hashId/:analyzerId", {templateUrl: "views/file/analysis.html"});
+  $routeProvider.when("/analysis/:hashId", {templateUrl: "views/file/analysis.html"});
   $routeProvider.otherwise({redirectTo: function() {window.location = "/";}});
   });
 </script>

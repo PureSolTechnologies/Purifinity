@@ -140,7 +140,7 @@ public class EvaluatorServiceManagerImpl extends
 	if (active != null) {
 	    return active;
 	}
-	active = preferencesStore.isActive(evaluatorId);
+	active = preferencesStore.isServiceActive(evaluatorId);
 	analyzerActivations.put(evaluatorId, active);
 	return active;
     }

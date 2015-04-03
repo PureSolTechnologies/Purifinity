@@ -12,26 +12,25 @@ import com.puresoltechnologies.versioning.Version;
 
 public class BuildInformationTest {
 
-    @Test
-    public void testInceptionYear() {
-	String year = BuildInformation.getInceptionYear();
-	assertNotNull(year);
-	assertEquals("2009", year);
-    }
+	@Test
+	public void testInceptionYear() {
+		String year = BuildInformation.getInceptionYear();
+		assertNotNull(year);
+		assertEquals("2009", year);
+	}
 
-    @Test
-    public void testBuildYear() {
-	String year = BuildInformation.getBuildYear();
-	assertNotNull(year);
-	String currentYear = new SimpleDateFormat("yyyy").format(new Date());
-	assertEquals(currentYear, year);
-    }
+	@Test
+	public void testBuildYear() {
+		String year = BuildInformation.getBuildYear();
+		assertNotNull(year);
+		String currentYear = new SimpleDateFormat("yyyy").format(new Date());
+		assertEquals(currentYear, year);
+	}
 
-    @Test
-    public void testVersion() {
-	String version = BuildInformation.getVersion();
-	assertNotNull(version);
-	Version.valueOf(version);
-    }
+	@Test
+	public void testVersion() {
+		Version version = BuildInformation.getVersion();
+		assertNotNull(version);
+	}
 
 }

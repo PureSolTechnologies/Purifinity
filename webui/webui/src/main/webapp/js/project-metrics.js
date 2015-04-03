@@ -1,8 +1,10 @@
-var projectMetricsModule = angular.module("projectMetricsModule", ["projectManagerModule", "pluginManagerModule", "purifinityServer"]);
+var projectMetricsModule = angular.module("projectMetricsModule", [
+    "projectManagerModule", "pluginManagerModule", "purifinityServer", "purifinityUI"
+]);
 projectMetricsModule.controller("fileSystemMetrics", fileSystemMetrics);
 projectMetricsModule.controller("treeMapCtrl", treeMapCtrl);
 
-function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServerConnector) {
+function fileSystemMetrics($scope, $routeParams, $filter, projectManager, purifinityServerConnector) {
     $scope.selectedEvaluator = undefined;
     $scope.selection = {
 	codeRangeType: undefined,
@@ -59,7 +61,7 @@ function fileSystemMetrics($scope, $routeParams, projectManager, purifinityServe
 		$scope.codeRangeTypes.sort();
 		$scope.selectedCodeRangeType = [];
 		$scope.metrics = data;
-		applyMetricsToFileTree($scope.metricsTreeTable, $scope.metrics, $scope.metrics.parameters);
+		applyMetricsToFileTree($scope.metricsTreeTable, $scope.metrics, $scope.metrics.parameters, $filter);
 		$scope.metricsTreeTable.columnHeaders = [ {name: "Name", tooltip: "Name of file or folder"} ];
 		$scope.metrics.parameters.forEach(function(parameter) {
 		    var name = parameter.name;
@@ -157,48 +159,49 @@ function convertFileTreeForMetrics(fileTree) {
 	return treeTableData;
 }
 
-function applyMetricsToFileTree(treeTableData, runMetrics, parameters) {
-	var found = false;
-	treeTableData.columns = [];
-	if (treeTableData.children && (treeTableData.children.length > 0)) {
-		var directoryMetrics = runMetrics.directoryMetrics[treeTableData.id];
-		if (directoryMetrics) {
-			found = true;
-			parameters.forEach(function(parameter){
-				var value = directoryMetrics.values[parameter.name];
-				if (value) {
-					treeTableData.columns.push({content:value.value});
-				} else {
-					treeTableData.columns.push({content:"n/a"});
-				}
-			});			
+function applyMetricsToFileTree(treeTableData, runMetrics, parameters, filter) {
+    var valueFilter = filter('metricValue');
+    var found = false;
+    treeTableData.columns = [];
+    if (treeTableData.children && (treeTableData.children.length > 0)) {
+	var directoryMetrics = runMetrics.directoryMetrics[treeTableData.id];
+	if (directoryMetrics) {
+	    found = true;
+	    parameters.forEach(function(parameter){
+		var value = directoryMetrics.values[parameter.name];
+		if (value) {
+		    treeTableData.columns.push({content: valueFilter(value.value)});
+		} else {
+		    treeTableData.columns.push({content:"n/a"});
 		}
-		treeTableData.children.forEach(function(child) {
-			applyMetricsToFileTree(child, runMetrics, parameters);
-		});
-	} else {
-		var fileMetrics = runMetrics.fileMetrics[treeTableData.id];
-		if (fileMetrics) {
-			fileMetrics.codeRangeMetrics.forEach(function(metric) {
-				if (metric.codeRangeType == "FILE") {
-					found = true;
-					parameters.forEach(function(parameter){
-						var value = metric.values[parameter.name];
-						if (value) {
-							treeTableData.columns.push({content:value.value});
-						} else {
-							treeTableData.columns.push({content:"n/a"});
-						}
-					});
-				}
-			});
+	    });			
+	}
+	treeTableData.children.forEach(function(child) {
+	    applyMetricsToFileTree(child, runMetrics, parameters, filter);
+	});
+    } else {
+	var fileMetrics = runMetrics.fileMetrics[treeTableData.id];
+	if (fileMetrics) {
+	    fileMetrics.codeRangeMetrics.forEach(function(metric) {
+		if (metric.codeRangeType == "FILE") {
+		    found = true;
+		    parameters.forEach(function(parameter){
+			var value = metric.values[parameter.name];
+			if (value) {
+			    treeTableData.columns.push({content:valueFilter(value.value)});
+			} else {
+			    treeTableData.columns.push({content:"n/a"});
+			}
+		    });
 		}
+	    });
 	}
-	if (!found) {
-		parameters.forEach(function(parameter){
-			treeTableData.columns.push({content:""});
-		});
-	}
+    }
+    if (!found) {
+	parameters.forEach(function(parameter){
+	    treeTableData.columns.push({content:""});
+	});
+    }
 }
 
 function strcmp(s1, s2) {

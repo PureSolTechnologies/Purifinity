@@ -1,3 +1,15 @@
 <div class="container" data-ng-controller="fileAnalysisCtrl">
-  <tree-table data-ng-model="analysisFileTree"></tree-table>
+  <select 
+     id="analyzerSelectorForFile" 
+     title="Analyzer Selector"
+     class="selectpicker show-tick form-control"	
+     data-ng-model="analyzerSelection">
+    <option value="">Select an Analysis</option>
+    <option 
+       data-ng-repeat="analysis in analyses" 
+       value="{{analysis.analysisInformation.analyzerId}}{{analysis.analysisInformation.analyzerVersion | version}}">
+      {{analysis.analysisInformation.languageName}} {{analysis.analysisInformation.languageVersion}}
+    </option>
+  </select>
+  <ust-view data-ng-model="selectedUST"></ust-view>
 </div>

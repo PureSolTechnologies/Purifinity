@@ -10,6 +10,7 @@
 var purifinityUI = angular.module("purifinityUI", ['ngSanitize']);
 purifinityUI.controller("menuCtrl", menuCtrl);
 purifinityUI.filter("defaultDate", defaultDateFilter);
+purifinityUI.filter("metricValue", metricValueFilter);
 purifinityUI.filter("version", versionFilter);
 purifinityUI.filter("successfulMark", successfulMarkFilter);
 
@@ -44,6 +45,16 @@ function menuCtrl($scope, $route, $routeParams, $location) {
 function defaultDateFilter($filter) {
     return function (value) {
 	return $filter('date')(value, 'yyyy-MM-dd HH:mm:ss');
+    }
+}
+
+function metricValueFilter($filter) {
+    return function (value) {
+	if (value === parseInt(value, 10)) {
+	    return value;
+	} else {
+	    return $filter('number')(value, 2);
+	}
     }
 }
 

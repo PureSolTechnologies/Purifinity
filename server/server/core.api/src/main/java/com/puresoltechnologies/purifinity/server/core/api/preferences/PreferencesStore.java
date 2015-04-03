@@ -81,7 +81,7 @@ public interface PreferencesStore {
      *         activated. <code>false</code> is returned otherwise if the
      *         service is unknown or deactivated.
      */
-    public boolean isActive(String serviceId);
+    public boolean isServiceActive(String serviceId);
 
     /**
      * This method sets the activation state of a service. This setting is

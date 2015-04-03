@@ -50,27 +50,27 @@ function pluginManager(purifinityServerConnector) {
 }
 
 function pluginSettingsCtrl($scope, pluginManager) {
-	$scope.analyzers = {};
-	$scope.evaluators = {};
-	$scope.repositories = {};
-	pluginManager.getAnalyzers(
-		function(data, status) {
-			$scope.analyzers = data;
-		}, 
-		function(data, status, error) {}
-	);
-	pluginManager.getEvaluators(
-		function(data, status) {
-			$scope.evaluators = data;
-		}, 
-		function(data, status, error) {}
-	);
-	pluginManager.getRepositoryTypes(
-		function(data, status) {
-			$scope.repositories = data;
-		}, 
-		function(data, status, error) {}
-	);
+    $scope.analyzers = {};
+    $scope.evaluators = {};
+    $scope.repositories = {};
+    pluginManager.getAnalyzers(
+	function(data, status) {
+	    $scope.analyzers = data;
+	}, 
+	function(data, status, error) {}
+    );
+    pluginManager.getEvaluators(
+	function(data, status) {
+	    $scope.evaluators = data;
+	}, 
+	function(data, status, error) {}
+    );
+    pluginManager.getRepositoryTypes(
+	function(data, status) {
+	    $scope.repositories = data;
+	}, 
+	function(data, status, error) {}
+    );
 }
 
 function pluginActivationCtrl($scope, pluginManager) {

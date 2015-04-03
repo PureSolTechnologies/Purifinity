@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap-theme.min.css" />
 <link rel="stylesheet" href="lib/bootstrap-select/css/bootstrap-select.min.css" />
+<link rel="stylesheet" href="lib/angular-ui-tree/angular-ui-tree.min.css" />
 <link rel="stylesheet" href="css/application.css" />
 <link rel="stylesheet" href="css/angular-ui.css" />
 <link rel="stylesheet" href="css/opensans.css" />
@@ -28,6 +29,7 @@
 <script type="text/javascript" src="lib/angular/angular-route.js"></script>
 <script type="text/javascript" src="lib/angular/angular-sanitize.js"></script>
 <script type="text/javascript" src="lib/angular-ui/ui-bootstrap-tpls-0.12.1.min.js"></script>
+<script type="text/javascript" src="lib/angular-ui-tree/angular-ui-tree.min.js"></script>
 
 <!-- Custom JS scripts -->
 <script type="text/javascript" src="config/server.js"></script>
@@ -39,87 +41,91 @@
 <script type="text/javascript" src="js/project-manager.js"></script>
 <script type="text/javascript" src="js/alerter.js"></script>
 <script type="text/javascript">
-	var adminApp = angular.module("purifinityAdminApp", [
-		"ngRoute",
-		"ui.bootstrap",
-		"purifinityUI",
-		"purifinityServer",
-		"accountManagerModule",
-		"pluginManagerModule",
-		"projectManagerModule",
-		"alerter"
-	]);
-	adminApp.config(function ($routeProvider, $locationProvider) {
-		$locationProvider.html5Mode(false);
-		$routeProvider.when("/login", {templateUrl:"views/login.html"});
-		$routeProvider.when("/dashboards", {templateUrl:"views/admin/dashboards.html"});
-		$routeProvider.when("/projects", {templateUrl:"views/admin/projects.html"});
-		$routeProvider.when("/settings", {templateUrl:"views/admin/settings.html"});
-		$routeProvider.when("/users", {templateUrl:"views/admin/users.html", controller: "usersViewCtrl"});
-		$routeProvider.otherwise({redirectTo:"/dashboards"});
-	});
+  var adminApp = angular.module("purifinityAdminApp", [
+  "ngRoute",
+  "ui.bootstrap",
+  "ui.tree",
+  "purifinityUI",
+  "purifinityServer",
+  "accountManagerModule",
+  "pluginManagerModule",
+  "projectManagerModule",
+  "alerter"
+  ]);
+  adminApp.config(function ($routeProvider, $locationProvider) {
+  $locationProvider.html5Mode(false);
+  $routeProvider.when("/login", {templateUrl:"views/login.html"});
+  $routeProvider.when("/dashboards", {templateUrl:"views/admin/dashboards.html"});
+  $routeProvider.when("/projects", {templateUrl:"views/admin/projects.html"});
+  $routeProvider.when("/settings", {templateUrl:"views/admin/settings.html"});
+  $routeProvider.when("/users", {templateUrl:"views/admin/users.html", controller: "usersViewCtrl"});
+  $routeProvider.otherwise({redirectTo:"/dashboards"});
+  });
 </script>
 </head>
 <body>
-	<div class="navbar navbar-default" role="navigation">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed"
-				data-toggle="collapse" data-target=".navbar-collapse">
-				<span class="sr-only">Toggle navigation</span> <span
-					class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-			<span class="navbar-brand"><a href="."><img src="images/logos/logo2.png" width="100" title="Purifinity" /></a> Administration</span>
-		</div>
-		<div class="collapse navbar-collapse">
-			<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
-				<li class="{{isActive('/dashboards')}}"><a href="#/dashboards">Dashboards</a></li>
-				<li class="{{isActive('/projects')}}"><a href="#/projects">Projects</a></li>
-				<li class="{{isActive('/settings')}}"><a href="#/settings">Settings</a></li>
-				<li class="{{isActive('/users')}}"><a href="#/users">Users</a></li>
-				<li class="{{isActive('/help')}}"><a href="./#/help">Help</a></li>
-			</ul>
-			<div class="navbar-right">
-				<ul class="nav navbar-nav" data-ng-controller="loginCtrl">
-					<li data-ng-show="isLoggedIn()">
-						<a href="./#/account"><span class="glyphicon glyphicon-user"></span>&nbsp;Account</a>
-					</li>
-					<li data-ng-hide="isLoggedIn()">
-						<a href="#/login"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a>
-					</li>
-					<li data-ng-show="isLoggedIn()">
-						<a class="btn btn-link" data-ng-click="logout()">
-							<span class="glyphicon glyphicon-off"></span>&nbsp;Logout
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-
-	<div class="row" data-ng-controller="alerterCtrl" data-ng-show="hasAlerts()">
-		<div
-			class="col-lg-1 col-lg-offset-4 col-md-2 col-md-offset-2 col-sm-4">
-			<button class="btn btn-default" data-ng-click="clearAlerts()">Clear
-				All</button>
-		</div>
-		<div class="col-lg-3 col-md-6 col-sm-8">
-			<alert data-ng-repeat="alert in alerts" type="{{alert.type}}"
-				close="closeAlert($index)" data-ng-cloak>{{alert.message}}</alert>
-		</div>
-	</div>
-
-	<span data-ng-view></span>
-
-	<span data-ng-include="'components/footer.html'"></span>
-
-	<!-- Bootstrap core JavaScript
-    ================================================== -->
-	<!-- Placed at the end of the document so the pages load faster -->
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="lib/jquery/jquery-2.1.1.min.js"></script>
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="lib/bootstrap/js/bootstrap.min.js"></script>
-	<script src="lib/bootstrap-select/js/bootstrap-select.min.js"></script>
+  <div class="navbar navbar-default" role="navigation">
+    <div class="navbar-header">
+      <button type="button" 
+	      class="navbar-toggle collapsed"
+	      data-toggle="collapse" 
+	      data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span> 
+	<span class="icon-bar"></span>
+	<span class="icon-bar"></span> 
+	<span class="icon-bar"></span>
+      </button>
+      <span class="navbar-brand"><a href="."><img src="images/logos/logo2.png" width="100" title="Purifinity" /></a> Administration</span>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav" data-ng-controller="menuCtrl">
+	<li class="{{isActive('/dashboards')}}"><a href="#/dashboards">Dashboards</a></li>
+	<li class="{{isActive('/projects')}}"><a href="#/projects">Projects</a></li>
+	<li class="{{isActive('/settings')}}"><a href="#/settings">Settings</a></li>
+	<li class="{{isActive('/users')}}"><a href="#/users">Users</a></li>
+	<li class="{{isActive('/help')}}"><a href="./#/help">Help</a></li>
+      </ul>
+      <div class="navbar-right">
+	<ul class="nav navbar-nav" data-ng-controller="loginCtrl">
+	  <li data-ng-show="isLoggedIn()">
+	    <a href="./#/account"><span class="glyphicon glyphicon-user"></span>&nbsp;Account</a>
+	  </li>
+	  <li data-ng-hide="isLoggedIn()">
+	    <a href="#/login"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a>
+	  </li>
+	  <li data-ng-show="isLoggedIn()">
+	    <a class="btn btn-link" data-ng-click="logout()">
+	      <span class="glyphicon glyphicon-off"></span>&nbsp;Logout
+	    </a>
+	  </li>
+	</ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row" data-ng-controller="alerterCtrl" data-ng-show="hasAlerts()">
+    <div
+       class="col-lg-1 col-lg-offset-4 col-md-2 col-md-offset-2 col-sm-4">
+      <button class="btn btn-default" data-ng-click="clearAlerts()">Clear
+	All</button>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-8">
+      <alert data-ng-repeat="alert in alerts" type="{{alert.type}}"
+	     close="closeAlert($index)" data-ng-cloak>{{alert.message}}</alert>
+    </div>
+  </div>
+  
+  <span data-ng-view></span>
+  
+  <span data-ng-include="'components/footer.html'"></span>
+  
+  <!-- Bootstrap core JavaScript
+       ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="lib/jquery/jquery-2.1.1.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+  <script src="lib/bootstrap-select/js/bootstrap-select.min.js"></script>
 </body>
 </html>

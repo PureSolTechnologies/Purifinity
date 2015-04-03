@@ -66,7 +66,7 @@ public class AnalyzerServiceManagerImpl extends
 	if (active != null) {
 	    return active;
 	}
-	active = preferencesStore.isActive(analyzerId);
+	active = preferencesStore.isServiceActive(analyzerId);
 	analyzerActivations.put(analyzerId, active);
 	return active;
     }

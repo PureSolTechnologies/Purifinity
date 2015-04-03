@@ -24,7 +24,7 @@
 	      <tbody>
 		<tr data-ng-repeat="parameter in metrics.parameters">
 		  <td>{{parameter.name}}</td>
-		  <td>{{metrics.directoryMetrics[fileTree.hashId.algorithmName+":"+fileTree.hashId.hash].values[parameter.name].value}}</td>
+		  <td>{{metrics.directoryMetrics[fileTree.hashId.algorithmName+":"+fileTree.hashId.hash].values[parameter.name].value | metricValue}}</td>
 		  <td>{{parameter.unit}}</td>
 		  <td>{{parameter.description}}</td>
 		</tr>
