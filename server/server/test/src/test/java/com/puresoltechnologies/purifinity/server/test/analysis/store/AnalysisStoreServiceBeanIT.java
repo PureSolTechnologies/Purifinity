@@ -20,7 +20,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInforma
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.DirectoryRepositoryLocation;
+import com.puresoltechnologies.purifinity.server.plugin.filesystem.DirectoryRepository;
 
 public class AnalysisStoreServiceBeanIT extends
 	AbstractAnalysisStoreServiceServerTest {
@@ -37,7 +37,7 @@ public class AnalysisStoreServiceBeanIT extends
     }
 
     private AnalysisProjectSettings createProjectSettings() {
-	DirectoryRepositoryLocation directoryRepositoryLocation = new DirectoryRepositoryLocation(
+	DirectoryRepository directoryRepositoryLocation = new DirectoryRepository(
 		"Test", new File("."));
 	FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
 		new ArrayList<String>(), new ArrayList<String>(),

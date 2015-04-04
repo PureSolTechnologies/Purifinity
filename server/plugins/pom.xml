@@ -8,11 +8,13 @@
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
+	<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 	<artifactId>plugins</artifactId>
-	<name>Purifinity Server: ${project.artifactId}</name>
+	<name>Purifinity Plugins: ${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>repository</module>
 		<module>java7</module>
 		<module>fortran2008</module>
 		<module>c11</module>

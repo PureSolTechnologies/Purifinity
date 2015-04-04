@@ -375,18 +375,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>c11.ejb</artifactId>
-				<version>${project.version}</version>
-				<type>ejb</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>c11.plugin</artifactId>
-				<version>${project.version}</version>
-				<type>ear</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>common.jms</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -419,18 +407,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>cpp11.ejb</artifactId>
-				<version>${project.version}</version>
-				<type>ejb</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>cpp11.plugin</artifactId>
-				<version>${project.version}</version>
-				<type>ear</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>database.cassandra</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -441,48 +417,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>fortran2008.ejb</artifactId>
-				<version>${project.version}</version>
-				<type>ejb</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>fortran2008.plugin</artifactId>
-				<version>${project.version}</version>
-				<type>ear</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>java7.ejb</artifactId>
-				<version>${project.version}</version>
-				<type>ejb</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>java7.plugin</artifactId>
-				<version>${project.version}</version>
-				<type>ear</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>logger</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>metrics.ddl</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>metrics.ejb</artifactId>
-				<type>ejb</type>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>metrics.plugin</artifactId>
-				<type>ear</type>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -642,6 +577,108 @@
 				<artifactId>wildfly.utils</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<!-- Plugins -->
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>c11.ejb</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>c11.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>cpp11.ejb</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>cpp11.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>fortran2008.ejb</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>fortran2008.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>java7.ejb</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>java7.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>metrics.ddl</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>metrics.ejb</artifactId>
+				<type>ejb</type>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>metrics.plugin</artifactId>
+				<type>ear</type>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>repository.directory.ejb</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>repository.directory.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>repository.git.ejb</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>repository.git.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>repository.subversion.ejb</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>repository.subversion.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
 			<!-- PureSol Technologies -->
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
@@ -676,6 +713,11 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.api</groupId>
 				<artifactId>evaluation.spi</artifactId>
+				<version>${purifinity.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>repository.spi</artifactId>
 				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>

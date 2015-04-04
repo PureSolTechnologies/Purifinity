@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresoltechnologies.purifinity.server</groupId>
+		<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 		<artifactId>metrics</artifactId>
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>metrics.ddl</artifactId>
-	<name>Purifinity Server: ${project.artifactId}</name>
+	<name>Purifinity Plugins: ${project.artifactId}</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

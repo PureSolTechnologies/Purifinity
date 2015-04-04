@@ -17,7 +17,7 @@
 			<artifactId>accountmanager.ddl</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 			<artifactId>metrics.ddl</artifactId>
 		</dependency>
 		<dependency>

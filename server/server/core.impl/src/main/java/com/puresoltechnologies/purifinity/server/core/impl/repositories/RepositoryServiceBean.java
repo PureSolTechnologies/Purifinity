@@ -8,8 +8,8 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryService;
-import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManager;
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
+import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManager;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryServiceInformation;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
 @Stateless
@@ -19,7 +19,7 @@ public class RepositoryServiceBean implements RepositoryService {
     private EventLoggerRemote eventLogger;
 
     @Inject
-    private RepositoryTypeServiceManager repositoryTypePluginService;
+    private RepositoryServiceManager repositoryTypePluginService;
 
     @PostConstruct
     public void initialize() {
@@ -32,14 +32,14 @@ public class RepositoryServiceBean implements RepositoryService {
     }
 
     @Override
-    public Collection<RepositoryTypeServiceInformation> getRepositoryTypes() {
+    public Collection<RepositoryServiceInformation> getRepositoryTypes() {
 	return repositoryTypePluginService.getServices();
     }
 
     @Override
-    public RepositoryTypeServiceInformation getRepositoryType(
+    public RepositoryServiceInformation getRepositoryType(
 	    String repositoryTypeId) {
-	for (RepositoryTypeServiceInformation information : repositoryTypePluginService
+	for (RepositoryServiceInformation information : repositoryTypePluginService
 		.getServices()) {
 	    if (information.getId().equals(repositoryTypeId)) {
 		return information;

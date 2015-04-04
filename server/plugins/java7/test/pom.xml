@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.puresoltechnologies.purifinity.server</groupId>
+		<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 		<artifactId>java7</artifactId>
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>java7.test</artifactId>
-	<name>Purifinity Server: ${project.artifactId}</name>
+	<name>Purifinity Plugins: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>
@@ -17,7 +17,7 @@
 			<artifactId>common.test</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 			<artifactId>metrics.ejb</artifactId>
 			<type>ejb</type>
 		</dependency>
@@ -31,7 +31,7 @@
 			<artifactId>server.test</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 			<artifactId>java7.plugin</artifactId>
 			<type>ear</type>
 		</dependency>

@@ -24,8 +24,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSetting
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.DirectoryRepositoryLocation;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.RepositoryLocationCreator;
+import com.puresoltechnologies.purifinity.server.plugin.filesystem.DirectoryRepository;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
 public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
@@ -41,7 +41,7 @@ public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 
     @Test
     public void testCreateAnalysisProject() throws AnalysisStoreException {
-	RepositoryLocation location = new DirectoryRepositoryLocation(
+	RepositoryLocation location = new DirectoryRepository(
 		"DirRepo", new File("/home/ludwig"));
 	FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
 		new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
@@ -63,7 +63,7 @@ public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
     @Test
     public void testCreateAndReadAnalysisProjectInformation()
 	    throws AnalysisStoreException {
-	RepositoryLocation location = new DirectoryRepositoryLocation(
+	RepositoryLocation location = new DirectoryRepository(
 		"DirRepo", new File("/home/ludwig"));
 	FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
 		new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
@@ -88,7 +88,7 @@ public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 	FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
 		new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
 			"*.java", "*.xml"), Arrays.asList("*.bak"), true);
-	RepositoryLocation repositoryLocation = new DirectoryRepositoryLocation(
+	RepositoryLocation repositoryLocation = new DirectoryRepository(
 		"DirRepo", new File("/home/ludwig"));
 	AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
 		"Description", fileSearchConfiguration,
@@ -118,7 +118,7 @@ public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 	FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
 		new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
 			"*.java", "*.xml"), Arrays.asList("*.bak"), true);
-	RepositoryLocation location = new DirectoryRepositoryLocation(
+	RepositoryLocation location = new DirectoryRepository(
 		"DirRepo", new File("/home/ludwig"));
 	AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
 		"Description", fileSearchConfiguration,
@@ -132,7 +132,7 @@ public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 	FileSearchConfiguration fileSearchConfiguration2 = new FileSearchConfiguration(
 		new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
 			"*.java2", "*.xml2"), Arrays.asList("*.bak2"), true);
-	RepositoryLocation location2 = new DirectoryRepositoryLocation(
+	RepositoryLocation location2 = new DirectoryRepository(
 		"DirRepo", new File("/home/ludwig2"));
 	AnalysisProjectSettings settings2 = new AnalysisProjectSettings(
 		"Name2", "Description2", fileSearchConfiguration2,
@@ -157,7 +157,7 @@ public class AnalysisStoreIT extends AbstractAnalysisStoreServiceServerTest {
 	FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(
 		new ArrayList<String>(), Arrays.asList(".*"), Arrays.asList(
 			"*.java", "*.xml"), Arrays.asList("*.bak"), true);
-	RepositoryLocation location = new DirectoryRepositoryLocation(
+	RepositoryLocation location = new DirectoryRepository(
 		"DirRepo", new File("/home/ludwig"));
 	AnalysisProjectSettings settings = new AnalysisProjectSettings("Name",
 		"Description", fileSearchConfiguration,

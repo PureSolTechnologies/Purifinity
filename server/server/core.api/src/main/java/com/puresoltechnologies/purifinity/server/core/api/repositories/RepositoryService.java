@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.core.api.repositories;
 
 import java.util.Collection;
 
-import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryTypeServiceInformation;
+import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryServiceInformation;
 
 /**
  * This is the interface for analysis service. This service provides information
@@ -12,9 +12,9 @@ import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryT
  */
 public interface RepositoryService {
 
-    public Collection<RepositoryTypeServiceInformation> getRepositoryTypes();
+    public Collection<RepositoryServiceInformation> getRepositoryTypes();
 
-    public RepositoryTypeServiceInformation getRepositoryType(
+    public RepositoryServiceInformation getRepositoryType(
 	    String repositoryTypeId);
 
 }

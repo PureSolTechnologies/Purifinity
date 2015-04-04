@@ -4,13 +4,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginInformation;
+import com.puresoltechnologies.purifinity.server.common.utils.BuildInformation;
 import com.puresoltechnologies.versioning.Version;
 
 public class C11Plugin {
 
 	private static final String ID = C11Plugin.class.getName();
 	private static final String NAME = "C11 Plugin";
-	private static final Version VERSION = new Version(0, 3, 0);
+	private static final Version VERSION = BuildInformation.getVersion();
 	private static final String DESCRIPTION = "Contains the analyzer for C 11.";
 	private static final String VENDOR = "PureSol Technologies";
 	private static final URL VENDOR_URL;

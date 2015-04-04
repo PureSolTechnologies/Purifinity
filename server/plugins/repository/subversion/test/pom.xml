@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+		<artifactId>repository.subversion</artifactId>
+		<version>0.3.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>repository.subversion.test</artifactId>
+	<name>Purifinity Plugins: ${project.artifactId}</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>server.app</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+			<artifactId>repository.subversion.plugin</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>wildfly.test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven2-plugin</artifactId>
+				<configuration>
+					<deployables>
+						<deployable>
+							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<artifactId>server.app</artifactId>
+							<type>ear</type>
+							<properties>
+								<name>server.app.ear</name>
+							</properties>
+						</deployable>
+					</deployables>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

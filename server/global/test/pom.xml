@@ -14,27 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>c11.plugin</artifactId>
-			<type>ear</type>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>database.cassandra</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>fortran2008.plugin</artifactId>
-			<type>ear</type>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>java7.plugin</artifactId>
-			<type>ear</type>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>metrics.plugin</artifactId>
-			<type>ear</type>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -60,6 +40,41 @@
 			<artifactId>wildfly.test</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+			<artifactId>c11.plugin</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+			<artifactId>fortran2008.plugin</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+			<artifactId>java7.plugin</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+			<artifactId>metrics.plugin</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+			<artifactId>repository.directory.plugin</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+			<artifactId>repository.git.plugin</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+			<artifactId>repository.subversion.plugin</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 		</dependency>
@@ -77,7 +92,7 @@
 				<configuration>
 					<deployables>
 						<deployable>
-							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 							<artifactId>c11.plugin</artifactId>
 							<type>ear</type>
 							<properties>
@@ -85,7 +100,7 @@
 							</properties>
 						</deployable>
 						<deployable>
-							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 							<artifactId>fortran2008.plugin</artifactId>
 							<type>ear</type>
 							<properties>
@@ -93,7 +108,7 @@
 							</properties>
 						</deployable>
 						<deployable>
-							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 							<artifactId>java7.plugin</artifactId>
 							<type>ear</type>
 							<properties>
@@ -101,7 +116,7 @@
 							</properties>
 						</deployable>
 						<deployable>
-							<groupId>com.puresoltechnologies.purifinity.server</groupId>
+							<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 							<artifactId>metrics.plugin</artifactId>
 							<type>ear</type>
 							<properties>
@@ -130,6 +145,30 @@
 							<type>ear</type>
 							<properties>
 								<name>systemmonitor.app.ear</name>
+							</properties>
+						</deployable>
+						<deployable>
+							<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+							<artifactId>repository.directory.plugin</artifactId>
+							<type>ear</type>
+							<properties>
+								<name>respository.directory.plugin.ear</name>
+							</properties>
+						</deployable>
+						<deployable>
+							<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+							<artifactId>repository.git.plugin</artifactId>
+							<type>ear</type>
+							<properties>
+								<name>respository.git.plugin.ear</name>
+							</properties>
+						</deployable>
+						<deployable>
+							<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+							<artifactId>repository.subversion.plugin</artifactId>
+							<type>ear</type>
+							<properties>
+								<name>respository.subversion.plugin.ear</name>
 							</properties>
 						</deployable>
 					</deployables>

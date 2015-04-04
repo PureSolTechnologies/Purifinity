@@ -4,13 +4,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginInformation;
+import com.puresoltechnologies.purifinity.server.common.utils.BuildInformation;
 import com.puresoltechnologies.versioning.Version;
 
 public class FortranPlugin {
 
 	private static final String ID = FortranPlugin.class.getName();
 	private static final String NAME = "Fortran 2008 Plugin";
-	private static final Version VERSION = new Version(0, 3, 0);
+	private static final Version VERSION = BuildInformation.getVersion();
 	private static final String DESCRIPTION = "Contains the analyzer for Fortran 2008.";
 	private static final String VENDOR = "PureSol Technologies";
 	private static final URL VENDOR_URL;

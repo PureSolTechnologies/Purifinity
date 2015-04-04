@@ -19,7 +19,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.states.Analys
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStatusInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessTransition;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
-import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryTypeServiceManager;
+import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManager;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.queues.ProjectAnalysisStartQueue;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
@@ -43,7 +43,7 @@ public class AnalysisServiceBean implements AnalysisService {
     private EvaluatorServiceManager evaluatorRegistration;
 
     @Inject
-    private RepositoryTypeServiceManager repositoryTypePluginService;
+    private RepositoryServiceManager repositoryTypePluginService;
 
     @Inject
     private AnalysisProcessStateTracker processTracker;

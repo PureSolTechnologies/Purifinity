@@ -484,6 +484,7 @@
 		<module>math</module>
 		<module>math.bundle</module>
 		<module>ust</module>
+		<module>repository.spi</module>
 		<module>analysis.domain</module>
 		<module>analysis.domain.bundle</module>
 		<module>analysis.api</module>
