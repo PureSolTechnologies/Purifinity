@@ -18,6 +18,7 @@ import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryServiceInformation;
+import com.puresoltechnologies.versioning.Version;
 
 public class DirectoryRepositoryTest {
 
@@ -28,7 +29,8 @@ public class DirectoryRepositoryTest {
 				"parameterName", "parameterUnit", LevelOfMeasurement.NOMINAL,
 				"parameterDescription", Double.class));
 		RepositoryServiceInformation repositoryType = new RepositoryServiceInformation(
-				"className", "name", "description", parameters,
+				"className", "name", "version", new Version(1, 2, 3),
+				"jndi://", "description", parameters,
 				new HashSet<ConfigurationParameter<?>>(), null, null, null,
 				null);
 		checkSerialization(repositoryType);

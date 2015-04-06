@@ -33,7 +33,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.store.Analysi
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.common.RepositoryLocationCreator;
+import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManager;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
 /**
@@ -44,147 +44,150 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerR
  */
 @MessageDriven(name = "AnalysisFileStorageQueueMBean",//
 activationConfig = {//
-	@ActivationConfigProperty(propertyName = "destinationType", propertyValue = ProjectFileStorageQueue.TYPE), //
-	@ActivationConfigProperty(propertyName = "destination", propertyValue = ProjectFileStorageQueue.NAME), //
-	@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") //
+		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = ProjectFileStorageQueue.TYPE), //
+		@ActivationConfigProperty(propertyName = "destination", propertyValue = ProjectFileStorageQueue.NAME), //
+		@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") //
 }//
 )
 public class ProjectFileStorageQueueMDBean implements MessageListener {
 
-    @Inject
-    private Logger logger;
+	@Inject
+	private Logger logger;
 
-    @Inject
-    private EventLoggerRemote eventLogger;
+	@Inject
+	private EventLoggerRemote eventLogger;
 
-    @Resource(mappedName = ProjectAnalysisQueue.NAME)
-    private Queue projectAnalysisQueue;
+	@Resource(mappedName = ProjectAnalysisQueue.NAME)
+	private Queue projectAnalysisQueue;
 
-    @Inject
-    private JMSMessageSender messageSender;
+	@Inject
+	private JMSMessageSender messageSender;
 
-    @Inject
-    private AnalysisStoreService analysisStoreService;
+	@Inject
+	private RepositoryServiceManager repositoryServiceManager;
 
-    @Inject
-    private FileStoreService fileStore;
+	@Inject
+	private AnalysisStoreService analysisStoreService;
 
-    @Inject
-    private AnalysisProcessStateTracker analysisProcessStateTracker;
+	@Inject
+	private FileStoreService fileStore;
 
-    @Override
-    public void onMessage(Message message) {
-	try {
-	    MapMessage mapMessage = (MapMessage) message;
-	    AnalysisProject analysisProject = JSONSerializer.fromJSONString(
-		    mapMessage.getString("AnalysisProject"),
-		    AnalysisProject.class);
-	    AnalysisRunInformation analysisRunInformation = JSONSerializer
-		    .fromJSONString(
-			    mapMessage.getString("AnalysisRunInformation"),
-			    AnalysisRunInformation.class);
+	@Inject
+	private AnalysisProcessStateTracker analysisProcessStateTracker;
 
-	    analysisProcessStateTracker.changeProcessState(
-		    analysisRunInformation.getProjectId(),
-		    analysisRunInformation.getRunId(),
-		    AnalysisProcessTransition.START_STORAGE);
+	@Override
+	public void onMessage(Message message) {
+		try {
+			MapMessage mapMessage = (MapMessage) message;
+			AnalysisProject analysisProject = JSONSerializer.fromJSONString(
+					mapMessage.getString("AnalysisProject"),
+					AnalysisProject.class);
+			AnalysisRunInformation analysisRunInformation = JSONSerializer
+					.fromJSONString(
+							mapMessage.getString("AnalysisRunInformation"),
+							AnalysisRunInformation.class);
 
-	    Map<SourceCodeLocation, HashId> storedSources = storeFilesInStore(
-		    analysisProject.getSettings(), analysisRunInformation);
-	    analysisProcessStateTracker.changeProcessProgress(
-		    analysisRunInformation.getProjectId(),
-		    "Creating file tree in database.", 0, 1);
-	    AnalysisRunFileTree fileTree = analysisStoreService
-		    .createAndStoreFileAndContentTree(analysisRunInformation
-			    .getProjectId(), analysisRunInformation.getRunId(),
-			    analysisProject.getSettings().getName(),
-			    storedSources);
+			analysisProcessStateTracker.changeProcessState(
+					analysisRunInformation.getProjectId(),
+					analysisRunInformation.getRunId(),
+					AnalysisProcessTransition.START_STORAGE);
 
-	    Map<String, String> stringMap = new HashMap<>();
-	    stringMap.put("AnalysisProject",
-		    JSONSerializer.toJSONString(analysisProject));
-	    stringMap.put("AnalysisRunInformation",
-		    JSONSerializer.toJSONString(analysisRunInformation));
-	    stringMap.put("AnalysisRunFileTree",
-		    JSONSerializer.toJSONString(fileTree));
+			Map<SourceCodeLocation, HashId> storedSources = storeFilesInStore(
+					analysisProject.getSettings(), analysisRunInformation);
+			analysisProcessStateTracker.changeProcessProgress(
+					analysisRunInformation.getProjectId(),
+					"Creating file tree in database.", 0, 1);
+			AnalysisRunFileTree fileTree = analysisStoreService
+					.createAndStoreFileAndContentTree(analysisRunInformation
+							.getProjectId(), analysisRunInformation.getRunId(),
+							analysisProject.getSettings().getName(),
+							storedSources);
 
-	    analysisProcessStateTracker.changeProcessState(
-		    analysisRunInformation.getProjectId(),
-		    analysisRunInformation.getRunId(),
-		    AnalysisProcessTransition.QUEUE_FOR_ANALYSIS);
-	    messageSender.sendMessage(projectAnalysisQueue, stringMap);
-	} catch (JMSException | IOException | AnalysisStoreException e) {
-	    // An issue occurred, re-queue the request.
-	    eventLogger.logEvent(ProjectAnalysisEvents.createGeneralError(e));
-	    throw new RuntimeException("Could not store the project files.", e);
+			Map<String, String> stringMap = new HashMap<>();
+			stringMap.put("AnalysisProject",
+					JSONSerializer.toJSONString(analysisProject));
+			stringMap.put("AnalysisRunInformation",
+					JSONSerializer.toJSONString(analysisRunInformation));
+			stringMap.put("AnalysisRunFileTree",
+					JSONSerializer.toJSONString(fileTree));
+
+			analysisProcessStateTracker.changeProcessState(
+					analysisRunInformation.getProjectId(),
+					analysisRunInformation.getRunId(),
+					AnalysisProcessTransition.QUEUE_FOR_ANALYSIS);
+			messageSender.sendMessage(projectAnalysisQueue, stringMap);
+		} catch (JMSException | IOException | AnalysisStoreException e) {
+			// An issue occurred, re-queue the request.
+			eventLogger.logEvent(ProjectAnalysisEvents.createGeneralError(e));
+			throw new RuntimeException("Could not store the project files.", e);
+		}
 	}
-    }
 
-    /**
-     * Searches the source code repository for source files and stores them in
-     * the database.
-     * 
-     * @param projectSettings
-     *            is a {@link AnalysisProjectSettings} object representing the
-     *            analysis project.
-     * @param analysisRunInformation
-     * @return A {@link Map} is returned containing a mapping of the
-     *         {@link SourceCodeLocation}s to the {@link HashId}s calculated
-     *         during storage.
-     */
-    private Map<SourceCodeLocation, HashId> storeFilesInStore(
-	    AnalysisProjectSettings projectSettings,
-	    AnalysisRunInformation analysisRunInformation) {
-	logger.debug("Start file storage for project '"
-		+ projectSettings.getName() + "'.");
-	Map<SourceCodeLocation, HashId> storedSources = new HashMap<SourceCodeLocation, HashId>();
-	RepositoryLocation repository = RepositoryLocationCreator
-		.createFromSerialization(projectSettings
-			.getRepositoryLocation());
-	List<SourceCodeLocation> sourceCodeLocations = repository
-		.getSourceCodes(projectSettings.getFileSearchConfiguration());
-	for (int i = 0; i < sourceCodeLocations.size(); ++i) {
-	    SourceCodeLocation sourceCodeLocation = sourceCodeLocations.get(i);
-	    analysisProcessStateTracker.changeProcessProgress(
-		    analysisRunInformation.getProjectId(),
-		    sourceCodeLocation.getHumanReadableLocationString(), i,
-		    sourceCodeLocations.size());
-	    HashId hashId = storeFile(projectSettings, repository,
-		    sourceCodeLocation);
-	    storedSources.put(sourceCodeLocation, hashId);
+	/**
+	 * Searches the source code repository for source files and stores them in
+	 * the database.
+	 * 
+	 * @param projectSettings
+	 *            is a {@link AnalysisProjectSettings} object representing the
+	 *            analysis project.
+	 * @param analysisRunInformation
+	 * @return A {@link Map} is returned containing a mapping of the
+	 *         {@link SourceCodeLocation}s to the {@link HashId}s calculated
+	 *         during storage.
+	 */
+	private Map<SourceCodeLocation, HashId> storeFilesInStore(
+			AnalysisProjectSettings projectSettings,
+			AnalysisRunInformation analysisRunInformation) {
+		logger.debug("Start file storage for project '"
+				+ projectSettings.getName() + "'.");
+		Map<SourceCodeLocation, HashId> storedSources = new HashMap<SourceCodeLocation, HashId>();
+		RepositoryLocation repository = repositoryServiceManager
+				.createFromSerialization(projectSettings
+						.getRepository());
+		List<SourceCodeLocation> sourceCodeLocations = repository
+				.getSourceCodes(projectSettings.getFileSearchConfiguration());
+		for (int i = 0; i < sourceCodeLocations.size(); ++i) {
+			SourceCodeLocation sourceCodeLocation = sourceCodeLocations.get(i);
+			analysisProcessStateTracker.changeProcessProgress(
+					analysisRunInformation.getProjectId(),
+					sourceCodeLocation.getHumanReadableLocationString(), i,
+					sourceCodeLocations.size());
+			HashId hashId = storeFile(projectSettings, repository,
+					sourceCodeLocation);
+			storedSources.put(sourceCodeLocation, hashId);
+		}
+		analysisProcessStateTracker.changeProcessProgress(
+				analysisRunInformation.getProjectId(), "",
+				sourceCodeLocations.size(), sourceCodeLocations.size());
+		return storedSources;
 	}
-	analysisProcessStateTracker.changeProcessProgress(
-		analysisRunInformation.getProjectId(), "",
-		sourceCodeLocations.size(), sourceCodeLocations.size());
-	return storedSources;
-    }
 
-    /**
-     * Stores a single file in database.
-     * 
-     * @param projectSettings
-     * @param repository
-     * @param sourceCodeLocation
-     * @return
-     */
-    private HashId storeFile(AnalysisProjectSettings projectSettings,
-	    RepositoryLocation repository, SourceCodeLocation sourceCodeLocation) {
-	try (InputStream stream = sourceCodeLocation.openStream()) {
-	    HashId hashId = fileStore.storeRawFile(stream);
-	    eventLogger.logEvent(ProjectAnalysisEvents
-		    .createRawFileStoredEvent(
-			    sourceCodeLocation.getInternalLocation(), hashId,
-			    projectSettings.getName(),
-			    repository.getHumanReadableLocationString()));
-	    return hashId;
-	} catch (FileStoreException | IOException e) {
-	    eventLogger.logEvent(ProjectAnalysisEvents.createRawFileStoreError(
-		    sourceCodeLocation.getInternalLocation(),
-		    projectSettings.getName(),
-		    repository.getHumanReadableLocationString(), e));
-	    throw new RuntimeException("Error storing file '"
-		    + sourceCodeLocation.getHumanReadableLocationString()
-		    + "'.");
+	/**
+	 * Stores a single file in database.
+	 * 
+	 * @param projectSettings
+	 * @param repository
+	 * @param sourceCodeLocation
+	 * @return
+	 */
+	private HashId storeFile(AnalysisProjectSettings projectSettings,
+			RepositoryLocation repository, SourceCodeLocation sourceCodeLocation) {
+		try (InputStream stream = sourceCodeLocation.openStream()) {
+			HashId hashId = fileStore.storeRawFile(stream);
+			eventLogger.logEvent(ProjectAnalysisEvents
+					.createRawFileStoredEvent(
+							sourceCodeLocation.getInternalLocation(), hashId,
+							projectSettings.getName(),
+							repository.getHumanReadableLocationString()));
+			return hashId;
+		} catch (FileStoreException | IOException e) {
+			eventLogger.logEvent(ProjectAnalysisEvents.createRawFileStoreError(
+					sourceCodeLocation.getInternalLocation(),
+					projectSettings.getName(),
+					repository.getHumanReadableLocationString(), e));
+			throw new RuntimeException("Error storing file '"
+					+ sourceCodeLocation.getHumanReadableLocationString()
+					+ "'.");
+		}
 	}
-    }
 }

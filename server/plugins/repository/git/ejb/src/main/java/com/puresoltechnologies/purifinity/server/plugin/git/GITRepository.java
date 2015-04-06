@@ -13,9 +13,14 @@ import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
+import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.repository.spi.AbstractRepository;
+import com.puresoltechnologies.purifinity.repository.spi.Repository;
+import com.puresoltechnologies.purifinity.server.common.utils.BuildInformation;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryServiceInformation;
+import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * 
@@ -26,7 +31,11 @@ public class GITRepository extends AbstractRepository {
 	private static final long serialVersionUID = -5405680480509263585L;
 
 	public static final String ID = GITRepository.class.getName();
-	public static final String NAME = "GIT Repository";
+	public static final String NAME = "GIT";
+	public static final Version PLUGIN_VERSION = BuildInformation.getVersion();
+	public static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
+			"repository.git.plugin", "repository.git.ejb", Repository.class,
+			GITRepository.class);
 	public static final Map<String, Parameter<?>> PARAMETERS = new HashMap<>();
 	static {
 		PARAMETERS.put("Host", new ParameterWithArbitraryUnit<>("host", "",
@@ -51,13 +60,14 @@ public class GITRepository extends AbstractRepository {
 	}
 	public static final Set<ConfigurationParameter<?>> CONFIG_PARAMETERS = new LinkedHashSet<>();
 	public static final RepositoryServiceInformation INFORMATION = new RepositoryServiceInformation(
-			ID, NAME, "GIT Repository.", PARAMETERS, CONFIG_PARAMETERS, null,
-			null, null, null);
+			ID, NAME, "1.9", PLUGIN_VERSION, JNDI_ADDRESS, "GIT Repository.",
+			PARAMETERS, CONFIG_PARAMETERS, null, null, null, null);
 
 	public GITRepository(Properties properties) {
-		super(properties.getProperty(REPOSITORY_LOCATION_NAME));
+		super(properties
+				.getProperty(RepositoryLocation.REPOSITORY_LOCATION_NAME));
 		Object repositoryLocationClass = properties
-				.get(REPOSITORY_LOCATION_CLASS);
+				.get(RepositoryLocation.REPOSITORY_LOCATION_CLASS);
 		if (!getClass().getName().equals(repositoryLocationClass)) {
 			throw new IllegalArgumentException(
 					"Repository location with class '"
@@ -68,23 +78,10 @@ public class GITRepository extends AbstractRepository {
 	}
 
 	@Override
-	public String getHumanReadableLocationString() {
-		return "GIT";
-	}
-
-	@Override
 	public List<SourceCodeLocation> getSourceCodes(
 			FileSearchConfiguration fileSearchConfiguration) {
 		List<SourceCodeLocation> locations = new ArrayList<SourceCodeLocation>();
 		return locations;
-	}
-
-	@Override
-	public Properties getSerialization() {
-		Properties properties = new Properties();
-		properties.setProperty(REPOSITORY_LOCATION_CLASS, getClass().getName());
-		properties.setProperty(REPOSITORY_LOCATION_NAME, getName());
-		return properties;
 	}
 
 	@Override

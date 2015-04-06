@@ -5,12 +5,10 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
-import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.AbstractRepositoryServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryServiceInformation;
-import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
@@ -18,22 +16,19 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 public class GITRepositoryRegistration extends
 		AbstractRepositoryServiceRegistration {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
-			"repository.git.plugin", "repository.git.ejb",
-			RepositoryLocation.class, GITRepository.class);
-
 	@PostConstruct
 	public void registraion() {
 		register(RepositoryServiceManagerRemote.class,
 				RepositoryServiceManagerRemote.JNDI_NAME,
-				GITRepositoryPlugin.INFORMATION, JNDI_ADDRESS,
+				GITRepositoryPlugin.INFORMATION, GITRepository.JNDI_ADDRESS,
 				GITRepository.INFORMATION);
 	}
 
 	@PreDestroy
 	public void unregistration() {
 		unregister(RepositoryServiceManagerRemote.class,
-				RepositoryServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
+				RepositoryServiceManagerRemote.JNDI_NAME,
+				GITRepository.JNDI_ADDRESS);
 	}
 
 	@Override

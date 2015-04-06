@@ -12,9 +12,11 @@ import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryS
  */
 public interface RepositoryService {
 
-    public Collection<RepositoryServiceInformation> getRepositoryTypes();
+	public static final String REPOSITORY_ID_PROPERTY = "repository.id";
 
-    public RepositoryServiceInformation getRepositoryType(
-	    String repositoryTypeId);
+	public Collection<RepositoryServiceInformation> getRepositoryTypes();
+
+	public RepositoryServiceInformation getRepositoryType(
+			String repositoryTypeId);
 
 }

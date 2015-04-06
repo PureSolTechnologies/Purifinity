@@ -21,9 +21,13 @@ import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.repository.spi.AbstractRepository;
+import com.puresoltechnologies.purifinity.repository.spi.Repository;
+import com.puresoltechnologies.purifinity.server.common.utils.BuildInformation;
 import com.puresoltechnologies.purifinity.server.common.utils.io.FileSearch;
 import com.puresoltechnologies.purifinity.server.common.utils.io.FileTree;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryServiceInformation;
+import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * 
@@ -38,7 +42,11 @@ public class DirectoryRepository extends AbstractRepository {
 
 	public static final String REPOSITORY_LOCATION_DIRECTORY = "repository.location.directory";
 	public static final String ID = DirectoryRepository.class.getName();
-	public static final String NAME = "Directory Repository";
+	public static final String NAME = "Directory";
+	public static final Version PLUGIN_VERSION = BuildInformation.getVersion();
+	public static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
+			"repository.directory.plugin", "repository.directory.ejb",
+			Repository.class, DirectoryRepository.class);
 	public static final Map<String, Parameter<?>> PARAMETERS = new HashMap<>();
 	static {
 		PARAMETERS
@@ -50,24 +58,30 @@ public class DirectoryRepository extends AbstractRepository {
 	}
 	public static final Set<ConfigurationParameter<?>> CONFIG_PARAMETERS = new LinkedHashSet<>();
 	public static final RepositoryServiceInformation INFORMATION = new RepositoryServiceInformation(
-			ID, NAME, "Simple directory in the file system of the server.",
-			PARAMETERS, CONFIG_PARAMETERS,
-			"/repository.directory.ui/index.jsf",
+			ID, NAME, PLUGIN_VERSION.toString(), PLUGIN_VERSION, JNDI_ADDRESS,
+			"Simple directory in the file system of the server.", PARAMETERS,
+			CONFIG_PARAMETERS, "/repository.directory.ui/index.jsf",
 			"/repository.directory.ui/config.jsf",
 			"/repository.directory.ui/project.jsf",
 			"/repository.directory.ui/run.jsf");
 
 	private final File repositoryDirectory;
 
-	public DirectoryRepository(String name, File repositoryDirectory) {
-		super(name);
+	public DirectoryRepository() {
+		super("Directory");
+		this.repositoryDirectory = null;
+	}
+
+	public DirectoryRepository(File repositoryDirectory) {
+		super("Directory");
 		this.repositoryDirectory = repositoryDirectory;
 	}
 
 	public DirectoryRepository(Properties properties) {
-		super(properties.getProperty(REPOSITORY_LOCATION_NAME));
+		super(properties
+				.getProperty(RepositoryLocation.REPOSITORY_LOCATION_NAME));
 		Object repositoryLocationClass = properties
-				.get(REPOSITORY_LOCATION_CLASS);
+				.get(RepositoryLocation.REPOSITORY_LOCATION_CLASS);
 		if (!getClass().getName().equals(repositoryLocationClass)) {
 			throw new IllegalArgumentException(
 					"Repository location with class '"
@@ -85,11 +99,6 @@ public class DirectoryRepository extends AbstractRepository {
 							+ properties.toString() + ")");
 		}
 		this.repositoryDirectory = new File(repositoryDirectoryString);
-	}
-
-	@Override
-	public String getHumanReadableLocationString() {
-		return "Directory: " + repositoryDirectory.getPath();
 	}
 
 	@Override
@@ -135,16 +144,6 @@ public class DirectoryRepository extends AbstractRepository {
 		} else if (!repositoryDirectory.equals(other.repositoryDirectory))
 			return false;
 		return true;
-	}
-
-	@Override
-	public Properties getSerialization() {
-		Properties properties = new Properties();
-		properties.setProperty(REPOSITORY_LOCATION_CLASS, getClass().getName());
-		properties.setProperty(REPOSITORY_LOCATION_NAME, getName());
-		properties.setProperty(REPOSITORY_LOCATION_DIRECTORY,
-				repositoryDirectory.getPath());
-		return properties;
 	}
 
 	@Override

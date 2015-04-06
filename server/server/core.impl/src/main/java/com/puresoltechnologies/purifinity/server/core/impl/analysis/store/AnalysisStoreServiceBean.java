@@ -168,7 +168,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 		fileSearchConfiguration.getLocationIncludes(),
 		fileSearchConfiguration.getLocationExcludes(),
 		fileSearchConfiguration.isIgnoreHidden(),
-		settings.getRepositoryLocation());
+		settings.getRepository());
 	session.execute(bound);
     }
 

@@ -5,7 +5,7 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
-import com.puresoltechnologies.parsers.source.RepositoryLocation;
+import com.puresoltechnologies.purifinity.repository.spi.Repository;
 import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.AbstractRepositoryServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManagerRemote;
@@ -20,7 +20,7 @@ public class DirectoryRepositoryRegistration extends
 
 	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"repository.directory.plugin", "repository.directory.ejb",
-			RepositoryLocation.class, DirectoryRepository.class);
+			Repository.class, DirectoryRepository.class);
 
 	@PostConstruct
 	public void registraion() {

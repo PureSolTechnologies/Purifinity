@@ -13,6 +13,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>repository.spi</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>math</artifactId>
 		</dependency>

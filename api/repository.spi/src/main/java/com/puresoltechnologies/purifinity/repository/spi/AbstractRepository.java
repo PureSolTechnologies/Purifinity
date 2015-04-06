@@ -1,8 +1,7 @@
 package com.puresoltechnologies.purifinity.repository.spi;
 
-import com.puresoltechnologies.parsers.source.RepositoryLocation;
 
-public abstract class AbstractRepository implements RepositoryLocation {
+public abstract class AbstractRepository implements Repository {
 
 	private static final long serialVersionUID = -3692883413027085776L;
 

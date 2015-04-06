@@ -52,9 +52,7 @@ import com.puresoltechnologies.trees.TreeWalker;
 import com.puresoltechnologies.trees.WalkingAction;
 
 /**
- * 
  * @author Rick-Rainer Ludwig
- * 
  */
 public class JavaAnalyzer extends AbstractCodeAnalyzer {
 
