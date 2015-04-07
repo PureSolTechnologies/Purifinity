@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.repository.spi;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Properties;
 
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -16,7 +17,10 @@ public interface Repository extends Serializable {
 	 */
 	public String getName();
 
+	public String getHumanReadableLocationString(Properties repositoryLocation);
+
 	public List<SourceCodeLocation> getSourceCodes(
+			Properties configuration,
 			FileSearchConfiguration fileSearchConfiguration);
 
 }

@@ -4,9 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ public class DirectoryRepositoryLocationTest {
 	 */
 	@Test
 	public void testEmptyCodeList() {
-		DirectoryRepository location = new DirectoryRepository(new File("."));
+		DirectoryRepository location = new DirectoryRepository();
 		List<String> dirIncludes = new ArrayList<String>();
 		List<String> dirExcludes = new ArrayList<String>();
 		List<String> fileIncludes = new ArrayList<String>();
@@ -29,23 +29,29 @@ public class DirectoryRepositoryLocationTest {
 		fileExcludes.add("*");
 		FileSearchConfiguration searchConfiguration = new FileSearchConfiguration(
 				dirIncludes, dirExcludes, fileIncludes, fileExcludes, true);
-		List<SourceCodeLocation> sourceCodes = location
-				.getSourceCodes(searchConfiguration);
+		Properties configuration = new Properties();
+		configuration.setProperty(
+				DirectoryRepository.REPOSITORY_LOCATION_DIRECTORY, ".");
+		List<SourceCodeLocation> sourceCodes = location.getSourceCodes(
+				configuration, searchConfiguration);
 		assertNotNull(sourceCodes);
 		assertEquals(0, sourceCodes.size());
 	}
 
 	@Test
 	public void test() {
-		DirectoryRepository location = new DirectoryRepository(new File("."));
+		DirectoryRepository location = new DirectoryRepository();
 		List<String> dirIncludes = new ArrayList<String>();
 		List<String> dirExcludes = new ArrayList<String>();
 		List<String> fileIncludes = new ArrayList<String>();
 		List<String> fileExcludes = new ArrayList<String>();
 		FileSearchConfiguration searchConfiguration = new FileSearchConfiguration(
 				dirIncludes, dirExcludes, fileIncludes, fileExcludes, true);
-		List<SourceCodeLocation> sourceCodes = location
-				.getSourceCodes(searchConfiguration);
+		Properties configuration = new Properties();
+		configuration.setProperty(
+				DirectoryRepository.REPOSITORY_LOCATION_DIRECTORY, ".");
+		List<SourceCodeLocation> sourceCodes = location.getSourceCodes(
+				configuration, searchConfiguration);
 		assertNotNull(sourceCodes);
 		assertTrue(sourceCodes.size() > 0);
 	}

@@ -17,7 +17,6 @@ import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
-import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.repository.spi.AbstractRepository;
@@ -35,7 +34,7 @@ import com.puresoltechnologies.versioning.Version;
  * @author Rick-Rainer Ludwig
  */
 @Stateless
-@Remote(RepositoryLocation.class)
+@Remote(Repository.class)
 public class DirectoryRepository extends AbstractRepository {
 
 	private static final long serialVersionUID = -5405680480509263585L;
@@ -47,6 +46,7 @@ public class DirectoryRepository extends AbstractRepository {
 	public static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
 			"repository.directory.plugin", "repository.directory.ejb",
 			Repository.class, DirectoryRepository.class);
+
 	public static final Map<String, Parameter<?>> PARAMETERS = new HashMap<>();
 	static {
 		PARAMETERS
@@ -65,45 +65,25 @@ public class DirectoryRepository extends AbstractRepository {
 			"/repository.directory.ui/project.jsf",
 			"/repository.directory.ui/run.jsf");
 
-	private final File repositoryDirectory;
-
 	public DirectoryRepository() {
-		super("Directory");
-		this.repositoryDirectory = null;
+		super("Directory Repository");
 	}
 
-	public DirectoryRepository(File repositoryDirectory) {
-		super("Directory");
-		this.repositoryDirectory = repositoryDirectory;
-	}
-
-	public DirectoryRepository(Properties properties) {
-		super(properties
-				.getProperty(RepositoryLocation.REPOSITORY_LOCATION_NAME));
-		Object repositoryLocationClass = properties
-				.get(RepositoryLocation.REPOSITORY_LOCATION_CLASS);
-		if (!getClass().getName().equals(repositoryLocationClass)) {
-			throw new IllegalArgumentException(
-					"Repository location with class '"
-							+ repositoryLocationClass
-							+ "' is not suitable for '" + getClass().getName()
-							+ "'. (" + properties.toString() + ")");
-		}
+	private File getDirectory(Properties properties) {
 		String repositoryDirectoryString = properties
 				.getProperty(REPOSITORY_LOCATION_DIRECTORY);
 		if (repositoryDirectoryString == null) {
 			throw new IllegalArgumentException(
-					"Repository location with class '"
-							+ repositoryLocationClass
-							+ "' does not contain a repository directory. ("
+					"Repository location not specified. ("
 							+ properties.toString() + ")");
 		}
-		this.repositoryDirectory = new File(repositoryDirectoryString);
+		return new File(repositoryDirectoryString);
 	}
 
 	@Override
-	public List<SourceCodeLocation> getSourceCodes(
+	public List<SourceCodeLocation> getSourceCodes(Properties configuration,
 			FileSearchConfiguration fileSearchConfiguration) {
+		File repositoryDirectory = getDirectory(configuration);
 		FileTree fileTree = FileSearch.getFileTree(repositoryDirectory,
 				fileSearchConfiguration);
 		List<SourceCodeLocation> locations = new ArrayList<SourceCodeLocation>();
@@ -119,35 +99,7 @@ public class DirectoryRepository extends AbstractRepository {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime
-				* result
-				+ ((repositoryDirectory == null) ? 0 : repositoryDirectory
-						.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		DirectoryRepository other = (DirectoryRepository) obj;
-		if (repositoryDirectory == null) {
-			if (other.repositoryDirectory != null)
-				return false;
-		} else if (!repositoryDirectory.equals(other.repositoryDirectory))
-			return false;
-		return true;
-	}
-
-	@Override
-	public String toString() {
-		return "Directory repository: " + repositoryDirectory;
+	public String getHumanReadableLocationString(Properties configuration) {
+		return "Directory repository '" + getDirectory(configuration) + "'";
 	}
 }

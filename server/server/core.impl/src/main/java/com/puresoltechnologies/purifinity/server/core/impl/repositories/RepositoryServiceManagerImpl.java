@@ -66,13 +66,13 @@ public class RepositoryServiceManagerImpl extends
 			@Override
 			public List<SourceCodeLocation> getSourceCodes(
 					FileSearchConfiguration fileSearchConfiguration) {
-				return instance.getSourceCodes(fileSearchConfiguration);
+				return instance.getSourceCodes(repositoryLocation,
+						fileSearchConfiguration);
 			}
 
 			@Override
 			public Properties getSerialization() {
-				// TODO Auto-generated method stub
-				return null;
+				return repositoryLocation;
 			}
 
 			@Override
@@ -82,8 +82,8 @@ public class RepositoryServiceManagerImpl extends
 
 			@Override
 			public String getHumanReadableLocationString() {
-				// TODO Auto-generated method stub
-				return null;
+				return instance
+						.getHumanReadableLocationString(repositoryLocation);
 			}
 		};
 	}

@@ -8,12 +8,14 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
+
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.commons.math.Parameter;
 import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
-import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.repository.spi.AbstractRepository;
 import com.puresoltechnologies.purifinity.repository.spi.Repository;
@@ -26,6 +28,8 @@ import com.puresoltechnologies.versioning.Version;
  * 
  * @author Rick-Rainer Ludwig
  */
+@Stateless
+@Remote(Repository.class)
 public class GITRepository extends AbstractRepository {
 
 	private static final long serialVersionUID = -5405680480509263585L;
@@ -63,29 +67,24 @@ public class GITRepository extends AbstractRepository {
 			ID, NAME, "1.9", PLUGIN_VERSION, JNDI_ADDRESS, "GIT Repository.",
 			PARAMETERS, CONFIG_PARAMETERS, null, null, null, null);
 
-	public GITRepository(Properties properties) {
-		super(properties
-				.getProperty(RepositoryLocation.REPOSITORY_LOCATION_NAME));
-		Object repositoryLocationClass = properties
-				.get(RepositoryLocation.REPOSITORY_LOCATION_CLASS);
-		if (!getClass().getName().equals(repositoryLocationClass)) {
-			throw new IllegalArgumentException(
-					"Repository location with class '"
-							+ repositoryLocationClass
-							+ "' is not suitable for '" + getClass().getName()
-							+ "'. (" + properties.toString() + ")");
-		}
+	public GITRepository() {
+		super("GIT Repository");
+	}
+
+	public String getHost(Properties properties) {
+		return "";
 	}
 
 	@Override
-	public List<SourceCodeLocation> getSourceCodes(
+	public List<SourceCodeLocation> getSourceCodes(Properties configuration,
 			FileSearchConfiguration fileSearchConfiguration) {
 		List<SourceCodeLocation> locations = new ArrayList<SourceCodeLocation>();
 		return locations;
 	}
 
 	@Override
-	public String toString() {
-		return "GIT repository";
+	public String getHumanReadableLocationString(Properties repositoryLocation) {
+		return "GIT Repository '???'";
 	}
+
 }

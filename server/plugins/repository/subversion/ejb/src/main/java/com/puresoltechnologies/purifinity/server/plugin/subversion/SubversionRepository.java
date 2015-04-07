@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
+
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.math.ConfigurationParameter;
 import com.puresoltechnologies.commons.math.Parameter;
@@ -18,6 +22,8 @@ import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryS
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 import com.puresoltechnologies.versioning.Version;
 
+@Stateless
+@Remote(Repository.class)
 public class SubversionRepository extends AbstractRepository {
 
 	private static final long serialVersionUID = 1876428394155714495L;
@@ -35,14 +41,19 @@ public class SubversionRepository extends AbstractRepository {
 			"Subversion Repository.", PARAMETERS, CONFIG_PARAMETERS, null,
 			null, null, null);
 
-	public SubversionRepository(String name) {
-		super(name);
+	public SubversionRepository() {
+		super("Subversion Repository");
 	}
 
 	@Override
-	public List<SourceCodeLocation> getSourceCodes(
+	public List<SourceCodeLocation> getSourceCodes(Properties configuration,
 			FileSearchConfiguration fileSearchConfiguration) {
 		return new ArrayList<>();
+	}
+
+	@Override
+	public String getHumanReadableLocationString(Properties repositoryLocation) {
+		return "Subversion Repository '???'";
 	}
 
 }
