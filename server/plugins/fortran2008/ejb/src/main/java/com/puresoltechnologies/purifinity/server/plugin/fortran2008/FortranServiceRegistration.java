@@ -5,7 +5,7 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AbstractAnalyzerServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;

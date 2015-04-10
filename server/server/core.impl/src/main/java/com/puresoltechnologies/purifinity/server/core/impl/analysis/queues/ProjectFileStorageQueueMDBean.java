@@ -18,13 +18,13 @@ import javax.jms.Queue;
 
 import org.slf4j.Logger;
 
-import com.puresoltechnologies.commons.math.JSONSerializer;
+import com.puresoltechnologies.commons.domain.JSONSerializer;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
@@ -142,8 +142,7 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 				+ projectSettings.getName() + "'.");
 		Map<SourceCodeLocation, HashId> storedSources = new HashMap<SourceCodeLocation, HashId>();
 		RepositoryLocation repository = repositoryServiceManager
-				.createFromSerialization(projectSettings
-						.getRepository());
+				.createFromSerialization(projectSettings.getRepository());
 		List<SourceCodeLocation> sourceCodeLocations = repository
 				.getSourceCodes(projectSettings.getFileSearchConfiguration());
 		for (int i = 0; i < sourceCodeLocations.size(); ++i) {

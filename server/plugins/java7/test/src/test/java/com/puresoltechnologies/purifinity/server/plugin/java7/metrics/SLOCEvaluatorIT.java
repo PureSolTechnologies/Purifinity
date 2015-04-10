@@ -11,9 +11,9 @@ import javax.inject.Inject;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;

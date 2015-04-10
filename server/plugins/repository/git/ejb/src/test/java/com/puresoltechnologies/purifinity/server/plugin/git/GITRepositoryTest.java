@@ -12,11 +12,11 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.puresoltechnologies.commons.math.ConfigurationParameter;
-import com.puresoltechnologies.commons.math.JSONSerializer;
-import com.puresoltechnologies.commons.math.LevelOfMeasurement;
-import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
+import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+import com.puresoltechnologies.commons.domain.JSONSerializer;
+import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
+import com.puresoltechnologies.commons.domain.Parameter;
+import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryServiceInformation;
 import com.puresoltechnologies.versioning.Version;
 

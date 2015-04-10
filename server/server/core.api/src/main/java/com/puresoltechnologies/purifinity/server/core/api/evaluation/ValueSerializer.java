@@ -5,10 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Properties;
 
-import com.puresoltechnologies.commons.math.LevelOfMeasurement;
-import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
-import com.puresoltechnologies.commons.math.Value;
+import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
+import com.puresoltechnologies.commons.domain.Parameter;
+import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
+import com.puresoltechnologies.commons.domain.Value;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
 
 public class ValueSerializer {

@@ -6,12 +6,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.rest.api.ProjectManagerRestInterface;

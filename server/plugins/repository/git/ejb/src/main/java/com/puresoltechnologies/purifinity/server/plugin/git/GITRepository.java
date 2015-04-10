@@ -11,10 +11,10 @@ import java.util.Set;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
-import com.puresoltechnologies.commons.math.ConfigurationParameter;
-import com.puresoltechnologies.commons.math.LevelOfMeasurement;
-import com.puresoltechnologies.commons.math.Parameter;
-import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
+import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
+import com.puresoltechnologies.commons.domain.Parameter;
+import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.repository.spi.AbstractRepository;

@@ -15,10 +15,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>math</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>misc</artifactId>
 		</dependency>
 		<dependency>
@@ -28,6 +24,10 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.graphs</groupId>
 			<artifactId>trees</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>domain</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.versioning</groupId>

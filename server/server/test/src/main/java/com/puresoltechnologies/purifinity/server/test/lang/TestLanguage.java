@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.IOException;
 
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.AnalyzerStore;
-import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
-import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalyzerStore;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguage;
 import com.puresoltechnologies.purifinity.server.test.lang.grammar.TestLanguageGrammar;
 

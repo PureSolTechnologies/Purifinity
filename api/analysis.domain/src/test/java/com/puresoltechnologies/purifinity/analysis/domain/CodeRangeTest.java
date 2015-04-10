@@ -8,20 +8,20 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.puresoltechnologies.commons.math.JSONSerializer;
+import com.puresoltechnologies.commons.domain.JSONSerializer;
 
 public class CodeRangeTest {
 
-    @Test
-    public void testSerialization() throws JsonGenerationException,
-	    JsonMappingException, IOException {
-	CodeRange codeRange = new CodeRange("simple", "canonical",
-		CodeRangeType.FUNCTION, null);
-	String serialized = JSONSerializer.toJSONString(codeRange);
-	System.out.println(serialized);
-	CodeRange deserialized = JSONSerializer.fromJSONString(serialized,
-		CodeRange.class);
-	assertEquals(codeRange, deserialized);
-    }
+	@Test
+	public void testSerialization() throws JsonGenerationException,
+			JsonMappingException, IOException {
+		CodeRange codeRange = new CodeRange("simple", "canonical",
+				CodeRangeType.FUNCTION, null);
+		String serialized = JSONSerializer.toJSONString(codeRange);
+		System.out.println(serialized);
+		CodeRange deserialized = JSONSerializer.fromJSONString(serialized,
+				CodeRange.class);
+		assertEquals(codeRange, deserialized);
+	}
 
 }

@@ -14,10 +14,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>math</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>types</artifactId>
 		</dependency>
 		<dependency>

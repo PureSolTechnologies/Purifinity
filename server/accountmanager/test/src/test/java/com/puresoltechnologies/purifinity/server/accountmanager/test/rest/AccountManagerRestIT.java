@@ -30,7 +30,7 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.puresoltechnologies.commons.math.JSONSerializer;
+import com.puresoltechnologies.commons.domain.JSONSerializer;
 import com.puresoltechnologies.purifinity.server.accountmanager.rest.api.CreateAccountEntity;
 import com.puresoltechnologies.purifinity.server.accountmanager.test.AbstractAccountManagerClientTest;
 
@@ -42,115 +42,115 @@ import com.puresoltechnologies.purifinity.server.accountmanager.test.AbstractAcc
  */
 public class AccountManagerRestIT extends AbstractAccountManagerClientTest {
 
-    private CloseableHttpClient httpClient = null;
+	private CloseableHttpClient httpClient = null;
 
-    @Before
-    public void setupClient() {
-	assertNull(httpClient);
-	httpClient = createHttpClient();
-    }
-
-    @After
-    public void tearDownClient() throws IOException {
-	assertNotNull(httpClient);
-	httpClient.close();
-	httpClient = null;
-    }
-
-    @Test
-    public void testGetRoles() throws URISyntaxException,
-	    IllegalStateException, IOException, ScriptException {
-	HttpGet getRequest = new HttpGet(new URI(getAccountManagerRestURI()
-		.toString() + "/roles"));
-	try (CloseableHttpResponse response = httpClient.execute(getRequest)) {
-	    assertEquals(HttpStatus.SC_OK, response.getStatusLine()
-		    .getStatusCode());
-	    HttpEntity entity = response.getEntity();
-	    try (InputStream content = entity.getContent()) {
-		ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-		IOUtils.copy(content, byteArray);
-		String rolesString = byteArray.toString();
-		System.out.println(rolesString);
-		assertContainsRole(rolesString, "administrator",
-			"Administrator");
-		assertContainsRole(rolesString, "unprivileged",
-			"Unprivileged User");
-		assertContainsRole(rolesString, "engineer", "Engineer");
-	    }
+	@Before
+	public void setupClient() {
+		assertNull(httpClient);
+		httpClient = createHttpClient();
 	}
-    }
 
-    @Test
-    public void testGetUsers() throws URISyntaxException,
-	    IllegalStateException, IOException, ScriptException {
-	HttpGet getRequest = new HttpGet(new URI(getAccountManagerRestURI()
-		.toString() + "/users"));
-	try (CloseableHttpResponse response = httpClient.execute(getRequest)) {
-	    assertEquals(HttpStatus.SC_OK, response.getStatusLine()
-		    .getStatusCode());
-	    HttpEntity entity = response.getEntity();
-	    try (InputStream content = entity.getContent()) {
-		ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-		IOUtils.copy(content, byteArray);
-		String usersString = byteArray.toString();
-		System.out.println(usersString);
-		assertContainsRole(usersString, "administrator",
-			"Administrator");
-		assertContainsRole(usersString, "unprivileged",
-			"Unprivileged User");
-		assertContainsRole(usersString, "engineer", "Engineer");
-
-		assertContainsUser(usersString,
-			"administrator@puresol-technologies.com",
-			"Administrator", "administrator", "Administrator");
-		assertContainsUser(usersString,
-			"ludwig@puresol-technologies.com",
-			"Rick-Rainer Ludwig", "administrator", "Administrator");
-		assertContainsUser(usersString,
-			"engineer@puresol-technologies.com", "Engineer",
-			"engineer", "Engineer");
-		assertContainsUser(usersString,
-			"user@puresol-technologies.com", "Unprivileged User",
-			"unprivileged", "Unprivileged User");
-	    }
+	@After
+	public void tearDownClient() throws IOException {
+		assertNotNull(httpClient);
+		httpClient.close();
+		httpClient = null;
 	}
-    }
 
-    private void assertContainsRole(String rolesString, String roleId,
-	    String roleName) {
-	String expectedString = "{\"id\":\"" + roleId + "\",\"name\":\""
-		+ roleName + "\"}";
-	assertTrue("Expected string '" + expectedString
-		+ "' is not contained in '" + rolesString + "'.",
-		rolesString.contains(expectedString));
-
-    }
-
-    private void assertContainsUser(String usersString, String email,
-	    String name, String roleId, String roleName) {
-	String expectedString = "{\"email\":\"" + email + "\",\"name\":\""
-		+ name + "\",\"role\":{\"id\":\"" + roleId + "\",\"name\":\""
-		+ roleName + "\"}}";
-	assertTrue("Expected string '" + expectedString
-		+ "' is not contained in '" + usersString + "'.",
-		usersString.contains(expectedString));
-    }
-
-    @Test
-    public void testCreateAccount() throws URISyntaxException,
-	    JsonGenerationException, JsonMappingException,
-	    UnsupportedEncodingException, IOException {
-	HttpPut httpPut = new HttpPut(new URI(getAccountManagerRestURI()
-		.toString() + "/users"));
-	CreateAccountEntity createAccountEntity = new CreateAccountEntity(
-		"a@a.de", "aBcD123!", "engineer");
-	HttpEntity entity = new StringEntity(
-		JSONSerializer.toJSONString(createAccountEntity));
-	httpPut.setHeader(HTTP.CONTENT_TYPE, MediaType.APPLICATION_JSON);
-	httpPut.setEntity(entity);
-	try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
-	    assertEquals(HttpStatus.SC_CREATED, response.getStatusLine()
-		    .getStatusCode());
+	@Test
+	public void testGetRoles() throws URISyntaxException,
+			IllegalStateException, IOException, ScriptException {
+		HttpGet getRequest = new HttpGet(new URI(getAccountManagerRestURI()
+				.toString() + "/roles"));
+		try (CloseableHttpResponse response = httpClient.execute(getRequest)) {
+			assertEquals(HttpStatus.SC_OK, response.getStatusLine()
+					.getStatusCode());
+			HttpEntity entity = response.getEntity();
+			try (InputStream content = entity.getContent()) {
+				ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+				IOUtils.copy(content, byteArray);
+				String rolesString = byteArray.toString();
+				System.out.println(rolesString);
+				assertContainsRole(rolesString, "administrator",
+						"Administrator");
+				assertContainsRole(rolesString, "unprivileged",
+						"Unprivileged User");
+				assertContainsRole(rolesString, "engineer", "Engineer");
+			}
+		}
 	}
-    }
+
+	@Test
+	public void testGetUsers() throws URISyntaxException,
+			IllegalStateException, IOException, ScriptException {
+		HttpGet getRequest = new HttpGet(new URI(getAccountManagerRestURI()
+				.toString() + "/users"));
+		try (CloseableHttpResponse response = httpClient.execute(getRequest)) {
+			assertEquals(HttpStatus.SC_OK, response.getStatusLine()
+					.getStatusCode());
+			HttpEntity entity = response.getEntity();
+			try (InputStream content = entity.getContent()) {
+				ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
+				IOUtils.copy(content, byteArray);
+				String usersString = byteArray.toString();
+				System.out.println(usersString);
+				assertContainsRole(usersString, "administrator",
+						"Administrator");
+				assertContainsRole(usersString, "unprivileged",
+						"Unprivileged User");
+				assertContainsRole(usersString, "engineer", "Engineer");
+
+				assertContainsUser(usersString,
+						"administrator@puresol-technologies.com",
+						"Administrator", "administrator", "Administrator");
+				assertContainsUser(usersString,
+						"ludwig@puresol-technologies.com",
+						"Rick-Rainer Ludwig", "administrator", "Administrator");
+				assertContainsUser(usersString,
+						"engineer@puresol-technologies.com", "Engineer",
+						"engineer", "Engineer");
+				assertContainsUser(usersString,
+						"user@puresol-technologies.com", "Unprivileged User",
+						"unprivileged", "Unprivileged User");
+			}
+		}
+	}
+
+	private void assertContainsRole(String rolesString, String roleId,
+			String roleName) {
+		String expectedString = "{\"id\":\"" + roleId + "\",\"name\":\""
+				+ roleName + "\"}";
+		assertTrue("Expected string '" + expectedString
+				+ "' is not contained in '" + rolesString + "'.",
+				rolesString.contains(expectedString));
+
+	}
+
+	private void assertContainsUser(String usersString, String email,
+			String name, String roleId, String roleName) {
+		String expectedString = "{\"email\":\"" + email + "\",\"name\":\""
+				+ name + "\",\"role\":{\"id\":\"" + roleId + "\",\"name\":\""
+				+ roleName + "\"}}";
+		assertTrue("Expected string '" + expectedString
+				+ "' is not contained in '" + usersString + "'.",
+				usersString.contains(expectedString));
+	}
+
+	@Test
+	public void testCreateAccount() throws URISyntaxException,
+			JsonGenerationException, JsonMappingException,
+			UnsupportedEncodingException, IOException {
+		HttpPut httpPut = new HttpPut(new URI(getAccountManagerRestURI()
+				.toString() + "/users"));
+		CreateAccountEntity createAccountEntity = new CreateAccountEntity(
+				"a@a.de", "aBcD123!", "engineer");
+		HttpEntity entity = new StringEntity(
+				JSONSerializer.toJSONString(createAccountEntity));
+		httpPut.setHeader(HTTP.CONTENT_TYPE, MediaType.APPLICATION_JSON);
+		httpPut.setEntity(entity);
+		try (CloseableHttpResponse response = httpClient.execute(httpPut)) {
+			assertEquals(HttpStatus.SC_CREATED, response.getStatusLine()
+					.getStatusCode());
+		}
+	}
 }

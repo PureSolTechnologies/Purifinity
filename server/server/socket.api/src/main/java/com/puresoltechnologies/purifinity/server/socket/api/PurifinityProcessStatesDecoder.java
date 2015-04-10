@@ -7,24 +7,24 @@ import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
-import com.puresoltechnologies.commons.math.JSONSerializer;
+import com.puresoltechnologies.commons.domain.JSONSerializer;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.PurifinityProcessStates;
 
 public class PurifinityProcessStatesDecoder implements
-	Decoder.TextStream<PurifinityProcessStates> {
+		Decoder.TextStream<PurifinityProcessStates> {
 
-    @Override
-    public void init(EndpointConfig config) {
-    }
+	@Override
+	public void init(EndpointConfig config) {
+	}
 
-    @Override
-    public void destroy() {
-    }
+	@Override
+	public void destroy() {
+	}
 
-    @Override
-    public PurifinityProcessStates decode(Reader reader)
-	    throws DecodeException, IOException {
-	return JSONSerializer.fromJSONString(reader,
-		PurifinityProcessStates.class);
-    }
+	@Override
+	public PurifinityProcessStates decode(Reader reader)
+			throws DecodeException, IOException {
+		return JSONSerializer.fromJSONString(reader,
+				PurifinityProcessStates.class);
+	}
 }

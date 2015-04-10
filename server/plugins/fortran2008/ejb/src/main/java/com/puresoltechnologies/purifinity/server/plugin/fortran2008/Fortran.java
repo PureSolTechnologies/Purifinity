@@ -10,11 +10,11 @@ import java.util.Set;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
-import com.puresoltechnologies.commons.math.ConfigurationParameter;
+import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
-import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
+import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.utils.BuildInformation;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.grammar.FortranGrammar;

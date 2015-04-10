@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.socket.api;
 import java.io.Serializable;
 import java.util.UUID;
 
-import com.puresoltechnologies.commons.math.Parameter;
+import com.puresoltechnologies.commons.domain.Parameter;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 
 public class ParetoChartDataRequest implements Serializable {

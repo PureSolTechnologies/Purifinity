@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis;
 
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.plugins.ServiceManager;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 

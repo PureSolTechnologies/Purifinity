@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.math.ConfigurationParameter;
+import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
-import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
 
 public class CPP extends AbstractProgrammingLanguageAnalyzer {

@@ -18,6 +18,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>domain</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>passwordstore.domain</artifactId>
 			<scope>provided</scope>
@@ -37,8 +42,8 @@
 		<dependency>
 			<!-- XXX This dependency is not correct here, but currently needed for 
 				testing. -->
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>math</artifactId>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>domain</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

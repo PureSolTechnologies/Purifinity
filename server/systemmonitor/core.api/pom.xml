@@ -14,11 +14,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>math</artifactId>
+			<artifactId>types</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>types</artifactId>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>domain</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

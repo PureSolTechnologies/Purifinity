@@ -14,6 +14,10 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>domain</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>accountmanager.core.api</artifactId>
 		</dependency>

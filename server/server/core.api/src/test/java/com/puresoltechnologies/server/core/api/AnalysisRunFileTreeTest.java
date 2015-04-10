@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.math.JSONSerializer;
+import com.puresoltechnologies.commons.domain.JSONSerializer;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 

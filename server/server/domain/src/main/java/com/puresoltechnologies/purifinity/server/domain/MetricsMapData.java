@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.domain;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.puresoltechnologies.commons.math.Value;
+import com.puresoltechnologies.commons.domain.Value;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 
 /**

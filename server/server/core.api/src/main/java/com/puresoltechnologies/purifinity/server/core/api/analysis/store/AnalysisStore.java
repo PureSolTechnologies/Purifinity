@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.UUID;
 
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
 
 /**
  * This is the central interface to access the delivered analysis store. The

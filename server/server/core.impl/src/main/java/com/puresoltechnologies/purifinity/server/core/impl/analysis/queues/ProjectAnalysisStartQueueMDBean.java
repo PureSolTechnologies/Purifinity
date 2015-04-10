@@ -15,9 +15,9 @@ import javax.jms.MessageListener;
 import javax.jms.Queue;
 import javax.jms.TextMessage;
 
-import com.puresoltechnologies.commons.math.JSONSerializer;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProject;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRunInformation;
+import com.puresoltechnologies.commons.domain.JSONSerializer;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessTransition;
@@ -36,80 +36,80 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerR
  */
 @MessageDriven(name = "ProjectAnalysisStartQueueMBean",//
 activationConfig = {//
-	@ActivationConfigProperty(propertyName = "destinationType", propertyValue = ProjectAnalysisStartQueue.TYPE), //
-	@ActivationConfigProperty(propertyName = "destination", propertyValue = ProjectAnalysisStartQueue.NAME), //
-	@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") //
+		@ActivationConfigProperty(propertyName = "destinationType", propertyValue = ProjectAnalysisStartQueue.TYPE), //
+		@ActivationConfigProperty(propertyName = "destination", propertyValue = ProjectAnalysisStartQueue.NAME), //
+		@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge") //
 }//
 )
 public class ProjectAnalysisStartQueueMDBean implements MessageListener {
 
-    @Inject
-    private EventLoggerRemote eventLogger;
+	@Inject
+	private EventLoggerRemote eventLogger;
 
-    @Resource(mappedName = ProjectFileStorageQueue.NAME)
-    private Queue projectFileStorageQueue;
+	@Resource(mappedName = ProjectFileStorageQueue.NAME)
+	private Queue projectFileStorageQueue;
 
-    @Resource(mappedName = ProjectAnalysisStartQueue.NAME)
-    private Queue projectAnalysisStartQueue;
+	@Resource(mappedName = ProjectAnalysisStartQueue.NAME)
+	private Queue projectAnalysisStartQueue;
 
-    @Inject
-    private JMSMessageSender messageSender;
+	@Inject
+	private JMSMessageSender messageSender;
 
-    @Inject
-    private AnalysisStore analysisStore;
+	@Inject
+	private AnalysisStore analysisStore;
 
-    @Inject
-    private AnalysisProcessStateTracker analysisProcessStateTracker;
+	@Inject
+	private AnalysisProcessStateTracker analysisProcessStateTracker;
 
-    @Override
-    public void onMessage(Message message) {
-	try {
-	    TextMessage textMessage = (TextMessage) message;
-	    String projectId = textMessage.getText();
+	@Override
+	public void onMessage(Message message) {
+		try {
+			TextMessage textMessage = (TextMessage) message;
+			String projectId = textMessage.getText();
 
-	    if (analysisProcessStateTracker.readProcessState(projectId) != null) {
-		/*
-		 * There is already a process running for the project, so we
-		 * re-queue here.
-		 */
-		messageSender.sendMessageWithDelay(projectAnalysisStartQueue,
-			projectId.toString(), 60000);
-		/*
-		 * We finish here and let the re-delivery do the job.
-		 */
-		return;
-	    }
-	    analysisProcessStateTracker.startProcess(projectId);
+			if (analysisProcessStateTracker.readProcessState(projectId) != null) {
+				/*
+				 * There is already a process running for the project, so we
+				 * re-queue here.
+				 */
+				messageSender.sendMessageWithDelay(projectAnalysisStartQueue,
+						projectId.toString(), 60000);
+				/*
+				 * We finish here and let the re-delivery do the job.
+				 */
+				return;
+			}
+			analysisProcessStateTracker.startProcess(projectId);
 
-	    AnalysisProject analysisProject = analysisStore
-		    .readAnalysisProject(projectId);
-	    eventLogger.logEvent(ProjectAnalysisEvents
-		    .createQueueAnalysisEvent(projectId, analysisProject
-			    .getSettings().getName()));
+			AnalysisProject analysisProject = analysisStore
+					.readAnalysisProject(projectId);
+			eventLogger.logEvent(ProjectAnalysisEvents
+					.createQueueAnalysisEvent(projectId, analysisProject
+							.getSettings().getName()));
 
-	    // TODO the actual logic for the collision avoidance is still
-	    // missing.
+			// TODO the actual logic for the collision avoidance is still
+			// missing.
 
-	    AnalysisRunInformation analysisRunInformation = analysisStore
-		    .createAnalysisRun(analysisProject.getInformation()
-			    .getProjectId(), new Date(), 0, "", analysisProject
-			    .getSettings().getFileSearchConfiguration());
+			AnalysisRunInformation analysisRunInformation = analysisStore
+					.createAnalysisRun(analysisProject.getInformation()
+							.getProjectId(), new Date(), 0, "", analysisProject
+							.getSettings().getFileSearchConfiguration());
 
-	    Map<String, String> stringMap = new HashMap<>();
-	    stringMap.put("AnalysisProject",
-		    JSONSerializer.toJSONString(analysisProject));
-	    stringMap.put("AnalysisRunInformation",
-		    JSONSerializer.toJSONString(analysisRunInformation));
+			Map<String, String> stringMap = new HashMap<>();
+			stringMap.put("AnalysisProject",
+					JSONSerializer.toJSONString(analysisProject));
+			stringMap.put("AnalysisRunInformation",
+					JSONSerializer.toJSONString(analysisRunInformation));
 
-	    analysisProcessStateTracker.changeProcessState(projectId,
-		    analysisRunInformation.getRunId(),
-		    AnalysisProcessTransition.QUEUE_FOR_STORAGE);
-	    messageSender.sendMessage(projectFileStorageQueue, stringMap);
-	} catch (JMSException | AnalysisStoreException | IOException e) {
-	    // An issue occurred, re-queue the request.
-	    eventLogger.logEvent(ProjectAnalysisEvents.createGeneralError(e));
-	    throw new RuntimeException("Could not start the project analysis.",
-		    e);
+			analysisProcessStateTracker.changeProcessState(projectId,
+					analysisRunInformation.getRunId(),
+					AnalysisProcessTransition.QUEUE_FOR_STORAGE);
+			messageSender.sendMessage(projectFileStorageQueue, stringMap);
+		} catch (JMSException | AnalysisStoreException | IOException e) {
+			// An issue occurred, re-queue the request.
+			eventLogger.logEvent(ProjectAnalysisEvents.createGeneralError(e));
+			throw new RuntimeException("Could not start the project analysis.",
+					e);
+		}
 	}
-    }
 }

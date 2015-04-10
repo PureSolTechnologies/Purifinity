@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.analysis.spi;
 
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.api.CodeAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
 
 public abstract class AbstractCodeAnalyzer implements CodeAnalyzer {
 

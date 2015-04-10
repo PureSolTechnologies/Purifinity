@@ -106,8 +106,10 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
 				* result
 				+ ((analyzableCodeRanges == null) ? 0 : analyzableCodeRanges
 						.hashCode());
-		result = prime * result
-				+ ((analysisInformation == null) ? 0 : analysisInformation.hashCode());
+		result = prime
+				* result
+				+ ((analysisInformation == null) ? 0 : analysisInformation
+						.hashCode());
 		result = prime * result + (int) (duration ^ (duration >>> 32));
 		result = prime * result + ((time == null) ? 0 : time.hashCode());
 		result = prime

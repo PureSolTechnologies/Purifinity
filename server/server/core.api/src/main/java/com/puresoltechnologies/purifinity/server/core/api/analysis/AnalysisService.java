@@ -5,7 +5,7 @@ import java.util.Set;
 
 import javax.jms.JMSException;
 
-import com.puresoltechnologies.commons.math.ConfigurationParameter;
+import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 
 /**
@@ -16,18 +16,18 @@ import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerService
  */
 public interface AnalysisService {
 
-    public void triggerNewRun(String projectId) throws JMSException;
+	public void triggerNewRun(String projectId) throws JMSException;
 
-    public void abortCurrentRun(String projectId);
+	public void abortCurrentRun(String projectId);
 
-    public Collection<AnalyzerServiceInformation> getAnalyzers();
+	public Collection<AnalyzerServiceInformation> getAnalyzers();
 
-    public AnalyzerServiceInformation getAnalyzer(String analyzerId);
+	public AnalyzerServiceInformation getAnalyzer(String analyzerId);
 
-    public Set<ConfigurationParameter<?>> getConfiguration(String analyzerId);
+	public Set<ConfigurationParameter<?>> getConfiguration(String analyzerId);
 
-    public boolean isEnabled(String analyzerId);
+	public boolean isEnabled(String analyzerId);
 
-    public void setActive(String analyzerId, boolean enabled);
+	public void setActive(String analyzerId, boolean enabled);
 
 }

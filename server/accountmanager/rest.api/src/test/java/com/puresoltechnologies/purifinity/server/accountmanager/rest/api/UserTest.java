@@ -8,18 +8,18 @@ import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.puresoltechnologies.commons.math.JSONSerializer;
+import com.puresoltechnologies.commons.domain.JSONSerializer;
 
 public class UserTest {
 
-    @Test
-    public void testSerialization() throws JsonGenerationException,
-	    JsonMappingException, IOException {
-	User user = new User("email@domain.com", "name", new Role("id", "name"));
-	String serialized = JSONSerializer.toJSONString(user);
-	User deserialized = JSONSerializer.fromJSONString(serialized,
-		User.class);
-	assertEquals(user, deserialized);
-    }
+	@Test
+	public void testSerialization() throws JsonGenerationException,
+			JsonMappingException, IOException {
+		User user = new User("email@domain.com", "name", new Role("id", "name"));
+		String serialized = JSONSerializer.toJSONString(user);
+		User deserialized = JSONSerializer.fromJSONString(serialized,
+				User.class);
+		assertEquals(user, deserialized);
+	}
 
 }

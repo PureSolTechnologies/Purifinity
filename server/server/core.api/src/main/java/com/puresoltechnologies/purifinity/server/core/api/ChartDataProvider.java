@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.core.api;
 
 import java.util.UUID;
 
-import com.puresoltechnologies.commons.math.Parameter;
+import com.puresoltechnologies.commons.domain.Parameter;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.server.domain.HistogramChartData;
 import com.puresoltechnologies.purifinity.server.domain.MetricsMapData;

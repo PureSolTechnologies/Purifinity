@@ -15,10 +15,10 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 
-import com.puresoltechnologies.commons.math.ConfigurationParameter;
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
+import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
@@ -36,173 +36,173 @@ import com.puresoltechnologies.versioning.Version;
  */
 public class EntropyMetric extends CodeRangeEvaluator {
 
-    public static final String ID = EntropyMetric.class.getName();
+	public static final String ID = EntropyMetric.class.getName();
 
-    public static final String NAME = "Entropy Metric";
+	public static final String NAME = "Entropy Metric";
 
-    public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
+	public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
 
-    public static final String DESCRIPTION = "Entropy Metric calculation.";
+	public static final String DESCRIPTION = "Entropy Metric calculation.";
 
-    public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
+	public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
 
-    public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
-    static {
-	EVALUATED_QUALITY_CHARACTERISTICS
-		.add(QualityCharacteristic.ANALYSABILITY);
-    }
-
-    public static final Set<String> DEPENDENCIES = new HashSet<>();
-    static {
-	DEPENDENCIES.add(HalsteadMetric.ID);
-    }
-
-    private final AnalysisRun analysisRun;
-    private final CodeRange codeRange;
-    private final HalsteadMetric halstead;
-    private EntropyMetricResult result;
-
-    public EntropyMetric(AnalysisRun analysisRun, ProgrammingLanguage language,
-	    CodeRange codeRange) {
-	super(NAME);
-	this.analysisRun = analysisRun;
-	this.codeRange = codeRange;
-	halstead = new HalsteadMetric(analysisRun, language, getCodeRange());
-    }
-
-    @Override
-    public AnalysisRun getAnalysisRun() {
-	return analysisRun;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public CodeRange getCodeRange() {
-	return codeRange;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean run() {
-	boolean retVal = calculate();
-	recreateResultsList();
-	return retVal;
-    }
-
-    private boolean calculate() {
-	halstead.run();
-
-	Hashtable<String, Integer> operands = halstead.getOperands();
-
-	double maxEntropy = Math.log(halstead.getDifferentOperands())
-		/ Math.log(2.0);
-	double entropy = 0.0;
-	for (String operant : operands.keySet()) {
-	    int count = operands.get(operant);
-	    entropy += count / (double) halstead.getTotalOperands()
-		    * Math.log(count / (double) halstead.getTotalOperands())
-		    / Math.log(2.0);
+	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
+	static {
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.ANALYSABILITY);
 	}
-	entropy *= -1.0;
-	double normEntropy = entropy / maxEntropy;
-	double entropyRedundancy = maxEntropy - entropy;
-	double redundancy = entropyRedundancy * halstead.getDifferentOperands()
-		/ maxEntropy;
-	double normalizedRedundancy = redundancy
-		/ halstead.getDifferentOperands();
-	result = new EntropyMetricResult(halstead.getVocabularySize(),
-		halstead.getProgramLength(), entropy, maxEntropy, normEntropy,
-		entropyRedundancy, redundancy, normalizedRedundancy);
-	return true;
-    }
 
-    private void recreateResultsList() {
-
-    }
-
-    public double getNTotal() {
-	return result.getNTotal();
-    }
-
-    public double getNDiff() {
-	return result.getNDiff();
-    }
-
-    public double getMaxEntropy() {
-	return result.getMaxEntropy();
-    }
-
-    public double getEntropy() {
-	return result.getEntropy();
-    }
-
-    public double getNormEntropy() {
-	return result.getNormEntropy();
-    }
-
-    public double getEntropyRedundancy() {
-	return result.getEntropyRedundancy();
-    }
-
-    public double getRedundancy() {
-	return result.getRedundancy();
-    }
-
-    public double getNormalizedRedundancy() {
-	return result.getNormalizedRedundancy();
-    }
-
-    public String getResultsAsString() {
-	String result = "number of symbols = " + getNTotal() + "\n";
-	result += "max entropy = " + getMaxEntropy() + "\n";
-	result += "entropy = " + getEntropy() + "\n";
-	result += "normalized entropy = " + getNormEntropy() + "\n";
-	result += "entropy redundance = " + getEntropyRedundancy() + "\n";
-	result += "redundancy = " + getRedundancy() + "\n";
-	result += "normalized redundancy = " + getNormalizedRedundancy() + "\n";
-	return result;
-    }
-
-    public void print() {
-	System.out.println(getResultsAsString());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SourceCodeQuality getQuality() {
-	if (getNormalizedRedundancy() > 0.40) {
-	    return SourceCodeQuality.LOW;
+	public static final Set<String> DEPENDENCIES = new HashSet<>();
+	static {
+		DEPENDENCIES.add(HalsteadMetric.ID);
 	}
-	if (getNormalizedRedundancy() > 0.20) {
-	    return SourceCodeQuality.MEDIUM;
+
+	private final AnalysisRun analysisRun;
+	private final CodeRange codeRange;
+	private final HalsteadMetric halstead;
+	private EntropyMetricResult result;
+
+	public EntropyMetric(AnalysisRun analysisRun, ProgrammingLanguage language,
+			CodeRange codeRange) {
+		super(NAME);
+		this.analysisRun = analysisRun;
+		this.codeRange = codeRange;
+		halstead = new HalsteadMetric(analysisRun, language, getCodeRange());
 	}
-	return SourceCodeQuality.HIGH;
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getDescription() {
-	return DESCRIPTION;
-    }
+	@Override
+	public AnalysisRun getAnalysisRun() {
+		return analysisRun;
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return EVALUATED_QUALITY_CHARACTERISTICS;
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public CodeRange getCodeRange() {
+		return codeRange;
+	}
 
-    @Override
-    public List<MetricValue<?>> getResults() {
-	return result.getResults();
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean run() {
+		boolean retVal = calculate();
+		recreateResultsList();
+		return retVal;
+	}
+
+	private boolean calculate() {
+		halstead.run();
+
+		Hashtable<String, Integer> operands = halstead.getOperands();
+
+		double maxEntropy = Math.log(halstead.getDifferentOperands())
+				/ Math.log(2.0);
+		double entropy = 0.0;
+		for (String operant : operands.keySet()) {
+			int count = operands.get(operant);
+			entropy += count / (double) halstead.getTotalOperands()
+					* Math.log(count / (double) halstead.getTotalOperands())
+					/ Math.log(2.0);
+		}
+		entropy *= -1.0;
+		double normEntropy = entropy / maxEntropy;
+		double entropyRedundancy = maxEntropy - entropy;
+		double redundancy = entropyRedundancy * halstead.getDifferentOperands()
+				/ maxEntropy;
+		double normalizedRedundancy = redundancy
+				/ halstead.getDifferentOperands();
+		result = new EntropyMetricResult(halstead.getVocabularySize(),
+				halstead.getProgramLength(), entropy, maxEntropy, normEntropy,
+				entropyRedundancy, redundancy, normalizedRedundancy);
+		return true;
+	}
+
+	private void recreateResultsList() {
+
+	}
+
+	public double getNTotal() {
+		return result.getNTotal();
+	}
+
+	public double getNDiff() {
+		return result.getNDiff();
+	}
+
+	public double getMaxEntropy() {
+		return result.getMaxEntropy();
+	}
+
+	public double getEntropy() {
+		return result.getEntropy();
+	}
+
+	public double getNormEntropy() {
+		return result.getNormEntropy();
+	}
+
+	public double getEntropyRedundancy() {
+		return result.getEntropyRedundancy();
+	}
+
+	public double getRedundancy() {
+		return result.getRedundancy();
+	}
+
+	public double getNormalizedRedundancy() {
+		return result.getNormalizedRedundancy();
+	}
+
+	public String getResultsAsString() {
+		String result = "number of symbols = " + getNTotal() + "\n";
+		result += "max entropy = " + getMaxEntropy() + "\n";
+		result += "entropy = " + getEntropy() + "\n";
+		result += "normalized entropy = " + getNormEntropy() + "\n";
+		result += "entropy redundance = " + getEntropyRedundancy() + "\n";
+		result += "redundancy = " + getRedundancy() + "\n";
+		result += "normalized redundancy = " + getNormalizedRedundancy() + "\n";
+		return result;
+	}
+
+	public void print() {
+		System.out.println(getResultsAsString());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public SourceCodeQuality getQuality() {
+		if (getNormalizedRedundancy() > 0.40) {
+			return SourceCodeQuality.LOW;
+		}
+		if (getNormalizedRedundancy() > 0.20) {
+			return SourceCodeQuality.MEDIUM;
+		}
+		return SourceCodeQuality.HIGH;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public String getDescription() {
+		return DESCRIPTION;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return EVALUATED_QUALITY_CHARACTERISTICS;
+	}
+
+	@Override
+	public List<MetricValue<?>> getResults() {
+		return result.getResults();
+	}
 }

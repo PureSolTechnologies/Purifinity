@@ -8,7 +8,7 @@ import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceManager;
 import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;

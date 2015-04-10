@@ -14,8 +14,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;

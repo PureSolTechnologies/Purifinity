@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.puresoltechnologies.commons.math.statistics.Statistics;
+import com.puresoltechnologies.commons.domain.statistics.Statistics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 
 public class SLOCMetric implements Serializable {

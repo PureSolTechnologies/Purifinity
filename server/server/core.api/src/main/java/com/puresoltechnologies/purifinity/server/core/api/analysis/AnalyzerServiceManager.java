@@ -3,7 +3,7 @@ package com.puresoltechnologies.purifinity.server.core.api.analysis;
 import javax.ejb.Local;
 
 import com.puresoltechnologies.parsers.analyzer.Analyzer;
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguageAnalyzer;
+import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 
 /**

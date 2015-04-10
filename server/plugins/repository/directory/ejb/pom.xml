@@ -14,8 +14,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>math</artifactId>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>domain</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.api</groupId>

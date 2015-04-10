@@ -681,8 +681,8 @@
 			</dependency>
 			<!-- PureSol Technologies -->
 			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>math</artifactId>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>domain</artifactId>
 				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>

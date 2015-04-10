@@ -20,7 +20,7 @@ import javax.websocket.server.ServerEndpoint;
 
 import org.slf4j.Logger;
 
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStatusInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.ProcessState;

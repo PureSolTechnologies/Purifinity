@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.math.statistics.Statistics;
+import com.puresoltechnologies.commons.domain.statistics.Statistics;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
 

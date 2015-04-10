@@ -15,13 +15,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>math</artifactId>
+			<artifactId>misc</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>misc</artifactId>
-			<scope>provided</scope>
+			<groupId>com.puresoltechnologies.purifinity.api</groupId>
+			<artifactId>domain</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

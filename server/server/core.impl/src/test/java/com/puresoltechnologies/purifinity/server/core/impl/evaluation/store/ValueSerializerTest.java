@@ -4,10 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.commons.math.GeneralValue;
-import com.puresoltechnologies.commons.math.LevelOfMeasurement;
-import com.puresoltechnologies.commons.math.ParameterWithArbitraryUnit;
-import com.puresoltechnologies.commons.math.Value;
+import com.puresoltechnologies.commons.domain.GeneralValue;
+import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
+import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
+import com.puresoltechnologies.commons.domain.Value;
 import com.puresoltechnologies.commons.misc.hash.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.evaluation.domain.QualityLevel;

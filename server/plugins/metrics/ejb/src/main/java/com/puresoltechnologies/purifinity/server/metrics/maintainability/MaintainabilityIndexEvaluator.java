@@ -11,12 +11,12 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import com.puresoltechnologies.commons.math.ConfigurationParameter;
+import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
@@ -44,185 +44,185 @@ import com.puresoltechnologies.versioning.Version;
 @Remote(Evaluator.class)
 public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 
-    public static final String ID = MaintainabilityIndexEvaluator.class
-	    .getName();
-    public static final String NAME = "Maintainability Index";
-    public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
-    public static final String DESCRIPTION = "Maintainability Index calculation.";
-    public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
-    public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
-    static {
-	EVALUATED_QUALITY_CHARACTERISTICS
-		.add(QualityCharacteristic.ANALYSABILITY);
-	EVALUATED_QUALITY_CHARACTERISTICS
-		.add(QualityCharacteristic.CHANGEABILITY);
-	EVALUATED_QUALITY_CHARACTERISTICS
-		.add(QualityCharacteristic.TESTABILITY);
-    }
-    public static final Set<String> DEPENDENCIES = new HashSet<>();
-    static {
-	DEPENDENCIES.add(SLOCMetricCalculator.ID);
-	DEPENDENCIES.add(McCabeMetric.ID);
-	DEPENDENCIES.add(HalsteadMetric.ID);
-    }
-
-    @Inject
-    private Logger logger;
-
-    @Inject
-    private SLOCMetricEvaluatorDAO slocMetricEvaluatorDAO;
-
-    @Inject
-    private McCabeMetricEvaluatorDAO mcCabeMetricEvaluatorDAO;
-
-    @Inject
-    private HalsteadMetricsEvaluatorDAO halsteadMetricsEvaluatorDAO;
-
-    @Inject
-    private MaintainabilityIndexEvaluatorDAO maintainabilityIndexEvaluatorDAO;
-
-    public MaintainabilityIndexEvaluator() {
-	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
-    }
-
-    @Override
-    public Set<ConfigurationParameter<?>> getConfigurationParameters() {
-	return PARAMETERS;
-    }
-
-    @Override
-    public Set<MetricParameter<?>> getParameters() {
-	return MaintainabilityIndexEvaluatorParameter.ALL;
-    }
-
-    @Override
-    protected FileMetrics processFile(AnalysisRun analysisRun,
-	    CodeAnalysis analysis) throws InterruptedException,
-	    EvaluationStoreException {
-	AnalysisInformation analyzedFile = analysis.getAnalysisInformation();
-	HashId hashId = analyzedFile.getHashId();
-	SourceCodeLocation sourceCodeLocation = analysisRun
-		.findTreeNode(hashId).getSourceCodeLocation();
-
-	MaintainabilityIndexFileResults results = new MaintainabilityIndexFileResults(
-		MaintainabilityIndexEvaluator.ID,
-		MaintainabilityIndexEvaluator.PLUGIN_VERSION, hashId,
-		sourceCodeLocation, new Date());
-
-	List<SLOCResult> slocFileResults = slocMetricEvaluatorDAO
-		.readFileResults(hashId);
-	List<McCabeMetricResult> mcCabeFileResults = mcCabeMetricEvaluatorDAO
-		.readFileResults(hashId);
-	List<HalsteadMetricResult> halsteadFileResults = halsteadMetricsEvaluatorDAO
-		.readFileResults(hashId);
-
-	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    SLOCResult slocCodeRangeResult = findSLOCMetricResult(
-		    slocFileResults, codeRange);
-	    if (slocCodeRangeResult == null) {
-		logger.warn("No SLOC result available for '" + hashId
-			+ "', yet.");
-		continue;
-	    }
-	    McCabeMetricResult mcCabeCodeRangeResult = findMcCabeMetricResult(
-		    mcCabeFileResults, codeRange);
-	    if (mcCabeCodeRangeResult == null) {
-		logger.warn("No McCabe Metric result available for '" + hashId
-			+ "', yet.");
-		continue;
-	    }
-	    HalsteadMetricResult halsteadCodeRangeResult = findHalsteadMetricResult(
-		    halsteadFileResults, codeRange);
-	    if (halsteadCodeRangeResult == null) {
-		logger.warn("No Halstead Metric result available for '"
-			+ hashId + "', yet.");
-		continue;
-	    }
-
-	    SLOCMetric slocMetric = slocCodeRangeResult.getSLOCMetric();
-	    int phyLOC = slocMetric.getPhyLOC();
-	    int comLOC = slocMetric.getComLOC();
-	    int vG = mcCabeCodeRangeResult.getCyclomaticComplexity();
-	    HalsteadResult halsteadResult = halsteadCodeRangeResult
-		    .getHalsteadResult();
-	    double hv = halsteadResult.getHalsteadVolume();
-	    double MIwoc = 171.0 - 5.2 * Math.log(hv) - 0.23 * vG - 16.2
-		    * Math.log(phyLOC * 100.0 / 171.0);
-	    double MIcw = 50 * Math.sin(Math.sqrt(2.4 * comLOC / phyLOC));
-	    MaintainabilityIndexResult result = new MaintainabilityIndexResult(
-		    MIwoc, MIcw);
-	    MaintainabilityIndexFileResult fileResult = new MaintainabilityIndexFileResult(
-		    sourceCodeLocation, codeRange.getType(),
-		    codeRange.getCanonicalName(), result);
-	    maintainabilityIndexEvaluatorDAO.storeFileResults(hashId,
-		    sourceCodeLocation, codeRange, fileResult);
-	    results.add(fileResult);
+	public static final String ID = MaintainabilityIndexEvaluator.class
+			.getName();
+	public static final String NAME = "Maintainability Index";
+	public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
+	public static final String DESCRIPTION = "Maintainability Index calculation.";
+	public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
+	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
+	static {
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.ANALYSABILITY);
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.CHANGEABILITY);
+		EVALUATED_QUALITY_CHARACTERISTICS
+				.add(QualityCharacteristic.TESTABILITY);
 	}
-	return results;
-    }
+	public static final Set<String> DEPENDENCIES = new HashSet<>();
+	static {
+		DEPENDENCIES.add(SLOCMetricCalculator.ID);
+		DEPENDENCIES.add(McCabeMetric.ID);
+		DEPENDENCIES.add(HalsteadMetric.ID);
+	}
 
-    private SLOCResult findSLOCMetricResult(List<SLOCResult> slocFileResults,
-	    CodeRange codeRange) {
-	if (slocFileResults != null) {
-	    for (SLOCResult t : slocFileResults) {
-		if ((t.getCodeRangeType() == codeRange.getType())
-			&& (t.getCodeRangeName().equals(codeRange
-				.getSimpleName()))) {
-		    return t;
+	@Inject
+	private Logger logger;
+
+	@Inject
+	private SLOCMetricEvaluatorDAO slocMetricEvaluatorDAO;
+
+	@Inject
+	private McCabeMetricEvaluatorDAO mcCabeMetricEvaluatorDAO;
+
+	@Inject
+	private HalsteadMetricsEvaluatorDAO halsteadMetricsEvaluatorDAO;
+
+	@Inject
+	private MaintainabilityIndexEvaluatorDAO maintainabilityIndexEvaluatorDAO;
+
+	public MaintainabilityIndexEvaluator() {
+		super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
+	}
+
+	@Override
+	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+		return PARAMETERS;
+	}
+
+	@Override
+	public Set<MetricParameter<?>> getParameters() {
+		return MaintainabilityIndexEvaluatorParameter.ALL;
+	}
+
+	@Override
+	protected FileMetrics processFile(AnalysisRun analysisRun,
+			CodeAnalysis analysis) throws InterruptedException,
+			EvaluationStoreException {
+		AnalysisInformation analyzedFile = analysis.getAnalysisInformation();
+		HashId hashId = analyzedFile.getHashId();
+		SourceCodeLocation sourceCodeLocation = analysisRun
+				.findTreeNode(hashId).getSourceCodeLocation();
+
+		MaintainabilityIndexFileResults results = new MaintainabilityIndexFileResults(
+				MaintainabilityIndexEvaluator.ID,
+				MaintainabilityIndexEvaluator.PLUGIN_VERSION, hashId,
+				sourceCodeLocation, new Date());
+
+		List<SLOCResult> slocFileResults = slocMetricEvaluatorDAO
+				.readFileResults(hashId);
+		List<McCabeMetricResult> mcCabeFileResults = mcCabeMetricEvaluatorDAO
+				.readFileResults(hashId);
+		List<HalsteadMetricResult> halsteadFileResults = halsteadMetricsEvaluatorDAO
+				.readFileResults(hashId);
+
+		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+			SLOCResult slocCodeRangeResult = findSLOCMetricResult(
+					slocFileResults, codeRange);
+			if (slocCodeRangeResult == null) {
+				logger.warn("No SLOC result available for '" + hashId
+						+ "', yet.");
+				continue;
+			}
+			McCabeMetricResult mcCabeCodeRangeResult = findMcCabeMetricResult(
+					mcCabeFileResults, codeRange);
+			if (mcCabeCodeRangeResult == null) {
+				logger.warn("No McCabe Metric result available for '" + hashId
+						+ "', yet.");
+				continue;
+			}
+			HalsteadMetricResult halsteadCodeRangeResult = findHalsteadMetricResult(
+					halsteadFileResults, codeRange);
+			if (halsteadCodeRangeResult == null) {
+				logger.warn("No Halstead Metric result available for '"
+						+ hashId + "', yet.");
+				continue;
+			}
+
+			SLOCMetric slocMetric = slocCodeRangeResult.getSLOCMetric();
+			int phyLOC = slocMetric.getPhyLOC();
+			int comLOC = slocMetric.getComLOC();
+			int vG = mcCabeCodeRangeResult.getCyclomaticComplexity();
+			HalsteadResult halsteadResult = halsteadCodeRangeResult
+					.getHalsteadResult();
+			double hv = halsteadResult.getHalsteadVolume();
+			double MIwoc = 171.0 - 5.2 * Math.log(hv) - 0.23 * vG - 16.2
+					* Math.log(phyLOC * 100.0 / 171.0);
+			double MIcw = 50 * Math.sin(Math.sqrt(2.4 * comLOC / phyLOC));
+			MaintainabilityIndexResult result = new MaintainabilityIndexResult(
+					MIwoc, MIcw);
+			MaintainabilityIndexFileResult fileResult = new MaintainabilityIndexFileResult(
+					sourceCodeLocation, codeRange.getType(),
+					codeRange.getCanonicalName(), result);
+			maintainabilityIndexEvaluatorDAO.storeFileResults(hashId,
+					sourceCodeLocation, codeRange, fileResult);
+			results.add(fileResult);
 		}
-	    }
+		return results;
 	}
-	return null;
-    }
 
-    private McCabeMetricResult findMcCabeMetricResult(
-	    List<McCabeMetricResult> mcCabeFileResults, CodeRange codeRange) {
-	if (mcCabeFileResults != null) {
-	    for (McCabeMetricResult t : mcCabeFileResults) {
-		if ((t.getCodeRangeType() == codeRange.getType())
-			&& (t.getCodeRangeName().equals(codeRange
-				.getSimpleName()))) {
-		    return t;
+	private SLOCResult findSLOCMetricResult(List<SLOCResult> slocFileResults,
+			CodeRange codeRange) {
+		if (slocFileResults != null) {
+			for (SLOCResult t : slocFileResults) {
+				if ((t.getCodeRangeType() == codeRange.getType())
+						&& (t.getCodeRangeName().equals(codeRange
+								.getSimpleName()))) {
+					return t;
+				}
+			}
 		}
-	    }
+		return null;
 	}
-	return null;
-    }
 
-    private HalsteadMetricResult findHalsteadMetricResult(
-	    List<HalsteadMetricResult> halsteadFileResults, CodeRange codeRange) {
-	if (halsteadFileResults != null) {
-	    for (HalsteadMetricResult t : halsteadFileResults) {
-		if ((t.getCodeRangeType() == codeRange.getType())
-			&& (t.getCodeRangeName().equals(codeRange
-				.getSimpleName()))) {
-		    return t;
+	private McCabeMetricResult findMcCabeMetricResult(
+			List<McCabeMetricResult> mcCabeFileResults, CodeRange codeRange) {
+		if (mcCabeFileResults != null) {
+			for (McCabeMetricResult t : mcCabeFileResults) {
+				if ((t.getCodeRangeType() == codeRange.getType())
+						&& (t.getCodeRangeName().equals(codeRange
+								.getSimpleName()))) {
+					return t;
+				}
+			}
 		}
-	    }
+		return null;
 	}
-	return null;
-    }
 
-    @Override
-    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-	return EVALUATED_QUALITY_CHARACTERISTICS;
-    }
+	private HalsteadMetricResult findHalsteadMetricResult(
+			List<HalsteadMetricResult> halsteadFileResults, CodeRange codeRange) {
+		if (halsteadFileResults != null) {
+			for (HalsteadMetricResult t : halsteadFileResults) {
+				if ((t.getCodeRangeType() == codeRange.getType())
+						&& (t.getCodeRangeName().equals(codeRange
+								.getSimpleName()))) {
+					return t;
+				}
+			}
+		}
+		return null;
+	}
 
-    @Override
-    protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
-	    AnalysisFileTree directory) throws InterruptedException,
-	    EvaluationStoreException {
-	MaintainabilityIndexDirectoryResults finalResults = new MaintainabilityIndexDirectoryResults(
-		MaintainabilityIndexEvaluator.ID,
-		MaintainabilityIndexEvaluator.PLUGIN_VERSION,
-		directory.getHashId(), new Date());
-	return finalResults;
-    }
+	@Override
+	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+		return EVALUATED_QUALITY_CHARACTERISTICS;
+	}
 
-    @Override
-    protected DirectoryMetrics processProject(AnalysisRun analysisRun,
-	    boolean enableReevaluation) throws InterruptedException,
-	    EvaluationStoreException {
-	return processDirectory(analysisRun, analysisRun.getFileTree());
-    }
+	@Override
+	protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
+			AnalysisFileTree directory) throws InterruptedException,
+			EvaluationStoreException {
+		MaintainabilityIndexDirectoryResults finalResults = new MaintainabilityIndexDirectoryResults(
+				MaintainabilityIndexEvaluator.ID,
+				MaintainabilityIndexEvaluator.PLUGIN_VERSION,
+				directory.getHashId(), new Date());
+		return finalResults;
+	}
+
+	@Override
+	protected DirectoryMetrics processProject(AnalysisRun analysisRun,
+			boolean enableReevaluation) throws InterruptedException,
+			EvaluationStoreException {
+		return processDirectory(analysisRun, analysisRun.getFileTree());
+	}
 }

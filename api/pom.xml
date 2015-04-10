@@ -182,11 +182,6 @@
 		<dependencies>
 			<!-- Project internal -->
 			<dependency>
-				<groupId>com.puresoltechnologies.commons</groupId>
-				<artifactId>math</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>com.puresoltechnologies.parsers</groupId>
 				<artifactId>ust</artifactId>
 				<version>${project.version}</version>
@@ -199,6 +194,11 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.api</groupId>
 				<artifactId>analysis.domain</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.api</groupId>
+				<artifactId>domain</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -346,39 +346,6 @@
 					</executions>
 				</plugin>
 				<plugin>
-					<groupId>org.apache.felix</groupId>
-					<artifactId>maven-bundle-plugin</artifactId>
-					<version>2.5.3</version>
-					<extensions>true</extensions>
-					<configuration>
-						<manifestLocation>META-INF</manifestLocation>
-						<instructions>
-							<Specification-Title>${project.name}</Specification-Title>
-							<Specification-Version>${project.version}</Specification-Version>
-							<Specification-Vendor>${project.organization.name}</Specification-Vendor>
-							<Implementation-Title>${project.groupId}:${project.artifactId}</Implementation-Title>
-							<Implementation-Version>${project.version}</Implementation-Version>
-							<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
-							<Vendor-URL>${project.organization.url}</Vendor-URL>
-							<Project-URL>${project.url}</Project-URL>
-							<!-- The Bundle-SymbolicName is fixed in this way. Otherwise Tycho 
-								will not find the bundle. -->
-							<Bundle-SymbolicName>${bundle.namespace}.bundle</Bundle-SymbolicName>
-							<Bundle-Name>${bundle.namespace}.bundle</Bundle-Name>
-							<Bundle-Version>${project.version}</Bundle-Version>
-							<Bundle-Vendor>${project.organization.name}</Bundle-Vendor>
-							<Export-Package>${bundle.namespace}.*;version="${project.version}"</Export-Package>
-							<Bundle-Activator>${bundle.namespace}.Activator</Bundle-Activator>
-							<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
-							<!-- embed compile/runtime dependencies using path that matches the 
-								copied dependency folder -->
-							<Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
-							<Embed-Directory>dependencies</Embed-Directory>
-							<Embed-StripGroup>true</Embed-StripGroup>
-						</instructions>
-					</configuration>
-				</plugin>
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
 					<version>2.5</version>
@@ -481,19 +448,14 @@
 	</reporting>
 
 	<modules>
-		<module>math</module>
-		<module>math.bundle</module>
+		<module>domain</module>
 		<module>ust</module>
 		<module>repository.spi</module>
 		<module>analysis.domain</module>
-		<module>analysis.domain.bundle</module>
 		<module>analysis.api</module>
-		<module>analysis.api.bundle</module>
 		<module>analysis.spi</module>
 		<module>evaluation.domain</module>
-		<module>evaluation.domain.bundle</module>
 		<module>evaluation.api</module>
-		<module>evaluation.api.bundle</module>
 		<module>evaluation.spi</module>
 	</modules>
 

@@ -6,7 +6,7 @@ import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.analysis.api.ProgrammingLanguage;
+import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 
 public class TestProgrammingLanguageTest {
 

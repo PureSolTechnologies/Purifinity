@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.api</groupId>
-			<artifactId>analysis.domain</artifactId>
+			<artifactId>analysis.api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

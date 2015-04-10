@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 
-import com.puresoltechnologies.commons.math.ConfigurationParameter;
+import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
@@ -27,80 +27,80 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerR
 @Stateless
 public class AnalysisServiceBean implements AnalysisService {
 
-    @Resource(mappedName = ProjectAnalysisStartQueue.NAME)
-    private Queue projectAnalysisStartQueue;
+	@Resource(mappedName = ProjectAnalysisStartQueue.NAME)
+	private Queue projectAnalysisStartQueue;
 
-    @Inject
-    private EventLoggerRemote eventLogger;
+	@Inject
+	private EventLoggerRemote eventLogger;
 
-    @Inject
-    private JMSMessageSender messageSender;
+	@Inject
+	private JMSMessageSender messageSender;
 
-    @Inject
-    private AnalyzerServiceManager analyzerRegistration;
+	@Inject
+	private AnalyzerServiceManager analyzerRegistration;
 
-    @Inject
-    private EvaluatorServiceManager evaluatorRegistration;
+	@Inject
+	private EvaluatorServiceManager evaluatorRegistration;
 
-    @Inject
-    private RepositoryServiceManager repositoryTypePluginService;
+	@Inject
+	private RepositoryServiceManager repositoryTypePluginService;
 
-    @Inject
-    private AnalysisProcessStateTracker processTracker;
+	@Inject
+	private AnalysisProcessStateTracker processTracker;
 
-    @PostConstruct
-    public void initialize() {
-	eventLogger.logEvent(AnalysisServiceEvents.createStartupEvent());
-    }
-
-    @PreDestroy
-    public void shutdown() {
-	eventLogger.logEvent(AnalysisServiceEvents.createShutdownEvent());
-    }
-
-    @Override
-    public void triggerNewRun(String projectId) throws JMSException {
-	messageSender.sendMessage(projectAnalysisStartQueue, projectId);
-    }
-
-    @Override
-    public void abortCurrentRun(String projectId) {
-	AnalysisProcessStatusInformation processState = processTracker
-		.readProcessState(projectId);
-	long runId = processState.getRunId();
-	processTracker.changeProcessState(projectId, runId,
-		AnalysisProcessTransition.REQUEST_ABORT);
-    }
-
-    @Override
-    public Collection<AnalyzerServiceInformation> getAnalyzers() {
-	return analyzerRegistration.getServices();
-    }
-
-    @Override
-    public AnalyzerServiceInformation getAnalyzer(String analyzerId) {
-	for (AnalyzerServiceInformation information : analyzerRegistration
-		.getServices()) {
-	    if (information.getId().equals(analyzerId)) {
-		return information;
-	    }
+	@PostConstruct
+	public void initialize() {
+		eventLogger.logEvent(AnalysisServiceEvents.createStartupEvent());
 	}
-	return null;
-    }
 
-    @Override
-    public Set<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
-	return analyzerRegistration.getInstanceById(analyzerId)
-		.getConfigurationParameters();
-    }
+	@PreDestroy
+	public void shutdown() {
+		eventLogger.logEvent(AnalysisServiceEvents.createShutdownEvent());
+	}
 
-    @Override
-    public boolean isEnabled(String analyzerId) {
-	return analyzerRegistration.isActive(analyzerId);
-    }
+	@Override
+	public void triggerNewRun(String projectId) throws JMSException {
+		messageSender.sendMessage(projectAnalysisStartQueue, projectId);
+	}
 
-    @Override
-    public void setActive(String analyzerId, boolean active) {
-	analyzerRegistration.setActive(analyzerId, active);
-    }
+	@Override
+	public void abortCurrentRun(String projectId) {
+		AnalysisProcessStatusInformation processState = processTracker
+				.readProcessState(projectId);
+		long runId = processState.getRunId();
+		processTracker.changeProcessState(projectId, runId,
+				AnalysisProcessTransition.REQUEST_ABORT);
+	}
+
+	@Override
+	public Collection<AnalyzerServiceInformation> getAnalyzers() {
+		return analyzerRegistration.getServices();
+	}
+
+	@Override
+	public AnalyzerServiceInformation getAnalyzer(String analyzerId) {
+		for (AnalyzerServiceInformation information : analyzerRegistration
+				.getServices()) {
+			if (information.getId().equals(analyzerId)) {
+				return information;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Set<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
+		return analyzerRegistration.getInstanceById(analyzerId)
+				.getConfigurationParameters();
+	}
+
+	@Override
+	public boolean isEnabled(String analyzerId) {
+		return analyzerRegistration.isActive(analyzerId);
+	}
+
+	@Override
+	public void setActive(String analyzerId, boolean active) {
+		analyzerRegistration.setActive(analyzerId, active);
+	}
 }

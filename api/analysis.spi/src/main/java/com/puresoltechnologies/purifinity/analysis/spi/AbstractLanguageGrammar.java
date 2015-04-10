@@ -9,7 +9,7 @@ import com.puresoltechnologies.parsers.grammar.production.ProductionSet;
 import com.puresoltechnologies.parsers.grammar.token.TokenDefinitionSet;
 import com.puresoltechnologies.parsers.lexer.Lexer;
 import com.puresoltechnologies.parsers.parser.Parser;
-import com.puresoltechnologies.purifinity.analysis.api.LanguageGrammar;
+import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
 
 /**
  * This class is an extended {@link Grammar} for language implementations. For
