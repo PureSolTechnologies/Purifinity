@@ -25,7 +25,7 @@ function treeTableCtrl($scope) {
 			return;
 		}
 		for (key in $scope.currentFolder.children) {
-			if ($scope.currentFolder.children[key].name == dir) {
+			if ($scope.currentFolder.children[key].content == dir) {
 				var newFolder = $scope.currentFolder.children[key];
 				$scope.path.push(newFolder);
 				$scope.currentFolder = newFolder;

@@ -26,7 +26,7 @@
     </tr>
     <tr data-ng-repeat="content in currentFolder.children">
       <td>
-	<a data-ng-show="content.children" href="" data-ng-click="chdir(content.name)">
+	<a data-ng-show="content.children" href="" data-ng-click="chdir(content.content)">
 	  <img data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />
 	  {{content.content}}
 	</a>

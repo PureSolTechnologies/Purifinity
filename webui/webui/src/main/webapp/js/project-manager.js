@@ -127,8 +127,8 @@ function projectSettingsCtrl($scope, $modal, $log, projectManager) {
 					fileIncludes: "",
 					fileExcludes: "",
 					ignoreHidden: true,
-					repositoryTypeId: "",
-					repositoryTypeProperties: {}
+					repositoryId: "",
+					repositoryProperties: {}
 					};
 	$scope.openCreateProject = function () {
 		var modalInstance = $modal.open({
@@ -189,20 +189,20 @@ function projectSettingsCtrl($scope, $modal, $log, projectManager) {
 
 function createProjectModalInstanceCtrl($scope, $modalInstance, items, projectManager) {
 	$scope.items = items;
-	$scope.repositoryTypes = undefined;
+	$scope.repositories = undefined;
 	projectManager.getRepositoryTypes(
-		function(data, status) {$scope.repositoryTypes = data}, //
+		function(data, status) {$scope.repositories = data}, //
 		function(data, status, error) {});
-	$scope.$watch('items.repositoryTypeId', function(oldValue, newValue) {
+	$scope.$watch('items.repositoryId', function(oldValue, newValue) {
 		var key;
-		for (key in $scope.repositoryTypes) {
-			var repositoryType = $scope.repositoryTypes[key];
-			if (repositoryType.id == items.repositoryTypeId) {
-				$scope.repositoryTypeProperties = {};
+		for (key in $scope.repositories) {
+			var repository = $scope.repositories[key];
+			if (repository.id == items.repositoryId) {
+				$scope.repositoryProperties = {};
 				var name;
-				for (name in repositoryType.parameters) {
-					$scope.repositoryTypeProperties[name] = repositoryType.parameters[name];
-					$scope.repositoryTypeProperties[name].uiName = name;
+				for (name in repository.parameters) {
+					$scope.repositoryProperties[name] = repository.parameters[name];
+					$scope.repositoryProperties[name].uiName = name;
 				}
 			}
 		}
@@ -220,13 +220,13 @@ function createProjectModalInstanceCtrl($scope, $modalInstance, items, projectMa
 				"fileExcludes": items.fileExcludes.split(";"),
 				"ignoreHidden": items.ignoreHidden
 			},
-			"repositoryLocation":{
-				"repository.class": items.repositoryTypeId
+			"repository":{
+				"repository.id": items.repositoryId
 			}
 		};
 		var key;
-		for (key in items.repositoryTypeProperties) {
-			projectSettings.repositoryLocation[key] = items.repositoryTypeProperties[key];
+		for (key in items.repositoryProperties) {
+			projectSettings.repository[key] = items.repositoryProperties[key];
 		}
 		projectManager.createProject(items.id, projectSettings,
 			function(data, status) {}, //

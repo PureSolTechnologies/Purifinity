@@ -28,13 +28,13 @@
 			<p>
 				The repository location specifies where and how to find the sources to be analysed.
 			</p>
-			<label for="repositoryType" title="Selection for the repository type to get sources from.">Repository Type</label><br/>
-			<select id="repositoryType" title="Project Selection"
+			<label for="repository" title="Selection for the repository type to get sources from.">Repository Type</label><br/>
+			<select id="repository" title="Project Selection"
 				class="selectpicker show-tick form-control"
-				data-ng-model="items.repositoryTypeId">
+				data-ng-model="items.repositoryId">
 				<option value="">Select a repository type</option>
-				<option data-ng-repeat="repositoryType in repositoryTypes" value="{{repositoryType.id}}">
-					{{repositoryType.name}}
+				<option data-ng-repeat="repository in repositories" value="{{repository.id}}">
+					{{repository.name}}
 				</option>
 			</select>
 			<table>
@@ -44,10 +44,10 @@
 						<th>Description</th>
 						<th>Value</th>
 					</tr>
-					<tr	data-ng-repeat="property in repositoryTypeProperties">
+					<tr	data-ng-repeat="property in repositoryProperties">
 						<td>{{property.uiName}}</td>
 						<td>{{property.description}}</td>
-						<td><input type="text" class="form-control" placeholder="to be set" data-ng-model="items.repositoryTypeProperties[property.name]"/></td>
+						<td><input type="text" class="form-control" placeholder="to be set" data-ng-model="items.repositoryProperties[property.name]"/></td>
 					</tr>
 				</tbody>
 			</table>
