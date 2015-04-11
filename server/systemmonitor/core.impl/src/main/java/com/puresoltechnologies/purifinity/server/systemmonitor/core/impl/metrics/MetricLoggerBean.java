@@ -53,7 +53,7 @@ public class MetricLoggerBean implements MetricLogger, MetricLoggerRemote {
 
 	@Inject
 	@SystemMonitorKeyspace
-	private final Session session = null;
+	private Session session;
 
 	private PreparedStatement preparedStatement;
 
