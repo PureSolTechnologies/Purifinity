@@ -75,7 +75,7 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 				.findByName(analysisInformation.getLanguageName(),
 						analysisInformation.getLanguageVersion());
 		ProgrammingLanguage language = analyzerServiceManager
-				.getInstance(analyzerServiceInformation.getJndiName());
+				.createProxy(analyzerServiceInformation.getJndiName());
 		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 			McCabeMetric metric = new McCabeMetric(analysisRun, language,
 					codeRange);

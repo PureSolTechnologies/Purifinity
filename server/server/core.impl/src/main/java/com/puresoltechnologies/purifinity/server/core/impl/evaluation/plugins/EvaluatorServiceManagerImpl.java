@@ -30,124 +30,124 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 @Singleton
 @EJBFacade
 public class EvaluatorServiceManagerImpl extends
-	AbstractServiceManager<EvaluatorServiceInformation> implements
-	EvaluatorServiceManager, EvaluatorServiceManagerRemote {
+		AbstractServiceManager<EvaluatorServiceInformation, Evaluator>
+		implements EvaluatorServiceManager, EvaluatorServiceManagerRemote {
 
-    @Inject
-    private Logger logger;
+	@Inject
+	private Logger logger;
 
-    @Inject
-    private PreferencesStore preferencesStore;
+	@Inject
+	private PreferencesStore preferencesStore;
 
-    @Inject
-    private EvaluatorStoreCassandraUtils evaluatorStoreCassandraUtils;
+	@Inject
+	private EvaluatorStoreCassandraUtils evaluatorStoreCassandraUtils;
 
-    private final Map<String, Boolean> analyzerActivations = new HashMap<>();
+	private final Map<String, Boolean> analyzerActivations = new HashMap<>();
 
-    public EvaluatorServiceManagerImpl() {
-	super("Evaluator Service Manager");
-    }
-
-    @Override
-    @Lock(LockType.WRITE)
-    public void registerService(PluginInformation pluginInformation,
-	    String jndiName, EvaluatorServiceInformation serviceInformation) {
-	super.registerService(pluginInformation, jndiName, serviceInformation);
-	addInformationToDatabase(pluginInformation, serviceInformation);
-    }
-
-    private void addInformationToDatabase(PluginInformation pluginInformation,
-	    EvaluatorServiceInformation serviceInformation) {
-	evaluatorStoreCassandraUtils.registerPluginInformation(
-		pluginInformation, serviceInformation);
-    }
-
-    @Override
-    public Evaluator createInstance(String jndi) {
-	return JndiUtils.createRemoteEJBInstance(Evaluator.class, jndi);
-    }
-
-    @Override
-    public Evaluator createInstanceById(String evaluatorId) {
-	for (EvaluatorServiceInformation evaluator : getServices()) {
-	    if (evaluator.getId().equals(evaluatorId)) {
-		return createInstance(evaluator.getJndiName());
-	    }
+	public EvaluatorServiceManagerImpl() {
+		super("Evaluator Service Manager");
 	}
-	return null;
-    }
 
-    @Override
-    public EvaluatorServiceInformation getEvaluatorPluginInformation(
-	    String evaluatorId) {
-	for (EvaluatorServiceInformation evaluator : getServices()) {
-	    if (evaluator.getId().equals(evaluatorId)) {
-		return evaluator;
-	    }
+	@Override
+	@Lock(LockType.WRITE)
+	public void registerService(PluginInformation pluginInformation,
+			String jndiName, EvaluatorServiceInformation serviceInformation) {
+		super.registerService(pluginInformation, jndiName, serviceInformation);
+		addInformationToDatabase(pluginInformation, serviceInformation);
 	}
-	return null;
-    }
 
-    @Override
-    public List<EvaluatorServiceInformation> getServicesSortedByDependency() {
-	return sortEvaluators(getServices());
-    }
+	private void addInformationToDatabase(PluginInformation pluginInformation,
+			EvaluatorServiceInformation serviceInformation) {
+		evaluatorStoreCassandraUtils.registerPluginInformation(
+				pluginInformation, serviceInformation);
+	}
 
-    private List<EvaluatorServiceInformation> sortEvaluators(
-	    Collection<EvaluatorServiceInformation> evaluators) {
-	List<EvaluatorServiceInformation> sortedEvaluators = new ArrayList<>();
-	Set<String> foundDependencies = new HashSet<>();
-	boolean changed = true;
-	while ((!evaluators.isEmpty()) && (changed)) {
-	    changed = false;
-	    Iterator<EvaluatorServiceInformation> evaluatorIterator = evaluators
-		    .iterator();
-	    while (evaluatorIterator.hasNext()) {
-		EvaluatorServiceInformation evaluator = evaluatorIterator
-			.next();
-		boolean ok = true;
-		for (String dependency : evaluator.getDependencies()) {
-		    if (!foundDependencies.contains(dependency)) {
-			ok = false;
-			break;
-		    }
+	@Override
+	public Evaluator createProxy(String jndi) {
+		return JndiUtils.createRemoteEJBInstance(Evaluator.class, jndi);
+	}
+
+	@Override
+	public Evaluator createInstanceById(String evaluatorId) {
+		for (EvaluatorServiceInformation evaluator : getServices()) {
+			if (evaluator.getId().equals(evaluatorId)) {
+				return createProxy(evaluator.getJndiName());
+			}
 		}
-		if (ok) {
-		    sortedEvaluators.add(evaluator);
-		    foundDependencies.add(evaluator.getId());
-		    evaluatorIterator.remove();
-		    changed = true;
-		}
-	    }
+		return null;
 	}
-	if (logger.isWarnEnabled()) {
-	    StringBuilder builder = new StringBuilder();
-	    for (EvaluatorServiceInformation evaluator : evaluators) {
-		if (builder.length() > 0) {
-		    builder.append(", ");
-		}
-		builder.append(evaluator.getName());
-	    }
-	    logger.warn("The following evaluators were not provided due to missing dependencies: "
-		    + builder.toString());
-	}
-	return sortedEvaluators;
-    }
 
-    @Override
-    public boolean isActive(String evaluatorId) {
-	Boolean active = analyzerActivations.get(evaluatorId);
-	if (active != null) {
-	    return active;
+	@Override
+	public EvaluatorServiceInformation getEvaluatorPluginInformation(
+			String evaluatorId) {
+		for (EvaluatorServiceInformation evaluator : getServices()) {
+			if (evaluator.getId().equals(evaluatorId)) {
+				return evaluator;
+			}
+		}
+		return null;
 	}
-	active = preferencesStore.isServiceActive(evaluatorId);
-	analyzerActivations.put(evaluatorId, active);
-	return active;
-    }
 
-    @Override
-    public void setActive(String evaluatorId, boolean active) {
-	preferencesStore.setServiceActive(evaluatorId, active);
-	analyzerActivations.put(evaluatorId, active);
-    }
+	@Override
+	public List<EvaluatorServiceInformation> getServicesSortedByDependency() {
+		return sortEvaluators(getServices());
+	}
+
+	private List<EvaluatorServiceInformation> sortEvaluators(
+			Collection<EvaluatorServiceInformation> evaluators) {
+		List<EvaluatorServiceInformation> sortedEvaluators = new ArrayList<>();
+		Set<String> foundDependencies = new HashSet<>();
+		boolean changed = true;
+		while ((!evaluators.isEmpty()) && (changed)) {
+			changed = false;
+			Iterator<EvaluatorServiceInformation> evaluatorIterator = evaluators
+					.iterator();
+			while (evaluatorIterator.hasNext()) {
+				EvaluatorServiceInformation evaluator = evaluatorIterator
+						.next();
+				boolean ok = true;
+				for (String dependency : evaluator.getDependencies()) {
+					if (!foundDependencies.contains(dependency)) {
+						ok = false;
+						break;
+					}
+				}
+				if (ok) {
+					sortedEvaluators.add(evaluator);
+					foundDependencies.add(evaluator.getId());
+					evaluatorIterator.remove();
+					changed = true;
+				}
+			}
+		}
+		if (logger.isWarnEnabled()) {
+			StringBuilder builder = new StringBuilder();
+			for (EvaluatorServiceInformation evaluator : evaluators) {
+				if (builder.length() > 0) {
+					builder.append(", ");
+				}
+				builder.append(evaluator.getName());
+			}
+			logger.warn("The following evaluators were not provided due to missing dependencies: "
+					+ builder.toString());
+		}
+		return sortedEvaluators;
+	}
+
+	@Override
+	public boolean isActive(String evaluatorId) {
+		Boolean active = analyzerActivations.get(evaluatorId);
+		if (active != null) {
+			return active;
+		}
+		active = preferencesStore.isServiceActive(evaluatorId);
+		analyzerActivations.put(evaluatorId, active);
+		return active;
+	}
+
+	@Override
+	public void setActive(String evaluatorId, boolean active) {
+		preferencesStore.setServiceActive(evaluatorId, active);
+		analyzerActivations.put(evaluatorId, active);
+	}
 }

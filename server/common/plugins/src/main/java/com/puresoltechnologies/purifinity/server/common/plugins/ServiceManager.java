@@ -12,7 +12,7 @@ import java.util.Collection;
  *            is a {@link ServiceInformation} object which defines information
  *            about the service. This is up to the actual implementation.
  */
-public interface ServiceManager<ServiceInfo extends ServiceInformation> {
+public interface ServiceManager<ServiceInfo extends ServiceInformation, ServiceImplementation> {
 
 	/**
 	 * This method is used for the registration of a service to the manager.
@@ -59,4 +59,15 @@ public interface ServiceManager<ServiceInfo extends ServiceInformation> {
 	 * @return A {@link Collection} of {@link PluginInformation} is returned.
 	 */
 	public Collection<PluginInformation> getPlugins();
+
+	/**
+	 * This method creates an instance of a {@link ServiceImplementation} with
+	 * the given JNDI name.
+	 * 
+	 * @param jndi
+	 *            is the JNDI name of the service for which a proxy is to be
+	 *            created.
+	 * @return An {@link ServiceImplementation} compliant proxy is returned.
+	 */
+	public ServiceImplementation createProxy(String jndi);
 }

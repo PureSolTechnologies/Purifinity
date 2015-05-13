@@ -73,7 +73,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 				.findByName(analysisInformation.getLanguageName(),
 						analysisInformation.getLanguageVersion());
 		ProgrammingLanguage language = analyzerServiceManager
-				.getInstance(analyzerServiceInformation.getJndiName());
+				.createProxy(analyzerServiceInformation.getJndiName());
 
 		HashId hashId = analysisInformation.getHashId();
 		SourceCodeLocation sourceCodeLocation = analysisRun

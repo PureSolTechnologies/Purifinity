@@ -12,9 +12,7 @@ import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryS
 
 @Local
 public interface RepositoryServiceManager extends
-		ServiceManager<RepositoryServiceInformation> {
-
-	Repository getInstance(String jndi);
+		ServiceManager<RepositoryServiceInformation, Repository> {
 
 	/**
 	 * This method creates a {@link Analyzer} instance out of the analyzer id.

@@ -10,19 +10,7 @@ import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerService
  * @author Rick-Rainer Ludwig
  */
 public interface AnalyzerServiceManagerCommon extends
-		ServiceManager<AnalyzerServiceInformation> {
-
-	/**
-	 * This method creates an instance of a {@link ProgrammingLanguageAnalyzer}
-	 * with the given JNDI name.
-	 * 
-	 * @param jndi
-	 *            is the JNDI name of the analyzer for which a proxy is to be
-	 *            created.
-	 * @return An {@link ProgrammingLanguageAnalyzer} compliant proxy is
-	 *         returned.
-	 */
-	public ProgrammingLanguageAnalyzer getInstance(String jndi);
+		ServiceManager<AnalyzerServiceInformation, ProgrammingLanguageAnalyzer> {
 
 	/**
 	 * This method looks for the analyzer for a given language.

@@ -24,8 +24,8 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 @Singleton
 @EJBFacade
 public class RepositoryServiceManagerImpl extends
-		AbstractServiceManager<RepositoryServiceInformation> implements
-		RepositoryServiceManager, RepositoryServiceManagerRemote {
+		AbstractServiceManager<RepositoryServiceInformation, Repository>
+		implements RepositoryServiceManager, RepositoryServiceManagerRemote {
 
 	private final Map<String, Repository> programmingLanguageAnalyzers = new HashMap<>();
 
@@ -35,7 +35,7 @@ public class RepositoryServiceManagerImpl extends
 
 	@Override
 	@Lock(LockType.WRITE)
-	public Repository getInstance(String jndi) {
+	public Repository createProxy(String jndi) {
 		Repository repository = programmingLanguageAnalyzers.get(jndi);
 		if (repository == null) {
 			repository = JndiUtils.createRemoteEJBInstance(Repository.class,
@@ -49,7 +49,7 @@ public class RepositoryServiceManagerImpl extends
 	public Repository getInstanceById(String analyzerId) {
 		for (RepositoryServiceInformation repository : getServices()) {
 			if (repository.getId().equals(analyzerId)) {
-				return getInstance(repository.getJndiName());
+				return createProxy(repository.getJndiName());
 			}
 		}
 		return null;
@@ -62,6 +62,8 @@ public class RepositoryServiceManagerImpl extends
 				.getProperty(RepositoryService.REPOSITORY_ID_PROPERTY);
 		Repository instance = getInstanceById(repositoryId);
 		return new RepositoryLocation() {
+
+			private static final long serialVersionUID = 1084534331267078708L;
 
 			@Override
 			public List<SourceCodeLocation> getSourceCodes(

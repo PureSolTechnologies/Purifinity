@@ -155,7 +155,7 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 				.getServices()) {
 			if (analyzerServiceManager.isActive(analyzerInformation.getId())) {
 				ProgrammingLanguageAnalyzer instance = analyzerServiceManager
-						.getInstance(analyzerInformation.getJndiName());
+						.createProxy(analyzerInformation.getJndiName());
 				if (instance.isSuitable(sourceFile)) {
 					logger.info("'"
 							+ sourceFile.getHumanReadableLocationString()

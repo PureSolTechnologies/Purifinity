@@ -11,6 +11,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
@@ -33,6 +34,24 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 			".f95", ".for" };
 
 	public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
+	static {
+		PARAMETERS
+				.add(new ConfigurationParameter<String>(
+						"Fixed Form Prefix(es)",
+						"",
+						LevelOfMeasurement.NOMINAL,
+						"Specifies a comma separated list of file name suffixes which are to be use to identify pre Fortran 90 fixed form sources.",
+						String.class, "suffixes.form.fixed",
+						"/Source Selection", "f,f77"));
+		PARAMETERS
+				.add(new ConfigurationParameter<String>(
+						"Free Form Prefix(es)",
+						"",
+						LevelOfMeasurement.NOMINAL,
+						"Specifies a comma separated list of file name suffixes which are to be use to identify Fortran 90 free form sources.",
+						String.class, "suffixes.form.fixed",
+						"/Source Selection", "f90"));
+	}
 
 	private SourceForm sourceForm = SourceForm.FREE_FORM;
 

@@ -104,7 +104,7 @@ public class ProjectEvaluationQueueMDBean implements MessageListener {
 				logger.info("Starting evaluator "
 						+ evaluatorInformation.getName() + "...");
 				Evaluator evaluator = evaluatorPluginService
-						.createInstance(evaluatorInformation.getJndiName());
+						.createProxy(evaluatorInformation.getJndiName());
 				evaluator.evaluate(analysisRun, false);
 			}
 		}

@@ -213,6 +213,8 @@ function roleSettingsCtrl($scope, accountManager) {
 
 function accountViewCtrl($scope, $modal, accountManager, authService) {
 	$scope.email = authService.authData.authId;
+	$scope.authId = authService.authData.authId;
+	$scope.authToken = authService.authData.authToken;
 	$scope.user = {};
 	accountManager.getUser($scope.email,
 		function(data, status) {$scope.user = data;}, 

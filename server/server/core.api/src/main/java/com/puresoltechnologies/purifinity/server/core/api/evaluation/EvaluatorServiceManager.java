@@ -13,17 +13,7 @@ import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServ
  */
 @Local
 public interface EvaluatorServiceManager extends
-		ServiceManager<EvaluatorServiceInformation> {
-
-	/**
-	 * This method creates a {@link Evaluator} instance out of the jndi name.
-	 * This evaluator is actually a proxy via remoting to the plugin.
-	 * 
-	 * @param jndi
-	 *            is the JNDI Name.
-	 * @return An {@link Evaluator} proxy is returned.
-	 */
-	public Evaluator createInstance(String jndi);
+		ServiceManager<EvaluatorServiceInformation, Evaluator> {
 
 	/**
 	 * This method creates a {@link Evaluator} instance out of the evaluator id.

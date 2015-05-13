@@ -14,7 +14,7 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class AbstractServiceRegistration<T extends ServiceInformation> {
+public abstract class AbstractServiceRegistration<ServiceInfo extends ServiceInformation> {
 
 	@Inject
 	private ServiceManagerProxy serviceManagerProxy;
@@ -34,7 +34,7 @@ public abstract class AbstractServiceRegistration<T extends ServiceInformation> 
 	 * 
 	 * @return
 	 */
-	public abstract T getServiceInformation();
+	public abstract ServiceInfo getServiceInformation();
 
 	/**
 	 * This method writes the service registration into the database.
@@ -68,7 +68,7 @@ public abstract class AbstractServiceRegistration<T extends ServiceInformation> 
 	 * @throws IllegalStateException
 	 *             is thrown, if the registration process times out.
 	 */
-	protected <Information extends ServiceInformation, RemoteService extends ServiceManager<Information>> void register(
+	protected <Information extends ServiceInformation, Service, RemoteService extends ServiceManager<Information, Service>> void register(
 			Class<? extends RemoteService> remoteService,
 			String remoteServiceJNDIName, PluginInformation pluginInformation,
 			String serviceJNDIName, Information information) {
@@ -96,7 +96,7 @@ public abstract class AbstractServiceRegistration<T extends ServiceInformation> 
 	 * @throws IllegalStateException
 	 *             is thrown, if the registration process times out.
 	 */
-	protected <Information extends ServiceInformation, RemoteService extends ServiceManager<Information>> void unregister(
+	protected <Information extends ServiceInformation, Service, RemoteService extends ServiceManager<Information, Service>> void unregister(
 			Class<? extends RemoteService> remoteService,
 			String remoteServiceJNDIName, String serviceJNDIName) {
 		try {
