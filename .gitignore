@@ -11,3 +11,4 @@ workspace
 *~
 dependency-reduced-pom.xml
 Thumbs.db
+node_modules
