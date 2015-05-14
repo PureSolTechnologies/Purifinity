@@ -10,7 +10,7 @@
 
 	<fileSets>
 		<fileSet>
-			<directory>src/main/webapp</directory>
+			<directory>target/dist</directory>
 			<includes>
 				<include>**/*</include>
 			</includes>
