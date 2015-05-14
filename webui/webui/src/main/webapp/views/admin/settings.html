@@ -1,17 +1,11 @@
 <div class="container">
   <tabset>
-    <tab heading="System Settings">
-      <p>Settings in this section are system wide settings and defaults for plugin, user and project settings.</p>
-      <div>
-	TODO
-      </div>
-    </tab>
+    <tab heading="System Settings" data-ng-controller="systemSettingsCtrl">
+      <p>Settings in this section are system settings which influence the behavior of the system in general.</p>
+      <configuration-component data-ng-model="systemSettingsTree"></configurationComponent>
+</tab>
     <tab heading="Plugin Activation" data-ng-controller="pluginActivationCtrl">
-      <div class="row">
-	<div class="col-xs-12">
-	  Settings in this section are plugin settings which may also override system defaults.
-	</div>
-      </div>
+      <p>In this sections plugins are enabled and disabled system wide.</p
       <h3>Analyzers</h3>
       <table class="table table-striped table-hover table-bordered">
 	<thead>
@@ -26,8 +20,8 @@
 	    <td>{{analyzer.name}}</td>
 	    <td>{{analyzer.description}}</td>
 	    <td>
-	      <button class="btn {{getAnalyzerButtonClass(analyzer.id)}}" 
-		      data-ng-value="analyzerActivation[analyzer.id]" 
+	      <button class="btn {{getAnalyzerButtonClass(analyzer.id)}}"
+		      data-ng-value="analyzerActivation[analyzer.id]"
 		      data-ng-click="toggleAnalyzerActivation(analyzer.id)">
 		{{getAnalyzerButtonText(analyzer.id)}}
 	      </button>
@@ -49,8 +43,8 @@
 	    <td>{{evaluator.name}}</td>
 	    <td>{{evaluator.description}}</td>
 	    <td>
-	      <button class="btn {{getEvaluatorButtonClass(evaluator.id)}}" 
-		      data-ng-value="evaluatorActivation[evaluator.id]" 
+	      <button class="btn {{getEvaluatorButtonClass(evaluator.id)}}"
+		      data-ng-value="evaluatorActivation[evaluator.id]"
 		      data-ng-click="toggleEvaluatorActivation(evaluator.id)">
 		{{getEvaluatorButtonText(evaluator.id)}}
 	      </button>
@@ -60,16 +54,7 @@
       </table>
     </tab>
     <tab heading="Plugin Settings" data-ng-controller="pluginSettingsCtrl">
-      <div ui-tree>
-	<ol ui-tree-nodes="">
-	  <li ui-tree-node="">
-	    <div ui-tree-handle>
-	      Title
-	    </div>
-	  </li>
-	</ol>
-      </div>
-      <p>Settings in this section are plugin settings which may also override system defaults.</p>
+      <p>Settings in this section are plugin settings which are used for the plugin as default. Project settings override these settings.</p>
       <div class="row">
 	<div class="col-md-4">
 	  <label for="repositorySelection" title="Selection for the repository plugin.">Repositories</label><br/>
