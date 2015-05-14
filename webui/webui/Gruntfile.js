@@ -1,19 +1,41 @@
 module.exports = function(grunt) {
+	var srcDir = 'src/main/'
 	grunt.loadNpmTasks('grunt-typescript');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
-	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-htmlmin');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt
 			.initConfig({
 				copy : {
-					production : {
+					libs : {
+						files : [
+								{
+									expand : true,
+									src : [ '**' ],
+									cwd : 'src/main/lib',
+									dest : 'target/tmp/lib/'
+								},
+								{
+									expand : true,
+									src : [ '**' ],
+									cwd : 'src/main/lib',
+									dest : 'target/dist/lib/'
+								} ]
+					},
+					resources : {
 						files : [ {
 							expand : true,
 							src : [ '**' ],
-							cwd : 'src/main/html/',
-							dest : 'target/dist/'
+							cwd : 'src/main/images/',
+							dest : 'target/tmp/images/'
+						}, {
+							expand : true,
+							src : [ '**' ],
+							cwd : 'src/main/fonts/',
+							dest : 'target/tmp/fonts/'
 						}, {
 							expand : true,
 							src : [ '**' ],
@@ -26,22 +48,17 @@ module.exports = function(grunt) {
 							dest : 'target/dist/fonts/'
 						} ]
 					},
-					development : {
+					html : {
 						files : [ {
 							expand : true,
 							src : [ '**' ],
-							cwd : 'src/html/',
+							cwd : 'src/main/html/',
 							dest : 'target/tmp/'
 						}, {
 							expand : true,
 							src : [ '**' ],
-							cwd : 'src/main/images/',
-							dest : 'target/tmp/images/'
-						}, {
-							expand : true,
-							src : [ '**' ],
-							cwd : 'src/main/fonts/',
-							dest : 'target/tmp/fonts/'
+							cwd : 'src/main/html/',
+							dest : 'target/dist/'
 						} ]
 					}
 				},
@@ -52,7 +69,7 @@ module.exports = function(grunt) {
 						options : {
 							module : 'amd',
 							target : 'es5',
-							basePath : 'src/typescript',
+							basePath : 'src/main/typescript',
 							watch : false,
 							sourceMap : true,
 							declaration : true
@@ -85,6 +102,26 @@ module.exports = function(grunt) {
 						}
 					}
 				},
+				htmlmin : {
+					production : {
+						files : [ {
+							expand : true,
+							src : [ '**/*.html' ],
+							cwd : 'target/tmp/',
+							dest : 'target/dist/'
+						} ],
+						options : {
+							removeComments : true,
+							removeCommentsFromCDATA : true,
+							removeCDATASectionsFromCDATA : true,
+							collapseWhitespace : true,
+							removeRedundantAttributes : true,
+							caseSensitive : true,
+							minifyJS : true,
+							minifyCSS : true
+						}
+					}
+				},
 				watch : {
 					scripts : {
 						files : [ 'src/main/typescript/**/*.ts' ],
@@ -102,13 +139,13 @@ module.exports = function(grunt) {
 					},
 					html : {
 						files : [ 'src/main/html/**/*' ],
-						tasks : [ 'copy', 'cssmin' ],
+						tasks : [ 'copy:html', 'htmlmin' ],
 						options : {
 							spawn : false
 						}
 					}
 				}
 			});
-	grunt.registerTask('default', 'Builds the whole distribution', [
-			'typescript', 'uglify', 'less', 'cssmin', 'copy' ]);
+	grunt.registerTask('default', 'Builds the whole distribution', [ 'copy',
+			'htmlmin', 'typescript', 'uglify', 'less', 'cssmin' ]);
 }
