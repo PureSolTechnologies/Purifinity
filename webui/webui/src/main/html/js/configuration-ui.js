@@ -1,14 +1,16 @@
-var configurationUIModule = angular.module("configurationUIModule", [ "preferencesManagerModule" ]);
-configurationUIModule.directive("configurationComponent", configurationComponent);
+var configurationUIModule = angular.module("configurationUIModule",
+		[ "preferencesManagerModule" ]);
+configurationUIModule.directive("configurationComponent",
+		configurationComponent);
 
 function configurationComponent() {
 	return {
-		restrict: "E",
-		scope: {
-			configurationTreeData: '=ngModel'
+		restrict : "E",
+		scope : {
+			configurationTreeData : '=ngModel'
 		},
 		controller : configurationComponentCtrl,
-		templateUrl: "js/configurationComponent.html"
+		templateUrl : "directives/configuration-component.html"
 	};
 }
 
@@ -17,11 +19,11 @@ function configurationComponentCtrl($scope) {
 	$scope.path.push($scope.configurationTreeData);
 	$scope.currentFolder = $scope.configurationTreeData;
 	$scope.chdir = function(dir) {
-		if  (dir == "..") {
+		if (dir == "..") {
 			if ($scope.path.length > 1) {
 				$scope.path.pop();
 				$scope.currentFolder = $scope.path[$scope.path.length - 1];
-			} 
+			}
 			return;
 		}
 		for (key in $scope.currentFolder.children) {
@@ -34,7 +36,8 @@ function configurationComponentCtrl($scope) {
 		}
 	}
 	$scope.setDir = function(dir) {
-		while (($scope.path.length > 1) && ($scope.path[$scope.path.length - 1] !== dir)) {
+		while (($scope.path.length > 1)
+				&& ($scope.path[$scope.path.length - 1] !== dir)) {
 			$scope.path.pop();
 		}
 		$scope.currentFolder = $scope.path[$scope.path.length - 1];
@@ -42,6 +45,6 @@ function configurationComponentCtrl($scope) {
 	$scope.$watch('configurationTreeData', function(newValue, oldValue) {
 		$scope.path = [];
 		$scope.path.push($scope.configurationTreeData);
-		$scope.currentFolder = $scope.configurationTreeData;		
+		$scope.currentFolder = $scope.configurationTreeData;
 	});
 };

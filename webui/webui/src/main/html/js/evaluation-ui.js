@@ -17,6 +17,6 @@ function evaluatorSelection() {
 				function(data, status, error) {}
 			);
 		},
-		templateUrl: "js/evaluatorSelection.html"
+		templateUrl: "directives/evaluator-selection.html"
 	};
 }

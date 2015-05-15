@@ -1,14 +1,15 @@
-var treeTableUIModule = angular.module("treeTableUIModule", [ "pluginManagerModule" ]);
+var treeTableUIModule = angular.module("treeTableUIModule",
+		[ "pluginManagerModule" ]);
 treeTableUIModule.directive("treeTable", treeTable);
 
 function treeTable() {
 	return {
-		restrict: "E",
-		scope: {
-			treeTableData: '=ngModel'
+		restrict : "E",
+		scope : {
+			treeTableData : '=ngModel'
 		},
 		controller : treeTableCtrl,
-		templateUrl: "js/treeTable.html"
+		templateUrl : "directives/tree-table.html"
 	};
 }
 
@@ -17,11 +18,11 @@ function treeTableCtrl($scope) {
 	$scope.path.push($scope.treeTableData);
 	$scope.currentFolder = $scope.treeTableData;
 	$scope.chdir = function(dir) {
-		if  (dir == "..") {
+		if (dir == "..") {
 			if ($scope.path.length > 1) {
 				$scope.path.pop();
 				$scope.currentFolder = $scope.path[$scope.path.length - 1];
-			} 
+			}
 			return;
 		}
 		for (key in $scope.currentFolder.children) {
@@ -34,7 +35,8 @@ function treeTableCtrl($scope) {
 		}
 	}
 	$scope.setDir = function(dir) {
-		while (($scope.path.length > 1) && ($scope.path[$scope.path.length - 1] !== dir)) {
+		while (($scope.path.length > 1)
+				&& ($scope.path[$scope.path.length - 1] !== dir)) {
 			$scope.path.pop();
 		}
 		$scope.currentFolder = $scope.path[$scope.path.length - 1];
@@ -42,6 +44,6 @@ function treeTableCtrl($scope) {
 	$scope.$watch('treeTableData', function(newValue, oldValue) {
 		$scope.path = [];
 		$scope.path.push($scope.treeTableData);
-		$scope.currentFolder = $scope.treeTableData;		
+		$scope.currentFolder = $scope.treeTableData;
 	});
 };
