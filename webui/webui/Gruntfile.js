@@ -82,11 +82,6 @@ module.exports = function(grunt) {
 							'target/tmp/css/purifinity-ui.css' : 'src/main/less/purifinity-ui.less'
 						}
 					},
-					production : {
-						files : {
-							'target/tmp/css/purifinity-ui.css' : 'src/main/less/purifinity-ui.less'
-						}
-					}
 				},
 				uglify : {
 					target : {
@@ -98,7 +93,7 @@ module.exports = function(grunt) {
 				cssmin : {
 					target : {
 						files : {
-							'target/tmp/css/purifinity-ui.css' : 'target/dist/css/purifinity-ui.css'
+							'target/dist/css/purifinity-ui.css' : 'target/tmp/css/purifinity-ui.css'
 						}
 					}
 				},

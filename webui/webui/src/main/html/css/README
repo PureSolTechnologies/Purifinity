@@ -1,6 +1,0 @@
-Cascading Stylesheets need to be in webapp/resources. The library name is the
-next folder within resources and the name of the file is the name of the style
-sheet.
-
-2012-07-20
-Rick-Rainer Ludwig
