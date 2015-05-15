@@ -126,7 +126,7 @@ module.exports = function(grunt) {
 						}
 					},
 					styles : {
-						files : [ 'src/main/typescript/**/*.ts' ],
+						files : [ 'src/main/less/**/*.less' ],
 						tasks : [ 'less', 'cssmin' ],
 						options : {
 							spawn : false
