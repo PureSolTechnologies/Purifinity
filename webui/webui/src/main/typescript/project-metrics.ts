@@ -1,4 +1,4 @@
-var projectMetricsModule = angular.module("projectMetricsModule", [
+var projectMetricsModule : angular.IModule = angular.module("projectMetricsModule", [
     "projectManagerModule", "pluginManagerModule", "purifinityServer", "purifinityUI"
 ]);
 projectMetricsModule.controller("fileSystemMetrics", fileSystemMetrics);

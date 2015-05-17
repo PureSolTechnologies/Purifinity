@@ -2,7 +2,7 @@
  * This JavaScript files contains Angular JS functionality to be added to an
  * application to handle user accounts for Purifinity.
  */
-var pluginManagerModule = angular.module("pluginManagerModule", [ "purifinityServer" ]);
+var pluginManagerModule : angular.IModule = angular.module("pluginManagerModule", [ "purifinityServer" ]);
 pluginManagerModule.factory('pluginManager', [
 		'purifinityServerConnector', pluginManager ]);
 pluginManagerModule.controller("pluginSettingsCtrl", pluginSettingsCtrl);

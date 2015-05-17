@@ -1,4 +1,4 @@
-var evaluationUIModule = angular.module("evaluationUIModule", [ "pluginManagerModule" ]);
+var evaluationUIModule : angular.IModule = angular.module("evaluationUIModule", [ "pluginManagerModule" ]);
 evaluationUIModule.directive("evaluatorSelection", evaluatorSelection);
 
 function evaluatorSelection() {

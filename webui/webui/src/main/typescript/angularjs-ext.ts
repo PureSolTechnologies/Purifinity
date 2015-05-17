@@ -7,7 +7,7 @@
  * 
  * @angularApplication is the AngularJS application which is to be enhanced.
  */
-var purifinityUI = angular.module("purifinityUI", ['ngSanitize']);
+var purifinityUI : angular.IModule = angular.module("purifinityUI", ['ngSanitize']);
 purifinityUI.controller("menuCtrl", menuCtrl);
 purifinityUI.filter("defaultDate", defaultDateFilter);
 purifinityUI.filter("metricValue", metricValueFilter);

@@ -2,7 +2,7 @@
  * This JavaScript files contains Angular JS functionality to be added to an
  * application to handle projects for Purifinity.
  */
-var projectManagerModule = angular.module("projectManagerModule", [ "purifinityServer" ]);
+var projectManagerModule : angular.IModule  = angular.module("projectManagerModule", [ "purifinityServer" ]);
 projectManagerModule.factory('projectManager', ['purifinityServerConnector', projectManager ]);
 projectManagerModule.controller("projectListCtrl", projectListCtrl);
 projectManagerModule.controller("projectsCtrl", projectsCtrl);	
@@ -103,8 +103,8 @@ function projectsCtrl($scope, $routeParams, baseURL) {
 	$scope.projectId = $routeParams['project'];
 	$scope.runId = $routeParams['run'];
 	$scope.mode = $routeParams['mode'];
-	$scope.isSelected = function(uuid) {
-		return projectId == uuid;
+	$scope.isSelected = function(id) {
+		return $scope.projectId == id;
 	};
 }
 

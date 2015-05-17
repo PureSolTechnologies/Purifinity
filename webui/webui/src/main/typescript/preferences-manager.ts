@@ -2,7 +2,7 @@
  * This JavaScript files contains Angular JS functionality to be added to an
  * application to handle preferences for Purifinity.
  */
-var preferencesManagerModule = angular.module("preferencesManagerModule", [ "purifinityServer" ]);
+var preferencesManagerModule : angular.IModule = angular.module("preferencesManagerModule", [ "purifinityServer" ]);
 preferencesManagerModule.factory('preferencesManager', [
     'purifinityServerConnector', preferencesManager ]);
 preferencesManagerModule.controller('systemSettingsCtrl', systemSettingsCtrl);

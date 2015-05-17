@@ -1,4 +1,4 @@
-var treeTableUIModule = angular.module("treeTableUIModule",
+var treeTableUIModule : angular.IModule = angular.module("treeTableUIModule",
 		[ "pluginManagerModule" ]);
 treeTableUIModule.directive("treeTable", treeTable);
 
@@ -25,7 +25,7 @@ function treeTableCtrl($scope) {
 			}
 			return;
 		}
-		for (key in $scope.currentFolder.children) {
+		for (var key in $scope.currentFolder.children) {
 			if ($scope.currentFolder.children[key].content == dir) {
 				var newFolder = $scope.currentFolder.children[key];
 				$scope.path.push(newFolder);

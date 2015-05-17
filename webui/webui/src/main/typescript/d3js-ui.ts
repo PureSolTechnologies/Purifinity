@@ -1,7 +1,7 @@
 /* 
  * This JavaScript file contains the D3.js bindings to AngularJS for Purifinity.
  */
-var d3Module = angular.module("d3Module", []);
+var d3Module : angular.IModule = angular.module("d3Module", []);
 d3Module.factory('d3Service', ['$document', '$q', '$rootScope', d3Service]);
 d3Module.directive("verticalParetoChart", ['d3Service', '$window', verticalParetoChart]);
 d3Module.directive("paretoChart", ['d3Service', '$window', paretoChart]);

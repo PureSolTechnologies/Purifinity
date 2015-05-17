@@ -7,7 +7,7 @@
  * to handle Purifinity servers efficiently.
  */
 
-var purifinityServer = angular.module("purifinityServer", [ 'alerter' ]);
+var purifinityServer : angular.IModule = angular.module("purifinityServer", [ 'alerter' ]);
 /*
  * Add baseURL constant as it is read out of the configuration for later use in
  * modules and controllers.
@@ -394,7 +394,7 @@ function serverStatusCtrl($scope) {
 	};
 	$scope.getCPUUsage = function() {
 		if (!$scope.status || !$scope.status.averageLoad || ($scope.status.averageLoad < 0) || !$scope.status.availableCPUs) {
-			return "n/a";
+			return 0.0;
 		}
 		return $scope.status.averageLoad / $scope.status.availableCPUs;
 	};

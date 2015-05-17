@@ -1,4 +1,4 @@
-var analysisUIModule = angular.module("analysisUIModule", [ "projectManagerModule" ]);
+var analysisUIModule : angular.IModule = angular.module("analysisUIModule", [ "projectManagerModule" ]);
 analysisUIModule.controller("analysisBrowserCtrl", analysisBrowserCtrl);
 analysisUIModule.controller("runListCtrl", runListCtrl);
 

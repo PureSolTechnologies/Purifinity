@@ -1,4 +1,4 @@
-var configurationUIModule = angular.module("configurationUIModule",
+var configurationUIModule : angular.IModule = angular.module("configurationUIModule",
 		[ "preferencesManagerModule" ]);
 configurationUIModule.directive("configurationComponent",
 		configurationComponent);
@@ -26,7 +26,7 @@ function configurationComponentCtrl($scope) {
 			}
 			return;
 		}
-		for (key in $scope.currentFolder.children) {
+		for (var key in $scope.currentFolder.children) {
 			if ($scope.currentFolder.children[key].content == dir) {
 				var newFolder = $scope.currentFolder.children[key];
 				$scope.path.push(newFolder);
