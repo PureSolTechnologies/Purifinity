@@ -2,7 +2,7 @@
  * This JavaScript files contains Angular JS functionality to be added to an
  * application to handle user accounts for Purifinity.
  */
-var accountManagerModule : angular.IModule = angular.module("accountManagerModule", [ "purifinityServer" ]);
+var accountManagerModule : angular.IModule = angular.module("accountManagerModule", [ "purifinityServerModule" ]);
 accountManagerModule.factory('accountManager', [
 		'purifinityServerConnector', accountManager ]);
 accountManagerModule.controller("usersViewCtrl", usersViewCtrl);
@@ -14,51 +14,7 @@ accountManagerModule.controller("accountViewCtrl", accountViewCtrl);
 accountManagerModule.controller("changePasswordModalInstanceCtrl", changePasswordModalInstanceCtrl);
 
 function accountManager(purifinityServerConnector) {
-	var accountManager = {};
-	accountManager.getUsers = function(success, error) {
-		return purifinityServerConnector.get('/accountmanager/rest/users',
-				success, error);
-	};
-	accountManager.createAccount = function(email, name, password, roleId, success, error) {
-		var data = {
-			email: email,
-			name: name,
-			password: password,
-			roleId: roleId
-		};
-		return purifinityServerConnector.put('/accountmanager/rest/users', data, 
-				success, error);
-	};
-	accountManager.editAccount = function(email, name, roleId, success, error) {
-		var data = {
-			name: name,
-			roleId: roleId
-		};
-		return purifinityServerConnector.post('/accountmanager/rest/users/' + email, data, 
-				success, error);
-	};
-	accountManager.deleteAccount = function(email, success, error) {
-		var data = {};
-		return purifinityServerConnector.del('/accountmanager/rest/users/' + email,  
-				success, error);
-	};
-	accountManager.getRoles = function(success, error) {
-		return purifinityServerConnector.get('/accountmanager/rest/roles',
-				success, error);
-	};
-	accountManager.getUser = function(email, success, error) {
-		return purifinityServerConnector.get('/accountmanager/rest/users/' + email,
-				success, error);
-	};
-	accountManager.changePassword = function(email, oldPassword, newPassword, success, error) {
-		var data = {
-			oldPassword: oldPassword,
-			newPassword: newPassword
-		};
-		return purifinityServerConnector.post('/accountmanager/rest/users/' + email + "/passwd", data,
-				success, error);
-	}
-	return accountManager;
+    return new AccountManager(purifinityServerConnector);
 }
 
 function usersViewCtrl($scope) {

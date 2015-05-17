@@ -29,19 +29,13 @@
 <!-- Custom JS scripts -->
 <script type="text/javascript" src="config/server.js"></script>
 <script type="text/javascript" src="config/authentication.js"></script>
-<script type="text/javascript" src="js/angularjs-ext.js"></script>
-<script type="text/javascript" src="js/purifinity-server.js"></script>
-<script type="text/javascript" src="js/account-manager.js"></script>
-<script type="text/javascript" src="js/plugin-manager.js"></script>
-<script type="text/javascript" src="js/preferences-manager.js"></script>
-<script type="text/javascript" src="js/project-manager.js"></script>
-<script type="text/javascript" src="js/alerter.js"></script>
+<script type="text/javascript" src="js/purifinity-ui.js"></script>
 <script type="text/javascript">
   var adminApp = angular.module("purifinityAdminApp", [
   "ngRoute",
   "ui.bootstrap",
   "purifinityUI",
-  "purifinityServer",
+  "purifinityServerModule",
   "accountManagerModule",
   "pluginManagerModule",
   "preferencesManagerModule",
@@ -106,7 +100,7 @@
 	All</button>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-8">
-      <alert data-ng-repeat="alert in alerts" type="{{alert.type}}"
+      <alert data-ng-repeat="alert in alerts" type="{{alert.severity}}"
 	     close="closeAlert($index)" data-ng-cloak>{{alert.message}}</alert>
     </div>
   </div>
@@ -123,5 +117,6 @@
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="lib/bootstrap/js/bootstrap.min.js"></script>
   <script src="lib/bootstrap-select/js/bootstrap-select.min.js"></script>
+	<script src="js/enable-tooltips.js"></script>
 </body>
 </html>

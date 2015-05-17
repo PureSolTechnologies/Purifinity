@@ -16,7 +16,7 @@ function d3Service($document, $q, $rootScope) {
 	function onScriptLoad() {
 		// Load client into browser
 		$rootScope.$apply(function() {
-			d.resolve(window.d3);
+			d.resolve(d3);
 		});
 	}
 	var scriptTag = $document[0].createElement('script');
@@ -77,7 +77,7 @@ function verticalParetoChart(d3Service, $window) {
 
 				 // Watch for resize event
 				scope.$watch(function() {
-					return angular.element($window)[0].innerWidth;
+					return angular.element($window)[0]['innerWidth'];
 				}, function() {
 					scope.render(scope.data);
 				});
@@ -145,7 +145,7 @@ function verticalParetoChart(d3Service, $window) {
 					})
 					.attr('x', 15)
 					.text(function(d) {
-						return d.name + " (" + parseFloat(Math.round(d.value * 100) / 100).toFixed(2) + ")";
+						return d.name + " (" + String((Math.round(d.value * 100) / 100).toFixed(2)) + ")";
 					});
 				}
 			});
@@ -185,7 +185,7 @@ function paretoChart(d3Service, $window) {
 
 				 // Watch for resize event
 				scope.$watch(function() {
-					return angular.element($window)[0].innerWidth;
+					return angular.element($window)[0]['innerWidth'];
 				}, function() {
 					scope.render(scope.data);
 				});
@@ -306,7 +306,7 @@ function histogramChart(d3Service, $window) {
 
 				 // Watch for resize event
 				scope.$watch(function() {
-					return angular.element($window)[0].innerWidth;
+					return angular.element($window)[0]['innerWidth'];
 				}, function() {
 					scope.render(scope.data);
 				});
@@ -339,7 +339,7 @@ function histogramChart(d3Service, $window) {
 					var bins = new Array(binCount);
 					for (var i = 0; i < binData.length; i++) {
 						binData[i] = 0;
-						bins[i] = parseFloat(Math.round((dataMin + (dataMax - dataMin) / binCount * (i +  0.5)) * 100) / 100).toFixed(2);
+						bins[i] = String((Math.round((dataMin + (dataMax - dataMin) / binCount * (i +  0.5)) * 100) / 100).toFixed(2));
 					}
 					for (var key in data) {
 						var value = data[key].value;
@@ -443,7 +443,7 @@ function treeMap(d3Service, $window) {
 
 					// Watch for resize event
 					scope.$watch(function() {
-						return angular.element($window)[0].innerWidth;
+						return angular.element($window)[0]['innerWidth'];
 					}, function() {
 						scope.render(scope.data);
 					});

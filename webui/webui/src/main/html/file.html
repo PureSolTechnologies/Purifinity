@@ -29,25 +29,14 @@
 <!-- Custom JS scripts -->
 <script type="text/javascript" src="config/server.js"></script>
 <script type="text/javascript" src="config/authentication.js"></script>
-<script type="text/javascript" src="js/angularjs-ext.js"></script>
-<script type="text/javascript" src="js/treetable-ui.js"></script>
-<script type="text/javascript" src="js/purifinity-server.js"></script>
-<script type="text/javascript" src="js/account-manager.js"></script>
-<script type="text/javascript" src="js/project-manager.js"></script>
-<script type="text/javascript" src="js/plugin-manager.js"></script>
-<script type="text/javascript" src="js/project-metrics.js"></script>
-<script type="text/javascript" src="js/analysis-ui.js"></script>
-<script type="text/javascript" src="js/file-store.js"></script>
-<script type="text/javascript" src="js/file-viewer.js"></script>
-<script type="text/javascript" src="js/alerter.js"></script>
-<script type="text/javascript" src="js/d3js-ui.js"></script>
+<script type="text/javascript" src="js/purifinity-ui.js"></script>
 <script type="text/javascript">
   var fileApp = angular.module("fileApp", [
   "ngRoute",
   "ui.bootstrap",
   "treeTableUIModule",
   "purifinityUI",
-  "purifinityServer",
+  "purifinityServerModule",
   "accountManagerModule",
   "projectManagerModule",
   "pluginManagerModule",
@@ -109,7 +98,7 @@
 	All</button>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-8" data-ng-cloak>
-      <alert data-ng-repeat="alert in alerts" type="{{alert.type}}"
+      <alert data-ng-repeat="alert in alerts" type="{{alert.severity}}"
 	     close="closeAlert($index)" data-ng-cloak>{{alert.message}}</alert>
     </div>
   </div>

@@ -1,5 +1,4 @@
-var treeTableUIModule : angular.IModule = angular.module("treeTableUIModule",
-		[ "pluginManagerModule" ]);
+var treeTableUIModule : angular.IModule = angular.module("treeTableUIModule", []);
 treeTableUIModule.directive("treeTable", treeTable);
 
 function treeTable() {

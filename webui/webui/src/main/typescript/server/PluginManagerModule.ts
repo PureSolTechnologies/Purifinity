@@ -2,51 +2,14 @@
  * This JavaScript files contains Angular JS functionality to be added to an
  * application to handle user accounts for Purifinity.
  */
-var pluginManagerModule : angular.IModule = angular.module("pluginManagerModule", [ "purifinityServer" ]);
+var pluginManagerModule : angular.IModule = angular.module("pluginManagerModule", [ "purifinityServerModule" ]);
 pluginManagerModule.factory('pluginManager', [
 		'purifinityServerConnector', pluginManager ]);
 pluginManagerModule.controller("pluginSettingsCtrl", pluginSettingsCtrl);
 pluginManagerModule.controller("pluginActivationCtrl", pluginActivationCtrl);
 
 function pluginManager(purifinityServerConnector) {
-	var pluginManager = {};
-	pluginManager.getAnalyzers = function(success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/analysis/analyzers',
-				success, error);
-	};
-	pluginManager.getEvaluators = function(success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/evaluation/evaluators',
-				success, error);
-	};
-	pluginManager.getRepositoryTypes = function(success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/repositories/types',
-				success, error);
-	};
-	pluginManager.isAnalyzerEnabled = function(analyzerId, success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/analysis/analyzers/' + analyzerId + "/enabled",
-				success, error);
-	};
-	pluginManager.enableAnalyzer = function(analyzerId, success, error) {
-		purifinityServerConnector.put('/purifinityserver/rest/analysis/analyzers/' + analyzerId + "/enable",
-				success, error);	
-	}
-	pluginManager.disableAnalyzer = function(analyzerId, success, error) {
-		purifinityServerConnector.put('/purifinityserver/rest/analysis/analyzers/' + analyzerId + "/disable",
-				success, error);	
-	}
-	pluginManager.isEvaluatorEnabled = function(analyzerId, success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/evaluation/evaluators/' + analyzerId + "/enabled",
-				success, error);
-	};
-	pluginManager.enableEvaluator = function(evaluatorId, success, error) {
-		purifinityServerConnector.put('/purifinityserver/rest/evaluation/evaluators/' + evaluatorId + "/enable",
-				success, error);	
-	}
-	pluginManager.disableEvaluator = function(evaluatorId, success, error) {
-		purifinityServerConnector.put('/purifinityserver/rest/evaluation/evaluators/' + evaluatorId + "/disable",
-				success, error);	
-	}
-	return pluginManager;
+    return new PluginManager(purifinityServerConnector);
 }
 
 function pluginSettingsCtrl($scope, pluginManager) {

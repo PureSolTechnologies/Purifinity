@@ -1,5 +1,5 @@
 var projectMetricsModule : angular.IModule = angular.module("projectMetricsModule", [
-    "projectManagerModule", "pluginManagerModule", "purifinityServer", "purifinityUI"
+    "projectManagerModule", "pluginManagerModule", "purifinityServerModule", "purifinityUI"
 ]);
 projectMetricsModule.controller("fileSystemMetrics", fileSystemMetrics);
 projectMetricsModule.controller("treeMapCtrl", treeMapCtrl);
@@ -45,13 +45,15 @@ function fileSystemMetrics($scope, $routeParams, $filter, projectManager, purifi
 	}
 	if ($scope.project.information && $scope.run.runId && newValue) {
 	    purifinityServerConnector.get('/purifinityserver/rest/evaluatorstore/metrics/' + $scope.project.information.projectId + '/' + $scope.run.runId + '/' + newValue, function(data, status) {
-		var types = new Set();
-		types.add('DIRECTORY');
-		types.add('FILE');
+		var types = [];
+		types.push('DIRECTORY');
+		types.push('FILE');
 		for (var hashid in data.fileMetrics) {
 		    var fileResults = data.fileMetrics[hashid];
 		    fileResults.codeRangeMetrics.forEach(function (metrics) {
-			types.add(metrics.codeRangeType);
+                if (types.indexOf(metrics.codeRangeType) < 0) {
+			     types.push(metrics.codeRangeType);
+                }
 		    });							
 		}
 		$scope.codeRangeTypes = [];
@@ -130,7 +132,7 @@ function fileSystemMetrics($scope, $routeParams, $filter, projectManager, purifi
 }
 
 function convertFileTreeForMetrics(fileTree) {
-	var treeTableData = {};
+	var treeTableData: any = {};
 	treeTableData.content = fileTree.name;
 	treeTableData.id = fileTree.hashId.algorithmName + ":" + fileTree.hashId.hash;
 	treeTableData.columns = [];
@@ -139,14 +141,14 @@ function convertFileTreeForMetrics(fileTree) {
 		fileTree.children.sort(function(l, r) {
 			if ((l.children) && (l.children.length > 0)) {
 				if ((r.children) && (r.children.length > 0)) {
-					return strcmp(l.name.toUpperCase(), r.name.toUpperCase());
+					return Utilities.strcmp(l.name.toUpperCase(), r.name.toUpperCase());
 				}
 				return -1;
 			} else {
 				if ((r.children) && (r.children.length > 0)) {
 					return 1;
 				}
-				return strcmp(l.name.toUpperCase(), r.name.toUpperCase());
+				return Utilities.strcmp(l.name.toUpperCase(), r.name.toUpperCase());
 			}
 		});
 		fileTree.children.forEach(function(child) {
@@ -202,10 +204,6 @@ function applyMetricsToFileTree(treeTableData, runMetrics, parameters, filter) {
 	    treeTableData.columns.push({content:""});
 	});
     }
-}
-
-function strcmp(s1, s2) {
-	return (s1 < s2)? - 1 : ((s1 > s2)? 1 : 0);
 }
 
 function treeMapCtrl($scope) {

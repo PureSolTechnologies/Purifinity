@@ -2,7 +2,7 @@
  * This JavaScript files contains Angular JS functionality to be added to an
  * application to handle projects for Purifinity.
  */
-var projectManagerModule : angular.IModule  = angular.module("projectManagerModule", [ "purifinityServer" ]);
+var projectManagerModule : angular.IModule  = angular.module("projectManagerModule", [ "purifinityServerModule" ]);
 projectManagerModule.factory('projectManager', ['purifinityServerConnector', projectManager ]);
 projectManagerModule.controller("projectListCtrl", projectListCtrl);
 projectManagerModule.controller("projectsCtrl", projectsCtrl);	
@@ -11,74 +11,7 @@ projectManagerModule.controller("createProjectModalInstanceCtrl", createProjectM
 projectManagerModule.controller("editProjectModalInstanceCtrl", editProjectModalInstanceCtrl);
 
 function projectManager(purifinityServerConnector) {
-	var projectManager = {};
-	projectManager.getProjects = function(success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects',
-				success, error);
-	};
-	projectManager.getProject = function(projectId, success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId,
-				success, error);
-	};
-	projectManager.getLastRun = function(projectId, success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/lastrun',
-				success, error);
-	};
-	projectManager.getRun = function(projectId, runId, success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/runs/' + runId,
-				success, error);
-	};
-	projectManager.createProject = function(identifier, projectSettings, success, error) {
-		return purifinityServerConnector.put('/purifinityserver/rest/projectmanager/projects/' + identifier, projectSettings,
-				success, error);
-	};
-	projectManager.triggerNewRun = function(identifier, success, error) {
-		return purifinityServerConnector.put('/purifinityserver/rest/analysis/projects/' + identifier, "",
-				success, error);
-	};
-	projectManager.editProject = function(id, name, success, error) {
-	};
-	projectManager.deleteProject = function(identifier, success, error) {
-		return purifinityServerConnector.del('/purifinityserver/rest/projectmanager/projects/' + identifier,
-				success, error);
-	};
-	projectManager.getRepositoryTypes = function(success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/repositories/types',
-				success, error);
-	};
-	projectManager.readAllRunInformation = function(projectId, success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/runs',
-				success, error);
-	};
-	projectManager.getAnalysisFileTree = function(projectId, runId, success, error) {
-		return purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/runs/' + runId + '/filetree',
-			function (data, status) {
-				data.files = {};
-				data.directories = {};
-				var searchFileTree = function (tree) {
-					var hashId = tree.hashId.algorithmName + ":" + tree.hashId.hash;
-					if (tree.file) {
-						data.files[hashId] = tree;
-					} else {
-						data.directories[hashId] = tree;
-					}
-					if (tree.children.length > 0) {
-						tree.children.forEach(searchFileTree);
-					}
-				}
-				searchFileTree(data);
-				data.getFile = function(hashid) {
-					return this.files[hashid];
-				}
-				data.getDirectory = function(hashid) {
-					return this.directories[hashid];
-				}
-				success(data, status);
-			}, 
-			error
-		);
-	};
-	return projectManager;
+    return new ProjectManager(purifinityServerConnector);
 }
 
 function projectListCtrl($scope, $location, projectManager) {

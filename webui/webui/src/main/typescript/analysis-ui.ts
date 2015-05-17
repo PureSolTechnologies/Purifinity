@@ -32,7 +32,7 @@ function analysisBrowserCtrl($scope, $routeParams, projectManager) {
 
 
 function convertAnalysisFileTree(fileTree) {
-    var treeTableData = {};
+    var treeTableData : any= {};
     treeTableData.content = fileTree.name;
     treeTableData.id = fileTree.hashId.algorithmName + ":" + fileTree.hashId.hash;
     var analyses = "";
@@ -52,14 +52,14 @@ function convertAnalysisFileTree(fileTree) {
 	fileTree.children.sort(function(l, r) {
 	    if ((l.children) && (l.children.length > 0)) {
 		if ((r.children) && (r.children.length > 0)) {
-		    return strcmp(l.name.toUpperCase(), r.name.toUpperCase());
+		    return Utilities.strcmp(l.name.toUpperCase(), r.name.toUpperCase());
 		}
 		return -1;
 	    } else {
 		if ((r.children) && (r.children.length > 0)) {
 		    return 1;
 		}
-		return strcmp(l.name.toUpperCase(), r.name.toUpperCase());
+		return Utilities.strcmp(l.name.toUpperCase(), r.name.toUpperCase());
 	    }
 	});
 	fileTree.children.forEach(function(child) {
@@ -71,10 +71,6 @@ function convertAnalysisFileTree(fileTree) {
 	treeTableData.link = "/file.html#/summary/" + treeTableData.id;
     }
     return treeTableData;
-}
-
-function strcmp(s1, s2) {
-	return (s1 < s2)? - 1 : ((s1 > s2)? 1 : 0);
 }
 
 function runListCtrl($scope, $routeParams, projectManager) {

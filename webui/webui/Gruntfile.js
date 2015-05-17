@@ -11,19 +11,17 @@ module.exports = function(grunt) {
 			.initConfig({
 				copy : {
 					libs : {
-						files : [
-								{
-									expand : true,
-									src : [ '**' ],
-									cwd : 'src/main/lib',
-									dest : 'target/tmp/lib/'
-								},
-								{
-									expand : true,
-									src : [ '**' ],
-									cwd : 'src/main/lib',
-									dest : 'target/dist/lib/'
-								} ]
+						files : [ {
+							expand : true,
+							src : [ '**' ],
+							cwd : 'src/main/lib',
+							dest : 'target/tmp/lib/'
+						}, {
+							expand : true,
+							src : [ '**' ],
+							cwd : 'src/main/lib',
+							dest : 'target/dist/lib/'
+						} ]
 					},
 					resources : {
 						files : [ {
@@ -60,6 +58,14 @@ module.exports = function(grunt) {
 							cwd : 'src/main/html/',
 							dest : 'target/dist/'
 						} ]
+					},
+					javascript : {
+						files : [ {
+							expand : true,
+							src : [ '**' ],
+							cwd : 'src/main/javascript/',
+							dest : 'target/tmp/js'
+						} ]
 					}
 				},
 				typescript : {
@@ -69,10 +75,10 @@ module.exports = function(grunt) {
 						options : {
 							module : 'amd',
 							target : 'es5',
-							basePath : 'src/main/typescript',
+							rootDir : 'src/main/typescript',
 							watch : false,
-							sourceMap : true,
-							declaration : true
+							sourceMap : false,
+							declaration : false
 						}
 					}
 				},
@@ -86,7 +92,8 @@ module.exports = function(grunt) {
 				uglify : {
 					target : {
 						files : {
-							'target/dist/js/purifinity-ui.js' : 'target/tmp/js/purifinity-ui.js'
+							'target/dist/js/purifinity-ui.js' : 'target/tmp/js/purifinity-ui.js',
+							'target/dist/js/enable-tooltips.js' : 'target/tmp/js/enable-tooltips.js',
 						}
 					}
 				},
