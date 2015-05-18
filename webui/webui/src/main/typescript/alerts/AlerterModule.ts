@@ -24,6 +24,14 @@ alerterModule.factory("alerterFactory", function(): Alerter {
     return new Alerter();
 });
 
+alerterModule.directive("alerter", function() {
+    return {
+        restrict: "E",
+        controller: "alerterCtrl",
+        templateUrl: "directives/alerter.html"
+    };
+});
+
 /*
  * The alerterCtrl is the control for the alert messages to be shown in UI.
  */
@@ -47,3 +55,4 @@ alerterModule.controller("alerterCtrl", function($scope, alerterFactory) {
         return alerterFactory.hasAlerts();
     }
 });
+

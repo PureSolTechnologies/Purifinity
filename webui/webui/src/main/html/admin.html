@@ -93,17 +93,7 @@
     </div>
   </div>
   
-  <div class="row" data-ng-controller="alerterCtrl" data-ng-show="hasAlerts()">
-    <div
-       class="col-lg-1 col-lg-offset-4 col-md-2 col-md-offset-2 col-sm-4">
-      <button class="btn btn-default" data-ng-click="clearAlerts()">Clear
-	All</button>
-    </div>
-    <div class="col-lg-3 col-md-6 col-sm-8">
-      <alert data-ng-repeat="alert in alerts" type="{{alert.severity}}"
-	     close="closeAlert($index)" data-ng-cloak>{{alert.message}}</alert>
-    </div>
-  </div>
+  <alerter></alerter>
   
   <span data-ng-view></span>
   
