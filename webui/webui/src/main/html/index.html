@@ -16,7 +16,8 @@
 <!-- CSS includes -->
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap-theme.min.css" />
-<link rel="stylesheet" href="lib/bootstrap-select/css/bootstrap-select.min.css" />
+<link rel="stylesheet"
+	href="lib/bootstrap-select/css/bootstrap-select.min.css" />
 
 <link rel="stylesheet" href="css/purifinity-ui.css" />
 
@@ -24,30 +25,43 @@
 <script type="text/javascript" src="lib/angular/angular.js"></script>
 <script type="text/javascript" src="lib/angular/angular-route.js"></script>
 <script type="text/javascript" src="lib/angular/angular-sanitize.js"></script>
-<script type="text/javascript" src="lib/angular-ui/ui-bootstrap-tpls-0.12.1.min.js"></script>
+<script type="text/javascript"
+	src="lib/angular-ui/ui-bootstrap-tpls-0.12.1.min.js"></script>
 
 <!-- Custom JS scripts -->
 <script type="text/javascript" src="config/server.js"></script>
 <script type="text/javascript" src="config/authentication.js"></script>
 <script type="text/javascript" src="js/purifinity-ui.js"></script>
 <script type="text/javascript">
-	var purifinityApp = angular.module("purifinityApp", [
-		"ngRoute",
-		"ui.bootstrap",
-		"purifinityUI",
-		"purifinityServerModule",
-		"accountManagerModule",
-		"projectManagerModule",
-		"alerter"
+	var purifinityApp = angular.module("purifinityApp", [ //
+	"ngRoute", //
+	"ui.bootstrap", //
+	"purifinityUI", //
+	"purifinityServerModule", //
+	"accountManagerModule", //
+	"projectManagerModule", //
+	"alerter" //
 	]);
-	purifinityApp.config(function($routeProvider, $locationProvider){
+	purifinityApp.config(function($routeProvider, $locationProvider) {
 		$locationProvider.html5Mode(false);
-		$routeProvider.when("/login", {templateUrl:"views/login.html"});
-		$routeProvider.when("/account", {templateUrl:"views/account.html"});
-		$routeProvider.when("/dashboards", {templateUrl: "views/dashboards.html"});
-		$routeProvider.when("/information", {templateUrl: "views/information.html"});
-		$routeProvider.when("/help", {templateUrl: "views/help.html"});
-		$routeProvider.otherwise({templateUrl: "views/overview.html"});
+		$routeProvider.when("/login", {
+			templateUrl : "views/login.html"
+		});
+		$routeProvider.when("/account", {
+			templateUrl : "views/account.html"
+		});
+		$routeProvider.when("/dashboards", {
+			templateUrl : "views/dashboards.html"
+		});
+		$routeProvider.when("/information", {
+			templateUrl : "views/information.html"
+		});
+		$routeProvider.when("/help", {
+			templateUrl : "views/help.html"
+		});
+		$routeProvider.otherwise({
+			templateUrl : "views/overview.html"
+		});
 	});
 </script>
 </head>
@@ -60,30 +74,29 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<span class="navbar-brand"><a href="."><img src="images/logos/logo2.png" width="100" title="Purifinity"/></a></span>
+			<span class="navbar-brand"><a href="."><img
+					src="images/logos/logo2.png" width="100" title="Purifinity" /></a></span>
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
 				<li class="{{isActive('')}}"><a href="#">Overview</a></li>
 				<li class="{{isActive('/dashboards')}}"><a href="#/dashboards">Dashboards</a></li>
-				<li class="{{isActive('/information')}}"><a href="#/information">Information</a></li>
+				<li class="{{isActive('/information')}}"><a
+					href="#/information">Information</a></li>
 				<li class="{{isActive('/help')}}"><a href="#/help">Help</a></li>
 			</ul>
 			<div class="navbar-right" data-ng-controller="loginCtrl">
 				<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
 					<li><a href="admin.html"><span
 							class="glyphicon glyphicon-wrench"></span>&nbsp;Administration</a></li>
-					<li data-ng-show="isLoggedIn()">
-						<a href="#/account"><span class="glyphicon glyphicon-user"></span>&nbsp;Account</a>
-					</li>
-					<li data-ng-hide="isLoggedIn()">
-						<a href="#/login"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a>
-					</li>
-					<li data-ng-show="isLoggedIn()">
-						<a class="btn btn-link" data-ng-click="logout()">
-							<span class="glyphicon glyphicon-off"></span>&nbsp;Logout
-						</a>
-					</li>
+					<li data-ng-show="isLoggedIn()"><a href="#/account"><span
+							class="glyphicon glyphicon-user"></span>&nbsp;Account</a></li>
+					<li data-ng-hide="isLoggedIn()"><a href="#/login"><span
+							class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a></li>
+					<li data-ng-show="isLoggedIn()"><a class="btn btn-link"
+						data-ng-click="logout()"> <span
+							class="glyphicon glyphicon-off"></span>&nbsp;Logout
+					</a></li>
 				</ul>
 			</div>
 		</div>
@@ -94,7 +107,7 @@
 	<span data-ng-view></span>
 
 	<span data-ng-include="'components/footer.html'"></span>
-	
+
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->

@@ -16,7 +16,8 @@
 <!-- CSS includes -->
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
 <link rel="stylesheet" href="lib/bootstrap/css/bootstrap-theme.min.css" />
-<link rel="stylesheet" href="lib/bootstrap-select/css/bootstrap-select.min.css" />
+<link rel="stylesheet"
+	href="lib/bootstrap-select/css/bootstrap-select.min.css" />
 
 <link rel="stylesheet" href="css/purifinity-ui.css" />
 
@@ -24,51 +25,87 @@
 <script type="text/javascript" src="lib/angular/angular.js"></script>
 <script type="text/javascript" src="lib/angular/angular-route.js"></script>
 <script type="text/javascript" src="lib/angular/angular-sanitize.js"></script>
-<script type="text/javascript" src="lib/angular-ui/ui-bootstrap-tpls-0.12.1.min.js"></script>
+<script type="text/javascript"
+	src="lib/angular-ui/ui-bootstrap-tpls-0.12.1.min.js"></script>
 
 <!-- Custom JS scripts -->
 <script type="text/javascript" src="config/server.js"></script>
 <script type="text/javascript" src="config/authentication.js"></script>
 <script type="text/javascript" src="js/purifinity-ui.js"></script>
 <script type="text/javascript">
-	var projectApp = angular.module("projectApp", [
-		"ngRoute",
-		"ui.bootstrap",
-		"treeTableUIModule",
-		"purifinityUI",
-		"purifinityServerModule",
-		"accountManagerModule",
-		"projectManagerModule",
-		"pluginManagerModule",
-		"projectMetricsModule",
-		"analysisUIModule",
-		"evaluationUIModule",
-		"alerter",
-		"d3Module"
+	var projectApp = angular.module("projectApp", [ //
+	"ngRoute", //
+	"ui.bootstrap", //
+	"treeTableModule", //
+	"purifinityUI", //
+	"purifinityServerModule", //
+	"accountManagerModule", //
+	"projectManagerModule", //
+	"pluginManagerModule", //
+	"projectMetricsModule", //
+	"analysisUIModule", //
+	"evaluationUIModule", //
+	"alerter", //
+	"d3Module" //
 	]);
-	projectApp.config(function($routeProvider, $locationProvider){
+	projectApp.config(function($routeProvider, $locationProvider) {
 		$locationProvider.html5Mode(false);
-		$routeProvider.when("/summary/:projectId", {templateUrl: "views/project/summary.html"});
-		$routeProvider.when("/analysis/:projectId", {templateUrl: "views/project/analysis.html"});
-		$routeProvider.when("/defects/:projectId", {templateUrl: "views/project/defects.html"});
-		$routeProvider.when("/style_issues/:projectId", {templateUrl: "views/project/style_issues.html"});
-		$routeProvider.when("/metrics/:projectId", {templateUrl: "views/project/metrics.html"});
-		$routeProvider.when("/trends/:projectId", {templateUrl: "views/project/trends.html"});
-		$routeProvider.when("/summary/:projectId", {templateUrl: "views/project/summary.html"});
-		$routeProvider.when("/analysis/:projectId", {templateUrl: "views/project/analysis.html"});
-		$routeProvider.when("/defects/:projectId", {templateUrl: "views/project/defects.html"});
-		$routeProvider.when("/style_issues/:projectId", {templateUrl: "views/project/style_issues.html"});
-		$routeProvider.when("/metrics/:projectId", {templateUrl: "views/project/metrics.html"});
-		$routeProvider.when("/design/:projectId", {templateUrl: "views/project/design.html"});
-		$routeProvider.when("/architecture/:projectId", {templateUrl: "views/project/architecture.html"});
-		$routeProvider.when("/trends/:projectId", {templateUrl: "views/project/trends.html"});
-		$routeProvider.when("/runs/:projectId", {templateUrl: "views/project/runs.html"});
-		$routeProvider.otherwise({redirectTo: function() {window.location = "/";}});
+		$routeProvider.when("/summary/:projectId", {
+			templateUrl : "views/project/summary.html"
+		});
+		$routeProvider.when("/analysis/:projectId", {
+			templateUrl : "views/project/analysis.html"
+		});
+		$routeProvider.when("/defects/:projectId", {
+			templateUrl : "views/project/defects.html"
+		});
+		$routeProvider.when("/style_issues/:projectId", {
+			templateUrl : "views/project/style_issues.html"
+		});
+		$routeProvider.when("/metrics/:projectId", {
+			templateUrl : "views/project/metrics.html"
+		});
+		$routeProvider.when("/trends/:projectId", {
+			templateUrl : "views/project/trends.html"
+		});
+		$routeProvider.when("/summary/:projectId", {
+			templateUrl : "views/project/summary.html"
+		});
+		$routeProvider.when("/analysis/:projectId", {
+			templateUrl : "views/project/analysis.html"
+		});
+		$routeProvider.when("/defects/:projectId", {
+			templateUrl : "views/project/defects.html"
+		});
+		$routeProvider.when("/style_issues/:projectId", {
+			templateUrl : "views/project/style_issues.html"
+		});
+		$routeProvider.when("/metrics/:projectId", {
+			templateUrl : "views/project/metrics.html"
+		});
+		$routeProvider.when("/design/:projectId", {
+			templateUrl : "views/project/design.html"
+		});
+		$routeProvider.when("/architecture/:projectId", {
+			templateUrl : "views/project/architecture.html"
+		});
+		$routeProvider.when("/trends/:projectId", {
+			templateUrl : "views/project/trends.html"
+		});
+		$routeProvider.when("/runs/:projectId", {
+			templateUrl : "views/project/runs.html"
+		});
+		$routeProvider.otherwise({
+			redirectTo : function() {
+				window.location = "/";
+			}
+		});
 	});
 </script>
 </head>
 <body>
-	<div class="navbar navbar-default" role="navigation" data-ng-controller="menuCtrl">
+	<div class="navbar navbar-default" role="navigation"
+		data-ng-controller="menuCtrl">
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target=".navbar-collapse">
@@ -76,36 +113,43 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<span class="navbar-brand">
-				<a href="."><img src="images/logos/logo2.png" width="100" title="Purifinity" /></a> Project View: {{$routeParams.projectId}}
+			<span class="navbar-brand"> <a href="."><img
+					src="images/logos/logo2.png" width="100" title="Purifinity" /></a>
+				Project View: {{$routeParams.projectId}}
 			</span>
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
-				<li class="{{isActive('/summary')}}"><a href="#/summary/{{$routeParams.projectId}}">Summary</a></li>
-				<li class="{{isActive('/analysis')}}"><a href="#/analysis/{{$routeParams.projectId}}">Analysis</a></li>
-				<li class="{{isActive('/defects')}}"><a href="#/defects/{{$routeParams.projectId}}">Defects</a></li>
-				<li class="{{isActive('/style_issues')}}"><a href="#/style_issues/{{$routeParams.projectId}}">Style</a></li>
-				<li class="{{isActive('/metrics')}}"><a href="#/metrics/{{$routeParams.projectId}}">Metrics</a></li>
-				<li class="{{isActive('/design')}}"><a href="#/design/{{$routeParams.projectId}}">Design</a></li>
-				<li class="{{isActive('/architecture')}}"><a href="#/architecture/{{$routeParams.projectId}}">Architecture</a></li>
-				<li class="{{isActive('/trends')}}"><a href="#/trends/{{$routeParams.projectId}}">Trends</a></li>
-				<li class="{{isActive('/runs')}}"><a href="#/runs/{{$routeParams.projectId}}">Runs</a></li>
+				<li class="{{isActive('/summary')}}"><a
+					href="#/summary/{{$routeParams.projectId}}">Summary</a></li>
+				<li class="{{isActive('/analysis')}}"><a
+					href="#/analysis/{{$routeParams.projectId}}">Analysis</a></li>
+				<li class="{{isActive('/defects')}}"><a
+					href="#/defects/{{$routeParams.projectId}}">Defects</a></li>
+				<li class="{{isActive('/style_issues')}}"><a
+					href="#/style_issues/{{$routeParams.projectId}}">Style</a></li>
+				<li class="{{isActive('/metrics')}}"><a
+					href="#/metrics/{{$routeParams.projectId}}">Metrics</a></li>
+				<li class="{{isActive('/design')}}"><a
+					href="#/design/{{$routeParams.projectId}}">Design</a></li>
+				<li class="{{isActive('/architecture')}}"><a
+					href="#/architecture/{{$routeParams.projectId}}">Architecture</a></li>
+				<li class="{{isActive('/trends')}}"><a
+					href="#/trends/{{$routeParams.projectId}}">Trends</a></li>
+				<li class="{{isActive('/runs')}}"><a
+					href="#/runs/{{$routeParams.projectId}}">Runs</a></li>
 				<li class="{{isActive('/help')}}"><a href="./#/help">Help</a></li>
 			</ul>
 			<div class="navbar-right" data-ng-controller="loginCtrl">
 				<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
-					<li data-ng-show="isLoggedIn()">
-						<a href="./#/account"><span class="glyphicon glyphicon-user"></span>&nbsp;Account</a>
-					</li>
-					<li data-ng-hide="isLoggedIn()">
-						<a href="#/login"><span class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a>
-					</li>
-					<li data-ng-show="isLoggedIn()">
-						<a href="" class="btn btn-link" data-ng-click="logout()">
-							<span class="glyphicon glyphicon-off"></span>&nbsp;Logout
-						</a>
-					</li>
+					<li data-ng-show="isLoggedIn()"><a href="./#/account"><span
+							class="glyphicon glyphicon-user"></span>&nbsp;Account</a></li>
+					<li data-ng-hide="isLoggedIn()"><a href="#/login"><span
+							class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a></li>
+					<li data-ng-show="isLoggedIn()"><a href=""
+						class="btn btn-link" data-ng-click="logout()"> <span
+							class="glyphicon glyphicon-off"></span>&nbsp;Logout
+					</a></li>
 				</ul>
 			</div>
 		</div>
@@ -116,7 +160,7 @@
 	<span data-ng-view></span>
 
 	<span data-ng-include="'components/footer.html'"></span>
-	
+
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->

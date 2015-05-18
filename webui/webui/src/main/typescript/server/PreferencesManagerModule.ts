@@ -19,6 +19,14 @@ function systemSettingsCtrl($scope, preferencesManager) {
         function(data, status) {
             for (var i = 0; i < data.length; i++) {
                 var parameter = data[i];
+                var pathElements = parameter.path.split("/");
+                var currentNode = $scope.systemSettingsTree;
+                for (var elementId = 0; elementId < pathElements.length; elementId++) {
+                    var element = pathElements[elementId];
+                    if (element.length == 0) {
+                        continue;
+                    }
+                }
             }
         },
         function(data, status, error) { }
