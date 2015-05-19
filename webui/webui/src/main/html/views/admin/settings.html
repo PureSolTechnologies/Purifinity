@@ -2,7 +2,7 @@
   <tabset>
     <tab heading="System Settings" data-ng-controller="systemSettingsCtrl">
       <p>Settings in this section are system settings which influence the behavior of the system in general.</p>
-      <configuration-component data-ng-model="systemSettingsTree"></configurationComponent>
+      <configuration-component data-ng-model="systemSettings"></configurationComponent>
 	</tab>
     <tab heading="Plugin Activation" data-ng-controller="pluginActivationCtrl">
       <p>In this sections plugins are enabled and disabled system wide.</p>
@@ -56,30 +56,10 @@
     <tab heading="Plugin Settings" data-ng-controller="pluginSettingsCtrl">
       <p>Settings in this section are plugin settings which are used for the plugin as default. Project settings override these settings.</p>
       <div class="row">
-	<div class="col-md-4">
-	  <label for="repositorySelection" title="Selection for the repository plugin.">Repositories</label><br/>
-	  <div id="repositorySelection">
-	    <ul data-ng-repeat="repository in repositories">
-	      <li>{{repository.name}}</li>
-	    </ul>
-	  </div>
-	  <label for="analyzerSelection" title="Selection for the analyzer plugin.">Analyzers</label><br/>
-	  <div id="analyzerSelection">
-	    <ul data-ng-repeat="analyzer in analyzers">
-	      <li>{{analyzer.name}}</li>
-	    </ul>
-	  </div>
-	  <label for="repositorySelection" title="Selection for the repository plugin.">Evaluators</label><br/>
-	  <div id="repositorySelection">
-	    <ul data-ng-repeat="evaluator in evaluators">
-	      <li>{{evaluator.name}}</li>
-	    </ul>
-	  </div>
+	<div class="col-sm-12">
+      <configuration-component data-ng-model="pluginSettings"></configurationComponent>
 	</div>
-	<div class="col-md-8">
-	  Plugin Settings
 	</div>
-      </div>
     </tab>
   </tabset>
 </div>

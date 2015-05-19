@@ -15,7 +15,7 @@ function analysisBrowserCtrl($scope, $routeParams, projectManager) {
                 $scope.run.runId,
                 function(data, status) {
                     var treeTableData: TreeTableData = new TreeTableData();
-                    treeTableData.root = convertAnalysisFileTree(data);
+                    treeTableData.root = convertAnalysisFileTree(data, null);
                     treeTableData.columnHeaders.push(new TreeTableColumnHeader("Name", "Name of file or folder"));
                     treeTableData.columnHeaders.push(new TreeTableColumnHeader("Size", "Size of file or size of folder without sub folders."));
                     treeTableData.columnHeaders.push(new TreeTableColumnHeader("Size Recursive", "Size of file or size of folder including sub folders."));
@@ -31,8 +31,8 @@ function analysisBrowserCtrl($scope, $routeParams, projectManager) {
 };
 
 
-function convertAnalysisFileTree(fileTree): TreeTableTree {
-    var treeTableData: TreeTableTree = new TreeTableTree();
+function convertAnalysisFileTree(fileTree: any, parent: TreeTableTree): TreeTableTree {
+    var treeTableData: TreeTableTree = new TreeTableTree(parent);
     treeTableData.content = fileTree.name;
     treeTableData.id = fileTree.hashId.algorithmName + ":" + fileTree.hashId.hash;
     var analyses = "";
@@ -61,7 +61,7 @@ function convertAnalysisFileTree(fileTree): TreeTableTree {
             }
         });
         fileTree.children.forEach(function(child) {
-            treeTableData.children.push(convertAnalysisFileTree(child));
+            treeTableData.addChild(convertAnalysisFileTree(child, treeTableData));
         });
         treeTableData.imageUrl = 'images/icons/FatCow_Icons16x16/folder.png';
     } else {

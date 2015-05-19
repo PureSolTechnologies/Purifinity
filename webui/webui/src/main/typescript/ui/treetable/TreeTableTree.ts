@@ -1,6 +1,8 @@
+/**
+ * This class represents a tree or node of a tree table tree.
+ */
 class TreeTableTree {
 
-    parent: TreeTableTree;
     children: TreeTableTree[];
     id: string;
     content: string;
@@ -8,6 +10,9 @@ class TreeTableTree {
     link: string;
     columns: TreeTableColumn[];
 
+    constructor(public parent: TreeTableTree) {
+    }
+       
     public addChild(child: TreeTableTree) {
         this.children.push(child);
         child.parent = this;

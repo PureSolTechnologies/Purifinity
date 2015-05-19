@@ -27,7 +27,7 @@ function fileSystemMetrics($scope, $routeParams, $filter, projectManager, purifi
                 function(data, status) {
                     $scope.fileTree = data;
                     var treeTableData: TreeTableData = new TreeTableData();
-                    treeTableData.root = convertFileTreeForMetrics(data);
+                    treeTableData.root = convertFileTreeForMetrics(data, null) ;
                     treeTableData.columnHeaders.push(new TreeTableColumnHeader("Name", "Name of file or folder"));
                     $scope.metricsTreeTable = treeTableData;
                 },
@@ -133,8 +133,8 @@ function fileSystemMetrics($scope, $routeParams, $filter, projectManager, purifi
     };
 }
 
-function convertFileTreeForMetrics(fileTree): TreeTableTree {
-    var treeTableData: TreeTableTree = new TreeTableTree();
+function convertFileTreeForMetrics(fileTree: any, parent: TreeTableTree): TreeTableTree {
+    var treeTableData: TreeTableTree = new TreeTableTree(parent);
     treeTableData.content = fileTree.name;
     treeTableData.id = fileTree.hashId.algorithmName + ":" + fileTree.hashId.hash;
     treeTableData.columns = [];
@@ -154,7 +154,7 @@ function convertFileTreeForMetrics(fileTree): TreeTableTree {
             }
         });
         fileTree.children.forEach(function(child) {
-            treeTableData.children.push(convertFileTreeForMetrics(child));
+            treeTableData.addChild(convertFileTreeForMetrics(child, treeTableData));
         });
         treeTableData.imageUrl = 'images/icons/FatCow_Icons16x16/folder.png';
     } else {

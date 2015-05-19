@@ -5,35 +5,10 @@
 var pluginManagerModule : angular.IModule = angular.module("pluginManagerModule", [ "purifinityServerModule" ]);
 pluginManagerModule.factory('pluginManager', [
 		'purifinityServerConnector', pluginManager ]);
-pluginManagerModule.controller("pluginSettingsCtrl", pluginSettingsCtrl);
 pluginManagerModule.controller("pluginActivationCtrl", pluginActivationCtrl);
 
 function pluginManager(purifinityServerConnector) {
     return new PluginManager(purifinityServerConnector);
-}
-
-function pluginSettingsCtrl($scope, pluginManager) {
-    $scope.analyzers = {};
-    $scope.evaluators = {};
-    $scope.repositories = {};
-    pluginManager.getAnalyzers(
-	function(data, status) {
-	    $scope.analyzers = data;
-	}, 
-	function(data, status, error) {}
-    );
-    pluginManager.getEvaluators(
-	function(data, status) {
-	    $scope.evaluators = data;
-	}, 
-	function(data, status, error) {}
-    );
-    pluginManager.getRepositoryTypes(
-	function(data, status) {
-	    $scope.repositories = data;
-	}, 
-	function(data, status, error) {}
-    );
 }
 
 function pluginActivationCtrl($scope, pluginManager) {

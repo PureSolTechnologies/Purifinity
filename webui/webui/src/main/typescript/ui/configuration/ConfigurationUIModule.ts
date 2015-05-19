@@ -16,8 +16,8 @@ function configurationComponent() {
 
 function configurationComponentCtrl($scope) {
 	$scope.path = [];
-	$scope.path.push($scope.configurationTreeData);
-	$scope.currentFolder = $scope.configurationTreeData;
+	$scope.path.push($scope.configurationTreeData.root);
+	$scope.currentFolder = $scope.configurationTreeData.root;
 	$scope.chdir = function(dir) {
 		if (dir == "..") {
 			if ($scope.path.length > 1) {
@@ -27,7 +27,7 @@ function configurationComponentCtrl($scope) {
 			return;
 		}
 		for (var key in $scope.currentFolder.children) {
-			if ($scope.currentFolder.children[key].content == dir) {
+			if ($scope.currentFolder.children[key].name == dir) {
 				var newFolder = $scope.currentFolder.children[key];
 				$scope.path.push(newFolder);
 				$scope.currentFolder = newFolder;
@@ -44,7 +44,7 @@ function configurationComponentCtrl($scope) {
 	}
 	$scope.$watch('configurationTreeData', function(newValue, oldValue) {
 		$scope.path = [];
-		$scope.path.push($scope.configurationTreeData);
-		$scope.currentFolder = $scope.configurationTreeData;
+		$scope.path.push($scope.configurationTreeData.root);
+		$scope.currentFolder = $scope.configurationTreeData.root;
 	});
 };
