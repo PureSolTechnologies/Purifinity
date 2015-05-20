@@ -12,6 +12,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesGroup;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesValue;
 import com.puresoltechnologies.purifinity.server.database.cassandra.PreferencesStoreKeyspace;
@@ -31,13 +32,14 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	private Session session;
 
 	@Override
-	public PreferencesValue getValue(String group, String name) {
+	public PreferencesValue getValue(PreferencesGroup group, String name) {
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(session,
 						"SELECT changed, changed_by, value FROM "
 								+ CassandraElementNames.PREFERENCES_TABLE
 								+ " WHERE group=? AND name=?;");
-		BoundStatement boundStatement = preparedStatement.bind(group, name);
+		BoundStatement boundStatement = preparedStatement.bind(
+				group.toString(), name);
 		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
@@ -49,7 +51,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	}
 
 	@Override
-	public PreferencesValue getValue(String group, String name,
+	public PreferencesValue getValue(PreferencesGroup group, String name,
 			String defaultValue) {
 		PreferencesValue value = getValue(group, name);
 		if (value != null) {
@@ -59,7 +61,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	}
 
 	@Override
-	public void setValue(String group, String name, String value) {
+	public void setValue(PreferencesGroup group, String name, String value) {
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(
 						session,
@@ -67,7 +69,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 								+ CassandraElementNames.PREFERENCES_TABLE
 								+ " (changed, changed_by, group, name, value) VALUES (?, ?, ?, ?, ?);");
 		BoundStatement boundStatement = preparedStatement.bind(new Date(),
-				"n/a", group, name, value);
+				"n/a", group.toString(), name, value);
 		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		session.execute(boundStatement);
 		logger.info("Wrote preference: '" + group + "/" + name + "'='" + value
@@ -75,32 +77,38 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	}
 
 	@Override
-	public void setValue(String group, String name, boolean value) {
+	public void setValue(PreferencesGroup group, String name, boolean value) {
 		setValue(group, name, String.valueOf(value));
 	}
 
 	@Override
-	public boolean hasValue(String group, String name) {
+	public boolean hasValue(PreferencesGroup group, String name) {
 		return getValue(group, name) != null;
 	}
 
 	@Override
-	public Boolean getBoolean(String group, String name) {
+	public Boolean getBoolean(PreferencesGroup group, String name) {
 		return Boolean.valueOf(getString(group, name));
 	}
 
 	@Override
-	public boolean getBoolean(String group, String name, String defaultValue) {
+	public boolean getBoolean(PreferencesGroup group, String name,
+			String defaultValue) {
 		return Boolean.valueOf(getString(group, name, defaultValue));
 	}
 
 	@Override
-	public String getString(String group, String name) {
-		return getValue(group, name).getValue();
+	public String getString(PreferencesGroup group, String name) {
+		PreferencesValue value = getValue(group, name);
+		if (value == null) {
+			return null;
+		}
+		return value.getValue();
 	}
 
 	@Override
-	public String getString(String group, String name, String defaultValue) {
+	public String getString(PreferencesGroup group, String name,
+			String defaultValue) {
 		return getValue(group, name, defaultValue).getValue();
 	}
 

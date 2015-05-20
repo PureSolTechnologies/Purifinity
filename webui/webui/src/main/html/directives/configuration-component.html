@@ -22,14 +22,14 @@
 					<td><a data-ng-show="content.children" href=""
 						data-ng-click="chdir(content.name)"> <img
 							data-ng-show="content.imageUrl"
-							data-ng-src="{{content.imageUrl}}" />&gt; {{content.name}}
+							data-ng-src="{{content.imageUrl}}" />{{content.name}}
 					</a> <span data-ng-hide="content.children"> <a
 							data-ng-show="content.link" href="{{content.link}}"> <img
 								data-ng-show="content.imageUrl"
-								data-ng-src="{{content.imageUrl}}" />&gt; {{content.name}}
+								data-ng-src="{{content.imageUrl}}" />{{content.name}}
 						</a> <span data-ng-hide="content.link"> <img
 								data-ng-show="content.imageUrl"
-								data-ng-src="{{content.imageUrl}}" />&gt; {{content.name}}
+								data-ng-src="{{content.imageUrl}}" />{{content.name}}
 						</span>
 					</span></td>
 				</tr>
@@ -41,12 +41,11 @@
 			<tbody>
 				<tr data-ng-repeat="parameter in currentFolder.parameters">
 					<td width="50%">{{parameter.name}}</td>
-					<td><input tooltip-enable="true" tooltip-trigger="focus"
-						tooltip-placement="top" tooltip="{{parameter.description}}" />{{parameter.unit}}</td>
+					<td><configuration-parameter data-ng-model="parameter"></configuration-parameter></td>
 					<td width="1%"><a href="" tooltip-enable="true"
 						tooltip-trigger="mouseenter" tooltip-placement="top"
 						tooltip="{{parameter.description}}"><img
-							src="/images/icons/FatCow_Icons16x16/help.png" /></a></td>
+							src="/images/icons/FatCow_Icons16x16/information.png" /></a></td>
 				</tr>
 			</tbody>
 		</table>

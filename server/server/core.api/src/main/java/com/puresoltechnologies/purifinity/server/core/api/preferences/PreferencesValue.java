@@ -11,7 +11,7 @@ public class PreferencesValue {
 
 	private final Date changed;
 	private final String changedBy;
-	private final String group;
+	private final PreferencesGroup group;
 	private final String name;
 	private final String value;
 
@@ -31,8 +31,8 @@ public class PreferencesValue {
 	 * @param value
 	 *            is the current value of the preference.
 	 */
-	public PreferencesValue(Date changed, String changedBy, String group,
-			String name, String value) {
+	public PreferencesValue(Date changed, String changedBy,
+			PreferencesGroup group, String name, String value) {
 		super();
 		this.changed = changed;
 		this.changedBy = changedBy;
@@ -70,7 +70,7 @@ public class PreferencesValue {
 	 * 
 	 * @return
 	 */
-	public String getGroup() {
+	public PreferencesGroup getGroup() {
 		return group;
 	}
 
