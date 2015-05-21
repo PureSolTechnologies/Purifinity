@@ -5,7 +5,7 @@ class PreferencesManager {
 
     getSystemParameters(success: (data: string, status: number) => void,
         error: (data: string, status: number, error: string) => void) {
-        return this.purifinityServerConnector.get(
+        return this.purifinityServerConnector.get_text(
             '/purifinityserver/rest/preferences/system',
             success,
             error
@@ -23,8 +23,8 @@ class PreferencesManager {
 
     setSystemParameter(propertyKey: string, value: string, success: (data: string, status: number) => void,
         error: (data: string, status: number, error: string) => void) {
-        return this.purifinityServerConnector.put('/purifinityserver/rest/preferences/system/' + propertyKey,
-            value, success,
+        return this.purifinityServerConnector.put_text('/purifinityserver/rest/preferences/system/' + propertyKey,
+            String(value), success,
             error);
     }
 

@@ -32,14 +32,51 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	private Session session;
 
 	@Override
-	public PreferencesValue getValue(PreferencesGroup group, String name) {
-		PreparedStatement preparedStatement = preparedStatements
-				.getPreparedStatement(session,
-						"SELECT changed, changed_by, value FROM "
-								+ CassandraElementNames.PREFERENCES_TABLE
-								+ " WHERE group=? AND name=?;");
-		BoundStatement boundStatement = preparedStatement.bind(
-				group.toString(), name);
+	public PreferencesValue getValue(PreferencesGroup group, String groupName,
+			String key) {
+		BoundStatement boundStatement;
+		switch (group) {
+		case SYSTEM:
+			PreparedStatement preparedStatement = preparedStatements
+					.getPreparedStatement(
+							session,
+							"SELECT changed, changed_by, value FROM "
+									+ CassandraElementNames.SYSTEM_PREFERENCES_TABLE
+									+ " WHERE key=?;");
+			boundStatement = preparedStatement.bind(key);
+			break;
+		case PLUGIN_DEFAULT:
+			preparedStatement = preparedStatements.getPreparedStatement(
+					session, "SELECT changed, changed_by, value FROM "
+							+ CassandraElementNames.PLUGIN_PREFERENCES_TABLE
+							+ " WHERE plugin_id=null AND key=?;");
+			boundStatement = preparedStatement.bind(key);
+			break;
+		case PLUGIN_PROJECT:
+			preparedStatement = preparedStatements.getPreparedStatement(
+					session, "SELECT changed, changed_by, value FROM "
+							+ CassandraElementNames.PLUGIN_PREFERENCES_TABLE
+							+ " WHERE plugin_id=? AND key=?;");
+			boundStatement = preparedStatement.bind(groupName, key);
+			break;
+		case USER:
+			preparedStatement = preparedStatements.getPreparedStatement(
+					session, "SELECT changed, changed_by, value FROM "
+							+ CassandraElementNames.USER_PREFERENCES_TABLE
+							+ " WHERE user_id=null AND key=?;");
+			boundStatement = preparedStatement.bind(key);
+			break;
+		case USER_DEFAULT:
+			preparedStatement = preparedStatements.getPreparedStatement(
+					session, "SELECT changed, changed_by, value FROM "
+							+ CassandraElementNames.USER_PREFERENCES_TABLE
+							+ " WHERE user_id=? AND key=?;");
+			boundStatement = preparedStatement.bind(groupName, key);
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown preferences group '"
+					+ group.name() + "'.");
+		}
 		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
@@ -47,59 +84,111 @@ public class PreferencesStoreImpl implements PreferencesStore {
 			return null;
 		}
 		return new PreferencesValue(result.getDate(0), result.getString(1),
-				group, name, result.getString(2));
+				group, groupName, key, result.getString(2));
 	}
 
 	@Override
-	public PreferencesValue getValue(PreferencesGroup group, String name,
-			String defaultValue) {
-		PreferencesValue value = getValue(group, name);
+	public PreferencesValue getValue(PreferencesGroup group, String groupName,
+			String key, String defaultValue) {
+		PreferencesValue value = getValue(group, groupName, key);
 		if (value != null) {
 			return value;
 		}
-		return new PreferencesValue(null, null, group, name, defaultValue);
+		return new PreferencesValue(null, null, group, groupName, key,
+				defaultValue);
 	}
 
 	@Override
-	public void setValue(PreferencesGroup group, String name, String value) {
-		PreparedStatement preparedStatement = preparedStatements
-				.getPreparedStatement(
-						session,
-						"INSERT INTO "
-								+ CassandraElementNames.PREFERENCES_TABLE
-								+ " (changed, changed_by, group, name, value) VALUES (?, ?, ?, ?, ?);");
-		BoundStatement boundStatement = preparedStatement.bind(new Date(),
-				"n/a", group.toString(), name, value);
+	public void setValue(PreferencesGroup group, String groupName, String key,
+			String value) {
+		BoundStatement boundStatement;
+		switch (group) {
+		case SYSTEM:
+			PreparedStatement preparedStatement = preparedStatements
+					.getPreparedStatement(
+							session,
+							"INSERT INTO "
+									+ CassandraElementNames.SYSTEM_PREFERENCES_TABLE
+									+ " (changed, changed_by, key, value) VALUES (?, ?, ?, ?);");
+			boundStatement = preparedStatement.bind(new Date(), "n/a", key,
+					value);
+			break;
+		case PLUGIN_DEFAULT:
+			preparedStatement = preparedStatements
+					.getPreparedStatement(
+							session,
+							"INSERT INTO "
+									+ CassandraElementNames.PLUGIN_PREFERENCES_TABLE
+									+ " (changed, changed_by, key, value) VALUES (?, ?, ?, ?);");
+			boundStatement = preparedStatement.bind(new Date(), "n/a", key,
+					value);
+			break;
+		case PLUGIN_PROJECT:
+			preparedStatement = preparedStatements
+					.getPreparedStatement(
+							session,
+							"INSERT INTO "
+									+ CassandraElementNames.PLUGIN_PREFERENCES_TABLE
+									+ " (changed, changed_by, plugin_id, key, value) VALUES (?, ?, ?, ?, ?);");
+			boundStatement = preparedStatement.bind(new Date(), "n/a",
+					groupName, key, value);
+			break;
+		case USER_DEFAULT:
+			preparedStatement = preparedStatements
+					.getPreparedStatement(
+							session,
+							"INSERT INTO "
+									+ CassandraElementNames.USER_PREFERENCES_TABLE
+									+ " (changed, changed_by, key, value) VALUES (?, ?, ?, ?);");
+			boundStatement = preparedStatement.bind(new Date(), "n/a", key,
+					value);
+			break;
+		case USER:
+			preparedStatement = preparedStatements
+					.getPreparedStatement(
+							session,
+							"INSERT INTO "
+									+ CassandraElementNames.USER_PREFERENCES_TABLE
+									+ " (changed, changed_by, group_name, key, value) VALUES (?, ?, ?, ?, ?);");
+			boundStatement = preparedStatement.bind(new Date(), "n/a",
+					groupName, key, value);
+			break;
+		default:
+			throw new IllegalArgumentException("Unknown preferences group '"
+					+ group.name() + "'.");
+		}
 		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		session.execute(boundStatement);
-		logger.info("Wrote preference: '" + group + "/" + name + "'='" + value
+		logger.info("Wrote preference: '" + group + "/" + key + "'='" + value
 				+ "'");
 	}
 
 	@Override
-	public void setValue(PreferencesGroup group, String name, boolean value) {
-		setValue(group, name, String.valueOf(value));
+	public void setValue(PreferencesGroup group, String groupName, String key,
+			boolean value) {
+		setValue(group, groupName, key, String.valueOf(value));
 	}
 
 	@Override
-	public boolean hasValue(PreferencesGroup group, String name) {
-		return getValue(group, name) != null;
+	public boolean hasValue(PreferencesGroup group, String groupName, String key) {
+		return getValue(group, groupName, key) != null;
 	}
 
 	@Override
-	public Boolean getBoolean(PreferencesGroup group, String name) {
-		return Boolean.valueOf(getString(group, name));
+	public Boolean getBoolean(PreferencesGroup group, String groupName,
+			String key) {
+		return Boolean.valueOf(getString(group, groupName, key));
 	}
 
 	@Override
-	public boolean getBoolean(PreferencesGroup group, String name,
-			String defaultValue) {
-		return Boolean.valueOf(getString(group, name, defaultValue));
+	public boolean getBoolean(PreferencesGroup group, String groupName,
+			String key, String defaultValue) {
+		return Boolean.valueOf(getString(group, groupName, key, defaultValue));
 	}
 
 	@Override
-	public String getString(PreferencesGroup group, String name) {
-		PreferencesValue value = getValue(group, name);
+	public String getString(PreferencesGroup group, String groupName, String key) {
+		PreferencesValue value = getValue(group, groupName, key);
 		if (value == null) {
 			return null;
 		}
@@ -107,9 +196,9 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	}
 
 	@Override
-	public String getString(PreferencesGroup group, String name,
-			String defaultValue) {
-		return getValue(group, name, defaultValue).getValue();
+	public String getString(PreferencesGroup group, String groupName,
+			String key, String defaultValue) {
+		return getValue(group, groupName, key, defaultValue).getValue();
 	}
 
 	@Override

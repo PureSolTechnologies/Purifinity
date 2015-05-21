@@ -1,7 +1,10 @@
 <input tooltip-enable="true" tooltip-trigger="focus"
-	tooltip-placement="top" tooltip="{{parameter.description}}"
-	data-ng-model="value" />
+	tooltip-placement="top" tooltip="{{parameter.description}}" type="text"
+	data-ng-model="values.input" class="form-control"
+	placeholder="{{parameter.defaultValue}}" required />
 {{parameter.unit}}
+<a href="" data-ng-click="refresh()"> <img
+	src="/images/icons/FatCow_Icons16x16/arrow_refresh.png" /></a>
 <a href="" data-ng-hide="isDefault()" data-ng-click="setDefault()"><img
 	src="/images/icons/FatCow_Icons16x16/arrow_redo.png" /></a>
 <a href="" data-ng-show="wasChanged()" data-ng-click="commit()"><img

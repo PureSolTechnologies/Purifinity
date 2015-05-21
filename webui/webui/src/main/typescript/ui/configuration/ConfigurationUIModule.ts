@@ -63,30 +63,33 @@ configurationUIModule.directive("configurationParameter",
 
 configurationUIModule.controller("configurationParameterCtrl",
     function($scope, preferencesManager) {
-        $scope.defaultValue = $scope.parameter.defaultValue;
-        $scope.currentValue = "n/a";
-        $scope.value = $scope.currentValue;
+        $scope.values = {};
+        $scope.values.current = "";
+        $scope.values.input = $scope.values.current;
         $scope.isDefault = function(): boolean {
-            return $scope.defaultValue === $scope.value;
+            return String($scope.parameter.defaultValue) === String($scope.values.input);
         }
         $scope.setDefault = function() {
-            $scope.value = $scope.defaultValue;
+            $scope.values.input = String($scope.parameter.defaultValue);
         }
         $scope.wasChanged = function(): boolean {
-            return $scope.currentValue !== $scope.value;
+            return String($scope.values.current) !== String($scope.values.input);
         }
         $scope.commit = function() {
-            preferencesManager.setSystemParameter($scope.parameter.propertyKey, $scope.value, function(data: any, status: number) {
-                $scope.currentValue = $scope.value;
+            preferencesManager.setSystemParameter($scope.parameter.propertyKey, String($scope.values.input), function(data: any, status: number) {
+                $scope.values.current = String($scope.values.input);
             }, function(data: any, status: number, error: string) {
                 });
         }
         $scope.rollback = function() {
-            $scope.value = $scope.currentValue;
+            $scope.values.input = $scope.values.current;
         }
-        preferencesManager.getSystemParameter($scope.parameter.propertyKey, function(data: any, status: number) {
-            $scope.value = data;
-            $scope.currentValue = $scope.value;
-        }, function(data: any, status: number, error: string) {
-            });
+        $scope.refresh = function() {
+            preferencesManager.getSystemParameter($scope.parameter.propertyKey, function(data: any, status: number) {
+                $scope.values.input = data;
+                $scope.values.current = $scope.values.input;
+            }, function(data: any, status: number, error: string) {
+                });
+        }
+        $scope.refresh();
     });

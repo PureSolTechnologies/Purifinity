@@ -30,12 +30,13 @@ public class PreferencesStoreRestService implements
 
 	@Override
 	public void setSystemParameter(String property, String value) {
-		preferencesStore.setValue(PreferencesGroup.SYSTEM, property, value);
+		preferencesStore.setValue(PreferencesGroup.SYSTEM, "", property, value);
 	}
 
 	@Override
 	public String getSystemParameter(String property) {
-		return preferencesStore.getString(PreferencesGroup.SYSTEM, property);
+		return preferencesStore
+				.getString(PreferencesGroup.SYSTEM, "", property);
 	}
 
 	@Override

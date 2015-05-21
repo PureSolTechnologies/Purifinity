@@ -22,13 +22,13 @@ public interface PreferencesStoreRestInterface {
 
 	@PUT
 	@Path("system/{property}")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.TEXT_PLAIN)
 	public void setSystemParameter(@PathParam("property") String property,
 			String value);
 
 	@GET
 	@Path("system/{property}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public String getSystemParameter(@PathParam("property") String property);
 
 	@GET
@@ -39,14 +39,14 @@ public interface PreferencesStoreRestInterface {
 
 	@PUT
 	@Path("plugins/{pluginId}/{property}")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.TEXT_PLAIN)
 	public void setPluginDefaultParameter(
 			@PathParam("pluginId") String pluginId,
 			@PathParam("property") String property, String value);
 
 	@GET
 	@Path("plugins/{pluginId}/{property}")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.TEXT_PLAIN)
 	public String getPluginDefaultParameter(
 			@PathParam("pluginId") String pluginId,
 			@PathParam("property") String property);
@@ -59,7 +59,7 @@ public interface PreferencesStoreRestInterface {
 
 	@PUT
 	@Path("plugins/{pluginId}/{projectId}/{property}")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.TEXT_PLAIN)
 	public String getPluginDefaultParameter(
 			@PathParam("pluginId") String pluginId,
 			@PathParam("projectId") String projectId,
@@ -67,7 +67,7 @@ public interface PreferencesStoreRestInterface {
 
 	@GET
 	@Path("plugins/{pluginId}/{projectId}/{property}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public void setPluginDefaultParameter(
 			@PathParam("pluginId") String pluginId,
 			@PathParam("projectId") String projectId,
@@ -80,13 +80,13 @@ public interface PreferencesStoreRestInterface {
 
 	@PUT
 	@Path("users/{property}")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.TEXT_PLAIN)
 	public void setUserDefaultParameter(@PathParam("property") String property,
 			String value);
 
 	@GET
 	@Path("users/{property}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public String getUserDefaultParameter(@PathParam("property") String property);
 
 	@GET
@@ -97,13 +97,13 @@ public interface PreferencesStoreRestInterface {
 
 	@PUT
 	@Path("users/{userId}/{property}")
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.TEXT_PLAIN)
 	public void setUserParameter(@PathParam("property") String property,
 			@PathParam("userId") String userId, String value);
 
 	@GET
 	@Path("users/{userId}/{property}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.TEXT_PLAIN)
 	public String getUserParameter(@PathParam("property") String property,
 			@PathParam("userId") String userId);
 
