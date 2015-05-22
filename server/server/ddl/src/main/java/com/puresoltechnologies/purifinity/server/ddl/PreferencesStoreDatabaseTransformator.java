@@ -22,7 +22,9 @@ public class PreferencesStoreDatabaseTransformator implements
 
 	private static final String SYSTEM_PREFERENCES_TABLE = "system_preferences";
 	private static final String USER_PREFERENCES_TABLE = "user_preferences";
+	private static final String USER_DEFAULTS_PREFERENCES_TABLE = "user_default_preferences";
 	private static final String PLUGIN_PREFERENCES_TABLE = "plugin_preferences";
+	private static final String PLUGIN_DEFAULTS_PREFERENCES_TABLE = "plugin_default_preferences";
 	private static final String SERVICE_ACTIVATION_TABLE = "service_activation";
 	private static final String SERVICE_PROJECT_ACTIVATION_TABLE = "service_project_activation";
 
@@ -101,9 +103,25 @@ public class PreferencesStoreDatabaseTransformator implements
 				sequence,
 				"Rick-Rainer Ludwig",
 				"CREATE TABLE "
+						+ USER_DEFAULTS_PREFERENCES_TABLE
+						+ " (changed timestamp, changed_by text, key ascii, value text, "
+						+ "PRIMARY KEY(key));",
+				"Keeps preferences for the user specific settings."));
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence,
+				"Rick-Rainer Ludwig",
+				"CREATE TABLE "
 						+ PLUGIN_PREFERENCES_TABLE
 						+ " (changed timestamp, changed_by text, project_id ascii, key ascii, value text, "
 						+ "PRIMARY KEY(project_id, key));",
+				"Keeps preferences for the project specific settings."));
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence,
+				"Rick-Rainer Ludwig",
+				"CREATE TABLE "
+						+ PLUGIN_DEFAULTS_PREFERENCES_TABLE
+						+ " (changed timestamp, changed_by text, key ascii, value text, "
+						+ "PRIMARY KEY(key));",
 				"Keeps preferences for the project specific settings."));
 		sequence.appendTransformation(new CassandraCQLTransformationStep(
 				sequence,

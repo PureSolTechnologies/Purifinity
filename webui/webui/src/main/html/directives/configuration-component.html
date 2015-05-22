@@ -42,10 +42,10 @@
 				<tr data-ng-repeat="parameter in currentFolder.parameters">
 					<td width="50%">{{parameter.name}}</td>
 					<td><configuration-parameter data-ng-model="parameter"></configuration-parameter></td>
-					<td width="1%"><a href="" tooltip-enable="true"
-						tooltip-trigger="mouseenter" tooltip-placement="top"
-						tooltip="{{parameter.description}}"><img
-							src="/images/icons/FatCow_Icons16x16/information.png" /></a></td>
+					<td width="1%"><img
+						src="/images/icons/FatCow_Icons16x16/information.png"
+						tooltip-enable="true" tooltip-trigger="mouseenter"
+						tooltip-placement="top" tooltip="{{parameter.description}}" /></td>
 				</tr>
 			</tbody>
 		</table>

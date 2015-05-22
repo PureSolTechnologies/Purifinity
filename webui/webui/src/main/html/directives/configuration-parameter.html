@@ -1,13 +1,20 @@
 <input tooltip-enable="true" tooltip-trigger="focus"
 	tooltip-placement="top" tooltip="{{parameter.description}}" type="text"
-	data-ng-model="values.input" class="form-control"
-	placeholder="{{parameter.defaultValue}}" required />
+	data-ng-model="values.input" required />
 {{parameter.unit}}
 <a href="" data-ng-click="refresh()"> <img
-	src="/images/icons/FatCow_Icons16x16/arrow_refresh.png" /></a>
+	src="/images/icons/FatCow_Icons16x16/arrow_refresh.png"
+	tooltip-enable="true" tooltip-trigger="mouseenter"
+	tooltip-placement="top" tooltip="Re-read value from server." /></a>
 <a href="" data-ng-hide="isDefault()" data-ng-click="setDefault()"><img
-	src="/images/icons/FatCow_Icons16x16/arrow_redo.png" /></a>
+	src="/images/icons/FatCow_Icons16x16/arrow_redo.png"
+	tooltip-enable="true" tooltip-trigger="mouseenter"
+	tooltip-placement="top" tooltip="Set back to default value." /></a>
 <a href="" data-ng-show="wasChanged()" data-ng-click="commit()"><img
-	src="/images/icons/FatCow_Icons16x16/accept_button.png" /></a>
+	src="/images/icons/FatCow_Icons16x16/accept_button.png"
+	tooltip-enable="true" tooltip-trigger="mouseenter"
+	tooltip-placement="top" tooltip="Save new value." /></a>
 <a href="" data-ng-show="wasChanged()" data-ng-click="rollback()"><img
-	src="/images/icons/FatCow_Icons16x16/cross.png" /></a>
+	src="/images/icons/FatCow_Icons16x16/cross.png" tooltip-enable="true"
+	tooltip-trigger="mouseenter" tooltip-placement="top"
+	tooltip="Reset changes." /></a>

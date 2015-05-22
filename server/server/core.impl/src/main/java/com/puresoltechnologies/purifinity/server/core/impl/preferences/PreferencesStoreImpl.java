@@ -46,10 +46,12 @@ public class PreferencesStoreImpl implements PreferencesStore {
 			boundStatement = preparedStatement.bind(key);
 			break;
 		case PLUGIN_DEFAULT:
-			preparedStatement = preparedStatements.getPreparedStatement(
-					session, "SELECT changed, changed_by, value FROM "
-							+ CassandraElementNames.PLUGIN_PREFERENCES_TABLE
-							+ " WHERE plugin_id=null AND key=?;");
+			preparedStatement = preparedStatements
+					.getPreparedStatement(
+							session,
+							"SELECT changed, changed_by, value FROM "
+									+ CassandraElementNames.PLUGIN_DEFAULTS_PREFERENCES_TABLE
+									+ " WHERE key=?;");
 			boundStatement = preparedStatement.bind(key);
 			break;
 		case PLUGIN_PROJECT:
@@ -67,10 +69,12 @@ public class PreferencesStoreImpl implements PreferencesStore {
 			boundStatement = preparedStatement.bind(key);
 			break;
 		case USER_DEFAULT:
-			preparedStatement = preparedStatements.getPreparedStatement(
-					session, "SELECT changed, changed_by, value FROM "
-							+ CassandraElementNames.USER_PREFERENCES_TABLE
-							+ " WHERE user_id=? AND key=?;");
+			preparedStatement = preparedStatements
+					.getPreparedStatement(
+							session,
+							"SELECT changed, changed_by, value FROM "
+									+ CassandraElementNames.USER_DEFAULTS_PREFERENCES_TABLE
+									+ " WHERE key=?;");
 			boundStatement = preparedStatement.bind(groupName, key);
 			break;
 		default:
@@ -118,7 +122,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 					.getPreparedStatement(
 							session,
 							"INSERT INTO "
-									+ CassandraElementNames.PLUGIN_PREFERENCES_TABLE
+									+ CassandraElementNames.PLUGIN_DEFAULTS_PREFERENCES_TABLE
 									+ " (changed, changed_by, key, value) VALUES (?, ?, ?, ?);");
 			boundStatement = preparedStatement.bind(new Date(), "n/a", key,
 					value);
@@ -138,7 +142,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 					.getPreparedStatement(
 							session,
 							"INSERT INTO "
-									+ CassandraElementNames.USER_PREFERENCES_TABLE
+									+ CassandraElementNames.USER_DEFAULTS_PREFERENCES_TABLE
 									+ " (changed, changed_by, key, value) VALUES (?, ?, ?, ?);");
 			boundStatement = preparedStatement.bind(new Date(), "n/a", key,
 					value);
