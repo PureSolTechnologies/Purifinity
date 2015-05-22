@@ -1,20 +1,30 @@
-<input tooltip-enable="true" tooltip-trigger="focus"
-	tooltip-placement="top" tooltip="{{parameter.description}}" type="text"
-	data-ng-model="values.input" required />
+<input data-ng-show="isBoolean()" data-tooltip-enable="true"
+	data-tooltip-trigger="focus" data-tooltip-placement="top"
+	data-tooltip="{{parameter.description}}" type="checkbox"
+	data-ng-model="values.booleanInput" data-ng-true-value="true"
+	data-ng-false-value="false" />
+<input data-ng-show="isText()" data-tooltip-enable="true"
+	data-tooltip-trigger="focus" data-tooltip-placement="top"
+	data-tooltip="{{parameter.description}}" type="text"
+	data-ng-model="values.textInput" required />
+<input data-ng-show="isNumber()" data-tooltip-enable="true"
+	data-tooltip-trigger="focus" data-tooltip-placement="top"
+	data-tooltip="{{parameter.description}}" type="number"
+	data-ng-model="values.numberInput" required />
 {{parameter.unit}}
 <a href="" data-ng-click="refresh()"> <img
 	src="/images/icons/FatCow_Icons16x16/arrow_refresh.png"
-	tooltip-enable="true" tooltip-trigger="mouseenter"
-	tooltip-placement="top" tooltip="Re-read value from server." /></a>
+	data-tooltip-enable="true" data-tooltip-trigger="mouseenter"
+	data-tooltip-placement="top" data-tooltip="Re-read value from server." /></a>
 <a href="" data-ng-hide="isDefault()" data-ng-click="setDefault()"><img
 	src="/images/icons/FatCow_Icons16x16/arrow_redo.png"
-	tooltip-enable="true" tooltip-trigger="mouseenter"
-	tooltip-placement="top" tooltip="Set back to default value." /></a>
+	data-tooltip-enable="true" data-tooltip-trigger="mouseenter"
+	data-tooltip-placement="top" data-tooltip="Set back to default value." /></a>
 <a href="" data-ng-show="wasChanged()" data-ng-click="commit()"><img
 	src="/images/icons/FatCow_Icons16x16/accept_button.png"
-	tooltip-enable="true" tooltip-trigger="mouseenter"
-	tooltip-placement="top" tooltip="Save new value." /></a>
+	data-tooltip-enable="true" data-tooltip-trigger="mouseenter"
+	data-tooltip-placement="top" data-tooltip="Save new value." /></a>
 <a href="" data-ng-show="wasChanged()" data-ng-click="rollback()"><img
-	src="/images/icons/FatCow_Icons16x16/cross.png" tooltip-enable="true"
-	tooltip-trigger="mouseenter" tooltip-placement="top"
-	tooltip="Reset changes." /></a>
+	src="/images/icons/FatCow_Icons16x16/cross.png"
+	data-tooltip-enable="true" data-tooltip-trigger="mouseenter"
+	data-tooltip-placement="top" data-tooltip="Reset changes." /></a>

@@ -64,32 +64,98 @@ configurationUIModule.directive("configurationParameter",
 configurationUIModule.controller("configurationParameterCtrl",
     function($scope, preferencesManager) {
         $scope.values = {};
-        $scope.values.current = "";
-        $scope.values.input = $scope.values.current;
+        $scope.values.current = {};
+        $scope.values.booleanInput = false;
+        $scope.values.textInput = "";
+        $scope.values.numberInput = 0;
         $scope.isDefault = function(): boolean {
-            return String($scope.parameter.defaultValue) === String($scope.values.input);
+            if ($scope.isBoolean()) {
+                return Boolean($scope.parameter.defaultValue) === $scope.values.booleanInput;
+            } else if ($scope.isText()) {
+                return String($scope.parameter.defaultValue) === $scope.values.textInput;
+            } else if ($scope.isNumber()) {
+                return Number($scope.parameter.defaultValue) === $scope.values.numberInput;
+            } else {
+                return String($scope.parameter.defaultValue) === String($scope.values.input);
+            }
         }
         $scope.setDefault = function() {
-            $scope.values.input = String($scope.parameter.defaultValue);
+            if ($scope.isBoolean()) {
+                $scope.values.booleanInput = Boolean($scope.parameter.defaultValue);
+            } else if ($scope.isText()) {
+                $scope.values.textInput = String($scope.parameter.defaultValue);
+            } else if ($scope.isNumber()) {
+                $scope.values.numberInput = Number($scope.parameter.defaultValue);
+            } else {
+                $scope.values.input = String($scope.parameter.defaultValue);
+            }
         }
         $scope.wasChanged = function(): boolean {
-            return String($scope.values.current) !== String($scope.values.input);
+            if ($scope.isBoolean()) {
+                return Boolean($scope.values.current) !== $scope.values.booleanInput;
+            } else if ($scope.isText()) {
+                return String($scope.values.current) !== $scope.values.textInput;
+            } else if ($scope.isNumber()) {
+                return Number($scope.values.current) !== $scope.values.numberInput;
+            } else {
+                return String($scope.values.current) !== String($scope.values.input);
+            }
         }
         $scope.commit = function() {
-            preferencesManager.setSystemParameter($scope.parameter.propertyKey, String($scope.values.input), function(data: any, status: number) {
-                $scope.values.current = String($scope.values.input);
-            }, function(data: any, status: number, error: string) {
-                });
+            if ($scope.isBoolean()) {
+                preferencesManager.setSystemParameter($scope.parameter.propertyKey, String($scope.values.booleanInput), function(data: any, status: number) {
+                    $scope.values.current = $scope.values.booleanInput;
+                }, function(data: any, status: number, error: string) {
+                    });
+            } else if ($scope.isText()) {
+                preferencesManager.setSystemParameter($scope.parameter.propertyKey, String($scope.values.textInput), function(data: any, status: number) {
+                    $scope.values.current = $scope.values.textInput;
+                }, function(data: any, status: number, error: string) {
+                    });
+            } else if ($scope.isNumber()) {
+                preferencesManager.setSystemParameter($scope.parameter.propertyKey, String($scope.values.numberInput), function(data: any, status: number) {
+                    $scope.values.current = $scope.values.numberInput;
+                }, function(data: any, status: number, error: string) {
+                    });
+            }
         }
         $scope.rollback = function() {
-            $scope.values.input = $scope.values.current;
+            if ($scope.isBoolean()) {
+                $scope.values.booleanInput = Boolean($scope.values.current);
+            } else if ($scope.isText()) {
+                $scope.values.textInput = String($scope.values.current);
+            } else if ($scope.isNumber()) {
+                $scope.values.numberInput = Number($scope.values.current);
+            } else {
+                $scope.values.input = $scope.values.current;
+            }
         }
         $scope.refresh = function() {
             preferencesManager.getSystemParameter($scope.parameter.propertyKey, function(data: any, status: number) {
-                $scope.values.input = data;
-                $scope.values.current = $scope.values.input;
+                if ($scope.isBoolean()) {
+                    $scope.values.booleanInput = Boolean(data);
+                    $scope.values.current =  Boolean(data);
+                } else if ($scope.isText()) {
+                    $scope.values.booleanInput = String(data);
+                    $scope.values.current =  String(data);
+                } else if ($scope.isNumber()) {
+                    $scope.values.booleanInput = Number(data);
+                    $scope.values.current =  Number(data);
+                } else {
+                    $scope.values.textInput = data;
+                    $scope.values.current =  data;
+                }
             }, function(data: any, status: number, error: string) {
                 });
+         }
+        $scope.isBoolean = function() {
+            return $scope.parameter.valueRepresentation === "BOOLEAN";
         }
-        $scope.refresh();
-    });
+        $scope.isText = function() {
+            return $scope.parameter.valueRepresentation === "STRING";
+        }
+        $scope.isNumber = function() {
+            return ($scope.parameter.valueRepresentation === "DECIMAL") || ($scope.parameter.valueRepresentation === "INTEGER");
+        }
+         $scope.refresh();
+     });

@@ -15,7 +15,8 @@ class ConfigurationParameter {
             configurationParameter.type,
             configurationParameter.propertyKey,
             configurationParameter.path,
-            configurationParameter.defaultValue);
+            configurationParameter.defaultValue,
+            String(configurationParameter.valueRepresentation) );
     }
 
     constructor(public name: string,
@@ -25,7 +26,8 @@ class ConfigurationParameter {
         public type: string,
         public propertyKey: string,
         public path: string,
-        public defaultValue: any) {
+        public defaultValue: any,
+        public valueRepresentation: string) {
     }
 
 }
