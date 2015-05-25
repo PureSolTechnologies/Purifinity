@@ -10,6 +10,7 @@
 
 package com.puresoltechnologies.purifinity.server.metrics.cocomo.basic;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -68,7 +69,7 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 		DEPENDENCIES.add(SLOCMetricCalculator.ID);
 	}
 
-	public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
+	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 
 	private SoftwareProject complexity = SoftwareProject.LOW;
 	private int averageSalary = 56286;
@@ -86,7 +87,7 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	public List<ConfigurationParameter<?>> getConfigurationParameters() {
 		return PARAMETERS;
 	}
 

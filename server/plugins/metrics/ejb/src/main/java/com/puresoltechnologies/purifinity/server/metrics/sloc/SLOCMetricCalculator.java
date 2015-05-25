@@ -50,7 +50,7 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 
 	public static final String DESCRIPTION = "SLOC Metric calculation.";
 
-	public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
+	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 
 	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
 	static {

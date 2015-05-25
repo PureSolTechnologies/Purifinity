@@ -1,6 +1,8 @@
 package com.puresoltechnologies.purifinity.server.domain.evaluation;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,7 +23,7 @@ public class EvaluatorServiceInformation implements ServiceInformation {
 	private final Version pluginVersion;
 	private final String jndiName;
 	private final String description;
-	private final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+	private final List<ConfigurationParameter<?>> configurationParameters = new ArrayList<>();
 	private final String serviceURLPath;
 	private final String configurationURLPath;
 	private final String projectURLPath;
@@ -37,7 +39,7 @@ public class EvaluatorServiceInformation implements ServiceInformation {
 			@JsonProperty("pluginVersion") Version pluginVersion,
 			@JsonProperty("jndiName") String jndiName,
 			@JsonProperty("description") String description,
-			@JsonProperty("configurationParameters") Set<ConfigurationParameter<?>> configurationParameters,
+			@JsonProperty("configurationParameters") List<ConfigurationParameter<?>> configurationParameters,
 			@JsonProperty("serviceURLPath") String serviceURLPath,
 			@JsonProperty("configurationURLPath") String configurationURLPath,
 			@JsonProperty("projectURLPath") String projectURLPath,
@@ -87,7 +89,7 @@ public class EvaluatorServiceInformation implements ServiceInformation {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	public List<ConfigurationParameter<?>> getConfigurationParameters() {
 		return configurationParameters;
 	}
 

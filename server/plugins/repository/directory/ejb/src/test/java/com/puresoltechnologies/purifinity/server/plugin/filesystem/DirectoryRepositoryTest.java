@@ -5,14 +5,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.JSONSerializer;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.domain.Parameter;
@@ -30,9 +29,8 @@ public class DirectoryRepositoryTest {
 				"parameterDescription", Double.class));
 		RepositoryServiceInformation repositoryType = new RepositoryServiceInformation(
 				"className", "name", "version", new Version(1, 2, 3),
-				"jndi://", "description", parameters,
-				new HashSet<ConfigurationParameter<?>>(), null, null, null,
-				null);
+				"jndi://", "description", parameters, new ArrayList<>(), null,
+				null, null, null);
 		checkSerialization(repositoryType);
 	}
 

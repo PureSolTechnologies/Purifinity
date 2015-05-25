@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -89,7 +89,7 @@ public class AnalysisServiceBean implements AnalysisService {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
+	public List<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
 		return analyzerRegistration.getInstanceById(analyzerId)
 				.getConfigurationParameters();
 	}

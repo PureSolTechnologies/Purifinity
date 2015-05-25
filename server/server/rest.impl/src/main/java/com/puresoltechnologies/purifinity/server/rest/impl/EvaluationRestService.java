@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.rest.impl;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,7 +28,7 @@ public class EvaluationRestService implements EvaluationRestInterface {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfiguration(String evaluatorId) {
+	public List<ConfigurationParameter<?>> getConfiguration(String evaluatorId) {
 		return evaluationService.getConfiguration(evaluatorId);
 	}
 

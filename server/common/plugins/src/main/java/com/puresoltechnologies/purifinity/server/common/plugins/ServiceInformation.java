@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.server.common.plugins;
 
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 
@@ -18,10 +18,10 @@ public interface ServiceInformation extends Serializable {
 	 * implementing class. This list of parameters is used to setup the specific
 	 * behavior of the class.
 	 * 
-	 * @return A {@link Set} of {@link ConfigurationParameter} is returned
+	 * @return A {@link List} of {@link ConfigurationParameter} is returned
 	 *         specifying the parameters for configuration.
 	 */
-	public Set<ConfigurationParameter<?>> getConfigurationParameters();
+	public List<ConfigurationParameter<?>> getConfigurationParameters();
 
 	/**
 	 * Returns the service's URL path suffix of the URL to reach the services

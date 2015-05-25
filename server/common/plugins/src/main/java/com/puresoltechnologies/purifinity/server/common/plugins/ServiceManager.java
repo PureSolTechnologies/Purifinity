@@ -70,4 +70,14 @@ public interface ServiceManager<ServiceInfo extends ServiceInformation, ServiceI
 	 * @return An {@link ServiceImplementation} compliant proxy is returned.
 	 */
 	public ServiceImplementation createProxy(String jndi);
+
+	/**
+	 * This method creates an instance out of the service id. This service is
+	 * actually a proxy via remoting to the plugin.
+	 * 
+	 * @param serviceId
+	 *            is the id of the service.
+	 * @return A proxy is for the service returned.
+	 */
+	public ServiceImplementation getInstanceById(String serviceId);
 }

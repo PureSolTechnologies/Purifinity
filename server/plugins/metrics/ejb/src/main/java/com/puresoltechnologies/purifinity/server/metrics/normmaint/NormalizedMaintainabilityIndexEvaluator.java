@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.metrics.normmaint;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +42,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends
 	public static final String NAME = "Normalized Maintainability Index";
 	public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
 	public static final String DESCRIPTION = "Normalized Maintainability Index calculation.";
-	public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
+	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 
 	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
 	static {
@@ -68,7 +69,7 @@ public class NormalizedMaintainabilityIndexEvaluator extends
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	public List<ConfigurationParameter<?>> getConfigurationParameters() {
 		return PARAMETERS;
 	}
 

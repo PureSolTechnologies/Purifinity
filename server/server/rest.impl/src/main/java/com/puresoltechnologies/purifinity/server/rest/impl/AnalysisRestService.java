@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.rest.impl;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.jms.JMSException;
@@ -44,7 +44,7 @@ public class AnalysisRestService implements AnalysisRestInterface {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
+	public List<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
 		return analysisService.getConfiguration(analyzerId);
 	}
 

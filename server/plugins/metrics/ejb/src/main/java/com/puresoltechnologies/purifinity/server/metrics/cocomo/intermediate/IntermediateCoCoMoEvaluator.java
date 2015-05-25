@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -57,7 +58,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 		DEPENDENCIES.add(SLOCMetricCalculator.ID);
 	}
 
-	public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
+	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 
 	@Inject
 	private IntermediateCoCoMoEvaluatorDAO intermediateCoCoMoEvaluatorDAO;
@@ -74,7 +75,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	public List<ConfigurationParameter<?>> getConfigurationParameters() {
 		return PARAMETERS;
 	}
 

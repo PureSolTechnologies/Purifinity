@@ -72,7 +72,7 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	public List<ConfigurationParameter<?>> getConfigurationParameters() {
 		return SLOCMetricCalculator.PARAMETERS;
 	}
 

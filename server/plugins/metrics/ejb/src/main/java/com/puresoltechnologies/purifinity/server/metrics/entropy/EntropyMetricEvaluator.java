@@ -47,7 +47,7 @@ public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	public List<ConfigurationParameter<?>> getConfigurationParameters() {
 		return EntropyMetric.PARAMETERS;
 	}
 

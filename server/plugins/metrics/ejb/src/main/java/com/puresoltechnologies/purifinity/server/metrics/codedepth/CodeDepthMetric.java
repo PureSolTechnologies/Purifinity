@@ -35,7 +35,7 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 
 	public static final String DESCRIPTION = "Analysis the nested code blocks for a maximum depth.";
 
-	public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
+	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 
 	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
 	static {

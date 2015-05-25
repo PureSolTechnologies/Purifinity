@@ -1,6 +1,6 @@
 package com.puresoltechnologies.commons.domain;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * This interface is implemented by all classes which have the possibility for
@@ -18,10 +18,10 @@ public interface Configurable {
 	 * implementing class. This list of parameters is used to setup the specific
 	 * behavior of the class.
 	 * 
-	 * @return A {@link Set} of {@link ConfigurationParameter} is returned
+	 * @return A {@link List} of {@link ConfigurationParameter} is returned
 	 *         specifying the parameters for configuration.
 	 */
-	public Set<ConfigurationParameter<?>> getConfigurationParameters();
+	public List<ConfigurationParameter<?>> getConfigurationParameters();
 
 	/**
 	 * This method is used to set a parameter in the class.
@@ -33,9 +33,8 @@ public interface Configurable {
 	 *            is the value to be set.
 	 * @throws IllegalArgumentException
 	 *             may be thrown if the parameter does not fit the list of
-	 *             parameter retieved from
-	 *             {@link #getConfigurationParameters()}, but this is
-	 *             up to the actual implementation.
+	 *             parameter retieved from {@link #getConfigurationParameters()}
+	 *             , but this is up to the actual implementation.
 	 */
 	public <T> void setConfigurationParameter(
 			ConfigurationParameter<T> parameter, T value);
@@ -52,9 +51,8 @@ public interface Configurable {
 	 *         the parameter is returned.
 	 * @throws IllegalArgumentException
 	 *             may be thrown if the parameter does not fit the list of
-	 *             parameter retieved from
-	 *             {@link #getConfigurationParameters()}, but this is
-	 *             up to the actual implementation.
+	 *             parameter retieved from {@link #getConfigurationParameters()}
+	 *             , but this is up to the actual implementation.
 	 */
 	public <T> T getConfigurationParameter(ConfigurationParameter<T> parameter);
 

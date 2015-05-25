@@ -2,8 +2,8 @@ package com.puresoltechnologies.purifinity.framework.lang.cpp11;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -16,7 +16,7 @@ public class CPP extends AbstractProgrammingLanguageAnalyzer {
 	public static final String[] FILE_SUFFIXES = { ".hpp", ".hxx", ".cpp",
 			".cxx" };
 
-	private static final Set<ConfigurationParameter<?>> configurationParameters = new HashSet<>();
+	private static final List<ConfigurationParameter<?>> configurationParameters = new ArrayList<>();
 
 	private static CPP instance = null;
 
@@ -48,7 +48,7 @@ public class CPP extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	public List<ConfigurationParameter<?>> getConfigurationParameters() {
 		return configurationParameters;
 	}
 

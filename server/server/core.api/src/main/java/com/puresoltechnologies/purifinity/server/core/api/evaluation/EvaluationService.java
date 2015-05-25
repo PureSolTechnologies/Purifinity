@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.server.core.api.evaluation;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
@@ -18,7 +18,7 @@ public interface EvaluationService {
 
 	public EvaluatorServiceInformation getEvaluator(String evaluatorId);
 
-	public Set<ConfigurationParameter<?>> getConfiguration(String evaluatorId);
+	public List<ConfigurationParameter<?>> getConfiguration(String evaluatorId);
 
 	public boolean isEnabled(String evaluatorId);
 

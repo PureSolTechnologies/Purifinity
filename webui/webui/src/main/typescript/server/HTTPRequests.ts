@@ -62,7 +62,9 @@ class HTTPRequests {
                 headers: {
                     'auth-id': authId,
                     'auth-token': authToken,
-                    'Content-Type': 'text/plain'
+                },
+                transformResponse: function(value) {
+                    return value;
                 }
             }
             )

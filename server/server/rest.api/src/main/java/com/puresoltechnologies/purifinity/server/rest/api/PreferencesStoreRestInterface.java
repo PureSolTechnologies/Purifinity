@@ -60,7 +60,7 @@ public interface PreferencesStoreRestInterface {
 	@PUT
 	@Path("plugins/{pluginId}/{projectId}/{property}")
 	@Consumes(MediaType.TEXT_PLAIN)
-	public String getPluginDefaultParameter(
+	public String getPluginProjectParameter(
 			@PathParam("pluginId") String pluginId,
 			@PathParam("projectId") String projectId,
 			@PathParam("property") String property);

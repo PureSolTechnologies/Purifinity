@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.server.metrics.codedepth;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.EJB;
@@ -54,7 +55,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	public List<ConfigurationParameter<?>> getConfigurationParameters() {
 		return CodeDepthMetric.PARAMETERS;
 	}
 

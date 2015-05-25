@@ -5,13 +5,13 @@ class ConfigurationComponentData {
 
     root: ConfigurationComponentTree;
 
-    constructor(private rootName: string) {
+    constructor(private rootName: string, public preferencesGroup: PreferencesGroup)  {
         this.root = new ConfigurationComponentTree(null, rootName);
     }
 
-    public addConfigurationParameter(parameter: ConfigurationParameter) {
+    public static addConfigurationParameter(node: ConfigurationComponentTree, parameter: ConfigurationParameter) {
         var path: string[] = parameter.path.split("/");
-        var currentNode: ConfigurationComponentTree = this.root;
+        var currentNode: ConfigurationComponentTree = node;
         for (var i = 0; i < path.length; i++) {
             var pathElement = path[i];
             if (pathElement.length > 0) {

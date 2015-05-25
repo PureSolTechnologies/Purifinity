@@ -150,4 +150,14 @@ public class EvaluatorServiceManagerImpl extends
 		preferencesStore.setServiceActive(evaluatorId, active);
 		analyzerActivations.put(evaluatorId, active);
 	}
+
+	@Override
+	public Evaluator getInstanceById(String evaluatorId) {
+		for (EvaluatorServiceInformation evaluator : getServices()) {
+			if (evaluator.getId().equals(evaluatorId)) {
+				return createProxy(evaluator.getJndiName());
+			}
+		}
+		return null;
+	}
 }

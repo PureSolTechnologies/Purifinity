@@ -2,11 +2,9 @@ package com.puresoltechnologies.purifinity.server.plugin.git;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -62,7 +60,7 @@ public class GITRepository extends AbstractRepository {
 				"The password of the user to be used for login into the host.",
 				String.class));
 	}
-	public static final Set<ConfigurationParameter<?>> CONFIG_PARAMETERS = new LinkedHashSet<>();
+	public static final List<ConfigurationParameter<?>> CONFIG_PARAMETERS = new ArrayList<>();
 	public static final RepositoryServiceInformation INFORMATION = new RepositoryServiceInformation(
 			ID, NAME, "1.9", PLUGIN_VERSION, JNDI_ADDRESS, "GIT Repository.",
 			PARAMETERS, CONFIG_PARAMETERS, null, null, null, null);
@@ -85,6 +83,24 @@ public class GITRepository extends AbstractRepository {
 	@Override
 	public String getHumanReadableLocationString(Properties repositoryLocation) {
 		return "GIT Repository '???'";
+	}
+
+	@Override
+	public List<ConfigurationParameter<?>> getConfigurationParameters() {
+		return CONFIG_PARAMETERS;
+	}
+
+	@Override
+	public <T> void setConfigurationParameter(
+			ConfigurationParameter<T> parameter, T value) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public <T> T getConfigurationParameter(ConfigurationParameter<T> parameter) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

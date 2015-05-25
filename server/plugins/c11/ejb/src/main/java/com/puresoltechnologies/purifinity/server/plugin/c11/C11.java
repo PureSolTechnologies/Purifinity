@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -39,7 +39,7 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 
 	public static final String[] FILE_SUFFIXES = { ".h", ".c" };
 
-	public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
+	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 
 	public C11() {
 		super(NAME, VERSION);
@@ -54,7 +54,7 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	public List<ConfigurationParameter<?>> getConfigurationParameters() {
 		return PARAMETERS;
 	}
 

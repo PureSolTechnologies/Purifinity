@@ -1,11 +1,22 @@
 package com.puresoltechnologies.purifinity.server.core.api.preferences;
 
+import java.util.List;
+
+import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+
 /**
  * This interface represents the preferences store used in Purifinity.
  * 
  * @author Rick-Rainer Ludwig
  */
 public interface PreferencesStore {
+
+	public List<ConfigurationParameter<?>> getSystemParameters();
+
+	public List<ConfigurationParameter<?>> getUserDefaultParameters();
+
+	public List<ConfigurationParameter<?>> getPluginDefaultParameters(
+			String pluginId);
 
 	/**
 	 * This method reads a preference value from the store.

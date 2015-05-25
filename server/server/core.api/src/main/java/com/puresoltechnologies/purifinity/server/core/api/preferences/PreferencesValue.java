@@ -113,8 +113,7 @@ public class PreferencesValue {
 
 	@Override
 	public String toString() {
-		return group + "/" + key + "=" + " (changed " + changed + " by "
-				+ changedBy + ")";
+		return group + "/" + key + "=" + value + " (changed " + changed
+				+ " by " + changedBy + ")";
 	}
-
 }

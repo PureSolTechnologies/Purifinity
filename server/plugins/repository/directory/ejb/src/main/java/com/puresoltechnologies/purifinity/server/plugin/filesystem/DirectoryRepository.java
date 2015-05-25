@@ -3,11 +3,9 @@ package com.puresoltechnologies.purifinity.server.plugin.filesystem;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -56,7 +54,7 @@ public class DirectoryRepository extends AbstractRepository {
 						"The directory the source code can be found in.",
 						String.class));
 	}
-	public static final Set<ConfigurationParameter<?>> CONFIG_PARAMETERS = new LinkedHashSet<>();
+	public static final List<ConfigurationParameter<?>> CONFIG_PARAMETERS = new ArrayList<>();
 	public static final RepositoryServiceInformation INFORMATION = new RepositoryServiceInformation(
 			ID, NAME, PLUGIN_VERSION.toString(), PLUGIN_VERSION, JNDI_ADDRESS,
 			"Simple directory in the file system of the server.", PARAMETERS,
@@ -101,5 +99,22 @@ public class DirectoryRepository extends AbstractRepository {
 	@Override
 	public String getHumanReadableLocationString(Properties configuration) {
 		return "Directory repository '" + getDirectory(configuration) + "'";
+	}
+
+	@Override
+	public List<ConfigurationParameter<?>> getConfigurationParameters() {
+		return new ArrayList<>();
+	}
+
+	@Override
+	public <T> void setConfigurationParameter(
+			ConfigurationParameter<T> parameter, T value) {
+		// intentionally left empty
+	}
+
+	@Override
+	public <T> T getConfigurationParameter(ConfigurationParameter<T> parameter) {
+		// intentionally left empty
+		return null;
 	}
 }

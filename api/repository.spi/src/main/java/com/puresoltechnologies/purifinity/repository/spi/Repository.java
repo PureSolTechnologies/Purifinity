@@ -4,10 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Properties;
 
+import com.puresoltechnologies.commons.domain.Configurable;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 
-public interface Repository extends Serializable {
+public interface Repository extends Serializable, Configurable {
 
 	/**
 	 * This method returns the repository's name,
@@ -19,8 +20,7 @@ public interface Repository extends Serializable {
 
 	public String getHumanReadableLocationString(Properties repositoryLocation);
 
-	public List<SourceCodeLocation> getSourceCodes(
-			Properties configuration,
+	public List<SourceCodeLocation> getSourceCodes(Properties configuration,
 			FileSearchConfiguration fileSearchConfiguration);
 
 }

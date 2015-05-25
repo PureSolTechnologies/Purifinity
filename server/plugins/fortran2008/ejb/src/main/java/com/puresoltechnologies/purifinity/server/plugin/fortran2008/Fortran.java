@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -33,7 +33,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	public static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
 			".f95", ".for" };
 
-	public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
+	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 	static {
 		PARAMETERS
 				.add(new ConfigurationParameter<String>(
@@ -49,7 +49,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 						"",
 						LevelOfMeasurement.NOMINAL,
 						"Specifies a comma separated list of file name suffixes which are to be use to identify Fortran 90 free form sources.",
-						String.class, "suffixes.form.fixed",
+						String.class, "suffixes.form.free",
 						"/Source Selection", "f90"));
 	}
 
@@ -65,7 +65,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfigurationParameters() {
+	public List<ConfigurationParameter<?>> getConfigurationParameters() {
 		return PARAMETERS;
 	}
 

@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 import javax.jms.JMSException;
 
@@ -24,7 +24,7 @@ public interface AnalysisService {
 
 	public AnalyzerServiceInformation getAnalyzer(String analyzerId);
 
-	public Set<ConfigurationParameter<?>> getConfiguration(String analyzerId);
+	public List<ConfigurationParameter<?>> getConfiguration(String analyzerId);
 
 	public boolean isEnabled(String analyzerId);
 

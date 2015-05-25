@@ -10,6 +10,7 @@
 
 package com.puresoltechnologies.purifinity.server.metrics.entropy;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
@@ -44,7 +45,7 @@ public class EntropyMetric extends CodeRangeEvaluator {
 
 	public static final String DESCRIPTION = "Entropy Metric calculation.";
 
-	public static final Set<ConfigurationParameter<?>> PARAMETERS = new HashSet<>();
+	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 
 	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
 	static {

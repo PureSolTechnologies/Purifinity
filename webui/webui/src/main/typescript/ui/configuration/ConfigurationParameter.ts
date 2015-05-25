@@ -7,8 +7,13 @@ class ConfigurationParameter {
      * This method is used to convert a single configuration parameter into a 
      * ConfigurationParameter object.
      */
-    public static fromJSON(configurationParameter: any) {
-        return new ConfigurationParameter(configurationParameter.name,
+    public static fromJSON(
+        preferencesGroup: PreferencesGroup,
+        groupIdentifier: string,
+        configurationParameter: any) {
+        return new ConfigurationParameter(preferencesGroup,
+            groupIdentifier,
+            configurationParameter.name,
             configurationParameter.unit,
             configurationParameter.levelOfMeasurement,
             configurationParameter.description,
@@ -16,10 +21,13 @@ class ConfigurationParameter {
             configurationParameter.propertyKey,
             configurationParameter.path,
             configurationParameter.defaultValue,
-            String(configurationParameter.valueRepresentation) );
+            String(configurationParameter.valueRepresentation));
     }
 
-    constructor(public name: string,
+    constructor(
+        public preferencesGroup: PreferencesGroup,
+        public groupIdentifier: string,
+        public name: string,
         public unit: string,
         public levelOfMeasurement: LevelOfMeasurement,
         public description: string,

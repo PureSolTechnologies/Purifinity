@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.server.core.impl.evaluation.plugins;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -50,7 +50,7 @@ public class EvaluationServiceBean implements EvaluationService {
 	}
 
 	@Override
-	public Set<ConfigurationParameter<?>> getConfiguration(String evaluatorId) {
+	public List<ConfigurationParameter<?>> getConfiguration(String evaluatorId) {
 		return evaluatorRegistration.createInstanceById(evaluatorId)
 				.getConfigurationParameters();
 	}

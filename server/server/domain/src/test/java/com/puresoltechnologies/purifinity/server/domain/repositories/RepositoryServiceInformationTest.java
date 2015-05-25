@@ -3,8 +3,8 @@ package com.puresoltechnologies.purifinity.server.domain.repositories;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import org.junit.Test;
@@ -33,7 +33,7 @@ public class RepositoryServiceInformationTest {
 		RepositoryServiceInformation information = new RepositoryServiceInformation(
 				"nameOfClass", "nameOfType", "version", new Version(1, 2, 3),
 				"jndi://", "descriptionOfType", parameters,
-				new HashSet<ConfigurationParameter<?>>(), "serviceURLPath",
+				new ArrayList<ConfigurationParameter<?>>(), "serviceURLPath",
 				"configurationURLPath", "projectURLPath", "runURLPath");
 		String serialized = JSONSerializer.toJSONString(information);
 		System.out.println(serialized);

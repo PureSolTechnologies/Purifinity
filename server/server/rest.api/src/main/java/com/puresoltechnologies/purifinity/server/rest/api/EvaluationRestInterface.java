@@ -2,7 +2,7 @@ package com.puresoltechnologies.purifinity.server.rest.api;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -32,7 +32,7 @@ public interface EvaluationRestInterface {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("evaluators/{id}/configuration")
-	public Set<ConfigurationParameter<?>> getConfiguration(
+	public List<ConfigurationParameter<?>> getConfiguration(
 			@PathParam("id") String evaluatorId);
 
 	@GET
