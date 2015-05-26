@@ -37,20 +37,18 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	static {
 		PARAMETERS
 				.add(new ConfigurationParameter<String>(
-						"Fixed Form Prefix(es)",
+						"Fortran Source File Suffixes for Fixed Form",
 						"",
 						LevelOfMeasurement.NOMINAL,
 						"Specifies a comma separated list of file name suffixes which are to be use to identify pre Fortran 90 fixed form sources.",
-						String.class, "suffixes.form.fixed",
-						"/Source Selection", "f,f77"));
+						String.class, "suffixes.form.fixed", "/", "f,f77"));
 		PARAMETERS
 				.add(new ConfigurationParameter<String>(
-						"Free Form Prefix(es)",
+						"Fortran Source File Suffixes for Free Form",
 						"",
 						LevelOfMeasurement.NOMINAL,
 						"Specifies a comma separated list of file name suffixes which are to be use to identify Fortran 90 free form sources.",
-						String.class, "suffixes.form.free",
-						"/Source Selection", "f90"));
+						String.class, "suffixes.form.free", "/", "f90"));
 	}
 
 	private SourceForm sourceForm = SourceForm.FREE_FORM;

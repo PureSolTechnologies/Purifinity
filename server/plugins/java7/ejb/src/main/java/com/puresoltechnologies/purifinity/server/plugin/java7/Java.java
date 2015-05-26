@@ -11,6 +11,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
@@ -40,6 +41,17 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 	public static final String[] FILE_SUFFIXES = { ".java" };
 
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
+	static {
+		PARAMETERS
+				.add(new ConfigurationParameter<String>(
+						"Java Source File Suffixes",
+						"",
+						LevelOfMeasurement.NOMINAL,
+						"Specifies a list of comma separated file suffixes which are used to mark Java sources.",
+						String.class, "analyzer.java.source.suffixes", "/",
+						"java"));
+
+	}
 
 	public Java() {
 		super(NAME, VERSION);

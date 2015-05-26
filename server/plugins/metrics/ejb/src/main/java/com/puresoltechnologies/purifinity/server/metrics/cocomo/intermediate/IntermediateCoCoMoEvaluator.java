@@ -11,6 +11,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
@@ -59,6 +60,29 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 	}
 
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
+	static {
+		PARAMETERS
+				.add(new ConfigurationParameter<String>(
+						"Software Project",
+						"",
+						LevelOfMeasurement.NOMINAL,
+						"Specifies the complexity of the project. Valid values: ORGANIC, SEMI_DETACHED, EMBEDDED",
+						String.class,
+						"evaluator.cocomo.intermediate.software_project", "/",
+						"SEMI_DETACHED"));
+		PARAMETERS
+				.add(new ConfigurationParameter<Integer>(
+						"Yearly Salary",
+						"currency",
+						LevelOfMeasurement.RATIO,
+						"Specifies the average yearly salary for a single developer for cost calculation.",
+						Integer.class, "evaluator.cocomo.intermediate.salary",
+						"/", 56286));
+		PARAMETERS.add(new ConfigurationParameter<String>("Currency", "",
+				LevelOfMeasurement.NOMINAL, "Currency for cost calculation.",
+				String.class, "evaluator.cocomo.intermediate.currency", "/",
+				"USD"));
+	}
 
 	@Inject
 	private IntermediateCoCoMoEvaluatorDAO intermediateCoCoMoEvaluatorDAO;

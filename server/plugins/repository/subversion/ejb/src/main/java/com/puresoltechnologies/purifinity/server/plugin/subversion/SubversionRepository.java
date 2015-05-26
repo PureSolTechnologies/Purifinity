@@ -10,6 +10,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.domain.Parameter;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -34,6 +35,12 @@ public class SubversionRepository extends AbstractRepository {
 			Repository.class, SubversionRepository.class);
 	public static final Map<String, Parameter<?>> PARAMETERS = new HashMap<>();
 	public static final List<ConfigurationParameter<?>> CONFIG_PARAMETERS = new ArrayList<>();
+	static {
+		CONFIG_PARAMETERS.add(new ConfigurationParameter<String>(
+				"SVN Binary Location", "", LevelOfMeasurement.NOMINAL,
+				"Specifies the location of the svn executable.", String.class,
+				"repository.subversion.binary", "/", ""));
+	}
 	public static final RepositoryServiceInformation INFORMATION = new RepositoryServiceInformation(
 			ID, NAME, "1.8", PLUGIN_VERSION, JNDI_ADDRESS,
 			"Subversion Repository.", PARAMETERS, CONFIG_PARAMETERS, null,

@@ -21,6 +21,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
@@ -70,6 +71,27 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 	}
 
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
+	static {
+		PARAMETERS
+				.add(new ConfigurationParameter<String>(
+						"Complexity",
+						"",
+						LevelOfMeasurement.NOMINAL,
+						"Specifies the complexity of the project. Valid values: LOW, MEDIUM, HIGH",
+						String.class, "evaluator.cocomo.basic.complexity", "/",
+						"LOW"));
+		PARAMETERS
+				.add(new ConfigurationParameter<Integer>(
+						"Yearly Salary",
+						"currency",
+						LevelOfMeasurement.RATIO,
+						"Specifies the average yearly salary for a single developer for cost calculation.",
+						Integer.class, "evaluator.cocomo.basic.salary", "/",
+						56286));
+		PARAMETERS.add(new ConfigurationParameter<String>("Currency", "",
+				LevelOfMeasurement.NOMINAL, "Currency for cost calculation.",
+				String.class, "evaluator.cocomo.basic.currency", "/", "USD"));
+	}
 
 	private SoftwareProject complexity = SoftwareProject.LOW;
 	private int averageSalary = 56286;

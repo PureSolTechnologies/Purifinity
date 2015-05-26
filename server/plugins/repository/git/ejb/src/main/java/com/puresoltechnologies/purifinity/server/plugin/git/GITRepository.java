@@ -61,6 +61,12 @@ public class GITRepository extends AbstractRepository {
 				String.class));
 	}
 	public static final List<ConfigurationParameter<?>> CONFIG_PARAMETERS = new ArrayList<>();
+	static {
+		CONFIG_PARAMETERS.add(new ConfigurationParameter<String>(
+				"GIT Binary Location", "", LevelOfMeasurement.NOMINAL,
+				"Specifies the location of the git executable.", String.class,
+				"repository.git.binary", "/", ""));
+	}
 	public static final RepositoryServiceInformation INFORMATION = new RepositoryServiceInformation(
 			ID, NAME, "1.9", PLUGIN_VERSION, JNDI_ADDRESS, "GIT Repository.",
 			PARAMETERS, CONFIG_PARAMETERS, null, null, null, null);
