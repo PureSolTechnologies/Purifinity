@@ -1,0 +1,18 @@
+<div class="container" data-ng-controller="editProjectCtrl">
+	<h1>Edit Project</h1>
+	<tabset> <tab heading="Information">
+	<h3>Information</h3>
+	<div class="row">
+		<button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
+		<button class="btn btn-primary" data-ng-click="ok()"
+			data-ng-disabled="disableOK()">OK</button>
+	</div>
+	</tab> <tab heading="Repository">
+	<h3>Repository</h3>
+	</tab> <tab heading="Source Code Filter">
+	<h3>Source File Filter</h3>
+	</tab> <tab heading="Plugins">
+	<h3>Plugins</h3>
+	</tab> </tabset>
+
+</div>

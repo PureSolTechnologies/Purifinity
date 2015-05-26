@@ -56,6 +56,12 @@
 		$routeProvider.when("/projects", {
 			templateUrl : "views/admin/projects.html"
 		});
+		$routeProvider.when("/projects/create", {
+			templateUrl : "views/admin/create_project.html"
+		});
+		$routeProvider.when("/project/:projectId", {
+			templateUrl : "views/admin/edit_project.html"
+		});
 		$routeProvider.when("/settings", {
 			templateUrl : "views/admin/settings.html"
 		});

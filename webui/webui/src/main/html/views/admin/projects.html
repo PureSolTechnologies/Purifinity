@@ -3,7 +3,8 @@
 	<div>
 		<script type="text/ng-template" id="createProjectModalContent.html">
 		</script>
-		<button class="btn btn-default" data-ng-click="openCreateProject()">Create Project...</button>
+		<a href="#/projects/create" class="btn btn-default">Create
+			Project...</a>
 	</div>
 	<div>
 		<div>
@@ -24,9 +25,10 @@
 					<td>{{project.settings.name}}</td>
 					<td>{{project.information.projectId}}</td>
 					<td>{{project.settings.description}}</td>
-					<td>
-						<button class="btn btn-default" data-ng-click="openEditProject(project)">Edit...</button>
-						<button class="btn btn-default" data-ng-click="deleteProject(project.information.projectId)">Delete...</button>
+					<td><a class="btn btn-default"
+						href="#/project/{{project.information.projectId}}">Edit...</a>
+						<button class="btn btn-default"
+							data-ng-click="deleteProject(project.information.projectId)">Delete...</button>
 					</td>
 				</tr>
 			</tbody>
