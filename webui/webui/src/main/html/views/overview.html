@@ -1,20 +1,27 @@
 <div class="container">
 	<div class="row">
-		<div class="col-md-3">			
+		<div class="col-md-3">
 			<span data-ng-include="'components/systemHealth.html'"> </span>
-
-			<h4>Logged In Users</h4>
-			<ul class="list-unstyled">
-				<li>User1</li>
-				<li>User2</li>
-				<li>User3</li>
-			</ul>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4>Logged In Users</h4>
+				</div>
+				<div class="panel-body">
+					<ul class="list-unstyled">
+						<li>User1</li>
+						<li>User2</li>
+						<li>User3</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 		<div class="col-md-9">
-			<h4>Projects</h4>
-			<div data-ng-controller="projectListCtrl">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4>Projects</h4>
+				</div>
 				<table class="table table-striped table-hover table-bordered"
-					data-ng-show="projects">
+					data-ng-controller="projectListCtrl" data-ng-show="projects">
 					<thead>
 						<tr>
 							<th>Status</th>
@@ -27,51 +34,49 @@
 					<tbody>
 						<tr data-ng-repeat="project in projects">
 							<td>?</td>
-							<td>
-								<a href="/project.html#/summary/{{project.information.projectId}}" 
-								   title="Project ID: {{project.information.projectId}}">
-									{{project.settings.name}}
-								</a>
-							</td>
+							<td><a
+								href="/project.html#/summary/{{project.information.projectId}}"
+								title="Project ID: {{project.information.projectId}}">
+									{{project.settings.name}} </a></td>
 							<td>{{project.information.creationTime | defaultDate}}</td>
 							<td>{{project.settings.description}}</td>
 							<td width="5%">
-								<button class="btn btn-primary" data-ng-click="triggerNewRun(project.information.projectId)">New Run...</button>
+								<button class="btn btn-primary"
+									data-ng-click="triggerNewRun(project.information.projectId)">New
+									Run...</button>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-			
-			<div data-ng-controller="processStatesCtrl">
-				<h4>Processes</h4>
-				{{processes.time | defaultDate}}
+
+			<div class="panel panel-default"
+				data-ng-controller="processStatesCtrl">
+				<div class="panel-heading">
+					<h4>Processes</h4>
+				</div>
+				<div class="panel-body">{{processes.time | defaultDate}}</div>
 				<table class="table">
 					<tbody>
 						<tr data-ng-repeat="state in processes.processStates">
 							<td width="30%"><b>{{state.name}}</b> ({{state.status}})</td>
 							<td>
 								<div class="progress">
-									<div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{state.current}}"
-										aria-valuemin="0" aria-valuemax="{{state.max}}" style="width:{{state.current / state.max * 100}}%">
-										{{state.current / state.max * 100}}%
-									</div>
-								</div>
-								<br/>
-								{{state.step}}
+									<div class="progress-bar progress-bar-striped"
+										role="progressbar" aria-valuenow="{{state.current}}"
+										aria-valuemin="0" aria-valuemax="{{state.max}}"
+										style="width: {{state.current/state.max* 100">
+										{{state.current / state.max * 100}}%</div>
+								</div> <br /> {{state.step}}
 							</td>
 							<td width="5%">
-								<button class="btn btn-danger" data-ng-click="abortRun(state.projectId)">Abort Run...</button>
+								<button class="btn btn-danger"
+									data-ng-click="abortRun(state.projectId)">Abort Run...</button>
 							</td>
-						</tr>
-						<tr>
-							<td></td>
-							<td></td>
-							<td></td>
 						</tr>
 					</tbody>
 				</table>
 			</div>
-		</div>		
+		</div>
 	</div>
 </div>

@@ -1,5 +1,7 @@
-<span data-ng-controller="serverStatusCtrl">
-	<h4>System Health</h4>
+<div class="panel panel-default" data-ng-controller="serverStatusCtrl">
+	<div class="panel-heading">
+		<h4>System Health</h4>
+	</div>
 	<table class="table">
 		<tbody>
 			<tr>
@@ -22,24 +24,32 @@
 				<td>Memory</td>
 				<td>
 					<div class="progress">
-						<div class="progress-bar progress-bar-striped {{getMemorySeverity()}}" role="progressbar" aria-valuenow="{{status.usedMemory}}"
-							aria-valuemin="0" aria-valuemax="{{status.maxMemory}}" style="width:{{status.usedMemory/status.maxMemory*100}}%">
-							<span>{{status.usedMemory/status.maxMemory*100 | number: 1}}%</span>
+						<div
+							class="progress-bar progress-bar-striped {{getMemorySeverity()}}"
+							role="progressbar" aria-valuenow="{{status.usedMemory}}"
+							aria-valuemin="0" aria-valuemax="{{status.maxMemory}}"
+							style="width: {{status.usedMemory/status.maxMemory*100">
+							<span>{{status.usedMemory/status.maxMemory*100 | number:
+								1}}%</span>
 						</div>
-					</div>						
+					</div>
 				</td>
 			</tr>
 			<tr>
-				<td>CPU Usage<br/>({{status.availableCPUs}} processors)</td>
+				<td>CPU Usage<br />({{status.availableCPUs}} processors)
+				</td>
 				<td>
 					<div class="progress">
-						<div class="progress-bar progress-bar-striped {{getCPUSeverity()}}" role="progressbar" aria-valuenow="{{getCPUUsage()*100}}"
-							aria-valuemin="0" aria-valuemax="{{status.availableCPUs * 100}}" style="width:{{getCPUUsage()*100}}%">
+						<div
+							class="progress-bar progress-bar-striped {{getCPUSeverity()}}"
+							role="progressbar" aria-valuenow="{{getCPUUsage()*100}}"
+							aria-valuemin="0" aria-valuemax="{{status.availableCPUs * 100}}"
+							style="width: {{getCPUUsage()*100">
 							<span>{{getCPUUsage()*100 | number: 1}}%</span>
 						</div>
-					</div>						
+					</div>
 				</td>
 			</tr>
 		</tbody>
 	</table>
-</span>
+</div>

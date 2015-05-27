@@ -3,31 +3,19 @@
 	<h2>Information</h2>
 	<p>General information about the project is specified here which is
 		used for identification, reporting and UI.</p>
-	<table>
-		<tbody class="two-column-form">
-			<tr>
-				<td><label for="projectIdentifier"
-					title="Identifier used for internal reference and usage in URLs.">Identifier:</label></td>
-				<td><input id="projectIdentifier" type="text"
-					data-ng-model="items.id" class="form-control"
-					placeholder="Identifier" required autofocus /></td>
-			</tr>
-			<tr>
-				<td><label for="projectName"
-					title="Name of project to be used in UI and reports.">Name:</label></td>
-				<td><input id="projectName" type="text"
-					data-ng-model="items.name" class="form-control" placeholder="Name"
-					required /></td>
-			</tr>
-			<tr>
-				<td><label for="projectDescription"
-					title="Description of project to be used in reports.">Description:</label></td>
-				<td><input id="projectDescription" type="text"
-					data-ng-model="items.description" class="form-control"
-					placeholder="Description" /></td>
-			</tr>
-		</tbody>
-	</table>
+	<label for="projectIdentifier"
+		title="Identifier used for internal reference and usage in URLs.">Identifier:</label><br />
+	<input id="projectIdentifier" type="text" data-ng-model="items.id"
+		class="form-control" placeholder="Identifier" required autofocus /><br />
+	<label for="projectName"
+		title="Name of project to be used in UI and reports.">Name:</label><br />
+	<input id="projectName" type="text" data-ng-model="items.name"
+		class="form-control" placeholder="Name" required /> <br /> <label
+		for="projectDescription"
+		title="Description of project to be used in reports.">Description:</label><br />
+	<textarea id="projectDescription" cols="20" rows="5"
+		data-ng-model="items.description" class="form-control"
+		placeholder="Description"></textarea>
 	<h2>Repository</h2>
 	<p>The repository location specifies where and how to find the
 		sources to be analysed.</p>
@@ -40,19 +28,14 @@
 		<option data-ng-repeat="repository in repositories"
 			value="{{repository.id}}">{{repository.name}}</option>
 	</select>
-	<table>
+	<table class="table-responsive">
 		<tbody class="two-column-form">
-			<tr>
-				<th>Parameter Name</th>
-				<th>Description</th>
-				<th>Value</th>
-			</tr>
 			<tr data-ng-repeat="property in repositoryProperties">
-				<td>{{property.uiName}}</td>
-				<td>{{property.description}}</td>
+				<td><label for="{{property.uiName}}">{{property.uiName}}</label></td>
 				<td><input type="text" class="form-control"
 					placeholder="to be set"
 					data-ng-model="items.repositoryProperties[property.name]" /></td>
+				<td>{{property.description}}</td>
 			</tr>
 		</tbody>
 	</table>
@@ -61,50 +44,35 @@
 		are to be analysed and which to be neglected. Include patterns always
 		precede excludes. Files and directories not fitting into any pattern
 		are selected per default.</p>
-	<table>
-		<tbody class="two-column-form">
-			<tr>
-				<td><label for="directoryIncludes"
-					title="Specifies a list of patterns for directories to be scanned in any case.">Directory
-						Includes:</label></td>
-				<td><input id="directoryIncludes" type="text"
-					data-ng-model="items.directoryIncludes" class="form-control"
-					placeholder="Directory Includes" /></td>
-			</tr>
-			<tr>
-				<td><label for="directoryExcludes"
-					title="Specifies a list of patterns for directories to be excluded for scans.">Directory
-						Excludes:</label></td>
-				<td><input id="directoryExcludes" type="text"
-					data-ng-model="items.directoryExcludes" class="form-control"
-					placeholder="Directory Excludes" /></td>
-			</tr>
-			<tr>
-				<td><label for="fileIncludes"
-					title="Specifies a list of patterns for file to be scanned in any case.">File
-						Includes:</label></td>
-				<td><input id="fileIncludes" type="text"
-					data-ng-model="items.fileIncludes" class="form-control"
-					placeholder="File Includes" /></td>
-			</tr>
-			<tr>
-				<td><label for="fileExcludes"
-					title="Specifies a list of patterns for files to be excluded for scans.">File
-						Excludes:</label></td>
-				<td><input id="fileExcludes" type="text"
-					data-ng-model="items.fileExcludes" class="form-control"
-					placeholder="File Excludes" /></td>
-			</tr>
-			<tr>
-				<td><label for="ignoreHidden"
-					title="Specifies whether hidden directories and files shall be ignored or not.">Ignore
-						Hidden Directories and Files:</label></td>
-				<td><input id="ignoreHidden" type="checkbox"
-					data-ng-model="items.ignoreHidden" class="form-control"
-					placeholder="File Excludes" /></td>
-			</tr>
-		</tbody>
-	</table>
+	<label for="directoryIncludes"
+		title="Specifies a list of patterns for directories to be scanned in any case.">Directory
+		Includes:</label><br />
+	<textarea id="directoryIncludes" cols="20" rows="5"
+		data-ng-model="items.directoryIncludes" class="form-control"
+		placeholder="Directory Includes"></textarea>
+	<br /> <label for="directoryExcludes"
+		title="Specifies a list of patterns for directories to be excluded for scans.">Directory
+		Excludes:</label> <br />
+	<textarea id="directoryExcludes" cols="20" rows="5"
+		data-ng-model="items.directoryExcludes" class="form-control"
+		placeholder="Directory Excludes"></textarea>
+	<br /> <label for="fileIncludes"
+		title="Specifies a list of patterns for file to be scanned in any case.">File
+		Includes:</label><br />
+	<textarea id="fileIncludes" cols="20" rows="5"
+		data-ng-model="items.fileIncludes" class="form-control"
+		placeholder="File Includes"></textarea>
+	<br /> <label for="fileExcludes"
+		title="Specifies a list of patterns for files to be excluded for scans.">File
+		Excludes:</label> <br />
+	<textarea id="fileExcludes" cols="20" rows="5"
+		data-ng-model="items.fileExcludes" class="form-control"
+		placeholder="File Excludes"></textarea>
+	<br /> <label for="ignoreHidden"
+		title="Specifies whether hidden directories and files shall be ignored or not.">Ignore
+		Hidden Directories and Files:</label><br /> <input id="ignoreHidden"
+		type="checkbox" data-ng-model="items.ignoreHidden"
+		class="form-control" placeholder="File Excludes" />
 	<div class="row">
 		<button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
 		<button class="btn btn-primary" data-ng-click="ok()"
