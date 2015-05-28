@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * This class specifies a single configuration parameter.
  * 
@@ -33,9 +36,16 @@ public class ConfigurationParameter<T> extends ParameterWithArbitraryUnit<T> {
 	private final T defaultValue;
 	private final ConfigurationValueRepresentation valueRepresentation;
 
-	public ConfigurationParameter(String name, String unit,
-			LevelOfMeasurement levelOfMeasurement, String description,
-			Class<T> type, String propertyKey, String path, T defaultValue) {
+	@JsonCreator
+	public ConfigurationParameter(
+			@JsonProperty("name") String name,
+			@JsonProperty("unit") String unit,
+			@JsonProperty("levelOfMeasurement") LevelOfMeasurement levelOfMeasurement,
+			@JsonProperty("description") String description,
+			@JsonProperty("type") Class<T> type,
+			@JsonProperty("propertyKey") String propertyKey,
+			@JsonProperty("path") String path,
+			@JsonProperty("defaultValue") T defaultValue) {
 		super(name, unit, levelOfMeasurement, description, type);
 		checkType(type);
 

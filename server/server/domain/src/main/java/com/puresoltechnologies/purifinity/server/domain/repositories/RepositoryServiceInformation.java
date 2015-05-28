@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.Parameter;
@@ -47,6 +48,7 @@ public class RepositoryServiceInformation implements ServiceInformation {
 		runURLPath = null;
 	}
 
+	@JsonCreator
 	public RepositoryServiceInformation(
 			@JsonProperty("id") String id,
 			@JsonProperty("name") String name,
