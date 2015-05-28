@@ -1,30 +1,52 @@
-<input data-ng-show="isBoolean()" data-tooltip-enable="true"
-	data-tooltip-trigger="focus" data-tooltip-placement="top"
-	data-tooltip="{{parameter.description}}" type="checkbox"
-	data-ng-model="values.booleanInput" data-ng-true-value="true"
-	data-ng-false-value="false" />
-<input data-ng-show="isText()" data-tooltip-enable="true"
-	data-tooltip-trigger="focus" data-tooltip-placement="top"
-	data-tooltip="{{parameter.description}}" type="text"
-	data-ng-model="values.textInput" required />
-<input data-ng-show="isNumber()" data-tooltip-enable="true"
-	data-tooltip-trigger="focus" data-tooltip-placement="top"
-	data-tooltip="{{parameter.description}}" type="number"
-	data-ng-model="values.numberInput" required />
-{{parameter.unit}}
-<a href="" data-ng-click="refresh()"> <img
-	src="/images/icons/FatCow_Icons16x16/arrow_refresh.png"
-	data-tooltip-enable="true" data-tooltip-trigger="mouseenter"
-	data-tooltip-placement="top" data-tooltip="Re-read value from server." /></a>
-<a href="" data-ng-hide="isDefault()" data-ng-click="setDefault()"><img
-	src="/images/icons/FatCow_Icons16x16/arrow_redo.png"
-	data-tooltip-enable="true" data-tooltip-trigger="mouseenter"
-	data-tooltip-placement="top" data-tooltip="Set back to default value." /></a>
-<a href="" data-ng-show="wasChanged()" data-ng-click="commit()"><img
-	src="/images/icons/FatCow_Icons16x16/accept_button.png"
-	data-tooltip-enable="true" data-tooltip-trigger="mouseenter"
-	data-tooltip-placement="top" data-tooltip="Save new value." /></a>
-<a href="" data-ng-show="wasChanged()" data-ng-click="rollback()"><img
-	src="/images/icons/FatCow_Icons16x16/cross.png"
-	data-tooltip-enable="true" data-tooltip-trigger="mouseenter"
-	data-tooltip-placement="top" data-tooltip="Reset changes." /></a>
+<div class="input-group input-group-sm">
+	<span class="input-group-btn"><a href="" class="btn btn-default"
+		data-ng-click="refresh()"> <img
+			src="/images/icons/FatCow_Icons16x16/arrow_refresh.png"
+			title="Re-read value from server." /></a> </span>
+	<!-- -->
+	<span class="input-group-addon"> <img
+		src="/images/icons/FatCow_Icons16x16/information.png"
+		title="{{parameter.description}}" />
+	</span>
+
+	<!-- boolean parameter -->
+	<input data-ng-show="isBoolean()" class="form-control"
+		title="{{parameter.description}}" type="checkbox"
+		data-ng-model="values.booleanInput" data-ng-true-value="true"
+		data-ng-false-value="false" />
+
+	<!-- string parameter -->
+	<input data-ng-show="isText()" class="form-control"
+		title="{{parameter.description}}" type="text"
+		data-ng-model="values.textInput" required />
+
+	<!-- number parameter -->
+	<input data-ng-show="isNumber()" class="form-control"
+		title="{{parameter.description}}" type="number"
+		data-ng-model="values.numberInput" required />
+
+	<!-- unit -->
+	<span class="input-group-addon">{{parameter.unit}}</span>
+
+	<!-- -->
+	<span class="input-group-btn"> <a href=""
+		class="btn btn-default" data-ng-hide="isDefault()"
+		data-ng-click="setDefault()"><img
+			src="/images/icons/FatCow_Icons16x16/arrow_redo.png"
+			title="Set back to default value." /></a></span>
+
+	<!-- -->
+	<span class="input-group-btn"> <a href=""
+		class="btn btn-default" data-ng-show="wasChanged()"
+		data-ng-click="commit()"><img
+			src="/images/icons/FatCow_Icons16x16/accept_button.png"
+			title="Save new value." /></a></span>
+
+	<!-- -->
+	<span class="input-group-btn"> <a href=""
+		class="btn btn-default" data-ng-show="wasChanged()"
+		data-ng-click="rollback()"><img
+			src="/images/icons/FatCow_Icons16x16/cross.png"
+			title="Reset changes." /></a></span>
+
+</div>
