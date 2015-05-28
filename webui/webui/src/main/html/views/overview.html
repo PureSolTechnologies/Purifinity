@@ -4,7 +4,8 @@
 			<span data-ng-include="'components/systemHealth.html'"> </span>
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h4>Logged In Users</h4>
+					<img src="/images/icons/FatCow_Icons16x16/users_3.png" /> Logged In
+					Users
 				</div>
 				<div class="panel-body">
 					<ul class="list-unstyled">
@@ -18,7 +19,8 @@
 		<div class="col-md-9">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h4>Projects</h4>
+					<img src="/images/icons/FatCow_Icons16x16/books_stack.png" />
+					Projects
 				</div>
 				<table class="table table-striped table-hover table-bordered"
 					data-ng-controller="projectListCtrl" data-ng-show="projects">
@@ -41,9 +43,10 @@
 							<td>{{project.information.creationTime | defaultDate}}</td>
 							<td>{{project.settings.description}}</td>
 							<td width="5%">
-								<button class="btn btn-primary"
-									data-ng-click="triggerNewRun(project.information.projectId)">New
-									Run...</button>
+								<button class="btn btn-default" title="New Run..."
+									data-ng-click="triggerNewRun(project.information.projectId)">
+									<img src="/images/icons/FatCow_Icons16x16/cog_add.png" />
+								</button>
 							</td>
 						</tr>
 					</tbody>
@@ -53,7 +56,8 @@
 			<div class="panel panel-default"
 				data-ng-controller="processStatesCtrl">
 				<div class="panel-heading">
-					<h4>Processes</h4>
+					<img src="/images/icons/FatCow_Icons16x16/service_status.png" />
+					Processes
 				</div>
 				<div class="panel-body">{{processes.time | defaultDate}}</div>
 				<table class="table">
@@ -70,8 +74,10 @@
 								</div> <br /> {{state.step}}
 							</td>
 							<td width="5%">
-								<button class="btn btn-danger"
-									data-ng-click="abortRun(state.projectId)">Abort Run...</button>
+								<button class="btn btn-default" title="Abort Run..."
+									data-ng-click="abortRun(state.projectId)">
+									<img src="/images/icons/FatCow_Icons16x16/stop.png" />
+								</button>
 							</td>
 						</tr>
 					</tbody>
