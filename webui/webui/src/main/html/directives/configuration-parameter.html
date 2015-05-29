@@ -10,10 +10,15 @@
 	</span>
 
 	<!-- boolean parameter -->
-	<input data-ng-show="isBoolean()" class="form-control"
+	<!-- input data-ng-show="isBoolean()" class="form-control"
 		title="{{parameter.description}}" type="checkbox"
 		data-ng-model="values.booleanInput" data-ng-true-value="true"
-		data-ng-false-value="false" />
+		data-ng-false-value="false" / -->
+
+	<button data-ng-show="isBoolean()" class="form-control {{getBooleanButtonClass()}}"
+		title="{{parameter.description}}" data-ng-value="values.booleanInput"
+		data-ng-click="toggleBoolean()">{{getBooleanText()}}</button>
+
 
 	<!-- string parameter -->
 	<input data-ng-show="isText()" class="form-control"

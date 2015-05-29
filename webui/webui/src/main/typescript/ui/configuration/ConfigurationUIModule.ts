@@ -73,9 +73,9 @@ configurationUIModule.controller("configurationParameterCtrl",
             } else if ($scope.isText()) {
                 return $scope.values.default === $scope.values.textInput;
             } else if ($scope.isNumber()) {
-                return  $scope.values.default === $scope.values.numberInput;
+                return $scope.values.default === $scope.values.numberInput;
             } else {
-                return  $scope.values.default ===  $scope.values.textInput;
+                return $scope.values.default === $scope.values.textInput;
             }
         }
         $scope.setDefault = function() {
@@ -133,24 +133,24 @@ configurationUIModule.controller("configurationParameterCtrl",
             preferencesManager.getParameter($scope.parameter, function(data: any, status: number) {
                 if ($scope.isBoolean()) {
                     $scope.values.booleanInput = (data === 'true');
-                    $scope.values.current =  $scope.values.booleanInput;
-                    $scope.values.default =  ($scope.parameter.defaultValue === 'true');
+                    $scope.values.current = $scope.values.booleanInput;
+                    $scope.values.default = ($scope.parameter.defaultValue === 'true');
                 } else if ($scope.isText()) {
                     $scope.values.textInput = String(data);
                     $scope.values.current = $scope.values.textInput;
-                    $scope.values.default =  String($scope.parameter.defaultValue);
+                    $scope.values.default = String($scope.parameter.defaultValue);
                 } else if ($scope.isNumber()) {
                     $scope.values.numberInput = Number(data);
-                    $scope.values.current =  $scope.values.numberInput;
-                    $scope.values.default =  Number($scope.parameter.defaultValue);
+                    $scope.values.current = $scope.values.numberInput;
+                    $scope.values.default = Number($scope.parameter.defaultValue);
                 } else {
                     $scope.values.textInput = data;
-                    $scope.values.current =  data;
-                    $scope.values.default =  data;
+                    $scope.values.current = data;
+                    $scope.values.default = data;
                 }
             }, function(data: any, status: number, error: string) {
                 });
-         }
+        }
         $scope.isBoolean = function() {
             return $scope.parameter.valueRepresentation === "BOOLEAN";
         }
@@ -160,5 +160,20 @@ configurationUIModule.controller("configurationParameterCtrl",
         $scope.isNumber = function() {
             return ($scope.parameter.valueRepresentation === "DECIMAL") || ($scope.parameter.valueRepresentation === "INTEGER");
         }
-         $scope.refresh();
-     });
+        $scope.getBooleanText = function() {
+            if ($scope.values.booleanInput) {
+                return "enabled";    
+            }
+            return "disabled";
+        }
+        $scope.getBooleanButtonClass = function() {
+            if ($scope.values.booleanInput) {
+                return "btn-success";    
+            }
+            return "btn-danger";
+        }
+        $scope.toggleBoolean = function() {
+            $scope.values.booleanInput = !$scope.values.booleanInput;
+        }
+        $scope.refresh();
+    });
