@@ -1,76 +1,99 @@
 <div class="container" data-ng-controller="editProjectCtrl">
-	<h1>Edit Project</h1>
+	<h1>
+		<img src="/images/icons/FatCow_Icons32x32/book_edit.png" /> Edit
+		Project
+	</h1>
 	<tabset> <tab heading="Information">
 	<h3>Information</h3>
-	<label for="projectName"
-		title="Name of project to be used in UI and reports.">Name:</label> <br />
-	<input id="projectName" type="text" data-ng-model="items.name"
-		class="form-control" placeholder="Name" required /> <br />
-	<label for="projectDescription"
-		title="Description of project to be used in reports.">Description:</label>
-	<br />
-	<textarea id="projectDescription" cols="20" rows="5"
-		data-ng-model="items.description" class="form-control"
-		placeholder="Description"></textarea> 
-		<button class="btn btn-primary">OK</button>
-		<button class="btn btn-default">Cancel</button>
-		</tab> <tab heading="Repository">
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<label for="projectName"
+				title="Name of project to be used in UI and reports.">Name:</label>
+			<br /> <input id="projectName" type="text"
+				data-ng-model="items.name" class="form-control" placeholder="Name"
+				required /> <br /> <label for="projectDescription"
+				title="Description of project to be used in reports.">Description:</label>
+			<br />
+			<textarea id="projectDescription" cols="20" rows="5"
+				data-ng-model="items.description" class="form-control"
+				placeholder="Description"></textarea>
+			<br />
+			<button class="btn btn-primary">OK</button>
+			<button class="btn btn-default">Cancel</button>
+		</div>
+	</div>
+	</tab> <tab heading="Repository">
 	<h3>Repository</h3>
-	<label for="repository"
-		title="Selection for the repository type to get sources from.">Repository
-		Type</label> <br /> <select id="repository" title="Project Selection"
-		class="selectpicker show-tick form-control"
-		data-ng-model="items.repositoryId">
-		<option value="">Select a repository type</option>
-		<option data-ng-repeat="repository in repositories"
-			value="{{repository.id}}">{{repository.name}}</option>
-	</select>
-	<table class="table-responsive">
-		<tbody class="two-column-form">
-			<tr data-ng-repeat="property in repositoryProperties">
-				<td><label for="{{property.uiName}}">{{property.uiName}}</label></td>
-				<td><input type="text" class="form-control"
-					placeholder="to be set"
-					data-ng-model="items.repositoryProperties[property.name]" /></td>
-				<td>{{property.description}}</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<label for="repository"
+				title="Selection for the repository type to get sources from.">Repository
+				Type</label> <br /> <select id="repository" title="Project Selection"
+				class="selectpicker show-tick form-control"
+				data-ng-model="items.repositoryId">
+				<option value="">Select a repository type</option>
+				<option data-ng-repeat="repository in repositories"
+					value="{{repository.id}}">{{repository.name}}</option>
+			</select> <br />
+			<table class="table-responsive">
+				<tbody class="two-column-form">
+					<tr data-ng-repeat="property in repositoryProperties">
+						<td><label for="{{property.uiName}}">{{property.uiName}}</label></td>
+						<td><input type="text" class="form-control"
+							placeholder="to be set"
+							data-ng-model="items.repositoryProperties[property.name]" /></td>
+						<td>{{property.description}}</td>
+					</tr>
+				</tbody>
+			</table>
+			<br />
+			<button class="btn btn-primary">OK</button>
+			<button class="btn btn-default">Cancel</button>
+		</div>
+	</div>
 	</tab> <tab heading="Source Code Filter">
 	<h3>Source File Filter</h3>
-	<label for="directoryIncludes"
-		title="Specifies a list of patterns for directories to be scanned in any case.">Directory
-		Includes:</label> <br />
-	<textarea id="directoryIncludes" cols="20" rows="5"
-		data-ng-model="items.directoryIncludes" class="form-control"
-		placeholder="Directory Includes"></textarea> <br />
-	<label for="directoryExcludes"
-		title="Specifies a list of patterns for directories to be excluded for scans.">Directory
-		Excludes:</label> <br />
-	<textarea id="directoryExcludes" cols="20" rows="5"
-		data-ng-model="items.directoryExcludes" class="form-control"
-		placeholder="Directory Excludes"></textarea> <br />
-	<label for="fileIncludes"
-		title="Specifies a list of patterns for file to be scanned in any case.">File
-		Includes:</label> <br />
-	<textarea id="fileIncludes" cols="20" rows="5"
-		data-ng-model="items.fileIncludes" class="form-control"
-		placeholder="File Includes"></textarea> <br />
-	<label for="fileExcludes"
-		title="Specifies a list of patterns for files to be excluded for scans.">File
-		Excludes:</label> <br />
-	<textarea id="fileExcludes" cols="20" rows="5"
-		data-ng-model="items.fileExcludes" class="form-control"
-		placeholder="File Excludes"></textarea> <br />
-	<label for="ignoreHidden"
-		title="Specifies whether hidden directories and files shall be ignored or not.">Ignore
-		Hidden Directories and Files:</label> <br />
-	<input id="ignoreHidden" type="checkbox"
-		data-ng-model="items.ignoreHidden" class="form-control"
-		placeholder="File Excludes" />
-	</td>
-	</tab> <tab heading="Plugins">
-	<h3>Plugins</h3>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<label for="directoryIncludes"
+				title="Specifies a list of patterns for directories to be scanned in any case.">Directory
+				Includes:</label> <br />
+			<textarea id="directoryIncludes" cols="20" rows="5"
+				data-ng-model="items.directoryIncludes" class="form-control"
+				placeholder="Directory Includes"></textarea>
+			<br /> <label for="directoryExcludes"
+				title="Specifies a list of patterns for directories to be excluded for scans.">Directory
+				Excludes:</label> <br />
+			<textarea id="directoryExcludes" cols="20" rows="5"
+				data-ng-model="items.directoryExcludes" class="form-control"
+				placeholder="Directory Excludes"></textarea>
+			<br /> <label for="fileIncludes"
+				title="Specifies a list of patterns for file to be scanned in any case.">File
+				Includes:</label> <br />
+			<textarea id="fileIncludes" cols="20" rows="5"
+				data-ng-model="items.fileIncludes" class="form-control"
+				placeholder="File Includes"></textarea>
+			<br /> <label for="fileExcludes"
+				title="Specifies a list of patterns for files to be excluded for scans.">File
+				Excludes:</label> <br />
+			<textarea id="fileExcludes" cols="20" rows="5"
+				data-ng-model="items.fileExcludes" class="form-control"
+				placeholder="File Excludes"></textarea>
+			<br /> <label for="ignoreHidden"
+				title="Specifies whether hidden directories and files shall be ignored or not.">Ignore
+				Hidden Directories and Files:</label> <br /> <input id="ignoreHidden"
+				type="checkbox" data-ng-model="items.ignoreHidden"
+				class="form-control" placeholder="File Excludes" /> <br />
+			<button class="btn btn-primary">OK</button>
+			<button class="btn btn-default">Cancel</button>
+		</div>
+	</div>
+	</tab> <tab heading="Plug-ins">
+	<p>
+		The system-wide, default settings for plug-ins are set in <a
+			href="#/settings">central settings section</a>. All settings should
+		be done there. Settings here a meant as project specific exceptions.
+	</p>
 	<div class="row">
 		<div class="col-sm-12">
 			<configuration-component data-ng-model="pluginSettings">

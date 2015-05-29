@@ -3,22 +3,12 @@
 		data-ng-click="refresh()"> <img
 			src="/images/icons/FatCow_Icons16x16/arrow_refresh.png"
 			title="Re-read value from server." /></a> </span>
-	<!-- -->
-	<span class="input-group-addon"> <img
-		src="/images/icons/FatCow_Icons16x16/information.png"
-		title="{{parameter.description}}" />
-	</span>
 
 	<!-- boolean parameter -->
-	<!-- input data-ng-show="isBoolean()" class="form-control"
-		title="{{parameter.description}}" type="checkbox"
-		data-ng-model="values.booleanInput" data-ng-true-value="true"
-		data-ng-false-value="false" / -->
-
-	<button data-ng-show="isBoolean()" class="form-control {{getBooleanButtonClass()}}"
+	<button data-ng-show="isBoolean()"
+		class="form-control {{getBooleanButtonClass()}}"
 		title="{{parameter.description}}" data-ng-value="values.booleanInput"
 		data-ng-click="toggleBoolean()">{{getBooleanText()}}</button>
-
 
 	<!-- string parameter -->
 	<input data-ng-show="isText()" class="form-control"
@@ -31,26 +21,23 @@
 		data-ng-model="values.numberInput" required />
 
 	<!-- unit -->
-	<span class="input-group-addon">{{parameter.unit}}</span>
+	<span data-ng-show="parameter.unit" class="input-group-addon">{{parameter.unit}}</span>
 
 	<!-- -->
-	<span class="input-group-btn"> <a href=""
-		class="btn btn-default" data-ng-hide="isDefault()"
-		data-ng-click="setDefault()"><img
+	<span class="input-group-btn" data-ng-hide="isDefault()"> <a
+		href="" class="btn btn-default" data-ng-click="setDefault()"><img
 			src="/images/icons/FatCow_Icons16x16/arrow_redo.png"
 			title="Set back to default value." /></a></span>
 
 	<!-- -->
-	<span class="input-group-btn"> <a href=""
-		class="btn btn-default" data-ng-show="wasChanged()"
-		data-ng-click="commit()"><img
+	<span class="input-group-btn" data-ng-show="wasChanged()"> <a
+		href="" class="btn btn-default" data-ng-click="commit()"><img
 			src="/images/icons/FatCow_Icons16x16/accept_button.png"
 			title="Save new value." /></a></span>
 
 	<!-- -->
-	<span class="input-group-btn"> <a href=""
-		class="btn btn-default" data-ng-show="wasChanged()"
-		data-ng-click="rollback()"><img
+	<span class="input-group-btn" data-ng-show="wasChanged()"> <a
+		href="" class="btn btn-default" data-ng-click="rollback()"><img
 			src="/images/icons/FatCow_Icons16x16/cross.png"
 			title="Reset changes." /></a></span>
 

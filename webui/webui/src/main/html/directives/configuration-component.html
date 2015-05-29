@@ -6,33 +6,32 @@
 				{{folder.name}}
 		</a></li>
 	</ol>
-	<table class="table table-striped table-hover">
-		<tbody>
-			<tr>
-				<td colspan="2"><h3>{{currentFolder.name}}</h3></td>
-			</tr>
-			<tr data-ng-show="path.length > 1">
-				<td colspan="2"><a href="" data-ng-click="chdir('..')"><img
-						src="images/icons/FatCow_Icons16x16/bullet_arrow_up.png" /> ..</a></td>
-			</tr>
-			<tr data-ng-repeat="content in currentFolder.children">
-				<td colspan="2"><a data-ng-show="content.children" href=""
-					data-ng-click="chdir(content.name)"> <img
-						data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />{{content.name}}
-				</a> <span data-ng-hide="content.children"> <a
-						data-ng-show="content.link" href="{{content.link}}"> <img
-							data-ng-show="content.imageUrl"
-							data-ng-src="{{content.imageUrl}}" />{{content.name}}
-					</a> <span data-ng-hide="content.link"> <img
-							data-ng-show="content.imageUrl"
-							data-ng-src="{{content.imageUrl}}" />{{content.name}}
-					</span>
-				</span></td>
-			</tr>
-			<tr data-ng-repeat="parameter in currentFolder.parameters">
-				<td width="50%">{{parameter.name}}</td>
-				<td width="50%"><configuration-parameter data-ng-model="parameter"></configuration-parameter></td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="panel-heading">
+		<h3 class="panel-title">{{currentFolder.name}}</h3>
+	</div>
+	<ul class="list-group">
+		<li class="list-group-item" data-ng-show="path.length > 1"><a
+			href="" data-ng-click="chdir('..')"><img
+				src="images/icons/FatCow_Icons16x16/bullet_arrow_up.png" /> ..</a></li>
+		<li class="list-group-item"
+			data-ng-repeat="content in currentFolder.children"><a
+			data-ng-show="content.children" href=""
+			data-ng-click="chdir(content.name)"> <img
+				data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />{{content.name}}
+		</a> <span data-ng-hide="content.children"> <a
+				data-ng-show="content.link" href="{{content.link}}"> <img
+					data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />{{content.name}}
+			</a> <span data-ng-hide="content.link"> <img
+					data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />{{content.name}}
+			</span>
+		</span></li>
+		<li class="list-group-item"
+			data-ng-repeat="parameter in currentFolder.parameters">
+			<div class="row">
+			<div class="col-md-4">{{parameter.name}}</div>
+			<div class="col-md-8">
+				<configuration-parameter data-ng-model="parameter"></configuration-parameter>
+			</div></div>
+		</li>
+	</ul>
 </div>
