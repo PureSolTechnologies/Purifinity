@@ -9,7 +9,7 @@ class ConfigurationParameter {
      */
     public static fromJSON(
         preferencesGroup: PreferencesGroup,
-        groupIdentifier: string,
+        groupIdentifier: PreferencesGroupIdentifier,
         configurationParameter: any) {
         return new ConfigurationParameter(preferencesGroup,
             groupIdentifier,
@@ -26,7 +26,7 @@ class ConfigurationParameter {
 
     constructor(
         public preferencesGroup: PreferencesGroup,
-        public groupIdentifier: string,
+        public groupIdentifier: PreferencesGroupIdentifier,
         public name: string,
         public unit: string,
         public levelOfMeasurement: LevelOfMeasurement,

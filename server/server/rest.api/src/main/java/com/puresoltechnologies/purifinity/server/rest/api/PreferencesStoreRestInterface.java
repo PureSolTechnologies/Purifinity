@@ -3,6 +3,7 @@ package com.puresoltechnologies.purifinity.server.rest.api;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -21,15 +22,14 @@ public interface PreferencesStoreRestInterface {
 	public List<ConfigurationParameter<?>> getSystemParameters();
 
 	@PUT
-	@Path("system/{property}")
+	@Path("system/{key}")
 	@Consumes(MediaType.TEXT_PLAIN)
-	public void setSystemParameter(@PathParam("property") String property,
-			String value);
+	public void setSystemParameter(@PathParam("key") String key, String value);
 
 	@GET
-	@Path("system/{property}")
+	@Path("system/{key}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getSystemParameter(@PathParam("property") String property);
+	public String getSystemParameter(@PathParam("key") String key);
 
 	@GET
 	@Path("plugins/{pluginId}")
@@ -38,40 +38,45 @@ public interface PreferencesStoreRestInterface {
 			@PathParam("pluginId") String pluginId);
 
 	@PUT
-	@Path("plugins/{pluginId}/{property}")
+	@Path("plugins/{pluginId}/{key}")
 	@Consumes(MediaType.TEXT_PLAIN)
 	public void setPluginDefaultParameter(
 			@PathParam("pluginId") String pluginId,
-			@PathParam("property") String property, String value);
+			@PathParam("key") String key, String value);
 
 	@GET
-	@Path("plugins/{pluginId}/{property}")
-	@Consumes(MediaType.TEXT_PLAIN)
+	@Path("plugins/{pluginId}/{key}")
+	@Produces(MediaType.TEXT_PLAIN)
 	public String getPluginDefaultParameter(
-			@PathParam("pluginId") String pluginId,
-			@PathParam("property") String property);
+			@PathParam("pluginId") String pluginId, @PathParam("key") String key);
 
 	@GET
-	@Path("plugins/{pluginId}/{projectId}")
+	@Path("projects/{projectId}/{pluginId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<ConfigurationParameter<?>> getPluginProjectParameters(
-			@PathParam("projectId") String projectId);
-
-	@PUT
-	@Path("plugins/{pluginId}/{projectId}/{property}")
-	@Consumes(MediaType.TEXT_PLAIN)
-	public String getPluginProjectParameter(
-			@PathParam("pluginId") String pluginId,
 			@PathParam("projectId") String projectId,
-			@PathParam("property") String property);
+			@PathParam("pluginId") String pluginId);
 
 	@GET
-	@Path("plugins/{pluginId}/{projectId}/{property}")
+	@Path("projects/{projectId}/{pluginId}/{key}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public void setPluginDefaultParameter(
-			@PathParam("pluginId") String pluginId,
+	public String getPluginProjectParameter(
 			@PathParam("projectId") String projectId,
-			@PathParam("property") String property, String value);
+			@PathParam("pluginId") String pluginId, @PathParam("key") String key);
+
+	@PUT
+	@Path("projects/{projectId}/{pluginId}/{key}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	public void setPluginProjectParameter(
+			@PathParam("projectId") String projectId,
+			@PathParam("pluginId") String pluginId,
+			@PathParam("key") String key, String value);
+
+	@DELETE
+	@Path("projects/{projectId}/{pluginId}/{key}")
+	public void deletePluginProjectParameter(
+			@PathParam("projectId") String projectId,
+			@PathParam("pluginId") String pluginId, @PathParam("key") String key);
 
 	@GET
 	@Path("users")
@@ -79,15 +84,15 @@ public interface PreferencesStoreRestInterface {
 	public List<ConfigurationParameter<?>> getUserDefaultParameters();
 
 	@PUT
-	@Path("users/{property}")
+	@Path("users/{key}")
 	@Consumes(MediaType.TEXT_PLAIN)
-	public void setUserDefaultParameter(@PathParam("property") String property,
+	public void setUserDefaultParameter(@PathParam("key") String key,
 			String value);
 
 	@GET
-	@Path("users/{property}")
+	@Path("users/{key}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getUserDefaultParameter(@PathParam("property") String property);
+	public String getUserDefaultParameter(@PathParam("key") String key);
 
 	@GET
 	@Path("users/{userId}")
@@ -96,15 +101,15 @@ public interface PreferencesStoreRestInterface {
 			@PathParam("userId") String userId);
 
 	@PUT
-	@Path("users/{userId}/{property}")
+	@Path("users/{userId}/{key}")
 	@Consumes(MediaType.TEXT_PLAIN)
-	public void setUserParameter(@PathParam("property") String property,
+	public void setUserParameter(@PathParam("key") String key,
 			@PathParam("userId") String userId, String value);
 
 	@GET
-	@Path("users/{userId}/{property}")
+	@Path("users/{userId}/{key}")
 	@Produces(MediaType.TEXT_PLAIN)
-	public String getUserParameter(@PathParam("property") String property,
+	public String getUserParameter(@PathParam("key") String key,
 			@PathParam("userId") String userId);
 
 }

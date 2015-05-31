@@ -19,76 +19,122 @@ public interface PreferencesStore {
 			String pluginId);
 
 	/**
-	 * This method reads a preference value from the store.
+	 * This method reads a preference value from the system store.
 	 * 
-	 * @param group
-	 *            is the name of the group.
 	 * @param key
 	 *            is the name of the parameter.
 	 * @return A {@link PreferencesValue} is returned containing the value. If
 	 *         no value was found <code>null</code> is returned.
 	 */
-	public PreferencesValue getValue(PreferencesGroup group, String groupName,
-			String key);
-
-	/**
-	 * This method is used like {@link #getValue(String, String)}, but an
-	 * additional default value can be specified which is returned if no value
-	 * is found in store. This method is used to avoid null pointer exceptionss.
-	 * 
-	 * @param group
-	 *            is the name of the group.
-	 * @param key
-	 *            is the name of the parameter.
-	 * @param defaultValue
-	 *            is the default value to be returned if no value is found in
-	 *            store. This value is not(!) put into the store automatically!
-	 * @return A {@link PreferencesValue} is returned containing the value. If
-	 *         no value was found defaultValue as specified is returned.
-	 */
-	public PreferencesValue getValue(PreferencesGroup group, String groupName,
-			String key, String defaultValue);
+	public PreferencesValue getSystemPreference(String key);
 
 	/**
 	 * This method is used to store a new value into the store.
 	 * 
-	 * @param group
-	 *            is the name of the group.
 	 * @param key
 	 *            is the name of the parameter.
 	 * @param value
 	 *            is the parameter's value.
 	 */
-	public void setValue(PreferencesGroup group, String groupName, String key,
-			String value);
-
-	public void setValue(PreferencesGroup group, String groupName, String key,
-			boolean value);
+	public void setSystemPreference(String key, String value);
 
 	/**
 	 * This method checks whether a value was stored for a parameter or not.
 	 * 
 	 * @param group
 	 *            is the name of the group.
-	 * @param name
+	 * @param key
 	 *            is the name of the parameter.
 	 * @return <code>true</code> is returned in case a value was already stored.
 	 *         <code>false</code> is returned otherwise.
 	 */
-	public boolean hasValue(PreferencesGroup group, String groupName,
-			String name);
+	public boolean hasSystemPreference(String key);
 
-	public Boolean getBoolean(PreferencesGroup group, String groupName,
-			String name);
+	/**
+	 * This method reads a preference value from the system store.
+	 * 
+	 * @param key
+	 *            is the name of the parameter.
+	 * @param pluginId
+	 *            is the id of the plug-in the preference belongs to.
+	 * @return A {@link PreferencesValue} is returned containing the value. If
+	 *         no value was found <code>null</code> is returned.
+	 */
+	public PreferencesValue getPluginDefaultPreference(String pluginId,
+			String key);
 
-	public boolean getBoolean(PreferencesGroup group, String groupName,
-			String name, String defaultValue);
+	/**
+	 * This method is used to store a new value into the store.
+	 * 
+	 * @param key
+	 *            is the name of the parameter.
+	 * @param pluginId
+	 *            is the id of the plug-in the preference belongs to.
+	 * @param value
+	 *            is the parameter's value.
+	 */
+	public void setPluginDefaultPreference(String pluginId, String key,
+			String value);
 
-	public String getString(PreferencesGroup group, String groupName,
-			String name);
+	/**
+	 * This method checks whether a value was stored for a parameter or not.
+	 * 
+	 * @param pluginId
+	 *            is the id of the plugin the preference belongs to.
+	 * @param key
+	 *            is the name of the parameter.
+	 * @return <code>true</code> is returned in case a value was already stored.
+	 *         <code>false</code> is returned otherwise.
+	 */
+	public boolean hasPluginDefaultPreference(String pluginId, String key);
 
-	public String getString(PreferencesGroup group, String groupName,
-			String name, String defaultValue);
+	/**
+	 * This method reads a preference value from the system store.
+	 * 
+	 * @param pluginId
+	 *            is the id of the plug-in the preference belongs to.
+	 * @param projectId
+	 *            is the id of the project the preference belongs to.
+	 * @param key
+	 *            is the name of the parameter.
+	 * @return A {@link PreferencesValue} is returned containing the value. If
+	 *         no value was found <code>null</code> is returned.
+	 */
+	public PreferencesValue getPluginProjectPreference(String projectId,
+			String pluginId, String key);
+
+	public void deletePluginProjectParameter(String projectId, String pluginId,
+			String key);
+
+	/**
+	 * This method is used to store a new value into the store.
+	 * 
+	 * @param pluginId
+	 *            is the id of the plug-in the preference belongs to.
+	 * @param projectId
+	 *            is the id of the project the preference belongs to.
+	 * @param key
+	 *            is the name of the parameter.
+	 * @param value
+	 *            is the parameter's value.
+	 */
+	public void setPluginProjectPreference(String projectId, String pluginId,
+			String key, String value);
+
+	/**
+	 * This method checks whether a value was stored for a parameter or not.
+	 * 
+	 * @param pluginId
+	 *            is the id of the plug-in the preference belongs to.
+	 * @param projectId
+	 *            is the id of the project the preference belongs to.
+	 * @param key
+	 *            is the name of the parameter.
+	 * @return <code>true</code> is returned in case a value was already stored.
+	 *         <code>false</code> is returned otherwise.
+	 */
+	public boolean hasPluginProjectPreference(String projectId,
+			String pluginId, String key);
 
 	/**
 	 * This method checks whether a specified service is activated or not. This

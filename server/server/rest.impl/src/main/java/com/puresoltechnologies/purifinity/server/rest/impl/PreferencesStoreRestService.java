@@ -5,8 +5,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
-import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesGroup;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesValue;
 import com.puresoltechnologies.purifinity.server.rest.api.PreferencesStoreRestInterface;
 
 public class PreferencesStoreRestService implements
@@ -21,14 +21,18 @@ public class PreferencesStoreRestService implements
 	}
 
 	@Override
-	public void setSystemParameter(String property, String value) {
-		preferencesStore.setValue(PreferencesGroup.SYSTEM, "", property, value);
+	public void setSystemParameter(String key, String value) {
+		preferencesStore.setSystemPreference(key, value);
 	}
 
 	@Override
-	public String getSystemParameter(String property) {
-		return preferencesStore
-				.getString(PreferencesGroup.SYSTEM, "", property);
+	public String getSystemParameter(String key) {
+		PreferencesValue systemPreference = preferencesStore
+				.getSystemPreference(key);
+		if (systemPreference == null) {
+			return null;
+		}
+		return systemPreference.getValue();
 	}
 
 	@Override
@@ -38,37 +42,55 @@ public class PreferencesStoreRestService implements
 	}
 
 	@Override
-	public void setPluginDefaultParameter(String pluginId, String property,
+	public void setPluginDefaultParameter(String pluginId, String key,
 			String value) {
-		preferencesStore.setValue(PreferencesGroup.PLUGIN_DEFAULT, pluginId,
-				property, value);
+		preferencesStore.setPluginDefaultPreference(pluginId, key, value);
 	}
 
 	@Override
-	public String getPluginDefaultParameter(String pluginId, String property) {
-		return preferencesStore.getString(PreferencesGroup.PLUGIN_DEFAULT,
-				pluginId, property);
+	public String getPluginDefaultParameter(String pluginId, String key) {
+		PreferencesValue pluginDefaultPreference = preferencesStore
+				.getPluginDefaultPreference(pluginId, key);
+		if (pluginDefaultPreference == null) {
+			return null;
+		}
+		return pluginDefaultPreference.getValue();
 	}
 
 	@Override
 	public List<ConfigurationParameter<?>> getPluginProjectParameters(
-			String projectId) {
-		// TODO Auto-generated method stub
-		return null;
+			String projectId, String pluginId) {
+		/*
+		 * At this very moment, we let all plug-in parameters got overridden by
+		 * the project. This might be different in future. Additionally, there
+		 * are currently no parameters which are mandatory by project, but which
+		 * are not to be set centrally.
+		 */
+		return getPluginDefaultParameters(pluginId);
 	}
 
 	@Override
-	public String getPluginProjectParameter(String pluginId, String projectId,
-			String property) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getPluginProjectParameter(String projectId, String pluginId,
+			String key) {
+		PreferencesValue pluginProjectPreference = preferencesStore
+				.getPluginProjectPreference(projectId, pluginId, key);
+		if (pluginProjectPreference == null) {
+			return null;
+		}
+		return pluginProjectPreference.getValue();
 	}
 
 	@Override
-	public void setPluginDefaultParameter(String pluginId, String projectId,
-			String property, String value) {
-		// TODO Auto-generated method stub
+	public void deletePluginProjectParameter(String projectId, String pluginId,
+			String key) {
+		preferencesStore.deletePluginProjectParameter(projectId, pluginId, key);
+	}
 
+	@Override
+	public void setPluginProjectParameter(String projectId, String pluginId,
+			String key, String value) {
+		preferencesStore.setPluginProjectPreference(projectId, pluginId, key,
+				value);
 	}
 
 	@Override
@@ -78,13 +100,13 @@ public class PreferencesStoreRestService implements
 	}
 
 	@Override
-	public void setUserParameter(String property, String userId, String value) {
+	public void setUserParameter(String key, String userId, String value) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public String getUserParameter(String property, String userId) {
+	public String getUserParameter(String key, String userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -95,13 +117,13 @@ public class PreferencesStoreRestService implements
 	}
 
 	@Override
-	public void setUserDefaultParameter(String property, String value) {
+	public void setUserDefaultParameter(String key, String value) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public String getUserDefaultParameter(String property) {
+	public String getUserDefaultParameter(String key) {
 		// TODO Auto-generated method stub
 		return null;
 	}

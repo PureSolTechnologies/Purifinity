@@ -1,23 +1,29 @@
 <div class="input-group input-group-sm">
-	<span class="input-group-btn"><a href="" class="btn btn-default"
-		data-ng-click="refresh()"> <img
+
+	<span class="input-group-btn"><a href=""
+		data-ng-show="isOverride()" class="form-control {{getOverrideButtonClass()}}"
+		title="Override parameter for this project." data-ng-click="toggleOverriding()">Override</a></span>
+
+	<!--  refresh -->
+	<span class="input-group-btn"><a href=""
+		class="form-control btn-default" data-ng-click="refresh()"> <img
 			src="/images/icons/FatCow_Icons16x16/arrow_refresh.png"
 			title="Re-read value from server." /></a> </span>
 
 	<!-- boolean parameter -->
-	<button data-ng-show="isBoolean()"
+	<a data-ng-show="isBoolean()" data-ng-disabled="isLocked()" href=""
 		class="form-control {{getBooleanButtonClass()}}"
 		title="{{parameter.description}}" data-ng-value="values.booleanInput"
-		data-ng-click="toggleBoolean()">{{getBooleanText()}}</button>
+		data-ng-click="toggleBoolean()">{{getBooleanText()}}</a>
 
 	<!-- string parameter -->
-	<input data-ng-show="isText()" class="form-control"
-		title="{{parameter.description}}" type="text"
+	<input data-ng-show="isText()" data-ng-disabled="isLocked()"
+		class="form-control" title="{{parameter.description}}" type="text"
 		data-ng-model="values.textInput" required />
 
 	<!-- number parameter -->
-	<input data-ng-show="isNumber()" class="form-control"
-		title="{{parameter.description}}" type="number"
+	<input data-ng-show="isNumber()" data-ng-disabled="isLocked()"
+		class="form-control" title="{{parameter.description}}" type="number"
 		data-ng-model="values.numberInput" required />
 
 	<!-- unit -->

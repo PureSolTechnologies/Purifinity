@@ -15,7 +15,7 @@ preferencesManagerModule.controller('systemSettingsCtrl', function($scope, prefe
         function(data, status) {
             var systemSettings: ConfigurationComponentData = new ConfigurationComponentData("Purifinity", PreferencesGroup.SYSTEM);
             for (var i = 0; i < data.length; i++) {
-                var parameter: ConfigurationParameter = ConfigurationParameter.fromJSON(PreferencesGroup.SYSTEM, "", data[i]);
+                var parameter: ConfigurationParameter = ConfigurationParameter.fromJSON(PreferencesGroup.SYSTEM, new PreferencesGroupIdentifier(), data[i]);
                 ConfigurationComponentData.addConfigurationParameter(systemSettings.root, parameter);
             }
             $scope.systemSettings = systemSettings;
@@ -72,16 +72,15 @@ preferencesManagerModule.controller('pluginSettingsCtrl', function($scope, prefe
         },
         function(data, status, error) { }
         );
+    var addPluginConfiguration = function(preferencesManager: PreferencesManager, pluginNode: ConfigurationComponentTree, pluginId: string) {
+        preferencesManager.getPluginDefaultParameters(pluginId,
+            function(data, status) {
+                for (var i = 0; i < data.length; i++) {
+                    var parameter: ConfigurationParameter = ConfigurationParameter.fromJSON(PreferencesGroup.PLUGIN_DEFAULT, new PreferencesGroupIdentifier(pluginId), data[i]);
+                    ConfigurationComponentData.addConfigurationParameter(pluginNode, parameter);
+                }
+            },
+            function(data, status, error) { }
+            );
+    }
 });
-
-function addPluginConfiguration(preferencesManager: PreferencesManager, pluginNode: ConfigurationComponentTree, pluginId: string) {
-    preferencesManager.getPluginDefaultParameters(pluginId,
-        function(data, status) {
-            for (var i = 0; i < data.length; i++) {
-                var parameter: ConfigurationParameter = ConfigurationParameter.fromJSON(PreferencesGroup.PLUGIN_DEFAULT, pluginId, data[i]);
-                ConfigurationComponentData.addConfigurationParameter(pluginNode, parameter);
-            }
-        },
-        function(data, status, error) { }
-        );
-}

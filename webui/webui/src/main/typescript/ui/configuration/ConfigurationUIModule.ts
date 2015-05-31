@@ -67,7 +67,11 @@ configurationUIModule.controller("configurationParameterCtrl",
         $scope.values.booleanInput = false;
         $scope.values.textInput = "";
         $scope.values.numberInput = 0;
+        $scope.overriding = false;
         $scope.isDefault = function(): boolean {
+            if ($scope.isLocked()) {
+                return true;
+            }
             if ($scope.isBoolean()) {
                 return $scope.values.default === $scope.values.booleanInput;
             } else if ($scope.isText()) {
@@ -90,6 +94,9 @@ configurationUIModule.controller("configurationParameterCtrl",
             }
         }
         $scope.wasChanged = function(): boolean {
+            if ($scope.isLocked()) {
+                return false;
+            }
             if ($scope.isBoolean()) {
                 return $scope.values.current !== $scope.values.booleanInput;
             } else if ($scope.isText()) {
@@ -148,6 +155,9 @@ configurationUIModule.controller("configurationParameterCtrl",
                     $scope.values.current = data;
                     $scope.values.default = data;
                 }
+                if ($scope.values.current || (!$scope.isOverride())) {
+                    $scope.overriding = true;
+                }
             }, function(data: any, status: number, error: string) {
                 });
         }
@@ -162,18 +172,55 @@ configurationUIModule.controller("configurationParameterCtrl",
         }
         $scope.getBooleanText = function() {
             if ($scope.values.booleanInput) {
-                return "enabled";    
+                return "enabled";
             }
             return "disabled";
         }
         $scope.getBooleanButtonClass = function() {
             if ($scope.values.booleanInput) {
-                return "btn-success";    
+                return "btn-success";
             }
             return "btn-danger";
         }
         $scope.toggleBoolean = function() {
             $scope.values.booleanInput = !$scope.values.booleanInput;
+        }
+        $scope.isOverride = function(): boolean {
+            switch ($scope.parameter.preferencesGroup) {
+                case PreferencesGroup.SYSTEM:
+                case PreferencesGroup.PLUGIN_DEFAULT:
+                case PreferencesGroup.USER_DEFAULT:
+                    return false;
+                case PreferencesGroup.PLUGIN_PROJECT:
+                case PreferencesGroup.USER:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        $scope.isOverriding = function(): boolean {
+            return $scope.overriding;
+        }
+        $scope.toggleOverriding = function() {
+            if ($scope.overriding) {
+                preferencesManager.deleteParameter($scope.parameter, function(data: any, status: number) {
+                }, function(data: any, status: number, error: string) {
+                });
+            }
+            $scope.overriding = !$scope.overriding;
+        }
+        $scope.getOverrideButtonClass = function() {
+            if ($scope.isOverriding()) {
+                return "btn-success";
+            } else {
+                return "btn-default";
+            }
+        }
+        $scope.isLocked = function(): boolean {
+            if (!$scope.isOverride()) {
+                return false;
+            }
+            return !$scope.isOverriding();
         }
         $scope.refresh();
     });

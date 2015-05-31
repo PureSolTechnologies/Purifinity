@@ -95,10 +95,18 @@ public class PreferencesStoreDatabaseTransformator implements
 				sequence,
 				"Rick-Rainer Ludwig",
 				"CREATE TABLE "
-						+ USER_PREFERENCES_TABLE
-						+ " (changed timestamp, changed_by text, user ascii, key ascii, value text, "
-						+ "PRIMARY KEY(user, key));",
-				"Keeps preferences for the user specific settings."));
+						+ PLUGIN_DEFAULTS_PREFERENCES_TABLE
+						+ " (changed timestamp, changed_by text, plugin_id ascii, key ascii, value text, "
+						+ "PRIMARY KEY(plugin_id, key));",
+				"Keeps preferences for the project specific settings."));
+		sequence.appendTransformation(new CassandraCQLTransformationStep(
+				sequence,
+				"Rick-Rainer Ludwig",
+				"CREATE TABLE "
+						+ PLUGIN_PREFERENCES_TABLE
+						+ " (changed timestamp, changed_by text, plugin_id ascii, project_id ascii, key ascii, value text, "
+						+ "PRIMARY KEY(project_id, plugin_id, key));",
+				"Keeps preferences for the project specific settings."));
 		sequence.appendTransformation(new CassandraCQLTransformationStep(
 				sequence,
 				"Rick-Rainer Ludwig",
@@ -111,18 +119,10 @@ public class PreferencesStoreDatabaseTransformator implements
 				sequence,
 				"Rick-Rainer Ludwig",
 				"CREATE TABLE "
-						+ PLUGIN_PREFERENCES_TABLE
-						+ " (changed timestamp, changed_by text, project_id ascii, key ascii, value text, "
-						+ "PRIMARY KEY(project_id, key));",
-				"Keeps preferences for the project specific settings."));
-		sequence.appendTransformation(new CassandraCQLTransformationStep(
-				sequence,
-				"Rick-Rainer Ludwig",
-				"CREATE TABLE "
-						+ PLUGIN_DEFAULTS_PREFERENCES_TABLE
-						+ " (changed timestamp, changed_by text, key ascii, value text, "
-						+ "PRIMARY KEY(key));",
-				"Keeps preferences for the project specific settings."));
+						+ USER_PREFERENCES_TABLE
+						+ " (changed timestamp, changed_by text, user_id ascii, key ascii, value text, "
+						+ "PRIMARY KEY(user_id, key));",
+				"Keeps preferences for the user specific settings."));
 		sequence.appendTransformation(new CassandraCQLTransformationStep(
 				sequence,
 				"Rick-Rainer Ludwig",

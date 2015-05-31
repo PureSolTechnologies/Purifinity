@@ -109,7 +109,7 @@ projectManagerModule.controller("createProjectCtrl", function($scope, $location,
 });
 
 projectManagerModule.controller("editProjectCtrl", function($scope, $location, $rootScope, $routeParams, projectManager, pluginManager, preferencesManager) {
-    $scope.projectId = $routeParams['project'];
+    $scope.projectId = $routeParams['projectId'];
     $scope.items = {
         id: "",
         name: "",
@@ -144,7 +144,7 @@ projectManagerModule.controller("editProjectCtrl", function($scope, $location, $
                 var plugin = data[i];
                 var analyzerNode: ConfigurationComponentTree = new ConfigurationComponentTree(analyzersNode, plugin.name);
                 analyzersNode.addChild(analyzerNode);
-                addPluginConfiguration(preferencesManager, analyzerNode, plugin.id);
+                addPluginConfiguration(preferencesManager, analyzerNode, plugin.id, $scope.projectId);
             }
         },
         function(data, status, error) { }
@@ -156,7 +156,7 @@ projectManagerModule.controller("editProjectCtrl", function($scope, $location, $
                 var plugin = data[i];
                 var evaluatorNode: ConfigurationComponentTree = new ConfigurationComponentTree(evaluatorsNode, plugin.name);
                 evaluatorsNode.addChild(evaluatorNode);
-                addPluginConfiguration(preferencesManager, evaluatorNode, plugin.id);
+                addPluginConfiguration(preferencesManager, evaluatorNode, plugin.id, $scope.projectId);
             }
         },
         function(data, status, error) { }
@@ -168,14 +168,24 @@ projectManagerModule.controller("editProjectCtrl", function($scope, $location, $
                 var plugin = data[i];
                 var repositoryNode: ConfigurationComponentTree = new ConfigurationComponentTree(repositoriesNode, plugin.name);
                 repositoriesNode.addChild(repositoryNode);
-                addPluginConfiguration(preferencesManager, repositoryNode, plugin.id);
+                addPluginConfiguration(preferencesManager, repositoryNode, plugin.id, $scope.projectId);
             }
         },
         function(data, status, error) { }
         );
+    var addPluginConfiguration = function(preferencesManager: PreferencesManager, pluginNode: ConfigurationComponentTree, pluginId: string, projectId: string) {
+        preferencesManager.getPluginProjectParameters(pluginId, $scope.projectId,
+            function(data, status) {
+                for (var i = 0; i < data.length; i++) {
+                    var parameter: ConfigurationParameter = ConfigurationParameter.fromJSON(PreferencesGroup.PLUGIN_PROJECT, new PreferencesGroupIdentifier(pluginId, $scope.projectId), data[i]);
+                    ConfigurationComponentData.addConfigurationParameter(pluginNode, parameter);
+                }
+            },
+            function(data, status, error) { }
+            );
+    }
     $scope.$watch('items.repositoryId', function(oldValue, newValue) {
-        var key;
-        for (key in $scope.repositories) {
+        for (var key in $scope.repositories) {
             var repository = $scope.repositories[key];
             if (repository.id == $scope.items.repositoryId) {
                 $scope.repositoryProperties = {};
@@ -187,8 +197,10 @@ projectManagerModule.controller("editProjectCtrl", function($scope, $location, $
             }
         }
     });
-    $scope.ok =    function() {
-        $location.path("/projects");};
-    $scope.cancel =    function() {
-        $location.path("/projects");};
+    $scope.ok = function() {
+        $location.path("/projects");
+    };
+    $scope.cancel = function() {
+        $location.path("/projects");
+    };
 });
