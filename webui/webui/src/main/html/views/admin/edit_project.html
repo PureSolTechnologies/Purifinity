@@ -1,4 +1,4 @@
-<div class="container" data-ng-controller="editProjectCtrl">
+<div class="container">
 	<h1>
 		<img src="/images/icons/FatCow_Icons32x32/book_edit.png" /> Edit
 		Project
@@ -6,7 +6,7 @@
 	<tabset> <tab heading="Information">
 	<h3>Information</h3>
 	<p>Project information can be changed here as the project evolves.</p>
-	<div class="panel panel-default">
+	<div class="panel panel-default" data-ng-controller="editProjectInformationCtrl">
 		<div class="panel-body">
 			<label for="projectIdentifier">Identifier:</label> <br /> <input
 				id="projectIdentifier" type="text" data-ng-disabled="true"
@@ -36,7 +36,7 @@
 		a new repository location.</p>
 	<p style="color: red; font-weight: bold;">This is not supported,
 		yet.</p>
-	<div class="panel panel-default">
+	<div class="panel panel-default" data-ng-controller="editProjectRepositoryCtrl">
 		<div class="panel-body">
 			<label for="repository"
 				title="Selection for the repository type to get sources from.">Repository
@@ -72,7 +72,7 @@
 		are to be analyzed and which to be neglected. Include patterns always
 		precede excludes. Files and directories not fitting into any pattern
 		are selected per default.</p>
-	<div class="panel panel-default">
+	<div class="panel panel-default" data-ng-controller="editProjectSourceCodeFilterCtrl">
 		<div class="panel-body">
 			<label for="directoryIncludes"
 				title="Specifies a list of patterns for directories to be scanned in any case.">Directory
@@ -115,7 +115,7 @@
 		be done there. Settings here a meant as project specific settings and
 		exceptions.
 	</p>
-	<div class="row">
+	<div class="row" data-ng-controller="editProjectPluginSettingsCtrl">
 		<div class="col-sm-12">
 			<configuration-component data-ng-model="pluginSettings">
 			</configurationComponent>
