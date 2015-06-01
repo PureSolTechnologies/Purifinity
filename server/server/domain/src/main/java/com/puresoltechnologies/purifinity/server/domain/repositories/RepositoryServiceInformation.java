@@ -31,7 +31,6 @@ public class RepositoryServiceInformation implements ServiceInformation {
 	private final Map<String, Parameter<?>> parameters = new LinkedHashMap<>();
 	private final List<ConfigurationParameter<?>> configurationParameters = new ArrayList<>();
 	private final String serviceURLPath;
-	private final String configurationURLPath;
 	private final String projectURLPath;
 	private final String runURLPath;
 
@@ -43,7 +42,6 @@ public class RepositoryServiceInformation implements ServiceInformation {
 		jndiName = null;
 		description = null;
 		serviceURLPath = null;
-		configurationURLPath = null;
 		projectURLPath = null;
 		runURLPath = null;
 	}
@@ -59,7 +57,6 @@ public class RepositoryServiceInformation implements ServiceInformation {
 			@JsonProperty("parameters") Map<String, Parameter<?>> parameters,
 			@JsonProperty("configurationParameters") List<ConfigurationParameter<?>> configurationParameters,
 			@JsonProperty("serviceURLPath") String serviceURLPath,
-			@JsonProperty("configurationURLPath") String configurationURLPath,
 			@JsonProperty("projectURLPath") String projectURLPath,
 			@JsonProperty("runURLPath") String runURLPath) {
 		super();
@@ -72,7 +69,6 @@ public class RepositoryServiceInformation implements ServiceInformation {
 		this.parameters.putAll(parameters);
 		this.configurationParameters.addAll(configurationParameters);
 		this.serviceURLPath = serviceURLPath;
-		this.configurationURLPath = configurationURLPath;
 		this.projectURLPath = projectURLPath;
 		this.runURLPath = runURLPath;
 	}
@@ -116,11 +112,6 @@ public class RepositoryServiceInformation implements ServiceInformation {
 	}
 
 	@Override
-	public String getConfigurationURLPath() {
-		return configurationURLPath;
-	}
-
-	@Override
 	public String getProjectURLPath() {
 		return projectURLPath;
 	}
@@ -135,10 +126,6 @@ public class RepositoryServiceInformation implements ServiceInformation {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime
-				* result
-				+ ((configurationURLPath == null) ? 0 : configurationURLPath
-						.hashCode());
 		result = prime * result
 				+ ((description == null) ? 0 : description.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -166,11 +153,6 @@ public class RepositoryServiceInformation implements ServiceInformation {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (configurationURLPath == null) {
-			if (other.configurationURLPath != null)
-				return false;
-		} else if (!configurationURLPath.equals(other.configurationURLPath))
 			return false;
 		if (description == null) {
 			if (other.description != null)

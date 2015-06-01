@@ -44,7 +44,7 @@ public class SubversionRepository extends AbstractRepository {
 	public static final RepositoryServiceInformation INFORMATION = new RepositoryServiceInformation(
 			ID, NAME, "1.8", PLUGIN_VERSION, JNDI_ADDRESS,
 			"Subversion Repository.", PARAMETERS, CONFIG_PARAMETERS, null,
-			null, null, null);
+			null, null);
 
 	public SubversionRepository() {
 		super("Subversion Repository");

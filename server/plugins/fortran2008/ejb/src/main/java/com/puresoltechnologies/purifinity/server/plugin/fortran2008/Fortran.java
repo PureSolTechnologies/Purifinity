@@ -13,7 +13,6 @@ import javax.ejb.Stateless;
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
@@ -68,12 +67,12 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+	public FortranAnalyzer restoreAnalyzer(File file) throws IOException {
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
 					file));
 			try {
-				return (CodeAnalyzer) ois.readObject();
+				return (FortranAnalyzer) ois.readObject();
 			} finally {
 				ois.close();
 			}
@@ -87,7 +86,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
+	public FortranAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
 		return new FortranAnalyzer(sourceCodeLocation);
 	}
 

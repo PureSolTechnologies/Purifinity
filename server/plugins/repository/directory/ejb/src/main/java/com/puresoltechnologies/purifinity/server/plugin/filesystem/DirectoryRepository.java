@@ -59,7 +59,6 @@ public class DirectoryRepository extends AbstractRepository {
 			ID, NAME, PLUGIN_VERSION.toString(), PLUGIN_VERSION, JNDI_ADDRESS,
 			"Simple directory in the file system of the server.", PARAMETERS,
 			CONFIG_PARAMETERS, "/repository.directory.ui/index.jsf",
-			"/repository.directory.ui/config.jsf",
 			"/repository.directory.ui/project.jsf",
 			"/repository.directory.ui/run.jsf");
 

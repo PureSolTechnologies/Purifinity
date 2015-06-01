@@ -13,7 +13,6 @@ import javax.ejb.Stateless;
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
@@ -70,12 +69,12 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+	public C11Analyzer restoreAnalyzer(File file) throws IOException {
 		try {
 			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
 					file));
 			try {
-				return (CodeAnalyzer) ois.readObject();
+				return (C11Analyzer) ois.readObject();
 			} finally {
 				ois.close();
 			}
@@ -89,7 +88,7 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public CodeAnalyzer createAnalyser(SourceCodeLocation source) {
+	public C11Analyzer createAnalyser(SourceCodeLocation source) {
 		return new C11Analyzer(source);
 	}
 

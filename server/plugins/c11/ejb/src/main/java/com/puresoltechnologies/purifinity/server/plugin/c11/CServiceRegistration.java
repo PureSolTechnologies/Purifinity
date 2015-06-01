@@ -17,35 +17,34 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 @EJBFacade
 public class CServiceRegistration extends AbstractAnalyzerServiceRegistration {
 
-    private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
-	    "c11.plugin", "c11.ejb", ProgrammingLanguageAnalyzer.class,
-	    C11.class);
-    private static final AnalyzerServiceInformation INFORMATION = new AnalyzerServiceInformation(
-	    C11.ID, C11.NAME, C11.VERSION, C11.PLUGIN_VERSION, JNDI_ADDRESS,
-	    "This is a C11 programming language analyzer.", C11.PARAMETERS,
-	    "/c11.ui/index.jsf", "/c11.ui/config.jsf", "/c11.ui/project.jsf",
-	    "/c11.ui/run.jsf");
+	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
+			"c11.plugin", "c11.ejb", ProgrammingLanguageAnalyzer.class,
+			C11.class);
+	private static final AnalyzerServiceInformation INFORMATION = new AnalyzerServiceInformation(
+			C11.ID, C11.NAME, C11.VERSION, C11.PLUGIN_VERSION, JNDI_ADDRESS,
+			"This is a C11 programming language analyzer.", C11.PARAMETERS,
+			"/c11.ui/index.jsf", "/c11.ui/project.jsf", "/c11.ui/run.jsf");
 
-    @PostConstruct
-    public void registration() {
-	register(AnalyzerServiceManagerRemote.class,
-		AnalyzerServiceManagerRemote.JNDI_NAME, C11Plugin.INFORMATION,
-		JNDI_ADDRESS, INFORMATION);
-    }
+	@PostConstruct
+	public void registration() {
+		register(AnalyzerServiceManagerRemote.class,
+				AnalyzerServiceManagerRemote.JNDI_NAME, C11Plugin.INFORMATION,
+				JNDI_ADDRESS, INFORMATION);
+	}
 
-    @PreDestroy
-    public void unregistration() {
-	unregister(AnalyzerServiceManagerRemote.class,
-		AnalyzerServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
-    }
+	@PreDestroy
+	public void unregistration() {
+		unregister(AnalyzerServiceManagerRemote.class,
+				AnalyzerServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
+	}
 
-    @Override
-    public String getName() {
-	return C11.NAME;
-    }
+	@Override
+	public String getName() {
+		return C11.NAME;
+	}
 
-    @Override
-    public AnalyzerServiceInformation getServiceInformation() {
-	return INFORMATION;
-    }
+	@Override
+	public AnalyzerServiceInformation getServiceInformation() {
+		return INFORMATION;
+	}
 }

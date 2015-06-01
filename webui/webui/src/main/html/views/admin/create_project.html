@@ -6,19 +6,19 @@
 	<h2>Information</h2>
 	<p>General information about the project is specified here which is
 		used for identification, reporting and UI.</p>
-	<label for="projectIdentifier"
-		title="Identifier used for internal reference and usage in URLs.">Identifier:</label><br />
-	<input id="projectIdentifier" type="text" data-ng-model="items.id"
-		class="form-control" placeholder="Identifier" required autofocus /><br />
-	<label for="projectName"
+	<label for="projectIdentifier">Identifier:</label><br /> <input
+		id="projectIdentifier" type="text" data-ng-model="items.id"
+		class="form-control" placeholder="Identifier"
+		title="Identifier used for internal reference and usage in URLs."
+		required autofocus /><br /> <label for="projectName"
 		title="Name of project to be used in UI and reports.">Name:</label><br />
 	<input id="projectName" type="text" data-ng-model="items.name"
 		class="form-control" placeholder="Name" required /> <br /> <label
-		for="projectDescription"
-		title="Description of project to be used in reports.">Description:</label><br />
+		for="projectDescription">Description:</label><br />
 	<textarea id="projectDescription" cols="20" rows="5"
 		data-ng-model="items.description" class="form-control"
-		placeholder="Description"></textarea>
+		placeholder="Description"
+		title="Description of project to be used in reports."></textarea>
 	<h2>Repository</h2>
 	<p>The repository location specifies where and how to find the
 		sources to be analysed.</p>
@@ -44,7 +44,7 @@
 	</table>
 	<h2>Source File Filter</h2>
 	<p>The directory and file includes and excludes defined which files
-		are to be analysed and which to be neglected. Include patterns always
+		are to be analyzed and which to be neglected. Include patterns always
 		precede excludes. Files and directories not fitting into any pattern
 		are selected per default.</p>
 	<label for="directoryIncludes"

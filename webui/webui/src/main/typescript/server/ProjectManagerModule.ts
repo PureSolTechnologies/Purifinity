@@ -123,11 +123,11 @@ projectManagerModule.controller("editProjectCtrl", function($scope, $location, $
         repositoryProperties: {}
     };
     $scope.repositories = undefined;
-    var pluginSettings: ConfigurationComponentData = new ConfigurationComponentData("Plug-ins", PreferencesGroup.PLUGIN_PROJECT);
-    $scope.pluginSettings = pluginSettings;
     projectManager.getRepositoryTypes(
         function(data, status) { $scope.repositories = data }, //
         function(data, status, error) { });
+    var pluginSettings: ConfigurationComponentData = new ConfigurationComponentData("Plug-ins", PreferencesGroup.PLUGIN_PROJECT);
+    $scope.pluginSettings = pluginSettings;
     $scope.analyzers = {};
     $scope.evaluators = {};
     $scope.repositories = {};
@@ -184,23 +184,32 @@ projectManagerModule.controller("editProjectCtrl", function($scope, $location, $
             function(data, status, error) { }
             );
     }
-    $scope.$watch('items.repositoryId', function(oldValue, newValue) {
+    $scope.$watch('items.repositoryId', function(newValue, oldValue) {
         for (var key in $scope.repositories) {
             var repository = $scope.repositories[key];
             if (repository.id == $scope.items.repositoryId) {
                 $scope.repositoryProperties = {};
-                var name;
-                for (name in repository.parameters) {
+                for (var name in repository.parameters) {
                     $scope.repositoryProperties[name] = repository.parameters[name];
                     $scope.repositoryProperties[name].uiName = name;
                 }
             }
         }
     });
+    projectManager.getProject($scope.projectId, function(data, status) {
+        $scope.items.id = data.information.projectId;
+        $scope.items.name = data.settings.name;
+        $scope.items.description = data.settings.description;
+        $scope.items.fileIncludes = data.settings.fileSearchConfiguration.fileIncludes;
+        $scope.items.fileExcludes = data.settings.fileSearchConfiguration.fileExcludes;
+        $scope.items.directoryIncludes = data.settings.fileSearchConfiguration.locationIncludes;
+        $scope.items.directoryExcludes = data.settings.fileSearchConfiguration.locationExcludes;
+        $scope.items.ignoreHidden = data.settings.fileSearchConfiguration.ignoreHidden;
+        $scope.items.repositoryId = data.settings.repository["repository.id"];
+        $scope.items.repositoryProperties = data.settings.repository;
+    }, function(data, status, error) { });
     $scope.ok = function() {
-        $location.path("/projects");
     };
     $scope.cancel = function() {
-        $location.path("/projects");
     };
 });

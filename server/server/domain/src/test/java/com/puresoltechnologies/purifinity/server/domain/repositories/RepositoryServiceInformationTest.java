@@ -34,7 +34,7 @@ public class RepositoryServiceInformationTest {
 				"nameOfClass", "nameOfType", "version", new Version(1, 2, 3),
 				"jndi://", "descriptionOfType", parameters,
 				new ArrayList<ConfigurationParameter<?>>(), "serviceURLPath",
-				"configurationURLPath", "projectURLPath", "runURLPath");
+				"projectURLPath", "runURLPath");
 		String serialized = JSONSerializer.toJSONString(information);
 		System.out.println(serialized);
 		RepositoryServiceInformation deserialized = JSONSerializer

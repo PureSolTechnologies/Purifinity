@@ -32,15 +32,6 @@ public interface ServiceInformation extends Serializable {
 	public String getServiceURLPath();
 
 	/**
-	 * Returns the service's URL path suffix of the URL to reach the
-	 * configuration UI. This may be <code>null</code> to signal, that the
-	 * service has no UI.
-	 * 
-	 * @return A {@link String} is returned containing the URL suffix.
-	 */
-	public String getConfigurationURLPath();
-
-	/**
 	 * This method returns the service's project URL path of the URL to reach
 	 * the services UI for a defined project. This may be <code>null</code> to
 	 * signal, that the service has no UI. The URL needs to support the

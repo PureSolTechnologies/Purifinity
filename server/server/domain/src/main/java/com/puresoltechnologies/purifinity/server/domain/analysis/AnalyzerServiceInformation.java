@@ -20,7 +20,6 @@ public class AnalyzerServiceInformation implements ServiceInformation {
 	private final String description;
 	private final List<ConfigurationParameter<?>> configurationParameters = new ArrayList<>();
 	private final String serviceURLPath;
-	private final String configurationURLPath;
 	private final String projectURLPath;
 	private final String runURLPath;
 
@@ -33,7 +32,6 @@ public class AnalyzerServiceInformation implements ServiceInformation {
 			@JsonProperty("description") String description,
 			@JsonProperty("configurationParameters") List<ConfigurationParameter<?>> configurationParameters,
 			@JsonProperty("serviceURLPath") String serviceURLPath,
-			@JsonProperty("configurationURLPath") String configurationURLPath,
 			@JsonProperty("projectURLPath") String projectURLPath,
 			@JsonProperty("runURLPath") String runURLPath) {
 		super();
@@ -45,7 +43,6 @@ public class AnalyzerServiceInformation implements ServiceInformation {
 		this.description = description;
 		this.configurationParameters.addAll(configurationParameters);
 		this.serviceURLPath = serviceURLPath;
-		this.configurationURLPath = configurationURLPath;
 		this.projectURLPath = projectURLPath;
 		this.runURLPath = runURLPath;
 	}
@@ -87,11 +84,6 @@ public class AnalyzerServiceInformation implements ServiceInformation {
 	@Override
 	public String getServiceURLPath() {
 		return serviceURLPath;
-	}
-
-	@Override
-	public String getConfigurationURLPath() {
-		return configurationURLPath;
 	}
 
 	@Override

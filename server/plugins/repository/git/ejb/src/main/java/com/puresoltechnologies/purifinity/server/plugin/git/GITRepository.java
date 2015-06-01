@@ -69,7 +69,7 @@ public class GITRepository extends AbstractRepository {
 	}
 	public static final RepositoryServiceInformation INFORMATION = new RepositoryServiceInformation(
 			ID, NAME, "1.9", PLUGIN_VERSION, JNDI_ADDRESS, "GIT Repository.",
-			PARAMETERS, CONFIG_PARAMETERS, null, null, null, null);
+			PARAMETERS, CONFIG_PARAMETERS, null, null, null);
 
 	public GITRepository() {
 		super("GIT Repository");
