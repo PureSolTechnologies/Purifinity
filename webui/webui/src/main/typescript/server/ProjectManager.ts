@@ -3,22 +3,22 @@ class ProjectManager {
     constructor(private purifinityServerConnector: PurifinityServerConnector) {
     }
 
-    getProjects(success: (data: any, status: number) => void,
-        error: (data: any, status: number, error: string) => void) {
+    getProjects(success: (data: Project[], status: number) => void,
+        error: (data: any, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects',
             success, error);
     }
 
     getProject(projectId: string,
-        success: (data: any, status: number) => void,
-        error: (data: any, status: number, error: string) => void) {
+        success: (data: Project, status: number) => void,
+        error: (data: any, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId,
             success, error);
     }
 
     getLastRun(projectId: string,
         success: (data: any, status: number) => void,
-        error: (data: any, status: number, error: string) => void) {
+        error: (data: any, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/lastrun',
             success, error);
     }
@@ -26,7 +26,7 @@ class ProjectManager {
     getRun(projectId: string,
         runId: string,
         success: (data: any, status: number) => void,
-        error: (data: any, status: number, error: string) => void) {
+        error: (data: any, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/runs/' + runId,
             success, error);
     }
@@ -34,40 +34,42 @@ class ProjectManager {
     createProject(identifier: string,
         projectSettings: any,
         success: (data: any, status: number) => void,
-        error: (data: any, status: number, error: string) => void) {
+        error: (data: any, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.put('/purifinityserver/rest/projectmanager/projects/' + identifier, projectSettings,
             success, error);
     }
 
     triggerNewRun(identifier: string,
         success: (data: any, status: number) => void,
-        error: (data: any, status: number, error: string) => void) {
-        return this.purifinityServerConnector.put('/purifinityserver/rest/analysis/projects/' + identifier, "",
+        error: (data: any, status: number, error: string) => void): angular.IHttpPromise<any> {
+        return this.purifinityServerConnector.put('/purifinityserver/rest/projectmanager/projects/' + identifier, "",
             success, error);
     }
 
-    updateAnalysisProjectSettings(id: string,
-        settings: any,
+    updateProjectSettings(identifier: string,
+        settings: ProjectSettings,
         success: (data: any, status: number) => void,
-        error: (data: any, status: number, error: string) => void) {
+        error: (data: any, status: number, error: string) => void): angular.IHttpPromise<any> {
+        return this.purifinityServerConnector.post('/purifinityserver/rest/projectmanager/projects/' + identifier, settings,
+            success, error);
     }
 
     deleteProject(identifier: string,
         success: (data: any, status: number) => void,
-        error: (data: any, status: number, error: string) => void) {
+        error: (data: any, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.del('/purifinityserver/rest/projectmanager/projects/' + identifier,
             success, error);
     }
 
     getRepositoryTypes(success: (data: any, status: number) => void,
-        error: (data: any, status: number, error: string) => void) {
+        error: (data: any, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get('/purifinityserver/rest/repositories/types',
             success, error);
     }
 
     readAllRunInformation(projectId: string,
         success: (data: any, status: number) => void,
-        error: (data: any, status: number, error: string) => void) {
+        error: (data: any, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/runs',
             success, error);
     }
@@ -75,7 +77,7 @@ class ProjectManager {
     getAnalysisFileTree(projectId: string,
         runId: string,
         success: (data: any, status: number) => void,
-        error: (data: any, status: number, error: string) => void) {
+        error: (data: any, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/runs/' + runId + '/filetree',
             function(data: any, status) {
                 data.files = {};

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" data-ng-controller="editProjectCtrl">
 	<h1>
 		<img src="/images/icons/FatCow_Icons32x32/book_edit.png" /> Edit
 		Project
@@ -6,7 +6,7 @@
 	<tabset> <tab heading="Information">
 	<h3>Information</h3>
 	<p>Project information can be changed here as the project evolves.</p>
-	<div class="panel panel-default" data-ng-controller="editProjectInformationCtrl">
+	<div class="panel panel-default">
 		<div class="panel-body">
 			<label for="projectIdentifier">Identifier:</label> <br /> <input
 				id="projectIdentifier" type="text" data-ng-disabled="true"
@@ -26,8 +26,8 @@
 				placeholder="Description"
 				title="Description of project to be used in reports."></textarea>
 			<br />
-			<button class="btn btn-primary">OK</button>
-			<button class="btn btn-default">Cancel</button>
+			<button class="btn btn-primary" data-ng-click="ok()">OK</button>
+			<button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
 		</div>
 	</div>
 	</tab> <tab heading="Repository">
@@ -36,7 +36,7 @@
 		a new repository location.</p>
 	<p style="color: red; font-weight: bold;">This is not supported,
 		yet.</p>
-	<div class="panel panel-default" data-ng-controller="editProjectRepositoryCtrl">
+	<div class="panel panel-default">
 		<div class="panel-body">
 			<label for="repository"
 				title="Selection for the repository type to get sources from.">Repository
@@ -44,7 +44,7 @@
 			<!--  -->
 			<select id="repository" title="Project Selection"
 				class="selectpicker show-tick form-control"
-				data-ng-model="items.repositoryId">
+				data-ng-model="items.repositoryId" data-ng-disabled="true">
 				<option value="">Select a repository type</option>
 				<option data-ng-repeat="repository in repositories"
 					value="{{repository.id}}">{{repository.name}}</option>
@@ -56,7 +56,7 @@
 						<td><label for="{{property.uiName}}">{{property.uiName}}</label></td>
 						<td><input type="text" class="form-control"
 							placeholder="to be set"
-							data-ng-model="items.repositoryProperties[property.name]" /></td>
+							data-ng-model="items.repositoryProperties[property.name]" data-ng-disabled="true"/></td>
 						<td>{{property.description}}</td>
 					</tr>
 				</tbody>
@@ -72,7 +72,7 @@
 		are to be analyzed and which to be neglected. Include patterns always
 		precede excludes. Files and directories not fitting into any pattern
 		are selected per default.</p>
-	<div class="panel panel-default" data-ng-controller="editProjectSourceCodeFilterCtrl">
+	<div class="panel panel-default">
 		<div class="panel-body">
 			<label for="directoryIncludes"
 				title="Specifies a list of patterns for directories to be scanned in any case.">Directory
@@ -103,8 +103,8 @@
 				Hidden Directories and Files:</label> <br /> <input id="ignoreHidden"
 				type="checkbox" data-ng-model="items.ignoreHidden"
 				class="form-control" placeholder="File Excludes" /> <br />
-			<button class="btn btn-primary">OK</button>
-			<button class="btn btn-default">Cancel</button>
+			<button class="btn btn-primary" data-ng-click="ok()">OK</button>
+			<button class="btn btn-default" data-ng-click="cancel()">Cancel</button>
 		</div>
 	</div>
 	</tab> <tab heading="Plug-ins">

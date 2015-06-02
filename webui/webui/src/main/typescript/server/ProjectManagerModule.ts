@@ -108,29 +108,51 @@ projectManagerModule.controller("createProjectCtrl", function($scope, $location,
     };
 });
 
-projectManagerModule.controller("editProjectInformationCtrl", function($scope, $location, $rootScope, $routeParams, projectManager, pluginManager, preferencesManager) {
+projectManagerModule.controller("editProjectCtrl", function($scope, $location, $rootScope, $routeParams, projectManager, pluginManager, preferencesManager) {
     $scope.projectId = $routeParams['projectId'];
+    $scope.currentProject = {};
     $scope.items = {
         id: "",
         name: "",
         description: "",
+        repositoryId: "",
+        repositoryProperties: {},
+        directoryIncludes: "",
+        directoryExcludes: "",
+        fileIncludes: "",
+        fileExcludes: "",
+        ignoreHidden: true        
     };
-    projectManager.getProject($scope.projectId, function(data, status) {
-        $scope.items.id = data.information.projectId;
-        $scope.items.name = data.settings.name;
-        $scope.items.description = data.settings.description;
-    }, function(data, status, error) { });
+    $scope.refresh = function() {
+        projectManager.getProject($scope.projectId, function(data: Project, status) {
+            $scope.currentProject = data;
+            $scope.items.id = data.information.projectId;
+            $scope.items.name = data.settings.name;
+            $scope.items.description = data.settings.description;
+            $scope.items.repositoryId = data.settings.repository["repository.id"];
+            $scope.items.repositoryProperties = data.settings.repository;
+            $scope.items.fileIncludes = data.settings.fileSearchConfiguration.fileIncludes;
+            $scope.items.fileExcludes = data.settings.fileSearchConfiguration.fileExcludes;
+            $scope.items.directoryIncludes = data.settings.fileSearchConfiguration.locationIncludes;
+            $scope.items.directoryExcludes = data.settings.fileSearchConfiguration.locationExcludes;
+            $scope.items.ignoreHidden = data.settings.fileSearchConfiguration.ignoreHidden;
+        }, function(data, status, error) { });
+    };
     $scope.ok = function() {
+        $scope.currentProject.settings.name = $scope.items.name;
+        $scope.currentProject.settings.description = $scope.items.description;
+        $scope.currentProject.settings.repository["repository.id"] = $scope.items.repositoryId;
+        $scope.currentProject.settings.repository = $scope.items.repositoryProperties;
+        $scope.currentProject.settings.fileSearchConfiguration.fileIncludes = $scope.items.fileIncludes;
+        $scope.currentProject.settings.fileSearchConfiguration.fileExcludes = $scope.items.fileExcludes;
+        $scope.currentProject.settings.fileSearchConfiguration.locationIncludes = $scope.items.directoryIncludes;
+        $scope.currentProject.settings.fileSearchConfiguration.locationExcludes = $scope.items.directoryExcludes;
+        $scope.currentProject.settings.fileSearchConfiguration.ignoreHidden = $scope.items.ignoreHidden;
+        projectManager.updateProjectSettings($scope.projectId, $scope.currentProject.settings, function(data: Project, status) {
+        }, function(data, status, error) { });
     };
     $scope.cancel = function() {
-    };
-});
-
-projectManagerModule.controller("editProjectRepositoryCtrl", function($scope, $location, $rootScope, $routeParams, projectManager) {
-    $scope.projectId = $routeParams['projectId'];
-    $scope.items = {
-        repositoryId: "",
-        repositoryProperties: {}
+        $scope.refresh();
     };
     $scope.repositories = undefined;
     projectManager.getRepositoryTypes(
@@ -148,36 +170,7 @@ projectManagerModule.controller("editProjectRepositoryCtrl", function($scope, $l
             }
         }
     });
-    projectManager.getProject($scope.projectId, function(data, status) {
-        $scope.items.repositoryId = data.settings.repository["repository.id"];
-        $scope.items.repositoryProperties = data.settings.repository;
-    }, function(data, status, error) { });
-    $scope.ok = function() {
-    };
-    $scope.cancel = function() {
-    };
-});
-
-projectManagerModule.controller("editProjectSourceCodeFilterCtrl", function($scope, $location, $rootScope, $routeParams, projectManager) {
-    $scope.projectId = $routeParams['projectId'];
-    $scope.items = {
-        directoryIncludes: "",
-        directoryExcludes: "",
-        fileIncludes: "",
-        fileExcludes: "",
-        ignoreHidden: true,
-    };
-    projectManager.getProject($scope.projectId, function(data, status) {
-        $scope.items.fileIncludes = data.settings.fileSearchConfiguration.fileIncludes;
-        $scope.items.fileExcludes = data.settings.fileSearchConfiguration.fileExcludes;
-        $scope.items.directoryIncludes = data.settings.fileSearchConfiguration.locationIncludes;
-        $scope.items.directoryExcludes = data.settings.fileSearchConfiguration.locationExcludes;
-        $scope.items.ignoreHidden = data.settings.fileSearchConfiguration.ignoreHidden;
-    }, function(data, status, error) { });
-    $scope.ok = function() {
-    };
-    $scope.cancel = function() {
-    };
+    $scope.refresh();
 });
 
 projectManagerModule.controller("editProjectPluginSettingsCtrl", function($scope, $location, $rootScope, $routeParams, pluginManager, preferencesManager) {
