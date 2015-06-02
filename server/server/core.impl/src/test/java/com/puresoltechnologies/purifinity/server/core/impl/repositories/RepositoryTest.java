@@ -30,7 +30,7 @@ public class RepositoryTest {
 		RepositoryServiceInformation repositoryType = new RepositoryServiceInformation(
 				"className", "name", "version", new Version(1, 2, 3),
 				"jndi://", "description", parameters, new ArrayList<>(), null,
-				null, null, null);
+				null, null);
 		checkSerialization(repositoryType);
 	}
 

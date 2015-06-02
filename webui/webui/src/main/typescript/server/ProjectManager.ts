@@ -3,57 +3,81 @@ class ProjectManager {
     constructor(private purifinityServerConnector: PurifinityServerConnector) {
     }
 
-    getProjects(success, error) {
+    getProjects(success: (data: any, status: number) => void,
+        error: (data: any, status: number, error: string) => void) {
         return this.purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects',
             success, error);
     }
 
-    getProject(projectId, success, error) {
+    getProject(projectId: string,
+        success: (data: any, status: number) => void,
+        error: (data: any, status: number, error: string) => void) {
         return this.purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId,
             success, error);
     }
 
-    getLastRun(projectId, success, error) {
+    getLastRun(projectId: string,
+        success: (data: any, status: number) => void,
+        error: (data: any, status: number, error: string) => void) {
         return this.purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/lastrun',
             success, error);
     }
 
-    getRun(projectId, runId, success, error) {
+    getRun(projectId: string,
+        runId: string,
+        success: (data: any, status: number) => void,
+        error: (data: any, status: number, error: string) => void) {
         return this.purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/runs/' + runId,
             success, error);
     }
 
-    createProject(identifier, projectSettings, success, error) {
+    createProject(identifier: string,
+        projectSettings: any,
+        success: (data: any, status: number) => void,
+        error: (data: any, status: number, error: string) => void) {
         return this.purifinityServerConnector.put('/purifinityserver/rest/projectmanager/projects/' + identifier, projectSettings,
             success, error);
     }
 
-    triggerNewRun(identifier, success, error) {
+    triggerNewRun(identifier: string,
+        success: (data: any, status: number) => void,
+        error: (data: any, status: number, error: string) => void) {
         return this.purifinityServerConnector.put('/purifinityserver/rest/analysis/projects/' + identifier, "",
             success, error);
     }
 
-    editProject(id, name, success, error) {
+    updateAnalysisProjectSettings(id: string,
+        settings: any,
+        success: (data: any, status: number) => void,
+        error: (data: any, status: number, error: string) => void) {
     }
 
-    deleteProject(identifier, success, error) {
+    deleteProject(identifier: string,
+        success: (data: any, status: number) => void,
+        error: (data: any, status: number, error: string) => void) {
         return this.purifinityServerConnector.del('/purifinityserver/rest/projectmanager/projects/' + identifier,
             success, error);
     }
 
-    getRepositoryTypes(success, error) {
+    getRepositoryTypes(success: (data: any, status: number) => void,
+        error: (data: any, status: number, error: string) => void) {
         return this.purifinityServerConnector.get('/purifinityserver/rest/repositories/types',
             success, error);
     }
 
-    readAllRunInformation(projectId, success, error) {
+    readAllRunInformation(projectId: string,
+        success: (data: any, status: number) => void,
+        error: (data: any, status: number, error: string) => void) {
         return this.purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/runs',
             success, error);
     }
 
-    getAnalysisFileTree(projectId, runId, success, error) {
+    getAnalysisFileTree(projectId: string,
+        runId: string,
+        success: (data: any, status: number) => void,
+        error: (data: any, status: number, error: string) => void) {
         return this.purifinityServerConnector.get('/purifinityserver/rest/projectmanager/projects/' + projectId + '/runs/' + runId + '/filetree',
-            function(data : any, status) {
+            function(data: any, status) {
                 data.files = {};
                 data.directories = {};
                 var searchFileTree = function(tree) {
@@ -79,6 +103,5 @@ class ProjectManager {
             error
             );
     }
-
 
 }
