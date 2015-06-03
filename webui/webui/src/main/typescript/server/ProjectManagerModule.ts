@@ -85,10 +85,10 @@ projectManagerModule.controller("createProjectCtrl", function($scope, $location,
             "name": items.name,
             "description": items.description,
             "fileSearchConfiguration": {
-                "locationIncludes": items.directoryIncludes.split(";"),
-                "locationExcludes": items.directoryExcludes.split(";"),
-                "fileIncludes": items.fileIncludes.split(";"),
-                "fileExcludes": items.fileExcludes.split(";"),
+                "locationIncludes": items.directoryIncludes.split("\n"),
+                "locationExcludes": items.directoryExcludes.split("\n"),
+                "fileIncludes": items.fileIncludes.split("\n"),
+                "fileExcludes": items.fileExcludes.split("\n"),
                 "ignoreHidden": items.ignoreHidden
             },
             "repository": {
@@ -121,7 +121,7 @@ projectManagerModule.controller("editProjectCtrl", function($scope, $location, $
         directoryExcludes: "",
         fileIncludes: "",
         fileExcludes: "",
-        ignoreHidden: true        
+        ignoreHidden: true
     };
     $scope.refresh = function() {
         projectManager.getProject($scope.projectId, function(data: Project, status) {
@@ -131,10 +131,34 @@ projectManagerModule.controller("editProjectCtrl", function($scope, $location, $
             $scope.items.description = data.settings.description;
             $scope.items.repositoryId = data.settings.repository["repository.id"];
             $scope.items.repositoryProperties = data.settings.repository;
-            $scope.items.fileIncludes = data.settings.fileSearchConfiguration.fileIncludes;
-            $scope.items.fileExcludes = data.settings.fileSearchConfiguration.fileExcludes;
-            $scope.items.directoryIncludes = data.settings.fileSearchConfiguration.locationIncludes;
-            $scope.items.directoryExcludes = data.settings.fileSearchConfiguration.locationExcludes;
+            $scope.items.fileIncludes = "";
+            data.settings.fileSearchConfiguration.fileIncludes.forEach(function(line: string, num: number) {
+                if (num > 0) {
+                    $scope.items.fileIncludes += "\n";
+                }
+                $scope.items.fileIncludes += line;
+            });
+            $scope.items.fileExcludes = "";
+            data.settings.fileSearchConfiguration.fileExcludes.forEach(function(line: string, num: number) {
+                if (num > 0) {
+                    $scope.items.fileExcludes += "\n";
+                }
+                $scope.items.fileExcludes += line;
+            });
+            $scope.items.directoryIncludes = "";
+            data.settings.fileSearchConfiguration.locationIncludes.forEach(function(line: string, num: number) {
+                if (num > 0) {
+                    $scope.items.directoryIncludes += "\n";
+                }
+                $scope.items.directoryIncludes += line;
+            });
+            $scope.items.directoryExcludes = "";
+            data.settings.fileSearchConfiguration.locationExcludes.forEach(function(line: string, num: number) {
+                if (num > 0) {
+                    $scope.items.directoryExcludes += "\n";
+                }
+                $scope.items.directoryExcludes += line;
+            });
             $scope.items.ignoreHidden = data.settings.fileSearchConfiguration.ignoreHidden;
         }, function(data, status, error) { });
     };
@@ -143,10 +167,10 @@ projectManagerModule.controller("editProjectCtrl", function($scope, $location, $
         $scope.currentProject.settings.description = $scope.items.description;
         $scope.currentProject.settings.repository["repository.id"] = $scope.items.repositoryId;
         $scope.currentProject.settings.repository = $scope.items.repositoryProperties;
-        $scope.currentProject.settings.fileSearchConfiguration.fileIncludes = $scope.items.fileIncludes;
-        $scope.currentProject.settings.fileSearchConfiguration.fileExcludes = $scope.items.fileExcludes;
-        $scope.currentProject.settings.fileSearchConfiguration.locationIncludes = $scope.items.directoryIncludes;
-        $scope.currentProject.settings.fileSearchConfiguration.locationExcludes = $scope.items.directoryExcludes;
+        $scope.currentProject.settings.fileSearchConfiguration.fileIncludes = $scope.items.fileIncludes.split("\n");
+        $scope.currentProject.settings.fileSearchConfiguration.fileExcludes = $scope.items.fileExcludes.split("\n");
+        $scope.currentProject.settings.fileSearchConfiguration.locationIncludes = $scope.items.directoryIncludes.split("\n");
+        $scope.currentProject.settings.fileSearchConfiguration.locationExcludes = $scope.items.directoryExcludes.split("\n");
         $scope.currentProject.settings.fileSearchConfiguration.ignoreHidden = $scope.items.ignoreHidden;
         projectManager.updateProjectSettings($scope.projectId, $scope.currentProject.settings, function(data: Project, status) {
         }, function(data, status, error) { });
