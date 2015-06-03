@@ -46,7 +46,7 @@ class PreferencesManager {
     getSystemParameters(success: (data: string, status: number) => void,
         error: (data: string, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get(
-            '/purifinityserver/rest/preferences/system',
+            "/purifinityserver/rest/preferences/system",
             success,
             error
             );
@@ -55,7 +55,7 @@ class PreferencesManager {
     getSystemParameter(propertyKey: string, success: (data: string, status: number) => void,
         error: (data: string, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get_text(
-            '/purifinityserver/rest/preferences/system/' + propertyKey,
+            "/purifinityserver/rest/preferences/system/" + propertyKey,
             success,
             error
             );
@@ -63,7 +63,7 @@ class PreferencesManager {
 
     setSystemParameter(propertyKey: string, value: string, success: (data: string, status: number) => void,
         error: (data: string, status: number, error: string) => void): angular.IHttpPromise<any> {
-        return this.purifinityServerConnector.put_text('/purifinityserver/rest/preferences/system/' + propertyKey,
+        return this.purifinityServerConnector.put_text("/purifinityserver/rest/preferences/system/" + propertyKey,
             String(value), success,
             error);
     }
@@ -71,7 +71,7 @@ class PreferencesManager {
     getPluginDefaultParameters(pluginId: string, success: (data: string, status: number) => void,
         error: (data: string, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get(
-            '/purifinityserver/rest/preferences/plugins/' + pluginId,
+            "/purifinityserver/rest/preferences/plugins/" + pluginId,
             success,
             error
             );
@@ -80,7 +80,7 @@ class PreferencesManager {
     getPluginDefaultParameter(pluginId: string, propertyKey: string, success: (data: string, status: number) => void,
         error: (data: string, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get_text(
-            '/purifinityserver/rest/preferences/plugins/' + pluginId + '/' + propertyKey,
+            "/purifinityserver/rest/preferences/plugins/" + pluginId + "/" + propertyKey,
             success,
             error
             );
@@ -88,7 +88,7 @@ class PreferencesManager {
 
     setPluginDefaultParameter(pluginId: string, propertyKey: string, value: string, success: (data: string, status: number) => void,
         error: (data: string, status: number, error: string) => void): angular.IHttpPromise<any> {
-        return this.purifinityServerConnector.put_text('/purifinityserver/rest/preferences/plugins/' + pluginId + '/' + propertyKey,
+        return this.purifinityServerConnector.put_text("/purifinityserver/rest/preferences/plugins/" + pluginId + "/" + propertyKey,
             String(value), success,
             error);
     }
@@ -96,7 +96,7 @@ class PreferencesManager {
     getPluginProjectParameters(pluginId: string, projectId: string, success: (data: string, status: number) => void,
         error: (data: string, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get(
-            '/purifinityserver/rest/preferences/projects/' + projectId + "/" + pluginId,
+            "/purifinityserver/rest/preferences/projects/" + projectId + "/" + pluginId,
             success,
             error
             );
@@ -105,7 +105,7 @@ class PreferencesManager {
     getPluginProjectParameter(pluginId: string, projectId: string, propertyKey: string, success: (data: string, status: number) => void,
         error: (data: string, status: number, error: string) => void): angular.IHttpPromise<any> {
         return this.purifinityServerConnector.get_text(
-            '/purifinityserver/rest/preferences/projects/' + projectId + '/' + pluginId + '/' + propertyKey,
+            "/purifinityserver/rest/preferences/projects/" + projectId + "/" + pluginId + "/" + propertyKey,
             success,
             error
             );
@@ -113,14 +113,14 @@ class PreferencesManager {
 
     setPluginProjectParameter(pluginId: string, projectId: string, propertyKey: string, value: string, success: (data: string, status: number) => void,
         error: (data: string, status: number, error: string) => void): angular.IHttpPromise<any> {
-        return this.purifinityServerConnector.put_text('/purifinityserver/rest/preferences/projects/' + projectId + '/' + pluginId + '/' + propertyKey,
+        return this.purifinityServerConnector.put_text("/purifinityserver/rest/preferences/projects/" + projectId + "/" + pluginId + "/" + propertyKey,
             String(value), success,
             error);
     }
 
     deletePluginProjectParameter(pluginId: string, projectId: string, propertyKey: string, success: (data: string, status: number) => void,
         error: (data: string, status: number, error: string) => void): angular.IHttpPromise<any> {
-        return this.purifinityServerConnector.del('/purifinityserver/rest/preferences/projects/' + projectId + '/' + pluginId + '/' + propertyKey, success,
+        return this.purifinityServerConnector.del("/purifinityserver/rest/preferences/projects/" + projectId + "/" + pluginId + "/" + propertyKey, success,
             error);
     }
 }

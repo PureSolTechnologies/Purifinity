@@ -12,7 +12,7 @@ class TreeTableTree {
 
     constructor(public parent: TreeTableTree) {
     }
-       
+
     public addChild(child: TreeTableTree) {
         this.children.push(child);
         child.parent = this;

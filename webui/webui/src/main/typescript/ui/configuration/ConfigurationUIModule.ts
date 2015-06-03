@@ -6,7 +6,7 @@ configurationUIModule.directive("configurationComponent",
         return {
             restrict: "E",
             scope: {
-                configurationTreeData: '=ngModel'
+                configurationTreeData: "=ngModel"
             },
             controller: "configurationComponentCtrl",
             templateUrl: "directives/configuration-component.html"
@@ -19,7 +19,7 @@ configurationUIModule.controller("configurationComponentCtrl",
         $scope.path.push($scope.configurationTreeData.root);
         $scope.currentFolder = $scope.configurationTreeData.root;
         $scope.chdir = function(dir: string) {
-            if (dir == "..") {
+            if (dir === "..") {
                 if ($scope.path.length > 1) {
                     $scope.path.pop();
                     $scope.currentFolder = $scope.path[$scope.path.length - 1];
@@ -27,22 +27,22 @@ configurationUIModule.controller("configurationComponentCtrl",
                 return;
             }
             for (var key in $scope.currentFolder.children) {
-                if ($scope.currentFolder.children[key].name == dir) {
+                if ($scope.currentFolder.children[key].name === dir) {
                     var newFolder = $scope.currentFolder.children[key];
                     $scope.path.push(newFolder);
                     $scope.currentFolder = newFolder;
                     return;
                 }
             }
-        }
+        };
         $scope.setDir = function(dir: string) {
             while (($scope.path.length > 1)
                 && ($scope.path[$scope.path.length - 1] !== dir)) {
                 $scope.path.pop();
             }
             $scope.currentFolder = $scope.path[$scope.path.length - 1];
-        }
-        $scope.$watch('configurationTreeData', function(newValue, oldValue) {
+        };
+        $scope.$watch("configurationTreeData", function(newValue, oldValue) {
             $scope.path = [];
             $scope.path.push($scope.configurationTreeData.root);
             $scope.currentFolder = $scope.configurationTreeData.root;
@@ -54,7 +54,7 @@ configurationUIModule.directive("configurationParameter",
         return {
             restrict: "E",
             scope: {
-                parameter: '=ngModel'
+                parameter: "=ngModel"
             },
             controller: "configurationParameterCtrl",
             templateUrl: "directives/configuration-parameter.html"
@@ -81,7 +81,7 @@ configurationUIModule.controller("configurationParameterCtrl",
             } else {
                 return $scope.values.default === $scope.values.textInput;
             }
-        }
+        };
         $scope.setDefault = function() {
             if ($scope.isBoolean()) {
                 $scope.values.booleanInput = $scope.values.default;
@@ -92,7 +92,7 @@ configurationUIModule.controller("configurationParameterCtrl",
             } else {
                 $scope.values.textInput = $scope.values.default;
             }
-        }
+        };
         $scope.wasChanged = function(): boolean {
             if ($scope.isLocked()) {
                 return false;
@@ -106,7 +106,7 @@ configurationUIModule.controller("configurationParameterCtrl",
             } else {
                 return $scope.values.current !== $scope.values.textInput;
             }
-        }
+        };
         $scope.commit = function() {
             if ($scope.isBoolean()) {
                 preferencesManager.setParameter($scope.parameter, String($scope.values.booleanInput), function(data: any, status: number) {
@@ -124,7 +124,7 @@ configurationUIModule.controller("configurationParameterCtrl",
                 }, function(data: any, status: number, error: string) {
                     });
             }
-        }
+        };
         $scope.rollback = function() {
             if ($scope.isBoolean()) {
                 $scope.values.booleanInput = $scope.values.current;
@@ -135,13 +135,13 @@ configurationUIModule.controller("configurationParameterCtrl",
             } else {
                 $scope.values.textInput = $scope.values.current;
             }
-        }
+        };
         $scope.refresh = function() {
             preferencesManager.getParameter($scope.parameter, function(data: any, status: number) {
                 if ($scope.isBoolean()) {
-                    $scope.values.booleanInput = (data === 'true');
+                    $scope.values.booleanInput = (data === "true");
                     $scope.values.current = $scope.values.booleanInput;
-                    $scope.values.default = ($scope.parameter.defaultValue === 'true');
+                    $scope.values.default = ($scope.parameter.defaultValue === "true");
                 } else if ($scope.isText()) {
                     $scope.values.textInput = String(data);
                     $scope.values.current = $scope.values.textInput;
@@ -160,31 +160,31 @@ configurationUIModule.controller("configurationParameterCtrl",
                 }
             }, function(data: any, status: number, error: string) {
                 });
-        }
+        };
         $scope.isBoolean = function() {
             return $scope.parameter.valueRepresentation === "BOOLEAN";
-        }
+        };
         $scope.isText = function() {
             return $scope.parameter.valueRepresentation === "STRING";
-        }
+        };
         $scope.isNumber = function() {
             return ($scope.parameter.valueRepresentation === "DECIMAL") || ($scope.parameter.valueRepresentation === "INTEGER");
-        }
+        };
         $scope.getBooleanText = function() {
             if ($scope.values.booleanInput) {
                 return "enabled";
             }
             return "disabled";
-        }
+        };
         $scope.getBooleanButtonClass = function() {
             if ($scope.values.booleanInput) {
                 return "btn-success";
             }
             return "btn-danger";
-        }
+        };
         $scope.toggleBoolean = function() {
             $scope.values.booleanInput = !$scope.values.booleanInput;
-        }
+        };
         $scope.isOverride = function(): boolean {
             switch ($scope.parameter.preferencesGroup) {
                 case PreferencesGroup.SYSTEM:
@@ -197,10 +197,10 @@ configurationUIModule.controller("configurationParameterCtrl",
                 default:
                     return false;
             }
-        }
+        };
         $scope.isOverriding = function(): boolean {
             return $scope.overriding;
-        }
+        };
         $scope.toggleOverriding = function() {
             if ($scope.overriding) {
                 preferencesManager.deleteParameter($scope.parameter, function(data: any, status: number) {
@@ -208,19 +208,19 @@ configurationUIModule.controller("configurationParameterCtrl",
                 });
             }
             $scope.overriding = !$scope.overriding;
-        }
+        };
         $scope.getOverrideButtonClass = function() {
             if ($scope.isOverriding()) {
                 return "btn-success";
             } else {
                 return "btn-default";
             }
-        }
+        };
         $scope.isLocked = function(): boolean {
             if (!$scope.isOverride()) {
                 return false;
             }
             return !$scope.isOverriding();
-        }
+        };
         $scope.refresh();
     });

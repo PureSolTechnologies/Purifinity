@@ -15,11 +15,11 @@ class HTTPRequests {
         var $location: angular.ILocationService = this.$location;
         return this.$http(
             {
-                method: 'GET',
+                method: "GET",
                 url: url,
                 headers: {
-                    'auth-id': authId,
-                    'auth-token': authToken
+                    "auth-id": authId,
+                    "auth-token": authToken
                 }
             }
             )
@@ -36,7 +36,7 @@ class HTTPRequests {
                 status: number,
                 headers: angular.IHttpHeadersGetter,
                 config: angular.IRequestConfig) {
-                if (status == 401) {
+                if (status === 401) {
                     alerter.addAlert("info", data);
                     $location.path("/login");
                     return;
@@ -57,11 +57,11 @@ class HTTPRequests {
         var $location: angular.ILocationService = this.$location;
         return this.$http(
             {
-                method: 'GET',
+                method: "GET",
                 url: url,
                 headers: {
-                    'auth-id': authId,
-                    'auth-token': authToken,
+                    "auth-id": authId,
+                    "auth-token": authToken,
                 },
                 transformResponse: function(value) {
                     return value;
@@ -81,7 +81,7 @@ class HTTPRequests {
                 status: number,
                 headers: angular.IHttpHeadersGetter,
                 config: angular.IRequestConfig) {
-                if (status == 401) {
+                if (status === 401) {
                     alerter.addAlert("info", data);
                     $location.path("/login");
                     return;
@@ -103,11 +103,11 @@ class HTTPRequests {
         var $location: angular.ILocationService = this.$location;
         return this.$http(
             {
-                method: 'POST',
+                method: "POST",
                 url: url,
                 headers: {
-                    'auth-id': authId,
-                    'auth-token': authToken
+                    "auth-id": authId,
+                    "auth-token": authToken
                 },
                 data: data
             }
@@ -124,7 +124,7 @@ class HTTPRequests {
                 status: number,
                 headers: angular.IHttpHeadersGetter,
                 config: angular.IRequestConfig) {
-                if (status == 401) {
+                if (status === 401) {
                     alerter.addAlert("info", data);
                     $location.path("/login");
                     return;
@@ -145,11 +145,11 @@ class HTTPRequests {
         var $location: angular.ILocationService = this.$location;
         return this.$http(
             {
-                method: 'PUT',
+                method: "PUT",
                 url: url,
                 headers: {
-                    'auth-id': authId,
-                    'auth-token': authToken
+                    "auth-id": authId,
+                    "auth-token": authToken
                 },
                 data: data
             }
@@ -167,7 +167,7 @@ class HTTPRequests {
                 status: number,
                 headers: angular.IHttpHeadersGetter,
                 config: angular.IRequestConfig) {
-                if (status == 401) {
+                if (status === 401) {
                     alerter.addAlert("info", data);
                     $location.path("/login");
                     return;
@@ -188,12 +188,12 @@ class HTTPRequests {
         var $location: angular.ILocationService = this.$location;
         return this.$http(
             {
-                method: 'PUT',
+                method: "PUT",
                 url: url,
                 headers: {
-                    'auth-id': authId,
-                    'auth-token': authToken,
-                    'Content-Type': 'text/plain'
+                    "auth-id": authId,
+                    "auth-token": authToken,
+                    "Content-Type": "text/plain"
                 },
                 data: data
             }
@@ -211,7 +211,7 @@ class HTTPRequests {
                 status: number,
                 headers: angular.IHttpHeadersGetter,
                 config: angular.IRequestConfig) {
-                if (status == 401) {
+                if (status === 401) {
                     alerter.addAlert("info", data);
                     $location.path("/login");
                     return;
@@ -231,11 +231,11 @@ class HTTPRequests {
         var $location: angular.ILocationService = this.$location;
         return this.$http(
             {
-                method: 'DELETE',
+                method: "DELETE",
                 url: url,
                 headers: {
-                    'auth-id': authId,
-                    'auth-token': authToken
+                    "auth-id": authId,
+                    "auth-token": authToken
                 }
             }
             )
@@ -252,7 +252,7 @@ class HTTPRequests {
                 status: number,
                 headers: angular.IHttpHeadersGetter,
                 config: angular.IRequestConfig) {
-                if (status == 401) {
+                if (status === 401) {
                     alerter.addAlert("info", data);
                     $location.path("/login");
                     return;

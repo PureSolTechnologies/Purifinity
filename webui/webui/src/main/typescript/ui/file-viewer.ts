@@ -1,9 +1,9 @@
 var fileViewerModule : angular.IModule = angular
     .module("fileViewerModule", ["fileStoreModule"]);
-fileViewerModule.controller("fileSummaryCtrl", ['$scope', '$routeParams',
-    'fileStore', fileSummaryCtrl]);
-fileViewerModule.controller("fileAnalysisCtrl", ['$scope', '$routeParams',
-    '$filter', 'fileStore', fileAnalysisCtrl]);
+fileViewerModule.controller("fileSummaryCtrl", ["$scope", "$routeParams",
+    "fileStore", fileSummaryCtrl]);
+fileViewerModule.controller("fileAnalysisCtrl", ["$scope", "$routeParams",
+    "$filter", "fileStore", fileAnalysisCtrl]);
 fileViewerModule.directive("sourceCode", sourceCode);
 fileViewerModule.directive("ustView", ustView);
 
@@ -29,7 +29,7 @@ function sourceCode() {
     return {
         restrict: "E",
         scope: {
-            sourceCodeData: '=ngModel'
+            sourceCodeData: "=ngModel"
         },
         controller: sourceCodeCtrl,
         templateUrl: "directives/source-code.html"
@@ -59,7 +59,7 @@ function fileAnalysisCtrl($scope, $routeParams, $filter, fileStore) {
                             analysis) {
                             var id = analysis.analysisInformation.analyzerId
                                 + $filter(
-                                    'version')
+                                    "version")
                                     (
                                     analysis.analysisInformation.analyzerVersion);
                             analysis.analyzableCodeRanges
@@ -76,7 +76,7 @@ function fileAnalysisCtrl($scope, $routeParams, $filter, fileStore) {
             }
         }, function(data, status, error) {
         });
-    $scope.$watch('analyzerSelection', function(newValue, oldValue) {
+    $scope.$watch("analyzerSelection", function(newValue, oldValue) {
         $scope.selectedUST = $scope.usts[newValue];
     });
 }
@@ -86,12 +86,12 @@ function ustView() {
         restrict: "E",
         replace: false,
         scope: {
-            ustViewData: '=ngModel'
+            ustViewData: "=ngModel"
         },
         controller: ustViewCtrl,
         link: function(scope, element, attrs) {
-            element.append($('<div/>').text("Hallo").append(
-                $('<span/>').text(scope.ustViewData)));
+            element.append($("<div/>").text("Hallo").append(
+                $("<span/>").text(scope.ustViewData)));
         }
     };
 }

@@ -8,7 +8,7 @@ class TreeTableData {
      * throughout the whole table to have consistency.
      */
     columnHeaders: TreeTableColumnHeader[] = [];
- 
+
     /**
      * This variable contains the tree data for the table.
      */

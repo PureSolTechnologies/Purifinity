@@ -37,14 +37,14 @@ alerterModule.directive("alerter", function() {
  */
 alerterModule.controller("alerterCtrl", function($scope, alerterFactory) {
     $scope.alerts = alerterFactory.alerts;
-	/*
-	 * Type: info, danger, success, warning
-	 */
+    /*
+     * Type: info, danger, success, warning
+     */
     $scope.addAlert = function(severity, message) {
         if (severity && message) {
             alerterFactory.addAlert(severity, message);
         }
-    }
+    };
     $scope.closeAlert = function(index) {
         alerterFactory.closeAlert(index);
     };
@@ -53,6 +53,6 @@ alerterModule.controller("alerterCtrl", function($scope, alerterFactory) {
     };
     $scope.hasAlerts = function() {
         return alerterFactory.hasAlerts();
-    }
+    };
 });
 

@@ -16,10 +16,14 @@ function analysisBrowserCtrl($scope, $routeParams, projectManager) {
                 function(data, status) {
                     var treeTableData: TreeTableData = new TreeTableData();
                     treeTableData.root = convertAnalysisFileTree(data, null);
-                    treeTableData.columnHeaders.push(new TreeTableColumnHeader("Name", "Name of file or folder"));
-                    treeTableData.columnHeaders.push(new TreeTableColumnHeader("Size", "Size of file or size of folder without sub folders."));
-                    treeTableData.columnHeaders.push(new TreeTableColumnHeader("Size Recursive", "Size of file or size of folder including sub folders."));
-                    treeTableData.columnHeaders.push(new TreeTableColumnHeader("Analyses", "Successful analyses."));
+                    treeTableData.columnHeaders.push(
+                        new TreeTableColumnHeader("Name", "Name of file or folder"));
+                    treeTableData.columnHeaders.push(
+                        new TreeTableColumnHeader("Size", "Size of file or size of folder without sub folders."));
+                    treeTableData.columnHeaders.push(
+                        new TreeTableColumnHeader("Size Recursive", "Size of file or size of folder including sub folders."));
+                    treeTableData.columnHeaders.push(
+                        new TreeTableColumnHeader("Analyses", "Successful analyses."));
                     $scope.analysisFileTree = treeTableData;
                 },
                 function(data, status, error) { }
@@ -63,9 +67,9 @@ function convertAnalysisFileTree(fileTree: any, parent: TreeTableTree): TreeTabl
         fileTree.children.forEach(function(child) {
             treeTableData.addChild(convertAnalysisFileTree(child, treeTableData));
         });
-        treeTableData.imageUrl = 'images/icons/FatCow_Icons16x16/folder.png';
+        treeTableData.imageUrl = "images/icons/FatCow_Icons16x16/folder.png";
     } else {
-        treeTableData.imageUrl = 'images/icons/FatCow_Icons16x16/document_green.png';
+        treeTableData.imageUrl = "images/icons/FatCow_Icons16x16/document_green.png";
         treeTableData.link = "/file.html#/summary/" + treeTableData.id;
     }
     return treeTableData;

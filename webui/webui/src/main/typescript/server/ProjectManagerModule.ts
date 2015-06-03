@@ -4,7 +4,7 @@
  */
 var projectManagerModule: angular.IModule = angular.module("projectManagerModule", ["purifinityServerModule", "preferencesManagerModule"]);
 
-projectManagerModule.factory('projectManager', ['purifinityServerConnector',
+projectManagerModule.factory("projectManager", ["purifinityServerConnector",
     function(purifinityServerConnector) {
         return new ProjectManager(purifinityServerConnector);
     }]);
@@ -65,11 +65,11 @@ projectManagerModule.controller("createProjectCtrl", function($scope, $location,
     projectManager.getRepositoryTypes(
         function(data, status) { $scope.repositories = data }, //
         function(data, status, error) { });
-    $scope.$watch('items.repositoryId', function(oldValue, newValue) {
+    $scope.$watch("items.repositoryId", function(oldValue, newValue) {
         var key;
         for (key in $scope.repositories) {
             var repository = $scope.repositories[key];
-            if (repository.id == $scope.items.repositoryId) {
+            if (repository.id === $scope.items.repositoryId) {
                 $scope.repositoryProperties = {};
                 var name;
                 for (name in repository.parameters) {
@@ -109,7 +109,7 @@ projectManagerModule.controller("createProjectCtrl", function($scope, $location,
 });
 
 projectManagerModule.controller("editProjectCtrl", function($scope, $location, $rootScope, $routeParams, projectManager, pluginManager, preferencesManager) {
-    $scope.projectId = $routeParams['projectId'];
+    $scope.projectId = $routeParams["projectId"];
     $scope.currentProject = {};
     $scope.items = {
         id: "",
@@ -158,10 +158,10 @@ projectManagerModule.controller("editProjectCtrl", function($scope, $location, $
     projectManager.getRepositoryTypes(
         function(data, status) { $scope.repositories = data }, //
         function(data, status, error) { });
-    $scope.$watch('items.repositoryId', function(newValue, oldValue) {
+    $scope.$watch("items.repositoryId", function(newValue, oldValue) {
         for (var key in $scope.repositories) {
             var repository = $scope.repositories[key];
-            if (repository.id == $scope.items.repositoryId) {
+            if (repository.id === $scope.items.repositoryId) {
                 $scope.repositoryProperties = {};
                 for (var name in repository.parameters) {
                     $scope.repositoryProperties[name] = repository.parameters[name];
@@ -174,7 +174,7 @@ projectManagerModule.controller("editProjectCtrl", function($scope, $location, $
 });
 
 projectManagerModule.controller("editProjectPluginSettingsCtrl", function($scope, $location, $rootScope, $routeParams, pluginManager, preferencesManager) {
-    $scope.projectId = $routeParams['projectId'];
+    $scope.projectId = $routeParams["projectId"];
     var pluginSettings: ConfigurationComponentData = new ConfigurationComponentData("Plug-ins", PreferencesGroup.PLUGIN_PROJECT);
     $scope.pluginSettings = pluginSettings;
     $scope.analyzers = {};

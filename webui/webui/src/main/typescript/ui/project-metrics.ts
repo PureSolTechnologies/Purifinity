@@ -27,7 +27,7 @@ function fileSystemMetrics($scope, $routeParams, $filter, projectManager, purifi
                 function(data, status) {
                     $scope.fileTree = data;
                     var treeTableData: TreeTableData = new TreeTableData();
-                    treeTableData.root = convertFileTreeForMetrics(data, null) ;
+                    treeTableData.root = convertFileTreeForMetrics(data, null);
                     treeTableData.columnHeaders.push(new TreeTableColumnHeader("Name", "Name of file or folder"));
                     $scope.metricsTreeTable = treeTableData;
                 },
@@ -37,44 +37,47 @@ function fileSystemMetrics($scope, $routeParams, $filter, projectManager, purifi
         }, function(data, status, error) {
             });
     }, function(data, status, error) { }
-			     );
-    $scope.$watch('selectedEvaluator', function(newValue, oldValue) {
+        );
+    $scope.$watch("selectedEvaluator", function(newValue, oldValue) {
         $scope.paretoData = [];
         $scope.selection.codeRangeType = undefined;
         $scope.selection.parameter = undefined;
-        if (newValue == oldValue) {
+        if (newValue === oldValue) {
             return;
         }
         if ($scope.project.information && $scope.run.runId && newValue) {
-            purifinityServerConnector.get('/purifinityserver/rest/evaluatorstore/metrics/' + $scope.project.information.projectId + '/' + $scope.run.runId + '/' + newValue, function(data, status) {
-                var types = [];
-                types.push('DIRECTORY');
-                types.push('FILE');
-                for (var hashid in data.fileMetrics) {
-                    var fileResults = data.fileMetrics[hashid];
-                    fileResults.codeRangeMetrics.forEach(function(metrics) {
-                        if (types.indexOf(metrics.codeRangeType) < 0) {
-                            types.push(metrics.codeRangeType);
-                        }
-                    });
-                }
-                $scope.codeRangeTypes = [];
-                types.forEach(function(type) {
-                    $scope.codeRangeTypes.push({ name: type });
-                });
-                $scope.codeRangeTypes.sort();
-                $scope.selectedCodeRangeType = [];
-                $scope.metrics = data;
-                applyMetricsToFileTree($scope.metricsTreeTable.root, $scope.metrics, $scope.metrics.parameters, $filter);
-                $scope.metricsTreeTable.columnHeaders = [{ name: "Name", tooltip: "Name of file or folder" }];
-                $scope.metrics.parameters.forEach(function(parameter) {
-                    var name = parameter.name;
-                    if (parameter.unit) {
-                        name += " [" + parameter.unit + "]";
+            purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/metrics/"
+                + $scope.project.information.projectId
+                + "/" + $scope.run.runId
+                + "/" + newValue, function(data, status) {
+                    var types = [];
+                    types.push("DIRECTORY");
+                    types.push("FILE");
+                    for (var hashid in data.fileMetrics) {
+                        var fileResults = data.fileMetrics[hashid];
+                        fileResults.codeRangeMetrics.forEach(function(metrics) {
+                            if (types.indexOf(metrics.codeRangeType) < 0) {
+                                types.push(metrics.codeRangeType);
+                            }
+                        });
                     }
-                    $scope.metricsTreeTable.columnHeaders.push({ name: name, tooltip: parameter.description });
-                });
-            }, function(data, status, error) {
+                    $scope.codeRangeTypes = [];
+                    types.forEach(function(type) {
+                        $scope.codeRangeTypes.push({ name: type });
+                    });
+                    $scope.codeRangeTypes.sort();
+                    $scope.selectedCodeRangeType = [];
+                    $scope.metrics = data;
+                    applyMetricsToFileTree($scope.metricsTreeTable.root, $scope.metrics, $scope.metrics.parameters, $filter);
+                    $scope.metricsTreeTable.columnHeaders = [{ name: "Name", tooltip: "Name of file or folder" }];
+                    $scope.metrics.parameters.forEach(function(parameter) {
+                        var name = parameter.name;
+                        if (parameter.unit) {
+                            name += " [" + parameter.unit + "]";
+                        }
+                        $scope.metricsTreeTable.columnHeaders.push({ name: name, tooltip: parameter.description });
+                    });
+                }, function(data, status, error) {
                 });
         }
     }, true);
@@ -84,7 +87,7 @@ function fileSystemMetrics($scope, $routeParams, $filter, projectManager, purifi
             return;
         }
         var newData = [];
-        if ($scope.selection.codeRangeType == 'DIRECTORY') {
+        if ($scope.selection.codeRangeType === "DIRECTORY") {
             for (var hashId in $scope.metrics.directoryMetrics) {
                 var metric = $scope.metrics.directoryMetrics[hashId];
                 var directory = $scope.fileTree.getDirectory(hashId);
@@ -102,7 +105,7 @@ function fileSystemMetrics($scope, $routeParams, $filter, projectManager, purifi
                 var file = $scope.fileTree.getFile(hashId);
                 if (codeRangeMetrics) {
                     codeRangeMetrics.forEach(function(metric) {
-                        if (metric.codeRangeType == $scope.selection.codeRangeType) {
+                        if (metric.codeRangeType === $scope.selection.codeRangeType) {
                             for (var valueName in metric.values) {
                                 var value = metric.values[valueName];
                                 if (!newData[value.parameter.name]) {
@@ -122,8 +125,8 @@ function fileSystemMetrics($scope, $routeParams, $filter, projectManager, purifi
         }
         $scope.paretoData = newData;
     };
-    $scope.$watchGroup(['selection.codeRangeType', 'selection.parameter'], function(newValue, oldValue) {
-        if (newValue == oldValue) {
+    $scope.$watchGroup(["selection.codeRangeType", "selection.parameter"], function(newValue, oldValue) {
+        if (newValue === oldValue) {
             return;
         }
         $scope.recalculateChartData();
@@ -156,15 +159,15 @@ function convertFileTreeForMetrics(fileTree: any, parent: TreeTableTree): TreeTa
         fileTree.children.forEach(function(child) {
             treeTableData.addChild(convertFileTreeForMetrics(child, treeTableData));
         });
-        treeTableData.imageUrl = 'images/icons/FatCow_Icons16x16/folder.png';
+        treeTableData.imageUrl = "images/icons/FatCow_Icons16x16/folder.png";
     } else {
-        treeTableData.imageUrl = 'images/icons/FatCow_Icons16x16/document_green.png';
+        treeTableData.imageUrl = "images/icons/FatCow_Icons16x16/document_green.png";
     }
     return treeTableData;
 }
 
 function applyMetricsToFileTree(treeTableData, runMetrics, parameters, filter) {
-    var valueFilter = filter('metricValue');
+    var valueFilter = filter("metricValue");
     var found = false;
     treeTableData.columns = [];
     if (treeTableData.children && (treeTableData.children.length > 0)) {
@@ -187,7 +190,7 @@ function applyMetricsToFileTree(treeTableData, runMetrics, parameters, filter) {
         var fileMetrics = runMetrics.fileMetrics[treeTableData.id];
         if (fileMetrics) {
             fileMetrics.codeRangeMetrics.forEach(function(metric) {
-                if (metric.codeRangeType == "FILE") {
+                if (metric.codeRangeType === "FILE") {
                     found = true;
                     parameters.forEach(function(parameter) {
                         var value = metric.values[parameter.name];

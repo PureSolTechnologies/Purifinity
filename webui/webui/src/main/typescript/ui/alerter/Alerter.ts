@@ -16,11 +16,11 @@ class Alerter {
     }
 
     clear() {
-        this.alerts.splice(0, this.alerts.length)
+        this.alerts.splice(0, this.alerts.length);
     }
 
     hasAlerts() {
-        if (this.alerts == undefined) {
+        if (this.alerts === undefined) {
             return false;
         }
         return this.alerts.length > 0;

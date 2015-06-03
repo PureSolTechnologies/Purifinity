@@ -4,7 +4,7 @@ class AccountManager {
     }
 
     getUsers(success, error) {
-        return this.purifinityServerConnector.get('/accountmanager/rest/users',
+        return this.purifinityServerConnector.get("/accountmanager/rest/users",
             success, error);
     }
 
@@ -15,7 +15,7 @@ class AccountManager {
             password: password,
             roleId: roleId
         };
-        return this.purifinityServerConnector.put('/accountmanager/rest/users', data,
+        return this.purifinityServerConnector.put("/accountmanager/rest/users", data,
             success, error);
     }
 
@@ -24,22 +24,22 @@ class AccountManager {
             name: name,
             roleId: roleId
         };
-        return this.purifinityServerConnector.post('/accountmanager/rest/users/' + email, data,
+        return this.purifinityServerConnector.post("/accountmanager/rest/users/" + email, data,
             success, error);
     }
 
     deleteAccount(email, success, error) {
         var data = {};
-        return this.purifinityServerConnector.del('/accountmanager/rest/users/' + email,
+        return this.purifinityServerConnector.del("/accountmanager/rest/users/" + email,
             success, error);
     }
 
     getRoles(success, error) {
-        return this.purifinityServerConnector.get('/accountmanager/rest/roles',
+        return this.purifinityServerConnector.get("/accountmanager/rest/roles",
             success, error);
     }
     getUser(email, success, error) {
-        return this.purifinityServerConnector.get('/accountmanager/rest/users/' + email,
+        return this.purifinityServerConnector.get("/accountmanager/rest/users/" + email,
             success, error);
     }
 
@@ -48,7 +48,7 @@ class AccountManager {
             oldPassword: oldPassword,
             newPassword: newPassword
         };
-        return this.purifinityServerConnector.post('/accountmanager/rest/users/' + email + "/passwd", data,
+        return this.purifinityServerConnector.post("/accountmanager/rest/users/" + email + "/passwd", data,
             success, error);
     }
 

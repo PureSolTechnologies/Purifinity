@@ -19,13 +19,13 @@ class ConfigurationComponentData {
                 if (currentNode.children) {
                     for (var childId = 0; childId < currentNode.children.length; childId++) {
                         var child = currentNode.children[childId];
-                        if (child.name == pathElement) {
+                        if (child.name === pathElement) {
                             nextNode = child;
                             break;
                         }
                     }
                 }
-                if (nextNode == null) {
+                if (nextNode === null) {
                     nextNode = new ConfigurationComponentTree(currentNode, pathElement);
                     currentNode.addChild(nextNode);
                 }

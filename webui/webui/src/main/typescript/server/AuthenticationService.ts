@@ -23,7 +23,7 @@ class AuthenticationService {
             password: password
         };
         var authService : AuthenticationService = this;
-        this.httpRequests.POST(this.loginURL, data, '', '',
+        this.httpRequests.POST(this.loginURL, data, "", "",
             function(data, status) {
                 authService.authData = data;
                 authService.authData.authId = email;
@@ -53,7 +53,7 @@ class AuthenticationService {
             token: authData.authToken
         };
         var authService : AuthenticationService = this;
-        this.httpRequests.POST(this.logoutURL, data, '', '',
+        this.httpRequests.POST(this.logoutURL, data, "", "",
             function(data, status) {
                 authData = undefined;
                 authService.removeAuthData();
@@ -84,7 +84,7 @@ class AuthenticationService {
         if (!data) {
             data = sessionStorage.getItem("purifinity-authentication");
         }
-        if (data && data != "undefined") {
+        if (data && data !== "undefined") {
             var authData = JSON.parse(data);
             return new AuthenticationData(authData.authId, authData.authToken);
         }

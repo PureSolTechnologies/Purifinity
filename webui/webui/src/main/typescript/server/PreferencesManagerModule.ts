@@ -4,12 +4,12 @@
  */
 var preferencesManagerModule: angular.IModule = angular.module("preferencesManagerModule", ["purifinityServerModule", "pluginManagerModule"]);
 
-preferencesManagerModule.factory('preferencesManager', [
-    'purifinityServerConnector', function(purifinityServerConnector) {
+preferencesManagerModule.factory("preferencesManager", [
+    "purifinityServerConnector", function(purifinityServerConnector) {
         return new PreferencesManager(purifinityServerConnector);
     }]);
 
-preferencesManagerModule.controller('systemSettingsCtrl', function($scope, preferencesManager) {
+preferencesManagerModule.controller("systemSettingsCtrl", function($scope, preferencesManager) {
     $scope.systemSettings = {};
     preferencesManager.getSystemParameters(
         function(data, status) {
@@ -24,7 +24,7 @@ preferencesManagerModule.controller('systemSettingsCtrl', function($scope, prefe
         );
 });
 
-preferencesManagerModule.controller('pluginSettingsCtrl', function($scope, preferencesManager, pluginManager) {
+preferencesManagerModule.controller("pluginSettingsCtrl", function($scope, preferencesManager, pluginManager) {
     var pluginSettings: ConfigurationComponentData = new ConfigurationComponentData("Plug-ins", PreferencesGroup.PLUGIN_DEFAULT);
     $scope.pluginSettings = pluginSettings;
     $scope.analyzers = {};

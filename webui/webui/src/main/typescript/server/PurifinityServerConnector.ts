@@ -14,8 +14,8 @@ class PurifinityServerConnector {
         serviceURL: string,
         successCallback: (data: any, status: number) => void,
         errorCallback: (data: any, status: number, error: string) => void) {
-        var authId = '';
-        var authToken = '';
+        var authId = "";
+        var authToken = "";
         if (this.authService.authData) {
             authId = this.authService.authData.authId;
             authToken = this.authService.authData.authToken;
@@ -27,8 +27,8 @@ class PurifinityServerConnector {
         serviceURL: string,
         successCallback: (data: any, status: number) => void,
         errorCallback: (data: any, status: number, error: string) => void) {
-        var authId = '';
-        var authToken = '';
+        var authId = "";
+        var authToken = "";
         if (this.authService.authData) {
             authId = this.authService.authData.authId;
             authToken = this.authService.authData.authToken;
@@ -41,8 +41,8 @@ class PurifinityServerConnector {
         data: any,
         successCallback: (data: any, status: number) => void,
         errorCallback: (data: any, status: number, error: string) => void) {
-        var authId = '';
-        var authToken = '';
+        var authId = "";
+        var authToken = "";
         if (this.authService.authData) {
             authId = this.authService.authData.authId;
             authToken = this.authService.authData.authToken;
@@ -55,8 +55,8 @@ class PurifinityServerConnector {
         data: any,
         successCallback: (data: any, status: number) => void,
         errorCallback: (data: any, status: number, error: string) => void) {
-        var authId = '';
-        var authToken = '';
+        var authId = "";
+        var authToken = "";
         if (this.authService.authData) {
             authId = this.authService.authData.authId;
             authToken = this.authService.authData.authToken;
@@ -69,8 +69,8 @@ class PurifinityServerConnector {
         data: any,
         successCallback: (data: any, status: number) => void,
         errorCallback: (data: any, status: number, error: string) => void) {
-        var authId = '';
-        var authToken = '';
+        var authId = "";
+        var authToken = "";
         if (this.authService.authData) {
             authId = this.authService.authData.authId;
             authToken = this.authService.authData.authToken;
@@ -82,8 +82,8 @@ class PurifinityServerConnector {
         serviceURL: string,
         successCallback: (data: any, status: number) => void,
         errorCallback: (data: any, status: number, error: string) => void) {
-        var authId = '';
-        var authToken = '';
+        var authId = "";
+        var authToken = "";
         if (this.authService.authData) {
             authId = this.authService.authData.authId;
             authToken = this.authService.authData.authToken;

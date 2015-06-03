@@ -7,6 +7,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-htmlmin');
 	grunt.loadNpmTasks('grunt-contrib-watch');
+	grunt.loadNpmTasks('grunt-tslint');
 	grunt
 			.initConfig({
 				copy : {
@@ -123,6 +124,14 @@ module.exports = function(grunt) {
 							minifyCSS : true
 						}
 					}
+				},
+				tslint : {
+					options : {
+						configuration : grunt.file.readJSON("tslint.json")
+					},
+					all: {
+						src : [  "src/main/typescript/**/*.ts", "!src/main/typescript/lib/**/*.ts" ]
+					},
 				},
 				watch : {
 					scripts : {
