@@ -68,6 +68,12 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	}
 
 	@Override
+	public List<ConfigurationParameter<?>> getPluginProjectParameters(
+			String projectId, String pluginId) {
+		return getPluginDefaultParameters(pluginId);
+	}
+
+	@Override
 	public List<ConfigurationParameter<?>> getPluginDefaultParameters(
 			String pluginId) {
 		ProgrammingLanguageAnalyzer analyzer = analyzerServiceManager
@@ -88,7 +94,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	}
 
 	@Override
-	public PreferencesValue getSystemPreference(String key) {
+	public PreferencesValue<?> getSystemPreference(String key) {
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(
 						session,
@@ -102,8 +108,9 @@ public class PreferencesStoreImpl implements PreferencesStore {
 		if (result == null) {
 			return null;
 		}
-		return new PreferencesValue(result.getDate(0), result.getString(1),
-				PreferencesGroup.SYSTEM, "", key, result.getString(2));
+		return new PreferencesValue<String>(result.getDate(0),
+				result.getString(1), PreferencesGroup.SYSTEM, "", key,
+				result.getString(2));
 	}
 
 	@Override
@@ -127,7 +134,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	}
 
 	@Override
-	public PreferencesValue getPluginDefaultPreference(String pluginId,
+	public PreferencesValue<?> getPluginDefaultPreference(String pluginId,
 			String key) {
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(
@@ -142,7 +149,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 		if (result == null) {
 			return null;
 		}
-		return new PreferencesValue(result.getDate(0), result.getString(1),
+		return new PreferencesValue<>(result.getDate(0), result.getString(1),
 				PreferencesGroup.PLUGIN_DEFAULT, pluginId, key,
 				result.getString(2));
 	}
@@ -170,7 +177,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	}
 
 	@Override
-	public PreferencesValue getPluginProjectPreference(String projectId,
+	public PreferencesValue<?> getPluginProjectPreference(String projectId,
 			String pluginId, String key) {
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(
@@ -186,7 +193,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 		if (result == null) {
 			return null;
 		}
-		return new PreferencesValue(result.getDate(0), result.getString(1),
+		return new PreferencesValue<>(result.getDate(0), result.getString(1),
 				PreferencesGroup.PLUGIN_PROJECT, projectId, key,
 				result.getString(2));
 	}

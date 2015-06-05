@@ -27,12 +27,12 @@ public class PreferencesStoreRestService implements
 
 	@Override
 	public String getSystemParameter(String key) {
-		PreferencesValue systemPreference = preferencesStore
+		PreferencesValue<?> systemPreference = preferencesStore
 				.getSystemPreference(key);
 		if (systemPreference == null) {
 			return null;
 		}
-		return systemPreference.getValue();
+		return systemPreference.getValue().toString();
 	}
 
 	@Override
@@ -49,35 +49,29 @@ public class PreferencesStoreRestService implements
 
 	@Override
 	public String getPluginDefaultParameter(String pluginId, String key) {
-		PreferencesValue pluginDefaultPreference = preferencesStore
+		PreferencesValue<?> pluginDefaultPreference = preferencesStore
 				.getPluginDefaultPreference(pluginId, key);
 		if (pluginDefaultPreference == null) {
 			return null;
 		}
-		return pluginDefaultPreference.getValue();
+		return pluginDefaultPreference.getValue().toString();
 	}
 
 	@Override
 	public List<ConfigurationParameter<?>> getPluginProjectParameters(
 			String projectId, String pluginId) {
-		/*
-		 * At this very moment, we let all plug-in parameters got overridden by
-		 * the project. This might be different in future. Additionally, there
-		 * are currently no parameters which are mandatory by project, but which
-		 * are not to be set centrally.
-		 */
-		return getPluginDefaultParameters(pluginId);
+		return preferencesStore.getPluginProjectParameters(projectId, pluginId);
 	}
 
 	@Override
 	public String getPluginProjectParameter(String projectId, String pluginId,
 			String key) {
-		PreferencesValue pluginProjectPreference = preferencesStore
+		PreferencesValue<?> pluginProjectPreference = preferencesStore
 				.getPluginProjectPreference(projectId, pluginId, key);
 		if (pluginProjectPreference == null) {
 			return null;
 		}
-		return pluginProjectPreference.getValue();
+		return pluginProjectPreference.getValue().toString();
 	}
 
 	@Override

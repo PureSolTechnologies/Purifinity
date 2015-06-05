@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.analysis.spi;
 
+import java.util.regex.Pattern;
+
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 
@@ -28,11 +30,13 @@ public abstract class AbstractProgrammingLanguage implements
 	}
 
 	/**
-	 * This method returns the valid suffixes for source files of the language.
+	 * This method returns the valid regular expression patterns for source
+	 * files of this language.
 	 * 
-	 * @return A String array is returned containing the suffixes.
+	 * @return A String array is returned containing the regular expression
+	 *         patterns.
 	 */
-	abstract protected String[] getValidFileSuffixes();
+	abstract protected String[] getValidFilePatterns();
 
 	/**
 	 * {@inheritDoc}
@@ -40,8 +44,10 @@ public abstract class AbstractProgrammingLanguage implements
 	@Override
 	public boolean isSuitable(SourceCodeLocation source) {
 		String name = source.getHumanReadableLocationString();
-		for (String suffix : getValidFileSuffixes()) {
-			if (name.endsWith(suffix)) {
+		for (String pattern : getValidFilePatterns()) {
+			// XXX Think about performance improvement here! The pattern does
+			// not need to be compiled over and over again!
+			if (Pattern.matches(pattern, name)) {
 				return true;
 			}
 		}

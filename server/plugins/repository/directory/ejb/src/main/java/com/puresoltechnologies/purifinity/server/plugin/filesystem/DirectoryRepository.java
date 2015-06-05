@@ -63,7 +63,7 @@ public class DirectoryRepository extends AbstractRepository {
 			"/repository.directory.ui/run.jsf");
 
 	public DirectoryRepository() {
-		super("Directory Repository");
+		super(NAME);
 	}
 
 	private File getDirectory(Properties properties) {
@@ -106,13 +106,13 @@ public class DirectoryRepository extends AbstractRepository {
 	}
 
 	@Override
-	public <T> void setConfigurationParameter(
-			ConfigurationParameter<T> parameter, T value) {
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
+			Object value) {
 		// intentionally left empty
 	}
 
 	@Override
-	public <T> T getConfigurationParameter(ConfigurationParameter<T> parameter) {
+	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
 		// intentionally left empty
 		return null;
 	}

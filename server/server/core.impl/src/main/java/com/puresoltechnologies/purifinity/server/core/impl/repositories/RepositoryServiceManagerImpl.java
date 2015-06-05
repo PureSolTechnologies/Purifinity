@@ -1,20 +1,22 @@
 package com.puresoltechnologies.purifinity.server.core.impl.repositories;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Singleton;
+import javax.inject.Inject;
 
+import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.RepositoryLocation;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.repository.spi.Repository;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceManager;
 import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesValue;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryService;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManagerRemote;
@@ -27,7 +29,8 @@ public class RepositoryServiceManagerImpl extends
 		AbstractServiceManager<RepositoryServiceInformation, Repository>
 		implements RepositoryServiceManager, RepositoryServiceManagerRemote {
 
-	private final Map<String, Repository> programmingLanguageAnalyzers = new HashMap<>();
+	@Inject
+	private PreferencesStore preferencesStore;
 
 	public RepositoryServiceManagerImpl() {
 		super("Repository Service Manager");
@@ -36,13 +39,30 @@ public class RepositoryServiceManagerImpl extends
 	@Override
 	@Lock(LockType.WRITE)
 	public Repository createProxy(String jndi) {
-		Repository repository = programmingLanguageAnalyzers.get(jndi);
-		if (repository == null) {
-			repository = JndiUtils.createRemoteEJBInstance(Repository.class,
-					jndi);
-			programmingLanguageAnalyzers.put(jndi, repository);
+		Repository repository = JndiUtils.createRemoteEJBInstance(
+				Repository.class, jndi);
+		String repositoryName = repository.getName();
+		RepositoryServiceInformation information = findByName(repositoryName);
+		for (ConfigurationParameter<?> configurationParameter : repository
+				.getConfigurationParameters()) {
+			PreferencesValue<?> value = preferencesStore
+					.getPluginDefaultPreference(information.getId(),
+							configurationParameter.getPropertyKey());
+			if (value != null) {
+				repository.setConfigurationParameter(configurationParameter,
+						value.getValue());
+			}
 		}
 		return repository;
+	}
+
+	private RepositoryServiceInformation findByName(String name) {
+		for (RepositoryServiceInformation information : getServices()) {
+			if (information.getName().equals(name)) {
+				return information;
+			}
+		}
+		return null;
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -29,36 +30,48 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	public static final String VERSION = "2008";
 	public static final Version PLUGIN_VERSION = BuildInformation.getVersion();
 
-	public static final String[] FILE_SUFFIXES = { ".f", ".f77", ".f90",
-			".f95", ".for" };
+	private static final String[] FIXED_FORM_FILE_PATTERNS = { ".*\\.f",
+			".*\\.for" };
+	private static final String[] FREE_FORM_FILE_PATTERNS = { ".*\\.f90",
+			".*\\.f95", ".*\\.f03", ".*\\.f08" };
+
+	private static final String FIXED_FORM_FILE_PATTERNS_PROPERTY = "suffixes.form.fixed";
+	private static final String FREE_FORM_FILE_PATTERNS_PROPERTY = "suffixes.form.free";
 
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 	static {
 		PARAMETERS
 				.add(new ConfigurationParameter<String>(
-						"Fortran Source File Suffixes for Fixed Form",
+						"Fortran Source File Patterns for Fixed Form",
 						"",
 						LevelOfMeasurement.NOMINAL,
-						"Specifies a comma separated list of file name suffixes which are to be use to identify pre Fortran 90 fixed form sources.",
-						String.class, "suffixes.form.fixed", "/", "f,f77"));
+						"Specifies a list of file patterns in regular expression format which are to be use to identify pre Fortran 90 fixed form sources. Each pattern is placed on its own line.",
+						String.class, FIXED_FORM_FILE_PATTERNS_PROPERTY, "/",
+						patternsToString(FIXED_FORM_FILE_PATTERNS)));
 		PARAMETERS
 				.add(new ConfigurationParameter<String>(
-						"Fortran Source File Suffixes for Free Form",
+						"Fortran Source File Patterns for Free Form",
 						"",
 						LevelOfMeasurement.NOMINAL,
-						"Specifies a comma separated list of file name suffixes which are to be use to identify Fortran 90 free form sources.",
-						String.class, "suffixes.form.free", "/", "f90"));
+						"Specifies a list of file patterns in regular expression format which are to be use to identify Fortran 90 free form sources. Each pattern is placed on its own line.",
+						String.class, FREE_FORM_FILE_PATTERNS_PROPERTY, "/",
+						patternsToString(FREE_FORM_FILE_PATTERNS)));
 	}
 
 	private SourceForm sourceForm = SourceForm.FREE_FORM;
+
+	private String[] freeFormFilePatterns = FREE_FORM_FILE_PATTERNS;
+	private String[] fixedFormFilePatterns = FIXED_FORM_FILE_PATTERNS;
 
 	public Fortran() {
 		super(NAME, VERSION);
 	}
 
 	@Override
-	protected String[] getValidFileSuffixes() {
-		return FILE_SUFFIXES;
+	protected String[] getValidFilePatterns() {
+		List<String> patternsList = Arrays.asList(fixedFormFilePatterns);
+		patternsList.addAll(Arrays.asList(freeFormFilePatterns));
+		return patternsList.toArray(new String[patternsList.size()]);
 	}
 
 	@Override
@@ -103,4 +116,32 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 		return FortranGrammar.getInstance();
 	}
 
+	@Override
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
+			Object value) {
+		if (FIXED_FORM_FILE_PATTERNS_PROPERTY
+				.equals(parameter.getPropertyKey())) {
+			fixedFormFilePatterns = stringToPatterns((String) value);
+		} else if (FREE_FORM_FILE_PATTERNS_PROPERTY.equals(parameter
+				.getPropertyKey())) {
+			freeFormFilePatterns = stringToPatterns((String) value);
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
+	}
+
+	@Override
+	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
+		if (FIXED_FORM_FILE_PATTERNS_PROPERTY
+				.equals(parameter.getPropertyKey())) {
+			return patternsToString(fixedFormFilePatterns);
+		} else if (FREE_FORM_FILE_PATTERNS_PROPERTY.equals(parameter
+				.getPropertyKey())) {
+			return patternsToString(freeFormFilePatterns);
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
+	}
 }

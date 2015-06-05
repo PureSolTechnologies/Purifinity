@@ -1,10 +1,10 @@
 package com.puresoltechnologies.purifinity.analysis.spi;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
-import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
@@ -20,32 +20,31 @@ import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAna
 public abstract class AbstractProgrammingLanguageAnalyzer extends
 		AbstractProgrammingLanguage implements ProgrammingLanguageAnalyzer {
 
-	private final Map<String, Object> properties = new HashMap<>();
+	protected static String patternsToString(String[] patternsArray) {
+		StringBuilder patternsString = new StringBuilder();
+		for (String pattern : patternsArray) {
+			if (patternsString.length() > 0) {
+				patternsString.append('\n');
+			}
+			patternsString.append(pattern);
+		}
+		return patternsString.toString();
+	}
+
+	protected static String[] stringToPatterns(String patternsString) {
+		List<String> patternsList = Arrays.asList(patternsString.split("\n"));
+		Iterator<String> iterator = patternsList.iterator();
+		while (iterator.hasNext()) {
+			String pattern = iterator.next();
+			if (pattern.isEmpty()) {
+				iterator.remove();
+			}
+		}
+		return patternsList.toArray(new String[patternsList.size()]);
+	}
 
 	protected AbstractProgrammingLanguageAnalyzer(String name, String version) {
 		super(name, version);
-	}
-
-	@Override
-	public final <T> T getConfigurationParameter(
-			ConfigurationParameter<T> parameter) {
-		if (!getConfigurationParameters().contains(parameter)) {
-			throw new IllegalArgumentException("The parameter '" + parameter
-					+ "' is not known.");
-		}
-		@SuppressWarnings("unchecked")
-		T t = (T) properties.get(parameter.getPropertyKey());
-		return t != null ? t : parameter.getDefaultValue();
-	}
-
-	@Override
-	public final <T> void setConfigurationParameter(
-			ConfigurationParameter<T> parameter, T value) {
-		if (!getConfigurationParameters().contains(parameter)) {
-			throw new IllegalArgumentException("The parameter '" + parameter
-					+ "' is not known.");
-		}
-		properties.put(parameter.getPropertyKey(), value);
 	}
 
 	@Override

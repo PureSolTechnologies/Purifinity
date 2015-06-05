@@ -37,19 +37,24 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 	public static final String VERSION = "11";
 	public static final Version PLUGIN_VERSION = BuildInformation.getVersion();
 
-	public static final String[] FILE_SUFFIXES = { ".h", ".c" };
+	private static final String[] FILE_PATTERNS = { ".*\\.h", ".*\\.c" };
+
+	private static final String FILE_PATTERNS_PROPERY = "analyzer.c.source.suffixes";
 
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 	static {
 		PARAMETERS
 				.add(new ConfigurationParameter<String>(
-						"C Source File Suffixes",
+						"C Source File Patterns",
 						"",
 						LevelOfMeasurement.NOMINAL,
-						"Specifies a list of comma separated file suffixes which are used to mark C sources.",
-						String.class, "analyzer.c.source.suffixes", "/", "h,c"));
+						"Specifies a list of file patterns in regular expression format which are used to mark C sources. Each pattern is placed on its own line.",
+						String.class, FILE_PATTERNS_PROPERY, "/",
+						patternsToString(FILE_PATTERNS)));
 
 	}
+
+	private String[] filePatterns = FILE_PATTERNS;
 
 	public C11() {
 		super(NAME, VERSION);
@@ -59,8 +64,8 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String[] getValidFileSuffixes() {
-		return FILE_SUFFIXES;
+	protected String[] getValidFilePatterns() {
+		return filePatterns;
 	}
 
 	@Override
@@ -97,4 +102,24 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 		return C11Grammar.getInstance();
 	}
 
+	@Override
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
+			Object value) {
+		if (FILE_PATTERNS_PROPERY.equals(parameter.getPropertyKey())) {
+			filePatterns = stringToPatterns((String) value);
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
+	}
+
+	@Override
+	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
+		if (FILE_PATTERNS_PROPERY.equals(parameter.getPropertyKey())) {
+			return patternsToString(filePatterns);
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
+	}
 }

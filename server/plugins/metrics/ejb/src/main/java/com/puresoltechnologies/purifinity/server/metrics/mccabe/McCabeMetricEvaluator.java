@@ -159,4 +159,19 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 		AnalysisFileTree directory = analysisRun.getFileTree();
 		return processDirectory(analysisRun, directory);
 	}
+
+	@Override
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
+			Object value) {
+		// Intentionally left empty.
+		throw new IllegalArgumentException("Parameter '" + parameter
+				+ "' is unknown.");
+	}
+
+	@Override
+	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
+		// Intentionally left empty.
+		throw new IllegalArgumentException("Parameter '" + parameter
+				+ "' is unknown.");
+	}
 }

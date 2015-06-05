@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.plugin.subversion;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,20 +35,45 @@ public class SubversionRepository extends AbstractRepository {
 			"repository.subversion.plugin", "repository.subversion.ejb",
 			Repository.class, SubversionRepository.class);
 	public static final Map<String, Parameter<?>> PARAMETERS = new HashMap<>();
+
+	private static final String SVN_BINARY_PATH_PROPERTY = "repository.subversion.binary";
+
 	public static final List<ConfigurationParameter<?>> CONFIG_PARAMETERS = new ArrayList<>();
 	static {
 		CONFIG_PARAMETERS.add(new ConfigurationParameter<String>(
 				"SVN Binary Location", "", LevelOfMeasurement.NOMINAL,
 				"Specifies the location of the svn executable.", String.class,
-				"repository.subversion.binary", "/", ""));
+				SVN_BINARY_PATH_PROPERTY, "/", ""));
 	}
 	public static final RepositoryServiceInformation INFORMATION = new RepositoryServiceInformation(
 			ID, NAME, "1.8", PLUGIN_VERSION, JNDI_ADDRESS,
 			"Subversion Repository.", PARAMETERS, CONFIG_PARAMETERS, null,
 			null, null);
 
+	private File svnBinaryPath = null;
+
 	public SubversionRepository() {
-		super("Subversion Repository");
+		super(NAME);
+	}
+
+	public void setSvnBinaryPath(File svnBinaryPath) {
+		if (!svnBinaryPath.exists()) {
+			throw new IllegalArgumentException("Path '" + svnBinaryPath
+					+ "' for GIT binary does not exist.");
+		}
+		if (!svnBinaryPath.isFile()) {
+			throw new IllegalArgumentException("Path '" + svnBinaryPath
+					+ "' for GIT binary is not a file.");
+		}
+		if (!svnBinaryPath.canExecute()) {
+			throw new IllegalArgumentException("Path '" + svnBinaryPath
+					+ "' for GIT binary is not executable.");
+		}
+		this.svnBinaryPath = svnBinaryPath;
+	}
+
+	public File getSvnBinaryPath() {
+		return svnBinaryPath;
 	}
 
 	@Override
@@ -67,16 +93,24 @@ public class SubversionRepository extends AbstractRepository {
 	}
 
 	@Override
-	public <T> void setConfigurationParameter(
-			ConfigurationParameter<T> parameter, T value) {
-		// TODO Auto-generated method stub
-
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
+			Object value) {
+		if (SVN_BINARY_PATH_PROPERTY.equals(parameter.getPropertyKey())) {
+			setSvnBinaryPath(new File((String) value));
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
 	}
 
 	@Override
-	public <T> T getConfigurationParameter(ConfigurationParameter<T> parameter) {
-		// TODO Auto-generated method stub
-		return null;
+	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
+		if (SVN_BINARY_PATH_PROPERTY.equals(parameter.getPropertyKey())) {
+			return getSvnBinaryPath().toString();
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
 	}
 
 }

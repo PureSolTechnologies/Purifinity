@@ -59,6 +59,10 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 		DEPENDENCIES.add(SLOCMetricCalculator.ID);
 	}
 
+	private static final String SOFTWARE_PROJECT_PROPERTY = "evaluator.cocomo.intermediate.software_project";
+	private static final String SALARY_PROPERTY = "evaluator.cocomo.intermediate.salary";
+	private static final String CURRENCY_PROPERTY = "evaluator.cocomo.intermediate.currency";
+
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 	static {
 		PARAMETERS
@@ -67,8 +71,7 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 						"",
 						LevelOfMeasurement.NOMINAL,
 						"Specifies the complexity of the project. Valid values: ORGANIC, SEMI_DETACHED, EMBEDDED",
-						String.class,
-						"evaluator.cocomo.intermediate.software_project", "/",
+						String.class, SOFTWARE_PROJECT_PROPERTY, "/",
 						"SEMI_DETACHED"));
 		PARAMETERS
 				.add(new ConfigurationParameter<Integer>(
@@ -76,12 +79,10 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 						"currency",
 						LevelOfMeasurement.RATIO,
 						"Specifies the average yearly salary for a single developer for cost calculation.",
-						Integer.class, "evaluator.cocomo.intermediate.salary",
-						"/", 56286));
+						Integer.class, SALARY_PROPERTY, "/", 56286));
 		PARAMETERS.add(new ConfigurationParameter<String>("Currency", "",
 				LevelOfMeasurement.NOMINAL, "Currency for cost calculation.",
-				String.class, "evaluator.cocomo.intermediate.currency", "/",
-				"USD"));
+				String.class, CURRENCY_PROPERTY, "/", "USD"));
 	}
 
 	@Inject
@@ -108,8 +109,28 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 		return IntermediateCoCoMoEvaluatorParameter.ALL;
 	}
 
-	public void setComplexity(SoftwareProject project) {
+	public SoftwareProject getProject() {
+		return project;
+	}
+
+	public void setProject(SoftwareProject project) {
 		this.project = project;
+	}
+
+	public int getAverageSalary() {
+		return averageSalary;
+	}
+
+	public void setAverageSalary(int averageSalary) {
+		this.averageSalary = averageSalary;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	public void setAverageSalary(int averageSalary, String currency) {
@@ -204,5 +225,34 @@ public class IntermediateCoCoMoEvaluator extends AbstractMetricEvaluator {
 			EvaluationStoreException {
 		AnalysisFileTree directory = analysisRun.getFileTree();
 		return processDirectory(analysisRun, directory);
+	}
+
+	@Override
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
+			Object value) {
+		if (SOFTWARE_PROJECT_PROPERTY.equals(parameter.getPropertyKey())) {
+			setProject(SoftwareProject.valueOf((String) value));
+		} else if (SALARY_PROPERTY.equals(parameter.getPropertyKey())) {
+			setAverageSalary(averageSalary);
+		} else if (CURRENCY_PROPERTY.equals(parameter.getPropertyKey())) {
+			setCurrency((String) value);
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
+	}
+
+	@Override
+	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
+		if (SOFTWARE_PROJECT_PROPERTY.equals(parameter.getPropertyKey())) {
+			return getProject().name();
+		} else if (SALARY_PROPERTY.equals(parameter.getPropertyKey())) {
+			return Integer.valueOf(getAverageSalary());
+		} else if (CURRENCY_PROPERTY.equals(parameter.getPropertyKey())) {
+			return getCurrency();
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
 	}
 }

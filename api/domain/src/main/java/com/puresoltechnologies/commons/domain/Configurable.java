@@ -36,8 +36,8 @@ public interface Configurable {
 	 *             parameter retieved from {@link #getConfigurationParameters()}
 	 *             , but this is up to the actual implementation.
 	 */
-	public <T> void setConfigurationParameter(
-			ConfigurationParameter<T> parameter, T value);
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
+			Object value);
 
 	/**
 	 * This method is used to get a parameter from the class.
@@ -54,6 +54,6 @@ public interface Configurable {
 	 *             parameter retieved from {@link #getConfigurationParameters()}
 	 *             , but this is up to the actual implementation.
 	 */
-	public <T> T getConfigurationParameter(ConfigurationParameter<T> parameter);
+	public Object getConfigurationParameter(ConfigurationParameter<?> parameter);
 
 }

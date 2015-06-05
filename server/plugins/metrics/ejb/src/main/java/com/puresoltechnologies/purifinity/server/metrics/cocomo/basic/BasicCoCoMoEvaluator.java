@@ -70,6 +70,10 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 		DEPENDENCIES.add(SLOCMetricCalculator.ID);
 	}
 
+	private static final String COMPLEXITY_PROPERTY = "evaluator.cocomo.basic.complexity";
+	private static final String SALARY_PROPERTY = "evaluator.cocomo.basic.salary";
+	private static final String CURRENCY_PROPERTY = "evaluator.cocomo.basic.currency";
+
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 	static {
 		PARAMETERS
@@ -78,19 +82,17 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 						"",
 						LevelOfMeasurement.NOMINAL,
 						"Specifies the complexity of the project. Valid values: LOW, MEDIUM, HIGH",
-						String.class, "evaluator.cocomo.basic.complexity", "/",
-						"LOW"));
+						String.class, COMPLEXITY_PROPERTY, "/", "LOW"));
 		PARAMETERS
 				.add(new ConfigurationParameter<Integer>(
 						"Yearly Salary",
 						"currency",
 						LevelOfMeasurement.RATIO,
 						"Specifies the average yearly salary for a single developer for cost calculation.",
-						Integer.class, "evaluator.cocomo.basic.salary", "/",
-						56286));
+						Integer.class, SALARY_PROPERTY, "/", 56286));
 		PARAMETERS.add(new ConfigurationParameter<String>("Currency", "",
 				LevelOfMeasurement.NOMINAL, "Currency for cost calculation.",
-				String.class, "evaluator.cocomo.basic.currency", "/", "USD"));
+				String.class, CURRENCY_PROPERTY, "/", "USD"));
 	}
 
 	private SoftwareProject complexity = SoftwareProject.LOW;
@@ -118,12 +120,27 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 		return BasicCoCoMoEvaluatorParameter.ALL;
 	}
 
+	public SoftwareProject getComplexity() {
+		return complexity;
+	}
+
+	public int getAverageSalary() {
+		return averageSalary;
+	}
+
+	public String getCurrency() {
+		return currency;
+	}
+
 	public void setComplexity(SoftwareProject complexity) {
 		this.complexity = complexity;
 	}
 
-	public void setAverageSalary(int averageSalary, String currency) {
+	public void setAverageSalary(int averageSalary) {
 		this.averageSalary = averageSalary;
+	}
+
+	public void setCurrency(String currency) {
 		this.currency = currency;
 	}
 
@@ -212,5 +229,34 @@ public class BasicCoCoMoEvaluator extends AbstractMetricEvaluator {
 			EvaluationStoreException {
 		AnalysisFileTree directory = analysisRun.getFileTree();
 		return processDirectory(analysisRun, directory);
+	}
+
+	@Override
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
+			Object value) {
+		if (COMPLEXITY_PROPERTY.equals(parameter.getPropertyKey())) {
+			setComplexity(SoftwareProject.valueOf((String) value));
+		} else if (SALARY_PROPERTY.equals(parameter.getPropertyKey())) {
+			setAverageSalary(averageSalary);
+		} else if (CURRENCY_PROPERTY.equals(parameter.getPropertyKey())) {
+			setCurrency((String) value);
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
+	}
+
+	@Override
+	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
+		if (COMPLEXITY_PROPERTY.equals(parameter.getPropertyKey())) {
+			return getComplexity().name();
+		} else if (SALARY_PROPERTY.equals(parameter.getPropertyKey())) {
+			return Integer.valueOf(getAverageSalary());
+		} else if (CURRENCY_PROPERTY.equals(parameter.getPropertyKey())) {
+			return getCurrency();
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
 	}
 }

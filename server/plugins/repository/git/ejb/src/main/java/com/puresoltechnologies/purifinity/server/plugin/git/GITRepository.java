@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.plugin.git;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,19 +61,44 @@ public class GITRepository extends AbstractRepository {
 				"The password of the user to be used for login into the host.",
 				String.class));
 	}
+
+	private static final String GIT_BINARY_PATH_PROPERTY = "repository.git.binary";
+
 	public static final List<ConfigurationParameter<?>> CONFIG_PARAMETERS = new ArrayList<>();
 	static {
 		CONFIG_PARAMETERS.add(new ConfigurationParameter<String>(
 				"GIT Binary Location", "", LevelOfMeasurement.NOMINAL,
 				"Specifies the location of the git executable.", String.class,
-				"repository.git.binary", "/", ""));
+				GIT_BINARY_PATH_PROPERTY, "/", ""));
 	}
 	public static final RepositoryServiceInformation INFORMATION = new RepositoryServiceInformation(
 			ID, NAME, "1.9", PLUGIN_VERSION, JNDI_ADDRESS, "GIT Repository.",
 			PARAMETERS, CONFIG_PARAMETERS, null, null, null);
 
+	private File gitBinaryPath = null;
+
 	public GITRepository() {
-		super("GIT Repository");
+		super(NAME);
+	}
+
+	public void setGitBinaryPath(File gitBinaryPath) {
+		if (!gitBinaryPath.exists()) {
+			throw new IllegalArgumentException("Path '" + gitBinaryPath
+					+ "' for GIT binary does not exist.");
+		}
+		if (!gitBinaryPath.isFile()) {
+			throw new IllegalArgumentException("Path '" + gitBinaryPath
+					+ "' for GIT binary is not a file.");
+		}
+		if (!gitBinaryPath.canExecute()) {
+			throw new IllegalArgumentException("Path '" + gitBinaryPath
+					+ "' for GIT binary is not executable.");
+		}
+		this.gitBinaryPath = gitBinaryPath;
+	}
+
+	public File getGitBinaryPath() {
+		return gitBinaryPath;
 	}
 
 	public String getHost(Properties properties) {
@@ -97,16 +123,24 @@ public class GITRepository extends AbstractRepository {
 	}
 
 	@Override
-	public <T> void setConfigurationParameter(
-			ConfigurationParameter<T> parameter, T value) {
-		// TODO Auto-generated method stub
-
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
+			Object value) {
+		if (GIT_BINARY_PATH_PROPERTY.equals(parameter.getPropertyKey())) {
+			setGitBinaryPath(new File((String) value));
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
 	}
 
 	@Override
-	public <T> T getConfigurationParameter(ConfigurationParameter<T> parameter) {
-		// TODO Auto-generated method stub
-		return null;
+	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
+		if (GIT_BINARY_PATH_PROPERTY.equals(parameter.getPropertyKey())) {
+			return getGitBinaryPath().toString();
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
 	}
 
 }

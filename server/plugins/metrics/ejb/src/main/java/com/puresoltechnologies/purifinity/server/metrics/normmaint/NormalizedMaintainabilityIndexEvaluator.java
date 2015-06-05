@@ -152,4 +152,19 @@ public class NormalizedMaintainabilityIndexEvaluator extends
 			EvaluationStoreException {
 		return processDirectory(analysisRun, analysisRun.getFileTree());
 	}
+
+	@Override
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
+			Object value) {
+		// Intentionally left empty.
+		throw new IllegalArgumentException("Parameter '" + parameter
+				+ "' is unknown.");
+	}
+
+	@Override
+	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
+		// Intentionally left empty.
+		throw new IllegalArgumentException("Parameter '" + parameter
+				+ "' is unknown.");
+	}
 }

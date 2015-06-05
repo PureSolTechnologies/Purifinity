@@ -1,16 +1,13 @@
 package com.puresoltechnologies.purifinity.server.core.api.evaluation;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.ejb.EJB;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
@@ -43,15 +40,13 @@ import com.puresoltechnologies.versioning.Version;
  * level and the evaluated quality characteristics.
  * 
  * <b>Extending implementations must not have mutable state!</b>
- * 
+ *
  * @author Rick-Rainer Ludwig
  */
 public abstract class AbstractEvaluator implements Evaluator {
 
 	private static final Logger logger = LoggerFactory
 			.getLogger(AbstractEvaluator.class);
-
-	private final Map<String, Object> properties = new HashMap<>();
 
 	@EJB(lookup = EvaluatorStoreServiceRemote.JNDI_NAME)
 	private EvaluatorStoreServiceRemote store;
@@ -116,28 +111,6 @@ public abstract class AbstractEvaluator implements Evaluator {
 	@Override
 	public final EvaluatorInformation getInformation() {
 		return information;
-	}
-
-	@Override
-	public final <T> T getConfigurationParameter(
-			ConfigurationParameter<T> parameter) {
-		if (!getConfigurationParameters().contains(parameter)) {
-			throw new IllegalArgumentException("The parameter '" + parameter
-					+ "' is not known.");
-		}
-		@SuppressWarnings("unchecked")
-		T t = (T) properties.get(parameter.getPropertyKey());
-		return t != null ? t : parameter.getDefaultValue();
-	}
-
-	@Override
-	public final <T> void setConfigurationParameter(
-			ConfigurationParameter<T> parameter, T value) {
-		if (!getConfigurationParameters().contains(parameter)) {
-			throw new IllegalArgumentException("The parameter '" + parameter
-					+ "' is not known.");
-		}
-		properties.put(parameter.getPropertyKey(), value);
 	}
 
 	/**

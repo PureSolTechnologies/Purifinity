@@ -16,13 +16,16 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
+import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceManager;
 import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginInformation;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesValue;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.store.EvaluatorStoreCassandraUtils;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
@@ -64,7 +67,20 @@ public class EvaluatorServiceManagerImpl extends
 
 	@Override
 	public Evaluator createProxy(String jndi) {
-		return JndiUtils.createRemoteEJBInstance(Evaluator.class, jndi);
+		Evaluator evaluator = JndiUtils.createRemoteEJBInstance(
+				Evaluator.class, jndi);
+		EvaluatorInformation information = evaluator.getInformation();
+		for (ConfigurationParameter<?> configurationParameter : evaluator
+				.getConfigurationParameters()) {
+			PreferencesValue<?> value = preferencesStore
+					.getPluginDefaultPreference(information.getId(),
+							configurationParameter.getPropertyKey());
+			if (value != null) {
+				evaluator.setConfigurationParameter(configurationParameter,
+						value.getValue());
+			}
+		}
+		return evaluator;
 	}
 
 	@Override

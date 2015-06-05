@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.evaluation.api;
 
+import java.io.Serializable;
+
 import com.puresoltechnologies.versioning.Version;
 
 /**
@@ -10,74 +12,76 @@ import com.puresoltechnologies.versioning.Version;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EvaluatorInformation {
+public class EvaluatorInformation implements Serializable {
 
-    private final String id;
-    /**
-     * Contains the name of the evaluator.
-     */
-    private final String name;
-    /**
-     * Contains the version of the evaluator.
-     */
-    private final Version version;
-    /**
-     * Contains the type of the evaluator.
-     */
-    private final EvaluatorType evaluatorType;
-    /**
-     * Contains the description of the evaluator.
-     */
-    private final String description;
+	private static final long serialVersionUID = -1580072488151141407L;
 
-    public EvaluatorInformation(String id, String name, Version version,
-	    EvaluatorType evaluatorType, String description) {
-	super();
-	this.id = id;
-	this.name = name;
-	this.version = version;
-	this.evaluatorType = evaluatorType;
-	this.description = description;
-    }
+	private final String id;
+	/**
+	 * Contains the name of the evaluator.
+	 */
+	private final String name;
+	/**
+	 * Contains the version of the evaluator.
+	 */
+	private final Version version;
+	/**
+	 * Contains the type of the evaluator.
+	 */
+	private final EvaluatorType evaluatorType;
+	/**
+	 * Contains the description of the evaluator.
+	 */
+	private final String description;
 
-    public String getId() {
-	return id;
-    }
+	public EvaluatorInformation(String id, String name, Version version,
+			EvaluatorType evaluatorType, String description) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.version = version;
+		this.evaluatorType = evaluatorType;
+		this.description = description;
+	}
 
-    /**
-     * Returns the name of the evaluator.
-     * 
-     * @return
-     */
-    public String getName() {
-	return name;
-    }
+	public String getId() {
+		return id;
+	}
 
-    /**
-     * Returns the version of the evaluator.
-     * 
-     * @return
-     */
-    public Version getVersion() {
-	return version;
-    }
+	/**
+	 * Returns the name of the evaluator.
+	 * 
+	 * @return
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * Returns the type classification of the evaluator.
-     * 
-     * @return A {@link EvaluatorType} constant is returned.
-     */
-    public EvaluatorType getEvaluatorType() {
-	return evaluatorType;
-    }
+	/**
+	 * Returns the version of the evaluator.
+	 * 
+	 * @return
+	 */
+	public Version getVersion() {
+		return version;
+	}
 
-    /**
-     * Returns the description of the evaluator.
-     * 
-     * @return
-     */
-    public String getDescription() {
-	return description;
-    }
+	/**
+	 * Returns the type classification of the evaluator.
+	 * 
+	 * @return A {@link EvaluatorType} constant is returned.
+	 */
+	public EvaluatorType getEvaluatorType() {
+		return evaluatorType;
+	}
+
+	/**
+	 * Returns the description of the evaluator.
+	 * 
+	 * @return
+	 */
+	public String getDescription() {
+		return description;
+	}
 
 }

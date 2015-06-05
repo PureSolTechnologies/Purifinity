@@ -139,19 +139,35 @@ configurationUIModule.controller("configurationParameterCtrl",
         $scope.refresh = function() {
             preferencesManager.getParameter($scope.parameter, function(data: any, status: number) {
                 if ($scope.isBoolean()) {
-                    $scope.values.booleanInput = (data === "true");
+                    if (data) {
+                        $scope.values.booleanInput = (data === "true");
+                    } else {
+                        $scope.values.booleanInput = $scope.parameter.defaultValue;
+                    }
                     $scope.values.current = $scope.values.booleanInput;
                     $scope.values.default = ($scope.parameter.defaultValue === "true");
                 } else if ($scope.isText()) {
-                    $scope.values.textInput = String(data);
+                    if (data) {
+                        $scope.values.textInput = String(data);
+                    } else {
+                        $scope.values.textInput = $scope.parameter.defaultValue;
+                    }
                     $scope.values.current = $scope.values.textInput;
                     $scope.values.default = String($scope.parameter.defaultValue);
                 } else if ($scope.isNumber()) {
-                    $scope.values.numberInput = Number(data);
+                    if (data) {
+                        $scope.values.numberInput = Number(data);
+                    } else {
+                        $scope.values.numberInput = $scope.parameter.defaultValue;
+                    }
                     $scope.values.current = $scope.values.numberInput;
                     $scope.values.default = Number($scope.parameter.defaultValue);
                 } else {
-                    $scope.values.textInput = data;
+                    if (data) {
+                        $scope.values.textInput = data;
+                    } else {
+                        $scope.values.textInput = $scope.parameter.defaultValue;
+                    }
                     $scope.values.current = data;
                     $scope.values.default = data;
                 }
@@ -205,7 +221,7 @@ configurationUIModule.controller("configurationParameterCtrl",
             if ($scope.overriding) {
                 preferencesManager.deleteParameter($scope.parameter, function(data: any, status: number) {
                 }, function(data: any, status: number, error: string) {
-                });
+                    });
             }
             $scope.overriding = !$scope.overriding;
         };

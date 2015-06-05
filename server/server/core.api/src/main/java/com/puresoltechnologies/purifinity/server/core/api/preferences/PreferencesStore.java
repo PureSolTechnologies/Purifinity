@@ -18,6 +18,9 @@ public interface PreferencesStore {
 	public List<ConfigurationParameter<?>> getPluginDefaultParameters(
 			String pluginId);
 
+	public List<ConfigurationParameter<?>> getPluginProjectParameters(
+			String projectId, String pluginId);
+
 	/**
 	 * This method reads a preference value from the system store.
 	 * 
@@ -26,7 +29,7 @@ public interface PreferencesStore {
 	 * @return A {@link PreferencesValue} is returned containing the value. If
 	 *         no value was found <code>null</code> is returned.
 	 */
-	public PreferencesValue getSystemPreference(String key);
+	public PreferencesValue<?> getSystemPreference(String key);
 
 	/**
 	 * This method is used to store a new value into the store.
@@ -60,7 +63,7 @@ public interface PreferencesStore {
 	 * @return A {@link PreferencesValue} is returned containing the value. If
 	 *         no value was found <code>null</code> is returned.
 	 */
-	public PreferencesValue getPluginDefaultPreference(String pluginId,
+	public PreferencesValue<?> getPluginDefaultPreference(String pluginId,
 			String key);
 
 	/**
@@ -100,7 +103,7 @@ public interface PreferencesStore {
 	 * @return A {@link PreferencesValue} is returned containing the value. If
 	 *         no value was found <code>null</code> is returned.
 	 */
-	public PreferencesValue getPluginProjectPreference(String projectId,
+	public PreferencesValue<?> getPluginProjectPreference(String projectId,
 			String pluginId, String key);
 
 	public void deletePluginProjectParameter(String projectId, String pluginId,

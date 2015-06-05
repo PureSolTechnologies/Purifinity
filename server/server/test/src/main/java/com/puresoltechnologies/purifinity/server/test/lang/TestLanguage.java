@@ -44,7 +44,7 @@ public class TestLanguage extends AbstractProgrammingLanguage implements
     }
 
     @Override
-    protected String[] getValidFileSuffixes() {
+    protected String[] getValidFilePatterns() {
 	return FILE_SUFFIXES;
     }
 

@@ -37,31 +37,39 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 	public static final String VERSION = "7";
 	public static final Version PLUGIN_VERSION = BuildInformation.getVersion();
 
-	public static final String[] FILE_SUFFIXES = { ".java" };
+	private static final String[] FILE_PATTERNS = { ".*\\.java" };
+
+	private static final String FILE_PATTERNS_PROPERTY = "analyzer.java.source.patterns";
 
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 	static {
 		PARAMETERS
 				.add(new ConfigurationParameter<String>(
-						"Java Source File Suffixes",
+						"Java Source File Pattern",
 						"",
 						LevelOfMeasurement.NOMINAL,
-						"Specifies a list of comma separated file suffixes which are used to mark Java sources.",
-						String.class, "analyzer.java.source.suffixes", "/",
-						"java"));
+						"Specifies a list of file patterns in regular expression syntax which are used to mark Java sources. One line is on pattern.",
+						String.class, FILE_PATTERNS_PROPERTY, "/",
+						patternsToString(FILE_PATTERNS)));
 
 	}
 
+	private String[] validFilePatterns = FILE_PATTERNS;
+
 	public Java() {
 		super(NAME, VERSION);
+	}
+
+	private void setValidFilePatterns(String[] validFilePatterns) {
+		this.validFilePatterns = validFilePatterns;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String[] getValidFileSuffixes() {
-		return FILE_SUFFIXES;
+	protected String[] getValidFilePatterns() {
+		return validFilePatterns;
 	}
 
 	@Override
@@ -96,5 +104,26 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 	@Override
 	public LanguageGrammar getGrammar() {
 		return JavaGrammar.getInstance();
+	}
+
+	@Override
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
+			Object value) {
+		if (FILE_PATTERNS_PROPERTY.equals(parameter.getPropertyKey())) {
+			setValidFilePatterns(stringToPatterns((String) value));
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
+	}
+
+	@Override
+	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
+		if (FILE_PATTERNS_PROPERTY.equals(parameter.getPropertyKey())) {
+			return patternsToString(getValidFilePatterns());
+		} else {
+			throw new IllegalArgumentException("Parameter '" + parameter
+					+ "' is unknown.");
+		}
 	}
 }

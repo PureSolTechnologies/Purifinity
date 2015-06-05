@@ -10,14 +10,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class PreferencesValue {
+public class PreferencesValue<T> {
 
 	private final Date changed;
 	private final String changedBy;
 	private final PreferencesGroup group;
 	private final String groupName;
 	private final String key;
-	private final String value;
+	private final T value;
 
 	/**
 	 * This is the initial value constructor.
@@ -41,7 +41,7 @@ public class PreferencesValue {
 			@JsonProperty("group") PreferencesGroup group,
 			@JsonProperty("groupName") String groupName,
 			@JsonProperty("key") String key, //
-			@JsonProperty("value") String value) {
+			@JsonProperty("value") T value) {
 		super();
 		this.changed = changed;
 		this.changedBy = changedBy;
@@ -107,7 +107,7 @@ public class PreferencesValue {
 	 * 
 	 * @return
 	 */
-	public String getValue() {
+	public T getValue() {
 		return value;
 	}
 

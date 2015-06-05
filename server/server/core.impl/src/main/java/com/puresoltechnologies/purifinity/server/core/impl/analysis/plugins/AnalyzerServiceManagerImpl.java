@@ -8,12 +8,14 @@ import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.inject.Inject;
 
+import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceManager;
 import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesValue;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
@@ -27,7 +29,6 @@ public class AnalyzerServiceManagerImpl
 	@Inject
 	private PreferencesStore preferencesStore;
 
-	private final Map<String, ProgrammingLanguageAnalyzer> programmingLanguageAnalyzers = new HashMap<>();
 	private final Map<String, Boolean> analyzerActivations = new HashMap<>();
 
 	public AnalyzerServiceManagerImpl() {
@@ -37,14 +38,22 @@ public class AnalyzerServiceManagerImpl
 	@Override
 	@Lock(LockType.WRITE)
 	public ProgrammingLanguageAnalyzer createProxy(String jndi) {
-		ProgrammingLanguageAnalyzer programmingLanguageAnalyzer = programmingLanguageAnalyzers
-				.get(jndi);
-		if (programmingLanguageAnalyzer == null) {
-			programmingLanguageAnalyzer = JndiUtils.createRemoteEJBInstance(
-					ProgrammingLanguageAnalyzer.class, jndi);
-			programmingLanguageAnalyzers.put(jndi, programmingLanguageAnalyzer);
+		ProgrammingLanguageAnalyzer analyzer = JndiUtils
+				.createRemoteEJBInstance(ProgrammingLanguageAnalyzer.class,
+						jndi);
+		AnalyzerServiceInformation information = findByName(analyzer.getName(),
+				analyzer.getVersion());
+		for (ConfigurationParameter<?> configurationParameter : analyzer
+				.getConfigurationParameters()) {
+			PreferencesValue<?> value = preferencesStore
+					.getPluginDefaultPreference(information.getId(),
+							configurationParameter.getPropertyKey());
+			if (value != null) {
+				analyzer.setConfigurationParameter(configurationParameter,
+						value.getValue());
+			}
 		}
-		return programmingLanguageAnalyzer;
+		return analyzer;
 	}
 
 	@Override
