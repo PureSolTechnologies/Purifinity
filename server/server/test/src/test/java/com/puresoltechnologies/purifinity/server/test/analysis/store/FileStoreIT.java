@@ -46,7 +46,7 @@ public class FileStoreIT extends AbstractAnalysisStoreServiceServerTest {
 		HashId hashId;
 		try (ByteArrayInputStream stream = new ByteArrayInputStream(
 				fileContent.getBytes())) {
-			hashId = fileStore.storeRawFile(stream);
+			hashId = fileStore.storeRawFile(stream, 1024);
 			assertNotNull(hashId);
 			assertEquals(HashUtilities.getDefaultMessageDigestAlgorithm(),
 					hashId.getAlgorithm());
@@ -70,7 +70,7 @@ public class FileStoreIT extends AbstractAnalysisStoreServiceServerTest {
 		HashId hashId;
 		try (ByteArrayInputStream stream = new ByteArrayInputStream(
 				fileContent.getBytes())) {
-			hashId = fileStore.storeRawFile(stream);
+			hashId = fileStore.storeRawFile(stream, 1024);
 			assertNotNull(hashId);
 			assertEquals(HashUtilities.getDefaultMessageDigestAlgorithm(),
 					hashId.getAlgorithm());

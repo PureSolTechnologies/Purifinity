@@ -263,4 +263,17 @@ public class PreferencesStoreImpl implements PreferencesStore {
 		session.execute(boundStatement);
 		logger.info("Set service to active=" + active);
 	}
+
+	@Override
+	public PreferencesValue<?> getSystemPreference(
+			ConfigurationParameter<?> configurationParameter) {
+		PreferencesValue<?> value = getSystemPreference(configurationParameter
+				.getPropertyKey());
+		if (value == null) {
+			value = new PreferencesValue<>(null, null, PreferencesGroup.SYSTEM,
+					"", configurationParameter.getPropertyKey(),
+					configurationParameter.getDefaultValue());
+		}
+		return value;
+	}
 }

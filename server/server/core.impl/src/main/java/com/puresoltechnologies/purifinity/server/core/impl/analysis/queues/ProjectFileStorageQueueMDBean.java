@@ -26,6 +26,7 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
+import com.puresoltechnologies.purifinity.server.core.api.PurifinityConfiguration;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessTransition;
@@ -33,6 +34,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.store.Analysi
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManager;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
@@ -74,6 +76,9 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 
 	@Inject
 	private AnalysisProcessStateTracker analysisProcessStateTracker;
+
+	@Inject
+	private PreferencesStore preferencesStore;
 
 	@Override
 	public void onMessage(Message message) {
@@ -145,6 +150,8 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 				.createFromSerialization(projectSettings.getRepository());
 		List<SourceCodeLocation> sourceCodeLocations = repository
 				.getSourceCodes(projectSettings.getFileSearchConfiguration());
+		long maxFileSize = (Long) preferencesStore.getSystemPreference(
+				PurifinityConfiguration.MAX_FILE_SIZE).getValue();
 		for (int i = 0; i < sourceCodeLocations.size(); ++i) {
 			SourceCodeLocation sourceCodeLocation = sourceCodeLocations.get(i);
 			analysisProcessStateTracker.changeProcessProgress(
@@ -152,8 +159,10 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 					sourceCodeLocation.getHumanReadableLocationString(), i,
 					sourceCodeLocations.size());
 			HashId hashId = storeFile(projectSettings, repository,
-					sourceCodeLocation);
-			storedSources.put(sourceCodeLocation, hashId);
+					sourceCodeLocation, maxFileSize);
+			if (hashId != null) {
+				storedSources.put(sourceCodeLocation, hashId);
+			}
 		}
 		analysisProcessStateTracker.changeProcessProgress(
 				analysisRunInformation.getProjectId(), "",
@@ -162,6 +171,7 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 	}
 
 	/**
+	 * 
 	 * Stores a single file in database.
 	 * 
 	 * @param projectSettings
@@ -170,14 +180,24 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 	 * @return
 	 */
 	private HashId storeFile(AnalysisProjectSettings projectSettings,
-			RepositoryLocation repository, SourceCodeLocation sourceCodeLocation) {
+			RepositoryLocation repository,
+			SourceCodeLocation sourceCodeLocation, long maxFileSize) {
 		try (InputStream stream = sourceCodeLocation.openStream()) {
-			HashId hashId = fileStore.storeRawFile(stream);
-			eventLogger.logEvent(ProjectAnalysisEvents
-					.createRawFileStoredEvent(
-							sourceCodeLocation.getInternalLocation(), hashId,
-							projectSettings.getName(),
-							repository.getHumanReadableLocationString()));
+			HashId hashId = fileStore.storeRawFile(stream, maxFileSize);
+			if (hashId != null) {
+				eventLogger.logEvent(ProjectAnalysisEvents
+						.createRawFileStoredEvent(
+								sourceCodeLocation.getInternalLocation(),
+								hashId, projectSettings.getName(),
+								repository.getHumanReadableLocationString()));
+			} else {
+				eventLogger.logEvent(ProjectAnalysisEvents
+						.createRawFileNotStoredEvent(
+								sourceCodeLocation.getInternalLocation(),
+								projectSettings.getName(),
+								repository.getHumanReadableLocationString()));
+			}
+
 			return hashId;
 		} catch (FileStoreException | IOException e) {
 			eventLogger.logEvent(ProjectAnalysisEvents.createRawFileStoreError(

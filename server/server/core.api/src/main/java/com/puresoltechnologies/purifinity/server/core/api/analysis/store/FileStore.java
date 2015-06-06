@@ -28,12 +28,18 @@ public interface FileStore {
 	 * 
 	 * @param rawStream
 	 *            is the {@link InputStream} to be stored.
+	 * @param maxFileSize
+	 *            is the maximum size of the file to be allowed to be stored. If
+	 *            the file is not stored, a <code>null</code> {@link HashId} is
+	 *            returned.
 	 * @return A {@link HashId} is returned which can be used for later access
-	 *         to the file.
+	 *         to the file. If the files was not stored and there was no error
+	 *         (size filtering), <code>null</code> is returned.
 	 * @throws FileStoreException
 	 *             is thrown in cases of issues.
 	 */
-	HashId storeRawFile(InputStream rawStream) throws FileStoreException;
+	HashId storeRawFile(InputStream rawStream, long maxFileSize)
+			throws FileStoreException;
 
 	/**
 	 * Stores the file in the store in raw format. This means we just copy it

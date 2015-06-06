@@ -163,4 +163,7 @@ public interface PreferencesStore {
 	 */
 	public void setServiceActive(String serviceId, boolean active);
 
+	public PreferencesValue<?> getSystemPreference(
+			ConfigurationParameter<?> configurationParameter);
+
 }

@@ -2,6 +2,9 @@ package com.puresoltechnologies.purifinity.server.core.impl.analysis.store;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -16,6 +19,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -41,6 +45,9 @@ public class FileStoreServiceBean implements FileStoreService,
 		FileStoreServiceRemote {
 
 	@Inject
+	private Logger logger;
+
+	@Inject
 	@AnalysisStoreKeyspace
 	private Session session;
 
@@ -48,11 +55,22 @@ public class FileStoreServiceBean implements FileStoreService,
 	private CassandraPreparedStatements cassandraPreparedStatements;
 
 	@Override
-	public HashId storeRawFile(InputStream rawStream) throws FileStoreException {
-		try (ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-			try (DigestInputStream digestInputStream = new DigestInputStream(
-					rawStream, AnalysisStoreServiceBean.DEFAULT_HASH)) {
-				IOUtils.copy(digestInputStream, buffer);
+	public HashId storeRawFile(InputStream rawStream, long maxFileSize)
+			throws FileStoreException {
+		try (DigestInputStream digestInputStream = new DigestInputStream(
+				rawStream, AnalysisStoreServiceBean.DEFAULT_HASH)) {
+			File tempFile = File.createTempFile("sourceRawFile", ".tmp");
+			try {
+				tempFile.deleteOnExit();
+				try (FileOutputStream fileOutputStream = new FileOutputStream(
+						tempFile)) {
+					IOUtils.copy(digestInputStream, fileOutputStream);
+					if (tempFile.length() > maxFileSize) {
+						logger.debug("Temporary file '" + tempFile
+								+ "' is larger than " + maxFileSize + " bytes.");
+						return null;
+					}
+				}
 				byte[] hashBytes = digestInputStream.getMessageDigest()
 						.digest();
 				String hashString = StringUtils
@@ -60,21 +78,33 @@ public class FileStoreServiceBean implements FileStoreService,
 				HashId hashId = new HashId(
 						HashUtilities.getDefaultMessageDigestAlgorithm(),
 						hashString);
+				try (FileInputStream fileInputStream = new FileInputStream(
+						tempFile)) {
+					try (ByteArrayOutputStream buffer = new ByteArrayOutputStream(
+							(int) tempFile.length())) {
+						IOUtils.copy(fileInputStream, buffer);
 
-				PreparedStatement preparedStatement = cassandraPreparedStatements
-						.getPreparedStatement(
-								session,
-								"INSERT INTO "
-										+ CassandraElementNames.ANALYSIS_FILES_TABLE
-										+ " (time, hashid, raw, size) VALUES (?, ?, ?, ?)");
-				byte[] array = buffer.toByteArray();
-				ByteBuffer byteBuffer = ByteBuffer.wrap(array);
-				BoundStatement boundStatement = preparedStatement.bind(
-						new Date(), hashId.toString());
-				boundStatement.setBytes("raw", byteBuffer);
-				boundStatement.setInt("size", buffer.size());
-				session.execute(boundStatement);
-				return hashId;
+						PreparedStatement preparedStatement = cassandraPreparedStatements
+								.getPreparedStatement(
+										session,
+										"INSERT INTO "
+												+ CassandraElementNames.ANALYSIS_FILES_TABLE
+												+ " (time, hashid, raw, size) VALUES (?, ?, ?, ?)");
+						byte[] array = buffer.toByteArray();
+						ByteBuffer byteBuffer = ByteBuffer.wrap(array);
+						BoundStatement boundStatement = preparedStatement.bind(
+								new Date(), hashId.toString());
+						boundStatement.setBytes("raw", byteBuffer);
+						boundStatement.setInt("size", buffer.size());
+						session.execute(boundStatement);
+						return hashId;
+					}
+				}
+			} finally {
+				if (!tempFile.delete()) {
+					logger.warn("Could not delete temporary file '" + tempFile
+							+ "'.");
+				}
 			}
 		} catch (IOException e) {
 			throw new FileStoreException("Could not store raw file.", e);

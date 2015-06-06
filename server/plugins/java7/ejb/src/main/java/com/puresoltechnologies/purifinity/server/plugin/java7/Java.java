@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -37,7 +38,7 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 	public static final String VERSION = "7";
 	public static final Version PLUGIN_VERSION = BuildInformation.getVersion();
 
-	private static final String[] FILE_PATTERNS = { ".*\\.java" };
+	private static final String[] FILE_PATTERNS = { "*.java" };
 
 	private static final String FILE_PATTERNS_PROPERTY = "analyzer.java.source.patterns";
 
@@ -54,21 +55,32 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 
 	}
 
-	private String[] validFilePatterns = FILE_PATTERNS;
+	private String[] validFiles;
+	private Pattern[] validFilePatterns;
 
 	public Java() {
 		super(NAME, VERSION);
+		setValidFilePatterns(FILE_PATTERNS);
 	}
 
-	private void setValidFilePatterns(String[] validFilePatterns) {
-		this.validFilePatterns = validFilePatterns;
+	private void setValidFilePatterns(String[] validFiles) {
+		this.validFiles = validFiles;
+		validFilePatterns = new Pattern[validFiles.length];
+		for (int i = 0; i < validFiles.length; i++) {
+			validFilePatterns[i] = Pattern.compile(validFiles[i]);
+		}
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected String[] getValidFilePatterns() {
+	protected String[] getValidFiles() {
+		return validFiles;
+	}
+
+	@Override
+	protected Pattern[] getValidFilePatterns() {
 		return validFilePatterns;
 	}
 
@@ -120,7 +132,7 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 	@Override
 	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
 		if (FILE_PATTERNS_PROPERTY.equals(parameter.getPropertyKey())) {
-			return patternsToString(getValidFilePatterns());
+			return patternsToString(getValidFiles());
 		} else {
 			throw new IllegalArgumentException("Parameter '" + parameter
 					+ "' is unknown.");

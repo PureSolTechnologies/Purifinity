@@ -42,7 +42,7 @@ class ProjectManager {
     triggerNewRun(identifier: string,
         success: (data: any, status: number) => void,
         error: (data: any, status: number, error: string) => void): angular.IHttpPromise<any> {
-        return this.purifinityServerConnector.put("/purifinityserver/rest/projectmanager/projects/" + identifier, "",
+        return this.purifinityServerConnector.put("/purifinityserver/rest/analysis/projects/" + identifier, "",
             success, error);
     }
 

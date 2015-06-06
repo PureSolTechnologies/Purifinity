@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
@@ -30,10 +31,9 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	public static final String VERSION = "2008";
 	public static final Version PLUGIN_VERSION = BuildInformation.getVersion();
 
-	private static final String[] FIXED_FORM_FILE_PATTERNS = { ".*\\.f",
-			".*\\.for" };
-	private static final String[] FREE_FORM_FILE_PATTERNS = { ".*\\.f90",
-			".*\\.f95", ".*\\.f03", ".*\\.f08" };
+	private static final String[] FIXED_FORM_FILE_PATTERNS = { "*.f", "*.for" };
+	private static final String[] FREE_FORM_FILE_PATTERNS = { "*.f90", "*.f95",
+			"*.f03", "*.f08" };
 
 	private static final String FIXED_FORM_FILE_PATTERNS_PROPERTY = "suffixes.form.fixed";
 	private static final String FREE_FORM_FILE_PATTERNS_PROPERTY = "suffixes.form.free";
@@ -60,18 +60,31 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 
 	private SourceForm sourceForm = SourceForm.FREE_FORM;
 
-	private String[] freeFormFilePatterns = FREE_FORM_FILE_PATTERNS;
-	private String[] fixedFormFilePatterns = FIXED_FORM_FILE_PATTERNS;
+	private String[] freeFormFiles;
+	private String[] fixedFormFiles;
+	private Pattern[] fixedFormFilePatterns;
+	private Pattern[] freeFormFilePatterns;
 
 	public Fortran() {
 		super(NAME, VERSION);
+		setValidFixedFormFiles(FIXED_FORM_FILE_PATTERNS);
+		setValidFreeFormFiles(FREE_FORM_FILE_PATTERNS);
 	}
 
 	@Override
-	protected String[] getValidFilePatterns() {
-		List<String> patternsList = Arrays.asList(fixedFormFilePatterns);
-		patternsList.addAll(Arrays.asList(freeFormFilePatterns));
+	protected String[] getValidFiles() {
+		List<String> patternsList = new ArrayList<>();
+		patternsList.addAll(Arrays.asList(fixedFormFiles));
+		patternsList.addAll(Arrays.asList(freeFormFiles));
 		return patternsList.toArray(new String[patternsList.size()]);
+	}
+
+	@Override
+	protected Pattern[] getValidFilePatterns() {
+		List<Pattern> patternsList = new ArrayList<>();
+		patternsList.addAll(Arrays.asList(fixedFormFilePatterns));
+		patternsList.addAll(Arrays.asList(freeFormFilePatterns));
+		return patternsList.toArray(new Pattern[patternsList.size()]);
 	}
 
 	@Override
@@ -121,13 +134,29 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 			Object value) {
 		if (FIXED_FORM_FILE_PATTERNS_PROPERTY
 				.equals(parameter.getPropertyKey())) {
-			fixedFormFilePatterns = stringToPatterns((String) value);
+			setValidFixedFormFiles(value);
 		} else if (FREE_FORM_FILE_PATTERNS_PROPERTY.equals(parameter
 				.getPropertyKey())) {
-			freeFormFilePatterns = stringToPatterns((String) value);
+			setValidFreeFormFiles(value);
 		} else {
 			throw new IllegalArgumentException("Parameter '" + parameter
 					+ "' is unknown.");
+		}
+	}
+
+	private void setValidFixedFormFiles(Object value) {
+		fixedFormFiles = stringToPatterns((String) value);
+		fixedFormFilePatterns = new Pattern[fixedFormFiles.length];
+		for (int i = 0; i < fixedFormFiles.length; i++) {
+			fixedFormFilePatterns[i] = Pattern.compile(fixedFormFiles[i]);
+		}
+	}
+
+	private void setValidFreeFormFiles(Object value) {
+		freeFormFiles = stringToPatterns((String) value);
+		freeFormFilePatterns = new Pattern[freeFormFiles.length];
+		for (int i = 0; i < freeFormFiles.length; i++) {
+			freeFormFilePatterns[i] = Pattern.compile(freeFormFiles[i]);
 		}
 	}
 
@@ -135,10 +164,10 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
 		if (FIXED_FORM_FILE_PATTERNS_PROPERTY
 				.equals(parameter.getPropertyKey())) {
-			return patternsToString(fixedFormFilePatterns);
+			return patternsToString(fixedFormFiles);
 		} else if (FREE_FORM_FILE_PATTERNS_PROPERTY.equals(parameter
 				.getPropertyKey())) {
-			return patternsToString(freeFormFilePatterns);
+			return patternsToString(freeFormFiles);
 		} else {
 			throw new IllegalArgumentException("Parameter '" + parameter
 					+ "' is unknown.");

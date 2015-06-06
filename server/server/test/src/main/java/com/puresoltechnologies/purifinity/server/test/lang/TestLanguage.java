@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.test.lang;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalyzerStore;
@@ -20,47 +21,56 @@ import com.puresoltechnologies.purifinity.server.test.lang.grammar.TestLanguageG
  * 
  */
 public class TestLanguage extends AbstractProgrammingLanguage implements
-	AnalyzerStore {
+		AnalyzerStore {
 
-    private static final String[] FILE_SUFFIXES = { ".d" };
+	private static final String[] FILE_SUFFIXES = { ".d" };
 
-    private static TestLanguage instance = null;
+	private static TestLanguage instance = null;
 
-    public static TestLanguage getInstance() {
-	if (instance == null) {
-	    createInstance();
+	public static TestLanguage getInstance() {
+		if (instance == null) {
+			createInstance();
+		}
+		return instance;
 	}
-	return instance;
-    }
 
-    private static synchronized void createInstance() {
-	if (instance == null) {
-	    instance = new TestLanguage();
+	private static synchronized void createInstance() {
+		if (instance == null) {
+			instance = new TestLanguage();
+		}
 	}
-    }
 
-    private TestLanguage() {
-	super("TestLanguage", "0.0.0");
-    }
+	private TestLanguage() {
+		super("TestLanguage", "0.0.0");
+	}
 
-    @Override
-    protected String[] getValidFilePatterns() {
-	return FILE_SUFFIXES;
-    }
+	@Override
+	protected String[] getValidFiles() {
+		return FILE_SUFFIXES;
+	}
 
-    @Override
-    public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
-	throw new IOException(
-		"Persistence not implemented in TestProgrammingLanguage!");
-    }
+	@Override
+	protected Pattern[] getValidFilePatterns() {
+		Pattern[] patterns = new Pattern[FILE_SUFFIXES.length];
+		for (int i = 0; i < FILE_SUFFIXES.length; i++) {
+			patterns[i] = Pattern.compile(FILE_SUFFIXES[i]);
+		}
+		return patterns;
+	}
 
-    @Override
-    public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
-	return new TestLanguageAnalyser(sourceCodeLocation);
-    }
+	@Override
+	public CodeAnalyzer restoreAnalyzer(File file) throws IOException {
+		throw new IOException(
+				"Persistence not implemented in TestProgrammingLanguage!");
+	}
 
-    @Override
-    public LanguageGrammar getGrammar() {
-	return TestLanguageGrammar.getInstance();
-    }
+	@Override
+	public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
+		return new TestLanguageAnalyser(sourceCodeLocation);
+	}
+
+	@Override
+	public LanguageGrammar getGrammar() {
+		return TestLanguageGrammar.getInstance();
+	}
 }

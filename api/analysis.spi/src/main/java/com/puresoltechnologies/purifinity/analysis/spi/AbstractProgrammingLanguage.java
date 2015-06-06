@@ -36,7 +36,9 @@ public abstract class AbstractProgrammingLanguage implements
 	 * @return A String array is returned containing the regular expression
 	 *         patterns.
 	 */
-	abstract protected String[] getValidFilePatterns();
+	abstract protected String[] getValidFiles();
+
+	abstract protected Pattern[] getValidFilePatterns();
 
 	/**
 	 * {@inheritDoc}
@@ -44,10 +46,10 @@ public abstract class AbstractProgrammingLanguage implements
 	@Override
 	public boolean isSuitable(SourceCodeLocation source) {
 		String name = source.getHumanReadableLocationString();
-		for (String pattern : getValidFilePatterns()) {
+		for (Pattern pattern : getValidFilePatterns()) {
 			// XXX Think about performance improvement here! The pattern does
 			// not need to be compiled over and over again!
-			if (Pattern.matches(pattern, name)) {
+			if (pattern.matcher(name).matches()) {
 				return true;
 			}
 		}

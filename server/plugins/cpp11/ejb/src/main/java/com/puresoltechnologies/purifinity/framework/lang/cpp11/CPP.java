@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
@@ -14,8 +15,8 @@ import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLangua
 
 public class CPP extends AbstractProgrammingLanguageAnalyzer {
 
-	private static final String[] FILE_PATTERNS = { ".hpp", ".hxx", ".cpp",
-			".cxx" };
+	private static final String[] FILE_PATTERNS = { "*.hpp", "*.hxx", "*.cpp",
+			"*.cxx" };
 
 	private static final String FILE_PATTERNS_PROPERY = "analyzer.cpp.source.suffixes";
 
@@ -32,10 +33,12 @@ public class CPP extends AbstractProgrammingLanguageAnalyzer {
 
 	}
 
-	private String[] filePatterns = FILE_PATTERNS;
+	private String[] validFiles;
+	private Pattern[] validFilePatterns;
 
 	private CPP() {
 		super("C++", "11");
+		setValidFiles(FILE_PATTERNS);
 	}
 
 	@Override
@@ -44,8 +47,13 @@ public class CPP extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	protected String[] getValidFilePatterns() {
-		return filePatterns;
+	protected String[] getValidFiles() {
+		return validFiles;
+	}
+
+	@Override
+	protected Pattern[] getValidFilePatterns() {
+		return validFilePatterns;
 	}
 
 	@Override
@@ -67,17 +75,25 @@ public class CPP extends AbstractProgrammingLanguageAnalyzer {
 	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
 			Object value) {
 		if (FILE_PATTERNS_PROPERY.equals(parameter.getPropertyKey())) {
-			filePatterns = stringToPatterns((String) value);
+			setValidFiles(value);
 		} else {
 			throw new IllegalArgumentException("Parameter '" + parameter
 					+ "' is unknown.");
 		}
 	}
 
+	private void setValidFiles(Object value) {
+		validFiles = stringToPatterns((String) value);
+		validFilePatterns = new Pattern[validFiles.length];
+		for (int i = 0; i < validFiles.length; i++) {
+			validFilePatterns[i] = Pattern.compile(validFiles[i]);
+		}
+	}
+
 	@Override
 	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
 		if (FILE_PATTERNS_PROPERY.equals(parameter.getPropertyKey())) {
-			return patternsToString(filePatterns);
+			return patternsToString(validFiles);
 		} else {
 			throw new IllegalArgumentException("Parameter '" + parameter
 					+ "' is unknown.");
