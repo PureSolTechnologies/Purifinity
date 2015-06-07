@@ -45,7 +45,7 @@ public abstract class AbstractProgrammingLanguage implements
 	 */
 	@Override
 	public boolean isSuitable(SourceCodeLocation source) {
-		String name = source.getHumanReadableLocationString();
+		String name = source.getName();
 		for (Pattern pattern : getValidFilePatterns()) {
 			// XXX Think about performance improvement here! The pattern does
 			// not need to be compiled over and over again!
