@@ -2,15 +2,16 @@ var analysisUIModule: angular.IModule = angular.module("analysisUIModule", ["pro
 
 analysisUIModule.controller("analysisBrowserCtrl", function($scope, $routeParams, $filter, projectManager) {
     $scope.project = undefined;
+    $scope.lastRun = undefined;
     $scope.run = undefined;
     $scope.analysisFileTree = {};
     projectManager.getProject($routeParams.projectId, function(data, status) {
         $scope.project = data;
         projectManager.getLastRun($routeParams.projectId, function(data, status) {
-            $scope.run = data;
+            $scope.lastRun = data;
             projectManager.getAnalysisFileTree(
                 $scope.project.information.projectId,
-                $scope.run.runId,
+                $scope.lastRun.runId,
                 function(data, status) {
                     var treeTableData: TreeTableData = new TreeTableData();
                     treeTableData.root = convertAnalysisFileTree(data, null, $filter);
@@ -26,6 +27,11 @@ analysisUIModule.controller("analysisBrowserCtrl", function($scope, $routeParams
                 },
                 function(data, status, error) { }
                 );
+            projectManager.getRun($routeParams.projectId, $scope.lastRun.runId,
+                function(data, status) {
+                    $scope.run = data;
+                },
+                function(data, status, error) { });
         }, function(data, status, error) {
             });
     }, function(data, status, error) {
