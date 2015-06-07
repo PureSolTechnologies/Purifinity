@@ -13,6 +13,7 @@ purifinityUI.filter("defaultDate", defaultDateFilter);
 purifinityUI.filter("metricValue", metricValueFilter);
 purifinityUI.filter("version", versionFilter);
 purifinityUI.filter("successfulMark", successfulMarkFilter);
+purifinityUI.filter("fsSize", fsSizeFilter);
 
 /**
  * This is a menu controller to have a chance to mark items as active in a
@@ -77,7 +78,7 @@ function versionFilter() {
 function successfulMarkFilter($sce) {
     return function(successful) {
         var mark = "<div style='position:relative;'>" +
-        "<img src='/images/icons/FatCow_Icons16x16/source_code.png' />";
+            "<img src='/images/icons/FatCow_Icons16x16/source_code.png' />";
         if (successful) {
             mark += "<img style='position:absolute;top:6px;left:6px;' src='/images/icons/FatCow_Icons16x16/bullet_valid.png' />";
         } else {
@@ -86,4 +87,27 @@ function successfulMarkFilter($sce) {
         mark += "</div>";
         return $sce.trustAsHtml(mark);
     };
+}
+
+function fsSizeFilter($filter) {
+    return function(size: number) : string {
+        var magnitude = 0;
+        var result = size;
+        while ((result > 1024) && (magnitude < 4)) {
+            result /= 1024;
+            magnitude++;
+        }        
+        switch (magnitude) {
+            case 1:
+                return String($filter("number")(result, 2)) + "kB";
+            case 2:
+                return String($filter("number")(result, 2)) + "MB";
+            case 3:
+                return String($filter("number")(result, 2)) + "GB";
+            case 4:
+                return String($filter("number")(result, 2)) + "TB";
+            default:
+                return String(size) + " B";
+        }
+    }
 }

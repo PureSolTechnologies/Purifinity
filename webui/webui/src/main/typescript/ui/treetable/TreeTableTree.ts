@@ -8,7 +8,7 @@ class TreeTableTree {
     content: string;
     imageUrl: string;
     link: string;
-    columns: TreeTableColumn[];
+    columns: TreeTableColumn[] = [];
 
     constructor(public parent: TreeTableTree) {
     }

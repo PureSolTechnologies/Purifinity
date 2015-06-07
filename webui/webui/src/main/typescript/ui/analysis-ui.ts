@@ -1,8 +1,6 @@
 var analysisUIModule: angular.IModule = angular.module("analysisUIModule", ["projectManagerModule"]);
-analysisUIModule.controller("analysisBrowserCtrl", analysisBrowserCtrl);
-analysisUIModule.controller("runListCtrl", runListCtrl);
 
-function analysisBrowserCtrl($scope, $routeParams, projectManager) {
+analysisUIModule.controller("analysisBrowserCtrl", function($scope, $routeParams, $filter, projectManager) {
     $scope.project = undefined;
     $scope.run = undefined;
     $scope.analysisFileTree = {};
@@ -15,7 +13,7 @@ function analysisBrowserCtrl($scope, $routeParams, projectManager) {
                 $scope.run.runId,
                 function(data, status) {
                     var treeTableData: TreeTableData = new TreeTableData();
-                    treeTableData.root = convertAnalysisFileTree(data, null);
+                    treeTableData.root = convertAnalysisFileTree(data, null, $filter);
                     treeTableData.columnHeaders.push(
                         new TreeTableColumnHeader("Name", "Name of file or folder"));
                     treeTableData.columnHeaders.push(
@@ -32,10 +30,10 @@ function analysisBrowserCtrl($scope, $routeParams, projectManager) {
             });
     }, function(data, status, error) {
         });
-};
+});
 
 
-function convertAnalysisFileTree(fileTree: any, parent: TreeTableTree): TreeTableTree {
+function convertAnalysisFileTree(fileTree: any, parent: TreeTableTree, $filter): TreeTableTree {
     var treeTableData: TreeTableTree = new TreeTableTree(parent);
     treeTableData.content = fileTree.name;
     treeTableData.id = fileTree.hashId.algorithmName + ":" + fileTree.hashId.hash;
@@ -46,8 +44,8 @@ function convertAnalysisFileTree(fileTree: any, parent: TreeTableTree): TreeTabl
         }
         analyses += analysis.languageName + " " + analysis.languageVersion;
     });
-    treeTableData.addColumn(new TreeTableColumn(fileTree.size, null, null));
-    treeTableData.addColumn(new TreeTableColumn(fileTree.sizeRecursive, null, null));
+    treeTableData.addColumn(new TreeTableColumn($filter("fsSize")(fileTree.size), null, null));
+    treeTableData.addColumn(new TreeTableColumn($filter("fsSize")(fileTree.sizeRecursive), null, null));
     treeTableData.addColumn(new TreeTableColumn(analyses, null, "/file.html#/summary/" + treeTableData.id));
     if (fileTree.children.length > 0) {
         treeTableData.children = [];
@@ -65,7 +63,7 @@ function convertAnalysisFileTree(fileTree: any, parent: TreeTableTree): TreeTabl
             }
         });
         fileTree.children.forEach(function(child) {
-            treeTableData.addChild(convertAnalysisFileTree(child, treeTableData));
+            treeTableData.addChild(convertAnalysisFileTree(child, treeTableData, $filter));
         });
         treeTableData.imageUrl = "images/icons/FatCow_Icons16x16/folder.png";
     } else {
@@ -75,21 +73,22 @@ function convertAnalysisFileTree(fileTree: any, parent: TreeTableTree): TreeTabl
     return treeTableData;
 }
 
-function runListCtrl($scope, $routeParams, projectManager) {
-    $scope.project = undefined;
-    $scope.runs = undefined;
-    projectManager.getProject($routeParams.projectId,
-        function(data, status) {
-            $scope.project = data;
-        },
-        function(data, status, error) {
-        }
-        );
-    projectManager.readAllRunInformation($routeParams.projectId,
-        function(data, status) {
-            $scope.runs = data;
-        },
-        function(data, status, error) {
-        }
-        );
-};
+analysisUIModule.controller("runListCtrl",
+    function($scope, $routeParams, projectManager) {
+        $scope.project = undefined;
+        $scope.runs = undefined;
+        projectManager.getProject($routeParams.projectId,
+            function(data, status) {
+                $scope.project = data;
+            },
+            function(data, status, error) {
+            }
+            );
+        projectManager.readAllRunInformation($routeParams.projectId,
+            function(data, status) {
+                $scope.runs = data;
+            },
+            function(data, status, error) {
+            }
+            );
+    });
