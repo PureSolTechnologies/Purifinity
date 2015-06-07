@@ -20,7 +20,7 @@ import com.puresoltechnologies.parsers.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.repository.spi.AbstractRepository;
 import com.puresoltechnologies.purifinity.repository.spi.Repository;
 import com.puresoltechnologies.purifinity.server.common.utils.BuildInformation;
-import com.puresoltechnologies.purifinity.server.common.utils.io.FileSearch;
+import com.puresoltechnologies.purifinity.server.common.utils.io.FileTreeSearch;
 import com.puresoltechnologies.purifinity.server.common.utils.io.FileTree;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
@@ -81,7 +81,7 @@ public class DirectoryRepository extends AbstractRepository {
 	public List<SourceCodeLocation> getSourceCodes(Properties configuration,
 			FileSearchConfiguration fileSearchConfiguration) {
 		File repositoryDirectory = getDirectory(configuration);
-		FileTree fileTree = FileSearch.getFileTree(repositoryDirectory,
+		FileTree fileTree = FileTreeSearch.getFileTree(repositoryDirectory,
 				fileSearchConfiguration);
 		List<SourceCodeLocation> locations = new ArrayList<SourceCodeLocation>();
 		for (FileTree fileNode : fileTree) {

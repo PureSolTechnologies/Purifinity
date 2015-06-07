@@ -16,7 +16,7 @@ import com.puresoltechnologies.parsers.grammar.Grammar;
 import com.puresoltechnologies.parsers.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
-import com.puresoltechnologies.purifinity.server.common.utils.io.FileSearch;
+import com.puresoltechnologies.purifinity.server.common.utils.io.FileTreeSearch;
 import com.puresoltechnologies.purifinity.server.common.utils.io.FileTree;
 import com.puresoltechnologies.purifinity.server.plugin.java7.Java;
 import com.puresoltechnologies.purifinity.server.plugin.java7.grammar.JavaGrammar;
@@ -65,7 +65,7 @@ public class SourceCodeAnalysisDistributionIT {
 	FileSearchConfiguration configuration = new FileSearchConfiguration(
 		includeDirectories, excludeDirectories, includeFiles,
 		excludeFiles, true);
-	FileTree fileTree = FileSearch.getFileTree(directory, configuration);
+	FileTree fileTree = FileTreeSearch.getFileTree(directory, configuration);
 	for (FileTree fileNode : fileTree) {
 	    File file = fileNode.getPathFile(true);
 	    if (file.isFile()) {

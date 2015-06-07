@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.puresoltechnologies.commons.misc.io.FileSearch;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 
 /**
@@ -41,74 +42,7 @@ import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class FileSearch {
-
-	public static String wildcardsToRegExp(String pattern) {
-		pattern = pattern.replaceAll("\\.", "\\\\.");
-		if (File.separator.equals("\\")) {
-			pattern = pattern.replaceAll("\\*", "[^\\\\\\\\]*");
-			pattern = pattern.replaceAll("\\?", "[^\\\\\\\\]");
-		} else {
-			pattern = pattern.replaceAll("\\*", "[^" + File.separator + "]*");
-			pattern = pattern.replaceAll("\\?", "[^" + File.separator + "]");
-		}
-		return pattern;
-	}
-
-	/**
-	 * This method searches a directory recursively. A pattern specifies which
-	 * files are to be put into the output list.
-	 * 
-	 * @param directory
-	 *            is the directory where the recursive search is to be started.
-	 * @param pattern
-	 *            is a Apache like pattern to specify the files which are to be
-	 *            put into the output list.
-	 * @return
-	 */
-	public static List<File> find(File directory, String pattern) {
-		pattern = wildcardsToRegExp(pattern);
-		List<File> files = findFilesInDirectory(directory,
-				Pattern.compile(pattern), true);
-		List<File> result = new ArrayList<File>();
-		for (File file : files) {
-			String fileString = file.getPath().substring(
-					directory.getPath().length());
-			result.add(new File(fileString));
-		}
-		return result;
-	}
-
-	/**
-	 * This class is the recursive part of the file search.
-	 * 
-	 * @param directory
-	 * @param pattern
-	 * @param scanRecursive
-	 * @return
-	 */
-	private static List<File> findFilesInDirectory(File directory,
-			Pattern pattern, boolean scanRecursive) {
-		List<File> files = new ArrayList<File>();
-		String[] filesInDirectory = directory.list();
-		if (filesInDirectory == null) {
-			return files;
-		}
-		for (String fileToCheck : filesInDirectory) {
-			File file = new File(directory, fileToCheck);
-			if (file.isFile()) {
-				if (pattern.matcher(fileToCheck).matches()) {
-					files.add(file);
-				}
-			} else if (file.isDirectory()) {
-				if (scanRecursive) {
-					files.addAll(findFilesInDirectory(file, pattern,
-							scanRecursive));
-				}
-			}
-		}
-		return files;
-	}
+public class FileTreeSearch {
 
 	public static FileTree getFileTree(File directory,
 			FileSearchConfiguration configuration) {

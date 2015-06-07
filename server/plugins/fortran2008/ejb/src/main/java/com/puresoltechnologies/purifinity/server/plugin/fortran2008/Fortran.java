@@ -14,6 +14,7 @@ import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
+import com.puresoltechnologies.commons.misc.io.FileSearch;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
@@ -134,29 +135,31 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 			Object value) {
 		if (FIXED_FORM_FILE_PATTERNS_PROPERTY
 				.equals(parameter.getPropertyKey())) {
-			setValidFixedFormFiles(value);
+			setValidFixedFormFiles(stringToPatterns((String) value));
 		} else if (FREE_FORM_FILE_PATTERNS_PROPERTY.equals(parameter
 				.getPropertyKey())) {
-			setValidFreeFormFiles(value);
+			setValidFreeFormFiles(stringToPatterns((String) value));
 		} else {
 			throw new IllegalArgumentException("Parameter '" + parameter
 					+ "' is unknown.");
 		}
 	}
 
-	private void setValidFixedFormFiles(Object value) {
-		fixedFormFiles = stringToPatterns((String) value);
+	private void setValidFixedFormFiles(String[] files) {
+		fixedFormFiles = files;
 		fixedFormFilePatterns = new Pattern[fixedFormFiles.length];
 		for (int i = 0; i < fixedFormFiles.length; i++) {
-			fixedFormFilePatterns[i] = Pattern.compile(fixedFormFiles[i]);
+			fixedFormFilePatterns[i] = Pattern.compile(FileSearch
+					.wildcardsToRegExp(fixedFormFiles[i]));
 		}
 	}
 
-	private void setValidFreeFormFiles(Object value) {
-		freeFormFiles = stringToPatterns((String) value);
+	private void setValidFreeFormFiles(String[] files) {
+		freeFormFiles = files;
 		freeFormFilePatterns = new Pattern[freeFormFiles.length];
 		for (int i = 0; i < freeFormFiles.length; i++) {
-			freeFormFilePatterns[i] = Pattern.compile(freeFormFiles[i]);
+			freeFormFilePatterns[i] = Pattern.compile(FileSearch
+					.wildcardsToRegExp(freeFormFiles[i]));
 		}
 	}
 

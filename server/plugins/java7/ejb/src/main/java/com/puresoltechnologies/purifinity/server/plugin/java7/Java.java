@@ -13,6 +13,7 @@ import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
+import com.puresoltechnologies.commons.misc.io.FileSearch;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
@@ -67,7 +68,8 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 		this.validFiles = validFiles;
 		validFilePatterns = new Pattern[validFiles.length];
 		for (int i = 0; i < validFiles.length; i++) {
-			validFilePatterns[i] = Pattern.compile(validFiles[i]);
+			validFilePatterns[i] = Pattern.compile(FileSearch
+					.wildcardsToRegExp(validFiles[i]));
 		}
 	}
 
