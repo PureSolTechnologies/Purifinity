@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.StopWatch;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.lexer.Lexer;
 import com.puresoltechnologies.parsers.lexer.LexerException;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
@@ -29,11 +30,9 @@ import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.parser.Parser;
 import com.puresoltechnologies.parsers.parser.ParserException;
 import com.puresoltechnologies.parsers.source.SourceCode;
-import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.CompilationUnit;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
@@ -61,18 +60,18 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 
 	private CodeAnalysis fileAnalysis;
 
-	public JavaAnalyzer(SourceCodeLocation sourceCodeLocation) {
-		super(sourceCodeLocation, JavaGrammar.getInstance());
+	public JavaAnalyzer(SourceCode sourceCode, HashId hashId) {
+		super(sourceCode, hashId, JavaGrammar.getInstance());
 	}
 
 	@Override
-	public void analyze() throws AnalyzerException {
+	public void analyze() throws IOException {
+		fileAnalysis = null;
+		Date date = new Date();
+		StopWatch watch = new StopWatch();
+		watch.start();
+		SourceCode sourceCode = getSourceCode();
 		try {
-			fileAnalysis = null;
-			Date date = new Date();
-			StopWatch watch = new StopWatch();
-			watch.start();
-			SourceCode sourceCode = getSource().getSourceCode();
 			Lexer lexer = getGrammar().getLexer();
 			TokenStream tokenStream = lexer.lex(sourceCode);
 			Parser parser = getGrammar().getParser();
@@ -82,13 +81,19 @@ public class JavaAnalyzer extends AbstractCodeAnalyzer {
 					.create(parserTree);
 			long timeEffort = watch.getMilliseconds();
 			AnalysisInformation analyzedFile = new AnalysisInformation(
-					sourceCode.getHashId(), date, timeEffort, true, Java.NAME,
+					getHashId(), date, timeEffort, true, Java.NAME,
 					Java.VERSION, Java.ID, Java.PLUGIN_VERSION);
 			fileAnalysis = new CodeAnalysis(date, timeEffort, Java.NAME,
 					Java.VERSION, analyzedFile,
 					getAnalyzableCodeRanges(compilationUnit), compilationUnit);
-		} catch (LexerException | ParserException | IOException e) {
-			throw new AnalyzerException(this, e);
+		} catch (LexerException | ParserException e) {
+			watch.stop();
+			long timeEffort = watch.getMilliseconds();
+			AnalysisInformation analyzedFile = new AnalysisInformation(
+					getHashId(), date, timeEffort, false, Java.NAME,
+					Java.VERSION, Java.ID, Java.PLUGIN_VERSION, e.getMessage());
+			fileAnalysis = new CodeAnalysis(date, timeEffort, Java.NAME,
+					Java.VERSION, analyzedFile, null, null);
 		}
 		return;
 	}

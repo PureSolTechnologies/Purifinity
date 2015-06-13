@@ -31,6 +31,9 @@ public interface PreferencesStore {
 	 */
 	public PreferencesValue<?> getSystemPreference(String key);
 
+	public <T> PreferencesValue<T> getSystemPreference(
+			ConfigurationParameter<T> configurationParameter);
+
 	/**
 	 * This method is used to store a new value into the store.
 	 * 
@@ -40,6 +43,17 @@ public interface PreferencesStore {
 	 *            is the parameter's value.
 	 */
 	public void setSystemPreference(String key, String value);
+
+	/**
+	 * This method is used to store a new value into the store.
+	 * 
+	 * @param key
+	 *            is the name of the parameter.
+	 * @param value
+	 *            is the parameter's value.
+	 */
+	public <T> void setSystemPreference(ConfigurationParameter<T> parameter,
+			T value);
 
 	/**
 	 * This method checks whether a value was stored for a parameter or not.
@@ -162,8 +176,5 @@ public interface PreferencesStore {
 	 *            <code>false</code> is to be set otherwise.
 	 */
 	public void setServiceActive(String serviceId, boolean active);
-
-	public PreferencesValue<?> getSystemPreference(
-			ConfigurationParameter<?> configurationParameter);
 
 }

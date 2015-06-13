@@ -13,7 +13,8 @@ package com.puresoltechnologies.purifinity.analysis.domain;
 import java.io.File;
 import java.io.IOException;
 
-import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.parsers.source.SourceCode;
 
 /**
  * This is a interface to a analyzer. It's used to implement a language
@@ -27,16 +28,18 @@ public interface CodeAnalyzer {
 	/**
 	 * This method returns the source which is to be analyzed.
 	 * 
-	 * @return
+	 * @return The source code is returned as {@link SourceCode} object.
 	 */
-	public SourceCodeLocation getSource();
+	public SourceCode getSourceCode();
+
+	public HashId getHashId();
 
 	/**
 	 * This method is called to start the actual parsing process.
 	 * 
 	 * @throws AnalyzerException
 	 */
-	public void analyze() throws AnalyzerException, IOException;
+	public void analyze() throws IOException;
 
 	/**
 	 * This method persists the analyzer into a file specified.

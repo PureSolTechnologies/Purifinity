@@ -21,14 +21,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.StopWatch;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.parser.ParserException;
 import com.puresoltechnologies.parsers.parser.packrat.PackratParser;
 import com.puresoltechnologies.parsers.source.SourceCode;
-import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.CompilationUnit;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractCodeAnalyzer;
@@ -47,32 +46,38 @@ public class C11Analyzer extends AbstractCodeAnalyzer {
 
 	private CodeAnalysis fileAnalysis;
 
-	public C11Analyzer(SourceCodeLocation sourceCodeLocation) {
-		super(sourceCodeLocation, C11Grammar.getInstance());
+	public C11Analyzer(SourceCode sourceCode, HashId hashId) {
+		super(sourceCode, hashId, C11Grammar.getInstance());
 	}
 
 	@Override
-	public void analyze() throws AnalyzerException {
+	public void analyze() throws IOException {
+		fileAnalysis = null;
+		Date date = new Date();
+		StopWatch watch = new StopWatch();
+		watch.start();
+		SourceCode sourceCode = getSourceCode();
 		try {
-			fileAnalysis = null;
-			Date date = new Date();
-			StopWatch watch = new StopWatch();
-			SourceCode sourceCode = getSource().getSourceCode();
-			watch.start();
 			PackratParser packratParser = new PackratParser(getGrammar());
 			ParseTreeNode parserTree = packratParser.parse(sourceCode);
 			watch.stop();
 			CompilationUnit compilationUnit = TranslationUnitCreator
 					.create(parserTree);
-			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
+			long timeEffort = watch.getMilliseconds();
 			AnalysisInformation analyzedFile = new AnalysisInformation(
-					sourceCode.getHashId(), date, timeEffort, true, C11.NAME,
-					C11.VERSION, C11.ID, C11.PLUGIN_VERSION);
+					getHashId(), date, timeEffort, true, C11.NAME, C11.VERSION,
+					C11.ID, C11.PLUGIN_VERSION);
 			fileAnalysis = new CodeAnalysis(date, timeEffort, C11.NAME,
 					C11.VERSION, analyzedFile,
 					this.getAnalyzableCodeRanges(parserTree), compilationUnit);
-		} catch (ParserException | IOException e) {
-			throw new AnalyzerException(this, e);
+		} catch (ParserException e) {
+			watch.stop();
+			long timeEffort = watch.getMilliseconds();
+			AnalysisInformation analyzedFile = new AnalysisInformation(
+					getHashId(), date, timeEffort, false, C11.NAME,
+					C11.VERSION, C11.ID, C11.PLUGIN_VERSION, e.getMessage());
+			fileAnalysis = new CodeAnalysis(date, timeEffort, C11.NAME,
+					C11.VERSION, analyzedFile, null, null);
 		}
 		return;
 	}

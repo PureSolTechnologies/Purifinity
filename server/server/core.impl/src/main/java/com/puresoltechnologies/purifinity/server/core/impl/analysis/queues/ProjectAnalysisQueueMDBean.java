@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis.queues;
 
 import java.io.IOException;
-import java.util.Date;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,10 +19,10 @@ import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.domain.JSONSerializer;
 import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
@@ -37,6 +37,7 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerR
 import com.puresoltechnologies.trees.TreeVisitor;
 import com.puresoltechnologies.trees.TreeWalker;
 import com.puresoltechnologies.trees.WalkingAction;
+import com.thinkaurelius.groovyshadedasm.tree.analysis.AnalyzerException;
 
 @MessageDriven(name = "ProjectAnalysisQueueMBean",//
 activationConfig = {//
@@ -120,18 +121,17 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 			@Override
 			public WalkingAction visit(AnalysisRunFileTree tree) {
 				if (tree.isFile()) {
-					analyze(tree.getHashId(), tree.getSourceCodeLocation());
+					analyzeFile(tree);
 				}
 				return WalkingAction.PROCEED;
 			}
 		}, analysisRunFileTree);
 	}
 
-	private void analyze(HashId hashId, SourceCodeLocation sourceCodeLocation) {
+	private void analyzeFile(AnalysisRunFileTree node) {
 		try {
-			if (!fileStore.wasAnalyzed(hashId)) {
-				Date startTime = new Date();
-				createNewAnalysis(startTime, hashId, sourceCodeLocation);
+			if (!fileStore.wasAnalyzed(node.getHashId())) {
+				createNewAnalysis(node);
 			}
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -148,21 +148,28 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 	 * @throws IOException
 	 * @throws FileStoreException
 	 */
-	private void createNewAnalysis(Date startTime, HashId hashId,
-			SourceCodeLocation sourceFile) throws AnalyzerException,
-			IOException, FileStoreException {
+	private void createNewAnalysis(AnalysisRunFileTree node)
+			throws IOException, FileStoreException {
+		HashId hashId = node.getHashId();
+		SourceCodeLocation sourceCodeLocation = node.getSourceCodeLocation();
 		for (AnalyzerServiceInformation analyzerInformation : analyzerServiceManager
 				.getServices()) {
 			if (analyzerServiceManager.isActive(analyzerInformation.getId())) {
 				ProgrammingLanguageAnalyzer instance = analyzerServiceManager
 						.createProxy(analyzerInformation.getJndiName());
-				if (instance.isSuitable(sourceFile)) {
+				if (instance.isSuitable(sourceCodeLocation)) {
 					logger.info("'"
-							+ sourceFile.getHumanReadableLocationString()
+							+ sourceCodeLocation
+									.getHumanReadableLocationString()
 							+ "' is a suitable file for '" + instance.getName()
 							+ "'.");
-					CodeAnalysis codeAnalysis = instance.analyze(sourceFile);
-					fileStore.storeAnalysis(hashId, codeAnalysis);
+					try (InputStream sourceStream = sourceCodeLocation
+							.openStream()) {
+						CodeAnalysis codeAnalysis = instance
+								.analyze(SourceCode.read(sourceStream,
+										sourceCodeLocation), hashId);
+						fileStore.storeAnalysis(codeAnalysis);
+					}
 				}
 			}
 		}

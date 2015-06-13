@@ -47,7 +47,7 @@ public interface PurifinityConfiguration {
 			"byte",
 			LevelOfMeasurement.RATIO,
 			"Specifies the maximum file size which shall be stored into databse..",
-			Long.class, "anonymous.can.read", "/Storage", 1024l * 1024l);
+			Long.class, "storage.file.size.max", "/Storage", 1024l * 1024l);
 
 	/**
 	 * This method returns a list of all configuration parameters.

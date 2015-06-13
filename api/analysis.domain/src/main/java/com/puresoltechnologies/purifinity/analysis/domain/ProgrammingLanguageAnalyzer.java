@@ -3,7 +3,8 @@ package com.puresoltechnologies.purifinity.analysis.domain;
 import java.io.IOException;
 
 import com.puresoltechnologies.commons.domain.Configurable;
-import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.parsers.source.SourceCode;
 
 /**
  * This interface is implemented
@@ -14,7 +15,7 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 public interface ProgrammingLanguageAnalyzer extends ProgrammingLanguage,
 		AnalyzerStore, Configurable {
 
-	public CodeAnalysis analyze(SourceCodeLocation sourceCodeLocation)
-			throws AnalyzerException, IOException;
+	public CodeAnalysis analyze(SourceCode sourceCode, HashId hashId)
+			throws IOException;
 
 }

@@ -12,6 +12,7 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
@@ -217,16 +218,20 @@ public abstract class AbstractEvaluator implements Evaluator {
 			List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyses(hashId);
 			for (CodeAnalysis fileAnalysis : fileAnalyses) {
 				if ((!hasFileResults(hashId)) || (enableReevaluation)) {
-					FileMetrics fileResults = processFile(analysisRun,
-							fileAnalysis);
-					if (fileResults != null) {
-						GenericFileMetrics metrics = new GenericFileMetrics(
-								getInformation().getId(), getInformation()
-										.getVersion(), hashId,
-								fileResults.getSourceCodeLocation(),
-								new Date(), fileResults.getParameters(),
-								fileResults.getCodeRangeMetrics());
-						storeFileResults(analysisRun, fileAnalysis, metrics);
+					AnalysisInformation analysisInformation = fileAnalysis
+							.getAnalysisInformation();
+					if (analysisInformation.isSuccessful()) {
+						FileMetrics fileResults = processFile(analysisRun,
+								fileAnalysis);
+						if (fileResults != null) {
+							GenericFileMetrics metrics = new GenericFileMetrics(
+									getInformation().getId(), getInformation()
+											.getVersion(), hashId,
+									fileResults.getSourceCodeLocation(),
+									new Date(), fileResults.getParameters(),
+									fileResults.getCodeRangeMetrics());
+							storeFileResults(analysisRun, fileAnalysis, metrics);
+						}
 					}
 				} else {
 					FileMetrics fileResults = readFileResults(hashId);

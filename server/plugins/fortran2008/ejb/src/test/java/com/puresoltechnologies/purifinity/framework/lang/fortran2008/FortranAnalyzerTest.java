@@ -7,9 +7,12 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import org.junit.Test;
 
+import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.FortranAnalyzer;
 
@@ -23,20 +26,28 @@ public class FortranAnalyzerTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new FortranAnalyzer(new SourceFileLocation("", "")));
+		assertNotNull(new FortranAnalyzer(new SourceCode(), null));
 	}
 
 	@Test
-	public void testInitValues() {
-		FortranAnalyzer analyser = new FortranAnalyzer(new SourceFileLocation(
-				"src/test", "TestFile.f"));
-		assertNull(analyser.getAnalysis());
+	public void testInitValues() throws IOException {
+		SourceFileLocation sourceFileLocation = new SourceFileLocation(
+				"src/test", "TestFile.f");
+		try (InputStream sourceStream = sourceFileLocation.openStream()) {
+			FortranAnalyzer analyser = new FortranAnalyzer(SourceCode.read(
+					sourceStream, sourceFileLocation), null);
+			assertNull(analyser.getAnalysis());
+		}
 	}
 
 	private void test(File sourceDirectory, File file) throws Exception {
-		FortranAnalyzer analyser = new FortranAnalyzer(new SourceFileLocation(
-				sourceDirectory, file));
-		analyser.analyze();
+		SourceFileLocation sourceFileLocation = new SourceFileLocation(
+				sourceDirectory, file);
+		try (InputStream openStream = sourceFileLocation.openStream()) {
+			FortranAnalyzer analyser = new FortranAnalyzer(SourceCode.read(
+					openStream, sourceFileLocation), null);
+			analyser.analyze();
+		}
 	}
 
 	@Test

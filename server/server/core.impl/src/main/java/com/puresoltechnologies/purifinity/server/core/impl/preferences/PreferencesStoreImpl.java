@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -25,6 +26,8 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorSe
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesGroup;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesValue;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChange;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChangeEvent;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManager;
 import com.puresoltechnologies.purifinity.server.database.cassandra.PreferencesStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
@@ -56,6 +59,10 @@ public class PreferencesStoreImpl implements PreferencesStore {
 
 	@Inject
 	private RepositoryServiceManager repositoryServiceManager;
+
+	@Inject
+	@SystemPreferenceChange
+	private Event<SystemPreferenceChangeEvent> event;
 
 	@Override
 	public List<ConfigurationParameter<?>> getSystemParameters() {
@@ -95,26 +102,59 @@ public class PreferencesStoreImpl implements PreferencesStore {
 
 	@Override
 	public PreferencesValue<?> getSystemPreference(String key) {
+		ConfigurationParameter<?> parameter = findConfigurationParameter(key);
+		if (parameter == null) {
+			logger.warn("Parameter with key '" + key
+					+ "' is unknown. Preference cannot be loaded.");
+			return null;
+		}
+		return getSystemPreference(parameter);
+	}
+
+	@Override
+	public <T> PreferencesValue<T> getSystemPreference(
+			ConfigurationParameter<T> configurationParameter) {
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(
 						session,
 						"SELECT changed, changed_by, value FROM "
 								+ CassandraElementNames.SYSTEM_PREFERENCES_TABLE
 								+ " WHERE key=?;");
-		BoundStatement boundStatement = preparedStatement.bind(key);
+		BoundStatement boundStatement = preparedStatement
+				.bind(configurationParameter.getPropertyKey());
 		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
-			return null;
+			return new PreferencesValue<>(null, null, PreferencesGroup.SYSTEM,
+					"", configurationParameter.getPropertyKey(),
+					configurationParameter.getDefaultValue());
 		}
-		return new PreferencesValue<String>(result.getDate(0),
-				result.getString(1), PreferencesGroup.SYSTEM, "", key,
-				result.getString(2));
+		return PreferencesValue.create(configurationParameter.getType(),
+				result.getDate(0), result.getString(1),
+				PreferencesGroup.SYSTEM, "",
+				configurationParameter.getPropertyKey(), result.getString(2));
 	}
 
 	@Override
 	public void setSystemPreference(String key, String value) {
+		ConfigurationParameter<?> parameter = findConfigurationParameter(key);
+		if (parameter == null) {
+			logger.warn("Parameter with key '" + key
+					+ "' is unknown. Preference is not set.");
+			return;
+		}
+		setSystemPreferenceDB(parameter, value);
+	}
+
+	@Override
+	public <T> void setSystemPreference(ConfigurationParameter<T> parameter,
+			T value) {
+		setSystemPreferenceDB(parameter, value.toString());
+	}
+
+	private void setSystemPreferenceDB(ConfigurationParameter<?> parameter,
+			String value) {
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(
 						session,
@@ -122,10 +162,27 @@ public class PreferencesStoreImpl implements PreferencesStore {
 								+ CassandraElementNames.SYSTEM_PREFERENCES_TABLE
 								+ " (changed, changed_by, key, value) VALUES (?, ?, ?, ?);");
 		BoundStatement boundStatement = preparedStatement.bind(new Date(),
-				"n/a", key, value);
+				"n/a", parameter.getPropertyKey(), value);
 		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		session.execute(boundStatement);
-		logger.info("Wrote system preference: '" + key + "'='" + value + "'");
+		logger.info("Wrote system preference: '" + parameter.getPropertyKey()
+				+ "'='" + value + "' (" + parameter + ")");
+		PreferencesValue<?> preferenceValue = PreferencesValue.create(
+				parameter.getType(), null, null, PreferencesGroup.SYSTEM, "",
+				parameter.getPropertyKey(), value);
+		event.fire(new SystemPreferenceChangeEvent(parameter, preferenceValue
+				.getValue()));
+	}
+
+	private ConfigurationParameter<?> findConfigurationParameter(String key) {
+		ConfigurationParameter<?> parameter = null;
+		for (ConfigurationParameter<?> configurationParameter : purifinityConfiguration
+				.getParameters()) {
+			if (configurationParameter.getPropertyKey().equals(key)) {
+				parameter = configurationParameter;
+			}
+		}
+		return parameter;
 	}
 
 	@Override
@@ -262,18 +319,5 @@ public class PreferencesStoreImpl implements PreferencesStore {
 		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		session.execute(boundStatement);
 		logger.info("Set service to active=" + active);
-	}
-
-	@Override
-	public PreferencesValue<?> getSystemPreference(
-			ConfigurationParameter<?> configurationParameter) {
-		PreferencesValue<?> value = getSystemPreference(configurationParameter
-				.getPropertyKey());
-		if (value == null) {
-			value = new PreferencesValue<>(null, null, PreferencesGroup.SYSTEM,
-					"", configurationParameter.getPropertyKey(),
-					configurationParameter.getDefaultValue());
-		}
-		return value;
 	}
 }

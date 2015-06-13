@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalyzerStore;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
@@ -65,8 +66,8 @@ public class TestLanguage extends AbstractProgrammingLanguage implements
 	}
 
 	@Override
-	public CodeAnalyzer createAnalyser(SourceCodeLocation sourceCodeLocation) {
-		return new TestLanguageAnalyser(sourceCodeLocation);
+	public CodeAnalyzer createAnalyser(SourceCode sourceCode, HashId hashId) {
+		return new TestLanguageAnalyser(sourceCode, hashId);
 	}
 
 	@Override

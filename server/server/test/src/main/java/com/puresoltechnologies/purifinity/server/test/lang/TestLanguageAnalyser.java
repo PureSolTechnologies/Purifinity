@@ -22,17 +22,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.StopWatch;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.lexer.Lexer;
 import com.puresoltechnologies.parsers.lexer.LexerException;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
 import com.puresoltechnologies.parsers.parser.Parser;
 import com.puresoltechnologies.parsers.parser.ParserException;
 import com.puresoltechnologies.parsers.source.SourceCode;
-import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.CompilationUnit;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
@@ -52,36 +51,39 @@ public class TestLanguageAnalyser extends AbstractCodeAnalyzer {
 
 	private CodeAnalysis fileAnalysis;
 
-	public TestLanguageAnalyser(SourceCodeLocation sourceCodeLocation) {
-		super(sourceCodeLocation, TestLanguageGrammar.getInstance());
+	public TestLanguageAnalyser(SourceCode sourceCode, HashId hashId) {
+		super(sourceCode, hashId, TestLanguageGrammar.getInstance());
 	}
 
 	@Override
-	public void analyze() throws AnalyzerException {
+	public void analyze() throws IOException {
+		fileAnalysis = null;
+		Date date = new Date();
+		StopWatch watch = new StopWatch();
+		watch.start();
+		SourceCode sourceCode = getSourceCode();
+		TestLanguage language = TestLanguage.getInstance();
 		try {
-			fileAnalysis = null;
-			Date date = new Date();
-			StopWatch watch = new StopWatch();
-			watch.start();
-			SourceCode sourceCode = getSource().getSourceCode();
 			Lexer lexer = getGrammar().getLexer();
 			TokenStream tokenStream = lexer.lex(sourceCode);
 			Parser parser = getGrammar().getParser();
 			parser.parse(tokenStream);
 			watch.stop();
 			CompilationUnit compilationUnit = null; // TODO
-			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
-			TestLanguage language = TestLanguage.getInstance();
+			long timeEffort = watch.getMilliseconds();
 			fileAnalysis = new CodeAnalysis(date, timeEffort,
 					language.getName(), language.getVersion(),
-					new AnalysisInformation(sourceCode.getHashId(), date,
-							timeEffort, true, language.getName(), language
-									.getVersion(), "analyzerId", Version
-									.valueOf("1.0.0")),
+					new AnalysisInformation(getHashId(), date, timeEffort,
+							true, language.getName(), language.getVersion(),
+							"analyzerId", Version.valueOf("1.0.0")),
 					getAnalyzableCodeRanges(compilationUnit), compilationUnit);
-
-		} catch (LexerException | ParserException | IOException e) {
-			throw new AnalyzerException(this, e);
+		} catch (LexerException | ParserException e) {
+			long timeEffort = watch.getMilliseconds();
+			fileAnalysis = new CodeAnalysis(date, timeEffort,
+					language.getName(), language.getVersion(),
+					new AnalysisInformation(getHashId(), date, timeEffort,
+							false, language.getName(), language.getVersion(),
+							"analyzerId", Version.valueOf("1.0.0")), null, null);
 		}
 		return;
 	}

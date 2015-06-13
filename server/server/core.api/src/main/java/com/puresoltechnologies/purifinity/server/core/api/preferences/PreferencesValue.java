@@ -12,6 +12,42 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class PreferencesValue<T> {
 
+	@SuppressWarnings("unchecked")
+	public static <T> PreferencesValue<T> create(Class<T> type, Date changed,
+			String changedBy, PreferencesGroup group, String groupName,
+			String key, //
+			String value) {
+		if (Byte.class.equals(type)) {
+			return (PreferencesValue<T>) new PreferencesValue<Byte>(changed,
+					changedBy, group, groupName, key, Byte.parseByte(value));
+		} else if (Short.class.equals(type)) {
+			return (PreferencesValue<T>) new PreferencesValue<Short>(changed,
+					changedBy, group, groupName, key, Short.parseShort(value));
+		} else if (Integer.class.equals(type)) {
+			return (PreferencesValue<T>) new PreferencesValue<Integer>(changed,
+					changedBy, group, groupName, key, Integer.parseInt(value));
+		} else if (Long.class.equals(type)) {
+			return (PreferencesValue<T>) new PreferencesValue<Long>(changed,
+					changedBy, group, groupName, key, Long.parseLong(value));
+		} else if (Float.class.equals(type)) {
+			return (PreferencesValue<T>) new PreferencesValue<Float>(changed,
+					changedBy, group, groupName, key, Float.parseFloat(value));
+		} else if (Double.class.equals(type)) {
+			return (PreferencesValue<T>) new PreferencesValue<Double>(changed,
+					changedBy, group, groupName, key, Double.parseDouble(value));
+		} else if (Character.class.equals(type)) {
+			return (PreferencesValue<T>) new PreferencesValue<Character>(
+					changed, changedBy, group, groupName, key, value.charAt(0));
+		} else if (String.class.equals(type)) {
+			return (PreferencesValue<T>) new PreferencesValue<String>(changed,
+					changedBy, group, groupName, key, value);
+		}
+		throw new IllegalArgumentException("Type '" + type
+				+ "' of configuration parameter '" + key
+				+ "' is not supported.");
+
+	}
+
 	private final Date changed;
 	private final String changedBy;
 	private final PreferencesGroup group;

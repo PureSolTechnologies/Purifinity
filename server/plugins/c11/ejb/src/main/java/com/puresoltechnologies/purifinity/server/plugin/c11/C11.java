@@ -13,8 +13,9 @@ import javax.ejb.Stateless;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.commons.misc.io.FileSearch;
-import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
@@ -102,8 +103,8 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public C11Analyzer createAnalyser(SourceCodeLocation source) {
-		return new C11Analyzer(source);
+	public C11Analyzer createAnalyser(SourceCode sourceCode, HashId hashId) {
+		return new C11Analyzer(sourceCode, hashId);
 	}
 
 	@Override

@@ -17,6 +17,7 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
@@ -60,7 +61,9 @@ public class EntropyMetricEvaluator extends AbstractMetricEvaluator {
 	protected FileMetrics processFile(AnalysisRun analysisRun,
 			CodeAnalysis analysis) throws InterruptedException,
 			EvaluationStoreException {
-		HashId hashId = analysis.getAnalysisInformation().getHashId();
+		AnalysisInformation analysisInformation = analysis
+				.getAnalysisInformation();
+		HashId hashId = analysisInformation.getHashId();
 		SourceCodeLocation sourceCodeLocation = analysisRun
 				.findTreeNode(hashId).getSourceCodeLocation();
 

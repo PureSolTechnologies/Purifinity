@@ -39,84 +39,85 @@ decoders = { PurifinityProcessStatesDecoder.class }//
 @Singleton
 public class PurifinityProcessStatesSocket {
 
-    @Inject
-    private Logger logger;
+	@Inject
+	private Logger logger;
 
-    @Inject
-    private EventLoggerRemote eventLogger;
+	@Inject
+	private EventLoggerRemote eventLogger;
 
-    @Inject
-    private AnalysisStore analysisStore;
+	@Inject
+	private AnalysisStore analysisStore;
 
-    @Inject
-    private AnalysisProcessStateTracker processStateTracker;
+	@Inject
+	private AnalysisProcessStateTracker processStateTracker;
 
-    private Session session = null;
+	private Session session = null;
 
-    @OnOpen
-    public void open(Session session, EndpointConfig config) {
-	this.session = session;
-	eventLogger.logEvent(PurifinityProgressSocketEvents
-		.createSocketOpenedEvent());
-    }
-
-    @OnClose
-    public void close(CloseReason reason) {
-	String reasonPhrase = reason != null ? reason.getReasonPhrase()
-		: "<no reason provided>";
-	eventLogger.logEvent(PurifinityProgressSocketEvents
-		.createSocketCloseEvent(reasonPhrase));
-    }
-
-    @OnError
-    public void handleError(Throwable throwable) {
-	eventLogger.logEvent(PurifinityProgressSocketEvents
-		.createSocketErrorEvent(throwable));
-    }
-
-    @OnMessage
-    public PurifinityProcessStates getProcessProgresses(String request) {
-	logger.debug("Got request for status.");
-	return getProgresses();
-    }
-
-    private PurifinityProcessStates getProgresses() {
-	Date time = new Date();
-	List<ProcessState> processStates = new ArrayList<ProcessState>();
-	for (AnalysisProcessStatusInformation processStatusInformation : processStateTracker
-		.readProcessStates()) {
-	    String projectId = processStatusInformation.getProjectId();
-	    try {
-		AnalysisProjectSettings projectSettings;
-		projectSettings = analysisStore
-			.readAnalysisProjectSettings(projectId);
-
-		ProcessState processState = new ProcessState(projectId,
-			projectSettings.getName(),
-			processStatusInformation.getState(), -1, 100, "files");
-		processStates.add(processState);
-	    } catch (AnalysisStoreException e) {
-		logger.error("Could not read project settings for project '"
-			+ projectId + "'.", e);
-	    }
+	@OnOpen
+	public void open(Session session, EndpointConfig config) {
+		this.session = session;
+		eventLogger.logEvent(PurifinityProgressSocketEvents
+				.createSocketOpenedEvent());
 	}
-	PurifinityProcessStates purifinityProcessStates = new PurifinityProcessStates(
-		time, processStates);
-	return purifinityProcessStates;
-    }
 
-    @Schedule(hour = "*", minute = "*", second = "*/5")
-    public void sendUpdate() {
-	if (session != null) {
-	    logger.trace("Send process progress updates...");
-	    PurifinityProcessStates states = getProgresses();
-	    for (Session client : session.getOpenSessions()) {
-		try {
-		    client.getBasicRemote().sendObject(states);
-		} catch (IOException | EncodeException | NullPointerException e) {
-		    logger.error("Could not send status message.", e);
+	@OnClose
+	public void close(CloseReason reason) {
+		String reasonPhrase = reason != null ? reason.getReasonPhrase()
+				: "<no reason provided>";
+		eventLogger.logEvent(PurifinityProgressSocketEvents
+				.createSocketCloseEvent(reasonPhrase));
+	}
+
+	@OnError
+	public void handleError(Throwable throwable) {
+		eventLogger.logEvent(PurifinityProgressSocketEvents
+				.createSocketErrorEvent(throwable));
+	}
+
+	@OnMessage
+	public PurifinityProcessStates getProcessProgresses(String request) {
+		logger.debug("Got request for status.");
+		return getProgresses();
+	}
+
+	private PurifinityProcessStates getProgresses() {
+		Date time = new Date();
+		List<ProcessState> processStates = new ArrayList<ProcessState>();
+		for (AnalysisProcessStatusInformation processStatusInformation : processStateTracker
+				.readProcessStates()) {
+			String projectId = processStatusInformation.getProjectId();
+			try {
+				AnalysisProjectSettings projectSettings;
+				projectSettings = analysisStore
+						.readAnalysisProjectSettings(projectId);
+
+				ProcessState processState = new ProcessState(projectId,
+						projectSettings.getName(),
+						processStatusInformation.getState(),
+						processStatusInformation.getCurrent(), 100, "files");
+				processStates.add(processState);
+			} catch (AnalysisStoreException e) {
+				logger.error("Could not read project settings for project '"
+						+ projectId + "'.", e);
+			}
 		}
-	    }
+		PurifinityProcessStates purifinityProcessStates = new PurifinityProcessStates(
+				time, processStates);
+		return purifinityProcessStates;
 	}
-    }
+
+	@Schedule(hour = "*", minute = "*", second = "*/5")
+	public void sendUpdate() {
+		if (session != null) {
+			logger.trace("Send process progress updates...");
+			PurifinityProcessStates states = getProgresses();
+			for (Session client : session.getOpenSessions()) {
+				try {
+					client.getBasicRemote().sendObject(states);
+				} catch (IOException | EncodeException | NullPointerException e) {
+					logger.error("Could not send status message.", e);
+				}
+			}
+		}
+	}
 }

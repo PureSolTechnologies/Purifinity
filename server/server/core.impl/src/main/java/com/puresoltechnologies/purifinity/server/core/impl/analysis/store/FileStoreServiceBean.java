@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.ejb.Stateless;
+import javax.annotation.PostConstruct;
+import javax.ejb.Singleton;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
@@ -33,14 +35,18 @@ import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.server.core.api.PurifinityConfiguration;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreServiceRemote;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChange;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChangeEvent;
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
 
-@Stateless
+@Singleton
 public class FileStoreServiceBean implements FileStoreService,
 		FileStoreServiceRemote {
 
@@ -54,9 +60,33 @@ public class FileStoreServiceBean implements FileStoreService,
 	@Inject
 	private CassandraPreparedStatements cassandraPreparedStatements;
 
+	@Inject
+	private PreferencesStore preferencesStore;
+
+	private long maxFileSize = PurifinityConfiguration.MAX_FILE_SIZE
+			.getDefaultValue();
+
+	@PostConstruct
+	public void initialize() {
+		maxFileSize = preferencesStore.getSystemPreference(
+				PurifinityConfiguration.MAX_FILE_SIZE).getValue();
+		logger.info("File store was initialized with max file size of "
+				+ maxFileSize + " bytes.");
+	}
+
 	@Override
-	public HashId storeRawFile(InputStream rawStream, long maxFileSize)
-			throws FileStoreException {
+	public void onSystemPreferenceChange(
+			@Observes @SystemPreferenceChange SystemPreferenceChangeEvent event) {
+		if (event.getConfigurationParameter().equals(
+				PurifinityConfiguration.MAX_FILE_SIZE)) {
+			maxFileSize = (Long) event.getValue();
+			logger.info("File store was reconfigured with max file size of "
+					+ maxFileSize + " bytes.");
+		}
+	}
+
+	@Override
+	public HashId storeRawFile(InputStream rawStream) throws FileStoreException {
 		try (DigestInputStream digestInputStream = new DigestInputStream(
 				rawStream, AnalysisStoreServiceBean.DEFAULT_HASH)) {
 			File tempFile = File.createTempFile("sourceRawFile", ".tmp");
@@ -160,12 +190,27 @@ public class FileStoreServiceBean implements FileStoreService,
 				try (ObjectInputStream inStream = new ObjectInputStream(
 						byteArrayInputStream)) {
 					Object object = inStream.readObject();
-					analyses.add((CodeAnalysis) object);
+					CodeAnalysis analysis = (CodeAnalysis) object;
+					if (!hashId.equals(analysis.getAnalysisInformation()
+							.getHashId())) {
+						/*
+						 * This check is necessary, because an issue occurred
+						 * during Purifinity 0.3.0 development. If hash IDs do
+						 * not match, evaluations could crash.
+						 */
+						throw new FileStoreException(
+								"Could not load analysis for file with hash id '"
+										+ hashId
+										+ "', because analysis assigned to this hash id contains hash id '"
+										+ analysis.getAnalysisInformation()
+												.getHashId() + "'!");
+					}
+					analyses.add(analysis);
 				}
 			} catch (ClassNotFoundException | IOException e) {
 				throw new FileStoreException(
-						"Could not load analysis for file with hash '" + hashId
-								+ "'", e);
+						"Could not load analysis for file with hash id '"
+								+ hashId + "'", e);
 			}
 			result = resultSet.one();
 		}
@@ -173,7 +218,7 @@ public class FileStoreServiceBean implements FileStoreService,
 	}
 
 	@Override
-	public final void storeAnalysis(HashId hashId, CodeAnalysis fileAnalysis)
+	public final void storeAnalysis(CodeAnalysis fileAnalysis)
 			throws FileStoreException {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(
@@ -184,8 +229,9 @@ public class FileStoreServiceBean implements FileStoreService,
 		AnalysisInformation analysisInformation = fileAnalysis
 				.getAnalysisInformation();
 		BoundStatement boundStatement = preparedStatement.bind(
-				analysisInformation.getStartTime(), hashId.toString(),
-				analysisInformation.getLanguageName(), analysisInformation
+				analysisInformation.getStartTime(), analysisInformation
+						.getHashId().toString(), analysisInformation
+						.getLanguageName(), analysisInformation
 						.getLanguageVersion().toString(), analysisInformation
 						.getAnalyzerId(), analysisInformation
 						.getAnalyzerVersion().toString(), analysisInformation
@@ -202,8 +248,8 @@ public class FileStoreServiceBean implements FileStoreService,
 			}
 		} catch (IOException e) {
 			throw new FileStoreException(
-					"Could not store analysis for file with hash '" + hashId
-							+ "'", e);
+					"Could not store analysis for file with hash '"
+							+ analysisInformation.getHashId() + "'", e);
 		}
 		session.execute(boundStatement);
 	}

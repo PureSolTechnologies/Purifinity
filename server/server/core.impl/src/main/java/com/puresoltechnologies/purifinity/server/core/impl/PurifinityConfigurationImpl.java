@@ -10,7 +10,7 @@ public class PurifinityConfigurationImpl implements PurifinityConfiguration {
 
 	private static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<ConfigurationParameter<?>>();
 	static {
-		PARAMETERS.add(MAX_FILE_SIZE);
+		PARAMETERS.add(ANONYMOUS_CAN_READ);
 		PARAMETERS.add(ALERT_MESSAGE_TIMEOUT);
 		PARAMETERS.add(USER_INACTIVITY_TIMEOUT);
 		PARAMETERS.add(USER_SESSION_TIMEOUT);

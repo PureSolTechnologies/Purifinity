@@ -22,17 +22,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.misc.StopWatch;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.lexer.LexerException;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
 import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.parsers.parser.Parser;
 import com.puresoltechnologies.parsers.parser.ParserException;
 import com.puresoltechnologies.parsers.source.SourceCode;
-import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.CompilationUnit;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzerException;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
@@ -58,49 +57,47 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 
 	private CodeAnalysis fileAnalysis;
 
-	public FortranAnalyzer(SourceCodeLocation sourceCodeLocation) {
-		super(sourceCodeLocation, FortranGrammar.getInstance());
+	public FortranAnalyzer(SourceCode sourceCode, HashId hashId) {
+		super(sourceCode, hashId, FortranGrammar.getInstance());
 	}
 
 	@Override
-	public void analyze() throws AnalyzerException {
+	public void analyze() throws IOException {
+		fileAnalysis = null;
+		Date date = new Date();
+		StopWatch watch = new StopWatch();
+		watch.start();
+		SourceCode sourceCode = getSourceCode();
 		try {
-			fileAnalysis = null;
-			Date date = new Date();
-			StopWatch watch = new StopWatch();
-			watch.start();
-			SourceCode sourceCode = getSource().getSourceCode();
 			TokenStream tokenStream = preConditioningAndLexing(sourceCode);
 			Parser parser = getGrammar().getParser();
 			ParseTreeNode ParseTreeNode = parser.parse(tokenStream);
 			watch.stop();
 			CompilationUnit program = ProgramCreator.create(ParseTreeNode);
-			long timeEffort = Math.round(watch.getSeconds() * 1000.0);
+			long timeEffort = watch.getMilliseconds();
 			AnalysisInformation analyzedFile = new AnalysisInformation(
-					sourceCode.getHashId(), date, timeEffort, true,
-					Fortran.NAME, Fortran.VERSION, Fortran.ID,
-					Fortran.PLUGIN_VERSION);
+					getHashId(), date, timeEffort, true, Fortran.NAME,
+					Fortran.VERSION, Fortran.ID, Fortran.PLUGIN_VERSION);
 			fileAnalysis = new CodeAnalysis(date, timeEffort, Fortran.NAME,
 					Fortran.VERSION, analyzedFile,
 					getAnalyzableCodeRanges(program), program);
-		} catch (ParserException | IOException e) {
-			throw new AnalyzerException(this, e);
+		} catch (ParserException | LexerException e) {
+			watch.stop();
+			long timeEffort = watch.getMilliseconds();
+			AnalysisInformation analyzedFile = new AnalysisInformation(
+					getHashId(), date, timeEffort, false, Fortran.NAME,
+					Fortran.VERSION, Fortran.ID, Fortran.PLUGIN_VERSION,
+					e.getMessage());
+			fileAnalysis = new CodeAnalysis(date, timeEffort, Fortran.NAME,
+					Fortran.VERSION, analyzedFile, null, null);
 		}
 	}
 
 	private TokenStream preConditioningAndLexing(SourceCode sourceCode)
-			throws AnalyzerException {
-		try {
-			FortranPreConditioner preconditioner = new FortranPreConditioner(
-					sourceCode);
-			return preconditioner.scan(getGrammar().getLexer());
-		} catch (IOException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		} catch (LexerException e) {
-			logger.error(e.getMessage(), e);
-			throw new AnalyzerException(this);
-		}
+			throws IOException, LexerException {
+		FortranPreConditioner preconditioner = new FortranPreConditioner(
+				sourceCode);
+		return preconditioner.scan(getGrammar().getLexer());
 	}
 
 	@Override

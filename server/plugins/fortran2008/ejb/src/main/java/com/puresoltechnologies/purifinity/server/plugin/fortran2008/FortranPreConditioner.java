@@ -334,18 +334,24 @@ public class FortranPreConditioner {
 				throw new LexerException(
 						"Found Label and Continuation in one line. This is not meaning full!");
 			}
-			Token whitespace = new Token("WHITESPACE", matcher.group(1),
-					Visibility.IGNORED, getCurrentMetaData(1, column));
-			tokenStream.add(whitespace);
-			column += whitespace.getText().length();
+			String group1 = matcher.group(1);
+			if (!group1.isEmpty()) {
+				Token whitespace = new Token("WHITESPACE", group1,
+						Visibility.IGNORED, getCurrentMetaData(1, column));
+				tokenStream.add(whitespace);
+				column += whitespace.getText().length();
+			}
 			Token label = new Token("LABEL", matcher.group(2),
 					Visibility.IGNORED, getCurrentMetaData(1, column));
 			tokenStream.add(label);
 			column += label.getText().length();
-			whitespace = new Token("WHITESPACE", matcher.group(3),
-					Visibility.IGNORED, getCurrentMetaData(1, column));
-			tokenStream.add(whitespace);
-			column += whitespace.getText().length();
+			String group3 = matcher.group(3);
+			if (!group3.isEmpty()) {
+				Token whitespace = new Token("WHITESPACE", group3,
+						Visibility.IGNORED, getCurrentMetaData(1, column));
+				tokenStream.add(whitespace);
+				column += whitespace.getText().length();
+			}
 			String string = matcher.group();
 			line = line.substring(string.length());
 		}

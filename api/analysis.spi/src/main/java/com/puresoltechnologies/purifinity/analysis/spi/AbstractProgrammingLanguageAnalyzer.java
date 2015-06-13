@@ -5,8 +5,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalyzerException;
+import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
@@ -48,9 +48,9 @@ public abstract class AbstractProgrammingLanguageAnalyzer extends
 	}
 
 	@Override
-	public CodeAnalysis analyze(SourceCodeLocation sourceCodeLocation)
-			throws AnalyzerException, IOException {
-		CodeAnalyzer analyser = createAnalyser(sourceCodeLocation);
+	public CodeAnalysis analyze(SourceCode sourceCode, HashId hashId)
+			throws IOException {
+		CodeAnalyzer analyser = createAnalyser(sourceCode, hashId);
 		analyser.analyze();
 		return analyser.getAnalysis();
 	}

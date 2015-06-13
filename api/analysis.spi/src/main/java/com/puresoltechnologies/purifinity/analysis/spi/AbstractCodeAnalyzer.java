@@ -1,23 +1,31 @@
 package com.puresoltechnologies.purifinity.analysis.spi;
 
-import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
 
 public abstract class AbstractCodeAnalyzer implements CodeAnalyzer {
 
-	private final SourceCodeLocation sourceCodeLocation;
+	private final SourceCode sourceCode;
+	private final HashId hashId;
 	private final transient AbstractLanguageGrammar grammar;
 
-	public AbstractCodeAnalyzer(SourceCodeLocation sourceCodeLocation,
+	public AbstractCodeAnalyzer(SourceCode sourceCode, HashId hashId,
 			AbstractLanguageGrammar grammar) {
 		super();
-		this.sourceCodeLocation = sourceCodeLocation;
+		this.sourceCode = sourceCode;
+		this.hashId = hashId;
 		this.grammar = grammar;
 	}
 
 	@Override
-	public final SourceCodeLocation getSource() {
-		return sourceCodeLocation;
+	public final SourceCode getSourceCode() {
+		return sourceCode;
+	}
+
+	@Override
+	public HashId getHashId() {
+		return hashId;
 	}
 
 	public AbstractLanguageGrammar getGrammar() {

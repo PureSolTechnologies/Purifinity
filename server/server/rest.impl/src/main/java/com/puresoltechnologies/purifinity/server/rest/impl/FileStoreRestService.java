@@ -8,11 +8,8 @@ import javax.inject.Inject;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
-import com.puresoltechnologies.purifinity.server.core.api.PurifinityConfiguration;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
-import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
-import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesValue;
 import com.puresoltechnologies.purifinity.server.rest.api.FileStoreRestInterface;
 
 public class FileStoreRestService implements FileStoreRestInterface {
@@ -20,14 +17,9 @@ public class FileStoreRestService implements FileStoreRestInterface {
 	@Inject
 	private FileStoreService fileStore;
 
-	@Inject
-	private PreferencesStore preferencesStore;
-
 	@Override
 	public HashId storeRawFile(InputStream rawStream) throws FileStoreException {
-		PreferencesValue<?> maxFileSize = preferencesStore
-				.getSystemPreference(PurifinityConfiguration.MAX_FILE_SIZE);
-		return fileStore.storeRawFile(rawStream, (Long) maxFileSize.getValue());
+		return fileStore.storeRawFile(rawStream);
 	}
 
 	@Override
@@ -54,7 +46,12 @@ public class FileStoreRestService implements FileStoreRestInterface {
 	@Override
 	public void storeAnalysis(HashId hashId, CodeAnalysis analysis)
 			throws FileStoreException {
-		fileStore.storeAnalysis(hashId, analysis);
+		if (!hashId.equals(analysis.getAnalysisInformation().getHashId())) {
+			throw new IllegalArgumentException("Hash id in URL '" + hashId
+					+ "' does not match hash id in analysis '"
+					+ analysis.getAnalysisInformation().getHashId() + "'!");
+		}
+		fileStore.storeAnalysis(analysis);
 	}
 
 	@Override

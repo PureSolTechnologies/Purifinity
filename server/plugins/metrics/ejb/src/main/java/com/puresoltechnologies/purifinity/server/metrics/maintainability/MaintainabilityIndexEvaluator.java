@@ -100,7 +100,9 @@ public class MaintainabilityIndexEvaluator extends AbstractMetricEvaluator {
 	protected FileMetrics processFile(AnalysisRun analysisRun,
 			CodeAnalysis analysis) throws InterruptedException,
 			EvaluationStoreException {
-		AnalysisInformation analyzedFile = analysis.getAnalysisInformation();
+		AnalysisInformation analysisInformation = analysis
+				.getAnalysisInformation();
+		AnalysisInformation analyzedFile = analysisInformation;
 		HashId hashId = analyzedFile.getHashId();
 		SourceCodeLocation sourceCodeLocation = analysisRun
 				.findTreeNode(hashId).getSourceCodeLocation();

@@ -8,8 +8,9 @@ import java.util.regex.Pattern;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.commons.misc.io.FileSearch;
-import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalyzer;
 import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
 import com.puresoltechnologies.purifinity.analysis.spi.AbstractProgrammingLanguageAnalyzer;
@@ -63,7 +64,7 @@ public class CPP extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public CodeAnalyzer createAnalyser(SourceCodeLocation source) {
+	public CodeAnalyzer createAnalyser(SourceCode sourceCode, HashId hashId) {
 		return null;
 	}
 

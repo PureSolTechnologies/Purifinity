@@ -38,8 +38,7 @@ public interface FileStore {
 	 * @throws FileStoreException
 	 *             is thrown in cases of issues.
 	 */
-	HashId storeRawFile(InputStream rawStream, long maxFileSize)
-			throws FileStoreException;
+	HashId storeRawFile(InputStream rawStream) throws FileStoreException;
 
 	/**
 	 * Stores the file in the store in raw format. This means we just copy it
@@ -87,12 +86,10 @@ public interface FileStore {
 	/**
 	 * This method stores a single analysis for a file.
 	 * 
-	 * @param hashId
 	 * @param analysis
 	 * @throws FileStoreException
 	 */
-	void storeAnalysis(HashId hashId, CodeAnalysis analysis)
-			throws FileStoreException;
+	void storeAnalysis(CodeAnalysis analysis) throws FileStoreException;
 
 	/**
 	 * Checks whether a code with a given id was analyzed or not.

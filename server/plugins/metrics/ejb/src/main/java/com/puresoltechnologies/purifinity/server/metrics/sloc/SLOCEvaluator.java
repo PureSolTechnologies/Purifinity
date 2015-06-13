@@ -93,8 +93,9 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 						analysisInformation.getLanguageVersion());
 		ProgrammingLanguage language = analyzerServiceManager
 				.createProxy(analyzerServiceInformation.getJndiName());
-		SourceCodeLocation sourceCodeLocation = analysisRun
-				.findTreeNode(hashId).getSourceCodeLocation();
+		AnalysisFileTree analysisRunNode = analysisRun.findTreeNode(hashId);
+		SourceCodeLocation sourceCodeLocation = analysisRunNode
+				.getSourceCodeLocation();
 		GenericFileMetrics results = new GenericFileMetrics(
 				SLOCMetricCalculator.ID, SLOCMetricCalculator.PLUGIN_VERSION,
 				hashId, sourceCodeLocation, analysis.getStartTime(),
