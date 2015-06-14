@@ -18,9 +18,17 @@
 			<writer ref="FileStorageItemWriter" />
 		</chunk>
 	</step>
-	
-	<step id="FileTreeCreation">
+
+	<step id="FileTreeCreation" next="FileAnalysis">
 		<batchlet ref="FileTreeCreationBatchlet" />
+	</step>
+
+	<step id="FileAnalysis">
+		<chunk checkpoint-policy="item" item-count="10">
+			<reader ref="AnalysisItemReader" />
+			<processor ref="AnalysisItemProcess" />
+			<writer ref="AnalysisItemWriter" />
+		</chunk>
 	</step>
 
 </job>

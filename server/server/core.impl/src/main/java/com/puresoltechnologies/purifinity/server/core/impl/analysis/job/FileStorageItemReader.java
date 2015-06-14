@@ -37,7 +37,6 @@ public class FileStorageItemReader extends AbstractItemReader {
 
 	@Override
 	public void open(Serializable checkpoint) throws Exception {
-		super.open(checkpoint);
 		logger.info("Item reader started for job " + jobContext.getJobName()
 				+ "...");
 		if (checkpoint != null) {
@@ -75,7 +74,6 @@ public class FileStorageItemReader extends AbstractItemReader {
 
 	@Override
 	public void close() throws Exception {
-		super.close();
 		logger.info("Item reader closed for job " + jobContext.getJobName()
 				+ ".");
 	}
