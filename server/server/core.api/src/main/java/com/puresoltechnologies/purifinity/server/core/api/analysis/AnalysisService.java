@@ -6,6 +6,7 @@ import java.util.List;
 import javax.jms.JMSException;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.jobs.PurifinityProcessStates;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 
 /**
@@ -16,9 +17,11 @@ import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerService
  */
 public interface AnalysisService {
 
-	public void triggerNewRun(String projectId) throws JMSException;
+	public void triggerRunJob(String projectId) throws JMSException;
 
-	public void abortCurrentRun(String projectId);
+	public void abortRun(long jobId);
+
+	public PurifinityProcessStates getProgresses();
 
 	public Collection<AnalyzerServiceInformation> getAnalyzers();
 

@@ -4,21 +4,22 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.server</groupId>
-		<artifactId>server-parent</artifactId>
+		<artifactId>common</artifactId>
 		<version>0.3.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>common</artifactId>
+	<artifactId>common.job</artifactId>
 	<name>Purifinity Server: ${project.artifactId}</name>
-	<packaging>pom</packaging>
 
-	<modules>
-		<module>utils</module>
-		<module>plugins</module>
-		<module>jms</module>
-		<module>job</module>
-		<module>rest</module>
-		<module>rest.security</module>
-		<module>test</module>
-	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+	</dependencies>
+
 </project>

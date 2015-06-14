@@ -1,52 +1,47 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.annotation.Resource;
+import javax.batch.operations.JobOperator;
+import javax.batch.operations.NoSuchJobException;
+import javax.batch.runtime.BatchStatus;
+import javax.batch.runtime.JobExecution;
+import javax.batch.runtime.StepExecution;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.JMSException;
-import javax.jms.Queue;
+
+import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
-import com.puresoltechnologies.purifinity.server.common.jms.JMSMessageSender;
+import com.puresoltechnologies.purifinity.server.common.job.StepInformation;
+import com.puresoltechnologies.purifinity.server.common.job.StepProgress;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStateTracker;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessStatusInformation;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.states.AnalysisProcessTransition;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
-import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManager;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.queues.ProjectAnalysisStartQueue;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.jobs.ProcessState;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.jobs.PurifinityProcessStates;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
 @Stateless
 public class AnalysisServiceBean implements AnalysisService {
 
-	@Resource(mappedName = ProjectAnalysisStartQueue.NAME)
-	private Queue projectAnalysisStartQueue;
+	@Inject
+	private Logger logger;
 
 	@Inject
 	private EventLoggerRemote eventLogger;
 
 	@Inject
-	private JMSMessageSender messageSender;
+	private JobOperator jobOperator;
 
 	@Inject
 	private AnalyzerServiceManager analyzerRegistration;
-
-	@Inject
-	private EvaluatorServiceManager evaluatorRegistration;
-
-	@Inject
-	private RepositoryServiceManager repositoryTypePluginService;
-
-	@Inject
-	private AnalysisProcessStateTracker processTracker;
 
 	@PostConstruct
 	public void initialize() {
@@ -59,17 +54,62 @@ public class AnalysisServiceBean implements AnalysisService {
 	}
 
 	@Override
-	public void triggerNewRun(String projectId) throws JMSException {
-		messageSender.sendMessage(projectAnalysisStartQueue, projectId);
+	public void triggerRunJob(String projectId) throws JMSException {
+		Properties jobParameters = new Properties();
+		jobParameters.setProperty("project_id", projectId);
+		jobOperator.start("ProjectAnalysis", jobParameters);
 	}
 
 	@Override
-	public void abortCurrentRun(String projectId) {
-		AnalysisProcessStatusInformation processState = processTracker
-				.readProcessState(projectId);
-		long runId = processState.getRunId();
-		processTracker.changeProcessState(projectId, runId,
-				AnalysisProcessTransition.REQUEST_ABORT);
+	public void abortRun(long jobId) {
+		jobOperator.abandon(jobId);
+	}
+
+	/**
+	 * @return
+	 */
+	@Override
+	public PurifinityProcessStates getProgresses() {
+		PurifinityProcessStates states = new PurifinityProcessStates(new Date());
+		try {
+			List<Long> runningExecutions = jobOperator
+					.getRunningExecutions("ProjectAnalysis");
+			for (long jobId : runningExecutions) {
+				JobExecution jobExecution = jobOperator.getJobExecution(jobId);
+				List<StepExecution> stepExecutions = jobOperator
+						.getStepExecutions(jobId);
+				for (StepExecution stepExecution : stepExecutions) {
+					if (stepExecution.getBatchStatus() == BatchStatus.STARTED) {
+						String stepName = stepExecution.getStepName();
+						long current = -1;
+						long max = 1;
+						Object persistentUserData = stepExecution
+								.getPersistentUserData();
+						if (persistentUserData != null) {
+							if (StepInformation.class
+									.isAssignableFrom(persistentUserData
+											.getClass())) {
+								StepInformation stepInformation = (StepInformation) persistentUserData;
+								stepName = stepInformation.getName();
+							}
+							if (StepProgress.class
+									.isAssignableFrom(persistentUserData
+											.getClass())) {
+								StepProgress stepInformation = (StepProgress) persistentUserData;
+								current = stepInformation.getCurrentItem();
+								max = stepInformation.getTotalItems();
+							}
+						}
+						states.addProcessState(new ProcessState(jobExecution
+								.getJobName(), jobExecution.getBatchStatus()
+								.name(), stepName, current, max));
+					}
+				}
+			}
+		} catch (NoSuchJobException e) {
+			logger.debug("Job 'ProjectAnalysis' does not exist. Maybe, it is not loaded, yet.");
+		}
+		return states;
 	}
 
 	@Override

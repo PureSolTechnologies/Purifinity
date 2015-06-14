@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job id="ProjectAnalysis" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	version="1.0">
+
+	<properties>
+		<property name="project_id" value="#{jobParameters['project_id']}" />
+	</properties>
+
+	<step id="AnalysisStart" next="ProjectFilesStorage">
+		<batchlet ref="CreateAnalysisRunBatchlet" />
+		<end on="ALREADY QUEUED" />
+	</step>
+
+	<step id="ProjectFilesStorage" next="FileTreeCreation">
+		<chunk checkpoint-policy="item" item-count="10">
+			<reader ref="FileStorageItemReader" />
+			<processor ref="FileStorageItemProcessor" />
+			<writer ref="FileStorageItemWriter" />
+		</chunk>
+	</step>
+	
+	<step id="FileTreeCreation">
+		<batchlet ref="FileTreeCreationBatchlet" />
+	</step>
+
+</job>

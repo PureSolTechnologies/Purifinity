@@ -26,7 +26,7 @@ public class AnalysisRestService implements AnalysisRestInterface {
 	@Override
 	public void triggerNewRun(String projectId) {
 		try {
-			analysisService.triggerNewRun(projectId);
+			analysisService.triggerRunJob(projectId);
 		} catch (JMSException e) {
 			throw new RuntimeException(
 					"Triggered analysis run finished with exception.", e);
@@ -34,8 +34,8 @@ public class AnalysisRestService implements AnalysisRestInterface {
 	}
 
 	@Override
-	public void abortCurrentRun(String projectId) {
-		analysisService.abortCurrentRun(projectId);
+	public void abortRun(String projectId, long jobId) {
+		analysisService.abortRun(jobId);
 	}
 
 	@Override

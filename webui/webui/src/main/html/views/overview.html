@@ -75,8 +75,8 @@
 									<div class="progress-bar progress-bar-striped"
 										role="progressbar" aria-valuenow="{{state.current}}"
 										aria-valuemin="0" aria-valuemax="{{state.max}}"
-										style="width: {{state.current/state.max* 100">
-										{{state.current / state.max * 100}}%</div>
+										style="width: {{state.current/state.max* 100}}%">
+										{{state.current / state.max * 100 | number: 1}}%</div>
 								</div> <br /> {{state.step}}
 							</td>
 							<td width="5%">
