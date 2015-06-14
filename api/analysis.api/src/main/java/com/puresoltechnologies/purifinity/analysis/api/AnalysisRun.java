@@ -13,6 +13,8 @@ import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
+import com.puresoltechnologies.trees.SearchVisitor;
+import com.puresoltechnologies.trees.TreeSearchCriterion;
 import com.puresoltechnologies.trees.TreeVisitor;
 import com.puresoltechnologies.trees.TreeWalker;
 import com.puresoltechnologies.trees.WalkingAction;
@@ -24,100 +26,123 @@ import com.puresoltechnologies.trees.WalkingAction;
  */
 public class AnalysisRun implements Serializable {
 
-    private static final long serialVersionUID = -3727921466916770165L;
+	private static final long serialVersionUID = -3727921466916770165L;
 
-    private final AnalysisRunInformation information;
-    private final AnalysisFileTree fileTree;
-    private final List<AnalysisInformation> successfulFiles = new ArrayList<>();
-    private final List<AnalysisInformation> failedFiles = new ArrayList<>();
-    private final Map<String, AnalysisInformation> internalPaths = new HashMap<>();
-    private final Map<HashId, AnalysisFileTree> hashIds = new HashMap<>();
+	private final AnalysisRunInformation information;
+	private final AnalysisFileTree fileTree;
+	private final List<AnalysisInformation> successfulFiles = new ArrayList<>();
+	private final List<AnalysisInformation> failedFiles = new ArrayList<>();
+	private final Map<String, AnalysisInformation> internalPaths = new HashMap<>();
+	private final Map<HashId, AnalysisFileTree> hashIds = new HashMap<>();
 
-    /**
-     * This constructor is used to create a new analysis run. All setup
-     * information is set and is immutable.
-     * 
-     * @param name
-     * @param runDirectory
-     * @param searchConfiguration
-     */
-    public AnalysisRun(String projectId, long runId, Date startTime,
-	    long duration, AnalysisFileTree fileTree,
-	    FileSearchConfiguration fileSearchConfiguration,
-	    Map<HashId, SourceCodeLocation> sourceCodeLocations) {
-	this(new AnalysisRunInformation(projectId, runId, startTime, duration,
-		"", fileSearchConfiguration), fileTree);
-    }
-
-    /**
-     * This constructor is used to create a new analysis run. All setup
-     * information is set and is immutable.
-     * 
-     * @param name
-     * @param runDirectory
-     * @param searchConfiguration
-     */
-    public AnalysisRun(
-	    @JsonProperty("information") AnalysisRunInformation information,
-	    @JsonProperty("fileTree") AnalysisFileTree fileTree) {
-	super();
-	this.information = information;
-	this.fileTree = fileTree;
-	populateFields();
-    }
-
-    private void populateFields() {
-	TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
-	    @Override
-	    public WalkingAction visit(AnalysisFileTree tree) {
-		hashIds.put(tree.getHashId(), tree);
-		if (tree.isFile()) {
-		    for (AnalysisInformation information : tree.getAnalyses()) {
-			if (information.isSuccessful()) {
-			    successfulFiles.add(information);
-			    internalPaths.put(
-				    tree.getPathFile(false).getPath(),
-				    information);
-			} else {
-			    failedFiles.add(information);
-			}
-		    }
-		}
-		return WalkingAction.PROCEED;
-	    }
-	};
-	if (fileTree != null) {
-	    TreeWalker.walk(visitor, fileTree);
+	/**
+	 * This constructor is used to create a new analysis run. All setup
+	 * information is set and is immutable.
+	 * 
+	 * @param name
+	 * @param runDirectory
+	 * @param searchConfiguration
+	 */
+	public AnalysisRun(String projectId, long runId, Date startTime,
+			long duration, AnalysisFileTree fileTree,
+			FileSearchConfiguration fileSearchConfiguration,
+			Map<HashId, SourceCodeLocation> sourceCodeLocations) {
+		this(new AnalysisRunInformation(projectId, runId, startTime, duration,
+				"", fileSearchConfiguration), fileTree);
 	}
-    }
 
-    public List<AnalysisInformation> getAnalyzedFiles() {
-	return successfulFiles;
-    }
+	/**
+	 * This constructor is used to create a new analysis run. All setup
+	 * information is set and is immutable.
+	 * 
+	 * @param name
+	 * @param runDirectory
+	 * @param searchConfiguration
+	 */
+	public AnalysisRun(
+			@JsonProperty("information") AnalysisRunInformation information,
+			@JsonProperty("fileTree") AnalysisFileTree fileTree) {
+		super();
+		this.information = information;
+		this.fileTree = fileTree;
+		populateFields();
+	}
 
-    public AnalysisFileTree getFileTree() {
-	return fileTree;
-    }
+	private void populateFields() {
+		TreeVisitor<AnalysisFileTree> visitor = new TreeVisitor<AnalysisFileTree>() {
+			@Override
+			public WalkingAction visit(AnalysisFileTree tree) {
+				hashIds.put(tree.getHashId(), tree);
+				if (tree.isFile()) {
+					for (AnalysisInformation information : tree.getAnalyses()) {
+						if (information.isSuccessful()) {
+							successfulFiles.add(information);
+							internalPaths.put(
+									tree.getPathFile(false).getPath(),
+									information);
+						} else {
+							failedFiles.add(information);
+						}
+					}
+				}
+				return WalkingAction.PROCEED;
+			}
+		};
+		if (fileTree != null) {
+			TreeWalker.walk(visitor, fileTree);
+		}
 
-    public List<AnalysisInformation> getFailedFiles() {
-	return failedFiles;
-    }
+	}
 
-    public AnalysisInformation findAnalyzedCode(String internalPath) {
-	return internalPaths.get(internalPath);
-    }
+	public List<AnalysisInformation> getAnalyzedFiles() {
+		return successfulFiles;
+	}
 
-    public AnalysisRunInformation getInformation() {
-	return information;
-    }
+	public AnalysisFileTree getFileTree() {
+		return fileTree;
+	}
 
-    public AnalysisFileTree findTreeNode(HashId hashId) {
-	return hashIds.get(hashId);
-    }
+	public List<AnalysisInformation> getFailedFiles() {
+		return failedFiles;
+	}
 
-    @Override
-    public String toString() {
-	return getInformation().getStartTime().toString() + " ("
-		+ getInformation().getRunId() + ")";
-    }
+	public AnalysisInformation findAnalyzedCode(String internalPath) {
+		return internalPaths.get(internalPath);
+	}
+
+	public AnalysisRunInformation getInformation() {
+		return information;
+	}
+
+	/**
+	 * XXX using hashIds here is not possible due to bugs... It is no
+	 * understood, why at the moment.
+	 * 
+	 * @param hashId
+	 * @return
+	 */
+	public AnalysisFileTree findTreeNode(HashId hashId) {
+		SearchVisitor<AnalysisFileTree> searchVisitor = new SearchVisitor<AnalysisFileTree>(
+				new TreeSearchCriterion<AnalysisFileTree>() {
+					@Override
+					public boolean accepted(AnalysisFileTree node) {
+						if (node.getHashId().equals(hashId)) {
+							return true;
+						}
+						return false;
+					}
+				});
+		TreeWalker.walk(searchVisitor, fileTree);
+		List<AnalysisFileTree> searchResult = searchVisitor.getSearchResult();
+		if (searchResult.isEmpty()) {
+			return null;
+		}
+		return searchResult.get(0);
+	}
+
+	@Override
+	public String toString() {
+		return getInformation().getStartTime().toString() + " ("
+				+ getInformation().getRunId() + ")";
+	}
 }

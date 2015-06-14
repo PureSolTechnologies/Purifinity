@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
@@ -52,6 +54,7 @@ public class ProjectEvaluationQueueMDBean implements MessageListener {
 	private EvaluatorServiceManager evaluatorPluginService;
 
 	@Override
+	@TransactionAttribute(TransactionAttributeType.NEVER)
 	public void onMessage(Message message) {
 		try {
 			MapMessage mapMessage = (MapMessage) message;
@@ -72,6 +75,7 @@ public class ProjectEvaluationQueueMDBean implements MessageListener {
 					.readAnalysisFileTree(
 							analysisRunInformation.getProjectId(),
 							analysisRunInformation.getRunId());
+
 			AnalysisRun analysisRun = new AnalysisRun(analysisRunInformation,
 					analysisFileTree);
 			evaluate(analysisRun);

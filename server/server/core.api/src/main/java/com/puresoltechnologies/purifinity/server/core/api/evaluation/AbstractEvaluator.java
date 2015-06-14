@@ -164,15 +164,16 @@ public abstract class AbstractEvaluator implements Evaluator {
 			boolean enableReevaluation) throws InterruptedException,
 			EvaluationStoreException {
 		// process files and directories
-		processTree(analysisRun, analysisRun.getFileTree(), enableReevaluation);
+		processTree(analysisRun, enableReevaluation);
 		// process project as whole
 		processProject(analysisRun, enableReevaluation);
 	}
 
-	private void processTree(AnalysisRun analysisRun, AnalysisFileTree tree,
-			boolean enableReevaluation) throws InterruptedException {
+	private void processTree(AnalysisRun analysisRun, boolean enableReevaluation)
+			throws InterruptedException {
 		try {
-			processNode(analysisRun, tree, enableReevaluation);
+			processNode(analysisRun, analysisRun.getFileTree(),
+					enableReevaluation);
 		} catch (FileStoreException | DirectoryStoreException
 				| ArrayStoreException | EvaluationStoreException e) {
 			logger.error("Evaluation result could not be stored.", e);
@@ -214,31 +215,32 @@ public abstract class AbstractEvaluator implements Evaluator {
 			throws FileStoreException, InterruptedException,
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 		HashId hashId = fileNode.getHashId();
-		if (fileStore.wasAnalyzed(hashId)) {
-			List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyses(hashId);
-			for (CodeAnalysis fileAnalysis : fileAnalyses) {
-				if ((!hasFileResults(hashId)) || (enableReevaluation)) {
-					AnalysisInformation analysisInformation = fileAnalysis
-							.getAnalysisInformation();
-					if (analysisInformation.isSuccessful()) {
-						FileMetrics fileResults = processFile(analysisRun,
-								fileAnalysis);
-						if (fileResults != null) {
-							GenericFileMetrics metrics = new GenericFileMetrics(
-									getInformation().getId(), getInformation()
-											.getVersion(), hashId,
-									fileResults.getSourceCodeLocation(),
-									new Date(), fileResults.getParameters(),
-									fileResults.getCodeRangeMetrics());
-							storeFileResults(analysisRun, fileAnalysis, metrics);
-						}
-					}
-				} else {
-					FileMetrics fileResults = readFileResults(hashId);
+		if (!fileStore.wasAnalyzed(hashId)) {
+			return;
+		}
+		List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyses(hashId);
+		for (CodeAnalysis fileAnalysis : fileAnalyses) {
+			if ((!hasFileResults(hashId)) || (enableReevaluation)) {
+				AnalysisInformation analysisInformation = fileAnalysis
+						.getAnalysisInformation();
+				if (analysisInformation.isSuccessful()) {
+					FileMetrics fileResults = processFile(analysisRun,
+							fileAnalysis);
 					if (fileResults != null) {
-						storeMetricsInBigTable(analysisRun, fileAnalysis,
-								fileResults);
+						GenericFileMetrics metrics = new GenericFileMetrics(
+								getInformation().getId(), getInformation()
+										.getVersion(), hashId,
+								fileResults.getSourceCodeLocation(),
+								new Date(), fileResults.getParameters(),
+								fileResults.getCodeRangeMetrics());
+						storeFileResults(analysisRun, fileAnalysis, metrics);
 					}
+				}
+			} else {
+				FileMetrics fileResults = readFileResults(hashId);
+				if (fileResults != null) {
+					storeMetricsInBigTable(analysisRun, fileAnalysis,
+							fileResults);
 				}
 			}
 		}

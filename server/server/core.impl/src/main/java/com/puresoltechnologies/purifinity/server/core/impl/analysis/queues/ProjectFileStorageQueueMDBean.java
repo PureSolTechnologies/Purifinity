@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
@@ -76,6 +78,7 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 	private AnalysisProcessStateTracker analysisProcessStateTracker;
 
 	@Override
+	@TransactionAttribute(TransactionAttributeType.NEVER)
 	public void onMessage(Message message) {
 		try {
 			MapMessage mapMessage = (MapMessage) message;
@@ -96,7 +99,7 @@ public class ProjectFileStorageQueueMDBean implements MessageListener {
 					analysisProject.getSettings(), analysisRunInformation);
 			analysisProcessStateTracker.changeProcessProgress(
 					analysisRunInformation.getProjectId(),
-					"Creating file tree in database.", 0, 1);
+					"Creating file tree in database.", 1, 2);
 			AnalysisRunFileTree fileTree = analysisStoreService
 					.createAndStoreFileAndContentTree(analysisRunInformation
 							.getProjectId(), analysisRunInformation.getRunId(),

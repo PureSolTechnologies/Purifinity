@@ -66,8 +66,9 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 		AnalysisInformation analysisInformation = analysis
 				.getAnalysisInformation();
 		HashId hashId = analysisInformation.getHashId();
-		SourceCodeLocation sourceCodeLocation = analysisRun
-				.findTreeNode(hashId).getSourceCodeLocation();
+		AnalysisFileTree analysisFileNode = analysisRun
+				.findTreeNode(hashId);
+		SourceCodeLocation sourceCodeLocation = analysisFileNode.getSourceCodeLocation();
 		McCabeMetricFileResults results = new McCabeMetricFileResults(
 				McCabeMetric.ID, McCabeMetric.PLUGIN_VERSION, hashId,
 				sourceCodeLocation, new Date());

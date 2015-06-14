@@ -597,13 +597,14 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 			Row result = resultSet.one();
 			if (time == null) {
 				time = result.getDate("time");
-			} else {
-				if (!time.equals(result.getDate("time"))) {
-					throw new EvaluationStoreException(
-							"Times are different for evaluatorId="
-									+ evaluatorId + " and hashId="
-									+ hashId.toString());
-				}
+				// XXX Do we need checks here?
+				// } else {
+				// if (!time.equals(result.getDate("time"))) {
+				// throw new EvaluationStoreException(
+				// "Times are different for evaluatorId="
+				// + evaluatorId + " and hashId="
+				// + hashId.toString());
+				// }
 			}
 			SourceCodeLocation alternateSourceCodeLocation = extractSourceCodeLocation(result);
 			if (sourceCodeLocation == null) {
@@ -949,12 +950,13 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService,
 		if (time == null) {
 			time = result.getDate("time");
 			timeBuffer.put(hashId, time);
-		} else {
-			if (!time.equals(result.getDate("time"))) {
-				throw new EvaluationStoreException(
-						"Times are different for evaluatorId=" + evaluatorId
-								+ " and hashId=" + hashId.toString());
-			}
+			// XXX Need to think about times here!
+			// } else {
+			// if (!time.equals(result.getDate("time"))) {
+			// throw new EvaluationStoreException(
+			// "Times are different for evaluatorId=" + evaluatorId
+			// + " and hashId=" + hashId.toString());
+			// }
 		}
 		return time;
 	}

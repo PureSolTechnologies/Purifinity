@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
@@ -70,6 +72,7 @@ public class ProjectAnalysisQueueMDBean implements MessageListener {
 	private JMSMessageSender messageSender;
 
 	@Override
+	@TransactionAttribute(TransactionAttributeType.NEVER)
 	public void onMessage(Message message) {
 		try {
 			MapMessage mapMessage = (MapMessage) message;

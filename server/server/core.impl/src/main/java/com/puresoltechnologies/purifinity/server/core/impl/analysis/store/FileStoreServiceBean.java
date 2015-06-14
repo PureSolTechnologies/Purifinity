@@ -108,28 +108,30 @@ public class FileStoreServiceBean implements FileStoreService,
 				HashId hashId = new HashId(
 						HashUtilities.getDefaultMessageDigestAlgorithm(),
 						hashString);
-				try (FileInputStream fileInputStream = new FileInputStream(
-						tempFile)) {
-					try (ByteArrayOutputStream buffer = new ByteArrayOutputStream(
-							(int) tempFile.length())) {
-						IOUtils.copy(fileInputStream, buffer);
+				if (!isAvailable(hashId)) {
+					try (FileInputStream fileInputStream = new FileInputStream(
+							tempFile)) {
+						try (ByteArrayOutputStream buffer = new ByteArrayOutputStream(
+								(int) tempFile.length())) {
+							IOUtils.copy(fileInputStream, buffer);
 
-						PreparedStatement preparedStatement = cassandraPreparedStatements
-								.getPreparedStatement(
-										session,
-										"INSERT INTO "
-												+ CassandraElementNames.ANALYSIS_FILES_TABLE
-												+ " (time, hashid, raw, size) VALUES (?, ?, ?, ?)");
-						byte[] array = buffer.toByteArray();
-						ByteBuffer byteBuffer = ByteBuffer.wrap(array);
-						BoundStatement boundStatement = preparedStatement.bind(
-								new Date(), hashId.toString());
-						boundStatement.setBytes("raw", byteBuffer);
-						boundStatement.setInt("size", buffer.size());
-						session.execute(boundStatement);
-						return hashId;
+							PreparedStatement preparedStatement = cassandraPreparedStatements
+									.getPreparedStatement(
+											session,
+											"INSERT INTO "
+													+ CassandraElementNames.ANALYSIS_FILES_TABLE
+													+ " (time, hashid, raw, size) VALUES (?, ?, ?, ?)");
+							byte[] array = buffer.toByteArray();
+							ByteBuffer byteBuffer = ByteBuffer.wrap(array);
+							BoundStatement boundStatement = preparedStatement
+									.bind(new Date(), hashId.toString());
+							boundStatement.setBytes("raw", byteBuffer);
+							boundStatement.setInt("size", buffer.size());
+							session.execute(boundStatement);
+						}
 					}
 				}
+				return hashId;
 			} finally {
 				if (!tempFile.delete()) {
 					logger.warn("Could not delete temporary file '" + tempFile
