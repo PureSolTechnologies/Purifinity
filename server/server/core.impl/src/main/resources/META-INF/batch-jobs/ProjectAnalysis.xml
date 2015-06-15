@@ -23,12 +23,19 @@
 		<batchlet ref="FileTreeCreationBatchlet" />
 	</step>
 
-	<step id="FileAnalysis">
+	<step id="FileAnalysis" next="ProjectEvaluation">
 		<chunk checkpoint-policy="item" item-count="10">
 			<reader ref="AnalysisItemReader" />
 			<processor ref="AnalysisItemProcess" />
 			<writer ref="AnalysisItemWriter" />
 		</chunk>
+	</step>
+
+	<step id="ProjectEvaluation">
+		<!-- chunk checkpoint-policy="item" item-count="10"> <reader ref="EvaluationItemReader" 
+			/> <processor ref="EvaluationItemProcessor" /> <writer ref="EvaluationItemWriter" 
+			/> </chunk -->
+		<batchlet ref="EvaluationBatchlet" />
 	</step>
 
 </job>

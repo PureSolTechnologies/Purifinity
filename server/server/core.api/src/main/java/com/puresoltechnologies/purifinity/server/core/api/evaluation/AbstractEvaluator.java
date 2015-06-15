@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,6 +162,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 			EvaluationStoreException;
 
 	@Override
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public final void evaluate(AnalysisRun analysisRun,
 			boolean enableReevaluation) throws InterruptedException,
 			EvaluationStoreException {
