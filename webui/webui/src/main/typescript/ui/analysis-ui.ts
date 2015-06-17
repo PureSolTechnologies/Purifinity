@@ -1,6 +1,6 @@
 var analysisUIModule: angular.IModule = angular.module("analysisUIModule", ["projectManagerModule"]);
 
-analysisUIModule.controller("analysisBrowserCtrl", function($scope, $routeParams, $filter, projectManager) {
+analysisUIModule.controller("analysisBrowserCtrl", ["$scope", "$routeParams", "$filter", "projectManager", function($scope, $routeParams, $filter, projectManager) {
     $scope.project = undefined;
     $scope.lastRun = undefined;
     $scope.run = undefined;
@@ -36,7 +36,7 @@ analysisUIModule.controller("analysisBrowserCtrl", function($scope, $routeParams
             });
     }, function(data, status, error) {
         });
-});
+}]);
 
 
 function convertAnalysisFileTree(fileTree: any, parent: TreeTableTree, $filter): TreeTableTree {
@@ -79,7 +79,7 @@ function convertAnalysisFileTree(fileTree: any, parent: TreeTableTree, $filter):
     return treeTableData;
 }
 
-analysisUIModule.controller("runListCtrl",
+analysisUIModule.controller("runListCtrl", ["$scope", "$routeParams", "projectManager",
     function($scope, $routeParams, projectManager) {
         $scope.project = undefined;
         $scope.runs = undefined;
@@ -97,4 +97,4 @@ analysisUIModule.controller("runListCtrl",
             function(data, status, error) {
             }
             );
-    });
+    }]);

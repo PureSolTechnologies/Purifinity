@@ -8,10 +8,10 @@ import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
 
 import com.puresoltechnologies.commons.domain.JSONSerializer;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.jobs.PurifinityProcessStates;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.jobs.PurifinityJobStates;
 
-public class PurifinityProcessStatesDecoder implements
-		Decoder.TextStream<PurifinityProcessStates> {
+public class PurifinityJobStatesDecoder implements
+		Decoder.TextStream<PurifinityJobStates> {
 
 	@Override
 	public void init(EndpointConfig config) {
@@ -22,9 +22,9 @@ public class PurifinityProcessStatesDecoder implements
 	}
 
 	@Override
-	public PurifinityProcessStates decode(Reader reader)
+	public PurifinityJobStates decode(Reader reader)
 			throws DecodeException, IOException {
 		return JSONSerializer.fromJSONString(reader,
-				PurifinityProcessStates.class);
+				PurifinityJobStates.class);
 	}
 }

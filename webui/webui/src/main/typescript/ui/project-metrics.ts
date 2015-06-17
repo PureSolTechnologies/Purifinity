@@ -1,10 +1,8 @@
 var projectMetricsModule: angular.IModule = angular.module("projectMetricsModule", [
     "projectManagerModule", "pluginManagerModule", "purifinityServerModule", "purifinityUI"
 ]);
-projectMetricsModule.controller("fileSystemMetrics", fileSystemMetrics);
-projectMetricsModule.controller("treeMapCtrl", treeMapCtrl);
 
-function fileSystemMetrics($scope, $routeParams, $filter, projectManager, purifinityServerConnector) {
+projectMetricsModule.controller("fileSystemMetrics", ["$scope", "$routeParams", "$filter", "projectManager", "purifinityServerConnector", function($scope, $routeParams, $filter, projectManager, purifinityServerConnector) {
     $scope.selectedEvaluator = undefined;
     $scope.selection = {
         codeRangeType: undefined,
@@ -134,7 +132,7 @@ function fileSystemMetrics($scope, $routeParams, $filter, projectManager, purifi
     $scope.showClick = function(item) {
         alert(item);
     };
-}
+}]);
 
 function convertFileTreeForMetrics(fileTree: any, parent: TreeTableTree): TreeTableTree {
     var treeTableData: TreeTableTree = new TreeTableTree(parent);
@@ -211,32 +209,33 @@ function applyMetricsToFileTree(treeTableData, runMetrics, parameters, filter) {
     }
 }
 
-function treeMapCtrl($scope) {
-    // Treemap test!
-    $scope.mapData =
-    {
-        "name": "flare",
-        "children": [
-            {
-                "name": "analytics",
-                "children": [
-                    {
-                        "name": "cluster",
-                        "children": [
-                            { "name": "AgglomerativeCluster", "size": 3938 },
-                            { "name": "CommunityStructure", "size": 3812 },
-                            { "name": "MergeEdge", "size": 743 }
-                        ]
-                    },
-                    {
-                        "name": "graph",
-                        "children": [
-                            { "name": "BetweennessCentrality", "size": 3534 },
-                            { "name": "LinkDistance", "size": 5731 }
-                        ]
-                    }
-                ]
-            }
-        ]
-    };
-}
+projectMetricsModule.controller("treeMapCtrl", ["$scope",
+    function treeMapCtrl($scope) {
+        // Treemap test!
+        $scope.mapData =
+        {
+            "name": "flare",
+            "children": [
+                {
+                    "name": "analytics",
+                    "children": [
+                        {
+                            "name": "cluster",
+                            "children": [
+                                { "name": "AgglomerativeCluster", "size": 3938 },
+                                { "name": "CommunityStructure", "size": 3812 },
+                                { "name": "MergeEdge", "size": 743 }
+                            ]
+                        },
+                        {
+                            "name": "graph",
+                            "children": [
+                                { "name": "BetweennessCentrality", "size": 3534 },
+                                { "name": "LinkDistance", "size": 5731 }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+    }]);

@@ -13,7 +13,7 @@ configurationUIModule.directive("configurationComponent",
         };
     });
 
-configurationUIModule.controller("configurationComponentCtrl",
+configurationUIModule.controller("configurationComponentCtrl", ["$scope",
     function($scope) {
         $scope.path = [];
         $scope.path.push($scope.configurationTreeData.root);
@@ -47,7 +47,7 @@ configurationUIModule.controller("configurationComponentCtrl",
             $scope.path.push($scope.configurationTreeData.root);
             $scope.currentFolder = $scope.configurationTreeData.root;
         });
-    });
+    }]);
 
 configurationUIModule.directive("configurationParameter",
     function() {
@@ -61,7 +61,7 @@ configurationUIModule.directive("configurationParameter",
         };
     });
 
-configurationUIModule.controller("configurationParameterCtrl",
+configurationUIModule.controller("configurationParameterCtrl", ["$scope", "preferencesManager",
     function($scope, preferencesManager) {
         $scope.values = {};
         $scope.values.booleanInput = false;
@@ -239,4 +239,4 @@ configurationUIModule.controller("configurationParameterCtrl",
             return !$scope.isOverriding();
         };
         $scope.refresh();
-    });
+    }]);

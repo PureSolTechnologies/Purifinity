@@ -4,6 +4,7 @@
 
 	<properties>
 		<property name="project_id" value="#{jobParameters['project_id']}" />
+		<property name="project_name" value="#{jobParameters['project_name']}" />
 	</properties>
 
 	<step id="AnalysisStart" next="ProjectFilesStorage">
@@ -11,7 +12,7 @@
 		<end on="ALREADY QUEUED" />
 	</step>
 
-	<step id="ProjectFilesStorage" next="FileTreeCreation">
+	<step id="ProjectFilesStorage" next="AnalysisSplit">
 		<chunk checkpoint-policy="item" item-count="10">
 			<reader ref="FileStorageItemReader" />
 			<processor ref="FileStorageItemProcessor" />
@@ -19,17 +20,22 @@
 		</chunk>
 	</step>
 
-	<step id="FileTreeCreation" next="FileAnalysis">
-		<batchlet ref="FileTreeCreationBatchlet" />
-	</step>
-
-	<step id="FileAnalysis" next="ProjectEvaluation">
-		<chunk checkpoint-policy="item" item-count="10">
-			<reader ref="AnalysisItemReader" />
-			<processor ref="AnalysisItemProcess" />
-			<writer ref="AnalysisItemWriter" />
-		</chunk>
-	</step>
+	<split id="AnalysisSplit" next="ProjectEvaluation">
+		<flow id="FileTreeCreationFlow">
+			<step id="FileTreeCreation">
+				<batchlet ref="FileTreeCreationBatchlet" />
+			</step>
+		</flow>
+		<flow id="FileAnalysisFlow">
+			<step id="FileAnalysis">
+				<chunk checkpoint-policy="item" item-count="10">
+					<reader ref="AnalysisItemReader" />
+					<processor ref="AnalysisItemProcess" />
+					<writer ref="AnalysisItemWriter" />
+				</chunk>
+			</step>
+		</flow>
+	</split>
 
 	<step id="ProjectEvaluation">
 		<!-- chunk checkpoint-policy="item" item-count="10"> <reader ref="EvaluationItemReader" 

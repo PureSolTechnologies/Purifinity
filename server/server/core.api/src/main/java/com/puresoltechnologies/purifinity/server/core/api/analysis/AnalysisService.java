@@ -3,10 +3,9 @@ package com.puresoltechnologies.purifinity.server.core.api.analysis;
 import java.util.Collection;
 import java.util.List;
 
-import javax.jms.JMSException;
-
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.jobs.PurifinityProcessStates;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.jobs.PurifinityJobStates;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 
 /**
@@ -17,11 +16,11 @@ import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerService
  */
 public interface AnalysisService {
 
-	public void triggerRunJob(String projectId) throws JMSException;
+	public void triggerRunJob(String projectId) throws AnalysisStoreException;
 
 	public void abortRun(long jobId);
 
-	public PurifinityProcessStates getProgresses();
+	public PurifinityJobStates getJobStates();
 
 	public Collection<AnalyzerServiceInformation> getAnalyzers();
 

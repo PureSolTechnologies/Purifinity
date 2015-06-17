@@ -45,34 +45,35 @@
 	"configurationUIModule", //	
 	"alerter" //
 	]);
-	adminApp.config(function($routeProvider, $locationProvider) {
-		$locationProvider.html5Mode(false);
-		$routeProvider.when("/login", {
-			templateUrl : "views/login.html"
-		});
-		$routeProvider.when("/dashboards", {
-			templateUrl : "views/admin/dashboards.html"
-		});
-		$routeProvider.when("/projects", {
-			templateUrl : "views/admin/projects.html"
-		});
-		$routeProvider.when("/projects/create", {
-			templateUrl : "views/admin/create_project.html"
-		});
-		$routeProvider.when("/project/:projectId", {
-			templateUrl : "views/admin/edit_project.html"
-		});
-		$routeProvider.when("/settings", {
-			templateUrl : "views/admin/settings.html"
-		});
-		$routeProvider.when("/users", {
-			templateUrl : "views/admin/users.html",
-			controller : "usersViewCtrl"
-		});
-		$routeProvider.otherwise({
-			redirectTo : "/dashboards"
-		});
-	});
+	adminApp.config([ "$routeProvider", "$locationProvider",
+			function($routeProvider, $locationProvider) {
+				$locationProvider.html5Mode(false);
+				$routeProvider.when("/login", {
+					templateUrl : "views/login.html"
+				});
+				$routeProvider.when("/dashboards", {
+					templateUrl : "views/admin/dashboards.html"
+				});
+				$routeProvider.when("/projects", {
+					templateUrl : "views/admin/projects.html"
+				});
+				$routeProvider.when("/projects/create", {
+					templateUrl : "views/admin/create_project.html"
+				});
+				$routeProvider.when("/project/:projectId", {
+					templateUrl : "views/admin/edit_project.html"
+				});
+				$routeProvider.when("/settings", {
+					templateUrl : "views/admin/settings.html"
+				});
+				$routeProvider.when("/users", {
+					templateUrl : "views/admin/users.html",
+					controller : "usersViewCtrl"
+				});
+				$routeProvider.otherwise({
+					redirectTo : "/dashboards"
+				});
+			} ]);
 </script>
 </head>
 <body>

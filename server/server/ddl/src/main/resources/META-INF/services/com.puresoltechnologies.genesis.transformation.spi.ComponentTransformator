@@ -3,5 +3,4 @@ com.puresoltechnologies.purifinity.server.ddl.AnalysisServiceDatabaseTransformat
 com.puresoltechnologies.purifinity.server.ddl.EvaluationServiceDatabaseTransformator
 com.puresoltechnologies.purifinity.server.ddl.PluginsDatabaseTransformator
 com.puresoltechnologies.purifinity.server.ddl.PreferencesStoreDatabaseTransformator
-com.puresoltechnologies.purifinity.server.ddl.ProcessStatesDatabaseTransformator
 com.puresoltechnologies.purifinity.server.ddl.TitanDatabaseTransformator

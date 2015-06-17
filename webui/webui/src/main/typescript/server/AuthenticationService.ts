@@ -7,8 +7,7 @@ class AuthenticationService {
 
     constructor(private $location: angular.ILocationService,
         private httpRequests: HTTPRequests,
-        private baseURL: string,
-        private purifinityServerConnector: PurifinityServerConnector) {
+        private baseURL: string) {
         this.authData = this.loadAuthData();
         this.redirect = "/";
         this.loginURL = "/purifinityserver/rest/auth/login";
@@ -22,7 +21,7 @@ class AuthenticationService {
             email: email,
             password: password
         };
-        var authService : AuthenticationService = this;
+        var authService: AuthenticationService = this;
         this.httpRequests.POST(this.loginURL, data, "", "",
             function(data, status) {
                 authService.authData = data;
@@ -52,7 +51,7 @@ class AuthenticationService {
             authId: authData.authId,
             token: authData.authToken
         };
-        var authService : AuthenticationService = this;
+        var authService: AuthenticationService = this;
         this.httpRequests.POST(this.logoutURL, data, "", "",
             function(data, status) {
                 authData = undefined;

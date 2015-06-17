@@ -8,10 +8,10 @@ import javax.websocket.Encoder;
 import javax.websocket.EndpointConfig;
 
 import com.puresoltechnologies.commons.domain.JSONSerializer;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.jobs.PurifinityProcessStates;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.jobs.PurifinityJobStates;
 
-public class PurifinityProcessStatesEncoder implements
-		Encoder.TextStream<PurifinityProcessStates> {
+public class PurifinityJobStatesEncoder implements
+		Encoder.TextStream<PurifinityJobStates> {
 
 	@Override
 	public void init(EndpointConfig config) {
@@ -22,7 +22,7 @@ public class PurifinityProcessStatesEncoder implements
 	}
 
 	@Override
-	public void encode(PurifinityProcessStates object, Writer writer)
+	public void encode(PurifinityJobStates object, Writer writer)
 			throws EncodeException, IOException {
 		String jsonString = JSONSerializer.toJSONString(object);
 		writer.write(jsonString);

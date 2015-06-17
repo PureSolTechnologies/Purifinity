@@ -11,7 +11,7 @@ treeTableModule.directive("treeTable", function() {
     };
 });
 
-treeTableModule.controller("treeTableCtrl", function($scope) {
+treeTableModule.controller("treeTableCtrl", ["$scope", function($scope) {
     $scope.path = [];
     $scope.path.push($scope.treeTableData.root);
     $scope.currentFolder = $scope.treeTableData.root;
@@ -44,4 +44,4 @@ treeTableModule.controller("treeTableCtrl", function($scope) {
         $scope.path.push($scope.treeTableData.root);
         $scope.currentFolder = $scope.treeTableData.root;
     });
-});
+}]);

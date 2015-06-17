@@ -8,27 +8,8 @@
  * @angularApplication is the AngularJS application which is to be enhanced.
  */
 var purifinityUI: angular.IModule = angular.module("purifinityUI", ["ngSanitize"]);
-purifinityUI.controller("menuCtrl", menuCtrl);
-purifinityUI.filter("defaultDate", defaultDateFilter);
-purifinityUI.filter("metricValue", metricValueFilter);
-purifinityUI.filter("version", versionFilter);
-purifinityUI.filter("successfulMark", successfulMarkFilter);
-purifinityUI.filter("fsSize", fsSizeFilter);
 
-/**
- * This is a menu controller to have a chance to mark items as active in a
- * Bootstrap navigation bar.
- * 
- * @param $scope
- *            is injected
- * @param $route
- *            is injected
- * @param $routeParams
- *            is injected
- * @param $location
- *            is injected
- */
-function menuCtrl($scope, $route, $routeParams, $location) {
+purifinityUI.controller("menuCtrl", ["$scope", "$route", "$routeParams", "$location", function($scope, $route, $routeParams, $location) {
     $scope.$route = $route;
     $scope.$location = $location;
     $scope.$routeParams = $routeParams;
@@ -41,15 +22,15 @@ function menuCtrl($scope, $route, $routeParams, $location) {
         }
         return "";
     };
-}
+}]);
 
-function defaultDateFilter($filter) {
+purifinityUI.filter("defaultDate", ["$filter", function($filter) {
     return function(value) {
         return $filter("date")(value, "yyyy-MM-dd HH:mm:ss");
     };
-}
+}]);
 
-function metricValueFilter($filter) {
+purifinityUI.filter("metricValue", ["$filter", function($filter) {
     return function(value) {
         if (value === parseInt(value, 10)) {
             return value;
@@ -57,9 +38,9 @@ function metricValueFilter($filter) {
             return $filter("number")(value, 2);
         }
     };
-}
+}]);
 
-function versionFilter() {
+purifinityUI.filter("version", function() {
     return function(version) {
         if ((typeof version.major === "number") && (typeof version.minor === "number") && (typeof version.patch === "number")) {
             var versionString = version.major + "." + version.minor + "." + version.patch;
@@ -73,9 +54,9 @@ function versionFilter() {
         }
         return version;
     };
-}
+});
 
-function successfulMarkFilter($sce) {
+purifinityUI.filter("successfulMark", ["$sce", function($sce) {
     return function(successful) {
         var mark = "<div style='position:relative;'>" +
             "<img src='/images/icons/FatCow_Icons16x16/source_code.png' />";
@@ -87,16 +68,16 @@ function successfulMarkFilter($sce) {
         mark += "</div>";
         return $sce.trustAsHtml(mark);
     };
-}
+}]);
 
-function fsSizeFilter($filter) {
-    return function(size: number) : string {
+purifinityUI.filter("fsSize", ["$filter", function($filter) {
+    return function(size: number): string {
         var magnitude = 0;
         var result = size;
         while ((result > 1024) && (magnitude < 4)) {
             result /= 1024;
             magnitude++;
-        }        
+        }
         switch (magnitude) {
             case 1:
                 return String($filter("number")(result, 2)) + "kB";
@@ -110,4 +91,5 @@ function fsSizeFilter($filter) {
                 return String(size) + " B";
         }
     }
-}
+}]);
+

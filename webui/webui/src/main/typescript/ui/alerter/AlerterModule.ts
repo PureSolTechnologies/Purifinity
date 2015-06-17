@@ -8,13 +8,13 @@ var alerterModule: angular.IModule = angular.module("alerter", []);
  * The clearAlerts directive provides a 'clear-alerts' directive for alerters
  * ng-repeat to be used to clear all alerts to not be shown again.
  */
-alerterModule.directive("clearAlerts", function(alerterFactory) {
+alerterModule.directive("clearAlerts", ["alerterFactory", function(alerterFactory) {
     return function(scope, element, attrs) {
         if (scope.$last) {
             alerterFactory.clear();
         }
     };
-});
+}]);
 
 /*
  * The alerterFactory is the singleton instance which saves the alerts to be
@@ -35,7 +35,7 @@ alerterModule.directive("alerter", function() {
 /*
  * The alerterCtrl is the control for the alert messages to be shown in UI.
  */
-alerterModule.controller("alerterCtrl", function($scope, alerterFactory) {
+alerterModule.controller("alerterCtrl", ["$scope", "alerterFactory", function($scope, alerterFactory) {
     $scope.alerts = alerterFactory.alerts;
     /*
      * Type: info, danger, success, warning
@@ -54,5 +54,4 @@ alerterModule.controller("alerterCtrl", function($scope, alerterFactory) {
     $scope.hasAlerts = function() {
         return alerterFactory.hasAlerts();
     };
-});
-
+}]);

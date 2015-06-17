@@ -155,22 +155,43 @@
 			</dependency>
 			<!-- Plugins -->
 			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 				<artifactId>fortran2008.plugin</artifactId>
 				<version>${purifinity.version}</version>
 				<type>ear</type>
 				<scope>runtime</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 				<artifactId>java7.plugin</artifactId>
 				<version>${purifinity.version}</version>
 				<type>ear</type>
 				<scope>runtime</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 				<artifactId>metrics.plugin</artifactId>
+				<version>${purifinity.version}</version>
+				<type>ear</type>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>repository.directory.plugin</artifactId>
+				<version>${purifinity.version}</version>
+				<type>ear</type>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>repository.git.plugin</artifactId>
+				<version>${purifinity.version}</version>
+				<type>ear</type>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>repository.subversion.plugin</artifactId>
 				<version>${purifinity.version}</version>
 				<type>ear</type>
 				<scope>runtime</scope>

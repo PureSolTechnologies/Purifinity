@@ -19,9 +19,9 @@ purifinityServerModule.factory("purifinityServerConnector", ["authService", "htt
         return new PurifinityServerConnector(authService, httpRequests, baseURL);
     }]);
 
-purifinityServerModule.factory("authService", ["$location", "httpRequests",
-    function($location, httpRequests, baseURL, purifinityServerConnector) {
-        return new AuthenticationService($location, httpRequests, baseURL, purifinityServerConnector);
+purifinityServerModule.factory("authService", ["$location", "httpRequests", "baseURL", 
+    function($location, httpRequests, baseURL) {
+        return new AuthenticationService($location, httpRequests, baseURL);
     }]);
 
 purifinityServerModule.factory("httpRequests", ["$http", "$location", "alerterFactory",
@@ -32,7 +32,7 @@ purifinityServerModule.factory("httpRequests", ["$http", "$location", "alerterFa
 /**
  * This function is the controller for the login box and logout box.
  */
-purifinityServerModule.controller("loginCtrl",
+purifinityServerModule.controller("loginCtrl", ["$scope", "authService",
     function($scope, authService) {
         $scope.message = authService.message;
         $scope.authId = undefined;
@@ -54,9 +54,9 @@ purifinityServerModule.controller("loginCtrl",
         $scope.isLoggedIn = function() {
             return authService.isLoggedIn();
         };
-    });
+    }]);
 
-purifinityServerModule.controller("serverStatusCtrl",
+purifinityServerModule.controller("serverStatusCtrl", ["$scope",
     function($scope) {
         $scope.connection = "Not Connected.";
         $scope.error = undefined;
@@ -140,36 +140,37 @@ purifinityServerModule.controller("serverStatusCtrl",
             }
             return $scope.status.averageLoad / $scope.status.availableCPUs;
         };
-    });
+    }]);
 
-purifinityServerModule.controller("processStatesCtrl", function($scope, purifinityServerConnector) {
-    $scope.connection = "Not Connected.";
-    $scope.error = undefined;
-    if (!$scope.websocket) {
-        var server = PurifinityConfiguration.server;
-        $scope.websocket = new WebSocket("ws://" + server.host + ":" + server.port + "/purifinityserver/socket/processes");
-        $scope.websocket.onopen = function(event) {
-            $scope.connection = "Connected.";
-            $scope.$apply();
-            $scope.websocket.send("sendProcessStates");
+purifinityServerModule.controller("jobStatesCtrl", ["$scope", "purifinityServerConnector",
+    function($scope, purifinityServerConnector) {
+        $scope.connection = "Not Connected.";
+        $scope.error = undefined;
+        if (!$scope.websocket) {
+            var server = PurifinityConfiguration.server;
+            $scope.websocket = new WebSocket("ws://" + server.host + ":" + server.port + "/purifinityserver/socket/jobs");
+            $scope.websocket.onopen = function(event) {
+                $scope.connection = "Connected.";
+                $scope.$apply();
+                $scope.websocket.send("sendJobStates");
+            }
+            $scope.websocket.onclose = function(event) {
+                $scope.connection = "Connection closed.";
+                $scope.$apply();
+            }
+            $scope.websocket.onmessage = function(event) {
+                $scope.jobs = JSON.parse(event.data);
+                $scope.$apply();
+            }
+            $scope.websocket.onerror = function(event) {
+                $scope.error = event;
+                $scope.$apply();
+            }
         }
-        $scope.websocket.onclose = function(event) {
-            $scope.connection = "Connection closed.";
-            $scope.$apply();
-        }
-        $scope.websocket.onmessage = function(event) {
-            $scope.processes = JSON.parse(event.data);
-            $scope.$apply();
-        }
-        $scope.websocket.onerror = function(event) {
-            $scope.error = event;
-            $scope.$apply();
-        }
-    }
-    $scope.abortRun = function(projectId) {
-        purifinityServerConnector.put("/purifinityserver/rest/analysis/projects/" + projectId + "/abort", "",
-            function(data, status) { },
-            function(data, status, error) { }
-            );
-    };
-});
+        $scope.abortRun = function(projectId, jobId) {
+            purifinityServerConnector.put("/purifinityserver/rest/analysis/projects/" + projectId + "/abort/" + jobId, "",
+                function(data, status) { },
+                function(data, status, error) { }
+                );
+        };
+    }]);

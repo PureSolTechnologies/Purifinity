@@ -42,30 +42,31 @@
 	"projectManagerModule", //
 	"alerter" //
 	]);
-	purifinityApp.config(function($routeProvider, $locationProvider) {
-		$locationProvider.html5Mode(false);
-		$routeProvider.when("/login", {
-			templateUrl : "views/login.html"
-		});
-		$routeProvider.when("/account", {
-			templateUrl : "views/account.html"
-		});
-		$routeProvider.when("/dashboards", {
-			templateUrl : "views/dashboards.html"
-		});
-		$routeProvider.when("/information", {
-			templateUrl : "views/information.html"
-		});
-		$routeProvider.when("/help", {
-			templateUrl : "views/help.html"
-		});
-		$routeProvider.when("/license", {
-			templateUrl : "license.html"
-		});
-		$routeProvider.otherwise({
-			templateUrl : "views/overview.html"
-		});
-	});
+	purifinityApp.config([ "$routeProvider", "$locationProvider",
+			function($routeProvider, $locationProvider) {
+				$locationProvider.html5Mode(false);
+				$routeProvider.when("/login", {
+					templateUrl : "views/login.html"
+				});
+				$routeProvider.when("/account", {
+					templateUrl : "views/account.html"
+				});
+				$routeProvider.when("/dashboards", {
+					templateUrl : "views/dashboards.html"
+				});
+				$routeProvider.when("/information", {
+					templateUrl : "views/information.html"
+				});
+				$routeProvider.when("/help", {
+					templateUrl : "views/help.html"
+				});
+				$routeProvider.when("/license", {
+					templateUrl : "license.html"
+				});
+				$routeProvider.otherwise({
+					templateUrl : "views/overview.html"
+				});
+			} ]);
 </script>
 </head>
 <body>

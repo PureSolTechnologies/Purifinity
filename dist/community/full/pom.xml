@@ -14,7 +14,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 			<artifactId>fortran2008.plugin</artifactId>
 			<type>ear</type>
 		</dependency>
@@ -23,13 +23,28 @@
 			<artifactId>global.ddl</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 			<artifactId>java7.plugin</artifactId>
 			<type>ear</type>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 			<artifactId>metrics.plugin</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+			<artifactId>repository.directory.plugin</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+			<artifactId>repository.git.plugin</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+			<artifactId>repository.subversion.plugin</artifactId>
 			<type>ear</type>
 		</dependency>
 		<dependency>

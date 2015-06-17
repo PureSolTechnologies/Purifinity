@@ -48,59 +48,60 @@
 	"alerter", //
 	"d3Module" //
 	]);
-	projectApp.config(function($routeProvider, $locationProvider) {
-		$locationProvider.html5Mode(false);
-		$routeProvider.when("/summary/:projectId", {
-			templateUrl : "views/project/summary.html"
-		});
-		$routeProvider.when("/analysis/:projectId", {
-			templateUrl : "views/project/analysis.html"
-		});
-		$routeProvider.when("/defects/:projectId", {
-			templateUrl : "views/project/defects.html"
-		});
-		$routeProvider.when("/style_issues/:projectId", {
-			templateUrl : "views/project/style_issues.html"
-		});
-		$routeProvider.when("/metrics/:projectId", {
-			templateUrl : "views/project/metrics.html"
-		});
-		$routeProvider.when("/trends/:projectId", {
-			templateUrl : "views/project/trends.html"
-		});
-		$routeProvider.when("/summary/:projectId", {
-			templateUrl : "views/project/summary.html"
-		});
-		$routeProvider.when("/analysis/:projectId", {
-			templateUrl : "views/project/analysis.html"
-		});
-		$routeProvider.when("/defects/:projectId", {
-			templateUrl : "views/project/defects.html"
-		});
-		$routeProvider.when("/style_issues/:projectId", {
-			templateUrl : "views/project/style_issues.html"
-		});
-		$routeProvider.when("/metrics/:projectId", {
-			templateUrl : "views/project/metrics.html"
-		});
-		$routeProvider.when("/design/:projectId", {
-			templateUrl : "views/project/design.html"
-		});
-		$routeProvider.when("/architecture/:projectId", {
-			templateUrl : "views/project/architecture.html"
-		});
-		$routeProvider.when("/trends/:projectId", {
-			templateUrl : "views/project/trends.html"
-		});
-		$routeProvider.when("/runs/:projectId", {
-			templateUrl : "views/project/runs.html"
-		});
-		$routeProvider.otherwise({
-			redirectTo : function() {
-				window.location = "/";
-			}
-		});
-	});
+	projectApp.config([ "$routeProvider", "$locationProvider",
+			function($routeProvider, $locationProvider) {
+				$locationProvider.html5Mode(false);
+				$routeProvider.when("/summary/:projectId", {
+					templateUrl : "views/project/summary.html"
+				});
+				$routeProvider.when("/analysis/:projectId", {
+					templateUrl : "views/project/analysis.html"
+				});
+				$routeProvider.when("/defects/:projectId", {
+					templateUrl : "views/project/defects.html"
+				});
+				$routeProvider.when("/style_issues/:projectId", {
+					templateUrl : "views/project/style_issues.html"
+				});
+				$routeProvider.when("/metrics/:projectId", {
+					templateUrl : "views/project/metrics.html"
+				});
+				$routeProvider.when("/trends/:projectId", {
+					templateUrl : "views/project/trends.html"
+				});
+				$routeProvider.when("/summary/:projectId", {
+					templateUrl : "views/project/summary.html"
+				});
+				$routeProvider.when("/analysis/:projectId", {
+					templateUrl : "views/project/analysis.html"
+				});
+				$routeProvider.when("/defects/:projectId", {
+					templateUrl : "views/project/defects.html"
+				});
+				$routeProvider.when("/style_issues/:projectId", {
+					templateUrl : "views/project/style_issues.html"
+				});
+				$routeProvider.when("/metrics/:projectId", {
+					templateUrl : "views/project/metrics.html"
+				});
+				$routeProvider.when("/design/:projectId", {
+					templateUrl : "views/project/design.html"
+				});
+				$routeProvider.when("/architecture/:projectId", {
+					templateUrl : "views/project/architecture.html"
+				});
+				$routeProvider.when("/trends/:projectId", {
+					templateUrl : "views/project/trends.html"
+				});
+				$routeProvider.when("/runs/:projectId", {
+					templateUrl : "views/project/runs.html"
+				});
+				$routeProvider.otherwise({
+					redirectTo : function() {
+						window.location = "/";
+					}
+				});
+			} ]);
 </script>
 </head>
 <body>

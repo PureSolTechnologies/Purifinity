@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.jms.JMSException;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.rest.api.AnalysisRestInterface;
 
@@ -27,7 +27,7 @@ public class AnalysisRestService implements AnalysisRestInterface {
 	public void triggerNewRun(String projectId) {
 		try {
 			analysisService.triggerRunJob(projectId);
-		} catch (JMSException e) {
+		} catch (AnalysisStoreException e) {
 			throw new RuntimeException(
 					"Triggered analysis run finished with exception.", e);
 		}

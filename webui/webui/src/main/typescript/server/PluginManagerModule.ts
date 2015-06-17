@@ -4,12 +4,12 @@
  */
 var pluginManagerModule: angular.IModule = angular.module("pluginManagerModule", ["purifinityServerModule"]);
 
-pluginManagerModule.factory('pluginManager', [
-    'purifinityServerConnector', function(purifinityServerConnector) {
+pluginManagerModule.factory("pluginManager", ["purifinityServerConnector",
+    function(purifinityServerConnector) {
         return new PluginManager(purifinityServerConnector);
     }]);
 
-pluginManagerModule.controller("pluginActivationCtrl",
+pluginManagerModule.controller("pluginActivationCtrl", ["$scope", "pluginManager",
     function($scope, pluginManager) {
         $scope.analyzers = {};
         $scope.evaluators = {};
@@ -100,4 +100,4 @@ pluginManagerModule.controller("pluginActivationCtrl",
                     );
             }
         }
-    });
+    }]);
