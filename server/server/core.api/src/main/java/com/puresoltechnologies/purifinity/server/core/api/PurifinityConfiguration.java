@@ -2,8 +2,6 @@ package com.puresoltechnologies.purifinity.server.core.api;
 
 import java.util.List;
 
-import javax.inject.Singleton;
-
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 
@@ -13,7 +11,6 @@ import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
  * 
  * @author Rick-Rainer Ludwig
  */
-@Singleton
 public interface PurifinityConfiguration {
 
 	public static final ConfigurationParameter<Boolean> ANONYMOUS_CAN_READ = new ConfigurationParameter<>(

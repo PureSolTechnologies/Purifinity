@@ -16,6 +16,8 @@ import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -86,6 +88,7 @@ public class FileStoreServiceBean implements FileStoreService,
 	}
 
 	@Override
+	@Lock(LockType.WRITE)
 	public HashId storeRawFile(InputStream rawStream) throws FileStoreException {
 		try (DigestInputStream digestInputStream = new DigestInputStream(
 				rawStream, AnalysisStoreServiceBean.DEFAULT_HASH)) {
@@ -144,6 +147,7 @@ public class FileStoreServiceBean implements FileStoreService,
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public InputStream readRawFile(HashId hashId) throws FileStoreException {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "SELECT raw FROM "
@@ -168,6 +172,7 @@ public class FileStoreServiceBean implements FileStoreService,
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public List<CodeAnalysis> loadAnalyses(HashId hashId)
 			throws FileStoreException {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
@@ -220,6 +225,7 @@ public class FileStoreServiceBean implements FileStoreService,
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public final void storeAnalysis(CodeAnalysis fileAnalysis)
 			throws FileStoreException {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
@@ -257,6 +263,7 @@ public class FileStoreServiceBean implements FileStoreService,
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public final boolean isAvailable(HashId hashId) {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "SELECT hashid FROM "
@@ -269,6 +276,7 @@ public class FileStoreServiceBean implements FileStoreService,
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public final SourceCode readSourceCode(HashId hashId)
 			throws FileStoreException {
 		try (InputStream inputStream = readRawFile(hashId)) {
@@ -281,6 +289,7 @@ public class FileStoreServiceBean implements FileStoreService,
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public final boolean wasAnalyzed(HashId hashId) {
 		PreparedStatement preparedStatement = cassandraPreparedStatements
 				.getPreparedStatement(session, "SELECT analysis FROM "

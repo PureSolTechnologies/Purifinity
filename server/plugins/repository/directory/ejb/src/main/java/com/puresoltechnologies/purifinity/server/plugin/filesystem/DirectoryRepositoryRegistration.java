@@ -2,6 +2,8 @@ package com.puresoltechnologies.purifinity.server.plugin.filesystem;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
@@ -37,11 +39,13 @@ public class DirectoryRepositoryRegistration extends
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public String getName() {
 		return DirectoryRepository.NAME;
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public RepositoryServiceInformation getServiceInformation() {
 		return DirectoryRepository.INFORMATION;
 	}

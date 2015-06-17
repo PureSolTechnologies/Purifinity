@@ -66,6 +66,7 @@ public class EvaluatorServiceManagerImpl extends
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public Evaluator createProxy(String jndi) {
 		Evaluator evaluator = JndiUtils.createRemoteEJBInstance(
 				Evaluator.class, jndi);
@@ -84,6 +85,7 @@ public class EvaluatorServiceManagerImpl extends
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public Evaluator createInstanceById(String evaluatorId) {
 		for (EvaluatorServiceInformation evaluator : getServices()) {
 			if (evaluator.getId().equals(evaluatorId)) {
@@ -94,6 +96,7 @@ public class EvaluatorServiceManagerImpl extends
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public EvaluatorServiceInformation getEvaluatorPluginInformation(
 			String evaluatorId) {
 		for (EvaluatorServiceInformation evaluator : getServices()) {
@@ -105,6 +108,7 @@ public class EvaluatorServiceManagerImpl extends
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public List<EvaluatorServiceInformation> getServicesSortedByDependency() {
 		return sortEvaluators(getServices());
 	}
@@ -151,6 +155,7 @@ public class EvaluatorServiceManagerImpl extends
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public boolean isActive(String evaluatorId) {
 		Boolean active = analyzerActivations.get(evaluatorId);
 		if (active != null) {
@@ -162,12 +167,14 @@ public class EvaluatorServiceManagerImpl extends
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public void setActive(String evaluatorId, boolean active) {
 		preferencesStore.setServiceActive(evaluatorId, active);
 		analyzerActivations.put(evaluatorId, active);
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public Evaluator getInstanceById(String evaluatorId) {
 		for (EvaluatorServiceInformation evaluator : getServices()) {
 			if (evaluator.getId().equals(evaluatorId)) {

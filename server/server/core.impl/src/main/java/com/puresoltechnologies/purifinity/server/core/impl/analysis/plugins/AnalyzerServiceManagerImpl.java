@@ -36,7 +36,7 @@ public class AnalyzerServiceManagerImpl
 	}
 
 	@Override
-	@Lock(LockType.WRITE)
+	@Lock(LockType.READ)
 	public ProgrammingLanguageAnalyzer createProxy(String jndi) {
 		ProgrammingLanguageAnalyzer analyzer = JndiUtils
 				.createRemoteEJBInstance(ProgrammingLanguageAnalyzer.class,
@@ -57,6 +57,7 @@ public class AnalyzerServiceManagerImpl
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public AnalyzerServiceInformation findByName(String languageName,
 			String languageVersion) {
 		for (AnalyzerServiceInformation analyzerServiceInformation : getServices()) {
@@ -82,13 +83,14 @@ public class AnalyzerServiceManagerImpl
 	}
 
 	@Override
-	@Lock(LockType.WRITE)
+	@Lock(LockType.READ)
 	public void setActive(String analyzerId, boolean active) {
 		preferencesStore.setServiceActive(analyzerId, active);
 		analyzerActivations.put(analyzerId, active);
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public ProgrammingLanguageAnalyzer getInstanceById(String analyzerId) {
 		for (AnalyzerServiceInformation analyzer : getServices()) {
 			if (analyzer.getId().equals(analyzerId)) {

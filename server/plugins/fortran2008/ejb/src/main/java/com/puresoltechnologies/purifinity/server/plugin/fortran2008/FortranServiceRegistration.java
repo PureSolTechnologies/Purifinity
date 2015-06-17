@@ -2,6 +2,8 @@ package com.puresoltechnologies.purifinity.server.plugin.fortran2008;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
@@ -29,6 +31,7 @@ public class FortranServiceRegistration extends
 			"/fortran2008.ui/project.jsf", "/fortran2008.ui/run.jsf");
 
 	@PostConstruct
+	@Lock(LockType.WRITE)
 	public void registration() {
 		register(AnalyzerServiceManagerRemote.class,
 				AnalyzerServiceManagerRemote.JNDI_NAME,
@@ -36,17 +39,20 @@ public class FortranServiceRegistration extends
 	}
 
 	@PreDestroy
+	@Lock(LockType.WRITE)
 	public void unregistration() {
 		unregister(AnalyzerServiceManagerRemote.class,
 				AnalyzerServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public String getName() {
 		return Fortran.NAME;
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public AnalyzerServiceInformation getServiceInformation() {
 		return INFORMATION;
 	}

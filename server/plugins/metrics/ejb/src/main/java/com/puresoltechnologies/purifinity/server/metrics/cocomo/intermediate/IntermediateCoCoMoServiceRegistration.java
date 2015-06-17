@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate;
 
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
@@ -30,23 +32,27 @@ public class IntermediateCoCoMoServiceRegistration extends
 			IntermediateCoCoMoEvaluatorParameter.ALL,
 			IntermediateCoCoMoEvaluator.DEPENDENCIES);
 
+	@Lock(LockType.WRITE)
 	public void registration() {
 		register(EvaluatorServiceManagerRemote.class,
 				EvaluatorServiceManagerRemote.JNDI_NAME,
 				MetricsPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
 	}
 
+	@Lock(LockType.WRITE)
 	public void unregistration() {
 		unregister(EvaluatorServiceManagerRemote.class,
 				EvaluatorServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public String getName() {
 		return IntermediateCoCoMoEvaluator.NAME;
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public EvaluatorServiceInformation getServiceInformation() {
 		return INFORMATION;
 	}

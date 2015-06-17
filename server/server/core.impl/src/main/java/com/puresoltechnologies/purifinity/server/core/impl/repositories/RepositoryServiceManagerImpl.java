@@ -37,7 +37,7 @@ public class RepositoryServiceManagerImpl extends
 	}
 
 	@Override
-	@Lock(LockType.WRITE)
+	@Lock(LockType.READ)
 	public Repository createProxy(String jndi) {
 		Repository repository = JndiUtils.createRemoteEJBInstance(
 				Repository.class, jndi);
@@ -66,6 +66,7 @@ public class RepositoryServiceManagerImpl extends
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public Repository getInstanceById(String analyzerId) {
 		for (RepositoryServiceInformation repository : getServices()) {
 			if (repository.getId().equals(analyzerId)) {
@@ -76,6 +77,7 @@ public class RepositoryServiceManagerImpl extends
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public RepositoryLocation createFromSerialization(
 			Properties repositoryLocation) {
 		String repositoryId = repositoryLocation

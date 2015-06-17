@@ -2,6 +2,8 @@ package com.puresoltechnologies.purifinity.server.plugin.git;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
@@ -32,11 +34,13 @@ public class GITRepositoryRegistration extends
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public String getName() {
 		return GITRepository.NAME;
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public RepositoryServiceInformation getServiceInformation() {
 		return GITRepository.INFORMATION;
 	}

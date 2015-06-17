@@ -3,6 +3,8 @@ package com.puresoltechnologies.purifinity.server.database.cassandra.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.inject.Singleton;
 
 import com.datastax.driver.core.PreparedStatement;
@@ -20,6 +22,7 @@ public class CassandraPreparedStatements {
 
 	private final Map<Session, Map<String, PreparedStatement>> preparedStatements = new HashMap<>();
 
+	@Lock(LockType.WRITE)
 	public PreparedStatement getPreparedStatement(Session session,
 			String statement) {
 		if (session == null) {
@@ -40,8 +43,8 @@ public class CassandraPreparedStatements {
 		return preparedStatement;
 	}
 
-	private synchronized PreparedStatement prepareStatement(Session session,
-			String statement) {
+	@Lock(LockType.WRITE)
+	public PreparedStatement prepareStatement(Session session, String statement) {
 		Map<String, PreparedStatement> sessionStatements = preparedStatements
 				.get(session);
 		if (sessionStatements == null) {

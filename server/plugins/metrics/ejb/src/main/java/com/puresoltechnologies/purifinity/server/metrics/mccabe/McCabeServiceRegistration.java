@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.server.metrics.mccabe;
 
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
@@ -27,23 +29,27 @@ public class McCabeServiceRegistration extends
 			McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS,
 			McCabeMetricEvaluatorParameter.ALL, McCabeMetric.DEPENDENCIES);
 
+	@Lock(LockType.WRITE)
 	public void registration() {
 		register(EvaluatorServiceManagerRemote.class,
 				EvaluatorServiceManagerRemote.JNDI_NAME,
 				MetricsPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
 	}
 
+	@Lock(LockType.WRITE)
 	public void unregistration() {
 		unregister(EvaluatorServiceManagerRemote.class,
 				EvaluatorServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public String getName() {
 		return McCabeMetric.NAME;
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public EvaluatorServiceInformation getServiceInformation() {
 		return INFORMATION;
 	}

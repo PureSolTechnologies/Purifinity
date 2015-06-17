@@ -118,10 +118,14 @@ module.exports = function(grunt) {
 							removeCommentsFromCDATA : true,
 							removeCDATASectionsFromCDATA : true,
 							collapseWhitespace : true,
-							removeRedundantAttributes : true,
 							caseSensitive : true,
 							minifyJS : true,
-							minifyCSS : true
+							/*
+							 * Do not use removeRedundantAttributes and
+							 * minifyCSS! AngularJS/Bootstrap might break!
+							 */
+							removeRedundantAttributes : false,
+							minifyCSS : false
 						}
 					}
 				},
@@ -129,8 +133,9 @@ module.exports = function(grunt) {
 					options : {
 						configuration : grunt.file.readJSON("tslint.json")
 					},
-					all: {
-						src : [  "src/main/typescript/**/*.ts", "!src/main/typescript/lib/**/*.ts" ]
+					all : {
+						src : [ "src/main/typescript/**/*.ts",
+								"!src/main/typescript/lib/**/*.ts" ]
 					},
 				},
 				watch : {

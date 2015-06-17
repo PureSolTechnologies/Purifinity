@@ -2,6 +2,8 @@ package com.puresoltechnologies.purifinity.server.plugin.java7;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
@@ -28,6 +30,7 @@ public class JavaServiceRegistration extends
 			"/java7.ui/run.jsf");
 
 	@PostConstruct
+	@Lock(LockType.WRITE)
 	public void registraion() {
 		register(AnalyzerServiceManagerRemote.class,
 				AnalyzerServiceManagerRemote.JNDI_NAME, JavaPlugin.INFORMATION,
@@ -35,17 +38,20 @@ public class JavaServiceRegistration extends
 	}
 
 	@PreDestroy
+	@Lock(LockType.WRITE)
 	public void unregistration() {
 		unregister(AnalyzerServiceManagerRemote.class,
 				AnalyzerServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public String getName() {
 		return Java.NAME;
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public AnalyzerServiceInformation getServiceInformation() {
 		return INFORMATION;
 	}

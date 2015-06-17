@@ -2,6 +2,8 @@ package com.puresoltechnologies.purifinity.server.plugin.c11;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.Lock;
+import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
@@ -26,6 +28,7 @@ public class CServiceRegistration extends AbstractAnalyzerServiceRegistration {
 			"/c11.ui/index.jsf", "/c11.ui/project.jsf", "/c11.ui/run.jsf");
 
 	@PostConstruct
+	@Lock(LockType.WRITE)
 	public void registration() {
 		register(AnalyzerServiceManagerRemote.class,
 				AnalyzerServiceManagerRemote.JNDI_NAME, C11Plugin.INFORMATION,
@@ -33,17 +36,20 @@ public class CServiceRegistration extends AbstractAnalyzerServiceRegistration {
 	}
 
 	@PreDestroy
+	@Lock(LockType.WRITE)
 	public void unregistration() {
 		unregister(AnalyzerServiceManagerRemote.class,
 				AnalyzerServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public String getName() {
 		return C11.NAME;
 	}
 
 	@Override
+	@Lock(LockType.READ)
 	public AnalyzerServiceInformation getServiceInformation() {
 		return INFORMATION;
 	}

@@ -1,10 +1,10 @@
 package com.puresoltechnologies.purifinity.server.common.plugins;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -25,8 +25,8 @@ public abstract class AbstractServiceManager<ServiceInfo extends ServiceInformat
 	@Inject
 	private EventLoggerRemote eventLogger;
 
-	private final Map<String, ServiceInfo> services = new ConcurrentHashMap<>();
-	private final Map<String, PluginInformation> plugins = new ConcurrentHashMap<>();
+	private final Map<String, ServiceInfo> services = new HashMap<>();
+	private final Map<String, PluginInformation> plugins = new HashMap<>();
 
 	private final String serviceManagerName;
 

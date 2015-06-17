@@ -2,11 +2,8 @@ package com.puresoltechnologies.purifinity.server.core.api;
 
 import java.util.List;
 
-import javax.inject.Singleton;
-
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 
-@Singleton
 public interface UserConfiguration {
 
 	/**
