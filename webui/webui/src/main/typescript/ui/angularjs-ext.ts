@@ -98,7 +98,10 @@ purifinityUI.filter("fsSize", ["$filter", function($filter) {
  */
 purifinityUI.filter("duration", function() {
     return function(duration: number): string {
-        var result : string = String(duration % 1000) + "ms";
+        if (duration < 0) {
+            return "not finished/aborted";
+        }
+        var result: string = String(duration % 1000) + "ms";
         duration = Math.floor(duration / 1000);
         if (duration <= 0) {
             return result;
@@ -114,5 +117,11 @@ purifinityUI.filter("duration", function() {
             return result;
         }
         return String(duration) + "hr " + result;
+    }
+});
+
+purifinityUI.filter("hashId", function() {
+    return function(hashId: HashId): string {
+        return hashId.algorithmName + ":" + hashId.hash;
     }
 });

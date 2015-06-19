@@ -54,6 +54,56 @@
 			</tr>
 		</tbody>
 	</table>
-	</tab> <tab heading="Failed Files"></tab> <tab heading="Analyzed Files"></tab>
-	</tabset>
+	</tab> <tab heading="Failed Files">
+	<p>{{run.failedFiles.length}} files failed during analysis:</p>
+	<table class="table table-striped table-hover table-bordered">
+		<thead>
+			<tr>
+				<th>Time</th>
+				<th>Duration</th>
+				<th>HashId</th>
+				<th>Error Message</th>
+				<th>Language</th>
+				<th>Analyzer Version</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat="failedFile in run.failedFiles">
+				<td>{{failedFile.startTime | defaultDate}}</td>
+				<td>{{failedFile.duration | duration}}</td>
+				<td><a
+					href="http://localhost:8080/file.html#/summary/{{failedFile.hashId.algorithmName}}:{{failedFile.hashId.hash}}">
+						{{failedFile.hashId | hashId}} </a></td>
+				<td>{{failedFile.analyzerErrorMessage}}</td>
+				<td>{{failedFile.languageName}} {{failedFile.languageVersion}}</td>
+				<td>{{failedFile.analyzerVersion | version}}</td>
+			</tr>
+		</tbody>
+	</table>
+	</tab> <tab heading="Analyzed Files">
+	<p>{{run.analyzedFiles.length}} files were analyzed:</p>
+	<table class="table table-striped table-hover table-bordered">
+		<thead>
+			<tr>
+				<th>Time</th>
+				<th>Duration</th>
+				<th>HashId</th>
+				<th>Language</th>
+				<th>Analyzer Version</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-ng-repeat="analyzedFile in run.analyzedFiles">
+				<td>{{analyzedFile.startTime | defaultDate}}</td>
+				<td>{{analyzedFile.duration | duration}}</td>
+				<td><a
+					href="http://localhost:8080/file.html#/summary/{{analyzedFile.hashId.algorithmName}}:{{analyzedFile.hashId.hash}}">
+						{{analyzedFile.hashId | hashId}} </a></td>
+				<td>{{analyzedFile.languageName}}
+					{{analyzedFile.languageVersion}}</td>
+				<td>{{analyzedFile.analyzerVersion | version}}</td>
+			</tr>
+		</tbody>
+	</table>
+	</tab> </tabset>
 </div>

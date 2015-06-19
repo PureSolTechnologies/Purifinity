@@ -41,6 +41,10 @@ preferencesManagerModule.controller("pluginSettingsCtrl", ["$scope", "preference
         pluginManager.getAnalyzers(
             function(data, status) {
                 $scope.analyzers = data;
+                $scope.analyzers.sort(
+                    function(left, right) {
+                        return Utilities.strcmp(left.name, right.name);
+                    });
                 for (var i = 0; i < data.length; i++) {
                     var plugin = data[i];
                     var analyzerNode: ConfigurationComponentTree = new ConfigurationComponentTree(analyzersNode, plugin.name);
@@ -53,6 +57,10 @@ preferencesManagerModule.controller("pluginSettingsCtrl", ["$scope", "preference
         pluginManager.getEvaluators(
             function(data, status) {
                 $scope.evaluators = data;
+                $scope.evaluators.sort(
+                    function(left, right) {
+                        return Utilities.strcmp(left.name, right.name);
+                    });
                 for (var i = 0; i < data.length; i++) {
                     var plugin = data[i];
                     var evaluatorNode: ConfigurationComponentTree = new ConfigurationComponentTree(evaluatorsNode, plugin.name);
@@ -65,6 +73,10 @@ preferencesManagerModule.controller("pluginSettingsCtrl", ["$scope", "preference
         pluginManager.getRepositoryTypes(
             function(data, status) {
                 $scope.repositories = data;
+                $scope.repositories.sort(
+                    function(left, right) {
+                        return Utilities.strcmp(left.name, right.name);
+                    });
                 for (var i = 0; i < data.length; i++) {
                     var plugin = data[i];
                     var repositoryNode: ConfigurationComponentTree = new ConfigurationComponentTree(repositoriesNode, plugin.name);

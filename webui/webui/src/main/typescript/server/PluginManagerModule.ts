@@ -19,6 +19,10 @@ pluginManagerModule.controller("pluginActivationCtrl", ["$scope", "pluginManager
         pluginManager.getAnalyzers(
             function(data, status) {
                 $scope.analyzers = data;
+                $scope.analyzers.sort(
+                    function(left, right) {
+                        return Utilities.strcmp(left.name, right.name);
+                    });
                 $scope.analyzers.forEach(function(analyzer) {
                     pluginManager.isAnalyzerEnabled(analyzer.id,
                         function(data, status) {
@@ -33,6 +37,10 @@ pluginManagerModule.controller("pluginActivationCtrl", ["$scope", "pluginManager
         pluginManager.getEvaluators(
             function(data, status) {
                 $scope.evaluators = data;
+                $scope.evaluators.sort(
+                    function(left, right) {
+                        return Utilities.strcmp(left.name, right.name);
+                    });
                 $scope.evaluators.forEach(function(evaluator) {
                     pluginManager.isEvaluatorEnabled(evaluator.id,
                         function(data, status) {
