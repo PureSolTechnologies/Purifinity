@@ -7,6 +7,8 @@ import javax.batch.runtime.context.JobContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
+
 @Named("FileStorageItemWriter")
 public class FileStorageItemWriter extends AbstractItemWriter {
 
@@ -20,10 +22,10 @@ public class FileStorageItemWriter extends AbstractItemWriter {
 
 		for (Object item : items) {
 			StoredFile storedFile = (StoredFile) item;
-			if (storedFile.getHashId() != null) {
+			FileInformation fileInformation = storedFile.getFileInformation();
+			if (fileInformation != null) {
 				analysisJobContext.addStoredFile(
-						storedFile.getSourceCodeLocation(),
-						storedFile.getHashId());
+						storedFile.getSourceCodeLocation(), fileInformation);
 			}
 		}
 	}

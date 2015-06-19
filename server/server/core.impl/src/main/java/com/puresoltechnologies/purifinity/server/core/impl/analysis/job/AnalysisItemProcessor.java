@@ -17,13 +17,14 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.job.PersistentStepUserData;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.thinkaurelius.groovyshadedasm.tree.analysis.AnalyzerException;
 
-@Named("AnalysisItemProcess")
-public class AnalysisItemProcess implements ItemProcessor {
+@Named("AnalysisItemProcessor")
+public class AnalysisItemProcessor implements ItemProcessor {
 
 	@Inject
 	private Logger logger;
@@ -40,7 +41,8 @@ public class AnalysisItemProcess implements ItemProcessor {
 	@Override
 	public Object processItem(Object item) throws Exception {
 		StoredFile storedFile = (StoredFile) item;
-		if (!fileStore.wasAnalyzed(storedFile.getHashId())) {
+		FileInformation fileInformation = storedFile.getFileInformation();
+		if (!fileStore.wasAnalyzed(fileInformation.getHashId())) {
 			createNewAnalysis(storedFile);
 		}
 		PersistentStepUserData persistentUserData = (PersistentStepUserData) stepContext
@@ -61,7 +63,10 @@ public class AnalysisItemProcess implements ItemProcessor {
 	 */
 	private void createNewAnalysis(StoredFile storedFile) throws IOException,
 			FileStoreException {
-		HashId hashId = storedFile.getHashId();
+		FileInformation fileInformation = storedFile.getFileInformation();
+		if (fileInformation.getSize() <= 0) {
+			return;
+		}
 		SourceCodeLocation sourceCodeLocation = storedFile
 				.getSourceCodeLocation();
 		for (AnalyzerServiceInformation analyzerInformation : analyzerServiceManager
@@ -77,6 +82,7 @@ public class AnalysisItemProcess implements ItemProcessor {
 							+ "'.");
 					try (InputStream sourceStream = sourceCodeLocation
 							.openStream()) {
+						HashId hashId = fileInformation.getHashId();
 						CodeAnalysis codeAnalysis = instance
 								.analyze(SourceCode.read(sourceStream,
 										sourceCodeLocation), hashId);

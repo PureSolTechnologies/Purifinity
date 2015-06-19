@@ -4,18 +4,20 @@ import java.util.Map;
 
 import javax.batch.api.Batchlet;
 import javax.batch.runtime.context.JobContext;
+import javax.batch.runtime.context.StepContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
 
-import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
+import com.puresoltechnologies.purifinity.server.common.job.PersistentStepUserData;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
 
 @Named("FileTreeCreationBatchlet")
 public class FileTreeCreationBatchlet implements Batchlet {
@@ -29,9 +31,18 @@ public class FileTreeCreationBatchlet implements Batchlet {
 	@Inject
 	private JobContext jobContext;
 
+	@Inject
+	private StepContext stepContext;
+
 	@Override
 	public String process() throws Exception {
 		logger.info("Create and store analysis run file tree...");
+
+		PersistentStepUserData persistentUserData = new PersistentStepUserData(
+				"Create and Store File Tree",
+				"For the project the complete file tree is generated and stored in database.",
+				2);
+		stepContext.setPersistentUserData(persistentUserData);
 
 		AnalysisJobContext analysisJobContext = (AnalysisJobContext) jobContext
 				.getTransientUserData();
@@ -41,9 +52,9 @@ public class FileTreeCreationBatchlet implements Batchlet {
 				.getAnalysisRunInformation();
 
 		AnalysisProjectSettings projectSettings = analysisProject.getSettings();
-		Map<SourceCodeLocation, HashId> storedSources = analysisJobContext
+		Map<SourceCodeLocation, FileInformation> storedSources = analysisJobContext
 				.getStoredFiles();
-
+		persistentUserData.increaseCurrentItem(1);
 		AnalysisRunFileTree analysisRunFileTree = analysisStoreService
 				.createAndStoreFileAndContentTree(
 						analysisRunInformation.getProjectId(),

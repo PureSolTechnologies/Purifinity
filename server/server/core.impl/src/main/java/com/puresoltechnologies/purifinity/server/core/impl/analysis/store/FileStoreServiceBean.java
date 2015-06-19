@@ -38,6 +38,7 @@ import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.server.core.api.PurifinityConfiguration;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreServiceRemote;
@@ -89,7 +90,8 @@ public class FileStoreServiceBean implements FileStoreService,
 
 	@Override
 	@Lock(LockType.WRITE)
-	public HashId storeRawFile(InputStream rawStream) throws FileStoreException {
+	public FileInformation storeRawFile(InputStream rawStream)
+			throws FileStoreException {
 		try (DigestInputStream digestInputStream = new DigestInputStream(
 				rawStream, AnalysisStoreServiceBean.DEFAULT_HASH)) {
 			File tempFile = File.createTempFile("sourceRawFile", ".tmp");
@@ -111,6 +113,7 @@ public class FileStoreServiceBean implements FileStoreService,
 				HashId hashId = new HashId(
 						HashUtilities.getDefaultMessageDigestAlgorithm(),
 						hashString);
+				int size = -1;
 				if (!isAvailable(hashId)) {
 					try (FileInputStream fileInputStream = new FileInputStream(
 							tempFile)) {
@@ -129,12 +132,13 @@ public class FileStoreServiceBean implements FileStoreService,
 							BoundStatement boundStatement = preparedStatement
 									.bind(new Date(), hashId.toString());
 							boundStatement.setBytes("raw", byteBuffer);
-							boundStatement.setInt("size", buffer.size());
+							size = buffer.size();
+							boundStatement.setInt("size", size);
 							session.execute(boundStatement);
 						}
 					}
 				}
-				return hashId;
+				return new FileInformation(hashId, size);
 			} finally {
 				if (!tempFile.delete()) {
 					logger.warn("Could not delete temporary file '" + tempFile

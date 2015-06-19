@@ -39,6 +39,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeRootVertex;
@@ -382,6 +383,34 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 
 	@Override
+	public void updateAnalysisRunInformation(String projectId, long runId,
+			long duration) throws AnalysisStoreException {
+		XOTransaction currentTransaction = xoManager.currentTransaction();
+		boolean active = currentTransaction.isActive();
+		if (!active) {
+			currentTransaction.begin();
+		}
+		try {
+			AnalysisRunVertex run = AnalysisStoreTitanUtils
+					.findAnalysisRunVertex(xoManager, runId);
+			if (run == null) {
+				return;
+			}
+			run.setDuration(duration);
+			if (!active) {
+				currentTransaction.commit();
+			}
+		} finally {
+			if (!active) {
+				if (currentTransaction.isActive()) {
+					currentTransaction.rollback();
+				}
+			}
+		}
+
+	}
+
+	@Override
 	public AnalysisRunInformation readAnalysisRunInformation(String projectId,
 			long runId) throws AnalysisStoreException {
 		XOTransaction currentTransaction = xoManager.currentTransaction();
@@ -557,7 +586,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	@Override
 	public AnalysisRunFileTree createAndStoreFileAndContentTree(
 			String projectId, long runId, String rootNodeName,
-			Map<SourceCodeLocation, HashId> storedSources)
+			Map<SourceCodeLocation, FileInformation> storedSources)
 			throws AnalysisStoreException {
 		XOTransaction currentTransaction = xoManager.currentTransaction();
 		boolean active = currentTransaction.isActive();
@@ -587,12 +616,15 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 
 	private AnalysisRunFileTree convertToAnalysisRunFileTree(
-			Map<SourceCodeLocation, HashId> storedSources, String rootNodeName) {
+			Map<SourceCodeLocation, FileInformation> storedSources,
+			String rootNodeName) {
 		AnalysisRunFileTree fileTree = new AnalysisRunFileTree(null,
 				rootNodeName, false, null);
-		for (Entry<SourceCodeLocation, HashId> entry : storedSources.entrySet()) {
+		for (Entry<SourceCodeLocation, FileInformation> entry : storedSources
+				.entrySet()) {
 			SourceCodeLocation sourceCodeLocation = entry.getKey();
-			HashId hashId = entry.getValue();
+			FileInformation fileInformation = entry.getValue();
+			HashId hashId = fileInformation.getHashId();
 			File internalPath = new File(
 					sourceCodeLocation.getInternalLocation());
 			AnalysisRunFileTree currentNode = fileTree;

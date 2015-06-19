@@ -1,7 +1,10 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis.job;
 
+import java.util.List;
+
 import javax.batch.api.Batchlet;
 import javax.batch.runtime.context.JobContext;
+import javax.batch.runtime.context.StepContext;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
@@ -16,6 +19,7 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
+import com.puresoltechnologies.purifinity.server.common.job.PersistentStepUserData;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStore;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
@@ -36,6 +40,11 @@ public class EvaluationBatchlet implements Batchlet {
 	@Inject
 	private JobContext jobContext;
 
+	@Inject
+	private StepContext stepContext;
+
+	private boolean stopRequested = false;
+
 	@Override
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public String process() throws Exception {
@@ -52,6 +61,9 @@ public class EvaluationBatchlet implements Batchlet {
 		AnalysisRun analysisRun = new AnalysisRun(analysisRunInformation,
 				analysisFileTree);
 		evaluate(analysisRun);
+		if (stopRequested) {
+			return "ABORT";
+		}
 		return "SUCCESS";
 	}
 
@@ -63,8 +75,17 @@ public class EvaluationBatchlet implements Batchlet {
 	 */
 	private void evaluate(AnalysisRun analysisRun) throws InterruptedException,
 			EvaluationStoreException {
-		for (EvaluatorServiceInformation evaluatorInformation : evaluatorPluginService
-				.getServicesSortedByDependency()) {
+		List<EvaluatorServiceInformation> evaluators = evaluatorPluginService
+				.getServicesSortedByDependency();
+
+		PersistentStepUserData persistentUserData = new PersistentStepUserData(
+				"Evaluation", "Evaluation of project.", evaluators.size());
+		stepContext.setPersistentUserData(persistentUserData);
+
+		for (EvaluatorServiceInformation evaluatorInformation : evaluators) {
+			if (stopRequested) {
+				break;
+			}
 			if (evaluatorPluginService.isActive(evaluatorInformation.getId())) {
 				logger.info("Starting evaluator "
 						+ evaluatorInformation.getName() + "...");
@@ -72,11 +93,12 @@ public class EvaluationBatchlet implements Batchlet {
 						.createProxy(evaluatorInformation.getJndiName());
 				evaluator.evaluate(analysisRun, false);
 			}
+			persistentUserData.increaseCurrentItem(1);
 		}
 	}
 
 	@Override
 	public void stop() throws Exception {
-		// TODO Auto-generated method stub
+		stopRequested = true;
 	}
 }

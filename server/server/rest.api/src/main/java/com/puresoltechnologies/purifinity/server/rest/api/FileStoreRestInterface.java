@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 
 @Path("filestore")
@@ -23,7 +24,8 @@ public interface FileStoreRestInterface {
 	@Path("files")
 	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
 	@Produces(MediaType.APPLICATION_JSON)
-	public HashId storeRawFile(InputStream rawStream) throws FileStoreException;
+	public FileInformation storeRawFile(InputStream rawStream)
+			throws FileStoreException;
 
 	@GET
 	@Path("files/{hashId}")

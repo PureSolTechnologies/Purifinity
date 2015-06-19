@@ -25,6 +25,7 @@ import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.versioning.Version;
@@ -46,8 +47,9 @@ public class FileStoreIT extends AbstractAnalysisStoreServiceServerTest {
 		HashId hashId;
 		try (ByteArrayInputStream stream = new ByteArrayInputStream(
 				fileContent.getBytes())) {
-			hashId = fileStore.storeRawFile(stream);
-			assertNotNull(hashId);
+			FileInformation fileInformation = fileStore.storeRawFile(stream);
+			assertNotNull(fileInformation);
+			hashId = fileInformation.getHashId();
 			assertEquals(HashUtilities.getDefaultMessageDigestAlgorithm(),
 					hashId.getAlgorithm());
 			assertNotNull(hashId.getHash());
@@ -70,8 +72,9 @@ public class FileStoreIT extends AbstractAnalysisStoreServiceServerTest {
 		HashId hashId;
 		try (ByteArrayInputStream stream = new ByteArrayInputStream(
 				fileContent.getBytes())) {
-			hashId = fileStore.storeRawFile(stream);
-			assertNotNull(hashId);
+			FileInformation fileInformation = fileStore.storeRawFile(stream);
+			assertNotNull(fileInformation);
+			hashId = fileInformation.getHashId();
 			assertEquals(HashUtilities.getDefaultMessageDigestAlgorithm(),
 					hashId.getAlgorithm());
 			assertNotNull(hashId.getHash());

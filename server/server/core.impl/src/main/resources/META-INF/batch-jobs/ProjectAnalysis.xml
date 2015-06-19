@@ -30,18 +30,21 @@
 			<step id="FileAnalysis">
 				<chunk checkpoint-policy="item" item-count="10">
 					<reader ref="AnalysisItemReader" />
-					<processor ref="AnalysisItemProcess" />
+					<processor ref="AnalysisItemProcessor" />
 					<writer ref="AnalysisItemWriter" />
 				</chunk>
 			</step>
 		</flow>
 	</split>
 
-	<step id="ProjectEvaluation">
+	<step id="ProjectEvaluation" next="WriteStatistics">
 		<!-- chunk checkpoint-policy="item" item-count="10"> <reader ref="EvaluationItemReader" 
 			/> <processor ref="EvaluationItemProcessor" /> <writer ref="EvaluationItemWriter" 
 			/> </chunk -->
 		<batchlet ref="EvaluationBatchlet" />
 	</step>
 
+	<step id="WriteStatistics">
+		<batchlet ref="WriteStatisticsBatchlet" />
+	</step>
 </job>

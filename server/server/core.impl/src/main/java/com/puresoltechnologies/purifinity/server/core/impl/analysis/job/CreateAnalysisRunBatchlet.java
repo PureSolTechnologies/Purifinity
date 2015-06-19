@@ -68,10 +68,11 @@ public class CreateAnalysisRunBatchlet implements Batchlet {
 			// missing.
 			AnalysisRunInformation analysisRunInformation = analysisStore
 					.createAnalysisRun(analysisProject.getInformation()
-							.getProjectId(), new Date(), 0, "", analysisProject
-							.getSettings().getFileSearchConfiguration());
+							.getProjectId(), new Date(), -1, "",
+							analysisProject.getSettings()
+									.getFileSearchConfiguration());
 
-			jobContext.setTransientUserData(new AnalysisJobContext(
+			jobContext.setTransientUserData(new AnalysisJobContext(new Date(),
 					analysisProject, analysisRunInformation));
 
 			return "SUCCESSFUL";

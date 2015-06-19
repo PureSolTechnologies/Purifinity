@@ -14,6 +14,7 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.server.common.job.PersistentStepUserData;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
@@ -49,11 +50,12 @@ public class FileStorageItemProcessor implements ItemProcessor {
 				.getAnalysisProject();
 		AnalysisProjectSettings projectSettings = analysisProject.getSettings();
 
-		HashId hashId = storeFile(projectSettings, sourceCodeLocation);
+		FileInformation fileInformation = storeFile(projectSettings,
+				sourceCodeLocation);
 		PersistentStepUserData persistentUserData = (PersistentStepUserData) stepContext
 				.getPersistentUserData();
 		persistentUserData.increaseCurrentItem(1);
-		return new StoredFile(sourceCodeLocation, hashId);
+		return new StoredFile(sourceCodeLocation, fileInformation);
 	}
 
 	/**
@@ -65,11 +67,12 @@ public class FileStorageItemProcessor implements ItemProcessor {
 	 * @param sourceCodeLocation
 	 * @return
 	 */
-	private HashId storeFile(AnalysisProjectSettings projectSettings,
+	private FileInformation storeFile(AnalysisProjectSettings projectSettings,
 			SourceCodeLocation sourceCodeLocation) {
 		try (InputStream stream = sourceCodeLocation.openStream()) {
-			HashId hashId = fileStore.storeRawFile(stream);
-			if (hashId != null) {
+			FileInformation fileInformation = fileStore.storeRawFile(stream);
+			if (fileInformation != null) {
+				HashId hashId = fileInformation.getHashId();
 				eventLogger.logEvent(AnalysisEvents.createRawFileStoredEvent(
 						sourceCodeLocation.getInternalLocation(), hashId,
 						projectSettings.getName(),
@@ -81,8 +84,7 @@ public class FileStorageItemProcessor implements ItemProcessor {
 								.getName(), sourceCodeLocation
 								.getHumanReadableLocationString()));
 			}
-
-			return hashId;
+			return fileInformation;
 		} catch (FileStoreException | IOException e) {
 			eventLogger.logEvent(AnalysisEvents.createRawFileStoreError(
 					sourceCodeLocation.getInternalLocation(),

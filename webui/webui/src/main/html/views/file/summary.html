@@ -17,7 +17,7 @@
 	<td>{{analysis.startTime | defaultDate}}</td>
 	<td>{{analysis.analysisInformation.languageName}} {{analysis.analysisInformation.languageVersion}}</td>
 	<td id="analyzerInformation" data-toggle="tooltip" title="{{analysis.analysisInformation.analyzerId}}">{{analysis.analysisInformation.analyzerVersion | version}}</td>
-	<td>{{analysis.duration}}ms</td>
+	<td>{{analysis.duration | duration}}</td>
 	<td>{{analysis.analysisInformation.analyzerErrorMessage}}</td>
       </tr>
     </tbody>
