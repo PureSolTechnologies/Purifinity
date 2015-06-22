@@ -47,7 +47,7 @@ public class RepositoryServiceManagerImpl extends
 				.getConfigurationParameters()) {
 			PreferencesValue<?> value = preferencesStore
 					.getPluginDefaultPreference(information.getId(),
-							configurationParameter.getPropertyKey());
+							configurationParameter);
 			if (value != null) {
 				repository.setConfigurationParameter(configurationParameter,
 						value.getValue());

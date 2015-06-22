@@ -101,17 +101,6 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	}
 
 	@Override
-	public PreferencesValue<?> getSystemPreference(String key) {
-		ConfigurationParameter<?> parameter = findConfigurationParameter(key);
-		if (parameter == null) {
-			logger.warn("Parameter with key '" + key
-					+ "' is unknown. Preference cannot be loaded.");
-			return null;
-		}
-		return getSystemPreference(parameter);
-	}
-
-	@Override
 	public <T> PreferencesValue<T> getSystemPreference(
 			ConfigurationParameter<T> configurationParameter) {
 		PreparedStatement preparedStatement = preparedStatements
@@ -134,17 +123,6 @@ public class PreferencesStoreImpl implements PreferencesStore {
 				result.getDate(0), result.getString(1),
 				PreferencesGroup.SYSTEM, "",
 				configurationParameter.getPropertyKey(), result.getString(2));
-	}
-
-	@Override
-	public void setSystemPreference(String key, String value) {
-		ConfigurationParameter<?> parameter = findConfigurationParameter(key);
-		if (parameter == null) {
-			logger.warn("Parameter with key '" + key
-					+ "' is unknown. Preference is not set.");
-			return;
-		}
-		setSystemPreferenceDB(parameter, value);
 	}
 
 	@Override
@@ -174,46 +152,40 @@ public class PreferencesStoreImpl implements PreferencesStore {
 				.getValue()));
 	}
 
-	private ConfigurationParameter<?> findConfigurationParameter(String key) {
-		ConfigurationParameter<?> parameter = null;
-		for (ConfigurationParameter<?> configurationParameter : purifinityConfiguration
-				.getParameters()) {
-			if (configurationParameter.getPropertyKey().equals(key)) {
-				parameter = configurationParameter;
-			}
-		}
-		return parameter;
+	@Override
+	public boolean hasSystemPreference(
+			ConfigurationParameter<?> configurationParameter) {
+		return getSystemPreference(configurationParameter) != null;
 	}
 
 	@Override
-	public boolean hasSystemPreference(String key) {
-		return getSystemPreference(key) != null;
-	}
-
-	@Override
-	public PreferencesValue<?> getPluginDefaultPreference(String pluginId,
-			String key) {
+	public <T> PreferencesValue<T> getPluginDefaultPreference(String pluginId,
+			ConfigurationParameter<T> configurationParameter) {
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(
 						session,
 						"SELECT changed, changed_by, value FROM "
 								+ CassandraElementNames.PLUGIN_DEFAULTS_PREFERENCES_TABLE
 								+ " WHERE plugin_id=? AND key=?;");
-		BoundStatement boundStatement = preparedStatement.bind(pluginId, key);
+		BoundStatement boundStatement = preparedStatement.bind(pluginId,
+				configurationParameter.getPropertyKey());
 		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
-			return null;
+			return new PreferencesValue<>(null, null, PreferencesGroup.SYSTEM,
+					"", configurationParameter.getPropertyKey(),
+					configurationParameter.getDefaultValue());
 		}
-		return new PreferencesValue<>(result.getDate(0), result.getString(1),
-				PreferencesGroup.PLUGIN_DEFAULT, pluginId, key,
-				result.getString(2));
+		return PreferencesValue.create(configurationParameter.getType(),
+				result.getDate(0), result.getString(1),
+				PreferencesGroup.PLUGIN_DEFAULT, "",
+				configurationParameter.getPropertyKey(), result.getString(2));
 	}
 
 	@Override
-	public void setPluginDefaultPreference(String pluginId, String key,
-			String value) {
+	public <T> void setPluginDefaultPreference(String pluginId,
+			ConfigurationParameter<T> configurationParameter, T value) {
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(
 						session,
@@ -221,21 +193,23 @@ public class PreferencesStoreImpl implements PreferencesStore {
 								+ CassandraElementNames.PLUGIN_DEFAULTS_PREFERENCES_TABLE
 								+ " (changed, changed_by, plugin_id, key, value) VALUES (?, ?, ?, ?, ?);");
 		BoundStatement boundStatement = preparedStatement.bind(new Date(),
-				"n/a", pluginId, key, value);
+				"n/a", pluginId, configurationParameter.getPropertyKey(),
+				value.toString());
 		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		session.execute(boundStatement);
-		logger.info("Wrote plugin default preference: '" + pluginId + "/" + key
-				+ "'='" + value + "'");
+		logger.info("Wrote plugin default preference: '" + pluginId + "/"
+				+ configurationParameter.getPropertyKey() + "'='" + value + "'");
 	}
 
 	@Override
-	public boolean hasPluginDefaultPreference(String pluginId, String key) {
-		return getPluginDefaultPreference(pluginId, key) != null;
+	public boolean hasPluginDefaultPreference(String pluginId,
+			ConfigurationParameter<?> configurationParameter) {
+		return getPluginDefaultPreference(pluginId, configurationParameter) != null;
 	}
 
 	@Override
-	public PreferencesValue<?> getPluginProjectPreference(String projectId,
-			String pluginId, String key) {
+	public <T> PreferencesValue<T> getPluginProjectPreference(String projectId,
+			String pluginId, ConfigurationParameter<T> configurationParameter) {
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(
 						session,
@@ -243,16 +217,19 @@ public class PreferencesStoreImpl implements PreferencesStore {
 								+ CassandraElementNames.PLUGIN_PREFERENCES_TABLE
 								+ " WHERE project_id=? AND plugin_id=? AND key=?;");
 		BoundStatement boundStatement = preparedStatement.bind(projectId,
-				pluginId, key);
+				pluginId, configurationParameter.getPropertyKey());
 		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		ResultSet resultSet = session.execute(boundStatement);
 		Row result = resultSet.one();
 		if (result == null) {
-			return null;
+			return new PreferencesValue<>(null, null, PreferencesGroup.SYSTEM,
+					"", configurationParameter.getPropertyKey(),
+					configurationParameter.getDefaultValue());
 		}
-		return new PreferencesValue<>(result.getDate(0), result.getString(1),
-				PreferencesGroup.PLUGIN_PROJECT, projectId, key,
-				result.getString(2));
+		return PreferencesValue.create(configurationParameter.getType(),
+				result.getDate(0), result.getString(1),
+				PreferencesGroup.PLUGIN_DEFAULT, "",
+				configurationParameter.getPropertyKey(), result.getString(2));
 	}
 
 	@Override
@@ -269,8 +246,9 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	}
 
 	@Override
-	public void setPluginProjectPreference(String projectId, String pluginId,
-			String key, String value) {
+	public <T> void setPluginProjectPreference(String projectId,
+			String pluginId, ConfigurationParameter<T> configurationParameter,
+			T value) {
 		PreparedStatement preparedStatement = preparedStatements
 				.getPreparedStatement(
 						session,
@@ -278,17 +256,20 @@ public class PreferencesStoreImpl implements PreferencesStore {
 								+ CassandraElementNames.PLUGIN_PREFERENCES_TABLE
 								+ " (changed, changed_by, project_id, plugin_id, key, value) VALUES (?, ?, ?, ?, ?, ?);");
 		BoundStatement boundStatement = preparedStatement.bind(new Date(),
-				"n/a", projectId, pluginId, key, value);
+				"n/a", projectId, pluginId,
+				configurationParameter.getPropertyKey(), value.toString());
 		boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
 		session.execute(boundStatement);
 		logger.info("Wrote plugin project preference: '" + projectId + "/"
-				+ pluginId + "/" + key + "'='" + value + "'");
+				+ pluginId + "/" + configurationParameter.getPropertyKey()
+				+ "'='" + value + "'");
 	}
 
 	@Override
 	public boolean hasPluginProjectPreference(String projectId,
-			String pluginId, String key) {
-		return getPluginProjectPreference(pluginId, projectId, key) != null;
+			String pluginId, ConfigurationParameter<?> configurationParameter) {
+		return getPluginProjectPreference(pluginId, projectId,
+				configurationParameter) != null;
 	}
 
 	@Override

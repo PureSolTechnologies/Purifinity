@@ -5,6 +5,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+import com.puresoltechnologies.purifinity.server.common.utils.data.TypeWrapper;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesValue;
 import com.puresoltechnologies.purifinity.server.rest.api.PreferencesStoreRestInterface;
@@ -22,13 +23,19 @@ public class PreferencesStoreRestService implements
 
 	@Override
 	public void setSystemParameter(String key, String value) {
-		preferencesStore.setSystemPreference(key, value);
+		@SuppressWarnings("unchecked")
+		ConfigurationParameter<Object> configurationParameter = (ConfigurationParameter<Object>) findConfigurationParameter(key);
+		Object o = TypeWrapper.convertFromString(
+				configurationParameter.getType(), value);
+		preferencesStore.setSystemPreference(configurationParameter, o);
 	}
 
 	@Override
 	public String getSystemParameter(String key) {
+		@SuppressWarnings("unchecked")
+		ConfigurationParameter<Object> configurationParameter = (ConfigurationParameter<Object>) findConfigurationParameter(key);
 		PreferencesValue<?> systemPreference = preferencesStore
-				.getSystemPreference(key);
+				.getSystemPreference(configurationParameter);
 		if (systemPreference == null) {
 			return null;
 		}
@@ -44,13 +51,22 @@ public class PreferencesStoreRestService implements
 	@Override
 	public void setPluginDefaultParameter(String pluginId, String key,
 			String value) {
-		preferencesStore.setPluginDefaultPreference(pluginId, key, value);
+		@SuppressWarnings("unchecked")
+		ConfigurationParameter<Object> configurationParameter = (ConfigurationParameter<Object>) findPluginDefaultConfigurationParameter(
+				pluginId, key);
+		Object o = TypeWrapper.convertFromString(
+				configurationParameter.getType(), value);
+		preferencesStore.setPluginDefaultPreference(pluginId,
+				configurationParameter, o);
 	}
 
 	@Override
 	public String getPluginDefaultParameter(String pluginId, String key) {
+		@SuppressWarnings("unchecked")
+		ConfigurationParameter<Object> configurationParameter = (ConfigurationParameter<Object>) findPluginDefaultConfigurationParameter(
+				pluginId, key);
 		PreferencesValue<?> pluginDefaultPreference = preferencesStore
-				.getPluginDefaultPreference(pluginId, key);
+				.getPluginDefaultPreference(pluginId, configurationParameter);
 		if (pluginDefaultPreference == null) {
 			return null;
 		}
@@ -66,8 +82,12 @@ public class PreferencesStoreRestService implements
 	@Override
 	public String getPluginProjectParameter(String projectId, String pluginId,
 			String key) {
+		@SuppressWarnings("unchecked")
+		ConfigurationParameter<Object> configurationParameter = (ConfigurationParameter<Object>) findPluginProjectConfigurationParameter(
+				projectId, pluginId, key);
 		PreferencesValue<?> pluginProjectPreference = preferencesStore
-				.getPluginProjectPreference(projectId, pluginId, key);
+				.getPluginProjectPreference(projectId, pluginId,
+						configurationParameter);
 		if (pluginProjectPreference == null) {
 			return null;
 		}
@@ -83,8 +103,13 @@ public class PreferencesStoreRestService implements
 	@Override
 	public void setPluginProjectParameter(String projectId, String pluginId,
 			String key, String value) {
-		preferencesStore.setPluginProjectPreference(projectId, pluginId, key,
-				value);
+		@SuppressWarnings("unchecked")
+		ConfigurationParameter<Object> configurationParameter = (ConfigurationParameter<Object>) findPluginProjectConfigurationParameter(
+				projectId, pluginId, key);
+		Object o = TypeWrapper.convertFromString(
+				configurationParameter.getType(), value);
+		preferencesStore.setPluginProjectPreference(projectId, pluginId,
+				configurationParameter, o);
 	}
 
 	@Override
@@ -120,6 +145,41 @@ public class PreferencesStoreRestService implements
 	public String getUserDefaultParameter(String key) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private ConfigurationParameter<?> findConfigurationParameter(String key) {
+		ConfigurationParameter<?> parameter = null;
+		for (ConfigurationParameter<?> configurationParameter : preferencesStore
+				.getSystemParameters()) {
+			if (configurationParameter.getPropertyKey().equals(key)) {
+				parameter = configurationParameter;
+			}
+		}
+		return parameter;
+	}
+
+	private ConfigurationParameter<?> findPluginDefaultConfigurationParameter(
+			String pluginId, String key) {
+		ConfigurationParameter<?> parameter = null;
+		for (ConfigurationParameter<?> configurationParameter : preferencesStore
+				.getPluginDefaultParameters(pluginId)) {
+			if (configurationParameter.getPropertyKey().equals(key)) {
+				parameter = configurationParameter;
+			}
+		}
+		return parameter;
+	}
+
+	private ConfigurationParameter<?> findPluginProjectConfigurationParameter(
+			String projectId, String pluginId, String key) {
+		ConfigurationParameter<?> parameter = null;
+		for (ConfigurationParameter<?> configurationParameter : preferencesStore
+				.getPluginProjectParameters(projectId, pluginId)) {
+			if (configurationParameter.getPropertyKey().equals(key)) {
+				parameter = configurationParameter;
+			}
+		}
+		return parameter;
 	}
 
 }

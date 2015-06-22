@@ -41,6 +41,10 @@ public class PreferencesValue<T> {
 		} else if (String.class.equals(type)) {
 			return (PreferencesValue<T>) new PreferencesValue<String>(changed,
 					changedBy, group, groupName, key, value);
+		} else if (Boolean.class.equals(type)) {
+			return (PreferencesValue<T>) new PreferencesValue<Boolean>(changed,
+					changedBy, group, groupName, key,
+					Boolean.parseBoolean(value));
 		}
 		throw new IllegalArgumentException("Type '" + type
 				+ "' of configuration parameter '" + key

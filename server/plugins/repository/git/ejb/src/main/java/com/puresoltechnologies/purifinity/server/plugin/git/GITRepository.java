@@ -9,6 +9,9 @@ import java.util.Properties;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
@@ -75,6 +78,9 @@ public class GITRepository extends AbstractRepository {
 			ID, NAME, "1.9", PLUGIN_VERSION, JNDI_ADDRESS, "GIT Repository.",
 			PARAMETERS, CONFIG_PARAMETERS, null, null, null);
 
+	@Inject
+	private Logger logger;
+
 	private File gitBinaryPath = null;
 
 	public GITRepository() {
@@ -83,18 +89,17 @@ public class GITRepository extends AbstractRepository {
 
 	public void setGitBinaryPath(File gitBinaryPath) {
 		if (!gitBinaryPath.exists()) {
-			throw new IllegalArgumentException("Path '" + gitBinaryPath
+			logger.warn("Path '" + gitBinaryPath
 					+ "' for GIT binary does not exist.");
-		}
-		if (!gitBinaryPath.isFile()) {
-			throw new IllegalArgumentException("Path '" + gitBinaryPath
+		} else if (!gitBinaryPath.isFile()) {
+			logger.warn("Path '" + gitBinaryPath
 					+ "' for GIT binary is not a file.");
-		}
-		if (!gitBinaryPath.canExecute()) {
-			throw new IllegalArgumentException("Path '" + gitBinaryPath
+		} else if (!gitBinaryPath.canExecute()) {
+			logger.warn("Path '" + gitBinaryPath
 					+ "' for GIT binary is not executable.");
+		} else {
+			this.gitBinaryPath = gitBinaryPath;
 		}
-		this.gitBinaryPath = gitBinaryPath;
 	}
 
 	public File getGitBinaryPath() {

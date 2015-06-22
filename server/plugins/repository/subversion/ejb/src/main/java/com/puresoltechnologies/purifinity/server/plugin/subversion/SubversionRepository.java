@@ -9,6 +9,9 @@ import java.util.Properties;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
@@ -50,6 +53,9 @@ public class SubversionRepository extends AbstractRepository {
 			"Subversion Repository.", PARAMETERS, CONFIG_PARAMETERS, null,
 			null, null);
 
+	@Inject
+	private Logger logger;
+
 	private File svnBinaryPath = null;
 
 	public SubversionRepository() {
@@ -58,18 +64,17 @@ public class SubversionRepository extends AbstractRepository {
 
 	public void setSvnBinaryPath(File svnBinaryPath) {
 		if (!svnBinaryPath.exists()) {
-			throw new IllegalArgumentException("Path '" + svnBinaryPath
+			logger.warn("Path '" + svnBinaryPath
 					+ "' for GIT binary does not exist.");
-		}
-		if (!svnBinaryPath.isFile()) {
-			throw new IllegalArgumentException("Path '" + svnBinaryPath
+		} else if (!svnBinaryPath.isFile()) {
+			logger.warn("Path '" + svnBinaryPath
 					+ "' for GIT binary is not a file.");
-		}
-		if (!svnBinaryPath.canExecute()) {
-			throw new IllegalArgumentException("Path '" + svnBinaryPath
+		} else if (!svnBinaryPath.canExecute()) {
+			logger.warn("Path '" + svnBinaryPath
 					+ "' for GIT binary is not executable.");
+		} else {
+			this.svnBinaryPath = svnBinaryPath;
 		}
-		this.svnBinaryPath = svnBinaryPath;
 	}
 
 	public File getSvnBinaryPath() {

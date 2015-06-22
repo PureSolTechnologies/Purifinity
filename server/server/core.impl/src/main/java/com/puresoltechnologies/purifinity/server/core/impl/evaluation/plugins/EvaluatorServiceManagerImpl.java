@@ -75,7 +75,7 @@ public class EvaluatorServiceManagerImpl extends
 				.getConfigurationParameters()) {
 			PreferencesValue<?> value = preferencesStore
 					.getPluginDefaultPreference(information.getId(),
-							configurationParameter.getPropertyKey());
+							configurationParameter);
 			if (value != null) {
 				evaluator.setConfigurationParameter(configurationParameter,
 						value.getValue());

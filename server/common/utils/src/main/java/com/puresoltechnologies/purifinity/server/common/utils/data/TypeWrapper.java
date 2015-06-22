@@ -90,4 +90,54 @@ public class TypeWrapper {
 		}
 		return prim2wrap.get(clazz);
 	}
+
+	public static <T> T convertFromString(Class<T> type, String value) {
+		if (Byte.class.equals(type)) {
+			Byte byteValue = Byte.parseByte(value);
+			@SuppressWarnings("unchecked")
+			T result = (T) byteValue;
+			return result;
+		} else if (Short.class.equals(type)) {
+			Short shortValue = Short.parseShort(value);
+			@SuppressWarnings("unchecked")
+			T result = (T) shortValue;
+			return result;
+		} else if (Integer.class.equals(type)) {
+			Integer integerValue = Integer.parseInt(value);
+			@SuppressWarnings("unchecked")
+			T result = (T) integerValue;
+			return result;
+		} else if (Long.class.equals(type)) {
+			Long longValue = Long.parseLong(value);
+			@SuppressWarnings("unchecked")
+			T result = (T) longValue;
+			return result;
+		} else if (Float.class.equals(type)) {
+			Float floatValue = Float.parseFloat(value);
+			@SuppressWarnings("unchecked")
+			T result = (T) floatValue;
+			return result;
+		} else if (Double.class.equals(type)) {
+			Double doubleValue = Double.parseDouble(value);
+			@SuppressWarnings("unchecked")
+			T result = (T) doubleValue;
+			return result;
+		} else if (Character.class.equals(type)) {
+			Character characterValue = value.charAt(0);
+			@SuppressWarnings("unchecked")
+			T result = (T) characterValue;
+			return result;
+		} else if (String.class.equals(type)) {
+			@SuppressWarnings("unchecked")
+			T result = (T) value;
+			return result;
+		} else if (Boolean.class.equals(type)) {
+			Boolean booleanValue = Boolean.parseBoolean(value);
+			@SuppressWarnings("unchecked")
+			T result = (T) booleanValue;
+			return result;
+		}
+		throw new IllegalArgumentException("Type '" + type
+				+ "' is not supported.");
+	}
 }

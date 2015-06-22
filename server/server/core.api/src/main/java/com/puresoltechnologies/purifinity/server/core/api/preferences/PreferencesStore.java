@@ -29,20 +29,8 @@ public interface PreferencesStore {
 	 * @return A {@link PreferencesValue} is returned containing the value. If
 	 *         no value was found <code>null</code> is returned.
 	 */
-	public PreferencesValue<?> getSystemPreference(String key);
-
 	public <T> PreferencesValue<T> getSystemPreference(
 			ConfigurationParameter<T> configurationParameter);
-
-	/**
-	 * This method is used to store a new value into the store.
-	 * 
-	 * @param key
-	 *            is the name of the parameter.
-	 * @param value
-	 *            is the parameter's value.
-	 */
-	public void setSystemPreference(String key, String value);
 
 	/**
 	 * This method is used to store a new value into the store.
@@ -65,7 +53,8 @@ public interface PreferencesStore {
 	 * @return <code>true</code> is returned in case a value was already stored.
 	 *         <code>false</code> is returned otherwise.
 	 */
-	public boolean hasSystemPreference(String key);
+	public boolean hasSystemPreference(
+			ConfigurationParameter<?> configurationParameter);
 
 	/**
 	 * This method reads a preference value from the system store.
@@ -77,8 +66,8 @@ public interface PreferencesStore {
 	 * @return A {@link PreferencesValue} is returned containing the value. If
 	 *         no value was found <code>null</code> is returned.
 	 */
-	public PreferencesValue<?> getPluginDefaultPreference(String pluginId,
-			String key);
+	public <T> PreferencesValue<T> getPluginDefaultPreference(String pluginId,
+			ConfigurationParameter<T> configurationParameter);
 
 	/**
 	 * This method is used to store a new value into the store.
@@ -90,8 +79,8 @@ public interface PreferencesStore {
 	 * @param value
 	 *            is the parameter's value.
 	 */
-	public void setPluginDefaultPreference(String pluginId, String key,
-			String value);
+	public <T> void setPluginDefaultPreference(String pluginId,
+			ConfigurationParameter<T> configurationParameter, T value);
 
 	/**
 	 * This method checks whether a value was stored for a parameter or not.
@@ -103,7 +92,8 @@ public interface PreferencesStore {
 	 * @return <code>true</code> is returned in case a value was already stored.
 	 *         <code>false</code> is returned otherwise.
 	 */
-	public boolean hasPluginDefaultPreference(String pluginId, String key);
+	public boolean hasPluginDefaultPreference(String pluginId,
+			ConfigurationParameter<?> configurationParameter);
 
 	/**
 	 * This method reads a preference value from the system store.
@@ -117,8 +107,8 @@ public interface PreferencesStore {
 	 * @return A {@link PreferencesValue} is returned containing the value. If
 	 *         no value was found <code>null</code> is returned.
 	 */
-	public PreferencesValue<?> getPluginProjectPreference(String projectId,
-			String pluginId, String key);
+	public <T> PreferencesValue<T> getPluginProjectPreference(String projectId,
+			String pluginId, ConfigurationParameter<T> configurationParameter);
 
 	public void deletePluginProjectParameter(String projectId, String pluginId,
 			String key);
@@ -135,8 +125,9 @@ public interface PreferencesStore {
 	 * @param value
 	 *            is the parameter's value.
 	 */
-	public void setPluginProjectPreference(String projectId, String pluginId,
-			String key, String value);
+	public <T> void setPluginProjectPreference(String projectId,
+			String pluginId, ConfigurationParameter<T> configurationParameter,
+			T value);
 
 	/**
 	 * This method checks whether a value was stored for a parameter or not.
@@ -151,7 +142,7 @@ public interface PreferencesStore {
 	 *         <code>false</code> is returned otherwise.
 	 */
 	public boolean hasPluginProjectPreference(String projectId,
-			String pluginId, String key);
+			String pluginId, ConfigurationParameter<?> configurationParameter);
 
 	/**
 	 * This method checks whether a specified service is activated or not. This

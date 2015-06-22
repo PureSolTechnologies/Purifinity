@@ -39,6 +39,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 
 	private static final String FIXED_FORM_FILE_PATTERNS_PROPERTY = "suffixes.form.fixed";
 	private static final String FREE_FORM_FILE_PATTERNS_PROPERTY = "suffixes.form.free";
+	private static final String C_PRE_PROCESSOR_USAGE_PROPERTY = "preprocessor.usage";
 
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 	static {
@@ -48,7 +49,8 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 						"",
 						LevelOfMeasurement.NOMINAL,
 						"Specifies a list of file patterns in regular expression format which are to be use to identify pre Fortran 90 fixed form sources. Each pattern is placed on its own line.",
-						String.class, FIXED_FORM_FILE_PATTERNS_PROPERTY, "/",
+						String.class, FIXED_FORM_FILE_PATTERNS_PROPERTY,
+						"/Source Files",
 						patternsToString(FIXED_FORM_FILE_PATTERNS)));
 		PARAMETERS
 				.add(new ConfigurationParameter<String>(
@@ -56,8 +58,17 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 						"",
 						LevelOfMeasurement.NOMINAL,
 						"Specifies a list of file patterns in regular expression format which are to be use to identify Fortran 90 free form sources. Each pattern is placed on its own line.",
-						String.class, FREE_FORM_FILE_PATTERNS_PROPERTY, "/",
+						String.class, FREE_FORM_FILE_PATTERNS_PROPERTY,
+						"/Source Files",
 						patternsToString(FREE_FORM_FILE_PATTERNS)));
+		PARAMETERS
+				.add(new ConfigurationParameter<Boolean>(
+						"Use C Pre-processor",
+						"",
+						LevelOfMeasurement.NOMINAL,
+						"Specifies wether a C pre-processor is to be used before analysis.",
+						Boolean.class, C_PRE_PROCESSOR_USAGE_PROPERTY,
+						"/Source Files", false));
 	}
 
 	private SourceForm sourceForm = SourceForm.FREE_FORM;
@@ -66,6 +77,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	private String[] fixedFormFiles;
 	private Pattern[] fixedFormFilePatterns;
 	private Pattern[] freeFormFilePatterns;
+	private boolean usePreProcessor = false;
 
 	public Fortran() {
 		super(NAME, VERSION);
@@ -140,6 +152,9 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 		} else if (FREE_FORM_FILE_PATTERNS_PROPERTY.equals(parameter
 				.getPropertyKey())) {
 			setValidFreeFormFiles(stringToPatterns((String) value));
+		} else if (C_PRE_PROCESSOR_USAGE_PROPERTY.equals(parameter
+				.getPropertyKey())) {
+			setUsePreProcessor((Boolean) value);
 		} else {
 			throw new IllegalArgumentException("Parameter '" + parameter
 					+ "' is unknown.");
@@ -162,6 +177,14 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 			freeFormFilePatterns[i] = Pattern.compile(FileSearch
 					.wildcardsToRegExp(freeFormFiles[i]));
 		}
+	}
+
+	public boolean isUsePreProcessor() {
+		return usePreProcessor;
+	}
+
+	private void setUsePreProcessor(boolean usePreProcessor) {
+		this.usePreProcessor = usePreProcessor;
 	}
 
 	@Override
