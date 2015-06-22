@@ -40,6 +40,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	private static final String FIXED_FORM_FILE_PATTERNS_PROPERTY = "suffixes.form.fixed";
 	private static final String FREE_FORM_FILE_PATTERNS_PROPERTY = "suffixes.form.free";
 	private static final String C_PRE_PROCESSOR_USAGE_PROPERTY = "preprocessor.usage";
+	private static final String AUTOMATIC_SOURCE_FORM_PROPERTY = "form.automatic";
 
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 	static {
@@ -63,6 +64,14 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 						patternsToString(FREE_FORM_FILE_PATTERNS)));
 		PARAMETERS
 				.add(new ConfigurationParameter<Boolean>(
+						"Automatic Source Form Identification",
+						"",
+						LevelOfMeasurement.NOMINAL,
+						"If checked, the parser tries to identify the source form (fixed or free) automaticaly. Default is true, because it is cleaner to specify source form via file suffix.",
+						Boolean.class, AUTOMATIC_SOURCE_FORM_PROPERTY,
+						"/Source Files", false));
+		PARAMETERS
+				.add(new ConfigurationParameter<Boolean>(
 						"Use C Pre-processor",
 						"",
 						LevelOfMeasurement.NOMINAL,
@@ -78,6 +87,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	private Pattern[] fixedFormFilePatterns;
 	private Pattern[] freeFormFilePatterns;
 	private boolean usePreProcessor = false;
+	private boolean automatedFormIdentification = true;
 
 	public Fortran() {
 		super(NAME, VERSION);
@@ -155,6 +165,9 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 		} else if (C_PRE_PROCESSOR_USAGE_PROPERTY.equals(parameter
 				.getPropertyKey())) {
 			setUsePreProcessor((Boolean) value);
+		} else if (AUTOMATIC_SOURCE_FORM_PROPERTY.equals(parameter
+				.getPropertyKey())) {
+			setAutomatedFormIdentification((Boolean) value);
 		} else {
 			throw new IllegalArgumentException("Parameter '" + parameter
 					+ "' is unknown.");
@@ -185,6 +198,11 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 
 	private void setUsePreProcessor(boolean usePreProcessor) {
 		this.usePreProcessor = usePreProcessor;
+	}
+
+	private void setAutomatedFormIdentification(
+			boolean automatedFormIdentification) {
+		this.automatedFormIdentification = automatedFormIdentification;
 	}
 
 	@Override
