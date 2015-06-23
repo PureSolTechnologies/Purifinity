@@ -64,7 +64,7 @@ public class TreeMacroProcessor implements TreeVisitor<ParseTreeNode> {
 	/**
 	 * This field contains after processing the new source code.
 	 */
-	private final SourceCode sourceCode = new SourceCode();
+	private final SourceCode sourceCode = new SourceCode("", "");
 	/**
 	 * This field contains the original {@link ParseTreeNode} of the source file
 	 * which is now to be processed.

@@ -26,7 +26,8 @@ public class FortranAnalyzerTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new FortranAnalyzer(new SourceCode(), null));
+		assertNotNull(new FortranAnalyzer(new SourceCode("", ""), null, true,
+				null, null));
 	}
 
 	@Test
@@ -35,7 +36,7 @@ public class FortranAnalyzerTest {
 				"src/test", "TestFile.f");
 		try (InputStream sourceStream = sourceFileLocation.openStream()) {
 			FortranAnalyzer analyser = new FortranAnalyzer(SourceCode.read(
-					sourceStream, sourceFileLocation), null);
+					sourceStream, sourceFileLocation), null, true, null, null);
 			assertNull(analyser.getAnalysis());
 		}
 	}
@@ -45,7 +46,7 @@ public class FortranAnalyzerTest {
 				sourceDirectory, file);
 		try (InputStream openStream = sourceFileLocation.openStream()) {
 			FortranAnalyzer analyser = new FortranAnalyzer(SourceCode.read(
-					openStream, sourceFileLocation), null);
+					openStream, sourceFileLocation), null, true, null, null);
 			analyser.analyze();
 		}
 	}

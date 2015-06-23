@@ -15,6 +15,7 @@ import com.puresoltechnologies.parsers.parser.ParserException;
 import com.puresoltechnologies.parsers.source.FixedCodeLocation;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.FortranPreConditioner;
+import com.puresoltechnologies.purifinity.server.plugin.fortran2008.SourceForm;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.grammar.FortranGrammar;
 
 public class FortranGrammarPartTester {
@@ -45,7 +46,7 @@ public class FortranGrammarPartTester {
 			initializeParser(production);
 		}
 		FortranPreConditioner fortranPreConditioner = new FortranPreConditioner(
-				source.getSourceCode());
+				source.getSourceCode(), SourceForm.MIXED_FORM);
 		TokenStream tokenStream = fortranPreConditioner.scan(lexer);
 		parsers.get(production).parse(tokenStream);
 		return true;

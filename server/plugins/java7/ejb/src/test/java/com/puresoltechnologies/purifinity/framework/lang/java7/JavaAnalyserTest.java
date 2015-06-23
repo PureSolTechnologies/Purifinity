@@ -18,7 +18,7 @@ public class JavaAnalyserTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new JavaAnalyzer(new SourceCode(), null));
+		assertNotNull(new JavaAnalyzer(new SourceCode("", ""), null));
 	}
 
 	@Test

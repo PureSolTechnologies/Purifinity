@@ -112,6 +112,7 @@ public class FortranPreConditioner {
 	private static final byte BROKEN_CHARACTER_LITERAL_DOUBLE_QUOTE = 2;
 
 	private final SourceCode sourceCode;
+	private final SourceForm sourceForm;
 	private final boolean validFixedForm;
 	private final List<Integer> invalidLines = new ArrayList<Integer>();
 	private final TokenStream tokenStream;
@@ -125,9 +126,11 @@ public class FortranPreConditioner {
 	 * @param sourceCode
 	 * @throws IOException
 	 */
-	public FortranPreConditioner(SourceCode sourceCode) throws IOException {
+	public FortranPreConditioner(SourceCode sourceCode, SourceForm sourceForm)
+			throws IOException {
 		super();
 		this.sourceCode = sourceCode;
+		this.sourceForm = sourceForm;
 		tokenStream = new TokenStream();
 		validFixedForm = validateFixedForm();
 	}
@@ -197,21 +200,40 @@ public class FortranPreConditioner {
 	public TokenStream scan(Lexer lexer) throws IOException, LexerException {
 		reset();
 		for (SourceCodeLine line : sourceCode.getLines()) {
-			String text = line.getLine();
-			if (FIXED_FORM_EMPTY_PATTERN.matcher(text).find()
-					&& (!FREE_FORM_CONTINUATION_PATTERN.matcher(text).find())) {
-				processEmptyPattern(lexer, line);
-			} else if (FIXED_FORM_COMMENT_PATTERN.matcher(text).find()) {
-				processCommentPattern(line);
-			} else if (FIXED_FORM_LABEL_PATTERN.matcher(text).find()) {
-				processLabelPattern(lexer, line);
-			} else if (FIXED_FORM_CONTINUATION_PATTERN.matcher(text).find()) {
-				processContinuationPattern(lexer, line);
-			} else {
+			switch (sourceForm) {
+			case FIXED_FORM:
+				processMixedForm(lexer, line, true);
+				break;
+			case FREE_FORM:
 				processFreeForm(lexer, line);
+				break;
+			default:
+				processMixedForm(lexer, line, false);
 			}
 		}
 		return tokenStream;
+	}
+
+	private void processMixedForm(Lexer lexer, SourceCodeLine line,
+			boolean fixed) throws LexerException, IOException {
+		String text = line.getLine();
+		if (FIXED_FORM_EMPTY_PATTERN.matcher(text).find()
+				&& (!FREE_FORM_CONTINUATION_PATTERN.matcher(text).find())) {
+			processEmptyPattern(lexer, line);
+		} else if (FIXED_FORM_COMMENT_PATTERN.matcher(text).find()) {
+			processCommentPattern(line);
+		} else if (FIXED_FORM_LABEL_PATTERN.matcher(text).find()) {
+			processLabelPattern(lexer, line);
+		} else if (FIXED_FORM_CONTINUATION_PATTERN.matcher(text).find()) {
+			processContinuationPattern(lexer, line);
+		} else {
+			if (fixed) {
+				throw new LexerException(
+						"Illegal line prefix for fixed form found at line "
+								+ lineId + "!");
+			}
+			processFreeForm(lexer, line);
+		}
 	}
 
 	/**

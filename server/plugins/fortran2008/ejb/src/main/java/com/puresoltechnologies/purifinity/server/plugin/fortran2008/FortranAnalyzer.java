@@ -17,6 +17,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,9 +57,17 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 			.getLogger(FortranAnalyzer.class);
 
 	private CodeAnalysis fileAnalysis;
+	private final boolean automatedFormIdentification;
+	private final Pattern[] fixedFormFilePatterns;
+	private final Pattern[] freeFormFilePatterns;
 
-	public FortranAnalyzer(SourceCode sourceCode, HashId hashId) {
+	public FortranAnalyzer(SourceCode sourceCode, HashId hashId,
+			boolean automatedFormIdentification,
+			Pattern[] fixedFormFilePatterns, Pattern[] freeFormFilePatterns) {
 		super(sourceCode, hashId, FortranGrammar.getInstance());
+		this.automatedFormIdentification = automatedFormIdentification;
+		this.fixedFormFilePatterns = fixedFormFilePatterns;
+		this.freeFormFilePatterns = freeFormFilePatterns;
 	}
 
 	@Override
@@ -95,8 +104,27 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 
 	private TokenStream preConditioningAndLexing(SourceCode sourceCode)
 			throws IOException, LexerException {
+		SourceForm sourceForm = SourceForm.MIXED_FORM;
+		if (!automatedFormIdentification) {
+			for (Pattern pattern : fixedFormFilePatterns) {
+				if (pattern.matcher(sourceCode.getName()).matches()) {
+					sourceForm = SourceForm.FIXED_FORM;
+					break;
+				}
+			}
+			for (Pattern pattern : freeFormFilePatterns) {
+				if (pattern.matcher(sourceCode.getName()).matches()) {
+					if (sourceForm != SourceForm.MIXED_FORM) {
+						throw new LexerException(
+								"Source code with name '' fits fixed and free form pattern. Cannot decide which rules to follow.");
+					}
+					sourceForm = SourceForm.FREE_FORM;
+					break;
+				}
+			}
+		}
 		FortranPreConditioner preconditioner = new FortranPreConditioner(
-				sourceCode);
+				sourceCode, sourceForm);
 		return preconditioner.scan(getGrammar().getLexer());
 	}
 

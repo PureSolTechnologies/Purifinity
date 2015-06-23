@@ -1,6 +1,8 @@
 package com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,7 +64,7 @@ public class C11PreprocessorTest {
 		SourceCode sourceWithoutMacros2 = new SourceFileLocation(directory,
 				"FileWithoutMacros2.txt").getSourceCode();
 
-		SourceCode expected = new SourceCode();
+		SourceCode expected = new SourceCode("", "");
 		expected.addSourceCode(sourceWithoutMacros);
 		expected.addSourceCodeLine(new SourceCodeLine(source, 2, "\n"));
 		expected.addSourceCode(sourceWithoutMacros);
@@ -90,7 +92,7 @@ public class C11PreprocessorTest {
 		SourceCode sourceWithoutMacros2 = new SourceFileLocation(directory,
 				"FileWithoutMacros2.txt").getSourceCode();
 
-		SourceCode expected = new SourceCode();
+		SourceCode expected = new SourceCode("", "");
 		expected.addSourceCodeLine(new SourceCodeLine(new SourceFileLocation(
 				directory, "RecursiveIncludeMacros3.txt"), 1, "<end of file>"));
 		expected.addSourceCode(sourceWithoutMacros2);
@@ -109,7 +111,7 @@ public class C11PreprocessorTest {
 		SourceCode preProcessedSourceCode = new C11Preprocessor()
 				.process(sourceCode);
 
-		SourceCode expected = new SourceCode();
+		SourceCode expected = new SourceCode("", "");
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 2, "1\n"));
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 4,
 				"\"Hello, world!\"\n"));
@@ -129,7 +131,7 @@ public class C11PreprocessorTest {
 		SourceCode preProcessedSourceCode = new C11Preprocessor()
 				.process(sourceCode);
 
-		SourceCode expected = new SourceCode();
+		SourceCode expected = new SourceCode("", "");
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 2,
 				"Call the printf(\"This is a simple object macro!\"); macro now...\n"));
 		assertEquals(expected, preProcessedSourceCode);
@@ -146,7 +148,7 @@ public class C11PreprocessorTest {
 		SourceCode preProcessedSourceCode = new C11Preprocessor()
 				.process(sourceCode);
 
-		SourceCode expected = new SourceCode();
+		SourceCode expected = new SourceCode("", "");
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 2,
 				"fprintf(stderr, \"%s\\\\n\", \"Error message!\");\n"));
 		assertEquals(expected, preProcessedSourceCode);
@@ -163,7 +165,7 @@ public class C11PreprocessorTest {
 		SourceCode preProcessedSourceCode = new C11Preprocessor()
 				.process(sourceCode);
 
-		SourceCode expected = new SourceCode();
+		SourceCode expected = new SourceCode("", "");
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 3, "\n"));
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 4,
 				"    fprintf(stderr, \"%s\\\\n\", \n"));
@@ -189,7 +191,7 @@ public class C11PreprocessorTest {
 		SourceCode preProcessedSourceCode = new C11Preprocessor()
 				.process(sourceCode);
 
-		SourceCode expected = new SourceCode();
+		SourceCode expected = new SourceCode("", "");
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 4,
 				"Else shown...\n"));
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 7,
@@ -211,7 +213,7 @@ public class C11PreprocessorTest {
 		SourceCode preProcessedSourceCode = new C11Preprocessor()
 				.process(sourceCode);
 
-		SourceCode expected = new SourceCode();
+		SourceCode expected = new SourceCode("", "");
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 5,
 				"Calculation valid.\n"));
 		expected.addSourceCodeLine(new SourceCodeLine(sourceLocation, 8,

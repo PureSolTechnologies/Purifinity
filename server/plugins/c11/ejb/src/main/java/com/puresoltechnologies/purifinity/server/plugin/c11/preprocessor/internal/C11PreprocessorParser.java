@@ -231,7 +231,8 @@ public class C11PreprocessorParser {
 			throw new IllegalArgumentException("Line number '" + lineNum
 					+ "' is not present.");
 		}
-		SourceCode codeToParse = new SourceCode();
+		SourceCode codeToParse = new SourceCode(sourceCode.getName(),
+				sourceCode.getInternalLocation());
 		SourceCodeLine line;
 		int lineCount = 0;
 		SourceCodeLine nextLine;
@@ -280,7 +281,8 @@ public class C11PreprocessorParser {
 			throw new IllegalArgumentException("Line number '" + lineNum
 					+ "' is not present.");
 		}
-		SourceCode codeToParse = new SourceCode();
+		SourceCode codeToParse = new SourceCode(sourceCode.getName(),
+				sourceCode.getInternalLocation());
 		SourceCodeLine line;
 		int lineCount = 0;
 		do {

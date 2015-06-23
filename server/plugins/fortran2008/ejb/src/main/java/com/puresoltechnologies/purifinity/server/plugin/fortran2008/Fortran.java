@@ -137,7 +137,9 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 
 	@Override
 	public FortranAnalyzer createAnalyser(SourceCode sourceCode, HashId hashId) {
-		return new FortranAnalyzer(sourceCode, hashId);
+		return new FortranAnalyzer(sourceCode, hashId,
+				automatedFormIdentification, fixedFormFilePatterns,
+				freeFormFilePatterns);
 	}
 
 	public void setSourceForm(SourceForm sourceForm) {

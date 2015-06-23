@@ -14,6 +14,7 @@ import com.puresoltechnologies.parsers.lexer.Token;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
 import com.puresoltechnologies.parsers.source.SourceFileLocation;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.FortranPreConditioner;
+import com.puresoltechnologies.purifinity.server.plugin.fortran2008.SourceForm;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.grammar.FortranGrammar;
 
 public class FortranPreConditionerTest {
@@ -120,7 +121,8 @@ public class FortranPreConditionerTest {
 		FortranPreConditioner fixedFormFile = new FortranPreConditioner(
 				new SourceFileLocation(
 						"src/test/resources/com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples",
-						"FixedFormSample.f").getSourceCode());
+						"FixedFormSample.f").getSourceCode(),
+				SourceForm.MIXED_FORM);
 		assertTrue(fixedFormFile.isValidFixedForm());
 	}
 
@@ -129,7 +131,8 @@ public class FortranPreConditionerTest {
 		FortranPreConditioner fixedFormFile = new FortranPreConditioner(
 				new SourceFileLocation(
 						"src/test/resources/com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples",
-						"FixedFormSample.f").getSourceCode());
+						"FixedFormSample.f").getSourceCode(),
+				SourceForm.MIXED_FORM);
 		TokenStream tokenStream = fixedFormFile.scan(FortranGrammar
 				.getInstance().getLexer());
 		for (Token token : tokenStream) {
