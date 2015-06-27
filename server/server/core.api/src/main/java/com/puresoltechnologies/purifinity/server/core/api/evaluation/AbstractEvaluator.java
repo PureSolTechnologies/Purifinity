@@ -219,6 +219,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 		HashId hashId = fileNode.getHashId();
 		if (!fileStore.wasAnalyzed(hashId)) {
+			// Files was not analyzed, so we cannot do something here...
 			return;
 		}
 		List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyses(hashId);
