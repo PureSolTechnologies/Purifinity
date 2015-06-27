@@ -32,13 +32,12 @@ purifinityServerModule.factory("httpRequests", ["$http", "$location", "alerterFa
 /**
  * This function is the controller for the login box and logout box.
  */
-purifinityServerModule.controller("loginCtrl", ["$scope", "authService",
-    function($scope, authService) {
+purifinityServerModule.controller("loginCtrl", ["$scope", "$route", "authService",
+    function($scope, $route, authService) {
         $scope.message = authService.message;
         $scope.authId = undefined;
         $scope.email = undefined;
         $scope.password = undefined;
-        $scope.remember = undefined;
         $scope.login = function() {
             if ($scope.email.indexOf("@") <= -1) {
                 var authSettings = PurifinityConfiguration.authentication;
@@ -46,10 +45,11 @@ purifinityServerModule.controller("loginCtrl", ["$scope", "authService",
                     $scope.email = $scope.email + authSettings.defaultDomain;
                 }
             }
-            authService.login($scope.email, $scope.password, $scope.remember);
+            authService.login($scope.email, $scope.password);
         };
         $scope.logout = function() {
             authService.logout();
+            $route.reload();
         };
         $scope.isLoggedIn = function() {
             return authService.isLoggedIn();

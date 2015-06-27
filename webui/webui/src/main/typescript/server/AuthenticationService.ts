@@ -15,7 +15,7 @@ class AuthenticationService {
     }
 
     /* Login functionality */
-    login(email, password, remember): boolean {
+    login(email: string, password: string): boolean {
         var authenticated = false;
         var data = {
             email: email,
@@ -27,7 +27,7 @@ class AuthenticationService {
                 authService.authData = data;
                 authService.authData.authId = email;
                 authenticated = true;
-                authService.storeAuthData(authService.authData, remember);
+                authService.storeAuthData(authService.authData);
                 if (authService.redirect) {
                     authService.$location.path(authService.redirect);
                 } else {
@@ -46,20 +46,16 @@ class AuthenticationService {
 
     /* Logout functionality */
     logout() {
-        var authData = this.authData;
         var data = {
-            authId: authData.authId,
-            token: authData.authToken
+            authId: this.authData.authId,
+            token: this.authData.authToken
         };
-        var authService: AuthenticationService = this;
+        this.authData = undefined;
+        this.removeAuthData();
         this.httpRequests.POST(this.logoutURL, data, "", "",
             function(data, status) {
-                authData = undefined;
-                authService.removeAuthData();
             },
             function(data, status, error) {
-                authData = undefined;
-                authService.removeAuthData();
                 // Error handling
             }
             );
@@ -93,19 +89,12 @@ class AuthenticationService {
     /**
      * This function write authentication data to storage.
      */
-    storeAuthData(authData: AuthenticationData, remember: boolean) {
-        if (remember) {
-            localStorage.setItem("purifinity-authentication", JSON.stringify(authData));
-            sessionStorage.removeItem("purifinity-authentication");
-        } else {
-            localStorage.removeItem("purifinity-authentication");
-            sessionStorage.setItem("purifinity-authentication", JSON.stringify(authData));
-        }
+    storeAuthData(authData: AuthenticationData) {
+        localStorage.setItem("purifinity-authentication", JSON.stringify(authData));
     }
 
     removeAuthData() {
         localStorage.removeItem("purifinity-authentication");
-        sessionStorage.removeItem("purifinity-authentication");
     }
 
 }
