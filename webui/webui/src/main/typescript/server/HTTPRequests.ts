@@ -3,6 +3,7 @@ class HTTPRequests {
     constructor(
         private $http: angular.IHttpService,
         private $location: angular.ILocationService,
+        private $window: angular.IWindowService,
         private alerter: Alerter) {
     }
 
@@ -13,6 +14,7 @@ class HTTPRequests {
         errorCallback: (data: any, status: number, error: string) => void) {
         var alerter: Alerter = this.alerter;
         var $location: angular.ILocationService = this.$location;
+        var $requests = this;
         return this.$http(
             {
                 method: "GET",
@@ -37,12 +39,10 @@ class HTTPRequests {
                 headers: angular.IHttpHeadersGetter,
                 config: angular.IRequestConfig) {
                 if (status === 401) {
-                    alerter.addAlert("info", data);
-                    $location.path("/login");
+                    $requests.handle401(data);
                     return;
                 }
                 alerter.addAlert("error", "HTTP Status: " + status + "\n" + data);
-                var data = localStorage.getItem(url);
                 errorCallback(data, status, "");
             }
             );
@@ -55,6 +55,7 @@ class HTTPRequests {
         errorCallback: (data: any, status: number, error: string) => void) {
         var alerter: Alerter = this.alerter;
         var $location: angular.ILocationService = this.$location;
+        var $requests = this;
         return this.$http(
             {
                 method: "GET",
@@ -82,12 +83,10 @@ class HTTPRequests {
                 headers: angular.IHttpHeadersGetter,
                 config: angular.IRequestConfig) {
                 if (status === 401) {
-                    alerter.addAlert("info", data);
-                    $location.path("/login");
+                    $requests.handle401(data);
                     return;
                 }
                 alerter.addAlert("error", "HTTP Status: " + status + "\n" + data);
-                var data = localStorage.getItem(url);
                 errorCallback(data, status, "");
             }
             );
@@ -101,6 +100,7 @@ class HTTPRequests {
         errorCallback: (data: any, status: number, error: string) => void) {
         var alerter: Alerter = this.alerter;
         var $location: angular.ILocationService = this.$location;
+        var $requests = this;
         return this.$http(
             {
                 method: "POST",
@@ -125,8 +125,7 @@ class HTTPRequests {
                 headers: angular.IHttpHeadersGetter,
                 config: angular.IRequestConfig) {
                 if (status === 401) {
-                    alerter.addAlert("info", data);
-                    $location.path("/login");
+                    $requests.handle401(data);
                     return;
                 }
                 alerter.addAlert("error", "HTTP Status: " + status + "\n" + data);
@@ -143,6 +142,7 @@ class HTTPRequests {
         errorCallback: (data: any, status: number, error: string) => void) {
         var alerter: Alerter = this.alerter;
         var $location: angular.ILocationService = this.$location;
+        var $requests = this;
         return this.$http(
             {
                 method: "PUT",
@@ -168,8 +168,7 @@ class HTTPRequests {
                 headers: angular.IHttpHeadersGetter,
                 config: angular.IRequestConfig) {
                 if (status === 401) {
-                    alerter.addAlert("info", data);
-                    $location.path("/login");
+                    $requests.handle401(data);
                     return;
                 }
                 alerter.addAlert("error", "HTTP Status: " + status + "\n" + data);
@@ -186,6 +185,7 @@ class HTTPRequests {
         errorCallback: (data: any, status: number, error: string) => void) {
         var alerter: Alerter = this.alerter;
         var $location: angular.ILocationService = this.$location;
+        var $requests = this;
         return this.$http(
             {
                 method: "PUT",
@@ -212,8 +212,7 @@ class HTTPRequests {
                 headers: angular.IHttpHeadersGetter,
                 config: angular.IRequestConfig) {
                 if (status === 401) {
-                    alerter.addAlert("info", data);
-                    $location.path("/login");
+                    $requests.handle401(data);
                     return;
                 }
                 alerter.addAlert("error", "HTTP Status: " + status + "\n" + data);
@@ -229,6 +228,7 @@ class HTTPRequests {
         errorCallback: (data: any, status: number, error: string) => void) {
         var alerter: Alerter = this.alerter;
         var $location: angular.ILocationService = this.$location;
+        var $requests = this;
         return this.$http(
             {
                 method: "DELETE",
@@ -253,13 +253,18 @@ class HTTPRequests {
                 headers: angular.IHttpHeadersGetter,
                 config: angular.IRequestConfig) {
                 if (status === 401) {
-                    alerter.addAlert("info", data);
-                    $location.path("/login");
+                    $requests.handle401(data);
                     return;
                 }
                 alerter.addAlert("error", "HTTP Status: " + status + "\n" + data);
                 errorCallback(data, status, "");
             }
             );
+    }
+
+    handle401(data: any) {
+        this.alerter.addAlert("info", data);
+        window.location.href = "/#/login";
+        sessionStorage.setItem("redirect.after.login", this.$location.absUrl());
     }
 }

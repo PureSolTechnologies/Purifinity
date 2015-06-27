@@ -24,9 +24,9 @@ purifinityServerModule.factory("authService", ["$location", "httpRequests", "bas
         return new AuthenticationService($location, httpRequests, baseURL);
     }]);
 
-purifinityServerModule.factory("httpRequests", ["$http", "$location", "alerterFactory",
-    function($http, $location, alerterFactory) {
-        return new HTTPRequests($http, $location, alerterFactory);
+purifinityServerModule.factory("httpRequests", ["$http", "$location", "$window", "alerterFactory",
+    function($http, $location, $window, alerterFactory) {
+        return new HTTPRequests($http, $location, $window, alerterFactory);
     }]);
 
 /**

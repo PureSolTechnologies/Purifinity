@@ -9,7 +9,6 @@ class AuthenticationService {
         private httpRequests: HTTPRequests,
         private baseURL: string) {
         this.authData = this.loadAuthData();
-        this.redirect = "/";
         this.loginURL = "/purifinityserver/rest/auth/login";
         this.logoutURL = "/purifinityserver/rest/auth/logout";
     }
@@ -28,8 +27,9 @@ class AuthenticationService {
                 authService.authData.authId = email;
                 authenticated = true;
                 authService.storeAuthData(authService.authData);
-                if (authService.redirect) {
-                    authService.$location.path(authService.redirect);
+                var redirect = sessionStorage.getItem("redirect.after.login");
+                if (redirect) {
+                    window.location.href = redirect ;
                 } else {
                     authService.$location.path("/");
                 }
