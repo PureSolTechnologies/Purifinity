@@ -38,8 +38,7 @@ public interface FileStore {
 	 * @throws FileStoreException
 	 *             is thrown in cases of issues.
 	 */
-	FileInformation storeRawFile(InputStream rawStream)
-			throws FileStoreException;
+	FileInformation storeRawFile(InputStream rawStream) throws FileStoreException;
 
 	/**
 	 * Stores the file in the store in raw format. This means we just copy it
@@ -81,8 +80,7 @@ public interface FileStore {
 	 * @return
 	 * @throws FileStoreException
 	 */
-	public List<CodeAnalysis> loadAnalyses(HashId hashId)
-			throws FileStoreException;
+	public List<CodeAnalysis> loadAnalyses(HashId hashId) throws FileStoreException;
 
 	/**
 	 * This method stores a single analysis for a file.
@@ -98,5 +96,5 @@ public interface FileStore {
 	 * @param hashId
 	 * @return
 	 */
-	public boolean wasAnalyzed(HashId hashId);
+	public boolean wasAnalyzed(HashId hashId) throws FileStoreException;
 }

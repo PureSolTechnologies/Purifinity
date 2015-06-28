@@ -15,18 +15,17 @@ public class TestLanguageAnalyserTest {
 
 	@Test
 	public void test() {
-		assertNotNull(new TestLanguageAnalyser(new SourceCode(), null));
+		assertNotNull(new TestLanguageAnalyser(new SourceCode(null, null), null));
 	}
 
 	@Test
 	public void testInitValues() throws IOException {
 		String directory = ".";
 		String fileName = "TestFile.test";
-		SourceFileLocation sourceFileLocation = new SourceFileLocation(
-				directory, fileName);
+		SourceFileLocation sourceFileLocation = new SourceFileLocation(directory, fileName);
 		try (InputStream sourceStream = sourceFileLocation.openStream()) {
-			TestLanguageAnalyser analyser = new TestLanguageAnalyser(
-					SourceCode.read(sourceStream, sourceFileLocation), null);
+			TestLanguageAnalyser analyser = new TestLanguageAnalyser(SourceCode.read(sourceStream, sourceFileLocation),
+					null);
 			assertEquals(sourceFileLocation, analyser.getSourceCode());
 		}
 	}

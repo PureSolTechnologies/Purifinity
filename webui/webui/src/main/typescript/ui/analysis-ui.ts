@@ -22,7 +22,7 @@ analysisUIModule.controller("analysisBrowserCtrl", ["$scope", "$routeParams", "$
                     treeTableData.columnHeaders.push(
                         new TreeTableColumnHeader("Size Recursive", "Size of file or size of folder including sub folders."));
                     treeTableData.columnHeaders.push(
-                        new TreeTableColumnHeader("Analyses", "Successful analyses."));
+                        new TreeTableColumnHeader("Analyzes", "Successful analyzes."));
                     $scope.analysisFileTree = treeTableData;
                 },
                 function(data, status, error) { }

@@ -102,9 +102,12 @@
 					}
 				});
 			} ]);
+	projectApp.controller("projectAppCtrl", ["$scope", function($scope){
+		$scope.parentScopeProject = "HALLO, WELT!";
+	}]);
 </script>
 </head>
-<body>
+<body data-ng-controller="projectAppCtrl">
 	<div class="navbar navbar-default" role="navigation"
 		data-ng-controller="menuCtrl">
 		<div class="navbar-header">

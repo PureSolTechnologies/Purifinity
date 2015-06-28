@@ -19,8 +19,7 @@ public class FileStoreRestService implements FileStoreRestInterface {
 	private FileStoreService fileStore;
 
 	@Override
-	public FileInformation storeRawFile(InputStream rawStream)
-			throws FileStoreException {
+	public FileInformation storeRawFile(InputStream rawStream) throws FileStoreException {
 		return fileStore.storeRawFile(rawStream);
 	}
 
@@ -40,24 +39,21 @@ public class FileStoreRestService implements FileStoreRestInterface {
 	}
 
 	@Override
-	public List<CodeAnalysis> loadAnalyses(HashId hashId)
-			throws FileStoreException {
+	public List<CodeAnalysis> loadAnalyses(HashId hashId) throws FileStoreException {
 		return fileStore.loadAnalyses(hashId);
 	}
 
 	@Override
-	public void storeAnalysis(HashId hashId, CodeAnalysis analysis)
-			throws FileStoreException {
+	public void storeAnalysis(HashId hashId, CodeAnalysis analysis) throws FileStoreException {
 		if (!hashId.equals(analysis.getAnalysisInformation().getHashId())) {
-			throw new IllegalArgumentException("Hash id in URL '" + hashId
-					+ "' does not match hash id in analysis '"
+			throw new IllegalArgumentException("Hash id in URL '" + hashId + "' does not match hash id in analysis '"
 					+ analysis.getAnalysisInformation().getHashId() + "'!");
 		}
 		fileStore.storeAnalysis(analysis);
 	}
 
 	@Override
-	public boolean wasAnalyzed(HashId hashId) {
+	public boolean wasAnalyzed(HashId hashId) throws FileStoreException {
 		return fileStore.wasAnalyzed(hashId);
 	}
 

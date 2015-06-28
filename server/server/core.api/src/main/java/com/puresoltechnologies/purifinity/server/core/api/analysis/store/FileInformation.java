@@ -26,4 +26,9 @@ public class FileInformation {
 	public int getSize() {
 		return size;
 	}
+
+	@Override
+	public String toString() {
+		return hashId + "(size: " + size + " bytes)";
+	}
 }

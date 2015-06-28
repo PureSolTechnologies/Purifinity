@@ -24,14 +24,12 @@ public interface FileStoreRestInterface {
 	@Path("files")
 	@Consumes(MediaType.APPLICATION_OCTET_STREAM)
 	@Produces(MediaType.APPLICATION_JSON)
-	public FileInformation storeRawFile(InputStream rawStream)
-			throws FileStoreException;
+	public FileInformation storeRawFile(InputStream rawStream) throws FileStoreException;
 
 	@GET
 	@Path("files/{hashId}")
 	@Produces(MediaType.APPLICATION_OCTET_STREAM)
-	public InputStream readRawFile(@PathParam("hashId") HashId hashId)
-			throws FileStoreException;
+	public InputStream readRawFile(@PathParam("hashId") HashId hashId) throws FileStoreException;
 
 	@GET
 	@Path("files/{hashId}/available")
@@ -41,24 +39,21 @@ public interface FileStoreRestInterface {
 	@GET
 	@Path("files/{hashId}/sourcecode")
 	@Produces(MediaType.APPLICATION_JSON)
-	public SourceCode readSourceCode(@PathParam("hashId") HashId hashId)
-			throws FileStoreException;
+	public SourceCode readSourceCode(@PathParam("hashId") HashId hashId) throws FileStoreException;
 
 	@GET
 	@Path("files/{hashId}/analyses")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<CodeAnalysis> loadAnalyses(@PathParam("hashId") HashId hashId)
-			throws FileStoreException;
+	public List<CodeAnalysis> loadAnalyses(@PathParam("hashId") HashId hashId) throws FileStoreException;
 
 	@PUT
 	@Path("files/{hashId}/analyses")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void storeAnalysis(@PathParam("hashId") HashId hashId,
-			CodeAnalysis analysis) throws FileStoreException;
+	public void storeAnalysis(@PathParam("hashId") HashId hashId, CodeAnalysis analysis) throws FileStoreException;
 
 	@GET
 	@Path("files/{hashId}/analyzed")
 	@Produces(MediaType.APPLICATION_JSON)
-	public boolean wasAnalyzed(@PathParam("hashId") HashId hashId);
+	public boolean wasAnalyzed(@PathParam("hashId") HashId hashId) throws FileStoreException;
 
 }
