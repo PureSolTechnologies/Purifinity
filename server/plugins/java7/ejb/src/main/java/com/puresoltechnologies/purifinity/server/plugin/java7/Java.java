@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.ejb.Remote;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
@@ -32,7 +32,7 @@ import com.puresoltechnologies.versioning.Version;
  * @author Rick-Rainer Ludwig
  * 
  */
-@Stateless
+@Stateful
 @Remote(ProgrammingLanguageAnalyzer.class)
 public class Java extends AbstractProgrammingLanguageAnalyzer {
 
@@ -46,15 +46,11 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 	private static final String FILE_PATTERNS_PROPERTY = "analyzer.java.source.patterns";
 
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
+
 	static {
-		PARAMETERS
-				.add(new ConfigurationParameter<String>(
-						"Java Source File Pattern",
-						"",
-						LevelOfMeasurement.NOMINAL,
-						"Specifies a list of file patterns in regular expression syntax which are used to mark Java sources. One line is on pattern.",
-						String.class, FILE_PATTERNS_PROPERTY, "/",
-						patternsToString(FILE_PATTERNS)));
+		PARAMETERS.add(new ConfigurationParameter<String>("Java Source File Pattern", "", LevelOfMeasurement.NOMINAL,
+				"Specifies a list of file patterns in regular expression syntax which are used to mark Java sources. One line is on pattern.",
+				String.class, FILE_PATTERNS_PROPERTY, "/", patternsToString(FILE_PATTERNS)));
 
 	}
 
@@ -70,8 +66,7 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 		this.validFiles = validFiles;
 		validFilePatterns = new Pattern[validFiles.length];
 		for (int i = 0; i < validFiles.length; i++) {
-			validFilePatterns[i] = Pattern.compile(FileSearch
-					.wildcardsToRegExp(validFiles[i]));
+			validFilePatterns[i] = Pattern.compile(FileSearch.wildcardsToRegExp(validFiles[i]));
 		}
 	}
 
@@ -96,8 +91,7 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 	@Override
 	public JavaAnalyzer restoreAnalyzer(File file) throws IOException {
 		try {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
-					file));
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
 			try {
 				return (JavaAnalyzer) ois.readObject();
 			} finally {
@@ -123,13 +117,11 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
-			Object value) {
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter, Object value) {
 		if (FILE_PATTERNS_PROPERTY.equals(parameter.getPropertyKey())) {
 			setValidFilePatterns(stringToPatterns((String) value));
 		} else {
-			throw new IllegalArgumentException("Parameter '" + parameter
-					+ "' is unknown.");
+			throw new IllegalArgumentException("Parameter '" + parameter + "' is unknown.");
 		}
 	}
 
@@ -138,8 +130,7 @@ public class Java extends AbstractProgrammingLanguageAnalyzer {
 		if (FILE_PATTERNS_PROPERTY.equals(parameter.getPropertyKey())) {
 			return patternsToString(getValidFiles());
 		} else {
-			throw new IllegalArgumentException("Parameter '" + parameter
-					+ "' is unknown.");
+			throw new IllegalArgumentException("Parameter '" + parameter + "' is unknown.");
 		}
 	}
 }

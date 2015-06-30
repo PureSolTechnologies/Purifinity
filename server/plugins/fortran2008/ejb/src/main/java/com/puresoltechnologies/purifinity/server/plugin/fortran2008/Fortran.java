@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.ejb.Remote;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
@@ -24,7 +24,7 @@ import com.puresoltechnologies.purifinity.server.common.utils.BuildInformation;
 import com.puresoltechnologies.purifinity.server.plugin.fortran2008.grammar.FortranGrammar;
 import com.puresoltechnologies.versioning.Version;
 
-@Stateless
+@Stateful
 @Remote(ProgrammingLanguageAnalyzer.class)
 public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 
@@ -62,8 +62,6 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 				"Specifies wether a C pre-processor is to be used before analysis.", Boolean.class,
 				C_PRE_PROCESSOR_USAGE_PROPERTY, "/Source Files", false));
 	}
-
-	private SourceForm sourceForm = SourceForm.FREE_FORM;
 
 	private String[] freeFormFiles;
 	private String[] fixedFormFiles;
@@ -121,14 +119,6 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	public FortranAnalyzer createAnalyser(SourceCode sourceCode, HashId hashId) {
 		return new FortranAnalyzer(sourceCode, hashId, automatedFormIdentification, fixedFormFilePatterns,
 				freeFormFilePatterns);
-	}
-
-	public void setSourceForm(SourceForm sourceForm) {
-		this.sourceForm = sourceForm;
-	}
-
-	public SourceForm getSourceForm() {
-		return sourceForm;
 	}
 
 	@Override

@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.batch.operations.JobOperator;
 import javax.batch.operations.NoSuchJobException;
 import javax.batch.runtime.BatchStatus;
@@ -50,24 +48,12 @@ public class AnalysisServiceBean implements AnalysisService {
 	@Inject
 	private AnalyzerServiceManager analyzerRegistration;
 
-	@PostConstruct
-	public void initialize() {
-		eventLogger.logEvent(AnalysisServiceEvents.createStartupEvent());
-	}
-
-	@PreDestroy
-	public void shutdown() {
-		eventLogger.logEvent(AnalysisServiceEvents.createShutdownEvent());
-	}
-
 	@Override
 	public void triggerRunJob(String projectId) throws AnalysisStoreException {
-		AnalysisProjectSettings analysisProjectSettings = analysisStore
-				.readAnalysisProjectSettings(projectId);
+		AnalysisProjectSettings analysisProjectSettings = analysisStore.readAnalysisProjectSettings(projectId);
 		Properties jobParameters = new Properties();
 		jobParameters.setProperty("project_id", projectId);
-		jobParameters.setProperty("project_name",
-				analysisProjectSettings.getName());
+		jobParameters.setProperty("project_name", analysisProjectSettings.getName());
 		jobOperator.start("ProjectAnalysis", jobParameters);
 	}
 
@@ -83,46 +69,35 @@ public class AnalysisServiceBean implements AnalysisService {
 	public PurifinityJobStates getJobStates() {
 		PurifinityJobStates states = new PurifinityJobStates(new Date());
 		try {
-			List<Long> runningExecutions = jobOperator
-					.getRunningExecutions("ProjectAnalysis");
+			List<Long> runningExecutions = jobOperator.getRunningExecutions("ProjectAnalysis");
 			for (long jobId : runningExecutions) {
 				JobExecution jobExecution = jobOperator.getJobExecution(jobId);
-				String projectId = jobExecution.getJobParameters().getProperty(
-						"project_id");
-				String projectName = jobExecution.getJobParameters()
-						.getProperty("project_name");
-				List<StepExecution> stepExecutions = jobOperator
-						.getStepExecutions(jobId);
+				String projectId = jobExecution.getJobParameters().getProperty("project_id");
+				String projectName = jobExecution.getJobParameters().getProperty("project_name");
+				List<StepExecution> stepExecutions = jobOperator.getStepExecutions(jobId);
 				List<JobStepState> stepStates = new ArrayList<JobStepState>();
 				for (StepExecution stepExecution : stepExecutions) {
 					if (stepExecution.getBatchStatus() == BatchStatus.STARTED) {
 						String stepName = stepExecution.getStepName();
 						long current = 0;
 						long max = 1;
-						Object persistentUserData = stepExecution
-								.getPersistentUserData();
+						Object persistentUserData = stepExecution.getPersistentUserData();
 						if (persistentUserData != null) {
-							if (StepInformation.class
-									.isAssignableFrom(persistentUserData
-											.getClass())) {
+							if (StepInformation.class.isAssignableFrom(persistentUserData.getClass())) {
 								StepInformation stepInformation = (StepInformation) persistentUserData;
 								stepName = stepInformation.getName();
 							}
-							if (StepProgress.class
-									.isAssignableFrom(persistentUserData
-											.getClass())) {
+							if (StepProgress.class.isAssignableFrom(persistentUserData.getClass())) {
 								StepProgress stepInformation = (StepProgress) persistentUserData;
 								current = stepInformation.getCurrentItem();
 								max = stepInformation.getTotalItems();
 							}
 						}
-						stepStates.add(new JobStepState(stepName, stepExecution
-								.getBatchStatus().name(), current, max));
+						stepStates.add(new JobStepState(stepName, stepExecution.getBatchStatus().name(), current, max));
 					}
 				}
 				if (stepStates.size() > 0) {
-					states.addJobState(new JobState(jobId, projectId,
-							projectName, stepStates));
+					states.addJobState(new JobState(jobId, projectId, projectName, stepStates));
 				}
 			}
 		} catch (NoSuchJobException e) {
@@ -138,8 +113,7 @@ public class AnalysisServiceBean implements AnalysisService {
 
 	@Override
 	public AnalyzerServiceInformation getAnalyzer(String analyzerId) {
-		for (AnalyzerServiceInformation information : analyzerRegistration
-				.getServices()) {
+		for (AnalyzerServiceInformation information : analyzerRegistration.getServices()) {
 			if (information.getId().equals(analyzerId)) {
 				return information;
 			}
@@ -149,8 +123,7 @@ public class AnalysisServiceBean implements AnalysisService {
 
 	@Override
 	public List<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
-		return analyzerRegistration.getInstanceById(analyzerId)
-				.getConfigurationParameters();
+		return analyzerRegistration.getInstanceById(analyzerId).getConfigurationParameters();
 	}
 
 	@Override

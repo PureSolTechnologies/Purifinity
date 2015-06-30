@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.ejb.Remote;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
@@ -31,7 +31,7 @@ import com.puresoltechnologies.versioning.Version;
  * @author Rick-Rainer Ludwig
  * 
  */
-@Stateless
+@Stateful
 @Remote(ProgrammingLanguageAnalyzer.class)
 public class C11 extends AbstractProgrammingLanguageAnalyzer {
 
@@ -45,15 +45,11 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 	private static final String FILE_PATTERNS_PROPERY = "analyzer.c.source.suffixes";
 
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
+
 	static {
-		PARAMETERS
-				.add(new ConfigurationParameter<String>(
-						"C Source File Patterns",
-						"",
-						LevelOfMeasurement.NOMINAL,
-						"Specifies a list of file patterns in regular expression format which are used to mark C sources. Each pattern is placed on its own line.",
-						String.class, FILE_PATTERNS_PROPERY, "/",
-						patternsToString(FILE_PATTERNS)));
+		PARAMETERS.add(new ConfigurationParameter<String>("C Source File Patterns", "", LevelOfMeasurement.NOMINAL,
+				"Specifies a list of file patterns in regular expression format which are used to mark C sources. Each pattern is placed on its own line.",
+				String.class, FILE_PATTERNS_PROPERY, "/", patternsToString(FILE_PATTERNS)));
 
 	}
 
@@ -86,8 +82,7 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 	@Override
 	public C11Analyzer restoreAnalyzer(File file) throws IOException {
 		try {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(
-					file));
+			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
 			try {
 				return (C11Analyzer) ois.readObject();
 			} finally {
@@ -113,13 +108,11 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 	}
 
 	@Override
-	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
-			Object value) {
+	public void setConfigurationParameter(ConfigurationParameter<?> parameter, Object value) {
 		if (FILE_PATTERNS_PROPERY.equals(parameter.getPropertyKey())) {
 			setValidFiles(stringToPatterns((String) value));
 		} else {
-			throw new IllegalArgumentException("Parameter '" + parameter
-					+ "' is unknown.");
+			throw new IllegalArgumentException("Parameter '" + parameter + "' is unknown.");
 		}
 	}
 
@@ -127,8 +120,7 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 		validFiles = files;
 		validFilePatterns = new Pattern[validFiles.length];
 		for (int i = 0; i < validFiles.length; i++) {
-			validFilePatterns[i] = Pattern.compile(FileSearch
-					.wildcardsToRegExp(validFiles[i]));
+			validFilePatterns[i] = Pattern.compile(FileSearch.wildcardsToRegExp(validFiles[i]));
 		}
 	}
 
@@ -137,8 +129,7 @@ public class C11 extends AbstractProgrammingLanguageAnalyzer {
 		if (FILE_PATTERNS_PROPERY.equals(parameter.getPropertyKey())) {
 			return patternsToString(validFiles);
 		} else {
-			throw new IllegalArgumentException("Parameter '" + parameter
-					+ "' is unknown.");
+			throw new IllegalArgumentException("Parameter '" + parameter + "' is unknown.");
 		}
 	}
 }

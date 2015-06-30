@@ -45,8 +45,7 @@ public class AnalysisItemProcessor implements ItemProcessor {
 		if (!fileStore.wasAnalyzed(fileInformation.getHashId())) {
 			createNewAnalysis(storedFile);
 		}
-		PersistentStepUserData persistentUserData = (PersistentStepUserData) stepContext
-				.getPersistentUserData();
+		PersistentStepUserData persistentUserData = (PersistentStepUserData) stepContext.getPersistentUserData();
 		persistentUserData.increaseCurrentItem(1);
 		return storedFile;
 	}
@@ -61,31 +60,26 @@ public class AnalysisItemProcessor implements ItemProcessor {
 	 * @throws IOException
 	 * @throws FileStoreException
 	 */
-	private void createNewAnalysis(StoredFile storedFile) throws IOException,
-			FileStoreException {
+	private void createNewAnalysis(StoredFile storedFile) throws IOException, FileStoreException {
 		FileInformation fileInformation = storedFile.getFileInformation();
 		if (fileInformation.getSize() <= 0) {
 			return;
 		}
-		SourceCodeLocation sourceCodeLocation = storedFile
-				.getSourceCodeLocation();
-		for (AnalyzerServiceInformation analyzerInformation : analyzerServiceManager
-				.getServices()) {
+		HashId hashId = fileInformation.getHashId();
+		if (fileStore.wasAnalyzed(hashId)) {
+			return;
+		}
+		SourceCodeLocation sourceCodeLocation = storedFile.getSourceCodeLocation();
+		for (AnalyzerServiceInformation analyzerInformation : analyzerServiceManager.getServices()) {
 			if (analyzerServiceManager.isActive(analyzerInformation.getId())) {
 				ProgrammingLanguageAnalyzer instance = analyzerServiceManager
 						.createProxy(analyzerInformation.getJndiName());
 				if (instance.isSuitable(sourceCodeLocation)) {
-					logger.info("'"
-							+ sourceCodeLocation
-									.getHumanReadableLocationString()
-							+ "' is a suitable file for '" + instance.getName()
-							+ "'.");
-					try (InputStream sourceStream = sourceCodeLocation
-							.openStream()) {
-						HashId hashId = fileInformation.getHashId();
-						CodeAnalysis codeAnalysis = instance
-								.analyze(SourceCode.read(sourceStream,
-										sourceCodeLocation), hashId);
+					logger.info("'" + sourceCodeLocation.getHumanReadableLocationString() + "' is a suitable file for '"
+							+ instance.getName() + "'.");
+					try (InputStream sourceStream = sourceCodeLocation.openStream()) {
+						CodeAnalysis codeAnalysis = instance.analyze(SourceCode.read(sourceStream, sourceCodeLocation),
+								hashId);
 						fileStore.storeAnalysis(codeAnalysis);
 					}
 				}
