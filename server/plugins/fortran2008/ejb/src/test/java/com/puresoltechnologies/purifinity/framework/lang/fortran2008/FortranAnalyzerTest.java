@@ -26,27 +26,26 @@ public class FortranAnalyzerTest {
 
 	@Test
 	public void testInstance() {
-		assertNotNull(new FortranAnalyzer(new SourceCode("", ""), null, true,
-				null, null));
+		assertNotNull(new FortranAnalyzer(new SourceCode("", ""), null, true, null, null));
 	}
 
 	@Test
 	public void testInitValues() throws IOException {
 		SourceFileLocation sourceFileLocation = new SourceFileLocation(
-				"src/test", "TestFile.f");
+				"src/test/resources/com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples",
+				"FortranTest.f");
 		try (InputStream sourceStream = sourceFileLocation.openStream()) {
-			FortranAnalyzer analyser = new FortranAnalyzer(SourceCode.read(
-					sourceStream, sourceFileLocation), null, true, null, null);
+			FortranAnalyzer analyser = new FortranAnalyzer(SourceCode.read(sourceStream, sourceFileLocation), null,
+					true, null, null);
 			assertNull(analyser.getAnalysis());
 		}
 	}
 
 	private void test(File sourceDirectory, File file) throws Exception {
-		SourceFileLocation sourceFileLocation = new SourceFileLocation(
-				sourceDirectory, file);
+		SourceFileLocation sourceFileLocation = new SourceFileLocation(sourceDirectory, file);
 		try (InputStream openStream = sourceFileLocation.openStream()) {
-			FortranAnalyzer analyser = new FortranAnalyzer(SourceCode.read(
-					openStream, sourceFileLocation), null, true, null, null);
+			FortranAnalyzer analyser = new FortranAnalyzer(SourceCode.read(openStream, sourceFileLocation), null, true,
+					null, null);
 			analyser.analyze();
 		}
 	}
@@ -54,29 +53,25 @@ public class FortranAnalyzerTest {
 	@Test
 	public void testEmptyProgram() throws Exception {
 		test(new File("src/test/resources"),
-				new File(
-						"com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples/EmptyProgram.f"));
+				new File("com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples/EmptyProgram.f"));
 	}
 
 	@Test
 	public void testEmptySubroutine() throws Exception {
 		test(new File("src/test/resources"),
-				new File(
-						"com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples/EmptySubroutine.f"));
+				new File("com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples/EmptySubroutine.f"));
 	}
 
 	@Test
 	public void test2() throws Exception {
 		test(new File("src/test/resources"),
-				new File(
-						"com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples/FortranTest.f"));
+				new File("com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples/FortranTest.f"));
 	}
 
 	@Test
 	public void testZGERC() throws Exception {
 		test(new File("src/test/resources"),
-				new File(
-						"com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples/zgerc.f"));
+				new File("com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples/zgerc.f"));
 	}
 
 	/**
@@ -87,7 +82,6 @@ public class FortranAnalyzerTest {
 	@Test
 	public void testNDTRAN() throws Exception {
 		test(new File("src/test/resources"),
-				new File(
-						"com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples/ndtran.f"));
+				new File("com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples/ndtran.f"));
 	}
 }
