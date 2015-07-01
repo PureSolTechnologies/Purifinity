@@ -16,8 +16,7 @@ import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.versioning.Version;
 
-public class HalsteadMetricEvaluatorDatabaseTransformator implements
-	ComponentTransformator {
+public class HalsteadMetricEvaluatorDatabaseTransformator implements ComponentTransformator {
 
     public static final String HALSTEAD_METRICS_KEYSPACE_NAME = "halstead_metrics";
     public static final String CASSANDRA_HOST = "localhost";
@@ -53,92 +52,51 @@ public class HalsteadMetricEvaluatorDatabaseTransformator implements
     private TransformationSequence migrateVersion0_3_0_pre() {
 	Version startVersion = new Version(0, 0, 0);
 	Version targetVersion = new Version(0, 3, 0, "pre");
-	ProvidedVersionRange versionRange = new ProvidedVersionRange(
-		targetVersion, null);
-	SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-		startVersion, versionRange);
-	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-		CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
-	sequence.appendTransformation(CassandraStandardMigrations
-		.createKeyspace(
-			sequence,
-			HALSTEAD_METRICS_KEYSPACE_NAME,
-			"Rick-Rainer Ludwig",
-			"This keyspace keeps the detailed results of halstaed evaluations like the found operators and operands and their count.",
-			ReplicationStrategy.SIMPLE_STRATEGY, 1));
+	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
+	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
+	CassandraTransformationSequence sequence = new CassandraTransformationSequence(CASSANDRA_HOST,
+		CASSANDRA_CQL_PORT, metadata);
+	sequence.appendTransformation(CassandraStandardMigrations.createKeyspace(sequence,
+		HALSTEAD_METRICS_KEYSPACE_NAME, "Rick-Rainer Ludwig",
+		"This keyspace keeps the detailed results of halstaed evaluations like the found operators and operands and their count.",
+		ReplicationStrategy.SIMPLE_STRATEGY, 1));
 	return sequence;
     }
 
     private TransformationSequence migrateVersion0_3_0() {
 	Version startVersion = new Version(0, 3, 0, "pre");
 	Version targetVersion = new Version(0, 3, 0);
-	ProvidedVersionRange versionRange = new ProvidedVersionRange(
-		targetVersion, null);
-	SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-		startVersion, versionRange);
-	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-		CASSANDRA_HOST, CASSANDRA_CQL_PORT,
-		HALSTEAD_METRICS_KEYSPACE_NAME, metadata);
+	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
+	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
+	CassandraTransformationSequence sequence = new CassandraTransformationSequence(CASSANDRA_HOST,
+		CASSANDRA_CQL_PORT, HALSTEAD_METRICS_KEYSPACE_NAME, metadata);
 
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence,
-		"Rick-Rainer Ludwig",
-		"CREATE TABLE "
-			+ FILE_RESULTS_TABLE
-			+ " (hashid varchar, "
-			+ "evaluator_id varchar, "
-			+ "source_code_location varchar, "
-			+ "code_range_type varchar, "
-			+ "code_range_name varchar, "
-			+ "operators map<text,int>, "
-			+ "operands map<text,int>, "
-			+ "differentOperators int, "
-			+ "differentOperands int, "
-			+ "totalOperators int, "
-			+ "totalOperands int, "
-			+ "vocabularySize int, "
-			+ "programLength int, "
-			+ "halsteadLength double, "
-			+ "halsteadVolume double, "
-			+ "difficulty double, "
-			+ "programLevel double, "
-			+ "implementationEffort double, "
-			+ "implementationTime double, "
-			+ "estimatedBugs double, "
+	sequence.appendTransformation(new CassandraCQLTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + FILE_RESULTS_TABLE + " (hashid varchar, " + "evaluator_id varchar, "
+			+ "source_code_location varchar, " + "code_range_type varchar, " + "code_range_name varchar, "
+			+ "operators varchar, " + "operands varchar, " + "differentOperators int, "
+			+ "differentOperands int, " + "totalOperators int, " + "totalOperands int, "
+			+ "vocabularySize int, " + "programLength int, " + "halsteadLength double, "
+			+ "halsteadVolume double, " + "difficulty double, " + "programLevel double, "
+			+ "implementationEffort double, " + "implementationTime double, " + "estimatedBugs double, "
 			+ "PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name));",
 		"Keeps directory results for Halstead evaluator."));
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
-			+ DIRECTORY_RESULTS_TABLE + " (hashid varchar, "
-			+ "evaluator_id varchar, "
-			+ "operators map<text,int>, "
-			+ "operands map<text,int>, "
-			+ "differentOperators int, "
-			+ "differentOperands int, " + "totalOperators int, "
-			+ "totalOperands int, " + "vocabularySize int, "
-			+ "programLength int, " + "halsteadLength double, "
-			+ "halsteadVolume double, " + "difficulty double, "
-			+ "programLevel double, "
-			+ "implementationEffort double, "
-			+ "implementationTime double, "
-			+ "estimatedBugs double, "
+	sequence.appendTransformation(new CassandraCQLTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + DIRECTORY_RESULTS_TABLE + " (hashid varchar, " + "evaluator_id varchar, "
+			+ "operators varchar, " + "operands varchar, " + "differentOperators int, "
+			+ "differentOperands int, " + "totalOperators int, " + "totalOperands int, "
+			+ "vocabularySize int, " + "programLength int, " + "halsteadLength double, "
+			+ "halsteadVolume double, " + "difficulty double, " + "programLevel double, "
+			+ "implementationEffort double, " + "implementationTime double, " + "estimatedBugs double, "
 			+ "PRIMARY KEY(hashid, evaluator_id));",
 		"Keeps directory results for Halstead evaluator."));
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
-			+ PROJECT_RESULTS_TABLE + " (project_id ascii, "
-			+ "evaluator_id varchar, "
-			+ "operators map<text,int>, "
-			+ "operands map<text,int>, "
-			+ "differentOperators int, "
-			+ "differentOperands int, " + "totalOperators int, "
-			+ "totalOperands int, " + "vocabularySize int, "
-			+ "programLength int, " + "halsteadLength double, "
-			+ "halsteadVolume double, " + "difficulty double, "
-			+ "programLevel double, "
-			+ "implementationEffort double, "
-			+ "implementationTime double, "
-			+ "estimatedBugs double, "
+	sequence.appendTransformation(new CassandraCQLTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + PROJECT_RESULTS_TABLE + " (project_id ascii, " + "evaluator_id varchar, "
+			+ "operators varchar, " + "operands varchar, " + "differentOperators int, "
+			+ "differentOperands int, " + "totalOperators int, " + "totalOperands int, "
+			+ "vocabularySize int, " + "programLength int, " + "halsteadLength double, "
+			+ "halsteadVolume double, " + "difficulty double, " + "programLevel double, "
+			+ "implementationEffort double, " + "implementationTime double, " + "estimatedBugs double, "
 			+ "PRIMARY KEY(project_id, evaluator_id));",
 		"Keeps project results for Halstead evaluator."));
 
@@ -149,8 +107,7 @@ public class HalsteadMetricEvaluatorDatabaseTransformator implements
     public void dropAll() {
 	try (Cluster cluster = CassandraUtils.connectCluster()) {
 	    try (Session session = cluster.connect()) {
-		session.execute("DROP KEYSPACE IF EXISTS "
-			+ HALSTEAD_METRICS_KEYSPACE_NAME);
+		session.execute("DROP KEYSPACE IF EXISTS " + HALSTEAD_METRICS_KEYSPACE_NAME);
 	    }
 	}
 
