@@ -145,7 +145,7 @@ configurationUIModule.controller("configurationParameterCtrl", ["$scope", "prefe
                         $scope.values.booleanInput = $scope.parameter.defaultValue;
                     }
                     $scope.values.current = $scope.values.booleanInput;
-                    $scope.values.default = ($scope.parameter.defaultValue === "true");
+                    $scope.values.default = $scope.parameter.defaultValue;
                 } else if ($scope.isText()) {
                     if (data) {
                         $scope.values.textInput = String(data);

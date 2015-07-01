@@ -33,13 +33,14 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	public static final String VERSION = "2008";
 	public static final Version PLUGIN_VERSION = BuildInformation.getVersion();
 
-	private static final String[] FIXED_FORM_FILE_PATTERNS = { "*.f", "*.for" };
-	private static final String[] FREE_FORM_FILE_PATTERNS = { "*.f90", "*.f95", "*.f03", "*.f08" };
+	private static final String[] DEFAULT_FIXED_FORM_FILE_SUFFIXES = { "*.f", "*.for" };
+	private static final String[] DEFAULT_FREE_FORM_FILE_SUFFIXES = { "*.f90", "*.f95", "*.f03", "*.f08" };
 
 	private static final String FIXED_FORM_FILE_PATTERNS_PROPERTY = "suffixes.form.fixed";
 	private static final String FREE_FORM_FILE_PATTERNS_PROPERTY = "suffixes.form.free";
 	private static final String C_PRE_PROCESSOR_USAGE_PROPERTY = "preprocessor.usage";
 	private static final String AUTOMATIC_SOURCE_FORM_PROPERTY = "form.automatic";
+	private static final String STRICT_FORM_CHECK_PROPERTY = "form.check.strict";
 
 	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
 
@@ -48,12 +49,12 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 				LevelOfMeasurement.NOMINAL,
 				"Specifies a list of file patterns in regular expression format which are to be use to identify pre Fortran 90 fixed form sources. Each pattern is placed on its own line.",
 				String.class, FIXED_FORM_FILE_PATTERNS_PROPERTY, "/Source Files",
-				patternsToString(FIXED_FORM_FILE_PATTERNS)));
+				patternsToString(DEFAULT_FIXED_FORM_FILE_SUFFIXES)));
 		PARAMETERS.add(new ConfigurationParameter<String>("Fortran Source File Patterns for Free Form", "",
 				LevelOfMeasurement.NOMINAL,
 				"Specifies a list of file patterns in regular expression format which are to be use to identify Fortran 90 free form sources. Each pattern is placed on its own line.",
 				String.class, FREE_FORM_FILE_PATTERNS_PROPERTY, "/Source Files",
-				patternsToString(FREE_FORM_FILE_PATTERNS)));
+				patternsToString(DEFAULT_FREE_FORM_FILE_SUFFIXES)));
 		PARAMETERS.add(new ConfigurationParameter<Boolean>("Automatic Source Form Identification", "",
 				LevelOfMeasurement.NOMINAL,
 				"If checked, the parser tries to identify the source form (fixed or free) automaticaly. Default is true, because it is cleaner to specify source form via file suffix.",
@@ -61,6 +62,9 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 		PARAMETERS.add(new ConfigurationParameter<Boolean>("Use C Pre-processor", "", LevelOfMeasurement.NOMINAL,
 				"Specifies wether a C pre-processor is to be used before analysis.", Boolean.class,
 				C_PRE_PROCESSOR_USAGE_PROPERTY, "/Source Files", false));
+		PARAMETERS.add(new ConfigurationParameter<Boolean>("Strict form check", "", LevelOfMeasurement.NOMINAL,
+				"Specifies wether the source form is to be checked very strict.", Boolean.class,
+				STRICT_FORM_CHECK_PROPERTY, "/Source Files", true));
 	}
 
 	private String[] freeFormFiles;
@@ -69,11 +73,12 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	private Pattern[] freeFormFilePatterns;
 	private boolean usePreProcessor = false;
 	private boolean automatedFormIdentification = false;
+	private boolean strictFormCheck = true;
 
 	public Fortran() {
 		super(NAME, VERSION);
-		setValidFixedFormFiles(FIXED_FORM_FILE_PATTERNS);
-		setValidFreeFormFiles(FREE_FORM_FILE_PATTERNS);
+		setValidFixedFormFiles(DEFAULT_FIXED_FORM_FILE_SUFFIXES);
+		setValidFreeFormFiles(DEFAULT_FREE_FORM_FILE_SUFFIXES);
 	}
 
 	@Override
@@ -118,7 +123,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 	@Override
 	public FortranAnalyzer createAnalyser(SourceCode sourceCode, HashId hashId) {
 		return new FortranAnalyzer(sourceCode, hashId, automatedFormIdentification, fixedFormFilePatterns,
-				freeFormFilePatterns);
+				freeFormFilePatterns, strictFormCheck);
 	}
 
 	@Override
@@ -136,6 +141,8 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 			setUsePreProcessor((Boolean) value);
 		} else if (AUTOMATIC_SOURCE_FORM_PROPERTY.equals(parameter.getPropertyKey())) {
 			setAutomatedFormIdentification((Boolean) value);
+		} else if (STRICT_FORM_CHECK_PROPERTY.equals(parameter.getPropertyKey())) {
+			setStrictFormCheck((Boolean) value);
 		} else {
 			throw new IllegalArgumentException("Parameter '" + parameter + "' is unknown.");
 		}
@@ -169,6 +176,10 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 		this.automatedFormIdentification = automatedFormIdentification;
 	}
 
+	private void setStrictFormCheck(boolean strictFormCheck) {
+		this.strictFormCheck = strictFormCheck;
+	}
+
 	@Override
 	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
 		if (FIXED_FORM_FILE_PATTERNS_PROPERTY.equals(parameter.getPropertyKey())) {
@@ -179,6 +190,8 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 			return usePreProcessor;
 		} else if (AUTOMATIC_SOURCE_FORM_PROPERTY.equals(parameter.getPropertyKey())) {
 			return automatedFormIdentification;
+		} else if (STRICT_FORM_CHECK_PROPERTY.equals(parameter.getPropertyKey())) {
+			return strictFormCheck;
 		} else {
 			throw new IllegalArgumentException("Parameter '" + parameter + "' is unknown.");
 		}

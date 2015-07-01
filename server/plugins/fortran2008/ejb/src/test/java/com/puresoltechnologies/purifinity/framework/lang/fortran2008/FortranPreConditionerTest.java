@@ -21,8 +21,7 @@ public class FortranPreConditionerTest {
 
 	private Pattern getPattern(String name) {
 		try {
-			Field commentPattern = FortranPreConditioner.class
-					.getDeclaredField(name);
+			Field commentPattern = FortranPreConditioner.class.getDeclaredField(name);
 			commentPattern.setAccessible(true);
 			return (Pattern) commentPattern.get(0);
 		} catch (SecurityException e) {
@@ -118,23 +117,18 @@ public class FortranPreConditionerTest {
 
 	@Test
 	public void testIsFixedForm() throws Exception {
-		FortranPreConditioner fixedFormFile = new FortranPreConditioner(
-				new SourceFileLocation(
-						"src/test/resources/com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples",
-						"FixedFormSample.f").getSourceCode(),
-				SourceForm.MIXED_FORM);
+		FortranPreConditioner fixedFormFile = new FortranPreConditioner(new SourceFileLocation(
+				"src/test/resources/com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples",
+				"FixedFormSample.f").getSourceCode(), SourceForm.MIXED_FORM, true);
 		assertTrue(fixedFormFile.isValidFixedForm());
 	}
 
 	@Test
 	public void testScan() throws Exception {
-		FortranPreConditioner fixedFormFile = new FortranPreConditioner(
-				new SourceFileLocation(
-						"src/test/resources/com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples",
-						"FixedFormSample.f").getSourceCode(),
-				SourceForm.MIXED_FORM);
-		TokenStream tokenStream = fixedFormFile.scan(FortranGrammar
-				.getInstance().getLexer());
+		FortranPreConditioner fixedFormFile = new FortranPreConditioner(new SourceFileLocation(
+				"src/test/resources/com/puresoltechnologies/purifinity/framework/lang/fortran2008/samples",
+				"FixedFormSample.f").getSourceCode(), SourceForm.MIXED_FORM, true);
+		TokenStream tokenStream = fixedFormFile.scan(FortranGrammar.getInstance().getLexer());
 		for (Token token : tokenStream) {
 			System.out.print(token);
 			System.out.print("\t");

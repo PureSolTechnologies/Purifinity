@@ -31,35 +31,34 @@ public class FortranPreConditioner {
 	 * '*'. If a '!' is found within the first five characters, the line is also
 	 * a comment line.
 	 */
-	private static final Pattern FIXED_FORM_COMMENT_PATTERN = Pattern
-			.compile("^([Cc*]|[ ]{0,4}!)");
+	private static final Pattern FIXED_FORM_COMMENT_PATTERN = Pattern.compile("^([Cc*]|[ ]{0,4}!|[ ]{6,}!)");
+	private static final Pattern STRICT_FIXED_FORM_COMMENT_PATTERN = Pattern.compile("^([C*]|[ ]{0,4}!|[ ]{6,}!)");
 
 	/**
 	 * This pattern checks for a label in front of a line. The line needs to
 	 * start with a space ' '. Within the next four characters an integer needs
 	 * to be found. The sixth character is allowed to be zero.
 	 */
-	private static final Pattern FIXED_FORM_LABEL_PATTERN = Pattern
-			.compile("^("
-			/*          */+ "\\d     " // one digit integer 1st position
-					+ "|" + " \\d    " // one digit integer 2nd position
-					+ "|" + "  \\d   " // one digit integer 3rd position
-					+ "|" + "   \\d  " // one digit integer 4th position
-					+ "|" + "    \\d[ 0]" // one digit integer 5th position
-					+ "|" + "\\d\\d    " // two digit integer 1st position
-					+ "|" + " \\d\\d   " // two digit integer 2nd position
-					+ "|" + "  \\d\\d  " // two digit integer 3rd position
-					+ "|" + "   \\d\\d[ 0]" // two digit integer 4th position
-					+ "|" + "\\d\\d\\d   " // three digit integer 1st position
-					+ "|" + " \\d\\d\\d  " // three digit integer 2nd position
-					+ "|" + "  \\d\\d\\d[ 0]" // three digit integer 3rd
-					// position
-					+ "|" + "\\d\\d\\d\\d  " // four digit integer 1st position
-					+ "|" + " \\d\\d\\d\\d[ 0]" // four digit integer 2nd
-					// position
-					+ "|" + "\\d\\d\\d\\d\\d[ 0]" // five digit integer 2nd
-					// position
-					+ ")"); // last character is a space or zero
+	private static final Pattern FIXED_FORM_LABEL_PATTERN = Pattern.compile("^("//
+			+ "\\d     " // one digit integer 1st position
+			+ "|" + " \\d    " // one digit integer 2nd position
+			+ "|" + "  \\d   " // one digit integer 3rd position
+			+ "|" + "   \\d  " // one digit integer 4th position
+			+ "|" + "    \\d[ 0]" // one digit integer 5th position
+			+ "|" + "\\d\\d    " // two digit integer 1st position
+			+ "|" + " \\d\\d   " // two digit integer 2nd position
+			+ "|" + "  \\d\\d  " // two digit integer 3rd position
+			+ "|" + "   \\d\\d[ 0]" // two digit integer 4th position
+			+ "|" + "\\d\\d\\d   " // three digit integer 1st position
+			+ "|" + " \\d\\d\\d  " // three digit integer 2nd position
+			+ "|" + "  \\d\\d\\d[ 0]" // three digit integer 3rd
+	// position
+			+ "|" + "\\d\\d\\d\\d  " // four digit integer 1st position
+			+ "|" + " \\d\\d\\d\\d[ 0]" // four digit integer 2nd
+	// position
+			+ "|" + "\\d\\d\\d\\d\\d[ 0]" // five digit integer 2nd
+	// position
+			+ ")"); // last character is a space or zero
 
 	/**
 	 * This pattern checks for a line continuation. If this is the case the
@@ -68,33 +67,27 @@ public class FortranPreConditioner {
 	 * continue. In this case the last LINE_TERMINATOR or LINE_COMMENT is set to
 	 * ignored.
 	 */
-	private static final Pattern FIXED_FORM_CONTINUATION_PATTERN = Pattern
-			.compile("^     [^ 0\\n\\r\\t]");
-	private static final Pattern FREE_FORM_CONTINUATION_PATTERN = Pattern
-			.compile("^[ \\t]*&");
-	private static final Pattern FREE_FORM_LABEL_PATTERN = Pattern
-			.compile("^([ \\t]*)(\\d{1,5})([ \\t]+)");
+	private static final Pattern FIXED_FORM_CONTINUATION_PATTERN = Pattern.compile("^     [^ 0\\n\\r\\t]");
+	private static final Pattern FREE_FORM_CONTINUATION_PATTERN = Pattern.compile("^[ \\t]*&");
+	private static final Pattern FREE_FORM_LABEL_PATTERN = Pattern.compile("^([ \\t]*)(\\d{1,5})([ \\t]+)");
 
 	/**
 	 * This pattern checks for six spaces at the line beginning. If this is the
 	 * case, the six spaces are treaded as simple whitespace.
 	 */
-	private static final Pattern FIXED_FORM_EMPTY_PATTERN = Pattern
-			.compile("^[ ]{6}");
+	private static final Pattern FIXED_FORM_EMPTY_PATTERN = Pattern.compile("^[ ]{6}");
 
 	/**
 	 * This is the fixed form pattern for single quote literal ends in cases of
 	 * broken literals.
 	 */
-	private static final Pattern FIXED_FORM_SINGLE_QUOTE_LITERAL_END = Pattern
-			.compile("^([^']|'')*'");
+	private static final Pattern FIXED_FORM_SINGLE_QUOTE_LITERAL_END = Pattern.compile("^([^']|'')*'");
 
 	/**
 	 * This is the fixed form pattern for double quote literal ends in cases of
 	 * broken literals.
 	 */
-	private static final Pattern FIXED_FORM_DOUBLE_QUOTE_LITERAL_END = Pattern
-			.compile("^([^\"]|\"\")*\"");
+	private static final Pattern FIXED_FORM_DOUBLE_QUOTE_LITERAL_END = Pattern.compile("^([^\"]|\"\")*\"");
 
 	/**
 	 * This constant tells that currently no string literal is opened.
@@ -113,6 +106,7 @@ public class FortranPreConditioner {
 
 	private final SourceCode sourceCode;
 	private final SourceForm sourceForm;
+	private final boolean strictFormCheck;
 	private final boolean validFixedForm;
 	private final List<Integer> invalidLines = new ArrayList<Integer>();
 	private final TokenStream tokenStream;
@@ -126,11 +120,12 @@ public class FortranPreConditioner {
 	 * @param sourceCode
 	 * @throws IOException
 	 */
-	public FortranPreConditioner(SourceCode sourceCode, SourceForm sourceForm)
+	public FortranPreConditioner(SourceCode sourceCode, SourceForm sourceForm, boolean strictFormCheck)
 			throws IOException {
 		super();
 		this.sourceCode = sourceCode;
 		this.sourceForm = sourceForm;
+		this.strictFormCheck = strictFormCheck;
 		tokenStream = new TokenStream();
 		validFixedForm = validateFixedForm();
 	}
@@ -147,20 +142,36 @@ public class FortranPreConditioner {
 		boolean isFixedForm = true;
 		int lineId = 0;
 		for (SourceCodeLine sourceLine : sourceCode.getLines()) {
-			String line = sourceLine.getLine();
 			lineId++;
-			if (line.isEmpty()) {
-				continue;
-			}
-			if (!(FIXED_FORM_EMPTY_PATTERN.matcher(line).find()
-					|| FIXED_FORM_COMMENT_PATTERN.matcher(line).find()
-					|| FIXED_FORM_LABEL_PATTERN.matcher(line).find() || FIXED_FORM_CONTINUATION_PATTERN
-					.matcher(line).find())) {
+			if (validateFixedFormLine(lineId, sourceLine) != null) {
 				isFixedForm = false;
-				invalidLines.add(lineId);
 			}
 		}
 		return isFixedForm;
+	}
+
+	private String validateFixedFormLine(int lineId, SourceCodeLine sourceLine) {
+		String line = sourceLine.getLine();
+		if (line.isEmpty()) {
+			return null;
+		}
+		if ((strictFormCheck) && (line.length() > 72)) {
+			return "Source line too long.";
+		}
+		if (FIXED_FORM_EMPTY_PATTERN.matcher(line).find()) {
+			return null;
+		}
+		if (FIXED_FORM_COMMENT_PATTERN.matcher(line).find()) {
+			if ((strictFormCheck) && (!STRICT_FIXED_FORM_COMMENT_PATTERN.matcher(line).find())) {
+				return "Comments are only allowed with 'C' and '*'.";
+			}
+			return null;
+		}
+		if (FIXED_FORM_LABEL_PATTERN.matcher(line).find()) {
+			return null;
+		}
+		invalidLines.add(lineId);
+		return "Invalid Line Found";
 	}
 
 	/**
@@ -185,8 +196,7 @@ public class FortranPreConditioner {
 
 	private TokenMetaData getCurrentMetaData(int lineNum, int column) {
 		SourceCodeLine sourceCodeLine = sourceCode.getLines().get(lineId - 1);
-		return new TokenMetaData(sourceCodeLine.getSource(), lineId, lineNum,
-				column);
+		return new TokenMetaData(sourceCodeLine.getSource(), lineId, lineNum, column);
 	}
 
 	/**
@@ -214,11 +224,19 @@ public class FortranPreConditioner {
 		return tokenStream;
 	}
 
-	private void processMixedForm(Lexer lexer, SourceCodeLine line,
-			boolean fixed) throws LexerException, IOException {
+	private void processMixedForm(Lexer lexer, SourceCodeLine line, boolean fixed) throws LexerException, IOException {
 		String text = line.getLine();
-		if (FIXED_FORM_EMPTY_PATTERN.matcher(text).find()
-				&& (!FREE_FORM_CONTINUATION_PATTERN.matcher(text).find())) {
+		if (text.isEmpty()) {
+			return;
+		}
+		if (fixed) {
+			String result = validateFixedFormLine(line.getLineNumber(), line);
+			if (result != null) {
+				throw new LexerException(
+						"Fixed form check failed at line " + lineId + " with message '" + result + "'.");
+			}
+		}
+		if (FIXED_FORM_EMPTY_PATTERN.matcher(text).find() && (!FREE_FORM_CONTINUATION_PATTERN.matcher(text).find())) {
 			processEmptyPattern(lexer, line);
 		} else if (FIXED_FORM_COMMENT_PATTERN.matcher(text).find()) {
 			processCommentPattern(line);
@@ -228,9 +246,7 @@ public class FortranPreConditioner {
 			processContinuationPattern(lexer, line);
 		} else {
 			if (fixed) {
-				throw new LexerException(
-						"Illegal line prefix for fixed form found at line "
-								+ lineId + "!");
+				throw new LexerException("Illegal line prefix for fixed form found at line " + lineId + "!");
 			}
 			processFreeForm(lexer, line);
 		}
@@ -256,21 +272,16 @@ public class FortranPreConditioner {
 	 * @throws LexerException
 	 * @throws IOException
 	 */
-	private void processEmptyPattern(Lexer lexer, SourceCodeLine sourceLine)
-			throws LexerException, IOException {
+	private void processEmptyPattern(Lexer lexer, SourceCodeLine sourceLine) throws LexerException, IOException {
 		if (currentBrokenCharacterMode != BROKEN_CHARACTER_LITERAL_NONE) {
-			throw new LexerException(
-					"Character literal was not closed! Continuation awaited at line "
-							+ lineId + "!");
+			throw new LexerException("Character literal was not closed! Continuation awaited at line " + lineId + "!");
 		}
 		String line = sourceLine.getLine();
 		Matcher matcher = FIXED_FORM_EMPTY_PATTERN.matcher(line);
 		matcher.find();
-		tokenStream.add(new Token("WHITESPACE", matcher.group(),
-				Visibility.IGNORED, new TokenMetaData(sourceLine.getSource(),
-						lineId, 1, 0)));
-		TokenStream subTokenStream = processRemainingLine(lexer,
-				line.substring(6), 6);
+		tokenStream.add(new Token("WHITESPACE", matcher.group(), Visibility.IGNORED,
+				new TokenMetaData(sourceLine.getSource(), lineId, 1, 0)));
+		TokenStream subTokenStream = processRemainingLine(lexer, line.substring(6), 6);
 		processSubTokenStream(subTokenStream, 6);
 	}
 
@@ -295,20 +306,16 @@ public class FortranPreConditioner {
 	 * @throws LexerException
 	 * @throws IOException
 	 */
-	private void processLabelPattern(Lexer lexer, SourceCodeLine sourceLine)
-			throws LexerException, IOException {
+	private void processLabelPattern(Lexer lexer, SourceCodeLine sourceLine) throws LexerException, IOException {
 		if (currentBrokenCharacterMode != BROKEN_CHARACTER_LITERAL_NONE) {
-			throw new LexerException(
-					"Character literal was not closed! Continuation awaited at line "
-							+ lineId + "!");
+			throw new LexerException("Character literal was not closed! Continuation awaited at line " + lineId + "!");
 		}
 		String line = sourceLine.getLine();
 		Matcher matcher = FIXED_FORM_LABEL_PATTERN.matcher(line);
 		matcher.find();
 		tokenStream.add(new Token("LABEL", matcher.group(), Visibility.IGNORED,
 				new TokenMetaData(sourceLine.getSource(), lineId, 1, 0)));
-		TokenStream subTokenStream = processRemainingLine(lexer,
-				line.substring(6), 6);
+		TokenStream subTokenStream = processRemainingLine(lexer, line.substring(6), 6);
 		processSubTokenStream(subTokenStream, 6);
 	}
 
@@ -322,30 +329,26 @@ public class FortranPreConditioner {
 	 * @throws LexerException
 	 * @throws IOException
 	 */
-	private void processContinuationPattern(Lexer lexer,
-			SourceCodeLine sourceLine) throws LexerException, IOException {
+	private void processContinuationPattern(Lexer lexer, SourceCodeLine sourceLine) throws LexerException, IOException {
 		ignoreLastLineTerminator(tokenStream);
 		String line = sourceLine.getLine();
 		Matcher matcher = FIXED_FORM_CONTINUATION_PATTERN.matcher(line);
 		matcher.find();
-		tokenStream.add(new Token("LINE_CONCATATION", matcher.group(),
-				Visibility.IGNORED, new TokenMetaData(sourceLine.getSource(),
-						lineId, 1, 0)));
-		TokenStream subTokenStream = processRemainingLine(lexer,
-				line.substring(6), 6);
+		tokenStream.add(new Token("LINE_CONCATATION", matcher.group(), Visibility.IGNORED,
+				new TokenMetaData(sourceLine.getSource(), lineId, 1, 0)));
+		TokenStream subTokenStream = processRemainingLine(lexer, line.substring(6), 6);
 		processSubTokenStream(subTokenStream, 6);
 	}
 
-	private void processFreeForm(Lexer lexer, SourceCodeLine sourceLine)
-			throws LexerException, IOException {
+	private void processFreeForm(Lexer lexer, SourceCodeLine sourceLine) throws LexerException, IOException {
 		String line = sourceLine.getLine();
 		Matcher matcher = FREE_FORM_CONTINUATION_PATTERN.matcher(line);
 		boolean continuation = false;
 		int column = 0;
 		if (matcher.find()) {
 			continuation = true;
-			tokenStream.add(new Token("CONTINUATION", matcher.group(),
-					Visibility.IGNORED, getCurrentMetaData(1, column)));
+			tokenStream
+					.add(new Token("CONTINUATION", matcher.group(), Visibility.IGNORED, getCurrentMetaData(1, column)));
 			int length = matcher.group().length();
 			column += length;
 			line = line.substring(length);
@@ -353,24 +356,20 @@ public class FortranPreConditioner {
 		matcher = FREE_FORM_LABEL_PATTERN.matcher(line);
 		if (matcher.find()) {
 			if (continuation) {
-				throw new LexerException(
-						"Found Label and Continuation in one line. This is not meaning full!");
+				throw new LexerException("Found Label and Continuation in one line. This is not meaning full!");
 			}
 			String group1 = matcher.group(1);
 			if (!group1.isEmpty()) {
-				Token whitespace = new Token("WHITESPACE", group1,
-						Visibility.IGNORED, getCurrentMetaData(1, column));
+				Token whitespace = new Token("WHITESPACE", group1, Visibility.IGNORED, getCurrentMetaData(1, column));
 				tokenStream.add(whitespace);
 				column += whitespace.getText().length();
 			}
-			Token label = new Token("LABEL", matcher.group(2),
-					Visibility.IGNORED, getCurrentMetaData(1, column));
+			Token label = new Token("LABEL", matcher.group(2), Visibility.IGNORED, getCurrentMetaData(1, column));
 			tokenStream.add(label);
 			column += label.getText().length();
 			String group3 = matcher.group(3);
 			if (!group3.isEmpty()) {
-				Token whitespace = new Token("WHITESPACE", group3,
-						Visibility.IGNORED, getCurrentMetaData(1, column));
+				Token whitespace = new Token("WHITESPACE", group3, Visibility.IGNORED, getCurrentMetaData(1, column));
 				tokenStream.add(whitespace);
 				column += whitespace.getText().length();
 			}
@@ -380,16 +379,14 @@ public class FortranPreConditioner {
 		if (currentBrokenCharacterMode != BROKEN_CHARACTER_LITERAL_NONE) {
 			if (!continuation) {
 				throw new LexerException(
-						"Character literal was not closed! Continuation awaited at line "
-								+ lineId + "!");
+						"Character literal was not closed! Continuation awaited at line " + lineId + "!");
 			}
 		}
 		TokenStream subTokenStream = processRemainingLine(lexer, line, column);
 		processSubTokenStream(subTokenStream, column);
 	}
 
-	private TokenStream processRemainingLine(Lexer lexer, String line,
-			int column) throws LexerException, IOException {
+	private TokenStream processRemainingLine(Lexer lexer, String line, int column) throws LexerException, IOException {
 		if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_NONE) {
 			return lexer.lex(new FixedCodeLocation(line).getSourceCode());
 		}
@@ -399,37 +396,30 @@ public class FortranPreConditioner {
 		} else if (currentBrokenCharacterMode == BROKEN_CHARACTER_LITERAL_DOUBLE_QUOTE) {
 			matcher = FIXED_FORM_DOUBLE_QUOTE_LITERAL_END.matcher(line);
 		} else {
-			throw new RuntimeException("BrokenCharacterLiteralMode "
-					+ currentBrokenCharacterMode + " is unknown!!!");
+			throw new RuntimeException("BrokenCharacterLiteralMode " + currentBrokenCharacterMode + " is unknown!!!");
 		}
 		if (!matcher.find()) {
-			tokenStream.add(new Token("CHAR_LITERAL_CONSTANT", line,
-					Visibility.VISIBLE, getCurrentMetaData(1, column)));
+			tokenStream
+					.add(new Token("CHAR_LITERAL_CONSTANT", line, Visibility.VISIBLE, getCurrentMetaData(1, column)));
 			return new TokenStream();
 		}
-		tokenStream.add(new Token("CHAR_LITERAL_CONSTANT", matcher.group(),
-				Visibility.VISIBLE, getCurrentMetaData(1, column)));
+		tokenStream.add(
+				new Token("CHAR_LITERAL_CONSTANT", matcher.group(), Visibility.VISIBLE, getCurrentMetaData(1, column)));
 		currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_NONE;
-		return lexer.lex(new FixedCodeLocation(line.substring(matcher.group()
-				.length())).getSourceCode());
+		return lexer.lex(new FixedCodeLocation(line.substring(matcher.group().length())).getSourceCode());
 	}
 
-	private void processSubTokenStream(TokenStream subTokenStream, int column)
-			throws IOException {
+	private void processSubTokenStream(TokenStream subTokenStream, int column) throws IOException {
 		for (Token token : subTokenStream) {
-			if ("CHAR_LITERAL_CONSTANT_SINGLE_QUOTE_START".equals(token
-					.getName())) {
+			if ("CHAR_LITERAL_CONSTANT_SINGLE_QUOTE_START".equals(token.getName())) {
 				currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_SINGLE_QUOTE;
 			}
-			if ("CHAR_LITERAL_CONSTANT_DOUBLE_QUOTE_START".equals(token
-					.getName())) {
+			if ("CHAR_LITERAL_CONSTANT_DOUBLE_QUOTE_START".equals(token.getName())) {
 				currentBrokenCharacterMode = BROKEN_CHARACTER_LITERAL_DOUBLE_QUOTE;
 			}
 			TokenMetaData metaData = token.getMetaData();
-			Token newToken = new Token(token.getName(), token.getText(),
-					token.getVisibility(), getCurrentMetaData(
-							metaData.getLineNum(), metaData.getColumn()
-									+ column));
+			Token newToken = new Token(token.getName(), token.getText(), token.getVisibility(),
+					getCurrentMetaData(metaData.getLineNum(), metaData.getColumn() + column));
 			tokenStream.add(newToken);
 			lineId += metaData.getLineNum() - 1;
 		}
@@ -451,20 +441,17 @@ public class FortranPreConditioner {
 	 * @param tokenStream
 	 * @throws IOException
 	 */
-	private static void ignoreLastLineTerminator(TokenStream tokenStream)
-			throws IOException {
+	private static void ignoreLastLineTerminator(TokenStream tokenStream) throws IOException {
 		int position = tokenStream.size() - 1;
 		while (true) {
 			if (position < 0) {
 				throw new IOException("Invalid input file!");
 			}
 			Token token = tokenStream.get(position);
-			if (token.getName().equals("LINE_TERMINATOR")
-					|| token.getName().equals("LINE_COMMENT")) {
+			if (token.getName().equals("LINE_TERMINATOR") || token.getName().equals("LINE_COMMENT")) {
 				tokenStream.remove(position);
 				tokenStream.add(position,
-						new Token(token.getName(), token.getText(),
-								Visibility.IGNORED, token.getMetaData()));
+						new Token(token.getName(), token.getText(), Visibility.IGNORED, token.getMetaData()));
 				return;
 			}
 			position--;

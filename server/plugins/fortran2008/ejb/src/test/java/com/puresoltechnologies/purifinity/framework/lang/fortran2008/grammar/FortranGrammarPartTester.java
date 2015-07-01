@@ -20,22 +20,19 @@ import com.puresoltechnologies.purifinity.server.plugin.fortran2008.grammar.Fort
 
 public class FortranGrammarPartTester {
 
-	public static final File PARSER_DIRECTORY = new File(
-			"test/com/puresol/coding/lang/fortran/parsers");
+	public static final File PARSER_DIRECTORY = new File("test/com/puresol/coding/lang/fortran/parsers");
 
 	private static Grammar grammar = null;
 	private static Lexer lexer = null;
 	private static Map<String, Parser> parsers = new HashMap<String, Parser>();
 
 	public static boolean test(String production, String... lines)
-			throws GrammarException, LexerException, IOException,
-			ParserException {
+			throws GrammarException, LexerException, IOException, ParserException {
 		return test(production, new FixedCodeLocation(lines));
 	}
 
 	public static boolean test(String production, SourceCodeLocation source)
-			throws GrammarException, LexerException, IOException,
-			ParserException {
+			throws GrammarException, LexerException, IOException, ParserException {
 		if (grammar == null) {
 			initializeGrammar();
 		}
@@ -45,8 +42,8 @@ public class FortranGrammarPartTester {
 		if (parsers.get(production) == null) {
 			initializeParser(production);
 		}
-		FortranPreConditioner fortranPreConditioner = new FortranPreConditioner(
-				source.getSourceCode(), SourceForm.MIXED_FORM);
+		FortranPreConditioner fortranPreConditioner = new FortranPreConditioner(source.getSourceCode(),
+				SourceForm.MIXED_FORM, true);
 		TokenStream tokenStream = fortranPreConditioner.scan(lexer);
 		parsers.get(production).parse(tokenStream);
 		return true;
@@ -60,17 +57,14 @@ public class FortranGrammarPartTester {
 
 	private static synchronized void initializeLexer() throws GrammarException {
 		if (lexer == null) {
-			lexer = grammar.createLexer(FortranGrammarPartTester.class
-					.getClassLoader());
+			lexer = grammar.createLexer(FortranGrammarPartTester.class.getClassLoader());
 		}
 	}
 
-	private static synchronized void initializeParser(String production)
-			throws GrammarException {
+	private static synchronized void initializeParser(String production) throws GrammarException {
 		if (parsers.get(production) == null) {
 			Parser parser = grammar.createWithNewStartProduction(production)
-					.createParser(
-							FortranGrammarPartTester.class.getClassLoader());
+					.createParser(FortranGrammarPartTester.class.getClassLoader());
 			parsers.put(production, parser);
 		}
 	}
