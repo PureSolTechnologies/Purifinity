@@ -7,8 +7,12 @@ package com.puresoltechnologies.purifinity.server.accountmanager.core.api;
  */
 public enum SupportedRoles {
 
-    ADMINISTRATOR("administrator", "Administrator"), ENGINEER("engineer",
-	    "Engineer"), UNPRIVILEGED("unprivileged", "Unprivileged User");
+    ADMINISTRATOR("administrator", "Administrator"), //
+    ENGINEER(SupportedRoles.ENGINEER_ID, "Engineer"), //
+    UNPRIVILEGED(SupportedRoles.UNPRIVILEGED_ID, "Unprivileged User");
+
+    public static final String ENGINEER_ID = "engineer";
+    public static final String UNPRIVILEGED_ID = "unprivileged";
 
     private final String id;
     private final String name;

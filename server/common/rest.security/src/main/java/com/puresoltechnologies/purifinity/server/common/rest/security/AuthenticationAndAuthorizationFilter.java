@@ -36,34 +36,31 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventType;
  * The security for Web UI and AngularJS was described in several posts. The
  * links to these posts are below.
  * 
- * @see Web 
+ * @see Web
  *      http://bitsuppliers.com/securing-rest-resources-with-java-ee-7-and-jax
  *      -rs -2-0 /
- * @see Web 
+ * @see Web
  *      http://www.developerscrappad.com/1814/java/java-ee/rest-jax-rs/java-ee
  *      -7- jax
  *      -rs-2-0-simple-rest-api-authentication-authorization-with-custom-http-
  *      header /#sthash.ZvuVwQ2p.eaof
- * @see Web 
- *      http://www.aschua.de/blog/pairing-angularjs-and-javaee-for-authentication
- *      /
- * 
+ * @see Web http://www.aschua.de/blog/pairing-angularjs-and-javaee-for-
+ *      authentication /
+ * @see Web http://stackoverflow.com/questions/3297048/403-forbidden-vs-401-
+ *      unauthorized-http-responses
  * @author Rick-Rainer Ludwig
  *
  */
 @Provider
 @Priority(Priorities.AUTHENTICATION)
-public class AuthSecurityIntercepter implements ContainerRequestFilter {
+public class AuthenticationAndAuthorizationFilter implements ContainerRequestFilter {
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(AuthSecurityIntercepter.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationAndAuthorizationFilter.class);
 
     // 401 - Access denied
-    private static final Response ACCESS_UNAUTHORIZED = Response.status(
-	    Response.Status.UNAUTHORIZED).build();
+    private static final Response ACCESS_UNAUTHORIZED = Response.status(Response.Status.UNAUTHORIZED).build();
     // 403 - Forbidden
-    private static final Response FORBIDDEN = Response.status(
-	    Response.Status.FORBIDDEN).build();
+    private static final Response FORBIDDEN = Response.status(Response.Status.FORBIDDEN).build();
 
     @Inject
     private AuthService authService;
@@ -88,8 +85,7 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
     }
 
     @Override
-    public void filter(ContainerRequestContext requestContext)
-	    throws IOException {
+    public void filter(ContainerRequestContext requestContext) throws IOException {
 	// Get method invoked.
 	Method methodInvoked = resourceInfo.getResourceMethod();
 	// Check if open method...
@@ -98,15 +94,12 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
 	    return;
 	}
 	// Get AuthId and AuthToken from HTTP-Header.
-	String authIdString = requestContext
-		.getHeaderString(AuthElement.AUTH_ID_HEADER);
-	String authTokenString = requestContext
-		.getHeaderString(AuthElement.AUTH_TOKEN_HEADER);
-	if ((authIdString == null) || (authIdString.isEmpty())
-		|| (authTokenString == null) || (authTokenString.isEmpty())) {
+	String authIdString = requestContext.getHeaderString(AuthElement.AUTH_ID_HEADER);
+	String authTokenString = requestContext.getHeaderString(AuthElement.AUTH_TOKEN_HEADER);
+	if ((authIdString == null) || (authIdString.isEmpty()) || (authTokenString == null)
+		|| (authTokenString.isEmpty())) {
 	    requestContext.abortWith(ACCESS_UNAUTHORIZED);
-	    eventLogger.logEvent(new Event("Authentication", 0,
-		    EventType.SYSTEM, EventSeverity.WARNING,
+	    eventLogger.logEvent(new Event("Authentication", 0, EventType.SYSTEM, EventSeverity.WARNING,
 		    "User was not authenticated, yet."));
 	    return;
 	}
@@ -115,8 +108,7 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
 	try {
 	    email = new EmailAddress(authIdString);
 	} catch (IllegalArgumentException e) {
-	    eventLogger.logEvent(new Event("Authentication", 1,
-		    EventType.SYSTEM, EventSeverity.WARNING,
+	    eventLogger.logEvent(new Event("Authentication", 1, EventType.SYSTEM, EventSeverity.WARNING,
 		    "Invalid email address '" + authIdString + "' provided."));
 	    requestContext.abortWith(ACCESS_UNAUTHORIZED);
 	    return;
@@ -126,36 +118,27 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
 	try {
 	    authToken = UUID.fromString(authTokenString);
 	} catch (IllegalArgumentException e) {
-	    eventLogger.logEvent(new Event("Authentication", 1,
-		    EventType.SYSTEM, EventSeverity.WARNING,
-		    "Invalid user token '" + authTokenString + "' for user '"
-			    + email + "'."));
+	    eventLogger.logEvent(new Event("Authentication", 1, EventType.SYSTEM, EventSeverity.WARNING,
+		    "Invalid user token '" + authTokenString + "' for user '" + email + "'."));
 	    requestContext.abortWith(ACCESS_UNAUTHORIZED);
 	    return;
 	}
 	if (methodInvoked.isAnnotationPresent(RolesAllowed.class)) {
-
-	    RolesAllowed rolesAllowedAnnotation = methodInvoked
-		    .getAnnotation(RolesAllowed.class);
-	    Set<String> rolesAllowed = new HashSet<>(
-		    Arrays.asList(rolesAllowedAnnotation.roles()));
+	    RolesAllowed rolesAllowedAnnotation = methodInvoked.getAnnotation(RolesAllowed.class);
+	    Set<String> rolesAllowed = new HashSet<>(Arrays.asList(rolesAllowedAnnotation.roles()));
 
 	    if (!authService.isAuthorized(email, authToken, rolesAllowed)) {
-		eventLogger.logEvent(new Event("Authentication", 1,
-			EventType.SYSTEM, EventSeverity.WARNING, "User '"
-				+ email + "' is not authorized for '"
-				+ methodInvoked.getDeclaringClass() + "."
+		eventLogger.logEvent(new Event("Authentication", 1, EventType.SYSTEM, EventSeverity.WARNING,
+			"User '" + email + "' is not authorized for '" + methodInvoked.getDeclaringClass() + "."
 				+ methodInvoked.getName() + "'."));
-		requestContext.abortWith(ACCESS_UNAUTHORIZED);
+		requestContext.abortWith(FORBIDDEN);
 	    }
 	    return;
 	} else if (authService.isAuthorizedAdministrator(email, authToken)) {
 	    return;
 	} else if (methodInvoked.isAnnotationPresent(DenyAll.class)) {
-	    eventLogger.logEvent(new Event("Authentication", 1,
-		    EventType.SYSTEM, EventSeverity.WARNING, "User '" + email
-			    + "' is not authorized for '"
-			    + methodInvoked.getDeclaringClass() + "."
+	    eventLogger.logEvent(new Event("Authentication", 1, EventType.SYSTEM, EventSeverity.WARNING,
+		    "User '" + email + "' is not authorized for '" + methodInvoked.getDeclaringClass() + "."
 			    + methodInvoked.getName() + "'."));
 	    requestContext.abortWith(FORBIDDEN);
 	    return;
@@ -167,6 +150,6 @@ public class AuthSecurityIntercepter implements ContainerRequestFilter {
 	 * Functionality needs to be declared permitted or roles added to open
 	 * methods into the public.
 	 */
-	requestContext.abortWith(ACCESS_UNAUTHORIZED);
+	requestContext.abortWith(FORBIDDEN);
     }
 }
