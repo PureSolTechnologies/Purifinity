@@ -10,8 +10,10 @@ import java.util.UUID;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.annotation.Priority;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.Priorities;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -24,6 +26,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.purifinity.server.core.api.PurifinityConfiguration;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChange;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChangeEvent;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.Event;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventSeverity;
@@ -57,6 +63,44 @@ public class AuthenticationAndAuthorizationFilter implements ContainerRequestFil
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationAndAuthorizationFilter.class);
 
+    private static Event createUserNotAuthenticatedEvent() {
+	return new Event("Authentication", 1, EventType.SYSTEM, EventSeverity.WARNING,
+		"User was not authenticated, yet.");
+    }
+
+    private static Event createIllegalEmailAddressEvent(String authIdString) {
+	return new Event("Authentication", 2, EventType.SYSTEM, EventSeverity.WARNING,
+		"Invalid email address '" + authIdString + "' provided.");
+    }
+
+    private static Event createIllegalTokenEvent(String authTokenString, EmailAddress email) {
+	return new Event("Authentication", 3, EventType.SYSTEM, EventSeverity.WARNING,
+		"Invalid user token '" + authTokenString + "' for user '" + email + "'.");
+    }
+
+    private static Event createInvalidAuthenticationDataEvent(String authTokenString, EmailAddress email) {
+	return new Event("Authentication", 4, EventType.SYSTEM, EventSeverity.WARNING,
+		"Invalid user token '" + authTokenString + "' for user '" + email + "'.");
+    }
+
+    private static Event createInsufficientPrivilegesEvent(Method methodInvoked, EmailAddress email) {
+	return new Event("Authentication", 5, EventType.SYSTEM, EventSeverity.WARNING,
+		"User '" + email + "' is not authorized for '" + methodInvoked.getDeclaringClass() + "."
+			+ methodInvoked.getName() + "'.");
+    }
+
+    private static Event createForbiddenEvent(Method methodInvoked, EmailAddress email) {
+	return new Event("Authentication", 6, EventType.SYSTEM, EventSeverity.WARNING,
+		"Forbidden feature. User '" + email + "' is not authorized for '" + methodInvoked.getDeclaringClass()
+			+ "." + methodInvoked.getName() + "'.");
+    }
+
+    private static Event createUnspecifiedAuthorizationEvent(Method methodInvoked, EmailAddress email) {
+	return new Event("Authentication", 7, EventType.SYSTEM, EventSeverity.WARNING,
+		"User '" + email + "' is not authorized for '" + methodInvoked.getDeclaringClass()
+			+ ", because there is no authorization specfied on." + methodInvoked.getName() + "'.");
+    }
+
     // 401 - Access denied
     private static final Response ACCESS_UNAUTHORIZED = Response.status(Response.Status.UNAUTHORIZED).build();
     // 403 - Forbidden
@@ -74,9 +118,15 @@ public class AuthenticationAndAuthorizationFilter implements ContainerRequestFil
     @Inject
     private EventLoggerRemote eventLogger;
 
+    @Inject
+    private PreferencesStore preferencesStore;
+
+    private boolean anonymousCanRead = PurifinityConfiguration.ANONYMOUS_CAN_READ.getDefaultValue();
+
     @PostConstruct
     public void postConstruct() {
 	logger.info("REST security is enabled.");
+	anonymousCanRead = preferencesStore.getSystemPreference(PurifinityConfiguration.ANONYMOUS_CAN_READ).getValue();
     }
 
     @PreDestroy
@@ -84,62 +134,87 @@ public class AuthenticationAndAuthorizationFilter implements ContainerRequestFil
 	logger.info("REST security is disabled.");
     }
 
+    public void onSystemPreferenceChange(@Observes @SystemPreferenceChange SystemPreferenceChangeEvent event) {
+	if (event.getConfigurationParameter().equals(PurifinityConfiguration.ANONYMOUS_CAN_READ)) {
+	    anonymousCanRead = (Boolean) event.getValue();
+	    logger.info("AnonymousCanRead was reconfigured to '" + anonymousCanRead + "'.");
+	}
+    }
+
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
-	// Get method invoked.
-	Method methodInvoked = resourceInfo.getResourceMethod();
-	// Check if open method...
-	if (methodInvoked.isAnnotationPresent(PermitAll.class)) {
-	    // Method is globally permitted, so we proceed without interactions.
-	    return;
-	}
-	// Get AuthId and AuthToken from HTTP-Header.
+	/* Get AuthId and AuthToken from HTTP-Header. */
 	String authIdString = requestContext.getHeaderString(AuthElement.AUTH_ID_HEADER);
 	String authTokenString = requestContext.getHeaderString(AuthElement.AUTH_TOKEN_HEADER);
 	if ((authIdString == null) || (authIdString.isEmpty()) || (authTokenString == null)
 		|| (authTokenString.isEmpty())) {
-	    requestContext.abortWith(ACCESS_UNAUTHORIZED);
-	    eventLogger.logEvent(new Event("Authentication", 0, EventType.SYSTEM, EventSeverity.WARNING,
-		    "User was not authenticated, yet."));
+	    if (!isOpenGlobally(requestContext)) {
+		/*
+		 * Method is not globally open and we do not have authentication
+		 * data, so we need to ask for it.
+		 */
+		eventLogger.logEvent(createUserNotAuthenticatedEvent());
+		requestContext.abortWith(ACCESS_UNAUTHORIZED);
+	    }
 	    return;
 	}
-	// Check email address format and convert it...
+	/* Check email address format and convert it... */
 	EmailAddress email;
 	try {
 	    email = new EmailAddress(authIdString);
 	} catch (IllegalArgumentException e) {
-	    eventLogger.logEvent(new Event("Authentication", 1, EventType.SYSTEM, EventSeverity.WARNING,
-		    "Invalid email address '" + authIdString + "' provided."));
-	    requestContext.abortWith(ACCESS_UNAUTHORIZED);
+	    if (!isOpenGlobally(requestContext)) {
+		eventLogger.logEvent(createIllegalEmailAddressEvent(authIdString));
+		requestContext.abortWith(ACCESS_UNAUTHORIZED);
+	    }
 	    return;
 	}
-	// Check authentication token and convert it...
+	/* Check authentication token and convert it... */
 	UUID authToken;
 	try {
 	    authToken = UUID.fromString(authTokenString);
 	} catch (IllegalArgumentException e) {
-	    eventLogger.logEvent(new Event("Authentication", 1, EventType.SYSTEM, EventSeverity.WARNING,
-		    "Invalid user token '" + authTokenString + "' for user '" + email + "'."));
-	    requestContext.abortWith(ACCESS_UNAUTHORIZED);
+	    if (!isOpenGlobally(requestContext)) {
+		eventLogger.logEvent(createIllegalTokenEvent(authTokenString, email));
+		requestContext.abortWith(ACCESS_UNAUTHORIZED);
+	    }
 	    return;
 	}
-	if (methodInvoked.isAnnotationPresent(RolesAllowed.class)) {
+	/* Check for correct authentication data... */
+	if (authService.isAuthenticated(email, authToken)) {
+	    authService.updateActivity(email, authToken);
+	} else {
+	    if (!isOpenGlobally(requestContext)) {
+		/*
+		 * Authentication data does not fit, so we do not need to check
+		 * further...
+		 */
+		eventLogger.logEvent(createInvalidAuthenticationDataEvent(authTokenString, email));
+		requestContext.abortWith(ACCESS_UNAUTHORIZED);
+	    }
+	    return;
+	}
+	/* Get method invoked. */
+	Method methodInvoked = resourceInfo.getResourceMethod();
+	/*
+	 * Check for certain roles to be allowed...
+	 */
+	if (isOpenGlobally(requestContext)) {
+	    return;
+	} else if (authService.isAuthorizedAdministrator(email, authToken)) {
+	    /* User is an administrator, so she is allowed. */
+	    return;
+	} else if (methodInvoked.isAnnotationPresent(RolesAllowed.class)) {
 	    RolesAllowed rolesAllowedAnnotation = methodInvoked.getAnnotation(RolesAllowed.class);
 	    Set<String> rolesAllowed = new HashSet<>(Arrays.asList(rolesAllowedAnnotation.roles()));
-
 	    if (!authService.isAuthorized(email, authToken, rolesAllowed)) {
-		eventLogger.logEvent(new Event("Authentication", 1, EventType.SYSTEM, EventSeverity.WARNING,
-			"User '" + email + "' is not authorized for '" + methodInvoked.getDeclaringClass() + "."
-				+ methodInvoked.getName() + "'."));
+		eventLogger.logEvent(createInsufficientPrivilegesEvent(methodInvoked, email));
 		requestContext.abortWith(FORBIDDEN);
 	    }
 	    return;
-	} else if (authService.isAuthorizedAdministrator(email, authToken)) {
-	    return;
 	} else if (methodInvoked.isAnnotationPresent(DenyAll.class)) {
-	    eventLogger.logEvent(new Event("Authentication", 1, EventType.SYSTEM, EventSeverity.WARNING,
-		    "User '" + email + "' is not authorized for '" + methodInvoked.getDeclaringClass() + "."
-			    + methodInvoked.getName() + "'."));
+	    /* Globally forbidden method. */
+	    eventLogger.logEvent(createForbiddenEvent(methodInvoked, email));
 	    requestContext.abortWith(FORBIDDEN);
 	    return;
 	}
@@ -150,6 +225,28 @@ public class AuthenticationAndAuthorizationFilter implements ContainerRequestFil
 	 * Functionality needs to be declared permitted or roles added to open
 	 * methods into the public.
 	 */
+	eventLogger.logEvent(createUnspecifiedAuthorizationEvent(methodInvoked, email));
 	requestContext.abortWith(FORBIDDEN);
+    }
+
+    private boolean isOpenGlobally(ContainerRequestContext requestContext) {
+	/* Get method invoked. */
+	Method methodInvoked = resourceInfo.getResourceMethod();
+	/* Check if open method... */
+	if (methodInvoked.isAnnotationPresent(PermitAll.class)) {
+	    /*
+	     * Method is globally permitted, so we proceed without interactions.
+	     */
+	    return true;
+	}
+	/* Check whether anonymous is allowed to read... */
+	if ((anonymousCanRead) && (HttpMethod.GET.equals(requestContext.getMethod()))) {
+	    /*
+	     * Anonymous is allowed read, so we can open GET methods globally
+	     * and skip all other tests for performance reasons.
+	     */
+	    return true;
+	}
+	return false;
     }
 }

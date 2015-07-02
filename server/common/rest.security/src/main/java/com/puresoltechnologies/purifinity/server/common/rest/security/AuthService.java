@@ -3,10 +3,13 @@ package com.puresoltechnologies.purifinity.server.common.rest.security;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.enterprise.event.Observes;
 import javax.security.auth.login.LoginException;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.commons.types.Password;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChange;
+import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChangeEvent;
 
 /**
  * This is the interface for the authenication service. This service is a proxy
@@ -16,11 +19,11 @@ import com.puresoltechnologies.commons.types.Password;
  */
 public interface AuthService {
 
-    public String login(EmailAddress email, Password password)
-	    throws LoginException;
+    public void onSystemPreferenceChange(@Observes @SystemPreferenceChange SystemPreferenceChangeEvent event);
 
-    public void logout(EmailAddress email, UUID authToken)
-	    throws LoginException;
+    public String login(EmailAddress email, Password password) throws LoginException;
+
+    public void logout(EmailAddress email, UUID authToken) throws LoginException;
 
     /**
      * This method checks whether a user was authenticated or not and whether it
@@ -33,9 +36,12 @@ public interface AuthService {
      * @param rolesAllowed
      * @return
      */
-    public boolean isAuthorized(EmailAddress email, UUID authToken,
-	    Set<String> rolesAllowed);
+    public boolean isAuthorized(EmailAddress email, UUID authToken, Set<String> rolesAllowed);
 
     public boolean isAuthorizedAdministrator(EmailAddress email, UUID authToken);
+
+    public boolean isAuthenticated(EmailAddress email, UUID authToken);
+
+    public void updateActivity(EmailAddress email, UUID authToken);
 
 }
