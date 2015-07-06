@@ -9,7 +9,7 @@ import com.datastax.driver.core.Cluster;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
 import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreTester;
-import com.puresoltechnologies.purifinity.wildfly.test.AbstractClientTest;
+import com.puresoltechnologies.purifinity.webui.test.AbstractClientTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
 public abstract class AbstractPasswordStoreClientTest extends

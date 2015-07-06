@@ -1259,7 +1259,7 @@
 							<properties>
 								<cargo.wildfly.configuration>default</cargo.wildfly.configuration>
 								<cargo.rmi.port>1099</cargo.rmi.port>
-								<cargo.jvmargs>${wildfly.jvm.options}</cargo.jvmargs>
+								<cargo.jvmargs>${wildfly.options}</cargo.jvmargs>
 								<cargo.servlet.port>${wildfly.http.port}</cargo.servlet.port>
 								<cargo.logging>${cargo.logging}</cargo.logging>
 							</properties>

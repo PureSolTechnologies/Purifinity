@@ -5,7 +5,7 @@ import java.net.URISyntaxException;
 
 import org.junit.Before;
 
-import com.puresoltechnologies.purifinity.wildfly.test.AbstractClientTest;
+import com.puresoltechnologies.purifinity.webui.test.AbstractClientTest;
 
 public abstract class AbstractAccountManagerClientTest extends
 	AbstractClientTest {

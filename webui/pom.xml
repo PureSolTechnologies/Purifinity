@@ -8,6 +8,21 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<selenium.version>2.46.0</selenium.version>
+		<!-- WildFly -->
+		<wildfly.version>8.2.0.Final</wildfly.version>
+		<wildfly.debug.options>-agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n</wildfly.debug.options>
+		<wildfly.memory.options>-Xms128m -Xmx512m</wildfly.memory.options>
+		<wildfly.options>${wildfly.memory.options} ${wildfly.debug.options}</wildfly.options>
+		<wildfly.http.port>8080</wildfly.http.port>
+		<server.config.directory>${work.dir}/config</server.config.directory>
+		<server.data.directory>${work.dir}/data</server.data.directory>
+		<!-- Arquillian -->
+		<arquillian.test.dir>${project.build.directory}/wildfly</arquillian.test.dir>
+		<!-- Cargo -->
+		<cargo.dir>${work.dir}/cargo</cargo.dir>
+		<cargo.logging>medium</cargo.logging>
+		<purifinity.home>${work.dir}/purifinity</purifinity.home>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity.webui</groupId>
@@ -79,40 +94,97 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	<repositories>
-		<repository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>libs-release</name>
-			<url>http://repo.puresol-technologies.net/libs-release</url>
-		</repository>
-		<repository>
-			<snapshots />
-			<id>snapshots</id>
-			<name>libs-snapshot</name>
-			<url>http://repo.puresol-technologies.net/libs-snapshot</url>
-		</repository>
-	</repositories>
+	<!-- repositories> <repository> <snapshots> <enabled>false</enabled> </snapshots> 
+		<id>central</id> <name>libs-release</name> <url>http://repo.puresol-technologies.net/libs-release</url> 
+		</repository> <repository> <snapshots /> <id>snapshots</id> <name>libs-snapshot</name> 
+		<url>http://repo.puresol-technologies.net/libs-snapshot</url> </repository> 
+		</repositories -->
 
-	<pluginRepositories>
-		<pluginRepository>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>central</id>
-			<name>plugins-release</name>
-			<url>http://repo.puresol-technologies.net/plugins-release</url>
-		</pluginRepository>
-		<pluginRepository>
-			<snapshots />
-			<id>snapshots</id>
-			<name>plugins-snapshot</name>
-			<url>http://repo.puresol-technologies.net/plugins-snapshot</url>
-		</pluginRepository>
-	</pluginRepositories>
+	<!-- pluginRepositories> <pluginRepository> <snapshots> <enabled>false</enabled> 
+		</snapshots> <id>central</id> <name>plugins-release</name> <url>http://repo.puresol-technologies.net/plugins-release</url> 
+		</pluginRepository> <pluginRepository> <snapshots /> <id>snapshots</id> <name>plugins-snapshot</name> 
+		<url>http://repo.puresol-technologies.net/plugins-snapshot</url> </pluginRepository> 
+		</pluginRepositories -->
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>c11.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>fortran2008.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>java7.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>metrics.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>repository.directory.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>repository.git.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+				<artifactId>repository.subversion.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>passwordstore.app</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>server.app</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>systemmonitor.app</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>wildfly.test</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.seleniumhq.selenium</groupId>
+				<artifactId>selenium-java</artifactId>
+				<version>${selenium.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.seleniumhq.selenium</groupId>
+				<artifactId>selenium-firefox-driver</artifactId>
+				<version>${selenium.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<pluginManagement>
@@ -121,6 +193,58 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-assembly-plugin</artifactId>
 					<version>2.5.3</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.cargo</groupId>
+					<artifactId>cargo-maven2-plugin</artifactId>
+					<version>1.4.8</version>
+					<executions>
+						<execution>
+							<id>WildFly Configuration</id>
+							<phase>package</phase>
+							<goals>
+								<goal>configure</goal>
+								<goal>deployer-deploy</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<!-- wait>false</wait -->
+						<container>
+							<containerId>wildfly8x</containerId>
+							<timeout>60000</timeout>
+							<artifactInstaller>
+								<groupId>org.wildfly</groupId>
+								<artifactId>wildfly-server</artifactId>
+								<version>${wildfly.version}</version>
+								<type>zip</type>
+								<extractDir>${cargo.dir}</extractDir>
+							</artifactInstaller>
+						</container>
+						<configuration>
+							<type>standalone</type>
+							<home>${arquillian.test.dir}</home>
+							<configfiles>
+								<configfile>
+									<file>${cargo.dir}/template/standalone/configuration/standalone.xml</file>
+									<todir>configuration</todir>
+								</configfile>
+							</configfiles>
+							<files>
+								<file>
+									<file>${cargo.dir}/template/standalone</file>
+									<todir>/</todir>
+								</file>
+							</files>
+							<properties>
+								<cargo.wildfly.configuration>default</cargo.wildfly.configuration>
+								<cargo.rmi.port>1099</cargo.rmi.port>
+								<cargo.jvmargs>${wildfly.options}</cargo.jvmargs>
+								<cargo.servlet.port>${wildfly.http.port}</cargo.servlet.port>
+								<cargo.logging>${cargo.logging}</cargo.logging>
+							</properties>
+						</configuration>
+					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -150,5 +274,6 @@
 
 	<modules>
 		<module>webui</module>
+		<module>test</module>
 	</modules>
 </project>

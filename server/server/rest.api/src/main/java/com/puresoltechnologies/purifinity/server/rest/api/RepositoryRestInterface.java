@@ -9,6 +9,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
+import com.puresoltechnologies.purifinity.server.common.rest.security.RolesAllowed;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryServiceInformation;
 
 @Path("repositories")
@@ -17,13 +19,13 @@ public interface RepositoryRestInterface {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("types")
-    public Collection<RepositoryServiceInformation> getRepositories()
-	    throws IOException;
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID })
+    public Collection<RepositoryServiceInformation> getRepositories() throws IOException;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("types/{id}")
-    public RepositoryServiceInformation getRepository(
-	    @PathParam("id") String repositoryTypeId);
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID })
+    public RepositoryServiceInformation getRepository(@PathParam("id") String repositoryTypeId);
 
 }
