@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.webui.test;
 
+import java.util.concurrent.TimeUnit;
+
 import org.apache.http.HttpHost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -30,8 +32,8 @@ public abstract class AbstractUITest extends AbstractArquillianTest {
     @BeforeClass
     public static void initializeSelenium() {
 	webDriver = new FirefoxDriver();
+	webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	webDriver.get("http://localhost:8080");
-
     }
 
     @AfterClass

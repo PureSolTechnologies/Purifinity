@@ -148,9 +148,9 @@
 				<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
 					<li data-ng-show="isLoggedIn()"><a href="./#/account"><span
 							class="glyphicon glyphicon-user"></span>&nbsp;Account</a></li>
-					<li data-ng-hide="isLoggedIn()"><a href="#/login"><span
+					<li data-ng-hide="isLoggedIn()"><a id="loginLink" href="#/login"><span
 							class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a></li>
-					<li data-ng-show="isLoggedIn()"><a href=""
+					<li data-ng-show="isLoggedIn()"><a id="logoutLink" href=""
 						class="btn btn-link" data-ng-click="logout()"> <span
 							class="glyphicon glyphicon-off"></span>&nbsp;Logout
 					</a></li>
