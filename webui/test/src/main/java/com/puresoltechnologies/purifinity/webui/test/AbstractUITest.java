@@ -7,10 +7,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractArquillianTest;
@@ -27,24 +26,17 @@ public abstract class AbstractUITest extends AbstractArquillianTest {
     private static final String HOST = "localhost";
     private static final int PORT = 8080;
 
-    private static WebDriver webDriver;
-
-    @BeforeClass
-    public static void initializeSelenium() {
-	webDriver = new FirefoxDriver();
-	webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-	webDriver.get("http://localhost:8080");
+    public static WebDriver getFirefoxDriver() {
+	WebDriver firefoxDriver = new FirefoxDriver();
+	firefoxDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+	return firefoxDriver;
     }
 
-    @AfterClass
-    public static void closeSelenium() {
-	if (webDriver != null) {
-	    webDriver.close();
-	}
-    }
-
-    protected static WebDriver getWebDriver() {
-	return webDriver;
+    public static WebDriver getChromeDriver() {
+	System.setProperty("webdriver.chrome.driver", "src/test/resources/chromedriver");
+	ChromeDriver chromeDriver = new ChromeDriver();
+	chromeDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+	return chromeDriver;
     }
 
     /**
