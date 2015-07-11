@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html data-ng-app="projectApp">
+<html data-ng-app="runApp">
 <head>
-<base href="project.html" />
+<base href="run.html" />
 
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -33,7 +33,7 @@
 <script type="text/javascript" src="config/authentication.js"></script>
 <script type="text/javascript" src="js/purifinity-ui.js"></script>
 <script type="text/javascript">
-	var projectApp = angular.module("projectApp", [ //
+	var runApp = angular.module("runApp", [ //
 	"ngRoute", //
 	"ui.bootstrap", //
 	"treeTableModule", //
@@ -48,17 +48,47 @@
 	"alerter", //
 	"d3Module" //
 	]);
-	projectApp.config([ "$routeProvider", "$locationProvider",
+	runApp.config([ "$routeProvider", "$locationProvider",
 			function($routeProvider, $locationProvider) {
 				$locationProvider.html5Mode(false);
-				$routeProvider.when("/summary/:projectId", {
-					templateUrl : "views/project/summary.html"
+				$routeProvider.when("/summary/:projectId/:runId", {
+					templateUrl : "views/run/summary.html"
 				});
-				$routeProvider.when("/trends/:projectId", {
-					templateUrl : "views/project/trends.html"
+				$routeProvider.when("/analysis/:projectId/:runId", {
+					templateUrl : "views/run/analysis.html"
 				});
-				$routeProvider.when("/runs/:projectId", {
-					templateUrl : "views/project/runs.html"
+				$routeProvider.when("/defects/:projectId/:runId", {
+					templateUrl : "views/run/defects.html"
+				});
+				$routeProvider.when("/style_issues/:projectId/:runId", {
+					templateUrl : "views/run/style_issues.html"
+				});
+				$routeProvider.when("/metrics/:projectId/:runId", {
+					templateUrl : "views/run/metrics.html"
+				});
+				$routeProvider.when("/trends/:projectId/:runId", {
+					templateUrl : "views/run/trends.html"
+				});
+				$routeProvider.when("/summary/:projectId/:runId", {
+					templateUrl : "views/run/summary.html"
+				});
+				$routeProvider.when("/analysis/:projectId/:runId", {
+					templateUrl : "views/run/analysis.html"
+				});
+				$routeProvider.when("/defects/:projectId/:runId", {
+					templateUrl : "views/run/defects.html"
+				});
+				$routeProvider.when("/style_issues/:projectId/:runId", {
+					templateUrl : "views/run/style_issues.html"
+				});
+				$routeProvider.when("/metrics/:projectId/:runId", {
+					templateUrl : "views/run/metrics.html"
+				});
+				$routeProvider.when("/design/:projectId/:runId", {
+					templateUrl : "views/run/design.html"
+				});
+				$routeProvider.when("/architecture/:projectId/:runId", {
+					templateUrl : "views/run/architecture.html"
 				});
 				$routeProvider.otherwise({
 					redirectTo : function() {
@@ -66,12 +96,9 @@
 					}
 				});
 			} ]);
-	projectApp.controller("projectAppCtrl", ["$scope", function($scope){
-		$scope.parentScopeProject = "HALLO, WELT!";
-	}]);
 </script>
 </head>
-<body data-ng-controller="projectAppCtrl">
+<body>
 	<div class="navbar navbar-default" role="navigation"
 		data-ng-controller="menuCtrl">
 		<div class="navbar-header">
@@ -83,17 +110,25 @@
 			</button>
 			<span class="navbar-brand"> <a href="."><img
 					src="images/logos/logo2.png" width="100" title="Purifinity" /></a>
-				Project View: {{$routeParams.projectId}}
+				Run View: <a href="/project.html#/summary/{{$routeParams.projectId}}">{{$routeParams.projectId}}</a> {{$routeParams.runId | defaultDate}}
 			</span>
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
 				<li class="{{isActive('/summary')}}"><a
-					href="#/summary/{{$routeParams.projectId}}">Summary</a></li>
-				<li class="{{isActive('/trends')}}"><a
-					href="#/trends/{{$routeParams.projectId}}">Trends</a></li>
-				<li class="{{isActive('/runs')}}"><a
-					href="#/runs/{{$routeParams.projectId}}">Runs</a></li>
+					href="#/summary/{{$routeParams.projectId}}/{{$routeParams.runId}}">Summary</a></li>
+				<li class="{{isActive('/analysis')}}"><a
+					href="#/analysis/{{$routeParams.projectId}}/{{$routeParams.runId}}">Analysis</a></li>
+				<li class="{{isActive('/defects')}}"><a
+					href="#/defects/{{$routeParams.projectId}}/{{$routeParams.runId}}">Defects</a></li>
+				<li class="{{isActive('/style_issues')}}"><a
+					href="#/style_issues/{{$routeParams.projectId}}/{{$routeParams.runId}}">Style</a></li>
+				<li class="{{isActive('/metrics')}}"><a
+					href="#/metrics/{{$routeParams.projectId}}/{{$routeParams.runId}}">Metrics</a></li>
+				<li class="{{isActive('/design')}}"><a
+					href="#/design/{{$routeParams.projectId}}/{{$routeParams.runId}}">Design</a></li>
+				<li class="{{isActive('/architecture')}}"><a
+					href="#/architecture/{{$routeParams.projectId}}/{{$routeParams.runId}}">Architecture</a></li>
 				<li class="{{isActive('/help')}}"><a href="./#/help">Help</a></li>
 			</ul>
 			<div class="navbar-right" data-ng-controller="loginCtrl">
