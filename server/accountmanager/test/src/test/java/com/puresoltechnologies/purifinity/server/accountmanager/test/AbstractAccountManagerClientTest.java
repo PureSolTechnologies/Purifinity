@@ -5,10 +5,9 @@ import java.net.URISyntaxException;
 
 import org.junit.Before;
 
-import com.puresoltechnologies.purifinity.webui.test.AbstractClientTest;
+import com.puresoltechnologies.purifinity.wildfly.test.AbstractClientTest;
 
-public abstract class AbstractAccountManagerClientTest extends
-	AbstractClientTest {
+public abstract class AbstractAccountManagerClientTest extends AbstractClientTest {
 
     @Before
     public void cleanup() {
@@ -17,12 +16,9 @@ public abstract class AbstractAccountManagerClientTest extends
 
     protected URI getAccountManagerRestURI() {
 	try {
-	    return new URI("http://" + getHost() + ":" + getPort()
-		    + "/accountmanager/rest");
+	    return new URI("http://" + getHost() + ":" + getPort() + "/accountmanager/rest");
 	} catch (URISyntaxException e) {
-	    throw new RuntimeException(
-		    "Test implementation issue for building AccountManager REST URI.",
-		    e);
+	    throw new RuntimeException("Test implementation issue for building AccountManager REST URI.", e);
 	}
     }
 }

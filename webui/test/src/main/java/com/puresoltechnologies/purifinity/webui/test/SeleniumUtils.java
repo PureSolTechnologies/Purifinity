@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.webui.test;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -66,7 +67,7 @@ public class SeleniumUtils {
 			try {
 			    WebElement element = webDriver.findElement(by);
 			    return element.isDisplayed() && element.isEnabled();
-			} catch (NoSuchElementException e) {
+			} catch (NoSuchElementException | StaleElementReferenceException e) {
 			    return false;
 			}
 		    }
