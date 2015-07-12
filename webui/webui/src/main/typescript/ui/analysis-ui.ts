@@ -2,38 +2,33 @@ var analysisUIModule: angular.IModule = angular.module("analysisUIModule", ["pro
 
 analysisUIModule.controller("analysisBrowserCtrl", ["$scope", "$routeParams", "$filter", "projectManager", function($scope, $routeParams, $filter, projectManager) {
     $scope.project = undefined;
-    $scope.lastRun = undefined;
     $scope.run = undefined;
     $scope.analysisFileTree = {};
     projectManager.getProject($routeParams.projectId, function(data, status) {
         $scope.project = data;
-        projectManager.getLastRun($routeParams.projectId, function(data, status) {
-            $scope.lastRun = data;
-            projectManager.getAnalysisFileTree(
-                $scope.project.information.projectId,
-                $scope.lastRun.runId,
-                function(data, status) {
-                    var treeTableData: TreeTableData = new TreeTableData();
-                    treeTableData.root = convertAnalysisFileTree(data, null, $filter);
-                    treeTableData.columnHeaders.push(
-                        new TreeTableColumnHeader("Name", "Name of file or folder"));
-                    treeTableData.columnHeaders.push(
-                        new TreeTableColumnHeader("Size", "Size of file or size of folder without sub folders."));
-                    treeTableData.columnHeaders.push(
-                        new TreeTableColumnHeader("Size Recursive", "Size of file or size of folder including sub folders."));
-                    treeTableData.columnHeaders.push(
-                        new TreeTableColumnHeader("Analyzes", "Successful analyzes."));
-                    $scope.analysisFileTree = treeTableData;
-                },
-                function(data, status, error) { }
-                );
-            projectManager.getRun($routeParams.projectId, $scope.lastRun.runId,
-                function(data, status) {
-                    $scope.run = data;
-                },
-                function(data, status, error) { });
-        }, function(data, status, error) {
-            });
+        projectManager.getAnalysisFileTree(
+            $scope.project.information.projectId,
+            $routeParams.runId,
+            function(data, status) {
+                var treeTableData: TreeTableData = new TreeTableData();
+                treeTableData.root = convertAnalysisFileTree(data, null, $filter);
+                treeTableData.columnHeaders.push(
+                    new TreeTableColumnHeader("Name", "Name of file or folder"));
+                treeTableData.columnHeaders.push(
+                    new TreeTableColumnHeader("Size", "Size of file or size of folder without sub folders."));
+                treeTableData.columnHeaders.push(
+                    new TreeTableColumnHeader("Size Recursive", "Size of file or size of folder including sub folders."));
+                treeTableData.columnHeaders.push(
+                    new TreeTableColumnHeader("Analyzes", "Successful analyzes."));
+                $scope.analysisFileTree = treeTableData;
+            },
+            function(data, status, error) { }
+            );
+        projectManager.getRun($routeParams.projectId, $routeParams.runId,
+            function(data, status) {
+                $scope.run = data;
+            },
+            function(data, status, error) { });
     }, function(data, status, error) {
         });
 }]);

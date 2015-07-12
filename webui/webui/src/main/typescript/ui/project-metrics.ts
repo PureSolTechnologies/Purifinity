@@ -17,11 +17,11 @@ projectMetricsModule.controller("fileSystemMetrics", ["$scope", "$routeParams", 
     $scope.paretoData = [];
     projectManager.getProject($routeParams.projectId, function(data, status) {
         $scope.project = data;
-        projectManager.getLastRun($routeParams.projectId, function(data, status) {
+        projectManager.getRun($routeParams.projectId, $routeParams.runId, function(data, status) {
             $scope.run = data;
             projectManager.getAnalysisFileTree(
-                $scope.project.information.projectId,
-                $scope.run.runId,
+				$routeParams.projectId, 
+				$routeParams.runId,
                 function(data, status) {
                     $scope.fileTree = data;
                     var treeTableData: TreeTableData = new TreeTableData();
@@ -43,10 +43,10 @@ projectMetricsModule.controller("fileSystemMetrics", ["$scope", "$routeParams", 
         if (newValue === oldValue) {
             return;
         }
-        if ($scope.project.information && $scope.run.runId && newValue) {
+        if ($scope.project.information && $scope.run.information.runId && newValue) {
             purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/metrics/"
                 + $scope.project.information.projectId
-                + "/" + $scope.run.runId
+                + "/" + $scope.run.information.runId
                 + "/" + newValue, function(data, status) {
                     var types = [];
                     types.push("DIRECTORY");
