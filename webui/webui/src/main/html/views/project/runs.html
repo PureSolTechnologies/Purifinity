@@ -13,8 +13,8 @@
 		<tbody>
 			<tr data-ng-repeat="run in runs">
 				<td><a
-					href="/run.html#/summary/{{run.projectId}}/{{run.runId}}">
-						{{run.startTime | defaultDate}} </a></td>
+					href="/run.html#/summary/{{run.projectId}}/{{run.runId}}" data-tooltip="{{run.startTime}}">
+						{{run.startTime | defaultDate}}</a></td>
 				<td>{{run.description}}<br />
 				</td>
 				<td>{{run.duration | duration}}</td>
