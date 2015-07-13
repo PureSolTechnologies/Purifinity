@@ -1,40 +1,43 @@
 var fileViewerModule: angular.IModule = angular
     .module("fileViewerModule", ["fileStoreModule"]);
 
-fileViewerModule.controller("fileSummaryCtrl", ["$scope", "$routeParams",
-    "fileStore", function($scope, $routeParams, fileStore) {
+fileViewerModule.controller("fileSummaryCtrl", ["$scope", "$routeParams", "fileStore",
+    function(
+        $scope: any,
+        $routeParams: angular.route.IRouteParamsService,
+        fileStore: FileStore) {
         $scope.analyses = {};
         $scope.sourceCode = {};
-        fileStore.wasAnalyzed($routeParams.hashId, function(data, status) {
+        fileStore.wasAnalyzed($routeParams["hashId"], function(data, status) {
             if (data) {
-                fileStore.loadAnalyses($routeParams.hashId, function(data, status) {
+                fileStore.loadAnalyses($routeParams["hashId"], function(data, status) {
                     $scope.analyses = data;
                 }, function(data, status, error) {
                     });
             }
         }, function(data, status, error) {
             });
-        fileStore.readSourceCode($routeParams.hashId, function(data, status) {
+        fileStore.readSourceCode($routeParams["hashId"], function(data, status) {
             $scope.sourceCode = data;
         }, function(data, status, error) {
             });
     }]);
 
 
-fileViewerModule.directive("sourceCode", function() {
-    return {
-        restrict: "E",
-        scope: {
-            sourceCodeData: "=ngModel"
-        },
-        controller: sourceCodeCtrl,
-        templateUrl: "directives/source-code.html"
-    };
-});
+fileViewerModule.directive("sourceCode",
+    function() {
+        return {
+            restrict: "E",
+            scope: {
+                sourceCodeData: "=ngModel"
+            },
+            controller: function($scope: any) {
+            },
+            templateUrl: "directives/source-code.html"
+        };
+    });
 
 
-function sourceCodeCtrl($scope) {
-}
 
 fileViewerModule.controller("fileAnalysisCtrl", ["$scope", "$routeParams",
     "$filter", "fileStore",
@@ -89,7 +92,7 @@ fileViewerModule.directive("ustView",
                 ustViewData: "=ngModel"
             },
             controller: ustViewCtrl,
-            link: function(scope:any, element, attrs) {
+            link: function(scope: any, element, attrs) {
                 element.append($("<div/>").text("Hallo").append(
                     $("<span/>").text(scope.ustViewData)));
             }

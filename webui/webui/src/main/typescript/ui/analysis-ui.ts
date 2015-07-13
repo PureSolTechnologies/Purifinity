@@ -1,40 +1,49 @@
 var analysisUIModule: angular.IModule = angular.module("analysisUIModule", ["projectManagerModule"]);
 
-analysisUIModule.controller("analysisBrowserCtrl", ["$scope", "$routeParams", "$filter", "projectManager", function($scope, $routeParams, $filter, projectManager) {
-    $scope.project = undefined;
-    $scope.run = undefined;
-    $scope.analysisFileTree = {};
-    projectManager.getProject($routeParams.projectId, function(data, status) {
-        $scope.project = data;
-        projectManager.getAnalysisFileTree(
-            $scope.project.information.projectId,
-            $routeParams.runId,
-            function(data, status) {
-                var treeTableData: TreeTableData = new TreeTableData();
-                treeTableData.root = convertAnalysisFileTree(data, null, $filter);
-                treeTableData.columnHeaders.push(
-                    new TreeTableColumnHeader("Name", "Name of file or folder"));
-                treeTableData.columnHeaders.push(
-                    new TreeTableColumnHeader("Size", "Size of file or size of folder without sub folders."));
-                treeTableData.columnHeaders.push(
-                    new TreeTableColumnHeader("Size Recursive", "Size of file or size of folder including sub folders."));
-                treeTableData.columnHeaders.push(
-                    new TreeTableColumnHeader("Analyzes", "Successful analyzes."));
-                $scope.analysisFileTree = treeTableData;
-            },
-            function(data, status, error) { }
-            );
-        projectManager.getRun($routeParams.projectId, $routeParams.runId,
-            function(data, status) {
-                $scope.run = data;
-            },
-            function(data, status, error) { });
-    }, function(data, status, error) {
-        });
-}]);
+analysisUIModule.controller("analysisBrowserCtrl", ["$scope", "$routeParams", "$filter", "projectManager",
+    function(
+        $scope: any,
+        $routeParams: angular.route.IRouteParamsService,
+        $filter: angular.IFilterService,
+        projectManager: ProjectManager) {
+        $scope.project = undefined;
+        $scope.run = undefined;
+        $scope.analysisFileTree = {};
+        projectManager.getProject($routeParams["projectId"], function(data, status) {
+            $scope.project = data;
+            projectManager.getAnalysisFileTree(
+                $scope.project.information.projectId,
+                $routeParams["runId"],
+                function(data, status) {
+                    var treeTableData: TreeTableData = new TreeTableData();
+                    treeTableData.root = convertAnalysisFileTree(data, null, $filter);
+                    treeTableData.columnHeaders.push(
+                        new TreeTableColumnHeader("Name", "Name of file or folder"));
+                    treeTableData.columnHeaders.push(
+                        new TreeTableColumnHeader("Size", "Size of file or size of folder without sub folders."));
+                    treeTableData.columnHeaders.push(
+                        new TreeTableColumnHeader("Size Recursive", "Size of file or size of folder including sub folders."));
+                    treeTableData.columnHeaders.push(
+                        new TreeTableColumnHeader("Analyzes", "Successful analyzes."));
+                    $scope.analysisFileTree = treeTableData;
+                },
+                function(data, status, error) { }
+                );
+            projectManager.getRun($routeParams["projectId"], $routeParams["runId"],
+                function(data, status) {
+                    $scope.run = data;
+                },
+                function(data, status, error) { });
+        }, function(data, status, error) {
+            });
+    }]);
 
 
-function convertAnalysisFileTree(fileTree: any, parent: TreeTableTree, $filter): TreeTableTree {
+function convertAnalysisFileTree(
+    fileTree: any,
+    parent: TreeTableTree,
+    $filter: angular.IFilterService)
+    : TreeTableTree {
     var treeTableData: TreeTableTree = new TreeTableTree(parent);
     treeTableData.content = fileTree.name;
     treeTableData.id = fileTree.hashId.algorithmName + ":" + fileTree.hashId.hash;
@@ -75,17 +84,20 @@ function convertAnalysisFileTree(fileTree: any, parent: TreeTableTree, $filter):
 }
 
 analysisUIModule.controller("runListCtrl", ["$scope", "$routeParams", "projectManager",
-    function($scope, $routeParams, projectManager) {
+    function(
+        $scope: any,
+        $routeParams: angular.route.IRouteParamsService,
+        projectManager: ProjectManager) {
         $scope.project = undefined;
         $scope.runs = undefined;
-        projectManager.getProject($routeParams.projectId,
+        projectManager.getProject($routeParams["projectId"],
             function(data, status) {
                 $scope.project = data;
             },
             function(data, status, error) {
             }
             );
-        projectManager.readAllRunInformation($routeParams.projectId,
+        projectManager.readAllRunInformation($routeParams["projectId"],
             function(data, status) {
                 $scope.runs = data;
             },
@@ -93,3 +105,22 @@ analysisUIModule.controller("runListCtrl", ["$scope", "$routeParams", "projectMa
             }
             );
     }]);
+
+/**
+ * This controller needs the :projectId route parameter set.
+ */
+analysisUIModule.controller("lastRunCtrl", ["$scope", "$routeParams", "projectManager",
+    function(
+        $scope: any,
+        $routeParams: angular.route.IRouteParamsService,
+        projectManager: ProjectManager) {
+        $scope.lastRun = undefined;
+        projectManager.getLastRun($routeParams["projectId"],
+            function(data, status) {
+                $scope.lastRun = data;
+            },
+            function(data, status, error) {
+            }
+            );
+    }]);
+    

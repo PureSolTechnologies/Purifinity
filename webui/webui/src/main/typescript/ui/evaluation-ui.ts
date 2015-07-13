@@ -7,7 +7,7 @@ evaluationUIModule.directive("evaluatorSelection",
             scope: {
                 evaluatorSelection: "=ngModel"
             },
-            controller: function($scope, pluginManager) {
+            controller: function($scope: any, pluginManager: PluginManager) {
                 $scope.evaluators = {};
                 pluginManager.getEvaluators(
                     function(data, status) {

@@ -2,139 +2,148 @@ var projectMetricsModule: angular.IModule = angular.module("projectMetricsModule
     "projectManagerModule", "pluginManagerModule", "purifinityServerModule", "purifinityUI"
 ]);
 
-projectMetricsModule.controller("fileSystemMetrics", ["$scope", "$routeParams", "$filter", "projectManager", "purifinityServerConnector", function($scope, $routeParams, $filter, projectManager, purifinityServerConnector) {
-    $scope.selectedEvaluator = undefined;
-    $scope.selection = {
-        codeRangeType: undefined,
-        parameter: undefined
-    };
-    $scope.fileTree = undefined;
-    $scope.metricsTreeTable = {};
-    $scope.metrics = {};
-    $scope.project = {};
-    $scope.run = {};
-    $scope.codeRangeTypes = [];
-    $scope.paretoData = [];
-    projectManager.getProject($routeParams.projectId, function(data, status) {
-        $scope.project = data;
-        projectManager.getRun($routeParams.projectId, $routeParams.runId, function(data, status) {
-            $scope.run = data;
-            projectManager.getAnalysisFileTree(
-				$routeParams.projectId, 
-				$routeParams.runId,
-                function(data, status) {
-                    $scope.fileTree = data;
-                    var treeTableData: TreeTableData = new TreeTableData();
-                    treeTableData.root = convertFileTreeForMetrics(data, null);
-                    treeTableData.columnHeaders.push(new TreeTableColumnHeader("Name", "Name of file or folder"));
-                    $scope.metricsTreeTable = treeTableData;
-                },
-                function(data, status, error) {
-                }
-                );
-        }, function(data, status, error) {
-            });
-    }, function(data, status, error) { }
-        );
-    $scope.$watch("selectedEvaluator", function(newValue, oldValue) {
+projectMetricsModule.controller("fileSystemMetrics", ["$scope", "$routeParams", "$filter", "projectManager", "purifinityServerConnector",
+    function(
+        $scope: any,
+        $routeParams: angular.route.IRouteParamsService,
+        $filter: angular.IFilterService,
+        projectManager: ProjectManager,
+        purifinityServerConnector: PurifinityServerConnector) {
+        $scope.selectedEvaluator = undefined;
+        $scope.selection = {
+            codeRangeType: undefined,
+            parameter: undefined
+        };
+        $scope.fileTree = undefined;
+        $scope.metricsTreeTable = {};
+        $scope.metrics = {};
+        $scope.project = {};
+        $scope.run = {};
+        $scope.codeRangeTypes = [];
         $scope.paretoData = [];
-        $scope.selection.codeRangeType = undefined;
-        $scope.selection.parameter = undefined;
-        if (newValue === oldValue) {
-            return;
-        }
-        if ($scope.project.information && $scope.run.information.runId && newValue) {
-            purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/metrics/"
-                + $scope.project.information.projectId
-                + "/" + $scope.run.information.runId
-                + "/" + newValue, function(data, status) {
-                    var types = [];
-                    types.push("DIRECTORY");
-                    types.push("FILE");
-                    for (var hashid in data.fileMetrics) {
-                        var fileResults = data.fileMetrics[hashid];
-                        fileResults.codeRangeMetrics.forEach(function(metrics) {
-                            if (types.indexOf(metrics.codeRangeType) < 0) {
-                                types.push(metrics.codeRangeType);
+        projectManager.getProject($routeParams["projectId"], function(data, status) {
+            $scope.project = data;
+            projectManager.getRun($routeParams["projectId"], $routeParams["runId"], function(data, status) {
+                $scope.run = data;
+                projectManager.getAnalysisFileTree(
+                    $routeParams["projectId"],
+                    $routeParams["runId"],
+                    function(data, status) {
+                        $scope.fileTree = data;
+                        var treeTableData: TreeTableData = new TreeTableData();
+                        treeTableData.root = convertFileTreeForMetrics(data, null);
+                        treeTableData.columnHeaders.push(new TreeTableColumnHeader("Name", "Name of file or folder"));
+                        $scope.metricsTreeTable = treeTableData;
+                    },
+                    function(data, status, error) {
+                    }
+                    );
+            }, function(data, status, error) {
+                });
+        }, function(data, status, error) { }
+            );
+        $scope.$watch("selectedEvaluator", function(newValue, oldValue) {
+            $scope.paretoData = [];
+            $scope.selection.codeRangeType = undefined;
+            $scope.selection.parameter = undefined;
+            if (newValue === oldValue) {
+                return;
+            }
+            if ($scope.project.information && $scope.run.information.runId && newValue) {
+                purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/metrics/"
+                    + $scope.project.information.projectId
+                    + "/" + $scope.run.information.runId
+                    + "/" + newValue, function(data, status) {
+                        var types = [];
+                        types.push("DIRECTORY");
+                        types.push("FILE");
+                        for (var hashid in data.fileMetrics) {
+                            var fileResults = data.fileMetrics[hashid];
+                            fileResults.codeRangeMetrics.forEach(function(metrics) {
+                                if (types.indexOf(metrics.codeRangeType) < 0) {
+                                    types.push(metrics.codeRangeType);
+                                }
+                            });
+                        }
+                        $scope.codeRangeTypes = [];
+                        types.forEach(function(type) {
+                            $scope.codeRangeTypes.push({ name: type });
+                        });
+                        $scope.codeRangeTypes.sort();
+                        $scope.selectedCodeRangeType = [];
+                        $scope.metrics = data;
+                        applyMetricsToFileTree($scope.metricsTreeTable.root, $scope.metrics, $scope.metrics.parameters, $filter);
+                        $scope.metricsTreeTable.columnHeaders = [{ name: "Name", tooltip: "Name of file or folder" }];
+                        $scope.metrics.parameters.forEach(function(parameter) {
+                            var name = parameter.name;
+                            if (parameter.unit) {
+                                name += " [" + parameter.unit + "]";
+                            }
+                            $scope.metricsTreeTable.columnHeaders.push({ name: name, tooltip: parameter.description });
+                        });
+                    }, function(data, status, error) {
+                    });
+            }
+        }, true);
+        $scope.recalculateChartData = function() {
+            if ((!$scope.selection.codeRangeType) || (!$scope.selection.parameter)) {
+                $scope.paretoData = [];
+                return;
+            }
+            var newData = [];
+            if ($scope.selection.codeRangeType === "DIRECTORY") {
+                for (var hashId in $scope.metrics.directoryMetrics) {
+                    var metric = $scope.metrics.directoryMetrics[hashId];
+                    var directory = $scope.fileTree.getDirectory(hashId);
+                    for (var valueName in metric.values) {
+                        var value = metric.values[valueName];
+                        if (!newData[value.parameter.name]) {
+                            newData[value.parameter.name] = [];
+                        }
+                        newData[value.parameter.name].push({ name: directory.name + ":" + value.parameter.name, value: value.value });
+                    }
+                }
+            } else {
+                for (var hashId in $scope.metrics.fileMetrics) {
+                    var codeRangeMetrics = $scope.metrics.fileMetrics[hashId].codeRangeMetrics;
+                    var file = $scope.fileTree.getFile(hashId);
+                    if (codeRangeMetrics) {
+                        codeRangeMetrics.forEach(function(metric) {
+                            if (metric.codeRangeType === $scope.selection.codeRangeType) {
+                                for (var valueName in metric.values) {
+                                    var value = metric.values[valueName];
+                                    if (!newData[value.parameter.name]) {
+                                        newData[value.parameter.name] = [];
+                                    }
+                                    newData[value.parameter.name].push({ name: file.name + ":" + metric.codeRangeName, value: value.value });
+                                }
                             }
                         });
                     }
-                    $scope.codeRangeTypes = [];
-                    types.forEach(function(type) {
-                        $scope.codeRangeTypes.push({ name: type });
-                    });
-                    $scope.codeRangeTypes.sort();
-                    $scope.selectedCodeRangeType = [];
-                    $scope.metrics = data;
-                    applyMetricsToFileTree($scope.metricsTreeTable.root, $scope.metrics, $scope.metrics.parameters, $filter);
-                    $scope.metricsTreeTable.columnHeaders = [{ name: "Name", tooltip: "Name of file or folder" }];
-                    $scope.metrics.parameters.forEach(function(parameter) {
-                        var name = parameter.name;
-                        if (parameter.unit) {
-                            name += " [" + parameter.unit + "]";
-                        }
-                        $scope.metricsTreeTable.columnHeaders.push({ name: name, tooltip: parameter.description });
-                    });
-                }, function(data, status, error) {
+                }
+            }
+            for (var key in newData) {
+                newData[key].sort(function(l, r) {
+                    return -1 * (l.value - r.value);
                 });
-        }
-    }, true);
-    $scope.recalculateChartData = function() {
-        if ((!$scope.selection.codeRangeType) || (!$scope.selection.parameter)) {
-            $scope.paretoData = [];
-            return;
-        }
-        var newData = [];
-        if ($scope.selection.codeRangeType === "DIRECTORY") {
-            for (var hashId in $scope.metrics.directoryMetrics) {
-                var metric = $scope.metrics.directoryMetrics[hashId];
-                var directory = $scope.fileTree.getDirectory(hashId);
-                for (var valueName in metric.values) {
-                    var value = metric.values[valueName];
-                    if (!newData[value.parameter.name]) {
-                        newData[value.parameter.name] = [];
-                    }
-                    newData[value.parameter.name].push({ name: directory.name + ":" + value.parameter.name, value: value.value });
-                }
             }
-        } else {
-            for (var hashId in $scope.metrics.fileMetrics) {
-                var codeRangeMetrics = $scope.metrics.fileMetrics[hashId].codeRangeMetrics;
-                var file = $scope.fileTree.getFile(hashId);
-                if (codeRangeMetrics) {
-                    codeRangeMetrics.forEach(function(metric) {
-                        if (metric.codeRangeType === $scope.selection.codeRangeType) {
-                            for (var valueName in metric.values) {
-                                var value = metric.values[valueName];
-                                if (!newData[value.parameter.name]) {
-                                    newData[value.parameter.name] = [];
-                                }
-                                newData[value.parameter.name].push({ name: file.name + ":" + metric.codeRangeName, value: value.value });
-                            }
-                        }
-                    });
-                }
+            $scope.paretoData = newData;
+        };
+        $scope.$watchGroup(["selection.codeRangeType", "selection.parameter"], function(newValue, oldValue) {
+            if (newValue === oldValue) {
+                return;
             }
-        }
-        for (var key in newData) {
-            newData[key].sort(function(l, r) {
-                return -1 * (l.value - r.value);
-            });
-        }
-        $scope.paretoData = newData;
-    };
-    $scope.$watchGroup(["selection.codeRangeType", "selection.parameter"], function(newValue, oldValue) {
-        if (newValue === oldValue) {
-            return;
-        }
-        $scope.recalculateChartData();
-    }, true);
-    $scope.showClick = function(item) {
-        alert(item);
-    };
-}]);
+            $scope.recalculateChartData();
+        }, true);
+        $scope.showClick = function(item) {
+            alert(item);
+        };
+    }]);
 
-function convertFileTreeForMetrics(fileTree: any, parent: TreeTableTree): TreeTableTree {
+function convertFileTreeForMetrics(
+    fileTree: any,
+    parent: TreeTableTree)
+    : TreeTableTree {
     var treeTableData: TreeTableTree = new TreeTableTree(parent);
     treeTableData.content = fileTree.name;
     treeTableData.id = fileTree.hashId.algorithmName + ":" + fileTree.hashId.hash;
@@ -210,7 +219,7 @@ function applyMetricsToFileTree(treeTableData, runMetrics, parameters, filter) {
 }
 
 projectMetricsModule.controller("treeMapCtrl", ["$scope",
-    function treeMapCtrl($scope) {
+    function treeMapCtrl($scope: any) {
         // Treemap test!
         $scope.mapData =
         {

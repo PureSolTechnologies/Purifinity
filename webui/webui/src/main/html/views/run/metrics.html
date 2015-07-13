@@ -1,110 +1,95 @@
 <div data-ng-controller="fileSystemMetrics">
-  <div class="container" >
-    <div class="row">
-      <div class="col-md-12">
-	<evaluator-selection data-ng-model="selectedEvaluator"></evaluator-selection>
-      </div>
-    </div>
-  </div>
-  <div class="container" >
-    <tabset>
-      <tab heading="Project Metrics">
-	<div class="row">
-	  <div class="col-md-12">
-	    <p>This tab contains the metrics for the whole project.</p>
-	    <table class="table table-striped table-hover table-bordered">
-	      <thead>
-		<tr>
-		  <th>Parameter</th>
-		  <th>Value</th>
-		  <th>Unit</th>
-		  <th>Description</th>
-		</tr>
-	      </thead>
-	      <tbody>
-		<tr data-ng-repeat="parameter in metrics.parameters">
-		  <td>{{parameter.name}}</td>
-		  <td>{{metrics.directoryMetrics[fileTree.hashId.algorithmName+":"+fileTree.hashId.hash].values[parameter.name].value | metricValue}}</td>
-		  <td>{{parameter.unit}}</td>
-		  <td>{{parameter.description}}</td>
-		</tr>
-	      </tbody>
-	    </table>
-	  </div>
+	<div class="container">
+		<h1>Metrics</h1>
+		<div class="row">
+			<div class="col-md-12">
+				<evaluator-selection data-ng-model="selectedEvaluator"></evaluator-selection>
+			</div>
+		</div>
 	</div>
-      </tab>
-      <tab heading="File System Tree">
-	<div class="row">
-	  <div class="col-md-12">
-	    <p>Here metrics can be browsed via file system selection.</p>
-	  </div>
+	<div class="container">
+		<tabset> <tab heading="Project Metrics">
+		<div class="row">
+			<div class="col-md-12">
+				<p>This tab contains the metrics for the whole project.</p>
+				<table class="table table-striped table-hover table-bordered">
+					<thead>
+						<tr>
+							<th>Parameter</th>
+							<th>Value</th>
+							<th>Unit</th>
+							<th>Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr data-ng-repeat="parameter in metrics.parameters">
+							<td>{{parameter.name}}</td>
+							<td>{{metrics.directoryMetrics[fileTree.hashId.algorithmName+":"+fileTree.hashId.hash].values[parameter.name].value
+								| metricValue}}</td>
+							<td>{{parameter.unit}}</td>
+							<td>{{parameter.description}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		</tab> <tab heading="File System Tree">
+		<div class="row">
+			<div class="col-md-12">
+				<p>Here metrics can be browsed via file system selection.</p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<tree-table data-ng-model="metricsTreeTable"></tree-table>
+			</div>
+		</div>
+		</tab> <tab heading="Tree Map">
+		<div class="row">
+			<div class="col-md-2">
+				<p>Treemap for metrics.</p>
+			</div>
+			<div class="col-md-10">
+				<div data-ng-controller="treeMapCtrl">
+					<tree-map map-data="mapData"></tree-map>
+				</div>
+			</div>
+		</div>
+		</tab> <tab heading="Graphs">
+		<div class="row">
+			<div class="col-md-6">
+				<select id="codeRangeTypeSelectorForGraphs"
+					title="Code Range Type Selector"
+					class="selectpicker show-tick form-control"
+					data-ng-model="selection.codeRangeType">
+					<option value="">Select a Code Range Type</option>
+					<option data-ng-repeat="codeRangeType in codeRangeTypes"
+						value="{{codeRangeType.name}}">{{codeRangeType.name}}</option>
+				</select>
+			</div>
+			<div class="col-md-6">
+				<select id="codeRangeTypeSelectorForGraphs"
+					title="Code Range Type Selector"
+					class="selectpicker show-tick form-control"
+					data-ng-model="selection.parameter">
+					<option value="">Select a Parameter</option>
+					<option data-ng-repeat="parameter in metrics.parameters"
+						value="{{parameter.name}}">{{parameter.name}}</option>
+				</select>
+			</div>
+		</div>
+		<tabset> <tab heading="Vertical Pareto Chart">
+		<h4>{{selection.parameter}}</h4>
+		<vertical-pareto-chart on-click="showClick(item)"
+			data="paretoData[selection.parameter]"></vertical-pareto-chart> </tab> <tab
+			heading="Pareto Chart">
+		<h4>{{selection.parameter}}</h4>
+		<pareto-chart on-click="showClick(item)"
+			data="paretoData[selection.parameter]"></pareto-chart> </tab> <tab
+			heading="Histogram Chart">
+		<h4>{{selection.parameter}}</h4>
+		<histogram-chart on-click="showClick(item)"
+			data="paretoData[selection.parameter]"></histogram-chart> </tab> <tab
+			heading="Cummulative Distribution"> </tab> </tabset> </tab> </tabset>
 	</div>
-	<div class="row">
-	  <div class="col-md-12">
-	    <tree-table data-ng-model="metricsTreeTable"></tree-table>
-	  </div>
-	</div>
-      </tab>
-      <tab heading="Tree Map">
-	<div class="row">
-	  <div class="col-md-2">
-	    <p>Treemap for metrics.</p>
-	  </div>
-	  <div class="col-md-10">
-	    <div data-ng-controller="treeMapCtrl">
-	      <tree-map map-data="mapData"></tree-map>
-	    </div>
-	  </div>
-	</div>
-      </tab>
-      <tab heading="Graphs">
-	<div class="row">
-	  <div class="col-md-6">
-	    <select 
-	       id="codeRangeTypeSelectorForGraphs" 
-	       title="Code Range Type Selector"
-	       class="selectpicker show-tick form-control"	
-	       data-ng-model="selection.codeRangeType">
-	      <option value="">Select a Code Range Type</option>
-	      <option 
-		 data-ng-repeat="codeRangeType in codeRangeTypes" 
-		 value="{{codeRangeType.name}}">
-		{{codeRangeType.name}}
-	      </option>
-	    </select>
-	  </div>
-	  <div class="col-md-6">
-	    <select 
-	       id="codeRangeTypeSelectorForGraphs" 
-	       title="Code Range Type Selector"
-	       class="selectpicker show-tick form-control"	
-	       data-ng-model="selection.parameter">
-	      <option value="">Select a Parameter</option>
-	      <option 
-		 data-ng-repeat="parameter in metrics.parameters" 
-		 value="{{parameter.name}}">
-		{{parameter.name}}
-	      </option>
-	    </select>
-	  </div>
-	</div>
-	<tabset>
-	  <tab heading="Vertical Pareto Chart">
-	    <h4>{{selection.parameter}}</h4>
-	    <vertical-pareto-chart on-click="showClick(item)" data="paretoData[selection.parameter]" ></vertical-pareto-chart>
-	  </tab>
-	  <tab heading="Pareto Chart">
-	    <h4>{{selection.parameter}}</h4>
-	    <pareto-chart on-click="showClick(item)" data="paretoData[selection.parameter]" ></pareto-chart>
-	  </tab>
-	  <tab heading="Histogram Chart">
-	    <h4>{{selection.parameter}}</h4>
-	    <histogram-chart on-click="showClick(item)" data="paretoData[selection.parameter]" ></histogram-chart>
-	  </tab>
-	  <tab heading="Cummulative Distribution">
-	  </tab>
-	</tabset>
-      </tab>
-    </tabset>
-  </div>
 </div>
