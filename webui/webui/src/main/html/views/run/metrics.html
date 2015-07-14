@@ -44,18 +44,9 @@
 				<tree-table data-ng-model="metricsTreeTable"></tree-table>
 			</div>
 		</div>
-		</tab> <tab heading="Tree Map">
-		<div class="row">
-			<div class="col-md-2">
-				<p>Treemap for metrics.</p>
-			</div>
-			<div class="col-md-10">
-				<div data-ng-controller="treeMapCtrl">
-					<tree-map map-data="mapData"></tree-map>
-				</div>
-			</div>
-		</div>
-		</tab> <tab heading="Graphs">
+		</tab> <tab heading="Tree Map" data-ng-controller="treeMapCtrl">
+		<h3>Tree Map</h3>
+		<tree-map data="mapData"></tree-map> </tab> <tab heading="Graphs">
 		<div class="row">
 			<div class="col-md-6">
 				<select id="codeRangeTypeSelectorForGraphs"
@@ -78,18 +69,16 @@
 				</select>
 			</div>
 		</div>
-		<tabset> <tab heading="Vertical Pareto Chart">
-		<h4>{{selection.parameter}}</h4>
-		<vertical-pareto-chart on-click="showClick(item)"
-			data="paretoData[selection.parameter]"></vertical-pareto-chart> </tab> <tab
-			heading="Pareto Chart">
-		<h4>{{selection.parameter}}</h4>
+		<h2>{{selection.parameter}}</h2>
+		<h3>Pareto Chart</h3>
 		<pareto-chart on-click="showClick(item)"
-			data="paretoData[selection.parameter]"></pareto-chart> </tab> <tab
-			heading="Histogram Chart">
-		<h4>{{selection.parameter}}</h4>
+			data="paretoData[selection.parameter]"></pareto-chart>
+		<h3>Histogram Chart</h3>
 		<histogram-chart on-click="showClick(item)"
-			data="paretoData[selection.parameter]"></histogram-chart> </tab> <tab
-			heading="Cummulative Distribution"> </tab> </tabset> </tab> </tabset>
+			data="paretoData[selection.parameter]"></histogram-chart>
+		<h3>Cummulative Distribution</h3>
+		<h3>Vertical Pareto Chart</h3>
+		<vertical-pareto-chart on-click="showClick(item)"
+			data="paretoData[selection.parameter]"></vertical-pareto-chart> </tab> </tabset>
 	</div>
 </div>
