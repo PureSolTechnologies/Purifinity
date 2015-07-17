@@ -8,9 +8,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<commons.version>0.6.0-SNAPSHOT</commons.version>
-		<parsers.version>0.5.0-SNAPSHOT</parsers.version>
-		<graphs.version>0.5.0-SNAPSHOT</graphs.version>
+		<commons.version>0.6.0</commons.version>
+		<parsers.version>0.5.0</parsers.version>
+		<graphs.version>0.6.0</graphs.version>
 		<versioning.version>1.1.0</versioning.version>
 		<com.fasterxml.jackson.version>2.4.1</com.fasterxml.jackson.version>
 	</properties>
