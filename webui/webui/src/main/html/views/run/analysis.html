@@ -9,7 +9,7 @@
 			<tr>
 				<th>Time</th>
 				<th>Duration</th>
-				<th>HashId</th>
+				<th>File(s)</th>
 				<th>Error Message</th>
 				<th>Language</th>
 				<th>Analyzer Version</th>
@@ -19,9 +19,13 @@
 			<tr data-ng-repeat="failedFile in run.failedFiles">
 				<td>{{failedFile.startTime | defaultDate}}</td>
 				<td>{{failedFile.duration | duration}}</td>
-				<td><a
-					href="http://localhost:8080/file.html#/summary/{{failedFile.hashId.algorithmName}}:{{failedFile.hashId.hash}}">
-						{{failedFile.hashId | hashId}} </a></td>
+				<td><div
+						data-ng-repeat="file in hashIds[failedFile.hashId.algorithmName+':'+failedFile.hashId.hash]"
+						tooltip="HashId: {{failedFile.hashId | hashId}}">
+						<a
+							href="http://localhost:8080/file.html#/summary/{{failedFile.hashId.algorithmName}}:{{failedFile.hashId.hash}}">
+							{{file}} </a>
+					</div></td>
 				<td>{{failedFile.analyzerErrorMessage}}</td>
 				<td>{{failedFile.languageName}} {{failedFile.languageVersion}}</td>
 				<td>{{failedFile.analyzerVersion | version}}</td>
@@ -35,7 +39,7 @@
 			<tr>
 				<th>Time</th>
 				<th>Duration</th>
-				<th>HashId</th>
+				<th>File(s)</th>
 				<th>Language</th>
 				<th>Analyzer Version</th>
 			</tr>
@@ -44,9 +48,13 @@
 			<tr data-ng-repeat="analyzedFile in run.analyzedFiles">
 				<td>{{analyzedFile.startTime | defaultDate}}</td>
 				<td>{{analyzedFile.duration | duration}}</td>
-				<td><a
-					href="http://localhost:8080/file.html#/summary/{{analyzedFile.hashId.algorithmName}}:{{analyzedFile.hashId.hash}}">
-						{{analyzedFile.hashId | hashId}} </a></td>
+				<td><div
+						data-ng-repeat="file in hashIds[analyzedFile.hashId.algorithmName+':'+analyzedFile.hashId.hash]"
+						tooltip="HashId: {{analyzedFile.hashId | hashId}}">
+						<a
+							href="http://localhost:8080/file.html#/summary/{{analyzedFile.hashId.algorithmName}}:{{analyzedFile.hashId.hash}}">
+							{{file}} </a>
+					</div></td>
 				<td>{{analyzedFile.languageName}}
 					{{analyzedFile.languageVersion}}</td>
 				<td>{{analyzedFile.analyzerVersion | version}}</td>

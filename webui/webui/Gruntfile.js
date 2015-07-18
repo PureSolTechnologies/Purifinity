@@ -94,7 +94,6 @@ module.exports = function(grunt) {
 					target : {
 						files : {
 							'target/dist/js/purifinity-ui.js' : 'target/tmp/js/purifinity-ui.js',
-							'target/dist/js/enable-tooltips.js' : 'target/tmp/js/enable-tooltips.js',
 						}
 					}
 				},

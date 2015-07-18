@@ -21,19 +21,22 @@ analysisUIModule.controller("analysisBrowserCtrl", ["$scope", "$routeParams", "$
                         new TreeTableColumnHeader("Name", "Name of file or folder"));
                     treeTableData.columnHeaders.push(
                         new TreeTableColumnHeader("Size", "Size of file or size of folder without sub folders."));
-                    treeTableData.columnHeaders.push(
+                    treeTableData.columnHeaders.push(	
                         new TreeTableColumnHeader("Size Recursive", "Size of file or size of folder including sub folders."));
                     treeTableData.columnHeaders.push(
                         new TreeTableColumnHeader("Analyzes", "Successful analyzes."));
                     $scope.analysisFileTree = treeTableData;
+                    projectManager.getRun($routeParams["projectId"], $routeParams["runId"],
+                        function(data, status) {
+                            $scope.run = data;
+                            var hashIds: { [hashId: string]: string[] } = {};
+                            $scope.hashIds = hashIds;
+                            collectHashIds(hashIds, data.fileTree, "/");
+                        },
+                        function(data, status, error) { });
                 },
                 function(data, status, error) { }
                 );
-            projectManager.getRun($routeParams["projectId"], $routeParams["runId"],
-                function(data, status) {
-                    $scope.run = data;
-                },
-                function(data, status, error) { });
         }, function(data, status, error) {
             });
     }]);
@@ -81,6 +84,19 @@ function convertAnalysisFileTree(
         treeTableData.link = "/file.html#/summary/" + treeTableData.id;
     }
     return treeTableData;
+}
+
+function collectHashIds(hashIds: { [hashId: string]: string[] }, node: any, path: string) {
+    var hashId = node.hashId.algorithmName + ":" + node.hashId.hash;
+    if (!hashIds[hashId]) {
+        hashIds[hashId] = [];
+    }
+    hashIds[hashId].push(path + node.name);
+    if ((!node.file) && (node.children.length > 0)) {
+        node.children.forEach(function(child: any) {
+            collectHashIds(hashIds, child, path + node.name + "/");
+        });
+    }
 }
 
 analysisUIModule.controller("runListCtrl", ["$scope", "$routeParams", "projectManager",
