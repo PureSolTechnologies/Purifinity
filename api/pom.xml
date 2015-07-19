@@ -69,7 +69,7 @@
 		<site>
 			<id>FTPPureSolTechnologiesCom</id>
 			<name>FTPPureSolTechnologiesCom</name>
-			<url>ftp://puresol-technologies.com/opensource/purifinity-api</url>
+			<url>ftp://puresol-technologies.com/opensource.puresol-technologies.com/projects/purifinity-api/${project.version}</url>
 		</site>
 		<repository>
 			<id>libs-release-local</id>
