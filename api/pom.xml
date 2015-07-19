@@ -24,7 +24,7 @@
 	<description>This Maven project and all its sub-projects contain public APIs and SPIs of Purifinity.</description>
 
 	<inceptionYear>2009</inceptionYear>
-	<url>http://opensource.puresol-technologies.com/purifinity-api</url>
+	<url>http://purifinity.com</url>
 
 	<organization>
 		<name>PureSol Technologies</name>

@@ -22,10 +22,10 @@
 	<packaging>pom</packaging>
 
 	<name>Purifinity Distribution: ${project.artifactId}</name>
-	<description>This Maven project and all its sub-projects contain the web UI of Purifinity.</description>
+	<description>This Maven project and all its sub-projects build the distributions of Purifinity.</description>
 
 	<inceptionYear>2009</inceptionYear>
-	<url>http://opensource.puresol-technologies.com/purifinity-webui</url>
+	<url>http://purifinity.com</url>
 
 	<organization>
 		<name>PureSol Technologies</name>
@@ -34,9 +34,7 @@
 
 	<licenses>
 		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-			<distribution>repo</distribution>
+			<name>PureSol Technologies Commercial License</name>
 		</license>
 	</licenses>
 
@@ -68,11 +66,11 @@
 	</ciManagement>
 
 	<distributionManagement>
-		<site>
+		<!-- site>
 			<id>FTPPureSolTechnologiesCom</id>
 			<name>FTPPureSolTechnologiesCom</name>
 			<url>ftp://puresol-technologies.com/opensource/purifinity-webui</url>
-		</site>
+		</site -->
 		<repository>
 			<id>libs-release-local</id>
 			<name>Repository libs-release-local</name>

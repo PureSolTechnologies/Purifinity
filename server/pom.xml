@@ -47,14 +47,14 @@
 
 	<groupId>com.puresoltechnologies.purifinity.server</groupId>
 	<artifactId>server-parent</artifactId>
-	<name>Purifinity Server: ${project.artifactId}</name>
 	<version>0.3.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<description>In this module and all its sub-modules server components are included..</description>
+	<name>Purifinity Server: ${project.artifactId}</name>
+	<description>In this module and all its sub-modules Purifinity server components are included.</description>
 
 	<inceptionYear>2009</inceptionYear>
-	<url>http://puresol-technologies.com</url>
+	<url>http://purifinity.com</url>
 
 	<organization>
 		<name>PureSol Technologies</name>
@@ -86,13 +86,31 @@
 
 	<issueManagement>
 		<system>Redmine</system>
-		<url>https://bugs.puresol-technologies.net/projects/license-maven-plugin</url>
+		<url>https://bugs.puresol-technologies.net/projects/purifinity-server</url>
 	</issueManagement>
 
 	<ciManagement>
 		<system>Jenkins</system>
-		<url>https://travis-ci.org/RickRainerLudwig/license-maven-plugin</url>
+		<url>http://ci.puresol-technologies.net</url>
 	</ciManagement>
+
+	<distributionManagement>
+		<!-- site>
+			<id>FTPPureSolTechnologiesCom</id>
+			<name>FTPPureSolTechnologiesCom</name>
+			<url>ftp://puresol-technologies.com/opensource/purifinity-api</url>
+		</site -->
+		<repository>
+			<id>libs-release-local</id>
+			<name>Repository libs-release-local</name>
+			<url>http://repo.puresol-technologies.net/libs-release-local</url>
+		</repository>
+		<snapshotRepository>
+			<id>libs-snapshot-local</id>
+			<name>Repository libs-snapshot-local</name>
+			<url>http://repo.puresol-technologies.net/libs-snapshot-local</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 	<repositories>
 		<repository>
@@ -1269,6 +1287,15 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.4.2</version>
+				<configuration>
+					<tagNameFormat>server-v@{project.version}</tagNameFormat>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
