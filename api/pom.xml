@@ -170,6 +170,13 @@
 										<alias>The Apache Software License, Version 2.0</alias>
 									</aliases>
 								</knownLicense>
+								<knownLicense>
+									<name>PureSol Technologies Commercial License</name>
+									<url>http://puresol-technologies.com</url>
+									<approvedDependencies>
+										<approvedDependency>com\.puresoltechnologies\..*:.*:.*</approvedDependency>
+									</approvedDependencies>
+								</knownLicense>
 							</knownLicenses>
 						</configuration>
 					</plugin>

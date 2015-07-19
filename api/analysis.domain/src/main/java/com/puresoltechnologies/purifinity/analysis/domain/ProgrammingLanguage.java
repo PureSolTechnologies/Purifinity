@@ -17,14 +17,16 @@ public interface ProgrammingLanguage { // do not Serialize!
     /**
      * This method returns the name of the programming language.
      * 
-     * @return
+     * @return A {@link String} is returned containing the name of the language.
      */
     public String getName();
 
     /**
      * This method returns the version of the programming language.
      * 
-     * @return
+     * @return A String with the version of the language is returned. Due to not
+     *         all languages use semantic versioning, a plain string is returned
+     *         here.
      */
     public String getVersion();
 
@@ -32,14 +34,16 @@ public interface ProgrammingLanguage { // do not Serialize!
      * This method specifies whether the programming language is suitable for a
      * specified file or not.
      * 
-     * @return
+     * @return <code>true</code> is returned in case the source code fits to
+     *         this language. <code>false</code> is returned otherwise.
      */
     public boolean isSuitable(SourceCodeLocation source);
 
     /**
      * This method returns the grammar of the programming language.
      * 
-     * @return
+     * @return A {@link LanguageGrammar} object is returned containing the
+     *         grammar of the language.
      */
     public LanguageGrammar getGrammar();
 

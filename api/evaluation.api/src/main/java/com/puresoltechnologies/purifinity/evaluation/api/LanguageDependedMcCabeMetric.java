@@ -15,15 +15,16 @@ import com.puresoltechnologies.parsers.ust.AbstractProduction;
  */
 public interface LanguageDependedMcCabeMetric extends Serializable {
 
-	/**
-	 * This method is implemented in language packs for distinguishing the type
-	 * of node in context to the language.
-	 * 
-	 * @param node
-	 *            is the node to be checked.
-	 * @return True is returned in cases the node increases the cyclomatic
-	 *         complexity within source codes.
-	 */
-	public int increasesCyclomaticComplexityBy(AbstractProduction production);
+    /**
+     * This method is implemented in language packs for determining whether the
+     * cyclomatic complexity is to be increased or not.
+     * 
+     * @param production
+     *            is a {@link AbstractProduction} of the language to be checked.
+     * @return An integer is returned about how much the complexity is to be
+     *         increased. 0 is to be returned in case no complexity is to be
+     *         changed.
+     */
+    public int increasesCyclomaticComplexityBy(AbstractProduction production);
 
 }

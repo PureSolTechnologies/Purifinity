@@ -15,22 +15,21 @@ import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
  * @param <T>
  *            is the type or interface of the elements contained in that list.
  */
-public class SyntaxElementList<T extends AbstractProduction> extends
-		AbstractProduction {
+public class SyntaxElementList<T extends AbstractProduction> extends AbstractProduction {
 
-	private static final long serialVersionUID = -1875399758682948173L;
+    private static final long serialVersionUID = -1875399758682948173L;
 
-	/**
-	 * This constructor is inherited from AbstractUSTNode.
-	 * 
-	 * @param parent
-	 * @param originalSymbol
-	 *            could here be ',', ';' or something similar regarding the
-	 *            source programming language.
-	 */
-	public SyntaxElementList(String originalSymbol,
-			List<AbstractProduction> elements) {
-		super("Syntax Element List", originalSymbol, elements
-				.toArray(new UniversalSyntaxTree[elements.size()]));
-	}
+    /**
+     * This constructor is inherited from AbstractUSTNode.
+     * 
+     * @param originalSymbol
+     *            could here be ',', ';' or something similar regarding the
+     *            source programming language.
+     * @param elements
+     *            is a {@link List} of {@link AbstractProduction}
+     * 
+     */
+    public SyntaxElementList(String originalSymbol, List<AbstractProduction> elements) {
+	super("Syntax Element List", originalSymbol, elements.toArray(new UniversalSyntaxTree[elements.size()]));
+    }
 }
