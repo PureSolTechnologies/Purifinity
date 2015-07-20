@@ -95,11 +95,8 @@
 	</ciManagement>
 
 	<distributionManagement>
-		<!-- site>
-			<id>FTPPureSolTechnologiesCom</id>
-			<name>FTPPureSolTechnologiesCom</name>
-			<url>ftp://puresol-technologies.com/opensource/purifinity-api</url>
-		</site -->
+		<!-- site> <id>FTPPureSolTechnologiesCom</id> <name>FTPPureSolTechnologiesCom</name> 
+			<url>ftp://puresol-technologies.com/opensource/purifinity-api</url> </site -->
 		<repository>
 			<id>libs-release-local</id>
 			<name>Repository libs-release-local</name>
@@ -222,55 +219,80 @@
 									<name>PureSol Technologies Commercial License</name>
 									<url>http://puresol-technologies.com</url>
 								</knownLicenses>
-								<!-- knownLicense> <name>The Apache Software License, Version 1.1</name> 
-									<url>https://www.apache.org/licenses/LICENSE-1.1</url> <approvedDependencies> 
-									<approvedDependency>avalon-framework:avalon-framework:4\.1\.3</approvedDependency> 
-									</approvedDependencies> </knownLicense -->
+								<knownLicense>
+									<name>The Apache Software License, Version 1.1</name>
+									<url>https://www.apache.org/licenses/LICENSE-1.1</url>
+									<approvedDependencies>
+										<approvedDependency>avalon-framework:avalon-framework:4\.1\.3</approvedDependency>
+									</approvedDependencies>
+								</knownLicense>
 								<knownLicense>
 									<name>Apache License, Version 2.0</name>
 									<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
 									<aliases>
 										<alias>AL 2.0</alias>
-										<!-- alias>Apache 2</alias> <alias>Apache License</alias> <alias>Apache 
-											License 2.0</alias -->
+										<alias>Apache 2</alias>
+										<alias>Apache License</alias>
+										<!-- alias>Apache License 2.0</alias -->
+										<alias>Apache License 2.0</alias>
 										<alias>Apache License Version 2.0</alias>
 										<alias>Apache License, version 2.0</alias>
-										<!-- alias>Apache Software License - Version 2.0</alias -->
+										<alias>Apache Software License - Version 2.0</alias>
 										<alias>The Apache Software License, Version 2.0</alias>
 									</aliases>
 									<approvedDependencies>
-										<!-- approvedDependency>commons-beanutils:commons-beanutils:1\.7\.0</approvedDependency> 
-											<approvedDependency>commons-codec:commons-codec:1\.2</approvedDependency> 
-											<approvedDependency>commons-logging:commons-logging:1\.0\.3</approvedDependency> 
-											<approvedDependency>log4j:log4j:1\.2\.12</approvedDependency> <approvedDependency>logkit:logkit:1\.0\.1</approvedDependency -->
-										<approvedDependency>org\.apache.commons:.*:.*</approvedDependency> <!-- approvedDependency>org\.codehaus\.jettison:jettison:1\.2</approvedDependency> 
-											<approvedDependency>oro:oro:2\.0\.8</approvedDependency -->
+										<approvedDependency>commons-beanutils:commons-beanutils:1\.7\.0</approvedDependency>
+										<approvedDependency>commons-codec:commons-codec:1\.2</approvedDependency>
+										<approvedDependency>commons-logging:commons-logging:1\.0\.3</approvedDependency>
+										<approvedDependency>log4j:log4j:1\.2\.12</approvedDependency>
+										<approvedDependency>logkit:logkit:1\.0\.1</approvedDependency>
+										<approvedDependency>org\.apache.commons:.*:.*</approvedDependency> 
+										<approvedDependency>org\.codehaus\.jettison:jettison:1\.2</approvedDependency>
+										<approvedDependency>oro:oro:2\.0\.8</approvedDependency>
+										<approvedDependency>org\.apache\.ant:.*:.*</approvedDependency>
+										<approvedDependency>org\.apache\.cassandra.*:.*:.*</approvedDependency>
 									</approvedDependencies>
 								</knownLicense>
 								<knownLicense>
 									<name>The BSD 2-Clause License</name>
 									<url>http://opensource.org/licenses/BSD-2-Clause</url>
+									<aliases>
+									  <alias>BSD style</alias>
+									  <alias>BSD licence</alias>
+									</aliases>
 									<approvedDependencies>
 										<!-- approvedDependency>com\.esotericsoftware\.kryo:kryo:2\.21</approvedDependency> 
 											<approvedDependency>com\.esotericsoftware\.minlog:minlog:1\.2</approvedDependency> 
-											<approvedDependency>com\.esotericsoftware\.reflectasm:reflectasm:1\.07</approvedDependency> 
-											<approvedDependency>jline:jline:.*</approvedDependency -->
+											<approvedDependency>com\.esotericsoftware\.reflectasm:reflectasm:1\.07</approvedDependency -->
+										<approvedDependency>dom4j:dom4j:.*</approvedDependency>
+										<approvedDependency>jline:jline:.*</approvedDependency>
 										<approvedDependency>org\.hamcrest:hamcrest-core:1\.3</approvedDependency>
 									</approvedDependencies>
 								</knownLicense>
-								<!-- knownLicense> <name>The BSD 3-Clause License</name> <url>http://opensource.org/licenses/BSD-3-Clause</url> 
-									<aliases> <alias>BSD 3-Clause</alias> </aliases> <approvedDependencies> <approvedDependency>antlr:antlr:.*</approvedDependency> 
-									<approvedDependency>asm:asm.*:.*</approvedDependency> <approvedDependency>org\.antlr:.*:.*</approvedDependency> 
-									<approvedDependency>org\.ow2\.asm:asm:4\.0</approvedDependency> </approvedDependencies> 
-									</knownLicense -->
+								<knownLicense>
+									<name>The BSD 3-Clause License</name>
+									<url>http://opensource.org/licenses/BSD-3-Clause</url>
+									<aliases>
+										<alias>BSD 3-Clause</alias>
+										<alias>New BSD License</alias>
+									</aliases>
+									<approvedDependencies>
+										<approvedDependency>antlr:antlr:.*</approvedDependency>
+										<approvedDependency>asm:asm.*:.*</approvedDependency>
+										<approvedDependency>org\.antlr:.*:.*</approvedDependency>
+										<!-- approvedDependency>org\.ow2\.asm:asm:4\.0</approvedDependency -->
+									</approvedDependencies>
+								</knownLicense>
 								<knownLicense>
 									<name><![CDATA[Common Development and Distribution License (CDDL-1.0)]]></name>
 									<url>http://opensource.org/licenses/CDDL-1.0</url>
 									<aliases>
 										<alias>CDDL v1.1 / GPL v2 dual license</alias>
+										<alias>Dual license consisting of the CDDL v1.1 and GPL v2</alias>
 									</aliases>
-									<!-- approvedDependencies> <approvedDependency>javax\.servlet:servlet-api:.*</approvedDependency> 
-										</approvedDependencies -->
+									<approvedDependencies>
+										<approvedDependency>javax\.servlet:servlet-api:.*</approvedDependency>
+									</approvedDependencies>
 								</knownLicense>
 								<knownLicense>
 									<name>Common Public License Version 1.0 (CPL)</name>
@@ -284,6 +306,8 @@
 									<url>http://www.eclipse.org/legal/epl-v10.html</url>
 									<aliases>
 										<alias>Eclipse License, Version 1.0</alias>
+										<alias>Eclipse Public License - Version 1.0</alias>
+										<alias>Eclipse Public License - v 1.0</alias>
 									</aliases>
 								</knownLicense>
 								<knownLicense>
@@ -297,44 +321,79 @@
 									<name>GNU Lesser General Public License, Version 2.1</name>
 									<url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
 									<aliases>
-										<!-- alias>GNU Lesser General Public License (LGPL), Version 2.1</alias -->
-										<alias>GNU Lesser General Public License, version 2.1</alias>
-										<alias>LGPL 2.1</alias>
-										<alias>lgpl</alias>
-										<alias>lgpl_v2_1</alias>
+									  <alias>GNU Lesser General Public License</alias>
+									  <!-- alias>GNU Lesser General Public License (LGPL), Version 2.1</alias -->
+									  <alias>GNU Lesser General Public License, version 2.1</alias>
+									  <alias>LGPL 2.1</alias>
+									  <alias>lgpl</alias>
+									  <alias>lgpl_v2_1</alias>
 									</aliases>
 								</knownLicense>
-								<!-- knownLicense> <name><![CDATA[GNU Lesser General Public License, 
-									Version 3.0]]></name> <url>http://www.gnu.org/copyleft/lesser.html</url> 
-									<approvedDependencies> <approvedDependency>colt:colt:1\.2\.0</approvedDependency> 
-									<approvedDependency>org\.acplt:oncrpc:1\.0\.7</approvedDependency> </approvedDependencies> 
-									</knownLicense> <knownLicense> <name>ISC License (ISC)</name> <url>http://www.opensource.org/licenses/isc-license.txt</url> 
-									<aliases> <alias>ISC/BSD License</alias> </aliases> </knownLicense -->
+								<knownLicense>
+									<name><![CDATA[GNU Lesser General Public License, Version 3.0]]></name>
+									<url>http://www.gnu.org/copyleft/lesser.html</url>
+									<approvedDependencies>
+										<approvedDependency>colt:colt:1\.2\.0</approvedDependency>
+										<approvedDependency>org\.acplt:oncrpc:1\.0\.7</approvedDependency>
+									</approvedDependencies>
+								</knownLicense>
+								<knownLicense>
+								  <name>ISC License (ISC)</name>
+								  <url>http://www.opensource.org/licenses/isc-license.txt</url> 
+								  <aliases>
+								    <alias>ISC/BSD License</alias>
+								  </aliases>
+								</knownLicense>
 								<knownLicense>
 									<name>The MIT License (MIT)</name>
 									<url>http://opensource.org/licenses/MIT</url>
 									<aliases>
-										<!-- alias>MIT License</alias -->
+										<alias>MIT License</alias>
 										<alias>The MIT License</alias>
 										<alias>The MIT license</alias>
 									</aliases>
 									<approvedDependencies>
-										<approvedDependency>org\.slf4j:slf4j-api:1\.5\.8</approvedDependency>
+									  <approvedDependency>org\.slf4j:.*:.*</approvedDependency>
 									</approvedDependencies>
 								</knownLicense>
-								<!-- knownLicense> <name>Mozilla Public License Version 1.1</name> 
-									<url>http://www.mozilla.org/MPL/1.1</url> <aliases> <alias>MPL 1.1</alias> 
-									</aliases> </knownLicense -->
+								<knownLicense>
+									<name>Mozilla Public License Version 1.1</name>
+									<url>http://www.mozilla.org/MPL/1.1</url>
+									<aliases>
+										<alias>MPL 1.1</alias>
+									</aliases>
+								</knownLicense>
 								<!-- knownLicense> <name>OSGi Specification License, Version 2.0</name> 
 									<url>http://www.osgi.org/Main/OSGiSpecificationLicense</url> </knownLicense -->
 								<knownLicense>
 									<name>Public Domain</name>
 									<url>http://en.wikipedia.org/wiki/Public_domain</url>
-									<!-- aliases> <alias>Public domain, Sun Microsoystems</alias> <alias>provided 
-										without support or warranty</alias> </aliases -->
+									<aliases>
+										<alias>Public domain, Sun Microsoystems</alias>
+										<alias><![CDATA[provided without support or warranty]]></alias>
+									</aliases>
 								</knownLicense>
-								<!-- knownLicense> <name>Snaptree License</name> <url>https://github.com/nbronson/snaptree/blob/master/LICENSE</url> 
-									<aliases> <alias>SNAPTREE LICENSE</alias> </aliases> </knownLicense -->
+								<knownLicense>
+									<name>PureSol Technologies Commercial License</name>
+									<url>http://puresol-technologies.com</url>
+									<approvedDependencies>
+										<approvedDependency>com\.puresoltechnologies\..*:.*:.*</approvedDependency>
+									</approvedDependencies>
+								</knownLicense>
+								<knownLicense>
+								  <name>Snaptree License</name>
+								  <url>https://github.com/nbronson/snaptree/blob/master/LICENSE</url> 
+								  <aliases> 
+								    <alias>SNAPTREE LICENSE</alias>
+								    </aliases>
+								</knownLicense>
+								<knownLicense>
+								  <name>Do What The Fuck You Want To Public License</name>
+								  <url>http://www.wtfpl.net/</url> 
+								  <aliases> 
+								    <alias>WTFPL</alias>
+								  </aliases>
+								</knownLicense>
 							</knownLicenses>
 						</configuration>
 					</plugin>
