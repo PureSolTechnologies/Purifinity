@@ -27,7 +27,7 @@
 
 	<groupId>com.puresoltechnologies.purifinity.webui</groupId>
 	<artifactId>webui-parent</artifactId>
-	<version>0.3.0</version>
+	<version>0.4.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Purifinity Web UI: ${project.artifactId}</name>
@@ -51,7 +51,7 @@
 		<developerConnection>scm:git:git@git:Purifinity</developerConnection>
 		<connection>scm:git:git@git:Purifinity</connection>
 		<url>http://git/gitweb/</url>
-		<tag>webui-v0.3.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
