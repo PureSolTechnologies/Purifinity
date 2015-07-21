@@ -7,7 +7,7 @@ evaluationUIModule.directive("evaluatorSelection",
             scope: {
                 evaluatorSelection: "=ngModel"
             },
-            controller: function($scope: any, pluginManager: PluginManager) {
+            controller: ['$scope', 'pluginManager', function($scope: any, pluginManager: PluginManager) {
                 $scope.evaluators = {};
                 pluginManager.getEvaluators(
                     function(data, status) {
@@ -16,7 +16,7 @@ evaluationUIModule.directive("evaluatorSelection",
                     },
                     function(data, status, error) { }
                     );
-            },
+            }],
             templateUrl: "directives/evaluator-selection.html"
         };
     });
