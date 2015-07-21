@@ -8,7 +8,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Purifinity -->
-		<purifinity.version>0.3.1-SNAPSHOT</purifinity.version>
+		<purifinity.version>0.3.1</purifinity.version>
 		<!-- WildFly -->
 		<wildfly.version>8.2.0.Final</wildfly.version>
 		<!-- Cassandra -->
