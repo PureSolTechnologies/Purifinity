@@ -8,7 +8,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Purifinity -->
-		<purifinity.version>0.3.0</purifinity.version>
+		<purifinity.version>0.3.1-SNAPSHOT</purifinity.version>
 		<!-- WildFly -->
 		<wildfly.version>8.2.0.Final</wildfly.version>
 		<!-- Cassandra -->
@@ -17,7 +17,7 @@
 
 	<groupId>com.puresoltechnologies.purifinity.distribution</groupId>
 	<artifactId>distribution-parent</artifactId>
-	<version>0.3.0</version>
+	<version>0.3.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Purifinity Distribution: ${project.artifactId}</name>

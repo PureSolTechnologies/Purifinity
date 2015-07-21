@@ -31,8 +31,8 @@ fileViewerModule.directive("sourceCode",
             scope: {
                 sourceCodeData: "=ngModel"
             },
-            controller: function($scope: any) {
-            },
+            controller: ['$scope', function($scope: any) {
+            }],
             templateUrl: "directives/source-code.html"
         };
     });
@@ -91,13 +91,11 @@ fileViewerModule.directive("ustView",
             scope: {
                 ustViewData: "=ngModel"
             },
-            controller: ustViewCtrl,
+            controller: ['$scope', function ustViewCtrl($scope) {
+            }],
             link: function(scope: any, element, attrs) {
                 element.append($("<div/>").text("Hallo").append(
                     $("<span/>").text(scope.ustViewData)));
             }
         };
     });
-
-function ustViewCtrl($scope) {
-}
