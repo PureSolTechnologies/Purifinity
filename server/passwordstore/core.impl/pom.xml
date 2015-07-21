@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.server</groupId>
 		<artifactId>passwordstore</artifactId>
-		<version>0.3.1</version>
+		<version>0.3.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>passwordstore.core.impl</artifactId>
