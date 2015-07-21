@@ -7,7 +7,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<server.version>0.3.0</server.version>
+		<purifinity.server.version>0.4.0-SNAPSHOT</purifinity.server.version>
 		<selenium.version>2.46.0</selenium.version>
 		<!-- WildFly -->
 		<wildfly.version>8.2.0.Final</wildfly.version>
@@ -157,67 +157,67 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 				<artifactId>c11.plugin</artifactId>
-				<version>${server.version}</version>
+				<version>${purifinity.server.version}</version>
 				<type>ear</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 				<artifactId>fortran2008.plugin</artifactId>
-				<version>${server.version}</version>
+				<version>${purifinity.server.version}</version>
 				<type>ear</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 				<artifactId>java7.plugin</artifactId>
-				<version>${server.version}</version>
+				<version>${purifinity.server.version}</version>
 				<type>ear</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 				<artifactId>metrics.plugin</artifactId>
-				<version>${server.version}</version>
+				<version>${purifinity.server.version}</version>
 				<type>ear</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 				<artifactId>repository.directory.plugin</artifactId>
-				<version>${server.version}</version>
+				<version>${purifinity.server.version}</version>
 				<type>ear</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 				<artifactId>repository.git.plugin</artifactId>
-				<version>${server.version}</version>
+				<version>${purifinity.server.version}</version>
 				<type>ear</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 				<artifactId>repository.subversion.plugin</artifactId>
-				<version>${server.version}</version>
+				<version>${purifinity.server.version}</version>
 				<type>ear</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>passwordstore.app</artifactId>
-				<version>${server.version}</version>
+				<version>${purifinity.server.version}</version>
 				<type>ear</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>server.app</artifactId>
-				<version>${server.version}</version>
+				<version>${purifinity.server.version}</version>
 				<type>ear</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>systemmonitor.app</artifactId>
-				<version>${server.version}</version>
+				<version>${purifinity.server.version}</version>
 				<type>ear</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>wildfly.test</artifactId>
-				<version>${server.version}</version>
+				<version>${purifinity.server.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.seleniumhq.selenium</groupId>
