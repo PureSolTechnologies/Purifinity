@@ -2,6 +2,7 @@
 .settings
 .classpath
 .project
+.tscache
 target
 target-grunt
 felix-cache
