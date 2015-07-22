@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 	var srcDir = 'src/main/'
-	grunt.loadNpmTasks('grunt-typescript');
+	grunt.loadNpmTasks('grunt-ts-1.5');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -69,10 +69,10 @@ module.exports = function(grunt) {
 						} ]
 					}
 				},
-				typescript : {
-					base : {
+				ts : {
+					default : {
 						src : [ 'src/main/typescript/**/*.ts' ],
-						dest : 'target/tmp/js/purifinity-ui.js',
+						out : 'target/tmp/js/purifinity-ui.js',
 						options : {
 							module : 'amd',
 							target : 'es5',
@@ -162,5 +162,5 @@ module.exports = function(grunt) {
 				}
 			});
 	grunt.registerTask('default', 'Builds the whole distribution', [ 'copy',
-			'htmlmin', 'typescript', 'uglify', 'less', 'cssmin' ]);
+			'htmlmin', 'ts', 'uglify', 'less', 'cssmin' ]);
 }
