@@ -1,0 +1,35 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			<img src="/images/icons/FatCow_Icons16x16/service_status.png" />
+			Running Jobs
+		</h3>
+	</div>
+	<div data-ng-show="jobs.jobStates.length > 0" class="panel-body">{{jobs.time
+		| defaultDate}}</div>
+	<table class="table">
+		<tbody>
+			<tr data-ng-repeat="jobStatus in jobs.jobStates">
+				<td width="30%"><h4>{{jobStatus.name}}</h4></td>
+				<td>
+					<div data-ng-repeat="stepStatus in jobStatus.stepStates">
+						{{stepStatus.name}}
+						<div class="progress">
+							<div class="progress-bar progress-bar-striped" role="progressbar"
+								aria-valuenow="{{stepStatus.current}}" aria-valuemin="0"
+								aria-valuemax="{{stepStatus.max}}"
+								style="width: {{stepStatus.current/stepStatus.max*100}}%">
+								{{stepStatus.current / stepStatus.max * 100 | number: 1}}%</div>
+						</div>
+					</div>
+				</td>
+				<td width="5%">
+					<button class="btn btn-default" title="Abort Run..."
+						data-ng-click="abortRun(jobStatus.projectId, jobStatus.jobId)">
+						<img src="/images/icons/FatCow_Icons16x16/stop.png" />
+					</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

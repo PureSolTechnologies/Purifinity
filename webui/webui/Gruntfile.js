@@ -140,7 +140,7 @@ module.exports = function(grunt) {
 				watch : {
 					scripts : {
 						files : [ 'src/main/typescript/**/*.ts' ],
-						tasks : [ 'typescript', 'uglify' ],
+						tasks : [ 'ts', 'uglify' ],
 						options : {
 							spawn : false
 						}
