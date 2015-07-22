@@ -1,4 +1,4 @@
-var systemModule: angular.IModule = angular.module("systemModule", ["purifinityServerModule"]);
+var systemModule: angular.IModule = angular.module("systemModule", ["purifinityServerModule", "projectManagerModule"]);
 
 systemModule.directive('loggedInUsers', function() {
     return {
@@ -147,3 +147,13 @@ systemModule.controller("runningJobsCtrl", ["$scope", "purifinityServerConnector
                 );
         };
     }]);
+
+systemModule.directive('projectList', function() {
+    return {
+        restrict: "E",
+        scope: {},
+        controller: "projectListCtrl",
+        templateUrl: "directives/project-list.html"
+    };
+});
+    
