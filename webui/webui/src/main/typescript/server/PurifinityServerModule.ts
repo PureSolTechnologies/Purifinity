@@ -19,7 +19,7 @@ purifinityServerModule.factory("purifinityServerConnector", ["authService", "htt
         return new PurifinityServerConnector(authService, httpRequests, baseURL);
     }]);
 
-purifinityServerModule.factory("authService", ["$location", "httpRequests", "baseURL", 
+purifinityServerModule.factory("authService", ["$location", "httpRequests", "baseURL",
     function($location, httpRequests, baseURL) {
         return new AuthenticationService($location, httpRequests, baseURL);
     }]);
@@ -38,6 +38,7 @@ purifinityServerModule.controller("loginCtrl", ["$scope", "$route", "authService
         $scope.authId = undefined;
         $scope.email = undefined;
         $scope.password = undefined;
+        $scope.authData = new AuthenticationData("", "");
         $scope.login = function() {
             if ($scope.email.indexOf("@") <= -1) {
                 var authSettings = PurifinityConfiguration.authentication;
