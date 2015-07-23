@@ -138,3 +138,25 @@ purifinityUI.filter("hashId",
             return hashId.algorithmName + ":" + hashId.hash;
         }
     });
+
+purifinityUI.directive('applicationTitle', function() {
+    return {
+        restrict: "E",
+        link: function(scope: any, element, attrs) {
+            attrs.$observe('text', function(value) {
+                scope.text = value;
+            })
+        },
+        scope: {
+            text: '@'
+        },
+        controller: "applicationTitleCtrl",
+        templateUrl: "directives/application-title.html"
+    };
+});
+
+purifinityUI.controller('applicationTitleCtrl', ['$scope',
+    function($scope) {
+        $scope.bar = 'test';
+    }]);
+	

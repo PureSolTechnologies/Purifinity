@@ -64,9 +64,17 @@
 					}
 				});
 			} ]);
+	fileApp.controller("fileAppCtrl", [ "$scope", "$routeParams",
+			function($scope, $routeParams) {
+				$scope.hashId = "";
+				$scope.$on('$routeChangeSuccess', function() {
+					$scope.hashId = $routeParams.hashId;
+				});
+			} ]);
 </script>
 </head>
-<body>
+<body data-ng-controller="fileAppCtrl">
+	<application-title text="File View: {{hashId}}"></application-title>
 	<div class="navbar navbar-default" role="navigation"
 		data-ng-controller="menuCtrl">
 		<div class="navbar-header">
@@ -76,10 +84,6 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<span class="navbar-brand"> <a href="."><img
-					src="images/logos/logo2.png" width="100" title="Purifinity" /></a>
-				File View
-			</span>
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
@@ -89,18 +93,6 @@
 					href="#/analysis/{{$routeParams.hashId}}">Analysis</a></li>
 				<li class="{{isActive('/help')}}"><a href="./#/help">Help</a></li>
 			</ul>
-			<div class="navbar-right" data-ng-controller="loginCtrl">
-				<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
-					<li data-ng-show="isLoggedIn()"><a href="./#/account"><span
-							class="glyphicon glyphicon-user"></span>&nbsp;Account</a></li>
-					<li data-ng-hide="isLoggedIn()"><a id="loginLink" href="#/login"><span
-							class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a></li>
-					<li data-ng-show="isLoggedIn()"><a id="logoutLink" href=""
-						class="btn btn-link" data-ng-click="logout()"> <span
-							class="glyphicon glyphicon-off"></span>&nbsp;Logout
-					</a></li>
-				</ul>
-			</div>
 		</div>
 	</div>
 

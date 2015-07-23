@@ -9,6 +9,15 @@ projectManagerModule.factory("projectManager", ["purifinityServerConnector",
         return new ProjectManager(purifinityServerConnector);
     }]);
 
+projectManagerModule.directive('projectList', function() {
+    return {
+        restrict: "E",
+        scope: {},
+        controller: "projectListCtrl",
+        templateUrl: "directives/project-list.html"
+    };
+});
+
 projectManagerModule.controller("projectListCtrl", ["$scope", "projectManager",
     function($scope, projectManager) {
         $scope.projects = {};

@@ -147,13 +147,4 @@ systemModule.controller("runningJobsCtrl", ["$scope", "purifinityServerConnector
                 );
         };
     }]);
-
-systemModule.directive('projectList', function() {
-    return {
-        restrict: "E",
-        scope: {},
-        controller: "projectListCtrl",
-        templateUrl: "directives/project-list.html"
-    };
-});
     

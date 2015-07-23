@@ -96,9 +96,19 @@
 					}
 				});
 			} ]);
+	runApp.controller("runAppCtrl", [ "$scope", "$routeParams",
+			function($scope, $routeParams) {
+				$scope.projectId = "";
+				$scope.runId = "";
+				$scope.$on('$routeChangeSuccess', function() {
+					$scope.projectId = $routeParams.projectId;
+					$scope.runId = $routeParams.runId;
+				});
+			} ]);
 </script>
 </head>
-<body>
+<body data-ng-controller="runAppCtrl">
+	<application-title text="Run View: {{projectId}} {{runId | defaultDate}}"></application-title>
 	<div class="navbar navbar-default" role="navigation"
 		data-ng-controller="menuCtrl">
 		<div class="navbar-header">
@@ -108,10 +118,6 @@
 					class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<span class="navbar-brand"> <a href="."><img
-					src="images/logos/logo2.png" width="100" title="Purifinity" /></a>
-				Run View: <a href="/project.html#/summary/{{$routeParams.projectId}}">{{$routeParams.projectId}}</a> {{$routeParams.runId | defaultDate}}
-			</span>
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
@@ -131,18 +137,6 @@
 					href="#/architecture/{{$routeParams.projectId}}/{{$routeParams.runId}}">Architecture</a></li>
 				<li class="{{isActive('/help')}}"><a href="./#/help">Help</a></li>
 			</ul>
-			<div class="navbar-right" data-ng-controller="loginCtrl">
-				<ul class="nav navbar-nav" data-ng-controller="menuCtrl">
-					<li data-ng-show="isLoggedIn()"><a href="./#/account"><span
-							class="glyphicon glyphicon-user"></span>&nbsp;Account</a></li>
-					<li data-ng-hide="isLoggedIn()"><a id="loginLink" href="#/login"><span
-							class="glyphicon glyphicon-pencil"></span>&nbsp;Login</a></li>
-					<li data-ng-show="isLoggedIn()"><a id="logoutLink" href=""
-						class="btn btn-link" data-ng-click="logout()"> <span
-							class="glyphicon glyphicon-off"></span>&nbsp;Logout
-					</a></li>
-				</ul>
-			</div>
 		</div>
 	</div>
 
