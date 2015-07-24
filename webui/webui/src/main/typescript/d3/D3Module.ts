@@ -27,11 +27,11 @@ d3Module.factory("d3Service", ["$document", "$q", "$rootScope",
         scriptTag.onload = onScriptLoad;
         $document[0].body.appendChild(scriptTag);
 
-//        var styleTag = $document[0].createElement("link");
-//        styleTag.rel = "stylesheet";
-//        styleTag.type = "text/css";
-//        styleTag.href = "css/d3js.css";
-//        $document[0].head.appendChild(styleTag);
+        //        var styleTag = $document[0].createElement("link");
+        //        styleTag.rel = "stylesheet";
+        //        styleTag.type = "text/css";
+        //        styleTag.href = "css/d3js.css";
+        //        $document[0].head.appendChild(styleTag);
 
         return {
             d3: function() {
@@ -40,18 +40,19 @@ d3Module.factory("d3Service", ["$document", "$q", "$rootScope",
         };
     }]);
 
-/*
+/**
  * Vertical Pareto Chart.
  */
 d3Module.directive("verticalParetoChart", ["d3Service", "$window",
     function(d3Service, $window) {
         return {
             restrict: "E",
-            replace: false,
+            replace: true,
             scope: {
                 data: "=",
                 onClick: "&" // parent execution binding
             },
+            templateUrl: "charts/vertical-pareto-chart.html",
             link: function(scope, element, attrs) {
                 d3Service.d3().then(function(d3) {
                     var svg = d3.select(element[0])
@@ -151,18 +152,19 @@ d3Module.directive("verticalParetoChart", ["d3Service", "$window",
         };
     }]);
     
-/*
+/**
  * Pareto Chart.
  */
 d3Module.directive("paretoChart", ["d3Service", "$window",
     function(d3Service, $window) {
         return {
             restrict: "E",
-            replace: false,
+            replace: true,
             scope: {
                 data: "=",
                 onClick: "&" // parent execution binding
             },
+            templateUrl: "charts/pareto-chart.html",
             link: function(scope, element, attrs) {
                 d3Service.d3().then(function(d3) {
                     var svg = d3.select(element[0])
@@ -273,18 +275,19 @@ d3Module.directive("paretoChart", ["d3Service", "$window",
         };
     }]);
 
-/*
+/**
  * Histogram Chart.
  */
 d3Module.directive("histogramChart", ["d3Service", "$window",
     function(d3Service, $window) {
         return {
             restrict: "E",
-            replace: false,
+            replace: true,
             scope: {
                 data: "=",
                 onClick: "&" // parent execution binding
             },
+            templateUrl: "charts/histogram-chart.html",
             link: function(scope, element, attrs) {
                 d3Service.d3().then(function(d3) {
                     var svg = d3.select(element[0])
@@ -416,15 +419,132 @@ d3Module.directive("histogramChart", ["d3Service", "$window",
         };
     }]);
 
-d3Module.directive("treeMap", ["d3Service", "$window",
+/**
+ * Correlation Chart.
+ */
+d3Module.directive("correlationChart", ["d3Service", "$window",
     function(d3Service, $window) {
         return {
             restrict: "E",
-            replace: false,
+            replace: true,
             scope: {
                 data: "=",
                 onClick: "&" // parent execution binding
             },
+            templateUrl: "charts/correlation-chart.html",
+            link: function(scope, element, attrs) {
+                d3Service.d3().then(function(d3) {
+                    var svg = d3.select(element[0])
+                        .append("svg")
+                        .attr("class", "chart")
+                        .style("width", "100%");
+
+                    var margin = parseInt(attrs.margin, 10) || 30;
+				
+                    // watch for data changes and re-render
+                    scope.$watch("data", function(newVals, oldVals) {
+                        return scope.render(newVals);
+                    }, true);
+					
+                    // Browser onresize event
+                    window.onresize = function() {
+                        scope.$apply();
+                    };
+
+                    // Watch for resize event
+                    scope.$watch(function() {
+                        return angular.element($window)[0]["innerWidth"];
+                    }, function() {
+                            scope.render(scope.data);
+                        });
+
+                    scope.render = function(data) {
+                        // remove all previous items before render
+                        svg.selectAll("*").remove();
+                        if (!data) {
+                            return;
+                        }
+                        // setup variables
+                        var width = d3.select(element[0]).node().offsetWidth - 2 * margin;
+                        if (width <= 0) {
+                            return;
+                        }
+                        // calculate the height
+                        var height = Math.round(width / 2) - 2 * margin;
+                    };
+                });
+            }
+        };
+    }]);
+
+/**
+ * Cummulative Distribution Chart.
+ */
+d3Module.directive("cummulativeDistributionChart", ["d3Service", "$window",
+    function(d3Service, $window) {
+        return {
+            restrict: "E",
+            replace: true,
+            scope: {
+                data: "=",
+                onClick: "&" // parent execution binding
+            },
+            templateUrl: "charts/cummulative-distribution-chart.html",
+            link: function(scope, element, attrs) {
+                d3Service.d3().then(function(d3) {
+                    var svg = d3.select(element[0])
+                        .append("svg")
+                        .attr("class", "chart")
+                        .style("width", "100%");
+
+                    var margin = parseInt(attrs.margin, 10) || 30;
+				
+                    // watch for data changes and re-render
+                    scope.$watch("data", function(newVals, oldVals) {
+                        return scope.render(newVals);
+                    }, true);
+					
+                    // Browser onresize event
+                    window.onresize = function() {
+                        scope.$apply();
+                    };
+
+                    // Watch for resize event
+                    scope.$watch(function() {
+                        return angular.element($window)[0]["innerWidth"];
+                    }, function() {
+                            scope.render(scope.data);
+                        });
+
+                    scope.render = function(data) {
+                        // remove all previous items before render
+                        svg.selectAll("*").remove();
+                        if (!data) {
+                            return;
+                        }
+                        // setup variables
+                        var width = d3.select(element[0]).node().offsetWidth - 2 * margin;
+                        if (width <= 0) {
+                            return;
+                        }
+                        // calculate the height
+                        var height = Math.round(width / 2) - 2 * margin;
+                    };
+                });
+            }
+        };
+    }]);
+
+d3Module.directive("treeMap", ["d3Service", "$window",
+    function(d3Service, $window) {
+        return {
+            restrict: "E",
+            replace: true,
+            scope: {
+                data: "=",
+                onClick: "&" // parent execution binding
+            },
+            templateUrl: "charts/tree-map-chart.html",
             link: function(scope, element, attrs) {
                 d3Service.d3().then(
                     function(d3) {

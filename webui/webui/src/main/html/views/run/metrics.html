@@ -70,14 +70,12 @@
 			</div>
 		</div>
 		<h2>{{selection.parameter}}</h2>
-		<h3>Pareto Chart</h3>
 		<pareto-chart on-click="showClick(item)"
 			data="paretoData[selection.parameter]"></pareto-chart>
-		<h3>Histogram Chart</h3>
 		<histogram-chart on-click="showClick(item)"
 			data="paretoData[selection.parameter]"></histogram-chart>
-		<h3>Cummulative Distribution</h3>
-		<h3>Vertical Pareto Chart</h3>
+		<cummulative-distribution-chart></cummulative-distribution-chart>
+		<correlation-chart></correlation-chart>
 		<vertical-pareto-chart on-click="showClick(item)"
 			data="paretoData[selection.parameter]"></vertical-pareto-chart> </tab> </tabset>
 	</div>
