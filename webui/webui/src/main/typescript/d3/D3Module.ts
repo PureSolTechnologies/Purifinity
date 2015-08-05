@@ -147,6 +147,13 @@ d3Module.directive("verticalParetoChart", ["d3Service", "$window",
                             return d.name + " (" + String((Math.round(d.value * 100) / 100).toFixed(2)) + ")";
                         });
                     };
+                    scope.printChart = function() {
+                        var printer: HtmlElementPrinter = new HtmlElementPrinter(svg.node());
+                        printer.print();
+                    }
+                    scope.exportChartData = function() {
+                        alert("verticalParetoChartCtrl.exportChartData()");
+                    }
                 });
             }
         };
@@ -270,6 +277,13 @@ d3Module.directive("paretoChart", ["d3Service", "$window",
                             return height - yScale(d.value);
                         });
                     };
+                    scope.printChart = function() {
+                        var printer: HtmlElementPrinter = new HtmlElementPrinter(svg.node());
+                        printer.print();
+                    }
+                    scope.exportChartData = function() {
+                        alert("paretoChartCtrl.exportChartData()");
+                    }
                 });
             }
         };
@@ -414,6 +428,13 @@ d3Module.directive("histogramChart", ["d3Service", "$window",
                             return yScale(d);
                         });
                     };
+                    scope.printChart = function() {
+                        var printer: HtmlElementPrinter = new HtmlElementPrinter(svg.node());
+                        printer.print();
+                    }
+                    scope.exportChartData = function() {
+                        alert("histogramChartCtrl.exportChartData()");
+                    }
                 });
             }
         };
@@ -472,6 +493,13 @@ d3Module.directive("correlationChart", ["d3Service", "$window",
                         // calculate the height
                         var height = Math.round(width / 2) - 2 * margin;
                     };
+                    scope.printChart = function() {
+                        var printer: HtmlElementPrinter = new HtmlElementPrinter(svg.node());
+                        printer.print();
+                    }
+                    scope.exportChartData = function() {
+                        alert("correlationChartCtrl.exportChartData()");
+                    }
                 });
             }
         };
@@ -530,11 +558,17 @@ d3Module.directive("cummulativeDistributionChart", ["d3Service", "$window",
                         // calculate the height
                         var height = Math.round(width / 2) - 2 * margin;
                     };
+                    scope.printChart = function() {
+                        var printer: HtmlElementPrinter = new HtmlElementPrinter(svg.node());
+                        printer.print();
+                    }
+                    scope.exportChartData = function() {
+                        alert("cummulativeDistributionChart.exportChartData()");
+                    }
                 });
             }
         };
     }]);
-
 d3Module.directive("treeMap", ["d3Service", "$window",
     function(d3Service, $window) {
         return {
@@ -616,8 +650,15 @@ d3Module.directive("treeMap", ["d3Service", "$window",
                                 .style("background", function(d) { return d.children ? color(d.name) : null; })
                                 .text(function(d) { return d.children ? null : d.name; });
                         };
-                    }
-                    );
+                        scope.printChart = function() {
+                            var printer: HtmlElementPrinter = new HtmlElementPrinter(chart.node());
+                            printer.print();
+                        }
+                        scope.exportChartData = function() {
+                            alert("treeMapChart.exportChartData()");
+                        }
+                    });
             }
         };
     }]);
+ 
