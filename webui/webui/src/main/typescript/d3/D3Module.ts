@@ -110,6 +110,7 @@ d3Module.directive("verticalParetoChart", ["d3Service", "$window",
                             .range([0, width]);
 
                         // set the height based on the calculations above
+                        svg.attr("width", width);
                         svg.attr("height", height);
                         //create the rectangles for the bar chart
                         svg.selectAll("rect")
@@ -151,8 +152,9 @@ d3Module.directive("verticalParetoChart", ["d3Service", "$window",
                         var printer: HtmlElementPrinter = new HtmlElementPrinter(svg.node());
                         printer.print();
                     }
-                    scope.exportChartData = function() {
-                        alert("verticalParetoChartCtrl.exportChartData()");
+                    scope.exportChart = function() {
+                        var exporter: ChartExport = new ChartExport(svg.node());
+                        exporter.export();
                     }
                 });
             }
@@ -233,6 +235,7 @@ d3Module.directive("paretoChart", ["d3Service", "$window",
 
                         // set the height based on the calculations above
                         var chart = svg
+                            .attr("width", width + 2 * margin)
                             .attr("height", height + 2 * margin)
                             .append("g")
                             .attr("transform", "translate(" + margin + "," + margin + ")");
@@ -281,8 +284,9 @@ d3Module.directive("paretoChart", ["d3Service", "$window",
                         var printer: HtmlElementPrinter = new HtmlElementPrinter(svg.node());
                         printer.print();
                     }
-                    scope.exportChartData = function() {
-                        alert("paretoChartCtrl.exportChartData()");
+                    scope.exportChart = function() {
+                        var exporter: ChartExport = new ChartExport(svg.node());
+                        exporter.export();
                     }
                 });
             }
@@ -384,6 +388,7 @@ d3Module.directive("histogramChart", ["d3Service", "$window",
 
                         // set the height based on the calculations above
                         var chart = svg
+                            .attr("width", width + 2 * margin)
                             .attr("height", height + 2 * margin)
                             .append("g")
                             .attr("transform", "translate(" + margin + "," + margin + ")");
@@ -432,8 +437,9 @@ d3Module.directive("histogramChart", ["d3Service", "$window",
                         var printer: HtmlElementPrinter = new HtmlElementPrinter(svg.node());
                         printer.print();
                     }
-                    scope.exportChartData = function() {
-                        alert("histogramChartCtrl.exportChartData()");
+                    scope.exportChart = function() {
+                        var exporter: ChartExport = new ChartExport(svg.node());
+                        exporter.export();
                     }
                 });
             }
@@ -497,8 +503,9 @@ d3Module.directive("correlationChart", ["d3Service", "$window",
                         var printer: HtmlElementPrinter = new HtmlElementPrinter(svg.node());
                         printer.print();
                     }
-                    scope.exportChartData = function() {
-                        alert("correlationChartCtrl.exportChartData()");
+                    scope.exportChart = function() {
+                        var exporter: ChartExport = new ChartExport(svg.node());
+                        exporter.export();
                     }
                 });
             }
@@ -562,8 +569,9 @@ d3Module.directive("cummulativeDistributionChart", ["d3Service", "$window",
                         var printer: HtmlElementPrinter = new HtmlElementPrinter(svg.node());
                         printer.print();
                     }
-                    scope.exportChartData = function() {
-                        alert("cummulativeDistributionChart.exportChartData()");
+                    scope.exportChart = function() {
+                        var exporter: ChartExport = new ChartExport(svg.node());
+                        exporter.export();
                     }
                 });
             }
@@ -654,8 +662,9 @@ d3Module.directive("treeMap", ["d3Service", "$window",
                             var printer: HtmlElementPrinter = new HtmlElementPrinter(chart.node());
                             printer.print();
                         }
-                        scope.exportChartData = function() {
-                            alert("treeMapChart.exportChartData()");
+                        scope.exportChart = function() {
+                            var exporter: ChartExport = new ChartExport(chart.node());
+                            exporter.export();
                         }
                     });
             }
