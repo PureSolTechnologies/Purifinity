@@ -37,9 +37,8 @@ public class PivotTableMetaData {
 		boolean isNumeric = row.getBool(5);
 		boolean isAggregatable = row.getBool(6);
 		boolean isTimestamp = row.getBool(7);
-		PivotColumnMetaData pivotColumnMetaData = new PivotColumnMetaData(
-			columnName, type, canFilter, canGroup, isNumeric,
-			isAggregatable, isTimestamp);
+		PivotColumnMetaData pivotColumnMetaData = new PivotColumnMetaData(columnName, type, canFilter, canGroup,
+			isNumeric, isAggregatable, isTimestamp);
 		Set<PivotColumnMetaData> table = tables.get(tableName);
 		if (table == null) {
 		    table = new LinkedHashSet<PivotColumnMetaData>();
@@ -48,15 +47,12 @@ public class PivotTableMetaData {
 		table.add(pivotColumnMetaData);
 	    }
 	    Set<PivotTableMetaData> configurations = new HashSet<>();
-	    for (Entry<String, Set<PivotColumnMetaData>> entries : tables
-		    .entrySet()) {
-		configurations.add(new PivotTableMetaData(session, entries
-			.getKey(), entries.getValue()));
+	    for (Entry<String, Set<PivotColumnMetaData>> entries : tables.entrySet()) {
+		configurations.add(new PivotTableMetaData(session, entries.getKey(), entries.getValue()));
 	    }
 	    return configurations;
 	} catch (ClassNotFoundException e) {
-	    throw new IllegalStateException("Could not read pivot meta data.",
-		    e);
+	    throw new IllegalStateException("Could not read pivot meta data.", e);
 	}
     }
 
@@ -65,8 +61,7 @@ public class PivotTableMetaData {
     private final String tableName;
     private final Set<PivotColumnMetaData> columnMetaData = new LinkedHashSet<>();
 
-    private PivotTableMetaData(Session session, String tableName,
-	    Set<PivotColumnMetaData> columns) {
+    private PivotTableMetaData(Session session, String tableName, Set<PivotColumnMetaData> columns) {
 	super();
 	this.session = session;
 	this.keyspaceName = session.getLoggedKeyspace();
@@ -90,12 +85,9 @@ public class PivotTableMetaData {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result
-		+ ((columnMetaData == null) ? 0 : columnMetaData.hashCode());
-	result = prime * result
-		+ ((keyspaceName == null) ? 0 : keyspaceName.hashCode());
-	result = prime * result
-		+ ((tableName == null) ? 0 : tableName.hashCode());
+	result = prime * result + ((columnMetaData == null) ? 0 : columnMetaData.hashCode());
+	result = prime * result + ((keyspaceName == null) ? 0 : keyspaceName.hashCode());
+	result = prime * result + ((tableName == null) ? 0 : tableName.hashCode());
 	return result;
     }
 
@@ -137,9 +129,8 @@ public class PivotTableMetaData {
     }
 
     public <T> Set<T> getFilterValues(PivotColumnMetaData<T> columnMetaData) {
-	ResultSet resultSet = session.execute("SELECT DISTINCT "
-		+ columnMetaData.getColumnName() + " FROM " + keyspaceName
-		+ "." + tableName);
+	ResultSet resultSet = session.execute(
+		"SELECT DISTINCT " + columnMetaData.getColumnName() + " FROM " + keyspaceName + "." + tableName);
 	if (columnMetaData.getColumnType().equals(Double.class)) {
 	    Set<Double> filterValues = new HashSet<>();
 	    resultSet.forEach(x -> filterValues.add(x.getDouble(0)));
@@ -165,7 +156,6 @@ public class PivotTableMetaData {
 	    Set<T> set = (Set<T>) filterValues;
 	    return set;
 	}
-	throw new IllegalArgumentException("Not supported type '"
-		+ columnMetaData.getColumnType().getName() + "'.");
+	throw new IllegalArgumentException("Not supported type '" + columnMetaData.getColumnType().getName() + "'.");
     }
 }

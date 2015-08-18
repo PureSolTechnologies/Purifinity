@@ -8,7 +8,7 @@ class TreeTableTree {
     content: string;
     imageUrl: string;
     link: string;
-    columns: TreeTableColumn[] = [];
+    columns: TableCell[] = [];
 
     constructor(public parent: TreeTableTree) {
     }
@@ -18,7 +18,7 @@ class TreeTableTree {
         child.parent = this;
     }
 
-    public addColumn(column: TreeTableColumn) {
+    public addColumn(column: TableCell) {
         this.columns.push(column);
     }
 }

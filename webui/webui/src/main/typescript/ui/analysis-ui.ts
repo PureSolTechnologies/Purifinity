@@ -18,13 +18,13 @@ analysisUIModule.controller("analysisBrowserCtrl", ["$scope", "$routeParams", "$
                     var treeTableData: TreeTableData = new TreeTableData();
                     treeTableData.root = convertAnalysisFileTree(data, null, $filter);
                     treeTableData.columnHeaders.push(
-                        new TreeTableColumnHeader("Name", "Name of file or folder"));
+                        new TableColumnHeader("Name", "Name of file or folder"));
                     treeTableData.columnHeaders.push(
-                        new TreeTableColumnHeader("Size", "Size of file or size of folder without sub folders."));
+                        new TableColumnHeader("Size", "Size of file or size of folder without sub folders."));
                     treeTableData.columnHeaders.push(	
-                        new TreeTableColumnHeader("Size Recursive", "Size of file or size of folder including sub folders."));
+                        new TableColumnHeader("Size Recursive", "Size of file or size of folder including sub folders."));
                     treeTableData.columnHeaders.push(
-                        new TreeTableColumnHeader("Analyzes", "Successful analyzes."));
+                        new TableColumnHeader("Analyzes", "Successful analyzes."));
                     $scope.analysisFileTree = treeTableData;
                     projectManager.getRun($routeParams["projectId"], $routeParams["runId"],
                         function(data, status) {
@@ -57,9 +57,9 @@ function convertAnalysisFileTree(
         }
         analyses += analysis.languageName + " " + analysis.languageVersion;
     });
-    treeTableData.addColumn(new TreeTableColumn($filter("fsSize")(fileTree.size), null, null));
-    treeTableData.addColumn(new TreeTableColumn($filter("fsSize")(fileTree.sizeRecursive), null, null));
-    treeTableData.addColumn(new TreeTableColumn(analyses, null, "/file.html#/summary/" + treeTableData.id));
+    treeTableData.addColumn(new TableCell($filter("fsSize")(fileTree.size), null, null));
+    treeTableData.addColumn(new TableCell($filter("fsSize")(fileTree.sizeRecursive), null, null));
+    treeTableData.addColumn(new TableCell(analyses, null, "/file.html#/summary/" + treeTableData.id));
     if (fileTree.children.length > 0) {
         treeTableData.children = [];
         fileTree.children.sort(function(l, r) {

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<prerequisites>
@@ -12,14 +13,14 @@
 		<purifinity.api.version>0.4.0-SNAPSHOT</purifinity.api.version>
 		<commons.version>0.6.0</commons.version>
 		<parsers.version>0.5.0</parsers.version>
-		<genesis.version>0.3.0</genesis.version>
+		<genesis.version>0.4.0-SNAPSHOT</genesis.version>
 		<graphs.version>0.6.0</graphs.version>
 		<versioning.version>1.1.0</versioning.version>
 
 		<!-- Databases -->
-		<cassandra.driver.version>2.1.4</cassandra.driver.version>
+		<cassandra.driver.version>2.1.7.1</cassandra.driver.version>
+		<xo-titan.version>0.4.0-SNAPSHOT</xo-titan.version>
 		<titan.version>0.5.4</titan.version>
-		<xo-titan.version>0.3.0</xo-titan.version>
 		<xo.version>0.4.5</xo.version>
 
 		<!-- WildFly -->
@@ -245,7 +246,7 @@
 										<approvedDependency>commons-logging:commons-logging:1\.0\.3</approvedDependency>
 										<approvedDependency>log4j:log4j:1\.2\.12</approvedDependency>
 										<approvedDependency>logkit:logkit:1\.0\.1</approvedDependency>
-										<approvedDependency>org\.apache.commons:.*:.*</approvedDependency> 
+										<approvedDependency>org\.apache.commons:.*:.*</approvedDependency>
 										<approvedDependency>org\.codehaus\.jettison:jettison:1\.2</approvedDependency>
 										<approvedDependency>oro:oro:2\.0\.8</approvedDependency>
 										<approvedDependency>org\.apache\.ant:.*:.*</approvedDependency>
@@ -256,8 +257,8 @@
 									<name>The BSD 2-Clause License</name>
 									<url>http://opensource.org/licenses/BSD-2-Clause</url>
 									<aliases>
-									  <alias>BSD style</alias>
-									  <alias>BSD licence</alias>
+										<alias>BSD style</alias>
+										<alias>BSD licence</alias>
 									</aliases>
 									<approvedDependencies>
 										<!-- approvedDependency>com\.esotericsoftware\.kryo:kryo:2\.21</approvedDependency> 
@@ -320,12 +321,12 @@
 									<name>GNU Lesser General Public License, Version 2.1</name>
 									<url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
 									<aliases>
-									  <alias>GNU Lesser General Public License</alias>
-									  <!-- alias>GNU Lesser General Public License (LGPL), Version 2.1</alias -->
-									  <alias>GNU Lesser General Public License, version 2.1</alias>
-									  <alias>LGPL 2.1</alias>
-									  <alias>lgpl</alias>
-									  <alias>lgpl_v2_1</alias>
+										<alias>GNU Lesser General Public License</alias>
+										<!-- alias>GNU Lesser General Public License (LGPL), Version 2.1</alias -->
+										<alias>GNU Lesser General Public License, version 2.1</alias>
+										<alias>LGPL 2.1</alias>
+										<alias>lgpl</alias>
+										<alias>lgpl_v2_1</alias>
 									</aliases>
 								</knownLicense>
 								<knownLicense>
@@ -337,11 +338,11 @@
 									</approvedDependencies>
 								</knownLicense>
 								<knownLicense>
-								  <name>ISC License (ISC)</name>
-								  <url>http://www.opensource.org/licenses/isc-license.txt</url> 
-								  <aliases>
-								    <alias>ISC/BSD License</alias>
-								  </aliases>
+									<name>ISC License (ISC)</name>
+									<url>http://www.opensource.org/licenses/isc-license.txt</url>
+									<aliases>
+										<alias>ISC/BSD License</alias>
+									</aliases>
 								</knownLicense>
 								<knownLicense>
 									<name>The MIT License (MIT)</name>
@@ -352,7 +353,7 @@
 										<alias>The MIT license</alias>
 									</aliases>
 									<approvedDependencies>
-									  <approvedDependency>org\.slf4j:.*:.*</approvedDependency>
+										<approvedDependency>org\.slf4j:.*:.*</approvedDependency>
 									</approvedDependencies>
 								</knownLicense>
 								<knownLicense>
@@ -380,18 +381,18 @@
 									</approvedDependencies>
 								</knownLicense>
 								<knownLicense>
-								  <name>Snaptree License</name>
-								  <url>https://github.com/nbronson/snaptree/blob/master/LICENSE</url> 
-								  <aliases> 
-								    <alias>SNAPTREE LICENSE</alias>
-								    </aliases>
+									<name>Snaptree License</name>
+									<url>https://github.com/nbronson/snaptree/blob/master/LICENSE</url>
+									<aliases>
+										<alias>SNAPTREE LICENSE</alias>
+									</aliases>
 								</knownLicense>
 								<knownLicense>
-								  <name>Do What The Fuck You Want To Public License</name>
-								  <url>http://www.wtfpl.net/</url> 
-								  <aliases> 
-								    <alias>WTFPL</alias>
-								  </aliases>
+									<name>Do What The Fuck You Want To Public License</name>
+									<url>http://www.wtfpl.net/</url>
+									<aliases>
+										<alias>WTFPL</alias>
+									</aliases>
 								</knownLicense>
 							</knownLicenses>
 						</configuration>
@@ -985,16 +986,6 @@
 				<version>${xo.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.datastax.cassandra</groupId>
-				<artifactId>cassandra-driver-core</artifactId>
-				<version>${cassandra.driver.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>net.jpountz.lz4</groupId>
-				<artifactId>lz4</artifactId>
-				<version>1.2.0</version>
-			</dependency>
-			<dependency>
 				<groupId>com.thinkaurelius.titan</groupId>
 				<artifactId>titan-core</artifactId>
 				<version>${titan.version}</version>
@@ -1003,6 +994,16 @@
 				<groupId>com.thinkaurelius.titan</groupId>
 				<artifactId>titan-cassandra</artifactId>
 				<version>${titan.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.datastax.cassandra</groupId>
+				<artifactId>cassandra-driver-core</artifactId>
+				<version>${cassandra.driver.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>net.jpountz.lz4</groupId>
+				<artifactId>lz4</artifactId>
+				<version>1.2.0</version>
 			</dependency>
 			<!-- WildFly -->
 			<dependency>
@@ -1205,10 +1206,12 @@
 							</goals>
 							<configuration>
 								<transformers>
-									<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<transformer
+										implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 										<mainClass>com.puresoltechnologies.genesis.controller.GenesisController</mainClass>
 									</transformer>
-									<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+									<transformer
+										implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 								</transformers>
 							</configuration>
 						</execution>

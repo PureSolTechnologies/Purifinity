@@ -32,7 +32,7 @@ projectMetricsModule.controller("fileSystemMetrics", ["$scope", "$routeParams", 
                         $scope.fileTree = data;
                         var treeTableData: TreeTableData = new TreeTableData();
                         treeTableData.root = convertFileTreeForMetrics(data, null);
-                        treeTableData.columnHeaders.push(new TreeTableColumnHeader("Name", "Name of file or folder"));
+                        treeTableData.columnHeaders.push(new TableColumnHeader("Name", "Name of file or folder"));
                         $scope.metricsTreeTable = treeTableData;
                     },
                     function(data, status, error) {
@@ -184,9 +184,9 @@ function applyMetricsToFileTree(treeTableData, runMetrics, parameters, filter) {
             parameters.forEach(function(parameter) {
                 var value = directoryMetrics.values[parameter.name];
                 if (value) {
-                    treeTableData.addColumn(new TreeTableColumn(valueFilter(value.value), undefined, undefined));
+                    treeTableData.addColumn(new TableCell(valueFilter(value.value), undefined, undefined));
                 } else {
-                    treeTableData.addColumn(new TreeTableColumn("n/a", undefined, undefined));
+                    treeTableData.addColumn(new TableCell("n/a", undefined, undefined));
                 }
             });
         }
@@ -202,9 +202,9 @@ function applyMetricsToFileTree(treeTableData, runMetrics, parameters, filter) {
                     parameters.forEach(function(parameter) {
                         var value = metric.values[parameter.name];
                         if (value) {
-                            treeTableData.addColumn(new TreeTableColumn(valueFilter(value.value), null, null));
+                            treeTableData.addColumn(new TableCell(valueFilter(value.value), null, null));
                         } else {
-                            treeTableData.addColumn(new TreeTableColumn("n/a", null, null));
+                            treeTableData.addColumn(new TableCell("n/a", null, null));
                         }
                     });
                 }

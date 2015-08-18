@@ -28,123 +28,115 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.server.test.AbstractPurifinityServerServerTest;
 
-public class CassandraDaylightSavingTimeIT extends
-		AbstractPurifinityServerServerTest {
+public class CassandraDaylightSavingTimeIT extends AbstractPurifinityServerServerTest {
 
-	@Inject
-	private Cluster cluster;
+    @Inject
+    private Cluster cluster;
 
-	private Session session = null;
-	private final String KEYSPACE_NAME = getClass().getSimpleName();
+    private Session session = null;
+    private final String KEYSPACE_NAME = getClass().getSimpleName();
 
-	@Before
-	public void createKeyspace() {
-		try (Session systemSession = cluster.connect()) {
-			systemSession
-					.execute("CREATE KEYSPACE IF NOT EXISTS "
-							+ KEYSPACE_NAME
-							+ " WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };");
-			systemSession.execute("CREATE TABLE " + KEYSPACE_NAME
-					+ ".dsttest (time timestamp PRIMARY KEY);");
-			session = cluster.connect(KEYSPACE_NAME);
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail("Could not initialize test.");
-		}
+    @Before
+    public void createKeyspace() {
+	try (Session systemSession = cluster.connect()) {
+	    systemSession.execute("CREATE KEYSPACE IF NOT EXISTS " + KEYSPACE_NAME
+		    + " WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 1 };");
+	    systemSession.execute("CREATE TABLE " + KEYSPACE_NAME + ".dsttest (time timestamp PRIMARY KEY);");
+	    session = cluster.connect(KEYSPACE_NAME);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	    fail("Could not initialize test.");
 	}
+    }
 
-	@After
-	public void removeKeyspace() {
-		if (session != null) {
-			session.close();
-			session = null;
-		}
-		try (Session systemSession = cluster.connect()) {
-			systemSession.execute("DROP KEYSPACE " + KEYSPACE_NAME + ";");
-		}
+    @After
+    public void removeKeyspace() {
+	if (session != null) {
+	    session.close();
+	    session = null;
 	}
-
-	@Before
-	public void checkPreconditions() {
-		assertNotNull(cluster);
-		assertNotNull(cluster.isClosed());
+	try (Session systemSession = cluster.connect()) {
+	    systemSession.execute("DROP KEYSPACE " + KEYSPACE_NAME + ";");
 	}
+    }
 
-	@Test
-	public void testSummerToWinter2014() {
-		// On October 26th 3:00 -> 2:00
-		DateTimeZone timeZone = DateTimeZone.forID("Europe/Berlin");
-		Chronology chronology = GregorianChronology.getInstance(timeZone);
-		DateTime startTime = new DateTime(2014, 10, 26, 1, 59, 59, 0,
-				chronology);
-		PreparedStatement preparedStatement = session
-				.prepare("INSERT INTO dsttest (time) VALUES (?)");
-		List<DateTime> dateTimes = new ArrayList<>();
-		for (int i = 0; i < 3602; i++) {
-			DateTime dt = startTime.plusSeconds(i);
-			dateTimes.add(dt);
-			BoundStatement boundStatement = preparedStatement.bind(dt.toDate());
-			session.execute(boundStatement);
-		}
-		List<Date> dates = new ArrayList<>();
-		ResultSet resultSet = session.execute("SELECT time FROM dsttest;");
-		while (!resultSet.isExhausted()) {
-			Row row = resultSet.one();
-			dates.add(row.getDate("time"));
-			System.err.println(row.getDate("time"));
-		}
-		Collections.sort(dateTimes, new Comparator<DateTime>() {
+    @Before
+    public void checkPreconditions() {
+	assertNotNull(cluster);
+	assertNotNull(cluster.isClosed());
+    }
 
-			@Override
-			public int compare(DateTime o1, DateTime o2) {
-				return o1.compareTo(o2);
-			}
-		});
-		Collections.sort(dates);
-		assertEquals(dateTimes.size(), dates.size());
-		for (int i = 0; i < dateTimes.size(); i++) {
-			DateTime time = dateTimes.get(i);
-			Date date = dates.get(i);
-			assertEquals(time.toDate(), date);
-		}
+    @Test
+    public void testSummerToWinter2014() {
+	// On October 26th 3:00 -> 2:00
+	DateTimeZone timeZone = DateTimeZone.forID("Europe/Berlin");
+	Chronology chronology = GregorianChronology.getInstance(timeZone);
+	DateTime startTime = new DateTime(2014, 10, 26, 1, 59, 59, 0, chronology);
+	PreparedStatement preparedStatement = session.prepare("INSERT INTO dsttest (time) VALUES (?)");
+	List<DateTime> dateTimes = new ArrayList<>();
+	for (int i = 0; i < 3602; i++) {
+	    DateTime dt = startTime.plusSeconds(i);
+	    dateTimes.add(dt);
+	    BoundStatement boundStatement = preparedStatement.bind(dt.toDate());
+	    session.execute(boundStatement);
 	}
-
-	@Test
-	public void testWinterToSummer2014() {
-		// On March 30th 2:00 -> 3:00
-		DateTimeZone timeZone = DateTimeZone.forID("Europe/Berlin");
-		Chronology chronology = GregorianChronology.getInstance(timeZone);
-		DateTime startTime = new DateTime(2014, 03, 30, 1, 59, 59, 0,
-				chronology);
-		PreparedStatement preparedStatement = session
-				.prepare("INSERT INTO dsttest (time) VALUES (?)");
-		List<DateTime> dateTimes = new ArrayList<>();
-		for (int i = 0; i < 3602; i++) {
-			DateTime dt = startTime.plusSeconds(i);
-			dateTimes.add(dt);
-			BoundStatement boundStatement = preparedStatement.bind(dt.toDate());
-			session.execute(boundStatement);
-		}
-		List<Date> dates = new ArrayList<>();
-		ResultSet resultSet = session.execute("SELECT time FROM dsttest;");
-		while (!resultSet.isExhausted()) {
-			Row row = resultSet.one();
-			dates.add(row.getDate("time"));
-			System.err.println(row.getDate("time"));
-		}
-		Collections.sort(dateTimes, new Comparator<DateTime>() {
-
-			@Override
-			public int compare(DateTime o1, DateTime o2) {
-				return o1.compareTo(o2);
-			}
-		});
-		Collections.sort(dates);
-		assertEquals(dateTimes.size(), dates.size());
-		for (int i = 0; i < dateTimes.size(); i++) {
-			DateTime time = dateTimes.get(i);
-			Date date = dates.get(i);
-			assertEquals(time.toDate(), date);
-		}
+	List<Date> dates = new ArrayList<>();
+	ResultSet resultSet = session.execute("SELECT time FROM dsttest;");
+	while (!resultSet.isExhausted()) {
+	    Row row = resultSet.one();
+	    dates.add(row.getDate("time"));
+	    System.err.println(row.getDate("time"));
 	}
+	Collections.sort(dateTimes, new Comparator<DateTime>() {
+
+	    @Override
+	    public int compare(DateTime o1, DateTime o2) {
+		return o1.compareTo(o2);
+	    }
+	});
+	Collections.sort(dates);
+	assertEquals(dateTimes.size(), dates.size());
+	for (int i = 0; i < dateTimes.size(); i++) {
+	    DateTime time = dateTimes.get(i);
+	    Date date = dates.get(i);
+	    assertEquals(time.toDate(), date);
+	}
+    }
+
+    @Test
+    public void testWinterToSummer2014() {
+	// On March 30th 2:00 -> 3:00
+	DateTimeZone timeZone = DateTimeZone.forID("Europe/Berlin");
+	Chronology chronology = GregorianChronology.getInstance(timeZone);
+	DateTime startTime = new DateTime(2014, 03, 30, 1, 59, 59, 0, chronology);
+	PreparedStatement preparedStatement = session.prepare("INSERT INTO dsttest (time) VALUES (?)");
+	List<DateTime> dateTimes = new ArrayList<>();
+	for (int i = 0; i < 3602; i++) {
+	    DateTime dt = startTime.plusSeconds(i);
+	    dateTimes.add(dt);
+	    BoundStatement boundStatement = preparedStatement.bind(dt.toDate());
+	    session.execute(boundStatement);
+	}
+	List<Date> dates = new ArrayList<>();
+	ResultSet resultSet = session.execute("SELECT time FROM dsttest;");
+	while (!resultSet.isExhausted()) {
+	    Row row = resultSet.one();
+	    dates.add(row.getDate("time"));
+	    System.err.println(row.getDate("time"));
+	}
+	Collections.sort(dateTimes, new Comparator<DateTime>() {
+
+	    @Override
+	    public int compare(DateTime o1, DateTime o2) {
+		return o1.compareTo(o2);
+	    }
+	});
+	Collections.sort(dates);
+	assertEquals(dateTimes.size(), dates.size());
+	for (int i = 0; i < dateTimes.size(); i++) {
+	    DateTime time = dateTimes.get(i);
+	    Date date = dates.get(i);
+	    assertEquals(time.toDate(), date);
+	}
+    }
 }
