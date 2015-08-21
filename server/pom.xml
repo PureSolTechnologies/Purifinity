@@ -24,9 +24,8 @@
 		<xo.version>0.4.5</xo.version>
 
 		<!-- WildFly -->
-		<wildfly.version>8.2.0.Final</wildfly.version>
-		<resteasy.version>3.0.10.Final</resteasy.version>
-		<mojarra.version>2.2.6</mojarra.version>
+		<wildfly.version>9.0.1.Final</wildfly.version>
+		<resteasy.version>3.0.11.Final</resteasy.version>
 		<!-- WildFly settings -->
 		<wildfly.http.port>8080</wildfly.http.port>
 		<server.config.directory>${work.dir}/config</server.config.directory>
@@ -36,7 +35,8 @@
 		<wildfly.memory.options>-Xms128m -Xmx512m</wildfly.memory.options>
 		<wildfly.options>${wildfly.memory.options} ${wildfly.debug.options}</wildfly.options>
 		<!-- Arquillian -->
-		<arquillian.version>1.1.7.Final</arquillian.version>
+		<arquillian.version>1.1.8.Final</arquillian.version>
+		<arquillian.container.managed.version>1.0.1.Final</arquillian.container.managed.version>
 		<arquillian.test.dir>${project.build.directory}/wildfly</arquillian.test.dir>
 		<!-- Cargo -->
 		<cargo.dir>${work.dir}/cargo</cargo.dir>
@@ -1023,13 +1023,13 @@
 				<groupId>org.eclipse.jetty.websocket</groupId>
 				<artifactId>websocket-client</artifactId>
 				<version>9.2.0.M0</version>
-				<scope>provided</scope>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jetty.websocket</groupId>
 				<artifactId>javax-websocket-client-impl</artifactId>
 				<version>9.2.0.M0</version>
-				<scope>provided</scope>
+				<scope>test</scope>
 			</dependency>
 			<!-- REST library -->
 			<dependency>
@@ -1082,9 +1082,9 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.wildfly</groupId>
+				<groupId>org.wildfly.arquillian</groupId>
 				<artifactId>wildfly-arquillian-container-managed</artifactId>
-				<version>${wildfly.version}</version>
+				<version>${arquillian.container.managed.version}</version>
 				<scope>test</scope>
 				<exclusions>
 					<exclusion>
