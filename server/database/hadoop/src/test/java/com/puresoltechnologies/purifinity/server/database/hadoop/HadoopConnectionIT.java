@@ -41,4 +41,11 @@ public class HadoopConnectionIT {
 	}
     }
 
+    @Test
+    public void test2() {
+	String hash = "12345678901234567890";
+	String child = hash.substring(0, 2) + "/" + hash.substring(2, 4) + "/" + hash.substring(4, 6) + "/"
+		+ hash.substring(6, 8) + "/" + hash.substring(8);
+	System.out.println(child);
+    }
 }

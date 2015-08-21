@@ -70,6 +70,10 @@
 					templateUrl : "views/admin/users.html",
 					controller : "usersViewCtrl"
 				});
+				$routeProvider.when("/backend", {
+					templateUrl : "views/admin/backend.html",
+					controller : "usersViewCtrl"
+				});
 				$routeProvider.otherwise({
 					redirectTo : "/dashboards"
 				});
@@ -93,6 +97,8 @@
 				<li class="{{isActive('/projects')}}"><a href="#/projects">Projects</a></li>
 				<li class="{{isActive('/settings')}}"><a href="#/settings">Settings</a></li>
 				<li class="{{isActive('/users')}}"><a href="#/users">Users</a></li>
+				<li class="{{isActive('/backend')}}"><a href="#/backend">Backend
+						Services</a></li>
 				<li class="{{isActive('/help')}}"><a href="./#/help">Help</a></li>
 			</ul>
 		</div>

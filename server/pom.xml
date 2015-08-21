@@ -581,6 +581,21 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>16.0.1</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>database.hadoop</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>database.hbase</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>database.titan</artifactId>
 				<version>${project.version}</version>
@@ -986,6 +1001,16 @@
 				<groupId>org.apache.hadoop</groupId>
 				<artifactId>hadoop-client</artifactId>
 				<version>${hadoop.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>io.netty</groupId>
+						<artifactId>netty</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>io.netty</groupId>
+						<artifactId>netty-all</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
@@ -1248,7 +1273,7 @@
 						<defaultLibBundleDir>lib</defaultLibBundleDir>
 						<skinnyWars>true</skinnyWars>
 						<applicationName>${project.artifactId}</applicationName>
-						<fileNameMapping>no-version</fileNameMapping>
+						<fileNameMapping>full</fileNameMapping>
 						<archive>
 							<manifest>
 								<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
@@ -1404,7 +1429,7 @@
 					<defaultLibBundleDir>lib</defaultLibBundleDir>
 					<skinnyWars>true</skinnyWars>
 					<applicationName>${project.artifactId}</applicationName>
-					<fileNameMapping>no-version</fileNameMapping>
+					<fileNameMapping>full</fileNameMapping>
 					<archive>
 						<manifest>
 							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
