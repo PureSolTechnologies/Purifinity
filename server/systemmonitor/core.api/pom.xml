@@ -20,6 +20,10 @@
 			<artifactId>domain</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>common.utils</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
 		</dependency>

@@ -17,42 +17,36 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 @Singleton
 @Startup
 @EJBFacade
-public class JavaServiceRegistration extends
-		AbstractAnalyzerServiceRegistration {
+public class JavaServiceRegistration extends AbstractAnalyzerServiceRegistration {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
-			"java7.plugin", "java7.ejb", ProgrammingLanguageAnalyzer.class,
-			Java.class);
-	private static final AnalyzerServiceInformation INFORMATION = new AnalyzerServiceInformation(
-			Java.ID, Java.NAME, Java.VERSION, Java.PLUGIN_VERSION,
-			JNDI_ADDRESS, "This is a Java 7 programming language analyzer.",
-			Java.PARAMETERS, "/java7.ui/index.jsf", "/java7.ui/project.jsf",
-			"/java7.ui/run.jsf");
+    private static final String JNDI_ADDRESS = JndiUtils.createGlobalName("java7.plugin",
+	    "com-puresoltechnologies-purifinity-plugins-java7.ejb", ProgrammingLanguageAnalyzer.class, Java.class);
+    private static final AnalyzerServiceInformation INFORMATION = new AnalyzerServiceInformation(Java.ID, Java.NAME,
+	    Java.VERSION, Java.PLUGIN_VERSION, JNDI_ADDRESS, "This is a Java 7 programming language analyzer.",
+	    Java.PARAMETERS, "/java7.ui/index.jsf", "/java7.ui/project.jsf", "/java7.ui/run.jsf");
 
-	@PostConstruct
-	@Lock(LockType.WRITE)
-	public void registration() {
-		register(AnalyzerServiceManagerRemote.class,
-				AnalyzerServiceManagerRemote.JNDI_NAME, JavaPlugin.INFORMATION,
-				JNDI_ADDRESS, INFORMATION);
-	}
+    @PostConstruct
+    @Lock(LockType.WRITE)
+    public void registration() {
+	register(AnalyzerServiceManagerRemote.class, AnalyzerServiceManagerRemote.JNDI_NAME, JavaPlugin.INFORMATION,
+		JNDI_ADDRESS, INFORMATION);
+    }
 
-	@PreDestroy
-	@Lock(LockType.WRITE)
-	public void unregistration() {
-		unregister(AnalyzerServiceManagerRemote.class,
-				AnalyzerServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
-	}
+    @PreDestroy
+    @Lock(LockType.WRITE)
+    public void unregistration() {
+	unregister(AnalyzerServiceManagerRemote.class, AnalyzerServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
+    }
 
-	@Override
-	@Lock(LockType.READ)
-	public String getName() {
-		return Java.NAME;
-	}
+    @Override
+    @Lock(LockType.READ)
+    public String getName() {
+	return Java.NAME;
+    }
 
-	@Override
-	@Lock(LockType.READ)
-	public AnalyzerServiceInformation getServiceInformation() {
-		return INFORMATION;
-	}
+    @Override
+    @Lock(LockType.READ)
+    public AnalyzerServiceInformation getServiceInformation() {
+	return INFORMATION;
+    }
 }

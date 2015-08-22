@@ -13,50 +13,41 @@ import com.puresoltechnologies.purifinity.server.metrics.MetricsPlugin;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
-public class NormalizedMaintainabilityIndexServiceRegistration extends
-		AbstractEvaluatorServiceRegistration {
+public class NormalizedMaintainabilityIndexServiceRegistration extends AbstractEvaluatorServiceRegistration {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
-			"metrics.plugin", "metrics.ejb", Evaluator.class,
-			NormalizedMaintainabilityIndexEvaluator.class);
+    private static final String JNDI_ADDRESS = JndiUtils.createGlobalName("metrics.plugin",
+	    "com-puresoltechnologies-purifinity-plugins-metrics.ejb", Evaluator.class,
+	    NormalizedMaintainabilityIndexEvaluator.class);
 
-	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
-			NormalizedMaintainabilityIndexEvaluator.ID,
-			NormalizedMaintainabilityIndexEvaluator.NAME,
-			EvaluatorType.METRICS,
-			NormalizedMaintainabilityIndexEvaluator.PLUGIN_VERSION,
-			JNDI_ADDRESS,
-			NormalizedMaintainabilityIndexEvaluator.DESCRIPTION,
-			NormalizedMaintainabilityIndexEvaluator.PARAMETERS,
-			"/metrics.ui/normalized-maintainability/index.jsf",
-			"/metrics.ui/normalized-maintainability/project.jsf",
-			"/metrics.ui/normalized-maintainability/run.jsf",
-			NormalizedMaintainabilityIndexEvaluator.EVALUATED_QUALITY_CHARACTERISTICS,
-			NormalizedMaintainabilityIndexEvaluatorParameter.ALL,
-			NormalizedMaintainabilityIndexEvaluator.DEPENDENCIES);
+    private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
+	    NormalizedMaintainabilityIndexEvaluator.ID, NormalizedMaintainabilityIndexEvaluator.NAME,
+	    EvaluatorType.METRICS, NormalizedMaintainabilityIndexEvaluator.PLUGIN_VERSION, JNDI_ADDRESS,
+	    NormalizedMaintainabilityIndexEvaluator.DESCRIPTION, NormalizedMaintainabilityIndexEvaluator.PARAMETERS,
+	    "/metrics.ui/normalized-maintainability/index.jsf", "/metrics.ui/normalized-maintainability/project.jsf",
+	    "/metrics.ui/normalized-maintainability/run.jsf",
+	    NormalizedMaintainabilityIndexEvaluator.EVALUATED_QUALITY_CHARACTERISTICS,
+	    NormalizedMaintainabilityIndexEvaluatorParameter.ALL, NormalizedMaintainabilityIndexEvaluator.DEPENDENCIES);
 
-	@Lock(LockType.WRITE)
-	public void registration() {
-		register(EvaluatorServiceManagerRemote.class,
-				EvaluatorServiceManagerRemote.JNDI_NAME,
-				MetricsPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
-	}
+    @Lock(LockType.WRITE)
+    public void registration() {
+	register(EvaluatorServiceManagerRemote.class, EvaluatorServiceManagerRemote.JNDI_NAME,
+		MetricsPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
+    }
 
-	@Lock(LockType.WRITE)
-	public void unregistration() {
-		unregister(EvaluatorServiceManagerRemote.class,
-				EvaluatorServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
-	}
+    @Lock(LockType.WRITE)
+    public void unregistration() {
+	unregister(EvaluatorServiceManagerRemote.class, EvaluatorServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
+    }
 
-	@Override
-	@Lock(LockType.READ)
-	public String getName() {
-		return NormalizedMaintainabilityIndexEvaluator.NAME;
-	}
+    @Override
+    @Lock(LockType.READ)
+    public String getName() {
+	return NormalizedMaintainabilityIndexEvaluator.NAME;
+    }
 
-	@Override
-	@Lock(LockType.READ)
-	public EvaluatorServiceInformation getServiceInformation() {
-		return INFORMATION;
-	}
+    @Override
+    @Lock(LockType.READ)
+    public EvaluatorServiceInformation getServiceInformation() {
+	return INFORMATION;
+    }
 }

@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.ejb.EJB;
+import javax.annotation.PostConstruct;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
@@ -34,6 +34,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServi
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
+import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 /**
  * This evaluator calculates the nesting depth of the source code. A too deep
@@ -46,124 +47,103 @@ import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator
 @Remote(Evaluator.class)
 public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 
-	@EJB(lookup = AnalyzerServiceManagerRemote.JNDI_NAME)
-	private AnalyzerServiceManagerRemote analyzerServiceManager;
+    private AnalyzerServiceManagerRemote analyzerServiceManager;
 
-	public CodeDepthMetricEvaluator() {
-		super(CodeDepthMetric.ID, CodeDepthMetric.NAME,
-				CodeDepthMetric.PLUGIN_VERSION, CodeDepthMetric.DESCRIPTION);
+    public CodeDepthMetricEvaluator() {
+	super(CodeDepthMetric.ID, CodeDepthMetric.NAME, CodeDepthMetric.PLUGIN_VERSION, CodeDepthMetric.DESCRIPTION);
+    }
+
+    @PostConstruct
+    public void initialize() {
+	analyzerServiceManager = JndiUtils.createRemoteEJBInstance(AnalyzerServiceManagerRemote.class,
+		AnalyzerServiceManagerRemote.JNDI_NAME);
+    }
+
+    @Override
+    public List<ConfigurationParameter<?>> getConfigurationParameters() {
+	return CodeDepthMetric.PARAMETERS;
+    }
+
+    @Override
+    public Set<MetricParameter<?>> getParameters() {
+	return CodeDepthMetricEvaluatorParameter.ALL;
+    }
+
+    @Override
+    protected FileMetrics processFile(AnalysisRun analysisRun, CodeAnalysis analysis)
+	    throws InterruptedException, UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
+	AnalysisInformation analysisInformation = analysis.getAnalysisInformation();
+	AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
+		.findByName(analysisInformation.getLanguageName(), analysisInformation.getLanguageVersion());
+	ProgrammingLanguage language = analyzerServiceManager.createProxy(analyzerServiceInformation.getJndiName());
+
+	HashId hashId = analysisInformation.getHashId();
+	SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
+	CodeDepthFileResults results = new CodeDepthFileResults(CodeDepthMetric.ID, CodeDepthMetric.PLUGIN_VERSION,
+		hashId, sourceCodeLocation, new Date());
+	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+	    CodeDepthMetric metric = new CodeDepthMetric(analysisRun, language, codeRange);
+	    metric.run();
+	    SourceCodeQuality quality = metric.getQuality();
+	    results.add(new CodeDepthResult(sourceCodeLocation, codeRange.getType(), codeRange.getCanonicalName(),
+		    metric.getMaxDepth(), quality));
 	}
+	return results;
+    }
 
-	@Override
-	public List<ConfigurationParameter<?>> getConfigurationParameters() {
-		return CodeDepthMetric.PARAMETERS;
-	}
+    @Override
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
+    }
 
-	@Override
-	public Set<MetricParameter<?>> getParameters() {
-		return CodeDepthMetricEvaluatorParameter.ALL;
-	}
-
-	@Override
-	protected FileMetrics processFile(AnalysisRun analysisRun,
-			CodeAnalysis analysis) throws InterruptedException,
-			UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-		AnalysisInformation analysisInformation = analysis
-				.getAnalysisInformation();
-		AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
-				.findByName(analysisInformation.getLanguageName(),
-						analysisInformation.getLanguageVersion());
-		ProgrammingLanguage language = analyzerServiceManager
-				.createProxy(analyzerServiceInformation.getJndiName());
-
-		HashId hashId = analysisInformation.getHashId();
-		SourceCodeLocation sourceCodeLocation = analysisRun
-				.findTreeNode(hashId).getSourceCodeLocation();
-		CodeDepthFileResults results = new CodeDepthFileResults(
-				CodeDepthMetric.ID, CodeDepthMetric.PLUGIN_VERSION, hashId,
-				sourceCodeLocation, new Date());
-		for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-			CodeDepthMetric metric = new CodeDepthMetric(analysisRun, language,
-					codeRange);
-			metric.run();
-			SourceCodeQuality quality = metric.getQuality();
-			results.add(new CodeDepthResult(sourceCodeLocation, codeRange
-					.getType(), codeRange.getCanonicalName(), metric
-					.getMaxDepth(), quality));
+    @Override
+    protected DirectoryMetrics processDirectory(AnalysisRun analysisRun, AnalysisFileTree directory)
+	    throws InterruptedException, EvaluationStoreException {
+	CodeDepthDirectoryResults directoryResults = new CodeDepthDirectoryResults(CodeDepthMetric.ID,
+		CodeDepthMetric.PLUGIN_VERSION, directory.getHashId(), new Date(), new UnspecifiedSourceCodeLocation(),
+		CodeRangeType.DIRECTORY, directory.getName());
+	int maxDepth = 0;
+	EvaluatorStore evaluatorStore = getEvaluatorStore();
+	for (AnalysisFileTree child : directory.getChildren()) {
+	    if (child.isFile()) {
+		GenericFileMetrics fileResults = evaluatorStore.readFileResults(child.getHashId(), CodeDepthMetric.ID);
+		if (fileResults == null) {
+		    continue;
 		}
-		return results;
-	}
-
-	@Override
-	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
-	}
-
-	@Override
-	protected DirectoryMetrics processDirectory(AnalysisRun analysisRun,
-			AnalysisFileTree directory) throws InterruptedException,
-			EvaluationStoreException {
-		CodeDepthDirectoryResults directoryResults = new CodeDepthDirectoryResults(
-				CodeDepthMetric.ID, CodeDepthMetric.PLUGIN_VERSION,
-				directory.getHashId(), new Date(),
-				new UnspecifiedSourceCodeLocation(), CodeRangeType.DIRECTORY,
-				directory.getName());
-		int maxDepth = 0;
-		EvaluatorStore evaluatorStore = getEvaluatorStore();
-		for (AnalysisFileTree child : directory.getChildren()) {
-			if (child.isFile()) {
-				GenericFileMetrics fileResults = evaluatorStore
-						.readFileResults(child.getHashId(), CodeDepthMetric.ID);
-				if (fileResults == null) {
-					continue;
-				}
-				for (GenericCodeRangeMetrics result : fileResults
-						.getCodeRangeMetrics()) {
-					maxDepth = Math
-							.max(maxDepth,
-									result.getValue(
-											CodeDepthMetricEvaluatorParameter.MAX_DEPTH)
-											.getValue());
-				}
-			} else {
-				GenericDirectoryMetrics childDirectoryResults = evaluatorStore
-						.readDirectoryResults(child.getHashId(),
-								CodeDepthMetric.ID);
-				if (childDirectoryResults == null) {
-					continue;
-				}
-				maxDepth = Math
-						.max(maxDepth,
-								(Integer) childDirectoryResults
-										.getValues()
-										.get(CodeDepthMetricEvaluatorParameter.MAX_DEPTH
-												.getName()).getValue());
-			}
-			directoryResults.setMaxDepth(maxDepth);
+		for (GenericCodeRangeMetrics result : fileResults.getCodeRangeMetrics()) {
+		    maxDepth = Math.max(maxDepth,
+			    result.getValue(CodeDepthMetricEvaluatorParameter.MAX_DEPTH).getValue());
 		}
-		return directoryResults;
+	    } else {
+		GenericDirectoryMetrics childDirectoryResults = evaluatorStore.readDirectoryResults(child.getHashId(),
+			CodeDepthMetric.ID);
+		if (childDirectoryResults == null) {
+		    continue;
+		}
+		maxDepth = Math.max(maxDepth, (Integer) childDirectoryResults.getValues()
+			.get(CodeDepthMetricEvaluatorParameter.MAX_DEPTH.getName()).getValue());
+	    }
+	    directoryResults.setMaxDepth(maxDepth);
 	}
+	return directoryResults;
+    }
 
-	@Override
-	protected DirectoryMetrics processProject(AnalysisRun analysisRun,
-			boolean enableReevaluation) throws InterruptedException,
-			EvaluationStoreException {
-		AnalysisFileTree directory = analysisRun.getFileTree();
-		return processDirectory(analysisRun, directory);
-	}
+    @Override
+    protected DirectoryMetrics processProject(AnalysisRun analysisRun, boolean enableReevaluation)
+	    throws InterruptedException, EvaluationStoreException {
+	AnalysisFileTree directory = analysisRun.getFileTree();
+	return processDirectory(analysisRun, directory);
+    }
 
-	@Override
-	public void setConfigurationParameter(ConfigurationParameter<?> parameter,
-			Object value) {
-		// Intentionally left empty.
-		throw new IllegalArgumentException("Parameter '" + parameter
-				+ "' is unknown.");
-	}
+    @Override
+    public void setConfigurationParameter(ConfigurationParameter<?> parameter, Object value) {
+	// Intentionally left empty.
+	throw new IllegalArgumentException("Parameter '" + parameter + "' is unknown.");
+    }
 
-	@Override
-	public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
-		// Intentionally left empty.
-		throw new IllegalArgumentException("Parameter '" + parameter
-				+ "' is unknown.");
-	}
+    @Override
+    public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
+	// Intentionally left empty.
+	throw new IllegalArgumentException("Parameter '" + parameter + "' is unknown.");
+    }
 }

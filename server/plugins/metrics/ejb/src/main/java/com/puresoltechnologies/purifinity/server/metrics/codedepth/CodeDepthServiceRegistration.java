@@ -13,45 +13,38 @@ import com.puresoltechnologies.purifinity.server.metrics.MetricsPlugin;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
-public class CodeDepthServiceRegistration extends
-		AbstractEvaluatorServiceRegistration {
+public class CodeDepthServiceRegistration extends AbstractEvaluatorServiceRegistration {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
-			"metrics.plugin", "metrics.ejb", Evaluator.class,
-			CodeDepthMetricEvaluator.class);
+    private static final String JNDI_ADDRESS = JndiUtils.createGlobalName("metrics.plugin",
+	    "com-puresoltechnologies-purifinity-plugins-metrics.ejb", Evaluator.class, CodeDepthMetricEvaluator.class);
 
-	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
-			CodeDepthMetric.ID, CodeDepthMetric.NAME, EvaluatorType.METRICS,
-			CodeDepthMetric.PLUGIN_VERSION, JNDI_ADDRESS,
-			CodeDepthMetric.DESCRIPTION, CodeDepthMetric.PARAMETERS,
-			"/metrics.ui/codedepth/index.jsf",
-			"/metrics.ui/codedepth/project.jsf",
-			"/metrics.ui/codedepth/run.jsf",
-			CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS,
-			CodeDepthMetricEvaluatorParameter.ALL, CodeDepthMetric.DEPENDENCIES);
+    private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(CodeDepthMetric.ID,
+	    CodeDepthMetric.NAME, EvaluatorType.METRICS, CodeDepthMetric.PLUGIN_VERSION, JNDI_ADDRESS,
+	    CodeDepthMetric.DESCRIPTION, CodeDepthMetric.PARAMETERS, "/metrics.ui/codedepth/index.jsf",
+	    "/metrics.ui/codedepth/project.jsf", "/metrics.ui/codedepth/run.jsf",
+	    CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS, CodeDepthMetricEvaluatorParameter.ALL,
+	    CodeDepthMetric.DEPENDENCIES);
 
-	@Lock(LockType.WRITE)
-	public void registration() {
-		register(EvaluatorServiceManagerRemote.class,
-				EvaluatorServiceManagerRemote.JNDI_NAME,
-				MetricsPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
-	}
+    @Lock(LockType.WRITE)
+    public void registration() {
+	register(EvaluatorServiceManagerRemote.class, EvaluatorServiceManagerRemote.JNDI_NAME,
+		MetricsPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
+    }
 
-	@Lock(LockType.WRITE)
-	public void unregistration() {
-		unregister(EvaluatorServiceManagerRemote.class,
-				EvaluatorServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
-	}
+    @Lock(LockType.WRITE)
+    public void unregistration() {
+	unregister(EvaluatorServiceManagerRemote.class, EvaluatorServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
+    }
 
-	@Override
-	@Lock(LockType.READ)
-	public String getName() {
-		return CodeDepthMetric.NAME;
-	}
+    @Override
+    @Lock(LockType.READ)
+    public String getName() {
+	return CodeDepthMetric.NAME;
+    }
 
-	@Override
-	@Lock(LockType.READ)
-	public EvaluatorServiceInformation getServiceInformation() {
-		return INFORMATION;
-	}
+    @Override
+    @Lock(LockType.READ)
+    public EvaluatorServiceInformation getServiceInformation() {
+	return INFORMATION;
+    }
 }

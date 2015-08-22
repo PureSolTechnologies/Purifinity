@@ -6,7 +6,6 @@ import javax.ejb.Lock;
 import javax.ejb.LockType;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 
@@ -37,9 +36,8 @@ public class ServiceManagerProxy {
      *            is the information about the service to be used for
      *            registration.
      * @throws InterruptedException
-     *             is thrown if the registration was interrupted.
-     * @throws NamingException
-     *             is thrown in case of a JNDI naming issue.
+     *             is thrown if the registration was interrupted. - * @throws
+     *             NamingException is thrown in case of a JNDI naming issue.
      * @throws IllegalStateException
      *             is thrown, if the registration process times out.
      */

@@ -13,44 +13,38 @@ import com.puresoltechnologies.purifinity.server.metrics.MetricsPlugin;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
-public class HalsteadServiceRegistration extends
-		AbstractEvaluatorServiceRegistration {
+public class HalsteadServiceRegistration extends AbstractEvaluatorServiceRegistration {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
-			"metrics.plugin", "metrics.ejb", Evaluator.class,
-			HalsteadMetricEvaluator.class);
+    private static final String JNDI_ADDRESS = JndiUtils.createGlobalName("metrics.plugin",
+	    "com-puresoltechnologies-purifinity-plugins-metrics.ejb", Evaluator.class, HalsteadMetricEvaluator.class);
 
-	private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
-			HalsteadMetric.ID, HalsteadMetric.NAME, EvaluatorType.METRICS,
-			HalsteadMetric.PLUGIN_VERSION, JNDI_ADDRESS,
-			HalsteadMetric.DESCRIPTION, HalsteadMetric.PARAMETERS,
-			"/metrics.ui/halstead/index.jsf",
-			"/metrics.ui/halstead/project.jsf", "/metrics.ui/halstead/run.jsf",
-			HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS,
-			HalsteadMetricEvaluatorParameter.ALL, HalsteadMetric.DEPENDENCIES);
+    private static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(HalsteadMetric.ID,
+	    HalsteadMetric.NAME, EvaluatorType.METRICS, HalsteadMetric.PLUGIN_VERSION, JNDI_ADDRESS,
+	    HalsteadMetric.DESCRIPTION, HalsteadMetric.PARAMETERS, "/metrics.ui/halstead/index.jsf",
+	    "/metrics.ui/halstead/project.jsf", "/metrics.ui/halstead/run.jsf",
+	    HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS, HalsteadMetricEvaluatorParameter.ALL,
+	    HalsteadMetric.DEPENDENCIES);
 
-	@Lock(LockType.WRITE)
-	public void registration() {
-		register(EvaluatorServiceManagerRemote.class,
-				EvaluatorServiceManagerRemote.JNDI_NAME,
-				MetricsPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
-	}
+    @Lock(LockType.WRITE)
+    public void registration() {
+	register(EvaluatorServiceManagerRemote.class, EvaluatorServiceManagerRemote.JNDI_NAME,
+		MetricsPlugin.INFORMATION, JNDI_ADDRESS, INFORMATION);
+    }
 
-	@Lock(LockType.WRITE)
-	public void unregistration() {
-		unregister(EvaluatorServiceManagerRemote.class,
-				EvaluatorServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
-	}
+    @Lock(LockType.WRITE)
+    public void unregistration() {
+	unregister(EvaluatorServiceManagerRemote.class, EvaluatorServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
+    }
 
-	@Override
-	@Lock(LockType.READ)
-	public String getName() {
-		return HalsteadMetric.NAME;
-	}
+    @Override
+    @Lock(LockType.READ)
+    public String getName() {
+	return HalsteadMetric.NAME;
+    }
 
-	@Override
-	@Lock(LockType.READ)
-	public EvaluatorServiceInformation getServiceInformation() {
-		return INFORMATION;
-	}
+    @Override
+    @Lock(LockType.READ)
+    public EvaluatorServiceInformation getServiceInformation() {
+	return INFORMATION;
+    }
 }

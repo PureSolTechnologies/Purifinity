@@ -6,6 +6,8 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresoltechnologies.purifinity.server.common.utils.BuildInformation;
+
 /**
  * This class contains functionality used to handle JNDI lookups, instance
  * creation and JNDI name creation.
@@ -15,8 +17,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JndiUtils {
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(JndiUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(JndiUtils.class);
 
     private static final int DEFAULT_RETRY_COUNT = 12;
     private static final int DEFAULT_SLEEP = 5000;
@@ -37,19 +38,16 @@ public class JndiUtils {
 		} catch (NamingException | IllegalStateException e) {
 		    retried++;
 		    if (retried < DEFAULT_RETRY_COUNT) {
-			logger.info("Could not lookup object '" + jndiName
-				+ "', yet.");
+			logger.info("Could not lookup object '" + jndiName + "', yet.");
 			Thread.sleep(DEFAULT_SLEEP);
 		    } else {
 			logger.error("'" + jndiName + "' was was not found.");
-			throw new IllegalStateException("Could not find '"
-				+ jndiName + "'.");
+			throw new IllegalStateException("Could not find '" + jndiName + "'.");
 		    }
 		}
 	    }
 	} catch (InterruptedException e) {
-	    throw new RuntimeException("Could not find '" + jndiName
-		    + "' due to caught interrupt.", e);
+	    throw new RuntimeException("Could not find '" + jndiName + "' due to caught interrupt.", e);
 	}
     }
 
@@ -62,28 +60,22 @@ public class JndiUtils {
      * @param implementationClass
      * @return
      */
-    public static <Interface> String createGlobalName(String earName,
-	    String ejbName, Class<Interface> interfaceClass,
+    public static <Interface> String createGlobalName(String earName, String ejbName, Class<Interface> interfaceClass,
 	    Class<? extends Interface> implementationClass) {
 	if (!interfaceClass.isInterface()) {
-	    throw new IllegalArgumentException("Class '"
-		    + interfaceClass.getName()
-		    + "' is not an interface as expected.");
+	    throw new IllegalArgumentException(
+		    "Class '" + interfaceClass.getName() + "' is not an interface as expected.");
 	}
 	if (implementationClass.isInterface()) {
-	    throw new IllegalArgumentException("Class '"
-		    + implementationClass.getName()
-		    + "' is not a class as expected.");
+	    throw new IllegalArgumentException(
+		    "Class '" + implementationClass.getName() + "' is not a class as expected.");
 	}
 	if (!interfaceClass.isAssignableFrom(implementationClass)) {
-	    throw new IllegalArgumentException("Class '"
-		    + implementationClass.getName()
-		    + "' is not implementing interface '"
-		    + interfaceClass.getName() + "' as expected.");
+	    throw new IllegalArgumentException("Class '" + implementationClass.getName()
+		    + "' is not implementing interface '" + interfaceClass.getName() + "' as expected.");
 	}
-	return "java:global/" + earName + "/" + ejbName + "/"
-		+ implementationClass.getSimpleName() + "!"
-		+ interfaceClass.getName();
+	return "java:global/" + earName + "/" + ejbName + "-" + BuildInformation.getVersion() + "/"
+		+ implementationClass.getSimpleName() + "!" + interfaceClass.getName();
     }
 
 }

@@ -17,36 +17,32 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 @Singleton
 @Startup
 @EJBFacade
-public class DirectoryRepositoryRegistration extends
-		AbstractRepositoryServiceRegistration {
+public class DirectoryRepositoryRegistration extends AbstractRepositoryServiceRegistration {
 
-	private static final String JNDI_ADDRESS = JndiUtils.createGlobalName(
-			"repository.directory.plugin", "repository.directory.ejb",
-			Repository.class, DirectoryRepository.class);
+    private static final String JNDI_ADDRESS = JndiUtils.createGlobalName("repository.directory.plugin",
+	    "com-puresoltechnologies-purifinity-plugins-repository.directory.ejb", Repository.class,
+	    DirectoryRepository.class);
 
-	@PostConstruct
-	public void registraion() {
-		register(RepositoryServiceManagerRemote.class,
-				RepositoryServiceManagerRemote.JNDI_NAME,
-				DirectoryRepositoryPlugin.INFORMATION, JNDI_ADDRESS,
-				DirectoryRepository.INFORMATION);
-	}
+    @PostConstruct
+    public void registraion() {
+	register(RepositoryServiceManagerRemote.class, RepositoryServiceManagerRemote.JNDI_NAME,
+		DirectoryRepositoryPlugin.INFORMATION, JNDI_ADDRESS, DirectoryRepository.INFORMATION);
+    }
 
-	@PreDestroy
-	public void unregistration() {
-		unregister(RepositoryServiceManagerRemote.class,
-				RepositoryServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
-	}
+    @PreDestroy
+    public void unregistration() {
+	unregister(RepositoryServiceManagerRemote.class, RepositoryServiceManagerRemote.JNDI_NAME, JNDI_ADDRESS);
+    }
 
-	@Override
-	@Lock(LockType.READ)
-	public String getName() {
-		return DirectoryRepository.NAME;
-	}
+    @Override
+    @Lock(LockType.READ)
+    public String getName() {
+	return DirectoryRepository.NAME;
+    }
 
-	@Override
-	@Lock(LockType.READ)
-	public RepositoryServiceInformation getServiceInformation() {
-		return DirectoryRepository.INFORMATION;
-	}
+    @Override
+    @Lock(LockType.READ)
+    public RepositoryServiceInformation getServiceInformation() {
+	return DirectoryRepository.INFORMATION;
+    }
 }
