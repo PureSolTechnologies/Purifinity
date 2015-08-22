@@ -552,6 +552,7 @@
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>common.plugins</artifactId>
 				<version>${project.version}</version>
+				<type>ejb</type>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -1001,16 +1002,6 @@
 				<groupId>org.apache.hadoop</groupId>
 				<artifactId>hadoop-client</artifactId>
 				<version>${hadoop.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>io.netty</groupId>
-						<artifactId>netty</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>io.netty</groupId>
-						<artifactId>netty-all</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>

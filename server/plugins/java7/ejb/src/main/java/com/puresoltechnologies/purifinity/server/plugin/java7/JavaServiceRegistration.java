@@ -31,7 +31,7 @@ public class JavaServiceRegistration extends
 
 	@PostConstruct
 	@Lock(LockType.WRITE)
-	public void registraion() {
+	public void registration() {
 		register(AnalyzerServiceManagerRemote.class,
 				AnalyzerServiceManagerRemote.JNDI_NAME, JavaPlugin.INFORMATION,
 				JNDI_ADDRESS, INFORMATION);
