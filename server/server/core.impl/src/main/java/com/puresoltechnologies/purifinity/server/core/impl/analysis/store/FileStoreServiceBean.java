@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -102,16 +103,17 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
 		byte[] hashBytes = digestInputStream.getMessageDigest().digest();
 		String hashString = StringUtils.convertByteArrayToString(hashBytes);
 		HashId hashId = new HashId(HashUtilities.getDefaultMessageDigestAlgorithm(), hashString);
-		FileInformation fileInformation = readFileInformation(hashId);
-		if (fileInformation == null) {
+		try {
+		    FileInformation fileInformation = readFileInformation(hashId);
+		    return fileInformation;
+		} catch (FileNotFoundException e) {
 		    try (FileInputStream fileInputStream = new FileInputStream(tempFile)) {
 			try (ByteArrayOutputStream buffer = new ByteArrayOutputStream((int) tempFile.length())) {
 			    IOUtils.copy(fileInputStream, buffer);
-			    fileInformation = storeFile(hashId, buffer);
+			    return storeFile(hashId, buffer);
 			}
 		    }
 		}
-		return fileInformation;
 	    } finally {
 		if (!tempFile.delete()) {
 		    logger.warn("Could not delete temporary file '" + tempFile + "'.");
