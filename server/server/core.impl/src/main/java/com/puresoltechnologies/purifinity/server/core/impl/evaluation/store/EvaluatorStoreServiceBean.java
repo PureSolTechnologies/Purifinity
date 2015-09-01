@@ -178,7 +178,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     }
 
     @Override
-    public final void storeFileResults(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, GenericFileMetrics metrics)
+    public void storeFileResults(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, GenericFileMetrics metrics)
 	    throws EvaluationStoreException {
 	storeFileMetricsAsValues(analysisRun, codeAnalysis, metrics);
 	storeMetricsInBigTable(analysisRun, codeAnalysis, metrics);
@@ -292,7 +292,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     }
 
     @Override
-    public final void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directory,
+    public void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    GenericDirectoryMetrics metrics) throws EvaluationStoreException {
 	storeDirectoryMetricsAsValues(analysisRun, directory, metrics);
 	storeMetricsInBigTable(analysisRun, directory, metrics);
@@ -377,8 +377,8 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     }
 
     @Override
-    public final void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directory,
-	    GenericProjectMetrics metrics) throws EvaluationStoreException {
+    public void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directory, GenericProjectMetrics metrics)
+	    throws EvaluationStoreException {
 	storeProjectMetricsAsValues(analysisRun, directory, metrics);
 	storeMetricsInBigTable(analysisRun, directory, metrics);
     }
@@ -457,7 +457,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     }
 
     @Override
-    public final GenericFileMetrics readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
+    public GenericFileMetrics readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements.getPreparedStatement(session,
 		"SELECT " + "time, " + "code_range_type, " + "code_range_name, " + "evaluator_version, "
 			+ "parameter_name, " + "parameter_unit, " + "parameter_description, " + "parameter_type, "
@@ -548,7 +548,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     }
 
     @Override
-    public final GenericDirectoryMetrics readDirectoryResults(HashId hashId, String evaluatorId)
+    public GenericDirectoryMetrics readDirectoryResults(HashId hashId, String evaluatorId)
 	    throws EvaluationStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements.getPreparedStatement(session,
 		"SELECT " + "time, " + "hashid, " + "evaluator_version, " + "parameter_name, " + "parameter_unit, "

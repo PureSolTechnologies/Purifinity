@@ -27,65 +27,61 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerR
 @Named("CreateAnalysisRunBatchlet")
 public class CreateAnalysisRunBatchlet implements Batchlet {
 
-	@Inject
-	private EventLoggerRemote eventLogger;
+    @Inject
+    private EventLoggerRemote eventLogger;
 
-	@Inject
-	private AnalysisStore analysisStore;
+    @Inject
+    private AnalysisStore analysisStore;
 
-	@Inject
-	private JobOperator jobOperator;
+    @Inject
+    private JobOperator jobOperator;
 
-	@Inject
-	private JobContext jobContext;
+    @Inject
+    private JobContext jobContext;
 
-	@Override
-	public String process() throws Exception {
-		try {
-			Properties properties = jobContext.getProperties();
-			String projectId = properties.getProperty("project_id");
+    @Override
+    public String process() throws Exception {
+	try {
+	    Properties properties = jobContext.getProperties();
+	    String projectId = properties.getProperty("project_id");
 
-			// if (jobOperator.getJobInstanceCount("ProjectAnalysis") > 2) {
-			/*
-			 * There is already a process running for the project, so we
-			 * re-queue here.
-			 */
-			// TODO
-			// messageSender.sendMessageWithDelay(projectAnalysisStartQueue,
-			// projectId.toString(), 60000);
-			/*
-			 * We finish here and let the re-delivery do the job.
-			 */
-			// return "ALREADY QUEUED";
-			// }
+	    if (jobOperator.getJobInstanceCount("ProjectAnalysis") > 2) {
+		/*
+		 * There is already a process running for the project, so we
+		 * re-queue here.
+		 */
+		// TODO
+		// messageSender.sendMessageWithDelay(projectAnalysisStartQueue,
+		// projectId.toString(), 60000);
+		/*
+		 * We finish here and let the re-delivery do the job.
+		 */
+		// return "ALREADY QUEUED";
+	    }
 
-			AnalysisProject analysisProject = analysisStore
-					.readAnalysisProject(projectId);
-			eventLogger.logEvent(AnalysisEvents.createQueueAnalysisEvent(
-					projectId, analysisProject.getSettings().getName()));
+	    AnalysisProject analysisProject = analysisStore.readAnalysisProject(projectId);
+	    eventLogger.logEvent(
+		    AnalysisEvents.createQueueAnalysisEvent(projectId, analysisProject.getSettings().getName()));
 
-			// TODO the actual logic for the collision avoidance is still
-			// missing.
-			AnalysisRunInformation analysisRunInformation = analysisStore
-					.createAnalysisRun(analysisProject.getInformation()
-							.getProjectId(), new Date(), -1, "",
-							analysisProject.getSettings()
-									.getFileSearchConfiguration());
+	    // TODO the actual logic for the collision avoidance is still
+	    // missing.
+	    AnalysisRunInformation analysisRunInformation = analysisStore.createAnalysisRun(
+		    analysisProject.getInformation().getProjectId(), new Date(), -1, "",
+		    analysisProject.getSettings().getFileSearchConfiguration());
 
-			jobContext.setTransientUserData(new AnalysisJobContext(new Date(),
-					analysisProject, analysisRunInformation));
+	    jobContext
+		    .setTransientUserData(new AnalysisJobContext(new Date(), analysisProject, analysisRunInformation));
 
-			return "SUCCESSFUL";
-		} catch (AnalysisStoreException e) {
-			// An issue occurred, re-queue the request.
-			eventLogger.logEvent(AnalysisEvents.createGeneralError(e));
-			throw new RuntimeException("Could not start the project analysis.",
-					e);
-		}
+	    return "SUCCESSFUL";
+	} catch (AnalysisStoreException e) {
+	    // An issue occurred, re-queue the request.
+	    eventLogger.logEvent(AnalysisEvents.createGeneralError(e));
+	    throw new RuntimeException("Could not start the project analysis.", e);
 	}
+    }
 
-	@Override
-	public void stop() throws Exception {
-		// TODO Auto-generated method stub
-	}
+    @Override
+    public void stop() throws Exception {
+	// TODO Auto-generated method stub
+    }
 }

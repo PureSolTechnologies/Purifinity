@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +14,9 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.trees.TreeLink;
 import com.puresoltechnologies.trees.TreeNode;
 
-public class AnalysisRunFileTree implements TreeNode<AnalysisRunFileTree> {
+public class AnalysisRunFileTree implements TreeNode<AnalysisRunFileTree>, Serializable {
+
+    private static final long serialVersionUID = -339032572242718376L;
 
     private HashId hashId = null;
 
@@ -27,8 +30,8 @@ public class AnalysisRunFileTree implements TreeNode<AnalysisRunFileTree> {
     public AnalysisRunFileTree() {
     }
 
-    public AnalysisRunFileTree(AnalysisRunFileTree parent, String name,
-	    boolean file, SourceCodeLocation sourceCodeLocation) {
+    public AnalysisRunFileTree(AnalysisRunFileTree parent, String name, boolean file,
+	    SourceCodeLocation sourceCodeLocation) {
 	this.parent = parent;
 	this.name = name;
 	this.file = file;
@@ -38,15 +41,14 @@ public class AnalysisRunFileTree implements TreeNode<AnalysisRunFileTree> {
 	}
     }
 
-    public AnalysisRunFileTree(AnalysisRunFileTree parent, String name,
-	    boolean file, SourceCodeLocation sourceCodeLocation, HashId hashId) {
+    public AnalysisRunFileTree(AnalysisRunFileTree parent, String name, boolean file,
+	    SourceCodeLocation sourceCodeLocation, HashId hashId) {
 	this(parent, name, file, sourceCodeLocation);
 	this.hashId = hashId;
     }
 
-    public AnalysisRunFileTree(AnalysisRunFileTree parent, String name,
-	    boolean file, SourceCodeLocation sourceCodeLocation, HashId hashId,
-	    List<AnalysisRunFileTree> children) {
+    public AnalysisRunFileTree(AnalysisRunFileTree parent, String name, boolean file,
+	    SourceCodeLocation sourceCodeLocation, HashId hashId, List<AnalysisRunFileTree> children) {
 	this(parent, name, file, sourceCodeLocation, hashId);
 	this.children.addAll(children);
     }
@@ -139,8 +141,7 @@ public class AnalysisRunFileTree implements TreeNode<AnalysisRunFileTree> {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result
-		+ ((children == null) ? 0 : children.hashCode());
+	result = prime * result + ((children == null) ? 0 : children.hashCode());
 	result = prime * result + (file ? 1231 : 1237);
 	result = prime * result + ((hashId == null) ? 0 : hashId.hashCode());
 	result = prime * result + ((name == null) ? 0 : name.hashCode());

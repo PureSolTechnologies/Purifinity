@@ -184,7 +184,7 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
 
     @Override
     @Lock(LockType.READ)
-    public final void storeAnalysis(CodeAnalysis fileAnalysis) throws FileStoreException {
+    public void storeAnalysis(CodeAnalysis fileAnalysis) throws FileStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements.getPreparedStatement(session, "INSERT INTO "
 		+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
 		+ " (time, hashid, language, language_version, analyzer_id, analyzer_version, analyzer_message, successful, duration, analysis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
@@ -210,7 +210,7 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
 
     @Override
     @Lock(LockType.READ)
-    public final boolean isAvailable(HashId hashId) {
+    public boolean isAvailable(HashId hashId) {
 	try {
 	    return bloob.isAvailable(hashId);
 	} catch (IOException e) {
@@ -221,7 +221,7 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
 
     @Override
     @Lock(LockType.READ)
-    public final SourceCode readSourceCode(HashId hashId) throws FileStoreException {
+    public SourceCode readSourceCode(HashId hashId) throws FileStoreException {
 	try (InputStream inputStream = readRawFile(hashId)) {
 	    return SourceCode.read(inputStream, new UnspecifiedSourceCodeLocation());
 	} catch (IOException e) {
@@ -231,7 +231,7 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
 
     @Override
     @Lock(LockType.READ)
-    public final boolean wasAnalyzed(HashId hashId) throws FileStoreException {
+    public boolean wasAnalyzed(HashId hashId) throws FileStoreException {
 	PreparedStatement preparedStatement = cassandraPreparedStatements.getPreparedStatement(session,
 		"SELECT successful FROM " + CassandraElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashid=?");
 	BoundStatement boundStatement = preparedStatement.bind(hashId.toString());

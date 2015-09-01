@@ -92,7 +92,8 @@ public class ProjectManagerRestService implements ProjectManagerRestInterface {
 
     @Override
     public AnalysisFileTree readAnalysisFileTree(String projectId, long runId) throws AnalysisStoreException {
-	return analysisStore.readAnalysisFileTree(projectId, runId);
+	AnalysisFileTree readAnalysisFileTree = analysisStore.readAnalysisFileTree(projectId, runId);
+	return readAnalysisFileTree;
     }
 
     @Override

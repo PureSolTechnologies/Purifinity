@@ -1,5 +1,5 @@
 class ProjectManager {
-
+    
     constructor(private purifinityServerConnector: PurifinityServerConnector) {
     }
 

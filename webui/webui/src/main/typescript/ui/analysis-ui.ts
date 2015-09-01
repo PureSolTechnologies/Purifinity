@@ -38,7 +38,7 @@ analysisUIModule.controller("analysisBrowserCtrl", ["$scope", "$routeParams", "$
                 function(data, status, error) { }
                 );
         }, function(data, status, error) {
-            });
+         );
     }]);
 
 

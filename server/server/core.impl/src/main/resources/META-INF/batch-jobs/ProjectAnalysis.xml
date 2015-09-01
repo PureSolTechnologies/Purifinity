@@ -12,7 +12,7 @@
 		<end on="ALREADY QUEUED" />
 	</step>
 
-	<step id="ProjectFilesStorage" next="AnalysisSplit">
+	<step id="ProjectFilesStorage" next="FileTreeCreation">
 		<chunk checkpoint-policy="item" item-count="10">
 			<reader ref="FileStorageItemReader" />
 			<processor ref="FileStorageItemProcessor" />
@@ -20,7 +20,19 @@
 		</chunk>
 	</step>
 
-	<split id="AnalysisSplit" next="ProjectEvaluation">
+	<step id="FileTreeCreation" next="FileAnalysis">
+		<batchlet ref="FileTreeCreationBatchlet" />
+	</step>
+
+	<step id="FileAnalysis" next="ProjectEvaluation">
+		<chunk checkpoint-policy="item" item-count="10">
+			<reader ref="AnalysisItemReader" />
+			<processor ref="AnalysisItemProcessor" />
+			<writer ref="AnalysisItemWriter" />
+		</chunk>
+	</step>
+
+	<!-- split id="AnalysisSplit" next="ProjectEvaluation">
 		<flow id="FileTreeCreationFlow">
 			<step id="FileTreeCreation">
 				<batchlet ref="FileTreeCreationBatchlet" />
@@ -35,7 +47,7 @@
 				</chunk>
 			</step>
 		</flow>
-	</split>
+	</split -->
 
 	<step id="ProjectEvaluation" next="WriteStatistics">
 		<!-- chunk checkpoint-policy="item" item-count="10"> <reader ref="EvaluationItemReader" 

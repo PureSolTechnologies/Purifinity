@@ -7,10 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -28,22 +26,21 @@ public class AnalysisFileTree implements TreeNode<AnalysisFileTree>, Serializabl
     private final List<AnalysisInformation> analyzedCodes = new ArrayList<>();
 
     private AnalysisFileTree parent;
-    private String name;
-    private HashId hashId;
-    private boolean file;
-    private long size;
-    private long sizeRecursive;
-    private SourceCodeLocation sourceCodeLocation;
+    private final String name;
+    private final HashId hashId;
+    private final boolean file;
+    private final long size;
+    private final long sizeRecursive;
+    private final SourceCodeLocation sourceCodeLocation;
 
-    public AnalysisFileTree() {
-    }
-
-    @JsonCreator
-    public AnalysisFileTree(@JsonProperty("parent") AnalysisFileTree parent, @JsonProperty("name") String name,
-	    @JsonProperty("hashId") HashId hashId, @JsonProperty("file") boolean file, @JsonProperty("size") long size,
-	    @JsonProperty("sizeRecursive") long sizeRecursive,
-	    @JsonProperty("sourceCodeLocation") SourceCodeLocation sourceCodeLocation,
-	    @JsonProperty("analyzedCodes") List<AnalysisInformation> analyzedCodes) {
+    public AnalysisFileTree(AnalysisFileTree parent, //
+	    String name, //
+	    HashId hashId, //
+	    boolean file, //
+	    long size, //
+	    long sizeRecursive, //
+	    SourceCodeLocation sourceCodeLocation, //
+	    List<AnalysisInformation> analyzedCodes) {
 	super();
 	this.parent = parent;
 	this.name = name;
@@ -60,54 +57,49 @@ public class AnalysisFileTree implements TreeNode<AnalysisFileTree>, Serializabl
 	}
     }
 
+    @JsonCreator
+    public AnalysisFileTree(@JsonProperty("name") String name, //
+	    @JsonProperty("hashId") HashId hashId, //
+	    @JsonProperty("file") boolean file, //
+	    @JsonProperty("size") long size, //
+	    @JsonProperty("sizeRecursive") long sizeRecursive, //
+	    @JsonProperty("sourceCodeLocation") SourceCodeLocation sourceCodeLocation, //
+	    @JsonProperty("analyzedCodes") List<AnalysisInformation> analyzedCodes,
+	    @JsonProperty("children") List<AnalysisFileTree> children) {
+	super();
+	this.parent = null;
+	this.name = name;
+	this.hashId = hashId;
+	this.file = file;
+	this.size = size;
+	this.sizeRecursive = sizeRecursive;
+	this.sourceCodeLocation = sourceCodeLocation;
+	if (analyzedCodes != null) {
+	    this.analyzedCodes.addAll(analyzedCodes);
+	}
+	this.children.addAll(children);
+	for (AnalysisFileTree child : this.children) {
+	    child.parent = this;
+	}
+    }
+
     public List<AnalysisInformation> getAnalyzedCodes() {
 	return analyzedCodes;
     }
 
-    public void setAnalyzedCodes(List<AnalysisInformation> analyzedCodes) {
-	this.analyzedCodes.clear();
-	this.analyzedCodes.addAll(analyzedCodes);
-    }
-
-    public void setChildren(List<AnalysisFileTree> children) {
-	this.children.clear();
-	this.children.addAll(children);
-    }
-
-    public void setParent(AnalysisFileTree parent) {
-	this.parent = parent;
-    }
-
-    public void setName(String name) {
-	this.name = name;
-    }
-
-    public void setHashId(HashId hashId) {
-	this.hashId = hashId;
-    }
-
-    public void setFile(boolean file) {
-	this.file = file;
-    }
-
-    public void setSourceCodeLocation(SourceCodeLocation sourceCodeLocation) {
-	this.sourceCodeLocation = sourceCodeLocation;
-    }
-
     @Override
-    @JsonBackReference
-    public final AnalysisFileTree getParent() {
+    @JsonIgnore
+    public AnalysisFileTree getParent() {
 	return parent;
     }
 
     @Override
-    public final boolean hasChildren() {
+    public boolean hasChildren() {
 	return !children.isEmpty();
     }
 
     @Override
-    @JsonManagedReference
-    public final List<AnalysisFileTree> getChildren() {
+    public List<AnalysisFileTree> getChildren() {
 	return children;
     }
 
@@ -123,15 +115,15 @@ public class AnalysisFileTree implements TreeNode<AnalysisFileTree>, Serializabl
     }
 
     @Override
-    public final String getName() {
+    public String getName() {
 	return name;
     }
 
-    public final HashId getHashId() {
+    public HashId getHashId() {
 	return hashId;
     }
 
-    public final boolean isFile() {
+    public boolean isFile() {
 	return file;
     }
 
@@ -139,28 +131,20 @@ public class AnalysisFileTree implements TreeNode<AnalysisFileTree>, Serializabl
 	return size;
     }
 
-    public void setSize(long size) {
-	this.size = size;
-    }
-
     public long getSizeRecursive() {
 	return sizeRecursive;
     }
 
-    public void setSizeRecursive(long sizeRecursive) {
-	this.sizeRecursive = sizeRecursive;
-    }
-
-    public final SourceCodeLocation getSourceCodeLocation() {
+    public SourceCodeLocation getSourceCodeLocation() {
 	return sourceCodeLocation;
     }
 
-    public final List<AnalysisInformation> getAnalyses() {
+    public List<AnalysisInformation> getAnalyses() {
 	return analyzedCodes;
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
 	StringBuilder builder = new StringBuilder(getName());
 	if (file) {
 	    builder.append(" (file) / ");
@@ -245,6 +229,65 @@ public class AnalysisFileTree implements TreeNode<AnalysisFileTree>, Serializabl
 	    }
 	}
 	return null;
+    }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	result = prime * result + ((analyzedCodes == null) ? 0 : analyzedCodes.hashCode());
+	result = prime * result + ((children == null) ? 0 : children.hashCode());
+	result = prime * result + (file ? 1231 : 1237);
+	result = prime * result + ((hashId == null) ? 0 : hashId.hashCode());
+	result = prime * result + ((name == null) ? 0 : name.hashCode());
+	result = prime * result + ((parent == null) ? 0 : parent.hashCode());
+	result = prime * result + (int) (size ^ (size >>> 32));
+	result = prime * result + (int) (sizeRecursive ^ (sizeRecursive >>> 32));
+	result = prime * result + ((sourceCodeLocation == null) ? 0 : sourceCodeLocation.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (obj == null)
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	AnalysisFileTree other = (AnalysisFileTree) obj;
+	if (analyzedCodes == null) {
+	    if (other.analyzedCodes != null)
+		return false;
+	} else if (!analyzedCodes.equals(other.analyzedCodes))
+	    return false;
+	if (children == null) {
+	    if (other.children != null)
+		return false;
+	} else if (!children.equals(other.children))
+	    return false;
+	if (file != other.file)
+	    return false;
+	if (hashId == null) {
+	    if (other.hashId != null)
+		return false;
+	} else if (!hashId.equals(other.hashId))
+	    return false;
+	if (name == null) {
+	    if (other.name != null)
+		return false;
+	} else if (!name.equals(other.name))
+	    return false;
+	if (size != other.size)
+	    return false;
+	if (sizeRecursive != other.sizeRecursive)
+	    return false;
+	if (sourceCodeLocation == null) {
+	    if (other.sourceCodeLocation != null)
+		return false;
+	} else if (!sourceCodeLocation.equals(other.sourceCodeLocation))
+	    return false;
+	return true;
     }
 
 }

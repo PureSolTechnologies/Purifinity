@@ -3,7 +3,6 @@ package com.puresoltechnologies.purifinity.server.core.api.evaluation;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 
@@ -51,21 +50,18 @@ public abstract class AbstractEvaluator implements Evaluator {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractEvaluator.class);
 
-    private EvaluatorStoreServiceRemote store;
+    private final EvaluatorStoreServiceRemote store;
 
-    private FileStoreServiceRemote fileStore;
+    private final FileStoreServiceRemote fileStore;
 
-    private DirectoryStoreServiceRemote directoryStore;
+    private final DirectoryStoreServiceRemote directoryStore;
 
     private final EvaluatorInformation information;
 
     public AbstractEvaluator(String id, String name, Version version, EvaluatorType type, String description) {
 	super();
 	this.information = new EvaluatorInformation(id, name, version, type, description);
-    }
 
-    @PostConstruct
-    public void initialize() {
 	store = JndiUtils.createRemoteEJBInstance(EvaluatorStoreServiceRemote.class,
 		EvaluatorStoreServiceRemote.JNDI_NAME);
 	fileStore = JndiUtils.createRemoteEJBInstance(FileStoreServiceRemote.class, FileStoreServiceRemote.JNDI_NAME);
@@ -108,7 +104,7 @@ public abstract class AbstractEvaluator implements Evaluator {
     }
 
     @Override
-    public final EvaluatorInformation getInformation() {
+    public EvaluatorInformation getInformation() {
 	return information;
     }
 
@@ -156,7 +152,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public final void evaluate(AnalysisRun analysisRun, boolean enableReevaluation)
+    public void evaluate(AnalysisRun analysisRun, boolean enableReevaluation)
 	    throws InterruptedException, EvaluationStoreException {
 	// process files and directories
 	processTree(analysisRun, enableReevaluation);
