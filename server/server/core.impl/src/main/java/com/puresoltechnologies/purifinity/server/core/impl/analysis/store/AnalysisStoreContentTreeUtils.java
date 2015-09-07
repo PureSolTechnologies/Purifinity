@@ -15,7 +15,7 @@ import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.Ana
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeDirectoryVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeFileVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeRootVertex;
-import com.puresoltechnologies.purifinity.server.database.hadoop.bloob.BloobService;
+import com.puresoltechnologies.purifinity.server.database.hadoop.connector.client.BloobService;
 
 /**
  * This class contains methods to deal with the content tree in Titan graph

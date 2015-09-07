@@ -30,7 +30,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>database.hadoop</artifactId>
+			<artifactId>database.hadoop.connector.client</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

@@ -48,7 +48,7 @@ import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPref
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
-import com.puresoltechnologies.purifinity.server.database.hadoop.bloob.BloobService;
+import com.puresoltechnologies.purifinity.server.database.hadoop.connector.client.BloobService;
 
 @Singleton
 public class FileStoreServiceBean implements FileStoreService, FileStoreServiceRemote {

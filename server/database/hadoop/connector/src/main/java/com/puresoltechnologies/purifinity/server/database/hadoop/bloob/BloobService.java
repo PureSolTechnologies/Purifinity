@@ -19,9 +19,10 @@ import org.apache.hadoop.fs.RemoteIterator;
 import org.apache.hadoop.fs.permission.FsPermission;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.purifinity.server.database.hadoop.connector.api.BloobServiceRemote;
 
 @Stateless
-public class BloobService {
+public class BloobService implements BloobServiceRemote {
 
     private static final String DATA_DIRECTORY = "/data/Purifinity/bloob";
 
@@ -63,6 +64,7 @@ public class BloobService {
 	return fileSystem.exists(createPath(hashId));
     }
 
+    @Override
     public long getFileSize(HashId hashId) throws IOException {
 	RemoteIterator<LocatedFileStatus> files = fileSystem.listFiles(createPath(hashId), false);
 	if (!files.hasNext()) {
@@ -94,6 +96,7 @@ public class BloobService {
 	}
     }
 
+    @Override
     public boolean removeRawFile(HashId hashId) throws IOException {
 	if (!isAvailable(hashId)) {
 	    return false;

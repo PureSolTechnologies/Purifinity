@@ -588,9 +588,27 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.hadoop</artifactId>
+				<artifactId>database.hadoop.connector</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>database.hadoop.connector.client</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>database.hadoop.connector.interface</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>database.hadoop.connector.plugin</artifactId>
+				<version>${project.version}</version>
+				<type>ear</type>
+			</dependency>
+
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>database.hbase</artifactId>
