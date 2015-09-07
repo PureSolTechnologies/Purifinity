@@ -4,21 +4,21 @@
 
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.server</groupId>
-		<artifactId>database.hadoop</artifactId>
+		<artifactId>database.hadoop.connector</artifactId>
 		<version>0.4.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>database.hadoop.connector.interface</artifactId>
+	<artifactId>database.hadoop.connector.client</artifactId>
 	<name>Purifinity Server: ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>misc</artifactId>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>database.hadoop.connector.core.api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>common.utils</artifactId>
+			<artifactId>wildfly.utils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

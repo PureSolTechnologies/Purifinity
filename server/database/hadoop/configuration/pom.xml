@@ -8,16 +8,7 @@
 		<version>0.4.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>database.hadoop.connector.plugin</artifactId>
+	<artifactId>database.hadoop.configuration</artifactId>
 	<name>Purifinity Server: ${project.artifactId}</name>
-	<packaging>ear</packaging>
-
-	<dependencies>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>database.hadoop.connector</artifactId>
-			<type>ejb</type>
-		</dependency>
-	</dependencies>
 
 </project>

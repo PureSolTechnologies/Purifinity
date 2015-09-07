@@ -12,7 +12,7 @@ import com.puresoltechnologies.purifinity.server.common.utils.BuildInformation;
 @Remote
 public interface BloobServiceRemote {
 
-    public static final String JNDI_NAME = "java:global/database.hadoop.connector.plugin/com-puresoltechnologies-purifinity-server-database.hadoop.connector-"
+    public static final String JNDI_NAME = "java:global/database.hadoop.connector.plugin/com-puresoltechnologies-purifinity-server-database.hadoop.connector.core.impl-"
 	    + BuildInformation.getVersion()
 	    + "/BloobService!com.puresoltechnologies.purifinity.server.database.hadoop.connector.api.BloobServiceRemote";
 

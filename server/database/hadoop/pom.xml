@@ -13,10 +13,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>connector.interface</module>
+		<module>configuration</module>
 		<module>connector</module>
-		<module>connector.plugin</module>
-		<module>connector.client</module>
 	</modules>
 
 </project>
