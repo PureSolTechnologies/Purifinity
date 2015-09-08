@@ -1,8 +1,6 @@
 package com.puresoltechnologies.purifinity.server.database.hadoop.connector.api;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.ejb.Remote;
 
@@ -20,9 +18,9 @@ public interface BloobServiceRemote {
 
     public long getFileSize(HashId hashId) throws IOException;
 
-    public void storeRawFile(HashId hashId, ByteArrayOutputStream buffer) throws IOException;
+    public void storeRawFile(HashId hashId, byte[] buffer) throws IOException;
 
-    public InputStream readRawFile(HashId hashId) throws IOException;
+    public byte[] readRawFile(HashId hashId) throws IOException;
 
     public boolean isAvailable(HashId hashId) throws IOException;
 

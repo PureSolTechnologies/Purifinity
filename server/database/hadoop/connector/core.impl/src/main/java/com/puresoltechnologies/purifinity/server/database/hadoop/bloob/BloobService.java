@@ -4,13 +4,13 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
@@ -60,6 +60,7 @@ public class BloobService implements BloobServiceRemote {
 	return path;
     }
 
+    @Override
     public boolean isAvailable(HashId hashId) throws IOException {
 	return fileSystem.exists(createPath(hashId));
     }
@@ -73,26 +74,24 @@ public class BloobService implements BloobServiceRemote {
 	return files.next().getLen();
     }
 
-    public InputStream readRawFile(HashId hashId) throws IOException {
+    @Override
+    public byte[] readRawFile(HashId hashId) throws IOException {
 	if (!isAvailable(hashId)) {
 	    throw new FileNotFoundException("Could not find file with hash id '" + hashId + "'.");
 	}
-	return fileSystem.open(createPath(hashId));
+	try (FSDataInputStream inputStream = fileSystem.open(createPath(hashId));
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();) {
+	    IOUtils.copy(inputStream, outputStream);
+	    return outputStream.toByteArray();
+	}
     }
 
-    public void storeRawFile(HashId hashId, ByteArrayOutputStream byteArrayOutputStream) throws IOException {
+    @Override
+    public void storeRawFile(HashId hashId, byte[] bytes) throws IOException {
 	Path path = createPath(hashId);
-	FSDataOutputStream outputStream = fileSystem.create(path, false);
-	try {
-	    byte[] array = byteArrayOutputStream.toByteArray();
-	    ByteArrayInputStream inputStream = new ByteArrayInputStream(array);
-	    try {
-		IOUtils.copy(inputStream, outputStream);
-	    } finally {
-		IOUtils.closeQuietly(inputStream);
-	    }
-	} finally {
-	    IOUtils.closeQuietly(outputStream);
+	try (FSDataOutputStream outputStream = fileSystem.create(path, false);
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);) {
+	    IOUtils.copy(inputStream, outputStream);
 	}
     }
 

@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.database.hadoop.connector.client;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +11,7 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.server.database.hadoop.connector.api.BloobServiceRemote;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
-public class BloobService implements BloobServiceRemote {
+public class BloobService {
 
     private BloobServiceRemote bloobServiceRemote;
 
@@ -19,24 +20,20 @@ public class BloobService implements BloobServiceRemote {
 	bloobServiceRemote = JndiUtils.createRemoteEJBInstance(BloobServiceRemote.class, BloobServiceRemote.JNDI_NAME);
     }
 
-    @Override
     public boolean removeRawFile(HashId hashId) throws IOException {
 	return bloobServiceRemote.removeRawFile(hashId);
     }
 
-    @Override
     public long getFileSize(HashId hashId) throws IOException {
 	return bloobServiceRemote.getFileSize(hashId);
     }
 
-    @Override
     public void storeRawFile(HashId hashId, ByteArrayOutputStream buffer) throws IOException {
-	bloobServiceRemote.storeRawFile(hashId, buffer);
+	bloobServiceRemote.storeRawFile(hashId, buffer.toByteArray());
     }
 
-    @Override
     public InputStream readRawFile(HashId hashId) throws IOException {
-	return bloobServiceRemote.readRawFile(hashId);
+	return new ByteArrayInputStream(bloobServiceRemote.readRawFile(hashId));
     }
 
     public boolean isAvailable(HashId hashId) throws IOException {
