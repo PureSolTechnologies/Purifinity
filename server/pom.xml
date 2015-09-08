@@ -25,6 +25,7 @@
 		<hadoop.version>2.7.1</hadoop.version>
 		<jersey.version>1.19</jersey.version>
 		<hbase.version>1.1.1</hbase.version>
+		<phoenix.version>4.5.1-HBase-1.1</phoenix.version>
 
 		<!-- WildFly -->
 		<wildfly.version>9.0.1.Final</wildfly.version>
@@ -609,10 +610,14 @@
 				<version>${project.version}</version>
 				<type>ear</type>
 			</dependency>
-
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.hbase</artifactId>
+				<artifactId>database.hbase.configuration</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>database.hbase.utils</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -1080,6 +1085,11 @@
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-client</artifactId>
 				<version>${hbase.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.phoenix</groupId>
+				<artifactId>phoenix-server-client</artifactId>
+				<version>${phoenix.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.buschmais.xo</groupId>

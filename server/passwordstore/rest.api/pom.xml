@@ -38,13 +38,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-		<dependency>
-			<!-- XXX This dependency is not correct here, but currently needed for 
-				testing. -->
-			<groupId>com.puresoltechnologies.purifinity.api</groupId>
-			<artifactId>domain</artifactId>
-			<scope>test</scope>
-		</dependency>
 	</dependencies>
 
 </project>
