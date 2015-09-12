@@ -12,11 +12,11 @@ import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.RemoteIterator;
-import org.apache.hadoop.fs.permission.FsPermission;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.server.database.hadoop.connector.api.BloobServiceRemote;
@@ -24,9 +24,9 @@ import com.puresoltechnologies.purifinity.server.database.hadoop.connector.api.B
 @Stateless
 public class BloobService implements BloobServiceRemote {
 
-    private static final String DATA_DIRECTORY = "/data/Purifinity/bloob";
+    private static final String FILE_DIRECTORY = "/apps/Purifinity/files";
 
-    private final Path dataPath = new Path(DATA_DIRECTORY);
+    private final Path filePath = new Path(FILE_DIRECTORY);
 
     @Inject
     private FileSystem fileSystem;
@@ -34,10 +34,13 @@ public class BloobService implements BloobServiceRemote {
     @PostConstruct
     public void initialize() {
 	try {
-	    if (!fileSystem.exists(dataPath)) {
-		if (!fileSystem.mkdirs(dataPath, new FsPermission("755"))) {
-		    throw new RuntimeException("Could not create Bloob data directory in HDFS.");
-		}
+	    if (!fileSystem.exists(filePath)) {
+		throw new RuntimeException("Could not initialize Bloob Service due to missing file directory in HDFS.");
+	    }
+	    FileStatus fileStatus = fileSystem.getFileStatus(filePath);
+	    if (!fileStatus.isDirectory()) {
+		throw new RuntimeException(
+			"Could not initialize Bloob Service due to missing file directory in HDFS. Path exists, but it is not a directory.");
 	    }
 	} catch (IOException e) {
 	    throw new RuntimeException("Could not initialize Bloob service.", e);
@@ -56,8 +59,7 @@ public class BloobService implements BloobServiceRemote {
 	child.append(hash.substring(6, 8));
 	child.append("/");
 	child.append(hash.substring(8));
-	Path path = new Path(dataPath, child.toString());
-	return path;
+	return new Path(filePath, child.toString());
     }
 
     @Override

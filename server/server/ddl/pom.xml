@@ -25,6 +25,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>database.hadoop.genesis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>database.titan</artifactId>
 		</dependency>
 		<dependency>
@@ -34,6 +38,10 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.genesis</groupId>
 			<artifactId>transformation.cassandra</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.genesis</groupId>
+			<artifactId>transformation.hadoop</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.genesis</groupId>

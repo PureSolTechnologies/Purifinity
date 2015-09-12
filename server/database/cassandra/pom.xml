@@ -17,10 +17,6 @@
 			<artifactId>misc</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.genesis</groupId>
-			<artifactId>tracker.cassandra</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>logger</artifactId>
 		</dependency>
