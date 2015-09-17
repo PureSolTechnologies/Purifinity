@@ -1,11 +1,10 @@
 package com.puresoltechnologies.purifinity.server.systemmonitor.test;
 
-import static org.junit.Assert.assertNotNull;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
-import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
-import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.SystemMonitorKeyspace;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBaseHelper;
 import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.events.EventLoggerBean;
 import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.metrics.MetricLoggerBean;
 
@@ -17,23 +16,16 @@ import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.metrics
  */
 public class SystemMonitorTester {
 
-    public static void cleanupDatabase() {
-	try (Cluster cluster = CassandraClusterHelper.connect()) {
-	    cleanupDatabase(cluster);
+    public static void cleanupDatabase() throws SQLException {
+	try (Connection connection = HBaseHelper.connect()) {
+	    cleanupDatabase(connection);
 	}
     }
 
-    public static void cleanupDatabase(Cluster cluster) {
-	try (Session session = connectKeyspace(cluster)) {
-	    session.execute("TRUNCATE " + EventLoggerBean.EVENTS_TABLE_NAME);
-	    session.execute("TRUNCATE " + MetricLoggerBean.METRICS_TABLE_NAME);
+    public static void cleanupDatabase(Connection connection) throws SQLException {
+	try (Statement statement = connection.createStatement()) {
+	    statement.execute("DELETE FROM " + EventLoggerBean.EVENTS_TABLE_NAME);
+	    statement.execute("DELETE FROM " + MetricLoggerBean.METRICS_TABLE_NAME);
 	}
-    }
-
-    public static Session connectKeyspace(Cluster cluster) {
-	Session session = cluster.connect(SystemMonitorKeyspace.NAME);
-	assertNotNull("Session for '" + SystemMonitorKeyspace.NAME
-		+ "' was not opened.", session);
-	return session;
     }
 }

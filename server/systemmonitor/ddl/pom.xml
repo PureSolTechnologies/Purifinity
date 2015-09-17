@@ -13,7 +13,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>database.cassandra</artifactId>
+			<artifactId>database.hbase.utils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.genesis</groupId>
@@ -21,7 +21,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.genesis</groupId>
-			<artifactId>transformation.cassandra</artifactId>
+			<artifactId>transformation.phoenix</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.versioning</groupId>

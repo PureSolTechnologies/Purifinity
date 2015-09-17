@@ -1,131 +1,112 @@
 package com.puresoltechnologies.purifinity.server.systemmonitor.ddl;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
-import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
-import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationStep;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.versioning.Version;
 
-public class SystemMonitorDatabaseTransformator implements
-		ComponentTransformator {
+public class SystemMonitorDatabaseTransformator implements ComponentTransformator {
 
-	public static final String SYSTEM_MONITOR_KEYSPACE_NAME = "system_monitor";
-	public static final String CASSANDRA_HOST = "localhost";
-	public static final int CASSANDRA_CQL_PORT = 9042;
-	public static final String PASSWORD_TABLE_NAME = "passwords";
+    private static final Logger logger = LoggerFactory.getLogger(SystemMonitorDatabaseTransformator.class);
 
-	private static final String EVENTS_TABLE_NAME = "events";
-	private static final String METRICS_TABLE_NAME = "metrics";
+    private static final String SYSTEM_MONITOR_KEYSPACE_NAME = "system_monitor";
+    private static final String HBASE_HOST = "localhost";
 
-	@Override
-	public String getComponentName() {
-		return "SystemMonitor";
-	}
+    private static final String EVENTS_TABLE_NAME = SYSTEM_MONITOR_KEYSPACE_NAME + "_events";
+    private static final String METRICS_TABLE_NAME = SYSTEM_MONITOR_KEYSPACE_NAME + "_metrics";
 
-	@Override
-	public boolean isHostBased() {
-		return false;
-	}
+    @Override
+    public String getComponentName() {
+	return "SystemMonitor";
+    }
 
-	@Override
-	public Set<TransformationSequence> getSequences() {
-		Set<TransformationSequence> sequences = new HashSet<>();
-		sequences.add(migrateVersion0_3_0_pre());
-		sequences.add(migrateVersion0_3_0());
-		return sequences;
-	}
+    @Override
+    public boolean isHostBased() {
+	return false;
+    }
 
-	/**
-	 * This pre version is used to create the keyspace.
-	 * 
-	 * @return
-	 */
-	private TransformationSequence migrateVersion0_3_0_pre() {
-		Version startVersion = new Version(0, 0, 0);
-		Version targetVersion = new Version(0, 3, 0, "pre");
-		ProvidedVersionRange versionRange = new ProvidedVersionRange(
-				targetVersion, null);
-		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-				startVersion, versionRange);
-		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-				CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
-		sequence.appendTransformation(CassandraStandardMigrations
-				.createKeyspace(
-						sequence,
-						SYSTEM_MONITOR_KEYSPACE_NAME,
-						"Rick-Rainer Ludwig",
-						"This keyspace keeps the system status information and event logs.",
-						ReplicationStrategy.SIMPLE_STRATEGY, 1));
-		return sequence;
-	}
+    @Override
+    public Set<TransformationSequence> getSequences() {
+	Set<TransformationSequence> sequences = new HashSet<>();
+	sequences.add(migrateVersion0_4_0());
+	return sequences;
+    }
 
-	private TransformationSequence migrateVersion0_3_0() {
-		Version startVersion = new Version(0, 3, 0, "pre");
-		Version targetVersion = new Version(0, 3, 0);
-		ProvidedVersionRange versionRange = new ProvidedVersionRange(
-				targetVersion, null);
-		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-				startVersion, versionRange);
-		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-				CASSANDRA_HOST, CASSANDRA_CQL_PORT,
-				SYSTEM_MONITOR_KEYSPACE_NAME, metadata);
+    private TransformationSequence migrateVersion0_4_0() {
+	Version startVersion = new Version(0, 0, 0);
+	Version targetVersion = new Version(0, 4, 0);
+	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
+	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
+	PhoenixTransformationSequence sequence = new PhoenixTransformationSequence(metadata, HBASE_HOST);
 
-		String description = "This is the table for the event log.";
-		sequence.appendTransformation(new CassandraCQLTransformationStep(
-				sequence,
-				"Rick-Rainer Ludwig",
-				"CREATE TABLE "
-						+ EVENTS_TABLE_NAME //
-						+ " (time timestamp, " //
-						+ "component ascii," //
-						+ "event_id bigint," //
-						+ "server ascii," //
-						+ "type ascii, " //
-						+ "severity ascii, "
-						+ "message text, "//
-						+ "user varchar, "
-						+ "user_id bigint," //
-						+ "client ascii, " //
-						+ "exception_message ascii, "
-						+ "exception_stacktrace ascii, "//
-						+ "PRIMARY KEY (server, time, severity, type, component, event_id, message))"
-						+ "WITH comment='" + description + "';", description));
+	String description = "This is the table for the event log.";
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE IF NOT EXISTS " + EVENTS_TABLE_NAME //
+			+ " (" //
+			+ "server varchar not null, " //
+			+ "time timestamp not null, " //
+			+ "severity varchar not null, "//
+			+ "type varchar not null, " //
+			+ "component varchar not null, " //
+			+ "event_id bigint not null, " //
+			+ "message varchar not null, "//
+			+ "user varchar, " //
+			+ "user_id bigint," //
+			+ "client varchar, " //
+			+ "exception_message varchar, " //
+			+ "exception_stacktrace varchar, "//
+			+ "CONSTRAINT " + EVENTS_TABLE_NAME
+			+ "_PK PRIMARY KEY (server, time, severity, type, component, event_id, message))",
+		description));
 
-		description = "This is the table for metrics and KPIs.";
-		sequence.appendTransformation(new CassandraCQLTransformationStep(
-				sequence, "Rick-Raienr Ludwig", "CREATE TABLE "
-						+ METRICS_TABLE_NAME //
-						+ " (time timestamp, " //
-						+ "server ascii," //
-						+ "name varchar," //
-						+ "unit varchar, " //
-						+ "type ascii, "
-						+ "description text, "//
-						+ "decimal_value decimal, "//
-						+ "integer_value varint, "//
-						+ "level_of_measurement ascii, "
-						+ "PRIMARY KEY (server, time, name))"
-						+ "WITH comment='" + description + "';", description));
-		return sequence;
-	}
+	description = "This is the table for metrics and KPIs.";
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE IF NOT EXISTS " + METRICS_TABLE_NAME //
+			+ " ("//
+			+ "server varchar not null," //
+			+ "time timestamp not null, " //
+			+ "name varchar not null," //
+			+ "unit varchar, " //
+			+ "type varchar, " //
+			+ "description varchar, "//
+			+ "decimal_value decimal, "//
+			+ "integer_value bigint, "//
+			+ "level_of_measurement varchar, "//
+			+ "CONSTRAINT " + METRICS_TABLE_NAME + "_PK PRIMARY KEY (server, time, name))",
+		description));
+	return sequence;
+    }
 
-	@Override
-	public void dropAll() {
-		try (Cluster cluster = CassandraUtils.connectCluster()) {
-			try (Session session = cluster.connect()) {
-				session.execute("DROP KEYSPACE IF EXISTS "
-						+ SYSTEM_MONITOR_KEYSPACE_NAME);
-			}
+    @Override
+    public void dropAll() {
+	try (Connection connection = DriverManager.getConnection("jdbc:phoenix:" + HBASE_HOST);) {
+	    try (Statement statement = connection.createStatement();) {
+		statement.execute("DROP TABLE IF EXISTS " + EVENTS_TABLE_NAME);
+		statement.execute("DROP TABLE IF EXISTS " + METRICS_TABLE_NAME);
+		connection.commit();
+	    } catch (SQLException e) {
+		try {
+		    connection.rollback();
+		} catch (SQLException e1) {
+		    logger.warn("Cannot rollback.", e);
 		}
+		throw new RuntimeException("Could not drop component tables.", e);
+	    }
+	} catch (SQLException e2) {
+	    throw new RuntimeException("Could not open Phoenix connection to HBase.", e2);
 	}
+    }
 }

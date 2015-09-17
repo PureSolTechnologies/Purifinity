@@ -14,7 +14,7 @@ import javax.inject.Qualifier;
 @Qualifier
 @Target({ TYPE, METHOD, FIELD, PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface SystemMonitorKeyspace {
+public @interface SystemMonitor {
 
     public static final String NAME = "system_monitor";
 

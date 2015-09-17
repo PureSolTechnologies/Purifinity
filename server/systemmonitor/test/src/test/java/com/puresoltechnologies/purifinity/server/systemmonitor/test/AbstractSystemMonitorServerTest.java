@@ -1,6 +1,6 @@
 package com.puresoltechnologies.purifinity.server.systemmonitor.test;
 
-import javax.ws.rs.BeanParam;
+import java.sql.SQLException;
 
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Before;
@@ -9,18 +9,16 @@ import com.puresoltechnologies.purifinity.server.common.test.PerformanceTest;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
-public abstract class AbstractSystemMonitorServerTest extends
-	AbstractServerTest {
+public abstract class AbstractSystemMonitorServerTest extends AbstractServerTest {
 
     @EnhanceDeployment
     public static final void enhanceDeployment(JavaArchive archive) {
-	archive.addPackages(true,
-		AbstractSystemMonitorServerTest.class.getPackage());
+	archive.addPackages(true, AbstractSystemMonitorServerTest.class.getPackage());
 	archive.addPackages(true, PerformanceTest.class.getPackage());
     }
 
     @Before
-    public void cleanup() {
+    public void cleanup() throws SQLException {
 	SystemMonitorTester.cleanupDatabase();
     }
 }
