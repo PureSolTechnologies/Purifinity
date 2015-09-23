@@ -98,7 +98,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>webui-packaging</id>
+						<id>community-full-packaging</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>

@@ -155,6 +155,9 @@
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
                     </driver>
+                    <driver name="phoenix" module="org.apache.hbase.client">
+                         <driver-class>org.apache.phoenix.jdbc.PhoenixDriver</driver-class>
+                    </driver>
                 </drivers>
             </datasources>
         </subsystem>
@@ -162,6 +165,10 @@
             <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" runtime-failure-causes-rollback="${jboss.deployment.scanner.rollback.on.failure:false}"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:ee:3.0">
+        	<global-modules>
+            	<module name="org.apache.hadoop.client" slot="main"/>
+            	<module name="org.apache.hbase.client" slot="main"/>
+        	</global-modules>
             <spec-descriptor-property-replacement>false</spec-descriptor-property-replacement>
             <concurrent>
                 <context-services>

@@ -44,6 +44,7 @@
 		<arquillian.test.dir>${project.build.directory}/wildfly</arquillian.test.dir>
 		<!-- Cargo -->
 		<cargo.dir>${work.dir}/cargo</cargo.dir>
+		<wildfly.module.dir><![CDATA[${cargo.dir}/wildfly-server-${wildfly.version}/wildfly-${wildfly.version}/modules/system/layers/base]]></wildfly.module.dir>
 		<cargo.logging>medium</cargo.logging>
 		<!-- Purifinity Settings -->
 		<purifinity.home>${work.dir}/purifinity</purifinity.home>
@@ -1069,6 +1070,18 @@
 				</exclusions>
 			</dependency>
 			<dependency>
+				<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-common</artifactId>
+				<version>${hadoop.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-auth</artifactId>
+				<version>${hadoop.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
 				<groupId>com.sun.jersey</groupId>
 				<artifactId>jersey-server</artifactId>
 				<version>${jersey.version}</version>
@@ -1100,11 +1113,19 @@
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-client</artifactId>
 				<version>${hbase.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.hbase</groupId>
+				<artifactId>hbase-common</artifactId>
+				<version>${hbase.version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.phoenix</groupId>
-				<artifactId>phoenix-client</artifactId>
+				<artifactId>phoenix-core</artifactId>
 				<version>${phoenix.version}</version>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.buschmais.xo</groupId>

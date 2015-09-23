@@ -13,6 +13,11 @@ import java.sql.SQLException;
 public class HBaseHelper {
 
     public static Connection connect() throws SQLException {
+	try {
+	    Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
+	} catch (ClassNotFoundException e) {
+	    throw new RuntimeException("Could not find Phoenix driver class.", e);
+	}
 	return DriverManager.getConnection("jdbc:phoenix:localhost");
     }
 

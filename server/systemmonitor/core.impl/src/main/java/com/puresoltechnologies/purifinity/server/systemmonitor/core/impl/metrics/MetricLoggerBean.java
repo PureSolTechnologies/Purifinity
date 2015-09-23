@@ -62,7 +62,7 @@ public class MetricLoggerBean implements MetricLogger, MetricLoggerRemote {
     @PostConstruct
     public void createStatements() {
 	try {
-	    preparedStatement = connection.prepareStatement("INSERT INTO " + METRICS_TABLE_NAME
+	    preparedStatement = connection.prepareStatement("UPSERT INTO " + METRICS_TABLE_NAME
 		    + " (time, server, name, unit, type, description, decimal_value, integer_value, level_of_measurement)"
 		    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    eventLogger.logEvent(MetricLoggerEvents.createStartEvent());
