@@ -11,6 +11,8 @@ import org.apache.hadoop.fs.Path;
  */
 public class HadoopClientHelper {
 
+    public static final String PURIFINITY_DIRECTORY = "/apps/Purifinity";
+
     /**
      * This method provides the default configuration for Hadoop client.
      * 

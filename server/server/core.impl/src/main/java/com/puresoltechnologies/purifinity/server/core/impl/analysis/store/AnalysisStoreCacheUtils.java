@@ -1,27 +1,21 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis.store;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.ByteBuffer;
 import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
+import com.puresoltechnologies.purifinity.server.database.hadoop.utils.HadoopClientHelper;
 
 /**
  * Some database operations are quite complex and time consuming. For that
@@ -30,19 +24,19 @@ import com.puresoltechnologies.purifinity.server.database.cassandra.utils.Cassan
  * created and re-cached. This speeds up operations remarkably.
  * 
  * @author Rick-Rainer Ludwig
- * 
  */
 public class AnalysisStoreCacheUtils {
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(AnalysisStoreCacheUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(AnalysisStoreCacheUtils.class);
+
+    private static final String CACHE_DIRECTORY = HadoopClientHelper.PURIFINITY_DIRECTORY + "/cache";
 
     @Inject
-    @AnalysisStoreKeyspace
-    private Session session;
+    private FileSystem fileSystem;
 
-    @Inject
-    private CassandraPreparedStatements cassandraPreparedStatements;
+    private static Path createPath(String projectId, long runId) {
+	return new Path(new Path(new Path(CACHE_DIRECTORY, projectId), String.valueOf(runId)), "file_tree.cache");
+    }
 
     /**
      * This method reads the cached {@link AnalysisFileTree} object stored with
@@ -52,29 +46,18 @@ public class AnalysisStoreCacheUtils {
      * @param runId
      * @return
      */
-    public AnalysisFileTree readCachedAnalysisFileTree(String projectId,
-	    long runId) {
-	PreparedStatement preparedStatement = cassandraPreparedStatements
-		.getPreparedStatement(session, "SELECT persisted_tree FROM "
-			+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
-			+ " WHERE project_id=? AND  run_id=?");
-	BoundStatement boundStatement = preparedStatement
-		.bind(projectId, runId);
-	ResultSet resultSet = session.execute(boundStatement);
-	Row result = resultSet.one();
-	if (result == null) {
-	    return null;
-	}
-	ByteBuffer byteBuffer = result.getBytes("persisted_tree");
-	try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(
-		byteBuffer.array(), byteBuffer.position(), byteBuffer.limit());
-		ObjectInputStream objectInputStream = new ObjectInputStream(
-			byteArrayInputStream)) {
-	    return (AnalysisFileTree) objectInputStream.readObject();
+    public AnalysisFileTree readCachedAnalysisFileTree(String projectId, long runId) {
+	try {
+	    Path path = createPath(projectId, runId);
+	    if (!fileSystem.exists(path)) {
+		return null;
+	    }
+	    try (InputStream inputStream = fileSystem.open(path);
+		    ObjectInputStream objectInputStream = new ObjectInputStream(inputStream)) {
+		return (AnalysisFileTree) objectInputStream.readObject();
+	    }
 	} catch (IOException | ClassNotFoundException | ClassCastException e) {
-	    logger.warn(
-		    "Could not read already cached file tree with run_uuid '"
-			    + runId + "'.", e);
+	    logger.warn("Could not read already cached file tree with run_uuid '" + runId + "'.", e);
 	    return null;
 	}
     }
@@ -87,27 +70,20 @@ public class AnalysisStoreCacheUtils {
      * @param runId
      * @param analysisFileTree
      */
-    public void cacheAnalysisFileTree(String projectId, long runId,
-	    AnalysisFileTree analysisFileTree) {
-	PreparedStatement preparedStatement = cassandraPreparedStatements
-		.getPreparedStatement(
-			session,
-			"INSERT INTO "
-				+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
-				+ " (project_id, run_id, persisted_tree) VALUES (?, ?, ?)");
-	try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-	    try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-		    byteArrayOutputStream)) {
-		objectOutputStream.writeObject(analysisFileTree);
-		BoundStatement boundStatement = preparedStatement.bind(
-			projectId, runId);
-		boundStatement.setBytes("persisted_tree",
-			ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
-		session.execute(boundStatement);
+    public void cacheAnalysisFileTree(String projectId, long runId, AnalysisFileTree analysisFileTree) {
+	try {
+	    Path path = createPath(projectId, runId);
+	    if (fileSystem.exists(path)) {
+		fileSystem.delete(path, true);
+	    }
+	    fileSystem.createNewFile(path);
+	    try (FSDataOutputStream fsDataOutputStream = fileSystem.create(path)) {
+		try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(fsDataOutputStream)) {
+		    objectOutputStream.writeObject(analysisFileTree);
+		}
 	    }
 	} catch (IOException e) {
-	    logger.warn("Could not cache analysis file tree with run_uuid '"
-		    + runId + "'.", e);
+	    logger.warn("Could not cache analysis file tree with run_uuid '" + runId + "'.", e);
 	}
     }
 
@@ -118,13 +94,14 @@ public class AnalysisStoreCacheUtils {
      * @param runId
      */
     public void clearAnalysisRunCaches(String projectId, long runId) {
-	PreparedStatement preparedStatement = cassandraPreparedStatements
-		.getPreparedStatement(session, "DELETE FROM "
-			+ CassandraElementNames.ANALYSIS_FILE_TREE_CACHE_TABLE
-			+ " WHERE project_id=? AND run_id=?");
-	BoundStatement boundStatement = preparedStatement
-		.bind(projectId, runId);
-	session.execute(boundStatement);
+	try {
+	    Path path = createPath(projectId, runId);
+	    if (fileSystem.exists(path)) {
+		fileSystem.delete(path, true);
+	    }
+	} catch (IOException e) {
+	    logger.warn("Could not clear cache analysis file tree with run id'" + runId + "'.", e);
+	}
     }
 
 }

@@ -90,11 +90,6 @@ public class AnalysisServiceDatabaseTransformator implements ComponentTransforma
 			+ "analysis blob, PRIMARY KEY(hashid, analyzer_id, analyzer_version));",
 		"Keeps analysis information for analyzed and unanalyzed " + "files and their raw data."));
 
-	sequence.appendTransformation(new CassandraCQLTransformationStep(sequence, "Rick-Rainer Ludwig",
-		"CREATE TABLE " + CassandraElementNames.ANALYSIS_FILE_TREE_CACHE + " (project_id ascii, run_id bigint, "
-			+ "persisted_tree blob, " + "PRIMARY KEY(project_id, run_id));",
-		"Keeps a cache for analysis file trees for performance optimization."));
-
 	return sequence;
     }
 

@@ -18,11 +18,12 @@ import org.apache.hadoop.fs.RemoteIterator;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.purifinity.server.database.hadoop.utils.HadoopClientHelper;
 
 @Stateless
 public class BloobService {
 
-    private static final String FILE_DIRECTORY = "/apps/Purifinity/files";
+    private static final String FILE_DIRECTORY = HadoopClientHelper.PURIFINITY_DIRECTORY + "/files";
 
     private final Path filePath = new Path(FILE_DIRECTORY);
 
