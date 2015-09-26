@@ -14,7 +14,7 @@
 
 	<modules>
 		<module>configuration</module>
-		<module>connector</module>
+		<module>utils</module>
 		<module>genesis</module>
 	</modules>
 

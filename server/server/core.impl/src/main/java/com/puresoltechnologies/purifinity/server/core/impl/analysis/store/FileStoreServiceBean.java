@@ -48,7 +48,7 @@ import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPref
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
-import com.puresoltechnologies.purifinity.server.database.hadoop.connector.client.BloobService;
+import com.puresoltechnologies.purifinity.server.database.hadoop.utils.bloob.BloobService;
 
 @Singleton
 public class FileStoreServiceBean implements FileStoreService, FileStoreServiceRemote {
@@ -108,10 +108,7 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
 		    return fileInformation;
 		} catch (FileNotFoundException e) {
 		    try (FileInputStream fileInputStream = new FileInputStream(tempFile)) {
-			try (ByteArrayOutputStream buffer = new ByteArrayOutputStream((int) tempFile.length())) {
-			    IOUtils.copy(fileInputStream, buffer);
-			    return storeFile(hashId, buffer);
-			}
+			return storeFile(hashId, fileInputStream);
 		    }
 		}
 	    } finally {
@@ -124,7 +121,7 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
 	}
     }
 
-    private FileInformation storeFile(HashId hashId, ByteArrayOutputStream buffer) throws IOException {
+    private FileInformation storeFile(HashId hashId, InputStream buffer) throws IOException {
 	bloob.storeRawFile(hashId, buffer);
 	return new FileInformation(hashId, bloob.getFileSize(hashId));
     }

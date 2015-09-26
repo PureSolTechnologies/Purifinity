@@ -166,8 +166,8 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:ee:3.0">
         	<global-modules>
-            	<module name="org.apache.hadoop.client" slot="main"/>
-            	<module name="org.apache.hbase.client" slot="main"/>
+            	<module name="org.apache.hadoop.client" slot="main" />
+            	<module name="org.apache.hbase.client" slot="main" />
         	</global-modules>
             <spec-descriptor-property-replacement>false</spec-descriptor-property-replacement>
             <concurrent>

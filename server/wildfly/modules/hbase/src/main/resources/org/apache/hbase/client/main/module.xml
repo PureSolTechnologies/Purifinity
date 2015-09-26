@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module xmlns="urn:jboss:module:1.3" name="org.apache.hbase.client">
 	<resources>
-		<resource-root path="htrace-core-3.1.0-incubating.jar" />
 		<resource-root path="phoenix-core-4.5.1-HBase-1.1.jar" />
 		<resource-root path="hbase-client-1.1.1.jar" />
 		<resource-root path="hbase-common-1.1.1.jar" />
 		<resource-root path="hbase-server-1.1.1.jar" />
 		<resource-root path="hbase-protocol-1.1.1.jar" />
-		<resource-root path="protobuf-java-2.5.0.jar" />
 		<resource-root path="zookeeper-3.4.6.jar" />
 		<resource-root path="guava-16.0.1.jar" />
 	</resources>

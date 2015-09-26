@@ -1,0 +1,10 @@
+<jboss-deployment-structure>
+
+	<deployment>
+		<dependencies>
+			<module name="org.apache.hadoop.client" services="import" />
+			<module name="org.apache.hbase.client" services="import" />
+		</dependencies>
+	</deployment>
+
+</jboss-deployment-structure>

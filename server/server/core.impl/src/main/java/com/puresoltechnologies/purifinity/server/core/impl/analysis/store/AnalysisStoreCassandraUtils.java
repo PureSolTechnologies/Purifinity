@@ -13,7 +13,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.store.Analysi
 import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
 import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
-import com.puresoltechnologies.purifinity.server.database.hadoop.connector.client.BloobService;
+import com.puresoltechnologies.purifinity.server.database.hadoop.utils.bloob.BloobService;
 
 /**
  * This class contains methods to handle analysis projects and run in Cassandra.

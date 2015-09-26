@@ -18,11 +18,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>database.hadoop.connector.plugin</artifactId>
-			<type>ear</type>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>passwordstore.app</artifactId>
 			<type>ear</type>
 		</dependency>
@@ -126,14 +121,6 @@
 							<type>ear</type>
 							<properties>
 								<name>metrics.plugin.ear</name>
-							</properties>
-						</deployable>
-						<deployable>
-							<groupId>com.puresoltechnologies.purifinity.server</groupId>
-							<artifactId>database.hadoop.connector.plugin</artifactId>
-							<type>ear</type>
-							<properties>
-								<name>database.hadoop.connector.plugin</name>
 							</properties>
 						</deployable>
 						<deployable>
