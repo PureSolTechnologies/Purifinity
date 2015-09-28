@@ -3,6 +3,8 @@ package com.puresoltechnologies.purifinity.server.accountmanager.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.sql.SQLException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -29,8 +31,7 @@ public class XOEntitiesIT {
 
     @BeforeClass
     public static void connecXO() {
-	xoManagerFactory = XO
-		.createXOManagerFactory(UsersXOManager.XO_UNIT_NAME);
+	xoManagerFactory = XO.createXOManagerFactory(UsersXOManager.XO_UNIT_NAME);
 	titanGraph = TitanGraphHelper.connect();
     }
 
@@ -41,7 +42,7 @@ public class XOEntitiesIT {
     }
 
     @Before
-    public void createXOManager() {
+    public void createXOManager() throws SQLException {
 	AccountManagerTester.cleanupDatabase();
 	xoManager = xoManagerFactory.createXOManager();
 	Iterable<Vertex> vertices = titanGraph.query().vertices();
@@ -64,8 +65,7 @@ public class XOEntitiesIT {
     public void testUserVertex() {
 	xoManager.currentTransaction().begin();
 	try {
-	    UserVertex user = xoManager.find(UserVertex.class,
-		    "ludwig@puresol-technologies.com").getSingleResult();
+	    UserVertex user = xoManager.find(UserVertex.class, "ludwig@puresol-technologies.com").getSingleResult();
 	    assertEquals("ludwig@puresol-technologies.com", user.getEmail());
 	    assertEquals("Rick-Rainer Ludwig", user.getName());
 	    RoleVertex role = user.getRole();
@@ -83,14 +83,11 @@ public class XOEntitiesIT {
     public void testRoleVertex() {
 	xoManager.currentTransaction().begin();
 	try {
-	    RoleVertex administratorVertex = xoManager.find(RoleVertex.class,
-		    "administrator").getSingleResult();
+	    RoleVertex administratorVertex = xoManager.find(RoleVertex.class, "administrator").getSingleResult();
 	    assertNotNull(administratorVertex);
-	    RoleVertex engineerVertex = xoManager.find(RoleVertex.class,
-		    "engineer").getSingleResult();
+	    RoleVertex engineerVertex = xoManager.find(RoleVertex.class, "engineer").getSingleResult();
 	    assertNotNull(engineerVertex);
-	    RoleVertex unprivilegedVertex = xoManager.find(RoleVertex.class,
-		    "unprivileged").getSingleResult();
+	    RoleVertex unprivilegedVertex = xoManager.find(RoleVertex.class, "unprivileged").getSingleResult();
 	    assertNotNull(unprivilegedVertex);
 	} finally {
 	    xoManager.currentTransaction().rollback();

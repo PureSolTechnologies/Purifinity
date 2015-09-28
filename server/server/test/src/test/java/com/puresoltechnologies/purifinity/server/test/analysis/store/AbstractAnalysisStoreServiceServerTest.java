@@ -2,6 +2,8 @@ package com.puresoltechnologies.purifinity.server.test.analysis.store;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.sql.SQLException;
+
 import javax.inject.Inject;
 
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -16,8 +18,7 @@ import com.puresoltechnologies.purifinity.server.test.analysis.AnalysisStoreData
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 import com.thinkaurelius.titan.core.TitanGraph;
 
-public abstract class AbstractAnalysisStoreServiceServerTest extends
-	AbstractPurifinityServerServerTest {
+public abstract class AbstractAnalysisStoreServiceServerTest extends AbstractPurifinityServerServerTest {
 
     @Inject
     private Cluster cluster;
@@ -31,16 +32,14 @@ public abstract class AbstractAnalysisStoreServiceServerTest extends
 
     @EnhanceDeployment
     public static final void enhanceDeployment(JavaArchive archive) {
-	archive.addPackages(true,
-		org.apache.commons.io.IOUtils.class.getPackage());
+	archive.addPackages(true, org.apache.commons.io.IOUtils.class.getPackage());
     }
 
     @Before
-    public void cleanupAnalysisStore() {
+    public void cleanupAnalysisStore() throws SQLException {
 	assertNotNull("Cassandra cluster was not connected.", cluster);
-	assertNotNull("Session for '" + AnalysisStoreKeyspace.NAME
-		+ "' was not opened.", session);
-	PasswordStoreTester.cleanupDatabase(cluster);
+	assertNotNull("Session for '" + AnalysisStoreKeyspace.NAME + "' was not opened.", session);
+	PasswordStoreTester.cleanupDatabase();
 	AnalysisStoreDatabaseHelper.cleanAnalysisStore(cluster, titanGraph);
     }
 

@@ -1,32 +1,34 @@
 package com.puresoltechnologies.purifinity.server.passwordstore.ddl;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
-import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
-import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationStep;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordState;
 import com.puresoltechnologies.versioning.Version;
 
-public class PasswordStoreDatabaseTransformator implements
-	ComponentTransformator {
+public class PasswordStoreDatabaseTransformator implements ComponentTransformator {
+
+    private static final Logger logger = LoggerFactory.getLogger(PasswordStoreDatabaseTransformator.class);
 
     public static final String TARGET_NAME = "PasswordStore";
 
     public static final String PASSWORD_STORE_KEYSPACE_NAME = "password_store";
-    public static final String CASSANDRA_HOST = "localhost";
-    public static final int CASSANDRA_CQL_PORT = 9042;
-    public static final String PASSWORD_TABLE_NAME = "passwords";
+    public static final String HBASE_HOST = "localhost";
+    public static final String PASSWORD_TABLE_NAME = PASSWORD_STORE_KEYSPACE_NAME + "_passwords";
 
     @Override
     public String getComponentName() {
@@ -41,88 +43,68 @@ public class PasswordStoreDatabaseTransformator implements
     @Override
     public Set<TransformationSequence> getSequences() {
 	Set<TransformationSequence> sequences = new HashSet<>();
-	sequences.add(migrateVersion0_3_0_pre());
-	sequences.add(migrateVersion0_3_0());
+	sequences.add(migrateVersion0_4_0());
 	return sequences;
     }
 
-    private TransformationSequence migrateVersion0_3_0_pre() {
+    private TransformationSequence migrateVersion0_4_0() {
 	Version startVersion = new Version(0, 0, 0);
-	Version targetVersion = new Version(0, 3, 0, "pre");
-	ProvidedVersionRange versionRange = new ProvidedVersionRange(
-		targetVersion, null);
-	SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-		startVersion, versionRange);
-	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-		CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
-
-	sequence.appendTransformation(CassandraStandardMigrations
-		.createKeyspace(sequence, PASSWORD_STORE_KEYSPACE_NAME,
-			"Rick-Rainer Ludwig",
-			"This keyspace keeps the user passwords.",
-			ReplicationStrategy.SIMPLE_STRATEGY, 1));
-
-	return sequence;
-    }
-
-    private TransformationSequence migrateVersion0_3_0() {
-	Version startVersion = new Version(0, 3, 0, "pre");
-	Version targetVersion = new Version(0, 3, 0);
-	ProvidedVersionRange versionRange = new ProvidedVersionRange(
-		targetVersion, null);
-	SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-		startVersion, versionRange);
-	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-		CASSANDRA_HOST, CASSANDRA_CQL_PORT,
-		PASSWORD_STORE_KEYSPACE_NAME, metadata);
+	Version targetVersion = new Version(0, 4, 0);
+	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
+	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
+	PhoenixTransformationSequence sequence = new PhoenixTransformationSequence(metadata, HBASE_HOST);
 
 	String description = "This table contains the authentication data and the state of the account.";
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
-			+ PASSWORD_TABLE_NAME//
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + PASSWORD_TABLE_NAME//
 			+ " (created timestamp, " //
 			+ "last_modified timestamp, " //
-			+ "email varchar," // 0
-			+ "password ascii, " //
-			+ "state ascii, "
-			+ "activation_key ascii, "//
-			+ "PRIMARY KEY (email))" + "WITH comment='"
-			+ description + "';", description));
+			+ "email varchar not null," //
+			+ "password varchar, " //
+			+ "state varchar, "//
+			+ "activation_key varchar, "//
+			+ "CONSTRAINT " + PASSWORD_TABLE_NAME + "_PK PRIMARY KEY (email))",
+		description));
 
-	sequence.appendTransformation(CassandraStandardMigrations.createIndex(
-		sequence, "Rick-Rainer Ludwig", "Secondary index on state.",
-		PASSWORD_TABLE_NAME, "state"));
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE INDEX IF NOT EXISTS " //
+			+ PASSWORD_TABLE_NAME + "_state_idx"//
+			+ " ON " + PASSWORD_TABLE_NAME //
+			+ " (state) ASYNC",
+		description));
 
-	sequence.appendTransformation(new AddUserStep(sequence,
-		new EmailAddress("user@puresol-technologies.com"), "password",
-		PasswordState.ACTIVE, "Rick-Rainer Ludwig",
-		"Create default user account."));
+	sequence.appendTransformation(new AddUserStep(sequence, new EmailAddress("user@puresol-technologies.com"),
+		"password", PasswordState.ACTIVE, "Rick-Rainer Ludwig", "Create default user account."));
 
-	sequence.appendTransformation(new AddUserStep(sequence,
-		new EmailAddress("engineer@puresol-technologies.com"),
-		"password", PasswordState.ACTIVE, "Rick-Rainer Ludwig",
-		"Create default engineer account."));
+	sequence.appendTransformation(new AddUserStep(sequence, new EmailAddress("engineer@puresol-technologies.com"),
+		"password", PasswordState.ACTIVE, "Rick-Rainer Ludwig", "Create default engineer account."));
 
-	sequence.appendTransformation(new AddUserStep(sequence,
-		new EmailAddress("administrator@puresol-technologies.com"),
-		"password", PasswordState.ACTIVE, "Rick-Rainer Ludwig",
-		"Create default administrator account."));
+	sequence.appendTransformation(
+		new AddUserStep(sequence, new EmailAddress("administrator@puresol-technologies.com"), "password",
+			PasswordState.ACTIVE, "Rick-Rainer Ludwig", "Create default administrator account."));
 
-	sequence.appendTransformation(new AddUserStep(sequence,
-		new EmailAddress("ludwig@puresol-technologies.com"),
-		"password", PasswordState.ACTIVE, "Rick-Rainer Ludwig",
-		"Creates first user account."));
+	sequence.appendTransformation(new AddUserStep(sequence, new EmailAddress("ludwig@puresol-technologies.com"),
+		"password", PasswordState.ACTIVE, "Rick-Rainer Ludwig", "Creates first user account."));
 
 	return sequence;
     }
 
     @Override
     public void dropAll() {
-	try (Cluster cluster = CassandraUtils.connectCluster()) {
-	    try (Session session = cluster.connect()) {
-		session.execute("DROP KEYSPACE IF EXISTS "
-			+ PASSWORD_STORE_KEYSPACE_NAME);
+	try (Connection connection = DriverManager.getConnection("jdbc:phoenix:" + HBASE_HOST);) {
+	    try (Statement statement = connection.createStatement();) {
+		statement.execute("DROP TABLE IF EXISTS " + PASSWORD_TABLE_NAME);
+		connection.commit();
+	    } catch (SQLException e) {
+		try {
+		    connection.rollback();
+		} catch (SQLException e1) {
+		    logger.warn("Cannot rollback.", e);
+		}
+		throw new RuntimeException("Could not drop component tables.", e);
 	    }
+	} catch (SQLException e2) {
+	    throw new RuntimeException("Could not open Phoenix connection to HBase.", e2);
 	}
     }
 }

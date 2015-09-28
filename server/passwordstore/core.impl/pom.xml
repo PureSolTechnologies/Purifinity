@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>database.cassandra</artifactId>
+			<artifactId>database.hbase.utils</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

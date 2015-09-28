@@ -2,6 +2,7 @@ package com.puresoltechnologies.purifinity.server.accountmanager.test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 
 import org.junit.Before;
 
@@ -10,7 +11,7 @@ import com.puresoltechnologies.purifinity.wildfly.test.AbstractClientTest;
 public abstract class AbstractAccountManagerClientTest extends AbstractClientTest {
 
     @Before
-    public void cleanup() {
+    public void cleanup() throws SQLException {
 	AccountManagerTester.cleanupDatabase();
     }
 

@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.test;
 
+import java.sql.SQLException;
+
 import com.datastax.driver.core.Cluster;
 import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
@@ -26,8 +28,10 @@ public class AccountManagerTester {
      * <li>administrator@puresol-technologies.com</li>
      * <li>ludwig@puresol-technologies.com</li>
      * </ol>
+     * 
+     * @throws SQLException
      */
-    public static void cleanupDatabase() {
+    public static void cleanupDatabase() throws SQLException {
 	try (Cluster cluster = CassandraClusterHelper.connect()) {
 	    cleanupDatabase(cluster);
 	}
@@ -47,18 +51,17 @@ public class AccountManagerTester {
      *            is the cluster where the keyspace
      *            {@link PasswordStoreBean#PASSWORD_STORE_KEYSPACE_NAME} can be
      *            found.
+     * @throws SQLException
      */
-    public static void cleanupDatabase(Cluster cluster) {
-	PasswordStoreTester.cleanupDatabase(cluster);
+    public static void cleanupDatabase(Cluster cluster) throws SQLException {
+	PasswordStoreTester.cleanupDatabase();
 
 	TitanGraph titanGraph = TitanGraphHelper.connect();
 	try {
 	    @SuppressWarnings("unchecked")
-	    Iterable<Vertex> userVertices = titanGraph.query()
-		    .has("_xo_discriminator_user").vertices();
+	    Iterable<Vertex> userVertices = titanGraph.query().has("_xo_discriminator_user").vertices();
 	    for (Vertex userVertex : userVertices) {
-		String email = userVertex
-			.getProperty(TitanElementNames.USER_EMAIL_PROPERTY);
+		String email = userVertex.getProperty(TitanElementNames.USER_EMAIL_PROPERTY);
 		if (isDefaultAccount(email)) {
 		    continue;
 		}
@@ -67,11 +70,9 @@ public class AccountManagerTester {
 	    titanGraph.commit();
 
 	    @SuppressWarnings("unchecked")
-	    Iterable<Vertex> roleVertices = titanGraph.query()
-		    .has("_xo_discriminator_role").vertices();
+	    Iterable<Vertex> roleVertices = titanGraph.query().has("_xo_discriminator_role").vertices();
 	    for (Vertex roleVertex : roleVertices) {
-		String roleId = roleVertex
-			.getProperty(TitanElementNames.ROLE_ID_PROPERTY);
+		String roleId = roleVertex.getProperty(TitanElementNames.ROLE_ID_PROPERTY);
 		if (isDefaultRole(roleId)) {
 		    continue;
 		}
@@ -91,8 +92,7 @@ public class AccountManagerTester {
 	if (roleId == null) {
 	    return false;
 	}
-	if (roleId.equals("unprivileged") || roleId.equals("engineer")
-		|| roleId.equals("administrator")) {
+	if (roleId.equals("unprivileged") || roleId.equals("engineer") || roleId.equals("administrator")) {
 	    return true;
 	}
 	return false;

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
@@ -20,53 +21,45 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.datastax.driver.core.Cluster;
 import com.puresoltechnologies.commons.domain.JSONSerializer;
-import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
 import com.puresoltechnologies.purifinity.server.passwordstore.rest.api.PasswordCreationEntity;
 import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreTester;
 
 public class PasswordStoreRestIT extends AbstractPasswordStoreClientTest {
 
-	private static final String EMAIL_ADDRESS = "newaccount@puresol-technologies.com";
-	private static final String INVALID_EMAIL_ADDRESS = "@puresol-technologies.com";
-	private static final String VALID_PASSWORD = "IAmAPassword!:-)3";
-	private static final String TOO_WEAK_PASSWORD = "123456";
+    private static final String EMAIL_ADDRESS = "newaccount@puresol-technologies.com";
+    private static final String INVALID_EMAIL_ADDRESS = "@puresol-technologies.com";
+    private static final String VALID_PASSWORD = "IAmAPassword!:-)3";
+    private static final String TOO_WEAK_PASSWORD = "123456";
 
-	private CloseableHttpClient httpClient;
+    private CloseableHttpClient httpClient;
 
-	@Before
-	public void setup() {
-		try (Cluster cluster = CassandraClusterHelper.connect()) {
-			PasswordStoreTester.cleanupDatabase(cluster);
-		}
-		httpClient = HttpClientBuilder.create().build();
+    @Before
+    public void setup() throws SQLException {
+	PasswordStoreTester.cleanupDatabase();
+    }
+
+    @After
+    public void teardown() throws IOException {
+	httpClient.close();
+    }
+
+    @Test
+    public void testCreateAccount() throws ClientProtocolException, IOException {
+	CloseableHttpClient httpClient = HttpClientBuilder.create().build();
+	HttpPut httpput = new HttpPut("http://localhost:8080/passwordstore/rest/createAccount");
+	httpput.setHeader(HTTP.CONTENT_TYPE, "application/json");
+
+	PasswordCreationEntity passwordCreationEntity = new PasswordCreationEntity(EMAIL_ADDRESS, VALID_PASSWORD);
+	HttpEntity entity = new StringEntity(JSONSerializer.toJSONString(passwordCreationEntity));
+	httpput.setEntity(entity);
+	HttpResponse response = httpClient.execute(httpput);
+	assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
+	entity = response.getEntity();
+	try (InputStream content = entity.getContent()) {
+	    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+	    IOUtils.copy(content, byteArrayOutputStream);
+	    assertEquals(64, byteArrayOutputStream.size());
 	}
-
-	@After
-	public void teardown() throws IOException {
-		httpClient.close();
-	}
-
-	@Test
-	public void testCreateAccount() throws ClientProtocolException, IOException {
-		CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-		HttpPut httpput = new HttpPut(
-				"http://localhost:8080/passwordstore/rest/createAccount");
-		httpput.setHeader(HTTP.CONTENT_TYPE, "application/json");
-
-		PasswordCreationEntity passwordCreationEntity = new PasswordCreationEntity(
-				EMAIL_ADDRESS, VALID_PASSWORD);
-		HttpEntity entity = new StringEntity(
-				JSONSerializer.toJSONString(passwordCreationEntity));
-		httpput.setEntity(entity);
-		HttpResponse response = httpClient.execute(httpput);
-		assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
-		entity = response.getEntity();
-		try (InputStream content = entity.getContent()) {
-			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-			IOUtils.copy(content, byteArrayOutputStream);
-			assertEquals(64, byteArrayOutputStream.size());
-		}
-	}
+    }
 }
