@@ -1,9 +1,9 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.test;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
-import com.datastax.driver.core.Cluster;
-import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBaseHelper;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanGraphHelper;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreBean;
@@ -32,8 +32,8 @@ public class AccountManagerTester {
      * @throws SQLException
      */
     public static void cleanupDatabase() throws SQLException {
-	try (Cluster cluster = CassandraClusterHelper.connect()) {
-	    cleanupDatabase(cluster);
+	try (Connection connection = HBaseHelper.connect()) {
+	    cleanupDatabase(connection);
 	}
     }
 
@@ -47,13 +47,13 @@ public class AccountManagerTester {
      * <li>ludwig@puresol-technologies.com</li>
      * </ol>
      * 
-     * @param cluster
+     * @param connection
      *            is the cluster where the keyspace
      *            {@link PasswordStoreBean#PASSWORD_STORE_KEYSPACE_NAME} can be
      *            found.
      * @throws SQLException
      */
-    public static void cleanupDatabase(Cluster cluster) throws SQLException {
+    public static void cleanupDatabase(Connection connection) throws SQLException {
 	PasswordStoreTester.cleanupDatabase();
 
 	TitanGraph titanGraph = TitanGraphHelper.connect();
