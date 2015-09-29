@@ -1,158 +1,176 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
-import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
-import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationStep;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
-import com.puresoltechnologies.purifinity.server.database.cassandra.PluginsKeyspace;
 import com.puresoltechnologies.versioning.Version;
 
 public class PluginsDatabaseTransformator implements ComponentTransformator {
 
-	private static final String PLUGINS_TABLE = "plugins";
-	private static final String ANALYZERS_TABLE = "analyzsers";
-	private static final String EVALUATORS_TABLE = "evaluators";
-	private static final String EVALUATOR_PARAMETERS_TABLE = "evaluator_parameters";
-	private static final String REPOSITORY_TYPES_TABLE = "repository_types";
-	private static final String REPOSITORY_TYPE_PARAMETERS_TABLE = "repository_type_parameters";
+    private static final Logger logger = LoggerFactory.getLogger(PluginsDatabaseTransformator.class);
 
-	public static final String CASSANDRA_HOST = "localhost";
-	public static final int CASSANDRA_CQL_PORT = 9042;
+    private static final String PLUGINS_TABLE = "plugins_database_plugins";
+    private static final String ANALYZERS_TABLE = "plugins_database_analyzers";
+    private static final String EVALUATORS_TABLE = "plugins_database_evaluators";
+    private static final String EVALUATOR_PARAMETERS_TABLE = "plugins_database_evaluator_parameters";
+    private static final String REPOSITORY_TYPES_TABLE = "plugins_repository_types";
+    private static final String REPOSITORY_TYPE_PARAMETERS_TABLE = "plugins_database_repository_type_parameters";
 
-	@Override
-	public String getComponentName() {
-		return "PluginsDatabase";
-	}
+    public static final String HBASE_HOST = "localhost";
 
-	@Override
-	public boolean isHostBased() {
-		return false;
-	}
+    @Override
+    public String getComponentName() {
+	return "PluginsDatabase";
+    }
 
-	@Override
-	public Set<TransformationSequence> getSequences() {
-		Set<TransformationSequence> sequences = new HashSet<>();
-		sequences.add(migrateVersion0_3_0_pre());
-		sequences.add(migrateVersion0_3_0());
-		return sequences;
-	}
+    @Override
+    public boolean isHostBased() {
+	return false;
+    }
 
-	/**
-	 * This pre version is used to create the keyspace.
-	 * 
-	 * @return
-	 */
-	private TransformationSequence migrateVersion0_3_0_pre() {
-		Version startVersion = new Version(0, 0, 0);
-		Version targetVersion = new Version(0, 3, 0, "pre");
-		ProvidedVersionRange versionRange = new ProvidedVersionRange(
-				targetVersion, null);
-		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-				startVersion, versionRange);
-		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-				CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
+    @Override
+    public Set<TransformationSequence> getSequences() {
+	Set<TransformationSequence> sequences = new HashSet<>();
+	sequences.add(migrateVersion0_4_0());
+	return sequences;
+    }
 
-		sequence.appendTransformation(CassandraStandardMigrations
-				.createKeyspace(sequence, PluginsKeyspace.NAME,
-						"Rick-Rainer Ludwig", "Keyspace for plugin system.",
-						ReplicationStrategy.SIMPLE_STRATEGY, 1));
+    private TransformationSequence migrateVersion0_4_0() {
+	Version startVersion = new Version(0, 0, 0);
+	Version targetVersion = new Version(0, 4, 0);
+	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
+	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
+	PhoenixTransformationSequence sequence = new PhoenixTransformationSequence(metadata, HBASE_HOST);
 
-		return sequence;
-	}
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + PLUGINS_TABLE + " ("//
+			+ "id varchar not null, "//
+			+ "version varchar not null, "//
+			+ "changed timestamp, "//
+			+ "changed_by varchar, "//
+			+ "name varchar, "//
+			+ "description varchar, "//
+			+ "vendor varchar, "//
+			+ "vendor_url varchar, "//
+			+ "path_to_ui varchar, " //
+			+ "CONSTRAINT " + PLUGINS_TABLE + "_PK PRIMARY KEY(id, version))",
+		"Keeps information about installed plugins."));
 
-	private TransformationSequence migrateVersion0_3_0() {
-		Version startVersion = new Version(0, 3, 0, "pre");
-		Version targetVersion = new Version(0, 3, 0);
-		ProvidedVersionRange versionRange = new ProvidedVersionRange(
-				targetVersion, null);
-		SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-				startVersion, versionRange);
-		CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-				CASSANDRA_HOST, CASSANDRA_CQL_PORT, PluginsKeyspace.NAME,
-				metadata);
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + ANALYZERS_TABLE + " ("//
+			+ "id varchar not null, "//
+			+ "version varchar not null, "//
+			+ "changed timestamp, " //
+			+ "changed_by varchar, " //
+			+ "name varchar, "//
+			+ "plugin_id varchar, " //
+			+ "plugin_version varchar, " //
+			+ "jndi_name varchar, "//
+			+ "description varchar, " //
+			+ "service_url varchar, " //
+			+ "configuration_url varchar, " //
+			+ "project_url varchar, "//
+			+ "run_url varchar," //
+			+ "CONSTRAINT " + ANALYZERS_TABLE + "_PK PRIMARY KEY(id, version))",
+		"Keeps information about installed analyzers."));
 
-		sequence.appendTransformation(new CassandraCQLTransformationStep(
-				sequence,
-				"Rick-Rainer Ludwig",
-				"CREATE TABLE "
-						+ PLUGINS_TABLE
-						+ " (changed timestamp, changed_by text, id text, name text, version text, description text, vendor text, vendor_url text, path_to_ui text, "
-						+ "PRIMARY KEY(id, version));",
-				"Keeps information about installed plugins."));
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + EVALUATORS_TABLE + " ("//
+			+ "id varchar not null, "//
+			+ "changed timestamp, " //
+			+ "changed_by varchar, " //
+			+ "name varchar, "//
+			+ "type varchar, "//
+			+ "plugin_id varchar, " //
+			+ "plugin_version varchar, " //
+			+ "jndi_name varchar, "//
+			+ "description varchar, "//
+			+ "service_url varchar, " //
+			+ "configuration_url varchar, "//
+			+ "project_url varchar, "//
+			+ "run_url varchar, " //
+			+ "quality_characteristics varchar array, " //
+			+ " dependencies varchar array, "//
+			+ "CONSTRAINT " + EVALUATORS_TABLE + "_PK PRIMARY KEY(id))",
+		"Keeps information about the installed evaluators."));
 
-		sequence.appendTransformation(new CassandraCQLTransformationStep(
-				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
-						+ ANALYZERS_TABLE + " (changed timestamp, "
-						+ "changed_by text, " + "id text, " + "name text, "
-						+ "version text, " + "plugin_id text, "
-						+ "plugin_version text, " + "jndi_name text, "
-						+ "description text, " + "service_url text, "
-						+ "configuration_url text, " + "project_url text, "
-						+ "run_url text," + "PRIMARY KEY(id, version));",
-				"Keeps information about installed analyzers."));
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + EVALUATOR_PARAMETERS_TABLE + " ("//
+			+ "evaluator_id varchar not null, "//
+			+ "name varchar not null, "//
+			+ "changed timestamp, " //
+			+ "changed_by varchar, "//
+			+ "unit varchar, " //
+			+ "description varchar, "//
+			+ "level_of_measurement varchar, " //
+			+ "type varchar, " //
+			+ "numeric boolean, " //
+			+ "CONSTRAINT " + EVALUATOR_PARAMETERS_TABLE + "_PK PRIMARY KEY(evaluator_id, name))",
+		"Keeps information about the provided parameters of evaluators."));
 
-		sequence.appendTransformation(new CassandraCQLTransformationStep(
-				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
-						+ EVALUATORS_TABLE + " (changed timestamp, "
-						+ "changed_by text, " + "id text, " + "name text, "
-						+ "type text, " + "plugin_id text, "
-						+ "plugin_version text, " + "jndi_name text, "
-						+ "description text, " + "service_url text, "
-						+ "configuration_url text, " + "project_url text, "
-						+ "run_url text, "
-						+ "quality_characteristics set<text>, "
-						+ " dependencies set<text>, " + "PRIMARY KEY(id));",
-				"Keeps information about the installed evaluators."));
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + REPOSITORY_TYPES_TABLE + " ("//
+			+ "class_name varchar not null, "//
+			+ "changed timestamp, "//
+			+ "changed_by varchar, "//
+			+ "name varchar, " //
+			+ "plugin_id varchar, " //
+			+ "plugin_version varchar, "//
+			+ "description varchar, " //
+			+ "CONSTRAINT " + REPOSITORY_TYPES_TABLE + "_PK PRIMARY KEY(class_name))",
+		"Keeps information about the installed evaluators."));
 
-		sequence.appendTransformation(new CassandraCQLTransformationStep(
-				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
-						+ EVALUATOR_PARAMETERS_TABLE + " (changed timestamp, "
-						+ "changed_by text, " + "evaluator_id text, "
-						+ "name text, " + "unit text, " + "description text, "
-						+ "level_of_measurement text, " + "type text, "
-						+ "numeric boolean, "
-						+ "PRIMARY KEY(evaluator_id, name));",
-				"Keeps information about the provided parameters of evaluators."));
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + REPOSITORY_TYPE_PARAMETERS_TABLE + " ("//
+			+ "class_name varchar not null, " //
+			+ "name varchar not null, " //
+			+ "changed timestamp, "//
+			+ "changed_by varchar, "//
+			+ "unit varchar, " //
+			+ "description varchar, "//
+			+ "level_of_measurement varchar, " //
+			+ "type varchar, " //
+			+ "numeric boolean, " //
+			+ "CONSTRAINT " + REPOSITORY_TYPE_PARAMETERS_TABLE + "_PK PRIMARY KEY(class_name, name))",
+		"Keeps information about the installed evaluators."));
 
-		sequence.appendTransformation(new CassandraCQLTransformationStep(
-				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
-						+ REPOSITORY_TYPES_TABLE + " (changed timestamp, "
-						+ "changed_by text, " + "class_name text, "
-						+ "name text, " + "plugin_id text, "
-						+ "plugin_version text, " + "description text, "
-						+ "PRIMARY KEY(class_name));",
-				"Keeps information about the installed evaluators."));
+	return sequence;
+    }
 
-		sequence.appendTransformation(new CassandraCQLTransformationStep(
-				sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
-						+ REPOSITORY_TYPE_PARAMETERS_TABLE
-						+ " (changed timestamp, " + "changed_by text, "
-						+ "class_name text, " + "name text, " + "unit text, "
-						+ "description text, " + "level_of_measurement text, "
-						+ "type text, " + "numeric boolean, "
-						+ "PRIMARY KEY(class_name, name));",
-				"Keeps information about the installed evaluators."));
-
-		return sequence;
-	}
-
-	@Override
-	public void dropAll() {
-		try (Cluster cluster = CassandraUtils.connectCluster()) {
-			try (Session session = cluster.connect()) {
-				session.execute("DROP KEYSPACE IF EXISTS "
-						+ PluginsKeyspace.NAME);
-			}
+    @Override
+    public void dropAll() {
+	try (Connection connection = DriverManager.getConnection("jdbc:phoenix:" + HBASE_HOST);) {
+	    try (Statement statement = connection.createStatement();) {
+		statement.execute("DROP TABLE IF EXISTS " + PLUGINS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + ANALYZERS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + EVALUATORS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + EVALUATOR_PARAMETERS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + REPOSITORY_TYPES_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + REPOSITORY_TYPE_PARAMETERS_TABLE);
+		connection.commit();
+	    } catch (SQLException e) {
+		try {
+		    connection.rollback();
+		} catch (SQLException e1) {
+		    logger.warn("Cannot rollback.", e);
 		}
+		throw new RuntimeException("Could not drop component tables.", e);
+	    }
+	} catch (SQLException e2) {
+	    throw new RuntimeException("Could not open Phoenix connection to HBase.", e2);
 	}
+    }
 }

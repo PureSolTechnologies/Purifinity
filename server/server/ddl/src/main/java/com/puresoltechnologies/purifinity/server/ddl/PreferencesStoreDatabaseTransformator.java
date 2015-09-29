@@ -51,7 +51,7 @@ public class PreferencesStoreDatabaseTransformator implements ComponentTransform
 
     private TransformationSequence migrateVersion0_4_0() {
 	Version startVersion = new Version(0, 0, 0);
-	Version targetVersion = new Version(0, 3, 0);
+	Version targetVersion = new Version(0, 4, 0);
 	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
 	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
 	PhoenixTransformationSequence sequence = new PhoenixTransformationSequence(metadata, HBASE_HOST);
