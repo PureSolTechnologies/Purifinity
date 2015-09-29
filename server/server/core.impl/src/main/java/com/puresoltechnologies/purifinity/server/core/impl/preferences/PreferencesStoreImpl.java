@@ -1,5 +1,10 @@
 package com.puresoltechnologies.purifinity.server.core.impl.preferences;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,12 +14,6 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.ConsistencyLevel;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
@@ -29,9 +28,7 @@ import com.puresoltechnologies.purifinity.server.core.api.preferences.Preference
 import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChange;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChangeEvent;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManager;
-import com.puresoltechnologies.purifinity.server.database.cassandra.PreferencesStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 
 public class PreferencesStoreImpl implements PreferencesStore {
 
@@ -39,11 +36,8 @@ public class PreferencesStoreImpl implements PreferencesStore {
     private Logger logger;
 
     @Inject
-    private CassandraPreparedStatements preparedStatements;
-
-    @Inject
-    @PreferencesStoreKeyspace
-    private Session session;
+    @PreferencesStoreConnection
+    private Connection connection;
 
     @Inject
     private PurifinityConfiguration purifinityConfiguration;
@@ -98,19 +92,22 @@ public class PreferencesStoreImpl implements PreferencesStore {
 
     @Override
     public <T> PreferencesValue<T> getSystemPreference(ConfigurationParameter<T> configurationParameter) {
-	PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(session,
-		"SELECT changed, changed_by, value FROM " + CassandraElementNames.SYSTEM_PREFERENCES_TABLE
-			+ " WHERE key=?;");
-	BoundStatement boundStatement = preparedStatement.bind(configurationParameter.getPropertyKey());
-	boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
-	ResultSet resultSet = session.execute(boundStatement);
-	Row result = resultSet.one();
-	if (result == null) {
-	    return new PreferencesValue<>(null, null, PreferencesGroup.SYSTEM, "",
-		    configurationParameter.getPropertyKey(), configurationParameter.getDefaultValue());
+	try {
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("SELECT changed, changed_by, setting FROM "
+			    + HBaseElementNames.SYSTEM_PREFERENCES_TABLE + " WHERE name=?");
+	    preparedStatement.setString(1, configurationParameter.getPropertyKey());
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    if (!resultSet.next()) {
+		return new PreferencesValue<>(null, null, PreferencesGroup.SYSTEM, "",
+			configurationParameter.getPropertyKey(), configurationParameter.getDefaultValue());
+	    }
+	    return PreferencesValue.create(configurationParameter.getType(), resultSet.getDate(1),
+		    resultSet.getString(2), PreferencesGroup.SYSTEM, "", configurationParameter.getPropertyKey(),
+		    resultSet.getString(3));
+	} catch (SQLException e) {
+	    throw new RuntimeException("Could not read system preference.", e);
 	}
-	return PreferencesValue.create(configurationParameter.getType(), result.getDate(0), result.getString(1),
-		PreferencesGroup.SYSTEM, "", configurationParameter.getPropertyKey(), result.getString(2));
     }
 
     @Override
@@ -119,17 +116,29 @@ public class PreferencesStoreImpl implements PreferencesStore {
     }
 
     private void setSystemPreferenceDB(ConfigurationParameter<?> parameter, String value) {
-	PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(session,
-		"INSERT INTO " + CassandraElementNames.SYSTEM_PREFERENCES_TABLE
-			+ " (changed, changed_by, key, value) VALUES (?, ?, ?, ?);");
-	BoundStatement boundStatement = preparedStatement.bind(new Date(), "n/a", parameter.getPropertyKey(), value);
-	boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
-	session.execute(boundStatement);
-	logger.info(
-		"Wrote system preference: '" + parameter.getPropertyKey() + "'='" + value + "' (" + parameter + ")");
-	PreferencesValue<?> preferenceValue = PreferencesValue.create(parameter.getType(), null, null,
-		PreferencesGroup.SYSTEM, "", parameter.getPropertyKey(), value);
-	event.fire(new SystemPreferenceChangeEvent(parameter, preferenceValue.getValue()));
+	try {
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("UPSERT INTO " + HBaseElementNames.SYSTEM_PREFERENCES_TABLE
+			    + " (changed, changed_by, name, setting) VALUES (?, ?, ?, ?)");
+	    preparedStatement.setTime(1, new Time(new Date().getTime()));
+	    preparedStatement.setString(2, "n/a");
+	    preparedStatement.setString(3, parameter.getPropertyKey());
+	    preparedStatement.setString(4, value);
+	    preparedStatement.execute();
+	    connection.commit();
+	    logger.info("Wrote system preference: '" + parameter.getPropertyKey() + "'='" + value + "' (" + parameter
+		    + ")");
+	    PreferencesValue<?> preferenceValue = PreferencesValue.create(parameter.getType(), null, null,
+		    PreferencesGroup.SYSTEM, "", parameter.getPropertyKey(), value);
+	    event.fire(new SystemPreferenceChangeEvent(parameter, preferenceValue.getValue()));
+	} catch (SQLException e) {
+	    try {
+		connection.rollback();
+	    } catch (SQLException e1) {
+		logger.warn("Could not rollback system preference change.", e1);
+	    }
+	    throw new RuntimeException("Could not change system preference.", e);
+	}
     }
 
     @Override
@@ -140,33 +149,49 @@ public class PreferencesStoreImpl implements PreferencesStore {
     @Override
     public <T> PreferencesValue<T> getPluginDefaultPreference(String pluginId,
 	    ConfigurationParameter<T> configurationParameter) {
-	PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(session,
-		"SELECT changed, changed_by, value FROM " + CassandraElementNames.PLUGIN_DEFAULTS_PREFERENCES_TABLE
-			+ " WHERE plugin_id=? AND key=?;");
-	BoundStatement boundStatement = preparedStatement.bind(pluginId, configurationParameter.getPropertyKey());
-	boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
-	ResultSet resultSet = session.execute(boundStatement);
-	Row result = resultSet.one();
-	if (result == null) {
-	    return new PreferencesValue<>(null, null, PreferencesGroup.SYSTEM, "",
-		    configurationParameter.getPropertyKey(), configurationParameter.getDefaultValue());
+	try {
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("SELECT changed, changed_by, setting FROM "
+			    + HBaseElementNames.PLUGIN_DEFAULTS_PREFERENCES_TABLE + " WHERE plugin_id=? AND name=?");
+	    preparedStatement.setString(1, pluginId);
+	    preparedStatement.setString(2, configurationParameter.getPropertyKey());
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    if (!resultSet.next()) {
+		return new PreferencesValue<>(null, null, PreferencesGroup.SYSTEM, "",
+			configurationParameter.getPropertyKey(), configurationParameter.getDefaultValue());
+	    }
+	    return PreferencesValue.create(configurationParameter.getType(), resultSet.getDate(1),
+		    resultSet.getString(2), PreferencesGroup.PLUGIN_DEFAULT, "",
+		    configurationParameter.getPropertyKey(), resultSet.getString(3));
+	} catch (SQLException e) {
+	    throw new RuntimeException("Could not read plugin default.", e);
 	}
-	return PreferencesValue.create(configurationParameter.getType(), result.getDate(0), result.getString(1),
-		PreferencesGroup.PLUGIN_DEFAULT, "", configurationParameter.getPropertyKey(), result.getString(2));
     }
 
     @Override
     public <T> void setPluginDefaultPreference(String pluginId, ConfigurationParameter<T> configurationParameter,
 	    T value) {
-	PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(session,
-		"INSERT INTO " + CassandraElementNames.PLUGIN_DEFAULTS_PREFERENCES_TABLE
-			+ " (changed, changed_by, plugin_id, key, value) VALUES (?, ?, ?, ?, ?);");
-	BoundStatement boundStatement = preparedStatement.bind(new Date(), "n/a", pluginId,
-		configurationParameter.getPropertyKey(), value.toString());
-	boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
-	session.execute(boundStatement);
-	logger.info("Wrote plugin default preference: '" + pluginId + "/" + configurationParameter.getPropertyKey()
-		+ "'='" + value + "'");
+	try {
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("UPSERT INTO " + HBaseElementNames.PLUGIN_DEFAULTS_PREFERENCES_TABLE
+			    + " (changed, changed_by, plugin_id, name, setting) VALUES (?, ?, ?, ?, ?)");
+	    preparedStatement.setTime(1, new Time(new Date().getTime()));
+	    preparedStatement.setString(2, "n/a");
+	    preparedStatement.setString(3, pluginId);
+	    preparedStatement.setString(4, configurationParameter.getPropertyKey());
+	    preparedStatement.setString(5, value.toString());
+	    preparedStatement.execute();
+	    connection.commit();
+	    logger.info("Wrote plugin default preference: '" + pluginId + "/" + configurationParameter.getPropertyKey()
+		    + "'='" + value + "'");
+	} catch (SQLException e) {
+	    try {
+		connection.rollback();
+	    } catch (SQLException e1) {
+		logger.warn("Could not rollback plugin default change.", e1);
+	    }
+	    throw new RuntimeException("Could not set plugin default.", e);
+	}
     }
 
     @Override
@@ -177,43 +202,71 @@ public class PreferencesStoreImpl implements PreferencesStore {
     @Override
     public <T> PreferencesValue<T> getPluginProjectPreference(String projectId, String pluginId,
 	    ConfigurationParameter<T> configurationParameter) {
-	PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(session,
-		"SELECT changed, changed_by, value FROM " + CassandraElementNames.PLUGIN_PREFERENCES_TABLE
-			+ " WHERE project_id=? AND plugin_id=? AND key=?;");
-	BoundStatement boundStatement = preparedStatement.bind(projectId, pluginId,
-		configurationParameter.getPropertyKey());
-	boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
-	ResultSet resultSet = session.execute(boundStatement);
-	Row result = resultSet.one();
-	if (result == null) {
-	    return new PreferencesValue<>(null, null, PreferencesGroup.SYSTEM, "",
-		    configurationParameter.getPropertyKey(), configurationParameter.getDefaultValue());
+	try {
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "SELECT changed, changed_by, setting FROM " + HBaseElementNames.PLUGIN_PREFERENCES_TABLE
+			    + " WHERE project_id=? AND plugin_id=? AND name=?");
+	    preparedStatement.setString(1, projectId);
+	    preparedStatement.setString(2, pluginId);
+	    preparedStatement.setString(3, configurationParameter.getPropertyKey());
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    if (!resultSet.next()) {
+		return new PreferencesValue<>(null, null, PreferencesGroup.SYSTEM, "",
+			configurationParameter.getPropertyKey(), configurationParameter.getDefaultValue());
+	    }
+	    return PreferencesValue.create(configurationParameter.getType(), resultSet.getDate(1),
+		    resultSet.getString(2), PreferencesGroup.PLUGIN_DEFAULT, "",
+		    configurationParameter.getPropertyKey(), resultSet.getString(3));
+	} catch (SQLException e) {
+	    throw new RuntimeException("Could not read plugin project preference.", e);
 	}
-	return PreferencesValue.create(configurationParameter.getType(), result.getDate(0), result.getString(1),
-		PreferencesGroup.PLUGIN_DEFAULT, "", configurationParameter.getPropertyKey(), result.getString(2));
     }
 
     @Override
     public void deletePluginProjectParameter(String projectId, String pluginId, String key) {
-	PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(session, "DELETE FROM "
-		+ CassandraElementNames.PLUGIN_PREFERENCES_TABLE + " WHERE project_id=? AND plugin_id=? AND key=?;");
-	BoundStatement boundStatement = preparedStatement.bind(projectId, pluginId, key);
-	boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
-	session.execute(boundStatement);
+	try {
+	    PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM "
+		    + HBaseElementNames.PLUGIN_PREFERENCES_TABLE + " WHERE project_id=? AND plugin_id=? AND name=?");
+	    preparedStatement.setString(1, projectId);
+	    preparedStatement.setString(2, pluginId);
+	    preparedStatement.setString(3, key);
+	    preparedStatement.execute();
+	    connection.commit();
+	} catch (SQLException e) {
+	    try {
+		connection.rollback();
+	    } catch (SQLException e1) {
+		logger.warn("Could not rollback plugin project preference deletion.", e1);
+	    }
+	    throw new RuntimeException("Could not delete plugin project preference.", e);
+	}
     }
 
     @Override
     public <T> void setPluginProjectPreference(String projectId, String pluginId,
 	    ConfigurationParameter<T> configurationParameter, T value) {
-	PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(session,
-		"INSERT INTO " + CassandraElementNames.PLUGIN_PREFERENCES_TABLE
-			+ " (changed, changed_by, project_id, plugin_id, key, value) VALUES (?, ?, ?, ?, ?, ?);");
-	BoundStatement boundStatement = preparedStatement.bind(new Date(), "n/a", projectId, pluginId,
-		configurationParameter.getPropertyKey(), value.toString());
-	boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
-	session.execute(boundStatement);
-	logger.info("Wrote plugin project preference: '" + projectId + "/" + pluginId + "/"
-		+ configurationParameter.getPropertyKey() + "'='" + value + "'");
+	try {
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("UPSERT INTO " + HBaseElementNames.PLUGIN_PREFERENCES_TABLE
+			    + " (changed, changed_by, project_id, plugin_id, name, setting) VALUES (?, ?, ?, ?, ?, ?)");
+	    preparedStatement.setTime(1, new Time(new Date().getTime()));
+	    preparedStatement.setString(2, "n/a");
+	    preparedStatement.setString(3, projectId);
+	    preparedStatement.setString(4, pluginId);
+	    preparedStatement.setString(5, configurationParameter.getPropertyKey());
+	    preparedStatement.setString(6, value.toString());
+	    preparedStatement.execute();
+	    connection.commit();
+	    logger.info("Wrote plugin project preference: '" + projectId + "/" + pluginId + "/"
+		    + configurationParameter.getPropertyKey() + "'='" + value + "'");
+	} catch (SQLException e) {
+	    try {
+		connection.rollback();
+	    } catch (SQLException e1) {
+		logger.warn("Could not rollback plugin project preference change.", e1);
+	    }
+	    throw new RuntimeException("Could not set plugin project preference.", e);
+	}
     }
 
     @Override
@@ -224,25 +277,40 @@ public class PreferencesStoreImpl implements PreferencesStore {
 
     @Override
     public boolean isServiceActive(String serviceId) {
-	PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(session,
-		"SELECT active FROM " + CassandraElementNames.SERVICE_ACTIVATION_TABLE + " where service_id=?;");
-	BoundStatement boundStatement = preparedStatement.bind(serviceId);
-	boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
-	ResultSet result = session.execute(boundStatement);
-	if (result.isExhausted()) {
-	    return false;
+	try {
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "SELECT activated FROM " + HBaseElementNames.SERVICE_ACTIVATION_TABLE + " where service_id=?");
+	    preparedStatement.setString(1, serviceId);
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    if (!resultSet.next()) {
+		return false;
+	    }
+	    return resultSet.getBoolean(1);
+	} catch (SQLException e) {
+	    throw new RuntimeException("Could not read service activation.", e);
 	}
-	return result.one().getBool(0);
     }
 
     @Override
     public void setServiceActive(String serviceId, boolean active) {
-	PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(session,
-		"INSERT INTO  " + CassandraElementNames.SERVICE_ACTIVATION_TABLE
-			+ " (changed, changed_by, service_id, active) VALUES (?, ?, ?, ?);");
-	BoundStatement boundStatement = preparedStatement.bind(new Date(), "n/a", serviceId, active);
-	boundStatement.setConsistencyLevel(ConsistencyLevel.LOCAL_QUORUM);
-	session.execute(boundStatement);
-	logger.info("Set service to active=" + active);
+	try {
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("UPSERT INTO  " + HBaseElementNames.SERVICE_ACTIVATION_TABLE
+			    + " (changed, changed_by, service_id, activated) VALUES (?, ?, ?, ?)");
+	    preparedStatement.setTime(1, new Time(new Date().getTime()));
+	    preparedStatement.setString(2, "n/a");
+	    preparedStatement.setString(3, serviceId);
+	    preparedStatement.setBoolean(4, active);
+	    preparedStatement.execute();
+	    connection.commit();
+	    logger.info("Set service to active=" + active);
+	} catch (SQLException e) {
+	    try {
+		connection.rollback();
+	    } catch (SQLException e1) {
+		logger.warn("Could not rollback service activation.", e1);
+	    }
+	    throw new RuntimeException("Could not set service activation.", e);
+	}
     }
 }

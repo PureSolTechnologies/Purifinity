@@ -15,12 +15,4 @@ public class CassandraElementNames {
     public static final String EVALUATION_DIRECTORY_METRICS_TABLE = "directory_metrics";
     public static final String EVALUATION_PROJECT_METRICS_TABLE = "project_metrics";
 
-    public static final String SYSTEM_PREFERENCES_TABLE = "system_preferences";
-    public static final String USER_PREFERENCES_TABLE = "user_preferences";
-    public static final String USER_DEFAULTS_PREFERENCES_TABLE = "user_default_preferences";
-    public static final String PLUGIN_PREFERENCES_TABLE = "plugin_preferences";
-    public static final String PLUGIN_DEFAULTS_PREFERENCES_TABLE = "plugin_default_preferences";
-    public static final String SERVICE_ACTIVATION_TABLE = "service_activation";
-    public static final String SERVICE_PROJECT_ACTIVATION_TABLE = "service_project_activation";
-
 }
