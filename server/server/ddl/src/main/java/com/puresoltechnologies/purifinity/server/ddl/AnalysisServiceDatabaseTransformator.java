@@ -1,27 +1,29 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
-import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
-import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationStep;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
-import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 import com.puresoltechnologies.versioning.Version;
 
 public class AnalysisServiceDatabaseTransformator implements ComponentTransformator {
 
-    public static final String CASSANDRA_HOST = "localhost";
-    public static final int CASSANDRA_CQL_PORT = 9042;
+    private static final Logger logger = LoggerFactory.getLogger(AnalysisServiceDatabaseTransformator.class);
+
+    public static final String HBASE_HOST = "localhost";
 
     @Override
     public String getComponentName() {
@@ -36,58 +38,60 @@ public class AnalysisServiceDatabaseTransformator implements ComponentTransforma
     @Override
     public Set<TransformationSequence> getSequences() {
 	Set<TransformationSequence> sequences = new HashSet<>();
-	sequences.add(migrateVersion0_3_0_pre());
-	sequences.add(migrateVersion0_3_0());
+	sequences.add(migrateVersion0_4_0());
 	return sequences;
     }
 
-    /**
-     * This pre version is used to create the keyspace.
-     * 
-     * @return
-     */
-    private TransformationSequence migrateVersion0_3_0_pre() {
+    private TransformationSequence migrateVersion0_4_0() {
 	Version startVersion = new Version(0, 0, 0);
-	Version targetVersion = new Version(0, 3, 0, "pre");
+	Version targetVersion = new Version(0, 4, 0);
 	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
 	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
-	CassandraTransformationSequence sequence = new CassandraTransformationSequence(CASSANDRA_HOST,
-		CASSANDRA_CQL_PORT, metadata);
+	PhoenixTransformationSequence sequence = new PhoenixTransformationSequence(metadata, HBASE_HOST);
 
-	sequence.appendTransformation(CassandraStandardMigrations.createKeyspace(sequence, AnalysisStoreKeyspace.NAME,
-		"Rick-Rainer Ludwig", "Keyspace for analysis information", ReplicationStrategy.SIMPLE_STRATEGY, 1));
-
-	return sequence;
-    }
-
-    private TransformationSequence migrateVersion0_3_0() {
-	Version startVersion = new Version(0, 3, 0, "pre");
-	Version targetVersion = new Version(0, 3, 0);
-	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
-	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
-	CassandraTransformationSequence sequence = new CassandraTransformationSequence(CASSANDRA_HOST,
-		CASSANDRA_CQL_PORT, AnalysisStoreKeyspace.NAME, metadata);
-
-	sequence.appendTransformation(new CassandraCQLTransformationStep(sequence, "Rick-Rainer Ludwig",
-		"CREATE TABLE " + CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " (project_id ascii, "
-			+ "name varchar, " + "description varchar, " + "file_includes list<text>, "
-			+ "file_excludes list<text>, " + "location_includes list<text>, "
-			+ "location_excludes list<text>, " + "ignore_hidden boolean, "
-			+ "repository_location map<text,text>, " + "PRIMARY KEY(project_id));",
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " ("//
+			+ "project_id varchar not null, " //
+			+ "name varchar, "//
+			+ "description varchar, "//
+			+ "file_includes varchar array, " //
+			+ "file_excludes varchar array, " //
+			+ "location_includes varchar array, "//
+			+ "location_excludes varchar array, "//
+			+ "ignore_hidden boolean, "//
+			+ "repository_location_keys varchar array, "//
+			+ "repository_location_values varchar array, "//
+			+ "CONSTRAINT " + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
+			+ "_PK PRIMARY KEY(project_id))",
 		"Keeps settings of analysis projects."));
 
-	sequence.appendTransformation(new CassandraCQLTransformationStep(sequence, "Rick-Rainer Ludwig",
-		"CREATE TABLE " + CassandraElementNames.ANALYSIS_RUN_SETTINGS_TABLE
-			+ " (project_id ascii, run_id bigint, " + "file_includes list<text>, "
-			+ "file_excludes list<text>, " + "location_includes list<text>, "
-			+ "location_excludes list<text>, " + "ignore_hidden boolean, "
-			+ "PRIMARY KEY(project_id, run_id));",
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + HBaseElementNames.ANALYSIS_RUN_SETTINGS_TABLE + " ("//
+			+ "project_id varchar not null, "//
+			+ "run_id bigint not null, " //
+			+ "file_includes varchar array, "//
+			+ "file_excludes varchar array, " //
+			+ "location_includes varchar array, "//
+			+ "location_excludes varchar array, " //
+			+ "ignore_hidden boolean, " //
+			+ "CONSTRAINT " + HBaseElementNames.ANALYSIS_RUN_SETTINGS_TABLE
+			+ "_PL PRIMARY KEY(project_id, run_id))",
 		"Keeps settings of analysis runs."));
 
-	sequence.appendTransformation(new CassandraCQLTransformationStep(sequence, "Rick-Rainer Ludwig",
-		"CREATE TABLE " + CassandraElementNames.ANALYSIS_ANALYSES_TABLE
-			+ " (time timestamp, hashid ascii, language varchar, language_version ascii, analyzer_id ascii, analyzer_version ascii, duration bigint, successful boolean, analyzer_message text,"
-			+ "analysis blob, PRIMARY KEY(hashid, analyzer_id, analyzer_version));",
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " ("//
+			+ "hashid varchar not null, "//
+			+ "analyzer_id varchar not null, "//
+			+ "analyzer_version varchar not null, "//
+			+ "time timestamp, "//
+			+ "language varchar, "//
+			+ "language_version varchar, "//
+			+ "duration bigint, "//
+			+ "successful boolean, "//
+			+ "analyzer_message varchar," //
+			+ "analysis varbinary, "//
+			+ "CONSTRAINT " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE
+			+ "_PK PRIMARY KEY(hashid, analyzer_id, analyzer_version))",
 		"Keeps analysis information for analyzed and unanalyzed " + "files and their raw data."));
 
 	return sequence;
@@ -95,10 +99,22 @@ public class AnalysisServiceDatabaseTransformator implements ComponentTransforma
 
     @Override
     public void dropAll() {
-	try (Cluster cluster = CassandraUtils.connectCluster()) {
-	    try (Session session = cluster.connect()) {
-		session.execute("DROP KEYSPACE IF EXISTS " + AnalysisStoreKeyspace.NAME);
+	try (Connection connection = DriverManager.getConnection("jdbc:phoenix:" + HBASE_HOST);) {
+	    try (Statement statement = connection.createStatement();) {
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.ANALYSIS_RUN_SETTINGS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE);
+		connection.commit();
+	    } catch (SQLException e) {
+		try {
+		    connection.rollback();
+		} catch (SQLException e1) {
+		    logger.warn("Cannot rollback.", e);
+		}
+		throw new RuntimeException("Could not drop component tables.", e);
 	    }
+	} catch (SQLException e2) {
+	    throw new RuntimeException("Could not open Phoenix connection to HBase.", e2);
 	}
     }
 }

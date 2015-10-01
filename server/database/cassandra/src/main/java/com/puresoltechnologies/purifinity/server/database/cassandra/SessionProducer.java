@@ -21,26 +21,12 @@ public class SessionProducer {
 
     @Produces
     @Singleton
-    @AnalysisStoreKeyspace
-    public Session getAnalysisSession() {
-	logger.info("Creating Cassandra Analysis Session...");
-	Session session = cluster.connect(AnalysisStoreKeyspace.NAME);
-	logger.info("Cassandra Analysis Session created.");
-	return session;
-    }
-
-    @Produces
-    @Singleton
     @EvaluationStoreKeyspace
     public Session getEvaluationSession() {
 	logger.info("Creating Cassandra Evaluation Session...");
 	Session session = cluster.connect(EvaluationStoreKeyspace.NAME);
 	logger.info("Cassandra Evaluation Session created...");
 	return session;
-    }
-
-    public void closeAnalysisKeyspaceSession(@Disposes @AnalysisStoreKeyspace Session session) {
-	session.close();
     }
 
     public void closeEvaluationKeyspaceSession(@Disposes @EvaluationStoreKeyspace Session session) {

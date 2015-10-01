@@ -2,6 +2,10 @@ package com.puresoltechnologies.purifinity.server.database.hbase;
 
 public class HBaseElementNames {
 
+    public static final String ANALYSIS_PROJECT_SETTINGS_TABLE = "analysis_service_project_settings";
+    public static final String ANALYSIS_RUN_SETTINGS_TABLE = "analysis_service_run_settings";
+    public static final String ANALYSIS_ANALYSES_TABLE = "analysis_service_analyses";
+
     public static final String SYSTEM_PREFERENCES_TABLE = "preferences_store_system_preferences";
     public static final String USER_PREFERENCES_TABLE = "preferences_store_user_preferences";
     public static final String USER_DEFAULTS_PREFERENCES_TABLE = "preferences_store_user_default_preferences";

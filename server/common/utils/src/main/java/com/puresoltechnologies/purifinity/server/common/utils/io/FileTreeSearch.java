@@ -44,81 +44,69 @@ import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
  */
 public class FileTreeSearch {
 
-	public static FileTree getFileTree(File directory,
-			FileSearchConfiguration configuration) {
+    public static FileTree getFileTree(File directory, FileSearchConfiguration configuration) {
 
-		List<Pattern> dirIncludePatterns = convertStringListToPatternList(configuration
-				.getLocationIncludes());
-		List<Pattern> dirExcludePatterns = convertStringListToPatternList(configuration
-				.getLocationExcludes());
-		List<Pattern> fileIncludePatterns = convertStringListToPatternList(configuration
-				.getFileIncludes());
-		List<Pattern> fileExcludePatterns = convertStringListToPatternList(configuration
-				.getFileExcludes());
+	List<Pattern> dirIncludePatterns = convertStringListToPatternList(configuration.getLocationIncludes());
+	List<Pattern> dirExcludePatterns = convertStringListToPatternList(configuration.getLocationExcludes());
+	List<Pattern> fileIncludePatterns = convertStringListToPatternList(configuration.getFileIncludes());
+	List<Pattern> fileExcludePatterns = convertStringListToPatternList(configuration.getFileExcludes());
 
-		FileTree fileTree = new FileTree(null, directory.getPath());
-		fileTree = getFileTree(directory, fileTree, dirIncludePatterns,
-				dirExcludePatterns, fileIncludePatterns, fileExcludePatterns,
-				configuration.isIgnoreHidden());
-		return fileTree;
+	FileTree fileTree = new FileTree(null, directory.getPath());
+	fileTree = getFileTree(directory, fileTree, dirIncludePatterns, dirExcludePatterns, fileIncludePatterns,
+		fileExcludePatterns, configuration.isIgnoreHidden());
+	return fileTree;
+    }
+
+    private static List<Pattern> convertStringListToPatternList(List<String> strings) {
+	List<Pattern> patterns = new ArrayList<Pattern>();
+	for (String string : strings) {
+	    if (string != null) {
+		patterns.add(Pattern.compile(FileSearch.wildcardsToRegExp(string)));
+	    }
 	}
+	return patterns;
+    }
 
-	private static List<Pattern> convertStringListToPatternList(
-			List<String> strings) {
-		List<Pattern> patterns = new ArrayList<Pattern>();
-		for (String string : strings) {
-			patterns.add(Pattern.compile(FileSearch.wildcardsToRegExp(string)));
-		}
-		return patterns;
+    private static FileTree getFileTree(File directory, FileTree fileTree, List<Pattern> dirIncludes,
+	    List<Pattern> dirExcludes, List<Pattern> fileIncludes, List<Pattern> fileExcludes, boolean ignoreHidden) {
+	String[] fileNames = directory.list();
+	for (String fileName : fileNames) {
+	    File file = new File(directory, fileName);
+	    if (file.isDirectory() && use(fileName, file.isHidden(), dirIncludes, dirExcludes, ignoreHidden)) {
+		FileTree fileSubTree = new FileTree(fileTree, fileName);
+		getFileTree(file, fileSubTree, dirIncludes, dirExcludes, fileIncludes, fileExcludes, ignoreHidden);
+	    } else if (file.isFile() && use(fileName, file.isHidden(), fileIncludes, fileExcludes, ignoreHidden)) {
+		new FileTree(fileTree, fileName);
+	    }
 	}
+	return fileTree;
+    }
 
-	private static FileTree getFileTree(File directory, FileTree fileTree,
-			List<Pattern> dirIncludes, List<Pattern> dirExcludes,
-			List<Pattern> fileIncludes, List<Pattern> fileExcludes,
-			boolean ignoreHidden) {
-		String[] fileNames = directory.list();
-		for (String fileName : fileNames) {
-			File file = new File(directory, fileName);
-			if (file.isDirectory()
-					&& use(fileName, file.isHidden(), dirIncludes, dirExcludes,
-							ignoreHidden)) {
-				FileTree fileSubTree = new FileTree(fileTree, fileName);
-				getFileTree(file, fileSubTree, dirIncludes, dirExcludes,
-						fileIncludes, fileExcludes, ignoreHidden);
-			} else if (file.isFile()
-					&& use(fileName, file.isHidden(), fileIncludes,
-							fileExcludes, ignoreHidden)) {
-				new FileTree(fileTree, fileName);
-			}
-		}
-		return fileTree;
-	}
-
-	/**
-	 * Checks whether a file or directory name is to be used.
-	 * 
-	 * @param fileName
-	 * @param hidden
-	 * @param includes
-	 * @param excludes
-	 * @param ignoreHidden
-	 * @return
-	 */
-	private static boolean use(String fileName, boolean hidden,
-			List<Pattern> includes, List<Pattern> excludes, boolean ignoreHidden) {
-		for (Pattern includePattern : includes) {
-			if (includePattern.matcher(fileName).matches()) {
-				return true;
-			}
-		}
-		for (Pattern excludePattern : excludes) {
-			if (excludePattern.matcher(fileName).matches()) {
-				return false;
-			}
-		}
-		if (ignoreHidden) {
-			return !hidden;
-		}
+    /**
+     * Checks whether a file or directory name is to be used.
+     * 
+     * @param fileName
+     * @param hidden
+     * @param includes
+     * @param excludes
+     * @param ignoreHidden
+     * @return
+     */
+    private static boolean use(String fileName, boolean hidden, List<Pattern> includes, List<Pattern> excludes,
+	    boolean ignoreHidden) {
+	for (Pattern includePattern : includes) {
+	    if (includePattern.matcher(fileName).matches()) {
 		return true;
+	    }
 	}
+	for (Pattern excludePattern : excludes) {
+	    if (excludePattern.matcher(fileName).matches()) {
+		return false;
+	    }
+	}
+	if (ignoreHidden) {
+	    return !hidden;
+	}
+	return true;
+    }
 }

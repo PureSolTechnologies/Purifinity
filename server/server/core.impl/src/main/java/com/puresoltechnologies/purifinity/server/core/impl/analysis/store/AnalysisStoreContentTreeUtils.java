@@ -27,7 +27,7 @@ import com.puresoltechnologies.purifinity.server.database.hadoop.utils.bloob.Blo
 public class AnalysisStoreContentTreeUtils {
 
     @Inject
-    private AnalysisStoreCassandraUtils analysisStoreCassandraUtils;
+    private AnalysisStoreUtils analysisStoreCassandraUtils;
 
     @Inject
     private BloobService bloob;

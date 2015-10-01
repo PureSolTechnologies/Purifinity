@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,14 +22,11 @@ import java.util.Properties;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+
 import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.XOTransaction;
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.hash.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.hash.HashCodeGenerator;
 import com.puresoltechnologies.commons.misc.hash.HashId;
@@ -41,15 +42,15 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFi
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.AnalysisServiceConnection;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeRootVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeDirectoryVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ProjectToRunEdge;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.TitanXOManager;
-import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBaseHelper;
 import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.Event;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
@@ -80,14 +81,17 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     public static final String COMPONENT_NAME = "AnalysisStoreService";
 
     @Inject
+    private Logger logger;
+
+    @Inject
     private EventLoggerRemote eventLogger;
 
     @Inject
-    @AnalysisStoreKeyspace
-    private Session session;
+    @AnalysisServiceConnection
+    private Connection connection;
 
     @Inject
-    private AnalysisStoreCassandraUtils analysisStoreCassandraUtils;
+    private AnalysisStoreUtils analysisStoreCassandraUtils;
 
     @Inject
     private AnalysisStoreFileTreeUtils analysisStoreFileTreeUtils;
@@ -97,9 +101,6 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 
     @Inject
     private AnalysisStoreCacheUtils analysisStoreCacheUtils;
-
-    @Inject
-    private CassandraPreparedStatements cassandraPreparedStatements;
 
     @Inject
     private BigTableUtils bigTableUtils;
@@ -145,21 +146,44 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	analysisProject.setCreationTime(creationTime);
     }
 
-    private void storeProjectAnalysisSettings(String projectId, AnalysisProjectSettings settings) {
-	String name = settings.getName();
-	String description = settings.getDescription();
-	FileSearchConfiguration fileSearchConfiguration = settings.getFileSearchConfiguration();
+    private void storeProjectAnalysisSettings(String projectId, AnalysisProjectSettings settings)
+	    throws AnalysisStoreException {
+	try {
+	    String name = settings.getName();
+	    String description = settings.getDescription();
+	    FileSearchConfiguration fileSearchConfiguration = settings.getFileSearchConfiguration();
 
-	PreparedStatement preparedStatement = cassandraPreparedStatements.getPreparedStatement(session,
-		"INSERT INTO " + CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
-			+ " (project_id, name, description, " + "file_includes, file_excludes, "
-			+ "location_includes, location_excludes, " + "ignore_hidden, repository_location) "
-			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-	BoundStatement bound = preparedStatement.bind(projectId, name, description,
-		fileSearchConfiguration.getFileIncludes(), fileSearchConfiguration.getFileExcludes(),
-		fileSearchConfiguration.getLocationIncludes(), fileSearchConfiguration.getLocationExcludes(),
-		fileSearchConfiguration.isIgnoreHidden(), settings.getRepository());
-	session.execute(bound);
+	    PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
+		    + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " (project_id, name, description, "
+		    + "file_includes, file_excludes, " + "location_includes, location_excludes, "
+		    + "ignore_hidden, repository_location_keys, repository_location_values) "
+		    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	    preparedStatement.setString(1, projectId);
+	    preparedStatement.setString(2, name);
+	    preparedStatement.setString(3, description);
+	    preparedStatement.setArray(4,
+		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getFileIncludes().toArray()));
+	    preparedStatement.setArray(5,
+		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getFileExcludes().toArray()));
+	    preparedStatement.setArray(6,
+		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getLocationIncludes().toArray()));
+	    preparedStatement.setArray(7,
+		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getLocationExcludes().toArray()));
+	    preparedStatement.setBoolean(8, fileSearchConfiguration.isIgnoreHidden());
+	    preparedStatement.setArray(9,
+		    connection.createArrayOf("VARCHAR", settings.getRepository().keySet().toArray()));
+	    preparedStatement.setArray(10,
+		    connection.createArrayOf("VARCHAR", settings.getRepository().values().toArray()));
+	    preparedStatement.execute();
+	    connection.commit();
+	} catch (SQLException e) {
+	    try {
+		connection.rollback();
+	    } catch (SQLException e1) {
+		logger.warn("Could not rollback project settings storage.", e1);
+	    }
+	    throw new AnalysisStoreException("Could not store project settings.", e);
+	}
     }
 
     @Override
@@ -243,30 +267,39 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 
     @Override
     public AnalysisProjectSettings readAnalysisProjectSettings(String projectId) throws AnalysisStoreException {
-	PreparedStatement preparedStatement = cassandraPreparedStatements.getPreparedStatement(session,
-		"SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location FROM "
-			+ CassandraElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " WHERE project_id=?");
-	BoundStatement boundStatement = preparedStatement.bind(projectId);
-	ResultSet resultSet = session.execute(boundStatement);
-	Row result = resultSet.one();
-	if (result == null) {
-	    return null;
+	try {
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location_keys, repository_location_values FROM "
+			    + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " WHERE project_id=?");
+	    preparedStatement.setString(1, projectId);
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    if (!resultSet.next()) {
+		return null;
+	    }
+	    String name = resultSet.getString("name");
+	    String description = resultSet.getString("description");
+	    List<String> fileIncludes = HBaseHelper.getList(resultSet, "file_includes", String.class);
+	    List<String> fileExcludes = HBaseHelper.getList(resultSet, "file_excludes", String.class);
+	    List<String> locationIncludes = HBaseHelper.getList(resultSet, "location_includes", String.class);
+	    List<String> locationExcludes = HBaseHelper.getList(resultSet, "location_excludes", String.class);
+	    boolean ignoreHidden = resultSet.getBoolean("ignore_hidden");
+	    FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(locationIncludes,
+		    locationExcludes, fileIncludes, fileExcludes, ignoreHidden);
+	    String[] repositoryLocationKeys = HBaseHelper.getArray(resultSet, "repository_location_keys", String.class);
+	    String[] repositoryLocationValues = HBaseHelper.getArray(resultSet, "repository_location_values",
+		    String.class);
+	    if (repositoryLocationKeys.length != repositoryLocationValues.length) {
+		throw new AnalysisStoreException(
+			"Array lenght of keys and values for repository location are different.");
+	    }
+	    Properties repositoryLocation = new Properties();
+	    for (int i = 0; i < repositoryLocationKeys.length; ++i) {
+		repositoryLocation.put(repositoryLocationKeys[i], repositoryLocationValues[i]);
+	    }
+	    return new AnalysisProjectSettings(name, description, fileSearchConfiguration, repositoryLocation);
+	} catch (SQLException e) {
+	    throw new AnalysisStoreException("Could not read project settings.", e);
 	}
-	String name = result.getString("name");
-	String description = result.getString("description");
-	List<String> fileIncludes = result.getList("file_includes", String.class);
-	List<String> fileExcludes = result.getList("file_excludes", String.class);
-	List<String> locationIncludes = result.getList("location_includes", String.class);
-	List<String> locationExcludes = result.getList("location_excludes", String.class);
-	boolean ignoreHidden = result.getBool("ignore_hidden");
-	FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(locationIncludes,
-		locationExcludes, fileIncludes, fileExcludes, ignoreHidden);
-	Map<String, String> repositoryLocationMap = result.getMap("repository_location", String.class, String.class);
-	Properties repositoryLocation = new Properties();
-	for (Object key : repositoryLocationMap.keySet()) {
-	    repositoryLocation.put(key.toString(), repositoryLocationMap.get(key).toString());
-	}
-	return new AnalysisProjectSettings(name, description, fileSearchConfiguration, repositoryLocation);
     }
 
     @Override
@@ -453,22 +486,26 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 
     @Override
     public FileSearchConfiguration readSearchConfiguration(String projectId, long runId) throws AnalysisStoreException {
-	PreparedStatement preparedStatement = cassandraPreparedStatements.getPreparedStatement(session,
-		"SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
-			+ CassandraElementNames.ANALYSIS_RUN_SETTINGS_TABLE + " WHERE project_id=? AND run_id=?");
-	BoundStatement boundStatement = preparedStatement.bind(projectId, runId);
-	ResultSet resultSet = session.execute(boundStatement);
-	Row result = resultSet.one();
-	if (result == null) {
-	    return null;
+	try {
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
+			    + HBaseElementNames.ANALYSIS_RUN_SETTINGS_TABLE + " WHERE project_id=? AND run_id=?");
+	    preparedStatement.setString(1, projectId);
+	    preparedStatement.setLong(2, runId);
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    if (!resultSet.next()) {
+		return null;
+	    }
+	    List<String> fileIncludes = HBaseHelper.getList(resultSet, "file_includes", String.class);
+	    List<String> fileExcludes = HBaseHelper.getList(resultSet, "file_excludes", String.class);
+	    List<String> locationIncludes = HBaseHelper.getList(resultSet, "location_includes", String.class);
+	    List<String> locationExcludes = HBaseHelper.getList(resultSet, "location_excludes", String.class);
+	    boolean ignoreHidden = resultSet.getBoolean("ignore_hidden");
+	    return new FileSearchConfiguration(locationIncludes, locationExcludes, fileIncludes, fileExcludes,
+		    ignoreHidden);
+	} catch (SQLException e) {
+	    throw new AnalysisStoreException("Could not read search configuration.", e);
 	}
-	List<String> fileIncludes = result.getList("file_includes", String.class);
-	List<String> fileExcludes = result.getList("file_excludes", String.class);
-	List<String> locationIncludes = result.getList("location_includes", String.class);
-	List<String> locationExcludes = result.getList("location_excludes", String.class);
-	boolean ignoreHidden = result.getBool("ignore_hidden");
-	return new FileSearchConfiguration(locationIncludes, locationExcludes, fileIncludes, fileExcludes,
-		ignoreHidden);
     }
 
     @Override

@@ -1,5 +1,9 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis.store;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -9,11 +13,6 @@ import javax.inject.Inject;
 
 import com.buschmais.xo.api.ResultIterable;
 import com.buschmais.xo.api.XOManager;
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
@@ -22,15 +21,14 @@ import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.common.SourceCodeLocationCreator;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.AnalysisServiceConnection;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeDirectoryVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeFileVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeDirectoryVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeFileVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeRootVertex;
-import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 import com.puresoltechnologies.versioning.Version;
 
 /**
@@ -42,11 +40,8 @@ import com.puresoltechnologies.versioning.Version;
 public class AnalysisStoreFileTreeUtils {
 
     @Inject
-    @AnalysisStoreKeyspace
-    private Session session;
-
-    @Inject
-    private CassandraPreparedStatements preparedStatements;
+    @AnalysisServiceConnection
+    private Connection connection;
 
     /**
      * This method adds a new file tree to a Analysis Run vertex.
@@ -246,29 +241,32 @@ public class AnalysisStoreFileTreeUtils {
      * @param fileTreeVertex
      * @param hash
      * @return
+     * @throws AnalysisStoreException
      */
-    private List<AnalysisInformation> readAnalyses(HashId hashId) {
-	List<AnalysisInformation> analyses = new ArrayList<AnalysisInformation>();
-
-	PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(session,
-		"SELECT * FROM " + CassandraElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashId=?;");
-	BoundStatement boundStatement = preparedStatement.bind(hashId.toString());
-	ResultSet resultSet = session.execute(boundStatement);
-	while (!resultSet.isExhausted()) {
-	    Row row = resultSet.one();
-	    Date time = row.getDate("time");
-	    long duration = row.getLong("duration");
-	    String language = row.getString("language");
-	    String languageVersion = row.getString("language_version");
-	    String analyzerId = row.getString("analyzer_id");
-	    Version analyzerVersion = Version.valueOf(row.getString("analyzer_version"));
-	    boolean successful = row.getBool("successful");
-	    String message = row.getString("analyzer_message");
-	    AnalysisInformation information = new AnalysisInformation(hashId, time, duration, successful, language,
-		    languageVersion, analyzerId, analyzerVersion, message);
-	    analyses.add(information);
+    private List<AnalysisInformation> readAnalyses(HashId hashId) throws AnalysisStoreException {
+	try {
+	    List<AnalysisInformation> analyses = new ArrayList<AnalysisInformation>();
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("SELECT * FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashId=?");
+	    preparedStatement.setString(1, hashId.toString());
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    while (resultSet.next()) {
+		Date time = resultSet.getDate("time");
+		long duration = resultSet.getLong("duration");
+		String language = resultSet.getString("language");
+		String languageVersion = resultSet.getString("language_version");
+		String analyzerId = resultSet.getString("analyzer_id");
+		Version analyzerVersion = Version.valueOf(resultSet.getString("analyzer_version"));
+		boolean successful = resultSet.getBoolean("successful");
+		String message = resultSet.getString("analyzer_message");
+		AnalysisInformation information = new AnalysisInformation(hashId, time, duration, successful, language,
+			languageVersion, analyzerId, analyzerVersion, message);
+		analyses.add(information);
+	    }
+	    return analyses;
+	} catch (SQLException e) {
+	    throw new AnalysisStoreException("Could not read analyses.", e);
 	}
-	return analyses;
     }
 
     /**

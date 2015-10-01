@@ -10,8 +10,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.ByteBuffer;
 import java.security.DigestInputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +29,6 @@ import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.commons.misc.hash.HashUtilities;
 import com.puresoltechnologies.commons.types.StringUtils;
@@ -45,10 +44,9 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileSto
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChange;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChangeEvent;
-import com.puresoltechnologies.purifinity.server.database.cassandra.AnalysisStoreKeyspace;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraPreparedStatements;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.AnalysisServiceConnection;
 import com.puresoltechnologies.purifinity.server.database.hadoop.utils.bloob.BloobService;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 
 @Singleton
 public class FileStoreServiceBean implements FileStoreService, FileStoreServiceRemote {
@@ -60,11 +58,8 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
     private BloobService bloob;
 
     @Inject
-    @AnalysisStoreKeyspace
-    private Session session;
-
-    @Inject
-    private CassandraPreparedStatements cassandraPreparedStatements;
+    @AnalysisServiceConnection
+    private Connection connection;
 
     @Inject
     private PreferencesStore preferencesStore;
@@ -143,66 +138,81 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
     @Override
     @Lock(LockType.READ)
     public List<CodeAnalysis> loadAnalyses(HashId hashId) throws FileStoreException {
-	PreparedStatement preparedStatement = cassandraPreparedStatements.getPreparedStatement(session,
-		"SELECT analysis FROM " + CassandraElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashid=?");
-	BoundStatement boundStatement = preparedStatement.bind(hashId.toString());
-	ResultSet resultSet = session.execute(boundStatement);
-	Row result = resultSet.one();
-	if (result == null) {
-	    throw new FileStoreException("Could not load analyses for file with hash '" + hashId + "'");
-	}
-	List<CodeAnalysis> analyses = new ArrayList<>();
-	while (result != null) {
-	    ByteBuffer byteBuffer = result.getBytes("analysis");
-	    try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteBuffer.array(),
-		    byteBuffer.position(), byteBuffer.limit())) {
-		try (ObjectInputStream inStream = new ObjectInputStream(byteArrayInputStream)) {
-		    Object object = inStream.readObject();
-		    CodeAnalysis analysis = (CodeAnalysis) object;
-		    if (!hashId.equals(analysis.getAnalysisInformation().getHashId())) {
-			/*
-			 * This check is necessary, because an issue occurred
-			 * during Purifinity 0.3.0 development. If hash IDs do
-			 * not match, evaluations could crash.
-			 */
-			throw new FileStoreException("Could not load analysis for file with hash id '" + hashId
-				+ "', because analysis assigned to this hash id contains hash id '"
-				+ analysis.getAnalysisInformation().getHashId() + "'!");
-		    }
-		    analyses.add(analysis);
-		}
-	    } catch (ClassNotFoundException | IOException e) {
-		throw new FileStoreException("Could not load analysis for file with hash id '" + hashId + "'", e);
+	try {
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "SELECT analysis FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashid=?");
+	    preparedStatement.setString(1, hashId.toString());
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    if (!resultSet.next()) {
+		throw new FileStoreException("Could not load analyses for file with hash '" + hashId + "'");
 	    }
-	    result = resultSet.one();
+	    List<CodeAnalysis> analyses = new ArrayList<>();
+	    do {
+		byte[] bytes = resultSet.getBytes(1);
+		try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes)) {
+		    try (ObjectInputStream inStream = new ObjectInputStream(byteArrayInputStream)) {
+			Object object = inStream.readObject();
+			CodeAnalysis analysis = (CodeAnalysis) object;
+			if (!hashId.equals(analysis.getAnalysisInformation().getHashId())) {
+			    /*
+			     * This check is necessary, because an issue
+			     * occurred during Purifinity 0.3.0 development. If
+			     * hash IDs do not match, evaluations could crash.
+			     */
+			    throw new FileStoreException("Could not load analysis for file with hash id '" + hashId
+				    + "', because analysis assigned to this hash id contains hash id '"
+				    + analysis.getAnalysisInformation().getHashId() + "'!");
+			}
+			analyses.add(analysis);
+		    }
+		} catch (ClassNotFoundException | IOException e) {
+		    throw new FileStoreException("Could not load analysis for file with hash id '" + hashId + "'", e);
+		}
+	    } while (resultSet.next());
+	    return analyses;
+	} catch (SQLException e) {
+	    throw new FileStoreException("Could not read analyses.", e);
 	}
-	return analyses;
     }
 
     @Override
     @Lock(LockType.READ)
     public void storeAnalysis(CodeAnalysis fileAnalysis) throws FileStoreException {
-	PreparedStatement preparedStatement = cassandraPreparedStatements.getPreparedStatement(session, "INSERT INTO "
-		+ CassandraElementNames.ANALYSIS_ANALYSES_TABLE
-		+ " (time, hashid, language, language_version, analyzer_id, analyzer_version, analyzer_message, successful, duration, analysis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-	AnalysisInformation analysisInformation = fileAnalysis.getAnalysisInformation();
-	BoundStatement boundStatement = preparedStatement.bind(analysisInformation.getStartTime(),
-		analysisInformation.getHashId().toString(), analysisInformation.getLanguageName(),
-		analysisInformation.getLanguageVersion().toString(), analysisInformation.getAnalyzerId(),
-		analysisInformation.getAnalyzerVersion().toString(), analysisInformation.getAnalyzerErrorMessage(),
-		analysisInformation.isSuccessful(), analysisInformation.getDuration());
 	try {
-	    try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
-		try (ObjectOutputStream outStream = new ObjectOutputStream(byteArrayOutputStream)) {
-		    outStream.writeObject(fileAnalysis);
-		    boundStatement.setBytes("analysis", ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
+	    PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
+		    + HBaseElementNames.ANALYSIS_ANALYSES_TABLE
+		    + " (time, hashid, language, language_version, analyzer_id, analyzer_version, analyzer_message, successful, duration, analysis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	    AnalysisInformation analysisInformation = fileAnalysis.getAnalysisInformation();
+	    preparedStatement.setTime(1, new Time(analysisInformation.getStartTime().getTime()));
+	    preparedStatement.setString(2, analysisInformation.getHashId().toString());
+	    preparedStatement.setString(3, analysisInformation.getLanguageName());
+	    preparedStatement.setString(4, analysisInformation.getLanguageVersion().toString());
+	    preparedStatement.setString(5, analysisInformation.getAnalyzerId());
+	    preparedStatement.setString(6, analysisInformation.getAnalyzerVersion().toString());
+	    preparedStatement.setString(7, analysisInformation.getAnalyzerErrorMessage());
+	    preparedStatement.setBoolean(8, analysisInformation.isSuccessful());
+	    preparedStatement.setLong(9, analysisInformation.getDuration());
+	    try {
+		try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+		    try (ObjectOutputStream outStream = new ObjectOutputStream(byteArrayOutputStream)) {
+			outStream.writeObject(fileAnalysis);
+			preparedStatement.setBytes(10, byteArrayOutputStream.toByteArray());
+		    }
 		}
+	    } catch (IOException e) {
+		throw new FileStoreException(
+			"Could not store analysis for file with hash '" + analysisInformation.getHashId() + "'", e);
 	    }
-	} catch (IOException e) {
-	    throw new FileStoreException(
-		    "Could not store analysis for file with hash '" + analysisInformation.getHashId() + "'", e);
+	    preparedStatement.execute();
+	    connection.commit();
+	} catch (SQLException e) {
+	    try {
+		connection.rollback();
+	    } catch (SQLException e1) {
+		logger.warn("Could not rollback analysis storage.", e1);
+	    }
+	    throw new FileStoreException("Could not store analysis.", e);
 	}
-	session.execute(boundStatement);
     }
 
     @Override
@@ -229,18 +239,22 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
     @Override
     @Lock(LockType.READ)
     public boolean wasAnalyzed(HashId hashId) throws FileStoreException {
-	PreparedStatement preparedStatement = cassandraPreparedStatements.getPreparedStatement(session,
-		"SELECT successful FROM " + CassandraElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashid=?");
-	BoundStatement boundStatement = preparedStatement.bind(hashId.toString());
-	ResultSet resultSet = session.execute(boundStatement);
-	Row result = resultSet.one();
-	if (result == null) {
-	    return false;
+	try {
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "SELECT successful FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashid=?");
+	    preparedStatement.setString(1, hashId.toString());
+	    ResultSet resultSet = preparedStatement.executeQuery();
+	    if (!resultSet.next()) {
+		return false;
+	    }
+	    boolean analyzed = resultSet.getBoolean(1);
+	    if (resultSet.next()) {
+		throw new FileStoreException(
+			"Could not check for successful analysis due to multiple restuls for '" + hashId + "'.");
+	    }
+	    return analyzed;
+	} catch (SQLException e) {
+	    throw new FileStoreException("Could not read analysis status.", e);
 	}
-	if (resultSet.one() != null) {
-	    throw new FileStoreException(
-		    "Could not check for successful analysis due to multiple restuls for '" + hashId + "'.");
-	}
-	return result.getBool(0);
     }
 }
