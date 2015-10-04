@@ -43,11 +43,10 @@ public class AnalysisStoreUtils {
      */
     public void writeAnalysisRunSettings(String projectId, long runId, FileSearchConfiguration fileSearchConfiguration)
 	    throws AnalysisStoreException {
-	try {
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("UPSERT INTO " + HBaseElementNames.ANALYSIS_RUN_SETTINGS_TABLE + " (project_id, "
-			    + " run_id, " + "file_includes, file_excludes, " + "location_includes, location_excludes, "
-			    + "ignore_hidden) " + "VALUES (?, ?, ?, ?, ?, ?, ?)");
+	try (PreparedStatement preparedStatement = connection
+		.prepareStatement("UPSERT INTO " + HBaseElementNames.ANALYSIS_RUN_SETTINGS_TABLE + " (project_id, "
+			+ " run_id, " + "file_includes, file_excludes, " + "location_includes, location_excludes, "
+			+ "ignore_hidden) " + "VALUES (?, ?, ?, ?, ?, ?, ?)")) {
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setLong(2, runId);
 	    preparedStatement.setArray(3,
@@ -79,9 +78,8 @@ public class AnalysisStoreUtils {
      * @throws AnalysisStoreException
      */
     public void removeAnalysisRunSettings(String projectId, long runId) throws AnalysisStoreException {
-	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM "
-		    + HBaseElementNames.ANALYSIS_RUN_SETTINGS_TABLE + " WHERE project_id=? AND run_id=?");
+	try (PreparedStatement preparedStatement = connection.prepareStatement(
+		"DELETE FROM " + HBaseElementNames.ANALYSIS_RUN_SETTINGS_TABLE + " WHERE project_id=? AND run_id=?")) {
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setLong(2, runId);
 	    preparedStatement.execute();
@@ -102,9 +100,8 @@ public class AnalysisStoreUtils {
 	} catch (IOException e) {
 	    throw new AnalysisStoreException("Could not delete file for hash id '" + hashId + "'.", e);
 	}
-	try {
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("DELETE FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashid=?");
+	try (PreparedStatement preparedStatement = connection
+		.prepareStatement("DELETE FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashid=?")) {
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.execute();
 	    connection.commit();
@@ -119,9 +116,8 @@ public class AnalysisStoreUtils {
     }
 
     public void removeProjectSettings(String projectId) throws AnalysisStoreException {
-	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "DELETE FROM " + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " WHERE project_id=?");
+	try (PreparedStatement preparedStatement = connection.prepareStatement(
+		"DELETE FROM " + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " WHERE project_id=?")) {
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.execute();
 	    connection.commit();

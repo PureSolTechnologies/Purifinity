@@ -73,6 +73,11 @@ public class MetricLoggerBean implements MetricLogger, MetricLoggerRemote {
 
     @PreDestroy
     public void disconnect() {
+	try {
+	    preparedStatement.close();
+	} catch (SQLException e) {
+	    logger.warn("Could not close prepared statement.", e);
+	}
 	eventLogger.logEvent(MetricLoggerEvents.createStopEvent());
     }
 

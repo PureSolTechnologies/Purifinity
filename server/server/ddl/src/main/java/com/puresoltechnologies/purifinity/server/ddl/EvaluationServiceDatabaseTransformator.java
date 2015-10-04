@@ -1,40 +1,39 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
-import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
-import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationStep;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
-import com.puresoltechnologies.purifinity.server.database.cassandra.EvaluationStoreKeyspace;
 import com.puresoltechnologies.versioning.Version;
 
-public class EvaluationServiceDatabaseTransformator implements
-	ComponentTransformator {
+public class EvaluationServiceDatabaseTransformator implements ComponentTransformator {
 
-    private static final String EVALUATION_KEYSPACE = EvaluationStoreKeyspace.NAME;
+    private static final Logger logger = LoggerFactory.getLogger(EvaluationServiceDatabaseTransformator.class);
 
-    private static final String EVALUATION_METRICS_TABLE = "metrics";
+    private static final String EVALUATION_METRICS_TABLE = "evaluator_store_metrics";
 
-    private static final String EVALUATION_PARAMETERS_TABLE = "parameters";
-    private static final String EVALUATION_FILE_METRICS_TABLE = "file_metrics";
-    private static final String EVALUATION_DIRECTORY_METRICS_TABLE = "directory_metrics";
-    private static final String EVALUATION_PROJECT_METRICS_TABLE = "project_metrics";
+    private static final String EVALUATION_PARAMETERS_TABLE = "evaluator_store_parameters";
+    private static final String EVALUATION_FILE_METRICS_TABLE = "evaluator_store_file_metrics";
+    private static final String EVALUATION_DIRECTORY_METRICS_TABLE = "evaluator_store_directory_metrics";
+    private static final String EVALUATION_PROJECT_METRICS_TABLE = "evaluator_store_project_metrics";
 
-    public static final String CASSANDRA_HOST = "localhost";
-    public static final int CASSANDRA_CQL_PORT = 9042;
+    public static final String HBASE_HOST = "localhost";
 
     @Override
     public String getComponentName() {
-	return "EvaluationStore";
+	return "EvaluatorStore";
     }
 
     @Override
@@ -45,153 +44,115 @@ public class EvaluationServiceDatabaseTransformator implements
     @Override
     public Set<TransformationSequence> getSequences() {
 	Set<TransformationSequence> sequences = new HashSet<>();
-	sequences.add(migrateVersion0_3_0_pre());
-	sequences.add(migrateVersion0_3_0());
+	sequences.add(migrateVersion0_4_0());
 	return sequences;
     }
 
-    /**
-     * This pre version is used to create the keyspace.
-     * 
-     * @return
-     */
-    private TransformationSequence migrateVersion0_3_0_pre() {
+    private TransformationSequence migrateVersion0_4_0() {
 	Version startVersion = new Version(0, 0, 0);
-	Version targetVersion = new Version(0, 3, 0, "pre");
-	ProvidedVersionRange versionRange = new ProvidedVersionRange(
-		targetVersion, null);
-	SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-		startVersion, versionRange);
-	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-		CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
+	Version targetVersion = new Version(0, 4, 0);
+	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
+	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
+	PhoenixTransformationSequence sequence = new PhoenixTransformationSequence(metadata, HBASE_HOST);
 
-	sequence.appendTransformation(CassandraStandardMigrations
-		.createKeyspace(sequence, EVALUATION_KEYSPACE,
-			"Rick-Rainer Ludwig",
-			"Keyspace for evaluation information",
-			ReplicationStrategy.SIMPLE_STRATEGY, 1));
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 
-	return sequence;
-    }
-
-    private TransformationSequence migrateVersion0_3_0() {
-	Version startVersion = new Version(0, 3, 0, "pre");
-	Version targetVersion = new Version(0, 3, 0);
-	ProvidedVersionRange versionRange = new ProvidedVersionRange(
-		targetVersion, null);
-	SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-		startVersion, versionRange);
-	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-		CASSANDRA_HOST, CASSANDRA_CQL_PORT, EVALUATION_KEYSPACE,
-		metadata);
-
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence,
-		"Rick-Rainer Ludwig",
-
-		"CREATE TABLE "
-			+ EVALUATION_PARAMETERS_TABLE
-			+ " (time timestamp, "
-			+ "evaluator_id ascii, "
-			+ "evaluator_name varchar, "
-			+ "evaluator_version ascii, "
-			+ "plugin_id varchar, "
-			+ "plugin_name varchar, "
-			+ "plugin_version varchar, "
-			+ "vendor varchar, "
-			+ "vendor_url varchar, "
-			+ "plugin_ui_path varchar, "
-			+ "parameter_name varchar, "
-			+ "parameter_unit varchar, "
-			+ "parameter_type ascii, "
-			+ "level_of_measurement ascii, "
-			+ "parameter_description varchar, "
-			+ "PRIMARY KEY(evaluator_id, evaluator_version, parameter_name))",
+	"CREATE TABLE " + EVALUATION_PARAMETERS_TABLE + " ("//
+		+ "evaluator_id varchar not null, " //
+		+ "evaluator_version varchar not null, " //
+		+ "parameter_name varchar not null, " //
+		+ "plugin_id varchar, " //
+		+ "time timestamp, " //
+		+ "evaluator_name varchar, " //
+		+ "plugin_name varchar, " //
+		+ "plugin_version varchar, " //
+		+ "vendor varchar, "//
+		+ "vendor_url varchar, " //
+		+ "plugin_ui_path varchar, " //
+		+ "parameter_unit varchar, " //
+		+ "parameter_type varchar, " //
+		+ "level_of_measurement varchar, " //
+		+ "parameter_description varchar, " //
+		+ "CONSTRAINT " + EVALUATION_PARAMETERS_TABLE
+		+ "_PK PRIMARY KEY(evaluator_id, evaluator_version, parameter_name))",
 		"This table contains all available parameters of all evaluators."));
 
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence,
-		"Rick-Rainer Ludwig",
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 
-		"CREATE INDEX parameters_vendor_idx ON "
-			+ EVALUATION_PARAMETERS_TABLE + " (vendor)",
+	"CREATE INDEX evaluator_store_parameters_vendor_idx ON " + EVALUATION_PARAMETERS_TABLE + " (vendor)",
 		"This index is used to search for parameters and evaluators of certain vendors."));
 
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence,
-		"Rick-Rainer Ludwig",
-		"CREATE TABLE "
-			+ EVALUATION_FILE_METRICS_TABLE
-			+ " (time timestamp, "
-			+ "hashid ascii, "
-			+ "source_code_location varchar, "
-			+ "code_range_type ascii, "
-			+ "code_range_name varchar, "
-			+ "evaluator_id ascii, "
-			+ "evaluator_version ascii, "
-			+ "parameter_name varchar, "
-			+ "parameter_unit varchar, "
-			+ "parameter_description varchar, "
-			+ "parameter_type ascii, "
-			+ "level_of_measurement ascii, "
-			+ "value double, "
-			+ "PRIMARY KEY(hashid, evaluator_id, parameter_name, code_range_type, code_range_name))",
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + EVALUATION_FILE_METRICS_TABLE + " ("//
+			+ "hashid varchar not null, " //
+			+ "evaluator_id varchar not null, " //
+			+ "parameter_name varchar not null, " //
+			+ "code_range_type varchar not null, " //
+			+ "code_range_name varchar not null, " //
+			+ "time timestamp, " //
+			+ "source_code_location varchar, " //
+			+ "evaluator_version varchar, " //
+			+ "parameter_unit varchar, " //
+			+ "parameter_description varchar, " //
+			+ "parameter_type varchar, " //
+			+ "level_of_measurement varchar, " //
+			+ "metric double, " + "CONSTRAINT " + EVALUATION_FILE_METRICS_TABLE
+			+ "_PK PRIMARY KEY(hashid, evaluator_id, parameter_name, code_range_type, code_range_name))",
 		"Keeps metrics for single files and their code ranges."));
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
-			+ EVALUATION_DIRECTORY_METRICS_TABLE
-			+ " (time timestamp, " + "hashid ascii, "
-			+ "evaluator_id ascii, " + "evaluator_version ascii, "
-			+ "parameter_name varchar, "
-			+ "parameter_unit varchar, "
-			+ "parameter_description varchar, "
-			+ "parameter_type ascii, "
-			+ "level_of_measurement ascii, " + "value double, "
-			+ "PRIMARY KEY(hashid, evaluator_id, parameter_name))",
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + EVALUATION_DIRECTORY_METRICS_TABLE + " ("//
+			+ "hashid varchar not null, " //
+			+ "evaluator_id varchar not null, " //
+			+ "parameter_name varchar not null, " //
+			+ "time timestamp, " //
+			+ "evaluator_version varchar, " //
+			+ "parameter_unit varchar, " //
+			+ "parameter_description varchar, " //
+			+ "parameter_type varchar, " //
+			+ "level_of_measurement varchar, " //
+			+ "metric double, " //
+			+ "CONSTRAINT " + EVALUATION_DIRECTORY_METRICS_TABLE
+			+ "_PK PRIMARY KEY(hashid, evaluator_id, parameter_name))",
 		"Keeps metrics for single files and their code ranges."));
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence,
-		"Rick-Rainer Ludwig",
-		"CREATE TABLE "
-			+ EVALUATION_PROJECT_METRICS_TABLE
-			+ " (time timestamp, "
-			+ "project_id ascii, "
-			+ "run_id bigint, "
-			+ "evaluator_id ascii, "
-			+ "evaluator_version ascii, "
-			+ "parameter_name varchar, "
-			+ "parameter_unit varchar, "
-			+ "parameter_description varchar, "
-			+ "parameter_type ascii, "
-			+ "level_of_measurement ascii, "
-			+ "value double, "
-			+ "PRIMARY KEY(project_id, run_id, evaluator_id, parameter_name))",
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + EVALUATION_PROJECT_METRICS_TABLE + " (" //
+			+ "project_id varchar not null, " //
+			+ "run_id bigint not null, " //
+			+ "evaluator_id varchar not null, " //
+			+ "parameter_name varchar not null, " //
+			+ "time timestamp, " //
+			+ "evaluator_version varchar, " //
+			+ "parameter_unit varchar, " //
+			+ "parameter_description varchar, " //
+			+ "parameter_type varchar, " //
+			+ "level_of_measurement varchar, " //
+			+ "metric double, " //
+			+ "CONSTRAINT " + EVALUATION_PROJECT_METRICS_TABLE
+			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, parameter_name))",
 		"Keeps metrics for single files and their code ranges."));
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence,
-		"Rick-Rainer Ludwig",
-		"CREATE TABLE "
-			+ EVALUATION_METRICS_TABLE
-			+ " (time timestamp, "
-			+ "project_id ascii, "
-			+ "run_id bigint, "
-			+ "evaluator_id ascii, "
-			+ "evaluator_version ascii, "
-			+ "hashid ascii, "
-			+ "internal_directory varchar, "
-			+ "file_name varchar, "
-			+ "source_code_location varchar, "
-			+ "language_name varchar, "
-			+ "language_version varchar, "
-			+ "code_range_name varchar, "
-			+ "code_range_type ascii, "
-			+ "parameter_name varchar, "
-			+ "parameter_unit varchar, "
-			+ "parameter_type ascii, "
-			+ "value double, "
-			+ "level_of_measurement ascii, "
-			+ "parameter_description varchar, "
-			+ "PRIMARY KEY((project_id, run_id), evaluator_id, parameter_name, code_range_type, hashid, code_range_name));",
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + EVALUATION_METRICS_TABLE + " (" //
+			+ "project_id varchar not null, " //
+			+ "run_id bigint not null, " //
+			+ "evaluator_id varchar not null, " //
+			+ "parameter_name varchar not null, " //
+			+ "code_range_type varchar not null, " //
+			+ "hashid varchar not null, " //
+			+ "code_range_name varchar not null, " //
+			+ "time timestamp, " //
+			+ "evaluator_version varchar, " //
+			+ "internal_directory varchar, " //
+			+ "file_name varchar, " //
+			+ "source_code_location varchar, " //
+			+ "language_name varchar, " //
+			+ "language_version varchar, " //
+			+ "parameter_unit varchar, " //
+			+ "parameter_type varchar, " //
+			+ "metric double, " //
+			+ "level_of_measurement varchar, " //
+			+ "parameter_description varchar, " //
+			+ "CONSTRAINT " + EVALUATION_METRICS_TABLE
+			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, parameter_name, code_range_type, hashid, code_range_name))",
 		"Keeps the metrics in a big table for efficient retrieval."));
 
 	return sequence;
@@ -199,11 +160,24 @@ public class EvaluationServiceDatabaseTransformator implements
 
     @Override
     public void dropAll() {
-	try (Cluster cluster = CassandraUtils.connectCluster()) {
-	    try (Session session = cluster.connect()) {
-		session.execute("DROP KEYSPACE IF EXISTS "
-			+ EvaluationStoreKeyspace.NAME);
+	try (Connection connection = DriverManager.getConnection("jdbc:phoenix:" + HBASE_HOST);) {
+	    try (Statement statement = connection.createStatement();) {
+		statement.execute("DROP TABLE IF EXISTS " + EVALUATION_METRICS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + EVALUATION_PARAMETERS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + EVALUATION_FILE_METRICS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + EVALUATION_DIRECTORY_METRICS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + EVALUATION_PROJECT_METRICS_TABLE);
+		connection.commit();
+	    } catch (SQLException e) {
+		try {
+		    connection.rollback();
+		} catch (SQLException e1) {
+		    logger.warn("Cannot rollback.", e);
+		}
+		throw new RuntimeException("Could not drop component tables.", e);
 	    }
+	} catch (SQLException e2) {
+	    throw new RuntimeException("Could not open Phoenix connection to HBase.", e2);
 	}
     }
 }

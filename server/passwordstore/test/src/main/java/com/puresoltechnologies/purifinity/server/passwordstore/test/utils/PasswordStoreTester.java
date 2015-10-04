@@ -52,17 +52,18 @@ public class PasswordStoreTester {
      * @throws SQLException
      */
     public static final void cleanupDatabase(Connection connection) throws SQLException {
-	try (Statement statement = connection.createStatement()) {
-	    ResultSet resultSet = statement.executeQuery("SELECT email FROM " + PasswordStoreBean.PASSWORD_TABLE_NAME);
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("DELETE FROM " + PasswordStoreBean.PASSWORD_TABLE_NAME + " where email=?;");
+	try (Statement selectEmailStatement = connection.createStatement();
+		PreparedStatement deletePasswordPreparedStatement = connection
+			.prepareStatement("DELETE FROM " + PasswordStoreBean.PASSWORD_TABLE_NAME + " where email=?;");
+		ResultSet resultSet = selectEmailStatement
+			.executeQuery("SELECT email FROM " + PasswordStoreBean.PASSWORD_TABLE_NAME)) {
 	    while (resultSet.next()) {
 		String email = resultSet.getString(1);
 		if (isDefaultAccount(email)) {
 		    continue;
 		}
-		preparedStatement.setString(1, email);
-		preparedStatement.execute();
+		deletePasswordPreparedStatement.setString(1, email);
+		deletePasswordPreparedStatement.execute();
 		connection.commit();
 	    }
 	}

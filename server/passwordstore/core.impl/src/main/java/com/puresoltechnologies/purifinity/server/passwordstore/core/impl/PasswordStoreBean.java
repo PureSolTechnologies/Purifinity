@@ -102,44 +102,44 @@ public class PasswordStoreBean implements PasswordStore {
 
     @Override
     public String createPassword(EmailAddress email, Password password) throws PasswordCreationException {
+	logger.info("An account for '" + email + "' is going to be created...");
+	if (!PasswordStrengthCalculator.validate(password.getPassword())) {
+	    Event event = PasswordStoreEvents.createPasswordTooWeakErrorEvent(email);
+	    eventLogger.logEvent(event);
+	    throw new PasswordCreationException(event.getMessage());
+	}
 	try {
-	    logger.info("An account for '" + email + "' is going to be created...");
-	    if (!PasswordStrengthCalculator.validate(password.getPassword())) {
-		Event event = PasswordStoreEvents.createPasswordTooWeakErrorEvent(email);
-		eventLogger.logEvent(event);
-		throw new PasswordCreationException(event.getMessage());
+	    try (PreparedStatement preparedStatement = connection.prepareStatement(RETRIEVE_ACCOUNT_STATEMENT)) {
+		preparedStatement.setString(1, email.getAddress());
+		ResultSet result = preparedStatement.executeQuery();
+		if (result.next()) {
+		    Event event = PasswordStoreEvents.createAccountAlreadyExistsErrorEvent(email);
+		    eventLogger.logEvent(event);
+		    throw new PasswordCreationException(event.getMessage());
+		}
 	    }
-	    PreparedStatement preparedStatement = connection.prepareStatement(RETRIEVE_ACCOUNT_STATEMENT);
-	    preparedStatement.setString(1, email.getAddress());
-	    ResultSet result = preparedStatement.executeQuery();
-	    if (result.next()) {
-		Event event = PasswordStoreEvents.createAccountAlreadyExistsErrorEvent(email);
-		eventLogger.logEvent(event);
-		throw new PasswordCreationException(event.getMessage());
+	    try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_ACCOUNT_STATEMENT)) {
+		Date created = new Date();
+		String activationKey = securityKeyGenerator.generate();
+		String passwordHash;
+		try {
+		    passwordHash = passwordEncrypter.encryptPassword(password.getPassword()).toString();
+		} catch (PasswordEncryptionException e) {
+		    Event event = PasswordStoreEvents.createPasswordEncryptionErrorEvent(email, e);
+		    eventLogger.logEvent(event);
+		    throw new RuntimeException(event.getMessage(), e);
+		}
+		preparedStatement.setTime(1, new Time(created.getTime()));
+		preparedStatement.setTime(2, new Time(created.getTime()));
+		preparedStatement.setString(3, email.getAddress());
+		preparedStatement.setString(4, passwordHash);
+		preparedStatement.setString(5, activationKey);
+		preparedStatement.execute();
+		connection.commit();
+
+		eventLogger.logEvent(PasswordStoreEvents.createAccountCreationEvent(email, activationKey));
+		return activationKey;
 	    }
-
-	    String passwordHash;
-	    try {
-		passwordHash = passwordEncrypter.encryptPassword(password.getPassword()).toString();
-	    } catch (PasswordEncryptionException e) {
-		Event event = PasswordStoreEvents.createPasswordEncryptionErrorEvent(email, e);
-		eventLogger.logEvent(event);
-		throw new RuntimeException(event.getMessage(), e);
-	    }
-	    String activationKey = securityKeyGenerator.generate();
-	    Date created = new Date();
-
-	    preparedStatement = connection.prepareStatement(CREATE_ACCOUNT_STATEMENT);
-	    preparedStatement.setTime(1, new Time(created.getTime()));
-	    preparedStatement.setTime(2, new Time(created.getTime()));
-	    preparedStatement.setString(3, email.getAddress());
-	    preparedStatement.setString(4, passwordHash);
-	    preparedStatement.setString(5, activationKey);
-	    preparedStatement.execute();
-	    connection.commit();
-
-	    eventLogger.logEvent(PasswordStoreEvents.createAccountCreationEvent(email, activationKey));
-	    return activationKey;
 	} catch (SQLException e) {
 	    try {
 		connection.rollback();
@@ -155,33 +155,35 @@ public class PasswordStoreBean implements PasswordStore {
 	try {
 	    logger.info("Account for user '" + email + "' is to be activated...");
 
-	    ResultSet account = getUserByEmail(email);
-	    if (account == null) {
-		Event event = PasswordStoreEvents.createInvalidEmailAddressErrorEvent(email);
-		eventLogger.logEvent(event);
-		throw new PasswordActivationException(event.getMessage());
-	    }
-	    String stateString = account.getString("state");
-	    if (!PasswordState.CREATED.name().equals(stateString)) {
-		Event event = PasswordStoreEvents.createAccountAlreadyActivatedEvent(email);
-		eventLogger.logEvent(event);
-		throw new PasswordActivationException(event.getMessage());
+	    try (ResultSet account = getUserByEmail(email)) {
+		if (account == null) {
+		    Event event = PasswordStoreEvents.createInvalidEmailAddressErrorEvent(email);
+		    eventLogger.logEvent(event);
+		    throw new PasswordActivationException(event.getMessage());
+		}
+		String stateString = account.getString("state");
+		if (!PasswordState.CREATED.name().equals(stateString)) {
+		    Event event = PasswordStoreEvents.createAccountAlreadyActivatedEvent(email);
+		    eventLogger.logEvent(event);
+		    throw new PasswordActivationException(event.getMessage());
+		}
+
+		String definedActivationKey = account.getString("activation_key");
+		if (!definedActivationKey.equals(activationKey)) {
+		    Event event = PasswordStoreEvents.createInvalidActivationKeyErrorEvent(email);
+		    eventLogger.logEvent(event);
+		    throw new PasswordActivationException(event.getMessage());
+		}
 	    }
 
-	    String definedActivationKey = account.getString("activation_key");
-	    if (!definedActivationKey.equals(activationKey)) {
-		Event event = PasswordStoreEvents.createInvalidActivationKeyErrorEvent(email);
-		eventLogger.logEvent(event);
-		throw new PasswordActivationException(event.getMessage());
+	    try (PreparedStatement preparedStatement = connection.prepareStatement(ACTIVATE_ACCOUNT_STATEMENT)) {
+		preparedStatement.setTime(1, new Time(new Date().getTime()));
+		preparedStatement.setString(2, email.getAddress());
+		preparedStatement.execute();
+		connection.commit();
+		eventLogger.logEvent(PasswordStoreEvents.createAccountActivatedEvent(email, activationKey));
+		return email;
 	    }
-
-	    PreparedStatement preparedStatement = connection.prepareStatement(ACTIVATE_ACCOUNT_STATEMENT);
-	    preparedStatement.setTime(1, new Time(new Date().getTime()));
-	    preparedStatement.setString(2, email.getAddress());
-	    preparedStatement.execute();
-	    connection.commit();
-	    eventLogger.logEvent(PasswordStoreEvents.createAccountActivatedEvent(email, activationKey));
-	    return email;
 	} catch (SQLException e) {
 	    try {
 		connection.rollback();
@@ -194,13 +196,15 @@ public class PasswordStoreBean implements PasswordStore {
     }
 
     private ResultSet getUserByEmail(EmailAddress email) throws SQLException {
-	PreparedStatement preparedStatement = connection.prepareStatement(RETRIEVE_ACCOUNT_STATEMENT);
-	preparedStatement.setString(1, email.getAddress());
-	ResultSet resultSet = preparedStatement.executeQuery();
-	if (resultSet.next()) {
-	    return resultSet;
-	} else {
-	    return null;
+	try (PreparedStatement preparedStatement = connection.prepareStatement(RETRIEVE_ACCOUNT_STATEMENT)) {
+	    preparedStatement.setString(1, email.getAddress());
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		if (resultSet.next()) {
+		    return resultSet;
+		} else {
+		    return null;
+		}
+	    }
 	}
     }
 
@@ -255,14 +259,15 @@ public class PasswordStoreBean implements PasswordStore {
 		eventLogger.logEvent(event);
 		throw new RuntimeException(event.getMessage(), e);
 	    }
-	    PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_PASSWORD_STATEMENT);
-	    preparedStatement.setString(1, passwordHash);
-	    preparedStatement.setString(2, email.getAddress());
-	    preparedStatement.execute();
-	    connection.commit();
+	    try (PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_PASSWORD_STATEMENT)) {
+		preparedStatement.setString(1, passwordHash);
+		preparedStatement.setString(2, email.getAddress());
+		preparedStatement.execute();
+		connection.commit();
 
-	    eventLogger.logEvent(PasswordStoreEvents.createPasswordChangedEvent(email));
-	    return true;
+		eventLogger.logEvent(PasswordStoreEvents.createPasswordChangedEvent(email));
+		return true;
+	    }
 	} catch (SQLException e) {
 	    try {
 		connection.rollback();
@@ -292,10 +297,11 @@ public class PasswordStoreBean implements PasswordStore {
 		eventLogger.logEvent(event);
 		throw new RuntimeException(event.getMessage(), e);
 	    }
-	    PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_PASSWORD_STATEMENT);
-	    preparedStatement.setString(1, passwordHash);
-	    preparedStatement.setString(2, email.getAddress());
-	    preparedStatement.execute();
+	    try (PreparedStatement preparedStatement = connection.prepareStatement(CHANGE_PASSWORD_STATEMENT)) {
+		preparedStatement.setString(1, passwordHash);
+		preparedStatement.setString(2, email.getAddress());
+		preparedStatement.execute();
+	    }
 	    connection.commit();
 
 	    eventLogger.logEvent(PasswordStoreEvents.createPasswordResetEvent(email));
@@ -325,9 +331,10 @@ public class PasswordStoreBean implements PasswordStore {
     @Override
     public void deletePassword(EmailAddress email) {
 	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ACCOUNT_STATEMENT);
-	    preparedStatement.setString(1, email.getAddress());
-	    preparedStatement.execute();
+	    try (PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ACCOUNT_STATEMENT)) {
+		preparedStatement.setString(1, email.getAddress());
+		preparedStatement.execute();
+	    }
 	    connection.commit();
 	    eventLogger.logEvent(PasswordStoreEvents.createPasswordDeleteEvent(email));
 	} catch (SQLException e) {

@@ -69,6 +69,11 @@ public class EventLoggerBean implements EventLogger, EventLoggerRemote {
 
     @PreDestroy
     public void disconnect() {
+	try {
+	    preparedLogEventStatement.close();
+	} catch (SQLException e) {
+	    logger.warn("Could not close prepared statement.", e);
+	}
 	logEvent(EventLoggerEvents.createStopEvent());
     }
 

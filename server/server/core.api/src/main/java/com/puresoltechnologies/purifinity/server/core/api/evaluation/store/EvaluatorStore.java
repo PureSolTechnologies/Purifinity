@@ -22,25 +22,20 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericRunMe
  */
 public interface EvaluatorStore {
 
-    public boolean hasFileResults(HashId hashId, CodeRangeType codeRangeType,
-	    String codeRangeName, String evaluatorId, String parameterName)
-	    throws EvaluationStoreException;
-
-    public boolean hasFileResults(HashId hashId, String evaluatorId)
-	    throws EvaluationStoreException;
-
-    public boolean hasDirectoryResults(HashId hashId, String evaluatorId,
+    public boolean hasFileResults(HashId hashId, CodeRangeType codeRangeType, String codeRangeName, String evaluatorId,
 	    String parameterName) throws EvaluationStoreException;
 
-    public boolean hasDirectoryResults(HashId hashId, String evaluatorId)
+    public boolean hasFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException;
+
+    public boolean hasDirectoryResults(HashId hashId, String evaluatorId, String parameterName)
 	    throws EvaluationStoreException;
 
-    public boolean hasProjectResults(String projectId, long runId,
-	    String evaluatorId, String parameterName)
+    public boolean hasDirectoryResults(HashId hashId, String evaluatorId) throws EvaluationStoreException;
+
+    public boolean hasProjectResults(String projectId, long runId, String evaluatorId, String parameterName)
 	    throws EvaluationStoreException;
 
-    public boolean hasProjectResults(String projectId, long runId,
-	    String evaluatorId) throws EvaluationStoreException;
+    public boolean hasProjectResults(String projectId, long runId, String evaluatorId) throws EvaluationStoreException;
 
     /**
      * This method stores the results for a single file.
@@ -56,8 +51,7 @@ public interface EvaluatorStore {
      *            stored.
      * @throws EvaluationStoreException
      */
-    public void storeFileResults(AnalysisRun analysisRun,
-	    CodeAnalysis codeAnalysis, GenericFileMetrics metrics)
+    public void storeFileResults(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, GenericFileMetrics metrics)
 	    throws EvaluationStoreException;
 
     /**
@@ -70,9 +64,8 @@ public interface EvaluatorStore {
      *            to be stored.
      * @throws EvaluationStoreException
      */
-    public void storeDirectoryResults(AnalysisRun analysisRun,
-	    AnalysisFileTree directory, GenericDirectoryMetrics metrics)
-	    throws EvaluationStoreException;
+    public void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directory,
+	    GenericDirectoryMetrics metrics) throws EvaluationStoreException;
 
     /**
      * This method stores the results for a whole project.
@@ -85,8 +78,7 @@ public interface EvaluatorStore {
      *            to be stored.
      * @throws EvaluationStoreException
      */
-    public void storeProjectResults(AnalysisRun analysisRun,
-	    AnalysisFileTree directory, GenericProjectMetrics metrics)
+    public void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directory, GenericProjectMetrics metrics)
 	    throws EvaluationStoreException;
 
     /**
@@ -98,8 +90,7 @@ public interface EvaluatorStore {
      *         <code>null</code> is returned if no results are available.
      * @throws EvaluationStoreException
      */
-    public GenericFileMetrics readFileResults(HashId hashId, String evaluatorId)
-	    throws EvaluationStoreException;
+    public GenericFileMetrics readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException;
 
     /**
      * This method reads the results for a single directory.
@@ -111,21 +102,21 @@ public interface EvaluatorStore {
      *         available.
      * @throws EvaluationStoreException
      */
-    public GenericDirectoryMetrics readDirectoryResults(HashId hashId,
-	    String evaluatorId) throws EvaluationStoreException;
+    public GenericDirectoryMetrics readDirectoryResults(HashId hashId, String evaluatorId)
+	    throws EvaluationStoreException;
 
-    public GenericProjectMetrics readProjectResults(String projectId,
-	    long runId, String evaluatorId) throws EvaluationStoreException;
+    public GenericProjectMetrics readProjectResults(String projectId, long runId, String evaluatorId)
+	    throws EvaluationStoreException;
 
-    public void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    CodeAnalysis codeAnalysis, GenericFileMetrics metrics);
+    public void storeMetricsInBigTable(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, GenericFileMetrics metrics)
+	    throws EvaluationStoreException;
 
-    public void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    AnalysisFileTree directory, GenericDirectoryMetrics metrics);
+    public void storeMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
+	    GenericDirectoryMetrics metrics) throws EvaluationStoreException;
 
-    public void storeMetricsInBigTable(AnalysisRun analysisRun,
-	    AnalysisFileTree directory, GenericProjectMetrics metrics);
+    public void storeMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
+	    GenericProjectMetrics metrics) throws EvaluationStoreException;
 
-    public GenericRunMetrics readRunMetrics(String projectId, long runId,
-	    String evaluatorId) throws EvaluationStoreException;
+    public GenericRunMetrics readRunMetrics(String projectId, long runId, String evaluatorId)
+	    throws EvaluationStoreException;
 }

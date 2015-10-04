@@ -244,26 +244,26 @@ public class AnalysisStoreFileTreeUtils {
      * @throws AnalysisStoreException
      */
     private List<AnalysisInformation> readAnalyses(HashId hashId) throws AnalysisStoreException {
-	try {
-	    List<AnalysisInformation> analyses = new ArrayList<AnalysisInformation>();
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("SELECT * FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashId=?");
+	try (PreparedStatement preparedStatement = connection
+		.prepareStatement("SELECT * FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashId=?")) {
 	    preparedStatement.setString(1, hashId.toString());
-	    ResultSet resultSet = preparedStatement.executeQuery();
-	    while (resultSet.next()) {
-		Date time = resultSet.getDate("time");
-		long duration = resultSet.getLong("duration");
-		String language = resultSet.getString("language");
-		String languageVersion = resultSet.getString("language_version");
-		String analyzerId = resultSet.getString("analyzer_id");
-		Version analyzerVersion = Version.valueOf(resultSet.getString("analyzer_version"));
-		boolean successful = resultSet.getBoolean("successful");
-		String message = resultSet.getString("analyzer_message");
-		AnalysisInformation information = new AnalysisInformation(hashId, time, duration, successful, language,
-			languageVersion, analyzerId, analyzerVersion, message);
-		analyses.add(information);
+	    List<AnalysisInformation> analyses = new ArrayList<AnalysisInformation>();
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		while (resultSet.next()) {
+		    Date time = resultSet.getDate("time");
+		    long duration = resultSet.getLong("duration");
+		    String language = resultSet.getString("language");
+		    String languageVersion = resultSet.getString("language_version");
+		    String analyzerId = resultSet.getString("analyzer_id");
+		    Version analyzerVersion = Version.valueOf(resultSet.getString("analyzer_version"));
+		    boolean successful = resultSet.getBoolean("successful");
+		    String message = resultSet.getString("analyzer_message");
+		    AnalysisInformation information = new AnalysisInformation(hashId, time, duration, successful,
+			    language, languageVersion, analyzerId, analyzerVersion, message);
+		    analyses.add(information);
+		}
+		return analyses;
 	    }
-	    return analyses;
 	} catch (SQLException e) {
 	    throw new AnalysisStoreException("Could not read analyses.", e);
 	}
@@ -287,7 +287,5 @@ public class AnalysisStoreFileTreeUtils {
 	    xoManager.delete(fileVertex);
 	}
 	xoManager.delete(rootDirectory);
-
     }
-
 }

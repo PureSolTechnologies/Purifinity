@@ -268,7 +268,7 @@ public abstract class AbstractEvaluator implements Evaluator {
     }
 
     protected final void storeMetricsInBigTable(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
-	    FileMetrics fileResults) {
+	    FileMetrics fileResults) throws EvaluationStoreException {
 	GenericFileMetrics metrics = new GenericFileMetrics(getInformation().getId(), getInformation().getVersion(),
 		fileResults.getHashId(), fileResults.getSourceCodeLocation(), new Date(), fileResults.getParameters(),
 		fileResults.getCodeRangeMetrics());
@@ -276,7 +276,7 @@ public abstract class AbstractEvaluator implements Evaluator {
     }
 
     protected final void storeMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
-	    DirectoryMetrics directoryResults) {
+	    DirectoryMetrics directoryResults) throws EvaluationStoreException {
 	GenericDirectoryMetrics metrics = new GenericDirectoryMetrics(getInformation().getId(),
 		getInformation().getVersion(), directoryResults.getHashId(), new Date(),
 		directoryResults.getParameters(), directoryResults.getValues());

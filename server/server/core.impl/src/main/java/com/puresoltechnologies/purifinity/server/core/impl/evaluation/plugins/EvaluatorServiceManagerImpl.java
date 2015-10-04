@@ -26,7 +26,7 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorSe
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesValue;
-import com.puresoltechnologies.purifinity.server.core.impl.evaluation.store.EvaluatorStoreCassandraUtils;
+import com.puresoltechnologies.purifinity.server.core.impl.evaluation.store.EvaluatorStoreUtils;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
@@ -43,7 +43,7 @@ public class EvaluatorServiceManagerImpl extends
 	private PreferencesStore preferencesStore;
 
 	@Inject
-	private EvaluatorStoreCassandraUtils evaluatorStoreCassandraUtils;
+	private EvaluatorStoreUtils evaluatorStoreCassandraUtils;
 
 	private final Map<String, Boolean> analyzerActivations = new HashMap<>();
 

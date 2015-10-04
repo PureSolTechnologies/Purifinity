@@ -148,16 +148,15 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 
     private void storeProjectAnalysisSettings(String projectId, AnalysisProjectSettings settings)
 	    throws AnalysisStoreException {
-	try {
+	try (PreparedStatement preparedStatement = connection.prepareStatement(
+		"UPSERT INTO " + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " (project_id, name, description, "
+			+ "file_includes, file_excludes, " + "location_includes, location_excludes, "
+			+ "ignore_hidden, repository_location_keys, repository_location_values) "
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    String name = settings.getName();
 	    String description = settings.getDescription();
 	    FileSearchConfiguration fileSearchConfiguration = settings.getFileSearchConfiguration();
 
-	    PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
-		    + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " (project_id, name, description, "
-		    + "file_includes, file_excludes, " + "location_includes, location_excludes, "
-		    + "ignore_hidden, repository_location_keys, repository_location_values) "
-		    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setString(2, name);
 	    preparedStatement.setString(3, description);
@@ -267,36 +266,37 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 
     @Override
     public AnalysisProjectSettings readAnalysisProjectSettings(String projectId) throws AnalysisStoreException {
-	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location_keys, repository_location_values FROM "
-			    + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " WHERE project_id=?");
+	try (PreparedStatement preparedStatement = connection.prepareStatement(
+		"SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location_keys, repository_location_values FROM "
+			+ HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " WHERE project_id=?")) {
 	    preparedStatement.setString(1, projectId);
-	    ResultSet resultSet = preparedStatement.executeQuery();
-	    if (!resultSet.next()) {
-		return null;
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		if (!resultSet.next()) {
+		    return null;
+		}
+		String name = resultSet.getString("name");
+		String description = resultSet.getString("description");
+		List<String> fileIncludes = HBaseHelper.getList(resultSet, "file_includes", String.class);
+		List<String> fileExcludes = HBaseHelper.getList(resultSet, "file_excludes", String.class);
+		List<String> locationIncludes = HBaseHelper.getList(resultSet, "location_includes", String.class);
+		List<String> locationExcludes = HBaseHelper.getList(resultSet, "location_excludes", String.class);
+		boolean ignoreHidden = resultSet.getBoolean("ignore_hidden");
+		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(locationIncludes,
+			locationExcludes, fileIncludes, fileExcludes, ignoreHidden);
+		String[] repositoryLocationKeys = HBaseHelper.getArray(resultSet, "repository_location_keys",
+			String.class);
+		String[] repositoryLocationValues = HBaseHelper.getArray(resultSet, "repository_location_values",
+			String.class);
+		if (repositoryLocationKeys.length != repositoryLocationValues.length) {
+		    throw new AnalysisStoreException(
+			    "Array lenght of keys and values for repository location are different.");
+		}
+		Properties repositoryLocation = new Properties();
+		for (int i = 0; i < repositoryLocationKeys.length; ++i) {
+		    repositoryLocation.put(repositoryLocationKeys[i], repositoryLocationValues[i]);
+		}
+		return new AnalysisProjectSettings(name, description, fileSearchConfiguration, repositoryLocation);
 	    }
-	    String name = resultSet.getString("name");
-	    String description = resultSet.getString("description");
-	    List<String> fileIncludes = HBaseHelper.getList(resultSet, "file_includes", String.class);
-	    List<String> fileExcludes = HBaseHelper.getList(resultSet, "file_excludes", String.class);
-	    List<String> locationIncludes = HBaseHelper.getList(resultSet, "location_includes", String.class);
-	    List<String> locationExcludes = HBaseHelper.getList(resultSet, "location_excludes", String.class);
-	    boolean ignoreHidden = resultSet.getBoolean("ignore_hidden");
-	    FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(locationIncludes,
-		    locationExcludes, fileIncludes, fileExcludes, ignoreHidden);
-	    String[] repositoryLocationKeys = HBaseHelper.getArray(resultSet, "repository_location_keys", String.class);
-	    String[] repositoryLocationValues = HBaseHelper.getArray(resultSet, "repository_location_values",
-		    String.class);
-	    if (repositoryLocationKeys.length != repositoryLocationValues.length) {
-		throw new AnalysisStoreException(
-			"Array lenght of keys and values for repository location are different.");
-	    }
-	    Properties repositoryLocation = new Properties();
-	    for (int i = 0; i < repositoryLocationKeys.length; ++i) {
-		repositoryLocation.put(repositoryLocationKeys[i], repositoryLocationValues[i]);
-	    }
-	    return new AnalysisProjectSettings(name, description, fileSearchConfiguration, repositoryLocation);
 	} catch (SQLException e) {
 	    throw new AnalysisStoreException("Could not read project settings.", e);
 	}
@@ -486,23 +486,23 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 
     @Override
     public FileSearchConfiguration readSearchConfiguration(String projectId, long runId) throws AnalysisStoreException {
-	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
-			    + HBaseElementNames.ANALYSIS_RUN_SETTINGS_TABLE + " WHERE project_id=? AND run_id=?");
+	try (PreparedStatement preparedStatement = connection.prepareStatement(
+		"SELECT file_includes, file_excludes, location_includes, location_excludes, ignore_hidden FROM "
+			+ HBaseElementNames.ANALYSIS_RUN_SETTINGS_TABLE + " WHERE project_id=? AND run_id=?")) {
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setLong(2, runId);
-	    ResultSet resultSet = preparedStatement.executeQuery();
-	    if (!resultSet.next()) {
-		return null;
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		if (!resultSet.next()) {
+		    return null;
+		}
+		List<String> fileIncludes = HBaseHelper.getList(resultSet, "file_includes", String.class);
+		List<String> fileExcludes = HBaseHelper.getList(resultSet, "file_excludes", String.class);
+		List<String> locationIncludes = HBaseHelper.getList(resultSet, "location_includes", String.class);
+		List<String> locationExcludes = HBaseHelper.getList(resultSet, "location_excludes", String.class);
+		boolean ignoreHidden = resultSet.getBoolean("ignore_hidden");
+		return new FileSearchConfiguration(locationIncludes, locationExcludes, fileIncludes, fileExcludes,
+			ignoreHidden);
 	    }
-	    List<String> fileIncludes = HBaseHelper.getList(resultSet, "file_includes", String.class);
-	    List<String> fileExcludes = HBaseHelper.getList(resultSet, "file_excludes", String.class);
-	    List<String> locationIncludes = HBaseHelper.getList(resultSet, "location_includes", String.class);
-	    List<String> locationExcludes = HBaseHelper.getList(resultSet, "location_excludes", String.class);
-	    boolean ignoreHidden = resultSet.getBoolean("ignore_hidden");
-	    return new FileSearchConfiguration(locationIncludes, locationExcludes, fileIncludes, fileExcludes,
-		    ignoreHidden);
 	} catch (SQLException e) {
 	    throw new AnalysisStoreException("Could not read search configuration.", e);
 	}

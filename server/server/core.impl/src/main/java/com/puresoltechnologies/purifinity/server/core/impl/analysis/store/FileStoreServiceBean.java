@@ -138,38 +138,40 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
     @Override
     @Lock(LockType.READ)
     public List<CodeAnalysis> loadAnalyses(HashId hashId) throws FileStoreException {
-	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "SELECT analysis FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashid=?");
+	try (PreparedStatement preparedStatement = connection.prepareStatement(
+		"SELECT analysis FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashid=?")) {
 	    preparedStatement.setString(1, hashId.toString());
-	    ResultSet resultSet = preparedStatement.executeQuery();
-	    if (!resultSet.next()) {
-		throw new FileStoreException("Could not load analyses for file with hash '" + hashId + "'");
-	    }
-	    List<CodeAnalysis> analyses = new ArrayList<>();
-	    do {
-		byte[] bytes = resultSet.getBytes(1);
-		try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes)) {
-		    try (ObjectInputStream inStream = new ObjectInputStream(byteArrayInputStream)) {
-			Object object = inStream.readObject();
-			CodeAnalysis analysis = (CodeAnalysis) object;
-			if (!hashId.equals(analysis.getAnalysisInformation().getHashId())) {
-			    /*
-			     * This check is necessary, because an issue
-			     * occurred during Purifinity 0.3.0 development. If
-			     * hash IDs do not match, evaluations could crash.
-			     */
-			    throw new FileStoreException("Could not load analysis for file with hash id '" + hashId
-				    + "', because analysis assigned to this hash id contains hash id '"
-				    + analysis.getAnalysisInformation().getHashId() + "'!");
-			}
-			analyses.add(analysis);
-		    }
-		} catch (ClassNotFoundException | IOException e) {
-		    throw new FileStoreException("Could not load analysis for file with hash id '" + hashId + "'", e);
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		if (!resultSet.next()) {
+		    throw new FileStoreException("Could not load analyses for file with hash '" + hashId + "'");
 		}
-	    } while (resultSet.next());
-	    return analyses;
+		List<CodeAnalysis> analyses = new ArrayList<>();
+		do {
+		    byte[] bytes = resultSet.getBytes(1);
+		    try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes)) {
+			try (ObjectInputStream inStream = new ObjectInputStream(byteArrayInputStream)) {
+			    Object object = inStream.readObject();
+			    CodeAnalysis analysis = (CodeAnalysis) object;
+			    if (!hashId.equals(analysis.getAnalysisInformation().getHashId())) {
+				/*
+				 * This check is necessary, because an issue
+				 * occurred during Purifinity 0.3.0 development.
+				 * If hash IDs do not match, evaluations could
+				 * crash.
+				 */
+				throw new FileStoreException("Could not load analysis for file with hash id '" + hashId
+					+ "', because analysis assigned to this hash id contains hash id '"
+					+ analysis.getAnalysisInformation().getHashId() + "'!");
+			    }
+			    analyses.add(analysis);
+			}
+		    } catch (ClassNotFoundException | IOException e) {
+			throw new FileStoreException("Could not load analysis for file with hash id '" + hashId + "'",
+				e);
+		    }
+		} while (resultSet.next());
+		return analyses;
+	    }
 	} catch (SQLException e) {
 	    throw new FileStoreException("Could not read analyses.", e);
 	}
@@ -178,10 +180,9 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
     @Override
     @Lock(LockType.READ)
     public void storeAnalysis(CodeAnalysis fileAnalysis) throws FileStoreException {
-	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
-		    + HBaseElementNames.ANALYSIS_ANALYSES_TABLE
-		    + " (time, hashid, language, language_version, analyzer_id, analyzer_version, analyzer_message, successful, duration, analysis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	try (PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
+		+ HBaseElementNames.ANALYSIS_ANALYSES_TABLE
+		+ " (time, hashid, language, language_version, analyzer_id, analyzer_version, analyzer_message, successful, duration, analysis) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    AnalysisInformation analysisInformation = fileAnalysis.getAnalysisInformation();
 	    preparedStatement.setTime(1, new Time(analysisInformation.getStartTime().getTime()));
 	    preparedStatement.setString(2, analysisInformation.getHashId().toString());
@@ -239,20 +240,20 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
     @Override
     @Lock(LockType.READ)
     public boolean wasAnalyzed(HashId hashId) throws FileStoreException {
-	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "SELECT successful FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashid=?");
+	try (PreparedStatement preparedStatement = connection.prepareStatement(
+		"SELECT successful FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashid=?")) {
 	    preparedStatement.setString(1, hashId.toString());
-	    ResultSet resultSet = preparedStatement.executeQuery();
-	    if (!resultSet.next()) {
-		return false;
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		if (!resultSet.next()) {
+		    return false;
+		}
+		boolean analyzed = resultSet.getBoolean(1);
+		if (resultSet.next()) {
+		    throw new FileStoreException(
+			    "Could not check for successful analysis due to multiple restuls for '" + hashId + "'.");
+		}
+		return analyzed;
 	    }
-	    boolean analyzed = resultSet.getBoolean(1);
-	    if (resultSet.next()) {
-		throw new FileStoreException(
-			"Could not check for successful analysis due to multiple restuls for '" + hashId + "'.");
-	    }
-	    return analyzed;
 	} catch (SQLException e) {
 	    throw new FileStoreException("Could not read analysis status.", e);
 	}
