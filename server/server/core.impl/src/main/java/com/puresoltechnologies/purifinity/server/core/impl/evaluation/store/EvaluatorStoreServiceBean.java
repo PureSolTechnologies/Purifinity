@@ -45,7 +45,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.common.Source
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.EvaluatorStoreConnection;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 import com.puresoltechnologies.versioning.Version;
 
 /**
@@ -71,7 +71,8 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 	String parameterType = resultSet.getString("parameter_type");
 	try {
 	    Class<?> type = Class.forName(parameterType);
-	    return MetricParameter.create(parameterName, parameterUnit, levelOfMeasurement, parameterDescription, type);
+	    return MetricParameter.create(parameterName, parameterUnit == null ? "" : parameterUnit, levelOfMeasurement,
+		    parameterDescription, type);
 	} catch (ClassNotFoundException e) {
 	    logger.error("Could not find type class '" + parameterType + "'.");
 	    return null;
@@ -91,7 +92,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     public boolean hasFileResults(HashId hashId, CodeRangeType codeRangeType, String codeRangeName, String evaluatorId,
 	    String parameterName) throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT hashid FROM "
-		+ CassandraElementNames.EVALUATION_FILE_METRICS_TABLE
+		+ HBaseElementNames.EVALUATION_FILE_METRICS_TABLE
 		+ " WHERE hashid=? AND code_range_type=? AND code_range_name=? AND evaluator_id=? AND parameter_name=?")) {
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, codeRangeType.name());
@@ -117,7 +118,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     @Override
     public boolean hasFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT hashid FROM "
-		+ CassandraElementNames.EVALUATION_FILE_METRICS_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
+		+ HBaseElementNames.EVALUATION_FILE_METRICS_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -132,7 +133,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     public boolean hasDirectoryResults(HashId hashId, String evaluatorId, String parameterName)
 	    throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("SELECT hashid FROM " + CassandraElementNames.EVALUATION_DIRECTORY_METRICS_TABLE
+		.prepareStatement("SELECT hashid FROM " + HBaseElementNames.EVALUATION_DIRECTORY_METRICS_TABLE
 			+ " WHERE hashid=? AND evaluator_id=? AND parameter_name=?")) {
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
@@ -155,7 +156,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     @Override
     public boolean hasDirectoryResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT hashid FROM "
-		+ CassandraElementNames.EVALUATION_DIRECTORY_METRICS_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
+		+ HBaseElementNames.EVALUATION_DIRECTORY_METRICS_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -170,7 +171,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     public boolean hasProjectResults(String projectId, long runId, String evaluatorId, String parameterName)
 	    throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("SELECT hashid FROM " + CassandraElementNames.EVALUATION_PROJECT_METRICS_TABLE
+		.prepareStatement("SELECT hashid FROM " + HBaseElementNames.EVALUATION_PROJECT_METRICS_TABLE
 			+ " WHERE project_id=? AND run_id=? AND evaluator_id=? AND parameter_name=?")) {
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setLong(2, runId);
@@ -194,7 +195,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     @Override
     public boolean hasProjectResults(String projectId, long runId, String evaluatorId) throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("SELECT hashid FROM " + CassandraElementNames.EVALUATION_PROJECT_METRICS_TABLE
+		.prepareStatement("SELECT hashid FROM " + HBaseElementNames.EVALUATION_PROJECT_METRICS_TABLE
 			+ " WHERE project_id=? AND run_id=? AND evaluator_id=?")) {
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setLong(2, runId);
@@ -226,12 +227,11 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 
     private void storeFileMetricsAsValues(AnalysisRun analysisRun, CodeAnalysis codeAnalysis,
 	    GenericFileMetrics metrics) throws SQLException {
-	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("UPSERT INTO " + CassandraElementNames.EVALUATION_FILE_METRICS_TABLE + " (time, "
-			+ "hashid, " + "source_code_location, " + "code_range_type, " + "code_range_name, "
-			+ "evaluator_id, " + "evaluator_version, " + "parameter_name, " + "parameter_unit, "
-			+ "parameter_type, " + "parameter_description, " + "level_of_measurement, " + "value) VALUES "
-			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);")) {
+	try (PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
+		+ HBaseElementNames.EVALUATION_FILE_METRICS_TABLE + " (time, " + "hashid, " + "source_code_location, "
+		+ "code_range_type, " + "code_range_name, " + "evaluator_id, " + "evaluator_version, "
+		+ "parameter_name, " + "parameter_unit, " + "parameter_type, " + "parameter_description, "
+		+ "level_of_measurement, " + "metric) VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    Date time = metrics.getTime();
 	    AnalysisInformation analysisInformation = codeAnalysis.getAnalysisInformation();
 	    HashId hashId = analysisInformation.getHashId();
@@ -302,12 +302,12 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     private void storeMetricsInBigTableWithoutCommit(AnalysisRun analysisRun, CodeAnalysis codeAnalysis,
 	    GenericFileMetrics metrics) throws SQLException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement(
-		"UPSERT INTO " + CassandraElementNames.EVALUATION_METRICS_TABLE + " (time," + "project_id, "
-			+ "run_id, " + "hashid, " + "internal_directory, " + "file_name, " + "source_code_location, "
+		"UPSERT INTO " + HBaseElementNames.EVALUATION_METRICS_TABLE + " (time," + "project_id, " + "run_id, "
+			+ "hashid, " + "internal_directory, " + "file_name, " + "source_code_location, "
 			+ "language_name, " + "language_version, " + "evaluator_id, " + "evaluator_version, "
 			+ "code_range_name, " + "code_range_type, " + "parameter_name, " + "parameter_unit, "
-			+ "parameter_type, " + "value, " + "level_of_measurement, " + "parameter_description ) VALUES "
-			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);")) {
+			+ "parameter_type, " + "metric, " + "level_of_measurement, " + "parameter_description ) VALUES "
+			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    Date time = metrics.getTime();
 	    String projectId = analysisRun.getInformation().getProjectId();
 	    long runId = analysisRun.getInformation().getRunId();
@@ -392,10 +392,10 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     private void storeDirectoryMetricsAsValues(AnalysisRun analysisRun, AnalysisFileTree analysisFileTree,
 	    GenericDirectoryMetrics metrics) throws SQLException {
 	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("UPSERT INTO " + CassandraElementNames.EVALUATION_DIRECTORY_METRICS_TABLE + " (time, "
+		.prepareStatement("UPSERT INTO " + HBaseElementNames.EVALUATION_DIRECTORY_METRICS_TABLE + " (time, "
 			+ "hashid, " + "evaluator_id, " + "evaluator_version, " + "parameter_name, "
 			+ "parameter_unit, " + "parameter_type, " + "parameter_description, " + "level_of_measurement, "
-			+ "value) VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);")) {
+			+ "metric) VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    Date time = metrics.getTime();
 	    HashId hashId = analysisFileTree.getHashId();
 	    String evaluatorId = metrics.getEvaluatorId();
@@ -453,11 +453,11 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     private void storeMetricsInBigTableWithoutCommit(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    GenericDirectoryMetrics metrics) throws SQLException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement(
-		"UPSERT INTO " + CassandraElementNames.EVALUATION_METRICS_TABLE + " (time, " + "project_id, "
-			+ "run_id, " + "hashid, " + "internal_directory, " + "file_name, " + "code_range_type,"
-			+ "code_range_name," + "evaluator_id, " + "evaluator_version, " + "parameter_name, "
-			+ "parameter_unit, " + "parameter_type, " + "value, " + "level_of_measurement, "
-			+ "parameter_description) VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);")) {
+		"UPSERT INTO " + HBaseElementNames.EVALUATION_METRICS_TABLE + " (time, " + "project_id, " + "run_id, "
+			+ "hashid, " + "internal_directory, " + "file_name, " + "code_range_type," + "code_range_name,"
+			+ "evaluator_id, " + "evaluator_version, " + "parameter_name, " + "parameter_unit, "
+			+ "parameter_type, " + "metric, " + "level_of_measurement, " + "parameter_description) VALUES "
+			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    Date time = metrics.getTime();
 	    String projectId = analysisRun.getInformation().getProjectId();
 	    long runId = analysisRun.getInformation().getRunId();
@@ -520,9 +520,9 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     private void storeProjectMetricsAsValues(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    GenericProjectMetrics metrics) throws SQLException {
 	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("UPSERT INTO " + CassandraElementNames.EVALUATION_DIRECTORY_METRICS_TABLE + " (time, "
+		.prepareStatement("UPSERT INTO " + HBaseElementNames.EVALUATION_DIRECTORY_METRICS_TABLE + " (time, "
 			+ "project_id, " + "run_id, " + "evaluator_id, " + "evaluator_version, " + "parameter_name, "
-			+ "parameter_unit, " + "value) VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?);")) {
+			+ "parameter_unit, " + "metric) VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    Date time = metrics.getTime();
 	    AnalysisRunInformation information = analysisRun.getInformation();
 	    String projectId = information.getProjectId();
@@ -577,10 +577,10 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     private void storeMetricsInBigTableWithoutCommit(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    GenericProjectMetrics metrics) throws SQLException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
-		+ CassandraElementNames.EVALUATION_METRICS_TABLE + " (time, " + "project_id, " + "run_id, " + "hashid, "
+		+ HBaseElementNames.EVALUATION_METRICS_TABLE + " (time, " + "project_id, " + "run_id, " + "hashid, "
 		+ "internal_directory, " + "file_name, " + "code_range_type" + "evaluator_id, " + "evaluator_version, "
-		+ "parameter_name, " + "parameter_unit, " + "parameter_type, " + "value, " + "level_of_measurement, "
-		+ "parameter_description) VALUES " + "( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);")) {
+		+ "parameter_name, " + "parameter_unit, " + "parameter_type, " + "metric, " + "level_of_measurement, "
+		+ "parameter_description) VALUES " + "( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    Date time = metrics.getTime();
 	    String projectId = analysisRun.getInformation().getProjectId();
 	    long runId = analysisRun.getInformation().getRunId();
@@ -625,8 +625,8 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 	try (PreparedStatement preparedStatement = connection
 		.prepareStatement("SELECT " + "time, " + "code_range_type, " + "code_range_name, "
 			+ "evaluator_version, " + "parameter_name, " + "parameter_unit, " + "parameter_description, "
-			+ "parameter_type, " + "level_of_measurement, " + "value, " + "source_code_location " + "FROM "
-			+ CassandraElementNames.EVALUATION_FILE_METRICS_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
+			+ "parameter_type, " + "level_of_measurement, " + "metric, " + "source_code_location " + "FROM "
+			+ HBaseElementNames.EVALUATION_FILE_METRICS_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -686,7 +686,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 			codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);
 			buffer.put(codeRangeType, codeRangeTypeBuffer);
 		    }
-		    double value = resultSet.getDouble("value");
+		    double value = resultSet.getDouble("metric");
 		    MetricValue<?> metricValue = MetricValue.create(metricsParameter, value);
 		    parameterBuffer.put(metricsParameter, metricValue);
 		}
@@ -722,8 +722,8 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 	    throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, " + "hashid, "
 		+ "evaluator_version, " + "parameter_name, " + "parameter_unit, " + "parameter_description, "
-		+ "parameter_type, " + "level_of_measurement, " + "value " + "FROM "
-		+ CassandraElementNames.EVALUATION_DIRECTORY_METRICS_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
+		+ "parameter_type, " + "level_of_measurement, " + "metric " + "FROM "
+		+ HBaseElementNames.EVALUATION_DIRECTORY_METRICS_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -753,7 +753,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 				+ "' are different for evaluatorId=" + evaluatorId + " and hashId="
 				+ hashId.toString());
 		    }
-		    double value = resultSet.getDouble("value");
+		    double value = resultSet.getDouble("metric");
 		    MetricValue<?> metricValue = MetricValue.create(metricsParameter, value);
 		    buffer.put(metricsParameter, metricValue);
 		}
@@ -780,8 +780,8 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     public GenericProjectMetrics readProjectResults(String projectId, long runId, String evaluatorId)
 	    throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, " + "project_id, "
-		+ "run_id, " + "evaluator_version, " + "parameter_name, " + "value " + "FROM "
-		+ CassandraElementNames.EVALUATION_PROJECT_METRICS_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
+		+ "run_id, " + "evaluator_version, " + "parameter_name, " + "metric " + "FROM "
+		+ HBaseElementNames.EVALUATION_PROJECT_METRICS_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setLong(2, runId);
 	    preparedStatement.setString(3, evaluatorId);
@@ -812,9 +812,9 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 	    throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, " + "hashid, "
 		+ "evaluator_version, " + "code_range_name, " + "source_code_location, " + "code_range_type, "
-		+ "parameter_name, " + "parameter_unit, " + "parameter_type, " + "value, " + "level_of_measurement, "
-		+ "parameter_description FROM " + CassandraElementNames.EVALUATION_METRICS_TABLE + " WHERE "
-		+ "project_id=? AND run_id=? AND evaluator_id=?;")) {
+		+ "parameter_name, " + "parameter_unit, " + "parameter_type, " + "metric, " + "level_of_measurement, "
+		+ "parameter_description FROM " + HBaseElementNames.EVALUATION_METRICS_TABLE + " WHERE "
+		+ "project_id=? AND run_id=? AND evaluator_id=?")) {
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setLong(2, runId);
 	    preparedStatement.setString(3, evaluatorId);
@@ -880,7 +880,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 			parameterBuffer = new HashMap<>();
 			codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);
 		    }
-		    double value = resultSet.getDouble("value");
+		    double value = resultSet.getDouble("metric");
 		    MetricValue<?> metricValue = MetricValue.create(metricsParameter, value);
 		    parameterBuffer.put(metricsParameter, metricValue);
 		}

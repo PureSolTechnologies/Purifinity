@@ -196,15 +196,16 @@ public class PasswordStoreBean implements PasswordStore {
     }
 
     private ResultSet getUserByEmail(EmailAddress email) throws SQLException {
-	try (PreparedStatement preparedStatement = connection.prepareStatement(RETRIEVE_ACCOUNT_STATEMENT)) {
-	    preparedStatement.setString(1, email.getAddress());
-	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
-		if (resultSet.next()) {
-		    return resultSet;
-		} else {
-		    return null;
-		}
-	    }
+	PreparedStatement preparedStatement = connection.prepareStatement(RETRIEVE_ACCOUNT_STATEMENT);
+	// XXX preparedStatment needs to be closed, but ResultSet is closed,
+	// too, but needs to returned... Maybe we should return a Properties
+	// object here?
+	preparedStatement.setString(1, email.getAddress());
+	ResultSet resultSet = preparedStatement.executeQuery();
+	if (resultSet.next()) {
+	    return resultSet;
+	} else {
+	    return null;
 	}
     }
 
@@ -212,24 +213,27 @@ public class PasswordStoreBean implements PasswordStore {
     public boolean authenticate(EmailAddress email, Password password) {
 	try {
 	    logger.info("Authenticating user '" + email + "'...");
-	    ResultSet account = getUserByEmail(email);
-	    if (account == null) {
-		eventLogger.logEvent(PasswordStoreEvents.createUserAuthenticationFailedAccountNotExistsEvent(email));
-		return false;
+	    try (ResultSet account = getUserByEmail(email)) {
+		if (account == null) {
+		    eventLogger
+			    .logEvent(PasswordStoreEvents.createUserAuthenticationFailedAccountNotExistsEvent(email));
+		    return false;
+		}
+		String stateString = account.getString("state");
+		if (!PasswordState.ACTIVE.name().equals(stateString)) {
+		    eventLogger
+			    .logEvent(PasswordStoreEvents.createUserAuthenticationFailedAccountNotActiveEvent(email));
+		    return false;
+		}
+		boolean authenticated = passwordEncrypter.checkPassword(password.getPassword(),
+			PasswordData.fromString(account.getString("password")));
+		if (authenticated) {
+		    eventLogger.logEvent(PasswordStoreEvents.createUserAuthenticatedEvent(email));
+		} else {
+		    eventLogger.logEvent(PasswordStoreEvents.createUserAuthenticationFailedEvent(email));
+		}
+		return authenticated;
 	    }
-	    String stateString = account.getString("state");
-	    if (!PasswordState.ACTIVE.name().equals(stateString)) {
-		eventLogger.logEvent(PasswordStoreEvents.createUserAuthenticationFailedAccountNotActiveEvent(email));
-		return false;
-	    }
-	    boolean authenticated = passwordEncrypter.checkPassword(password.getPassword(),
-		    PasswordData.fromString(account.getString("password")));
-	    if (authenticated) {
-		eventLogger.logEvent(PasswordStoreEvents.createUserAuthenticatedEvent(email));
-	    } else {
-		eventLogger.logEvent(PasswordStoreEvents.createUserAuthenticationFailedEvent(email));
-	    }
-	    return authenticated;
 	} catch (SQLException | PasswordEncryptionException e) {
 	    Event event = PasswordStoreEvents.createPasswordEncryptionErrorEvent(email, e);
 	    eventLogger.logEvent(event);
@@ -282,11 +286,12 @@ public class PasswordStoreBean implements PasswordStore {
     public Password resetPassword(EmailAddress email) throws PasswordResetException {
 	try {
 	    logger.info("Password for user '" + email + "' is going to be reset...");
-	    ResultSet account = getUserByEmail(email);
-	    if (account == null) {
-		Event event = PasswordStoreEvents.createPasswordResetFailedUnknownAccountEvent(email);
-		eventLogger.logEvent(event);
-		throw new PasswordResetException(event.getMessage());
+	    try (ResultSet account = getUserByEmail(email)) {
+		if (account == null) {
+		    Event event = PasswordStoreEvents.createPasswordResetFailedUnknownAccountEvent(email);
+		    eventLogger.logEvent(event);
+		    throw new PasswordResetException(event.getMessage());
+		}
 	    }
 	    String password = generatePassword();
 	    String passwordHash;

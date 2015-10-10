@@ -14,4 +14,11 @@ public class HBaseElementNames {
     public static final String SERVICE_ACTIVATION_TABLE = "preferences_store_service_activation";
     public static final String SERVICE_PROJECT_ACTIVATION_TABLE = "preferences_store_service_project_activation";
 
+    public static final String EVALUATION_METRICS_TABLE = "evaluator_store_metrics";
+
+    public static final String EVALUATION_PARAMETERS_TABLE = "evaluator_store_parameters";
+    public static final String EVALUATION_FILE_METRICS_TABLE = "evaluator_store_file_metrics";
+    public static final String EVALUATION_DIRECTORY_METRICS_TABLE = "evaluator_store_directory_metrics";
+    public static final String EVALUATION_PROJECT_METRICS_TABLE = "evaluator_store_project_metrics";
+
 }

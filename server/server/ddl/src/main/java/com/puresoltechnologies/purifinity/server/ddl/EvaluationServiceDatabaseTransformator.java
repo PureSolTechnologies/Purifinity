@@ -88,7 +88,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "evaluator_id varchar not null, " //
 			+ "parameter_name varchar not null, " //
 			+ "code_range_type varchar not null, " //
-			+ "code_range_name varchar not null, " //
+			+ "code_range_name varchar, " //
 			+ "time timestamp, " //
 			+ "source_code_location varchar, " //
 			+ "evaluator_version varchar, " //
@@ -138,7 +138,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "parameter_name varchar not null, " //
 			+ "code_range_type varchar not null, " //
 			+ "hashid varchar not null, " //
-			+ "code_range_name varchar not null, " //
+			+ "code_range_name varchar, " //
 			+ "time timestamp, " //
 			+ "evaluator_version varchar, " //
 			+ "internal_directory varchar, " //

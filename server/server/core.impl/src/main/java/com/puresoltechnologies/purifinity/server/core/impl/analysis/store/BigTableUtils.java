@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.EvaluatorStoreConnection;
-import com.puresoltechnologies.purifinity.server.database.cassandra.utils.CassandraElementNames;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 
 /**
  * This class contains method to handle the evaluation big tables.
@@ -27,8 +27,8 @@ public class BigTableUtils {
     private Connection connection;
 
     public void removeAnalysisRunResults(String projectId, long runId) throws AnalysisStoreException {
-	try (PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM "
-		+ CassandraElementNames.EVALUATION_METRICS_TABLE + " WHERE project_id=? AND run_id=?;")) {
+	try (PreparedStatement preparedStatement = connection.prepareStatement(
+		"DELETE FROM " + HBaseElementNames.EVALUATION_METRICS_TABLE + " WHERE project_id=? AND run_id=?;")) {
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setLong(2, runId);
 	    preparedStatement.execute();

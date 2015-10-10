@@ -4,10 +4,6 @@ import java.util.Date;
 
 import javax.batch.api.Batchlet;
 import javax.batch.runtime.context.JobContext;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -19,40 +15,34 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.store.Analysi
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
 
 @Named("WriteStatisticsBatchlet")
-@TransactionManagement(TransactionManagementType.BEAN)
 public class WriteStatisticsBatchlet implements Batchlet {
 
-	@Inject
-	private Logger logger;
+    @Inject
+    private Logger logger;
 
-	@Inject
-	private AnalysisStoreService analysisStore;
+    @Inject
+    private AnalysisStoreService analysisStore;
 
-	@Inject
-	private EvaluatorServiceManager evaluatorPluginService;
+    @Inject
+    private EvaluatorServiceManager evaluatorPluginService;
 
-	@Inject
-	private JobContext jobContext;
+    @Inject
+    private JobContext jobContext;
 
-	@Override
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public String process() throws Exception {
-		AnalysisJobContext analysisJobContext = (AnalysisJobContext) jobContext
-				.getTransientUserData();
-		AnalysisProject analysisProject = analysisJobContext
-				.getAnalysisProject();
-		AnalysisRunInformation analysisRunInformation = analysisJobContext
-				.getAnalysisRunInformation();
-		Date startTime = analysisJobContext.getStartTime();
-		Date stopTime = new Date();
-		analysisStore.updateAnalysisRunInformation(analysisProject
-				.getInformation().getProjectId(), analysisRunInformation
-				.getRunId(), (stopTime.getTime() - startTime.getTime()));
-		return "SUCCESS";
-	}
+    @Override
+    public String process() throws Exception {
+	AnalysisJobContext analysisJobContext = (AnalysisJobContext) jobContext.getTransientUserData();
+	AnalysisProject analysisProject = analysisJobContext.getAnalysisProject();
+	AnalysisRunInformation analysisRunInformation = analysisJobContext.getAnalysisRunInformation();
+	Date startTime = analysisJobContext.getStartTime();
+	Date stopTime = new Date();
+	analysisStore.updateAnalysisRunInformation(analysisProject.getInformation().getProjectId(),
+		analysisRunInformation.getRunId(), (stopTime.getTime() - startTime.getTime()));
+	return "SUCCESS";
+    }
 
-	@Override
-	public void stop() throws Exception {
-		// Intentionally left empty.
-	}
+    @Override
+    public void stop() throws Exception {
+	// Intentionally left empty.
+    }
 }
