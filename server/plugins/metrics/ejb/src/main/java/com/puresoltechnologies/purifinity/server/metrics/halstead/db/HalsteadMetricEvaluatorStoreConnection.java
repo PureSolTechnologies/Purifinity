@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.db;
+package com.puresoltechnologies.purifinity.server.metrics.halstead.db;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -14,8 +14,8 @@ import javax.inject.Qualifier;
 @Qualifier
 @Target({ TYPE, METHOD, FIELD, PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IntermediateCoCoMoEvaluatorStoreKeyspace {
+public @interface HalsteadMetricEvaluatorStoreConnection {
 
-    public static final String NAME = "intermediate_cocomo";
+    public static final String NAME = "halstead_metrics";
 
 }

@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.metrics.halstead;
+package com.puresoltechnologies.purifinity.server.metrics.mccabe.db;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -14,8 +14,8 @@ import javax.inject.Qualifier;
 @Qualifier
 @Target({ TYPE, METHOD, FIELD, PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface HalsteadEvaluatorKeyspace {
+public @interface McCabeMetricEvaluatorStoreConnection {
 
-	public static final String NAME = "halstead_evaluator";
+    public static final String NAME = "mccabe_metrics";
 
 }

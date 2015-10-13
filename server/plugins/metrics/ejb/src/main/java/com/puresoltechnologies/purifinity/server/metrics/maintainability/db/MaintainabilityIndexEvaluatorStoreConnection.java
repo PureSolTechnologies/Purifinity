@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.server.passwordstore.core.impl.db;
+package com.puresoltechnologies.purifinity.server.metrics.maintainability.db;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -14,8 +14,8 @@ import javax.inject.Qualifier;
 @Qualifier
 @Target({ TYPE, METHOD, FIELD, PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PasswordStoreKeyspace {
+public @interface MaintainabilityIndexEvaluatorStoreConnection {
 
-    public static final String NAME = "password_store";
+    public static final String NAME = "maintainability_indizes";
 
 }

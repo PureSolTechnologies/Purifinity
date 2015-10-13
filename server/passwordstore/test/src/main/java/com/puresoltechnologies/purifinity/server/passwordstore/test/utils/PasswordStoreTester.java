@@ -8,7 +8,6 @@ import java.sql.Statement;
 
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseHelper;
 import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreBean;
-import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.db.PasswordStoreKeyspace;
 
 /**
  * This class contains several methods which support testing the PasswordStore

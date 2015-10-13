@@ -169,10 +169,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    preparedStatement.setArray(7,
 		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getLocationExcludes().toArray()));
 	    preparedStatement.setBoolean(8, fileSearchConfiguration.isIgnoreHidden());
-	    preparedStatement.setArray(9,
-		    connection.createArrayOf("VARCHAR", settings.getRepository().keySet().toArray()));
-	    preparedStatement.setArray(10,
-		    connection.createArrayOf("VARCHAR", settings.getRepository().values().toArray()));
+	    HBaseHelper.writeProperties(connection, preparedStatement, 9, 10, settings.getRepository());
 	    preparedStatement.execute();
 	    connection.commit();
 	} catch (SQLException e) {

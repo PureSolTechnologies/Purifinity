@@ -1,31 +1,30 @@
 package com.puresoltechnologies.purifinity.server.metrics.ddl;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
-import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
-import com.puresoltechnologies.genesis.commons.cassandra.ReplicationStrategy;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraStandardMigrations;
-import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationStep;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.versioning.Version;
 
-public class SLOCMetricEvaluatorDatabaseTransformator implements
-	ComponentTransformator {
+public class SLOCMetricEvaluatorDatabaseTransformator implements ComponentTransformator {
 
-    public static final String SLOC_METRICS_KEYSPACE_NAME = "sloc_metrics";
-    public static final String CASSANDRA_HOST = "localhost";
-    public static final int CASSANDRA_CQL_PORT = 9042;
+    private static final Logger logger = LoggerFactory.getLogger(SLOCMetricEvaluatorDatabaseTransformator.class);
 
-    private static final String FILE_RESULTS_TABLE = "file_results";
-    private static final String DIRECTORY_RESULTS_TABLE = "directory_results";
-    private static final String PROJECT_RESULTS_TABLE = "project_results";
+    private static final String FILE_RESULTS_TABLE = "sloc_metrics_file_results";
+    private static final String DIRECTORY_RESULTS_TABLE = "sloc_metrics_directory_results";
+    private static final String PROJECT_RESULTS_TABLE = "sloc_metrics_project_results";
 
     @Override
     public String getComponentName() {
@@ -40,93 +39,40 @@ public class SLOCMetricEvaluatorDatabaseTransformator implements
     @Override
     public Set<TransformationSequence> getSequences() {
 	Set<TransformationSequence> sequences = new HashSet<>();
-	sequences.add(migrateVersion0_3_0_pre());
-	sequences.add(migrateVersion0_3_0());
+	sequences.add(migrateVersion0_4_0());
 	return sequences;
     }
 
-    /**
-     * This pre version is used to create the keyspace.
-     * 
-     * @return
-     */
-    private TransformationSequence migrateVersion0_3_0_pre() {
+    private TransformationSequence migrateVersion0_4_0() {
 	Version startVersion = new Version(0, 0, 0);
-	Version targetVersion = new Version(0, 3, 0, "pre");
-	ProvidedVersionRange versionRange = new ProvidedVersionRange(
-		targetVersion, null);
-	SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-		startVersion, versionRange);
-	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-		CASSANDRA_HOST, CASSANDRA_CQL_PORT, metadata);
-	sequence.appendTransformation(CassandraStandardMigrations
-		.createKeyspace(
-			sequence,
-			SLOC_METRICS_KEYSPACE_NAME,
-			"Rick-Rainer Ludwig",
-			"This keyspace keeps the detailed results of SLOC evaluations.",
-			ReplicationStrategy.SIMPLE_STRATEGY, 1));
-	return sequence;
-    }
+	Version targetVersion = new Version(0, 4, 0);
+	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
+	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
+	PhoenixTransformationSequence sequence = new PhoenixTransformationSequence(metadata,
+		DatabaseTransformatorConstants.HBASE_HOST);
 
-    private TransformationSequence migrateVersion0_3_0() {
-	Version startVersion = new Version(0, 3, 0, "pre");
-	Version targetVersion = new Version(0, 3, 0);
-	ProvidedVersionRange versionRange = new ProvidedVersionRange(
-		targetVersion, null);
-	SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-		startVersion, versionRange);
-	CassandraTransformationSequence sequence = new CassandraTransformationSequence(
-		CASSANDRA_HOST, CASSANDRA_CQL_PORT, SLOC_METRICS_KEYSPACE_NAME,
-		metadata);
-
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence,
-		"Rick-Rainer Ludwig",
-		"CREATE TABLE "
-			+ FILE_RESULTS_TABLE
-			+ " (hashid varchar, "
-			+ "evaluator_id varchar, "
-			+ "source_code_location varchar, "
-			+ "code_range_type varchar, "
-			+ "code_range_name varchar, "
-			+ "phyLOC int, "
-			+ "proLOC int, "
-			+ "comLOC int, "
-			+ "blLOC int, "
-			+ "line_length_count int, "
-			+ "line_length_min double, "
-			+ "line_length_max double, "
-			+ "line_length_avg double, "
-			+ "line_length_median double, "
-			+ "line_length_stdDev double, "
-			+ "PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name));",
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + FILE_RESULTS_TABLE + " (hashid varchar, " + "evaluator_id varchar, "
+			+ "source_code_location varchar, " + "code_range_type varchar, " + "code_range_name varchar, "
+			+ "phyLOC integer, " + "proLOC integer, " + "comLOC integer, " + "blLOC integer, "
+			+ "line_length_count integer, " + "line_length_min double, " + "line_length_max double, "
+			+ "line_length_avg double, " + "line_length_median double, " + "line_length_stdDev double, "
+			+ "CONSTRAINT " + FILE_RESULTS_TABLE
+			+ "_PK PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name))",
 		"Keeps directory results for SLOC evaluator."));
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
-			+ DIRECTORY_RESULTS_TABLE + " (hashid varchar, "
-			+ "evaluator_id varchar, " + "phyLOC int, "
-			+ "proLOC int, " + "comLOC int, " + "blLOC int, "
-			+ "line_length_count int, "
-			+ "line_length_min double, "
-			+ "line_length_max double, "
-			+ "line_length_avg double, "
-			+ "line_length_median double, "
-			+ "line_length_stdDev double, "
-			+ "PRIMARY KEY(hashid, evaluator_id));",
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + DIRECTORY_RESULTS_TABLE + " (hashid varchar, " + "evaluator_id varchar, "
+			+ "phyLOC integer, " + "proLOC integer, " + "comLOC integer, " + "blLOC integer, "
+			+ "line_length_count integer, " + "line_length_min double, " + "line_length_max double, "
+			+ "line_length_avg double, " + "line_length_median double, " + "line_length_stdDev double, "
+			+ "CONSTRAINT " + DIRECTORY_RESULTS_TABLE + "_PK PRIMARY KEY(hashid, evaluator_id))",
 		"Keeps directory results for SLOC evaluator."));
-	sequence.appendTransformation(new CassandraCQLTransformationStep(
-		sequence, "Rick-Rainer Ludwig", "CREATE TABLE "
-			+ PROJECT_RESULTS_TABLE + " (project_id ascii, "
-			+ "evaluator_id varchar, " + "phyLOC int, "
-			+ "proLOC int, " + "comLOC int, " + "blLOC int, "
-			+ "line_length_count int, "
-			+ "line_length_min double, "
-			+ "line_length_max double, "
-			+ "line_length_avg double, "
-			+ "line_length_median double, "
-			+ "line_length_stdDev double, "
-			+ "PRIMARY KEY(project_id, evaluator_id));",
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + PROJECT_RESULTS_TABLE + " (project_id varchar, " + "evaluator_id varchar, "
+			+ "phyLOC integer, " + "proLOC integer, " + "comLOC integer, " + "blLOC integer, "
+			+ "line_length_count integer, " + "line_length_min double, " + "line_length_max double, "
+			+ "line_length_avg double, " + "line_length_median double, " + "line_length_stdDev double, "
+			+ "CONSTRAINT " + PROJECT_RESULTS_TABLE + "_PK PRIMARY KEY(project_id, evaluator_id))",
 		"Keeps project results for SLOC evaluator."));
 
 	return sequence;
@@ -134,12 +80,23 @@ public class SLOCMetricEvaluatorDatabaseTransformator implements
 
     @Override
     public void dropAll() {
-	try (Cluster cluster = CassandraUtils.connectCluster()) {
-	    try (Session session = cluster.connect()) {
-		session.execute("DROP KEYSPACE IF EXISTS "
-			+ SLOC_METRICS_KEYSPACE_NAME);
+	try (Connection connection = DriverManager
+		.getConnection("jdbc:phoenix:" + DatabaseTransformatorConstants.HBASE_HOST);) {
+	    try (Statement statement = connection.createStatement();) {
+		statement.execute("DROP TABLE IF EXISTS " + FILE_RESULTS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + DIRECTORY_RESULTS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + PROJECT_RESULTS_TABLE);
+		connection.commit();
+	    } catch (SQLException e) {
+		try {
+		    connection.rollback();
+		} catch (SQLException e1) {
+		    logger.warn("Cannot rollback.", e);
+		}
+		throw new RuntimeException("Could not drop component tables.", e);
 	    }
+	} catch (SQLException e2) {
+	    throw new RuntimeException("Could not open Phoenix connection to HBase.", e2);
 	}
-
     }
 }
