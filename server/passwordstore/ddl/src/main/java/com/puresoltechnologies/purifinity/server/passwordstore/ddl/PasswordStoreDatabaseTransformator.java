@@ -24,15 +24,12 @@ public class PasswordStoreDatabaseTransformator implements ComponentTransformato
 
     private static final Logger logger = LoggerFactory.getLogger(PasswordStoreDatabaseTransformator.class);
 
-    public static final String TARGET_NAME = "PasswordStore";
-
-    public static final String PASSWORD_STORE_KEYSPACE_NAME = "password_store";
-    public static final String HBASE_HOST = "localhost";
-    public static final String PASSWORD_TABLE_NAME = PASSWORD_STORE_KEYSPACE_NAME + "_passwords";
+    private static final String HBASE_HOST = "localhost";
+    public static final String PASSWORD_TABLE_NAME = "password_store.passwords";
 
     @Override
     public String getComponentName() {
-	return TARGET_NAME;
+	return "PasswordStore";
     }
 
     @Override
@@ -63,7 +60,7 @@ public class PasswordStoreDatabaseTransformator implements ComponentTransformato
 			+ "password varchar, " //
 			+ "state varchar, "//
 			+ "activation_key varchar, "//
-			+ "CONSTRAINT " + PASSWORD_TABLE_NAME + "_PK PRIMARY KEY (email))",
+			+ "CONSTRAINT " + PASSWORD_TABLE_NAME.replaceAll("\\.", "_") + "_PK PRIMARY KEY (email))",
 		description));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",

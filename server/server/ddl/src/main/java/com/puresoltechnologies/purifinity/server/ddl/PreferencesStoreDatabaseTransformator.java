@@ -22,15 +22,15 @@ public class PreferencesStoreDatabaseTransformator implements ComponentTransform
 
     private static final Logger logger = LoggerFactory.getLogger(PreferencesStoreDatabaseTransformator.class);
 
-    private static final String SYSTEM_PREFERENCES_TABLE = "preferences_store_system_preferences";
-    private static final String USER_PREFERENCES_TABLE = "preferences_store_user_preferences";
-    private static final String USER_DEFAULTS_PREFERENCES_TABLE = "preferences_store_user_default_preferences";
-    private static final String PLUGIN_PREFERENCES_TABLE = "preferences_store_plugin_preferences";
-    private static final String PLUGIN_DEFAULTS_PREFERENCES_TABLE = "preferences_store_plugin_default_preferences";
-    private static final String SERVICE_ACTIVATION_TABLE = "preferences_store_service_activation";
-    private static final String SERVICE_PROJECT_ACTIVATION_TABLE = "preferences_store_service_project_activation";
+    private static final String SYSTEM_PREFERENCES_TABLE = "preferences_store.system_preferences";
+    private static final String USER_PREFERENCES_TABLE = "preferences_store.user_preferences";
+    private static final String USER_DEFAULTS_PREFERENCES_TABLE = "preferences_store.user_default_preferences";
+    private static final String PLUGIN_PREFERENCES_TABLE = "preferences_store.plugin_preferences";
+    private static final String PLUGIN_DEFAULTS_PREFERENCES_TABLE = "preferences_store.plugin_default_preferences";
+    private static final String SERVICE_ACTIVATION_TABLE = "preferences_store.service_activation";
+    private static final String SERVICE_PROJECT_ACTIVATION_TABLE = "preferences_store.service_project_activation";
 
-    public static final String HBASE_HOST = "localhost";
+    private static final String HBASE_HOST = "localhost";
 
     @Override
     public String getComponentName() {
@@ -62,7 +62,7 @@ public class PreferencesStoreDatabaseTransformator implements ComponentTransform
 			+ "changed timestamp, "//
 			+ "changed_by varchar, "//
 			+ "setting varchar, " //
-			+ "CONSTRAINT " + SYSTEM_PREFERENCES_TABLE + "_PK PRIMARY KEY(name))",
+			+ "CONSTRAINT " + SYSTEM_PREFERENCES_TABLE.replaceAll("\\.", "_") + "_PK PRIMARY KEY(name))",
 		"Keeps preferences for the system wide settings."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + PLUGIN_DEFAULTS_PREFERENCES_TABLE + " ("//
@@ -71,7 +71,8 @@ public class PreferencesStoreDatabaseTransformator implements ComponentTransform
 			+ "changed timestamp, "//
 			+ "changed_by varchar, "//
 			+ "setting varchar, " //
-			+ "CONSTRAINT " + PLUGIN_DEFAULTS_PREFERENCES_TABLE + "_PK PRIMARY KEY(plugin_id, name))",
+			+ "CONSTRAINT " + PLUGIN_DEFAULTS_PREFERENCES_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(plugin_id, name))",
 		"Keeps preferences for the project specific settings."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + PLUGIN_PREFERENCES_TABLE + " ("//
@@ -81,7 +82,8 @@ public class PreferencesStoreDatabaseTransformator implements ComponentTransform
 			+ "changed timestamp, "//
 			+ "changed_by varchar, "//
 			+ "setting varchar, "//
-			+ "CONSTRAINT " + PLUGIN_PREFERENCES_TABLE + "_PK PRIMARY KEY(project_id, plugin_id, name))",
+			+ "CONSTRAINT " + PLUGIN_PREFERENCES_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(project_id, plugin_id, name))",
 		"Keeps preferences for the project specific settings."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + USER_DEFAULTS_PREFERENCES_TABLE + " ("//
@@ -89,7 +91,8 @@ public class PreferencesStoreDatabaseTransformator implements ComponentTransform
 			+ "changed timestamp, "//
 			+ "changed_by varchar, "//
 			+ "setting varchar, "//
-			+ "CONSTRAINT " + USER_DEFAULTS_PREFERENCES_TABLE + "_PK PRIMARY KEY(name))",
+			+ "CONSTRAINT " + USER_DEFAULTS_PREFERENCES_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(name))",
 		"Keeps preferences for the user specific settings."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + USER_PREFERENCES_TABLE + " ("//
@@ -98,7 +101,7 @@ public class PreferencesStoreDatabaseTransformator implements ComponentTransform
 			+ "changed timestamp, "//
 			+ "changed_by varchar, "//
 			+ "setting varchar, " + "CONSTRAINT " //
-			+ USER_PREFERENCES_TABLE + "_PK PRIMARY KEY(user_id, name))",
+			+ USER_PREFERENCES_TABLE.replaceAll("\\.", "_") + "_PK PRIMARY KEY(user_id, name))",
 		"Keeps preferences for the user specific settings."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + SERVICE_ACTIVATION_TABLE + " ("//
@@ -106,7 +109,8 @@ public class PreferencesStoreDatabaseTransformator implements ComponentTransform
 			+ "changed timestamp, "//
 			+ "changed_by varchar, "//
 			+ "activated boolean, "//
-			+ "CONSTRAINT " + SERVICE_ACTIVATION_TABLE + "_PK PRIMARY KEY(service_id))",
+			+ "CONSTRAINT " + SERVICE_ACTIVATION_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(service_id))",
 		"Keeps the activation states of services."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + SERVICE_PROJECT_ACTIVATION_TABLE + " ("//
@@ -115,7 +119,8 @@ public class PreferencesStoreDatabaseTransformator implements ComponentTransform
 			+ "changed timestamp, "//
 			+ "changed_by varchar, "//
 			+ "activated boolean, "//
-			+ "CONSTRAINT " + SERVICE_PROJECT_ACTIVATION_TABLE + "_PK PRIMARY KEY(project_id, service_id))",
+			+ "CONSTRAINT " + SERVICE_PROJECT_ACTIVATION_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(project_id, service_id))",
 		"Keeps the activation states of services."));
 
 	return sequence;

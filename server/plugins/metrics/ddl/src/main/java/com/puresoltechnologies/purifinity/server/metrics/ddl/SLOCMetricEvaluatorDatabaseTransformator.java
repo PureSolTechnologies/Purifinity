@@ -22,9 +22,9 @@ public class SLOCMetricEvaluatorDatabaseTransformator implements ComponentTransf
 
     private static final Logger logger = LoggerFactory.getLogger(SLOCMetricEvaluatorDatabaseTransformator.class);
 
-    private static final String FILE_RESULTS_TABLE = "sloc_metrics_file_results";
-    private static final String DIRECTORY_RESULTS_TABLE = "sloc_metrics_directory_results";
-    private static final String PROJECT_RESULTS_TABLE = "sloc_metrics_project_results";
+    private static final String FILE_RESULTS_TABLE = "sloc_metric.file_results";
+    private static final String DIRECTORY_RESULTS_TABLE = "sloc_metric.directory_results";
+    private static final String PROJECT_RESULTS_TABLE = "sloc_metric.project_results";
 
     @Override
     public String getComponentName() {
@@ -57,7 +57,7 @@ public class SLOCMetricEvaluatorDatabaseTransformator implements ComponentTransf
 			+ "phyLOC integer, " + "proLOC integer, " + "comLOC integer, " + "blLOC integer, "
 			+ "line_length_count integer, " + "line_length_min double, " + "line_length_max double, "
 			+ "line_length_avg double, " + "line_length_median double, " + "line_length_stdDev double, "
-			+ "CONSTRAINT " + FILE_RESULTS_TABLE
+			+ "CONSTRAINT " + FILE_RESULTS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name))",
 		"Keeps directory results for SLOC evaluator."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -65,14 +65,16 @@ public class SLOCMetricEvaluatorDatabaseTransformator implements ComponentTransf
 			+ "phyLOC integer, " + "proLOC integer, " + "comLOC integer, " + "blLOC integer, "
 			+ "line_length_count integer, " + "line_length_min double, " + "line_length_max double, "
 			+ "line_length_avg double, " + "line_length_median double, " + "line_length_stdDev double, "
-			+ "CONSTRAINT " + DIRECTORY_RESULTS_TABLE + "_PK PRIMARY KEY(hashid, evaluator_id))",
+			+ "CONSTRAINT " + DIRECTORY_RESULTS_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(hashid, evaluator_id))",
 		"Keeps directory results for SLOC evaluator."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + PROJECT_RESULTS_TABLE + " (project_id varchar, " + "evaluator_id varchar, "
 			+ "phyLOC integer, " + "proLOC integer, " + "comLOC integer, " + "blLOC integer, "
 			+ "line_length_count integer, " + "line_length_min double, " + "line_length_max double, "
 			+ "line_length_avg double, " + "line_length_median double, " + "line_length_stdDev double, "
-			+ "CONSTRAINT " + PROJECT_RESULTS_TABLE + "_PK PRIMARY KEY(project_id, evaluator_id))",
+			+ "CONSTRAINT " + PROJECT_RESULTS_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(project_id, evaluator_id))",
 		"Keeps project results for SLOC evaluator."));
 
 	return sequence;

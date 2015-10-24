@@ -24,7 +24,6 @@ import com.tinkerpop.blueprints.Vertex;
 
 public class AccountManagerDatabaseTransformator implements ComponentTransformator {
 
-    public static final String ACCOUNT_MANAGER_KEYSPACE_NAME = "account_manager";
     public static final String HBASE_HOST = "localhost";
 
     @Override

@@ -22,12 +22,12 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 
     private static final Logger logger = LoggerFactory.getLogger(EvaluationServiceDatabaseTransformator.class);
 
-    private static final String EVALUATION_METRICS_TABLE = "evaluator_store_metrics";
+    private static final String EVALUATION_METRICS_TABLE = "evaluator_store.metrics";
 
-    private static final String EVALUATION_PARAMETERS_TABLE = "evaluator_store_parameters";
-    private static final String EVALUATION_FILE_METRICS_TABLE = "evaluator_store_file_metrics";
-    private static final String EVALUATION_DIRECTORY_METRICS_TABLE = "evaluator_store_directory_metrics";
-    private static final String EVALUATION_PROJECT_METRICS_TABLE = "evaluator_store_project_metrics";
+    private static final String EVALUATION_PARAMETERS_TABLE = "evaluator_store.parameters";
+    private static final String EVALUATION_FILE_METRICS_TABLE = "evaluator_store.file_metrics";
+    private static final String EVALUATION_DIRECTORY_METRICS_TABLE = "evaluator_store.directory_metrics";
+    private static final String EVALUATION_PROJECT_METRICS_TABLE = "evaluator_store.project_metrics";
 
     public static final String HBASE_HOST = "localhost";
 
@@ -73,7 +73,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 		+ "parameter_type varchar, " //
 		+ "level_of_measurement varchar, " //
 		+ "parameter_description varchar, " //
-		+ "CONSTRAINT " + EVALUATION_PARAMETERS_TABLE
+		+ "CONSTRAINT " + EVALUATION_PARAMETERS_TABLE.replaceAll("\\.", "_")
 		+ "_PK PRIMARY KEY(evaluator_id, evaluator_version, parameter_name))",
 		"This table contains all available parameters of all evaluators."));
 
@@ -96,7 +96,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "parameter_description varchar, " //
 			+ "parameter_type varchar, " //
 			+ "level_of_measurement varchar, " //
-			+ "metric double, " + "CONSTRAINT " + EVALUATION_FILE_METRICS_TABLE
+			+ "metric double, " + "CONSTRAINT " + EVALUATION_FILE_METRICS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, parameter_name, code_range_type, code_range_name))",
 		"Keeps metrics for single files and their code ranges."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -111,7 +111,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "parameter_type varchar, " //
 			+ "level_of_measurement varchar, " //
 			+ "metric double, " //
-			+ "CONSTRAINT " + EVALUATION_DIRECTORY_METRICS_TABLE
+			+ "CONSTRAINT " + EVALUATION_DIRECTORY_METRICS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, parameter_name))",
 		"Keeps metrics for single files and their code ranges."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -127,7 +127,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "parameter_type varchar, " //
 			+ "level_of_measurement varchar, " //
 			+ "metric double, " //
-			+ "CONSTRAINT " + EVALUATION_PROJECT_METRICS_TABLE
+			+ "CONSTRAINT " + EVALUATION_PROJECT_METRICS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, parameter_name))",
 		"Keeps metrics for single files and their code ranges."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -151,7 +151,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "metric double, " //
 			+ "level_of_measurement varchar, " //
 			+ "parameter_description varchar, " //
-			+ "CONSTRAINT " + EVALUATION_METRICS_TABLE
+			+ "CONSTRAINT " + EVALUATION_METRICS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, parameter_name, code_range_type, hashid, code_range_name))",
 		"Keeps the metrics in a big table for efficient retrieval."));
 

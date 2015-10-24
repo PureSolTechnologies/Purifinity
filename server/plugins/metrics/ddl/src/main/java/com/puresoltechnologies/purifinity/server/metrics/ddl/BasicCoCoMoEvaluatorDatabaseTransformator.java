@@ -22,9 +22,9 @@ public class BasicCoCoMoEvaluatorDatabaseTransformator implements ComponentTrans
 
     private static final Logger logger = LoggerFactory.getLogger(BasicCoCoMoEvaluatorDatabaseTransformator.class);
 
-    private static final String FILE_RESULTS_TABLE = "basic_cocomo_file_results";
-    private static final String DIRECTORY_RESULTS_TABLE = "basic_cocomo_directory_results";
-    private static final String PROJECT_RESULTS_TABLE = "basic_cocomo_project_results";
+    private static final String FILE_RESULTS_TABLE = "basic_cocomo.file_results";
+    private static final String DIRECTORY_RESULTS_TABLE = "basic_cocomo.directory_results";
+    private static final String PROJECT_RESULTS_TABLE = "basic_cocomo.project_results";
 
     @Override
     public String getComponentName() {
@@ -58,7 +58,7 @@ public class BasicCoCoMoEvaluatorDatabaseTransformator implements ComponentTrans
 			+ "scheduledMonth double, " + "scheduledYears double, " + "teamSize double, "
 			+ "estimatedCosts double, " + "c1 double, " + "c2 double, " + "c3 double, "
 			+ "complexity varchar, " + "averageSalary double, " + "currency varchar, " + "CONSTRAINT "
-			+ FILE_RESULTS_TABLE
+			+ FILE_RESULTS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name))",
 		"Keeps directory results for Basic CoCoMo Evaluator."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -67,7 +67,7 @@ public class BasicCoCoMoEvaluatorDatabaseTransformator implements ComponentTrans
 			+ "scheduledMonth double, " + "scheduledYears double, " + "teamSize double, "
 			+ "estimatedCosts double, " + "c1 double, " + "c2 double, " + "c3 double, "
 			+ "complexity varchar, " + "averageSalary double, " + "currency varchar, " + "CONSTRAINT "
-			+ DIRECTORY_RESULTS_TABLE + "_PK PRIMARY KEY(hashid, evaluator_id))",
+			+ DIRECTORY_RESULTS_TABLE.replaceAll("\\.", "_") + "_PK PRIMARY KEY(hashid, evaluator_id))",
 		"Keeps directory results for Basic CoCoMo Evaluator."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + PROJECT_RESULTS_TABLE + " (project_id varchar, " + "evaluator_id varchar, "
@@ -75,7 +75,7 @@ public class BasicCoCoMoEvaluatorDatabaseTransformator implements ComponentTrans
 			+ "scheduledMonth double, " + "scheduledYears double, " + "teamSize double, "
 			+ "estimatedCosts double, " + "c1 double, " + "c2 double, " + "c3 double, "
 			+ "complexity varchar, " + "averageSalary double, " + "currency varchar, " + "CONSTRAINT "
-			+ PROJECT_RESULTS_TABLE + "_PK PRIMARY KEY(project_id, evaluator_id))",
+			+ PROJECT_RESULTS_TABLE.replaceAll("\\.", "_") + "_PK PRIMARY KEY(project_id, evaluator_id))",
 		"Keeps project results for Basic CoCoMo Evaluator."));
 
 	return sequence;

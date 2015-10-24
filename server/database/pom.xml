@@ -14,7 +14,7 @@
 	<modules>
 		<module>hadoop</module>
 		<module>hbase</module>
-		<module>cassandra</module>
-		<module>titan</module>
+		<module>hgraph</module>
+		<module>neo4j</module>
 	</modules>
 </project>

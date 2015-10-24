@@ -22,9 +22,9 @@ public class HalsteadMetricEvaluatorDatabaseTransformator implements ComponentTr
 
     private static final Logger logger = LoggerFactory.getLogger(HalsteadMetricEvaluatorDatabaseTransformator.class);
 
-    private static final String FILE_RESULTS_TABLE = "halstead_metrics_file_results";
-    private static final String DIRECTORY_RESULTS_TABLE = "halstead_metrics_directory_results";
-    private static final String PROJECT_RESULTS_TABLE = "halstead_metrics_project_results";
+    private static final String FILE_RESULTS_TABLE = "halstead_metric.file_results";
+    private static final String DIRECTORY_RESULTS_TABLE = "halstead_metric.directory_results";
+    private static final String PROJECT_RESULTS_TABLE = "halstead_metric.project_results";
 
     @Override
     public String getComponentName() {
@@ -59,7 +59,7 @@ public class HalsteadMetricEvaluatorDatabaseTransformator implements ComponentTr
 			+ "vocabularySize integer, " + "programLength integer, " + "halsteadLength double, "
 			+ "halsteadVolume double, " + "difficulty double, " + "programLevel double, "
 			+ "implementationEffort double, " + "implementationTime double, " + "estimatedBugs double, "
-			+ "CONSTRAINT " + FILE_RESULTS_TABLE
+			+ "CONSTRAINT " + FILE_RESULTS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name))",
 		"Keeps directory results for Halstead evaluator."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -69,7 +69,8 @@ public class HalsteadMetricEvaluatorDatabaseTransformator implements ComponentTr
 			+ "vocabularySize integer, " + "programLength integer, " + "halsteadLength double, "
 			+ "halsteadVolume double, " + "difficulty double, " + "programLevel double, "
 			+ "implementationEffort double, " + "implementationTime double, " + "estimatedBugs double, "
-			+ "CONSTRAINT " + DIRECTORY_RESULTS_TABLE + "_PK PRIMARY KEY(hashid, evaluator_id))",
+			+ "CONSTRAINT " + DIRECTORY_RESULTS_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(hashid, evaluator_id))",
 		"Keeps directory results for Halstead evaluator."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + PROJECT_RESULTS_TABLE + " (project_id varchar, " + "evaluator_id varchar, "
@@ -78,7 +79,8 @@ public class HalsteadMetricEvaluatorDatabaseTransformator implements ComponentTr
 			+ "vocabularySize integer, " + "programLength integer, " + "halsteadLength double, "
 			+ "halsteadVolume double, " + "difficulty double, " + "programLevel double, "
 			+ "implementationEffort double, " + "implementationTime double, " + "estimatedBugs double, "
-			+ "CONSTRAINT " + PROJECT_RESULTS_TABLE + "_PK PRIMARY KEY(project_id, evaluator_id))",
+			+ "CONSTRAINT " + PROJECT_RESULTS_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(project_id, evaluator_id))",
 		"Keeps project results for Halstead evaluator."));
 
 	return sequence;

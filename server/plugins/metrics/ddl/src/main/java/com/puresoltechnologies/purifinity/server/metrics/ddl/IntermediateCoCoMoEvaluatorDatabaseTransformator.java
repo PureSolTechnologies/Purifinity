@@ -23,9 +23,9 @@ public class IntermediateCoCoMoEvaluatorDatabaseTransformator implements Compone
     private static final Logger logger = LoggerFactory
 	    .getLogger(IntermediateCoCoMoEvaluatorDatabaseTransformator.class);
 
-    private static final String FILE_RESULTS_TABLE = "intermediate_cocomo_file_results";
-    private static final String DIRECTORY_RESULTS_TABLE = "intermediate_cocomo_directory_results";
-    private static final String PROJECT_RESULTS_TABLE = "intermediate_cocomo_project_results";
+    private static final String FILE_RESULTS_TABLE = "intermediate_cocomo.file_results";
+    private static final String DIRECTORY_RESULTS_TABLE = "intermediate_cocomo.directory_results";
+    private static final String PROJECT_RESULTS_TABLE = "intermediate_cocomo.project_results";
 
     @Override
     public String getComponentName() {
@@ -59,7 +59,7 @@ public class IntermediateCoCoMoEvaluatorDatabaseTransformator implements Compone
 			+ "scheduledMonth double, " + "scheduledYears double, " + "teamSize double, "
 			+ "estimatedCosts double, " + "project varchar, " + "averageSalary double, "
 			+ "currency varchar, " + "attributes_keys varchar array, " + "attributes_values varchar array, "
-			+ "CONSTRAINT " + FILE_RESULTS_TABLE
+			+ "CONSTRAINT " + FILE_RESULTS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name))",
 		"Keeps directory results for Intermediate CoCoMo Evaluator."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -68,7 +68,8 @@ public class IntermediateCoCoMoEvaluatorDatabaseTransformator implements Compone
 			+ "scheduledMonth double, " + "scheduledYears double, " + "teamSize double, "
 			+ "estimatedCosts double, " + "project varchar, " + "averageSalary double, "
 			+ "currency varchar, " + "attributes_keys varchar array, " + "attributes_values varchar array, "
-			+ "CONSTRAINT " + DIRECTORY_RESULTS_TABLE + "_PK PRIMARY KEY(hashid, evaluator_id))",
+			+ "CONSTRAINT " + DIRECTORY_RESULTS_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(hashid, evaluator_id))",
 		"Keeps directory results for Intermediate CoCoMo Evaluator."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + PROJECT_RESULTS_TABLE + " (project_id varchar, " + "evaluator_id varchar, "
@@ -76,7 +77,8 @@ public class IntermediateCoCoMoEvaluatorDatabaseTransformator implements Compone
 			+ "scheduledMonth double, " + "scheduledYears double, " + "teamSize double, "
 			+ "estimatedCosts double, " + "project varchar, " + "averageSalary double, "
 			+ "currency varchar, " + "attributes_keys varchar array, " + "attributes_values varchar array, "
-			+ "CONSTRAINT " + PROJECT_RESULTS_TABLE + "_PK PRIMARY KEY(project_id, evaluator_id))",
+			+ "CONSTRAINT " + PROJECT_RESULTS_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(project_id, evaluator_id))",
 		"Keeps project results for Intermediate CoCoMo Evaluator."));
 
 	return sequence;

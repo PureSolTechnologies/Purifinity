@@ -29,9 +29,9 @@ public class McCabeMetricEvaluatorDAO {
     public void storeFileResults(HashId hashId, SourceCodeLocation sourceCodeLocation, CodeRange codeRange,
 	    McCabeMetricResult mcCabeResult) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("INSERT INTO file_results (hashid, " + "evaluator_id, " + "source_code_location, "
-			    + "code_range_type, " + "code_range_name, " + "vg) " + "VALUES (?, ?, ?, ?, ?, ?);");
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "INSERT INTO mccabe_metric.file_results (hashid, " + "evaluator_id, " + "source_code_location, "
+			    + "code_range_type, " + "code_range_name, " + "vg) " + "VALUES (?, ?, ?, ?, ?, ?)");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, McCabeMetric.ID);
 	    preparedStatement.setString(3, PropertiesUtils.toString(sourceCodeLocation.getSerialization()));
@@ -50,7 +50,7 @@ public class McCabeMetricEvaluatorDAO {
 	    List<McCabeMetricResult> mcCabeResults = new ArrayList<>();
 	    PreparedStatement preparedStatement = connection
 		    .prepareStatement("SELECT " + "source_code_location, " + "code_range_type, " + "code_range_name, "
-			    + "vg FROM file_results " + "WHERE hashid=? AND evaluator_id=?;");
+			    + "vg FROM mccabe_metric.file_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, McCabeMetric.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -73,8 +73,9 @@ public class McCabeMetricEvaluatorDAO {
 
     public void storeDirectoryResults(HashId hashId, McCabeMetricResult mcCabeResult) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "INSERT INTO directory_results (hashid, " + "evaluator_id, " + "vg) " + "VALUES (?, ?, ?);");
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("INSERT INTO mccabe_metric.directory_results (hashid, " + "evaluator_id, "
+			    + "vg) " + "VALUES (?, ?, ?)");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, McCabeMetric.ID);
 	    preparedStatement.setInt(3, mcCabeResult.getCyclomaticComplexity());
@@ -88,7 +89,7 @@ public class McCabeMetricEvaluatorDAO {
     public McCabeMetricResult readDirectoryResults(HashId hashId) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "SELECT " + "vg " + " FROM directory_results " + "WHERE hashid=? AND evaluator_id=?;");
+		    "SELECT " + "vg " + " FROM mccabe_metric.directory_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, McCabeMetric.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();

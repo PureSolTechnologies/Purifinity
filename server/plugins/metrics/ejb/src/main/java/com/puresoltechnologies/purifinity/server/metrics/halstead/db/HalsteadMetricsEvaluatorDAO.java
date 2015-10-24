@@ -35,13 +35,14 @@ public class HalsteadMetricsEvaluatorDAO implements MetricsDAO<HalsteadMetricRes
     public void storeFileResults(HashId hashId, SourceCodeLocation sourceCodeLocation, CodeRange codeRange,
 	    HalsteadMetricResult halsteadMetricResult) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO file_results (hashid, "
-		    + "evaluator_id, " + "source_code_location, " + "code_range_type, " + "code_range_name, "
-		    + "operators, " + "operands, " + "differentOperators, " + "differentOperands, " + "totalOperators, "
-		    + "totalOperands, " + "vocabularySize, " + "programLength, " + "halsteadLength, "
-		    + "halsteadVolume, " + "difficulty, " + "programLevel, " + "implementationEffort, "
-		    + "implementationTime, " + "estimatedBugs) "
-		    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("INSERT INTO halstead_metric.file_results (hashid, " + "evaluator_id, "
+			    + "source_code_location, " + "code_range_type, " + "code_range_name, " + "operators, "
+			    + "operands, " + "differentOperators, " + "differentOperands, " + "totalOperators, "
+			    + "totalOperands, " + "vocabularySize, " + "programLength, " + "halsteadLength, "
+			    + "halsteadVolume, " + "difficulty, " + "programLevel, " + "implementationEffort, "
+			    + "implementationTime, " + "estimatedBugs) "
+			    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    HalsteadResult halsteadResult = halsteadMetricResult.getHalsteadResult();
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, HalsteadMetric.ID);
@@ -78,8 +79,8 @@ public class HalsteadMetricsEvaluatorDAO implements MetricsDAO<HalsteadMetricRes
 		    + "code_range_type, " + "code_range_name, " + "operators, " + "operands, " + "differentOperators, "
 		    + "differentOperands, " + "totalOperators, " + "totalOperands, " + "vocabularySize, "
 		    + "programLength, " + "halsteadLength, " + "halsteadVolume, " + "difficulty, " + "programLevel, "
-		    + "implementationEffort, " + "implementationTime, " + "estimatedBugs " + "FROM file_results "
-		    + "WHERE hashid=? AND evaluator_id=?;");
+		    + "implementationEffort, " + "implementationTime, " + "estimatedBugs "
+		    + "FROM halstead_metric.file_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, HalsteadMetric.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -124,12 +125,13 @@ public class HalsteadMetricsEvaluatorDAO implements MetricsDAO<HalsteadMetricRes
     public void storeDirectoryResults(HashId hashId, HalsteadMetricResult halsteadMetricResult)
 	    throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "INSERT INTO directory_results (hashid, " + "evaluator_id, " + "operators, " + "operands, "
-			    + "differentOperators, " + "differentOperands, " + "totalOperators, " + "totalOperands, "
-			    + "vocabularySize, " + "programLength, " + "halsteadLength, " + "halsteadVolume, "
-			    + "difficulty, " + "programLevel, " + "implementationEffort, " + "implementationTime, "
-			    + "estimatedBugs) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("INSERT INTO halstead_metric.directory_results (hashid, " + "evaluator_id, "
+			    + "operators, " + "operands, " + "differentOperators, " + "differentOperands, "
+			    + "totalOperators, " + "totalOperands, " + "vocabularySize, " + "programLength, "
+			    + "halsteadLength, " + "halsteadVolume, " + "difficulty, " + "programLevel, "
+			    + "implementationEffort, " + "implementationTime, " + "estimatedBugs) "
+			    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    HalsteadResult halsteadResult = halsteadMetricResult.getHalsteadResult();
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, HalsteadMetric.ID);
@@ -162,7 +164,7 @@ public class HalsteadMetricsEvaluatorDAO implements MetricsDAO<HalsteadMetricRes
 		    + "differentOperators, " + "differentOperands, " + "totalOperators, " + "totalOperands, "
 		    + "vocabularySize, " + "programLength, " + "halsteadLength, " + "halsteadVolume, " + "difficulty, "
 		    + "programLevel, " + "implementationEffort, " + "implementationTime, " + "estimatedBugs "
-		    + "FROM directory_results " + "WHERE hashid=? AND evaluator_id=?;");
+		    + "FROM halstead_metric.directory_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, HalsteadMetric.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -200,8 +202,8 @@ public class HalsteadMetricsEvaluatorDAO implements MetricsDAO<HalsteadMetricRes
     @Override
     public boolean hasFileResults(HashId hashId) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("SELECT " + "hashid FROM file_results " + "WHERE hashid=? AND evaluator_id=?;");
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "SELECT " + "hashid FROM halstead_metric.file_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, HalsteadMetric.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -215,7 +217,7 @@ public class HalsteadMetricsEvaluatorDAO implements MetricsDAO<HalsteadMetricRes
     public boolean hasDirectoryResults(HashId hashId) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "SELECT " + "hashid FROM directory_results " + "WHERE hashid=? AND evaluator_id=?;");
+		    "SELECT " + "hashid FROM halstead_metric.directory_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, HalsteadMetric.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();

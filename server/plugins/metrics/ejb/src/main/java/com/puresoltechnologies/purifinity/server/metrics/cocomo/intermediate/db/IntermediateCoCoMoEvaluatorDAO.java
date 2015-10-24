@@ -41,11 +41,12 @@ public class IntermediateCoCoMoEvaluatorDAO
     public void storeFileResults(HashId hashId, SourceCodeLocation sourceCodeLocation, CodeRange codeRange,
 	    IntermediateCoCoMoFileResults fileResults) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO file_results (hashid, "
-		    + "evaluator_id, " + "source_code_location, " + "code_range_type, " + "code_range_name, "
-		    + "phyLOC, " + "ksloc, " + "personMonth, " + "personYears, " + "scheduledMonth, "
-		    + "scheduledYears, " + "teamSize, " + "estimatedCosts, " + "project, " + "averageSalary, "
-		    + "currency, " + "attributes) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("INSERT INTO intermediate_cocomo.file_results (hashid, " + "evaluator_id, "
+			    + "source_code_location, " + "code_range_type, " + "code_range_name, " + "phyLOC, "
+			    + "ksloc, " + "personMonth, " + "personYears, " + "scheduledMonth, " + "scheduledYears, "
+			    + "teamSize, " + "estimatedCosts, " + "project, " + "averageSalary, " + "currency, "
+			    + "attributes) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    Map<String, String> attributes = attributesToMap(fileResults);
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, IntermediateCoCoMoEvaluator.ID);
@@ -83,9 +84,9 @@ public class IntermediateCoCoMoEvaluatorDAO
     public List<IntermediateCoCoMoFileResults> readFileResults(HashId hashId) throws EvaluationStoreException {
 	try {
 	    List<IntermediateCoCoMoFileResults> fileResults = new ArrayList<>();
-	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "SELECT " + "source_code_location, " + "phyLOC, " + "project, " + "averageSalary, " + "currency, "
-			    + "attributes " + "FROM file_results " + "WHERE hashid=? AND evaluator_id=?;");
+	    PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "source_code_location, "
+		    + "phyLOC, " + "project, " + "averageSalary, " + "currency, " + "attributes "
+		    + "FROM intermediate_cocomo.file_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, IntermediateCoCoMoEvaluator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -128,11 +129,12 @@ public class IntermediateCoCoMoEvaluatorDAO
     public void storeDirectoryResults(HashId hashId, IntermediateCoCoMoDirectoryResults directoryResult)
 	    throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "INSERT INTO directory_results (hashid, " + "evaluator_id, " + "phyLOC, " + "ksloc, "
-			    + "personMonth, " + "personYears, " + "scheduledMonth, " + "scheduledYears, " + "teamSize, "
-			    + "estimatedCosts, " + "project, " + "averageSalary, " + "currency, " + "attributes_keys, "
-			    + "attributes_values" + ") " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("INSERT INTO intermediate_cocomo.directory_results (hashid, " + "evaluator_id, "
+			    + "phyLOC, " + "ksloc, " + "personMonth, " + "personYears, " + "scheduledMonth, "
+			    + "scheduledYears, " + "teamSize, " + "estimatedCosts, " + "project, " + "averageSalary, "
+			    + "currency, " + "attributes_keys, " + "attributes_values" + ") "
+			    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    Map<String, String> attributes = attributesToMap(directoryResult);
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, IntermediateCoCoMoEvaluator.ID);
@@ -158,9 +160,9 @@ public class IntermediateCoCoMoEvaluatorDAO
     @Override
     public IntermediateCoCoMoDirectoryResults readDirectoryResults(HashId hashId) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("SELECT " + "phyLOC, " + "project, " + "averageSalary, " + "currency, "
-			    + "attributes " + "FROM directory_results " + "WHERE hashid=? AND evaluator_id=?;");
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "SELECT " + "phyLOC, " + "project, " + "averageSalary, " + "currency, " + "attributes "
+			    + "FROM intermediate_cocomo.directory_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, IntermediateCoCoMoEvaluator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -190,8 +192,8 @@ public class IntermediateCoCoMoEvaluatorDAO
     @Override
     public boolean hasFileResults(HashId hashId) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("SELECT " + "hashid FROM file_results " + "WHERE hashid=? AND evaluator_id=?;");
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "SELECT " + "hashid FROM intermediate_cocomo.file_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, IntermediateCoCoMoEvaluator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -204,8 +206,8 @@ public class IntermediateCoCoMoEvaluatorDAO
     @Override
     public boolean hasDirectoryResults(HashId hashId) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "SELECT " + "hashid FROM directory_results " + "WHERE hashid=? AND evaluator_id=?;");
+	    PreparedStatement preparedStatement = connection.prepareStatement("SELECT "
+		    + "hashid FROM intermediate_cocomo.directory_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, IntermediateCoCoMoEvaluator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();

@@ -22,11 +22,10 @@ public class SystemMonitorDatabaseTransformator implements ComponentTransformato
 
     private static final Logger logger = LoggerFactory.getLogger(SystemMonitorDatabaseTransformator.class);
 
-    private static final String SYSTEM_MONITOR_KEYSPACE_NAME = "system_monitor";
     private static final String HBASE_HOST = "localhost";
 
-    private static final String EVENTS_TABLE_NAME = SYSTEM_MONITOR_KEYSPACE_NAME + "_events";
-    private static final String METRICS_TABLE_NAME = SYSTEM_MONITOR_KEYSPACE_NAME + "_metrics";
+    private static final String EVENTS_TABLE_NAME = "system_monitor.events";
+    private static final String METRICS_TABLE_NAME = "system_monitor.metrics";
 
     @Override
     public String getComponentName() {
@@ -68,7 +67,7 @@ public class SystemMonitorDatabaseTransformator implements ComponentTransformato
 			+ "client varchar, " //
 			+ "exception_message varchar, " //
 			+ "exception_stacktrace varchar, "//
-			+ "CONSTRAINT " + EVENTS_TABLE_NAME
+			+ "CONSTRAINT " + EVENTS_TABLE_NAME.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY (server, time, severity, type, component, event_id, message))",
 		description));
 
@@ -85,7 +84,8 @@ public class SystemMonitorDatabaseTransformator implements ComponentTransformato
 			+ "decimal_value decimal, "//
 			+ "integer_value bigint, "//
 			+ "level_of_measurement varchar, "//
-			+ "CONSTRAINT " + METRICS_TABLE_NAME + "_PK PRIMARY KEY (server, time, name))",
+			+ "CONSTRAINT " + METRICS_TABLE_NAME.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY (server, time, name))",
 		description));
 	return sequence;
     }

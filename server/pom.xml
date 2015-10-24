@@ -18,10 +18,7 @@
 		<versioning.version>1.1.0</versioning.version>
 
 		<!-- Databases -->
-		<cassandra.driver.version>2.1.7.1</cassandra.driver.version>
-		<xo-titan.version>0.4.0-SNAPSHOT</xo-titan.version>
-		<titan.version>0.5.4</titan.version>
-		<xo.version>0.4.5</xo.version>
+		<xo.version>0.6.0</xo.version>
 		<hadoop.version>2.7.1</hadoop.version>
 		<jersey.version>1.19</jersey.version>
 		<hbase.version>1.1.2</hbase.version>
@@ -255,7 +252,6 @@
 										<approvedDependency>org\.codehaus\.jettison:jettison:1\.2</approvedDependency>
 										<approvedDependency>oro:oro:2\.0\.8</approvedDependency>
 										<approvedDependency>org\.apache\.ant:.*:.*</approvedDependency>
-										<approvedDependency>org\.apache\.cassandra.*:.*:.*</approvedDependency>
 									</approvedDependencies>
 								</knownLicense>
 								<knownLicense>
@@ -581,11 +577,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.cassandra</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>database.hadoop.genesis</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -603,11 +594,6 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>database.hbase.utils</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.titan</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -916,9 +902,9 @@
 				<version>${purifinity.api.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.puresoltechnologies.extended-objects</groupId>
-				<artifactId>titan</artifactId>
-				<version>${xo-titan.version}</version>
+				<groupId>com.buschmais.xo</groupId>
+				<artifactId>xo.neo4j</artifactId>
+				<version>${xo.version}</version>
 			</dependency>
 			<!-- External PureSol Technologies Libraries -->
 			<dependency>
@@ -953,22 +939,12 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.genesis</groupId>
-				<artifactId>transformation.cassandra</artifactId>
-				<version>${genesis.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.genesis</groupId>
 				<artifactId>transformation.hadoop</artifactId>
 				<version>${genesis.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.genesis</groupId>
 				<artifactId>transformation.phoenix</artifactId>
-				<version>${genesis.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.genesis</groupId>
-				<artifactId>transformation.titan</artifactId>
 				<version>${genesis.version}</version>
 			</dependency>
 			<dependency>
@@ -1057,26 +1033,6 @@
 				<groupId>com.buschmais.xo</groupId>
 				<artifactId>xo.api</artifactId>
 				<version>${xo.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.thinkaurelius.titan</groupId>
-				<artifactId>titan-core</artifactId>
-				<version>${titan.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.thinkaurelius.titan</groupId>
-				<artifactId>titan-cassandra</artifactId>
-				<version>${titan.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.datastax.cassandra</groupId>
-				<artifactId>cassandra-driver-core</artifactId>
-				<version>${cassandra.driver.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>net.jpountz.lz4</groupId>
-				<artifactId>lz4</artifactId>
-				<version>1.2.0</version>
 			</dependency>
 			<!-- WildFly -->
 			<dependency>

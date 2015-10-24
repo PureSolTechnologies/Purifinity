@@ -33,12 +33,12 @@ public class BasicCoCoMoEvaluatorDAO implements MetricsDAO<BasicCoCoMoFileResult
     public void storeFileResults(HashId hashId, SourceCodeLocation sourceCodeLocation, CodeRange codeRange,
 	    BasicCoCoMoFileResults fileResults) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("INSERT INTO file_results (hashid, " + "evaluator_id, " + "source_code_location, "
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "INSERT INTO basic_cocomo.file_results (hashid, " + "evaluator_id, " + "source_code_location, "
 			    + "code_range_type, " + "code_range_name, " + "phyLOC, " + "ksloc, " + "personMonth, "
 			    + "personYears, " + "scheduledMonth, " + "scheduledYears, " + "teamSize, "
 			    + "estimatedCosts, " + "c1, " + "c2, " + "c3, " + "complexity, " + "averageSalary, "
-			    + "currency) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+			    + "currency) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, BasicCoCoMoEvaluator.ID);
 	    preparedStatement.setString(3, PropertiesUtils.toString(sourceCodeLocation.getSerialization()));
@@ -72,7 +72,7 @@ public class BasicCoCoMoEvaluatorDAO implements MetricsDAO<BasicCoCoMoFileResult
 	    List<BasicCoCoMoFileResults> fileResults = new ArrayList<>();
 	    PreparedStatement preparedStatement = connection.prepareStatement(
 		    "SELECT " + "source_code_location, " + "phyLOC, " + "complexity, " + "averageSalary, " + "currency "
-			    + "FROM file_results " + "WHERE hashid=? AND evaluator_id=?;");
+			    + "FROM basic_cocomo.file_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, BasicCoCoMoEvaluator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -102,10 +102,11 @@ public class BasicCoCoMoEvaluatorDAO implements MetricsDAO<BasicCoCoMoFileResult
     public void storeDirectoryResults(HashId hashId, BasicCoCoMoDirectoryResults directoryResult)
 	    throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO directory_results (hashid, "
-		    + "evaluator_id, " + "phyLOC, " + "ksloc, " + "personMonth, " + "personYears, " + "scheduledMonth, "
-		    + "scheduledYears, " + "teamSize, " + "estimatedCosts, " + "c1, " + "c2, " + "c3, " + "complexity, "
-		    + "averageSalary, " + "currency) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "INSERT INTO basic_cocomo.directory_results (hashid, " + "evaluator_id, " + "phyLOC, " + "ksloc, "
+			    + "personMonth, " + "personYears, " + "scheduledMonth, " + "scheduledYears, " + "teamSize, "
+			    + "estimatedCosts, " + "c1, " + "c2, " + "c3, " + "complexity, " + "averageSalary, "
+			    + "currency) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, BasicCoCoMoEvaluator.ID);
 	    preparedStatement.setInt(3, directoryResult.getPhyLOC());
@@ -134,7 +135,7 @@ public class BasicCoCoMoEvaluatorDAO implements MetricsDAO<BasicCoCoMoFileResult
 	try {
 	    PreparedStatement preparedStatement = connection
 		    .prepareStatement("SELECT " + "phyLOC, " + "complexity, " + "averageSalary, " + "currency "
-			    + "FROM directory_results " + "WHERE hashid=? AND evaluator_id=?;");
+			    + "FROM basic_cocomo.directory_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, BasicCoCoMoEvaluator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -160,8 +161,8 @@ public class BasicCoCoMoEvaluatorDAO implements MetricsDAO<BasicCoCoMoFileResult
     @Override
     public boolean hasFileResults(HashId hashId) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("SELECT " + "hashid FROM file_results " + "WHERE hashid=? AND evaluator_id=?;");
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "SELECT " + "hashid FROM basic_cocomo.file_results " + "WHERE hashid=? AND evaluator_id=?");
 
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, BasicCoCoMoEvaluator.ID);
@@ -176,7 +177,7 @@ public class BasicCoCoMoEvaluatorDAO implements MetricsDAO<BasicCoCoMoFileResult
     public boolean hasDirectoryResults(HashId hashId) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "SELECT " + "hashid FROM directory_results " + "WHERE hashid=? AND evaluator_id=?;");
+		    "SELECT " + "hashid FROM basic_cocomo.directory_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, BasicCoCoMoEvaluator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();

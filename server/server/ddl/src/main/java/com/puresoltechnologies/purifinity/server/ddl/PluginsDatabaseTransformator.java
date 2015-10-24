@@ -22,12 +22,12 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 
     private static final Logger logger = LoggerFactory.getLogger(PluginsDatabaseTransformator.class);
 
-    private static final String PLUGINS_TABLE = "plugins_database_plugins";
-    private static final String ANALYZERS_TABLE = "plugins_database_analyzers";
-    private static final String EVALUATORS_TABLE = "plugins_database_evaluators";
-    private static final String EVALUATOR_PARAMETERS_TABLE = "plugins_database_evaluator_parameters";
+    private static final String PLUGINS_TABLE = "plugins_database.plugins";
+    private static final String ANALYZERS_TABLE = "plugins_database.analyzers";
+    private static final String EVALUATORS_TABLE = "plugins_database.evaluators";
+    private static final String EVALUATOR_PARAMETERS_TABLE = "plugins_database.evaluator_parameters";
     private static final String REPOSITORY_TYPES_TABLE = "plugins_repository_types";
-    private static final String REPOSITORY_TYPE_PARAMETERS_TABLE = "plugins_database_repository_type_parameters";
+    private static final String REPOSITORY_TYPE_PARAMETERS_TABLE = "plugins_database.repository_type_parameters";
 
     public static final String HBASE_HOST = "localhost";
 
@@ -66,7 +66,7 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 			+ "vendor varchar, "//
 			+ "vendor_url varchar, "//
 			+ "path_to_ui varchar, " //
-			+ "CONSTRAINT " + PLUGINS_TABLE + "_PK PRIMARY KEY(id, version))",
+			+ "CONSTRAINT " + PLUGINS_TABLE.replaceAll("\\.", "_") + "_PK PRIMARY KEY(id, version))",
 		"Keeps information about installed plugins."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -84,7 +84,7 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 			+ "configuration_url varchar, " //
 			+ "project_url varchar, "//
 			+ "run_url varchar," //
-			+ "CONSTRAINT " + ANALYZERS_TABLE + "_PK PRIMARY KEY(id, version))",
+			+ "CONSTRAINT " + ANALYZERS_TABLE.replaceAll("\\.", "_") + "_PK PRIMARY KEY(id, version))",
 		"Keeps information about installed analyzers."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -104,7 +104,7 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 			+ "run_url varchar, " //
 			+ "quality_characteristics varchar array, " //
 			+ " dependencies varchar array, "//
-			+ "CONSTRAINT " + EVALUATORS_TABLE + "_PK PRIMARY KEY(id))",
+			+ "CONSTRAINT " + EVALUATORS_TABLE.replaceAll("\\.", "_") + "_PK PRIMARY KEY(id))",
 		"Keeps information about the installed evaluators."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -118,7 +118,8 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 			+ "level_of_measurement varchar, " //
 			+ "type varchar, " //
 			+ "numeric boolean, " //
-			+ "CONSTRAINT " + EVALUATOR_PARAMETERS_TABLE + "_PK PRIMARY KEY(evaluator_id, name))",
+			+ "CONSTRAINT " + EVALUATOR_PARAMETERS_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(evaluator_id, name))",
 		"Keeps information about the provided parameters of evaluators."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -130,7 +131,8 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 			+ "plugin_id varchar, " //
 			+ "plugin_version varchar, "//
 			+ "description varchar, " //
-			+ "CONSTRAINT " + REPOSITORY_TYPES_TABLE + "_PK PRIMARY KEY(class_name))",
+			+ "CONSTRAINT " + REPOSITORY_TYPES_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(class_name))",
 		"Keeps information about the installed evaluators."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -144,7 +146,8 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
 			+ "level_of_measurement varchar, " //
 			+ "type varchar, " //
 			+ "numeric boolean, " //
-			+ "CONSTRAINT " + REPOSITORY_TYPE_PARAMETERS_TABLE + "_PK PRIMARY KEY(class_name, name))",
+			+ "CONSTRAINT " + REPOSITORY_TYPE_PARAMETERS_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(class_name, name))",
 		"Keeps information about the installed evaluators."));
 
 	return sequence;

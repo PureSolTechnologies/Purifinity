@@ -3,12 +3,9 @@ package com.puresoltechnologies.purifinity.server.ddl;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
 import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
 import com.puresoltechnologies.genesis.commons.TransformationException;
-import com.puresoltechnologies.genesis.commons.cassandra.CassandraUtils;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.genesis.transformation.titan.AbstractTitanTransformationStep;
@@ -39,16 +36,12 @@ public class TitanDatabaseTransformator implements ComponentTransformator {
     private TransformationSequence migrateVersion0_3_0() {
 	Version startVersion = new Version(0, 0, 0);
 	Version targetVersion = new Version(0, 3, 0);
-	ProvidedVersionRange versionRange = new ProvidedVersionRange(
-		targetVersion, null);
-	SequenceMetadata metadata = new SequenceMetadata(getComponentName(),
-		startVersion, versionRange);
-	TitanTransformationSequence sequence = new TitanTransformationSequence(
-		TITAN_HOST, metadata);
+	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
+	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
+	TitanTransformationSequence sequence = new TitanTransformationSequence(TITAN_HOST, metadata);
 
-	sequence.appendTransformation(new AbstractTitanTransformationStep(
-		sequence, "Rick-Rainer Ludwig", "Create Titan Keyspace",
-		"Create Titan Keyspace") {
+	sequence.appendTransformation(new AbstractTitanTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"Create Titan Keyspace", "Create Titan Keyspace") {
 	    @Override
 	    public void transform() throws TransformationException {
 		// intentionally left blank
@@ -60,11 +53,12 @@ public class TitanDatabaseTransformator implements ComponentTransformator {
 
     @Override
     public void dropAll() {
-	try (Cluster cluster = CassandraUtils.connectCluster()) {
-	    try (Session session = cluster.connect()) {
-		session.execute("DROP KEYSPACE IF EXISTS titan");
-	    }
-	}
+	// FIXME
+	// try (Cluster cluster = CassandraUtils.connectCluster()) {
+	// try (Session session = cluster.connect()) {
+	// session.execute("DROP KEYSPACE IF EXISTS titan");
+	// }
+	// }
     }
 
 }

@@ -61,7 +61,7 @@ public class AnalysisServiceDatabaseTransformator implements ComponentTransforma
 			+ "ignore_hidden boolean, "//
 			+ "repository_location_keys varchar array, "//
 			+ "repository_location_values varchar array, "//
-			+ "CONSTRAINT " + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
+			+ "CONSTRAINT " + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(project_id))",
 		"Keeps settings of analysis projects."));
 
@@ -90,7 +90,7 @@ public class AnalysisServiceDatabaseTransformator implements ComponentTransforma
 			+ "successful boolean, "//
 			+ "analyzer_message varchar," //
 			+ "analysis varbinary, "//
-			+ "CONSTRAINT " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE
+			+ "CONSTRAINT " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, analyzer_id, analyzer_version))",
 		"Keeps analysis information for analyzed and unanalyzed " + "files and their raw data."));
 

@@ -23,9 +23,9 @@ public class MaintainabilityIndexEvaluatorDatabaseTransformator implements Compo
     private static final Logger logger = LoggerFactory
 	    .getLogger(MaintainabilityIndexEvaluatorDatabaseTransformator.class);
 
-    private static final String FILE_RESULTS_TABLE = "maintainability_indizes_file_results";
-    private static final String DIRECTORY_RESULTS_TABLE = "maintainability_indizes_directory_results";
-    private static final String PROJECT_RESULTS_TABLE = "maintainability_indizes_project_results";
+    private static final String FILE_RESULTS_TABLE = "maintainability_index.file_results";
+    private static final String DIRECTORY_RESULTS_TABLE = "maintainability_index.directory_results";
+    private static final String PROJECT_RESULTS_TABLE = "maintainability_index.project_results";
 
     @Override
     public String getComponentName() {
@@ -55,18 +55,19 @@ public class MaintainabilityIndexEvaluatorDatabaseTransformator implements Compo
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + FILE_RESULTS_TABLE + " (hashid varchar, " + "evaluator_id varchar, "
 			+ "source_code_location varchar, " + "code_range_type varchar, " + "code_range_name varchar, "
-			+ "MIwoc double, " + "MIcw double, " + "MI double, " + "CONSTRAINT " + FILE_RESULTS_TABLE
+			+ "MIwoc double, " + "MIcw double, " + "MI double, " + "CONSTRAINT "
+			+ FILE_RESULTS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, code_range_type, code_range_name))",
 		"Keeps directory results for McCabe Metric evaluator."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + DIRECTORY_RESULTS_TABLE + " (hashid varchar, " + "evaluator_id varchar, "
-			+ "MIwoc double, " + "MIcw double, " + "MI double, " + "CONSTRAINT " + DIRECTORY_RESULTS_TABLE
-			+ "_PK PRIMARY KEY(hashid, evaluator_id))",
+			+ "MIwoc double, " + "MIcw double, " + "MI double, " + "CONSTRAINT "
+			+ DIRECTORY_RESULTS_TABLE.replaceAll("\\.", "_") + "_PK PRIMARY KEY(hashid, evaluator_id))",
 		"Keeps directory results for McCabe Metric evaluator."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + PROJECT_RESULTS_TABLE + " (project_id varchar, " + "evaluator_id varchar, "
-			+ "MIwoc double, " + "MIcw double, " + "MI double, " + "CONSTRAINT " + PROJECT_RESULTS_TABLE
-			+ "_PK PRIMARY KEY(project_id, evaluator_id))",
+			+ "MIwoc double, " + "MIcw double, " + "MI double, " + "CONSTRAINT "
+			+ PROJECT_RESULTS_TABLE.replaceAll("\\.", "_") + "_PK PRIMARY KEY(project_id, evaluator_id))",
 		"Keeps project results for McCabe Metric evaluator."));
 
 	return sequence;

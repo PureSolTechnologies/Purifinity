@@ -37,10 +37,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.genesis</groupId>
-			<artifactId>transformation.cassandra</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.genesis</groupId>
 			<artifactId>transformation.phoenix</artifactId>
 		</dependency>
 		<dependency>

@@ -34,9 +34,10 @@ public class MaintainabilityIndexEvaluatorDAO
     public void storeFileResults(HashId hashId, SourceCodeLocation sourceCodeLocation, CodeRange codeRange,
 	    MaintainabilityIndexFileResult maintainabilityIndex) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO file_results (hashid, "
-		    + "evaluator_id, " + "source_code_location, " + "code_range_type, " + "code_range_name, "
-		    + "MIwoc, " + "MIcw, " + "MI) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("INSERT INTO maintainability_index.file_results (hashid, " + "evaluator_id, "
+			    + "source_code_location, " + "code_range_type, " + "code_range_name, " + "MIwoc, "
+			    + "MIcw, " + "MI) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 	    MaintainabilityIndexResult maintainabilityIndexResult = maintainabilityIndex
 		    .getMaintainabilityIndexResult();
 	    preparedStatement.setString(1, hashId.toString());
@@ -58,9 +59,9 @@ public class MaintainabilityIndexEvaluatorDAO
     public List<MaintainabilityIndexFileResult> readFileResults(HashId hashId) throws EvaluationStoreException {
 	try {
 	    List<MaintainabilityIndexFileResult> mcCabeResults = new ArrayList<>();
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("SELECT " + "source_code_location, " + "code_range_type, " + "code_range_name, "
-			    + "MIwoc, " + "MIcw " + "FROM " + "file_results " + "WHERE hashid=? AND evaluator_id=?;");
+	    PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "source_code_location, "
+		    + "code_range_type, " + "code_range_name, " + "MIwoc, " + "MIcw " + "FROM "
+		    + "maintainability_index.file_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, MaintainabilityIndexEvaluator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -104,7 +105,7 @@ public class MaintainabilityIndexEvaluatorDAO
     public boolean hasFileResults(HashId hashId) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("SELECT " + "hashid " + "WHERE hashid=? AND evaluator_id=?;");
+		    .prepareStatement("SELECT " + "hashid " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, MaintainabilityIndexEvaluator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();

@@ -33,11 +33,12 @@ public class SLOCMetricEvaluatorDAO implements MetricsDAO<SLOCResult, SLOCResult
     public void storeFileResults(HashId hashId, SourceCodeLocation sourceCodeLocation, CodeRange codeRange,
 	    SLOCResult slocResult) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO file_results (hashid, "
-		    + "evaluator_id, " + "source_code_location, " + "code_range_type, " + "code_range_name, "
-		    + "phyLOC, " + "proLOC, " + "comLOC, " + "blLOC, " + "line_length_count, " + "line_length_min, "
-		    + "line_length_max, " + "line_length_avg, " + "line_length_median, " + "line_length_stdDev) "
-		    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("INSERT INTO sloc_metric.file_results (hashid, " + "evaluator_id, "
+			    + "source_code_location, " + "code_range_type, " + "code_range_name, " + "phyLOC, "
+			    + "proLOC, " + "comLOC, " + "blLOC, " + "line_length_count, " + "line_length_min, "
+			    + "line_length_max, " + "line_length_avg, " + "line_length_median, "
+			    + "line_length_stdDev) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    SLOCMetric slocMetric = slocResult.getSLOCMetric();
 	    Statistics lineStatistics = slocMetric.getLineStatistics();
 	    preparedStatement.setString(1, hashId.toString());
@@ -65,8 +66,8 @@ public class SLOCMetricEvaluatorDAO implements MetricsDAO<SLOCResult, SLOCResult
     @Override
     public boolean hasFileResults(HashId hashId) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("SELECT " + "hashid FROM file_results " + "WHERE hashid=? AND evaluator_id=?;");
+	    PreparedStatement preparedStatement = connection.prepareStatement(
+		    "SELECT " + "hashid FROM sloc_metric.file_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, SLOCMetricCalculator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -79,11 +80,11 @@ public class SLOCMetricEvaluatorDAO implements MetricsDAO<SLOCResult, SLOCResult
     @Override
     public List<SLOCResult> readFileResults(HashId hashId) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("SELECT " + "source_code_location, " + "code_range_type, " + "code_range_name, "
-			    + "phyLOC, " + "proLOC, " + "comLOC, " + "blLOC, " + "line_length_count, "
-			    + "line_length_min, " + "line_length_max, " + "line_length_avg, " + "line_length_median, "
-			    + "line_length_stdDev FROM file_results " + "WHERE hashid=? AND evaluator_id=?;");
+	    PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "source_code_location, "
+		    + "code_range_type, " + "code_range_name, " + "phyLOC, " + "proLOC, " + "comLOC, " + "blLOC, "
+		    + "line_length_count, " + "line_length_min, " + "line_length_max, " + "line_length_avg, "
+		    + "line_length_median, " + "line_length_stdDev FROM sloc_metric.file_results "
+		    + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, SLOCMetricCalculator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -121,10 +122,11 @@ public class SLOCMetricEvaluatorDAO implements MetricsDAO<SLOCResult, SLOCResult
     @Override
     public void storeDirectoryResults(HashId hashId, SLOCResult slocResult) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO directory_results (hashid, "
-		    + "evaluator_id, " + "phyLOC, " + "proLOC, " + "comLOC, " + "blLOC, " + "line_length_count, "
-		    + "line_length_min, " + "line_length_max, " + "line_length_avg, " + "line_length_median, "
-		    + "line_length_stdDev) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+	    PreparedStatement preparedStatement = connection
+		    .prepareStatement("INSERT INTO sloc_metric.directory_results (hashid, " + "evaluator_id, "
+			    + "phyLOC, " + "proLOC, " + "comLOC, " + "blLOC, " + "line_length_count, "
+			    + "line_length_min, " + "line_length_max, " + "line_length_avg, " + "line_length_median, "
+			    + "line_length_stdDev) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    SLOCMetric slocMetric = slocResult.getSLOCMetric();
 	    Statistics lineStatistics = slocMetric.getLineStatistics();
 	    preparedStatement.setString(1, hashId.toString());
@@ -150,7 +152,7 @@ public class SLOCMetricEvaluatorDAO implements MetricsDAO<SLOCResult, SLOCResult
     public boolean hasDirectoryResults(HashId hashId) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "SELECT " + "hashid FROM directory_results " + "WHERE hashid=? AND evaluator_id=?;");
+		    "SELECT " + "hashid FROM sloc_metric.directory_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, SLOCMetricCalculator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
@@ -163,10 +165,10 @@ public class SLOCMetricEvaluatorDAO implements MetricsDAO<SLOCResult, SLOCResult
     @Override
     public SLOCResult readDirectoryResults(HashId hashId) throws EvaluationStoreException {
 	try {
-	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "SELECT " + "phyLOC, " + "proLOC, " + "comLOC, " + "blLOC, " + "line_length_count, "
-			    + "line_length_min, " + "line_length_max, " + "line_length_avg, " + "line_length_median, "
-			    + "line_length_stdDev FROM directory_results " + "WHERE hashid=? AND evaluator_id=?;");
+	    PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "phyLOC, " + "proLOC, "
+		    + "comLOC, " + "blLOC, " + "line_length_count, " + "line_length_min, " + "line_length_max, "
+		    + "line_length_avg, " + "line_length_median, "
+		    + "line_length_stdDev FROM sloc_metric.directory_results " + "WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, SLOCMetricCalculator.ID);
 	    ResultSet resultSet = preparedStatement.executeQuery();
