@@ -3,9 +3,11 @@ package com.puresoltechnologies.purifinity.server.database.hgraph;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NavigableMap;
+import java.util.Set;
 
 import org.apache.commons.lang.SerializationUtils;
 import org.apache.hadoop.hbase.HColumnDescriptor;
@@ -32,7 +34,8 @@ public class HGraphImpl implements HGraph {
 
     static final String NAMESPACE_NAME = "hgraph";
     static final String VERTICES_TABLE_NAME = NAMESPACE_NAME + ":vertices";
-    static final String LABEL_COLUMN_FAMILIY = "labels";
+    static final String LABELS_COLUMN_FAMILIY = "labels";
+    static final byte[] LABELS_COLUMN_FAMILIY_BYTES = Bytes.toBytes(LABELS_COLUMN_FAMILIY);
     static final String EDGES_COLUMN_FAMILY = "edges";
     static final byte[] EDGES_COLUMN_FAMILY_BYTES = Bytes.toBytes(EDGES_COLUMN_FAMILY);
     static final String PROPERTIES_COLUMN_FAMILY = "properties";
@@ -65,7 +68,7 @@ public class HGraphImpl implements HGraph {
     private void assureVertexTablePresence(Admin admin) throws IOException {
 	if (!admin.isTableAvailable(TableName.valueOf(VERTICES_TABLE_NAME))) {
 	    HTableDescriptor descriptor = new HTableDescriptor(TableName.valueOf(VERTICES_TABLE_NAME));
-	    HColumnDescriptor labelColumnFamily = new HColumnDescriptor(LABEL_COLUMN_FAMILIY);
+	    HColumnDescriptor labelColumnFamily = new HColumnDescriptor(LABELS_COLUMN_FAMILIY);
 	    descriptor.addFamily(labelColumnFamily);
 	    HColumnDescriptor edgesColumnFamily = new HColumnDescriptor(EDGES_COLUMN_FAMILY);
 	    descriptor.addFamily(edgesColumnFamily);
@@ -130,8 +133,7 @@ public class HGraphImpl implements HGraph {
 	getCurrentTransaction().put(VERTICES_TABLE_NAME, put);
 	Map<String, Object> properties = new HashMap<>();
 	properties.put(HGRAPH_ID_PROPERTY, vertexId);
-	HGraphVertexImpl vertex = new HGraphVertexImpl(this, id, properties);
-	return vertex;
+	return new HGraphVertexImpl(this, id, new HashSet<>(), properties);
     }
 
     @Override
@@ -168,17 +170,24 @@ public class HGraphImpl implements HGraph {
 	    }
 	    // TODO read edges and labels
 	    // Reading labels...
+	    Set<String> labels = new HashSet<>();
+	    NavigableMap<byte[], byte[]> labelsMap = result.getFamilyMap(LABELS_COLUMN_FAMILIY_BYTES);
+	    if (labelsMap != null) {
+		for (byte[] label : labelsMap.keySet()) {
+		    labels.add(Bytes.toString(label));
+		}
+	    }
 	    // Reading properties...
 	    Map<String, Object> properties = new HashMap<>();
-	    NavigableMap<byte[], byte[]> familyMap = result.getFamilyMap(PROPERTIES_COLUMN_FAMILY_BYTES);
-	    if (familyMap != null) {
-		for (Entry<byte[], byte[]> entry : familyMap.entrySet()) {
+	    NavigableMap<byte[], byte[]> propertyMap = result.getFamilyMap(PROPERTIES_COLUMN_FAMILY_BYTES);
+	    if (propertyMap != null) {
+		for (Entry<byte[], byte[]> entry : propertyMap.entrySet()) {
 		    String key = Bytes.toString(entry.getKey());
 		    Object value = SerializationUtils.deserialize(entry.getValue());
 		    properties.put(key, value);
 		}
 	    }
-	    return new HGraphVertexImpl(this, id, properties);
+	    return new HGraphVertexImpl(this, id, labels, properties);
 	} catch (IOException e) {
 	    throw new HGraphException("Could not get vertex.", e);
 	}
@@ -225,20 +234,8 @@ public class HGraphImpl implements HGraph {
 	}
     }
 
-    void saveProperty(byte[] id, String key, Object value) {
-	Put put = new Put(id);
-	put.addColumn(PROPERTIES_COLUMN_FAMILY_BYTES, Bytes.toBytes(key),
-		SerializationUtils.serialize((Serializable) value));
-	getCurrentTransaction().put(VERTICES_TABLE_NAME, put);
-    }
-
-    public void removeProperty(byte[] id, String key) {
-	Delete delete = new Delete(id);
-	delete.addColumn(PROPERTIES_COLUMN_FAMILY_BYTES, Bytes.toBytes(key));
-	getCurrentTransaction().delete(VERTICES_TABLE_NAME, delete);
-    }
-
     @Override
+    @SuppressWarnings("deprecation")
     public void stopTransaction(Conclusion conclusion) {
 	switch (conclusion) {
 	case SUCCESS:
@@ -262,4 +259,28 @@ public class HGraphImpl implements HGraph {
 	getCurrentTransaction().rollback();
     }
 
+    public void addLabel(byte[] id, String label) {
+	Put put = new Put(id);
+	put.addColumn(LABELS_COLUMN_FAMILIY_BYTES, Bytes.toBytes(label), Bytes.toBytes(label));
+	getCurrentTransaction().put(VERTICES_TABLE_NAME, put);
+    }
+
+    public void removeLabel(byte[] id, String label) {
+	Delete delete = new Delete(id);
+	delete.addColumn(LABELS_COLUMN_FAMILIY_BYTES, Bytes.toBytes(label));
+	getCurrentTransaction().delete(VERTICES_TABLE_NAME, delete);
+    }
+
+    void setVertexProperty(byte[] id, String key, Object value) {
+	Put put = new Put(id);
+	put.addColumn(PROPERTIES_COLUMN_FAMILY_BYTES, Bytes.toBytes(key),
+		SerializationUtils.serialize((Serializable) value));
+	getCurrentTransaction().put(VERTICES_TABLE_NAME, put);
+    }
+
+    public void removeVertexProperty(byte[] id, String key) {
+	Delete delete = new Delete(id);
+	delete.addColumn(PROPERTIES_COLUMN_FAMILY_BYTES, Bytes.toBytes(key));
+	getCurrentTransaction().delete(VERTICES_TABLE_NAME, delete);
+    }
 }

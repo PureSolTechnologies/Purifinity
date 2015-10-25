@@ -1,10 +1,12 @@
 package com.puresoltechnologies.purifinity.server.database.hgraph;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Admin;
@@ -74,6 +76,30 @@ public class HGraphVertexIT {
     }
 
     @Test
+    public void testSetLabel() throws IOException {
+	try (HGraph graph = GraphFactory.createGraph()) {
+	    HGraphVertex vertex = graph.addVertex("LabelTest");
+	    vertex.addLabel("label");
+	    graph.commit();
+	    assertEquals("LabelTest", vertex.getId().toString());
+	    assertTrue(vertex.hasLabel("label"));
+	    Iterable<String> labels = vertex.getLabels();
+	    Iterator<String> iterator = labels.iterator();
+	    assertTrue(iterator.hasNext());
+	    assertEquals("label", iterator.next());
+	    assertFalse(iterator.hasNext());
+
+	    Vertex vertex2 = graph.getVertex(vertex.getId());
+	    assertEquals(vertex, vertex2);
+
+	    vertex.removeLabel("label");
+	    graph.commit();
+	    assertFalse(vertex.hasLabel("label"));
+	    assertFalse(graph.getVertex(vertex.getId()).hasLabel("label"));
+	}
+    }
+
+    @Test
     public void testVertexCreationPerformance() throws IOException {
 	try (HGraph graph = GraphFactory.createGraph()) {
 	    long start = System.currentTimeMillis();
@@ -87,7 +113,7 @@ public class HGraphVertexIT {
 	    long duration = stop - start;
 	    double speed = (double) number / (double) duration * 1000.0;
 	    System.out.println("time: " + duration + "ms");
-	    System.out.println("speed: " + speed + "vertices/s");
+	    System.out.println("speed: " + speed + " vertices/s");
 	    assertTrue(duration < 10000);
 	}
     }
@@ -95,7 +121,7 @@ public class HGraphVertexIT {
     @Test
     public void testSetPropertyPerformance() throws IOException {
 	try (HGraph graph = GraphFactory.createGraph()) {
-	    Vertex vertex = graph.addVertex("setPropertyNode");
+	    Vertex vertex = graph.addVertex("PropertyPerformanceTest");
 	    long start = System.currentTimeMillis();
 	    int number = 10000;
 	    for (int i = 0; i < number; ++i) {
@@ -107,7 +133,27 @@ public class HGraphVertexIT {
 	    long duration = stop - start;
 	    double speed = (double) number / (double) duration * 1000.0;
 	    System.out.println("time: " + duration + "ms");
-	    System.out.println("speed: " + speed + "properties/s");
+	    System.out.println("speed: " + speed + " properties/s");
+	    assertTrue(duration < 10000);
+	}
+    }
+
+    @Test
+    public void testSetLabelPerformance() throws IOException {
+	try (HGraph graph = GraphFactory.createGraph()) {
+	    HGraphVertex vertex = graph.addVertex("LabelPerformanceTest");
+	    long start = System.currentTimeMillis();
+	    int number = 10000;
+	    for (int i = 0; i < number; ++i) {
+		vertex.addLabel("label" + i);
+		assertTrue(vertex.hasLabel("label" + i));
+	    }
+	    graph.commit();
+	    long stop = System.currentTimeMillis();
+	    long duration = stop - start;
+	    double speed = (double) number / (double) duration * 1000.0;
+	    System.out.println("time: " + duration + "ms");
+	    System.out.println("speed: " + speed + " labels/s");
 	    assertTrue(duration < 10000);
 	}
     }

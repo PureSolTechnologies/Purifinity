@@ -2,6 +2,8 @@ package com.puresoltechnologies.purifinity.server.database.hgraph;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,11 +16,13 @@ public class HGraphVertexImpl implements HGraphVertex {
 
     private final HGraphImpl hgraph;
     private final byte[] id;
+    private final Set<String> labels = new HashSet<>();
     private final Map<String, Object> properties = new HashMap<>();
 
-    public HGraphVertexImpl(HGraphImpl hgraph, byte[] id, Map<String, Object> properties) {
+    public HGraphVertexImpl(HGraphImpl hgraph, byte[] id, Set<String> labels, Map<String, Object> properties) {
 	this.hgraph = hgraph;
 	this.id = id;
+	this.labels.addAll(labels);
 	this.properties.putAll(properties);
     }
 
@@ -57,7 +61,7 @@ public class HGraphVertexImpl implements HGraphVertex {
     }
 
     @Override
-    public Iterable<Vertex> getVertices(Direction direction, String... labels) {
+    public Iterable<Vertex> getVertices(Direction direction, String... edgeLabels) {
 	// TODO Auto-generated method stub
 	return null;
     }
@@ -87,7 +91,7 @@ public class HGraphVertexImpl implements HGraphVertex {
 
     @Override
     public void setProperty(String key, Object value) {
-	hgraph.saveProperty(id, key, value);
+	hgraph.setVertexProperty(id, key, value);
 	properties.put(key, value);
     }
 
@@ -95,7 +99,7 @@ public class HGraphVertexImpl implements HGraphVertex {
     public <T> T removeProperty(String key) {
 	@SuppressWarnings("unchecked")
 	T value = (T) getProperty(key);
-	hgraph.removeProperty(id, key);
+	hgraph.removeVertexProperty(id, key);
 	return value;
     }
 
@@ -107,6 +111,33 @@ public class HGraphVertexImpl implements HGraphVertex {
     @Override
     public Object getId() {
 	return HGraphImpl.decodeRowKey(id);
+    }
+
+    @Override
+    public Iterable<String> getLabels() {
+	return new Iterable<String>() {
+	    @Override
+	    public Iterator<String> iterator() {
+		return labels.iterator();
+	    }
+	};
+    }
+
+    @Override
+    public void addLabel(String label) {
+	hgraph.addLabel(id, label);
+	labels.add(label);
+    }
+
+    @Override
+    public void removeLabel(String label) {
+	hgraph.removeLabel(id, label);
+	labels.remove(label);
+    }
+
+    @Override
+    public boolean hasLabel(String label) {
+	return labels.contains(label);
     }
 
 }

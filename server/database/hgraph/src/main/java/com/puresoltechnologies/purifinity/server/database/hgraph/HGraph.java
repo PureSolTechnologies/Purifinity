@@ -15,9 +15,17 @@ import com.tinkerpop.blueprints.TransactionalGraph;
  */
 public interface HGraph extends TransactionalGraph, Closeable {
 
+    @Override
+    public HGraphVertex addVertex(Object id);
+
+    @Override
+    public HGraphVertex getVertex(Object id);
+
     public Connection getConnection();
 
+    @Override
     public void commit();
 
+    @Override
     public void rollback();
 }
