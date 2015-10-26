@@ -901,11 +901,6 @@
 				<artifactId>repository.spi</artifactId>
 				<version>${purifinity.api.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>com.buschmais.xo</groupId>
-				<artifactId>xo.neo4j</artifactId>
-				<version>${xo.version}</version>
-			</dependency>
 			<!-- External PureSol Technologies Libraries -->
 			<dependency>
 				<groupId>com.puresoltechnologies.commons</groupId>
