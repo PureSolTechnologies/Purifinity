@@ -21,4 +21,11 @@
     <name>dfs.replication</name>
     <value>1</value>
   </property>
-</configuration>
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>/home/ludwig/HadoopData/hdfs/namenode</value>
+  </property>
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>/home/ludwig/HadoopData/hdfs/datanode</value>
+</property></configuration>

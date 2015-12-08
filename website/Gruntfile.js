@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 	var srcDir = ''
-	grunt.loadNpmTasks('grunt-ts-1.5');
+	grunt.loadNpmTasks('grunt-ts');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -71,13 +71,12 @@ module.exports = function(grunt) {
 				},
 				ts : {
 					default : {
-						src : [ 'typescript/**/*.ts' ],
+						src : [ 'typescript/**/*.ts', 'typings/**/*.ts' ],
 						out : 'target/tmp/js/purifinity-ui.js',
 						options : {
 							module : 'amd',
 							target : 'es5',
 							rootDir : 'typescript',
-							watch : false,
 							sourceMap : false,
 							declaration : false
 						}
