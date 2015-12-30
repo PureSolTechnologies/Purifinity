@@ -8,12 +8,12 @@ import javax.inject.Inject;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Before;
 
+import com.puresoltechnologies.ductiledb.tinkerpop.DuctileGraph;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.AnalysisServiceConnection;
 import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreTester;
 import com.puresoltechnologies.purifinity.server.test.AbstractPurifinityServerServerTest;
 import com.puresoltechnologies.purifinity.server.test.analysis.AnalysisStoreDatabaseHelper;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
-import com.thinkaurelius.titan.core.TitanGraph;
 
 public abstract class AbstractAnalysisStoreServiceServerTest extends AbstractPurifinityServerServerTest {
 
@@ -22,7 +22,7 @@ public abstract class AbstractAnalysisStoreServiceServerTest extends AbstractPur
     private Connection connection;
 
     @Inject
-    private TitanGraph titanGraph;
+    private DuctileGraph graph;
 
     @EnhanceDeployment
     public static final void enhanceDeployment(JavaArchive archive) {
@@ -32,7 +32,7 @@ public abstract class AbstractAnalysisStoreServiceServerTest extends AbstractPur
     @Before
     public void cleanupAnalysisStore() throws SQLException {
 	PasswordStoreTester.cleanupDatabase();
-	AnalysisStoreDatabaseHelper.cleanAnalysisStore(connection, titanGraph);
+	AnalysisStoreDatabaseHelper.cleanAnalysisStore(connection, graph);
     }
 
 }

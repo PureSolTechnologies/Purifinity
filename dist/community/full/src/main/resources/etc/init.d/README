@@ -1,0 +1,11 @@
+The provided scripts here were developed for Ubuntu >=14.04. The scripts are to
+be copied into /etc/init.d. To enable them, the path for the Hadoop, HBase and
+Purifinity installations need to be adapted. After that, insert the scripts 
+into the boot process with: 
+
+$ update-rc.d dfs defaults
+
+To setup the password less dfs start, please do the following steps:
+
+$ ssh-keygen -t rsa -P "" -f ~/.ssh/id_rsa
+$ cat ~/.ssh/id_rsa.pub >> ~/.ssh//authorized_keys

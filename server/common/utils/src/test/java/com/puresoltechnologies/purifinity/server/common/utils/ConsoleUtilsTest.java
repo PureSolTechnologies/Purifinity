@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.common.utils.ConsoleUtils;
-
 public class ConsoleUtilsTest {
 
 	@Test

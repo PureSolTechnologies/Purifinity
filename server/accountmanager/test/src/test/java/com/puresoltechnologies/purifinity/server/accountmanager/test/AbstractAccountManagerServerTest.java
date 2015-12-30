@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.test;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
@@ -19,7 +20,7 @@ public abstract class AbstractAccountManagerServerTest extends AbstractServerTes
     }
 
     @Before
-    public void cleanup() throws SQLException {
+    public void cleanup() throws SQLException, IOException {
 	AccountManagerTester.cleanupDatabase();
     }
 

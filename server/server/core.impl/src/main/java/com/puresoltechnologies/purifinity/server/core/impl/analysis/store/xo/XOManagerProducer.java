@@ -23,7 +23,7 @@ public class XOManagerProducer {
 
     @PostConstruct
     public void postConstruct() {
-	xoManagerFactory = XO.createXOManagerFactory(TitanXOManager.XO_UNIT_NAME);
+	xoManagerFactory = XO.createXOManagerFactory(DuctileDBXOManager.XO_UNIT_NAME);
     }
 
     @PreDestroy
@@ -32,7 +32,7 @@ public class XOManagerProducer {
     }
 
     @Produces
-    @TitanXOManager
+    @DuctileDBXOManager
     public XOManager produceXOManager() {
 	logger.debug("Creating XOManager for Titan...");
 	XOManager xoManager = xoManagerFactory.createXOManager();
@@ -40,7 +40,7 @@ public class XOManagerProducer {
 	return xoManager;
     }
 
-    public void closeXOManager(@Disposes @TitanXOManager XOManager xoManager) {
+    public void closeXOManager(@Disposes @DuctileDBXOManager XOManager xoManager) {
 	logger.debug("Closing XOManager for Titan...");
 	xoManager.close();
 	logger.debug("XOManager for Titan closed.");

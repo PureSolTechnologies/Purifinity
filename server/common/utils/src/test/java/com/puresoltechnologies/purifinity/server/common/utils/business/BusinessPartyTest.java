@@ -7,8 +7,6 @@ import java.util.Locale;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.common.utils.business.BusinessParty;
-
 public class BusinessPartyTest {
 
 	/**

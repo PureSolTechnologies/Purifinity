@@ -38,13 +38,11 @@ import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCh
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
-import com.thinkaurelius.titan.core.SchemaViolationException;
 
 @Stateless
 @Local(AccountManager.class)
 @Remote(AccountManagerRemote.class)
-public class AccountManagerBean implements Serializable, AccountManager,
-	AccountManagerRemote {
+public class AccountManagerBean implements Serializable, AccountManager, AccountManagerRemote {
 
     private static final long serialVersionUID = 2254178680686589373L;
 
@@ -74,14 +72,12 @@ public class AccountManagerBean implements Serializable, AccountManager,
     }
 
     @Override
-    public String createPassword(EmailAddress email, Password password)
-	    throws PasswordCreationException {
+    public String createPassword(EmailAddress email, Password password) throws PasswordCreationException {
 	return passwordStore.createPassword(email, password);
     }
 
     @Override
-    public EmailAddress activatePassword(EmailAddress email,
-	    String activationKey) throws PasswordActivationException {
+    public EmailAddress activatePassword(EmailAddress email, String activationKey) throws PasswordActivationException {
 	return passwordStore.activatePassword(email, activationKey);
     }
 
@@ -91,14 +87,13 @@ public class AccountManagerBean implements Serializable, AccountManager,
     }
 
     @Override
-    public boolean changePassword(EmailAddress email, Password oldPassword,
-	    Password newPassword) throws PasswordChangeException {
+    public boolean changePassword(EmailAddress email, Password oldPassword, Password newPassword)
+	    throws PasswordChangeException {
 	return passwordStore.changePassword(email, oldPassword, newPassword);
     }
 
     @Override
-    public Password resetPassword(EmailAddress email)
-	    throws PasswordResetException {
+    public Password resetPassword(EmailAddress email) throws PasswordResetException {
 	return passwordStore.resetPassword(email);
     }
 
@@ -115,9 +110,8 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	    Method method = principal.getClass().getMethod("getRealName");
 	    Object name = method.invoke(principal);
 	    return name.toString();
-	} catch (ClassCastException | SecurityException | NoSuchMethodException
-		| IllegalArgumentException | IllegalAccessException
-		| InvocationTargetException e) {
+	} catch (ClassCastException | SecurityException | NoSuchMethodException | IllegalArgumentException
+		| IllegalAccessException | InvocationTargetException e) {
 	    e.printStackTrace();
 	    return "unauthenticated";
 	}
@@ -130,9 +124,8 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	    Method method = principal.getClass().getMethod("getRealName");
 	    Object name = method.invoke(principal);
 	    return !(name.toString().isEmpty());
-	} catch (ClassCastException | SecurityException | NoSuchMethodException
-		| IllegalArgumentException | IllegalAccessException
-		| InvocationTargetException e) {
+	} catch (ClassCastException | SecurityException | NoSuchMethodException | IllegalArgumentException
+		| IllegalAccessException | InvocationTargetException e) {
 	    e.printStackTrace();
 	    return false;
 	}
@@ -148,17 +141,11 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	    user.setEmail(email.getAddress());
 	    user.setName(name);
 
-	    RoleVertex roleVertex = xoManager.find(RoleVertex.class, roleId)
-		    .getSingleResult();
+	    RoleVertex roleVertex = xoManager.find(RoleVertex.class, roleId).getSingleResult();
 	    user.setRole(roleVertex);
 
 	    xoManager.currentTransaction().commit();
-	    eventLogger.logEvent(AccountManagerEvents
-		    .createAccountCreationEvent(email));
-	} catch (SchemaViolationException e) {
-	    xoManager.currentTransaction().rollback();
-	    throw new XOException(
-		    "Could not create new account. Account already exists?", e);
+	    eventLogger.logEvent(AccountManagerEvents.createAccountCreationEvent(email));
 	} catch (XOException e) {
 	    xoManager.currentTransaction().rollback();
 	    throw e;
@@ -170,21 +157,14 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	xoManager.currentTransaction().begin();
 	try {
 	    logger.debug("Editing user account for '" + email + "'...");
-	    UserVertex user = xoManager.find(UserVertex.class,
-		    email.getAddress()).getSingleResult();
+	    UserVertex user = xoManager.find(UserVertex.class, email.getAddress()).getSingleResult();
 	    user.setName(name);
 
-	    RoleVertex roleVertex = xoManager.find(RoleVertex.class, roleId)
-		    .getSingleResult();
+	    RoleVertex roleVertex = xoManager.find(RoleVertex.class, roleId).getSingleResult();
 	    user.setRole(roleVertex);
 
 	    xoManager.currentTransaction().commit();
-	    eventLogger.logEvent(AccountManagerEvents
-		    .alterAccountCreationEvent(email));
-	} catch (SchemaViolationException e) {
-	    xoManager.currentTransaction().rollback();
-	    throw new XOException(
-		    "Could not create new account. Account already exists?", e);
+	    eventLogger.logEvent(AccountManagerEvents.alterAccountCreationEvent(email));
 	} catch (XOException e) {
 	    xoManager.currentTransaction().rollback();
 	    throw e;
@@ -196,9 +176,8 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	xoManager.currentTransaction().begin();
 	try {
 	    Set<Role> roles = new LinkedHashSet<>();
-	    Result<RoleVertex> results = xoManager.createQuery(
-		    "_().has('_xo_discriminator_" + RoleVertex.NAME + "')",
-		    RoleVertex.class).execute();
+	    Result<RoleVertex> results = xoManager
+		    .createQuery("_().has('_xo_discriminator_" + RoleVertex.NAME + "')", RoleVertex.class).execute();
 	    for (RoleVertex roleVertex : results) {
 		roles.add(new Role(roleVertex.getId(), roleVertex.getName()));
 	    }
@@ -213,14 +192,12 @@ public class AccountManagerBean implements Serializable, AccountManager,
 	xoManager.currentTransaction().begin();
 	try {
 	    Set<User> users = new LinkedHashSet<>();
-	    Result<UserVertex> results = xoManager.createQuery(
-		    "_().has('_xo_discriminator_" + UserVertex.NAME + "')",
-		    UserVertex.class).execute();
+	    Result<UserVertex> results = xoManager
+		    .createQuery("_().has('_xo_discriminator_" + UserVertex.NAME + "')", UserVertex.class).execute();
 	    for (UserVertex userVertex : results) {
 		RoleVertex roleVertex = userVertex.getRole();
 		Role role = new Role(roleVertex.getId(), roleVertex.getName());
-		User user = new User(new EmailAddress(userVertex.getEmail()),
-			userVertex.getName(), role);
+		User user = new User(new EmailAddress(userVertex.getEmail()), userVertex.getName(), role);
 		users.add(user);
 	    }
 	    return users;
@@ -233,8 +210,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
     public void setUser(EmailAddress email, User user) {
 	xoManager.currentTransaction().begin();
 	try {
-	    UserVertex userVertex = xoManager.find(UserVertex.class,
-		    user.getEmail()).getSingleResult();
+	    UserVertex userVertex = xoManager.find(UserVertex.class, user.getEmail()).getSingleResult();
 	    userVertex.setName(user.getName());
 	    xoManager.currentTransaction().commit();
 	} catch (XOException e) {
@@ -247,12 +223,10 @@ public class AccountManagerBean implements Serializable, AccountManager,
     public User getUser(EmailAddress email) {
 	xoManager.currentTransaction().begin();
 	try {
-	    UserVertex userVertex = xoManager.find(UserVertex.class,
-		    email.getAddress()).getSingleResult();
+	    UserVertex userVertex = xoManager.find(UserVertex.class, email.getAddress()).getSingleResult();
 	    RoleVertex roleVertex = userVertex.getRole();
 	    Role role = new Role(roleVertex.getId(), roleVertex.getName());
-	    return new User(new EmailAddress(userVertex.getEmail()),
-		    userVertex.getName(), role);
+	    return new User(new EmailAddress(userVertex.getEmail()), userVertex.getName(), role);
 	} finally {
 	    xoManager.currentTransaction().rollback();
 	}
@@ -262,8 +236,7 @@ public class AccountManagerBean implements Serializable, AccountManager,
     public void deletePassword(EmailAddress email) {
 	xoManager.currentTransaction().begin();
 	try {
-	    UserVertex userVertex = xoManager.find(UserVertex.class,
-		    email.getAddress()).getSingleResult();
+	    UserVertex userVertex = xoManager.find(UserVertex.class, email.getAddress()).getSingleResult();
 	    xoManager.delete(userVertex);
 	    passwordStore.deletePassword(email);
 	    xoManager.currentTransaction().commit();

@@ -8,10 +8,6 @@ import java.util.Locale;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.common.utils.business.BusinessDuty;
-import com.puresoltechnologies.purifinity.server.common.utils.business.BusinessParty;
-import com.puresoltechnologies.purifinity.server.common.utils.business.InternationalCommercialTerm;
-
 public class InternationalCommercialTermTest {
 
 	@Test

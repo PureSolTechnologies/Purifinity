@@ -1,0 +1,38 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          hbase
+# Required-Start:    $dfs $yarn
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: hbase
+# Description:       Start HBase daemons
+### END INIT INFO
+
+# Please, change the following path to the path of HBase installation
+HBASE_HOME=/opt/hbase
+
+# source function library
+. /lib/lsb/init-functions
+
+
+case "$1" in
+    start)
+        log_daemon_msg "Starting HBase server" "hbase"
+        $HBASE_HOME/bin/start-hbase.sh
+        status=$?
+        log_end_msg $status
+        ;;
+    stop)
+        log_daemon_msg "Stopping HBase server" "hbase"
+        $HBASE_HOME/bin/stop-hbase.sh
+        status=$?
+        log_end_msg $status
+        ;;
+    restart|force-reload)
+        $0 stop && sleep 2 && $0 start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|force-reload|status}"
+        exit 2
+esac

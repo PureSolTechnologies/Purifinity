@@ -6,8 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.passwordstore.utils.encrypt.Encrypter1;
-
 public class Encrypter1Test {
 
 	@Test

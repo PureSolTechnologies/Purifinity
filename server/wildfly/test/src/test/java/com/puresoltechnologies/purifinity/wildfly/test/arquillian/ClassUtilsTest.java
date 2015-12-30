@@ -9,8 +9,6 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.wildfly.test.arquillian.ClassUtils;
-
 public class ClassUtilsTest {
 
 	private static final String TARGET_CLASSES_DIRECTORY = "target/classes";

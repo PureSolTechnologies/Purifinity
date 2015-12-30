@@ -7,8 +7,6 @@ import javax.crypto.SecretKey;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.common.utils.crypt.AESUtilities;
-
 public class AESUtilitiesTest {
 
 	@Test

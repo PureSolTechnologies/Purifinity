@@ -17,12 +17,15 @@
 		<graphs.version>0.6.0</graphs.version>
 		<versioning.version>1.1.0</versioning.version>
 
+		<logback.version>1.1.2</logback.version>
+
 		<!-- Databases -->
 		<xo.version>0.6.0</xo.version>
 		<hadoop.version>2.7.1</hadoop.version>
 		<jersey.version>1.19</jersey.version>
 		<hbase.version>1.1.2</hbase.version>
 		<phoenix.version>4.5.1-HBase-1.1</phoenix.version>
+		<ductiledb.version>0.1.0-SNAPSHOT</ductiledb.version>
 
 		<!-- WildFly -->
 		<wildfly.version>9.0.1.Final</wildfly.version>
@@ -577,6 +580,17 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>database.ductiledb.genesis</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>database.ductiledb.utils</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>database.hadoop.genesis</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -934,6 +948,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.genesis</groupId>
+				<artifactId>transformation.ductiledb</artifactId>
+				<version>${genesis.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.genesis</groupId>
 				<artifactId>transformation.hadoop</artifactId>
 				<version>${genesis.version}</version>
 			</dependency>
@@ -990,15 +1009,27 @@
 			<!-- Databases -->
 			<dependency>
 				<groupId>org.apache.hadoop</groupId>
-				<artifactId>hadoop-common</artifactId>
-				<version>${hadoop.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.hadoop</groupId>
 				<artifactId>hadoop-auth</artifactId>
 				<version>${hadoop.version}</version>
 				<scope>provided</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.hadoop</groupId>
+				<artifactId>hadoop-common</artifactId>
+				<version>${hadoop.version}</version>
+				<scope>provided</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hadoop</groupId>
@@ -1011,6 +1042,12 @@
 				<artifactId>hbase-client</artifactId>
 				<version>${hbase.version}</version>
 				<scope>provided</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.hbase</groupId>
@@ -1023,11 +1060,38 @@
 				<artifactId>phoenix-core</artifactId>
 				<version>${phoenix.version}</version>
 				<scope>provided</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>com.buschmais.xo</groupId>
 				<artifactId>xo.api</artifactId>
 				<version>${xo.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.ductiledb</groupId>
+				<artifactId>ductiledb-core</artifactId>
+				<version>${ductiledb.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.ductiledb</groupId>
+				<artifactId>ductiledb-tinkerpop</artifactId>
+				<version>${ductiledb.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.ductiledb</groupId>
+				<artifactId>ductiledb-xo</artifactId>
+				<version>${ductiledb.version}</version>
 			</dependency>
 			<!-- WildFly -->
 			<dependency>
@@ -1133,7 +1197,13 @@
 			<dependency>
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
-				<version>1.1.2</version>
+				<version>${logback.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-core</artifactId>
+				<version>${logback.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>

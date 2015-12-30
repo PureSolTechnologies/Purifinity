@@ -12,8 +12,6 @@
 		<purifinity.version>0.4.0-SNAPSHOT</purifinity.version>
 		<!-- WildFly -->
 		<wildfly.version>8.2.0.Final</wildfly.version>
-		<!-- Cassandra -->
-		<cassandra.version>2.0.13</cassandra.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity.distribution</groupId>
@@ -213,14 +211,6 @@
 				<version>${wildfly.version}</version>
 				<type>zip</type>
 				<scope>runtime</scope>
-			</dependency>
-			<!-- Cassandra -->
-			<dependency>
-				<groupId>org.apache.cassandra</groupId>
-				<artifactId>cassandra</artifactId>
-				<version>${cassandra.version}</version>
-				<classifier>bin</classifier>
-				<type>tar.gz</type>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

@@ -9,8 +9,6 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.wildfly.test.arquillian.ResourceUtils;
-
 public class ResourceUtilsTest {
 
 	private static final String SAMPLE_RESOURCES_DIRECTORY = "target";

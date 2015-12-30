@@ -14,7 +14,7 @@ import javax.inject.Qualifier;
 @Qualifier
 @Target({ TYPE, METHOD, FIELD, PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TitanXOManager {
+public @interface DuctileDBXOManager {
 
     public static final String XO_UNIT_NAME = "Titan";
 

@@ -24,6 +24,7 @@ public class HBaseHelper {
     public static Connection connect() throws SQLException {
 	try {
 	    Class.forName("org.apache.phoenix.jdbc.PhoenixDriver");
+	    Class.forName("org.apache.commons.io.output.DeferredFileOutputStream");
 	} catch (ClassNotFoundException e) {
 	    throw new RuntimeException("Could not find Phoenix driver class.", e);
 	}

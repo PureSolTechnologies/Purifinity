@@ -1,29 +1,27 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
+import com.puresoltechnologies.ductiledb.api.DuctileDBGraph;
+import com.puresoltechnologies.ductiledb.api.DuctileDBVertex;
 import com.puresoltechnologies.genesis.commons.TransformationException;
-import com.puresoltechnologies.genesis.transformation.titan.AbstractTitanTransformationStep;
-import com.puresoltechnologies.genesis.transformation.titan.TitanTransformationSequence;
+import com.puresoltechnologies.genesis.transformation.ductiledb.AbstractDuctileDBTransformationStep;
+import com.puresoltechnologies.genesis.transformation.ductiledb.DuctileDBTransformationSequence;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
-import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
-import com.thinkaurelius.titan.core.TitanGraph;
-import com.thinkaurelius.titan.core.TitanVertex;
-import com.tinkerpop.blueprints.Vertex;
+import com.puresoltechnologies.purifinity.server.database.ductiledb.utils.DuctileDBElementNames;
 
-public class AddUserStep extends AbstractTitanTransformationStep {
+public class AddUserStep extends AbstractDuctileDBTransformationStep {
 
     private final EmailAddress userEmail;
     private final String userName;
     private final SupportedRoles role;
 
-    public AddUserStep(TitanTransformationSequence sequence,
-	    EmailAddress userEmail, String userName, SupportedRoles role,
-	    String developer, String comment) {
-	super(sequence, developer, "Add user " + userEmail.getAddress(),
-		comment);
+    public AddUserStep(DuctileDBTransformationSequence sequence, EmailAddress userEmail, String userName,
+	    SupportedRoles role, String developer, String comment) {
+	super(sequence, developer, "Add user " + userEmail.getAddress(), comment);
 	this.userEmail = userEmail;
 	this.userName = userName;
 	this.role = role;
@@ -31,39 +29,34 @@ public class AddUserStep extends AbstractTitanTransformationStep {
 
     @Override
     public void transform() throws TransformationException {
-	TitanGraph titanGraph = getTitanGraph();
-	titanGraph.buildTransaction();
+	DuctileDBGraph ductileDBGraph = getDuctileDBGraph();
 	try {
-	    TitanVertex userVertex = titanGraph.addVertex();
+	    DuctileDBVertex userVertex = ductileDBGraph.addVertex();
 	    userVertex.setProperty("_xo_discriminator_user", "user");
-	    userVertex.setProperty(TitanElementNames.USER_EMAIL_PROPERTY,
-		    userEmail.getAddress());
-	    userVertex.setProperty(TitanElementNames.USER_NAME_PROPERTY,
-		    userName);
-	    userVertex.setProperty(TitanElementNames.CREATION_TIME_PROPERTY,
-		    new Date());
+	    userVertex.setProperty(DuctileDBElementNames.USER_EMAIL_PROPERTY, userEmail.getAddress());
+	    userVertex.setProperty(DuctileDBElementNames.USER_NAME_PROPERTY, userName);
+	    userVertex.setProperty(DuctileDBElementNames.CREATION_TIME_PROPERTY, new Date());
 
-	    @SuppressWarnings("unchecked")
-	    Iterable<Vertex> roles = titanGraph.query()
-		    .has(TitanElementNames.ROLE_ID_PROPERTY, role.getId())
-		    .vertices();
-	    Iterator<Vertex> roleIterator = roles.iterator();
+	    Iterable<DuctileDBVertex> roles = ductileDBGraph.getVertices(DuctileDBElementNames.ROLE_ID_PROPERTY,
+		    role.getId());
+	    Iterator<DuctileDBVertex> roleIterator = roles.iterator();
 	    if (!roleIterator.hasNext()) {
-		throw new TransformationException("No role vertex for "
-			+ role.getName() + " was found.");
+		throw new TransformationException("No role vertex for " + role.getName() + " was found.");
 	    }
-	    Vertex roleVertex = roleIterator.next();
+	    DuctileDBVertex roleVertex = roleIterator.next();
 	    if (roleIterator.hasNext()) {
-		throw new TransformationException("Multiple role vertices for "
-			+ role.getName() + " were found.");
+		throw new TransformationException("Multiple role vertices for " + role.getName() + " were found.");
 	    }
-	    userVertex.addEdge(TitanElementNames.BELONGS_TO_GROUP_LABEL, roleVertex);
+	    userVertex.addEdge(DuctileDBElementNames.BELONGS_TO_GROUP_LABEL, roleVertex);
 
-	    titanGraph.commit();
+	    ductileDBGraph.commit();
 	} catch (Exception e) {
-	    titanGraph.rollback();
-	    throw new TransformationException(
-		    "Could not create default user in Titan database.", e);
+	    try {
+		ductileDBGraph.rollback();
+	    } catch (IOException e1) {
+		throw new TransformationException("Could not rollback DuctileDB.", e1);
+	    }
+	    throw new TransformationException("Could not create default user in Titan database.", e);
 	}
     }
 }

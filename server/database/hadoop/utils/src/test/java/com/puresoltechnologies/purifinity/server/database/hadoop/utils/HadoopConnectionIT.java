@@ -14,8 +14,6 @@ import org.apache.hadoop.fs.RemoteIterator;
 import org.apache.hadoop.fs.permission.FsPermission;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.database.hadoop.utils.HadoopClientHelper;
-
 public class HadoopConnectionIT {
 
     @Test

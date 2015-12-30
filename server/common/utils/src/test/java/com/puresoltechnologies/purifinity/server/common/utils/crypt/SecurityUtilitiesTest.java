@@ -7,8 +7,6 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.common.utils.crypt.SecurityUtilities;
-
 public class SecurityUtilitiesTest {
 
 	@Test

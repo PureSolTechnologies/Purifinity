@@ -10,9 +10,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.common.utils.io.FileTree;
-import com.puresoltechnologies.purifinity.server.common.utils.io.FileTreeConverter;
-
 public class FileTreeTest {
 
 	private FileTree tree;

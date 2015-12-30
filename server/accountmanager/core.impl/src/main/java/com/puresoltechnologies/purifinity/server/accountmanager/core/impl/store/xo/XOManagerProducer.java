@@ -23,8 +23,7 @@ public class XOManagerProducer {
 
     @PostConstruct
     public void postConstruct() {
-	xoManagerFactory = XO
-		.createXOManagerFactory(UsersXOManager.XO_UNIT_NAME);
+	xoManagerFactory = XO.createXOManagerFactory(UsersXOManager.XO_UNIT_NAME);
     }
 
     @PreDestroy

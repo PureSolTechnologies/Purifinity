@@ -5,18 +5,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresoltechnologies.ductiledb.tinkerpop.DuctileGraph;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
-import com.thinkaurelius.titan.core.TitanGraph;
-import com.tinkerpop.blueprints.Vertex;
 
 public class AnalysisStoreDatabaseHelper {
 
     private static final Logger logger = LoggerFactory.getLogger(AnalysisStoreDatabaseHelper.class);
 
-    public static void cleanAnalysisStore(Connection connection, TitanGraph titanGraph) {
+    public static void cleanAnalysisStore(Connection connection, DuctileGraph graph) {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("DROP TABLE IF EXISTS ?")) {
 	    Field[] fields = HBaseElementNames.class.getDeclaredFields();
 	    for (Field field : fields) {
@@ -38,10 +39,11 @@ public class AnalysisStoreDatabaseHelper {
 	    }
 	    throw new RuntimeException("Could not clean analysis store.", e);
 	}
-	Iterable<Vertex> vertices = titanGraph.query().vertices();
-	for (Vertex vertex : vertices) {
+	GraphTraversal<Vertex, Vertex> vertices = graph.traversal().V().emit();
+	while (vertices.hasNext()) {
+	    Vertex vertex = vertices.next();
 	    vertex.remove();
 	}
-	titanGraph.commit();
+	graph.tx().commit();
     }
 }

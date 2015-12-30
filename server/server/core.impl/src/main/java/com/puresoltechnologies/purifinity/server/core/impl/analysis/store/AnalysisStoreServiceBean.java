@@ -22,6 +22,8 @@ import java.util.Properties;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.slf4j.Logger;
 
 import com.buschmais.xo.api.XOException;
@@ -31,6 +33,8 @@ import com.puresoltechnologies.commons.misc.hash.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.hash.HashCodeGenerator;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
+import com.puresoltechnologies.ductiledb.tinkerpop.DuctileGraph;
+import com.puresoltechnologies.ductiledb.tinkerpop.DuctileVertex;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformation;
@@ -46,12 +50,12 @@ import com.puresoltechnologies.purifinity.server.core.impl.analysis.AnalysisServ
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeRootVertex;
+import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.DuctileDBXOManager;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.FileTreeDirectoryVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ProjectToRunEdge;
-import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.TitanXOManager;
+import com.puresoltechnologies.purifinity.server.database.ductiledb.utils.DuctileDBElementNames;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseHelper;
-import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.Event;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventSeverity;
@@ -59,10 +63,6 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventType;
 import com.puresoltechnologies.trees.TreeVisitor;
 import com.puresoltechnologies.trees.TreeWalker;
 import com.puresoltechnologies.trees.WalkingAction;
-import com.puresoltechnologies.xo.titan.impl.TitanStoreSession;
-import com.thinkaurelius.titan.core.TitanGraph;
-import com.thinkaurelius.titan.core.TitanGraphQuery;
-import com.tinkerpop.blueprints.Vertex;
 
 @Stateless
 public class AnalysisStoreServiceBean implements AnalysisStoreService {
@@ -106,10 +106,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     private BigTableUtils bigTableUtils;
 
     @Inject
-    private TitanGraph graph;
+    private DuctileGraph graph;
 
     @Inject
-    @TitanXOManager
+    @DuctileDBXOManager
     private XOManager xoManager;
 
     @Override
@@ -189,20 +189,17 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    return projects;
 	}
 	try {
-	    TitanGraphQuery<?> query = graph.query().has(
-		    TitanStoreSession.XO_DISCRIMINATORS_PROPERTY + AnalysisProjectVertex.NAME,
-		    AnalysisProjectVertex.NAME);
-	    Iterable<Vertex> vertices = query.vertices();
-	    Iterator<Vertex> vertexIterator = vertices.iterator();
-	    while (vertexIterator.hasNext()) {
-		Vertex vertex = vertexIterator.next();
-		String projectId = vertex.getProperty(TitanElementNames.ANALYSIS_PROJECT_ID_PROPERTY);
-		Date creationTime = (Date) vertex.getProperty(TitanElementNames.CREATION_TIME_PROPERTY);
+	    GraphTraversal<Vertex, Vertex> vertices = graph.traversal().V().hasLabel(AnalysisProjectVertex.NAME);
+
+	    while (vertices.hasNext()) {
+		DuctileVertex vertex = (DuctileVertex) vertices.next();
+		String projectId = (String) vertex.property(DuctileDBElementNames.ANALYSIS_PROJECT_ID_PROPERTY).value();
+		Date creationTime = (Date) vertex.property(DuctileDBElementNames.CREATION_TIME_PROPERTY);
 		projects.add(new AnalysisProjectInformation(projectId, creationTime));
 	    }
 	    return projects;
 	} finally {
-	    graph.rollback();
+	    graph.tx().rollback();
 	}
     }
 
@@ -224,8 +221,8 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    currentTransaction.begin();
 	}
 	try {
-	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(xoManager,
-		    projectId);
+	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreDuctileDBUtils
+		    .findAnalysisProjectVertex(xoManager, projectId);
 	    Date creationTime = analysisProjectVertex.getCreationTime();
 	    return new AnalysisProjectInformation(projectId, creationTime);
 	} finally {
@@ -249,8 +246,8 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     private void deleteProject(String projectId) throws AnalysisStoreException {
 	xoManager.currentTransaction().begin();
 	try {
-	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(xoManager,
-		    projectId);
+	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreDuctileDBUtils
+		    .findAnalysisProjectVertex(xoManager, projectId);
 	    xoManager.delete(analysisProjectVertex);
 	    analysisStoreCassandraUtils.removeProjectSettings(projectId);
 	    eventLogger.logEvent(new Event(COMPONENT_NAME, 0x01, EventType.USER_ACTION, EventSeverity.INFO,
@@ -313,8 +310,8 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    currentTransaction.begin();
 	}
 	try {
-	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(xoManager,
-		    projectId);
+	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreDuctileDBUtils
+		    .findAnalysisProjectVertex(xoManager, projectId);
 
 	    List<ProjectToRunEdge> analysisRuns = analysisProjectVertex.getAnalysisRuns();
 
@@ -349,10 +346,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    Date creationTime = new Date();
 	    long runId = System.currentTimeMillis();
 
-	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreTitanUtils.findAnalysisProjectVertex(xoManager,
-		    projectId);
+	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreDuctileDBUtils
+		    .findAnalysisProjectVertex(xoManager, projectId);
 
-	    AnalysisStoreTitanUtils.createAnalysisRunVertex(xoManager, analysisProjectVertex, runId, creationTime,
+	    AnalysisStoreDuctileDBUtils.createAnalysisRunVertex(xoManager, analysisProjectVertex, runId, creationTime,
 		    startTime, duration, description);
 
 	    analysisStoreCassandraUtils.writeAnalysisRunSettings(projectId, runId, fileSearchConfiguration);
@@ -381,7 +378,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    currentTransaction.begin();
 	}
 	try {
-	    AnalysisRunVertex run = AnalysisStoreTitanUtils.findAnalysisRunVertex(xoManager, runId);
+	    AnalysisRunVertex run = AnalysisStoreDuctileDBUtils.findAnalysisRunVertex(xoManager, runId);
 	    if (run == null) {
 		return;
 	    }
@@ -408,7 +405,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    currentTransaction.begin();
 	}
 	try {
-	    AnalysisRunVertex run = AnalysisStoreTitanUtils.findAnalysisRunVertex(xoManager, runId);
+	    AnalysisRunVertex run = AnalysisStoreDuctileDBUtils.findAnalysisRunVertex(xoManager, runId);
 	    if (run == null) {
 		return null;
 	    }
@@ -453,7 +450,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    currentTransaction.begin();
 	}
 	try {
-	    AnalysisRunVertex analysisRunVertex = AnalysisStoreTitanUtils.findAnalysisRunVertex(xoManager, runId);
+	    AnalysisRunVertex analysisRunVertex = AnalysisStoreDuctileDBUtils.findAnalysisRunVertex(xoManager, runId);
 	    if (analysisRunVertex != null) {
 		FileTreeDirectoryVertex rootDirectory = analysisRunVertex.getRootDirectory();
 		ContentTreeRootVertex contentRoot = analysisRunVertex.getContentRoot();
@@ -517,7 +514,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    currentTransaction.begin();
 	}
 	try {
-	    AnalysisRunVertex analysisRunVertex = AnalysisStoreTitanUtils.findAnalysisRunVertex(xoManager, runId);
+	    AnalysisRunVertex analysisRunVertex = AnalysisStoreDuctileDBUtils.findAnalysisRunVertex(xoManager, runId);
 	    analysisFileTree = analysisStoreFileTreeUtils.createAnalysisFileTree(analysisRunVertex);
 	    analysisStoreCacheUtils.cacheAnalysisFileTree(projectId, runId, analysisFileTree);
 	    return analysisFileTree;
@@ -556,7 +553,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	}
 	try {
 	    AnalysisRunFileTree fileTree = convertToAnalysisRunFileTree(storedSources, rootNodeName);
-	    AnalysisRunVertex analysisRunVertex = AnalysisStoreTitanUtils.findAnalysisRunVertex(xoManager, runId);
+	    AnalysisRunVertex analysisRunVertex = AnalysisStoreDuctileDBUtils.findAnalysisRunVertex(xoManager, runId);
 	    analysisStoreContentTreeUtils.addContentTree(xoManager, fileTree, analysisRunVertex);
 	    analysisStoreFileTreeUtils.storeAndSetFileTree(xoManager, fileTree, analysisRunVertex);
 	    return fileTree;

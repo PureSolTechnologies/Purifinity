@@ -6,8 +6,6 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.common.utils.io.DirectoryUtilities;
-
 public class DirectoryUtilitiesTest {
 
 	@Test

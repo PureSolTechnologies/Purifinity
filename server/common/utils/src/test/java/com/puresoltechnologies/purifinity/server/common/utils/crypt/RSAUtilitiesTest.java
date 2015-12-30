@@ -10,8 +10,6 @@ import java.security.PublicKey;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.common.utils.crypt.RSAUtilities;
-
 public class RSAUtilitiesTest {
 
 	@Test(expected = InvalidParameterException.class)

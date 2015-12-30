@@ -14,20 +14,21 @@ import com.puresoltechnologies.purifinity.server.metrics.spi.LanguageDependedCod
  */
 public class CodeDepthMetricImpl implements LanguageDependedCodeDepthMetric {
 
-	private static final long serialVersionUID = -5364624376125586289L;
+    private static final long serialVersionUID = -5364624376125586289L;
 
-	private static final List<String> blockNames = new ArrayList<String>();
-	static {
-		blockNames.add("Block");
-		blockNames.add("ClassBody");
-		blockNames.add("InterfaceBody");
-		blockNames.add("EnumBody");
-		blockNames.add("AnnotationTypeBody");
-	}
+    private static final List<String> blockNames = new ArrayList<String>();
 
-	@Override
-	public boolean isCascading(UniversalSyntaxTree node) {
-		return blockNames.contains(node.getName());
-	}
+    static {
+	blockNames.add("Block");
+	blockNames.add("ClassBody");
+	blockNames.add("InterfaceBody");
+	blockNames.add("EnumBody");
+	blockNames.add("AnnotationTypeBody");
+    }
+
+    @Override
+    public boolean isCascading(UniversalSyntaxTree node) {
+	return blockNames.contains(node.getName());
+    }
 
 }

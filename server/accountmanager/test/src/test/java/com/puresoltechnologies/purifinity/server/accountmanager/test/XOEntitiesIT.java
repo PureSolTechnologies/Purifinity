@@ -3,8 +3,14 @@ package com.puresoltechnologies.purifinity.server.accountmanager.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Iterator;
 
+import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
+import org.apache.tinkerpop.gremlin.structure.Graph;
+import org.apache.tinkerpop.gremlin.structure.Vertex;
+import org.apache.tinkerpop.gremlin.structure.VertexProperty;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -15,42 +21,47 @@ import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.XOManagerFactory;
 import com.buschmais.xo.api.bootstrap.XO;
+import com.puresoltechnologies.ductiledb.tinkerpop.DuctileGraph;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UserVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UsersXOManager;
-import com.puresoltechnologies.purifinity.server.database.titan.TitanGraphHelper;
-import com.thinkaurelius.titan.core.TitanGraph;
-import com.tinkerpop.blueprints.Vertex;
+import com.puresoltechnologies.purifinity.server.database.ductiledb.utils.DuctileGraphHelper;
 
 public class XOEntitiesIT {
 
     private static XOManagerFactory xoManagerFactory;
-    private static TitanGraph titanGraph;
+    private static DuctileGraph ductileGraph;
 
     private XOManager xoManager;
 
     @BeforeClass
-    public static void connecXO() {
+    public static void connecXO() throws IOException {
 	xoManagerFactory = XO.createXOManagerFactory(UsersXOManager.XO_UNIT_NAME);
-	titanGraph = TitanGraphHelper.connect();
+	ductileGraph = DuctileGraphHelper.connect();
     }
 
     @AfterClass
-    public static void disconnect() {
-	titanGraph.shutdown();
-	xoManagerFactory.close();
+    public static void disconnect() throws IOException {
+	try {
+	    ductileGraph.close();
+	} finally {
+	    xoManagerFactory.close();
+	}
     }
 
     @Before
-    public void createXOManager() throws SQLException {
+    public void createXOManager() throws SQLException, IOException {
 	AccountManagerTester.cleanupDatabase();
 	xoManager = xoManagerFactory.createXOManager();
-	Iterable<Vertex> vertices = titanGraph.query().vertices();
+	GraphTraversal<Vertex, Vertex> vertices = ((Graph) ductileGraph).traversal().V();
 	int counter = 0;
-	for (Vertex vertex : vertices) {
+	while (vertices.hasNext()) {
+	    Vertex vertex = vertices.next();
 	    counter++;
-	    for (String key : vertex.getPropertyKeys()) {
-		System.out.println(key + ": " + vertex.getProperty(key));
+	    Iterator<VertexProperty<Object>> properties = vertex.properties();
+	    while (properties.hasNext()) {
+		VertexProperty<Object> property = properties.next();
+		System.out.println(property.key() + ": " + property.value());
 	    }
 	}
 	assertEquals(7, counter);

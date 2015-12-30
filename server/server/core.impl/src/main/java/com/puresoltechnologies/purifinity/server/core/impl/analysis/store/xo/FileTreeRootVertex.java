@@ -1,7 +1,7 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo;
 
-import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Incoming;
-import com.puresoltechnologies.xo.titan.api.annotation.VertexDefinition;
+import com.puresoltechnologies.ductiledb.xo.api.annotation.EdgeDefinition.Incoming;
+import com.puresoltechnologies.ductiledb.xo.api.annotation.VertexDefinition;
 
 @VertexDefinition(value = FileTreeRootVertex.NAME, usingIndexedPropertyOf = FileTreeDirectoryVertex.class)
 public interface FileTreeRootVertex extends FileTreeDirectoryVertex {

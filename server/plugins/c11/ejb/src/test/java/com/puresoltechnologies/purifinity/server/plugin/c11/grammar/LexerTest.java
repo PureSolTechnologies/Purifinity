@@ -11,7 +11,6 @@ import com.puresoltechnologies.parsers.grammar.token.TokenDefinition;
 import com.puresoltechnologies.parsers.grammar.token.TokenDefinitionSet;
 import com.puresoltechnologies.parsers.lexer.Lexer;
 import com.puresoltechnologies.parsers.source.FixedCodeLocation;
-import com.puresoltechnologies.purifinity.server.plugin.c11.grammar.C11Grammar;
 
 public class LexerTest {
 

@@ -14,5 +14,6 @@
 	<modules>
 		<module>hadoop</module>
 		<module>hbase</module>
+		<module>ductiledb</module>
 	</modules>
 </project>

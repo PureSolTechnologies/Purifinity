@@ -1,12 +1,12 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo;
 
-import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
-import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition;
-import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Incoming;
-import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition.Outgoing;
-import com.puresoltechnologies.xo.titan.api.annotation.Property;
+import com.puresoltechnologies.ductiledb.xo.api.annotation.EdgeDefinition;
+import com.puresoltechnologies.ductiledb.xo.api.annotation.EdgeDefinition.Incoming;
+import com.puresoltechnologies.ductiledb.xo.api.annotation.EdgeDefinition.Outgoing;
+import com.puresoltechnologies.ductiledb.xo.api.annotation.Property;
+import com.puresoltechnologies.purifinity.server.database.ductiledb.utils.DuctileDBElementNames;
 
-@EdgeDefinition(TitanElementNames.HAS_ANALYSIS_RUN_LABEL)
+@EdgeDefinition(DuctileDBElementNames.HAS_ANALYSIS_RUN_LABEL)
 public interface ProjectToRunEdge {
 
     @Outgoing
@@ -15,7 +15,7 @@ public interface ProjectToRunEdge {
     @Incoming
     public AnalysisRunVertex getRun();
 
-    @Property(TitanElementNames.ANALYSIS_RUN_ID_PROPERTY)
+    @Property(DuctileDBElementNames.ANALYSIS_RUN_ID_PROPERTY)
     public long getRunId();
 
     public void setRunId(long runId);

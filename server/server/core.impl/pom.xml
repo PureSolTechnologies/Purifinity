@@ -27,6 +27,11 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>database.ductiledb.utils</artifactId>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>database.hbase.utils</artifactId>
 		</dependency>
 		<dependency>
@@ -35,8 +40,8 @@
 			<type>ejb</type>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>database.titan</artifactId>
+			<groupId>com.puresoltechnologies.ductiledb</groupId>
+			<artifactId>ductiledb-xo</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -61,10 +66,6 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.commons</groupId>
 			<artifactId>money</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.extended-objects</groupId>
-			<artifactId>titan</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>

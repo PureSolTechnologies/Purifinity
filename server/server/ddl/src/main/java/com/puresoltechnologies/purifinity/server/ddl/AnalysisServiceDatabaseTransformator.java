@@ -74,8 +74,8 @@ public class AnalysisServiceDatabaseTransformator implements ComponentTransforma
 			+ "location_includes varchar array, "//
 			+ "location_excludes varchar array, " //
 			+ "ignore_hidden boolean, " //
-			+ "CONSTRAINT " + HBaseElementNames.ANALYSIS_RUN_SETTINGS_TABLE
-			+ "_PL PRIMARY KEY(project_id, run_id))",
+			+ "CONSTRAINT " + HBaseElementNames.ANALYSIS_RUN_SETTINGS_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(project_id, run_id))",
 		"Keeps settings of analysis runs."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",

@@ -11,7 +11,6 @@ import com.puresoltechnologies.parsers.lexer.Token;
 import com.puresoltechnologies.parsers.lexer.TokenMetaData;
 import com.puresoltechnologies.parsers.lexer.TokenStream;
 import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
-import com.puresoltechnologies.purifinity.server.plugin.c11.preprocessor.internal.ReplacementParameterResult;
 
 public class ReplacementParameterResultTest {
 

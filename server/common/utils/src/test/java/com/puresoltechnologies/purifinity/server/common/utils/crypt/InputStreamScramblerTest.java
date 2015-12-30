@@ -9,8 +9,6 @@ import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.common.utils.crypt.InputStreamScrambler;
-
 public class InputStreamScramblerTest {
 
 	@Test

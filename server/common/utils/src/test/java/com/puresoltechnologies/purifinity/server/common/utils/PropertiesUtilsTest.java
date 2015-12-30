@@ -7,8 +7,6 @@ import java.util.Properties;
 
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
-
 public class PropertiesUtilsTest {
 
 	@Test

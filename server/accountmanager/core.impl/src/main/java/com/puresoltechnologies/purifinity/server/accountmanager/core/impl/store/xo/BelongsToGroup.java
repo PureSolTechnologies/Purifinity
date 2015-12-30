@@ -3,10 +3,10 @@ package com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
-import com.puresoltechnologies.xo.titan.api.annotation.EdgeDefinition;
+import com.puresoltechnologies.ductiledb.xo.api.annotation.EdgeDefinition;
+import com.puresoltechnologies.purifinity.server.database.ductiledb.utils.DuctileDBElementNames;
 
-@EdgeDefinition(TitanElementNames.BELONGS_TO_GROUP_LABEL)
+@EdgeDefinition(DuctileDBElementNames.BELONGS_TO_GROUP_LABEL)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BelongsToGroup {
 }

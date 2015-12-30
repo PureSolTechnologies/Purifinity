@@ -21,7 +21,6 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInf
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
-import com.thinkaurelius.groovyshadedasm.tree.analysis.AnalyzerException;
 
 @Named("AnalysisItemProcessor")
 public class AnalysisItemProcessor implements ItemProcessor {

@@ -74,12 +74,6 @@
 			<type>zip</type>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.cassandra</groupId>
-			<artifactId>cassandra</artifactId>
-			<classifier>bin</classifier>
-			<type>tar.gz</type>
-		</dependency>
-		<dependency>
 			<groupId>org.wildfly</groupId>
 			<artifactId>wildfly-server</artifactId>
 			<type>zip</type>

@@ -1,0 +1,38 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          yarn
+# Required-Start:    $sshd $dfs
+# Required-Stop:     $hbase
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: yarn
+# Description:       Start Yarn daemon
+### END INIT INFO
+
+# Please, change the following path to the path of Hadoop installation
+HADOOP_HOME=/opt/hadoop
+
+# source function library
+. /lib/lsb/init-functions
+
+
+case "$1" in
+    start)
+        log_daemon_msg "Starting Yarn server" "yarn"
+        $HADOOP_HOME/sbin/start-yarn.sh
+        status=$?
+        log_end_msg $status
+        ;;
+    stop)
+        log_daemon_msg "Stopping Yarn server" "yarn"
+        $HADOOP_HOME/sbin/stop-yarn.sh
+        status=$?
+        log_end_msg $status
+        ;;
+    restart|force-reload)
+        $0 stop && sleep 2 && $0 start
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|force-reload|status}"
+        exit 2
+esac
