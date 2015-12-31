@@ -33,7 +33,7 @@ public class EventLoggerBean implements EventLogger, EventLoggerRemote {
 
     private static final long serialVersionUID = -4162895953533068913L;
 
-    public static final String EVENTS_TABLE_NAME = "system_monitor_events";
+    public static final String EVENTS_TABLE_NAME = "system_monitor.events";
     private static final String LOG_EVENT_STATEMENT = "UPSERT INTO " + EVENTS_TABLE_NAME
 	    + " (time, component, event_id, server, type, severity, message, user, user_id, client, exception_message, exception_stacktrace)"
 	    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

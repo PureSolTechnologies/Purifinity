@@ -65,7 +65,7 @@ public class PasswordStoreDatabaseTransformator implements ComponentTransformato
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE INDEX IF NOT EXISTS " //
-			+ PASSWORD_TABLE_NAME + "_state_idx"//
+			+ PASSWORD_TABLE_NAME.replaceAll("\\.", "_") + "_state_idx"//
 			+ " ON " + PASSWORD_TABLE_NAME //
 			+ " (state) ASYNC",
 		description));
