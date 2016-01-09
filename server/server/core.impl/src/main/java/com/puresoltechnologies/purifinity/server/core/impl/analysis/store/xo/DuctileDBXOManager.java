@@ -16,6 +16,6 @@ import javax.inject.Qualifier;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DuctileDBXOManager {
 
-    public static final String XO_UNIT_NAME = "Titan";
+    public static final String XO_UNIT_NAME = "DuctileDB";
 
 }

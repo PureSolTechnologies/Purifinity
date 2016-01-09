@@ -43,9 +43,13 @@ public class XOEntitiesIT {
     @AfterClass
     public static void disconnect() throws IOException {
 	try {
-	    ductileGraph.close();
+	    if (ductileGraph != null) {
+		ductileGraph.close();
+	    }
 	} finally {
-	    xoManagerFactory.close();
+	    if (xoManagerFactory != null) {
+		xoManagerFactory.close();
+	    }
 	}
     }
 

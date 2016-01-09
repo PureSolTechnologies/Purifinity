@@ -1079,6 +1079,11 @@
 				<version>${xo.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.buschmais.xo</groupId>
+				<artifactId>xo.impl</artifactId>
+				<version>${xo.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.puresoltechnologies.ductiledb</groupId>
 				<artifactId>ductiledb-core</artifactId>
 				<version>${ductiledb.version}</version>

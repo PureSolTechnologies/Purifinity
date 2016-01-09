@@ -37,4 +37,8 @@
     <name>hbase.zookeeper.property.dataDir</name>
     <value>/home/ludwig/HadoopData/zookeeper</value>
   </property>
+  <property>
+    <name>hbase.zookeeper.property.maxClientCnxns</name>
+    <value>35</value>
+  </property>
 </configuration>

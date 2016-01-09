@@ -26,6 +26,10 @@
 			<artifactId>ductiledb-xo</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.buschmais.xo</groupId>
+			<artifactId>xo.impl</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.hbase</groupId>
 			<artifactId>hbase-client</artifactId>
 		</dependency>

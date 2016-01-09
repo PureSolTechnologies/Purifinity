@@ -16,7 +16,7 @@ import com.puresoltechnologies.purifinity.server.database.ductiledb.utils.Ductil
 @VertexDefinition(UserVertex.NAME)
 public interface UserVertex {
 
-    public static final String NAME = "user";
+    public static final String NAME = "User";
 
     @Indexed(unique = true)
     @Property(DuctileDBElementNames.USER_EMAIL_PROPERTY)

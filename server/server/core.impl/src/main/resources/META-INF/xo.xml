@@ -1,9 +1,8 @@
 <v1:xo version="1.0" xmlns:v1="http://buschmais.com/xo/schema/v1.0">
-	<xo-unit name="Titan">
-		<description>This is a eXtended Objects unit for the Titan datastore.
-		</description>
-		<url>titan-cassandra://localhost:9160/titan</url>
-		<provider><![CDATA[com.puresoltechnologies.xo.titan.api.TitanXOProvider]]></provider>
+	<xo-unit name="DuctileDB">
+		<description>This is a eXtended Objects unit for the DuctileDB datastore.</description>
+        <url>ductiledb:/opt/hbase/conf/hbase-site.xml</url>
+        <provider>com.puresoltechnologies.ductiledb.xo.api.DuctileDBXOProvider</provider>
 		<types>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex]]></type>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex]]></type>

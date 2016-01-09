@@ -17,7 +17,7 @@ import com.puresoltechnologies.purifinity.server.database.ductiledb.utils.Ductil
 @VertexDefinition(RoleVertex.NAME)
 public interface RoleVertex {
 
-    public static final String NAME = "role";
+    public static final String NAME = "Role";
 
     @Indexed(unique = true)
     @Property(DuctileDBElementNames.ROLE_ID_PROPERTY)

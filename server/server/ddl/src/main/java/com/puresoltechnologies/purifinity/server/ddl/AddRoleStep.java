@@ -1,10 +1,12 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
-import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import com.puresoltechnologies.ductiledb.api.DuctileDBGraph;
-import com.puresoltechnologies.ductiledb.api.DuctileDBVertex;
 import com.puresoltechnologies.genesis.commons.TransformationException;
 import com.puresoltechnologies.genesis.transformation.ductiledb.AbstractDuctileDBTransformationStep;
 import com.puresoltechnologies.genesis.transformation.ductiledb.DuctileDBTransformationSequence;
@@ -23,20 +25,18 @@ public class AddRoleStep extends AbstractDuctileDBTransformationStep {
 
     @Override
     public void transform() throws TransformationException {
-	DuctileDBGraph titanGraph = getDuctileDBGraph();
+	DuctileDBGraph graph = getDuctileDBGraph();
 	try {
-	    DuctileDBVertex administratorRoleVertex = titanGraph.addVertex();
-	    administratorRoleVertex.setProperty("_xo_discriminator_role", "role");
-	    administratorRoleVertex.setProperty(DuctileDBElementNames.ROLE_ID_PROPERTY, role.getId());
-	    administratorRoleVertex.setProperty(DuctileDBElementNames.ROLE_NAME_PROPERTY, role.getName());
-	    administratorRoleVertex.setProperty(DuctileDBElementNames.CREATION_TIME_PROPERTY, new Date());
-	    titanGraph.commit();
+	    Set<String> types = new HashSet<>();
+	    types.add("Role");
+	    Map<String, Object> properties = new HashMap<>();
+	    properties.put(DuctileDBElementNames.ROLE_ID_PROPERTY, role.getId());
+	    properties.put(DuctileDBElementNames.ROLE_NAME_PROPERTY, role.getName());
+	    properties.put(DuctileDBElementNames.CREATION_TIME_PROPERTY, new Date());
+	    graph.addVertex(types, properties);
+	    graph.commit();
 	} catch (Exception e) {
-	    try {
-		titanGraph.rollback();
-	    } catch (IOException e1) {
-		throw new TransformationException("Could not rollback DuctileDB.", e1);
-	    }
+	    graph.rollback();
 	    throw new TransformationException("Could not create default roles in Titan database.", e);
 	}
     }

@@ -1,8 +1,11 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
-import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 import com.puresoltechnologies.commons.types.EmailAddress;
 import com.puresoltechnologies.ductiledb.api.DuctileDBGraph;
@@ -31,11 +34,13 @@ public class AddUserStep extends AbstractDuctileDBTransformationStep {
     public void transform() throws TransformationException {
 	DuctileDBGraph ductileDBGraph = getDuctileDBGraph();
 	try {
-	    DuctileDBVertex userVertex = ductileDBGraph.addVertex();
-	    userVertex.setProperty("_xo_discriminator_user", "user");
-	    userVertex.setProperty(DuctileDBElementNames.USER_EMAIL_PROPERTY, userEmail.getAddress());
-	    userVertex.setProperty(DuctileDBElementNames.USER_NAME_PROPERTY, userName);
-	    userVertex.setProperty(DuctileDBElementNames.CREATION_TIME_PROPERTY, new Date());
+	    Set<String> types = new HashSet<>();
+	    types.add("User");
+	    Map<String, Object> properties = new HashMap<>();
+	    properties.put(DuctileDBElementNames.USER_EMAIL_PROPERTY, userEmail.getAddress());
+	    properties.put(DuctileDBElementNames.USER_NAME_PROPERTY, userName);
+	    properties.put(DuctileDBElementNames.CREATION_TIME_PROPERTY, new Date());
+	    DuctileDBVertex userVertex = ductileDBGraph.addVertex(types, properties);
 
 	    Iterable<DuctileDBVertex> roles = ductileDBGraph.getVertices(DuctileDBElementNames.ROLE_ID_PROPERTY,
 		    role.getId());
@@ -47,15 +52,11 @@ public class AddUserStep extends AbstractDuctileDBTransformationStep {
 	    if (roleIterator.hasNext()) {
 		throw new TransformationException("Multiple role vertices for " + role.getName() + " were found.");
 	    }
-	    userVertex.addEdge(DuctileDBElementNames.BELONGS_TO_GROUP_LABEL, roleVertex);
+	    userVertex.addEdge(DuctileDBElementNames.BELONGS_TO_GROUP_LABEL, roleVertex, new HashMap<>());
 
 	    ductileDBGraph.commit();
 	} catch (Exception e) {
-	    try {
-		ductileDBGraph.rollback();
-	    } catch (IOException e1) {
-		throw new TransformationException("Could not rollback DuctileDB.", e1);
-	    }
+	    ductileDBGraph.rollback();
 	    throw new TransformationException("Could not create default user in Titan database.", e);
 	}
     }
