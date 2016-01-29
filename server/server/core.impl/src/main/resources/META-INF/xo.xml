@@ -2,7 +2,7 @@
 	<xo-unit name="DuctileDB">
 		<description>This is a eXtended Objects unit for the DuctileDB datastore.</description>
         <url>ductiledb:/opt/hbase/conf/hbase-site.xml</url>
-        <provider>com.puresoltechnologies.ductiledb.xo.api.DuctileDBXOProvider</provider>
+        <provider>com.puresoltechnologies.ductiledb.xo.api.DuctileXOProvider</provider>
 		<types>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex]]></type>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex]]></type>

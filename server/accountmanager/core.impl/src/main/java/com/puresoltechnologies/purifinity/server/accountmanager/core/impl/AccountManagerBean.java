@@ -177,7 +177,7 @@ public class AccountManagerBean implements Serializable, AccountManager, Account
 	try {
 	    Set<Role> roles = new LinkedHashSet<>();
 	    Result<RoleVertex> results = xoManager
-		    .createQuery("_().has('_xo_discriminator_" + RoleVertex.NAME + "')", RoleVertex.class).execute();
+		    .createQuery("g.V().hasLabel('" + RoleVertex.NAME + "')", RoleVertex.class).execute();
 	    for (RoleVertex roleVertex : results) {
 		roles.add(new Role(roleVertex.getId(), roleVertex.getName()));
 	    }
@@ -193,7 +193,7 @@ public class AccountManagerBean implements Serializable, AccountManager, Account
 	try {
 	    Set<User> users = new LinkedHashSet<>();
 	    Result<UserVertex> results = xoManager
-		    .createQuery("_().has('_xo_discriminator_" + UserVertex.NAME + "')", UserVertex.class).execute();
+		    .createQuery("g.V().hasLabel('" + UserVertex.NAME + "')", UserVertex.class).execute();
 	    for (UserVertex userVertex : results) {
 		RoleVertex roleVertex = userVertex.getRole();
 		Role role = new Role(roleVertex.getId(), roleVertex.getName());

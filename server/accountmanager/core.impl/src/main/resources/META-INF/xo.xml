@@ -2,7 +2,7 @@
 	<xo-unit name="Users">
 		<description>This is a eXtended Objects unit for the DuctileDB datastore.</description>
         <url>ductiledb:/opt/hbase/conf/hbase-site.xml</url>
-        <provider>com.puresoltechnologies.ductiledb.xo.api.DuctileDBXOProvider</provider>
+        <provider>com.puresoltechnologies.ductiledb.xo.api.DuctileXOProvider</provider>
 		<types>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UserVertex]]></type>
 			<type><![CDATA[com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex]]></type>
