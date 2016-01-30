@@ -12,10 +12,9 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 public class JSONSerializer {
 
-    public static String toJSONString(Object o) throws JsonGenerationException,
-	    JsonMappingException, IOException {
+    public static String toJSONString(Object o) throws JsonGenerationException, JsonMappingException, IOException {
 	ObjectMapper mapper = new ObjectMapper();
-	ObjectWriter writer = mapper.writerWithType(o.getClass());
+	ObjectWriter writer = mapper.writerFor(o.getClass());
 	return writer.writeValueAsString(o);
     }
 

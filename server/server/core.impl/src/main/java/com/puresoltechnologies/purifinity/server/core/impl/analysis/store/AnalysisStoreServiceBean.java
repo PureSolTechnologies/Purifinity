@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.XOTransaction;
+import com.puresoltechnologies.commons.domain.JSONSerializer;
 import com.puresoltechnologies.commons.misc.hash.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.hash.HashCodeGenerator;
 import com.puresoltechnologies.commons.misc.hash.HashId;
@@ -151,8 +152,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	try (PreparedStatement preparedStatement = connection.prepareStatement(
 		"UPSERT INTO " + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " (project_id, name, description, "
 			+ "file_includes, file_excludes, " + "location_includes, location_excludes, "
-			+ "ignore_hidden, repository_location_keys, repository_location_values) "
-			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+			+ "ignore_hidden, repository_location) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    String name = settings.getName();
 	    String description = settings.getDescription();
 	    FileSearchConfiguration fileSearchConfiguration = settings.getFileSearchConfiguration();
@@ -169,10 +169,10 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    preparedStatement.setArray(7,
 		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getLocationExcludes().toArray()));
 	    preparedStatement.setBoolean(8, fileSearchConfiguration.isIgnoreHidden());
-	    HBaseHelper.writeProperties(connection, preparedStatement, 9, 10, settings.getRepository());
+	    preparedStatement.setString(9, JSONSerializer.toJSONString(settings.getRepository()));
 	    preparedStatement.execute();
 	    connection.commit();
-	} catch (SQLException e) {
+	} catch (SQLException | IOException e) {
 	    try {
 		connection.rollback();
 	    } catch (SQLException e1) {
@@ -261,7 +261,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
     @Override
     public AnalysisProjectSettings readAnalysisProjectSettings(String projectId) throws AnalysisStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement(
-		"SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location_keys, repository_location_values FROM "
+		"SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location FROM "
 			+ HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " WHERE project_id=?")) {
 	    preparedStatement.setString(1, projectId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -277,21 +277,11 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 		boolean ignoreHidden = resultSet.getBoolean("ignore_hidden");
 		FileSearchConfiguration fileSearchConfiguration = new FileSearchConfiguration(locationIncludes,
 			locationExcludes, fileIncludes, fileExcludes, ignoreHidden);
-		String[] repositoryLocationKeys = HBaseHelper.getArray(resultSet, "repository_location_keys",
-			String.class);
-		String[] repositoryLocationValues = HBaseHelper.getArray(resultSet, "repository_location_values",
-			String.class);
-		if (repositoryLocationKeys.length != repositoryLocationValues.length) {
-		    throw new AnalysisStoreException(
-			    "Array lenght of keys and values for repository location are different.");
-		}
-		Properties repositoryLocation = new Properties();
-		for (int i = 0; i < repositoryLocationKeys.length; ++i) {
-		    repositoryLocation.put(repositoryLocationKeys[i], repositoryLocationValues[i]);
-		}
+		Properties repositoryLocation = JSONSerializer
+			.fromJSONString(resultSet.getString("repository_location"), Properties.class);
 		return new AnalysisProjectSettings(name, description, fileSearchConfiguration, repositoryLocation);
 	    }
-	} catch (SQLException e) {
+	} catch (SQLException | IOException e) {
 	    throw new AnalysisStoreException("Could not read project settings.", e);
 	}
     }

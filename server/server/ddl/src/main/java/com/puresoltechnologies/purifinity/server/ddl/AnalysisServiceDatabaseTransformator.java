@@ -59,8 +59,7 @@ public class AnalysisServiceDatabaseTransformator implements ComponentTransforma
 			+ "location_includes varchar array, "//
 			+ "location_excludes varchar array, "//
 			+ "ignore_hidden boolean, "//
-			+ "repository_location_keys varchar array, "//
-			+ "repository_location_values varchar array, "//
+			+ "repository_location varchar, "//
 			+ "CONSTRAINT " + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(project_id))",
 		"Keeps settings of analysis projects."));
