@@ -34,7 +34,7 @@ public class BasicCoCoMoEvaluatorDAO implements MetricsDAO<BasicCoCoMoFileResult
 	    BasicCoCoMoFileResults fileResults) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "INSERT INTO basic_cocomo.file_results (hashid, " + "evaluator_id, " + "source_code_location, "
+		    "UPSERT INTO basic_cocomo.file_results (hashid, " + "evaluator_id, " + "source_code_location, "
 			    + "code_range_type, " + "code_range_name, " + "phyLOC, " + "ksloc, " + "personMonth, "
 			    + "personYears, " + "scheduledMonth, " + "scheduledYears, " + "teamSize, "
 			    + "estimatedCosts, " + "c1, " + "c2, " + "c3, " + "complexity, " + "averageSalary, "
@@ -103,7 +103,7 @@ public class BasicCoCoMoEvaluatorDAO implements MetricsDAO<BasicCoCoMoFileResult
 	    throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "INSERT INTO basic_cocomo.directory_results (hashid, " + "evaluator_id, " + "phyLOC, " + "ksloc, "
+		    "UPSERT INTO basic_cocomo.directory_results (hashid, " + "evaluator_id, " + "phyLOC, " + "ksloc, "
 			    + "personMonth, " + "personYears, " + "scheduledMonth, " + "scheduledYears, " + "teamSize, "
 			    + "estimatedCosts, " + "c1, " + "c2, " + "c3, " + "complexity, " + "averageSalary, "
 			    + "currency) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");

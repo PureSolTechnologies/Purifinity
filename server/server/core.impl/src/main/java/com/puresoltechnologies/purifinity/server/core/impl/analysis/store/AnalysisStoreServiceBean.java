@@ -194,7 +194,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    while (vertices.hasNext()) {
 		DuctileVertex vertex = (DuctileVertex) vertices.next();
 		String projectId = (String) vertex.property(DuctileDBElementNames.ANALYSIS_PROJECT_ID_PROPERTY).value();
-		Date creationTime = (Date) vertex.property(DuctileDBElementNames.CREATION_TIME_PROPERTY);
+		Date creationTime = (Date) vertex.property(DuctileDBElementNames.CREATION_TIME_PROPERTY).value();
 		projects.add(new AnalysisProjectInformation(projectId, creationTime));
 	    }
 	    return projects;

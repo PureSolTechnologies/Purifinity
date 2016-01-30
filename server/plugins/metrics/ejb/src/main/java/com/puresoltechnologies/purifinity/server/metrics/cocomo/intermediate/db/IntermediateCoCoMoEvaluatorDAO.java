@@ -42,7 +42,7 @@ public class IntermediateCoCoMoEvaluatorDAO
 	    IntermediateCoCoMoFileResults fileResults) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("INSERT INTO intermediate_cocomo.file_results (hashid, " + "evaluator_id, "
+		    .prepareStatement("UPSERT INTO intermediate_cocomo.file_results (hashid, " + "evaluator_id, "
 			    + "source_code_location, " + "code_range_type, " + "code_range_name, " + "phyLOC, "
 			    + "ksloc, " + "personMonth, " + "personYears, " + "scheduledMonth, " + "scheduledYears, "
 			    + "teamSize, " + "estimatedCosts, " + "project, " + "averageSalary, " + "currency, "
@@ -130,7 +130,7 @@ public class IntermediateCoCoMoEvaluatorDAO
 	    throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("INSERT INTO intermediate_cocomo.directory_results (hashid, " + "evaluator_id, "
+		    .prepareStatement("UPSERT INTO intermediate_cocomo.directory_results (hashid, " + "evaluator_id, "
 			    + "phyLOC, " + "ksloc, " + "personMonth, " + "personYears, " + "scheduledMonth, "
 			    + "scheduledYears, " + "teamSize, " + "estimatedCosts, " + "project, " + "averageSalary, "
 			    + "currency, " + "attributes_keys, " + "attributes_values" + ") "

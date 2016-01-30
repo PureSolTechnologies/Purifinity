@@ -36,7 +36,7 @@ public class HalsteadMetricsEvaluatorDAO implements MetricsDAO<HalsteadMetricRes
 	    HalsteadMetricResult halsteadMetricResult) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("INSERT INTO halstead_metric.file_results (hashid, " + "evaluator_id, "
+		    .prepareStatement("UPSERT INTO halstead_metric.file_results (hashid, " + "evaluator_id, "
 			    + "source_code_location, " + "code_range_type, " + "code_range_name, " + "operators, "
 			    + "operands, " + "differentOperators, " + "differentOperands, " + "totalOperators, "
 			    + "totalOperands, " + "vocabularySize, " + "programLength, " + "halsteadLength, "
@@ -126,7 +126,7 @@ public class HalsteadMetricsEvaluatorDAO implements MetricsDAO<HalsteadMetricRes
 	    throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("INSERT INTO halstead_metric.directory_results (hashid, " + "evaluator_id, "
+		    .prepareStatement("UPSERT INTO halstead_metric.directory_results (hashid, " + "evaluator_id, "
 			    + "operators, " + "operands, " + "differentOperators, " + "differentOperands, "
 			    + "totalOperators, " + "totalOperands, " + "vocabularySize, " + "programLength, "
 			    + "halsteadLength, " + "halsteadVolume, " + "difficulty, " + "programLevel, "

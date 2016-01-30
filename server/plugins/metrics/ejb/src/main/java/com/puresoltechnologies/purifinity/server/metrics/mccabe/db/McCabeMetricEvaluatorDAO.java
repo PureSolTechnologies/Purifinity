@@ -30,7 +30,7 @@ public class McCabeMetricEvaluatorDAO {
 	    McCabeMetricResult mcCabeResult) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection.prepareStatement(
-		    "INSERT INTO mccabe_metric.file_results (hashid, " + "evaluator_id, " + "source_code_location, "
+		    "UPSERT INTO mccabe_metric.file_results (hashid, " + "evaluator_id, " + "source_code_location, "
 			    + "code_range_type, " + "code_range_name, " + "vg) " + "VALUES (?, ?, ?, ?, ?, ?)");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, McCabeMetric.ID);
@@ -74,7 +74,7 @@ public class McCabeMetricEvaluatorDAO {
     public void storeDirectoryResults(HashId hashId, McCabeMetricResult mcCabeResult) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("INSERT INTO mccabe_metric.directory_results (hashid, " + "evaluator_id, "
+		    .prepareStatement("UPSERT INTO mccabe_metric.directory_results (hashid, " + "evaluator_id, "
 			    + "vg) " + "VALUES (?, ?, ?)");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, McCabeMetric.ID);

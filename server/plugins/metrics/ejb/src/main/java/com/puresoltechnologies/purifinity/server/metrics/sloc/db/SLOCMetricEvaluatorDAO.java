@@ -34,7 +34,7 @@ public class SLOCMetricEvaluatorDAO implements MetricsDAO<SLOCResult, SLOCResult
 	    SLOCResult slocResult) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("INSERT INTO sloc_metric.file_results (hashid, " + "evaluator_id, "
+		    .prepareStatement("UPSERT INTO sloc_metric.file_results (hashid, " + "evaluator_id, "
 			    + "source_code_location, " + "code_range_type, " + "code_range_name, " + "phyLOC, "
 			    + "proLOC, " + "comLOC, " + "blLOC, " + "line_length_count, " + "line_length_min, "
 			    + "line_length_max, " + "line_length_avg, " + "line_length_median, "
@@ -123,7 +123,7 @@ public class SLOCMetricEvaluatorDAO implements MetricsDAO<SLOCResult, SLOCResult
     public void storeDirectoryResults(HashId hashId, SLOCResult slocResult) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("INSERT INTO sloc_metric.directory_results (hashid, " + "evaluator_id, "
+		    .prepareStatement("UPSERT INTO sloc_metric.directory_results (hashid, " + "evaluator_id, "
 			    + "phyLOC, " + "proLOC, " + "comLOC, " + "blLOC, " + "line_length_count, "
 			    + "line_length_min, " + "line_length_max, " + "line_length_avg, " + "line_length_median, "
 			    + "line_length_stdDev) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");

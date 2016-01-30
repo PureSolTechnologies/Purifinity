@@ -35,7 +35,7 @@ public class MaintainabilityIndexEvaluatorDAO
 	    MaintainabilityIndexFileResult maintainabilityIndex) throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = connection
-		    .prepareStatement("INSERT INTO maintainability_index.file_results (hashid, " + "evaluator_id, "
+		    .prepareStatement("UPSERT INTO maintainability_index.file_results (hashid, " + "evaluator_id, "
 			    + "source_code_location, " + "code_range_type, " + "code_range_name, " + "MIwoc, "
 			    + "MIcw, " + "MI) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 	    MaintainabilityIndexResult maintainabilityIndexResult = maintainabilityIndex

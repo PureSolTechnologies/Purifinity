@@ -8,8 +8,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import javax.ejb.Singleton;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -68,7 +66,6 @@ public class AuthServiceBean implements AuthService {
     }
 
     @Override
-    @Lock(LockType.WRITE)
     public String login(EmailAddress email, Password password) throws LoginException {
 	if (accountManager.authenticate(email, password)) {
 	    /*
@@ -88,7 +85,6 @@ public class AuthServiceBean implements AuthService {
     }
 
     @Override
-    @Lock(LockType.WRITE)
     public void logout(EmailAddress email, UUID authToken) throws LoginException {
 	if (authorizationTokensStorage.containsKey(authToken)
 		&& (authorizationTokensStorage.get(authToken).equals(email))) {
@@ -109,7 +105,6 @@ public class AuthServiceBean implements AuthService {
      *            The authorization token generated after login
      * @return TRUE for acceptance and FALSE for denied.
      */
-    @Lock(LockType.READ)
     public boolean isAuthTokenValid(String authToken) {
 	if (authorizationTokensStorage.containsKey(authToken)) {
 	    return true;
@@ -117,7 +112,6 @@ public class AuthServiceBean implements AuthService {
 	return false;
     }
 
-    @Lock(LockType.WRITE)
     public void logout(UUID authToken) throws GeneralSecurityException {
 	if (authorizationTokensStorage.containsKey(authToken)) {
 	    authorizationTokensStorage.remove(authToken);
@@ -137,7 +131,6 @@ public class AuthServiceBean implements AuthService {
     }
 
     @Override
-    @Lock(LockType.READ)
     public boolean isAuthorized(EmailAddress email, UUID authToken, Set<String> rolesAllowed) {
 	User user = findByEmailAndAuthToken(email, authToken);
 	if (user != null) {
@@ -148,7 +141,6 @@ public class AuthServiceBean implements AuthService {
     }
 
     @Override
-    @Lock(LockType.READ)
     public boolean isAuthorizedAdministrator(EmailAddress email, UUID authToken) {
 	User user = findByEmailAndAuthToken(email, authToken);
 	if (user == null) {
