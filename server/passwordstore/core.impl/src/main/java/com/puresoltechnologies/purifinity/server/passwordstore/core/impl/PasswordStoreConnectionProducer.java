@@ -19,6 +19,7 @@ public class PasswordStoreConnectionProducer {
     private Logger logger;
 
     @Produces
+    @Singleton
     @PasswordStoreConnection
     public Connection getAnalysisSession() {
 	try {

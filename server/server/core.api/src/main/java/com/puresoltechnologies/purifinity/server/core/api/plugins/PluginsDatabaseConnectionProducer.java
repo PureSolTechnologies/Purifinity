@@ -19,6 +19,7 @@ public class PluginsDatabaseConnectionProducer {
     private Logger logger;
 
     @Produces
+    @Singleton
     @PluginsDatabaseConnection
     public Connection getAnalysisSession() {
 	try {

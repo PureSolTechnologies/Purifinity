@@ -19,6 +19,7 @@ public class PreferencesStoreConnectionProducer {
     private Logger logger;
 
     @Produces
+    @Singleton
     @PreferencesStoreConnection
     public Connection getAnalysisSession() {
 	try {

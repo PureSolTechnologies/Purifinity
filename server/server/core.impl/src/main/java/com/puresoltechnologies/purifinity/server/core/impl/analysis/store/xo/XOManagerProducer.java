@@ -34,16 +34,16 @@ public class XOManagerProducer {
     @Produces
     @DuctileDBXOManager
     public XOManager produceXOManager() {
-	logger.debug("Creating XOManager for Titan...");
+	logger.debug("Creating XOManager for DuctileDB...");
 	XOManager xoManager = xoManagerFactory.createXOManager();
-	logger.debug("XOManager for Titan created.");
+	logger.debug("XOManager for DuctileDB created.");
 	return xoManager;
     }
 
     public void closeXOManager(@Disposes @DuctileDBXOManager XOManager xoManager) {
-	logger.debug("Closing XOManager for Titan...");
+	logger.debug("Closing XOManager for DuctileDB...");
 	xoManager.close();
-	logger.debug("XOManager for Titan closed.");
+	logger.debug("XOManager for DuctileDB closed.");
     }
 
 }

@@ -139,8 +139,9 @@ public class SLOCMetricEvaluatorDAO implements MetricsDAO<SLOCResult, SLOCResult
 	    preparedStatement.setDouble(8, lineStatistics.getMin());
 	    preparedStatement.setDouble(9, lineStatistics.getMax());
 	    preparedStatement.setDouble(10, lineStatistics.getAvg());
-	    preparedStatement.setDouble(11, lineStatistics.getMedian());
-	    preparedStatement.setDouble(12, lineStatistics.getStdDev());
+	    preparedStatement.setDouble(11,
+		    lineStatistics.getMedian() != null ? lineStatistics.getMedian() : lineStatistics.getAvg());
+	    preparedStatement.setDouble(12, lineStatistics.getStdDev() != null ? lineStatistics.getStdDev() : 0.0);
 	    preparedStatement.execute();
 	    connection.commit();
 	} catch (SQLException e) {

@@ -36,7 +36,7 @@
 		<server.data.directory>${work.dir}/data</server.data.directory>
 		<!-- wildfly.debug.options>-Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n</wildfly.debug.options -->
 		<wildfly.debug.options>-agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n</wildfly.debug.options>
-		<wildfly.memory.options>-Xms128m -Xmx512m</wildfly.memory.options>
+		<wildfly.memory.options>-Xms512m -Xmx1024m</wildfly.memory.options>
 		<wildfly.options>${wildfly.memory.options} ${wildfly.debug.options}</wildfly.options>
 		<!-- Arquillian -->
 		<arquillian.version>1.1.8.Final</arquillian.version>

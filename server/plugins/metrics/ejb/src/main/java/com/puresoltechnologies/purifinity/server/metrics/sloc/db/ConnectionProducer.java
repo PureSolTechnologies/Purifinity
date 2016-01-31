@@ -23,9 +23,9 @@ public class ConnectionProducer {
     @SLOCEvaluatorStoreConnection
     public Connection getAnalysisSession() {
 	try {
-	    logger.info("Creating Cassandra SLOC Evaluator Session...");
+	    logger.info("Creating HBase SLOC Evaluator Connection...");
 	    Connection connection = HBaseHelper.connect();
-	    logger.info("Cassandra SLOC Evaluator Session created.");
+	    logger.info("HBase SLOC Evaluator Connnection created.");
 	    return connection;
 	} catch (SQLException e) {
 	    throw new RuntimeException("Could not connect to HBase via Phoenix.", e);

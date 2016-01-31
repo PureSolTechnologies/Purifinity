@@ -19,6 +19,7 @@ public class EvaluatorStoreConnectionProducer {
     private Logger logger;
 
     @Produces
+    @Singleton
     @EvaluatorStoreConnection
     public Connection getAnalysisSession() {
 	try {

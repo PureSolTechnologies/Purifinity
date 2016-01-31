@@ -19,6 +19,7 @@ public class AccountManagerConnectionProducer {
     private Logger logger;
 
     @Produces
+    @Singleton
     @AccountManagerConnection
     public Connection getAnalysisSession() {
 	try {

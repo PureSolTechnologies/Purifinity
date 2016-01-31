@@ -19,7 +19,7 @@ public class DuctileGraphProducer {
 
     @Produces
     @Singleton
-    public DuctileGraph getAnalysisSession() {
+    public DuctileGraph getDuctileGraph() {
 	try {
 	    logger.info("Creating Ductile Graph...");
 	    DuctileGraph ductileGraph = DuctileGraphHelper.connect();
@@ -30,7 +30,7 @@ public class DuctileGraphProducer {
 	}
     }
 
-    public void closeAnalysisKeyspaceSession(@Disposes DuctileGraph ductileGraph) {
+    public void closeDuctileGraph(@Disposes DuctileGraph ductileGraph) {
 	try {
 	    ductileGraph.close();
 	} catch (IOException e) {

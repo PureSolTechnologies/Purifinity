@@ -19,6 +19,7 @@ public class SystemMonitorConnectionProducer {
     private Logger logger;
 
     @Produces
+    @Singleton
     @SystemMonitorConnection
     public Connection getAnalysisSession() {
 	try {
