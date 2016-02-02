@@ -46,7 +46,8 @@ public class IntermediateCoCoMoEvaluatorDAO
 			    + "source_code_location, " + "code_range_type, " + "code_range_name, " + "phyLOC, "
 			    + "ksloc, " + "personMonth, " + "personYears, " + "scheduledMonth, " + "scheduledYears, "
 			    + "teamSize, " + "estimatedCosts, " + "project, " + "averageSalary, " + "currency, "
-			    + "attributes) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			    + "attributes_keys, " + "attributes_values) "
+			    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	    Map<String, String> attributes = attributesToMap(fileResults);
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, IntermediateCoCoMoEvaluator.ID);
