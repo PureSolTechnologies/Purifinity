@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
-	var srcDir = ''
-	grunt.loadNpmTasks('grunt-ts');
+	var srcDir = 'src/main/'
+	grunt.loadNpmTasks('grunt-ts-1.5');
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-less');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -71,12 +71,13 @@ module.exports = function(grunt) {
 				},
 				ts : {
 					default : {
-						src : [ 'typescript/**/*.ts', 'typings/**/*.ts' ],
-						out : 'target/tmp/js/purifinity-ui.js',
+						src : [ 'app/**/*.ts' ],
+						out : 'target/tmp/js/purifinity.js',
 						options : {
 							module : 'amd',
 							target : 'es5',
 							rootDir : 'typescript',
+							watch : false,
 							sourceMap : false,
 							declaration : false
 						}
@@ -85,21 +86,21 @@ module.exports = function(grunt) {
 				less : {
 					development : {
 						files : {
-							'target/tmp/css/purifinity-ui.css' : 'less/purifinity-ui.less'
+							'target/dist/css/purifinity.css' : 'src/main/less/purifinity.less'
 						}
 					},
 				},
 				uglify : {
 					target : {
 						files : {
-							'target/dist/js/purifinity-ui.js' : 'target/tmp/js/purifinity-ui.js',
+							'target/dist/js/purifinity.js' : 'target/tmp/js/purifinity.js',
 						}
 					}
 				},
 				cssmin : {
 					target : {
 						files : {
-							'target/dist/css/purifinity-ui.css' : 'target/tmp/css/purifinity-ui.css'
+							'target/dist/css/purifinity.css' : 'target/tmp/css/purifinity.css'
 						}
 					}
 				},
@@ -132,13 +133,13 @@ module.exports = function(grunt) {
 						configuration : grunt.file.readJSON("tslint.json")
 					},
 					all : {
-						src : [ "typescript/**/*.ts",
-								"!typescript/lib/**/*.ts" ]
+						src : [ "app/**/*.ts",
+								"!app/lib/**/*.ts" ]
 					},
 				},
 				watch : {
 					scripts : {
-						files : [ 'typescript/**/*.ts' ],
+						files : [ 'app/**/*.ts' ],
 						tasks : [ 'ts', 'uglify' ],
 						options : {
 							spawn : false
