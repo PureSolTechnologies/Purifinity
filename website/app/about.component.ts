@@ -14,7 +14,7 @@ import {PurifinityComponent} from './purifinity.component';
   <div class="col-md-12">
     <h1>About</h1>
     <p>
-      DuctileDB was started by <puresol-technologies></puresol-technologies> as side project for <purifinity></purifinity>, because a large graph database was needed to keep a large amount of information for source code analysis. 
+      To be done...
     </p>
   </div>
 </div>`

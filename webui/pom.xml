@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<prerequisites>
@@ -75,11 +76,8 @@
 	</ciManagement>
 
 	<distributionManagement>
-		<!-- site>
-			<id>FTPPureSolTechnologiesCom</id>
-			<name>FTPPureSolTechnologiesCom</name>
-			<url>ftp://puresol-technologies.com/opensource/purifinity-webui</url>
-		</site -->
+		<!-- site> <id>FTPPureSolTechnologiesCom</id> <name>FTPPureSolTechnologiesCom</name> 
+			<url>ftp://puresol-technologies.com/opensource/purifinity-webui</url> </site -->
 		<repository>
 			<id>libs-release-local</id>
 			<name>Repository libs-release-local</name>
@@ -146,6 +144,106 @@
 						<configuration>
 							<forkCount>1</forkCount>
 							<reuseForks>false</reuseForks>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.puresoltechnologies.maven.plugins</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<phase>validate</phase>
+								<goals>
+									<goal>validate</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<recursive>true</recursive>
+							<skipTestScope>true</skipTestScope>
+							<skipProvidedScope>true</skipProvidedScope>
+							<skipOptionals>true</skipOptionals>
+							<knownLicenses>
+								<knownLicenses>
+									<name>PureSol Technologies Commercial License</name>
+									<url>http://puresol-technologies.com</url>
+								</knownLicenses>
+								<knownLicense>
+									<name>Apache License, Version 2.0</name>
+									<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+								</knownLicense>
+							</knownLicenses>
+						</configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.0.0</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+								<configuration>
+									<archive>
+										<index>true</index>
+										<manifestEntries>
+											<Specification-Title>${project.name}</Specification-Title>
+											<Specification-Version>${project.version}</Specification-Version>
+											<Specification-Vendor>${project.organization.name}</Specification-Vendor>
+											<Implementation-Title>${project.groupId}:${project.artifactId}</Implementation-Title>
+											<Implementation-Version>${project.version}</Implementation-Version>
+											<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+											<Vendor-URL>${project.organization.url}</Vendor-URL>
+											<Project-URL>${project.url}</Project-URL>
+										</manifestEntries>
+									</archive>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>2.10.1</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.6</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>true</autoReleaseAfterClose>
 						</configuration>
 					</plugin>
 				</plugins>
