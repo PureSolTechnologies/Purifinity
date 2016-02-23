@@ -8,6 +8,7 @@ import org.apache.http.HttpEntity;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.BeforeClass;
 
+import com.google.protobuf.ServiceException;
 import com.puresoltechnologies.ductiledb.tinkerpop.DuctileGraph;
 import com.puresoltechnologies.purifinity.server.database.ductiledb.utils.DuctileGraphHelper;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseHelper;
@@ -18,7 +19,7 @@ import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeploym
 public abstract class AbstractAnalysisStoreServiceClientTest extends AbstractPurifinityServerRestClientTest {
 
     @BeforeClass
-    public static void cleanupAnalysisStore() throws SQLException, IOException {
+    public static void cleanupAnalysisStore() throws SQLException, IOException, ServiceException {
 	try (Connection connection = HBaseHelper.connect()) {
 	    DuctileGraph titanGraph = DuctileGraphHelper.connect();
 	    try {

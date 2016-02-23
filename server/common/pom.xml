@@ -14,7 +14,6 @@
 	<modules>
 		<module>utils</module>
 		<module>plugins</module>
-		<module>jms</module>
 		<module>job</module>
 		<module>rest</module>
 		<module>rest.security</module>

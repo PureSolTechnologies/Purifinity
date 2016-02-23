@@ -35,11 +35,12 @@ public class ServiceManagerProxy {
      * @param information
      *            is the information about the service to be used for
      *            registration.
-     * @throws InterruptedException
-     *             is thrown if the registration was interrupted. - * @throws
-     *             NamingException is thrown in case of a JNDI naming issue.
-     * @throws IllegalStateException
-     *             is thrown, if the registration process times out.
+     * @param <Information>
+     *            is the {@link ServiceInformation} object type.
+     * @param <Service>
+     *            is the Service to be registered.
+     * @param <RemoteService>
+     *            is the remote service to be registered.
      */
     @Lock(LockType.WRITE)
     public <Information extends ServiceInformation, Service, RemoteService extends ServiceManager<Information, Service>> void register(

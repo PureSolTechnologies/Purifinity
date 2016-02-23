@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.common.plugins;
 
 import javax.inject.Inject;
-import javax.naming.NamingException;
 
 import org.slf4j.Logger;
 
@@ -12,7 +11,6 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
  * register plugin services.
  * 
  * @author Rick-Rainer Ludwig
- * 
  */
 public abstract class AbstractServiceRegistration<ServiceInfo extends ServiceInformation> {
 
@@ -25,14 +23,14 @@ public abstract class AbstractServiceRegistration<ServiceInfo extends ServiceInf
     /**
      * Returns the name of the service.
      * 
-     * @return
+     * @return A {@link String} with the name is returned.
      */
     protected abstract String getName();
 
     /**
      * Returns the {@link ServiceInformation} object of the service.
      * 
-     * @return
+     * @return A {@link ServiceInfo} object is returned.
      */
     public abstract ServiceInfo getServiceInformation();
 
@@ -55,18 +53,20 @@ public abstract class AbstractServiceRegistration<ServiceInfo extends ServiceInf
      *            registration.
      * @param remoteServiceJNDIName
      *            is the JNDI name of the remote service for registration.
+     * @param pluginInformation
+     *            is the {@link PluginInformation} to be registered.
      * @param serviceJNDIName
      *            is the JDNI name of the service to be called from the central
      *            register.
      * @param information
      *            is the information about the service to be used for
      *            registration.
-     * @throws InterruptedException
-     *             is thrown if the registration was interrupted.
-     * @throws NamingException
-     *             is thrown in case of a JNDI naming issue.
-     * @throws IllegalStateException
-     *             is thrown, if the registration process times out.
+     * @param <Information>
+     *            is the {@link ServiceInformation} object type.
+     * @param <Service>
+     *            is the Service to be registered.
+     * @param <RemoteService>
+     *            is the remote service to be registered.
      */
     protected <Information extends ServiceInformation, Service, RemoteService extends ServiceManager<Information, Service>> void register(
 	    Class<? extends RemoteService> remoteService, String remoteServiceJNDIName,
@@ -90,12 +90,12 @@ public abstract class AbstractServiceRegistration<ServiceInfo extends ServiceInf
      * @param serviceJNDIName
      *            is the JDNI name of the service to be called from the central
      *            register.
-     * @throws InterruptedException
-     *             is thrown if the registration was interrupted.
-     * @throws NamingException
-     *             is thrown in case of a JNDI naming issue.
-     * @throws IllegalStateException
-     *             is thrown, if the registration process times out.
+     * @param <Information>
+     *            is the {@link ServiceInformation} object type.
+     * @param <Service>
+     *            is the Service to be unregistered.
+     * @param <RemoteService>
+     *            is the remote service to be unregistered.
      */
     protected <Information extends ServiceInformation, Service, RemoteService extends ServiceManager<Information, Service>> void unregister(
 	    Class<? extends RemoteService> remoteService, String remoteServiceJNDIName, String serviceJNDIName) {

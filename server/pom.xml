@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<prerequisites>
-		<maven>3.0</maven>
+		<maven>3.2</maven>
 	</prerequisites>
 
 	<properties>
@@ -25,7 +25,7 @@
 		<jersey.version>1.19</jersey.version>
 		<hbase.version>1.1.2</hbase.version>
 		<phoenix.version>4.5.1-HBase-1.1</phoenix.version>
-		<ductiledb.version>0.1.0-SNAPSHOT</ductiledb.version>
+		<ductiledb.version>0.1.1</ductiledb.version>
 
 		<!-- WildFly -->
 		<wildfly.version>9.0.1.Final</wildfly.version>
@@ -237,11 +237,13 @@
 									<name>Apache License, Version 2.0</name>
 									<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
 									<aliases>
+										<alias>asl</alias>
 										<alias>AL 2.0</alias>
 										<alias>Apache 2</alias>
+										<alias>Apache 2.0 License</alias>
 										<alias>Apache License</alias>
-										<!-- alias>Apache License 2.0</alias -->
 										<alias>Apache License 2.0</alias>
+										<alias>Apache License Version 2</alias>
 										<alias>Apache License Version 2.0</alias>
 										<alias>Apache License, version 2.0</alias>
 										<alias>Apache Software License - Version 2.0</alias>
@@ -257,6 +259,8 @@
 										<approvedDependency>org\.codehaus\.jettison:jettison:1\.2</approvedDependency>
 										<approvedDependency>oro:oro:2\.0\.8</approvedDependency>
 										<approvedDependency>org\.apache\.ant:.*:.*</approvedDependency>
+										<approvedDependency>org\.apache\.zookeeper:zookeeper:.*</approvedDependency>
+										<approvedDependency>javax\.xml\.stream:stax-api:.*</approvedDependency>
 									</approvedDependencies>
 								</knownLicense>
 								<knownLicense>
@@ -265,6 +269,7 @@
 									<aliases>
 										<alias>BSD style</alias>
 										<alias>BSD licence</alias>
+										<alias>The BSD License</alias>
 									</aliases>
 									<approvedDependencies>
 										<!-- approvedDependency>com\.esotericsoftware\.kryo:kryo:2\.21</approvedDependency> 
@@ -279,25 +284,35 @@
 									<name>The BSD 3-Clause License</name>
 									<url>http://opensource.org/licenses/BSD-3-Clause</url>
 									<aliases>
+										<alias>BSD</alias>
 										<alias>BSD 3-Clause</alias>
 										<alias>New BSD License</alias>
+										<alias>New BSD license</alias>
+										<alias>Modified BSD License</alias>
 									</aliases>
 									<approvedDependencies>
 										<approvedDependency>antlr:antlr:.*</approvedDependency>
 										<approvedDependency>asm:asm.*:.*</approvedDependency>
 										<approvedDependency>org\.antlr:.*:.*</approvedDependency>
-										<!-- approvedDependency>org\.ow2\.asm:asm:4\.0</approvedDependency -->
+										<approvedDependency>sqlline:sqlline:.*</approvedDependency>
 									</approvedDependencies>
 								</knownLicense>
 								<knownLicense>
 									<name><![CDATA[Common Development and Distribution License (CDDL-1.0)]]></name>
 									<url>http://opensource.org/licenses/CDDL-1.0</url>
 									<aliases>
+										<alias>CDDL 1.0</alias>
+										<alias><![CDATA[COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0]]></alias>
 										<alias>CDDL v1.1 / GPL v2 dual license</alias>
+										<alias>CDDL 1.1</alias>
 										<alias>Dual license consisting of the CDDL v1.1 and GPL v2</alias>
 									</aliases>
 									<approvedDependencies>
 										<approvedDependency>javax\.servlet:servlet-api:.*</approvedDependency>
+										<approvedDependency>javax\.activation:activation:.*</approvedDependency>
+										<approvedDependency>javax\.servlet:jsp-api:.*</approvedDependency>
+										<approvedDependency>javax\.servlet\.jsp:jsp-api:.*</approvedDependency>
+										<approvedDependency>org\.codehaus\.jettison:jettison:.*</approvedDependency>
 									</approvedDependencies>
 								</knownLicense>
 								<knownLicense>
@@ -312,13 +327,18 @@
 									<url>http://www.eclipse.org/legal/epl-v10.html</url>
 									<aliases>
 										<alias>Eclipse License, Version 1.0</alias>
+										<alias>Eclipse Public License 1.0</alias>
 										<alias>Eclipse Public License - Version 1.0</alias>
 										<alias>Eclipse Public License - v 1.0</alias>
+										<alias>Eclipse Public License v1.0</alias>
 									</aliases>
 								</knownLicense>
 								<knownLicense>
 									<name><![CDATA[GNU General Public License, version 2, with the Classpath Exception]]></name>
 									<url>http://openjdk.java.net/legal/gplv2+ce.html</url>
+									<aliases>
+										<alias>GPL2 w/ CPE</alias>
+									</aliases>
 									<approvedDependencies>
 										<approvedDependency>sun\.jdk:jconsole:.*</approvedDependency>
 									</approvedDependencies>
@@ -327,8 +347,9 @@
 									<name>GNU Lesser General Public License, Version 2.1</name>
 									<url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
 									<aliases>
+										<alias>GNU Lesser Public License</alias>
 										<alias>GNU Lesser General Public License</alias>
-										<!-- alias>GNU Lesser General Public License (LGPL), Version 2.1</alias -->
+										<alias>GNU Lesser General Public License (LGPL), Version 2.1</alias>
 										<alias>GNU Lesser General Public License, version 2.1</alias>
 										<alias>LGPL 2.1</alias>
 										<alias>lgpl</alias>
@@ -342,6 +363,10 @@
 										<approvedDependency>colt:colt:1\.2\.0</approvedDependency>
 										<approvedDependency>org\.acplt:oncrpc:1\.0\.7</approvedDependency>
 									</approvedDependencies>
+								</knownLicense>
+								<knownLicense>
+									<name>The H2 License, Version 1.0</name>
+									<url>http://h2database.com/html/license.html</url>
 								</knownLicense>
 								<knownLicense>
 									<name>ISC License (ISC)</name>
@@ -368,6 +393,13 @@
 									<aliases>
 										<alias>MPL 1.1</alias>
 									</aliases>
+								</knownLicense>
+								<knownLicense>
+									<name> Oracle Binary Code License Agreement</name>
+									<url>http://www.oracle.com/technetwork/java/javase/terms/license/index.html</url>
+									<approvedDependencies>
+										<approvedDependency>jdk\.tools:jdk\.tools:.*</approvedDependency>
+									</approvedDependencies>
 								</knownLicense>
 								<!-- knownLicense> <name>OSGi Specification License, Version 2.0</name> 
 									<url>http://www.osgi.org/Main/OSGiSpecificationLicense</url> </knownLicense -->
@@ -432,7 +464,7 @@
 					</plugin>
 					<plugin>
 						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.10.1</version>
+						<version>2.10.3</version>
 						<executions>
 							<execution>
 								<id>attach-javadocs</id>
@@ -1166,6 +1198,16 @@
 				</exclusions>
 			</dependency>
 			<dependency>
+				<groupId>sqlline</groupId>
+				<artifactId>sqlline</artifactId>
+				<version>1.1.9</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>16.0.1</version>
+			</dependency>
+			<dependency>
 				<groupId>com.buschmais.xo</groupId>
 				<artifactId>xo.api</artifactId>
 				<version>${xo.version}</version>
@@ -1354,7 +1396,7 @@
 			<plugins>
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
+					<version>3.5.1</version>
 					<configuration>
 						<source>1.8</source>
 						<target>1.8</target>
@@ -1407,7 +1449,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
-					<version>2.6.1</version>
+					<version>3.0.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -1536,7 +1578,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.2</version>
+				<version>2.5.3</version>
 				<dependencies>
 					<dependency>
 						<groupId>org.apache.maven.scm</groupId>
@@ -1624,8 +1666,41 @@
 					</archive>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.5</version>
+			</plugin>
 		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>2.5</version>
+			</extension>
+		</extensions>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>com.puresoltechnologies.maven.plugins</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</reporting>
 
 	<modules>
 		<module>wildfly</module>

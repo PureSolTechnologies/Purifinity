@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * </p>
  * 
  * <pre>
- * {@literal @}Inject<br/>
+ * {@literal @}Inject<br>
  * private Logger logger;
  * </pre>
  * 
@@ -25,19 +25,19 @@ import org.slf4j.LoggerFactory;
  */
 public class LoggerProducer {
 
-	/**
-	 * This is the actual producer method to create the {@link Logger} instance.
-	 * 
-	 * @param injectionPoint
-	 *            is the {@link InjectionPoint} where to inject the
-	 *            {@link Logger}.
-	 * @return A {@link Logger} object is returned which can be used for
-	 *         logging.
-	 */
-	@Produces
-	public Logger produceLogger(InjectionPoint injectionPoint) {
-		Class<?> beanClass = injectionPoint.getMember().getDeclaringClass();
-		return LoggerFactory.getLogger(beanClass);
-	}
+    /**
+     * This is the actual producer method to create the {@link Logger} instance.
+     * 
+     * @param injectionPoint
+     *            is the {@link InjectionPoint} where to inject the
+     *            {@link Logger}.
+     * @return A {@link Logger} object is returned which can be used for
+     *         logging.
+     */
+    @Produces
+    public Logger produceLogger(InjectionPoint injectionPoint) {
+	Class<?> beanClass = injectionPoint.getMember().getDeclaringClass();
+	return LoggerFactory.getLogger(beanClass);
+    }
 
 }

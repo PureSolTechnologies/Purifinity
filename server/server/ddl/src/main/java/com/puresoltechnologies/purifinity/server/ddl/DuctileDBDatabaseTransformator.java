@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.configuration.BaseConfiguration;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.NamespaceDescriptor;
 import org.apache.hadoop.hbase.TableName;
@@ -16,6 +15,7 @@ import org.apache.hadoop.hbase.client.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.protobuf.ServiceException;
 import com.puresoltechnologies.ductiledb.api.ElementType;
 import com.puresoltechnologies.ductiledb.api.schema.UniqueConstraint;
 import com.puresoltechnologies.ductiledb.core.DuctileDBGraphFactory;
@@ -101,9 +101,9 @@ public class DuctileDBDatabaseTransformator implements ComponentTransformator {
 
     @Override
     public void dropAll() {
-	try (Connection connection = DuctileDBGraphFactory.createConnection(new BaseConfiguration())) {
+	try (Connection connection = DuctileDBGraphFactory.createConnection("localhost", 2181, "localhost", 60000)) {
 	    removeTables(connection);
-	} catch (IOException e) {
+	} catch (IOException | ServiceException e) {
 	    throw new RuntimeException("Could not drop DuctileDB.", e);
 	}
     }

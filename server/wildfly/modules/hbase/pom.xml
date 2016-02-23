@@ -44,9 +44,12 @@
 			<artifactId>phoenix-core</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>sqlline</groupId>
+			<artifactId>sqlline</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>16.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
