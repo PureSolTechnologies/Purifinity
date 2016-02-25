@@ -17,7 +17,7 @@ import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCr
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
 
 /**
- * This is the central REST interface for {@link PasswordStore}.
+ * This is the central REST interface for PasswordStore.
  * 
  * @author Rick-Rainer Ludwig
  */
@@ -28,15 +28,13 @@ public interface PasswordStoreRestInterface {
     @Path("createAccount")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String createPassword(PasswordCreationEntity entity)
-	    throws PasswordCreationException;
+    public String createPassword(PasswordCreationEntity entity) throws PasswordCreationException;
 
     @PUT
     @Path("activateAcount")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public EmailAddress activatePassword(PasswordActivationEntity entity)
-	    throws PasswordActivationException;
+    public EmailAddress activatePassword(PasswordActivationEntity entity) throws PasswordActivationException;
 
     @POST
     @Path("authenticate")
@@ -48,15 +46,13 @@ public interface PasswordStoreRestInterface {
     @Path("changePassword")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean changePassword(PasswordChangeEntity entity)
-	    throws PasswordChangeException;
+    public boolean changePassword(PasswordChangeEntity entity) throws PasswordChangeException;
 
     @POST
     @Path("resetPassword")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Password resetPassword(String emailAddress)
-	    throws PasswordResetException;
+    public Password resetPassword(String emailAddress) throws PasswordResetException;
 
     @DELETE
     @Path("{email}")

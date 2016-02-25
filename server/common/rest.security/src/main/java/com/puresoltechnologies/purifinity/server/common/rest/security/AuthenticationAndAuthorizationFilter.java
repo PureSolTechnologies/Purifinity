@@ -42,18 +42,19 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventType;
  * The security for Web UI and AngularJS was described in several posts. The
  * links to these posts are below.
  * 
- * @see Web
- *      http://bitsuppliers.com/securing-rest-resources-with-java-ee-7-and-jax
- *      -rs -2-0 /
- * @see Web
- *      http://www.developerscrappad.com/1814/java/java-ee/rest-jax-rs/java-ee
- *      -7- jax
- *      -rs-2-0-simple-rest-api-authentication-authorization-with-custom-http-
- *      header /#sthash.ZvuVwQ2p.eaof
- * @see Web http://www.aschua.de/blog/pairing-angularjs-and-javaee-for-
- *      authentication /
- * @see Web http://stackoverflow.com/questions/3297048/403-forbidden-vs-401-
- *      unauthorized-http-responses
+ * <ul>
+ * <li>http://bitsuppliers.com/securing-rest-resources-with-java-ee-7-and-jax
+ * -rs -2-0</li>
+ * <li>http://www.developerscrappad.com/1814/java/java-ee/rest-jax-rs/java-ee
+ * -7- jax
+ * -rs-2-0-simple-rest-api-authentication-authorization-with-custom-http- header
+ * /#sthash.ZvuVwQ2p.eaof</li>
+ * <li>http://www.aschua.de/blog/pairing-angularjs-and-javaee-for-
+ * authentication</li>
+ * <li>http://stackoverflow.com/questions/3297048/403-forbidden-vs-401-
+ * unauthorized-http-responses</li>
+ * </ul>
+ * 
  * @author Rick-Rainer Ludwig
  *
  */

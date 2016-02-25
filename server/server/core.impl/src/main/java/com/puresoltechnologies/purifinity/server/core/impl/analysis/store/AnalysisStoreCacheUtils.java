@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -40,11 +39,13 @@ public class AnalysisStoreCacheUtils {
 
     /**
      * This method reads the cached {@link AnalysisFileTree} object stored with
-     * {@link #cacheAnalysisFileTree(UUID, UUID, AnalysisFileTree)}.
+     * {@link #cacheAnalysisFileTree(String, long, AnalysisFileTree)}.
      * 
      * @param projectId
+     *            is the id of the project.
      * @param runId
-     * @return
+     *            is the id of the run.
+     * @return a {@link AnalysisFileTree} is returned.
      */
     public AnalysisFileTree readCachedAnalysisFileTree(String projectId, long runId) {
 	try {
@@ -64,11 +65,15 @@ public class AnalysisStoreCacheUtils {
 
     /**
      * This method caches a {@link AnalysisFileTree} object Java serialized into
-     * Cassandra, because it is quite an effort to read it from Titan.
+     * Hadoop, because it is quite an effort to read it everytime from
+     * DuctileDB.
      * 
      * @param projectId
+     *            is the id of the project.
      * @param runId
+     *            is the id of the run.
      * @param analysisFileTree
+     *            is the file tree to be stored.
      */
     public void cacheAnalysisFileTree(String projectId, long runId, AnalysisFileTree analysisFileTree) {
 	try {
@@ -91,7 +96,9 @@ public class AnalysisStoreCacheUtils {
      * This method removes Analysis Run related caches.
      * 
      * @param projectId
+     *            is the id of the project.
      * @param runId
+     *            is the id of the run.
      */
     public void clearAnalysisRunCaches(String projectId, long runId) {
 	try {

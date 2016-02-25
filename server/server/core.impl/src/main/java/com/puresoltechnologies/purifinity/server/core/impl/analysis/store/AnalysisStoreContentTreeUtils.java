@@ -27,7 +27,7 @@ import com.puresoltechnologies.purifinity.server.database.hadoop.utils.bloob.Blo
 public class AnalysisStoreContentTreeUtils {
 
     @Inject
-    private AnalysisStoreUtils analysisStoreCassandraUtils;
+    private AnalysisStoreUtils analysisStoreUtils;
 
     @Inject
     private BloobService bloob;
@@ -36,16 +36,16 @@ public class AnalysisStoreContentTreeUtils {
      * This method adds a new content tree node or content tree part to the
      * database.
      * 
-     * @param progressObserver
-     *            is an optional observer to be informed about progress (may be
-     *            null).
-     * @param graph
+     * @param xoManager
+     *            is the {@link XOManager} to use for graph access.
      * @param fileTree
-     * @param parentVertex
-     * @param edgeLabel
-     * @return
+     *            is the run tree to add.
+     * @param analysisRunVertex
+     *            is the run vertex to add the tree to.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store utilities.
      * @throws IOException
+     *             is thrown in case of IO issues.
      */
     public void addContentTree(XOManager xoManager, AnalysisRunFileTree fileTree, AnalysisRunVertex analysisRunVertex)
 	    throws AnalysisStoreException, IOException {
@@ -72,16 +72,17 @@ public class AnalysisStoreContentTreeUtils {
      * This method adds a new content tree node or content tree part to the
      * database.
      * 
-     * @param progressObserver
-     *            is an optional observer to be informed about progress (may be
-     *            null).
-     * @param graph
+     * @param xoManager
+     *            is the {@link XOManager} to use for graph access.
      * @param fileTreeNode
+     *            is the run tree node.
      * @param parentDirectory
-     * @param edgeLabel
-     * @return
+     *            is the content tree parent node.
+     * @return A {@link ContentTreeFileVertex} is returned.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store utilities.
      * @throws IOException
+     *             is thrown in case of IO issues.
      */
     private ContentTreeFileVertex addContentTreeFileVertex(XOManager xoManager, AnalysisRunFileTree fileTreeNode,
 	    ContentTreeDirectoryVertex parentDirectory) throws AnalysisStoreException, IOException {
@@ -111,16 +112,17 @@ public class AnalysisStoreContentTreeUtils {
      * This method adds a new content tree node or content tree part to the
      * database.
      * 
-     * @param progressObserver
-     *            is an optional observer to be informed about progress (may be
-     *            null).
-     * @param graph
+     * @param xoManager
+     *            is the {@link XOManager} to use for graph access.
      * @param fileTreeNode
+     *            is the run tree node.
      * @param parentDirectory
-     * @param edgeLabel
-     * @return
+     *            is the content tree parent node.
+     * @return A {@link ContentTreeDirectoryVertex} object is returned.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store utilities.
      * @throws IOException
+     *             is thrown in case of IO issues.
      */
     private ContentTreeDirectoryVertex addContentTreeDirectoryVertex(XOManager xoManager,
 	    AnalysisRunFileTree fileTreeNode, ContentTreeDirectoryVertex parentDirectory)
@@ -196,7 +198,7 @@ public class AnalysisStoreContentTreeUtils {
 	HashId hashId = HashId.valueOf(contentVertex.getHashId());
 	xoManager.delete(contentVertex);
 
-	analysisStoreCassandraUtils.removeAnalysisFile(hashId);
+	analysisStoreUtils.removeAnalysisFile(hashId);
 
 	// FIXME: The evaluation values need to be removed!
 	// boolean isFile = (Boolean) contentVertex
@@ -219,7 +221,7 @@ public class AnalysisStoreContentTreeUtils {
 	HashId hashId = HashId.valueOf(contentVertex.getHashId());
 	xoManager.delete(contentVertex);
 
-	analysisStoreCassandraUtils.removeAnalysisFile(hashId);
+	analysisStoreUtils.removeAnalysisFile(hashId);
 
 	// FIXME: The evaluation values need to be removed!
 	// boolean isFile = (Boolean) contentVertex

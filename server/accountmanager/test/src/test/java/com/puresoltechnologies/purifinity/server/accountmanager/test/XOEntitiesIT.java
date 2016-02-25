@@ -21,6 +21,7 @@ import com.buschmais.xo.api.XOException;
 import com.buschmais.xo.api.XOManager;
 import com.buschmais.xo.api.XOManagerFactory;
 import com.buschmais.xo.api.bootstrap.XO;
+import com.google.protobuf.ServiceException;
 import com.puresoltechnologies.ductiledb.tinkerpop.DuctileGraph;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.RoleVertex;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.impl.store.xo.UserVertex;
@@ -35,7 +36,7 @@ public class XOEntitiesIT {
     private XOManager xoManager;
 
     @BeforeClass
-    public static void connecXO() throws IOException {
+    public static void connecXO() throws IOException, ServiceException {
 	xoManagerFactory = XO.createXOManagerFactory(UsersXOManager.XO_UNIT_NAME);
 	ductileGraph = DuctileGraphHelper.connect();
     }

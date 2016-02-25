@@ -7,11 +7,11 @@ import java.sql.SQLException;
 import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
 import org.apache.tinkerpop.gremlin.structure.Vertex;
 
+import com.google.protobuf.ServiceException;
 import com.puresoltechnologies.ductiledb.tinkerpop.DuctileGraph;
 import com.puresoltechnologies.purifinity.server.database.ductiledb.utils.DuctileDBElementNames;
 import com.puresoltechnologies.purifinity.server.database.ductiledb.utils.DuctileGraphHelper;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseHelper;
-import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreBean;
 import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreTester;
 
 /**
@@ -33,9 +33,13 @@ public class AccountManagerTester {
      * </ol>
      * 
      * @throws SQLException
+     *             is thrown in case of database issues.
      * @throws IOException
+     *             is thrown in case of IO issues.
+     * @throws ServiceException
+     *             is thrown in case of HBase issues.
      */
-    public static void cleanupDatabase() throws SQLException, IOException {
+    public static void cleanupDatabase() throws SQLException, IOException, ServiceException {
 	try (Connection connection = HBaseHelper.connect()) {
 	    cleanupDatabase(connection);
 	}
@@ -53,12 +57,15 @@ public class AccountManagerTester {
      * 
      * @param connection
      *            is the cluster where the keyspace
-     *            {@link PasswordStoreBean#PASSWORD_STORE_KEYSPACE_NAME} can be
-     *            found.
+     *            PasswordStoreBean.PASSWORD_STORE_KEYSPACE_NAME can be found.
      * @throws SQLException
+     *             is thrown in case of database issues.
      * @throws IOException
+     *             is thrown in case of IO issues.
+     * @throws ServiceException
+     *             is thrown in case of HBase issues.
      */
-    public static void cleanupDatabase(Connection connection) throws SQLException, IOException {
+    public static void cleanupDatabase(Connection connection) throws SQLException, IOException, ServiceException {
 	PasswordStoreTester.cleanupDatabase();
 
 	DuctileGraph titanGraph = DuctileGraphHelper.connect();

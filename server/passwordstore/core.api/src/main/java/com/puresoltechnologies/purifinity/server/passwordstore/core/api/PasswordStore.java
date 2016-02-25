@@ -30,8 +30,7 @@ public interface PasswordStore {
      *             if there is any issue during account creation, this checked
      *             exception is thrown.
      */
-    public String createPassword(EmailAddress email, Password password)
-	    throws PasswordCreationException;
+    public String createPassword(EmailAddress email, Password password) throws PasswordCreationException;
 
     /**
      * This method activates a new account. Needed is the activation key from
@@ -46,14 +45,13 @@ public interface PasswordStore {
      *            is the email of the created account.
      * @param activationKey
      *            is the activation key returned from
-     *            {@link #createPassword(String, String)}.
+     *            {@link #createPassword(EmailAddress, Password)}.
      * @return The {@link EmailAddress} is returned which was assigned to the
      *         user.
      * @throws PasswordActivationException
      *             is thrown if the account could not be activated.
      */
-    public EmailAddress activatePassword(EmailAddress email,
-	    String activationKey) throws PasswordActivationException;
+    public EmailAddress activatePassword(EmailAddress email, String activationKey) throws PasswordActivationException;
 
     /**
      * This method performs the authentication for a given email and a provided
@@ -86,8 +84,8 @@ public interface PasswordStore {
      * @throws PasswordChangeException
      *             is thrown in cases of issues.
      */
-    public boolean changePassword(EmailAddress email, Password oldPassword,
-	    Password newPassword) throws PasswordChangeException;
+    public boolean changePassword(EmailAddress email, Password oldPassword, Password newPassword)
+	    throws PasswordChangeException;
 
     /**
      * This method resets the password of a user account in case of a lost or
@@ -99,8 +97,7 @@ public interface PasswordStore {
      * @throws PasswordResetException
      *             is thrown in a case that a reset was not possible.
      */
-    public Password resetPassword(EmailAddress email)
-	    throws PasswordResetException;
+    public Password resetPassword(EmailAddress email) throws PasswordResetException;
 
     /**
      * Removes a password from the store.

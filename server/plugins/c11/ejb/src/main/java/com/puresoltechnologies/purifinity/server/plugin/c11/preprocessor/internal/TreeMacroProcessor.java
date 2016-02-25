@@ -46,632 +46,590 @@ import com.puresoltechnologies.trees.WalkingAction;
  */
 public class TreeMacroProcessor implements TreeVisitor<ParseTreeNode> {
 
-	private static final String IDENTIFIER_TOKEN_NAME = "identifier";
+    private static final String IDENTIFIER_TOKEN_NAME = "identifier";
 
-	private static final Logger logger = LoggerFactory
-			.getLogger(TreeMacroProcessor.class);
+    private static final Logger logger = LoggerFactory.getLogger(TreeMacroProcessor.class);
 
-	/**
-	 * This {@link IncludeDirectories} object contains the include directories
-	 * to be used with #include statements.
-	 */
-	private final IncludeDirectories includeDirectories;
+    /**
+     * This {@link IncludeDirectories} object contains the include directories
+     * to be used with #include statements.
+     */
+    private final IncludeDirectories includeDirectories;
 
-	/**
-	 * This field contains the information about the defined macros.
-	 */
-	private final DefinedMacros definedMacros;
-	/**
-	 * This field contains after processing the new source code.
-	 */
-	private final SourceCode sourceCode = new SourceCode("", "");
-	/**
-	 * This field contains the original {@link ParseTreeNode} of the source file
-	 * which is now to be processed.
-	 */
-	private final ParseTreeNode tree;
-	/**
-	 * This field contains the current nesting depth. This is needed to check
-	 * for the maximum nesting depth to avoid recursive endless loops.
-	 */
-	private final int nestingDepth;
+    /**
+     * This field contains the information about the defined macros.
+     */
+    private final DefinedMacros definedMacros;
+    /**
+     * This field contains after processing the new source code.
+     */
+    private final SourceCode sourceCode = new SourceCode("", "");
+    /**
+     * This field contains the original {@link ParseTreeNode} of the source file
+     * which is now to be processed.
+     */
+    private final ParseTreeNode tree;
+    /**
+     * This field contains the current nesting depth. This is needed to check
+     * for the maximum nesting depth to avoid recursive endless loops.
+     */
+    private final int nestingDepth;
 
-	private PreprocessorException walkingResult = null;
+    private PreprocessorException walkingResult = null;
 
-	/**
-	 * This field is used to store token stream parts which are part of a
-	 * function-like macro replace which cannot be performed, yet due to its
-	 * spread of multiple lines.
-	 */
-	private final TokenStream macroReplacementTokenStream = new TokenStream();
+    /**
+     * This field is used to store token stream parts which are part of a
+     * function-like macro replace which cannot be performed, yet due to its
+     * spread of multiple lines.
+     */
+    private final TokenStream macroReplacementTokenStream = new TokenStream();
 
-	/**
-	 * This is the normal constructor to be used to process preprocessor source
-	 * trees.
-	 * 
-	 * @param tree
-	 *            is the {@link ParseTreeNode} to be processed.
-	 * @param includeDirectories
-	 *            is the object which contains the include directories to be
-	 *            used during #include statements.
-	 * @param definedMacros
-	 *            is used to store defined macros for macro replacement.
-	 *            <b>Attention!!!:</b> This field is altered during run to be
-	 *            used later on in other instances due to newly defined macros!
-	 * @param nestingDepth
-	 *            is the current nesting depth which is used to check for the
-	 *            maximum nesting depth to avoid recursive endless loops.
-	 */
-	public TreeMacroProcessor(ParseTreeNode tree,
-			IncludeDirectories includeDirectories, DefinedMacros definedMacros,
-			int nestingDepth) {
-		super();
-		this.tree = tree;
-		this.includeDirectories = includeDirectories;
-		this.definedMacros = definedMacros;
-		this.nestingDepth = nestingDepth;
+    /**
+     * This is the normal constructor to be used to process preprocessor source
+     * trees.
+     * 
+     * @param tree
+     *            is the {@link ParseTreeNode} to be processed.
+     * @param includeDirectories
+     *            is the object which contains the include directories to be
+     *            used during #include statements.
+     * @param definedMacros
+     *            is used to store defined macros for macro replacement.
+     *            <b>Attention!!!:</b> This field is altered during run to be
+     *            used later on in other instances due to newly defined macros!
+     * @param nestingDepth
+     *            is the current nesting depth which is used to check for the
+     *            maximum nesting depth to avoid recursive endless loops.
+     */
+    public TreeMacroProcessor(ParseTreeNode tree, IncludeDirectories includeDirectories, DefinedMacros definedMacros,
+	    int nestingDepth) {
+	super();
+	this.tree = tree;
+	this.includeDirectories = includeDirectories;
+	this.definedMacros = definedMacros;
+	this.nestingDepth = nestingDepth;
+    }
+
+    /**
+     * Runs the processor. The result of the process can be got by
+     * {@link #getSourceCode()}.
+     * 
+     * @throws PreprocessorException
+     *             is thrown for pre-processor issues.
+     */
+    public void process() throws PreprocessorException {
+	walkingResult = null;
+	new TreeWalker<ParseTreeNode>(tree).walk(this);
+	if (walkingResult != null) {
+	    throw walkingResult;
 	}
+    }
 
-	/**
-	 * Runs the processor. The result of the process can be got by
-	 * {@link #getSourceCode()}.
-	 * 
-	 * @throws PreprocessorException
-	 */
-	public void process() throws PreprocessorException {
-		walkingResult = null;
-		new TreeWalker<ParseTreeNode>(tree).walk(this);
-		if (walkingResult != null) {
-			throw walkingResult;
-		}
+    /**
+     * This method returns the new source code after processing.
+     * 
+     * @return A new {@link SourceCode} object containing the process code is
+     *         returned.
+     */
+    public SourceCode getSourceCode() {
+	return sourceCode;
+    }
+
+    /**
+     * This method walks over {@link #tree} and invokes the processXXX() methods
+     * to perform the actual processing tasks.
+     */
+    @Override
+    public WalkingAction visit(ParseTreeNode tree) {
+	try {
+	    Token token = tree.getToken();
+	    if (token == null) {
+		return processProduction(tree);
+	    } else if (token.getName().equals("Comment")) {
+		return processTextLine(tree);
+	    } else {
+		throw new RuntimeException("An unprocessed token was found. This should not be possible!");
+	    }
+	} catch (TreeException e) {
+	    throw new RuntimeException("The grammar or the implementation might be wrong!", e);
+	} catch (PreprocessorException e) {
+	    walkingResult = e;
+	    return WalkingAction.ABORT;
 	}
+    }
 
-	/**
-	 * This method returns the new source code after processing.
-	 * 
-	 * @return A new {@link SourceCode} object containing the process code is
-	 *         returned.
-	 */
-	public SourceCode getSourceCode() {
-		return sourceCode;
+    /**
+     * This method processes a production and returns the next walking action
+     * through the syntax tree.
+     * 
+     * @param tree
+     * @return A {@link WalkingAction} is returned specifying the next action
+     *         during tree walk.
+     * @throws TreeException
+     * @throws PreprocessorException
+     */
+    private WalkingAction processProduction(ParseTreeNode tree) throws TreeException, PreprocessorException {
+	if ("control-line".equals(tree.getName())) {
+	    return processControlLine(tree);
+	} else if ("text-line".equals(tree.getName())) {
+	    return processTextLine(tree);
+	} else if ("if-section".equals(tree.getName())) {
+	    return processIfSection(tree);
+	} else if ("non-directive-line".equals(tree.getName())) {
+	    /*
+	     * As long as we do not know here what we need to do with this kind
+	     * of line, we handle it as normal text-line. It is done so, too, by
+	     * gpp.
+	     */
+	    return processTextLine(tree);
+	} else {
+	    return WalkingAction.PROCEED;
 	}
+    }
 
-	/**
-	 * This method walks over {@link #tree} and invokes the methods
-	 * {@link #processProduction(ParseTreeNode)} and
-	 * {@link #processToken(Token)} to perform the actual processing tasks.
-	 */
-	@Override
-	public WalkingAction visit(ParseTreeNode tree) {
-		try {
-			Token token = tree.getToken();
-			if (token == null) {
-				return processProduction(tree);
-			} else if (token.getName().equals("Comment")) {
-				return processTextLine(tree);
-			} else {
-				throw new RuntimeException(
-						"An unprocessed token was found. This should not be possible!");
-			}
-		} catch (TreeException e) {
-			throw new RuntimeException(
-					"The grammar or the implementation might be wrong!", e);
-		} catch (PreprocessorException e) {
-			walkingResult = e;
-			return WalkingAction.ABORT;
-		}
-	}
-
-	/**
-	 * This method processes a production and returns the next walking action
-	 * through the syntax tree.
-	 * 
-	 * @param tree
-	 * @return A {@link WalkingAction} is returned specifying the next action
-	 *         during tree walk.
-	 * @throws TreeException
-	 * @throws PreprocessorException
-	 */
-	private WalkingAction processProduction(ParseTreeNode tree)
-			throws TreeException, PreprocessorException {
-		if ("control-line".equals(tree.getName())) {
-			return processControlLine(tree);
-		} else if ("text-line".equals(tree.getName())) {
-			return processTextLine(tree);
-		} else if ("if-section".equals(tree.getName())) {
-			return processIfSection(tree);
-		} else if ("non-directive-line".equals(tree.getName())) {
-			/*
-			 * As long as we do not know here what we need to do with this kind
-			 * of line, we handle it as normal text-line. It is done so, too, by
-			 * gpp.
-			 */
-			return processTextLine(tree);
-		} else {
-			return WalkingAction.PROCEED;
-		}
-	}
-
-	private WalkingAction processControlLine(ParseTreeNode tree)
-			throws TreeException {
-		try {
-			List<ParseTreeNode> children = tree.getChildren();
-			ParseTreeNode controlCommand = children.get(0);
-			if (controlCommand.getText().equals("#include")) {
-				return include(tree);
-			} else if (controlCommand.getText().equals("#define")) {
-				return define(tree);
-			} else if (controlCommand.getText().equals("#undef")) {
-				return undefine(tree);
-			} else {
-				return WalkingAction.LEAVE_BRANCH;
-			}
-		} catch (PreprocessorException e) {
-			logger.warn("Abort preprocessing of file!", e);
-			return WalkingAction.ABORT;
-		}
-	}
-
-	/**
-	 * This method processes a single text-line.
-	 * 
-	 * @param tree
-	 * @return
-	 * @throws PreprocessorException
-	 */
-	private WalkingAction processTextLine(ParseTreeNode tree)
-			throws PreprocessorException {
-		TokenCollector visitor = new TokenCollector();
-		TreeWalker.walk(visitor, tree);
-		TokenStream tokenStream = visitor.getTokenStream();
-		macroReplacementTokenStream.addAll(tokenStream);
-		/*
-		 * We are in normal mode...
-		 */
-		if (replaceAllMacros(macroReplacementTokenStream)) {
-			TokenMetaData metaData = macroReplacementTokenStream.get(0)
-					.getMetaData();
-			StringBuffer buffer = new StringBuffer();
-			for (Token token : macroReplacementTokenStream) {
-				buffer.append(token.getText());
-			}
-			int lineNum = 0;
-			int pos = 0;
-			while (pos < buffer.length()) {
-				int index = buffer.indexOf("\n", pos);
-				String line = buffer.substring(pos, index + 1);
-				SourceCodeLine sourceCodeLine = new SourceCodeLine(
-						metaData.getSource(), metaData.getLine() + lineNum,
-						line);
-				sourceCode.addSourceCodeLine(sourceCodeLine);
-				lineNum++;
-				pos += line.length();
-			}
-			macroReplacementTokenStream.clear();
-		}
+    private WalkingAction processControlLine(ParseTreeNode tree) throws TreeException {
+	try {
+	    List<ParseTreeNode> children = tree.getChildren();
+	    ParseTreeNode controlCommand = children.get(0);
+	    if (controlCommand.getText().equals("#include")) {
+		return include(tree);
+	    } else if (controlCommand.getText().equals("#define")) {
+		return define(tree);
+	    } else if (controlCommand.getText().equals("#undef")) {
+		return undefine(tree);
+	    } else {
 		return WalkingAction.LEAVE_BRANCH;
+	    }
+	} catch (PreprocessorException e) {
+	    logger.warn("Abort preprocessing of file!", e);
+	    return WalkingAction.ABORT;
 	}
+    }
 
-	private boolean replaceAllMacros(TokenStream tokenStream)
-			throws PreprocessorException {
-		for (int position = 0; position < tokenStream.size(); position++) {
-			if (!replaceMacroIfNeeded(tokenStream, position)) {
-				return false;
-			}
-		}
-		return true;
+    /**
+     * This method processes a single text-line.
+     * 
+     * @param tree
+     * @return
+     * @throws PreprocessorException
+     */
+    private WalkingAction processTextLine(ParseTreeNode tree) throws PreprocessorException {
+	TokenCollector visitor = new TokenCollector();
+	TreeWalker.walk(visitor, tree);
+	TokenStream tokenStream = visitor.getTokenStream();
+	macroReplacementTokenStream.addAll(tokenStream);
+	/*
+	 * We are in normal mode...
+	 */
+	if (replaceAllMacros(macroReplacementTokenStream)) {
+	    TokenMetaData metaData = macroReplacementTokenStream.get(0).getMetaData();
+	    StringBuffer buffer = new StringBuffer();
+	    for (Token token : macroReplacementTokenStream) {
+		buffer.append(token.getText());
+	    }
+	    int lineNum = 0;
+	    int pos = 0;
+	    while (pos < buffer.length()) {
+		int index = buffer.indexOf("\n", pos);
+		String line = buffer.substring(pos, index + 1);
+		SourceCodeLine sourceCodeLine = new SourceCodeLine(metaData.getSource(), metaData.getLine() + lineNum,
+			line);
+		sourceCode.addSourceCodeLine(sourceCodeLine);
+		lineNum++;
+		pos += line.length();
+	    }
+	    macroReplacementTokenStream.clear();
 	}
+	return WalkingAction.LEAVE_BRANCH;
+    }
 
-	private WalkingAction processIfSection(ParseTreeNode ifSection)
-			throws TreeException, PreprocessorException {
-		ParseTreeNode ifGroup = ifSection.getChild("if-group");
-		if (evaluateValidity(ifGroup)) {
-			TreeMacroProcessor processor = new TreeMacroProcessor(
-					ifGroup.getChild("group"), includeDirectories,
-					definedMacros, nestingDepth);
-			processor.process();
-			sourceCode.addSourceCode(processor.sourceCode);
-			return WalkingAction.LEAVE_BRANCH;
-		}
-		List<ParseTreeNode> elifGroups = ifSection.getChildren("elif-group");
-		for (ParseTreeNode elifGroup : elifGroups) {
-			if (evaluateValidity(elifGroup)) {
-				TreeMacroProcessor processor = new TreeMacroProcessor(
-						elifGroup.getChild("group"), includeDirectories,
-						definedMacros, nestingDepth);
-				processor.process();
-				sourceCode.addSourceCode(processor.sourceCode);
-				return WalkingAction.LEAVE_BRANCH;
-			}
-		}
-		ParseTreeNode elseGroup = ifSection.getChild("else-group");
-		if (elseGroup != null) {
-			TreeMacroProcessor processor = new TreeMacroProcessor(
-					elseGroup.getChild("group"), includeDirectories,
-					definedMacros, nestingDepth);
-			processor.process();
-			sourceCode.addSourceCode(processor.sourceCode);
-		}
-		return WalkingAction.LEAVE_BRANCH;
-	}
-
-	private boolean evaluateValidity(ParseTreeNode evaluation)
-			throws TreeException, PreprocessorException {
-		if (evaluation.hasChild("PP_IFDEF")) {
-			ParseTreeNode identifier = evaluation.getChild("identifier");
-			if (definedMacros.isDefined(identifier.getText())) {
-				return true;
-			}
-		} else if (evaluation.hasChild("PP_IFNDEF")) {
-			ParseTreeNode identifier = evaluation.getChild("identifier");
-			if (!definedMacros.isDefined(identifier.getText())) {
-				return true;
-			}
-		} else if (evaluation.hasChild("PP_IF")
-				|| evaluation.hasChild("PP_ELIF")) {
-			// #if and #elif
-			ParseTreeNode expression = evaluation
-					.getChild("constant-expression");
-			C11PreprocessorExpressionEvaluator evaluator = new C11PreprocessorExpressionEvaluator(
-					expression, definedMacros);
-			try {
-				evaluator.evaluate();
-				return evaluator.getResult().getBooleanValue();
-			} catch (UniversalSyntaxTreeEvaluationException e) {
-				throw new PreprocessorException(
-						"Could not evaluate expression '"
-								+ expression.toString() + "'.", e);
-			} catch (ValueTypeException e) {
-				throw new PreprocessorException(
-						"Could not evaluate expression '"
-								+ expression.toString() + "'.", e);
-			}
-		} else {
-			throw new RuntimeException("Illegal evaluation production found!");
-		}
+    private boolean replaceAllMacros(TokenStream tokenStream) throws PreprocessorException {
+	for (int position = 0; position < tokenStream.size(); position++) {
+	    if (!replaceMacroIfNeeded(tokenStream, position)) {
 		return false;
+	    }
 	}
+	return true;
+    }
 
-	private WalkingAction define(ParseTreeNode tree) throws TreeException {
-		List<ParseTreeNode> children = tree.getChildren();
-		if ((children.size() >= 4)
-				&& (children.get(3).getName().equals("LPAREN"))) {
-			return defineFunctionLikeMacro(tree);
-		} else {
-			return defineObjectLikeMacro(tree);
-		}
+    private WalkingAction processIfSection(ParseTreeNode ifSection) throws TreeException, PreprocessorException {
+	ParseTreeNode ifGroup = ifSection.getChild("if-group");
+	if (evaluateValidity(ifGroup)) {
+	    TreeMacroProcessor processor = new TreeMacroProcessor(ifGroup.getChild("group"), includeDirectories,
+		    definedMacros, nestingDepth);
+	    processor.process();
+	    sourceCode.addSourceCode(processor.sourceCode);
+	    return WalkingAction.LEAVE_BRANCH;
 	}
-
-	private WalkingAction undefine(ParseTreeNode tree) throws TreeException {
-		ParseTreeNode identifier = tree.getChild("identifier");
-		definedMacros.undefine(identifier.getText());
+	List<ParseTreeNode> elifGroups = ifSection.getChildren("elif-group");
+	for (ParseTreeNode elifGroup : elifGroups) {
+	    if (evaluateValidity(elifGroup)) {
+		TreeMacroProcessor processor = new TreeMacroProcessor(elifGroup.getChild("group"), includeDirectories,
+			definedMacros, nestingDepth);
+		processor.process();
+		sourceCode.addSourceCode(processor.sourceCode);
 		return WalkingAction.LEAVE_BRANCH;
+	    }
 	}
+	ParseTreeNode elseGroup = ifSection.getChild("else-group");
+	if (elseGroup != null) {
+	    TreeMacroProcessor processor = new TreeMacroProcessor(elseGroup.getChild("group"), includeDirectories,
+		    definedMacros, nestingDepth);
+	    processor.process();
+	    sourceCode.addSourceCode(processor.sourceCode);
+	}
+	return WalkingAction.LEAVE_BRANCH;
+    }
 
-	/**
-	 * This method is invoked for includeFile nodes.
-	 * 
-	 * @param tree
-	 * @return
-	 * @throws TreeException
-	 * @throws PreprocessorException
+    private boolean evaluateValidity(ParseTreeNode evaluation) throws TreeException, PreprocessorException {
+	if (evaluation.hasChild("PP_IFDEF")) {
+	    ParseTreeNode identifier = evaluation.getChild("identifier");
+	    if (definedMacros.isDefined(identifier.getText())) {
+		return true;
+	    }
+	} else if (evaluation.hasChild("PP_IFNDEF")) {
+	    ParseTreeNode identifier = evaluation.getChild("identifier");
+	    if (!definedMacros.isDefined(identifier.getText())) {
+		return true;
+	    }
+	} else if (evaluation.hasChild("PP_IF") || evaluation.hasChild("PP_ELIF")) {
+	    // #if and #elif
+	    ParseTreeNode expression = evaluation.getChild("constant-expression");
+	    C11PreprocessorExpressionEvaluator evaluator = new C11PreprocessorExpressionEvaluator(expression,
+		    definedMacros);
+	    try {
+		evaluator.evaluate();
+		return evaluator.getResult().getBooleanValue();
+	    } catch (UniversalSyntaxTreeEvaluationException e) {
+		throw new PreprocessorException("Could not evaluate expression '" + expression.toString() + "'.", e);
+	    } catch (ValueTypeException e) {
+		throw new PreprocessorException("Could not evaluate expression '" + expression.toString() + "'.", e);
+	    }
+	} else {
+	    throw new RuntimeException("Illegal evaluation production found!");
+	}
+	return false;
+    }
+
+    private WalkingAction define(ParseTreeNode tree) throws TreeException {
+	List<ParseTreeNode> children = tree.getChildren();
+	if ((children.size() >= 4) && (children.get(3).getName().equals("LPAREN"))) {
+	    return defineFunctionLikeMacro(tree);
+	} else {
+	    return defineObjectLikeMacro(tree);
+	}
+    }
+
+    private WalkingAction undefine(ParseTreeNode tree) throws TreeException {
+	ParseTreeNode identifier = tree.getChild("identifier");
+	definedMacros.undefine(identifier.getText());
+	return WalkingAction.LEAVE_BRANCH;
+    }
+
+    /**
+     * This method is invoked for includeFile nodes.
+     * 
+     * @param tree
+     * @return
+     * @throws TreeException
+     * @throws PreprocessorException
+     */
+    private WalkingAction include(ParseTreeNode tree) throws TreeException, PreprocessorException {
+	ParseTreeNode headerName = tree.getChild("pp-tokens").getChild("preprocessing-token").getChild("header-name");
+	String includeFile = headerName.getText();
+	/*
+	 * We need to trim next due to we have looked for the production
+	 * "IncludeFile" which may carry some white spaces.
 	 */
-	private WalkingAction include(ParseTreeNode tree) throws TreeException,
-			PreprocessorException {
-		ParseTreeNode headerName = tree.getChild("pp-tokens")
-				.getChild("preprocessing-token").getChild("header-name");
-		String includeFile = headerName.getText();
-		/*
-		 * We need to trim next due to we have looked for the production
-		 * "IncludeFile" which may carry some white spaces.
-		 */
-		includeFile = includeFile.trim();
-		logger.debug("Include file '" + includeFile + "',");
-		performInclude(headerName.getToken().getMetaData().getSource(),
-				includeFile);
-		return WalkingAction.LEAVE_BRANCH;
-	}
+	includeFile = includeFile.trim();
+	logger.debug("Include file '" + includeFile + "',");
+	performInclude(headerName.getToken().getMetaData().getSource(), includeFile);
+	return WalkingAction.LEAVE_BRANCH;
+    }
 
-	private WalkingAction defineObjectLikeMacro(ParseTreeNode tree)
-			throws TreeException {
-		String macroName = tree.getChild(IDENTIFIER_TOKEN_NAME).getText();
-		TokenStream replacement = createReplacement(tree);
-		definedMacros.define(macroName, replacement);
-		return WalkingAction.LEAVE_BRANCH;
-	}
+    private WalkingAction defineObjectLikeMacro(ParseTreeNode tree) throws TreeException {
+	String macroName = tree.getChild(IDENTIFIER_TOKEN_NAME).getText();
+	TokenStream replacement = createReplacement(tree);
+	definedMacros.define(macroName, replacement);
+	return WalkingAction.LEAVE_BRANCH;
+    }
 
-	private WalkingAction defineFunctionLikeMacro(ParseTreeNode tree)
-			throws TreeException {
-		String macroName = tree.getChild(IDENTIFIER_TOKEN_NAME).getText();
-		final List<String> parameters = new ArrayList<String>();
-		ParseTreeNode parameterList = tree.getChild("identifier-list");
-		TreeVisitor<ParseTreeNode> visitor = new TreeVisitor<ParseTreeNode>() {
-			@Override
-			public WalkingAction visit(ParseTreeNode tree) {
-				Token token = tree.getToken();
-				if (token != null) {
-					if (IDENTIFIER_TOKEN_NAME.equals(token.getName())) {
-						parameters.add(token.getText());
-					} else if ("OptionalParameters".equals(token.getName())) {
-						parameters.add("...");
-					}
-				}
-				return null;
-			}
-		};
-		TreeWalker.walk(visitor, parameterList);
-		boolean optionalParameters = parameters.contains("...");
-		if (optionalParameters) {
-			parameters.remove("...");
+    private WalkingAction defineFunctionLikeMacro(ParseTreeNode tree) throws TreeException {
+	String macroName = tree.getChild(IDENTIFIER_TOKEN_NAME).getText();
+	final List<String> parameters = new ArrayList<String>();
+	ParseTreeNode parameterList = tree.getChild("identifier-list");
+	TreeVisitor<ParseTreeNode> visitor = new TreeVisitor<ParseTreeNode>() {
+	    @Override
+	    public WalkingAction visit(ParseTreeNode tree) {
+		Token token = tree.getToken();
+		if (token != null) {
+		    if (IDENTIFIER_TOKEN_NAME.equals(token.getName())) {
+			parameters.add(token.getText());
+		    } else if ("OptionalParameters".equals(token.getName())) {
+			parameters.add("...");
+		    }
 		}
-		TokenStream replacement = createReplacement(tree);
-		Macro macro = new Macro(macroName, replacement, parameters,
-				optionalParameters);
-		definedMacros.define(macro);
-		return WalkingAction.LEAVE_BRANCH;
+		return null;
+	    }
+	};
+	TreeWalker.walk(visitor, parameterList);
+	boolean optionalParameters = parameters.contains("...");
+	if (optionalParameters) {
+	    parameters.remove("...");
 	}
+	TokenStream replacement = createReplacement(tree);
+	Macro macro = new Macro(macroName, replacement, parameters, optionalParameters);
+	definedMacros.define(macro);
+	return WalkingAction.LEAVE_BRANCH;
+    }
 
-	private TokenStream createReplacement(ParseTreeNode defineStatement)
-			throws TreeException {
-		final TokenStream replacement = new TokenStream();
-		/*
-		 * Check for relevant white spaces...
-		 */
-		List<ParseTreeNode> defineChildren = defineStatement.getChildren();
-		int startIndex;
-		if (defineStatement.hasChild("RPAREN")) {
-			ParseTreeNode rparenToken = defineStatement.getChild("RPAREN");
-			startIndex = defineChildren.indexOf(rparenToken) + 1;
-		} else {
-			ParseTreeNode identifierToken = defineStatement
-					.getChild(IDENTIFIER_TOKEN_NAME);
-			startIndex = defineChildren.indexOf(identifierToken) + 1;
-		}
-		boolean skipedWhiteSpace = false;
-		for (int i = startIndex; i < defineChildren.size(); i++) {
-			ParseTreeNode child = defineChildren.get(i);
-			if (child.getName().equals("replacement-list")) {
-				break;
-			}
-			Token token = child.getToken();
-			if (token.getName().equals("LineTerminator")) {
-				break;
-			}
-			if (token.getName().equals("WhiteSpace") && (!skipedWhiteSpace)) {
-				skipedWhiteSpace = true;
-				continue;
-			}
-			if (token.getName().equals("LineConcatenation")) {
-				replacement.add(new Token("LineTerminator", "\n",
-						Visibility.HIDDEN, token.getMetaData()));
-			} else {
-				replacement.add(token);
-			}
-		}
-		/*
-		 * Get replacement list.
-		 */
-		TreeVisitor<ParseTreeNode> visitor = new TreeVisitor<ParseTreeNode>() {
-			@Override
-			public WalkingAction visit(ParseTreeNode tree) {
-				Token token = tree.getToken();
-				if (token != null) {
-					if ((!"WhiteSpace".equals(token.getName()))
-							|| (replacement.size() > 0)) {
-						replacement.add(token);
-					}
-				}
-				return WalkingAction.PROCEED;
-			}
-		};
-		ParseTreeNode replacementList = defineStatement
-				.getChild("replacement-list");
-		TreeWalker.walk(visitor, replacementList);
-		return replacement;
-	}
-
-	/**
-	 * This method performs the actual include.
-	 * 
-	 * @param source
-	 * @param includeFile
-	 * @throws PreprocessorException
+    private TokenStream createReplacement(ParseTreeNode defineStatement) throws TreeException {
+	final TokenStream replacement = new TokenStream();
+	/*
+	 * Check for relevant white spaces...
 	 */
-	private void performInclude(SourceCodeLocation source, String includeFile)
-			throws PreprocessorException {
-		if (nestingDepth == C11Preprocessor.getNestingLimit()) {
-			throw new PreprocessorException("Nesting limit for #include of "
-					+ C11Preprocessor.getNestingLimit() + "is not sufficient!");
-		}
-		boolean includeFileDirectory = isFileDirectoryInclude(includeFile);
-		includeFile = includeFile.substring(1, includeFile.length() - 1);
-		if (includeFileDirectory) {
-			SourceCodeLocation includeSource = source
-					.newRelativeSource(includeFile);
-			if (includeFile(includeSource)) {
-				return;
-			}
-		}
-		for (File directory : includeDirectories.getDirectories()) {
-			if (includeFile(new SourceFileLocation(directory, includeFile))) {
-				return;
-			}
-		}
+	List<ParseTreeNode> defineChildren = defineStatement.getChildren();
+	int startIndex;
+	if (defineStatement.hasChild("RPAREN")) {
+	    ParseTreeNode rparenToken = defineStatement.getChild("RPAREN");
+	    startIndex = defineChildren.indexOf(rparenToken) + 1;
+	} else {
+	    ParseTreeNode identifierToken = defineStatement.getChild(IDENTIFIER_TOKEN_NAME);
+	    startIndex = defineChildren.indexOf(identifierToken) + 1;
 	}
-
-	/**
-	 * Performs an include for a given source.
-	 * 
-	 * @param includeSource
-	 * @throws PreprocessorException
-	 */
-	private boolean includeFile(SourceCodeLocation includeSource)
-			throws PreprocessorException {
-		try {
-			if (!includeSource.isAvailable()) {
-				return false;
-			}
-			// read to be included source...
-			SourceCode sourceCode = includeSource.getSourceCode();
-			// we need to process this source, too, before we can
-			// include it...
-			SourceCode processedSourceCode = new C11Preprocessor(
-					includeDirectories, definedMacros, nestingDepth + 1)
-					.process(sourceCode);
-			// we actually do the including...
-			this.sourceCode.addSourceCode(processedSourceCode);
-			return true;
-		} catch (IOException e) {
-			throw new PreprocessorException("Could not include file '"
-					+ includeSource.getHumanReadableLocationString() + "'!", e);
-		}
+	boolean skipedWhiteSpace = false;
+	for (int i = startIndex; i < defineChildren.size(); i++) {
+	    ParseTreeNode child = defineChildren.get(i);
+	    if (child.getName().equals("replacement-list")) {
+		break;
+	    }
+	    Token token = child.getToken();
+	    if (token.getName().equals("LineTerminator")) {
+		break;
+	    }
+	    if (token.getName().equals("WhiteSpace") && (!skipedWhiteSpace)) {
+		skipedWhiteSpace = true;
+		continue;
+	    }
+	    if (token.getName().equals("LineConcatenation")) {
+		replacement.add(new Token("LineTerminator", "\n", Visibility.HIDDEN, token.getMetaData()));
+	    } else {
+		replacement.add(token);
+	    }
 	}
-
-	/**
-	 * Checks whether an include file is a local directory include or a system
-	 * include.
-	 * 
-	 * @param includeFile
-	 *            is the file string with greater and smaller than signs or
-	 *            double quotes. It is checked for the delimiting signs.
-	 * @return True is returned if it is a local include file.
+	/*
+	 * Get replacement list.
 	 */
-	private boolean isFileDirectoryInclude(String includeFile) {
-		if (includeFile.startsWith("\"") && includeFile.endsWith("\"")) {
-			return true;
+	TreeVisitor<ParseTreeNode> visitor = new TreeVisitor<ParseTreeNode>() {
+	    @Override
+	    public WalkingAction visit(ParseTreeNode tree) {
+		Token token = tree.getToken();
+		if (token != null) {
+		    if ((!"WhiteSpace".equals(token.getName())) || (replacement.size() > 0)) {
+			replacement.add(token);
+		    }
 		}
+		return WalkingAction.PROCEED;
+	    }
+	};
+	ParseTreeNode replacementList = defineStatement.getChild("replacement-list");
+	TreeWalker.walk(visitor, replacementList);
+	return replacement;
+    }
+
+    /**
+     * This method performs the actual include.
+     * 
+     * @param source
+     * @param includeFile
+     * @throws PreprocessorException
+     */
+    private void performInclude(SourceCodeLocation source, String includeFile) throws PreprocessorException {
+	if (nestingDepth == C11Preprocessor.getNestingLimit()) {
+	    throw new PreprocessorException(
+		    "Nesting limit for #include of " + C11Preprocessor.getNestingLimit() + "is not sufficient!");
+	}
+	boolean includeFileDirectory = isFileDirectoryInclude(includeFile);
+	includeFile = includeFile.substring(1, includeFile.length() - 1);
+	if (includeFileDirectory) {
+	    SourceCodeLocation includeSource = source.newRelativeSource(includeFile);
+	    if (includeFile(includeSource)) {
+		return;
+	    }
+	}
+	for (File directory : includeDirectories.getDirectories()) {
+	    if (includeFile(new SourceFileLocation(directory, includeFile))) {
+		return;
+	    }
+	}
+    }
+
+    /**
+     * Performs an include for a given source.
+     * 
+     * @param includeSource
+     * @throws PreprocessorException
+     */
+    private boolean includeFile(SourceCodeLocation includeSource) throws PreprocessorException {
+	try {
+	    if (!includeSource.isAvailable()) {
 		return false;
+	    }
+	    // read to be included source...
+	    SourceCode sourceCode = includeSource.getSourceCode();
+	    // we need to process this source, too, before we can
+	    // include it...
+	    SourceCode processedSourceCode = new C11Preprocessor(includeDirectories, definedMacros, nestingDepth + 1)
+		    .process(sourceCode);
+	    // we actually do the including...
+	    this.sourceCode.addSourceCode(processedSourceCode);
+	    return true;
+	} catch (IOException e) {
+	    throw new PreprocessorException(
+		    "Could not include file '" + includeSource.getHumanReadableLocationString() + "'!", e);
 	}
+    }
 
-	/**
-	 * This method replaces the macros in a given
-	 * 
-	 * @param text
-	 * @return
-	 * @throws PreprocessorException
-	 */
-	private boolean replaceMacroIfNeeded(TokenStream tokenStream, int position)
-			throws PreprocessorException {
-		for (int i = position; i < tokenStream.size(); i++) {
-			Token token = tokenStream.get(i);
-			String text = token.getText();
-			if (definedMacros.isDefined(text)) {
-				Macro macro = definedMacros.getMacro(text);
-				/*
-				 * We found a matching macro.
-				 */
-				if (macro.getParameters().size() == 0) {
-					/*
-					 * Process an object like macro.
-					 */
-					replaceObjectLikeMacro(tokenStream, i, macro);
-					return true;
-				} else {
-					/*
-					 * Process an function like macro.
-					 */
-					return replaceFunctionLikeMacro(tokenStream, i, macro);
-				}
-			}
-		}
-		return true;
+    /**
+     * Checks whether an include file is a local directory include or a system
+     * include.
+     * 
+     * @param includeFile
+     *            is the file string with greater and smaller than signs or
+     *            double quotes. It is checked for the delimiting signs.
+     * @return True is returned if it is a local include file.
+     */
+    private boolean isFileDirectoryInclude(String includeFile) {
+	if (includeFile.startsWith("\"") && includeFile.endsWith("\"")) {
+	    return true;
 	}
+	return false;
+    }
 
-	/**
-	 * <p>
-	 * This replacement is very simple. The actual token of the macro name is
-	 * replaced with the replacement list of a macro without parameters. Even if
-	 * a parameter list would follow, this is ignored and only the macro name is
-	 * relevant.
-	 * </p>
-	 * <p>
-	 * This behavior was checked with gpp.
-	 * </p>
-	 * 
-	 * @param tokenStream
-	 * @param tokenId
-	 * @param macro
-	 * @throws PreprocessorException
-	 */
-	private void replaceObjectLikeMacro(TokenStream tokenStream, int tokenId,
-			Macro macro) throws PreprocessorException {
-		Token token = tokenStream.get(tokenId);
-		TokenStream definition = macro.getReplacement();
-		TokenStream replacement = new TokenStream();
-		// Add all tokens before macro
-		for (int i = 0; i < tokenId; i++) {
-			replacement.add(tokenStream.get(i));
+    /**
+     * This method replaces the macros in a given
+     * 
+     * @param text
+     * @return
+     * @throws PreprocessorException
+     */
+    private boolean replaceMacroIfNeeded(TokenStream tokenStream, int position) throws PreprocessorException {
+	for (int i = position; i < tokenStream.size(); i++) {
+	    Token token = tokenStream.get(i);
+	    String text = token.getText();
+	    if (definedMacros.isDefined(text)) {
+		Macro macro = definedMacros.getMacro(text);
+		/*
+		 * We found a matching macro.
+		 */
+		if (macro.getParameters().size() == 0) {
+		    /*
+		     * Process an object like macro.
+		     */
+		    replaceObjectLikeMacro(tokenStream, i, macro);
+		    return true;
+		} else {
+		    /*
+		     * Process an function like macro.
+		     */
+		    return replaceFunctionLikeMacro(tokenStream, i, macro);
 		}
-		// Add replacement instead of macro name
-		for (Token defToken : definition) {
-			Token replacementToken = new Token(defToken.getName(),
-					defToken.getText(), defToken.getVisibility(),
-					token.getMetaData());
-			replacement.add(replacementToken);
-		}
-		// Add all tokens behind macro
-		for (int i = tokenId + 1; i < tokenStream.size(); i++) {
-			replacement.add(tokenStream.get(i));
-		}
-		replaceAllMacros(replacement);
-		tokenStream.clear();
-		tokenStream.addAll(replacement);
+	    }
 	}
+	return true;
+    }
 
-	private boolean replaceFunctionLikeMacro(TokenStream tokenStream,
-			int tokenId, Macro macro) throws PreprocessorException {
-		ReplacementParameterResult parameterReplacements = ReplacementParameterResult
-				.extractParameterReplacements(tokenStream, tokenId);
-		if (parameterReplacements == null) {
-			return false;
-		}
-		TokenStream replacement = new TokenStream();
-		// Add all tokens before macro
-		for (int i = 0; i < tokenId; i++) {
-			replacement.add(tokenStream.get(i));
-		}
-		// Add replacement instead of macro name
-		Token token = tokenStream.get(tokenId);
-		List<String> parameters = macro.getParameters();
-		TokenStream replacementDefinition = macro.getReplacement();
-		for (Token defToken : replacementDefinition) {
-			int foundParameterId = findParameterId(parameters, defToken);
-			if (foundParameterId >= 0) {
-				replacement.addAll(parameterReplacements
-						.getReplacement(foundParameterId));
-			} else {
-				Token replacementToken = new Token(defToken.getName(),
-						defToken.getText(), defToken.getVisibility(),
-						token.getMetaData());
-				replacement.add(replacementToken);
-			}
-		}
-		// Add all tokens behind macro
-		for (int i = tokenId + parameterReplacements.getTokensToSkip() + 1; i < tokenStream
-				.size(); i++) {
-			replacement.add(tokenStream.get(i));
-		}
-		replaceAllMacros(replacement);
-		tokenStream.clear();
-		tokenStream.addAll(replacement);
-		return true;
+    /**
+     * <p>
+     * This replacement is very simple. The actual token of the macro name is
+     * replaced with the replacement list of a macro without parameters. Even if
+     * a parameter list would follow, this is ignored and only the macro name is
+     * relevant.
+     * </p>
+     * <p>
+     * This behavior was checked with gpp.
+     * </p>
+     * 
+     * @param tokenStream
+     * @param tokenId
+     * @param macro
+     * @throws PreprocessorException
+     */
+    private void replaceObjectLikeMacro(TokenStream tokenStream, int tokenId, Macro macro)
+	    throws PreprocessorException {
+	Token token = tokenStream.get(tokenId);
+	TokenStream definition = macro.getReplacement();
+	TokenStream replacement = new TokenStream();
+	// Add all tokens before macro
+	for (int i = 0; i < tokenId; i++) {
+	    replacement.add(tokenStream.get(i));
 	}
+	// Add replacement instead of macro name
+	for (Token defToken : definition) {
+	    Token replacementToken = new Token(defToken.getName(), defToken.getText(), defToken.getVisibility(),
+		    token.getMetaData());
+	    replacement.add(replacementToken);
+	}
+	// Add all tokens behind macro
+	for (int i = tokenId + 1; i < tokenStream.size(); i++) {
+	    replacement.add(tokenStream.get(i));
+	}
+	replaceAllMacros(replacement);
+	tokenStream.clear();
+	tokenStream.addAll(replacement);
+    }
 
-	/**
-	 * Finds a parameter id for a given token. The text of the token is
-	 * interpreted as macro name.
-	 * 
-	 * @return <0 is returned if the token is not a parameter name.
-	 * 
-	 */
-	private static int findParameterId(List<String> parameters, Token token) {
-		int foundParameterId = -1;
-		for (int parameterId = 0; parameterId < parameters.size(); parameterId++) {
-			if (token.getText().equals(parameters.get(parameterId))) {
-				foundParameterId = parameterId;
-			}
-		}
-		return foundParameterId;
+    private boolean replaceFunctionLikeMacro(TokenStream tokenStream, int tokenId, Macro macro)
+	    throws PreprocessorException {
+	ReplacementParameterResult parameterReplacements = ReplacementParameterResult
+		.extractParameterReplacements(tokenStream, tokenId);
+	if (parameterReplacements == null) {
+	    return false;
 	}
+	TokenStream replacement = new TokenStream();
+	// Add all tokens before macro
+	for (int i = 0; i < tokenId; i++) {
+	    replacement.add(tokenStream.get(i));
+	}
+	// Add replacement instead of macro name
+	Token token = tokenStream.get(tokenId);
+	List<String> parameters = macro.getParameters();
+	TokenStream replacementDefinition = macro.getReplacement();
+	for (Token defToken : replacementDefinition) {
+	    int foundParameterId = findParameterId(parameters, defToken);
+	    if (foundParameterId >= 0) {
+		replacement.addAll(parameterReplacements.getReplacement(foundParameterId));
+	    } else {
+		Token replacementToken = new Token(defToken.getName(), defToken.getText(), defToken.getVisibility(),
+			token.getMetaData());
+		replacement.add(replacementToken);
+	    }
+	}
+	// Add all tokens behind macro
+	for (int i = tokenId + parameterReplacements.getTokensToSkip() + 1; i < tokenStream.size(); i++) {
+	    replacement.add(tokenStream.get(i));
+	}
+	replaceAllMacros(replacement);
+	tokenStream.clear();
+	tokenStream.addAll(replacement);
+	return true;
+    }
+
+    /**
+     * Finds a parameter id for a given token. The text of the token is
+     * interpreted as macro name.
+     * 
+     * @return <0 is returned if the token is not a parameter name.
+     * 
+     */
+    private static int findParameterId(List<String> parameters, Token token) {
+	int foundParameterId = -1;
+	for (int parameterId = 0; parameterId < parameters.size(); parameterId++) {
+	    if (token.getText().equals(parameters.get(parameterId))) {
+		foundParameterId = parameterId;
+	    }
+	}
+	return foundParameterId;
+    }
 
 }

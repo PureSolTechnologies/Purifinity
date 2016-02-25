@@ -41,7 +41,7 @@ public abstract class CodeRangeEvaluator {
      * This method returns the name of the time stamp of the evaluation. This is
      * used to track the need for a re-evaluation.
      * 
-     * @return
+     * @return A {@link Date} object is returned containing the time.
      */
     public final Date getTimeStamp() {
 	return timeStamp;
@@ -50,7 +50,7 @@ public abstract class CodeRangeEvaluator {
     /**
      * This method returns the code range which was analyzed.
      * 
-     * @return
+     * @return The {@link CodeRange} is returned.
      */
     public abstract CodeRange getCodeRange();
 
@@ -58,7 +58,7 @@ public abstract class CodeRangeEvaluator {
      * This method returns the description of the evaluator which might be
      * displayed in reports or within applications.
      * 
-     * @return
+     * @return A description {@link String} is returned.
      */
     public abstract String getDescription();
 
@@ -67,14 +67,14 @@ public abstract class CodeRangeEvaluator {
      * used for creating a report and for storing and tracking them over a
      * longer time (SPC).
      * 
-     * @return
+     * @return A {@link List} of {@link MetricValue} is returned.
      */
     public abstract List<MetricValue<?>> getResults();
 
     /**
      * This method returns the quality level after an evalutation was performed.
      * 
-     * @return
+     * @return The quality is returned as {@link SourceCodeQuality}.
      */
     public abstract SourceCodeQuality getQuality();
 
@@ -82,14 +82,14 @@ public abstract class CodeRangeEvaluator {
      * This method returns a list with quality characteristics which might be
      * evaluated by the evaluator.
      * 
-     * @return
+     * @return A {@link Set} of {@link QualityCharacteristic} is returned.
      */
     public abstract Set<QualityCharacteristic> getEvaluatedQualityCharacteristics();
 
     /**
      * This method returns the analysis run which is base for the evaluation.
      * 
-     * @return
+     * @return A {@link AnalysisRun} object is returned.
      */
     public abstract AnalysisRun getAnalysisRun();
 

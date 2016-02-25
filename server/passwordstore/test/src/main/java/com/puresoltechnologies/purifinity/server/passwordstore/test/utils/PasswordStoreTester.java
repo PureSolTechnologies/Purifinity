@@ -28,6 +28,7 @@ public class PasswordStoreTester {
      * </ol>
      * 
      * @throws SQLException
+     *             is thrown in case of database issues.
      */
     public static void cleanupDatabase() throws SQLException {
 	try (Connection connection = HBaseHelper.connect()) {
@@ -47,8 +48,9 @@ public class PasswordStoreTester {
      * 
      * @param connection
      *            is the session opened to the keyspace
-     *            {@link PasswordStoreKeyspace#NAME}.
+     *            {@link PasswordStoreBean#PASSWORD_TABLE_NAME}.
      * @throws SQLException
+     *             is thrown in case of database issues.
      */
     public static final void cleanupDatabase(Connection connection) throws SQLException {
 	try (Statement selectEmailStatement = connection.createStatement();

@@ -34,11 +34,12 @@ public class AbstractRestClient<GenericRestInterface> implements AutoCloseable {
      * interface class is provided here to bind the client to the correct
      * implementation.
      * 
+     * @param uri
+     *            is the target URI.
      * @param restInterface
      *            is the interface class with the specification annotations.
      */
-    protected AbstractRestClient(URI uri,
-	    Class<GenericRestInterface> restInterface) {
+    protected AbstractRestClient(URI uri, Class<GenericRestInterface> restInterface) {
 	ResteasyClientBuilder resteasyClientBuilder = new ResteasyClientBuilder();
 	resteasyClientBuilder.register(JacksonJsonProvider.class);
 	client = resteasyClientBuilder.build();

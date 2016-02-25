@@ -23,13 +23,10 @@ public class EventLoggerEvents {
     /**
      * Event for user account creation.
      * 
-     * @param userId
-     * @param email
-     * @return
+     * @return The {@link Event} is returned.
      */
     public static Event createStartEvent() {
-	return new Event(COMPONENT, 0x01, EventType.SYSTEM, EventSeverity.INFO,
-		"EventLogger was started up.");
+	return new Event(COMPONENT, 0x01, EventType.SYSTEM, EventSeverity.INFO, "EventLogger was started up.");
     }
 
     public static Event createStopEvent() {

@@ -30,11 +30,13 @@ public interface AuthService {
      * has the correct role.
      * 
      * @param email
-     *            is the username of the user to be authenticated.
+     *            is the {@link EmailAddress} of the user to be authenticated.
      * @param authToken
-     *            is the token which was
+     *            is the {@link UUID} token.
      * @param rolesAllowed
-     * @return
+     *            is a {@link Set} of role names.
+     * @return <code>true</code> is returned if the user was authorized.
+     *         <code>false</code> is returned otherwise.
      */
     public boolean isAuthorized(EmailAddress email, UUID authToken, Set<String> rolesAllowed);
 

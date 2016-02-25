@@ -37,9 +37,14 @@ public class AnalysisStoreUtils {
     /**
      * This method write the project analysis settings into database.
      * 
+     * @param projectId
+     *            is the id of the project.
      * @param runId
+     *            is the id of the analysis run.
      * @param fileSearchConfiguration
+     *            is the configuration of the file search.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store issues.
      */
     public void writeAnalysisRunSettings(String projectId, long runId, FileSearchConfiguration fileSearchConfiguration)
 	    throws AnalysisStoreException {
@@ -74,8 +79,11 @@ public class AnalysisStoreUtils {
      * This method removes Analysis Run Settings from Cassandra.
      * 
      * @param projectId
+     *            is the id of the project.
      * @param runId
+     *            is the id of the analysis run.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store issues.
      */
     public void removeAnalysisRunSettings(String projectId, long runId) throws AnalysisStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement(

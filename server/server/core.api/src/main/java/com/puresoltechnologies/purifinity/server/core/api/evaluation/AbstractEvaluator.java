@@ -112,15 +112,20 @@ public abstract class AbstractEvaluator implements Evaluator {
      * This method is used to run an evaluation of an analyzed file. This method
      * is called by the run method.
      * 
+     * @param analysisRun
+     *            is the {@link AnalysisRun} for which the evaluation is to be
+     *            run.
      * @param analysis
      *            is the {@link CodeAnalysis} of the file which is to be
      *            evaluated.
+     * @return The results are returned as {@link FileMetrics} object.
      * @throws InterruptedException
      *             is thrown if the evaluation was interrupted.
      * @throws UniversalSyntaxTreeEvaluationException
      *             is thrown if the evaluation was aborted by an exceptional
      *             event.
      * @throws EvaluationStoreException
+     *             is thrown in cases of issues within evaluation store.
      */
     abstract protected FileMetrics processFile(AnalysisRun analysisRun, CodeAnalysis analysis)
 	    throws InterruptedException, UniversalSyntaxTreeEvaluationException, EvaluationStoreException;
@@ -129,12 +134,17 @@ public abstract class AbstractEvaluator implements Evaluator {
      * This method is used to run an evaluation of an entire directory. This
      * method is called by the run method.
      * 
+     * @param analysisRun
+     *            is the {@link AnalysisRun} for which the evaluation is to be
+     *            run.
      * @param directory
-     *            is the {@link HashIdFileTree} object of the directory to be
+     *            is the {@link AnalysisFileTree} object of the directory to be
      *            evaluated.
+     * @return The results are returned as {@link DirectoryMetrics} object.
      * @throws InterruptedException
      *             is thrown if the evaluation was interrupted.
      * @throws EvaluationStoreException
+     *             is thrown in cases of issues within evaluation store.
      */
     abstract protected DirectoryMetrics processDirectory(AnalysisRun analysisRun, AnalysisFileTree directory)
 	    throws InterruptedException, EvaluationStoreException;
@@ -142,10 +152,19 @@ public abstract class AbstractEvaluator implements Evaluator {
     /**
      * This method is used to run an evaluation of the entire project. This
      * method is called by the run method.
-     * 
+     *
+     * @param analysisRun
+     *            is the {@link AnalysisRun} for which the evaluation is to be
+     *            run.
+     * @param enableReevaluation
+     *            is set to <code>true</code> if all evaluations are to be
+     *            calculated again, even if results already exist.
+     *            <code>false</code> is to be set otherwise.
+     * @return The results are returned as {@link DirectoryMetrics} object.
      * @throws InterruptedException
      *             is thrown if the evaluation was interrupted.
      * @throws EvaluationStoreException
+     *             is thrown in cases of issues within evaluation store.
      */
     abstract protected DirectoryMetrics processProject(AnalysisRun analysisRun, boolean enableReevaluation)
 	    throws InterruptedException, EvaluationStoreException;
@@ -205,7 +224,7 @@ public abstract class AbstractEvaluator implements Evaluator {
 	    // Files was not analyzed, so we cannot do something here...
 	    return;
 	}
-	List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyses(hashId);
+	List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyzes(hashId);
 	for (CodeAnalysis fileAnalysis : fileAnalyses) {
 	    if ((!hasFileResults(hashId)) || (enableReevaluation)) {
 		AnalysisInformation analysisInformation = fileAnalysis.getAnalysisInformation();

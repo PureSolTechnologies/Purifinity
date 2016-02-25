@@ -25,19 +25,17 @@ public class AccountManagerEvents {
     /**
      * Event for user account creation.
      * 
-     * @param userId
      * @param email
-     * @return
+     *            is the {@link EmailAddress} of the user.
+     * @return The {@link Event} is returned.
      */
     public static Event createAccountCreationEvent(EmailAddress email) {
-	return new Event(COMPONENT, 0x01, EventType.USER_ACTION,
-		EventSeverity.INFO, "User account created for '" + email + "'.")
-		.setUserEmail(email);
+	return new Event(COMPONENT, 0x01, EventType.USER_ACTION, EventSeverity.INFO,
+		"User account created for '" + email + "'.").setUserEmail(email);
     }
 
     public static Event alterAccountCreationEvent(EmailAddress email) {
-	return new Event(COMPONENT, 0x01, EventType.USER_ACTION,
-		EventSeverity.INFO, "User account altered for '" + email + "'.")
-		.setUserEmail(email);
+	return new Event(COMPONENT, 0x01, EventType.USER_ACTION, EventSeverity.INFO,
+		"User account altered for '" + email + "'.").setUserEmail(email);
     }
 }

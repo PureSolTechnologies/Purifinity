@@ -19,17 +19,17 @@ import org.slf4j.LoggerFactory;
  * the header. This header information are need to let Angular JS and other
  * services access this REST interfaces from other domains and ports.
  * 
- * @see StackOverflow:
- *      http://stackoverflow.com/questions/23450494/how-to-enable-cross-domain
- *      -requests -on-jax-rs-web-services
+ * StackOverflow:
+ * http://stackoverflow.com/questions/23450494/how-to-enable-cross-domain
+ * -requests -on-jax-rs-web-services
+ * 
  * @author Rick-Rainer Ludwig
  *
  */
 @Provider
 public class CORSFilter implements ContainerResponseFilter {
 
-    private static final Logger logger = LoggerFactory
-	    .getLogger(CORSFilter.class);
+    private static final Logger logger = LoggerFactory.getLogger(CORSFilter.class);
 
     @PostConstruct
     public void postConstruct() {
@@ -42,8 +42,8 @@ public class CORSFilter implements ContainerResponseFilter {
     }
 
     @Override
-    public void filter(ContainerRequestContext requestContext,
-	    ContainerResponseContext responseContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
+	    throws IOException {
 	MultivaluedMap<String, Object> headers = responseContext.getHeaders();
 	// Allow from all origins...
 	if (!headers.containsKey("Access-Control-Allow-Origin")) {
@@ -51,8 +51,7 @@ public class CORSFilter implements ContainerResponseFilter {
 	}
 	// Allow changing the following headers...
 	if (!headers.containsKey("Access-Control-Allow-Headers")) {
-	    headers.add("Access-Control-Allow-Headers",
-		    "Content-Type, auth-id, auth-token");
+	    headers.add("Access-Control-Allow-Headers", "Content-Type, auth-id, auth-token");
 	}
 	// Allow credentials...
 	if (!headers.containsKey("Access-Control-Allow-Credentials")) {
@@ -60,8 +59,7 @@ public class CORSFilter implements ContainerResponseFilter {
 	}
 	// Allow methods...
 	if (!headers.containsKey("Access-Control-Allow-Methods")) {
-	    headers.add("Access-Control-Allow-Methods",
-		    "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+	    headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 	}
 	// Max 14 days...
 	if (!headers.containsKey("Access-Control-Max-Age")) {

@@ -40,16 +40,15 @@ public interface EvaluatorStore {
     /**
      * This method stores the results for a single file.
      * 
-     * @param hashId
-     *            is the id of the file the results belong to.
-     * @param evaluator
-     *            is the evaluator which produced the results.
+     * @param analysisRun
+     *            is the analysis.
      * @param codeAnalysis
      *            is the analysis which was used as basis for the evaluation.
-     * @param results
-     *            is the {@link FileMetrics} object containing the results to be
-     *            stored.
+     * @param metrics
+     *            is the {@link GenericFileMetrics} object containing the
+     *            results to be stored.
      * @throws EvaluationStoreException
+     *             is thrown in case of issue in evaluation store.
      */
     public void storeFileResults(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, GenericFileMetrics metrics)
 	    throws EvaluationStoreException;
@@ -57,12 +56,16 @@ public interface EvaluatorStore {
     /**
      * This method stores the results for a single directory.
      * 
-     * @param hashId
-     *            is the id of the directory the results belong to.
-     * @param results
-     *            is the {@link DirectoryMetrics} object containing the results
-     *            to be stored.
+     * @param analysisRun
+     *            is the {@link AnalysisRun} object of the project the results
+     *            belong to.
+     * @param directory
+     *            is the {@link AnalysisFileTree} object of the directory.
+     * @param metrics
+     *            is the {@link GenericDirectoryMetrics} object containing the
+     *            results to be stored.
      * @throws EvaluationStoreException
+     *             is thrown in case of issue in evaluation store.
      */
     public void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    GenericDirectoryMetrics metrics) throws EvaluationStoreException;
@@ -73,10 +76,13 @@ public interface EvaluatorStore {
      * @param analysisRun
      *            is the {@link AnalysisRun} object of the project the results
      *            belong to.
-     * @param results
-     *            is the {@link DirectoryMetrics} object containing the results
-     *            to be stored.
+     * @param directory
+     *            is the {@link AnalysisFileTree} object of the directory.
+     * @param metrics
+     *            is the {@link GenericProjectMetrics} object containing the
+     *            results to be stored.
      * @throws EvaluationStoreException
+     *             is thrown in case of issue in evaluation store.
      */
     public void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directory, GenericProjectMetrics metrics)
 	    throws EvaluationStoreException;
@@ -86,9 +92,12 @@ public interface EvaluatorStore {
      * 
      * @param hashId
      *            is the id of the file to be read.
+     * @param evaluatorId
+     *            is the id of the evaluator.
      * @return A {@link FileMetrics} object is returned containing the results.
      *         <code>null</code> is returned if no results are available.
      * @throws EvaluationStoreException
+     *             is thrown in case of issue in evaluation store.
      */
     public GenericFileMetrics readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException;
 
@@ -97,10 +106,13 @@ public interface EvaluatorStore {
      * 
      * @param hashId
      *            specifies the directory.
+     * @param evaluatorId
+     *            is the id of the evaluator.
      * @return A {@link DirectoryMetrics} object is returned containing the
      *         results. <code>null</code> is returned if no results are
      *         available.
      * @throws EvaluationStoreException
+     *             is thrown in case of issue in evaluation store.
      */
     public GenericDirectoryMetrics readDirectoryResults(HashId hashId, String evaluatorId)
 	    throws EvaluationStoreException;

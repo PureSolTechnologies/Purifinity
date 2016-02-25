@@ -46,13 +46,14 @@ public class AnalysisStoreFileTreeUtils {
     /**
      * This method adds a new file tree to a Analysis Run vertex.
      * 
-     * @param analysisStore
-     * @param progressObserver
-     * @param graph
+     * @param xoManager
+     *            is the {@link XOManager} to use for graph access.
      * @param fileTree
+     *            is the tree to store.
      * @param analysisRunVertex
-     * @return
+     *            is the analysis run vertex to store the file tree to.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store issues.
      */
     public void storeAndSetFileTree(XOManager xoManager, AnalysisRunFileTree fileTree,
 	    AnalysisRunVertex analysisRunVertex) throws AnalysisStoreException {
@@ -75,14 +76,15 @@ public class AnalysisStoreFileTreeUtils {
     /**
      * This method adds a new file tree node to a parent vertex.
      * 
-     * @param analysisStore
-     * @param progressObserver
-     * @param graph
+     * @param xoManager
+     *            is the {@link XOManager} to use for graph access.
      * @param fileTreeNode
+     *            is the file tree vertex of the analysis to be added.
      * @param parentVertex
-     * @param edgeLabel
-     * @return
+     *            is the parent to add the vertex to.
+     * @return A {@link FileTreeFileVertex} is returned.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store issues.
      */
     private FileTreeFileVertex addFileTreeFileVertex(XOManager xoManager, AnalysisRunFileTree fileTreeNode,
 	    FileTreeDirectoryVertex parentVertex) throws AnalysisStoreException {
@@ -114,14 +116,15 @@ public class AnalysisStoreFileTreeUtils {
     /**
      * This method adds a new file tree node to a parent vertex.
      * 
-     * @param analysisStore
-     * @param progressObserver
-     * @param graph
+     * @param xoManager
+     *            is the {@link XOManager} to use for graph access.
      * @param fileTreeNode
+     *            is the node to add.
      * @param parentVertex
-     * @param edgeLabel
-     * @return
+     *            is the parent to add the vertex to.
+     * @return A {@link FileTreeDirectoryVertex} is returned.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store issues.
      */
     private FileTreeDirectoryVertex addFileTreeDirectoryVertex(XOManager xoManager, AnalysisRunFileTree fileTreeNode,
 	    FileTreeDirectoryVertex parentVertex) throws AnalysisStoreException {
@@ -164,10 +167,11 @@ public class AnalysisStoreFileTreeUtils {
     /**
      * This method reads the analysis file tree from a analysis run.
      * 
-     * @param projectUUID
-     * @param runUUID
-     * @return
+     * @param analysisRunVertex
+     *            is the vertex of the run.
+     * @return A {@link AnalysisFileTree} is returned.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store issues.
      */
     public AnalysisFileTree createAnalysisFileTree(AnalysisRunVertex analysisRunVertex) throws AnalysisStoreException {
 	FileTreeRootVertex rootDirectory = analysisRunVertex.getRootDirectory();
@@ -181,10 +185,13 @@ public class AnalysisStoreFileTreeUtils {
      * This method creates a new {@link AnalysisFileTree} object out of a single
      * file tree node.
      * 
-     * @param fileTreeVertex
+     * @param fileTreeDirectory
+     *            is the node to create the {@link AnalysisFileTree} from.
      * @param parent
-     * @return
+     *            is the parent.
+     * @return The {@link AnalysisFileTree} is returned.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store issues.
      */
     private AnalysisFileTree createAnalysisFileTreeNode(FileTreeDirectoryVertex fileTreeDirectory,
 	    AnalysisFileTree parent) throws AnalysisStoreException {
@@ -215,10 +222,13 @@ public class AnalysisStoreFileTreeUtils {
      * This method creates a new {@link AnalysisFileTree} object out of a single
      * file tree node.
      * 
-     * @param fileTreeVertex
+     * @param fileTreeFile
+     *            is the {@link FileTreeFileVertex} to create tree node for.
      * @param parent
-     * @return
+     *            is the parent.
+     * @return The {@link AnalysisFileTree} is returned.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store issues.
      */
     private AnalysisFileTree createAnalysisFileTreeNode(FileTreeFileVertex fileTreeFile, AnalysisFileTree parent)
 	    throws AnalysisStoreException {
@@ -238,10 +248,11 @@ public class AnalysisStoreFileTreeUtils {
     /**
      * This method reads all analyzes which are attached to a file tree node.
      * 
-     * @param fileTreeVertex
-     * @param hash
-     * @return
+     * @param hashId
+     *            is the {@link HashId} of the file to read analyzes for.
+     * @return A {@link List} of {@link AnalysisInformation} is returned.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store issues.
      */
     private List<AnalysisInformation> readAnalyses(HashId hashId) throws AnalysisStoreException {
 	try (PreparedStatement preparedStatement = connection
@@ -274,9 +285,12 @@ public class AnalysisStoreFileTreeUtils {
      * be accompanied with a deletion of the Analsysis Run, because an Analysis
      * Run without a File Tree is meaningless.
      * 
-     * @param fileTreeVertex
+     * @param xoManager
+     *            is the {@link XOManager} to use for graph access.
+     * @param rootDirectory
      *            is the vertex of the file to be deleted.
      * @throws AnalysisStoreException
+     *             is thrown in case of analysis store issues.
      */
     public void deleteFileTree(XOManager xoManager, FileTreeDirectoryVertex rootDirectory)
 	    throws AnalysisStoreException {

@@ -28,111 +28,108 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.jobs.Purifini
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
-import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
 @Stateless
 public class AnalysisServiceBean implements AnalysisService {
 
-	@Inject
-	private Logger logger;
+    @Inject
+    private Logger logger;
 
-	@Inject
-	private EventLoggerRemote eventLogger;
+    @Inject
+    private JobOperator jobOperator;
 
-	@Inject
-	private JobOperator jobOperator;
+    @Inject
+    private AnalysisStore analysisStore;
 
-	@Inject
-	private AnalysisStore analysisStore;
+    @Inject
+    private AnalyzerServiceManager analyzerRegistration;
 
-	@Inject
-	private AnalyzerServiceManager analyzerRegistration;
+    @Override
+    public void triggerRunJob(String projectId) throws AnalysisStoreException {
+	AnalysisProjectSettings analysisProjectSettings = analysisStore.readAnalysisProjectSettings(projectId);
+	Properties jobParameters = new Properties();
+	jobParameters.setProperty("project_id", projectId);
+	jobParameters.setProperty("project_name", analysisProjectSettings.getName());
+	jobOperator.start("ProjectAnalysis", jobParameters);
+    }
 
-	@Override
-	public void triggerRunJob(String projectId) throws AnalysisStoreException {
-		AnalysisProjectSettings analysisProjectSettings = analysisStore.readAnalysisProjectSettings(projectId);
-		Properties jobParameters = new Properties();
-		jobParameters.setProperty("project_id", projectId);
-		jobParameters.setProperty("project_name", analysisProjectSettings.getName());
-		jobOperator.start("ProjectAnalysis", jobParameters);
-	}
+    @Override
+    public void abortRun(long jobId) {
+	jobOperator.stop(jobId);
+    }
 
-	@Override
-	public void abortRun(long jobId) {
-		jobOperator.stop(jobId);
-	}
-
-	/**
-	 * @return
-	 */
-	@Override
-	public PurifinityJobStates getJobStates() {
-		PurifinityJobStates states = new PurifinityJobStates(new Date());
-		try {
-			List<Long> runningExecutions = jobOperator.getRunningExecutions("ProjectAnalysis");
-			for (long jobId : runningExecutions) {
-				JobExecution jobExecution = jobOperator.getJobExecution(jobId);
-				String projectId = jobExecution.getJobParameters().getProperty("project_id");
-				String projectName = jobExecution.getJobParameters().getProperty("project_name");
-				List<StepExecution> stepExecutions = jobOperator.getStepExecutions(jobId);
-				List<JobStepState> stepStates = new ArrayList<JobStepState>();
-				for (StepExecution stepExecution : stepExecutions) {
-					if (stepExecution.getBatchStatus() == BatchStatus.STARTED) {
-						String stepName = stepExecution.getStepName();
-						long current = 0;
-						long max = 1;
-						Object persistentUserData = stepExecution.getPersistentUserData();
-						if (persistentUserData != null) {
-							if (StepInformation.class.isAssignableFrom(persistentUserData.getClass())) {
-								StepInformation stepInformation = (StepInformation) persistentUserData;
-								stepName = stepInformation.getName();
-							}
-							if (StepProgress.class.isAssignableFrom(persistentUserData.getClass())) {
-								StepProgress stepInformation = (StepProgress) persistentUserData;
-								current = stepInformation.getCurrentItem();
-								max = stepInformation.getTotalItems();
-							}
-						}
-						stepStates.add(new JobStepState(stepName, stepExecution.getBatchStatus().name(), current, max));
-					}
-				}
-				if (stepStates.size() > 0) {
-					states.addJobState(new JobState(jobId, projectId, projectName, stepStates));
-				}
+    /**
+     * @return A {@link PurifinityJobStates} object is returned containing all
+     *         states of all running jobs.
+     */
+    @Override
+    public PurifinityJobStates getJobStates() {
+	PurifinityJobStates states = new PurifinityJobStates(new Date());
+	try {
+	    List<Long> runningExecutions = jobOperator.getRunningExecutions("ProjectAnalysis");
+	    for (long jobId : runningExecutions) {
+		JobExecution jobExecution = jobOperator.getJobExecution(jobId);
+		String projectId = jobExecution.getJobParameters().getProperty("project_id");
+		String projectName = jobExecution.getJobParameters().getProperty("project_name");
+		List<StepExecution> stepExecutions = jobOperator.getStepExecutions(jobId);
+		List<JobStepState> stepStates = new ArrayList<JobStepState>();
+		for (StepExecution stepExecution : stepExecutions) {
+		    if (stepExecution.getBatchStatus() == BatchStatus.STARTED) {
+			String stepName = stepExecution.getStepName();
+			long current = 0;
+			long max = 1;
+			Object persistentUserData = stepExecution.getPersistentUserData();
+			if (persistentUserData != null) {
+			    if (StepInformation.class.isAssignableFrom(persistentUserData.getClass())) {
+				StepInformation stepInformation = (StepInformation) persistentUserData;
+				stepName = stepInformation.getName();
+			    }
+			    if (StepProgress.class.isAssignableFrom(persistentUserData.getClass())) {
+				StepProgress stepInformation = (StepProgress) persistentUserData;
+				current = stepInformation.getCurrentItem();
+				max = stepInformation.getTotalItems();
+			    }
 			}
-		} catch (NoSuchJobException e) {
-			logger.debug("Job 'ProjectAnalysis' does not exist. Maybe, it is not loaded, yet.");
+			stepStates.add(new JobStepState(stepName, stepExecution.getBatchStatus().name(), current, max));
+		    }
 		}
-		return states;
-	}
-
-	@Override
-	public Collection<AnalyzerServiceInformation> getAnalyzers() {
-		return analyzerRegistration.getServices();
-	}
-
-	@Override
-	public AnalyzerServiceInformation getAnalyzer(String analyzerId) {
-		for (AnalyzerServiceInformation information : analyzerRegistration.getServices()) {
-			if (information.getId().equals(analyzerId)) {
-				return information;
-			}
+		if (stepStates.size() > 0) {
+		    states.addJobState(new JobState(jobId, projectId, projectName, stepStates));
 		}
-		return null;
+	    }
+	} catch (NoSuchJobException e) {
+	    logger.debug("Job 'ProjectAnalysis' does not exist. Maybe, it is not loaded, yet.");
 	}
+	return states;
+    }
 
-	@Override
-	public List<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
-		return analyzerRegistration.getInstanceById(analyzerId).getConfigurationParameters();
-	}
+    @Override
+    public Collection<AnalyzerServiceInformation> getAnalyzers() {
+	return analyzerRegistration.getServices();
+    }
 
-	@Override
-	public boolean isEnabled(String analyzerId) {
-		return analyzerRegistration.isActive(analyzerId);
+    @Override
+    public AnalyzerServiceInformation getAnalyzer(String analyzerId) {
+	for (AnalyzerServiceInformation information : analyzerRegistration.getServices()) {
+	    if (information.getId().equals(analyzerId)) {
+		return information;
+	    }
 	}
+	return null;
+    }
 
-	@Override
-	public void setActive(String analyzerId, boolean active) {
-		analyzerRegistration.setActive(analyzerId, active);
-	}
+    @Override
+    public List<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
+	return analyzerRegistration.getInstanceById(analyzerId).getConfigurationParameters();
+    }
+
+    @Override
+    public boolean isEnabled(String analyzerId) {
+	return analyzerRegistration.isActive(analyzerId);
+    }
+
+    @Override
+    public void setActive(String analyzerId, boolean active) {
+	analyzerRegistration.setActive(analyzerId, active);
+    }
 }

@@ -137,7 +137,7 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
 
     @Override
     @Lock(LockType.READ)
-    public List<CodeAnalysis> loadAnalyses(HashId hashId) throws FileStoreException {
+    public List<CodeAnalysis> loadAnalyzes(HashId hashId) throws FileStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement(
 		"SELECT analysis FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE + " WHERE hashid=?")) {
 	    preparedStatement.setString(1, hashId.toString());

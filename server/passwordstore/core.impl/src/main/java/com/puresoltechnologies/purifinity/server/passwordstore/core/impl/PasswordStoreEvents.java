@@ -23,9 +23,7 @@ public class PasswordStoreEvents {
     /**
      * Event for user account creation.
      * 
-     * @param userId
-     * @param email
-     * @return
+     * @return The {@link Event} is returned.
      */
     public static Event createStartEvent() {
 	return new Event(COMPONENT, 1, EventType.SYSTEM, EventSeverity.INFO, "EventLogger was started up.");

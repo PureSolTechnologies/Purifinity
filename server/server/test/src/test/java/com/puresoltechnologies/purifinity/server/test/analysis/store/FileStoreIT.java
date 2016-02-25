@@ -86,7 +86,7 @@ public class FileStoreIT extends AbstractAnalysisStoreServiceServerTest {
 				"language", "1.2.3", analyzedFile, new ArrayList<CodeRange>(),
 				(UniversalSyntaxTree) null);
 		fileStore.storeAnalysis(fileAnalysis);
-		List<CodeAnalysis> fileAnalysisRead = fileStore.loadAnalyses(hashId);
+		List<CodeAnalysis> fileAnalysisRead = fileStore.loadAnalyzes(hashId);
 		assertNotNull(fileAnalysisRead);
 		assertEquals(1, fileAnalysisRead.size());
 		assertNotSame(fileAnalysis, fileAnalysisRead.get(0));
