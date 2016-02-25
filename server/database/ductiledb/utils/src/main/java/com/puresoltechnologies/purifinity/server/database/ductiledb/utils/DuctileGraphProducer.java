@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 
+import com.google.protobuf.ServiceException;
 import com.puresoltechnologies.ductiledb.tinkerpop.DuctileGraph;
 
 @Singleton
@@ -25,7 +26,7 @@ public class DuctileGraphProducer {
 	    DuctileGraph ductileGraph = DuctileGraphHelper.connect();
 	    logger.info("Ductile Graph created.");
 	    return ductileGraph;
-	} catch (IOException e) {
+	} catch (IOException | ServiceException e) {
 	    throw new RuntimeException("Could not create Ductile Graph.", e);
 	}
     }

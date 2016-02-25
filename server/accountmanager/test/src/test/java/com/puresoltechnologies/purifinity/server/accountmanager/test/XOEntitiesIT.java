@@ -55,7 +55,7 @@ public class XOEntitiesIT {
     }
 
     @Before
-    public void createXOManager() throws SQLException, IOException {
+    public void createXOManager() throws SQLException, IOException, ServiceException {
 	AccountManagerTester.cleanupDatabase();
 	xoManager = xoManagerFactory.createXOManager();
 	GraphTraversal<Vertex, Vertex> vertices = ((Graph) ductileGraph).traversal().V();
