@@ -252,6 +252,7 @@
 										<alias>Apache License Version 2.0</alias>
 										<alias>Apache License, version 2.0</alias>
 										<alias>Apache Software License - Version 2.0</alias>
+										<alias>ASL, version 2</alias>
 										<alias>The Apache Software License, Version 2.0</alias>
 									</aliases>
 									<approvedDependencies>
@@ -266,6 +267,7 @@
 										<approvedDependency>org\.apache\.ant:.*:.*</approvedDependency>
 										<approvedDependency>org\.apache\.zookeeper:zookeeper:.*</approvedDependency>
 										<approvedDependency>javax\.xml\.stream:stax-api:.*</approvedDependency>
+										<approvedDependency>cglib:cglib-nodep:.*</approvedDependency>
 									</approvedDependencies>
 								</knownLicense>
 								<knownLicense>
@@ -273,6 +275,7 @@
 									<url>http://opensource.org/licenses/BSD-2-Clause</url>
 									<aliases>
 										<alias>BSD style</alias>
+										<alias>BSD License</alias>
 										<alias>BSD licence</alias>
 										<alias>The BSD License</alias>
 									</aliases>
@@ -357,6 +360,7 @@
 										<alias>GNU Lesser General Public License (LGPL), Version 2.1</alias>
 										<alias>GNU Lesser General Public License, version 2.1</alias>
 										<alias>LGPL 2.1</alias>
+										<alias>LGPL, version 2.1</alias>
 										<alias>lgpl</alias>
 										<alias>lgpl_v2_1</alias>
 									</aliases>
@@ -400,6 +404,13 @@
 									</aliases>
 								</knownLicense>
 								<knownLicense>
+									<name>Mozilla Public License Version 2.0</name>
+									<url>http://www.mozilla.org/MPL/2.0</url>
+									<aliases>
+										<alias>Mozilla Public License version 2.0</alias>
+									</aliases>
+								</knownLicense>
+								<knownLicense>
 									<name> Oracle Binary Code License Agreement</name>
 									<url>http://www.oracle.com/technetwork/java/javase/terms/license/index.html</url>
 									<approvedDependencies>
@@ -424,10 +435,22 @@
 									</approvedDependencies>
 								</knownLicense>
 								<knownLicense>
+									<name>The SAX License</name>
+									<url>http://www.saxproject.org/copying.html</url>
+								</knownLicense>
+								<knownLicense>
 									<name>Snaptree License</name>
 									<url>https://github.com/nbronson/snaptree/blob/master/LICENSE</url>
 									<aliases>
 										<alias>SNAPTREE LICENSE</alias>
+									</aliases>
+								</knownLicense>
+								<knownLicense>
+									<name>W3C SOFTWARE AND DOCUMENT NOTICE AND LICENSE</name>
+									<url>https://www.w3.org/Consortium/Legal/2015/copyright-software-and-document</url>
+									<aliases>
+										<alias>The W3C License</alias>
+										<alias>The W3C Software License</alias>
 									</aliases>
 								</knownLicense>
 								<knownLicense>

@@ -69,7 +69,9 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
      * email address.
      * 
      * @throws PasswordCreationException
+     *             is thrown in case of password creation issues.
      * @throws SQLException
+     *             is thrown in case of database issues.
      */
     @Test(expected = PasswordCreationException.class)
     public void testCreateAccountDuplicateEmail() throws PasswordCreationException, SQLException {
@@ -97,7 +99,9 @@ public class PasswordStoreBeanIT extends AbstractPasswordStoreServerTest {
      * with an embedded message about a too weak password.
      * 
      * @throws PasswordCreationException
+     *             is thrown in case of password creation issues.
      * @throws SQLException
+     *             is thrown in case of database issues.
      */
     @Test(expected = PasswordCreationException.class)
     public void testCreateAccountTooWeakPassword() throws PasswordCreationException, SQLException {

@@ -52,6 +52,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
      * email address.
      * 
      * @throws PasswordCreationException
+     *             is thrown in case of password creation issues.
      */
     @Test(expected = PasswordCreationException.class)
     public void testCreateAccountDuplicateEmail() throws PasswordCreationException {
@@ -66,6 +67,7 @@ public class PasswordStoreClientIT extends AbstractPasswordStoreClientTest {
      * with an embedded message about a too weak password.
      * 
      * @throws PasswordCreationException
+     *             is thrown in case of password creation issues.
      */
     @Test(expected = PasswordCreationException.class)
     public void testCreateAccountTooWeakPassword() throws PasswordCreationException {

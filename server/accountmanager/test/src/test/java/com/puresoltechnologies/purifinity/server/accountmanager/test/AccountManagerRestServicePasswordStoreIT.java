@@ -27,8 +27,7 @@ import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCh
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordCreationException;
 import com.puresoltechnologies.purifinity.server.passwordstore.domain.PasswordResetException;
 
-public class AccountManagerRestServicePasswordStoreIT extends
-	AbstractAccountManagerClientTest {
+public class AccountManagerRestServicePasswordStoreIT extends AbstractAccountManagerClientTest {
 
     private static final String EMAIL_ADDRESS = "newaccount@puresol-technologies.com";
     private static final String INVALID_EMAIL_ADDRESS = "@puresol-technologies.com";
@@ -62,8 +61,7 @@ public class AccountManagerRestServicePasswordStoreIT extends
 
     @Test
     public void testCreateAccount() throws AccountManagerException {
-	Response response = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
+	Response response = proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
 	assertEquals(HttpStatus.SC_CREATED, response.getStatus());
 	response.close();
     }
@@ -73,19 +71,17 @@ public class AccountManagerRestServicePasswordStoreIT extends
      * AccountCreationException with an embedded message about the duplicate
      * email address.
      * 
-     * @throws PasswordCreationException
+     * @throws AccountManagerException
+     *             is thrown in case of account issues.
      */
     @Test
-    public void testCreateAccountDuplicateEmail()
-	    throws AccountManagerException {
+    public void testCreateAccountDuplicateEmail() throws AccountManagerException {
 	// the first account should be created normally...
-	Response response = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
+	Response response = proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
 	assertEquals(HttpStatus.SC_CREATED, response.getStatus());
 	response.close();
 	// now we expect an error...
-	response = proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS,
-		VALID_PASSWORD, "engineer"));
+	response = proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
 	int status = response.getStatus();
 	response.close();
 	assertEquals(HttpStatus.SC_NOT_ACCEPTABLE, status);
@@ -95,13 +91,12 @@ public class AccountManagerRestServicePasswordStoreIT extends
      * For a trival password we expect a {@link PasswordCreationException} here
      * with an embedded message about a too weak password.
      * 
-     * @throws PasswordCreationException
+     * @throws AccountManagerException
+     *             is thrown in case of account issues.
      */
     @Test
-    public void testCreateAccountTooWeakPassword()
-	    throws AccountManagerException {
-	Response response = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, TOO_WEAK_PASSWORD, "engineer"));
+    public void testCreateAccountTooWeakPassword() throws AccountManagerException {
+	Response response = proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS, TOO_WEAK_PASSWORD, "engineer"));
 	int status = response.getStatus();
 	response.close();
 	assertEquals(HttpStatus.SC_NOT_ACCEPTABLE, status);
@@ -112,13 +107,13 @@ public class AccountManagerRestServicePasswordStoreIT extends
      * {@link PasswordCreationException} with an embedded message about the
      * invalid email address.
      * 
-     * @throws PasswordCreationException
+     * @throws AccountManagerException
+     *             is thrown in case of account issues.
      */
     @Test
-    public void testCreateAccountWithInvalidEmailAddress()
-	    throws AccountManagerException {
-	Response response = proxy.createAccount(new CreateAccountEntity(
-		INVALID_EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
+    public void testCreateAccountWithInvalidEmailAddress() throws AccountManagerException {
+	Response response = proxy
+		.createAccount(new CreateAccountEntity(INVALID_EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
 	int status = response.getStatus();
 	response.close();
 	assertEquals(HttpStatus.SC_NOT_ACCEPTABLE, status);
@@ -126,93 +121,69 @@ public class AccountManagerRestServicePasswordStoreIT extends
 
     @Test
     public void testAuthenticate() throws AccountManagerException {
-	Response response = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
+	Response response = proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
 	assertEquals(HttpStatus.SC_CREATED, response.getStatus());
 	response.close();
-	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
-		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
+	assertTrue(passwordStoreClient.authenticate(new EmailAddress(EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
     }
 
     @Test
     public void testAuthenticateWrongPassword() throws AccountManagerException {
-	Response response = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
+	Response response = proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
 	assertEquals(HttpStatus.SC_CREATED, response.getStatus());
 	response.close();
-	assertFalse(passwordStoreClient.authenticate(new EmailAddress(
-		EMAIL_ADDRESS), new Password(VALID_PASSWORD + "Wrong!")));
+	assertFalse(passwordStoreClient.authenticate(new EmailAddress(EMAIL_ADDRESS),
+		new Password(VALID_PASSWORD + "Wrong!")));
     }
 
     @Test
-    public void testChangePassword() throws AccountManagerException,
-	    PasswordChangeException {
-	Response response = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
+    public void testChangePassword() throws AccountManagerException, PasswordChangeException {
+	Response response = proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
 	assertEquals(HttpStatus.SC_CREATED, response.getStatus());
 	response.close();
-	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
-		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
+	assertTrue(passwordStoreClient.authenticate(new EmailAddress(EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
 	String newPassword = VALID_PASSWORD + "New!";
-	assertTrue(proxy.changePassword(EMAIL_ADDRESS,
-		new ChangePasswordEntity(VALID_PASSWORD, newPassword)));
-	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
-		EMAIL_ADDRESS), new Password(newPassword)));
+	assertTrue(proxy.changePassword(EMAIL_ADDRESS, new ChangePasswordEntity(VALID_PASSWORD, newPassword)));
+	assertTrue(passwordStoreClient.authenticate(new EmailAddress(EMAIL_ADDRESS), new Password(newPassword)));
     }
 
     @Test(expected = NotAcceptableException.class)
-    public void testChangePasswordWrongEmail() throws AccountManagerException,
-	    PasswordChangeException {
-	Response response = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
+    public void testChangePasswordWrongEmail() throws AccountManagerException, PasswordChangeException {
+	Response response = proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
 	assertEquals(HttpStatus.SC_CREATED, response.getStatus());
 	response.close();
-	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
-		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
+	assertTrue(passwordStoreClient.authenticate(new EmailAddress(EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
 	assertFalse(proxy.changePassword(EMAIL_ADDRESS + "Wrong!",
-		new ChangePasswordEntity(VALID_PASSWORD, VALID_PASSWORD
-			+ "New!")));
+		new ChangePasswordEntity(VALID_PASSWORD, VALID_PASSWORD + "New!")));
     }
 
     @Test
-    public void testChangePasswordWrongPassword()
-	    throws AccountManagerException, PasswordChangeException {
-	Response response = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
+    public void testChangePasswordWrongPassword() throws AccountManagerException, PasswordChangeException {
+	Response response = proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
 	assertEquals(HttpStatus.SC_CREATED, response.getStatus());
 	response.close();
-	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
-		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
+	assertTrue(passwordStoreClient.authenticate(new EmailAddress(EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
 	assertFalse(proxy.changePassword(EMAIL_ADDRESS,
-		new ChangePasswordEntity(VALID_PASSWORD + "Wrong!",
-			VALID_PASSWORD + "New!")));
+		new ChangePasswordEntity(VALID_PASSWORD + "Wrong!", VALID_PASSWORD + "New!")));
     }
 
     @Test(expected = NotAcceptableException.class)
-    public void testChangePasswordTooWeakPassword()
-	    throws AccountManagerException, PasswordChangeException {
-	Response response = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
+    public void testChangePasswordTooWeakPassword() throws AccountManagerException, PasswordChangeException {
+	Response response = proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
 	assertEquals(HttpStatus.SC_CREATED, response.getStatus());
 	response.close();
-	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
-		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
-	proxy.changePassword(EMAIL_ADDRESS, new ChangePasswordEntity(
-		VALID_PASSWORD, TOO_WEAK_PASSWORD));
+	assertTrue(passwordStoreClient.authenticate(new EmailAddress(EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
+	proxy.changePassword(EMAIL_ADDRESS, new ChangePasswordEntity(VALID_PASSWORD, TOO_WEAK_PASSWORD));
     }
 
     @Test
-    public void testResetPassword() throws AccountManagerException,
-	    PasswordResetException {
-	Response response = proxy.createAccount(new CreateAccountEntity(
-		EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
+    public void testResetPassword() throws AccountManagerException, PasswordResetException {
+	Response response = proxy.createAccount(new CreateAccountEntity(EMAIL_ADDRESS, VALID_PASSWORD, "engineer"));
 	assertEquals(HttpStatus.SC_CREATED, response.getStatus());
 	response.close();
-	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
-		EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
+	assertTrue(passwordStoreClient.authenticate(new EmailAddress(EMAIL_ADDRESS), new Password(VALID_PASSWORD)));
 	Password newPassword = new Password(proxy.resetPassword(EMAIL_ADDRESS));
-	assertTrue(passwordStoreClient.authenticate(new EmailAddress(
-		EMAIL_ADDRESS), newPassword));
+	assertTrue(passwordStoreClient.authenticate(new EmailAddress(EMAIL_ADDRESS), newPassword));
     }
 
     @Test(expected = NotAcceptableException.class)
