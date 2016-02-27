@@ -12,11 +12,42 @@
 	<dependencySets>
 		<dependencySet>
 			<includes>
-				<include>org.apache.cassandra:cassandra:tar.gz:bin:${cassandra.version}</include>
+				<include>org.apache.hadoop:hadoop:tar.gz:distribution:${hadoop.version}</include>
 			</includes>
 			<useProjectArtifact>false</useProjectArtifact>
 			<outputDirectory>lib</outputDirectory>
 			<unpack>true</unpack>
+			<unpackOptions>
+				<excludes>
+					<exclude>**/etc/hadoop/core-site.xml</exclude>
+					<exclude>**/etc/hadoop/hadoop-env.sh</exclude>
+					<exclude>**/etc/hadoop/hdfs-site.xml</exclude>
+					<exclude>**/etc/hadoop/mapred-site.xml</exclude>
+					<exclude>**/etc/hadoop/yarn-site.xml</exclude>
+				</excludes>
+			</unpackOptions>
+		</dependencySet>
+		<dependencySet>
+			<includes>
+				<include>org.apache.hbase:hbase:tar.gz:distribution:${hbase.version}</include>
+			</includes>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputDirectory>lib</outputDirectory>
+			<unpack>true</unpack>
+			<unpackOptions>
+				<excludes>
+					<exclude>**/conf/hbase-env.sh</exclude>
+					<exclude>**/conf/hbase-site.xml</exclude>
+				</excludes>
+			</unpackOptions>
+		</dependencySet>
+		<dependencySet>
+			<includes>
+				<include>org.apache.phoenix:phoenix:jar:server:${phoenix.version}</include>
+			</includes>
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputDirectory>lib/hbase-${hbase.version}/lib</outputDirectory>
+			<unpack>false</unpack>
 		</dependencySet>
 		<dependencySet>
 			<includes>
@@ -33,7 +64,7 @@
 		</dependencySet>
 		<dependencySet>
 			<includes>
-				<include>com.puresoltechnologies.purifinity.server:global.ddl:jar:${purifinity.version}</include>
+				<include>com.puresoltechnologies.purifinity.server:global.ddl:jar:${project.version}</include>
 			</includes>
 			<useProjectArtifact>false</useProjectArtifact>
 			<outputDirectory>ddl</outputDirectory>
@@ -41,8 +72,8 @@
 		</dependencySet>
 		<dependencySet>
 			<includes>
-				<include>com.puresoltechnologies.purifinity.server:*.app:ear:${purifinity.version}</include>
-				<include>com.puresoltechnologies.purifinity.plugins:*.plugin:ear:${purifinity.version}</include>
+				<include>com.puresoltechnologies.purifinity.server:*.app:ear:${project.version}</include>
+				<include>com.puresoltechnologies.purifinity.plugins:*.plugin:ear:${project.version}</include>
 			</includes>
 			<useProjectArtifact>false</useProjectArtifact>
 			<outputDirectory>lib/wildfly-${wildfly.version}/standalone/deployments</outputDirectory>
@@ -50,10 +81,26 @@
 		</dependencySet>
 		<dependencySet>
 			<includes>
-				<include>com.puresoltechnologies.purifinity.webui:webui:zip:bin:${purifinity.version}</include>
+				<include>com.puresoltechnologies.purifinity.webui:webui:zip:bin:${project.version}</include>
 			</includes>
 			<useProjectArtifact>false</useProjectArtifact>
 			<outputDirectory>lib/wildfly-${wildfly.version}/welcome-content</outputDirectory>
+			<unpack>true</unpack>
+		</dependencySet>
+		<dependencySet>
+			<includes>
+				<include>com.puresoltechnologies.purifinity.server:database.hadoop.configuration:jar:${project.version}</include>
+			</includes>
+			<useProjectArtifact>true</useProjectArtifact>
+			<outputDirectory>lib/hadoop-${hadoop.version}</outputDirectory>
+			<unpack>true</unpack>
+		</dependencySet>
+		<dependencySet>
+			<includes>
+				<include>com.puresoltechnologies.purifinity.server:database.hbase.configuration:jar:${project.version}</include>
+			</includes>
+			<useProjectArtifact>true</useProjectArtifact>
+			<outputDirectory>lib/hbase-${hbase.version}</outputDirectory>
 			<unpack>true</unpack>
 		</dependencySet>
 	</dependencySets>
@@ -67,16 +114,6 @@
 			<outputDirectory>bin</outputDirectory>
 			<filtered>true</filtered>
 			<fileMode>755</fileMode>
-			<directoryMode>755</directoryMode>
-		</fileSet>
-		<fileSet>
-			<directory>src/main/resources/cassandra</directory>
-			<includes>
-				<include>**/*</include>
-			</includes>
-			<outputDirectory>lib/apache-cassandra-${cassandra.version}</outputDirectory>
-			<filtered>false</filtered>
-			<fileMode>644</fileMode>
 			<directoryMode>755</directoryMode>
 		</fileSet>
 		<fileSet>

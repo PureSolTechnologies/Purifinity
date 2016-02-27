@@ -1,13 +1,23 @@
 #!/bin/sh
-BASEDIR=$(dirname $0)
-CASSANDRA_DIR=$BASEDIR/../lib/apache-cassandra-${cassandra.version}
-echo "Cassandra directory: " $CASSANDRA_DIR
+BASEDIR=$(dirname $PWD/$0)
+echo "Base directory: " $BASEDIR
 
-echo "Starting Cassandra ${cassandra.version}..."
-CASSANDRA_BINDIR=$CASSANDRA_DIR/bin
-cd $CASSANDRA_BINDIR && sh cassandra
+HADOOP_HOME=$BASEDIR/../lib/hadoop-${hadoop.version}
+HADOOP_SBIN=$HADOOP_HOME/sbin
+echo "Hadoop home: " $HADOOP_HOME
 
-# start-dfs.sh
-# start-yarn.sh
-# mr-jobhistory-daemon.sh start historyserver
-# start-hbase.sh
+HBASE_HOME=$BASEDIR/../lib/hbase-${hbase.version}
+HBASE_BIN=$HBASE_HOME/bin
+echo "HBase home: " $HBASE_HOME
+
+echo "Starting Hadoop Distributed Filesystem ${hadoop.version}..."
+cd $HADOOP_SBIN && sh start-dfs.sh
+
+echo "Starting Hadoop Yarn ${hadoop.version}..."
+cd $HADOOP_SBIN && sh start-yarn.sh
+
+echo "Starting Hadoop MapReduce History Daemon ${hadoop.version}..."
+cd $HADOOP_SBIN && sh mr-jobhistory-daemon.sh start historyserver
+
+echo "Starting HBase ${hbase.version}..."
+cd $HBASE_BIN && sh start-hbase.sh

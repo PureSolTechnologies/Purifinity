@@ -19,10 +19,6 @@
 			<type>ear</type>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>global.ddl</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 			<artifactId>java7.plugin</artifactId>
 			<type>ear</type>
@@ -49,6 +45,18 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>database.hadoop.configuration</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>database.hbase.configuration</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>global.ddl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>passwordstore.app</artifactId>
 			<type>ear</type>
 		</dependency>
@@ -67,6 +75,25 @@
 			<artifactId>webui</artifactId>
 			<classifier>bin</classifier>
 			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop</artifactId>
+			<type>tar.gz</type>
+			<classifier>distribution</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase</artifactId>
+			<type>tar.gz</type>
+			<classifier>distribution</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.phoenix</groupId>
+			<artifactId>phoenix</artifactId>
+			<type>jar</type>
+			<classifier>server</classifier>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.wildfly</groupId>
