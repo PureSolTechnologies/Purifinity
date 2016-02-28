@@ -1825,6 +1825,7 @@
 		<module>server</module>
 		<module>webui</module>
 		<module>dist</module>
+		<module>website</module>
 	</modules>
 
 </project>
