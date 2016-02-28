@@ -20,7 +20,6 @@
 			<unpackOptions>
 				<excludes>
 					<exclude>**/etc/hadoop/core-site.xml</exclude>
-					<exclude>**/etc/hadoop/hadoop-env.sh</exclude>
 					<exclude>**/etc/hadoop/hdfs-site.xml</exclude>
 					<exclude>**/etc/hadoop/mapred-site.xml</exclude>
 					<exclude>**/etc/hadoop/yarn-site.xml</exclude>
@@ -36,7 +35,6 @@
 			<unpack>true</unpack>
 			<unpackOptions>
 				<excludes>
-					<exclude>**/conf/hbase-env.sh</exclude>
 					<exclude>**/conf/hbase-site.xml</exclude>
 				</excludes>
 			</unpackOptions>
