@@ -256,16 +256,14 @@
 										<alias>The Apache Software License, Version 2.0</alias>
 									</aliases>
 									<approvedDependencies>
+										<approvedDependency>org\.apache.*:.*:.*</approvedDependency>
 										<approvedDependency>commons-beanutils:commons-beanutils:1\.7\.0</approvedDependency>
 										<approvedDependency>commons-codec:commons-codec:1\.2</approvedDependency>
 										<approvedDependency>commons-logging:commons-logging:1\.0\.3</approvedDependency>
 										<approvedDependency>log4j:log4j:1\.2\.12</approvedDependency>
 										<approvedDependency>logkit:logkit:1\.0\.1</approvedDependency>
-										<approvedDependency>org\.apache.commons:.*:.*</approvedDependency>
 										<approvedDependency>org\.codehaus\.jettison:jettison:1\.2</approvedDependency>
 										<approvedDependency>oro:oro:2\.0\.8</approvedDependency>
-										<approvedDependency>org\.apache\.ant:.*:.*</approvedDependency>
-										<approvedDependency>org\.apache\.zookeeper:zookeeper:.*</approvedDependency>
 										<approvedDependency>javax\.xml\.stream:stax-api:.*</approvedDependency>
 										<approvedDependency>cglib:cglib-nodep:.*</approvedDependency>
 									</approvedDependencies>
@@ -371,6 +369,7 @@
 									<approvedDependencies>
 										<approvedDependency>colt:colt:1\.2\.0</approvedDependency>
 										<approvedDependency>org\.acplt:oncrpc:1\.0\.7</approvedDependency>
+										<approvedDependency>org\.wildfly:wildfly-server:.*</approvedDependency>
 									</approvedDependencies>
 								</knownLicense>
 								<knownLicense>
