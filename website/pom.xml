@@ -21,6 +21,31 @@
 				<directory>src/main/website</directory>
 				<targetPath>${project.build.directory}/tmp</targetPath>
 				<filtering>true</filtering>
+				<excludes>
+					<exclude>**/*.woff</exclude>
+					<exclude>**/*.woff2</exclude>
+					<exclude>**/*.ttf</exclude>
+					<exclude>**/*.png</exclude>
+					<exclude>**/*.gif</exclude>
+					<exclude>**/*.ico</exclude>
+					<exclude>**/*.xcf</exclude>
+					<exclude>node_modules</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/website</directory>
+				<targetPath>${project.build.directory}/tmp</targetPath>
+				<filtering>false</filtering>
+				<includes>
+					<include>**/*.woff</include>
+					<include>**/*.woff2</include>
+					<include>**/*.ttf</include>
+					<include>**/*.png</include>
+					<include>**/*.gif</include>
+					<include>**/*.ico</include>
+					<include>**/*.xcf</include>
+					<include>node_modules</include>
+				</includes>
 			</resource>
 		</resources>
 		<plugins>
@@ -83,6 +108,24 @@
 							</arguments>
 							<workingDirectory>${project.build.directory}/tmp</workingDirectory>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>src/assembly/website.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>website-packaging</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
