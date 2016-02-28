@@ -13,7 +13,7 @@ import {FeaturesComponent} from './features.component';
 import {DocumentationComponent} from './documentation.component';
 import {AboutComponent} from './about.component';
 import {ContributeComponent} from './contribute.component';
-import {ImprintComponent} from './imprint.component';
+import {ImprintComponent} from './commons/imprint.component';
 
 @Component({
     selector: 'app',

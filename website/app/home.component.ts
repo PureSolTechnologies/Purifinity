@@ -1,13 +1,11 @@
 import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 
-import {TwitterTimelineComponent} from './twitter-timeline.component';
 import {TwitterPurifinityTimelineComponent} from './twitter-purifinity-timeline.component';
 
 @Component({
 	selector: 'home',
 	directives: [
-	  TwitterTimelineComponent,
 	  TwitterPurifinityTimelineComponent,
 	  ROUTER_DIRECTIVES
 	],
