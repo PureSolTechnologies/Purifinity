@@ -1,0 +1,11 @@
+= Purifinity Development Manual
+:revnumber: {project-version}
+:author: Rick-Rainer Ludwig
+:email: ludwig@puresol-technologies.com
+:homepage: http://purifinity.com
+:encoding: UTF-8
+
+.............................................................................
+This manual contains all information for Purifinity Developers and Plugin
+Developers.
+.............................................................................

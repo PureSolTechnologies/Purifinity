@@ -1,0 +1,10 @@
+= Purifinity User's Manual
+:revnumber: {project-version}
+:author: Rick-Rainer Ludwig
+:email: ludwig@puresol-technologies.com
+:homepage: http://purifinity.com
+:encoding: UTF-8
+
+.............................................................................
+This manual is for end users. 
+.............................................................................
