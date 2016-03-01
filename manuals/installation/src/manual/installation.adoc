@@ -11,10 +11,14 @@ Purifinity.
 .............................................................................
 
 == Get Purifinity
+
 Purifinity can be downloaded as binary distribution, ready for installation, 
 or as a source package to be built from the latest source code.
 
-=== Binary Distribution
+=== Binary Distributions
+
+==== Community full Distribution
+
 The binary distribution are official releases which are tested and ready 
 for installation. It is preferred to use this version for productive 
 installations.
@@ -22,21 +26,14 @@ installations.
 Purifinity {project-version} can be downloaded a Purifinity's website at
 http://purifinity.com.
 
-=== Source Code
+=== From Source Code
+
 Source code can be used to use the latest source version for testing or
-development. To build Purifinity form source, Maven is needed in version
-{maven-version} or later.
-
-Download the source code from GitHub 
-https://github.com/PureSolTechnologies/Purifinity. 
-
-Change into root directory of source directory and build Purifinity on
-command line via:
-
-[source,shell]
-$ mvn install
+development. For information about how to handle the sources, have a look
+into Purifinity Development Manual.
 
 == Extract Purifinity
+
 The distribution of Purifinity come as ZIP archive or gzipped TAR archive.
 Extract with either
 
@@ -67,6 +64,7 @@ TIP: When the full community version is used, only the directories in
 hdfs-site.xml are to be adapted.
 
 === Configure HBase
+
 
 Open and check the content of the following files in the extraction directory:
 

@@ -2,10 +2,10 @@
 <module xmlns="urn:jboss:module:1.3" name="org.apache.hadoop.client">
 	<resources>
 		<resource-root path="htrace-core-3.1.0-incubating.jar" />
-		<resource-root path="hadoop-hdfs-2.7.1.jar" />
+		<resource-root path="hadoop-hdfs-2.7.2.jar" />
 		<resource-root path="commons-configuration-1.6.jar" />
-		<resource-root path="hadoop-auth-2.7.1.jar" />
-		<resource-root path="hadoop-common-2.7.1.jar" />
+		<resource-root path="hadoop-auth-2.7.2.jar" />
+		<resource-root path="hadoop-common-2.7.2.jar" />
 		<resource-root path="protobuf-java-2.5.0.jar" />
 		<resource-root path="service-loader-resources" />
 	</resources>

@@ -10,6 +10,15 @@
 
 	<dependencySets>
 		<dependencySet>
+			<includes>
+				<include>com.google.guava:guava</include>
+				<include>org.apache.hbase:hbase-client</include>
+				<include>org.apache.hbase:hbase-common</include>
+				<include>org.apache.hbase:hbase-protocol</include>
+				<include>org.apache.hbase:hbase-server</include>
+				<include>org.apache.phoenix:phoenix-core</include>
+				<include>org.apache.zookeeper:zookeeper</include>
+			</includes>
 			<useProjectArtifact>false</useProjectArtifact>
 			<outputDirectory>org/apache/hbase/client/main</outputDirectory>
 			<unpack>false</unpack>

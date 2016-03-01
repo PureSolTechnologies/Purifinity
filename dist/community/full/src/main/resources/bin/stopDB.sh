@@ -11,13 +11,13 @@ HBASE_BIN=$HBASE_HOME/bin
 echo "HBase home: " $HBASE_HOME
 
 echo "Stopping HBase ${hbase.version}..."
-cd $HBASE_BIN && sh stop-hbase.sh
+$HBASE_BIN/stop-hbase.sh
 
 echo "Stopping Hadoop MapReduce History Daemon ${hadoop.version}..."
-cd $HADOOP_SBIN && sh mr-jobhistory-daemon.sh stop historyserver
+$HADOOP_SBIN/mr-jobhistory-daemon.sh stop historyserver
 
 echo "Stopping Hadoop Yarn ${hadoop.version}..."
-cd $HADOOP_SBIN && sh stop-yarn.sh
+$HADOOP_SBIN/stop-yarn.sh
 
 echo "Stopping Hadoop Distributed Filesystem ${hadoop.version}..."
-cd $HADOOP_SBIN && sh stop-dfs.sh
+$HADOOP_SBIN/stop-dfs.sh

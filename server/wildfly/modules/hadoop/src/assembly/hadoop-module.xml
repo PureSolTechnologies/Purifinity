@@ -10,6 +10,14 @@
 
 	<dependencySets>
 		<dependencySet>
+			<includes>
+				<include>commons-configuration:commons-configuration</include>
+				<include>org.apache.hadoop:hadoop-auth</include>
+				<include>org.apache.hadoop:hadoop-common</include>
+				<include>org.apache.hadoop:hadoop-hdfs</include>
+				<include>org.apache.htrace:htrace-core</include>
+				<include>com.google.protobuf:protobuf-java</include>
+			</includes>
 			<useProjectArtifact>false</useProjectArtifact>
 			<outputDirectory>org/apache/hadoop/client/main</outputDirectory>
 			<unpack>false</unpack>

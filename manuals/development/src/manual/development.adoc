@@ -9,3 +9,54 @@
 This manual contains all information for Purifinity Developers and Plugin
 Developers.
 .............................................................................
+
+== First Steps in Purifinity Development
+
+The next sub sections describe the first steps in Purifinity development. It
+will be explained where and how to get the sources, how to build Purifinity
+and how to setup the development environment.
+
+=== Get the Source Code
+
+Purifinity's source code can be found at GitHub: 
+https://github.com/PureSolTechnologies/Purifinity
+
+Clone this repository into your own account or to your local machine via
+
+[source,shell] 
+$ git clone https://github.com/PureSolTechnologies/Purifinity.git
+
+=== Build the Sources
+
+To build Purifinity form source, Maven is needed in version
+{maven-version} or later.
+
+Change into root directory of source directory and build Purifinity on
+command line via:
+
+[source,shell]
+$ mvn install
+
+=== Setting up Eclipse
+
+==== Change the formatter to Sun Java Coding convention
+
+Open Preferences Dialog via "Window > Preferences". Go to "Java > Code Style > Formatter"
+and select "Java Conventions [built-in]". Use apply finalize the setting.
+
+==== Configure Save Actions
+
+Open Preferences Dialog via "Window > Preferences". Go to "Java > Editor > Save Actions". 
+
+Configure:
+
+* Enable "Perform the selected actions on save"
+* Enable "Format source code"
+* Enable "Format all lines"
+* Enable "Organize imports"
+* Enable "Additional actions"
+* Select as additional actions:
+** "Add missing @Override annotations"
+** "Add missing @Override annotations to implementations of interface methods"
+** "Add missing @Deprecated annotations"
+** "Remove unnecessary casts"
