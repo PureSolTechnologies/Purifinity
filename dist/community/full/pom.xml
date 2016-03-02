@@ -15,6 +15,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
+			<artifactId>c11.plugin</artifactId>
+			<type>ear</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 			<artifactId>fortran2008.plugin</artifactId>
 			<type>ear</type>
 		</dependency>

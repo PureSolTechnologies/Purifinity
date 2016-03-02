@@ -45,6 +45,11 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.htrace</groupId>
+			<artifactId>htrace-core</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.phoenix</groupId>
 			<artifactId>phoenix-core</artifactId>
 			<scope>compile</scope>
@@ -58,7 +63,6 @@
 		<dependency>
 			<groupId>sqlline</groupId>
 			<artifactId>sqlline</artifactId>
-			<version>1.1.9</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
