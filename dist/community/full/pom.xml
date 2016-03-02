@@ -72,6 +72,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
+			<artifactId>wildfly.configuration</artifactId>
+			<classifier>distribution</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>wildfly.modules.hadoop</artifactId>
 			<classifier>zip</classifier>
 			<type>zip</type>

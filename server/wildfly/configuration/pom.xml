@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -47,22 +48,33 @@
 							<resources>
 								<resource>
 									<!-- XML files are filtered to replace properties. -->
-									<directory>src/wildfly/configuration</directory>
+									<directory>src/wildfly</directory>
 									<filtering>true</filtering>
 									<includes>
 										<include>**/*.xml</include>
 										<include>**/*.properties</include>
 									</includes>
 								</resource>
-								<resource>
-									<!-- Non-XML files are not filtered. -->
-									<directory>src/configuration/configuration</directory>
-									<excludes>
-										<exclude>**/*.xml</exclude>
-									</excludes>
-								</resource>
 							</resources>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>src/assembly/wildfly-configuration.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>wildfly-configuration-packaging</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>

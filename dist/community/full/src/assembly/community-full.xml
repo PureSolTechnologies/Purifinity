@@ -54,6 +54,8 @@
 			<unpackOptions>
 				<excludes>
 					<exclude>*/welcome-content/**/*</exclude>
+					<exclude>**/configuration/standalone.xml</exclude>
+					<exclude>**/configuration/mgmt-users.properties</exclude>
 				</excludes>
 			</unpackOptions>
 			<useProjectArtifact>false</useProjectArtifact>
@@ -95,6 +97,14 @@
 		</dependencySet>
 		<dependencySet>
 			<includes>
+				<include>com.puresoltechnologies.purifinity.server:wildfly.configuration:zip:distribution:${project.version}</include>
+			</includes>
+			<useProjectArtifact>true</useProjectArtifact>
+			<outputDirectory>lib/wildfly-${wildfly.version}</outputDirectory>
+			<unpack>true</unpack>
+		</dependencySet>
+		<dependencySet>
+			<includes>
 				<include>com.puresoltechnologies.purifinity.server:database.hadoop.configuration:jar:${project.version}</include>
 			</includes>
 			<useProjectArtifact>true</useProjectArtifact>
@@ -120,16 +130,6 @@
 			<outputDirectory>bin</outputDirectory>
 			<filtered>true</filtered>
 			<fileMode>755</fileMode>
-			<directoryMode>755</directoryMode>
-		</fileSet>
-		<fileSet>
-			<directory>src/main/resources/wildfly</directory>
-			<includes>
-				<include>**/*</include>
-			</includes>
-			<outputDirectory>lib/wildfly-${wildfly.version}</outputDirectory>
-			<filtered>false</filtered>
-			<fileMode>644</fileMode>
 			<directoryMode>755</directoryMode>
 		</fileSet>
 	</fileSets>
