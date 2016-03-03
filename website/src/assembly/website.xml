@@ -9,6 +9,18 @@
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<baseDirectory>Purifinity-Website-${project.version}</baseDirectory>
 
+	<dependencySets>
+		<dependencySet>
+			<includes>
+				<include>com.puresoltechnologies.purifinity.manuals:manuals.development</include>
+				<include>com.puresoltechnologies.purifinity.manuals:manuals.installation</include>
+				<include>com.puresoltechnologies.purifinity.manuals:manuals.user</include>
+			</includes>
+			<outputDirectory>manuals</outputDirectory>
+			<unpack>true</unpack>
+		</dependencySet>
+	</dependencySets>
+
 	<fileSets>
 		<fileSet>
 			<directory>target/tmp</directory>

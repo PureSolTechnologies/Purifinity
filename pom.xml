@@ -675,6 +675,48 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
+				<artifactId>manuals.development</artifactId>
+				<version>${project.version}</version>
+				<classifier>html</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
+				<artifactId>manuals.development</artifactId>
+				<version>${project.version}</version>
+				<classifier>pdf</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
+				<artifactId>manuals.installation</artifactId>
+				<version>${project.version}</version>
+				<classifier>html</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
+				<artifactId>manuals.installation</artifactId>
+				<version>${project.version}</version>
+				<classifier>pdf</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
+				<artifactId>manuals.user</artifactId>
+				<version>${project.version}</version>
+				<classifier>html</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
+				<artifactId>manuals.user</artifactId>
+				<version>${project.version}</version>
+				<classifier>pdf</classifier>
+				<type>zip</type>
+			</dependency>
+			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>accountmanager.app</artifactId>
 				<version>${project.version}</version>

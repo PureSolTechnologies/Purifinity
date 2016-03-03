@@ -48,7 +48,7 @@
 				</executions>
 				<configuration>
 					<sourceDirectory>${basedir}/src/manual</sourceDirectory>
-					<sourceDocumentName>installation.adoc</sourceDocumentName>
+					<sourceDocumentName>purifinity-installation.adoc</sourceDocumentName>
 					<attributes>
 						<project-version>${project.version}</project-version>
 						<maven-version>3.2</maven-version>
@@ -56,6 +56,70 @@
 						<hbase-version>${hbase.version}</hbase-version>
 					</attributes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.agilejava.docbkx</groupId>
+				<artifactId>docbkx-maven-plugin</artifactId>
+				<version>2.0.16</version>
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.docbook</groupId>
+						<artifactId>docbook-xml</artifactId>
+						<version>5.0-all</version>
+						<classifier>resources</classifier>
+						<type>zip</type>
+						<scope>runtime</scope>
+					</dependency>
+					<dependency>
+						<groupId>net.sf.xslthl</groupId>
+						<artifactId>xslthl</artifactId>
+						<version>2.0.1</version>
+						<scope>runtime</scope>
+					</dependency>
+					<dependency>
+						<groupId>net.sf.offo</groupId>
+						<artifactId>fop-hyph</artifactId>
+						<version>1.2</version>
+						<scope>runtime</scope>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>generate-pdf</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>generate-pdf</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<sourceDirectory>${project.build.directory}/generated-docs</sourceDirectory>
+					<targetDirectory>${project.build.directory}/generated-docs</targetDirectory>
+					<includes>*.xml</includes>
+					<!-- NOTE imgSrcPath is handled by AsciiDoc settings -->
+					<imgSrcPath></imgSrcPath>
+					<!-- FIXME highlightSource not working! -->
+					<highlightSource>1</highlightSource>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>src/assembly/installation-pdf.xml</descriptor>
+						<descriptor>src/assembly/installation-html.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>community-full-packaging</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
