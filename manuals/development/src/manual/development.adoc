@@ -15,8 +15,8 @@ Developers.
 The following requirments should be met to run Purifinity:
 
 * Linux OS needs to be installed
-* A [Java Development Kit 8 (JDK8) or later](http://java.oracle.com) is installed and configured
-* [Maven 3.2 or greater](http://maven.apache.org) is available
+* A link:http://java.oracle.com[Java Development Kit 8 (JDK8) or later] is installed and configured
+* link:http://maven.apache.org[Maven 3.2 or greater] is available
 
 == First Steps in Purifinity Development
 
