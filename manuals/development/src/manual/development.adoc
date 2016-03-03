@@ -47,6 +47,8 @@ $ mvn install
 
 === Setting up Eclipse
 
+In the next sections the recommended setup of link:http://eclipse/org[Eclipse] is described.
+
 ==== Change the formatter to Sun Java Coding convention
 
 Open Preferences Dialog via "Window > Preferences". Go to "Java > Code Style > Formatter"
