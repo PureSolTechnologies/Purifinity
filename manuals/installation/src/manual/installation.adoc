@@ -10,6 +10,13 @@ This manual contains all information for installation and configuration of
 Purifinity.
 .............................................................................
 
+== Requirements
+
+The following requirments should be met to run Purifinity:
+
+* Linux OS needs to be installed
+* A Java 8 or later is installed and configured
+
 == Get Purifinity
 
 Purifinity can be downloaded as binary distribution, ready for installation, 
