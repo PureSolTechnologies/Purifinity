@@ -21,31 +21,19 @@
 				<directory>src/main/website</directory>
 				<targetPath>${project.build.directory}/tmp</targetPath>
 				<filtering>true</filtering>
-				<excludes>
-					<exclude>**/*.woff</exclude>
-					<exclude>**/*.woff2</exclude>
-					<exclude>**/*.ttf</exclude>
-					<exclude>**/*.png</exclude>
-					<exclude>**/*.gif</exclude>
-					<exclude>**/*.ico</exclude>
-					<exclude>**/*.xcf</exclude>
-					<exclude>node_modules</exclude>
-				</excludes>
+				<includes>
+					<include>**/*.ts</include>
+					<include>**/*.html</include>
+				</includes>
 			</resource>
 			<resource>
 				<directory>src/main/website</directory>
 				<targetPath>${project.build.directory}/tmp</targetPath>
 				<filtering>false</filtering>
-				<includes>
-					<include>**/*.woff</include>
-					<include>**/*.woff2</include>
-					<include>**/*.ttf</include>
-					<include>**/*.png</include>
-					<include>**/*.gif</include>
-					<include>**/*.ico</include>
-					<include>**/*.xcf</include>
-					<include>node_modules</include>
-				</includes>
+				<excludes>
+					<exclude>**/*.ts</exclude>
+					<exclude>**/*.html</exclude>
+				</excludes>
 			</resource>
 		</resources>
 		<plugins>
