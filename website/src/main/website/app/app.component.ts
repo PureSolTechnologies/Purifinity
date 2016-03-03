@@ -10,6 +10,7 @@ import {FooterComponent} from './footer.component';
 import {MenuComponent} from './menu.component';
 import {HomeComponent} from './home.component';
 import {FeaturesComponent} from './features.component';
+import {DownloadComponent} from './download.component';
 import {DocumentationComponent} from './documentation.component';
 import {AboutComponent} from './about.component';
 import {ContributeComponent} from './contribute.component';
@@ -35,6 +36,7 @@ import {ImprintComponent} from './commons/imprint.component';
 { path: '/', name: 'root', redirectTo: ['/Home'] },
 { path: '/home', name: 'Home', component: HomeComponent },
 { path: '/documentation', name: 'Documentation', component: DocumentationComponent },
+{ path: '/download', name: 'Download', component: DownloadComponent },
 { path: '/features', name: 'Features', component: FeaturesComponent },
 { path: '/about', name: 'About', component: AboutComponent },
 { path: '/contribute', name: 'Contribute', component: ContributeComponent },

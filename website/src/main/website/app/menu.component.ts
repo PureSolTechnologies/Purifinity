@@ -18,6 +18,9 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
         <a class="nav-link" [routerLink]="['/Features']">Features</a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/Download']">Download</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" [routerLink]="['/Documentation']">Documentation</a>
       </li>
       <li class="nav-item">

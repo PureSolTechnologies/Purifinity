@@ -12,7 +12,7 @@ import {PurifinityComponent} from './commons/purifinity.component';
 	template:
 `<div class="navbar">
   <div class="col-sm-6">
-    <a class="navbar-brand" href="#"><purifinity style="font-size:18pt;">${project.version}</purifinity></a>
+    <a class="navbar-brand" href="#"><purifinity style="font-size:18pt;"></purifinity></a>
   </div>
   <div class="col-sm-6" style="text-align:right;">
     <span style="font-size:16pt;"><puresol-technologies></puresol-technologies></span>

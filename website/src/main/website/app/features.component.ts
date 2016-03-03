@@ -9,15 +9,7 @@ import {PurifinityComponent} from './commons/purifinity.component';
 	  PureSolTechnologiesComponent,
 	  PurifinityComponent
 	],
-	template:
-`<div class="container">
-  <div class="row">
-    <h1>Features</h1>
-    <p>
-      To be done...
-    </p>
-  </div>
-</div>`
+	templateUrl: '../html/features.html'
 })
 export class FeaturesComponent {
 }
