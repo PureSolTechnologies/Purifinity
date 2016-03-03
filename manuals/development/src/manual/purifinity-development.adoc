@@ -10,6 +10,14 @@ This manual contains all information for Purifinity Developers and Plugin
 Developers.
 .............................................................................
 
+== Requirements
+
+The following requirments should be met to run Purifinity:
+
+* Linux OS needs to be installed
+* A link:http://java.oracle.com[Java Development Kit 8 (JDK8) or later] is installed and configured
+* link:http://maven.apache.org[Maven 3.2 or greater] is available
+
 == First Steps in Purifinity Development
 
 The next sub sections describe the first steps in Purifinity development. It
@@ -38,6 +46,8 @@ command line via:
 $ mvn install
 
 === Setting up Eclipse
+
+In the next sections the recommended setup of link:http://eclipse/org[Eclipse] is described.
 
 ==== Change the formatter to Sun Java Coding convention
 

@@ -10,34 +10,37 @@ This manual contains all information for installation and configuration of
 Purifinity.
 .............................................................................
 
+== Requirements
+
+The following requirments should be met to run Purifinity:
+
+* Linux OS needs to be installed
+* A Java 8 or later is installed and configured
+
 == Get Purifinity
 
 Purifinity can be downloaded as binary distribution, ready for installation, 
 or as a source package to be built from the latest source code.
 
-=== Binary Distributions
+If you want to use the source code for installation and development, please
+have a look int the Development Manual. 
 
-==== Community full Distribution
+In all other cases, Purifinity {project-version} can be downloaded as 
+pre-built binary distribution off Purifinity's website at 
+http://purifinity.com. 
+
+== Installing Binary Distributions
 
 The binary distribution are official releases which are tested and ready 
-for installation. It is preferred to use this version for productive 
+for installation. It is preferred to use these versions for productive 
 installations.
 
-Purifinity {project-version} can be downloaded a Purifinity's website at
-http://purifinity.com.
+=== Community Full Distribution
 
-=== From Source Code
-
-Source code can be used to use the latest source version for testing or
-development. For information about how to handle the sources, have a look
-into Purifinity Development Manual.
-
-== Extract Purifinity
+==== Extract Purifinity
 
 The distribution of Purifinity come as ZIP archive or gzipped TAR archive.
 Extract with either
-
-{project-version}
 
 [source,shell,subs="attributes"]
 $ unzip purifinity-{project-version}.zip
@@ -47,10 +50,9 @@ or
 [source,shell,subs="attributes"]
 $ tar xfz purifinity-{project-version}.tar.gz
 
-== Configure Purifinity
+==== Configure Purifinity
 
-=== Configure Hadoop
-
+.Configure Hadoop
 Open and check the content of the following files in the extraction directory:
 
 * lib/hadoop-{hadoop-version}/etc/hadoop/core-site.xml
@@ -63,9 +65,7 @@ Check here for the correct URLs and directories.
 TIP: When the full community version is used, only the directories in 
 hdfs-site.xml are to be adapted.
 
-=== Configure HBase
-
-
+.Configure HBase
 Open and check the content of the following files in the extraction directory:
 
 * lib/hbase-{hbase-version}/conf/hbase-site.xml
@@ -73,7 +73,7 @@ Open and check the content of the following files in the extraction directory:
 TIP: When the full community version is used, only the directory in 
 hbase-site.xml are to be adapted.
 
-== Prepare a new Installation 
+==== Prepare a new Installation 
 
 Only once for the first installation, run the following command to format the 
 hadoop file system:
@@ -84,7 +84,7 @@ $ lib/hadoop-{hadoop-version}/bin/hadoop namenode -format
 CAUTION: If you run this command again all data already present in Hadoop
 will be deleted!
 
-== Start and Stop Database
+==== Start and Stop Database
 
 Start data storage:
 
@@ -96,7 +96,7 @@ Stop data storage:
 [source,shell]
 $ bin/stopDB.sh
 
-== Create and Migrate Database 
+==== Create and Migrate Database 
 
 [source,shell]
 $ bin/migrateDB.sh
@@ -104,7 +104,7 @@ $ bin/migrateDB.sh
 IMPORTANT: Before the schema creation or migration can be started, the
 data storage needs to be started. 
  
-== Start and Stop Purifinity
+==== Start and Stop Purifinity
 
 [source,shell]
 $ bin/startServer.sh
