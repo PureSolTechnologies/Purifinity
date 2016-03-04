@@ -64,6 +64,14 @@
 					<include>**/*.ts</include>
 					<include>**/*.html</include>
 				</includes>
+				<excludes>				
+					<exclude>**/node_modules/concurrently</exclude>
+					<exclude>**/node_modules/less</exclude>
+					<exclude>**/node_modules/lite-server</exclude>
+					<exclude>**/node_modules/tsd</exclude>
+					<exclude>**/node_modules/tsline</exclude>
+					<exclude>**/node_modules/typescript</exclude>
+				</excludes>
 			</resource>
 			<resource>
 				<directory>src/main/website</directory>
@@ -72,6 +80,12 @@
 				<excludes>
 					<exclude>**/*.ts</exclude>
 					<exclude>**/*.html</exclude>
+					<exclude>**/node_modules/concurrently</exclude>
+					<exclude>**/node_modules/less</exclude>
+					<exclude>**/node_modules/lite-server</exclude>
+					<exclude>**/node_modules/tsd</exclude>
+					<exclude>**/node_modules/tsline</exclude>
+					<exclude>**/node_modules/typescript</exclude>
 				</excludes>
 			</resource>
 		</resources>

@@ -16,7 +16,7 @@
 				<include>com.puresoltechnologies.purifinity.manuals:manuals.installation</include>
 				<include>com.puresoltechnologies.purifinity.manuals:manuals.user</include>
 			</includes>
-			<outputDirectory>manuals</outputDirectory>
+			<outputDirectory>manuals/${project.version}</outputDirectory>
 			<unpack>true</unpack>
 		</dependencySet>
 	</dependencySets>
@@ -27,7 +27,7 @@
 			<includes>
 				<include>**/*</include>
 			</includes>
-			<filtered>true</filtered>
+			<filtered>false</filtered>
 			<fileMode>644</fileMode>
 			<directoryMode>755</directoryMode>
 			<outputDirectory>.</outputDirectory>

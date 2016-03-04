@@ -1,8 +1,11 @@
 import {Component} from 'angular2/core';
 
+import {ReferenceComponent} from './commons/reference.component';
+
 @Component({
-	selector: 'documentation',
-	templateUrl: '../html/documentation.html'
+    selector: 'documentation',
+    directives: [ReferenceComponent],
+    templateUrl: '../html/documentation.html'
 })
 export class DocumentationComponent {
 }

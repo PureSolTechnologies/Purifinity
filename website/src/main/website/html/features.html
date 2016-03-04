@@ -1,6 +1,60 @@
 <div class="row">
 	<div class="col-md-12">
 		<h1>Features</h1>
-		<p>To be done...</p>
+		<h2>(Almost) Unlimited and Secure Storage</h2>
+		<p>
+			Purifinity's core feature is scalability. The most important part to
+			reach this goal is a storage design which can grow on demand. To meet
+			his target
+			<ref url="http://hadoop.apache.org">Hadoop</ref>
+			is used as basis for all storage.
+		</p>
+		<p>
+			Source files are stored as is in Hadoop for reference, but to store
+			metrics and other information a more structured database is needed.
+			For this purpose
+			<ref url="http://hbase.apache.org">HBase</ref>
+			is used together with
+			<ref url="http://phoenix.apache.org">Phoenix</ref>
+			.
+		</p>
+		<p>This kind of storage has two major advantages:</p>
+		<ul>
+			<li>Linear scalability by adding more hardware with Hadoop and
+				HBase as cluster.</li>
+			<li>Due to atuomated replication no backup strategy is needed,
+				because parts of the cluster can fail without loosing data.</li>
+		</ul>
+		<h2>Graph Storage</h2>
+		<p>
+			For analysis and evaluation purpose Graph Storage is needed which is
+			also scalable. All graph data is put into a
+			<ref url="http://ductiledb.com">DuctileDB</ref>
+			which is also based on Hadoop/HBase and is scalable by design.
+		</p>
+		<h2>Powerful Server Architecture</h2>
+		<p>
+			Scalable storage is nice, but without the power to search and
+			calculate meaningful information, it is useless. Based on
+			<ref url="http://java-oracle.com">Java Technologies</ref>
+			and
+			<ref url="http://wildfly.org">WildFly</ref>
+			a clustered application server can be used to scale together with the
+			storage to handle a lot of large project over a long period of time.
+		</p>
+		<h2>Universal Web User Interface</h2>
+		<p>Due to a big diversity of hardware where Purifinity may be
+			needed to run on (Desktop PCs, Laptops,Tables, Smartphones...) a web
+			based, reactive user interface is needed.</p>
+		<p>
+			Purifinity's user interface is based on
+			<ref url="https://angularjs.org">Angular</ref>
+			and
+			<ref url="http://getbootstrap.com">Bootstrap</ref>
+			.
+		</p>
+		<h2>Plugin Architecture</h2>
+		<p>Purifinity was meant to be language independent. To allow third
+			parties to develop extensions, a plugin architecture is used.</p>
 	</div>
 </div>

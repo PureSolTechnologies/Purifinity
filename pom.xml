@@ -107,7 +107,7 @@
 		<site>
 			<id>FTPPureSolTechnologiesCom</id>
 			<name>FTPPureSolTechnologiesCom</name>
-			<url>ftp://puresol-technologies.com/opensource.puresol-technologies.com/projects/purifinity/${project.version}</url>
+			<url>ftp://puresol-technologies.com/purifinity.com/sites/${project.version}</url>
 		</site>
 		<repository>
 			<id>libs-release-local</id>

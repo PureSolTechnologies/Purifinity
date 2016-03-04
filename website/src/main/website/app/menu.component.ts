@@ -15,6 +15,9 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
         <a class="nav-link" [routerLink]="['/Home']"><span class="octicon octicon-home"></span></a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" [routerLink]="['/About']">About</a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" [routerLink]="['/Features']">Features</a>
       </li>
       <li class="nav-item">
@@ -24,13 +27,7 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
         <a class="nav-link" [routerLink]="['/Documentation']">Documentation</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/About']">About</a>
-      </li>
-      <li class="nav-item">
         <a class="nav-link" [routerLink]="['/Contribute']">Contribute</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/Imprint']">Imprint</a>
       </li>
     </ul>
   </div>
