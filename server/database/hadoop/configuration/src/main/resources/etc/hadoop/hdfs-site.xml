@@ -22,10 +22,7 @@
     <value>1</value>
   </property>
   <property>
-    <name>dfs.namenode.name.dir</name>
-    <value>/home/ludwig/HadoopData/hdfs/namenode</value>
+    <name>hadoop.tmp.dir</name>
+    <value>${hadoop.data.dir}</value>
   </property>
-  <property>
-    <name>dfs.datanode.data.dir</name>
-    <value>/home/ludwig/HadoopData/hdfs/datanode</value>
-</property></configuration>
+</configuration>

@@ -50,6 +50,8 @@
 		<cargo.logging>medium</cargo.logging>
 		<!-- Purifinity Settings -->
 		<purifinity.home>${work.dir}/purifinity</purifinity.home>
+		<hadoop.data.dir>${purifinity.home}/data/hadoop</hadoop.data.dir>
+		<hbase.data.dir>${purifinity.home}/data/hbase</hbase.data.dir>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity</groupId>
@@ -531,6 +533,10 @@
 		</profile>
 		<profile>
 			<id>dist</id>
+			<properties>
+				<hadoop.data.dir>/var/opt/purifinity/data/hadoop</hadoop.data.dir>
+				<hbase.data.dir>/var/opt/purifinity/data/hbase</hbase.data.dir>
+			</properties>
 			<modules>
 				<module>dist</module>
 			</modules>
