@@ -6,5 +6,139 @@
 :encoding: UTF-8
 
 .............................................................................
-This manual is for end users. 
+This manual is for end users and administrators and explains how to use the
+user interface for daily work and administration. 
 .............................................................................
+
+== Requirements
+
+In order to use Purifinity, the following requirements need to be met to run
+the client:
+
+* Dual core processor
+* Min. 2GB of RAM
+* A current HTML5 browser like:
+** Microsoft Internet Explorer >= 10
+** Microsoft Edge
+** Firefox  
+** Chrome or Chromium
+** Opera
+
+== Managing Users
+
+=== Introduction
+
+Users in Purifinity authenticate themself via their email address and a
+password. Email addresses are use, because these are unique for every user
+and they are also used to contact the users.
+
+How to change the default mail domain for easier login, have a look into the
+Installation Manual.
+
+To manage users, you need to be logged into Purifinity as administrator. Have
+a look into the Installation manual to find out, what the default accounts are
+and what are there passwords. Use the default administrator account to login
+for the first time to create your own administrator account. 
+
+TIP: It is good practice to delete the default accounts, after the final
+accounts are created. At least, the default passwords need to be changed for
+the default accounts in order to increase security.
+
+When logged in, change into the Administration section by clicking 'Administration' 
+in the upper right corner. Select there 'Users' in the menu to get to the user
+management section.
+
+=== Adding Users
+
+Select 'Users' tab and hit 'Add User...' button. Fill out the form and confirm
+with 'OK'. 
+
+=== Deleting Users 
+
+Select 'Users' tab and search for the user to delete in users table. In Actions
+column hit the 'Delete...' button in the row of the user to be deleted.
+
+WARNING: Make sure you are on the correct account. There is no confirmation dialog
+at the moment to double check for the correct intention.
+
+=== Managing Roles
+
+Currently, only three fixed roles are supported:
+
+* Unprivileged User (read only)
+* Engineer (no administration, but may start analyses)
+* Administration (full access to all functionality)
+
+The role management will be enhanced in future to provide fine grained access
+to Purifinity's functionality.
+
+== Managing Projects
+
+In order to analyze source code and software projects, Purifinity needs to
+know them and how to get the source.
+
+When logged in, change into the Administration section by clicking 'Administration' 
+in the upper right corner. Select there 'Projects' in the menu to get to the project
+management section.
+
+=== Create Projects
+
+Use the button 'Create Project...' to add a new project to Purifinity. The appearing
+form asks for all relevant information about the project:
+
+* *Identifier:* is an identifier used in the database and for URLs. It must not contain
+any special character or white spaces. It is best built by letters, numbers, minus and 
+underscores.
+* *Name:* is the name of the project as it is to be presented in reports and in the UI.
+* *Description:* is an optional description for the project used in reports to summerize
+what the project is about.
+* *Repository Type:* is the type of repository where the source code can be read from. Depending on the selection the configuration is changed for the selected repository. 
+*At the time of writing (Purifinity 0.4.0) only the 'Directory' repository type is implemented!*
+
+=== Delete Projects
+
+In 'Projects' section of Administrators page, a list of projects can be found. In the 
+actions column a button can be found to delete the project. 
+
+== Managing Plug-ins
+
+Plug-ins are most important for the functionality of Purifinity. All important
+functionality is brought to Purifinity via plug-ins. A lot of them need some
+additional configuration or provide customization. In the next sub sections
+it is explained how to enable and disable plug-ins and how to configure them.
+
+For information about the different configuration options, have a look to the
+documentation of the plug-ins.
+ 
+=== Enable and Disable Plug-ins
+
+When logged in, change into the Administration section by clicking 'Administration' 
+in the upper right corner. Select there 'Settings' in the menu to get to the settings 
+section. Select tab 'Plug-in Activation'.
+
+There all deployed and initialized plug-ins can be found sorted by plug-in type. 
+Plugin-ins are enabled and disabled by using the buttons on the right side. Red 'disabledÄ
+buttons indicate that the specific plug-in is not enabled and cannot be used. A green 'enabled'
+button indicates the activated plug-in which can be used.   
+
+=== Configure Plug-ins 
+
+When logged in, change into the Administration section by clicking 'Administration' 
+in the upper right corner. Select there 'Settings' in the menu to get to the settings 
+section. Select tab 'Plug-in Settings'.
+
+There a tree can be found which sorts in root layer the types of the plug-ins and in the 
+layers below the plug-ins itself and all there provided configuration parameters.
+
+Tooltips over the values show what content is valid and expected.
+
+== Running analyzes
+
+In the start page of Purifinity, a list of projects appear. At the right 
+side of the list the execute button can be found, to start a new analysis.
+
+== Analyzes Results
+
+On Purifinity's start page, the list of projects can be found. Click on the
+project of interest to get to a list of analysis runs and there select the
+run for which the results are to be shown.

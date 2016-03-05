@@ -7,27 +7,29 @@
 
 .............................................................................
 This manual contains all information for installation and configuration of
-Purifinity.
+Purifinity system. How to add user, to configure projects and to use 
+Purifinity, the User's manual can be consulted. 
 .............................................................................
 
 == Requirements
 
-The following requirments should be met to run Purifinity:
+The following requirements should be met to run Purifinity storage and server:
 
-* Linux OS needs to be installed
+* Min. dual core processor
+* Min. 8 GB RAM
+* Linux OS needs to be installed (Windows should work, too, but was not tested)
 * A Java 8 or later is installed and configured
 
 == Get Purifinity
 
-Purifinity can be downloaded as binary distribution, ready for installation, 
+Purifinity can be loaded down as binary distribution, ready for installation, 
 or as a source package to be built from the latest source code.
 
 If you want to use the source code for installation and development, please
-have a look int the Development Manual. 
+have a look into the Development Manual. 
 
 In all other cases, Purifinity {project-version} can be downloaded as 
-pre-built binary distribution off Purifinity's website at 
-http://purifinity.com. 
+pre-built binary distribution off link:http://purifinity.com[Purifinity's web site]. 
 
 == Installing Binary Distributions
 
@@ -36,6 +38,9 @@ for installation. It is preferred to use these versions for productive
 installations.
 
 === Community Full Distribution
+
+The community edition is free of charge, contains everything you need to
+start and use Purifiniy. 
 
 ==== Extract Purifinity
 
@@ -53,61 +58,170 @@ $ tar xfz purifinity-{project-version}.tar.gz
 ==== Configure Purifinity
 
 .Configure Hadoop
-Open and check the content of the following files in the extraction directory:
+Open and check the content of the following file in the extraction directory:
 
-* lib/hadoop-{hadoop-version}/etc/hadoop/core-site.xml
 * lib/hadoop-{hadoop-version}/etc/hadoop/hdfs-site.xml
-* lib/hadoop-{hadoop-version}/etc/hadoop/yarn-site.xml
-* lib/hadoop-{hadoop-version}/etc/hadoop/mapred-site.xml
 
-Check here for the correct URLs and directories.
-
-TIP: When the full community version is used, only the directories in 
-hdfs-site.xml are to be adapted.
+Only the directories in hdfs-site.xml is to be adapted, if needed.
 
 .Configure HBase
 Open and check the content of the following files in the extraction directory:
 
 * lib/hbase-{hbase-version}/conf/hbase-site.xml
 
-TIP: When the full community version is used, only the directory in 
-hbase-site.xml are to be adapted.
+Only the directory in 'hbase-site.xml' is to be adapted, if needed.
 
 ==== Prepare a new Installation 
 
 Only once for the first installation, run the following command to format the 
-hadoop file system:
+Hadoop file system:
 
 [source,shell,subs="attributes"]
-$ lib/hadoop-{hadoop-version}/bin/hadoop namenode -format
+$ bin/format.sh
 
 CAUTION: If you run this command again all data already present in Hadoop
 will be deleted!
 
-==== Start and Stop Database
+==== Start Database
 
 Start data storage:
 
 [source,shell]
 $ bin/startDB.sh
 
-Stop data storage:
-
-[source,shell]
-$ bin/stopDB.sh
-
-==== Create and Migrate Database 
+==== Create Database 
 
 [source,shell]
 $ bin/migrateDB.sh
 
-IMPORTANT: Before the schema creation or migration can be started, the
-data storage needs to be started. 
+IMPORTANT: Before the schema creation can be started, the
+data storage needs to be started and Hadoop to be formatted. 
  
-==== Start and Stop Purifinity
+==== Start Purifinity
 
 [source,shell]
 $ bin/startServer.sh
 
 IMPORTANT: Before Purifinity can be started, the data storage needs to 
 be started and also the database schema needs to be created or migrated. 
+
+After a successulf start, you can open the web UI at URL http://localhost:8080.
+
+==== Changing the default email domain
+
+In Purifintiy UI the email address needs to be provided as login. It is quite 
+cumbersome to always fill in the full email address including the mail domain.
+Therefore, Purifinity brings the feature of adding the default mail domain
+in case it is not provided.
+
+As example let's assume, we have the user 'ludwig@puresol-technologies.com'.
+When logging in the whole email address would be 31 characters. Instead of the
+whole email address, only 'ludwig' is provided in login box and of course also 
+the password. As soon as 'Sign In' is hit, the mail domain '@puresol-technologies.com'
+is added automatically and also used for login.
+
+To change this default mail domain, open file 
+'lib/wildfly-${wildfly-version}/welcome-content/config/authentication.js'
+and change 
+
+[source,javascript]
+----
+PurifinityConfiguration.authentication = {
+        defaultDomain : "@puresol-technologies.com",
+}
+----
+
+to your domain like:
+
+[source,javascript]
+----
+PurifinityConfiguration.authentication = {
+        defaultDomain : "@adapt.me",
+}
+----
+
+There is not server restart required. Only refresh the site in the browser
+and the default domain is changed.
+
+==== Logging into Purifinity with Default  Accounts
+
+When opening the web UI, a login screen will apprear. There are several
+default accounts. All accounts use an email address as login name and 
+a password. The following accounts are created during installation:
+
+* user@puresol-technologies.com
+* engineer@puresol-technologies.com
+* administrator@puresol-technologies.com
+
+Passwords for all accounts are 'password'.
+
+These account differ only in the permissions they have. To add new
+users, use 'administrator@puresol-technologies.com'. For more
+details about the user management, have a look into the User's Manual.
+
+== Starting and Stopping Purifinity
+
+=== Starting Purifinity
+
+Directly after finished the installation, Purifinity is already running.
+The procedure described in this section is only usable in case Purifinity
+was stopped before.
+
+The sequence for stopping Purifinity is:
+
+. Start storage
+. Start Purifinity server
+
+.In detail
+To start the data storage use the command:
+
+[source,shell]
+$ bin/startDB.sh
+
+To start Purifinity, the command 
+
+[source,shell]
+$ bin/startServer.sh
+
+is used.
+
+
+=== Stopping Purifinity
+
+The sequence for stopping Purifinity is:
+
+. Stop Purifinity server
+. Stop storage
+
+.In detail
+When started with the bin/startServer.sh script, just hit <CTRL>+C to stop
+the server gracefully.
+
+To stop the data storage use the command:
+
+[source,shell]
+$ bin/stopDB.sh
+
+== Additional Documentation for 3rd Party Components
+
+In order to optimize the configuration for certain 3rd party components,
+have a look to the official web sites of the projects. The components
+of interests and the web sites are:   
+
+* link:http://hadoop.apache.org[Hadoop Distributed File System]
+* link:http://hbase.apache.org[HBase Distributed Database]
+* link:http://ductiledb.com[DuctileDB Graph Database]
+* link:http://wildfly.org[WildFly Application Server]
+
+== Next Steps
+
+If you have finished the installation and configuration of Purifinity,
+the next steps are to:
+
+. Add users
+. Add projects
+. Enable plug-ins
+. Configure plug-ins 
+. Run your first analyzes
+
+These steps are described in the User's manual.

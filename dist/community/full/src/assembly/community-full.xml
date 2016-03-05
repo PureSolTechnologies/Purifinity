@@ -119,6 +119,15 @@
 			<outputDirectory>lib/hbase-${hbase.version}</outputDirectory>
 			<unpack>true</unpack>
 		</dependencySet>
+		<dependencySet>
+			<includes>
+				<include>com.puresoltechnologies.purifinity.manuals:manuals.development</include>
+				<include>com.puresoltechnologies.purifinity.manuals:manuals.installation</include>
+				<include>com.puresoltechnologies.purifinity.manuals:manuals.user</include>
+			</includes>
+			<outputDirectory>doc</outputDirectory>
+			<unpack>true</unpack>
+		</dependencySet>
 	</dependencySets>
 
 	<fileSets>

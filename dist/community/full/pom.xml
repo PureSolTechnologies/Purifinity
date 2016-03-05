@@ -14,6 +14,42 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
+			<artifactId>manuals.development</artifactId>
+			<classifier>html</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
+			<artifactId>manuals.development</artifactId>
+			<classifier>pdf</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
+			<artifactId>manuals.installation</artifactId>
+			<classifier>html</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
+			<artifactId>manuals.installation</artifactId>
+			<classifier>pdf</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
+			<artifactId>manuals.user</artifactId>
+			<classifier>html</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
+			<artifactId>manuals.user</artifactId>
+			<classifier>pdf</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 			<artifactId>c11.plugin</artifactId>
 			<type>ear</type>

@@ -54,6 +54,7 @@
 						<maven-version>3.2</maven-version>
 						<hadoop-version>${hadoop.version}</hadoop-version>
 						<hbase-version>${hbase.version}</hbase-version>
+						<wildfly-version>${wildfly.version}</wildfly-version>
 					</attributes>
 				</configuration>
 			</plugin>
