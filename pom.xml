@@ -538,12 +538,14 @@
 				<hbase.data.dir>/var/opt/purifinity/data/hbase</hbase.data.dir>
 			</properties>
 			<modules>
+				<module>manuals</module>
 				<module>dist</module>
 			</modules>
 		</profile>
 		<profile>
 			<id>website</id>
 			<modules>
+				<module>manuals</module>
 				<module>website</module>
 			</modules>
 		</profile>
@@ -1943,7 +1945,6 @@
 		<module>api</module>
 		<module>server</module>
 		<module>webui</module>
-		<module>manuals</module>
 	</modules>
 
 </project>
