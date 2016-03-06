@@ -209,6 +209,10 @@
 		</profile>
 		<profile>
 			<id>release</id>
+			<properties>
+				<hadoop.data.dir>/var/opt/purifinity/data/hadoop</hadoop.data.dir>
+				<hbase.data.dir>/var/opt/purifinity/data/hbase</hbase.data.dir>
+			</properties>
 			<build>
 				<plugins>
 					<plugin>
@@ -533,10 +537,6 @@
 		</profile>
 		<profile>
 			<id>dist</id>
-			<properties>
-				<hadoop.data.dir>/var/opt/purifinity/data/hadoop</hadoop.data.dir>
-				<hbase.data.dir>/var/opt/purifinity/data/hbase</hbase.data.dir>
-			</properties>
 			<modules>
 				<module>manuals</module>
 				<module>dist</module>
