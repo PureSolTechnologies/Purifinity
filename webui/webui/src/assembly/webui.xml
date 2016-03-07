@@ -10,10 +10,13 @@
 
 	<fileSets>
 		<fileSet>
-			<directory>target/dist</directory>
+			<directory>target/tmp</directory>
 			<includes>
 				<include>**/*</include>
 			</includes>
+			<filtered>false</filtered>
+			<fileMode>644</fileMode>
+			<directoryMode>755</directoryMode>
 			<outputDirectory>.</outputDirectory>
 		</fileSet>
 	</fileSets>
