@@ -1,0 +1,52 @@
+<panel title="System Health"
+	icon="/images/icons/FatCow_Icons16x16/system_monitor.png">
+<table class="table">
+	<tbody>
+		<tr>
+			<td>Connection</td>
+			<td>{{connection}}</td>
+		</tr>
+		<tr *ngIf="error">
+			<td>Error</td>
+			<td>{{error}}</td>
+		</tr>
+		<tr>
+			<td>Server Start</td>
+			<td>{{getStartTime()}}</td>
+		</tr>
+		<tr>
+			<td>Uptime</td>
+			<td>{{getUptimeString()}}</td>
+		</tr>
+		<tr>
+			<td>Memory</td>
+			<td>
+				<div class="progress">
+					<div
+						class="progress-bar progress-bar-striped {{getMemorySeverity()}}"
+						role="progressbar" [attr.data-aria-valuenow]="getUsedMemory()"
+						aria-valuemin="0" [attr.data-aria-valuemax]="getMaxMemory()"
+						style="width: {{getMemoryProgressWidth()}}">
+						<span>{{getMemoryProgressWidth()}}%</span>
+					</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>CPU Usage<br />({{getAvailableCPUs()}} processors)
+			</td>
+			<td>
+				<div class="progress">
+					<div class="progress-bar progress-bar-striped {{getCPUSeverity()}}"
+						role="progressbar" [attr.data-aria-valuenow]="getCPUUsage()*100"
+						aria-valuemin="0"
+						[attr.data-aria-valuemax]="getAvailableCPUs() * 100"
+						style="width: {{getCPUUsage()*100">
+						<span>{{getCPUUsage()*100}}%</span>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</panel>

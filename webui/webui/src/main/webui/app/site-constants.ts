@@ -6,4 +6,16 @@ import {Injectable} from 'angular2/core';
 @Injectable()
 export class SiteConstants {
 
+    getServerHost(): string {
+        return PurifinityConfiguration.server.host;
+    }
+
+    getServerPort(): number {
+        return PurifinityConfiguration.server.port;
+    }
+
+    getAuthenticationDefaultDomain(): string {
+        return PurifinityConfiguration.authentication.defaultDomain;
+    }
+
 }

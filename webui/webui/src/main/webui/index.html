@@ -1,54 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-  
-  <head>
-    <!-- Required meta tags always come first -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <base href="/" />
 
-    <title>Purifinity - Source Code Analysis</title>
+<head>
+<!-- Required meta tags always come first -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<base href="/" />
 
-    <!-- Load libraries -->
-    <!-- IE required polyfills, in this exact order -->
-    <script src="node_modules/es6-shim/es6-shim.min.js"></script>
-    <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
-    <script src="node_modules/angular2/es6/prod/src/testing/shims_for_IE.js"></script>
+<title>Purifinity - Source Code Analysis</title>
 
-    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
-    <script src="node_modules/systemjs/dist/system.src.js"></script>
-    <script src="node_modules/rxjs/bundles/Rx.js"></script>
-    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
-    <script src="node_modules/angular2/bundles/router.dev.js"></script>
-    <script src="node_modules/tether/dist/js/tether.min.js"></script>
-    
-    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="css/purifinity-ui.css">
-    
-    <!-- Configure SystemJS -->
-    <script>
-      System.config({
-        packages: {        
-          app: {
-            format: 'register',
-            defaultExtension: 'js'
-          }
-        }
-      });
-      System.import('app/main')
-            .then(null, console.error.bind(console));
-    </script>
-  </head>
+<!-- Load libraries -->
+<!-- IE required polyfills, in this exact order -->
+<script src="node_modules/es6-shim/es6-shim.min.js"></script>
+<script src="node_modules/systemjs/dist/system-polyfills.js"></script>
+<script src="node_modules/angular2/es6/prod/src/testing/shims_for_IE.js"></script>
 
-  <body>
-    <app>
-      <img src="images/ventilator.gif" width="64pt" style="padding: 5pt;"/> Loading page...
-    </app>
+<script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
+<script src="node_modules/systemjs/dist/system.src.js"></script>
+<script src="node_modules/rxjs/bundles/Rx.js"></script>
+<script src="node_modules/angular2/bundles/angular2.dev.js"></script>
+<script src="node_modules/angular2/bundles/router.dev.js"></script>
+<script src="node_modules/tether/dist/js/tether.min.js"></script>
 
-    <!-- Boostrap start -->
-    <script src="node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-  </body>
-  
+<link rel="stylesheet" type="text/css"
+	href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/purifinity-ui.css">
+
+<!-- Custom JS scripts -->
+<script type="text/javascript" src="config/server.js"></script>
+<script type="text/javascript" src="config/authentication.js"></script>
+
+<!-- Configure SystemJS -->
+<script>
+	System.config({
+		packages : {
+			app : {
+				format : 'register',
+				defaultExtension : 'js'
+			}
+		}
+	});
+	System.import('app/main').then(null, console.error.bind(console));
+</script>
+</head>
+
+<body>
+	<app> <img src="images/ventilator.gif" width="64pt"
+		style="padding: 5pt;" /> Loading page... </app>
+
+	<!-- Boostrap start -->
+	<script src="node_modules/jquery/dist/jquery.min.js"></script>
+	<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+</body>
+
 </html>
