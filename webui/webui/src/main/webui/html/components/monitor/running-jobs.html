@@ -1,0 +1,29 @@
+<panel title="Running Jobs"
+	icon="/images/icons/FatCow_Icons16x16/service_status.png">
+<div *ngIf="jobs.jobStates.length > 0" class="panel-body">{{jobs.time
+	| defaultDate}}</div>
+<table class="table">
+	<tbody>
+		<tr *ngFor="#jobStatus of jobs.jobStates">
+			<td width="30%"><h4>{{jobStatus.name}}</h4></td>
+			<td>
+				<div *ngFor="#stepStatus of jobStatus.stepStates">
+					{{stepStatus.name}}
+					<div class="progress">
+						<progress class="progress progress-striped"
+							[attr.value]="stepStatus.current"
+							[attr.max]="stepStatus.max"> {{stepStatus.current
+							/ stepStatus.max * 100 | number: 1}}%</progress>
+					</div>
+				</div>
+			</td>
+			<td width="5%">
+				<button class="btn btn-default" title="Abort Run..."
+					data-ng-click="abortRun(jobStatus.projectId, jobStatus.jobId)">
+					<img src="/images/icons/FatCow_Icons16x16/stop.png" />
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+</panel>
