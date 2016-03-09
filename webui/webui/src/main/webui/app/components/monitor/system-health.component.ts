@@ -2,6 +2,8 @@ import {Component, NgZone} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 
 import {PanelComponent} from '../../commons/panel.component';
+import {DefaultDatePipe} from '../../commons/pipes/default-date.pipe';
+import {DurationPipe} from '../../commons/pipes/duration.pipe';
 
 class SystemHealth {
 
@@ -19,6 +21,10 @@ class SystemHealth {
     directives: [
         ROUTER_DIRECTIVES,
         PanelComponent
+    ],
+    pipes: [
+        DefaultDatePipe,
+        DurationPipe
     ],
     templateUrl: '../../../html/components/monitor/system-health.html'
 })
@@ -58,32 +64,11 @@ export class SystemHealthComponent {
         }
     }
 
-    getUptimeString() {
-        if (!this.status) {
-            return "";
+    getUptime(): number {
+        if ((this.status) && (this.status.uptime)) {
+            return this.status.uptime;
         }
-        var milliseconds = this.status.uptime;
-        if (milliseconds < 1000) {
-            return milliseconds + "ms";
-        }
-        var seconds = Math.floor(milliseconds / 1000);
-        milliseconds = milliseconds % 1000;
-        if (seconds < 60) {
-            return seconds + "s";
-        }
-        var minutes = Math.floor(seconds / 60);
-        seconds = seconds % 60;
-        if (minutes < 60) {
-            return minutes + "min " + seconds + "s";
-        }
-        var hours = Math.floor(minutes / 60);
-        minutes = minutes % 60;
-        if (hours < 24) {
-            return hours + "hr " + minutes + "min " + seconds + "s";
-        }
-        var days = Math.floor(hours / 24);
-        hours = hours % 24;
-        return days + "days " + hours + "hr " + minutes + "min " + seconds + "s";
+        return 0.0;
     }
 
     getMemorySeverity() {
@@ -92,12 +77,12 @@ export class SystemHealthComponent {
         }
         var usage = this.status.usedMemory / this.status.maxMemory;
         if (usage < 0.75) {
-            return "progress-bar-success";
+            return "progress-success";
         }
         if (usage < 0.9) {
-            return "progress-bar-warning";
+            return "progress-warning";
         }
-        return "progress-bar-danger";
+        return "progress-danger";
     }
 
     getCPUSeverity() {
@@ -106,12 +91,12 @@ export class SystemHealthComponent {
             return "";
         }
         if (usage < 0.75) {
-            return "progress-bar-success";
+            return "progress-success";
         }
         if (usage < 0.9) {
-            return "progress-bar-warning";
+            return "progress-warning";
         }
-        return "progress-bar-danger";
+        return "progress-danger";
     }
 
     getCPUUsage() {

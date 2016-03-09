@@ -29,14 +29,6 @@ purifinityUI.controller("menuCtrl", ["$scope", "$route", "$routeParams", "$locat
         };
     }]);
 
-purifinityUI.filter("defaultDate", ["$filter",
-    function(
-        $filter: angular.IFilterService) {
-        return function(value) {
-            return $filter("date")(value, "yyyy-MM-dd HH:mm:ss");
-        };
-    }]);
-
 purifinityUI.filter("metricValue", ["$filter",
     function($filter: angular.IFilterService) {
         return function(value) {
@@ -103,34 +95,6 @@ purifinityUI.filter("fsSize", ["$filter",
             }
         }
     }]);
-
-/**
- * We assume for that filter a duration with millisecond accuracy.
- */
-purifinityUI.filter("duration",
-    function() {
-        return function(duration: number): string {
-            if (duration < 0) {
-                return "not finished/aborted";
-            }
-            var result: string = String(duration % 1000) + "ms";
-            duration = Math.floor(duration / 1000);
-            if (duration <= 0) {
-                return result;
-            }
-            result = String(duration % 60) + "s " + result;
-            duration = Math.floor(duration / 60);
-            if (duration <= 0) {
-                return result;
-            }
-            result = String(duration % 60) + "min " + result;
-            duration = Math.floor(duration / 60);
-            if (duration <= 0) {
-                return result;
-            }
-            return String(duration) + "hr " + result;
-        }
-    });
 
 purifinityUI.filter("hashId",
     function() {
