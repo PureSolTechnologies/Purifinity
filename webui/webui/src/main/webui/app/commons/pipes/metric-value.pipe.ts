@@ -5,11 +5,11 @@ import {Pipe, PipeTransform} from 'angular2/core';
 })
 export class MetricValuePipe implements PipeTransform {
 
-    transform(value: number, args: any[]): number {
-        if (value === parseInt(value, 10)) {
+    transform(value: string, args: any[]): string {
+        if (value === String(parseInt(value, 10))) {
             return value;
         } else {
-            return value.toFixed(2);
+            return Number(value).toFixed(2);
         }
     };
 }
