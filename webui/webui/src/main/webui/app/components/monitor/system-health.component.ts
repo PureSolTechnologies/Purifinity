@@ -25,7 +25,7 @@ class SystemHealth {
 export class SystemHealthComponent {
 
     connection: string = "Not Connected.";
-    error: string = undefined;
+    error: any;
     status: SystemHealth;
     websocket: WebSocket;
     zone: NgZone;
@@ -34,26 +34,26 @@ export class SystemHealthComponent {
         this.zone = zone;
         var server: any = PurifinityConfiguration.server;
         this.websocket = new WebSocket("ws://" + server.host + ":" + server.port + "/purifinityserver/socket/status");
-        var websocket: WebSocket = this.websocket;
+        var shc = this;
         this.websocket.onopen = function(event) {
             zone.run(() => {
-                this.connection = "Connected.";
-                websocket.send("sendStatus");
+                shc.connection = "Connected.";
+                shc.websocket.send("sendStatus");
             });
         }
         this.websocket.onclose = function(event) {
             zone.run(() => {
-                this.connection = "Connection closed.";
+                shc.connection = "Connection closed.";
             });
         }
         this.websocket.onmessage = function(event) {
             zone.run(() => {
-                this.status = JSON.parse(event.data);
+                shc.status = JSON.parse(event.data);
             });
         }
         this.websocket.onerror = function(event) {
             zone.run(() => {
-                this.error = event;
+                shc.error = event;
             });
         }
     }
