@@ -1,11 +1,14 @@
-class Alerter {
+import {Injectable} from 'angular2/core';
+
+@Injectable()
+export class Alerter {
 
     public alerts: Alert[] = [];
 
     /*
      * Type: info, danger, success, warning
      */
-    addAlert(severity, message) {
+    addAlert(severity: string, message: string) {
         if (severity && message) {
             this.alerts.push(new Alert(severity, message));
         }

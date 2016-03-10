@@ -1,8 +1,9 @@
-import {Component, NgZone} from 'angular2/core';
+import {Component, NgZone, Inject} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 
 import {PanelComponent} from '../../commons/panel.component';
 import {DefaultDatePipe} from '../../commons/pipes/default-date.pipe';
+import {PurifinityServerConnector} from '../../commons/purifinity/PurifinityServerConnector';
 
 @Component({
     selector: 'running-jobs',
@@ -17,14 +18,16 @@ import {DefaultDatePipe} from '../../commons/pipes/default-date.pipe';
 })
 export class RunningJobsComponent {
 
+    private zone: NgZone;
+    private purifinityServerConnector: PurifinityServerConnector;
     private connection: string = "Not Connected.";
     private error: any;
     private jobs: any;
     private websocket: WebSocket;
-    private zone: NgZone;
 
-    constructor(zone: NgZone/*, purifinityServerConnector: PurifinityServerConnector*/) {
+    constructor(zone: NgZone, purifinityServerConnector: PurifinityServerConnector) {
         this.zone = zone;
+        this.purifinityServerConnector = purifinityServerConnector;
         var server = PurifinityConfiguration.server;
         this.websocket = new WebSocket("ws://" + server.host + ":" + server.port + "/purifinityserver/socket/jobs");
         var rjc = this;
@@ -52,10 +55,10 @@ export class RunningJobsComponent {
     }
 
     abortRun(projectId, jobId) {
-        /*        purifinityServerConnector.put("/purifinityserver/rest/analysis/projects/" + projectId + "/abort/" + jobId, "",
-                    function(data, status) { },
-                    function(data, status, error) { }
-                );*/
+        this.purifinityServerConnector.put("/purifinityserver/rest/analysis/projects/" + projectId + "/abort/" + jobId, "",
+            function(data, status) { },
+            function(data, status, error) { }
+        );
     };
 
     getJobStates(): any[] {

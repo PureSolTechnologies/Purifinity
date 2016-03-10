@@ -1,13 +1,19 @@
-class AuthenticationService {
+import {Injectable} from 'angular2/core';
+import {Location} from 'angular2/router';
+
+import {HTTPRequests} from './HTTPRequests';
+import {AuthenticationData} from './AuthenticationData';
+
+@Injectable()
+export class AuthenticationService {
 
     public authData: AuthenticationData;
     public redirect: string;
     private loginURL: string;
     private logoutURL: string;
 
-    constructor(private $location: angular.ILocationService,
-        private httpRequests: HTTPRequests,
-        private baseURL: string) {
+    constructor(private location: Location,
+        private httpRequests: HTTPRequests) {
         this.authData = this.loadAuthData();
         this.loginURL = "/purifinityserver/rest/auth/login";
         this.logoutURL = "/purifinityserver/rest/auth/logout";
@@ -31,7 +37,7 @@ class AuthenticationService {
                 if (redirect) {
                     window.location.href = redirect ;
                 } else {
-                    authService.$location.path("/");
+                    authService.location.go("/");
                 }
             }, //
             function(data, status, error) {
