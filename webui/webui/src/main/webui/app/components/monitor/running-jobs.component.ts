@@ -17,11 +17,11 @@ import {DefaultDatePipe} from '../../commons/pipes/default-date.pipe';
 })
 export class RunningJobsComponent {
 
-    connection: string = "Not Connected.";
-    error: any;
-    jobs: any;
-    websocket: WebSocket;
-    zone: NgZone;
+    private connection: string = "Not Connected.";
+    private error: any;
+    private jobs: any;
+    private websocket: WebSocket;
+    private zone: NgZone;
 
     constructor(zone: NgZone/*, purifinityServerConnector: PurifinityServerConnector*/) {
         this.zone = zone;
@@ -57,4 +57,18 @@ export class RunningJobsComponent {
                     function(data, status, error) { }
                 );*/
     };
+
+    getJobStates(): any[] {
+        if (this.jobs && this.jobs.jobStates) {
+            return this.jobs.jobStates;
+        }
+        return [];
+    }
+
+    hasJobStates(): boolean {
+        if (this.jobs && this.jobs.jobStates) {
+            return this.jobs.jobStates.length > 0;
+        }
+        return false;
+    }
 }

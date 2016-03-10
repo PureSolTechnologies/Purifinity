@@ -1,10 +1,10 @@
 <panel title="Running Jobs"
 	icon="/images/icons/FatCow_Icons16x16/service_status.png">
-<div *ngIf="jobs.jobStates.length > 0" class="panel-body">{{jobs.time
+<div *ngIf="hasJobStates()" class="panel-body">{{jobs.time
 	| defaultDate}}</div>
 <table class="table">
 	<tbody>
-		<tr *ngFor="#jobStatus of jobs.jobStates">
+		<tr *ngFor="#jobStatus of getJobStates()">
 			<td width="30%"><h4>{{jobStatus.name}}</h4></td>
 			<td>
 				<div *ngFor="#stepStatus of jobStatus.stepStates">
