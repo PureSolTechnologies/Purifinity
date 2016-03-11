@@ -1,6 +1,6 @@
 import {Injectable} from 'angular2/core';
-import {Location} from 'angular2/router';
-import {Http, Headers} from 'angular2/http';
+import {Router, Location} from 'angular2/router';
+import {Http, Headers, Response} from 'angular2/http';
 
 import {Alerter} from '../alerter/Alerter';
 
@@ -9,6 +9,7 @@ export class HTTPRequests {
 
     constructor(
         private http: Http,
+        private router: Router,
         private location: Location,
         private alerter: Alerter) {
     }
@@ -20,8 +21,8 @@ export class HTTPRequests {
     GET(url: string,
         authId: string,
         authToken: string,
-        successCallback: (data: any, status: string) => void,
-        errorCallback: (data: any, status: string, error: string) => void) {
+        successCallback: (response: Response) => void,
+        errorCallback: (response: Response) => void) {
         var headers = this.createAuthHeaders(authId, authToken);
         var alerter: Alerter = this.alerter;
         var location: Location = this.location;
@@ -31,22 +32,22 @@ export class HTTPRequests {
                 headers: headers
             })
             .subscribe(
-            data => successCallback(data, status),
+            data => successCallback(data),
             err => {
-                if (status === "401") {
+                if (err.status === 401) {
                     $requests.handle401(err);
                     return;
                 }
                 alerter.addAlert("error", "HTTP Status: " + status + "\n" + err);
-                errorCallback(err, status, "");
+                errorCallback(err);
             });
     }
 
     GET_TEXT(url: string,
         authId: string,
         authToken: string,
-        successCallback: (data: any, status: string) => void,
-        errorCallback: (data: any, status: string, error: string) => void) {
+        successCallback: (response: Response) => void,
+        errorCallback: (response: Response) => void) {
         var headers = this.createAuthHeaders(authId, authToken);
         var alerter: Alerter = this.alerter;
         var location: Location = this.location;
@@ -56,14 +57,14 @@ export class HTTPRequests {
                 headers: headers
             })
             .subscribe(
-            data => successCallback(data, status),
+            data => successCallback(data),
             err => {
-                if (status === "401") {
+                if (err.status === 401) {
                     $requests.handle401(err);
                     return;
                 }
                 alerter.addAlert("error", "HTTP Status: " + status + "\n" + err);
-                errorCallback(err, status, "");
+                errorCallback(err);
             });
     }
 
@@ -71,25 +72,26 @@ export class HTTPRequests {
         data: any,
         authId: string,
         authToken: string,
-        successCallback: (data: any, status: string) => void,
-        errorCallback: (data: any, status: string, error: string) => void) {
+        successCallback: (response: Response) => void,
+        errorCallback: (response: Response) => void) {
         var headers = this.createAuthHeaders(authId, authToken);
+        headers.append("Content-type", "application/json"); 
         var alerter: Alerter = this.alerter;
         var location: Location = this.location;
         var $requests = this;
-        return this.http.post(url, data,
+        return this.http.post(url, JSON.stringify(data),
             {
                 headers: headers
             })
             .subscribe(
-            data => successCallback(data, status),
+            data => successCallback(data),
             err => {
-                if (status === "401") {
+                if (err.status === 401) {
                     $requests.handle401(err);
                     return;
                 }
                 alerter.addAlert("error", "HTTP Status: " + status + "\n" + err);
-                errorCallback(err, status, "");
+                errorCallback(err);
             });
     }
 
@@ -97,60 +99,34 @@ export class HTTPRequests {
         data: any,
         authId: string,
         authToken: string,
-        successCallback: (data: any, status: string) => void,
-        errorCallback: (data: any, status: string, error: string) => void) {
+        successCallback: (response: Response) => void,
+        errorCallback: (response: Response) => void) {
         var headers = this.createAuthHeaders(authId, authToken);
+        headers.append("Content-type", "application/json"); 
         var alerter: Alerter = this.alerter;
         var location: Location = this.location;
         var $requests = this;
-        return this.http.put(url, data,
+        return this.http.put(url, JSON.stringify(data),
             {
                 headers: headers
             })
             .subscribe(
-            data => successCallback(data, status),
+            data => successCallback(data),
             err => {
-                if (status === "401") {
+                if (err.status === 401) {
                     $requests.handle401(err);
                     return;
                 }
                 alerter.addAlert("error", "HTTP Status: " + status + "\n" + err);
-                errorCallback(err, status, "");
-            });
-    }
-
-    PUT_TEXT(url: string,
-        data: any,
-        authId: string,
-        authToken: string,
-        successCallback: (data: any, status: string) => void,
-        errorCallback: (data: any, status: string, error: string) => void) {
-        var headers = this.createAuthHeaders(authId, authToken);
-        headers.append("Content-Type", "text/plain");
-        var alerter: Alerter = this.alerter;
-        var location: Location = this.location;
-        var $requests = this;
-        return this.http.put(url, data,
-            {
-                headers: headers
-            })
-            .subscribe(
-            data => successCallback(data, status),
-            err => {
-                if (status === "401") {
-                    $requests.handle401(err);
-                    return;
-                }
-                alerter.addAlert("error", "HTTP Status: " + status + "\n" + err);
-                errorCallback(err, status, "");
+                errorCallback(err);
             });
     }
 
     DELETE(url: string,
         authId: string,
         authToken: string,
-        successCallback: (data: any, status: string) => void,
-        errorCallback: (data: any, status: string, error: string) => void) {
+        successCallback: (response: Response) => void,
+        errorCallback: (response: Response) => void) {
         var headers = this.createAuthHeaders(authId, authToken);
         var alerter: Alerter = this.alerter;
         var location: Location = this.location;
@@ -160,21 +136,21 @@ export class HTTPRequests {
                 headers: headers
             })
             .subscribe(
-            data => successCallback(data, status),
+            data => successCallback(data),
             err => {
-                if (status === "401") {
+                if (err.status === 401) {
                     $requests.handle401(err);
                     return;
                 }
                 alerter.addAlert("error", "HTTP Status: " + status + "\n" + err);
-                errorCallback(err, status, "");
+                errorCallback(err);
             });
     }
 
     handle401(data: any) {
         this.alerter.addAlert("info", data);
-        window.location.href = "/#/login";
         sessionStorage.setItem("redirect.after.login", this.location.path());
+        this.router.navigate(['Login']);
     }
 
     createAuthHeaders(authId: string, authToken: string): Headers {

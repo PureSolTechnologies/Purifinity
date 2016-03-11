@@ -1,4 +1,5 @@
 import {Injectable} from 'angular2/core';
+import {Response} from 'angular2/http';
 
 import {AuthenticationService} from './AuthenticationService';
 import {HTTPRequests} from './HTTPRequests';
@@ -20,8 +21,8 @@ export class PurifinityServerConnector {
 
     get(
         serviceURL: string,
-        successCallback: (data: any, status: string) => void,
-        errorCallback: (data: any, status: string, error: string) => void) {
+        successCallback: (response: Response) => void,
+        errorCallback: (response: Response) => void) {
         var authId = "";
         var authToken = "";
         if (this.authService.authData) {
@@ -33,8 +34,8 @@ export class PurifinityServerConnector {
 
     get_text(
         serviceURL: string,
-        successCallback: (data: any, status: string) => void,
-        errorCallback: (data: any, status: string, error: string) => void) {
+        successCallback: (response: Response) => void,
+        errorCallback: (response: Response) => void) {
         var authId = "";
         var authToken = "";
         if (this.authService.authData) {
@@ -47,8 +48,8 @@ export class PurifinityServerConnector {
     put(
         serviceURL: string,
         data: any,
-        successCallback: (data: any, status: string) => void,
-        errorCallback: (data: any, status: string, error: string) => void) {
+        successCallback: (response: Response) => void,
+        errorCallback: (response: Response) => void) {
         var authId = "";
         var authToken = "";
         if (this.authService.authData) {
@@ -58,25 +59,11 @@ export class PurifinityServerConnector {
         return this.httpRequests.PUT(this.baseURL + serviceURL, data, authId, authToken, successCallback, errorCallback);
     }
 
-    put_text(
-        serviceURL: string,
-        data: any,
-        successCallback: (data: any, status: string) => void,
-        errorCallback: (data: any, status: string, error: string) => void) {
-        var authId = "";
-        var authToken = "";
-        if (this.authService.authData) {
-            authId = this.authService.authData.authId;
-            authToken = this.authService.authData.authToken;
-        }
-        return this.httpRequests.PUT_TEXT(this.baseURL + serviceURL, data, authId, authToken, successCallback, errorCallback);
-    }
-
     post(
         serviceURL: string,
         data: any,
-        successCallback: (data: any, status: string) => void,
-        errorCallback: (data: any, status: string, error: string) => void) {
+        successCallback: (response: Response) => void,
+        errorCallback: (response: Response) => void) {
         var authId = "";
         var authToken = "";
         if (this.authService.authData) {
@@ -88,8 +75,8 @@ export class PurifinityServerConnector {
 
     del(
         serviceURL: string,
-        successCallback: (data: any, status: string) => void,
-        errorCallback: (data: any, status: string, error: string) => void) {
+        successCallback: (response: Response) => void,
+        errorCallback: (response: Response) => void) {
         var authId = "";
         var authToken = "";
         if (this.authService.authData) {

@@ -1,5 +1,6 @@
 import {Component, NgZone, Inject} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
+import {Response} from 'angular2/http';
 
 import {PanelComponent} from '../../components/panel.component';
 import {DefaultDatePipe} from '../../commons/pipes/default-date.pipe';
@@ -56,8 +57,8 @@ export class RunningJobsComponent {
 
     abortRun(projectId, jobId) {
         this.purifinityServerConnector.put("/purifinityserver/rest/analysis/projects/" + projectId + "/abort/" + jobId, "",
-            function(data, status) { },
-            function(data, status, error) { }
+            function(response: Response) { },
+            function(response: Response) { }
         );
     };
 

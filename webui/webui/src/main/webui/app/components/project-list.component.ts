@@ -1,4 +1,5 @@
 import {Component, Input} from 'angular2/core';
+import {Response} from 'angular2/http';
 
 import {DefaultDatePipe} from '../commons/pipes/default-date.pipe';
 import {ProjectManager} from '../commons/purifinity/ProjectManager';
@@ -25,14 +26,14 @@ export class ProjectListComponent {
                     projects = [];
                     }
                 }, //
-                function(data, status, error) { }
+                function(response: Response) { }
             );
         }
         
         triggerNewRun(id) {
             this.projectManager.triggerNewRun(id,
                 function(data, status) { },
-                function(data, status, error) { }
+                function(response: Response) { }
                 );
         }
             

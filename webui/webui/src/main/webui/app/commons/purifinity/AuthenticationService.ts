@@ -1,5 +1,6 @@
 import {Injectable} from 'angular2/core';
-import {Location} from 'angular2/router';
+import {Router} from 'angular2/router';
+import {Response} from 'angular2/http';
 
 import {HTTPRequests} from './HTTPRequests';
 import {AuthenticationData} from './AuthenticationData';
@@ -12,7 +13,7 @@ export class AuthenticationService {
     private loginURL: string;
     private logoutURL: string;
 
-    constructor(private location: Location,
+    constructor(private router: Router,
         private httpRequests: HTTPRequests) {
         this.authData = this.loadAuthData();
         this.loginURL = "/purifinityserver/rest/auth/login";
@@ -28,25 +29,24 @@ export class AuthenticationService {
         };
         var authService: AuthenticationService = this;
         this.httpRequests.POST(this.loginURL, data, "", "",
-            function(data, status) {
-                authService.authData = data;
+            function(response: Response) {
+                authService.authData = response.json();
                 authService.authData.authId = email;
                 authenticated = true;
                 authService.storeAuthData(authService.authData);
                 var redirect = sessionStorage.getItem("redirect.after.login");
                 if (redirect) {
-                    window.location.href = redirect ;
+                    authService.router.navigateByUrl(redirect);
                 } else {
-                    authService.location.go("/");
+                    authService.router.navigate(['route']);
                 }
             }, //
-            function(data, status, error) {
+            function(response: Response) {
                 authService.authData = undefined;
                 authenticated = false;
                 authService.removeAuthData();
                 // Error handling
-            }
-            );
+            });
         return authenticated;
     }
 
@@ -59,12 +59,11 @@ export class AuthenticationService {
         this.authData = undefined;
         this.removeAuthData();
         this.httpRequests.POST(this.logoutURL, data, "", "",
-            function(data, status) {
+            function(response: Response) {
             },
-            function(data, status, error) {
+            function(response: Response) {
                 // Error handling
-            }
-            );
+            });
     }
 
     /* Check for login functionality */

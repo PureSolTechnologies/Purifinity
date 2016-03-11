@@ -1,6 +1,7 @@
-import {PurifinityServerConnector} from './PurifinityServerConnector';
-
 import {Injectable} from 'angular2/core';
+import {Response} from 'angular2/http';
+
+import {PurifinityServerConnector} from './PurifinityServerConnector';
 
 @Injectable()
 export class ProjectManager {
@@ -9,82 +10,83 @@ export class ProjectManager {
     }
 
     getProjects(success: (data: Project[], status: string) => void,
-        error: (data: any, status: string, error: string) => void) {
+        error: (response: Response) => void) {
         return this.purifinityServerConnector.get("/purifinityserver/rest/projectmanager/projects",
-            success, error);
+            response => success(response.json(), response.statusText), error);
     }
 
     getProject(projectId: string,
         success: (data: Project, status: string) => void,
-        error: (data: any, status: string, error: string) => void) {
+        error: (response: Response) => void) {
         return this.purifinityServerConnector.get("/purifinityserver/rest/projectmanager/projects/" + projectId,
-            success, error);
+            response => success(response.json(), response.statusText), error);
     }
 
     getLastRun(projectId: string,
         success: (data: any, status: string) => void,
-        error: (data: any, status: string, error: string) => void) {
+        error: (response: Response) => void) {
         return this.purifinityServerConnector.get("/purifinityserver/rest/projectmanager/projects/" + projectId + "/lastrun",
-            success, error);
+            response => success(response.json(), response.statusText), error);
     }
 
     getRun(projectId: string,
         runId: string,
         success: (data: any, status: string) => void,
-        error: (data: any, status: string, error: string) => void) {
+        error: (response: Response) => void) {
         return this.purifinityServerConnector.get("/purifinityserver/rest/projectmanager/projects/" + projectId + "/runs/" + runId,
-            success, error);
+            response => success(response.json(), response.statusText), error);
     }
 
     createProject(identifier: string,
         projectSettings: any,
         success: (data: any, status: string) => void,
-        error: (data: any, status: string, error: string) => void) {
+        error: (response: Response) => void) {
         return this.purifinityServerConnector.put("/purifinityserver/rest/projectmanager/projects/" + identifier, projectSettings,
-            success, error);
+            response => success(response.json(), response.statusText), error);
     }
 
     triggerNewRun(identifier: string,
         success: (data: any, status: string) => void,
-        error: (data: any, status: string, error: string) => void) {
+        error: (response: Response) => void) {
         return this.purifinityServerConnector.put("/purifinityserver/rest/analysis/projects/" + identifier, "",
-            success, error);
+            response => success(response.json(), response.statusText), error);
     }
 
     updateProjectSettings(identifier: string,
         settings: ProjectSettings,
         success: (data: any, status: string) => void,
-        error: (data: any, status: string, error: string) => void) {
+        error: (response: Response) => void) {
         return this.purifinityServerConnector.post("/purifinityserver/rest/projectmanager/projects/" + identifier, settings,
-            success, error);
+            response => success(response.json(), response.statusText), error);
     }
 
     deleteProject(identifier: string,
         success: (data: any, status: string) => void,
-        error: (data: any, status: string, error: string) => void) {
+        error: (response: Response) => void) {
         return this.purifinityServerConnector.del("/purifinityserver/rest/projectmanager/projects/" + identifier,
-            success, error);
+            response => success(response.json(), response.statusText), error);
     }
 
     getRepositoryTypes(success: (data: any, status: string) => void,
-        error: (data: any, status: string, error: string) => void) {
+        error: (response: Response) => void) {
         return this.purifinityServerConnector.get("/purifinityserver/rest/repositories/types",
-            success, error);
+            response => success(response.json(), response.statusText), error);
     }
 
     readAllRunInformation(projectId: string,
         success: (data: any, status: string) => void,
-        error: (data: any, status: string, error: string) => void) {
+        error: (response: Response) => void) {
         return this.purifinityServerConnector.get("/purifinityserver/rest/projectmanager/projects/" + projectId + "/runs",
-            success, error);
+            response => success(response.json(), response.statusText), error);
     }
 
     getAnalysisFileTree(projectId: string,
         runId: string,
         success: (data: any, status: string) => void,
-        error: (data: any, status: string, error: string) => void) {
+        error: (response: Response) => void) {
         return this.purifinityServerConnector.get("/purifinityserver/rest/projectmanager/projects/" + projectId + "/runs/" + runId + "/filetree",
-            function(data: any, status) {
+            function(response: Response) {
+                var data = response.json();
                 data.files = {};
                 data.directories = {};
                 var searchFileTree = function(tree) {
@@ -105,7 +107,7 @@ export class ProjectManager {
                 data.getDirectory = function(hashid) {
                     return this.directories[hashid];
                 };
-                success(data, status);
+                success(data, response.statusText);
             },
             error
             );
