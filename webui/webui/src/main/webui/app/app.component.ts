@@ -28,12 +28,10 @@ import {LicenseComponent} from './license.component';
         ROUTER_DIRECTIVES
     ],
     template:
-    `<div class="container">
-  <header></header>
-  <menu></menu>
-  <router-outlet></router-outlet>
-  <footer></footer>
-</div>`
+`<header></header>
+<menu></menu>
+<router-outlet></router-outlet>
+<footer></footer>`
 })
 @RouteConfig([
     { path: '/', name: 'root', redirectTo: ['/Home'] },

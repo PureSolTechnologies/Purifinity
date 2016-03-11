@@ -1,32 +1,24 @@
-<div class="navbar navbar-inverse" role="navigation"
-	style="margin-bottom: 0;">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed"
-				data-toggle="collapse" data-target="#bs-collapse-title"
-				aria-expanded="false">
-				<span class="sr-only">Toggle navigation</span> <span
-					class="icon-bar"></span> <span class="icon-bar"></span> <span
-					class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="."><img
-				src="images/logos/logo2.png" width="100" title="Purifinity" /></a> <span
-				class="navbar-brand">{{text}}</span>
-		</div>
-		<div class="collapse navbar-collapse" id="bs-collapse-title"
-			data-ng-controller="loginCtrl">
-			<ul class="nav navbar-nav navbar-right">
-				<li data-ng-hide="isLoggedIn()"><a id="loginLink"
-					href="#/login">Login&nbsp;<span class="glyphicon glyphicon-off"
-						style="color: #c00000;"></span></a></li>
-				<li data-ng-show="isLoggedIn()"><a href="admin.html"><span
-						class="glyphicon glyphicon-wrench"></span>&nbsp;Administration</a></li>
-				<li data-ng-show="isLoggedIn()"><a id="accountLink"
-					href="#/account"><span class="glyphicon glyphicon-user"></span>&nbsp;Account</a></li>
-				<li data-ng-show="isLoggedIn()"><a id="logoutLink"
-					data-ng-click="logout()">Logout&nbsp;<span
-						class="glyphicon glyphicon-off" style="color: #00c000;"></span></a></li>
-			</ul>
-		</div>
+<div class="navbar navbar-dark bg-inverse" style="margin:0pt;">
+	<button class="navbar-toggler hidden-sm-up" type="button"
+		data-toggle="collapse" data-target="#bs-collapse-title">
+		<span class="octicon octicon-three-bars"></span>
+	</button>
+	<a class="navbar-brand" href="."><img src="images/logos/logo2.png"
+		width="100" title="Purifinity" /></a> <span class="navbar-brand">{{text}}</span>
+	<div class="collapse navbar-toggleable-xs pull-xs-right"
+		id="bs-collapse-title">
+		<ul class="nav navbar-nav">
+			<li *ngIf="!isLoggedIn()" class="nav-item"><a class="nav-link"
+				id="loginLink" [routerLink]="['Login']"><span
+					class="octicon octicon-sign-in" style="color: #c00000;"></span>&nbsp;Login</a></li>
+			<li *ngIf="isLoggedIn()" class="nav-item"><a class="nav-link"
+				href="/admin.html"><span class="octicon octicon-tools"></span>&nbsp;Administration</a></li>
+			<li *ngIf="isLoggedIn()" class="nav-item"><a class="nav-link"
+				id="accountLink" [routerLink]="['Account']"><span
+					class="octicon octicon-person"></span>&nbsp;Account</a></li>
+			<li *ngIf="isLoggedIn()" class="nav-item"><a class="nav-link"
+				id="logoutLink" (click)="logout()"><span
+					class="octicon octicon-sign-out" style="color: #00c000;"></span>&nbsp;Logout</a></li>
+		</ul>
 	</div>
 </div>
