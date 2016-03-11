@@ -1,7 +1,7 @@
 import {Component, NgZone} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 
-import {PanelComponent} from '../../commons/panel.component';
+import {PanelComponent} from '../../components/panel.component';
 import {DefaultDatePipe} from '../../commons/pipes/default-date.pipe';
 import {DurationPipe} from '../../commons/pipes/duration.pipe';
 

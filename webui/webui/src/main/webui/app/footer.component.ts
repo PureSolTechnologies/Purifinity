@@ -1,7 +1,7 @@
 import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 
-import {PureSolTechnologiesComponent} from './commons/puresol-technologies.component';
+import {PureSolTechnologiesComponent} from './components/puresol-technologies.component';
 
 @Component({
     selector: 'footer',

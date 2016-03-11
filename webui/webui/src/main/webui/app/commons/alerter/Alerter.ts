@@ -1,5 +1,7 @@
 import {Injectable} from 'angular2/core';
 
+import {Alert} from './Alert';
+
 @Injectable()
 export class Alerter {
 

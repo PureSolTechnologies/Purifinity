@@ -4,39 +4,6 @@
  */
 var projectManagerModule: angular.IModule = angular.module("projectManagerModule", ["purifinityServerModule", "preferencesManagerModule"]);
 
-projectManagerModule.factory("projectManager", ["purifinityServerConnector",
-    function(purifinityServerConnector) {
-        return new ProjectManager(purifinityServerConnector);
-    }]);
-
-projectManagerModule.directive('projectList', function() {
-    return {
-        restrict: "E",
-        scope: {},
-        controller: "projectListCtrl",
-        templateUrl: "directives/project-list.html"
-    };
-});
-
-projectManagerModule.controller("projectListCtrl", ["$scope", "projectManager",
-    function($scope, projectManager) {
-        $scope.projects = {};
-        projectManager.getProjects(//
-            function(data, status) {
-                $scope.projects = data;
-                if (!$scope.projects) {
-                    $scope.projects = {};
-                }
-            }, //
-            function(data, status, error) { });
-        $scope.triggerNewRun = function(id) {
-            projectManager.triggerNewRun(id,
-                function(data, status) { },
-                function(data, status, error) { }
-                );
-        }
-    }]);
-
 projectManagerModule.controller("projectSettingsCtrl", ["$scope", "$modal", "$log", "projectManager",
     function($scope, $modal, $log, projectManager) {
         $scope.projects = {};

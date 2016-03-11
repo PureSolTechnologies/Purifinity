@@ -13,6 +13,7 @@ import {SiteConstants} from './site-constants';
 import {PurifinityServerConnector} from './commons/purifinity/PurifinityServerConnector';
 import {AuthenticationService} from './commons/purifinity/AuthenticationService';
 import {HTTPRequests} from './commons/purifinity/HTTPRequests';
+import {ProjectManager} from './commons/purifinity/ProjectManager';
 import {Alerter} from './commons/alerter/Alerter';
 
 /**
@@ -21,7 +22,7 @@ import {Alerter} from './commons/alerter/Alerter';
 bootstrap(AppComponent, [
     ROUTER_PROVIDERS, HTTP_PROVIDERS,
     AuthenticationService,
-    PurifinityServerConnector, HTTPRequests, Alerter,
+    PurifinityServerConnector, ProjectManager, HTTPRequests, Alerter,
     provide(LocationStrategy, { useClass: PathLocationStrategy }),
     provide(SiteConstants, { useClass: SiteConstants })
 ]);
