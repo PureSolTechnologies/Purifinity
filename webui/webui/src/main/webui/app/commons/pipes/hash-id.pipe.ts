@@ -1,5 +1,7 @@
 import {Pipe, PipeTransform} from 'angular2/core';
 
+import {HashId} from '../domain/HashId';
+
 @Pipe({
     name: 'hashId'
 })

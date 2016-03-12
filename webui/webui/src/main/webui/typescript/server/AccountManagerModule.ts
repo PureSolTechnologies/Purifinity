@@ -4,12 +4,6 @@
  */
 var accountManagerModule: angular.IModule = angular.module("accountManagerModule", ["purifinityServerModule"]);
 
-accountManagerModule.factory("accountManager", [
-    "purifinityServerConnector", function(purifinityServerConnector) {
-        return new AccountManager(purifinityServerConnector);
-    }
-]);
-
 accountManagerModule.controller("usersViewCtrl", ["$scope", function usersViewCtrl($scope) {
     /*
      * Mode may be either users or roles.
@@ -164,69 +158,4 @@ accountManagerModule.controller("roleSettingsCtrl", ["$scope", "accountManager",
         accountManager.getRoles(//
             function(data, status) { $scope.roles = data }, //
             function(data, status, error) { });
-    }]);
-
-accountManagerModule.controller("accountViewCtrl", ["$scope", "$modal", "$log", "accountManager", "authService",
-    function($scope, $modal, $log, accountManager, authService) {
-        $scope.email = authService.authData.authId;
-        $scope.authId = authService.authData.authId;
-        $scope.authToken = authService.authData.authToken;
-        $scope.user = {};
-        accountManager.getUser($scope.email,
-            function(data, status) { $scope.user = data; },
-            function(data, status, error) { });
-        $scope.changePasswordItems = {
-            email: $scope.email,
-            password: ""
-        };
-        $scope.openChangePassword = function(email) {
-            $scope.changePasswordItems.email = email;
-            var modalInstance = $modal.open({
-                templateUrl: "views/dialogs/changePasswordModalContent.html",
-                controller: "changePasswordModalInstanceCtrl",
-                resolve: {
-                    items: function() {
-                        return $scope.changePasswordItems;
-                    }
-                }
-            });
-
-            modalInstance.result.then(function(items) {
-                $scope.changePasswordItems = items;
-            }, function() {
-                    $log.info("Modal dismissed at: " + new Date());
-                });
-        }
-    }]);
-
-accountManagerModule.controller("changePasswordModalInstanceCtrl", ["$scope", "$modalInstance", "items", "accountManager",
-    function changePasswordModalInstanceCtrl($scope, $modalInstance, items, accountManager) {
-        $scope.items = items;
-        $scope.ok = function() {
-            $modalInstance.close($scope.items);
-            accountManager.changePassword($scope.items.email, $scope.items.oldPassword, $scope.items.newPassword,
-                function(data, status) {
-                },
-                function(data, status, error) {
-                }
-                );
-        };
-        $scope.cancel = function() {
-            $modalInstance.dismiss("cancel");
-        };
-        $scope.disableOK = function() {
-            if (!$scope.items.oldPassword) {
-                return true;
-            }
-            if (!$scope.items.newPassword) {
-                return true;
-            }
-            if (!$scope.items.newPassword2) {
-                return true;
-            }
-            if ($scope.items.newPassword !== $scope.items.newPassword2) {
-                return true;
-            }
-            return false;
-        }
     }]);

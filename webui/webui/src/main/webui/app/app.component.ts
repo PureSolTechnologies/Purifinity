@@ -11,6 +11,7 @@ import {MenuComponent} from './menu.component';
 import {HomeComponent} from './home.component';
 import {LoginComponent} from './login.component';
 import {AccountComponent} from './account.component';
+import {ChangePasswordComponent} from './change-password.component';
 import {DashboardsComponent} from './dashboards.component';
 import {InformationComponent} from './information.component';
 import {HelpComponent} from './help.component';
@@ -38,6 +39,7 @@ import {LicenseComponent} from './license.component';
     { path: '/home', name: 'Home', component: HomeComponent },
     { path: '/login', name: 'Login', component: LoginComponent },
     { path: '/account', name: 'Account', component: AccountComponent },
+    { path: '/change-password', name: 'ChangePassword', component: ChangePasswordComponent },
     { path: '/dashboards', name: 'Dashboards', component: DashboardsComponent },
     { path: '/information', name: 'Information', component: InformationComponent },
     { path: '/help', name: 'Help', component: HelpComponent },

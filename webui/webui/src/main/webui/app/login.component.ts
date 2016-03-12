@@ -1,8 +1,8 @@
 import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, Router} from 'angular2/router';
 
-import {AuthenticationData} from './commons/purifinity/AuthenticationData';
-import {AuthenticationService} from './commons/purifinity/AuthenticationService';
+import {AuthenticationData} from './commons/auth/AuthenticationData';
+import {AuthenticationService} from './commons/auth/AuthenticationService';
 
 @Component({
     selector: 'login',

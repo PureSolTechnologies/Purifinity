@@ -1,7 +1,7 @@
 import {Injectable} from 'angular2/core';
 import {Response} from 'angular2/http';
 
-import {AuthenticationService} from './AuthenticationService';
+import {AuthenticationService} from '../auth/AuthenticationService';
 import {HTTPRequests} from './HTTPRequests';
 
 /**

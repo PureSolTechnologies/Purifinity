@@ -1,7 +1,7 @@
 import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 
-import {AuthenticationService} from './commons/purifinity/AuthenticationService';
+import {AuthenticationService} from './commons/auth/AuthenticationService';
 
 @Component({
     selector: 'header',

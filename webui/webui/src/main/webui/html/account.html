@@ -1,34 +1,37 @@
-<div class="container-fluid" data-ng-controller="accountViewCtrl">
-	<h1>
-		<img src="/images/icons/FatCow_Icons32x32/user.png" /> Account
-		Settings
-	</h1>
-	<table class="table table-striped table-hover table-bordered">
-		<tbody>
-			<tr>
-				<td>Name</td>
-				<td>{{user.name}}</td>
-			</tr>
-			<tr>
-				<td>Email</td>
-				<td>{{user.email}}</td>
-			</tr>
-			<tr>
-				<td>Role</td>
-				<td>{{user.role.name}}</td>
-			</tr>
-			<tr>
-				<td>Security</td>
-				<td>auth-id: {{authId}}<br />auth-token: {{authToken}}
-				</td>
-			</tr>
-		</tbody>
-	</table>
-	<script type="text/ng-template" id="changePasswordModalContent.html">
-		</script>
-	<button class="btn btn-default"
-		data-ng-click="openChangePassword(user.email)">
-		<img src="/images/icons/FatCow_Icons16x16/lock_edit.png" /> Change
-		Password...
-	</button>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<h1>
+				<img src="/images/icons/FatCow_Icons32x32/user.png" /> Account
+				Settings
+			</h1>
+			<table class="table table-striped table-hover table-bordered">
+				<tbody>
+					<tr>
+						<td>Name</td>
+						<td>{{getUserName()}}</td>
+					</tr>
+					<tr>
+						<td>Email</td>
+						<td>{{getUserEmail()}}</td>
+					</tr>
+					<tr>
+						<td>Role</td>
+						<td>{{getRoleName()}}</td>
+					</tr>
+					<tr>
+						<td>Security</td>
+						<td>auth-id: {{getAuthId()}}<br />auth-token:
+							{{getAuthToken()}}
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<a class="btn btn-secondary" role="button"
+				[routerLink]="['/ChangePassword']"> <img
+				src="/images/icons/FatCow_Icons16x16/lock_edit.png" /> Change
+				Password...
+			</a>
+		</div>
+	</div>
 </div>

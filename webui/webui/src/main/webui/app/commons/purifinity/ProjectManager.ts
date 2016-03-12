@@ -2,10 +2,12 @@ import {Injectable} from 'angular2/core';
 import {Response} from 'angular2/http';
 
 import {PurifinityServerConnector} from './PurifinityServerConnector';
+import {Project} from '../domain/Project';
+import {ProjectSettings} from '../domain/ProjectSettings';
 
 @Injectable()
 export class ProjectManager {
-    
+
     constructor(private purifinityServerConnector: PurifinityServerConnector) {
     }
 
@@ -110,7 +112,7 @@ export class ProjectManager {
                 success(data, response.statusText);
             },
             error
-            );
+        );
     }
 
 }

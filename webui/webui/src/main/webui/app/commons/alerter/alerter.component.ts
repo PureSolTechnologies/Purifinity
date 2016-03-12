@@ -1,5 +1,7 @@
 import {Component} from 'angular2/core';
 
+import {Alerter} from './Alerter';
+
 @Component({
     selector: 'alerter',
     directives: [],

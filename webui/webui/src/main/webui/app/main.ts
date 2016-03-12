@@ -11,9 +11,10 @@ import {HTTP_PROVIDERS} from 'angular2/http';
 import {AppComponent} from './app.component';
 import {SiteConstants} from './site-constants';
 import {PurifinityServerConnector} from './commons/purifinity/PurifinityServerConnector';
-import {AuthenticationService} from './commons/purifinity/AuthenticationService';
+import {AuthenticationService} from './commons/auth/AuthenticationService';
 import {HTTPRequests} from './commons/purifinity/HTTPRequests';
 import {ProjectManager} from './commons/purifinity/ProjectManager';
+import {AccountManager} from './commons/purifinity/AccountManager';
 import {Alerter} from './commons/alerter/Alerter';
 
 /**
@@ -22,7 +23,7 @@ import {Alerter} from './commons/alerter/Alerter';
 bootstrap(AppComponent, [
     ROUTER_PROVIDERS, HTTP_PROVIDERS,
     AuthenticationService,
-    PurifinityServerConnector, ProjectManager, HTTPRequests, Alerter,
+    PurifinityServerConnector, ProjectManager, AccountManager, HTTPRequests, Alerter,
     provide(LocationStrategy, { useClass: PathLocationStrategy }),
     provide(SiteConstants, { useClass: SiteConstants })
 ]);
