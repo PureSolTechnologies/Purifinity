@@ -13,28 +13,30 @@ import {PanelComponent} from './panel.component';
 })
 export class ProjectListComponent {
 
-        private projectManager: ProjectManager;
-        private projects = [];
-        
-        constructor(projectManager:ProjectManager) {
-            this.projectManager = projectManager;
-            var projects = this.projects;
-            projectManager.getProjects(//
-                function(data, status) {
-                    projects = data;
-                    if (!projects) {
-                    projects = [];
-                    }
-                }, //
-                function(response: Response) { }
-            );
-        }
-        
-        triggerNewRun(id) {
-            this.projectManager.triggerNewRun(id,
-                function(data, status) { },
-                function(response: Response) { }
-                );
-        }
-            
+    private projectManager: ProjectManager;
+    private projects = [];
+
+    constructor(projectManager: ProjectManager) {
+        this.projectManager = projectManager;
+        var projectListComponent = this;
+        projectManager.getProjects(//
+            function(data, status) {
+                projectListComponent.projects = data;
+                if (!projectListComponent.projects) {
+                    projectListComponent.projects = [];
+                }
+            }, //
+            function(response: Response) {
+                projectListComponent.projects = [];
+            }
+        );
+    }
+
+    triggerNewRun(id) {
+        this.projectManager.triggerNewRun(id,
+            function(data, status) { },
+            function(response: Response) { }
+        );
+    }
+
 }
