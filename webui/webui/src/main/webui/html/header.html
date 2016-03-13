@@ -1,9 +1,9 @@
-<div class="navbar navbar-dark bg-inverse" style="margin:0pt;">
+<div class="navbar navbar-dark bg-inverse" style="margin: 0pt;">
 	<button class="navbar-toggler hidden-sm-up" type="button"
 		data-toggle="collapse" data-target="#bs-collapse-title">
 		<span class="octicon octicon-three-bars"></span>
 	</button>
-	<a class="navbar-brand" href="."><img src="images/logos/logo2.png"
+	<a class="navbar-brand" [routerLink]="['/Home']"><img src="images/logos/logo2.png"
 		width="100" title="Purifinity" /></a> <span class="navbar-brand">{{text}}</span>
 	<div class="collapse navbar-toggleable-xs pull-xs-right"
 		id="bs-collapse-title">
@@ -12,7 +12,7 @@
 				id="loginLink" [routerLink]="['Login']"><span
 					class="octicon octicon-sign-in" style="color: #c00000;"></span>&nbsp;Login</a></li>
 			<li *ngIf="isLoggedIn()" class="nav-item"><a class="nav-link"
-				href="/admin.html"><span class="octicon octicon-tools"></span>&nbsp;Administration</a></li>
+				[routerLink]="['DashboardsAdmin']"><span class="octicon octicon-tools"></span>&nbsp;Administration</a></li>
 			<li *ngIf="isLoggedIn()" class="nav-item"><a class="nav-link"
 				id="accountLink" [routerLink]="['Account']"><span
 					class="octicon octicon-person"></span>&nbsp;Account</a></li>

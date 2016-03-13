@@ -4,7 +4,7 @@ import {provide} from 'angular2/core';
 import {bootstrap}    from 'angular2/platform/browser';
 import {
     ROUTER_PROVIDERS,
-    PathLocationStrategy,
+    HashLocationStrategy,
     LocationStrategy
 } from 'angular2/router';
 import {HTTP_PROVIDERS} from 'angular2/http';
@@ -22,8 +22,8 @@ import {Alerter} from './commons/alerter/Alerter';
  */
 bootstrap(AppComponent, [
     ROUTER_PROVIDERS, HTTP_PROVIDERS,
-    AuthenticationService,
-    PurifinityServerConnector, ProjectManager, AccountManager, HTTPRequests, Alerter,
-    provide(LocationStrategy, { useClass: PathLocationStrategy }),
-    provide(SiteConstants, { useClass: SiteConstants })
+    provide(LocationStrategy, { useClass: HashLocationStrategy }),
+    SiteConstants, AuthenticationService,
+    PurifinityServerConnector, ProjectManager,
+    AccountManager, HTTPRequests, Alerter
 ]);
