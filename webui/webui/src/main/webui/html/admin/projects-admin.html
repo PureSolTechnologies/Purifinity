@@ -1,37 +1,45 @@
-<div class="container">
-	<h1>
-		<img src="/images/icons/FatCow_Icons32x32/books_stack.png" />
-		Projects
-	</h1>
-	<div>
-		<a [routerLink]="['/CreateProject']" class="btn btn-secondary"><img
-			src="/images/icons/FatCow_Icons16x16/book_add.png" /> Create
-			Project...</a>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<h1>
+				<img src="/images/icons/FatCow_Icons32x32/books_stack.png" />
+				Projects
+			</h1>
+		</div>
 	</div>
-	<div>
-		<table class="table table-striped table-hover table-bordered">
-			<thead>
-				<tr>
-					<th>Name</th>
-					<th>Identifier</th>
-					<th>Description</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr *ngFor="#project of getProjects()">
-					<td>{{project.settings.name}}</td>
-					<td>{{project.information.projectId}}</td>
-					<td>{{project.settings.description}}</td>
-					<td><a class="btn btn-secondary" title="Edit..."
-						[routerLink]="['EditProject', {projectId: project.information.projectId}]"><img
-							src="/images/icons/FatCow_Icons16x16/book_edit.png" /></a>
-						<button class="btn btn-secondary" title="Delete..."
-							data-ng-click="deleteProject(project.information.projectId)">
-							<img src="/images/icons/FatCow_Icons16x16/book_delete.png" />
-						</button></td>
-				</tr>
-			</tbody>
-		</table>
+	<div class="row">
+		<div class="col-xs-12">
+			<a [routerLink]="['/CreateProject']" class="btn btn-secondary"><img
+				src="/images/icons/FatCow_Icons16x16/book_add.png" /> Create
+				Project...</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Identifier</th>
+						<th>Description</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr *ngFor="#project of getProjects()">
+						<td>{{project.settings.name}}</td>
+						<td>{{project.information.projectId}}</td>
+						<td>{{project.settings.description}}</td>
+						<td><a class="btn btn-secondary" title="Edit..."
+							[routerLink]="['EditProject', {projectId: project.information.projectId}]"><img
+								src="/images/icons/FatCow_Icons16x16/book_edit.png" /></a>
+							<button class="btn btn-secondary" title="Delete..."
+								data-ng-click="deleteProject(project.information.projectId)">
+								<img src="/images/icons/FatCow_Icons16x16/book_delete.png" />
+							</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>

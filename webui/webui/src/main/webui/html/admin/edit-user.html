@@ -1,0 +1,45 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<h1>
+				<img src="/images/icons/FatCow_Icons32x32/user_edit.png" /> Edit
+				User
+			</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<table>
+				<tbody class="two-column-form">
+					<tr>
+						<td><label for="userEmail"
+							title="Email address of user. (Cannot be changed.)">Email:</label></td>
+						<td><input id="userEmail" type="email"
+							data-ng-model="items.email" class="form-control"
+							placeholder="Email Address" disabled="true" required /></td>
+					</tr>
+					<tr>
+						<td><label for="userName" title="New name for user.">Name:</label></td>
+						<td><input id="userName" type="text"
+							data-ng-model="items.name" class="form-control"
+							placeholder="Name" required /></td>
+					</tr>
+					<tr>
+						<td><label for="userRole" title="New role for user.">Role:</label></td>
+						<td><select id="userRole" title="Role Selecion"
+							class="selectpicker show-tick form-control"
+							data-ng-model="items.roleId"
+							data-ng-options="role.id as role.name for role in roles" /></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<button class="btn btn-primary" (click)="editUser()"
+				data-ng-disabled="disableOK()">OK</button>
+			<a class="btn btn-secondary" [routerLink]="['/UserAdmin']">Cancel</a>
+		</div>
+	</div>
+</div>

@@ -27,6 +27,8 @@ import {EditProjectComponent} from './admin/edit-project.component';
 import {SettingsAdminComponent} from './admin/settings-admin.component';
 import {UsersAdminComponent} from './admin/users-admin.component';
 import {BackendAdminComponent} from './admin/backend-admin.component';
+import {CreateUserComponent} from './admin/create-user.component';
+import {EditUserComponent} from './admin/edit-user.component';
 
 /**
  * This component is Purifinity's central application.
@@ -63,9 +65,11 @@ import {BackendAdminComponent} from './admin/backend-admin.component';
     { path: '/admin/dashboards', name: 'DashboardsAdmin', component: DashboardsAdminComponent },
     { path: '/admin/projects', name: 'ProjectsAdmin', component: ProjectsAdminComponent },
     { path: '/admin/projects/create', name: 'CreateProject', component: CreateProjectComponent },
-    { path: '/admin/projects/:projectId', name: 'EditProject', component: EditProjectComponent },
+    { path: '/admin/projects/:projectId/edit', name: 'EditProject', component: EditProjectComponent },
     { path: '/admin/settings', name: 'SettingsAdmin', component: SettingsAdminComponent },
     { path: '/admin/users', name: 'UsersAdmin', component: UsersAdminComponent },
+    { path: '/admin/users/create', name: 'CreateUser', component: CreateUserComponent },
+    { path: '/admin/users/:email/edit', name: 'EditUser', component: EditUserComponent },
     { path: '/admin/backend', name: 'BackendAdmin', component: BackendAdminComponent },
 ])
 export class AppComponent {

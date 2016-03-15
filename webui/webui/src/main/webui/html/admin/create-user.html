@@ -1,0 +1,62 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<h1>
+				<img src="/images/icons/FatCow_Icons32x32/user_add.png" /> Create
+				User
+			</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<table>
+				<tbody class="two-column-form">
+					<tr>
+						<td><label for="userEmail"
+							title="Email of user to be used for login, messages and internal identification.">Email:</label></td>
+						<td><input id="userEmail" type="email" [(ngModel)]="email"
+							class="form-control" placeholder="Email address" required
+							autofocus /></td>
+					</tr>
+					<tr>
+						<td><label for="userName"
+							title="Name of the user to be used in UI and reports.">Name:</label></td>
+						<td><input id="userName" type="text" [(ngModel)]="name"
+							class="form-control" placeholder="Name" required /></td>
+					</tr>
+					<tr>
+						<td><label for="userPassword"
+							title="Password for user for login">Password:</label></td>
+						<td><input id="userPassword" type="text"
+							[(ngModel)]="password" class="form-control"
+							placeholder="Password" required /></td>
+					</tr>
+					<tr>
+						<td><label for="userPasswordConfirmation"
+							title="Re-enter password for validation.">Password Check:</label></td>
+						<td><input id="userPasswordConfirmation" type="text"
+							[(ngModel)]="password2" class="form-control"
+							placeholder="Repeat password" required /></td>
+					</tr>
+					<tr>
+						<td><label for="userRole"
+							title="Role of the user which specifies the granted permissions.">Role:</label></td>
+						<td><select id="userRole" [(ngModel)]="roleId"
+							title="Role Selecion" class="selectpicker show-tick form-control">
+								<option value="">Select a analysis run</option>
+								<option *ngFor="#role of roles" value="{{role.id}}">
+									{{role.name}}</option>
+						</select></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<button class="btn btn-primary" (click)="createUser()"
+				data-ng-disabled="disableOK()">OK</button>
+			<a class="btn btn-secondary" [routerLink]="['/UsersAdmin']">Cancel</a>
+		</div>
+	</div>
+</div>

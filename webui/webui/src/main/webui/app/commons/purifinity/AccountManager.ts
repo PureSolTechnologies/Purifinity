@@ -2,6 +2,8 @@ import {Injectable} from 'angular2/core';
 import {Response} from 'angular2/http';
 
 import {PurifinityServerConnector} from './PurifinityServerConnector';
+import {Role} from '../auth/Role';
+import {User} from '../auth/User';
 
 @Injectable()
 export class AccountManager {
@@ -9,12 +11,22 @@ export class AccountManager {
     constructor(private purifinityServerConnector: PurifinityServerConnector) {
     }
 
-    getUsers(success, error) {
+    getUsers(success: (users: User[]) => void, error: (response: Response) => void) {
         return this.purifinityServerConnector.get("/accountmanager/rest/users",
-            success, error);
+            function(response: Response) {
+                success(response.json());
+            }, error);
     }
 
-    createAccount(email, name, password, roleId, success, error) {
+    getUser(email: string, success: (user: User) => void, error: (response: Response) => void) {
+        return this.purifinityServerConnector.get("/accountmanager/rest/users/" + email,
+            function(response: Response) {
+                success(response.json());
+            }, error);
+    }
+
+    createAccount(email: string, name: string, password: string, roleId: string,
+        success: (response: Response) => void, error: (response: Response) => void) {
         var data = {
             email: email,
             name: name,
@@ -25,7 +37,8 @@ export class AccountManager {
             success, error);
     }
 
-    editAccount(email, name, roleId, success, error) {
+    editAccount(email: string, name: string, roleId: string,
+        success: (response: Response) => void, error: (response: Response) => void) {
         var data = {
             name: name,
             roleId: roleId
@@ -34,28 +47,28 @@ export class AccountManager {
             success, error);
     }
 
-    deleteAccount(email, success, error) {
+    deleteAccount(email: string,
+        success: (response: Response) => void, error: (response: Response) => void) {
         var data = {};
         return this.purifinityServerConnector.del("/accountmanager/rest/users/" + email,
             success, error);
     }
 
-    getRoles(success, error) {
-        return this.purifinityServerConnector.get("/accountmanager/rest/roles",
-            success, error);
-    }
-    getUser(email, success, error) {
-        return this.purifinityServerConnector.get("/accountmanager/rest/users/" + email,
-            success, error);
-    }
-
-    changePassword(email, oldPassword, newPassword, success, error) {
+    changePassword(email: string, oldPassword: string, newPassword: string,
+        success: (response: Response) => void, error: (response: Response) => void) {
         var data = {
             oldPassword: oldPassword,
             newPassword: newPassword
         };
         return this.purifinityServerConnector.post("/accountmanager/rest/users/" + email + "/passwd", data,
             success, error);
+    }
+
+    getRoles(success: (roles: Role[]) => void, error: (response: Response) => void) {
+        return this.purifinityServerConnector.get("/accountmanager/rest/roles",
+            function(response: Response) {
+                success(response.json());
+            }, error);
     }
 
 }

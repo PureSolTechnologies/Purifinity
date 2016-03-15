@@ -27,11 +27,9 @@ export class AccountComponent {
         this.authToken = authService.authData.authToken;
         var ac = this;
         accountManager.getUser(this.email,
-            function(response: Response) { ac.user = response.json(); },
-            function(response: Response) { });
-    }
-
-    openChangePassword(): void {
+            function(user: User) { 
+                ac.user = user; 
+        }, function(response: Response) { });
     }
 
     getUserName(): string {
@@ -40,6 +38,7 @@ export class AccountComponent {
         }
         return "";
     }
+
     getUserEmail(): string {
         if (this.user && this.user.email) {
             return this.user.email;
@@ -60,10 +59,12 @@ export class AccountComponent {
         }
         return "";
     }
+    
     getAuthToken(): string {
         if (this.authToken) {
             return this.authToken;
         }
         return "";
     }
+
 }

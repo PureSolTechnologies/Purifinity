@@ -38,7 +38,7 @@ export class LoginComponent {
 
     logout() {
         this.authenticationService.logout();
-        this.router.navigate(['route']);
+        this.router.navigate(['/Home']);
     };
 
     isLoggedIn() {

@@ -38,7 +38,7 @@ export class AuthenticationService {
                 if (redirect) {
                     authService.router.navigateByUrl(redirect);
                 } else {
-                    authService.router.navigate(['route']);
+                    authService.router.navigate(['/Home']);
                 }
             }, //
             function(response: Response) {
