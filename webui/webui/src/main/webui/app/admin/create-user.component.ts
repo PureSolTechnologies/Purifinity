@@ -36,7 +36,7 @@ export class CreateUserComponent {
         var createUserComponent = this;
         this.accountManager.createAccount(this.email, this.name, this.password, this.roleId,
             function(response: Response) {
-                createUserComponent.router.navigate['/UsersAdmin'];            
+                createUserComponent.router.navigate(['/UsersAdmin']);            
             },
             function(response: Response) {
             }
