@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.plugins</groupId>
 		<artifactId>fortran2008</artifactId>
-		<version>0.4.0</version>
+		<version>0.4.1</version>
 	</parent>
 
 	<artifactId>fortran2008.plugin</artifactId>

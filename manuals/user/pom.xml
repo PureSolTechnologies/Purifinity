@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
 		<artifactId>manuals-parent</artifactId>
-		<version>0.4.0</version>
+		<version>0.4.1</version>
 	</parent>
 
 	<artifactId>manuals.user</artifactId>
