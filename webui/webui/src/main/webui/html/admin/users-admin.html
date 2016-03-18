@@ -30,7 +30,7 @@
 						<td>{{user.role.name}}</td>
 						<td>{{user.email}}</td>
 						<td><a class="btn btn-secondary" title="Edit..."
-							(click)="openEditUser(user)"> <img
+							[routerLink]="['EditUser', {email: user.email}]"> <img
 								src="/images/icons/FatCow_Icons16x16/user_edit.png" />
 						</a>
 							<button class="btn btn-secondary" title="Delete..."

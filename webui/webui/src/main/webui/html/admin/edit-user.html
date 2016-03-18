@@ -14,22 +14,22 @@
 					<tr>
 						<td><label for="userEmail"
 							title="Email address of user. (Cannot be changed.)">Email:</label></td>
-						<td><input id="userEmail" type="email"
-							data-ng-model="items.email" class="form-control"
-							placeholder="Email Address" disabled="true" required /></td>
+						<td><input id="userEmail" type="email" [(ngModel)]="email"
+							class="form-control" placeholder="Email Address" disabled="true"
+							required /></td>
 					</tr>
 					<tr>
 						<td><label for="userName" title="New name for user.">Name:</label></td>
-						<td><input id="userName" type="text"
-							data-ng-model="items.name" class="form-control"
-							placeholder="Name" required /></td>
+						<td><input id="userName" type="text" [(ngModel)]="name"
+							class="form-control" placeholder="Name" required /></td>
 					</tr>
 					<tr>
 						<td><label for="userRole" title="New role for user.">Role:</label></td>
 						<td><select id="userRole" title="Role Selecion"
-							class="selectpicker show-tick form-control"
-							data-ng-model="items.roleId"
-							data-ng-options="role.id as role.name for role in roles" /></td>
+							class="selectpicker show-tick form-control" [(ngModel)]="roleId">
+								<option *ngFor="#role of roles" value="{{role.id}}">
+									{{role.name}}</option>
+						</select></td>
 					</tr>
 				</tbody>
 			</table>
@@ -39,7 +39,7 @@
 		<div class="col-xs-12">
 			<button class="btn btn-primary" (click)="editUser()"
 				data-ng-disabled="disableOK()">OK</button>
-			<a class="btn btn-secondary" [routerLink]="['/UserAdmin']">Cancel</a>
+			<a class="btn btn-secondary" [routerLink]="['UsersAdmin']">Cancel</a>
 		</div>
 	</div>
 </div>

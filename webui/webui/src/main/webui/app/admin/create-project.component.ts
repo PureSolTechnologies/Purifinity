@@ -90,9 +90,10 @@ export class CreateProjectComponent {
             projectSettings.repository[key] = this.repositoryProperties[key];
         }
         this.projectManager.createProject(this.id, projectSettings,
-            function(response: Response) { }, //
+            function(response: Response) {
+                this.router.navigate(['/ProjectsAdmin']);
+            }, //
             function(response: Response) { });
-        this.router.navigate(['/ProjectsAdmin']);
     }
 
 
