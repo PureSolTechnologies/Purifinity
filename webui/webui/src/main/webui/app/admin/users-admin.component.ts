@@ -5,10 +5,16 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {User} from '../commons/auth/User';
 import {Role} from '../commons/auth/Role';
 import {AccountManager} from '../commons/purifinity/AccountManager';
+import {TabComponent} from '../components/tabs/tab.component';
+import {TabSetComponent} from '../components/tabs/tabset.component';
 
 @Component({
     selector: 'users-admin',
-    directives: [ROUTER_DIRECTIVES],
+    directives: [
+        ROUTER_DIRECTIVES,
+        TabSetComponent,
+        TabComponent
+    ],
     templateUrl: '../../html/admin/users-admin.html'
 })
 export class UsersAdminComponent {
