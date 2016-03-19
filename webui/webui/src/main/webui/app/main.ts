@@ -14,6 +14,8 @@ import {PurifinityServerConnector} from './commons/purifinity/PurifinityServerCo
 import {AuthenticationService} from './commons/auth/AuthenticationService';
 import {HTTPRequests} from './commons/purifinity/HTTPRequests';
 import {ProjectManager} from './commons/purifinity/ProjectManager';
+import {PluginManager} from './commons/purifinity/PluginManager';
+import {PreferencesManager} from './commons/purifinity/PreferencesManager';
 import {AccountManager} from './commons/purifinity/AccountManager';
 import {Alerter} from './commons/alerter/Alerter';
 
@@ -24,6 +26,6 @@ bootstrap(AppComponent, [
     ROUTER_PROVIDERS, HTTP_PROVIDERS,
     provide(LocationStrategy, { useClass: HashLocationStrategy }),
     SiteConstants, AuthenticationService,
-    PurifinityServerConnector, ProjectManager,
+    PurifinityServerConnector, ProjectManager, PluginManager, PreferencesManager,
     AccountManager, HTTPRequests, Alerter
 ]);

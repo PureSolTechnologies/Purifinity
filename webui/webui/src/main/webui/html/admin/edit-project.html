@@ -42,8 +42,8 @@
 				class="selectpicker show-tick form-control"
 				[(ngModel)]="repositoryId" data-ng-disabled="true">
 				<option value="">Select a repository type</option>
-				<option *ngFor="#repository of repositories"
-					value="{{repository.id}}">{{repository.name}}</option>
+				<option *ngFor="#repositoryType of repositoryTypes"
+					value="{{repositoryType.id}}">{{repositoryType.name}}</option>
 			</select>{{repositoryId}} <br />
 			<!--  -->
 			<table class="table-responsive">

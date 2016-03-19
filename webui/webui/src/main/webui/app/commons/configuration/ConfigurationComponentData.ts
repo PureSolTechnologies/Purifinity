@@ -1,5 +1,7 @@
 import {ConfigurationComponentTree} from './ConfigurationComponentTree';
 import {ConfigurationParameter} from './ConfigurationParameter';
+import {PreferencesGroup} from '../preferences/PreferencesGroup';
+
 
 /**
 * This class contains the model for the configuration-component directive.

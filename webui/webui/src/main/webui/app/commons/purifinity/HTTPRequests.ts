@@ -75,7 +75,7 @@ export class HTTPRequests {
         successCallback: (response: Response) => void,
         errorCallback: (response: Response) => void) {
         var headers = this.createAuthHeaders(authId, authToken);
-        headers.append("Content-type", "application/json"); 
+        headers.append("Content-type", "application/json");
         var alerter: Alerter = this.alerter;
         var location: Location = this.location;
         var $requests = this;
@@ -102,11 +102,38 @@ export class HTTPRequests {
         successCallback: (response: Response) => void,
         errorCallback: (response: Response) => void) {
         var headers = this.createAuthHeaders(authId, authToken);
-        headers.append("Content-type", "application/json"); 
+        headers.append("Content-type", "application/json");
         var alerter: Alerter = this.alerter;
         var location: Location = this.location;
         var $requests = this;
         return this.http.put(url, JSON.stringify(data),
+            {
+                headers: headers
+            })
+            .subscribe(
+            data => successCallback(data),
+            err => {
+                if (err.status === 401) {
+                    $requests.handle401(err);
+                    return;
+                }
+                alerter.addAlert("error", "HTTP Status: " + status + "\n" + err);
+                errorCallback(err);
+            });
+    }
+
+    PUT_TEXT(url: string,
+        data: string,
+        authId: string,
+        authToken: string,
+        successCallback: (response: Response) => void,
+        errorCallback: (response: Response) => void) {
+        var headers = this.createAuthHeaders(authId, authToken);
+        headers.append("Content-type", "application/json");
+        var alerter: Alerter = this.alerter;
+        var location: Location = this.location;
+        var $requests = this;
+        return this.http.put(url, data,
             {
                 headers: headers
             })

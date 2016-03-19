@@ -1,4 +1,5 @@
 import {LevelOfMeasurement} from '../math/LevelOfMeasurement';
+import {PreferencesGroup} from '../preferences/PreferencesGroup';
 
  /**
  * This class represents a single configuration parameter. The whole definition is defined here.

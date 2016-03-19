@@ -59,6 +59,20 @@ export class PurifinityServerConnector {
         return this.httpRequests.PUT(this.baseURL + serviceURL, data, authId, authToken, successCallback, errorCallback);
     }
 
+    put_text(
+        serviceURL: string,
+        data: string,
+        successCallback: (response: Response) => void,
+        errorCallback: (response: Response) => void) {
+        var authId = "";
+        var authToken = "";
+        if (this.authService.authData) {
+            authId = this.authService.authData.authId;
+            authToken = this.authService.authData.authToken;
+        }
+        return this.httpRequests.PUT_TEXT(this.baseURL + serviceURL, data, authId, authToken, successCallback, errorCallback);
+    }
+
     post(
         serviceURL: string,
         data: any,
