@@ -18,6 +18,7 @@ import {AnalyzerServiceInformation} from '../commons/plugins/AnalyzerServiceInfo
 import {EvaluatorServiceInformation} from '../commons/plugins/EvaluatorServiceInformation';
 import {RepositoryServiceInformation} from '../commons/plugins/RepositoryServiceInformation';
 import {PreferencesGroup} from '../commons/preferences/PreferencesGroup';
+import {PreferencesGroupIdentifier} from '../commons/preferences/PreferencesGroupIdentifier';
 
 @Component({
     selector: 'edit-project',
@@ -82,7 +83,7 @@ export class EditProjectComponent {
                     let plugin: any = analyzers[i];
                     let analyzerNode: ConfigurationComponentTree = new ConfigurationComponentTree(analyzersNode, plugin.name);
                     analyzersNode.addChild(analyzerNode);
-                    editProjectComponent.addPluginConfiguration(this.preferencesManager, analyzerNode, plugin.id, editProjectComponent.projectId);
+                    editProjectComponent.addPluginConfiguration(analyzerNode, plugin.id);
                 }
             },
             function(response: Response) { }
@@ -94,7 +95,7 @@ export class EditProjectComponent {
                     let plugin = evaluators[i];
                     let evaluatorNode: ConfigurationComponentTree = new ConfigurationComponentTree(evaluatorsNode, plugin.name);
                     evaluatorsNode.addChild(evaluatorNode);
-                    editProjectComponent.addPluginConfiguration(preferencesManager, evaluatorNode, plugin.id, editProjectComponent.projectId);
+                    editProjectComponent.addPluginConfiguration(evaluatorNode, plugin.id);
                 }
             },
             function(response: Response) { }
@@ -106,7 +107,7 @@ export class EditProjectComponent {
                     let plugin = repositories[i];
                     let repositoryNode: ConfigurationComponentTree = new ConfigurationComponentTree(repositoriesNode, plugin.name);
                     repositoriesNode.addChild(repositoryNode);
-                    editProjectComponent.addPluginConfiguration(preferencesManager, repositoryNode, plugin.id, editProjectComponent.projectId);
+                    editProjectComponent.addPluginConfiguration(repositoryNode, plugin.id);
                 }
             },
             function(response: Response) { }
@@ -121,34 +122,41 @@ export class EditProjectComponent {
             editProjectComponent.name = project.settings.name;
             editProjectComponent.description = project.settings.description;
             editProjectComponent.repositoryId = project.settings.repository["repository.id"];
-            editProjectComponent.repositoryProperties = project.settings.repository;
             editProjectComponent.fileIncludes = "";
             project.settings.fileSearchConfiguration.fileIncludes.forEach(function(line: string, num: number) {
                 if (num > 0) {
                     editProjectComponent.fileIncludes += "\n";
                 }
-                editProjectComponent.fileIncludes += line;
+                if (line) {
+                    editProjectComponent.fileIncludes += line;
+                }
             });
             editProjectComponent.fileExcludes = "";
             project.settings.fileSearchConfiguration.fileExcludes.forEach(function(line: string, num: number) {
                 if (num > 0) {
                     editProjectComponent.fileExcludes += "\n";
                 }
-                editProjectComponent.fileExcludes += line;
+                if (line) {
+                    editProjectComponent.fileExcludes += line;
+                }
             });
             editProjectComponent.directoryIncludes = "";
             project.settings.fileSearchConfiguration.locationIncludes.forEach(function(line: string, num: number) {
                 if (num > 0) {
                     editProjectComponent.directoryIncludes += "\n";
                 }
-                editProjectComponent.directoryIncludes += line;
+                if (line) {
+                    editProjectComponent.directoryIncludes += line;
+                }
             });
             editProjectComponent.directoryExcludes = "";
             project.settings.fileSearchConfiguration.locationExcludes.forEach(function(line: string, num: number) {
                 if (num > 0) {
                     editProjectComponent.directoryExcludes += "\n";
                 }
-                editProjectComponent.directoryExcludes += line;
+                if (line) {
+                    editProjectComponent.directoryExcludes += line;
+                }
             });
             editProjectComponent.ignoreHidden = project.settings.fileSearchConfiguration.ignoreHidden;
         }, function(response: Response) { });
@@ -173,23 +181,24 @@ export class EditProjectComponent {
         this.refresh();
     };
 
-    setRepositoryType(repositoryId: string) {
-        this.repositoryId = repositoryId;
+    selectRepository(newRepositoryId: string) {
+        this.repositoryId = newRepositoryId;
         for (let key in this.repositoryTypes) {
             let repository = this.repositoryTypes[key];
             if (repository.id === this.repositoryId) {
-                this.repositoryProperties = {};
+                this.repositoryProperties = [];
                 for (let name in repository.parameters) {
-                    this.repositoryProperties[name] = repository.parameters[name];
-                    this.repositoryProperties[name].uiName = name;
+                    let parameter: any = repository.parameters[name];
+                    parameter.uiName = name;
+                    this.repositoryProperties.push(parameter);
                 }
             }
         }
     }
 
-    addPluginConfiguration(preferencesManager: PreferencesManager, pluginNode: ConfigurationComponentTree, pluginId: string, projectId: string) {
+    addPluginConfiguration(pluginNode: ConfigurationComponentTree, pluginId: string) {
         let editProjectComponent = this;
-        preferencesManager.getPluginProjectParameters(pluginId, this.projectId,
+        this.preferencesManager.getPluginProjectParameters(pluginId, this.projectId,
             function(response: Response) {
                 let data: any = response.json();
                 for (let i = 0; i < data.length; i++) {

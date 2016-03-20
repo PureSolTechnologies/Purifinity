@@ -40,13 +40,11 @@ export class CreateProjectComponent {
 
     selectRepository(newRepositoryId: string) {
         this.repositoryId = newRepositoryId;
-        var key;
-        for (key in this.repositories) {
-            var repository = this.repositories[key];
+        for (let key in this.repositories) {
+            let repository = this.repositories[key];
             if (repository.id === this.repositoryId) {
                 this.repositoryProperties = [];
-                var name;
-                for (name in repository.parameters) {
+                for (let name in repository.parameters) {
                     let parameter: any = repository.parameters[name];
                     parameter.uiName = name;
                     this.repositoryProperties.push(parameter);

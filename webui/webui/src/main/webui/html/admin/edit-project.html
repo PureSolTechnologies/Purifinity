@@ -15,7 +15,7 @@
 				evolves.</p>
 			<label for="projectIdentifier">Identifier:</label> <br />
 			<input id="projectIdentifier" type="text" data-ng-disabled="true"
-				[(ngModel)]="id" class="form-control" placeholder="Identifier"
+				[(ngModel)]="projectId" class="form-control" placeholder="Identifier"
 				title="Id of project to be used as identification within Purifinity. This setting cannot be changed after project creation and is shown as rerfernce only."
 				required /> <!--  --> <br />
 			<label for="projectName">Name:</label> <br />
@@ -39,8 +39,8 @@
 				title="Selection for the repository type to get sources from.">Repository
 				Type</label> <br />
 			<!--  --> <select id="repository" title="Project Selection"
-				class="selectpicker show-tick form-control"
-				[(ngModel)]="repositoryId" data-ng-disabled="true">
+				class="selectpicker show-tick form-control" [ngModel]="repositoryId"
+				(ngModelChange)="selectRepository($event)" data-ng-disabled="true">
 				<option value="">Select a repository type</option>
 				<option *ngFor="#repositoryType of repositoryTypes"
 					value="{{repositoryType.id}}">{{repositoryType.name}}</option>
@@ -49,7 +49,7 @@
 			<table class="table-responsive">
 				<tbody class="two-column-form">
 					<tr *ngFor="#property of repositoryProperties">
-						<td><label [attr.data-for]="property.uiName">{{property.uiName}}</label></td>
+						<td><label>{{property.uiName}}</label></td>
 						<td><input type="text" class="form-control"
 							placeholder="to be set"
 							[(ngModel)]="repositoryProperties[property.name]"
