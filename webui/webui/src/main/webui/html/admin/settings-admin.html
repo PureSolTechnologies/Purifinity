@@ -1,1 +1,78 @@
-Settings
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<h1>
+				<img src="/images/icons/FatCow_Icons32x32/setting_tools.png" />
+				Settings
+			</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<tabset> <tab heading="System Settings"
+				data-ng-controller="systemSettingsCtrl">
+			<p>Settings in this section are system settings which influence
+				the behavior of the system in general.</p>
+			<configuration-component data-ng-model="systemSettings">
+			</configurationComponent></tab> <tab heading="Plug-in Activation"
+				data-ng-controller="pluginActivationCtrl">
+			<p>In this sections plugins are enabled and disabled system wide.</p>
+			<h3>Analyzers</h3>
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Plug-in Name</th>
+						<th>Description</th>
+						<th width="5%">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="analyzer in analyzers">
+						<td>{{analyzer.name}}</td>
+						<td>{{analyzer.description}}</td>
+						<td>
+							<button class="btn {{getAnalyzerButtonClass(analyzer.id)}}"
+								data-ng-value="analyzerActivation[analyzer.id]"
+								data-ng-click="toggleAnalyzerActivation(analyzer.id)">
+								{{getAnalyzerButtonText(analyzer.id)}}</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<h3>Evaluators</h3>
+			<table class="table table-striped table-hover table-bordered">
+				<thead>
+					<tr>
+						<th>Plug-in Name</th>
+						<th>Description</th>
+						<th width="5%">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr data-ng-repeat="evaluator in evaluators">
+						<td>{{evaluator.name}}</td>
+						<td>{{evaluator.description}}</td>
+						<td>
+							<button class="btn {{getEvaluatorButtonClass(evaluator.id)}}"
+								data-ng-value="evaluatorActivation[evaluator.id]"
+								data-ng-click="toggleEvaluatorActivation(evaluator.id)">
+								{{getEvaluatorButtonText(evaluator.id)}}</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			</tab> <tab heading="Plug-in Settings"
+				data-ng-controller="pluginSettingsCtrl">
+			<p>Settings in this section are plug-in settings which are used
+				for the plug-in as default. Project settings override these
+				settings.</p>
+			<div class="row">
+				<div class="col-sm-12">
+					<configuration-component data-ng-model="pluginSettings">
+					</configurationComponent>
+				</div>
+			</div>
+			</tab> </tabset>
+		</div>
+	</div>
+</div>

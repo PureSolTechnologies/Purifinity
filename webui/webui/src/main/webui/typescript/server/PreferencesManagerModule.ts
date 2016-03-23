@@ -4,11 +4,6 @@
  */
 var preferencesManagerModule: angular.IModule = angular.module("preferencesManagerModule", ["purifinityServerModule", "pluginManagerModule"]);
 
-preferencesManagerModule.factory("preferencesManager", ["purifinityServerConnector",
-    function(purifinityServerConnector) {
-        return new PreferencesManager(purifinityServerConnector);
-    }]);
-
 preferencesManagerModule.controller("systemSettingsCtrl", ["$scope", "preferencesManager",
     function($scope, preferencesManager) {
         $scope.systemSettings = {};
