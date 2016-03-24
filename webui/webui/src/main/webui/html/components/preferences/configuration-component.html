@@ -1,8 +1,8 @@
 <div class="panel panel-default">
 	<ol class="breadcrumb" style="padding: 0.5em; margin: 0pt;">
-		<li data-ng-repeat="folder in path" data-ng-hide="$last"><a
-			href="" data-ng-click="setDir(folder)"> <img
-				data-ng-show="folder.imageUrl" data-ng-src="{{folder.imageUrl}}" />
+		<li *ngFor="#folder of path" data-ng-hide="$last"><a
+			href="" (click)="setDir(folder)"> <img
+				data-ng-show="folder.imageUrl" src="{{folder.imageUrl}}" />
 				{{folder.name}}
 		</a></li>
 	</ol>
@@ -11,26 +11,26 @@
 	</div>
 	<ul class="list-group">
 		<li class="list-group-item" data-ng-show="path.length > 1"><a
-			href="" data-ng-click="chdir('..')"><img
+			href="" (click)="chdir('..')"><img
 				src="images/icons/FatCow_Icons16x16/bullet_arrow_up.png" /> ..</a></li>
 		<li class="list-group-item"
-			data-ng-repeat="content in currentFolder.children"><a
+			*ngFor="#content of currentFolder.children"><a
 			data-ng-show="content.children" href=""
-			data-ng-click="chdir(content.name)"> <img
-				data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />{{content.name}}
+			(click)="chdir(content.name)"> <img
+				data-ng-show="content.imageUrl" src="{{content.imageUrl}}" />{{content.name}}
 		</a> <span data-ng-hide="content.children"> <a
 				data-ng-show="content.link" href="{{content.link}}"> <img
-					data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />{{content.name}}
+					data-ng-show="content.imageUrl" src="{{content.imageUrl}}" />{{content.name}}
 			</a> <span data-ng-hide="content.link"> <img
-					data-ng-show="content.imageUrl" data-ng-src="{{content.imageUrl}}" />{{content.name}}
+					data-ng-show="content.imageUrl" src="{{content.imageUrl}}" />{{content.name}}
 			</span>
 		</span></li>
 		<li class="list-group-item"
-			data-ng-repeat="parameter in currentFolder.parameters">
+			*ngFor="#parameter of currentFolder.parameters">
 			<div class="row">
 			<div class="col-md-4">{{parameter.name}}</div>
 			<div class="col-md-8">
-				<configuration-parameter data-ng-model="parameter"></configuration-parameter>
+				<configuration-parameter [ngModel]="parameter"></configuration-parameter>
 			</div></div>
 		</li>
 	</ul>

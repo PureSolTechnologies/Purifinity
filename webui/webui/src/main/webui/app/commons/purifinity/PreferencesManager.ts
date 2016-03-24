@@ -52,8 +52,8 @@ export class PreferencesManager {
     }
 
     getSystemParameters(success: (response: Response) => void,
-        error: (response: Response) => void) {
-        return this.purifinityServerConnector.get(
+        error: (response: Response) => void): void {
+        this.purifinityServerConnector.get(
             "/purifinityserver/rest/preferences/system",
             success,
             error
