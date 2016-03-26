@@ -86,10 +86,11 @@ export class ConfigurationParameterComponent {
     @Input() parameter: ConfigurationParameter;
 
     values: Values;
-    preferencesManager: PreferencesManager;
 
-    constructor(preferencesManager: PreferencesManager) {
-        this.preferencesManager = preferencesManager;
+    constructor(private preferencesManager: PreferencesManager) {
+    }
+
+    ngOnInit() {
         this.refresh();
     }
 

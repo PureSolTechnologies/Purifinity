@@ -48,6 +48,7 @@ public interface AnalysisRestInterface {
     public List<ConfigurationParameter<?>> getConfiguration(@PathParam("id") String analyzerId);
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("analyzers/{id}/enabled")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
     public boolean isEnabled(@PathParam("id") String analyzerId);

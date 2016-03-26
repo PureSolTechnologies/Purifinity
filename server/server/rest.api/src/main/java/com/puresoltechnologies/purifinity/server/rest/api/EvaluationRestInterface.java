@@ -38,6 +38,7 @@ public interface EvaluationRestInterface {
     public List<ConfigurationParameter<?>> getConfiguration(@PathParam("id") String evaluatorId);
 
     @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("evaluators/{id}/enabled")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
     public boolean isEnabled(@PathParam("id") String evaluatorId);

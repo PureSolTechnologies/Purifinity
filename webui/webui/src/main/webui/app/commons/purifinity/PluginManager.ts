@@ -32,7 +32,7 @@ export class PluginManager {
 
     isAnalyzerEnabled(analyzerId, success: (enabled: boolean) => void,
         error: (response: Response) => void) {
-        return this.purifinityServerConnector.get("/purifinityserver/rest/analysis/analyzers/" + analyzerId + "/enabled",
+        return this.purifinityServerConnector.get_text("/purifinityserver/rest/analysis/analyzers/" + analyzerId + "/enabled",
             response => success(response.json()), error);
     }
 
@@ -50,7 +50,7 @@ export class PluginManager {
 
     isEvaluatorEnabled(analyzerId, success: (enabled: boolean) => void,
         error: (response: Response) => void) {
-        return this.purifinityServerConnector.get("/purifinityserver/rest/evaluation/evaluators/" + analyzerId + "/enabled",
+        return this.purifinityServerConnector.get_text("/purifinityserver/rest/evaluation/evaluators/" + analyzerId + "/enabled",
             response => success(response.json()), error);
     }
 

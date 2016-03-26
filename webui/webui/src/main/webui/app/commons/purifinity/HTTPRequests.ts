@@ -24,6 +24,7 @@ export class HTTPRequests {
         successCallback: (response: Response) => void,
         errorCallback: (response: Response) => void) {
         var headers = this.createAuthHeaders(authId, authToken);
+        headers.append("content-type", "application/json");
         var alerter: Alerter = this.alerter;
         var location: Location = this.location;
         var $requests = this;
@@ -49,6 +50,7 @@ export class HTTPRequests {
         successCallback: (response: Response) => void,
         errorCallback: (response: Response) => void) {
         var headers = this.createAuthHeaders(authId, authToken);
+        headers.append("content-type", "application/text");
         var alerter: Alerter = this.alerter;
         var location: Location = this.location;
         var $requests = this;
@@ -129,7 +131,7 @@ export class HTTPRequests {
         successCallback: (response: Response) => void,
         errorCallback: (response: Response) => void) {
         var headers = this.createAuthHeaders(authId, authToken);
-        headers.append("Content-type", "application/json");
+        headers.append("Content-type", "application/text");
         var alerter: Alerter = this.alerter;
         var location: Location = this.location;
         var $requests = this;

@@ -1,7 +1,9 @@
-import {Component, NgZone} from 'angular2/core';
+import {Component, Input} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 
-import {PanelComponent} from '../../components/panel.component';
+import {PanelComponent} from '..//panel.component';
+import {ConfigurationComponentData} from '../../commons/configuration/ConfigurationComponentData';
+import {ConfigurationComponentTree} from '../../commons/configuration/ConfigurationComponentTree';
 
 @Component({
     selector: 'configuration-component',
@@ -11,4 +13,41 @@ import {PanelComponent} from '../../components/panel.component';
     templateUrl: '../../../html/components/preferences/configuration-component.html'
 })
 export class ConfigurationComponent {
+
+    @Input() configurationTreeData: ConfigurationComponentData;
+
+    path: ConfigurationComponentTree[] = [];
+    currentFolder: ConfigurationComponentTree;
+
+    ngOnInit() {
+        this.path.push(this.configurationTreeData.root);
+        this.currentFolder = this.configurationTreeData.root;
+    }
+
+    chdir(dir: string): void {
+        if (dir === "..") {
+            if (this.path.length > 1) {
+                this.path.pop();
+                this.currentFolder = this.path[this.path.length - 1];
+            }
+            return;
+        }
+        for (var key in this.currentFolder.children) {
+            if (this.currentFolder.children[key].name === dir) {
+                var newFolder = this.currentFolder.children[key];
+                this.path.push(newFolder);
+                this.currentFolder = newFolder;
+                return;
+            }
+        }
+    }
+
+    setDir(dir: string): void {
+        while ((this.path.length > 1)
+            && (this.path[this.path.length - 1].name !== dir)) {
+            this.path.pop();
+        }
+        this.currentFolder = this.path[this.path.length - 1];
+    }
+
 }

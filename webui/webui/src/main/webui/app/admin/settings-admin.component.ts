@@ -1,6 +1,7 @@
 import {Component} from 'angular2/core';
 import {Response} from 'angular2/http';
 
+import {Utilities} from '../commons/Utilities';
 import {TabComponent} from '../components/tabs/tab.component';
 import {TabSetComponent} from '../components/tabs/tabset.component';
 import {PreferencesManager} from '../commons/purifinity/PreferencesManager';
@@ -27,7 +28,7 @@ import {ConfigurationComponent} from '../components/preferences/configuration.co
 })
 export class SettingsAdminComponent {
 
-    systemSettings: any = {};
+    systemSettings: ConfigurationComponentData = new ConfigurationComponentData("Purifinity", PreferencesGroup.SYSTEM);
     analyzers: AnalyzerServiceInformation[] = [];
     evaluators: EvaluatorServiceInformation[] = [];
     repositories: RepositoryServiceInformation[] = [];
@@ -40,12 +41,13 @@ export class SettingsAdminComponent {
         preferencesManager.getSystemParameters(
             function(response: Response) {
                 var data = response.json();
-                var systemSettings: ConfigurationComponentData = new ConfigurationComponentData("Purifinity", PreferencesGroup.SYSTEM);
                 for (var i = 0; i < data.length; i++) {
                     var parameter: ConfigurationParameter = ConfigurationParameter.fromJSON(PreferencesGroup.SYSTEM, new PreferencesGroupIdentifier(), data[i]);
-                    ConfigurationComponentData.addConfigurationParameter(systemSettings.root, parameter);
+                    ConfigurationComponentData.addConfigurationParameter(
+                        settingsAdminComponent.systemSettings.root,
+                        parameter
+                    );
                 }
-                settingsAdminComponent.systemSettings = systemSettings;
             },
             function(response: Response) { }
         );
@@ -184,4 +186,17 @@ export class SettingsAdminComponent {
         );
     }
 
+    getAnalyzerActivation(analyzerId: string): boolean {
+        if ((analyzerId) && (this.analyzerActivation[analyzerId])) {
+            return this.analyzerActivation[analyzerId];
+        }
+        return false;
+    }
+
+    getEvaluatorActivation(evaluatorId: string): boolean {
+        if ((evaluatorId) && (this.evaluatorActivation[evaluatorId])) {
+            return this.evaluatorActivation[evaluatorId];
+        }
+        return false;
+    }
 }

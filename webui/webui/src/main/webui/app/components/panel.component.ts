@@ -15,8 +15,8 @@ import {Component, Input} from 'angular2/core';
 })
 export class PanelComponent {
 
-    @Input() title: String;
-    @Input() icon: String;
+    @Input() title: string;
+    @Input() icon: string;
 
 }
 
