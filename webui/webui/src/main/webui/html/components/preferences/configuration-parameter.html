@@ -1,49 +1,49 @@
-<div class="input-group input-group-sm">
+<div class="input-group">
 
-	<span class="input-group-btn"><a href=""
-		data-ng-show="isOverride()" class="form-control {{getOverrideButtonClass()}}"
-		title="Override parameter for this project." data-ng-click="toggleOverriding()">Override</a></span>
+	<span class="input-group-btn"><a *ngIf="isOverride()"
+		class="form-control {{getOverrideButtonClass()}}"
+		title="Override parameter for this project."
+		(click)="toggleOverriding()">Override</a></span>
 
 	<!--  refresh -->
-	<span class="input-group-btn"><a href=""
-		class="form-control btn-default" data-ng-click="refresh()"> <img
+	<span class="input-group-btn"><a
+		class="form-control btn-default" (click)="refresh()"> <img
 			src="/images/icons/FatCow_Icons16x16/arrow_refresh.png"
 			title="Re-read value from server." /></a> </span>
 
 	<!-- boolean parameter -->
-	<a data-ng-show="isBoolean()" data-ng-disabled="isLocked()" href=""
+	<a *ngIf="isBoolean()" [attr.disabled]="isLocked()"
 		class="form-control {{getBooleanButtonClass()}}"
-		title="{{parameter.description}}" data-ng-value="values.booleanInput"
-		data-ng-click="toggleBoolean()">{{getBooleanText()}}</a>
+		title="{{parameter.description}}" (click)="toggleBoolean()">{{getBooleanText()}}</a>
 
 	<!-- string parameter -->
-	<input data-ng-show="isText()" data-ng-disabled="isLocked()"
-		class="form-control" title="{{parameter.description}}" type="text"
-		data-ng-model="values.textInput" required />
+	<input *ngIf="isText()" [disabled]="isLocked()" class="form-control"
+		title="{{parameter.description}}" type="text" [(ngModel)]="textInput"
+		required />
 
 	<!-- number parameter -->
-	<input data-ng-show="isNumber()" data-ng-disabled="isLocked()"
-		class="form-control" title="{{parameter.description}}" type="number"
-		data-ng-model="values.numberInput" required />
+	<input *ngIf="isNumber()" [disabled]="isLocked()" class="form-control"
+		title="{{parameter.description}}" type="number"
+		[(ngModel)]="numberInput" required />
 
 	<!-- unit -->
-	<span data-ng-show="parameter.unit" class="input-group-addon">{{parameter.unit}}</span>
+	<span *ngIf="parameter.unit" class="input-group-addon">{{parameter.unit}}</span>
 
 	<!-- -->
 	<span class="input-group-btn" data-ng-hide="isDefault()"> <a
-		href="" class="btn btn-default" data-ng-click="setDefault()"><img
+		class="btn btn-default" (click)="setDefault()"><img
 			src="/images/icons/FatCow_Icons16x16/arrow_redo.png"
 			title="Set back to default value." /></a></span>
 
 	<!-- -->
-	<span class="input-group-btn" data-ng-show="wasChanged()"> <a
-		href="" class="btn btn-default" data-ng-click="commit()"><img
+	<span class="input-group-btn" *ngIf="wasChanged()"> <a
+		class="btn btn-default" (click)="commit()"><img
 			src="/images/icons/FatCow_Icons16x16/accept_button.png"
 			title="Save new value." /></a></span>
 
 	<!-- -->
-	<span class="input-group-btn" data-ng-show="wasChanged()"> <a
-		href="" class="btn btn-default" data-ng-click="rollback()"><img
+	<span class="input-group-btn" *ngIf="wasChanged()"> <a
+		class="btn btn-default" (click)="rollback()"><img
 			src="/images/icons/FatCow_Icons16x16/cross.png"
 			title="Reset changes." /></a></span>
 

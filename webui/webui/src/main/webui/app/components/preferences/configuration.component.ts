@@ -2,24 +2,28 @@ import {Component, Input} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 
 import {PanelComponent} from '..//panel.component';
+import {ConfigurationParameterComponent} from './configuration-parameter.component';
 import {ConfigurationComponentData} from '../../commons/configuration/ConfigurationComponentData';
 import {ConfigurationComponentTree} from '../../commons/configuration/ConfigurationComponentTree';
 
 @Component({
     selector: 'configuration-component',
     directives: [
-        PanelComponent
+        PanelComponent,
+        ConfigurationParameterComponent
     ],
     templateUrl: '../../../html/components/preferences/configuration-component.html'
 })
 export class ConfigurationComponent {
 
-    @Input() configurationTreeData: ConfigurationComponentData;
+    @Input()
+    private configurationTreeData: ConfigurationComponentData;
 
-    path: ConfigurationComponentTree[] = [];
-    currentFolder: ConfigurationComponentTree;
+    private path: ConfigurationComponentTree[] = [];
+    private currentFolder: ConfigurationComponentTree;
 
     ngOnInit() {
+        this.path = [];
         this.path.push(this.configurationTreeData.root);
         this.currentFolder = this.configurationTreeData.root;
     }

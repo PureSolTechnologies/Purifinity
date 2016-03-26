@@ -35,8 +35,15 @@ export class SettingsAdminComponent {
     analyzerActivation: any = {};
     evaluatorActivation: any = {};
     pluginSettings: ConfigurationComponentData = new ConfigurationComponentData("Plug-ins", PreferencesGroup.PLUGIN_DEFAULT);
+    analyzersNode: ConfigurationComponentTree = new ConfigurationComponentTree(this.pluginSettings.root, "Analyzers");
+    evaluatorsNode: ConfigurationComponentTree = new ConfigurationComponentTree(this.pluginSettings.root, "Evaluators");
+    repositoriesNode: ConfigurationComponentTree = new ConfigurationComponentTree(this.pluginSettings.root, "Repositories");
 
     constructor(private preferencesManager: PreferencesManager, private pluginManager: PluginManager) {
+        this.pluginSettings.root.addChild(this.analyzersNode);
+        this.pluginSettings.root.addChild(this.evaluatorsNode);
+        this.pluginSettings.root.addChild(this.repositoriesNode);
+
         let settingsAdminComponent = this;
         preferencesManager.getSystemParameters(
             function(response: Response) {
@@ -66,6 +73,12 @@ export class SettingsAdminComponent {
                         function(response: Response) { }
                     );
                 });
+                for (var i = 0; i < data.length; i++) {
+                    var plugin = data[i];
+                    var analyzerNode: ConfigurationComponentTree = new ConfigurationComponentTree(settingsAdminComponent.analyzersNode, plugin.name);
+                    settingsAdminComponent.analyzersNode.addChild(analyzerNode);
+                    settingsAdminComponent.addPluginConfiguration(analyzerNode, plugin.id);
+                }
             },
             function(response: Response) { }
         );
@@ -84,6 +97,12 @@ export class SettingsAdminComponent {
                         function(response: Response) { }
                     );
                 });
+                for (var i = 0; i < data.length; i++) {
+                    var plugin = data[i];
+                    var evaluatorNode: ConfigurationComponentTree = new ConfigurationComponentTree(settingsAdminComponent.evaluatorsNode, plugin.name);
+                    settingsAdminComponent.evaluatorsNode.addChild(evaluatorNode);
+                    settingsAdminComponent.addPluginConfiguration(evaluatorNode, plugin.id);
+                }
             },
             function(response: Response) { }
         );
@@ -96,19 +115,13 @@ export class SettingsAdminComponent {
                     });
                 for (var i = 0; i < data.length; i++) {
                     var plugin = data[i];
-                    var repositoryNode: ConfigurationComponentTree = new ConfigurationComponentTree(repositoriesNode, plugin.name);
-                    repositoriesNode.addChild(repositoryNode);
+                    var repositoryNode: ConfigurationComponentTree = new ConfigurationComponentTree(settingsAdminComponent.repositoriesNode, plugin.name);
+                    settingsAdminComponent.repositoriesNode.addChild(repositoryNode);
                     settingsAdminComponent.addPluginConfiguration(repositoryNode, plugin.id);
                 }
             },
             function(response: Response) { }
         );
-        let analyzersNode: ConfigurationComponentTree = new ConfigurationComponentTree(this.pluginSettings.root, "Analyzers");
-        this.pluginSettings.root.addChild(analyzersNode);
-        let evaluatorsNode: ConfigurationComponentTree = new ConfigurationComponentTree(this.pluginSettings.root, "Evaluators");
-        this.pluginSettings.root.addChild(evaluatorsNode);
-        let repositoriesNode: ConfigurationComponentTree = new ConfigurationComponentTree(this.pluginSettings.root, "Repositories");
-        this.pluginSettings.root.addChild(repositoriesNode);
     }
 
     getAnalyzerButtonClass(pluginId: string): string {

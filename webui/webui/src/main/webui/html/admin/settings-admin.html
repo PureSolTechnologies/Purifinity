@@ -12,8 +12,8 @@
 			<tabset> <tab heading="System Settings">
 			<p>Settings in this section are system settings which influence
 				the behavior of the system in general.</p>
-			<!-- configuration-component [configurationTreeData]="systemSettings">
-			</configuration-component --></tab> <tab heading="Plug-in Activation">
+			<configuration-component [configurationTreeData]="systemSettings">
+			</configuration-component></tab> <tab heading="Plug-in Activation">
 			<p>In this sections plugins are enabled and disabled system wide.</p>
 			<h3>Analyzers</h3>
 			<table class="table table-striped table-hover table-bordered">
@@ -63,8 +63,8 @@
 				settings.</p>
 			<div class="row">
 				<div class="col-sm-12">
-					<!-- configuration-component [configurationTreeData]="pluginSettings">
-					</configuration-component -->
+					<configuration-component [configurationTreeData]="pluginSettings">
+					</configuration-component>
 				</div>
 			</div>
 			</tab> </tabset>

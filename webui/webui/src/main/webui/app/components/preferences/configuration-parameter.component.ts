@@ -6,75 +6,6 @@ import {ConfigurationParameter} from '../../commons/configuration/ConfigurationP
 import {PreferencesManager} from '../../commons/purifinity/PreferencesManager';
 import {PreferencesGroup} from '../../commons/preferences/PreferencesGroup';
 
-enum ValueType { TEXT, NUMBER, BOOLEAN }
-
-class Values {
-
-    valueType: ValueType;
-    currentValue: any;
-    defaultValue: any;
-    overriding: boolean = false;
-    booleanInput: boolean = false;
-    textInput: string = "";
-    numberInput: number = 0;
-
-    constructor(valueType: ValueType, currentValue: any, defaultValue: any, overriding: boolean) {
-        this.valueType = valueType;
-        this.currentValue = currentValue;
-        this.defaultValue = defaultValue;
-        this.overriding = overriding;
-        this.setDefault();
-    }
-
-    isDefault(): boolean {
-        if (this.isBoolean()) {
-            return this.defaultValue === this.booleanInput;
-        } else if (this.isText()) {
-            return this.defaultValue === this.textInput;
-        } else if (this.isNumber()) {
-            return this.defaultValue === this.numberInput;
-        } else {
-            return this.defaultValue === this.textInput;
-        }
-    }
-
-    setDefault(): void {
-        if (this.isBoolean()) {
-            this.booleanInput = this.defaultValue;
-        } else if (this.isText()) {
-            this.textInput = this.defaultValue;
-        } else if (this.isNumber()) {
-            this.numberInput = this.defaultValue;
-        } else {
-            this.textInput = this.defaultValue;
-        }
-    }
-
-    wasChanged(): boolean {
-        if (this.isBoolean()) {
-            return this.currentValue !== this.booleanInput;
-        } else if (this.isText()) {
-            return this.currentValue !== this.textInput;
-        } else if (this.isNumber()) {
-            return this.currentValue !== this.numberInput;
-        } else {
-            return this.currentValue !== this.textInput;
-        }
-    }
-
-    isBoolean(): boolean {
-        return this.valueType === ValueType.BOOLEAN;
-    }
-
-    isNumber(): boolean {
-        return this.valueType === ValueType.NUMBER;
-    }
-
-    isText(): boolean {
-        return this.valueType === ValueType.TEXT;
-    }
-}
-
 @Component({
     selector: 'configuration-parameter',
     directives: [],
@@ -85,7 +16,12 @@ export class ConfigurationParameterComponent {
 
     @Input() parameter: ConfigurationParameter;
 
-    values: Values;
+    currentValue: any;
+    defaultValue: any;
+    overriding: boolean = false;
+    booleanInput: boolean = false;
+    textInput: string = "";
+    numberInput: number = 0;
 
     constructor(private preferencesManager: PreferencesManager) {
     }
@@ -98,14 +34,30 @@ export class ConfigurationParameterComponent {
         if (this.isLocked()) {
             return true;
         }
-        return this.values.isDefault();
+        if (this.isBoolean()) {
+            return this.defaultValue === this.booleanInput;
+        } else if (this.isText()) {
+            return this.defaultValue === this.textInput;
+        } else if (this.isNumber()) {
+            return this.defaultValue === this.numberInput;
+        } else {
+            return this.defaultValue === this.textInput;
+        }
     }
 
     wasChanged(): boolean {
         if (this.isLocked()) {
             return false;
         }
-        return this.values.wasChanged();
+        if (this.isBoolean()) {
+            return this.currentValue !== this.booleanInput;
+        } else if (this.isText()) {
+            return this.currentValue !== this.textInput;
+        } else if (this.isNumber()) {
+            return this.currentValue !== this.numberInput;
+        } else {
+            return this.currentValue !== this.textInput;
+        }
     }
 
     isLocked(): boolean {
@@ -118,21 +70,21 @@ export class ConfigurationParameterComponent {
     commit() {
         let configurationParameterComponent = this;
         if (this.isBoolean()) {
-            this.preferencesManager.setParameter(this.parameter, String(this.values.booleanInput),
+            this.preferencesManager.setParameter(this.parameter, String(this.booleanInput),
                 function(response: Response) {
-                    configurationParameterComponent.values.currentValue = configurationParameterComponent.values.booleanInput;
+                    configurationParameterComponent.currentValue = configurationParameterComponent.booleanInput;
                 }, function(response: Response) {
                 });
         } else if (this.isText()) {
-            this.preferencesManager.setParameter(this.parameter, String(this.values.textInput),
+            this.preferencesManager.setParameter(this.parameter, String(this.textInput),
                 function(response: Response) {
-                    configurationParameterComponent.values.currentValue = configurationParameterComponent.values.textInput;
+                    configurationParameterComponent.currentValue = configurationParameterComponent.textInput;
                 }, function(response: Response) {
                 });
         } else if (this.isNumber()) {
-            this.preferencesManager.setParameter(this.parameter, String(this.values.numberInput),
+            this.preferencesManager.setParameter(this.parameter, String(this.numberInput),
                 function(response: Response) {
-                    configurationParameterComponent.values.currentValue = configurationParameterComponent.values.numberInput;
+                    configurationParameterComponent.currentValue = configurationParameterComponent.numberInput;
                 }, function(response: Response) {
                 });
         }
@@ -140,55 +92,56 @@ export class ConfigurationParameterComponent {
 
     rollback() {
         if (this.isBoolean()) {
-            this.values.booleanInput = this.values.currentValue;
+            this.booleanInput = this.currentValue;
         } else if (this.isText()) {
-            this.values.textInput = this.values.currentValue;
+            this.textInput = this.currentValue;
         } else if (this.isNumber()) {
-            this.values.numberInput = this.values.currentValue;
+            this.numberInput = this.currentValue;
         } else {
-            this.values.textInput = this.values.currentValue;
+            this.textInput = this.currentValue;
         }
     }
 
     refresh() {
+        let configurationParameterComponent = this;
         this.preferencesManager.getParameter(this.parameter,
             function(response: Response) {
-                let data = response.json();
-                if (this.isBoolean()) {
+                let data = response.text();
+                if (configurationParameterComponent.isBoolean()) {
                     if (data) {
-                        this.values.booleanInput = (data === "true");
+                        configurationParameterComponent.booleanInput = (data === "true");
                     } else {
-                        this.values.booleanInput = this.parameter.defaultValue;
+                        configurationParameterComponent.booleanInput = configurationParameterComponent.parameter.defaultValue;
                     }
-                    this.values.currentValue = this.values.booleanInput;
-                    this.values.defaultValue = this.parameter.defaultValue;
-                } else if (this.isText()) {
+                    configurationParameterComponent.currentValue = configurationParameterComponent.booleanInput;
+                    configurationParameterComponent.defaultValue = configurationParameterComponent.parameter.defaultValue;
+                } else if (configurationParameterComponent.isText()) {
                     if (data) {
-                        this.values.textInput = String(data);
+                        configurationParameterComponent.textInput = String(data);
                     } else {
-                        this.values.textInput = this.parameter.defaultValue;
+                        configurationParameterComponent.textInput = configurationParameterComponent.parameter.defaultValue;
                     }
-                    this.values.currentValue = this.values.textInput;
-                    this.values.defaultValue = String(this.parameter.defaultValue);
-                } else if (this.isNumber()) {
+                    configurationParameterComponent.currentValue = configurationParameterComponent.textInput;
+                    configurationParameterComponent.defaultValue = String(configurationParameterComponent.parameter.defaultValue);
+                } else if (configurationParameterComponent.isNumber()) {
                     if (data) {
-                        this.values.numberInput = Number(data);
+                        configurationParameterComponent.numberInput = Number(data);
                     } else {
-                        this.values.numberInput = this.parameter.defaultValue;
+                        configurationParameterComponent.numberInput = configurationParameterComponent.parameter.defaultValue;
                     }
-                    this.values.currentValue = this.values.numberInput;
-                    this.values.defaultValue = Number(this.parameter.defaultValue);
+                    configurationParameterComponent.currentValue = configurationParameterComponent.numberInput;
+                    configurationParameterComponent.defaultValue = Number(configurationParameterComponent.parameter.defaultValue);
                 } else {
                     if (data) {
-                        this.values.textInput = data;
+                        configurationParameterComponent.textInput = data;
                     } else {
-                        this.values.textInput = this.parameter.defaultValue;
+                        configurationParameterComponent.textInput = configurationParameterComponent.parameter.defaultValue;
                     }
-                    this.values.currentValue = data;
-                    this.values.defaultValue = data;
+                    configurationParameterComponent.currentValue = data;
+                    configurationParameterComponent.defaultValue = data;
                 }
-                if (this.values.currentValue || (!this.isOverride())) {
-                    this.overriding = true;
+                if (configurationParameterComponent.currentValue || (!configurationParameterComponent.isOverride())) {
+                    configurationParameterComponent.overriding = true;
                 }
             }, function(response: Response) {
             });
@@ -207,21 +160,21 @@ export class ConfigurationParameterComponent {
     }
 
     getBooleanText(): string {
-        if (this.values.booleanInput) {
+        if (this.booleanInput) {
             return "enabled";
         }
         return "disabled";
     }
 
     getBooleanButtonClass(): string {
-        if (this.values.booleanInput) {
+        if (this.booleanInput) {
             return "btn-success";
         }
         return "btn-danger";
     }
 
     toggleBoolean(): void {
-        this.values.booleanInput = !this.values.booleanInput;
+        this.booleanInput = !this.booleanInput;
     }
 
     isOverride(): boolean {
@@ -239,17 +192,17 @@ export class ConfigurationParameterComponent {
     }
 
     isOverriding(): boolean {
-        return this.values.overriding;
+        return this.overriding;
     }
 
     toggleOverriding() {
-        if (this.values.overriding) {
+        if (this.overriding) {
             this.preferencesManager.deleteParameter(this.parameter,
                 function(response: Response) {
                 }, function(response: Response) {
                 });
         }
-        this.values.overriding = !this.values.overriding;
+        this.overriding = !this.overriding;
     }
 
     getOverrideButtonClass() {
@@ -260,4 +213,15 @@ export class ConfigurationParameterComponent {
         }
     }
 
+    setDefault(): void {
+        if (this.isBoolean()) {
+            this.booleanInput = this.defaultValue;
+        } else if (this.isText()) {
+            this.textInput = this.defaultValue;
+        } else if (this.isNumber()) {
+            this.numberInput = this.defaultValue;
+        } else {
+            this.textInput = this.defaultValue;
+        }
+    }
 }

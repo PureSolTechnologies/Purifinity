@@ -1,37 +1,37 @@
-<div class="panel panel-default">
-	<ol class="breadcrumb" style="padding: 0.5em; margin: 0pt;">
-		<li *ngFor="#folder of path" data-ng-hide="$last"><a
-			href="" (click)="setDir(folder)"> <img
-				data-ng-show="folder.imageUrl" src="{{folder.imageUrl}}" />
-				{{folder.name}}
-		</a></li>
-	</ol>
-	<div class="panel-heading">
-		<h3 class="panel-title">{{currentFolder.name}}</h3>
-	</div>
-	<ul class="list-group">
-		<li class="list-group-item" data-ng-show="path.length > 1"><a
-			href="" (click)="chdir('..')"><img
-				src="images/icons/FatCow_Icons16x16/bullet_arrow_up.png" /> ..</a></li>
-		<li class="list-group-item"
-			*ngFor="#content of currentFolder.children"><a
-			data-ng-show="content.children" href=""
-			(click)="chdir(content.name)"> <img
-				data-ng-show="content.imageUrl" src="{{content.imageUrl}}" />{{content.name}}
-		</a> <span data-ng-hide="content.children"> <a
-				data-ng-show="content.link" href="{{content.link}}"> <img
-					data-ng-show="content.imageUrl" src="{{content.imageUrl}}" />{{content.name}}
-			</a> <span data-ng-hide="content.link"> <img
-					data-ng-show="content.imageUrl" src="{{content.imageUrl}}" />{{content.name}}
-			</span>
-		</span></li>
-		<li class="list-group-item"
-			*ngFor="#parameter of currentFolder.parameters">
-			<div class="row">
+<ol class="breadcrumb" style="padding: 0.5em; margin: 0pt;">
+	<li *ngFor="#folder of path; #lastEntry = last"><a
+		*ngIf="!lastEntry" (click)="setDir(folder)"> <img
+			*ngIf="folder.imageUrl" src="{{folder.imageUrl}}" /> {{folder.name}}
+	</a> <span *ngIf="lastEntry"> <img *ngIf="folder.imageUrl"
+			src="{{folder.imageUrl}}" /> {{folder.name}}
+	</span></li>
+</ol>
+<ul class="list-group">
+	<!-- Provide move up if not in root folder. -->
+	<li class="list-group-item" *ngIf="path.length>1"><a
+		(click)="chdir('..')"><img
+			src="images/icons/FatCow_Icons16x16/bullet_arrow_up.png" /> ..</a></li>
+	<!-- Provide move into child folders. -->
+	<li class="list-group-item" *ngFor="#content of currentFolder.children">
+		<!-- Link to change into child folder. --> <a *ngIf="content.children"
+		(click)="chdir(content.name)"> <img *ngIf="content.imageUrl"
+			src="{{content.imageUrl}}" />{{content.name}}
+	</a> <!-- Provide a hard link to a parameter: --> <span
+		*ngIf="!content.children"> <a *ngIf="content.link"
+			href="{{content.link}}"> <img *ngIf="content.imageUrl"
+				src="{{content.imageUrl}}" />{{content.name}}
+		</a> <!-- Provide name of parameter. --> <span *ngIf="!content.link">
+				<img *ngIf="content.imageUrl" src="{{content.imageUrl}}" />{{content.name}}
+		</span>
+	</span>
+	</li>
+	<li class="list-group-item"
+		*ngFor="#parameter of currentFolder.parameters">
+		<div class="row">
 			<div class="col-md-4">{{parameter.name}}</div>
 			<div class="col-md-8">
 				<configuration-parameter [parameter]="parameter"></configuration-parameter>
-			</div></div>
-		</li>
-	</ul>
-</div>
+			</div>
+		</div>
+	</li>
+</ul>
