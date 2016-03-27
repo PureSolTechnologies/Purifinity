@@ -2,13 +2,14 @@ import {Component, Input} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {Response} from 'angular2/http';
 
+import {ProgressIndicatorComponent} from '../progress-indicator.component';
 import {ConfigurationParameter} from '../../commons/configuration/ConfigurationParameter';
 import {PreferencesManager} from '../../commons/purifinity/PreferencesManager';
 import {PreferencesGroup} from '../../commons/preferences/PreferencesGroup';
 
 @Component({
     selector: 'configuration-parameter',
-    directives: [],
+    directives: [ProgressIndicatorComponent],
     pipes: [],
     templateUrl: '../../../html/components/preferences/configuration-parameter.html'
 })
@@ -22,12 +23,17 @@ export class ConfigurationParameterComponent {
     booleanInput: boolean = false;
     textInput: string = "";
     numberInput: number = 0;
+    loading: number = 0;
 
     constructor(private preferencesManager: PreferencesManager) {
     }
 
     ngOnInit() {
         this.refresh();
+    }
+
+    isLoading(): boolean {
+        return this.loading < 1;
     }
 
     isDefault(): boolean {
@@ -103,6 +109,7 @@ export class ConfigurationParameterComponent {
     }
 
     refresh() {
+        this.loading = 0;
         let configurationParameterComponent = this;
         this.preferencesManager.getParameter(this.parameter,
             function(response: Response) {
@@ -143,7 +150,9 @@ export class ConfigurationParameterComponent {
                 if (configurationParameterComponent.currentValue || (!configurationParameterComponent.isOverride())) {
                     configurationParameterComponent.overriding = true;
                 }
+                configurationParameterComponent.loading++;
             }, function(response: Response) {
+                configurationParameterComponent.loading++;
             });
     }
 

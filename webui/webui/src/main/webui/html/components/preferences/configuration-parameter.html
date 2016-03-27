@@ -1,4 +1,7 @@
-<div class="input-group">
+<div *ngIf="isLoading()">
+	<progress-indicator></progress-indicator>
+</div>
+<div class="input-group" *ngIf="!isLoading()">
 
 	<span class="input-group-btn"><a *ngIf="isOverride()"
 		class="form-control {{getOverrideButtonClass()}}"

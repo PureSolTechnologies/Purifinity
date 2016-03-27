@@ -1,5 +1,6 @@
 <div class="container-fluid">
-	<tabset> <tab heading="Users">
+	<progress-indicator *ngIf="isLoading()"></progress-indicator>
+	<tabset *ngIf="!isLoading()"> <tab heading="Users">
 	<div class="row">
 		<div class="col-xs-12">
 			<h1>
