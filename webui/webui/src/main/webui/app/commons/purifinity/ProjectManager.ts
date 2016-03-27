@@ -48,10 +48,10 @@ export class ProjectManager {
     }
 
     triggerNewRun(identifier: string,
-        success: (data: any, status: string) => void,
+        success: () => void,
         error: (response: Response) => void) {
         return this.purifinityServerConnector.put("/purifinityserver/rest/analysis/projects/" + identifier, "",
-            response => success(response.json(), response.statusText), error);
+            response => success(), error);
     }
 
     updateProjectSettings(identifier: string,

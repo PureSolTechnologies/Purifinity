@@ -1,2 +1,23 @@
 <project-menu></project-menu>
-Summary
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<h1>Summary</h1>
+
+			<panel title="Last Run"
+				icon="/images/icons/FatCow_Icons16x16/cog.png">
+			<table class="table table-striped table-hover table-bordered">
+				<tr>
+					<th>Date</th>
+					<td>{{lastRun.startTime | defaultDate}}</td>
+				</tr>
+				<tr>
+					<th>Duration</th>
+					<td>{{lastRun.duration | duration}}</td>
+				</tr>
+			</table>
+			<a href="/run.html#/summary/{{lastRun.projectId}}/{{lastRun.runId}}"
+				class="btn btn-default">Open Last Run...</a> </panel>
+		</div>
+	</div>
+</div>

@@ -21,8 +21,8 @@
 				<td>{{project.information.creationTime | defaultDate}}</td>
 				<td>{{project.settings.description}}</td>
 				<td width="5%">
-					<button class="btn btn-default" title="New Run..."
-						data-ng-click="triggerNewRun(project.information.projectId)">
+					<button class="btn btn-secondary" title="New Run..."
+						(click)="triggerNewRun(project.information.projectId)">
 						<img src="/images/icons/FatCow_Icons16x16/cog_add.png" />
 					</button>
 				</td>

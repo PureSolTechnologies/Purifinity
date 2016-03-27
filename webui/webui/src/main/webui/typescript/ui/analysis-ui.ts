@@ -121,22 +121,3 @@ analysisUIModule.controller("runListCtrl", ["$scope", "$routeParams", "projectMa
             }
             );
     }]);
-
-/**
- * This controller needs the :projectId route parameter set.
- */
-analysisUIModule.controller("lastRunCtrl", ["$scope", "$routeParams", "projectManager",
-    function(
-        $scope: any,
-        $routeParams: angular.route.IRouteParamsService,
-        projectManager: ProjectManager) {
-        $scope.lastRun = undefined;
-        projectManager.getLastRun($routeParams["projectId"],
-            function(data, status) {
-                $scope.lastRun = data;
-            },
-            function(data, status, error) {
-            }
-            );
-    }]);
-    

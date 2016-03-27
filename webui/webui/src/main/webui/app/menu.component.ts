@@ -8,5 +8,4 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
     ],
     templateUrl: '../html/menu.html'
 })
-export class MenuComponent {
-}
+export class MenuComponent {}

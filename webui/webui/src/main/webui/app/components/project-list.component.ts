@@ -36,9 +36,9 @@ export class ProjectListComponent {
         );
     }
 
-    triggerNewRun(id) {
+    triggerNewRun(id): void {
         this.projectManager.triggerNewRun(id,
-            function(data, status) { },
+            function() { },
             function(response: Response) { }
         );
     }

@@ -6,5 +6,4 @@ import {ROUTER_DIRECTIVES} from 'angular2/router';
     directives: [ROUTER_DIRECTIVES],
     templateUrl: '../../html/admin/admin-menu.html'
 })
-export class AdminMenuComponent {
-}
+export class AdminMenuComponent {}
