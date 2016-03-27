@@ -1,4 +1,5 @@
 import {Component, Input} from 'angular2/core';
+import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {Response} from 'angular2/http';
 
 import {DefaultDatePipe} from '../commons/pipes/default-date.pipe';
@@ -7,7 +8,10 @@ import {PanelComponent} from './panel.component';
 
 @Component({
     selector: 'project-list',
-    directives: [PanelComponent],
+    directives: [
+        ROUTER_DIRECTIVES,
+        PanelComponent
+    ],
     pipes: [DefaultDatePipe],
     templateUrl: '../../html/components/project-list.html'
 })

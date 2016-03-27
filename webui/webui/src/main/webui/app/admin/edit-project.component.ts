@@ -2,6 +2,7 @@ import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, Router, RouteParams} from 'angular2/router';
 import {Response} from 'angular2/http';
 
+import {AdminMenuComponent} from './admin-menu.component';
 import {ProjectManager} from '../commons/purifinity/ProjectManager';
 import {PluginManager} from '../commons/purifinity/PluginManager';
 import {PreferencesManager} from '../commons/purifinity/PreferencesManager';
@@ -23,6 +24,7 @@ import {PreferencesGroupIdentifier} from '../commons/preferences/PreferencesGrou
 @Component({
     selector: 'edit-project',
     directives: [
+        AdminMenuComponent,
         PanelComponent,
         TabComponent,
         TabSetComponent

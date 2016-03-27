@@ -2,12 +2,16 @@ import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {Response} from 'angular2/http';
 
+import {AdminMenuComponent} from './admin-menu.component';
 import {ProjectManager} from '../commons/purifinity/ProjectManager';
 import {Project} from '../commons/domain/Project';
 
 @Component({
     selector: 'projects-admin',
-    directives: [ROUTER_DIRECTIVES],
+    directives: [
+        ROUTER_DIRECTIVES,
+        AdminMenuComponent
+    ],
     templateUrl: '../../html/admin/projects-admin.html'
 })
 export class ProjectsAdminComponent {

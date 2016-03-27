@@ -1,13 +1,15 @@
 import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, Router} from 'angular2/router';
 
+import {MenuComponent} from './menu.component';
 import {AuthenticationData} from './commons/auth/AuthenticationData';
 import {AuthenticationService} from './commons/auth/AuthenticationService';
 
 @Component({
     selector: 'login',
     directives: [
-        ROUTER_DIRECTIVES
+        ROUTER_DIRECTIVES,
+        MenuComponent
     ],
     templateUrl: '../html/login.html'
 })

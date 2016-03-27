@@ -2,6 +2,7 @@ import {Component} from 'angular2/core';
 import {Response} from 'angular2/http';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 
+import {AdminMenuComponent} from './admin-menu.component';
 import {ProgressIndicatorComponent} from '../components/progress-indicator.component';
 import {User} from '../commons/auth/User';
 import {Role} from '../commons/auth/Role';
@@ -13,6 +14,7 @@ import {TabSetComponent} from '../components/tabs/tabset.component';
     selector: 'users-admin',
     directives: [
         ROUTER_DIRECTIVES,
+        AdminMenuComponent,
         ProgressIndicatorComponent,
         TabSetComponent,
         TabComponent

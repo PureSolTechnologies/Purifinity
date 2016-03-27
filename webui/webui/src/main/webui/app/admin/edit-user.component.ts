@@ -2,13 +2,17 @@ import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, Router, RouteParams} from 'angular2/router';
 import {Response} from 'angular2/http';
 
+import {AdminMenuComponent} from './admin-menu.component';
 import {User} from '../commons/auth/User';
 import {Role} from '../commons/auth/Role';
 import {AccountManager} from '../commons/purifinity/AccountManager';
 
 @Component({
     selector: 'edit-user',
-    directives: [ROUTER_DIRECTIVES],
+    directives: [
+        ROUTER_DIRECTIVES,
+        AdminMenuComponent
+    ],
     templateUrl: '../../html/admin/edit-user.html'
 })
 export class EditUserComponent {

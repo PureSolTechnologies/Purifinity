@@ -15,7 +15,7 @@
 			<tr *ngFor="#project of projects">
 				<td><img src="/images/icons/FatCow_Icons32x32/question.png" /></td>
 				<td><a
-					href="/project.html#/summary/{{project.information.projectId}}"
+					[routerLink]="['ProjectSummary', {projectId: project.information.projectId}]"
 					title="Project ID: {{project.information.projectId}}">
 						{{project.settings.name}} </a></td>
 				<td>{{project.information.creationTime | defaultDate}}</td>

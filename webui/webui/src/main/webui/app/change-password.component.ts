@@ -2,13 +2,15 @@ import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, Router} from 'angular2/router';
 import {Response} from 'angular2/http';
 
+import {MenuComponent} from './menu.component';
 import {AccountManager} from './commons/purifinity/AccountManager';
 import {AuthenticationService} from './commons/auth/AuthenticationService';
 
 @Component({
     selector: 'change-password',
     directives: [
-        ROUTER_DIRECTIVES
+        ROUTER_DIRECTIVES,
+        MenuComponent
     ],
     templateUrl: '../html/change-password.html'
 })

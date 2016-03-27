@@ -2,6 +2,7 @@ import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {Response} from 'angular2/http';
 
+import {MenuComponent} from './menu.component';
 import {AccountManager} from './commons/purifinity/AccountManager';
 import {AuthenticationService} from './commons/auth/AuthenticationService';
 import {Role} from './commons/auth/Role';
@@ -10,7 +11,8 @@ import {User} from './commons/auth/User';
 @Component({
     selector: 'account',
     directives: [
-        ROUTER_DIRECTIVES
+        ROUTER_DIRECTIVES,
+        MenuComponent
     ],
     templateUrl: '../html/account.html'
 })

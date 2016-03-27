@@ -2,13 +2,17 @@ import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, Router} from 'angular2/router';
 import {Response} from 'angular2/http';
 
+import {AdminMenuComponent} from './admin-menu.component';
 import {ProjectManager} from '../commons/purifinity/ProjectManager';
 import {Project} from '../commons/domain/Project';
 import {RepositoryType} from '../commons/domain/RepositoryType';
 
 @Component({
     selector: 'create-project',
-    directives: [ROUTER_DIRECTIVES],
+    directives: [
+        AdminMenuComponent,
+        ROUTER_DIRECTIVES
+    ],
     templateUrl: '../../html/admin/create-project.html'
 })
 export class CreateProjectComponent {

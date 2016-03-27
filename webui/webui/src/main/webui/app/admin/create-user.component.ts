@@ -2,12 +2,16 @@ import {Component} from 'angular2/core';
 import {ROUTER_DIRECTIVES, Router} from 'angular2/router';
 import {Response} from 'angular2/http';
 
+import {AdminMenuComponent} from './admin-menu.component';
 import {Role} from '../commons/auth/Role';
 import {AccountManager} from '../commons/purifinity/AccountManager';
 
 @Component({
     selector: 'create-user',
-    directives: [ROUTER_DIRECTIVES],
+    directives: [
+        AdminMenuComponent,
+        ROUTER_DIRECTIVES
+    ],
     templateUrl: '../../html/admin/create-user.html'
 })
 export class CreateUserComponent {

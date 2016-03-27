@@ -1,6 +1,7 @@
 import {Component} from 'angular2/core';
 import {Response} from 'angular2/http';
 
+import {AdminMenuComponent} from './admin-menu.component';
 import {Utilities} from '../commons/Utilities';
 import {TabComponent} from '../components/tabs/tab.component';
 import {TabSetComponent} from '../components/tabs/tabset.component';
@@ -20,6 +21,7 @@ import {ConfigurationComponent} from '../components/preferences/configuration.co
 @Component({
     selector: 'settings-admin',
     directives: [
+        AdminMenuComponent,
         TabSetComponent,
         TabComponent,
         ConfigurationComponent
