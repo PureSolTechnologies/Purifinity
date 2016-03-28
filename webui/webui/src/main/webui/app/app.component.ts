@@ -39,6 +39,9 @@ import {ProjectRunMetricsComponent} from './project/run/project-run-metrics.comp
 import {ProjectRunDesignComponent} from './project/run/project-run-design.component';
 import {ProjectRunArchitectureComponent} from './project/run/project-run-architecture.component';
 import {ProjectRunTrendsComponent} from './project/run/project-run-trends.component';
+// File pages
+import {FileSummaryComponent} from './file/file-summary.component';
+import {FileAnalysisComponent} from './file/file-analysis.component';
 
 /**
  * This component is Purifinity's central application.
@@ -90,6 +93,8 @@ import {ProjectRunTrendsComponent} from './project/run/project-run-trends.compon
     { path: '/projects/:projectId/runs/:runId/design', name: 'ProjectRunDesign', component: ProjectRunDesignComponent },
     { path: '/projects/:projectId/runs/:runId/architecture', name: 'ProjectRunArchitecture', component: ProjectRunArchitectureComponent },
     { path: '/projects/:projectId/runs/:runId/trends', name: 'ProjectRunTrends', component: ProjectRunTrendsComponent },
-
+    // File pages
+    { path: '/files/:hashId/summary', name: 'FileSummary', component: FileSummaryComponent },
+    { path: '/files/:hashId/analysis', name: 'FileAnalysis', component: FileAnalysisComponent },
 ])
 export class AppComponent { }
