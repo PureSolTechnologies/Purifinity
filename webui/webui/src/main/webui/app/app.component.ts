@@ -30,6 +30,7 @@ import {EditUserComponent} from './admin/edit-user.component';
 import {ProjectSummaryComponent} from './project/project-summary.component';
 import {ProjectTrendsComponent} from './project/project-trends.component';
 import {ProjectRunsComponent} from './project/project-runs.component';
+// Run pages
 
 /**
  * This component is Purifinity's central application.
@@ -72,5 +73,7 @@ import {ProjectRunsComponent} from './project/project-runs.component';
     { path: '/projects/:projectId/summary', name: 'ProjectSummary', component: ProjectSummaryComponent },
     { path: '/projects/:projectId/trends', name: 'ProjectTrends', component: ProjectTrendsComponent },
     { path: '/projects/:projectId/runs', name: 'ProjectRuns', component: ProjectRunsComponent },
+    // Run pages
+    //{ path: '/projects/:projectId/runs/:runId/summary', name: 'ProjectRunSummary', component: ProjectRunSummaryComponent },
 ])
 export class AppComponent {}

@@ -98,26 +98,3 @@ function collectHashIds(hashIds: { [hashId: string]: string[] }, node: any, path
         });
     }
 }
-
-analysisUIModule.controller("runListCtrl", ["$scope", "$routeParams", "projectManager",
-    function(
-        $scope: any,
-        $routeParams: angular.route.IRouteParamsService,
-        projectManager: ProjectManager) {
-        $scope.project = undefined;
-        $scope.runs = undefined;
-        projectManager.getProject($routeParams["projectId"],
-            function(data, status) {
-                $scope.project = data;
-            },
-            function(data, status, error) {
-            }
-            );
-        projectManager.readAllRunInformation($routeParams["projectId"],
-            function(data, status) {
-                $scope.runs = data;
-            },
-            function(data, status, error) {
-            }
-            );
-    }]);
