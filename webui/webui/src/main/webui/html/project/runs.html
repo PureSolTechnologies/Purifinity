@@ -15,13 +15,10 @@
 				</thead>
 				<tbody>
 					<tr *ngFor="#run of runs">
-						<td>
-							<!-- a
+						<td><a
 							[routerLink]="['/ProjectRunSummary', {projectId: run.projectId, runId:run.runId}]"
 							data-toggle="tooltip" data-placement="top"
-							title="{{run.startTime}}"> {{run.startTime | defaultDate}}</a -->
-							{{run.startTime | defaultDate}}
-						</td>
+							title="{{run.startTime}}"> {{run.startTime | defaultDate}}</a></td>
 						<td>{{run.description}}<br />
 						</td>
 						<td>{{run.duration | duration}}</td>

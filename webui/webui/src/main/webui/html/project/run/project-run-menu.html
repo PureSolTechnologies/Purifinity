@@ -1,0 +1,30 @@
+<div class="navbar navbar-light bg-faded" style="margin:0pt;">
+	<button class="navbar-toggler hidden-sm-up" type="button"
+		data-toggle="collapse" data-target="#exCollapsingNavbar2">
+		<span class="octicon octicon-three-bars"></span>
+	</button>
+	<div class="collapse navbar-toggleable-xs" id="exCollapsingNavbar2">
+		<ul class="nav navbar-nav">
+			<li class="nav-item"><a class="nav-link"
+				[routerLink]="['/ProjectRunSummary', {projectId: projectId, runId: runId}]">Summary</a></li>
+			<li class="nav-item"><a class="nav-link"
+				[routerLink]="['/ProjectRunAnalysis', {projectId: projectId, runId: runId}]">Analysis</a></li>
+			<li class="nav-item"><a class="nav-link"
+				[routerLink]="['/ProjectRunDefects', {projectId: projectId, runId: runId}]">Defects</a></li>
+			<li class="nav-item"><a class="nav-link"
+				[routerLink]="['/ProjectRunStyle', {projectId: projectId, runId: runId}]">Style</a></li>
+			<li class="nav-item"><a class="nav-link"
+				[routerLink]="['/ProjectRunMetrics', {projectId: projectId, runId: runId}]">Metrics</a></li>
+			<li class="nav-item"><a class="nav-link"
+				[routerLink]="['/ProjectRunDesign', {projectId: projectId, runId: runId}]">Design</a></li>
+			<li class="nav-item"><a class="nav-link"
+				[routerLink]="['/ProjectRunArchitecture', {projectId: projectId, runId: runId}]">Architecture</a></li>
+			<li class="nav-item"><a class="nav-link"
+				[routerLink]="['/ProjectRunTrends', {projectId: projectId, runId: runId}]">Trends</a></li>
+		</ul>
+		<ul class="nav navbar-nav pull-xs-right">
+			<li class="nav-item"><a class="nav-link"
+				[routerLink]="['/Help']">Help</a></li>
+		</ul>
+	</div>
+</div>

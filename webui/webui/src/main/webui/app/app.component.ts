@@ -31,6 +31,14 @@ import {ProjectSummaryComponent} from './project/project-summary.component';
 import {ProjectTrendsComponent} from './project/project-trends.component';
 import {ProjectRunsComponent} from './project/project-runs.component';
 // Run pages
+import {ProjectRunSummaryComponent} from './project/run/project-run-summary.component';
+import {ProjectRunAnalysisComponent} from './project/run/project-run-analysis.component';
+import {ProjectRunDefectsComponent} from './project/run/project-run-defects.component';
+import {ProjectRunStyleComponent} from './project/run/project-run-style.component';
+import {ProjectRunMetricsComponent} from './project/run/project-run-metrics.component';
+import {ProjectRunDesignComponent} from './project/run/project-run-design.component';
+import {ProjectRunArchitectureComponent} from './project/run/project-run-architecture.component';
+import {ProjectRunTrendsComponent} from './project/run/project-run-trends.component';
 
 /**
  * This component is Purifinity's central application.
@@ -74,6 +82,14 @@ import {ProjectRunsComponent} from './project/project-runs.component';
     { path: '/projects/:projectId/trends', name: 'ProjectTrends', component: ProjectTrendsComponent },
     { path: '/projects/:projectId/runs', name: 'ProjectRuns', component: ProjectRunsComponent },
     // Run pages
-    //{ path: '/projects/:projectId/runs/:runId/summary', name: 'ProjectRunSummary', component: ProjectRunSummaryComponent },
+    { path: '/projects/:projectId/runs/:runId/summary', name: 'ProjectRunSummary', component: ProjectRunSummaryComponent },
+    { path: '/projects/:projectId/runs/:runId/analysis', name: 'ProjectRunAnalysis', component: ProjectRunAnalysisComponent },
+    { path: '/projects/:projectId/runs/:runId/defects', name: 'ProjectRunDefects', component: ProjectRunDefectsComponent },
+    { path: '/projects/:projectId/runs/:runId/style-issues', name: 'ProjectRunStyle', component: ProjectRunStyleComponent },
+    { path: '/projects/:projectId/runs/:runId/metrics', name: 'ProjectRunMetrics', component: ProjectRunMetricsComponent },
+    { path: '/projects/:projectId/runs/:runId/design', name: 'ProjectRunDesign', component: ProjectRunDesignComponent },
+    { path: '/projects/:projectId/runs/:runId/architecture', name: 'ProjectRunArchitecture', component: ProjectRunArchitectureComponent },
+    { path: '/projects/:projectId/runs/:runId/trends', name: 'ProjectRunTrends', component: ProjectRunTrendsComponent },
+
 ])
-export class AppComponent {}
+export class AppComponent { }

@@ -1,5 +1,5 @@
 import {Component} from 'angular2/core';
-import {RouteParams} from 'angular2/router';
+import {ROUTER_DIRECTIVES, RouteParams} from 'angular2/router';
 import {Response} from 'angular2/http';
 
 import {ProjectManager} from '../commons/purifinity/ProjectManager';
@@ -11,6 +11,7 @@ import {DurationPipe} from '../commons/pipes/duration.pipe';
 @Component({
     selector: 'project-summary',
     directives: [
+        ROUTER_DIRECTIVES,
         ProjectMenuComponent,
         PanelComponent
     ],
