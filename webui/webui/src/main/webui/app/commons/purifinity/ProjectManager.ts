@@ -11,10 +11,10 @@ export class ProjectManager {
     constructor(private purifinityServerConnector: PurifinityServerConnector) {
     }
 
-    getProjects(success: (data: Project[], status: string) => void,
+    getProjects(success: (data: Project[]) => void,
         error: (response: Response) => void) {
         return this.purifinityServerConnector.get("/purifinityserver/rest/projectmanager/projects",
-            response => success(response.json(), response.statusText), error);
+            response => success(response.json()), error);
     }
 
     getProject(projectId: string,
