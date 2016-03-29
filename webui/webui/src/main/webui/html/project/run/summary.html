@@ -1,2 +1,60 @@
 <project-run-menu></project-run-menu>
-Summary
+<div class="container">
+	<div class="row">
+		<div class="col-xs-12">
+			<h1>Summary</h1>
+			<table *ngIf="project && run" class="table table-striped table-hover table-bordered">
+				<tbody>
+					<tr>
+						<td>Project</td>
+						<td>{{project.settings.name}}</td>
+					</tr>
+					<tr>
+						<td>Run Time</td>
+						<td>{{run.information.startTime | defaultDate}}</td>
+					</tr>
+					<tr>
+						<td>Description</td>
+						<td>{{run.information.description}}</td>
+					</tr>
+					<tr>
+						<td>Duration</td>
+						<td>{{run.information.duration | duration}}</td>
+					</tr>
+					<tr>
+						<td>Analyzed Files</td>
+						<td>{{run.analyzedFiles.length}}</td>
+					</tr>
+					<tr>
+						<td>Failed Files</td>
+						<td>{{run.failedFiles.length}}</td>
+					</tr>
+					<tr>
+						<td>File Includes</td>
+						<td><pre class="console"
+								data-ng-repeat="file in run.information.fileSearchConfiguration.fileIncludes">{{file}}</pre></td>
+					</tr>
+					<tr>
+						<td>File Excludes</td>
+						<td><pre class="console"
+								data-ng-repeat="file in run.information.fileSearchConfiguration.fileExcludes">{{file}}</pre></td>
+					</tr>
+					<tr>
+						<td>Directory Includes</td>
+						<td><pre class="console"
+								data-ng-repeat="location in run.information.fileSearchConfiguration.locationIncludes">{{location}}</pre></td>
+					</tr>
+					<tr>
+						<td>Directory Excludes</td>
+						<td><pre class="console"
+								data-ng-repeat="location in run.information.fileSearchConfiguration.locationExcludes">{{location}}</pre></td>
+					</tr>
+					<tr>
+						<td>Ignore Hidden Files</td>
+						<td>{{run.information.fileSearchConfiguration.ignoreHidden}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
