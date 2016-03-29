@@ -5,12 +5,7 @@ import {Response} from 'angular2/http';
 import {FsSizePipe} from '../../commons/pipes/fs-size.pipe';
 import {DefaultDatePipe} from '../../commons/pipes/default-date.pipe';
 import {DurationPipe} from '../../commons/pipes/duration.pipe';
-import {Utilities} from '../../commons/Utilities';
 import {Project} from '../../commons/domain/Project';
-import {TableColumnHeader} from '../../commons/tables/TableColumnHeader';
-import {TableCell} from '../../commons/tables/TableCell';
-import {TreeTableData} from '../../commons/treetable/TreeTableData';
-import {TreeTableTree} from '../../commons/treetable/TreeTableTree';
 import {ProjectRunMenuComponent} from './project-run-menu.component';
 import {ProjectManager} from '../../commons/purifinity/ProjectManager';
 

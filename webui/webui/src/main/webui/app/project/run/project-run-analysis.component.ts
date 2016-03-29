@@ -2,6 +2,10 @@ import {Component} from 'angular2/core';
 import {RouteParams} from 'angular2/router';
 import {Response} from 'angular2/http';
 
+import {DefaultDatePipe} from '../../commons/pipes/default-date.pipe';
+import {DurationPipe} from '../../commons/pipes/duration.pipe';
+import {HashIdPipe} from '../../commons/pipes/hash-id.pipe';
+import {VersionPipe} from '../../commons/pipes/version.pipe';
 import {FsSizePipe} from '../../commons/pipes/fs-size.pipe';
 import {Utilities} from '../../commons/Utilities';
 import {Project} from '../../commons/domain/Project';
@@ -12,10 +16,21 @@ import {TreeTableTree} from '../../commons/treetable/TreeTableTree';
 import {ProjectRunMenuComponent} from './project-run-menu.component';
 import {ProjectManager} from '../../commons/purifinity/ProjectManager';
 
+import {TabSetComponent} from '../../components/tabs/tabset.component';
+import {TabComponent} from '../../components/tabs/tab.component';
+
 @Component({
     selector: 'project-run-analysis',
     directives: [
-        ProjectRunMenuComponent
+        ProjectRunMenuComponent,
+        TabSetComponent,
+        TabComponent
+    ],
+    pipes: [
+        DefaultDatePipe,
+        DurationPipe,
+        HashIdPipe,
+        VersionPipe
     ],
     templateUrl: '../../html/project/run/analysis.html'
 })
