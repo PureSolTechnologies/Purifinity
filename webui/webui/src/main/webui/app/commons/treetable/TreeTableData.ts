@@ -7,14 +7,10 @@ import {TreeTableTree} from './TreeTableTree';
 export class TreeTableData {
 
     /**
-     * This array contains the column header definitions which are used
+     * @columnHeaders is an array containing the column header definitions which are used
      * throughout the whole table to have consistency.
+     * @root contains the tree data for the table.
      */
-    columnHeaders: TableColumnHeader[] = [];
-
-    /**
-     * This variable contains the tree data for the table.
-     */
-    root: TreeTableTree;
+    constructor(public columnHeaders: TableColumnHeader[], public root: TreeTableTree) { }
 
 }

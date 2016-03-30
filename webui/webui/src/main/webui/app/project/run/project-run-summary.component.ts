@@ -8,11 +8,13 @@ import {DurationPipe} from '../../commons/pipes/duration.pipe';
 import {Project} from '../../commons/domain/Project';
 import {ProjectRunMenuComponent} from './project-run-menu.component';
 import {ProjectManager} from '../../commons/purifinity/ProjectManager';
+import {ProgressIndicatorComponent} from '../../components/progress-indicator.component';
 
 @Component({
     selector: 'project-run-summary',
     directives: [
-        ProjectRunMenuComponent
+        ProjectRunMenuComponent,
+        ProgressIndicatorComponent
     ],
     pipes: [
         DefaultDatePipe,
@@ -46,4 +48,7 @@ export class ProjectRunSummaryComponent {
         });
     }
 
+    isLoading(): boolean {
+        return !(this.project && this.run);
+    }
 }

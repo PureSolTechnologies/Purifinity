@@ -1,0 +1,45 @@
+<table *ngIf="treeTableData"
+	class="table table-striped table-hover table-bordered">
+	<thead>
+		<tr>
+			<th [attr.colspan]="treeTableData.columnHeaders.length + 1"
+				style="padding: 0pt; margin: 0pt;">
+				<ol class="breadcrumb" style="padding: 0.5em; margin: 0pt;">
+					<li *ngFor="#folder of path"><a href=""
+						(click)="setDir(folder)"> <img *ngIf="folder.imageUrl"
+							src="{{folder.imageUrl}}" /> {{folder.content}}
+					</a></li>
+				</ol>
+			</th>
+		</tr>
+		<tr>
+			<th></th>
+			<th *ngFor="#columnHeader of treeTableData.columnHeaders"
+				data-toggle="tooltip" data-placement="top"
+				title="{{columnHeader.tooltip}}">{{columnHeader.name}}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngIf="path.length > 1">
+			<td><a href="" (click)="chdir('..')"><img
+					src="images/icons/FatCow_Icons16x16/bullet_arrow_up.png" /> ..</a></td>
+			<td *ngFor="#column of treeTableData.columns"></td>
+		</tr>
+		<tr *ngFor="#content of currentFolder.children">
+			<td><a *ngIf="content.children" href=""
+				(click)="chdir(content.content)"> <img *ngIf="content.imageUrl"
+					src="{{content.imageUrl}}" /> {{content.content}}
+			</a> <span *ngIf="!content.children"> <a *ngIf="content.link"
+					href="{{content.link}}"> <img *ngIf="content.imageUrl"
+						src="{{content.imageUrl}}" /> {{content.content}}
+				</a> <span *ngIf="!content.link"> <img *ngIf="content.imageUrl"
+						src="{{content.imageUrl}}" /> {{content.content}}
+				</span>
+			</span></td>
+			<td *ngFor="#contentColumn of content.columns"><span
+				*ngIf="!contentColumn.link">{{contentColumn.content}}</span> <a
+				*ngIf="contentColumn.link" href="{{contentColumn.link}}">{{contentColumn.content}}</a>
+			</td>
+		</tr>
+	</tbody>
+</table>

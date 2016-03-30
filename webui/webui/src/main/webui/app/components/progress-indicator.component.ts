@@ -6,12 +6,13 @@ declare var $: any;
     selector: 'progress-indicator',
     directives: [],
     template:
-    `<img src="/images/ventilator.gif" width="32px" height="32px"/> Loading...<br/><progress class="progress indicator"></progress>`
+    `<img src="/images/ventilator.gif" width="32px" height="32px"/> Loading...`
+    //<br/><progress class="progress indicator"></progress>
 })
 export class ProgressIndicatorComponent {
 
-    ngAfterContentInit() {
-    $('.indicator').css('width', '100%');
-}
+    /* ngAfterContentInit() {
+        $('.indicator').css('width', '100%');
+    }*/
 
 } 

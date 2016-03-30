@@ -15,16 +15,20 @@ import {TreeTableData} from '../../commons/treetable/TreeTableData';
 import {TreeTableTree} from '../../commons/treetable/TreeTableTree';
 import {ProjectRunMenuComponent} from './project-run-menu.component';
 import {ProjectManager} from '../../commons/purifinity/ProjectManager';
+import {ProgressIndicatorComponent} from '../../components/progress-indicator.component';
 
 import {TabSetComponent} from '../../components/tabs/tabset.component';
 import {TabComponent} from '../../components/tabs/tab.component';
+import {TreeTableComponent} from '../../components/treetable/tree-table.component';
 
 @Component({
     selector: 'project-run-analysis',
     directives: [
         ProjectRunMenuComponent,
+        ProgressIndicatorComponent,
         TabSetComponent,
-        TabComponent
+        TabComponent,
+        TreeTableComponent
     ],
     pipes: [
         DefaultDatePipe,
@@ -43,7 +47,7 @@ export class ProjectRunAnalysisComponent {
 
     private project: Project;
     private run = undefined;
-    private analysisFileTree = {};
+    private analysisFileTree: TreeTableData;
     private hashIds: { [hashId: string]: string[] } = {};
 
     constructor(private routeParams: RouteParams, private projectManager: ProjectManager) {
@@ -57,23 +61,23 @@ export class ProjectRunAnalysisComponent {
                 component.project.information.projectId,
                 component.runId,
                 function(data, status) {
-                    let treeTableData: TreeTableData = new TreeTableData();
-                    treeTableData.root = this.convertAnalysisFileTree(data, null);
-                    treeTableData.columnHeaders.push(
+                    let root = component.convertAnalysisFileTree(data, null);
+                    let columnHeaders: TableColumnHeader[] = [];
+                    columnHeaders.push(
                         new TableColumnHeader("Name", "Name of file or folder"));
-                    treeTableData.columnHeaders.push(
+                    columnHeaders.push(
                         new TableColumnHeader("Size", "Size of file or size of folder without sub folders."));
-                    treeTableData.columnHeaders.push(
+                    columnHeaders.push(
                         new TableColumnHeader("Size Recursive", "Size of file or size of folder including sub folders."));
-                    treeTableData.columnHeaders.push(
+                    columnHeaders.push(
                         new TableColumnHeader("Analyzes", "Successful analyzes."));
-                    component.analysisFileTree = treeTableData;
+                    component.analysisFileTree = new TreeTableData(columnHeaders, root);
                     projectManager.getRun(component.projectId, component.runId,
                         function(data, status) {
                             component.run = data;
                             let hashIds: { [hashId: string]: string[] } = {};
                             component.hashIds = hashIds;
-                            collectHashIds(hashIds, data.fileTree, "/");
+                            component.collectHashIds(hashIds, data.fileTree, "/");
                         },
                         function(response: Response) { });
                 },
@@ -87,6 +91,7 @@ export class ProjectRunAnalysisComponent {
         fileTree: any,
         parent: TreeTableTree)
         : TreeTableTree {
+        let component = this;
         let treeTableTree: TreeTableTree = new TreeTableTree(parent);
         treeTableTree.content = fileTree.name;
         treeTableTree.id = fileTree.hashId.algorithmName + ":" + fileTree.hashId.hash;
@@ -116,7 +121,7 @@ export class ProjectRunAnalysisComponent {
                 }
             });
             fileTree.children.forEach(function(child) {
-                let tree: TreeTableTree = this.convertAnalysisFileTree(child, treeTableTree);
+                let tree: TreeTableTree = component.convertAnalysisFileTree(child, treeTableTree);
                 treeTableTree.addChild(tree);
             });
             treeTableTree.imageUrl = "images/icons/FatCow_Icons16x16/folder.png";
@@ -127,17 +132,21 @@ export class ProjectRunAnalysisComponent {
         return treeTableTree;
     }
 
-    collectHashIds(hashIds: { [hashId: string]: string[] }, node: any, path: string) {
+    collectHashIds(hashIds: { [hashId: string]: string[] }, node: any, path: string): void {
         let hashId = node.hashId.algorithmName + ":" + node.hashId.hash;
         if (!hashIds[hashId]) {
             hashIds[hashId] = [];
         }
         hashIds[hashId].push(path + node.name);
         if ((!node.file) && (node.children.length > 0)) {
+            let component = this;
             node.children.forEach(function(child: any) {
-                collectHashIds(hashIds, child, path + node.name + "/");
+                component.collectHashIds(hashIds, child, path + node.name + "/");
             });
         }
     }
 
+    isLoading(): boolean {
+        return !(this.project && this.run && this.analysisFileTree);
+    }
 }
