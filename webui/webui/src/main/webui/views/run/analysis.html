@@ -1,7 +1,7 @@
 <div class="container" data-ng-controller="analysisBrowserCtrl">
 	<h1>Analysis</h1>
 	<tabset> <!-- File System Tree --> <tab heading="Tree">
-	<tree-table data-ng-model="analysisFileTree"></tree-table> </tab> <tab
+	<tree-table [treeTableData]="{{analysisFileTree}}"></tree-table> </tab> <tab
 		heading="Failed Files">
 	<p>{{run.failedFiles.length}} files failed during analysis:</p>
 	<table class="table table-striped table-hover table-bordered">

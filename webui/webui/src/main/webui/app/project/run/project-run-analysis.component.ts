@@ -47,7 +47,7 @@ export class ProjectRunAnalysisComponent {
 
     private project: Project;
     private run = undefined;
-    private analysisFileTree: TreeTableData;
+    analysisFileTree: TreeTableData;
     private hashIds: { [hashId: string]: string[] } = {};
 
     constructor(private routeParams: RouteParams, private projectManager: ProjectManager) {

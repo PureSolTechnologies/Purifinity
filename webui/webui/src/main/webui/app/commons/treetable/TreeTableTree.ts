@@ -5,12 +5,12 @@ import {TableCell} from '../tables/TableCell';
  */
 export class TreeTableTree {
 
-    children: TreeTableTree[];
+    children: Array<TreeTableTree> = new Array<TreeTableTree>();
     id: string;
     content: string;
     imageUrl: string;
     link: string;
-    columns: TableCell[] = [];
+    columns: Array<TableCell> = new Array<TableCell>();
 
     constructor(public parent: TreeTableTree) {
     }

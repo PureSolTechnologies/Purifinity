@@ -10,10 +10,11 @@ import {TreeTableTree} from '../../commons/treetable/TreeTableTree';
 })
 export class TreeTableComponent {
 
-    @Input() treeTableData: TreeTableData;
+    @Input()
+    private treeTableData: TreeTableData;
 
-    private path: TreeTableTree[] = [];
-    private currentFolder: TreeTableTree;
+    path: TreeTableTree[] = [];
+    currentFolder: TreeTableTree;
 
     ngOnInit() {
         this.currentFolder = this.treeTableData.root;

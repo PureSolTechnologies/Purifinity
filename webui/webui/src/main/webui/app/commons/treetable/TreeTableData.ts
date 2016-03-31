@@ -11,6 +11,6 @@ export class TreeTableData {
      * throughout the whole table to have consistency.
      * @root contains the tree data for the table.
      */
-    constructor(public columnHeaders: TableColumnHeader[], public root: TreeTableTree) { }
+    constructor(public columnHeaders: Array<TableColumnHeader>, public root: TreeTableTree) { }
 
 }
