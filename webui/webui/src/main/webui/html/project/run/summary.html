@@ -33,22 +33,22 @@
 					<tr>
 						<td>File Includes</td>
 						<td><pre class="console"
-								data-ng-repeat="file in run.information.fileSearchConfiguration.fileIncludes">{{file}}</pre></td>
+								*ngFor="#file of run.information.fileSearchConfiguration.fileIncludes">{{file}}</pre></td>
 					</tr>
 					<tr>
 						<td>File Excludes</td>
 						<td><pre class="console"
-								data-ng-repeat="file in run.information.fileSearchConfiguration.fileExcludes">{{file}}</pre></td>
+								*ngFor="#file of run.information.fileSearchConfiguration.fileExcludes">{{file}}</pre></td>
 					</tr>
 					<tr>
 						<td>Directory Includes</td>
 						<td><pre class="console"
-								data-ng-repeat="location in run.information.fileSearchConfiguration.locationIncludes">{{location}}</pre></td>
+								*ngFor="#location of run.information.fileSearchConfiguration.locationIncludes">{{location}}</pre></td>
 					</tr>
 					<tr>
 						<td>Directory Excludes</td>
 						<td><pre class="console"
-								data-ng-repeat="location in run.information.fileSearchConfiguration.locationExcludes">{{location}}</pre></td>
+								*ngFor="#location of run.information.fileSearchConfiguration.locationExcludes">{{location}}</pre></td>
 					</tr>
 					<tr>
 						<td>Ignore Hidden Files</td>

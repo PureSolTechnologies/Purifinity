@@ -127,7 +127,7 @@ export class ProjectRunAnalysisComponent {
             treeTableTree.imageUrl = "images/icons/FatCow_Icons16x16/folder.png";
         } else {
             treeTableTree.imageUrl = "images/icons/FatCow_Icons16x16/document_green.png";
-            treeTableTree.link = "/file.html#/summary/" + treeTableTree.id;
+            treeTableTree.routerLink = ['FileSummary', {hashId: treeTableTree.id}];
         }
         return treeTableTree;
     }

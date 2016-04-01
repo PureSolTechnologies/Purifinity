@@ -10,6 +10,7 @@ export class TreeTableTree {
     content: string;
     imageUrl: string;
     link: string;
+    routerLink: Array<any>;
     columns: Array<TableCell> = new Array<TableCell>();
 
     constructor(public parent: TreeTableTree) {

@@ -28,10 +28,14 @@
 			<td><a *ngIf="content.children.length > 0" 
 				(click)="chdir(content.content)"> <img *ngIf="content.imageUrl"
 					src="{{content.imageUrl}}" /> {{content.content}}
-			</a> <span *ngIf="content.children.length == 0"> <a *ngIf="content.link"
-					href="{{content.link}}"> <img *ngIf="content.imageUrl"
-						src="{{content.imageUrl}}" /> {{content.content}}
-				</a> <span *ngIf="!content.link"> <img *ngIf="content.imageUrl"
+			</a> <span *ngIf="content.children.length == 0">
+			<a *ngIf="content.link" href="{{content.link}}"> 
+				<img *ngIf="content.imageUrl" src="{{content.imageUrl}}" /> {{content.content}}
+				</a> 
+			<a *ngIf="content.routerLink" [routerLink]="content.routerLink"> 
+				<img *ngIf="content.imageUrl" src="{{content.imageUrl}}" /> {{content.content}}
+				</a> 
+				<span *ngIf="!(content.link || content.routerLink)"> <img *ngIf="content.imageUrl"
 						src="{{content.imageUrl}}" /> {{content.content}}
 				</span>
 			</span></td>

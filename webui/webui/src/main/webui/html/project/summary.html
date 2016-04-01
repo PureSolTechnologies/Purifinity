@@ -16,7 +16,7 @@
 					<td>{{lastRun.duration | duration}}</td>
 				</tr>
 			</table>
-			<a [routerLink]="['ProjectRunSummary', {projectId: lastRun.projectId, runId: lastRun.runId}]"
+			<a *ngIf="lastRun.projectId" [routerLink]="['ProjectRunSummary', {projectId: lastRun.projectId, runId: lastRun.runId}]"
 				class="btn btn-default">Open Last Run...</a> </panel>
 		</div>
 	</div>
