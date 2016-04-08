@@ -17,6 +17,7 @@ import {ProjectManager} from './commons/purifinity/ProjectManager';
 import {PluginManager} from './commons/purifinity/PluginManager';
 import {PreferencesManager} from './commons/purifinity/PreferencesManager';
 import {AccountManager} from './commons/purifinity/AccountManager';
+import {FileStore} from './commons/purifinity/FileStore';
 import {Alerter} from './commons/alerter/Alerter';
 
 /**
@@ -27,5 +28,5 @@ bootstrap(AppComponent, [
     provide(LocationStrategy, { useClass: HashLocationStrategy }),
     SiteConstants, AuthenticationService,
     PurifinityServerConnector, ProjectManager, PluginManager, PreferencesManager,
-    AccountManager, HTTPRequests, Alerter
+    AccountManager, HTTPRequests, FileStore, Alerter
 ]);

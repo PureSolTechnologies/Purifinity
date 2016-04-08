@@ -1,2 +1,17 @@
 <file-menu></file-menu>
-Analysis
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-12">
+			<select id="analyzerSelectorForFile" title="Analyzer Selector"
+				class="selectpicker show-tick form-control"
+				data-ng-model="analyzerSelection">
+				<option value="">Select an Analysis</option>
+				<option *ngFor="#analysis of analyses"
+					value="{{analysis.analysisInformation.analyzerId}}{{analysis.analysisInformation.analyzerVersion | version}}">
+					{{analysis.analysisInformation.languageName}}
+					{{analysis.analysisInformation.languageVersion}}</option>
+			</select>
+			<ust-view data-ng-model="selectedUST"></ust-view>
+		</div>
+	</div>
+</div>
