@@ -7,11 +7,13 @@ import {FileStore} from '../commons/purifinity/FileStore';
 import {DefaultDatePipe} from '../commons/pipes/default-date.pipe';
 import {DurationPipe} from '../commons/pipes/duration.pipe';
 import {VersionPipe} from '../commons/pipes/version.pipe';
+import {SourceCodeComponent} from '../components/source-code.component';
 
 @Component({
     selector: 'file-summary',
     directives: [
-        FileMenuComponent
+        FileMenuComponent,
+        SourceCodeComponent
     ],
     pipes: [
         DefaultDatePipe,
@@ -40,7 +42,7 @@ export class FileSummaryComponent {
         }, function(response: Response) {
         });
         fileStore.readSourceCode(this.hashId, function(data, status) {
-            component.sourceCode = data;
+            component.sourceCode = data.json();
         }, function(response: Response) {
         });
     }
