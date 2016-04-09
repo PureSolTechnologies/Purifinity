@@ -1,7 +1,7 @@
 /**
  * This class is used to export SVG picture Elements as pixel based image.
  */
-class ChartExport {
+export class ChartExport {
 
     constructor(private svgElement: Element) {
         if ((!svgElement.nodeName) || (svgElement.nodeName !== 'svg')) {

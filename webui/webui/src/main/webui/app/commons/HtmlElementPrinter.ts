@@ -2,7 +2,7 @@
  * This class is used to open selected Elements of an HTML document into a new
  * window for separated printing.
 */
-class HtmlElementPrinter {
+export class HtmlElementPrinter {
 
     constructor(private rootElement: Element) {
     }
