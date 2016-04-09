@@ -5,8 +5,7 @@ import {PluginManager} from '../../commons/purifinity/PluginManager';
 import {EvaluatorServiceInformation} from '../../commons/plugins/EvaluatorServiceInformation';
 
 @Component({
-    selector: 'panel',
-    directives: [],
+    selector: 'evaluator-selection',
     template:
     `<select id="evaluatorSelector" title="Evaluator Selector" class="selectpicker show-tick form-control" data-ng-model="evaluatorSelection">
     <option value="">Select an evaluator</option>

@@ -1,7 +1,7 @@
 import {Pipe, PipeTransform} from 'angular2/core';
 
 @Pipe({
-    name: 'metric-value'
+    name: 'metricValue'
 })
 export class MetricValuePipe implements PipeTransform {
 
