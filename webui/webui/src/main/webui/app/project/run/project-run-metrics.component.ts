@@ -2,7 +2,14 @@ import {Component} from 'angular2/core';
 import {RouteParams} from 'angular2/router';
 import {Response} from 'angular2/http';
 
+import {TabSetComponent} from '../../components/tabs/tabset.component';
+import {TabComponent} from '../../components/tabs/tab.component';
 import {EvaluatorSelectionComponent} from '../../components/evaluation/evaluator-selection.component';
+import {ParetoChartComponent} from '../../components/charts/pareto-chart.component';
+import {VerticalParetoChartComponent} from '../../components/charts/vertical-pareto-chart.component';
+import {HistogramChartComponent} from '../../components/charts/histogram-chart.component';
+import {TreeMapComponent} from '../../components/charts/tree-map.component';
+import {CummulativeDistributionChartComponent} from '../../components/charts/cummulative-distribution-chart.component';
 
 import {MetricValuePipe} from '../../commons/pipes/metric-value.pipe';
 import {Utilities} from '../../commons/Utilities';
@@ -18,8 +25,15 @@ import {TableCell} from '../../commons/tables/TableCell';
 @Component({
     selector: 'project-run-metrics',
     directives: [
+        TabSetComponent,
+        TabComponent,
         ProjectRunMenuComponent,
-        EvaluatorSelectionComponent
+        EvaluatorSelectionComponent,
+        ParetoChartComponent,
+        VerticalParetoChartComponent,
+        HistogramChartComponent,
+        TreeMapComponent,
+        CummulativeDistributionChartComponent
     ],
     pipes: [
         MetricValuePipe
@@ -58,7 +72,7 @@ export class ProjectRunMetricsComponent {
                     component.runId,
                     function(data, status) {
                         component.fileTree = data;
-                        let root: TreeTableTree = this.convertFileTreeForMetrics(data, null);
+                        let root: TreeTableTree = component.convertFileTreeForMetrics(data, null);
                         let columnHeaders = new Array<TableColumnHeader>();
                         columnHeaders.push(new TableColumnHeader("Name", "Name of file or folder"));
                         component.metricsTreeTable = new TreeTableData(columnHeaders, root);

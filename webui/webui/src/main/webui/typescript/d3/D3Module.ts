@@ -3,43 +3,6 @@
  */
 var d3Module: angular.IModule = angular.module("d3Module", []);
 
-/*
- * This d3Service is used for lacy loading of d3.js. 
- */
-d3Module.factory("d3Service", ["$document", "$q", "$rootScope",
-    function($document, $q, $rootScope) {
-        var d = $q.defer();
-        function onScriptLoad() {
-            // Load client into browser
-            $rootScope.$apply(function() {
-                d.resolve(d3);
-            });
-        }
-        var scriptTag = $document[0].createElement("script");
-        scriptTag.type = "text/javascript";
-        scriptTag.async = true;
-        scriptTag.src = "lib/d3/d3.min.js";
-        scriptTag.onreadystatechange = function() {
-            if (this.readyState === "complete") {
-                onScriptLoad();
-            }
-        };
-        scriptTag.onload = onScriptLoad;
-        $document[0].body.appendChild(scriptTag);
-
-        //        var styleTag = $document[0].createElement("link");
-        //        styleTag.rel = "stylesheet";
-        //        styleTag.type = "text/css";
-        //        styleTag.href = "css/d3js.css";
-        //        $document[0].head.appendChild(styleTag);
-
-        return {
-            d3: function() {
-                return d.promise;
-            }
-        };
-    }]);
-
 /**
  * Vertical Pareto Chart.
  */
