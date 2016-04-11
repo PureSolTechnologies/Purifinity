@@ -1,13 +1,22 @@
-import {Component} from 'angular2/core';
+import {Component, Output, EventEmitter} from 'angular2/core';
 import {Response} from 'angular2/http';
 
 import {PluginManager} from '../../commons/purifinity/PluginManager';
 import {EvaluatorServiceInformation} from '../../commons/plugins/EvaluatorServiceInformation';
 
+/**
+ * This component is a simple selector which reads the installed evaluator from REST and lets the user select
+ * a evaluator. 
+ */
 @Component({
     selector: 'evaluator-selection',
     template:
-    `<select id="evaluatorSelector" title="Evaluator Selector" class="selectpicker show-tick form-control" data-ng-model="evaluatorSelection">
+    `<select 
+        id="evaluatorSelector" 
+        class="selectpicker show-tick form-control" 
+        title="Evaluator Selector" 
+        [(ngModel)]="selectedEvaluatorId" 
+        (ngModelChange)="update()">
     <option value="">Select an evaluator</option>
     <option *ngFor="#evaluator of evaluators" value="{{evaluator.id}}">
         {{evaluator.name}}
@@ -16,7 +25,11 @@ import {EvaluatorServiceInformation} from '../../commons/plugins/EvaluatorServic
 })
 export class EvaluatorSelectionComponent {
 
-    private evaluators: EvaluatorServiceInformation[] = [];
+    @Output('evaluator')
+    private evaluatorEmitter = new EventEmitter<EvaluatorServiceInformation>();
+ 
+    private selectedEvaluatorId:  string = "";
+    private evaluators:  Array<EvaluatorServiceInformation> = [];
 
     constructor(private pluginManager: PluginManager) {
         let component = this;
@@ -29,4 +42,11 @@ export class EvaluatorSelectionComponent {
         );
     }
 
+    update()  {
+        for (let evaluator of this.evaluators) {
+            if (this.selectedEvaluatorId === evaluator.id) {
+                this.evaluatorEmitter.emit(evaluator);
+            }
+        }
+    }
 }

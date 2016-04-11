@@ -3,7 +3,7 @@
  */
 export class ChartExport {
 
-    constructor(private svgElement: Element) {
+    constructor(private svgElement: Node) {
         if ((!svgElement.nodeName) || (svgElement.nodeName !== 'svg')) {
             throw new Error("No SVG provided!");
         }

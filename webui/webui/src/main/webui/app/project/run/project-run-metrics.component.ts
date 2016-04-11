@@ -11,6 +11,7 @@ import {HistogramChartComponent} from '../../components/charts/histogram-chart.c
 import {TreeMapComponent} from '../../components/charts/tree-map.component';
 import {CummulativeDistributionChartComponent} from '../../components/charts/cummulative-distribution-chart.component';
 
+import {EvaluatorServiceInformation} from '../../commons/plugins/EvaluatorServiceInformation';
 import {MetricValuePipe} from '../../commons/pipes/metric-value.pipe';
 import {Utilities} from '../../commons/Utilities';
 import {Project} from '../../commons/domain/Project';
@@ -44,11 +45,9 @@ export class ProjectRunMetricsComponent {
 
     private projectId: string;
     private runId: string;
-    private selectedEvaluator = undefined;
-    private selection = {
-        codeRangeType: undefined,
-        parameter: undefined
-    };
+    private evaluator: EvaluatorServiceInformation = undefined;
+    private codeRangeType: string = "";
+    private parameter: string = "";
     private fileTree = undefined;
     private metricsTreeTable: TreeTableData = new TreeTableData([], null);
     private metrics: any = {};
@@ -56,6 +55,32 @@ export class ProjectRunMetricsComponent {
     private run: any = undefined;
     private codeRangeTypes = [];
     private paretoData = [];
+    private mapData =
+    {
+        "name": "flare",
+        "children": [
+            {
+                "name": "analytics",
+                "children": [
+                    {
+                        "name": "cluster",
+                        "children": [
+                            { "name": "AgglomerativeCluster", "size": 3938 },
+                            { "name": "CommunityStructure", "size": 3812 },
+                            { "name": "MergeEdge", "size": 743 }
+                        ]
+                    },
+                    {
+                        "name": "graph",
+                        "children": [
+                            { "name": "BetweennessCentrality", "size": 3534 },
+                            { "name": "LinkDistance", "size": 5731 }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
 
 
     constructor(private routeParams: RouteParams, private projectManager: ProjectManager, private purifinityServerConnector: PurifinityServerConnector) {
@@ -86,49 +111,52 @@ export class ProjectRunMetricsComponent {
         );
     }
 
-    setSelectedEvaluator(newValue) {
-        this.paretoData = [];
-        this.selection.codeRangeType = undefined;
-        this.selection.parameter = undefined;
-        if (newValue === this.selectedEvaluator) {
+    setEvaluator(evaluator: EvaluatorServiceInformation) {
+        if (evaluator === this.evaluator) {
             return;
         }
-        if (this.project.information && this.run.information.runId && newValue) {
-            let component = this;
-            this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/metrics/"
-                + component.project.information.projectId
-                + "/" + component.run.information.runId
-                + "/" + newValue, function(response: Response) {
-                    let types = [];
-                    types.push("DIRECTORY");
-                    types.push("FILE");
-                    let data = response.json();
-                    for (let hashid in data.fileMetrics) {
-                        let fileResults = data.fileMetrics[hashid];
-                        fileResults.codeRangeMetrics.forEach(function(metrics) {
-                            if (types.indexOf(metrics.codeRangeType) < 0) {
-                                types.push(metrics.codeRangeType);
-                            }
-                        });
-                    }
-                    component.codeRangeTypes = [];
-                    types.forEach(function(type) {
-                        component.codeRangeTypes.push({ name: type });
-                    });
-                    component.codeRangeTypes.sort();
-                    component.metrics = data;
-                    this.applyMetricsToFileTree(component.metricsTreeTable.root, component.metrics, component.metrics.parameters);
-                    component.metricsTreeTable.columnHeaders = [{ name: "Name", tooltip: "Name of file or folder" }];
-                    component.metrics.parameters.forEach(function(parameter) {
-                        let name = parameter.name;
-                        if (parameter.unit) {
-                            name += " [" + parameter.unit + "]";
-                        }
-                        component.metricsTreeTable.columnHeaders.push({ name: name, tooltip: parameter.description });
-                    });
-                }, function(response: Response) {
-                });
+        this.evaluator = evaluator;
+        this.paretoData = [];
+        this.codeRangeType = undefined;
+        this.parameter = undefined;
+        if (!(this.project.information && this.run.information.runId && evaluator)) {
+            return;
         }
+        let component = this;
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/metrics/"
+            + component.project.information.projectId
+            + "/" + component.run.information.runId
+            + "/" + evaluator.id, function(response: Response) {
+                let data = response.json();
+                let types = [];
+                types.push("DIRECTORY");
+                types.push("FILE");
+                for (let hashid in data.fileMetrics) {
+                    let fileResults = data.fileMetrics[hashid];
+                    fileResults.codeRangeMetrics.forEach(function(metrics) {
+                        if (types.indexOf(metrics.codeRangeType) < 0) {
+                            types.push(metrics.codeRangeType);
+                        }
+                    });
+                }
+                component.codeRangeTypes = [];
+                types.forEach(function(type) {
+                    component.codeRangeTypes.push({ name: type });
+                });
+                component.codeRangeTypes.sort();
+                component.metrics = data;
+                component.applyMetricsToFileTree(component.metricsTreeTable.root, component.metrics, component.metrics.parameters);
+                component.metricsTreeTable.columnHeaders = [{ name: "Name", tooltip: "Name of file or folder" }];
+                component.metrics.parameters.forEach(function(parameter) {
+                    let name = parameter.name;
+                    if (parameter.unit) {
+                        name += " [" + parameter.unit + "]";
+                    }
+                    component.metricsTreeTable.columnHeaders.push({ name: name, tooltip: parameter.description });
+                });
+            }, function(response: Response) {
+            }
+        );
     }
 
     changedValue(newValue) {
@@ -136,12 +164,12 @@ export class ProjectRunMetricsComponent {
     }
 
     recalculateChartData(): void {
-        if ((!this.selection.codeRangeType) || (!this.selection.parameter)) {
+        if ((!this.codeRangeType) || (!this.parameter)) {
             this.paretoData = [];
             return;
         }
         let newData = [];
-        if (this.selection.codeRangeType === "DIRECTORY") {
+        if (this.codeRangeType === "DIRECTORY") {
             for (let hashId in this.metrics.directoryMetrics) {
                 let metric = this.metrics.directoryMetrics[hashId];
                 let directory = this.fileTree.getDirectory(hashId);
@@ -154,12 +182,13 @@ export class ProjectRunMetricsComponent {
                 }
             }
         } else {
+            let component = this;
             for (let hashId in this.metrics.fileMetrics) {
                 let codeRangeMetrics = this.metrics.fileMetrics[hashId].codeRangeMetrics;
                 let file = this.fileTree.getFile(hashId);
                 if (codeRangeMetrics) {
                     codeRangeMetrics.forEach(function(metric) {
-                        if (metric.codeRangeType === this.selection.codeRangeType) {
+                        if (metric.codeRangeType === component.codeRangeType) {
                             for (let valueName in metric.values) {
                                 let value = metric.values[valueName];
                                 if (!newData[value.parameter.name]) {
@@ -264,4 +293,13 @@ export class ProjectRunMetricsComponent {
         }
     }
 
+    getProjectMetric(parameter): number {
+        let hashidString: string = this.fileTree.hashId.algorithmName + ":" + this.fileTree.hashId.hash;
+        let directoryMetrics = this.metrics.directoryMetrics[hashidString];
+        let value = directoryMetrics.values[parameter.name];
+        if (!value) {
+            return null;
+        }
+        return value.value;
+    }
 }

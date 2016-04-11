@@ -3,7 +3,7 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<h1>Metrics</h1>
-			<evaluator-selection data-ng-model="selectedEvaluator"></evaluator-selection>
+			<evaluator-selection (evaluator)="setEvaluator($event)"></evaluator-selection>
 		</div>
 	</div>
 	<div class="row">
@@ -24,8 +24,7 @@
 						<tbody>
 							<tr *ngFor="#parameter of metrics.parameters">
 								<td>{{parameter.name}}</td>
-								<td>{{metrics.directoryMetrics[fileTree.hashId.algorithmName+":"+fileTree.hashId.hash].values[parameter.name].value
-									| metricValue}}</td>
+								<td>{{getProjectMetric(parameter) | metricValue}}</td>
 								<td>{{parameter.unit}}</td>
 								<td>{{parameter.description}}</td>
 							</tr>
@@ -44,15 +43,16 @@
 					<tree-table data-ng-model="metricsTreeTable"></tree-table>
 				</div>
 			</div>
-			</tab> <tab heading="Tree Map" data-ng-controller="treeMapCtrl">
+			</tab> <tab heading="Tree Map">
 			<h3>Tree Map</h3>
-			<tree-map data="mapData"></tree-map> </tab> <tab heading="Graphs">
+			<tree-map [data]="mapData"></tree-map> </tab> <tab heading="Graphs">
 			<div class="row">
 				<div class="col-md-6">
 					<select id="codeRangeTypeSelectorForGraphs"
 						title="Code Range Type Selector"
 						class="selectpicker show-tick form-control"
-						data-ng-model="selection.codeRangeType">
+						[(ngModel)]="codeRangeType"
+						(ngModelChange)="recalculateChartData()">
 						<option value="">Select a Code Range Type</option>
 						<option *ngFor="#codeRangeType of codeRangeTypes"
 							value="{{codeRangeType.name}}">{{codeRangeType.name}}</option>
@@ -62,20 +62,21 @@
 					<select id="codeRangeTypeSelectorForGraphs"
 						title="Code Range Type Selector"
 						class="selectpicker show-tick form-control"
-						data-ng-model="selection.parameter">
+						[(ngModel)]="parameter"
+						(ngModelChange)="recalculateChartData()">
 						<option value="">Select a Parameter</option>
 						<option *ngFor="#parameter of metrics.parameters"
 							value="{{parameter.name}}">{{parameter.name}}</option>
 					</select>
 				</div>
 			</div>
-			<h2>{{selection.parameter}}</h2>
+			<h2>{{parameter}}</h2>
 			<pareto-chart (click)="showClick(item)"
-				data="paretoData[selection.parameter]"></pareto-chart> <histogram-chart
-				(click)="showClick(item)" data="paretoData[selection.parameter]"></histogram-chart>
+				[data]="paretoData[parameter]"></pareto-chart> <histogram-chart
+				(click)="showClick(item)" [data]="paretoData[parameter]"></histogram-chart>
 			<cummulative-distribution-chart></cummulative-distribution-chart> <correlation-chart></correlation-chart>
 			<vertical-pareto-chart (click)="showClick(item)"
-				data="paretoData[selection.parameter]"></vertical-pareto-chart> </tab> </tabset>
+				[data]="paretoData[parameter]"></vertical-pareto-chart> </tab> </tabset>
 		</div>
 	</div>
 </div>

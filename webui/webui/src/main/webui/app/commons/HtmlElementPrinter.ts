@@ -4,7 +4,7 @@
 */
 export class HtmlElementPrinter {
 
-    constructor(private rootElement: Element) {
+    constructor(private rootElement: Node) {
     }
 
     public print() {
