@@ -11,6 +11,7 @@ import {HistogramChartComponent} from '../../components/charts/histogram-chart.c
 import {TreeMapComponent} from '../../components/charts/tree-map.component';
 import {CummulativeDistributionChartComponent} from '../../components/charts/cummulative-distribution-chart.component';
 
+import {ParetoDatum} from '../../commons/charts/ParetoDatum';
 import {EvaluatorServiceInformation} from '../../commons/plugins/EvaluatorServiceInformation';
 import {MetricValuePipe} from '../../commons/pipes/metric-value.pipe';
 import {Utilities} from '../../commons/Utilities';
@@ -54,7 +55,7 @@ export class ProjectRunMetricsComponent {
     private project: Project = undefined;
     private run: any = undefined;
     private codeRangeTypes = [];
-    private paretoData = [];
+    private paretoData: ParetoDatum[] = [];
     private mapData =
     {
         "name": "flare",
@@ -168,17 +169,17 @@ export class ProjectRunMetricsComponent {
             this.paretoData = [];
             return;
         }
-        let newData = [];
+        let paretoData = [];
         if (this.codeRangeType === "DIRECTORY") {
             for (let hashId in this.metrics.directoryMetrics) {
                 let metric = this.metrics.directoryMetrics[hashId];
                 let directory = this.fileTree.getDirectory(hashId);
                 for (let valueName in metric.values) {
                     let value = metric.values[valueName];
-                    if (!newData[value.parameter.name]) {
-                        newData[value.parameter.name] = [];
+                    if (!paretoData[value.parameter.name]) {
+                        paretoData[value.parameter.name] = [];
                     }
-                    newData[value.parameter.name].push({ name: directory.name + ":" + value.parameter.name, value: value.value });
+                    paretoData[value.parameter.name].push(new ParetoDatum(directory.name + ":" + value.parameter.name, value.value));
                 }
             }
         } else {
@@ -191,22 +192,22 @@ export class ProjectRunMetricsComponent {
                         if (metric.codeRangeType === component.codeRangeType) {
                             for (let valueName in metric.values) {
                                 let value = metric.values[valueName];
-                                if (!newData[value.parameter.name]) {
-                                    newData[value.parameter.name] = [];
+                                if (!paretoData[value.parameter.name]) {
+                                    paretoData[value.parameter.name] = [];
                                 }
-                                newData[value.parameter.name].push({ name: file.name + ":" + metric.codeRangeName, value: value.value });
+                                paretoData[value.parameter.name].push({ name: file.name + ":" + metric.codeRangeName, value: value.value });
                             }
                         }
                     });
                 }
             }
         }
-        for (let key in newData) {
-            newData[key].sort(function(l, r) {
+        for (let key in paretoData) {
+            paretoData[key].sort(function(l, r) {
                 return -1 * (l.value - r.value);
             });
         }
-        this.paretoData = newData;
+        this.paretoData = paretoData;
     }
 
     showClick(item: any): void {

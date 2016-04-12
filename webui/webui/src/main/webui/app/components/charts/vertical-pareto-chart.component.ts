@@ -1,14 +1,12 @@
 import {Component, ElementRef, Input} from 'angular2/core';
 
-import {PanelComponent} from '../panel.component';
+import {ParetoDatum} from '../../commons/charts/ParetoDatum';
 import {HtmlElementPrinter} from '../../commons/HtmlElementPrinter';
 import {ChartExport} from '../../commons/ChartExport';
 
 @Component({
     selector: 'vertical-pareto-chart',
-    directives: [
-        PanelComponent
-    ],
+    directives: [],
     template:
     `<div class="panel vertical-pareto-chart" (window:resize)="onResize($event)">
     <div class="panel-heading">
@@ -31,7 +29,7 @@ import {ChartExport} from '../../commons/ChartExport';
 export class VerticalParetoChartComponent {
 
     @Input()
-    private data: any;
+    private data: ParetoDatum[];
 
     private svg: d3.Selection<any>;
     private margin: number;
