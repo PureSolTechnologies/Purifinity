@@ -9,6 +9,7 @@ import {Role} from '../commons/auth/Role';
 import {AccountManager} from '../commons/purifinity/AccountManager';
 import {TabComponent} from '../components/tabs/tab.component';
 import {TabSetComponent} from '../components/tabs/tabset.component';
+import {HelpComponent} from '../components/help.component';
 
 @Component({
     selector: 'users-admin',
@@ -17,7 +18,8 @@ import {TabSetComponent} from '../components/tabs/tabset.component';
         AdminMenuComponent,
         ProgressIndicatorComponent,
         TabSetComponent,
-        TabComponent
+        TabComponent,
+        HelpComponent
     ],
     templateUrl: '../../html/admin/users-admin.html'
 })

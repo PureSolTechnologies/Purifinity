@@ -24,6 +24,7 @@ the client:
 ** Chrome or Chromium
 ** Opera
 
+[[ManagingUsers]]
 == Managing Users
 
 === Introduction
