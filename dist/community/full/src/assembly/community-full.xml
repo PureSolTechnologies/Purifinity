@@ -125,7 +125,18 @@
 				<include>com.puresoltechnologies.purifinity.manuals:manuals.installation</include>
 				<include>com.puresoltechnologies.purifinity.manuals:manuals.user</include>
 			</includes>
+			<useProjectArtifact>true</useProjectArtifact>
 			<outputDirectory>doc</outputDirectory>
+			<unpack>true</unpack>
+		</dependencySet>
+		<dependencySet>
+			<includes>
+				<include>com.puresoltechnologies.purifinity.manuals:manuals.development</include>
+				<include>com.puresoltechnologies.purifinity.manuals:manuals.installation</include>
+				<include>com.puresoltechnologies.purifinity.manuals:manuals.user</include>
+			</includes>
+			<useProjectArtifact>true</useProjectArtifact>
+			<outputDirectory>lib/wildfly-${wildfly.version}/welcome-content/manuals</outputDirectory>
 			<unpack>true</unpack>
 		</dependencySet>
 	</dependencySets>
