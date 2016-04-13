@@ -1,6 +1,5 @@
 import {Component, ElementRef, Input} from 'angular2/core';
 
-import {ParetoDatum} from '../../commons/charts/ParetoDatum';
 import {HtmlElementPrinter} from '../../commons/HtmlElementPrinter';
 import {ChartExport} from '../../commons/ChartExport';
 
@@ -8,7 +7,7 @@ import {ChartExport} from '../../commons/ChartExport';
     selector: 'histogram-chart',
     directives: [],
     template:
-`<div class="panel panel-default histogram-chart">
+`<div class="panel histogram-chart" (window:resize)="onResize($event)">
     <div class="panel-heading">
         <img src="/images/icons/FatCow_Icons16x16/chart_column_up.png" />
         Histogram Chart
