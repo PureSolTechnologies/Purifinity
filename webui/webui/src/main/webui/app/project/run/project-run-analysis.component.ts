@@ -12,7 +12,7 @@ import {Project} from '../../commons/domain/Project';
 import {TableColumnHeader} from '../../commons/tables/TableColumnHeader';
 import {TableCell} from '../../commons/tables/TableCell';
 import {TreeTableData} from '../../commons/treetable/TreeTableData';
-import {TreeTableTree} from '../../commons/treetable/TreeTableTree';
+import {TreeTableNode} from '../../commons/treetable/TreeTableNode';
 import {ProjectRunMenuComponent} from './project-run-menu.component';
 import {ProjectManager} from '../../commons/purifinity/ProjectManager';
 import {ProgressIndicatorComponent} from '../../components/progress-indicator.component';
@@ -58,7 +58,7 @@ export class ProjectRunAnalysisComponent {
         projectManager.getProject(this.projectId, function(project: Project) {
             component.project = project;
             projectManager.getAnalysisFileTree(
-                component.project.information.projectId,
+                component.projectId,
                 component.runId,
                 function(data, status) {
                     let root = component.convertAnalysisFileTree(data, null);
@@ -89,10 +89,10 @@ export class ProjectRunAnalysisComponent {
 
     convertAnalysisFileTree(
         fileTree: any,
-        parent: TreeTableTree)
-        : TreeTableTree {
+        parent: TreeTableNode)
+        : TreeTableNode {
         let component = this;
-        let treeTableTree: TreeTableTree = new TreeTableTree(parent);
+        let treeTableTree: TreeTableNode = new TreeTableNode(parent);
         treeTableTree.content = fileTree.name;
         treeTableTree.id = fileTree.hashId.algorithmName + ":" + fileTree.hashId.hash;
         let analyses = "";
@@ -121,7 +121,7 @@ export class ProjectRunAnalysisComponent {
                 }
             });
             fileTree.children.forEach(function(child) {
-                let tree: TreeTableTree = component.convertAnalysisFileTree(child, treeTableTree);
+                let tree: TreeTableNode = component.convertAnalysisFileTree(child, treeTableTree);
                 treeTableTree.addChild(tree);
             });
             treeTableTree.imageUrl = "images/icons/FatCow_Icons16x16/folder.png";

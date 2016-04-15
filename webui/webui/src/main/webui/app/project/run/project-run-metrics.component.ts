@@ -10,6 +10,7 @@ import {VerticalParetoChartComponent} from '../../components/charts/vertical-par
 import {HistogramChartComponent} from '../../components/charts/histogram-chart.component';
 import {TreeMapComponent} from '../../components/charts/tree-map.component';
 import {CummulativeDistributionChartComponent} from '../../components/charts/cummulative-distribution-chart.component';
+import {TreeTableComponent} from '../../components/treetable/tree-table.component';
 
 import {ParetoDatum} from '../../commons/charts/ParetoDatum';
 import {EvaluatorServiceInformation} from '../../commons/plugins/EvaluatorServiceInformation';
@@ -19,7 +20,7 @@ import {Project} from '../../commons/domain/Project';
 import {ProjectManager} from '../../commons/purifinity/ProjectManager';
 import {PurifinityServerConnector} from '../../commons/purifinity/PurifinityServerConnector';
 import {ProjectRunMenuComponent} from './project-run-menu.component';
-import {TreeTableTree} from '../../commons/treetable/TreeTableTree';
+import {TreeTableNode} from '../../commons/treetable/TreeTableNode';
 import {TreeTableData} from '../../commons/treetable/TreeTableData';
 import {TableColumnHeader} from '../../commons/tables/TableColumnHeader';
 import {TableCell} from '../../commons/tables/TableCell';
@@ -29,6 +30,7 @@ import {TableCell} from '../../commons/tables/TableCell';
     directives: [
         TabSetComponent,
         TabComponent,
+        TreeTableComponent,
         ProjectRunMenuComponent,
         EvaluatorSelectionComponent,
         ParetoChartComponent,
@@ -50,7 +52,7 @@ export class ProjectRunMetricsComponent {
     private codeRangeType: string = "";
     private parameter: string = "";
     private fileTree = undefined;
-    private metricsTreeTable: TreeTableData = new TreeTableData([], null);
+    metricsTreeTable: TreeTableData;
     private metrics: any = {};
     private project: Project = undefined;
     private run: any = undefined;
@@ -87,29 +89,27 @@ export class ProjectRunMetricsComponent {
     constructor(private routeParams: RouteParams, private projectManager: ProjectManager, private purifinityServerConnector: PurifinityServerConnector) {
         this.projectId = routeParams.get('projectId');
         this.runId = routeParams.get('runId');
+    }
 
+    ngOnInit(){
         let component = this;
-        projectManager.getProject(this.projectId, function(project: Project) {
+        this.projectManager.getProject(this.projectId, function(project: Project) {
             component.project = project;
-            projectManager.getRun(component.projectId, component.runId, function(data, status) {
-                component.run = data;
-                projectManager.getAnalysisFileTree(
-                    component.projectId,
-                    component.runId,
-                    function(data, status) {
-                        component.fileTree = data;
-                        let root: TreeTableTree = component.convertFileTreeForMetrics(data, null);
-                        let columnHeaders = new Array<TableColumnHeader>();
-                        columnHeaders.push(new TableColumnHeader("Name", "Name of file or folder"));
-                        component.metricsTreeTable = new TreeTableData(columnHeaders, root);
-                    },
-                    function(response: Response) {
-                    }
-                );
-            }, function(response: Response) {
-            });
-        }, function(response: Response) { }
-        );
+            component.projectManager.getAnalysisFileTree(
+                component.projectId,
+                component.runId,
+                function(data, status) {
+                    component.fileTree = data;
+                    let root: TreeTableNode = component.convertFileTreeForMetrics(data, null);
+                    let columnHeaders: TableColumnHeader[] = [];
+                    columnHeaders.push(new TableColumnHeader("Name", "Name of file or folder"));
+                    component.metricsTreeTable = new TreeTableData(columnHeaders, root);
+                },
+                function(response: Response) {
+                }
+            );
+        }, function(response: Response) {
+        });
     }
 
     setEvaluator(evaluator: EvaluatorServiceInformation) {
@@ -120,13 +120,13 @@ export class ProjectRunMetricsComponent {
         this.paretoData = [];
         this.codeRangeType = undefined;
         this.parameter = undefined;
-        if (!(this.project.information && this.run.information.runId && evaluator)) {
+        if (!(this.project.information && evaluator)) {
             return;
         }
         let component = this;
         this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/metrics/"
-            + component.project.information.projectId
-            + "/" + component.run.information.runId
+            + component.projectId
+            + "/" + component.runId
             + "/" + evaluator.id, function(response: Response) {
                 let data = response.json();
                 let types = [];
@@ -216,10 +216,10 @@ export class ProjectRunMetricsComponent {
 
     convertFileTreeForMetrics(
         fileTree: any,
-        parent: TreeTableTree)
-        : TreeTableTree {
+        parent: TreeTableNode)
+        : TreeTableNode {
         let component = this;
-        let treeTableData: TreeTableTree = new TreeTableTree(parent);
+        let treeTableData: TreeTableNode = new TreeTableNode(parent);
         treeTableData.content = fileTree.name;
         treeTableData.id = fileTree.hashId.algorithmName + ":" + fileTree.hashId.hash;
         treeTableData.columns = [];

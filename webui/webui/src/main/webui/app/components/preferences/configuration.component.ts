@@ -22,6 +22,8 @@ export class ConfigurationComponent {
     private path: ConfigurationComponentTree[] = [];
     private currentFolder: ConfigurationComponentTree;
 
+    constructor(){}
+    
     ngOnInit() {
         this.path = [];
         this.path.push(this.configurationTreeData.root);

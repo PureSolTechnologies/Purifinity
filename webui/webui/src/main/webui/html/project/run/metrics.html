@@ -40,12 +40,13 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<tree-table data-ng-model="metricsTreeTable"></tree-table>
+					<tree-table [treeTableData]="metricsTreeTable"></tree-table>
 				</div>
 			</div>
 			</tab> <tab heading="Tree Map">
 			<h3>Tree Map</h3>
-			<tree-map [data]="mapData"></tree-map> </tab> <tab heading="Graphs">
+			<tree-map [data]="mapData"></tree-map> </tab> 
+			<tab heading="Graphs">
 			<div class="row">
 				<div class="col-md-6">
 					<select id="codeRangeTypeSelectorForGraphs"

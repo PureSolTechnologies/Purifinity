@@ -1,5 +1,5 @@
 import {TableColumnHeader} from '../tables/TableColumnHeader';
-import {TreeTableTree} from './TreeTableTree';
+import {TreeTableNode} from './TreeTableNode';
 
 /**
  * This class is used as model for the tree-table directive. 
@@ -11,6 +11,6 @@ export class TreeTableData {
      * throughout the whole table to have consistency.
      * @root contains the tree data for the table.
      */
-    constructor(public columnHeaders: Array<TableColumnHeader>, public root: TreeTableTree) { }
+    constructor(public columnHeaders: Array<TableColumnHeader>, public root: TreeTableNode) { }
 
 }

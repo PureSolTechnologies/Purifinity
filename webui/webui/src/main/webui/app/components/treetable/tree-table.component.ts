@@ -2,7 +2,7 @@ import {Component, Input} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 
 import {TreeTableData} from '../../commons/treetable/TreeTableData';
-import {TreeTableTree} from '../../commons/treetable/TreeTableTree';
+import {TreeTableNode} from '../../commons/treetable/TreeTableNode';
 
 @Component({
     selector: 'tree-table',
@@ -16,12 +16,32 @@ export class TreeTableComponent {
     @Input()
     private treeTableData: TreeTableData;
 
-    path: TreeTableTree[] = [];
-    currentFolder: TreeTableTree;
+    path: TreeTableNode[] = [];
+    currentFolder: TreeTableNode;
 
+    constructor(){}
+    
     ngOnInit() {
-        this.currentFolder = this.treeTableData.root;
-        this.path.push(this.currentFolder);
+        if (this.treeTableData) {
+            this.currentFolder = this.treeTableData.root;
+            this.path = [];
+            this.path.push(this.currentFolder);
+        } else {
+            this.currentFolder = undefined;
+            this.path = [];
+        }
+    }
+
+    ngOnChanges(newValues) {
+        if (newValues.treeTableData.currentValue) {
+            this.treeTableData = newValues.treeTableData.currentValue;
+            this.currentFolder = this.treeTableData.root;
+            this.path = [];
+            this.path.push(this.currentFolder);
+        } else {
+            this.currentFolder = undefined;
+            this.path = [];
+        }
     }
 
     chdir(dir: string): boolean {
@@ -32,17 +52,19 @@ export class TreeTableComponent {
             }
             return;
         }
-        for (var key in this.currentFolder.children) {
-            if (this.currentFolder.children[key].content === dir) {
-                var newFolder = this.currentFolder.children[key];
-                this.path.push(newFolder);
-                this.currentFolder = newFolder;
-                return;
+        if ((this.currentFolder) && (this.currentFolder.children)) {
+            for (var key in this.currentFolder.children) {
+                if (this.currentFolder.children[key].content === dir) {
+                    var newFolder = this.currentFolder.children[key];
+                    this.path.push(newFolder);
+                    this.currentFolder = newFolder;
+                    return;
+                }
             }
         }
     };
 
-    setDir(dir: TreeTableTree): void {
+    setDir(dir: TreeTableNode): void {
         while ((this.path.length > 1)
             && (this.path[this.path.length - 1] !== dir)) {
             this.path.pop();

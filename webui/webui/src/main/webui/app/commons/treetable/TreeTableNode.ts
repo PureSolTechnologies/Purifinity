@@ -3,9 +3,9 @@ import {TableCell} from '../tables/TableCell';
 /**
   * This class represents a tree or node of a tree table tree.
  */
-export class TreeTableTree {
+export class TreeTableNode {
 
-    children: Array<TreeTableTree> = new Array<TreeTableTree>();
+    children: Array<TreeTableNode> = new Array<TreeTableNode>();
     id: string;
     content: string;
     imageUrl: string;
@@ -13,10 +13,10 @@ export class TreeTableTree {
     routerLink: Array<any>;
     columns: Array<TableCell> = new Array<TableCell>();
 
-    constructor(public parent: TreeTableTree) {
+    constructor(public parent: TreeTableNode) {
     }
 
-    public addChild(child: TreeTableTree) {
+    public addChild(child: TreeTableNode) {
         this.children.push(child);
         child.parent = this;
     }
