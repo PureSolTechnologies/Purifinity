@@ -13,37 +13,36 @@ import com.puresoltechnologies.purifinity.server.rest.api.EvaluationRestInterfac
 
 public class EvaluationRestService implements EvaluationRestInterface {
 
-	@Inject
-	private EvaluationService evaluationService;
+    @Inject
+    private EvaluationService evaluationService;
 
-	@Override
-	public Collection<EvaluatorServiceInformation> getEvaluators()
-			throws IOException {
-		return evaluationService.getEvaluators();
-	}
+    @Override
+    public Collection<EvaluatorServiceInformation> getEvaluators() throws IOException {
+	return evaluationService.getEvaluators();
+    }
 
-	@Override
-	public EvaluatorServiceInformation getEvaluator(String evaluatorId) {
-		return evaluationService.getEvaluator(evaluatorId);
-	}
+    @Override
+    public EvaluatorServiceInformation getEvaluator(String evaluatorId) {
+	return evaluationService.getEvaluator(evaluatorId);
+    }
 
-	@Override
-	public List<ConfigurationParameter<?>> getConfiguration(String evaluatorId) {
-		return evaluationService.getConfiguration(evaluatorId);
-	}
+    @Override
+    public List<ConfigurationParameter<?>> getConfiguration(String evaluatorId) {
+	return evaluationService.getConfiguration(evaluatorId);
+    }
 
-	@Override
-	public boolean isEnabled(String evaluatorId) {
-		return evaluationService.isEnabled(evaluatorId);
-	}
+    @Override
+    public boolean isEnabled(String evaluatorId) {
+	return evaluationService.isEnabled(evaluatorId);
+    }
 
-	@Override
-	public void enable(String evaluatorId) {
-		evaluationService.setActive(evaluatorId, true);
-	}
+    @Override
+    public void enable(String evaluatorId) {
+	evaluationService.setActive(evaluatorId, true);
+    }
 
-	@Override
-	public void disable(String evaluatorId) {
-		evaluationService.setActive(evaluatorId, false);
-	}
+    @Override
+    public void disable(String evaluatorId) {
+	evaluationService.setActive(evaluatorId, false);
+    }
 }

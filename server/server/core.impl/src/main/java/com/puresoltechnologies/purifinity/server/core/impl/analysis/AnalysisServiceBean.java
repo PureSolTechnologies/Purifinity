@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.server.core.impl.analysis;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -17,7 +19,13 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+import com.puresoltechnologies.parsers.grammar.Grammar;
+import com.puresoltechnologies.parsers.grammar.GrammarConverter;
+import com.puresoltechnologies.parsers.grammar.GrammarException;
+import com.puresoltechnologies.parsers.grammar.GrammarFile;
+import com.puresoltechnologies.parsers.parser.ParseTreeNode;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
+import com.puresoltechnologies.purifinity.analysis.domain.LanguageGrammar;
 import com.puresoltechnologies.purifinity.server.common.job.StepInformation;
 import com.puresoltechnologies.purifinity.server.common.job.StepProgress;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisService;
@@ -121,6 +129,18 @@ public class AnalysisServiceBean implements AnalysisService {
     @Override
     public List<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
 	return analyzerRegistration.getInstanceById(analyzerId).getConfigurationParameters();
+    }
+
+    @Override
+    public Grammar getGrammar(String analyzerId) {
+	LanguageGrammar languageGrammar = analyzerRegistration.getInstanceById(analyzerId).getGrammar();
+	try (InputStream grammarInput = languageGrammar.getGrammarDefinition();
+		GrammarFile grammarFile = new GrammarFile(grammarInput)) {
+	    ParseTreeNode parserTree = grammarFile.getParserTree();
+	    return new GrammarConverter(parserTree).getGrammar();
+	} catch (IOException | GrammarException e) {
+	    throw new RuntimeException("Error while reading grammar.", e);
+	}
     }
 
     @Override

@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
+import com.puresoltechnologies.parsers.grammar.Grammar;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
 import com.puresoltechnologies.purifinity.server.common.rest.security.RolesAllowed;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
@@ -46,6 +47,12 @@ public interface AnalysisRestInterface {
     @Path("analyzers/{id}/configuration")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
     public List<ConfigurationParameter<?>> getConfiguration(@PathParam("id") String analyzerId);
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("analyzers/{id}/grammar")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Grammar getGrammar(@PathParam("id") String analyzerId);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
