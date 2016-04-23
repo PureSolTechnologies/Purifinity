@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 
 public class NormalizedMaintainabilityIndexFileResult implements Serializable {
 
@@ -14,13 +14,13 @@ public class NormalizedMaintainabilityIndexFileResult implements Serializable {
 	private final CodeRangeType codeRangeType;
 	private final String codeRangeName;
 	private final NormalizedMaintainabilityIndexResult maintainabilityIndexResult;
-	private final SourceCodeQuality quality;
+	private final Severity quality;
 
 	public NormalizedMaintainabilityIndexFileResult(
 			SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
 			String codeRangeName,
 			NormalizedMaintainabilityIndexResult maintainabilityIndexResult,
-			SourceCodeQuality quality) {
+			Severity quality) {
 		super();
 		this.sourceCodeLocation = sourceCodeLocation;
 		this.codeRangeType = codeRangeType;
@@ -45,7 +45,7 @@ public class NormalizedMaintainabilityIndexFileResult implements Serializable {
 		return maintainabilityIndexResult;
 	}
 
-	public SourceCodeQuality getQuality() {
+	public Severity getQuality() {
 		return quality;
 	}
 

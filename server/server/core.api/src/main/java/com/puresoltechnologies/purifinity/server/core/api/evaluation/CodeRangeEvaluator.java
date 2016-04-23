@@ -7,7 +7,7 @@ import java.util.Set;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 
 /**
@@ -74,9 +74,9 @@ public abstract class CodeRangeEvaluator {
     /**
      * This method returns the quality level after an evalutation was performed.
      * 
-     * @return The quality is returned as {@link SourceCodeQuality}.
+     * @return The quality is returned as {@link Severity}.
      */
-    public abstract SourceCodeQuality getQuality();
+    public abstract Severity getQuality();
 
     /**
      * This method returns a list with quality characteristics which might be

@@ -23,7 +23,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
@@ -84,7 +84,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    CodeDepthMetric metric = new CodeDepthMetric(analysisRun, language, codeRange);
 	    metric.run();
-	    SourceCodeQuality quality = metric.getQuality();
+	    Severity quality = metric.getQuality();
 	    results.add(new CodeDepthResult(sourceCodeLocation, codeRange.getType(), codeRange.getCanonicalName(),
 		    metric.getMaxDepth(), quality));
 	}

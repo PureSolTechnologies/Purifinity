@@ -12,7 +12,7 @@ import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
@@ -68,8 +68,8 @@ public class CodeDepthFileResults extends AbstractMetrics implements
 	    Map<String, MetricValue<?>> row = new HashMap<>();
 	    row.put(MAX_DEPTH.getName(),
 		    new MetricValue<Integer>(result.getMaxDepth(), MAX_DEPTH));
-	    SourceCodeQuality quality = result.getQuality();
-	    if (quality != SourceCodeQuality.UNSPECIFIED) {
+	    Severity quality = result.getQuality();
+	    if (quality != Severity.NONE) {
 		values.add(new GenericCodeRangeMetrics(sourceCodeLocation,
 			result.getCodeRangeType(), result.getCodeRangeName(),
 			CodeDepthMetricEvaluatorParameter.ALL, row));

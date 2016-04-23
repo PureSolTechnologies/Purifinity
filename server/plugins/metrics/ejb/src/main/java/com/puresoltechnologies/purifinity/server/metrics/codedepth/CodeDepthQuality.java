@@ -1,39 +1,33 @@
 package com.puresoltechnologies.purifinity.server.metrics.codedepth;
 
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 
 public class CodeDepthQuality {
 
-    public static SourceCodeQuality get(CodeRangeType codeRangeType,
-	    int maxDepth) {
+    public static Severity get(CodeRangeType codeRangeType, int maxDepth) {
 
-	if ((codeRangeType == CodeRangeType.FILE)
-		|| (codeRangeType == CodeRangeType.CLASS)
-		|| (codeRangeType == CodeRangeType.INTERFACE)
-		|| (codeRangeType == CodeRangeType.ENUMERATION)
-		|| (codeRangeType == CodeRangeType.ANNOTATION)
-		|| (codeRangeType == CodeRangeType.MODULE)) {
+	if ((codeRangeType == CodeRangeType.FILE) || (codeRangeType == CodeRangeType.CLASS)
+		|| (codeRangeType == CodeRangeType.INTERFACE) || (codeRangeType == CodeRangeType.ENUMERATION)
+		|| (codeRangeType == CodeRangeType.ANNOTATION) || (codeRangeType == CodeRangeType.MODULE)) {
 	    if (maxDepth > 7) {
-		return SourceCodeQuality.LOW;
+		return Severity.CRITICAL;
 	    } else if (maxDepth > 5) {
-		return SourceCodeQuality.MEDIUM;
+		return Severity.MAJOR;
 	    }
-	    return SourceCodeQuality.HIGH;
-	} else if ((codeRangeType == CodeRangeType.CONSTRUCTOR)
-		|| (codeRangeType == CodeRangeType.METHOD)
-		|| (codeRangeType == CodeRangeType.PROGRAM)
-		|| (codeRangeType == CodeRangeType.SUBROUTINE)
+	    return Severity.NONE;
+	} else if ((codeRangeType == CodeRangeType.CONSTRUCTOR) || (codeRangeType == CodeRangeType.METHOD)
+		|| (codeRangeType == CodeRangeType.PROGRAM) || (codeRangeType == CodeRangeType.SUBROUTINE)
 		|| (codeRangeType == CodeRangeType.FUNCTION)) {
 	    if (maxDepth > 6) {
-		return SourceCodeQuality.LOW;
+		return Severity.CRITICAL;
 	    } else if (maxDepth > 4) {
-		return SourceCodeQuality.MEDIUM;
+		return Severity.MAJOR;
 	    }
-	    return SourceCodeQuality.HIGH;
+	    return Severity.NONE;
 	} else if (codeRangeType == CodeRangeType.DIRECTORY) {
-	    return SourceCodeQuality.HIGH;
+	    return Severity.NONE;
 	}
-	return SourceCodeQuality.UNSPECIFIED;
+	return Severity.NONE;
     }
 }

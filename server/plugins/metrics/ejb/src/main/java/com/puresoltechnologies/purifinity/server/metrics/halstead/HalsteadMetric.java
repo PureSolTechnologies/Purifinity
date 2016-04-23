@@ -25,7 +25,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.domain.HalsteadLabels;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
 import com.puresoltechnologies.trees.TreeIterator;
@@ -33,236 +33,231 @@ import com.puresoltechnologies.versioning.Version;
 
 public class HalsteadMetric extends CodeRangeEvaluator {
 
-	public static final String ID = HalsteadMetric.class.getName();
+    public static final String ID = HalsteadMetric.class.getName();
 
-	public static final String NAME = "Halstead Metric";
-	public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
-	public static final String DESCRIPTION = "Halstead Metric calculation.";
-	public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
-	public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
-	static {
-		EVALUATED_QUALITY_CHARACTERISTICS
-				.add(QualityCharacteristic.ANALYSABILITY);
-	}
-	public static final Set<String> DEPENDENCIES = new HashSet<>();
+    public static final String NAME = "Halstead Metric";
+    public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
+    public static final String DESCRIPTION = "Halstead Metric calculation.";
+    public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
+    public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
 
-	private final AnalysisRun analysisRun;
-	private final Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
-	private final Hashtable<String, Integer> operants = new Hashtable<String, Integer>();
-	private final CodeRange codeRange;
-	private final ProgrammingLanguage language;
+    static {
+	EVALUATED_QUALITY_CHARACTERISTICS.add(QualityCharacteristic.ANALYSABILITY);
+    }
 
-	private HalsteadResult result;
+    public static final Set<String> DEPENDENCIES = new HashSet<>();
 
-	public HalsteadMetric(AnalysisRun analysisRun,
-			ProgrammingLanguage language, CodeRange codeRange) {
-		super(NAME);
-		this.analysisRun = analysisRun;
-		this.codeRange = codeRange;
-		this.language = language;
-	}
+    private final AnalysisRun analysisRun;
+    private final Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
+    private final Hashtable<String, Integer> operants = new Hashtable<String, Integer>();
+    private final CodeRange codeRange;
+    private final ProgrammingLanguage language;
 
-	@Override
-	public AnalysisRun getAnalysisRun() {
-		return analysisRun;
-	}
+    private HalsteadResult result;
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public CodeRange getCodeRange() {
-		return codeRange;
-	}
+    public HalsteadMetric(AnalysisRun analysisRun, ProgrammingLanguage language, CodeRange codeRange) {
+	super(NAME);
+	this.analysisRun = analysisRun;
+	this.codeRange = codeRange;
+	this.language = language;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean run() {
-		createHashtables();
-		calculateValues();
-		return true;
-	}
+    @Override
+    public AnalysisRun getAnalysisRun() {
+	return analysisRun;
+    }
 
-	private void createHashtables() {
-		TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(
-				codeRange.getUST());
-		do {
-			UniversalSyntaxTree node = iterator.getCurrentNode();
-			if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {
-				AbstractTerminal token = (AbstractTerminal) node;
-				if (token.hasLabel(HalsteadLabels.RELEVANT)) {
-					if (token.hasLabel(HalsteadLabels.OPERATOR)) {
-						addOperator((String) token.getProperties().get(
-								HalsteadLabels.SYMBOL));
-					} else {
-						addOperant((String) token.getProperties().get(
-								HalsteadLabels.SYMBOL));
-					}
-				}
-			}
-		} while (iterator.goForward());
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public CodeRange getCodeRange() {
+	return codeRange;
+    }
 
-	private void addOperator(String operator) {
-		if (operators.containsKey(operator)) {
-			operators.put(operator, operators.get(operator) + 1);
-		} else {
-			operators.put(operator, 1);
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean run() {
+	createHashtables();
+	calculateValues();
+	return true;
+    }
+
+    private void createHashtables() {
+	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(codeRange.getUST());
+	do {
+	    UniversalSyntaxTree node = iterator.getCurrentNode();
+	    if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {
+		AbstractTerminal token = (AbstractTerminal) node;
+		if (token.hasLabel(HalsteadLabels.RELEVANT)) {
+		    if (token.hasLabel(HalsteadLabels.OPERATOR)) {
+			addOperator((String) token.getProperties().get(HalsteadLabels.SYMBOL));
+		    } else {
+			addOperant((String) token.getProperties().get(HalsteadLabels.SYMBOL));
+		    }
 		}
-	}
+	    }
+	} while (iterator.goForward());
+    }
 
-	private void addOperant(String operant) {
-		if (operants.containsKey(operant)) {
-			operants.put(operant, operants.get(operant) + 1);
-		} else {
-			operants.put(operant, 1);
-		}
+    private void addOperator(String operator) {
+	if (operators.containsKey(operator)) {
+	    operators.put(operator, operators.get(operator) + 1);
+	} else {
+	    operators.put(operator, 1);
 	}
+    }
 
-	private void calculateValues() {
-		result = new HalsteadResult(operants, operators);
+    private void addOperant(String operant) {
+	if (operants.containsKey(operant)) {
+	    operants.put(operant, operants.get(operant) + 1);
+	} else {
+	    operants.put(operant, 1);
 	}
+    }
 
-	public HalsteadResult getHalsteadResults() {
-		return result;
-	}
+    private void calculateValues() {
+	result = new HalsteadResult(operants, operators);
+    }
 
-	public Hashtable<String, Integer> getOperators() {
-		return operators;
-	}
+    public HalsteadResult getHalsteadResults() {
+	return result;
+    }
 
-	public Hashtable<String, Integer> getOperands() {
-		return operants;
-	}
+    public Hashtable<String, Integer> getOperators() {
+	return operators;
+    }
 
-	public int getDifferentOperands() {
-		return result.getDifferentOperands();
-	}
+    public Hashtable<String, Integer> getOperands() {
+	return operants;
+    }
 
-	public int getDifferentOperators() {
-		return result.getDifferentOperators();
-	}
+    public int getDifferentOperands() {
+	return result.getDifferentOperands();
+    }
 
-	public double getDifficulty() {
-		return result.getDifficulty();
-	}
+    public int getDifferentOperators() {
+	return result.getDifferentOperators();
+    }
 
-	public double getEstimatedBugs() {
-		return result.getEstimatedBugs();
-	}
+    public double getDifficulty() {
+	return result.getDifficulty();
+    }
 
-	public double getHalsteadLength() {
-		return result.getHalsteadLength();
-	}
+    public double getEstimatedBugs() {
+	return result.getEstimatedBugs();
+    }
 
-	public double getHalsteadVolume() {
-		return result.getHalsteadVolume();
-	}
+    public double getHalsteadLength() {
+	return result.getHalsteadLength();
+    }
 
-	public double getImplementationEffort() {
-		return result.getImplementationEffort();
-	}
+    public double getHalsteadVolume() {
+	return result.getHalsteadVolume();
+    }
 
-	public double getImplementationTime() {
-		return result.getImplementationTime();
-	}
+    public double getImplementationEffort() {
+	return result.getImplementationEffort();
+    }
 
-	public int getProgramLength() {
-		return result.getProgramLength();
-	}
+    public double getImplementationTime() {
+	return result.getImplementationTime();
+    }
 
-	public double getProgramLevel() {
-		return result.getProgramLevel();
-	}
+    public int getProgramLength() {
+	return result.getProgramLength();
+    }
 
-	public int getTotalOperands() {
-		return result.getTotalOperands();
-	}
+    public double getProgramLevel() {
+	return result.getProgramLevel();
+    }
 
-	public int getTotalOperators() {
-		return result.getTotalOperators();
-	}
+    public int getTotalOperands() {
+	return result.getTotalOperands();
+    }
 
-	public int getVocabularySize() {
-		return result.getVocabularySize();
-	}
+    public int getTotalOperators() {
+	return result.getTotalOperators();
+    }
 
-	public void print() {
-		System.out.println("n1 = " + result.getDifferentOperators());
-		System.out.println("n2 = " + result.getDifferentOperands());
-		System.out.println("N1 = " + result.getTotalOperators());
-		System.out.println("N2 = " + result.getTotalOperands());
-		System.out.println("n = " + result.getVocabularySize());
-		System.out.println("N = " + result.getProgramLength());
-		System.out.println("HL = " + result.getHalsteadLength());
-		System.out.println("HV = " + result.getHalsteadVolume());
-		System.out.println("D = " + result.getDifficulty());
-		System.out.println("L = " + result.getProgramLevel());
-		System.out.println("E = " + result.getImplementationEffort());
-		System.out.println("T = " + result.getImplementationTime());
-		System.out.println("B = " + result.getEstimatedBugs());
-	}
+    public int getVocabularySize() {
+	return result.getVocabularySize();
+    }
 
-	public static boolean isSuitable(CodeRange codeRange) {
-		return true;
-	}
+    public void print() {
+	System.out.println("n1 = " + result.getDifferentOperators());
+	System.out.println("n2 = " + result.getDifferentOperands());
+	System.out.println("N1 = " + result.getTotalOperators());
+	System.out.println("N2 = " + result.getTotalOperands());
+	System.out.println("n = " + result.getVocabularySize());
+	System.out.println("N = " + result.getProgramLength());
+	System.out.println("HL = " + result.getHalsteadLength());
+	System.out.println("HV = " + result.getHalsteadVolume());
+	System.out.println("D = " + result.getDifficulty());
+	System.out.println("L = " + result.getProgramLevel());
+	System.out.println("E = " + result.getImplementationEffort());
+	System.out.println("T = " + result.getImplementationTime());
+	System.out.println("B = " + result.getEstimatedBugs());
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public SourceCodeQuality getQuality() {
-		if ((codeRange.getType() == CodeRangeType.FILE)
-				|| (codeRange.getType() == CodeRangeType.CLASS)
-				|| (codeRange.getType() == CodeRangeType.ENUMERATION)) {
-			if (getHalsteadVolume() < 80) {
-				return SourceCodeQuality.MEDIUM;
-			}
-			if (getHalsteadVolume() > 10000) {
-				return SourceCodeQuality.LOW;
-			}
-			if (getHalsteadVolume() > 8000) {
-				return SourceCodeQuality.MEDIUM;
-			}
-			return SourceCodeQuality.HIGH;
-		} else if ((codeRange.getType() == CodeRangeType.CONSTRUCTOR)
-				|| (codeRange.getType() == CodeRangeType.METHOD)
-				|| (codeRange.getType() == CodeRangeType.FUNCTION)
-				|| (codeRange.getType() == CodeRangeType.INTERFACE)) {
-			if (getHalsteadVolume() < 10) {
-				return SourceCodeQuality.MEDIUM;
-			}
-			if (getHalsteadVolume() > 1250) {
-				return SourceCodeQuality.LOW;
-			}
-			if (getHalsteadVolume() > 1000) {
-				return SourceCodeQuality.MEDIUM;
-			}
-			return SourceCodeQuality.HIGH;
-		}
-		return SourceCodeQuality.HIGH; // not evaluated...
-	}
+    public static boolean isSuitable(CodeRange codeRange) {
+	return true;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getDescription() {
-		return DESCRIPTION;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Severity getQuality() {
+	if ((codeRange.getType() == CodeRangeType.FILE) || (codeRange.getType() == CodeRangeType.CLASS)
+		|| (codeRange.getType() == CodeRangeType.ENUMERATION)) {
+	    if (getHalsteadVolume() < 80) {
+		return Severity.MINOR;
+	    }
+	    if (getHalsteadVolume() > 10000) {
+		return Severity.CRITICAL;
+	    }
+	    if (getHalsteadVolume() > 8000) {
+		return Severity.MAJOR;
+	    }
+	    return Severity.NONE;
+	} else if ((codeRange.getType() == CodeRangeType.CONSTRUCTOR) || (codeRange.getType() == CodeRangeType.METHOD)
+		|| (codeRange.getType() == CodeRangeType.FUNCTION)
+		|| (codeRange.getType() == CodeRangeType.INTERFACE)) {
+	    if (getHalsteadVolume() < 10) {
+		return Severity.MINOR;
+	    }
+	    if (getHalsteadVolume() > 1250) {
+		return Severity.CRITICAL;
+	    }
+	    if (getHalsteadVolume() > 1000) {
+		return Severity.MAJOR;
+	    }
+	    return Severity.NONE;
 	}
+	return Severity.NONE; // not evaluated...
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
-		return EVALUATED_QUALITY_CHARACTERISTICS;
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDescription() {
+	return DESCRIPTION;
+    }
 
-	@Override
-	public List<MetricValue<?>> getResults() {
-		return result.getResults();
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+	return EVALUATED_QUALITY_CHARACTERISTICS;
+    }
+
+    @Override
+    public List<MetricValue<?>> getResults() {
+	return result.getResults();
+    }
 }

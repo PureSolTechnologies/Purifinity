@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 
 public class CodeDepthResult implements Serializable {
 
@@ -14,11 +14,11 @@ public class CodeDepthResult implements Serializable {
 	private final CodeRangeType codeRangeType;
 	private final String codeRangeName;
 	private final int maxDepth;
-	private final SourceCodeQuality quality;
+	private final Severity quality;
 
 	public CodeDepthResult(SourceCodeLocation sourceCodeLocation,
 			CodeRangeType codeRangeType, String codeRangeName, int maxDepth,
-			SourceCodeQuality quality) {
+			Severity quality) {
 		super();
 		this.sourceCodeLocation = sourceCodeLocation;
 		this.codeRangeType = codeRangeType;
@@ -43,7 +43,7 @@ public class CodeDepthResult implements Serializable {
 		return maxDepth;
 	}
 
-	public SourceCodeQuality getQuality() {
+	public Severity getQuality() {
 		return quality;
 	}
 

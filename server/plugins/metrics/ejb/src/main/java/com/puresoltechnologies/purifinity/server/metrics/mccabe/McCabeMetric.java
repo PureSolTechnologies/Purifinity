@@ -23,7 +23,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.McCabeLabels;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
 import com.puresoltechnologies.trees.TreeIterator;
@@ -121,7 +121,7 @@ public class McCabeMetric extends CodeRangeEvaluator {
 	}
 
 	@Override
-	public SourceCodeQuality getQuality() {
+	public Severity getQuality() {
 		return McCabeQuality.get(getCodeRange().getType(), cyclomaticNumber);
 	}
 

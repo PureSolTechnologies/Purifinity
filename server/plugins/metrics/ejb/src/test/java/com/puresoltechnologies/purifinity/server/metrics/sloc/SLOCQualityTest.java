@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.puresoltechnologies.commons.domain.statistics.Statistics;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.evaluation.domain.SourceCodeQuality;
+import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 
 public class SLOCQualityTest {
 
@@ -21,7 +21,7 @@ public class SLOCQualityTest {
 		list.add(20.0);
 		SLOCMetric result = new SLOCMetric(10, 5, 5, 5, new Statistics(list));
 		for (CodeRangeType type : CodeRangeType.class.getEnumConstants()) {
-			if (SLOCQuality.get(type, result) == SourceCodeQuality.UNSPECIFIED) {
+			if (SLOCQuality.get(type, result) == Severity.NONE) {
 				fail("No source code quality check for code range type '"
 						+ type.name() + "' defined!");
 			}
