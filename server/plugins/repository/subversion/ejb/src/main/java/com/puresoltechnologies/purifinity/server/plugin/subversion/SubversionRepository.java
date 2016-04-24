@@ -41,12 +41,9 @@ public class SubversionRepository extends AbstractRepository {
 
     private static final String SVN_BINARY_PATH_PROPERTY = "repository.subversion.binary";
 
-    public static final List<ConfigurationParameter<?>> CONFIG_PARAMETERS = new ArrayList<>();
-
-    static {
-	CONFIG_PARAMETERS.add(new ConfigurationParameter<String>("SVN Binary Location", "", LevelOfMeasurement.NOMINAL,
-		"Specifies the location of the svn executable.", String.class, SVN_BINARY_PATH_PROPERTY, "/", ""));
-    }
+    public static final ConfigurationParameter<?>[] CONFIG_PARAMETERS = new ConfigurationParameter<?>[] {
+	    new ConfigurationParameter<String>("SVN Binary Location", "", LevelOfMeasurement.NOMINAL,
+		    "Specifies the location of the svn executable.", String.class, SVN_BINARY_PATH_PROPERTY, "/", "") };
 
     public static final RepositoryServiceInformation INFORMATION = new RepositoryServiceInformation(ID, NAME, "1.8",
 	    PLUGIN_VERSION, JNDI_ADDRESS, "Subversion Repository.", PARAMETERS, CONFIG_PARAMETERS, null, null, null);
@@ -88,7 +85,7 @@ public class SubversionRepository extends AbstractRepository {
     }
 
     @Override
-    public List<ConfigurationParameter<?>> getConfigurationParameters() {
+    public ConfigurationParameter<?>[] getConfigurationParameters() {
 	return CONFIG_PARAMETERS;
     }
 

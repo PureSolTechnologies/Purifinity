@@ -53,7 +53,7 @@ public class McCabeMetricFileResults extends AbstractMcCabeMetricResults
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return ALL;
     }
 

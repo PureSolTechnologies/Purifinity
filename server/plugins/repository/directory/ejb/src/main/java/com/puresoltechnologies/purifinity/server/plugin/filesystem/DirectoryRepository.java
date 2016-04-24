@@ -52,7 +52,7 @@ public class DirectoryRepository extends AbstractRepository {
 		"", LevelOfMeasurement.NOMINAL, "The directory the source code can be found in.", String.class));
     }
 
-    public static final List<ConfigurationParameter<?>> CONFIG_PARAMETERS = new ArrayList<>();
+    public static final ConfigurationParameter<?>[] CONFIG_PARAMETERS = new ConfigurationParameter<?>[] {};
     public static final RepositoryServiceInformation INFORMATION = new RepositoryServiceInformation(ID, NAME,
 	    PLUGIN_VERSION.toString(), PLUGIN_VERSION, JNDI_ADDRESS,
 	    "Simple directory in the file system of the server.", PARAMETERS, CONFIG_PARAMETERS,
@@ -93,8 +93,8 @@ public class DirectoryRepository extends AbstractRepository {
     }
 
     @Override
-    public List<ConfigurationParameter<?>> getConfigurationParameters() {
-	return new ArrayList<>();
+    public ConfigurationParameter<?>[] getConfigurationParameters() {
+	return new ConfigurationParameter<?>[] {};
     }
 
     @Override

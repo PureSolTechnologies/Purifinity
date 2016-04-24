@@ -127,7 +127,7 @@ public class AnalysisServiceBean implements AnalysisService {
     }
 
     @Override
-    public List<ConfigurationParameter<?>> getConfiguration(String analyzerId) {
+    public ConfigurationParameter<?>[] getConfiguration(String analyzerId) {
 	return analyzerRegistration.getInstanceById(analyzerId).getConfigurationParameters();
     }
 

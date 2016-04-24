@@ -2,9 +2,7 @@ package com.puresoltechnologies.purifinity.evaluation.domain.metrics;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,24 +13,19 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
 
     private static final long serialVersionUID = -815011058948733680L;
 
-    private final Set<MetricParameter<?>> parameters = new HashSet<>();
+    private final MetricParameter<?>[] parameters;
     private final Map<HashId, GenericFileMetrics> fileMetrics = new HashMap<>();
     private final Map<HashId, GenericDirectoryMetrics> directoryMetrics = new HashMap<>();
 
-    public GenericRunMetrics(String evaluatorId, Version evaluatorVersion,
-	    Date time, Set<MetricParameter<?>> parameters) {
+    public GenericRunMetrics(String evaluatorId, Version evaluatorVersion, Date time, MetricParameter<?>[] parameters) {
 	super(evaluatorId, evaluatorVersion, time);
-	if (parameters != null) {
-	    this.parameters.addAll(parameters);
-	}
+	this.parameters = parameters;
     }
 
     @JsonCreator
-    public GenericRunMetrics(
-	    @JsonProperty("evaluatorId") String evaluatorId,
-	    @JsonProperty("evaluatorVersion") Version evaluatorVersion,
-	    @JsonProperty("time") Date time,
-	    @JsonProperty("parameters") Set<MetricParameter<?>> parameters,
+    public GenericRunMetrics(@JsonProperty("evaluatorId") String evaluatorId,
+	    @JsonProperty("evaluatorVersion") Version evaluatorVersion, @JsonProperty("time") Date time,
+	    @JsonProperty("parameters") MetricParameter<?>[] parameters,
 	    @JsonProperty("fileMetrics") Map<HashId, GenericFileMetrics> fileMetrics,
 	    @JsonProperty("directoryMetrics") Map<HashId, GenericDirectoryMetrics> directoryMetrics) {
 	this(evaluatorId, evaluatorVersion, time, parameters);
@@ -45,7 +38,7 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return parameters;
     }
 
@@ -54,8 +47,7 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
     }
 
     public void add(GenericDirectoryMetrics directoryMetrics) {
-	this.directoryMetrics.put(directoryMetrics.getHashId(),
-		directoryMetrics);
+	this.directoryMetrics.put(directoryMetrics.getHashId(), directoryMetrics);
     }
 
     public Map<HashId, GenericFileMetrics> getFileMetrics() {
@@ -70,14 +62,9 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
     public int hashCode() {
 	final int prime = 31;
 	int result = super.hashCode();
-	result = prime
-		* result
-		+ ((directoryMetrics == null) ? 0 : directoryMetrics
-			.hashCode());
-	result = prime * result
-		+ ((fileMetrics == null) ? 0 : fileMetrics.hashCode());
-	result = prime * result
-		+ ((parameters == null) ? 0 : parameters.hashCode());
+	result = prime * result + ((directoryMetrics == null) ? 0 : directoryMetrics.hashCode());
+	result = prime * result + ((fileMetrics == null) ? 0 : fileMetrics.hashCode());
+	result = prime * result + ((parameters == null) ? 0 : parameters.hashCode());
 	return result;
     }
 

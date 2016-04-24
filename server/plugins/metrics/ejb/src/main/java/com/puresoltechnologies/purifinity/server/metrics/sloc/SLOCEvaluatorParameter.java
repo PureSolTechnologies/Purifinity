@@ -1,8 +1,5 @@
 package com.puresoltechnologies.purifinity.server.metrics.sloc;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -44,19 +41,8 @@ public class SLOCEvaluatorParameter {
 
     public static final ParameterWithArbitraryUnit<Severity> SEVERITY = SeverityParameter.getInstance();
 
-    public static final Set<MetricParameter<?>> ALL = new HashSet<>();
-
-    static {
-	ALL.add(PHY_LOC);
-	ALL.add(PRO_LOC);
-	ALL.add(COM_LOC);
-	ALL.add(BL_LOC);
-	ALL.add(MIN);
-	ALL.add(MAX);
-	ALL.add(AVG);
-	ALL.add(MEDIAN);
-	ALL.add(STD_DEV);
-    }
+    public static final MetricParameter<?>[] ALL = new MetricParameter<?>[] { PHY_LOC, PRO_LOC, COM_LOC, BL_LOC, MIN,
+	    MAX, AVG, MEDIAN, STD_DEV };
 
     /**
      * Private constructor to avoid instantiation.

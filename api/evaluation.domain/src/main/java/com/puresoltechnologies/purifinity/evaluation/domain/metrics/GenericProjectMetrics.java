@@ -2,31 +2,26 @@ package com.puresoltechnologies.purifinity.evaluation.domain.metrics;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericProjectMetrics extends AbstractMetrics implements
-	ProjectMetrics {
+public class GenericProjectMetrics extends AbstractMetrics implements ProjectMetrics {
 
     private static final long serialVersionUID = 2692614300538471139L;
 
-    private final Set<MetricParameter<?>> parameters = new LinkedHashSet<>();
+    private final MetricParameter<?>[] parameters;
     private final Map<String, MetricValue<?>> values = new HashMap<>();
 
     private final String projectId;
     private final long runId;
 
-    public GenericProjectMetrics(String evaluatorId, Version evaluatorVersion,
-	    String projectId, long runId, Date time,
-	    Set<MetricParameter<?>> parameters,
-	    Map<String, MetricValue<?>> values) {
+    public GenericProjectMetrics(String evaluatorId, Version evaluatorVersion, String projectId, long runId, Date time,
+	    MetricParameter<?>[] parameters, Map<String, MetricValue<?>> values) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.projectId = projectId;
 	this.runId = runId;
-	this.parameters.addAll(parameters);
+	this.parameters = parameters;
 	this.values.putAll(values);
     }
 
@@ -41,7 +36,7 @@ public class GenericProjectMetrics extends AbstractMetrics implements
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return parameters;
     }
 

@@ -630,11 +630,11 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
-		Set<MetricParameter<?>> parameters = new HashSet<>();
 		Date time = null;
 		SourceCodeLocation sourceCodeLocation = null;
 		Version evaluatorVersion = null;
 		Map<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> buffer = new HashMap<>();
+		MetricParameter<?>[] parameters = new MetricParameter<?>[] {};
 		while (resultSet.next()) {
 		    if (time == null) {
 			time = resultSet.getDate("time");
@@ -663,7 +663,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 		    if (metricsParameter == null) {
 			continue;
 		    }
-		    parameters.add(metricsParameter);
+		    parameters = new MetricParameter<?>[] { metricsParameter };
 		    CodeRangeType codeRangeType = CodeRangeType.valueOf(resultSet.getString("code_range_type"));
 		    String codeRangeName = resultSet.getString("code_range_name");
 		    Map<Parameter<?>, MetricValue<?>> parameterBuffer;
@@ -727,10 +727,10 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
-		Set<MetricParameter<?>> parameters = new HashSet<>();
 		Date time = null;
 		Version evaluatorVersion = null;
 		Map<Parameter<?>, MetricValue<?>> buffer = new HashMap<>();
+		MetricParameter<?>[] parameters = new MetricParameter<?>[] {};
 		while (resultSet.next()) {
 		    if (time == null) {
 			time = resultSet.getDate("time");
@@ -747,7 +747,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 		    if (metricsParameter == null) {
 			continue;
 		    }
-		    parameters.add(metricsParameter);
+		    parameters = new MetricParameter<?>[] { metricsParameter };
 		    if (buffer.containsKey(metricsParameter)) {
 			throw new EvaluationStoreException("Multiple parameters with same name '" + parameterName
 				+ "' are different for evaluatorId=" + evaluatorId + " and hashId="
@@ -786,7 +786,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 	    preparedStatement.setLong(2, runId);
 	    preparedStatement.setString(3, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
-		Set<MetricParameter<?>> parameters = new HashSet<>();
+		MetricParameter<?>[] parameters = new MetricParameter<?>[] {};
 		Date time = null;
 		if (!resultSet.next()) {
 		    if (time == null) {
@@ -884,15 +884,10 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 		    MetricValue<?> metricValue = MetricValue.create(metricsParameter, value);
 		    parameterBuffer.put(metricsParameter, metricValue);
 		}
-
-		Set<MetricParameter<?>> allParameters = new HashSet<>();
-		for (Set<MetricParameter<?>> parameters : parametersBuffer.values()) {
-		    allParameters.addAll(parameters);
-		}
 		GenericRunMetrics metrics = new GenericRunMetrics(evaluatorId, evaluatorVersion, minTime,
-			allParameters);
+			(MetricParameter<?>[]) parametersBuffer.values().toArray());
 		for (HashId hashId : buffer.keySet()) {
-		    Set<MetricParameter<?>> parameters = parametersBuffer.get(hashId);
+		    MetricParameter<?>[] parameters = (MetricParameter<?>[]) parametersBuffer.get(hashId).toArray();
 		    Map<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> hashIdBuffer = buffer
 			    .get(hashId);
 		    if (hashIdTypes.get(hashId) == CodeRangeType.FILE) {

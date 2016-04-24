@@ -4,7 +4,6 @@ import static com.puresoltechnologies.purifinity.server.metrics.entropy.EntropyM
 
 import java.util.Date;
 import java.util.Map;
-import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -13,8 +12,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMet
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 
-public class EntropyDirectoryResults extends AbstractEntropyResults implements
-	DirectoryMetrics {
+public class EntropyDirectoryResults extends AbstractEntropyResults implements DirectoryMetrics {
 
     private static final long serialVersionUID = 4585034044953318000L;
 
@@ -24,9 +22,8 @@ public class EntropyDirectoryResults extends AbstractEntropyResults implements
     private final String codeRangeName;
     private EntropyMetricResult entropyResult;
 
-    public EntropyDirectoryResults(HashId hashId, Date time,
-	    SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
-	    String codeRangeName) {
+    public EntropyDirectoryResults(HashId hashId, Date time, SourceCodeLocation sourceCodeLocation,
+	    CodeRangeType codeRangeType, String codeRangeName) {
 	super(time);
 	this.hashId = hashId;
 	this.sourceCodeLocation = sourceCodeLocation;
@@ -60,13 +57,12 @@ public class EntropyDirectoryResults extends AbstractEntropyResults implements
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return ALL;
     }
 
     @Override
     public Map<String, MetricValue<?>> getValues() {
-	return convertToRow(new EntropyResult(sourceCodeLocation,
-		codeRangeType, codeRangeName, entropyResult));
+	return convertToRow(new EntropyResult(sourceCodeLocation, codeRangeType, codeRangeName, entropyResult));
     }
 }

@@ -1,8 +1,5 @@
 package com.puresoltechnologies.purifinity.server.metrics.halstead;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -49,21 +46,7 @@ public class HalsteadMetricEvaluatorParameter {
 	    LevelOfMeasurement.RATIO, "Number of delivered bugs", Double.class);
     public static final ParameterWithArbitraryUnit<Severity> SEVERITY = SeverityParameter.getInstance();
 
-    public static final Set<MetricParameter<?>> ALL = new HashSet<>();
-
-    static {
-	ALL.add(DIFFERENT_OPERATORS);
-	ALL.add(DIFFERENT_OPERANDS);
-	ALL.add(TOTAL_OPERATORS);
-	ALL.add(TOTAL_OPERANDS);
-	ALL.add(VOCABULARY_SIZE);
-	ALL.add(PROGRAM_LENGTH);
-	ALL.add(HALSTEAD_LENGTH);
-	ALL.add(HALSTEAD_VOLUMNE);
-	ALL.add(DIFFICULTY);
-	ALL.add(PROGRAM_LEVEL);
-	ALL.add(IMPLEMENTATION_EFFORT);
-	ALL.add(IMPLEMENTATION_TIME);
-	ALL.add(ESTIMATED_BUGS);
-    }
+    public static final MetricParameter<?>[] ALL = new MetricParameter<?>[] { DIFFERENT_OPERATORS, DIFFERENT_OPERANDS,
+	    TOTAL_OPERATORS, TOTAL_OPERANDS, VOCABULARY_SIZE, PROGRAM_LENGTH, HALSTEAD_LENGTH, HALSTEAD_VOLUMNE,
+	    DIFFICULTY, PROGRAM_LEVEL, IMPLEMENTATION_EFFORT, IMPLEMENTATION_TIME, ESTIMATED_BUGS };
 }

@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -21,8 +20,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParame
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
 
-public class NormalizedMaintainabilityIndexFileResults extends AbstractMetrics
-	implements FileMetrics {
+public class NormalizedMaintainabilityIndexFileResults extends AbstractMetrics implements FileMetrics {
 
     private static final long serialVersionUID = 7667134885288322378L;
 
@@ -31,8 +29,7 @@ public class NormalizedMaintainabilityIndexFileResults extends AbstractMetrics
     private final HashId hashId;
     private final SourceCodeLocation sourceCodeLocation;
 
-    public NormalizedMaintainabilityIndexFileResults(String evaluatorId,
-	    Version evaluatorVersion, HashId hashId,
+    public NormalizedMaintainabilityIndexFileResults(String evaluatorId, Version evaluatorVersion, HashId hashId,
 	    SourceCodeLocation sourceCodeLocation, Date time) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
@@ -58,7 +55,7 @@ public class NormalizedMaintainabilityIndexFileResults extends AbstractMetrics
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return ALL;
     }
 
@@ -66,19 +63,13 @@ public class NormalizedMaintainabilityIndexFileResults extends AbstractMetrics
     public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
 	List<GenericCodeRangeMetrics> values = new ArrayList<>();
 	for (NormalizedMaintainabilityIndexFileResult result : results) {
-	    NormalizedMaintainabilityIndexResult mi = result
-		    .getNormalizedMaintainabilityIndexResult();
+	    NormalizedMaintainabilityIndexResult mi = result.getNormalizedMaintainabilityIndexResult();
 	    Map<String, MetricValue<?>> row = new HashMap<>();
-	    row.put(NORM_MI_WOC.getName(),
-		    new MetricValue<Double>(mi.getNMIwoc(), NORM_MI_WOC));
-	    row.put(NORM_MI_CW.getName(), new MetricValue<Double>(
-		    mi.getNMIcw(), NORM_MI_CW));
-	    row.put(NORM_MI.getName(), new MetricValue<Double>(mi.getNMI(),
-		    NORM_MI));
-	    values.add(new GenericCodeRangeMetrics(result
-		    .getSourceCodeLocation(), result.getCodeRangeType(), result
-		    .getCodeRangeName(),
-		    NormalizedMaintainabilityIndexEvaluatorParameter.ALL, row));
+	    row.put(NORM_MI_WOC.getName(), new MetricValue<Double>(mi.getNMIwoc(), NORM_MI_WOC));
+	    row.put(NORM_MI_CW.getName(), new MetricValue<Double>(mi.getNMIcw(), NORM_MI_CW));
+	    row.put(NORM_MI.getName(), new MetricValue<Double>(mi.getNMI(), NORM_MI));
+	    values.add(new GenericCodeRangeMetrics(result.getSourceCodeLocation(), result.getCodeRangeType(),
+		    result.getCodeRangeName(), NormalizedMaintainabilityIndexEvaluatorParameter.ALL, row));
 	}
 	return values;
     }

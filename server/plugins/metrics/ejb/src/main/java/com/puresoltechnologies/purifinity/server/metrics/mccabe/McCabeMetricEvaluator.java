@@ -2,7 +2,6 @@ package com.puresoltechnologies.purifinity.server.metrics.mccabe;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Remote;
@@ -55,12 +54,12 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public List<ConfigurationParameter<?>> getConfigurationParameters() {
+    public ConfigurationParameter<?>[] getConfigurationParameters() {
 	return McCabeMetric.PARAMETERS;
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return McCabeMetricEvaluatorParameter.ALL;
     }
 
@@ -88,7 +87,7 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+    public QualityCharacteristic[] getQualityCharacteristics() {
 	return McCabeMetric.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 

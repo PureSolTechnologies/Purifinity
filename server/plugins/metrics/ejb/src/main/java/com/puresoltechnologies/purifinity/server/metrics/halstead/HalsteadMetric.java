@@ -10,7 +10,6 @@
 
 package com.puresoltechnologies.purifinity.server.metrics.halstead;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
@@ -38,12 +37,9 @@ public class HalsteadMetric extends CodeRangeEvaluator {
     public static final String NAME = "Halstead Metric";
     public static final Version PLUGIN_VERSION = new Version(1, 0, 0);
     public static final String DESCRIPTION = "Halstead Metric calculation.";
-    public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
-    public static final Set<QualityCharacteristic> EVALUATED_QUALITY_CHARACTERISTICS = new HashSet<QualityCharacteristic>();
-
-    static {
-	EVALUATED_QUALITY_CHARACTERISTICS.add(QualityCharacteristic.ANALYSABILITY);
-    }
+    public static final ConfigurationParameter<?>[] PARAMETERS = new ConfigurationParameter<?>[] {};
+    public static final QualityCharacteristic[] EVALUATED_QUALITY_CHARACTERISTICS = new QualityCharacteristic[] {
+	    QualityCharacteristic.ANALYSABILITY };
 
     public static final Set<String> DEPENDENCIES = new HashSet<>();
 
@@ -252,7 +248,7 @@ public class HalsteadMetric extends CodeRangeEvaluator {
      * {@inheritDoc}
      */
     @Override
-    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+    public QualityCharacteristic[] getQualityCharacteristics() {
 	return EVALUATED_QUALITY_CHARACTERISTICS;
     }
 

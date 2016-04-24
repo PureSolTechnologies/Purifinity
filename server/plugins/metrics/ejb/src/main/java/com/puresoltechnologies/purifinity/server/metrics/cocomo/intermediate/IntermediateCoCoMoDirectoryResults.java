@@ -17,7 +17,6 @@ import static com.puresoltechnologies.purifinity.server.metrics.cocomo.intermedi
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.commons.money.Money;
@@ -26,15 +25,13 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParame
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
 
-public class IntermediateCoCoMoDirectoryResults extends
-	IntermediateCoCoMoResults implements DirectoryMetrics {
+public class IntermediateCoCoMoDirectoryResults extends IntermediateCoCoMoResults implements DirectoryMetrics {
 
     private static final long serialVersionUID = 7272355142441159285L;
 
     private final HashId hashId;
 
-    public IntermediateCoCoMoDirectoryResults(String evaluatorId,
-	    Version evaluatorVersion, HashId hashId, Date time) {
+    public IntermediateCoCoMoDirectoryResults(String evaluatorId, Version evaluatorVersion, HashId hashId, Date time) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
     }
@@ -45,7 +42,7 @@ public class IntermediateCoCoMoDirectoryResults extends
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return ALL;
     }
 
@@ -54,18 +51,12 @@ public class IntermediateCoCoMoDirectoryResults extends
 	Map<String, MetricValue<?>> row = new HashMap<>();
 
 	row.put(KSLOC.getName(), new MetricValue<Double>(getKsloc(), KSLOC));
-	row.put(PERSON_MONTH.getName(), new MetricValue<Double>(
-		getPersonMonth(), PERSON_MONTH));
-	row.put(PERSON_YEARS.getName(), new MetricValue<Double>(
-		getPersonYears(), PERSON_YEARS));
-	row.put(SCHEDULED_MONTH.getName(), new MetricValue<Double>(
-		getScheduledMonth(), SCHEDULED_MONTH));
-	row.put(SCHEDULED_YEARS.getName(), new MetricValue<Double>(
-		getScheduledYears(), SCHEDULED_YEARS));
-	row.put(TEAM_SIZE.getName(), new MetricValue<Double>(getTeamSize(),
-		TEAM_SIZE));
-	row.put(COSTS.getName(), new MetricValue<Double>(getEstimatedCosts(),
-		COSTS));
+	row.put(PERSON_MONTH.getName(), new MetricValue<Double>(getPersonMonth(), PERSON_MONTH));
+	row.put(PERSON_YEARS.getName(), new MetricValue<Double>(getPersonYears(), PERSON_YEARS));
+	row.put(SCHEDULED_MONTH.getName(), new MetricValue<Double>(getScheduledMonth(), SCHEDULED_MONTH));
+	row.put(SCHEDULED_YEARS.getName(), new MetricValue<Double>(getScheduledYears(), SCHEDULED_YEARS));
+	row.put(TEAM_SIZE.getName(), new MetricValue<Double>(getTeamSize(), TEAM_SIZE));
+	row.put(COSTS.getName(), new MetricValue<Double>(getEstimatedCosts(), COSTS));
 
 	row.put(SALARY.getName(), new MetricValue<Money>(getMoney(), SALARY));
 	row.put(AI.getName(), new MetricValue<Double>(getProject().getAi(), AI));

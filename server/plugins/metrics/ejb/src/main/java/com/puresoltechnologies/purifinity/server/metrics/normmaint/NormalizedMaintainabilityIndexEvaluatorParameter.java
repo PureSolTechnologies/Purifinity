@@ -1,8 +1,5 @@
 package com.puresoltechnologies.purifinity.server.metrics.normmaint;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -29,11 +26,5 @@ public class NormalizedMaintainabilityIndexEvaluatorParameter {
 	    LevelOfMeasurement.ORDINAL, "Normalized maintainability index including comments", Double.class);
     public static final ParameterWithArbitraryUnit<Severity> SEVERITY = SeverityParameter.getInstance();
 
-    public static final Set<MetricParameter<?>> ALL = new HashSet<MetricParameter<?>>();
-
-    static {
-	ALL.add(NORM_MI_WOC);
-	ALL.add(NORM_MI_CW);
-	ALL.add(NORM_MI);
-    }
+    public static final MetricParameter<?>[] ALL = new MetricParameter<?>[] { NORM_MI_WOC, NORM_MI_CW, NORM_MI };
 }

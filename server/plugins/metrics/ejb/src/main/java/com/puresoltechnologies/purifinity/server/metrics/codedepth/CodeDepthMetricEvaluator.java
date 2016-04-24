@@ -1,8 +1,6 @@
 package com.puresoltechnologies.purifinity.server.metrics.codedepth;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Remote;
@@ -60,12 +58,12 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public List<ConfigurationParameter<?>> getConfigurationParameters() {
+    public ConfigurationParameter<?>[] getConfigurationParameters() {
 	return CodeDepthMetric.PARAMETERS;
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return CodeDepthMetricEvaluatorParameter.ALL;
     }
 
@@ -92,7 +90,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+    public QualityCharacteristic[] getQualityCharacteristics() {
 	return CodeDepthMetric.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 

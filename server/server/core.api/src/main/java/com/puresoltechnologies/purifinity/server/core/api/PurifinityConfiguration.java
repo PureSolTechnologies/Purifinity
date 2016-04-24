@@ -42,6 +42,6 @@ public interface PurifinityConfiguration {
      * 
      * @return A {@link List} of {@link ConfigurationParameter} is returned.
      */
-    public List<ConfigurationParameter<?>> getParameters();
+    public ConfigurationParameter<?>[] getParameters();
 
 }

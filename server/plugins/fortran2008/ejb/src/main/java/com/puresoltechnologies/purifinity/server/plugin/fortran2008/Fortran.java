@@ -49,30 +49,26 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
     private static final String AUTOMATIC_SOURCE_FORM_PROPERTY = "form.automatic";
     private static final String STRICT_FORM_CHECK_PROPERTY = "form.check.strict";
 
-    public static final List<ConfigurationParameter<?>> PARAMETERS = new ArrayList<>();
-
-    static {
-	PARAMETERS.add(new ConfigurationParameter<String>("Fortran Source File Patterns for Fixed Form", "",
-		LevelOfMeasurement.NOMINAL,
-		"Specifies a list of file patterns in regular expression format which are to be use to identify pre Fortran 90 fixed form sources. Each pattern is placed on its own line.",
-		String.class, FIXED_FORM_FILE_PATTERNS_PROPERTY, "/Source Files",
-		patternsToString(DEFAULT_FIXED_FORM_FILE_SUFFIXES)));
-	PARAMETERS.add(new ConfigurationParameter<String>("Fortran Source File Patterns for Free Form", "",
-		LevelOfMeasurement.NOMINAL,
-		"Specifies a list of file patterns in regular expression format which are to be use to identify Fortran 90 free form sources. Each pattern is placed on its own line.",
-		String.class, FREE_FORM_FILE_PATTERNS_PROPERTY, "/Source Files",
-		patternsToString(DEFAULT_FREE_FORM_FILE_SUFFIXES)));
-	PARAMETERS.add(new ConfigurationParameter<Boolean>("Automatic Source Form Identification", "",
-		LevelOfMeasurement.NOMINAL,
-		"If checked, the parser tries to identify the source form (fixed or free) automaticaly. Default is true, because it is cleaner to specify source form via file suffix.",
-		Boolean.class, AUTOMATIC_SOURCE_FORM_PROPERTY, "/Source Files", false));
-	PARAMETERS.add(new ConfigurationParameter<Boolean>("Use C Pre-processor", "", LevelOfMeasurement.NOMINAL,
-		"Specifies wether a C pre-processor is to be used before analysis.", Boolean.class,
-		C_PRE_PROCESSOR_USAGE_PROPERTY, "/Source Files", false));
-	PARAMETERS.add(new ConfigurationParameter<Boolean>("Strict form check", "", LevelOfMeasurement.NOMINAL,
-		"Specifies wether the source form is to be checked very strict.", Boolean.class,
-		STRICT_FORM_CHECK_PROPERTY, "/Source Files", true));
-    }
+    public static final ConfigurationParameter<?>[] PARAMETERS = new ConfigurationParameter<?>[] {
+	    new ConfigurationParameter<String>("Fortran Source File Patterns for Fixed Form", "",
+		    LevelOfMeasurement.NOMINAL,
+		    "Specifies a list of file patterns in regular expression format which are to be use to identify pre Fortran 90 fixed form sources. Each pattern is placed on its own line.",
+		    String.class, FIXED_FORM_FILE_PATTERNS_PROPERTY, "/Source Files",
+		    patternsToString(DEFAULT_FIXED_FORM_FILE_SUFFIXES)),
+	    new ConfigurationParameter<String>("Fortran Source File Patterns for Free Form", "",
+		    LevelOfMeasurement.NOMINAL,
+		    "Specifies a list of file patterns in regular expression format which are to be use to identify Fortran 90 free form sources. Each pattern is placed on its own line.",
+		    String.class, FREE_FORM_FILE_PATTERNS_PROPERTY, "/Source Files",
+		    patternsToString(DEFAULT_FREE_FORM_FILE_SUFFIXES)),
+	    new ConfigurationParameter<Boolean>("Automatic Source Form Identification", "", LevelOfMeasurement.NOMINAL,
+		    "If checked, the parser tries to identify the source form (fixed or free) automaticaly. Default is true, because it is cleaner to specify source form via file suffix.",
+		    Boolean.class, AUTOMATIC_SOURCE_FORM_PROPERTY, "/Source Files", false),
+	    new ConfigurationParameter<Boolean>("Use C Pre-processor", "", LevelOfMeasurement.NOMINAL,
+		    "Specifies wether a C pre-processor is to be used before analysis.", Boolean.class,
+		    C_PRE_PROCESSOR_USAGE_PROPERTY, "/Source Files", false),
+	    new ConfigurationParameter<Boolean>("Strict form check", "", LevelOfMeasurement.NOMINAL,
+		    "Specifies wether the source form is to be checked very strict.", Boolean.class,
+		    STRICT_FORM_CHECK_PROPERTY, "/Source Files", true) };
 
     @Inject
     private Logger logger;
@@ -108,7 +104,7 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
     }
 
     @Override
-    public List<ConfigurationParameter<?>> getConfigurationParameters() {
+    public ConfigurationParameter<?>[] getConfigurationParameters() {
 	return PARAMETERS;
     }
 

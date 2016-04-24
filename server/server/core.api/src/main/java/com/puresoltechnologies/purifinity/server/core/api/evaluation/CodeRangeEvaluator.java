@@ -2,7 +2,6 @@ package com.puresoltechnologies.purifinity.server.core.api.evaluation;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
@@ -82,9 +81,9 @@ public abstract class CodeRangeEvaluator {
      * This method returns a list with quality characteristics which might be
      * evaluated by the evaluator.
      * 
-     * @return A {@link Set} of {@link QualityCharacteristic} is returned.
+     * @return An array of {@link QualityCharacteristic} is returned.
      */
-    public abstract Set<QualityCharacteristic> getEvaluatedQualityCharacteristics();
+    public abstract QualityCharacteristic[] getQualityCharacteristics();
 
     /**
      * This method returns the analysis run which is base for the evaluation.

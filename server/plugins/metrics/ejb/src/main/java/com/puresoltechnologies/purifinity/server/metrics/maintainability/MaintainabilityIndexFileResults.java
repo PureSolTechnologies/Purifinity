@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -21,8 +20,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParame
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
 
-public class MaintainabilityIndexFileResults extends AbstractMetrics implements
-	FileMetrics {
+public class MaintainabilityIndexFileResults extends AbstractMetrics implements FileMetrics {
 
     private static final long serialVersionUID = -5901342878584699006L;
 
@@ -31,8 +29,7 @@ public class MaintainabilityIndexFileResults extends AbstractMetrics implements
     private final HashId hashId;
     private final SourceCodeLocation sourceCodeLocation;
 
-    public MaintainabilityIndexFileResults(String evaluatorId,
-	    Version evaluatorVersion, HashId hashId,
+    public MaintainabilityIndexFileResults(String evaluatorId, Version evaluatorVersion, HashId hashId,
 	    SourceCodeLocation sourceCodeLocation, Date time) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
@@ -58,7 +55,7 @@ public class MaintainabilityIndexFileResults extends AbstractMetrics implements
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return ALL;
     }
 
@@ -67,18 +64,13 @@ public class MaintainabilityIndexFileResults extends AbstractMetrics implements
 	List<GenericCodeRangeMetrics> values = new ArrayList<>();
 
 	for (MaintainabilityIndexFileResult result : results) {
-	    MaintainabilityIndexResult mi = result
-		    .getMaintainabilityIndexResult();
+	    MaintainabilityIndexResult mi = result.getMaintainabilityIndexResult();
 	    Map<String, MetricValue<?>> row = new HashMap<>();
-	    row.put(MI_WOC.getName(), new MetricValue<Double>(mi.getMIwoc(),
-		    MI_WOC));
-	    row.put(MI_CW.getName(), new MetricValue<Double>(mi.getMIcw(),
-		    MI_CW));
+	    row.put(MI_WOC.getName(), new MetricValue<Double>(mi.getMIwoc(), MI_WOC));
+	    row.put(MI_CW.getName(), new MetricValue<Double>(mi.getMIcw(), MI_CW));
 	    row.put(MI.getName(), new MetricValue<Double>(mi.getMI(), MI));
-	    values.add(new GenericCodeRangeMetrics(result
-		    .getSourceCodeLocation(), result.getCodeRangeType(), result
-		    .getCodeRangeName(),
-		    MaintainabilityIndexEvaluatorParameter.ALL, row));
+	    values.add(new GenericCodeRangeMetrics(result.getSourceCodeLocation(), result.getCodeRangeType(),
+		    result.getCodeRangeName(), MaintainabilityIndexEvaluatorParameter.ALL, row));
 	}
 	return values;
     }

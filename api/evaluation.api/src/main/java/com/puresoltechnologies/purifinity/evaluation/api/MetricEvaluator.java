@@ -1,5 +1,8 @@
 package com.puresoltechnologies.purifinity.evaluation.api;
 
+import java.util.Set;
+
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 
 /**
  * This interface describes metric evaluators which are exclusively used to
@@ -8,5 +11,12 @@ package com.puresoltechnologies.purifinity.evaluation.api;
  * @author Rick-Rainer Ludwig
  */
 public interface MetricEvaluator extends Evaluator {
+
+    /**
+     * @return A {@link Set} of {@link MetricParameter} is returned which are
+     *         calculated by this evaluator.
+     */
+    @Override
+    public MetricParameter<?>[] getParameters();
 
 }

@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -20,8 +19,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParame
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
 
-public class CodeDepthFileResults extends AbstractMetrics implements
-	FileMetrics {
+public class CodeDepthFileResults extends AbstractMetrics implements FileMetrics {
 
     private static final long serialVersionUID = 5885874850811986090L;
 
@@ -30,8 +28,8 @@ public class CodeDepthFileResults extends AbstractMetrics implements
     private final HashId hashId;
     private final SourceCodeLocation sourceCodeLocation;
 
-    public CodeDepthFileResults(String evaluatorId, Version evaluatorVersion,
-	    HashId hashId, SourceCodeLocation sourceCodeLocation, Date time) {
+    public CodeDepthFileResults(String evaluatorId, Version evaluatorVersion, HashId hashId,
+	    SourceCodeLocation sourceCodeLocation, Date time) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
 	this.sourceCodeLocation = sourceCodeLocation;
@@ -56,7 +54,7 @@ public class CodeDepthFileResults extends AbstractMetrics implements
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return ALL;
     }
 
@@ -66,13 +64,11 @@ public class CodeDepthFileResults extends AbstractMetrics implements
 
 	for (CodeDepthResult result : results) {
 	    Map<String, MetricValue<?>> row = new HashMap<>();
-	    row.put(MAX_DEPTH.getName(),
-		    new MetricValue<Integer>(result.getMaxDepth(), MAX_DEPTH));
+	    row.put(MAX_DEPTH.getName(), new MetricValue<Integer>(result.getMaxDepth(), MAX_DEPTH));
 	    Severity quality = result.getQuality();
 	    if (quality != Severity.NONE) {
-		values.add(new GenericCodeRangeMetrics(sourceCodeLocation,
-			result.getCodeRangeType(), result.getCodeRangeName(),
-			CodeDepthMetricEvaluatorParameter.ALL, row));
+		values.add(new GenericCodeRangeMetrics(sourceCodeLocation, result.getCodeRangeType(),
+			result.getCodeRangeName(), CodeDepthMetricEvaluatorParameter.ALL, row));
 	    }
 	}
 

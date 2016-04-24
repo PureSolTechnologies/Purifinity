@@ -11,7 +11,6 @@
 package com.puresoltechnologies.purifinity.server.metrics.normmaint;
 
 import java.util.List;
-import java.util.Set;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
@@ -34,16 +33,13 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
     private final HalsteadMetric halsteadMetric;
     private NormalizedMaintainabilityIndexResult result;
 
-    public NormalizedMaintainabilityIndex(AnalysisRun analysisRun,
-	    ProgrammingLanguage language, CodeRange codeRange) {
+    public NormalizedMaintainabilityIndex(AnalysisRun analysisRun, ProgrammingLanguage language, CodeRange codeRange) {
 	super(NormalizedMaintainabilityIndexEvaluator.NAME);
 	this.analysisRun = analysisRun;
 	this.codeRange = codeRange;
-	slocMetric = new SLOCMetricCalculator(analysisRun, language,
-		getCodeRange());
+	slocMetric = new SLOCMetricCalculator(analysisRun, language, getCodeRange());
 	mcCabeMetric = new McCabeMetric(analysisRun, language, getCodeRange());
-	halsteadMetric = new HalsteadMetric(analysisRun, language,
-		getCodeRange());
+	halsteadMetric = new HalsteadMetric(analysisRun, language, getCodeRange());
     }
 
     @Override
@@ -87,12 +83,9 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
 	halsteadMetric.run();
 
 	SLOCMetric sloc = slocMetric.getSLOCResult();
-	double MIwoc = 171.0 - 5.2
-		* Math.log(halsteadMetric.getHalsteadVolume()) - 0.23
-		* mcCabeMetric.getCyclomaticNumber() - 16.2
-		* Math.log(sloc.getPhyLOC() * 100.0 / 171.0);
-	double MIcw = 50 * Math.sin(Math.sqrt(2.4 * sloc.getComLOC()
-		/ sloc.getPhyLOC()));
+	double MIwoc = 171.0 - 5.2 * Math.log(halsteadMetric.getHalsteadVolume())
+		- 0.23 * mcCabeMetric.getCyclomaticNumber() - 16.2 * Math.log(sloc.getPhyLOC() * 100.0 / 171.0);
+	double MIcw = 50 * Math.sin(Math.sqrt(2.4 * sloc.getComLOC() / sloc.getPhyLOC()));
 	result = new NormalizedMaintainabilityIndexResult(MIwoc, MIcw);
 	return true;
     }
@@ -122,8 +115,7 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
      */
     @Override
     public Severity getQuality() {
-	return NormalizedMaintainabilityQuality.get(getCodeRange().getType(),
-		result);
+	return NormalizedMaintainabilityQuality.get(getCodeRange().getType(), result);
     }
 
     /**
@@ -142,7 +134,7 @@ public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
      * @return
      */
     @Override
-    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+    public QualityCharacteristic[] getQualityCharacteristics() {
 	return NormalizedMaintainabilityIndexEvaluator.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 

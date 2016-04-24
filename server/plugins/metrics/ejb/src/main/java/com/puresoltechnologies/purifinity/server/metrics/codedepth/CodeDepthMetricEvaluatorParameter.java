@@ -1,8 +1,5 @@
 package com.puresoltechnologies.purifinity.server.metrics.codedepth;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -25,9 +22,5 @@ public class CodeDepthMetricEvaluatorParameter {
 	    LevelOfMeasurement.RATIO, "Maximum nesting depth in evaluated code ranges.", Integer.class);
     public static final ParameterWithArbitraryUnit<Severity> SEVERITY = SeverityParameter.getInstance();
 
-    public static final Set<MetricParameter<?>> ALL = new HashSet<>();
-
-    static {
-	ALL.add(MAX_DEPTH);
-    }
+    public static final MetricParameter<?>[] ALL = new MetricParameter<?>[] { MAX_DEPTH };
 }

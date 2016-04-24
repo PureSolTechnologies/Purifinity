@@ -2,9 +2,7 @@ package com.puresoltechnologies.purifinity.evaluation.domain.metrics;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,33 +14,27 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
 
     private static final long serialVersionUID = -3838440751773878139L;
 
-    private final Set<MetricParameter<?>> parameters = new LinkedHashSet<>();
+    private final MetricParameter<?>[] parameters;
     private final List<GenericCodeRangeMetrics> codeRangeMetrics = new ArrayList<>();
 
     private final HashId hashId;
     private final SourceCodeLocation sourceCodeLocation;
 
-    public GenericFileMetrics(String evaluatorId, Version evaluatorVersion,
-	    HashId hashId, SourceCodeLocation sourceCodeLocation, Date time,
-	    Set<MetricParameter<?>> parameters) {
+    public GenericFileMetrics(String evaluatorId, Version evaluatorVersion, HashId hashId,
+	    SourceCodeLocation sourceCodeLocation, Date time, MetricParameter<?>[] parameters) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
 	this.sourceCodeLocation = sourceCodeLocation;
-	this.parameters.addAll(parameters);
+	this.parameters = parameters;
     }
 
     @JsonCreator
-    public GenericFileMetrics(
-	    @JsonProperty("evaluatorId") String evaluatorId,
-	    @JsonProperty("evaluatorVersion") Version evaluatorVersion,
-	    @JsonProperty("hashId") HashId hashId,
-	    @JsonProperty("sourceCodeLocation") SourceCodeLocation sourceCodeLocation,
-	    @JsonProperty("time") Date time,
-	    @JsonProperty("parameters") Set<MetricParameter<?>> parameters,
+    public GenericFileMetrics(@JsonProperty("evaluatorId") String evaluatorId,
+	    @JsonProperty("evaluatorVersion") Version evaluatorVersion, @JsonProperty("hashId") HashId hashId,
+	    @JsonProperty("sourceCodeLocation") SourceCodeLocation sourceCodeLocation, @JsonProperty("time") Date time,
+	    @JsonProperty("parameters") MetricParameter<?>[] parameters,
 	    @JsonProperty("codeRangeMetrics") List<GenericCodeRangeMetrics> codeRangeMetrics) {
-	this(evaluatorId, evaluatorVersion, hashId, sourceCodeLocation, time,
-		parameters);
-	this.parameters.addAll(parameters);
+	this(evaluatorId, evaluatorVersion, hashId, sourceCodeLocation, time, parameters);
 	this.codeRangeMetrics.addAll(codeRangeMetrics);
     }
 
@@ -61,7 +53,7 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return parameters;
     }
 
@@ -75,15 +67,9 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
 	final int prime = 31;
 	int result = super.hashCode();
 	result = prime * result + ((hashId == null) ? 0 : hashId.hashCode());
-	result = prime * result
-		+ ((parameters == null) ? 0 : parameters.hashCode());
-	result = prime
-		* result
-		+ ((sourceCodeLocation == null) ? 0 : sourceCodeLocation
-			.hashCode());
-	result = prime
-		* result
-		+ ((codeRangeMetrics == null) ? 0 : codeRangeMetrics.hashCode());
+	result = prime * result + ((parameters == null) ? 0 : parameters.hashCode());
+	result = prime * result + ((sourceCodeLocation == null) ? 0 : sourceCodeLocation.hashCode());
+	result = prime * result + ((codeRangeMetrics == null) ? 0 : codeRangeMetrics.hashCode());
 	return result;
     }
 

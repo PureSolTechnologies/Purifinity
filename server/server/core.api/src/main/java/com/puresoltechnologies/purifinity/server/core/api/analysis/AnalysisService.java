@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis;
 
 import java.util.Collection;
-import java.util.List;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.parsers.grammar.Grammar;
@@ -27,7 +26,7 @@ public interface AnalysisService {
 
     public AnalyzerServiceInformation getAnalyzer(String analyzerId);
 
-    public List<ConfigurationParameter<?>> getConfiguration(String analyzerId);
+    public ConfigurationParameter<?>[] getConfiguration(String analyzerId);
 
     public Grammar getGrammar(String analyzerId);
 

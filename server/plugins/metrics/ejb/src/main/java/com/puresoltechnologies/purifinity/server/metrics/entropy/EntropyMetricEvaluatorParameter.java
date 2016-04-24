@@ -1,8 +1,5 @@
 package com.puresoltechnologies.purifinity.server.metrics.entropy;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -39,16 +36,6 @@ public class EntropyMetricEvaluatorParameter {
 	    LevelOfMeasurement.RATIO, "Normalized redundancy", Double.class);
     public static final ParameterWithArbitraryUnit<Severity> SEVERITY = SeverityParameter.getInstance();
 
-    public static final Set<MetricParameter<?>> ALL = new HashSet<>();
-
-    static {
-	ALL.add(N_DIFF);
-	ALL.add(N_TOTAL);
-	ALL.add(S);
-	ALL.add(S_MAX);
-	ALL.add(S_NORM);
-	ALL.add(RS);
-	ALL.add(R);
-	ALL.add(R_NORM);
-    }
+    public static final MetricParameter<?>[] ALL = new MetricParameter<?>[] { N_DIFF, N_TOTAL, S, S_MAX, S_NORM, RS, R,
+	    R_NORM };
 }

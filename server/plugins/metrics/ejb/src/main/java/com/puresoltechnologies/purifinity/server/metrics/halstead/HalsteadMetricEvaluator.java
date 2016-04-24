@@ -2,7 +2,6 @@ package com.puresoltechnologies.purifinity.server.metrics.halstead;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Remote;
@@ -54,12 +53,12 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public List<ConfigurationParameter<?>> getConfigurationParameters() {
+    public ConfigurationParameter<?>[] getConfigurationParameters() {
 	return HalsteadMetric.PARAMETERS;
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return HalsteadMetricEvaluatorParameter.ALL;
     }
 
@@ -88,7 +87,7 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+    public QualityCharacteristic[] getQualityCharacteristics() {
 	return HalsteadMetric.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 

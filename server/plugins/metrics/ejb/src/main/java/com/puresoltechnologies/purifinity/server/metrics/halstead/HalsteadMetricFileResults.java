@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -16,8 +15,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParame
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
 
-public class HalsteadMetricFileResults extends AbstractHalsteadResults
-	implements FileMetrics {
+public class HalsteadMetricFileResults extends AbstractHalsteadResults implements FileMetrics {
 
     private static final long serialVersionUID = -5970030495863471269L;
 
@@ -26,8 +24,7 @@ public class HalsteadMetricFileResults extends AbstractHalsteadResults
     private final HashId hashId;
     private final SourceCodeLocation sourceCodeLocation;
 
-    public HalsteadMetricFileResults(String evaluatorId,
-	    Version evaluatorVersion, HashId hashId,
+    public HalsteadMetricFileResults(String evaluatorId, Version evaluatorVersion, HashId hashId,
 	    SourceCodeLocation sourceCodeLocation, Date time) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
@@ -53,7 +50,7 @@ public class HalsteadMetricFileResults extends AbstractHalsteadResults
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return ALL;
     }
 
@@ -62,10 +59,8 @@ public class HalsteadMetricFileResults extends AbstractHalsteadResults
 	List<GenericCodeRangeMetrics> values = new ArrayList<>();
 	for (HalsteadMetricResult result : results) {
 	    Map<String, MetricValue<?>> row = convertToRow(result);
-	    values.add(new GenericCodeRangeMetrics(result
-		    .getSourceCodeLocation(), result.getCodeRangeType(), result
-		    .getCodeRangeName(), HalsteadMetricEvaluatorParameter.ALL,
-		    row));
+	    values.add(new GenericCodeRangeMetrics(result.getSourceCodeLocation(), result.getCodeRangeType(),
+		    result.getCodeRangeName(), HalsteadMetricEvaluatorParameter.ALL, row));
 	}
 	return values;
     }

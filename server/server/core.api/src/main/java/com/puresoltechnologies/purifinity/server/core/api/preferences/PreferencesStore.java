@@ -1,7 +1,5 @@
 package com.puresoltechnologies.purifinity.server.core.api.preferences;
 
-import java.util.List;
-
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 
 /**
@@ -11,13 +9,13 @@ import com.puresoltechnologies.commons.domain.ConfigurationParameter;
  */
 public interface PreferencesStore {
 
-    public List<ConfigurationParameter<?>> getSystemParameters();
+    public ConfigurationParameter<?>[] getSystemParameters();
 
-    public List<ConfigurationParameter<?>> getUserDefaultParameters();
+    public ConfigurationParameter<?>[] getUserDefaultParameters();
 
-    public List<ConfigurationParameter<?>> getPluginDefaultParameters(String pluginId);
+    public ConfigurationParameter<?>[] getPluginDefaultParameters(String pluginId);
 
-    public List<ConfigurationParameter<?>> getPluginProjectParameters(String projectId, String pluginId);
+    public ConfigurationParameter<?>[] getPluginProjectParameters(String projectId, String pluginId);
 
     /**
      * This method reads a preference value from the system store.

@@ -5,9 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
@@ -59,22 +57,22 @@ public class PreferencesStoreImpl implements PreferencesStore {
     private Event<SystemPreferenceChangeEvent> event;
 
     @Override
-    public List<ConfigurationParameter<?>> getSystemParameters() {
+    public ConfigurationParameter<?>[] getSystemParameters() {
 	return purifinityConfiguration.getParameters();
     }
 
     @Override
-    public List<ConfigurationParameter<?>> getUserDefaultParameters() {
+    public ConfigurationParameter<?>[] getUserDefaultParameters() {
 	return userConfiguration.getDefaultParameters();
     }
 
     @Override
-    public List<ConfigurationParameter<?>> getPluginProjectParameters(String projectId, String pluginId) {
+    public ConfigurationParameter<?>[] getPluginProjectParameters(String projectId, String pluginId) {
 	return getPluginDefaultParameters(pluginId);
     }
 
     @Override
-    public List<ConfigurationParameter<?>> getPluginDefaultParameters(String pluginId) {
+    public ConfigurationParameter<?>[] getPluginDefaultParameters(String pluginId) {
 	ProgrammingLanguageAnalyzer analyzer = analyzerServiceManager.getInstanceById(pluginId);
 	if (analyzer != null) {
 	    return analyzer.getConfigurationParameters();
@@ -87,7 +85,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 	if (repository != null) {
 	    return repository.getConfigurationParameters();
 	}
-	return new ArrayList<>();
+	return new ConfigurationParameter<?>[] {};
     }
 
     @Override

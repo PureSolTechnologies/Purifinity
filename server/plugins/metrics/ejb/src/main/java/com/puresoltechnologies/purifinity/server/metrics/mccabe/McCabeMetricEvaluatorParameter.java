@@ -1,8 +1,5 @@
 package com.puresoltechnologies.purifinity.server.metrics.mccabe;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -25,9 +22,5 @@ public class McCabeMetricEvaluatorParameter {
 	    "McCabe's cyclomatic complexity for evaluated code range.", Integer.class);
     public static final ParameterWithArbitraryUnit<Severity> SEVERITY = SeverityParameter.getInstance();
 
-    public static final Set<MetricParameter<?>> ALL = new HashSet<>();
-
-    static {
-	ALL.add(VG);
-    }
+    public static final MetricParameter<?>[] ALL = new MetricParameter<?>[] { VG };
 }

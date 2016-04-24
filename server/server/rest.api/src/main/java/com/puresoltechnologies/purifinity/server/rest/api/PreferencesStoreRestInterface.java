@@ -1,7 +1,5 @@
 package com.puresoltechnologies.purifinity.server.rest.api;
 
-import java.util.List;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -22,7 +20,7 @@ public interface PreferencesStoreRestInterface {
     @Path("system")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
-    public List<ConfigurationParameter<?>> getSystemParameters();
+    public ConfigurationParameter<?>[] getSystemParameters();
 
     @PUT
     @Path("system/{key}")
@@ -39,7 +37,7 @@ public interface PreferencesStoreRestInterface {
     @Path("plugins/{pluginId}")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
-    public List<ConfigurationParameter<?>> getPluginDefaultParameters(@PathParam("pluginId") String pluginId);
+    public ConfigurationParameter<?>[] getPluginDefaultParameters(@PathParam("pluginId") String pluginId);
 
     @PUT
     @Path("plugins/{pluginId}/{key}")
@@ -57,7 +55,7 @@ public interface PreferencesStoreRestInterface {
     @Path("projects/{projectId}/{pluginId}")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
-    public List<ConfigurationParameter<?>> getPluginProjectParameters(@PathParam("projectId") String projectId,
+    public ConfigurationParameter<?>[] getPluginProjectParameters(@PathParam("projectId") String projectId,
 	    @PathParam("pluginId") String pluginId);
 
     @GET
@@ -82,7 +80,7 @@ public interface PreferencesStoreRestInterface {
     @Path("users")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
-    public List<ConfigurationParameter<?>> getUserDefaultParameters();
+    public ConfigurationParameter<?>[] getUserDefaultParameters();
 
     @PUT
     @Path("users/{key}")
@@ -99,7 +97,7 @@ public interface PreferencesStoreRestInterface {
     @Path("users/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
-    public List<ConfigurationParameter<?>> getUserParameters(@PathParam("userId") String userId);
+    public ConfigurationParameter<?>[] getUserParameters(@PathParam("userId") String userId);
 
     @PUT
     @Path("users/{userId}/{key}")

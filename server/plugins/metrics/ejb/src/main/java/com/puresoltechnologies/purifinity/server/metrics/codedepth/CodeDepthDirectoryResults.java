@@ -6,7 +6,6 @@ import static com.puresoltechnologies.purifinity.server.metrics.codedepth.CodeDe
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -17,8 +16,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParame
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
 
-public class CodeDepthDirectoryResults extends AbstractMetrics implements
-	DirectoryMetrics {
+public class CodeDepthDirectoryResults extends AbstractMetrics implements DirectoryMetrics {
 
     private static final long serialVersionUID = 5885874850811986090L;
 
@@ -28,10 +26,8 @@ public class CodeDepthDirectoryResults extends AbstractMetrics implements
     private final String codeRangeName;
     private int maxDepth;
 
-    public CodeDepthDirectoryResults(String evaluatorId,
-	    Version evaluatorVersion, HashId hashId, Date time,
-	    SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
-	    String codeRangeName) {
+    public CodeDepthDirectoryResults(String evaluatorId, Version evaluatorVersion, HashId hashId, Date time,
+	    SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType, String codeRangeName) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
 	this.sourceCodeLocation = sourceCodeLocation;
@@ -65,15 +61,14 @@ public class CodeDepthDirectoryResults extends AbstractMetrics implements
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return ALL;
     }
 
     @Override
     public Map<String, MetricValue<?>> getValues() {
 	Map<String, MetricValue<?>> values = new HashMap<>();
-	values.put(MAX_DEPTH.getName(), new MetricValue<Integer>(maxDepth,
-		MAX_DEPTH));
+	values.put(MAX_DEPTH.getName(), new MetricValue<Integer>(maxDepth, MAX_DEPTH));
 	return values;
     }
 

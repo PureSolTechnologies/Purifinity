@@ -2,7 +2,6 @@ package com.puresoltechnologies.purifinity.server.rest.api;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -46,7 +45,7 @@ public interface AnalysisRestInterface {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("analyzers/{id}/configuration")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
-    public List<ConfigurationParameter<?>> getConfiguration(@PathParam("id") String analyzerId);
+    public ConfigurationParameter<?>[] getConfiguration(@PathParam("id") String analyzerId);
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

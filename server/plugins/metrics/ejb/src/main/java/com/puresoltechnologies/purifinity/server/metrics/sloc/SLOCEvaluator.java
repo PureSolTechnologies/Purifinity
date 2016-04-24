@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Remote;
@@ -77,12 +76,12 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public List<ConfigurationParameter<?>> getConfigurationParameters() {
+    public ConfigurationParameter<?>[] getConfigurationParameters() {
 	return SLOCMetricCalculator.PARAMETERS;
     }
 
     @Override
-    public Set<MetricParameter<?>> getParameters() {
+    public MetricParameter<?>[] getParameters() {
 	return SLOCEvaluatorParameter.ALL;
     }
 
@@ -121,7 +120,7 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    public Set<QualityCharacteristic> getEvaluatedQualityCharacteristics() {
+    public QualityCharacteristic[] getQualityCharacteristics() {
 	return SLOCMetricCalculator.EVALUATED_QUALITY_CHARACTERISTICS;
     }
 

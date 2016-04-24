@@ -1,8 +1,5 @@
 package com.puresoltechnologies.purifinity.server.metrics.maintainability;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -29,11 +26,5 @@ public class MaintainabilityIndexEvaluatorParameter {
 	    "Maintainability index including comments", Double.class);
     public static final ParameterWithArbitraryUnit<Severity> SEVERITY = SeverityParameter.getInstance();
 
-    public static final Set<MetricParameter<?>> ALL = new HashSet<MetricParameter<?>>();
-
-    static {
-	ALL.add(MI_WOC);
-	ALL.add(MI_CW);
-	ALL.add(MI);
-    }
+    public static final MetricParameter<?>[] ALL = new MetricParameter<?>[] { MI_WOC, MI_CW, MI };
 }
