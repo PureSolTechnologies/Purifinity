@@ -21,7 +21,7 @@ public class PreferencesStoreConnectionProducer {
     @Produces
     @Singleton
     @PreferencesStoreConnection
-    public Connection getAnalysisSession() {
+    public Connection getPreferencesStoreSession() {
 	try {
 	    logger.info("Creating HBase PreferencesStore Connection...");
 	    Connection connection = HBaseHelper.connect();
@@ -32,7 +32,7 @@ public class PreferencesStoreConnectionProducer {
 	}
     }
 
-    public void closeAnalysisKeyspaceSession(@Disposes @PreferencesStoreConnection Connection connection) {
+    public void closePreferencesStoreSession(@Disposes @PreferencesStoreConnection Connection connection) {
 	try {
 	    connection.close();
 	} catch (SQLException e) {

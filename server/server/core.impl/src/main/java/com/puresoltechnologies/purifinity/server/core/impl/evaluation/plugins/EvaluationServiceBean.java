@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
@@ -13,7 +13,7 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorSe
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
-@Stateless
+@ApplicationScoped
 public class EvaluationServiceBean implements EvaluationService {
 
     @Inject

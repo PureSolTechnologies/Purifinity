@@ -29,6 +29,7 @@ import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPref
 public class AuthServiceBean implements AuthService {
 
     private static final int MINUTES_TO_MILLISECONDS = 60000;
+
     @Inject
     private Logger logger;
 
@@ -40,6 +41,7 @@ public class AuthServiceBean implements AuthService {
 
     // An authentication token storage which stores <auth_token>.
     private final Map<UUID, EmailAddress> authorizationTokensStorage = new HashMap<>();
+    private final Map<UUID, User> users = new HashMap<>();
     private final Map<UUID, Date> sessionStarts = new HashMap<>();
     private final Map<UUID, Date> lastActivities = new HashMap<>();
 
@@ -91,6 +93,7 @@ public class AuthServiceBean implements AuthService {
 	    authorizationTokensStorage.remove(authToken);
 	    lastActivities.remove(authToken);
 	    sessionStarts.remove(authToken);
+	    users.remove(authToken);
 	} else {
 	    throw new LoginException(
 		    "User '" + email + "' could not be logged out. User was either not logged in or is unknown.");
@@ -125,7 +128,13 @@ public class AuthServiceBean implements AuthService {
     private User findByEmailAndAuthToken(EmailAddress email, UUID authToken) {
 	EmailAddress userId = authorizationTokensStorage.get(authToken);
 	if ((userId != null) && (userId.equals(email))) {
-	    return accountManager.getUser(email);
+	    User user = users.get(authToken);
+	    if (user != null) {
+		return user;
+	    }
+	    user = accountManager.getUser(email);
+	    users.put(authToken, user);
+	    return user;
 	}
 	return null;
     }

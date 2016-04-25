@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.Date;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
@@ -27,7 +28,9 @@ import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPref
 import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChangeEvent;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManager;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBasePreparedStatements;
 
+@ApplicationScoped
 public class PreferencesStoreImpl implements PreferencesStore {
 
     @Inject
@@ -36,6 +39,9 @@ public class PreferencesStoreImpl implements PreferencesStore {
     @Inject
     @PreferencesStoreConnection
     private Connection connection;
+
+    @Inject
+    private HBasePreparedStatements preparedStatements;
 
     @Inject
     private PurifinityConfiguration purifinityConfiguration;
@@ -90,9 +96,9 @@ public class PreferencesStoreImpl implements PreferencesStore {
 
     @Override
     public <T> PreferencesValue<T> getSystemPreference(ConfigurationParameter<T> configurationParameter) {
-	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("SELECT changed, changed_by, setting FROM "
-			+ HBaseElementNames.SYSTEM_PREFERENCES_TABLE + " WHERE name=?")) {
+	try (PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		"SELECT changed, changed_by, setting FROM " + HBaseElementNames.SYSTEM_PREFERENCES_TABLE
+			+ " WHERE name=?")) {
 	    preparedStatement.setString(1, configurationParameter.getPropertyKey());
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
 		if (!resultSet.next()) {
@@ -114,8 +120,8 @@ public class PreferencesStoreImpl implements PreferencesStore {
     }
 
     private void setSystemPreferenceDB(ConfigurationParameter<?> parameter, String value) {
-	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("UPSERT INTO " + HBaseElementNames.SYSTEM_PREFERENCES_TABLE
+	try (PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		"UPSERT INTO " + HBaseElementNames.SYSTEM_PREFERENCES_TABLE
 			+ " (changed, changed_by, name, setting) VALUES (?, ?, ?, ?)")) {
 	    preparedStatement.setTime(1, new Time(new Date().getTime()));
 	    preparedStatement.setString(2, "n/a");
@@ -146,9 +152,9 @@ public class PreferencesStoreImpl implements PreferencesStore {
     @Override
     public <T> PreferencesValue<T> getPluginDefaultPreference(String pluginId,
 	    ConfigurationParameter<T> configurationParameter) {
-	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("SELECT changed, changed_by, setting FROM "
-			+ HBaseElementNames.PLUGIN_DEFAULTS_PREFERENCES_TABLE + " WHERE plugin_id=? AND name=?")) {
+	try (PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		"SELECT changed, changed_by, setting FROM " + HBaseElementNames.PLUGIN_DEFAULTS_PREFERENCES_TABLE
+			+ " WHERE plugin_id=? AND name=?")) {
 	    preparedStatement.setString(1, pluginId);
 	    preparedStatement.setString(2, configurationParameter.getPropertyKey());
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -168,8 +174,8 @@ public class PreferencesStoreImpl implements PreferencesStore {
     @Override
     public <T> void setPluginDefaultPreference(String pluginId, ConfigurationParameter<T> configurationParameter,
 	    T value) {
-	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("UPSERT INTO " + HBaseElementNames.PLUGIN_DEFAULTS_PREFERENCES_TABLE
+	try (PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		"UPSERT INTO " + HBaseElementNames.PLUGIN_DEFAULTS_PREFERENCES_TABLE
 			+ " (changed, changed_by, plugin_id, name, setting) VALUES (?, ?, ?, ?, ?)")) {
 	    preparedStatement.setTime(1, new Time(new Date().getTime()));
 	    preparedStatement.setString(2, "n/a");
@@ -198,7 +204,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
     @Override
     public <T> PreferencesValue<T> getPluginProjectPreference(String projectId, String pluginId,
 	    ConfigurationParameter<T> configurationParameter) {
-	try (PreparedStatement preparedStatement = connection.prepareStatement(
+	try (PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
 		"SELECT changed, changed_by, setting FROM " + HBaseElementNames.PLUGIN_PREFERENCES_TABLE
 			+ " WHERE project_id=? AND plugin_id=? AND name=?")) {
 	    preparedStatement.setString(1, projectId);
@@ -220,7 +226,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 
     @Override
     public void deletePluginProjectParameter(String projectId, String pluginId, String key) {
-	try (PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM "
+	try (PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection, "DELETE FROM "
 		+ HBaseElementNames.PLUGIN_PREFERENCES_TABLE + " WHERE project_id=? AND plugin_id=? AND name=?")) {
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setString(2, pluginId);
@@ -240,8 +246,8 @@ public class PreferencesStoreImpl implements PreferencesStore {
     @Override
     public <T> void setPluginProjectPreference(String projectId, String pluginId,
 	    ConfigurationParameter<T> configurationParameter, T value) {
-	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("UPSERT INTO " + HBaseElementNames.PLUGIN_PREFERENCES_TABLE
+	try (PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		"UPSERT INTO " + HBaseElementNames.PLUGIN_PREFERENCES_TABLE
 			+ " (changed, changed_by, project_id, plugin_id, name, setting) VALUES (?, ?, ?, ?, ?, ?)")) {
 	    preparedStatement.setTime(1, new Time(new Date().getTime()));
 	    preparedStatement.setString(2, "n/a");
@@ -271,7 +277,7 @@ public class PreferencesStoreImpl implements PreferencesStore {
 
     @Override
     public boolean isServiceActive(String serviceId) {
-	try (PreparedStatement preparedStatement = connection.prepareStatement(
+	try (PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
 		"SELECT activated FROM " + HBaseElementNames.SERVICE_ACTIVATION_TABLE + " where service_id=?")) {
 	    preparedStatement.setString(1, serviceId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -287,8 +293,8 @@ public class PreferencesStoreImpl implements PreferencesStore {
 
     @Override
     public void setServiceActive(String serviceId, boolean active) {
-	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("UPSERT INTO  " + HBaseElementNames.SERVICE_ACTIVATION_TABLE
+	try (PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		"UPSERT INTO  " + HBaseElementNames.SERVICE_ACTIVATION_TABLE
 			+ " (changed, changed_by, service_id, activated) VALUES (?, ?, ?, ?)")) {
 	    preparedStatement.setTime(1, new Time(new Date().getTime()));
 	    preparedStatement.setString(2, "n/a");
