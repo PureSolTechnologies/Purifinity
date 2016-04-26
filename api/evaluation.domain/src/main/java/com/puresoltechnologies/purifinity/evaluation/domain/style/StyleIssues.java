@@ -6,7 +6,7 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.evaluation.domain.EvaluationResults;
 
-public interface StyleResult extends EvaluationResults {
+public interface StyleIssues extends EvaluationResults {
 
     /**
      * This method returns the {@link HashId} of the file for which the style

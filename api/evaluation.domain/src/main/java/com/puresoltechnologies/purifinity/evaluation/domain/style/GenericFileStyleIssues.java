@@ -10,7 +10,7 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericFileStyleIssues extends AbstractStyleResults {
+public class GenericFileStyleIssues extends AbstractStyleIssues {
 
     private static final long serialVersionUID = -2265405120665928206L;
 

@@ -1,7 +1,8 @@
-package com.puresoltechnologies.purifinity.evaluation.api;
+package com.puresoltechnologies.purifinity.evaluation.api.metrics;
 
 import java.util.Set;
 
+import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 
 /**
