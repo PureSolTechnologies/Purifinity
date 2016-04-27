@@ -70,13 +70,15 @@ public class FileTreeSearch {
     private static FileTree getFileTree(File directory, FileTree fileTree, List<Pattern> dirIncludes,
 	    List<Pattern> dirExcludes, List<Pattern> fileIncludes, List<Pattern> fileExcludes, boolean ignoreHidden) {
 	String[] fileNames = directory.list();
-	for (String fileName : fileNames) {
-	    File file = new File(directory, fileName);
-	    if (file.isDirectory() && use(fileName, file.isHidden(), dirIncludes, dirExcludes, ignoreHidden)) {
-		FileTree fileSubTree = new FileTree(fileTree, fileName);
-		getFileTree(file, fileSubTree, dirIncludes, dirExcludes, fileIncludes, fileExcludes, ignoreHidden);
-	    } else if (file.isFile() && use(fileName, file.isHidden(), fileIncludes, fileExcludes, ignoreHidden)) {
-		new FileTree(fileTree, fileName);
+	if (fileNames != null) {
+	    for (String fileName : fileNames) {
+		File file = new File(directory, fileName);
+		if (file.isDirectory() && use(fileName, file.isHidden(), dirIncludes, dirExcludes, ignoreHidden)) {
+		    FileTree fileSubTree = new FileTree(fileTree, fileName);
+		    getFileTree(file, fileSubTree, dirIncludes, dirExcludes, fileIncludes, fileExcludes, ignoreHidden);
+		} else if (file.isFile() && use(fileName, file.isHidden(), fileIncludes, fileExcludes, ignoreHidden)) {
+		    new FileTree(fileTree, fileName);
+		}
 	    }
 	}
 	return fileTree;

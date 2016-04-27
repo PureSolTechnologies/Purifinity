@@ -29,9 +29,9 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirec
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStore;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
-import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 /**
@@ -101,7 +101,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 		CodeDepthMetric.PLUGIN_VERSION, directory.getHashId(), new Date(), new UnspecifiedSourceCodeLocation(),
 		CodeRangeType.DIRECTORY, directory.getName());
 	int maxDepth = 0;
-	EvaluatorStore evaluatorStore = getEvaluatorStore();
+	EvaluatorMetricsStore evaluatorStore = getEvaluatorStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    if (child.isFile()) {
 		GenericFileMetrics fileResults = evaluatorStore.readFileResults(child.getHashId(), CodeDepthMetric.ID);

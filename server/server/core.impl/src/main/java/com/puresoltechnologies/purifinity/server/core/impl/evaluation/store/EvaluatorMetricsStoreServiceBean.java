@@ -42,8 +42,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParame
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.common.SourceCodeLocationCreator;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreServiceRemote;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.EvaluatorStoreConnection;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 import com.puresoltechnologies.versioning.Version;
@@ -54,7 +54,8 @@ import com.puresoltechnologies.versioning.Version;
  * @author Rick-Rainer Ludwig
  */
 @Stateless
-public class EvaluatorStoreServiceBean implements EvaluatorStoreService, EvaluatorStoreServiceRemote {
+public class EvaluatorMetricsStoreServiceBean
+	implements EvaluatorMetricsStoreService, EvaluatorMetricsStoreServiceRemote {
 
     @Inject
     private Logger logger;
@@ -213,7 +214,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 	    throws EvaluationStoreException {
 	try {
 	    storeFileMetricsAsValues(analysisRun, codeAnalysis, metrics);
-	    storeMetricsInBigTable(analysisRun, codeAnalysis, metrics);
+	    storeFileMetricsInBigTable(analysisRun, codeAnalysis, metrics);
 	    connection.commit();
 	} catch (SQLException e) {
 	    try {
@@ -284,8 +285,8 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     }
 
     @Override
-    public void storeMetricsInBigTable(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, GenericFileMetrics metrics)
-	    throws EvaluationStoreException {
+    public void storeFileMetricsInBigTable(AnalysisRun analysisRun, CodeAnalysis codeAnalysis,
+	    GenericFileMetrics metrics) throws EvaluationStoreException {
 	try {
 	    storeMetricsInBigTableWithoutCommit(analysisRun, codeAnalysis, metrics);
 	    connection.commit();
@@ -377,7 +378,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 	    GenericDirectoryMetrics metrics) throws EvaluationStoreException {
 	try {
 	    storeDirectoryMetricsAsValues(analysisRun, directory, metrics);
-	    storeMetricsInBigTable(analysisRun, directory, metrics);
+	    storeDirectoryMetricsInBigTable(analysisRun, directory, metrics);
 	    connection.commit();
 	} catch (SQLException e) {
 	    try {
@@ -435,7 +436,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     }
 
     @Override
-    public void storeMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
+    public void storeDirectoryMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    GenericDirectoryMetrics metrics) throws EvaluationStoreException {
 	try {
 	    storeMetricsInBigTableWithoutCommit(analysisRun, directory, metrics);
@@ -505,7 +506,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
 	    throws EvaluationStoreException {
 	try {
 	    storeProjectMetricsAsValues(analysisRun, directory, metrics);
-	    storeMetricsInBigTable(analysisRun, directory, metrics);
+	    storeProjectMetricsInBigTable(analysisRun, directory, metrics);
 	    connection.commit();
 	} catch (SQLException e) {
 	    try {
@@ -559,7 +560,7 @@ public class EvaluatorStoreServiceBean implements EvaluatorStoreService, Evaluat
     }
 
     @Override
-    public void storeMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
+    public void storeProjectMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    GenericProjectMetrics metrics) throws EvaluationStoreException {
 	try {
 	    storeMetricsInBigTableWithoutCommit(analysisRun, directory, metrics);

@@ -24,7 +24,7 @@ import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacte
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
-import com.puresoltechnologies.purifinity.server.metrics.AbstractMetricEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.cocomo.intermediate.db.IntermediateCoCoMoEvaluatorDAO;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCResult;

@@ -15,8 +15,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
-import com.puresoltechnologies.purifinity.evaluation.api.defects.DefectEvaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
@@ -25,12 +23,14 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileM
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProjectMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.defects.AbstractDefectEvaluator;
 import com.puresoltechnologies.versioning.Version;
 
 @Stateless
 @Remote(Evaluator.class)
-public class FortranDefectEvaluator extends AbstractEvaluator implements DefectEvaluator {
+public class FortranDefectEvaluator extends AbstractDefectEvaluator {
 
     public static final String ID = FortranDefectEvaluator.class.getName();
     public static final String NAME = "Fortran Defect Evaluator";
@@ -42,7 +42,7 @@ public class FortranDefectEvaluator extends AbstractEvaluator implements DefectE
     public static final Set<String> DEPENDENCIES = new HashSet<>();
 
     public FortranDefectEvaluator() {
-	super(ID, NAME, PLUGIN_VERSION, EvaluatorType.DEFECTS, DESCRIPTION);
+	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
     }
 
     @Override
@@ -130,24 +130,26 @@ public class FortranDefectEvaluator extends AbstractEvaluator implements DefectE
     }
 
     @Override
-    protected FileMetrics processFile(AnalysisRun analysisRun, CodeAnalysis analysis)
-	    throws InterruptedException, UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    protected DirectoryMetrics processDirectory(AnalysisRun analysisRun, AnalysisFileTree directory)
-	    throws InterruptedException, EvaluationStoreException {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
     protected DirectoryMetrics processProject(AnalysisRun analysisRun, boolean enableReevaluation)
 	    throws InterruptedException, EvaluationStoreException {
 	// TODO Auto-generated method stub
 	return null;
+    }
+
+    @Override
+    protected void processAsFile(AnalysisRun analysisRun, AnalysisFileTree fileNode, boolean enableReevaluation)
+	    throws FileStoreException, InterruptedException, UniversalSyntaxTreeEvaluationException,
+	    EvaluationStoreException {
+	// TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void processAsDirectory(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
+	    boolean enableReevaluation) throws FileStoreException, InterruptedException,
+		    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
+	// TODO Auto-generated method stub
+
     }
 
 }

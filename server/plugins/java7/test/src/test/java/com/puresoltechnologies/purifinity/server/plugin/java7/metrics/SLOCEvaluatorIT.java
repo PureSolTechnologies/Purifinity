@@ -21,7 +21,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileM
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.store.EvaluatorStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreService;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluatorParameter;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
@@ -41,7 +41,7 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
     private FileStoreService fileStore;
 
     @Inject
-    private EvaluatorStoreService evaluatorStore;
+    private EvaluatorMetricsStoreService evaluatorStore;
 
     public SLOCEvaluatorIT() {
 	super(testProjectDir, new TestFileSearchConfiguration());

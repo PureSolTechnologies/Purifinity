@@ -25,6 +25,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileM
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProjectMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
 import com.puresoltechnologies.versioning.Version;
 
@@ -130,24 +132,26 @@ public class FortranDesignEvaluator extends AbstractEvaluator implements DesignE
     }
 
     @Override
-    protected FileMetrics processFile(AnalysisRun analysisRun, CodeAnalysis analysis)
-	    throws InterruptedException, UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    protected DirectoryMetrics processDirectory(AnalysisRun analysisRun, AnalysisFileTree directory)
-	    throws InterruptedException, EvaluationStoreException {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
     protected DirectoryMetrics processProject(AnalysisRun analysisRun, boolean enableReevaluation)
 	    throws InterruptedException, EvaluationStoreException {
 	// TODO Auto-generated method stub
 	return null;
+    }
+
+    @Override
+    protected void processAsFile(AnalysisRun analysisRun, AnalysisFileTree fileNode, boolean enableReevaluation)
+	    throws FileStoreException, InterruptedException, UniversalSyntaxTreeEvaluationException,
+	    EvaluationStoreException {
+	// TODO Auto-generated method stub
+
+    }
+
+    @Override
+    protected void processAsDirectory(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
+	    boolean enableReevaluation) throws FileStoreException, InterruptedException,
+		    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
+	// TODO Auto-generated method stub
+
     }
 
 }
