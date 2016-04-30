@@ -15,8 +15,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
-import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
-import com.puresoltechnologies.purifinity.evaluation.api.desgin.DesignEvaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
@@ -27,12 +25,12 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParame
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.design.AbstractDesignEvaluator;
 import com.puresoltechnologies.versioning.Version;
 
 @Stateless
 @Remote(Evaluator.class)
-public class FortranDesignEvaluator extends AbstractEvaluator implements DesignEvaluator {
+public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 
     public static final String ID = FortranDesignEvaluator.class.getName();
     public static final String NAME = "Fortran Design Evaluator";
@@ -44,7 +42,7 @@ public class FortranDesignEvaluator extends AbstractEvaluator implements DesignE
     public static final Set<String> DEPENDENCIES = new HashSet<>();
 
     public FortranDesignEvaluator() {
-	super(ID, NAME, PLUGIN_VERSION, EvaluatorType.DESGIN, DESCRIPTION);
+	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
     }
 
     @Override
@@ -65,7 +63,6 @@ public class FortranDesignEvaluator extends AbstractEvaluator implements DesignE
     @Override
     public void setConfigurationParameter(ConfigurationParameter<?> parameter, Object value) {
 	// TODO Auto-generated method stub
-
     }
 
     @Override
