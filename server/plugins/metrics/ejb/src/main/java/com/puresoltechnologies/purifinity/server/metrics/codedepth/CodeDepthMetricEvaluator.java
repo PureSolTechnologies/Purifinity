@@ -101,7 +101,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 		CodeDepthMetric.PLUGIN_VERSION, directory.getHashId(), new Date(), new UnspecifiedSourceCodeLocation(),
 		CodeRangeType.DIRECTORY, directory.getName());
 	int maxDepth = 0;
-	EvaluatorMetricsStore evaluatorStore = getEvaluatorStore();
+	EvaluatorMetricsStore evaluatorStore = getMetricStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    if (child.isFile()) {
 		GenericFileMetrics fileResults = evaluatorStore.readFileResults(child.getHashId(), CodeDepthMetric.ID);

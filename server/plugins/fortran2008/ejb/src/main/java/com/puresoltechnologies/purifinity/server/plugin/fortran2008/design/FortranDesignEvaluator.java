@@ -1,14 +1,19 @@
 package com.puresoltechnologies.purifinity.server.plugin.fortran2008.design;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
@@ -26,6 +31,10 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetri
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.design.AbstractDesignEvaluator;
+import com.puresoltechnologies.purifinity.server.plugin.fortran2008.FortranPlugin;
+import com.puresoltechnologies.trees.TreeVisitor;
+import com.puresoltechnologies.trees.TreeWalker;
+import com.puresoltechnologies.trees.WalkingAction;
 import com.puresoltechnologies.versioning.Version;
 
 @Stateless
@@ -40,6 +49,9 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
     public static final ConfigurationParameter<?>[] CONFIGURATION_PARAMETERS = new ConfigurationParameter[] {};
     public static final MetricParameter<?>[] PARAMETERS = new MetricParameter[] {};
     public static final Set<String> DEPENDENCIES = new HashSet<>();
+
+    @Inject
+    private Logger logger;
 
     public FortranDesignEvaluator() {
 	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
@@ -139,7 +151,57 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
     protected void processAsFile(AnalysisRun analysisRun, AnalysisFileTree fileNode, boolean enableReevaluation)
 	    throws FileStoreException, InterruptedException, UniversalSyntaxTreeEvaluationException,
 	    EvaluationStoreException {
-	// TODO Auto-generated method stub
+	HashId hashId = fileNode.getHashId();
+	CodeAnalysis analysis = getFileStore().loadAnalysis(hashId, FortranPlugin.INFORMATION.getId(),
+		FortranPlugin.INFORMATION.getVersion());
+	if (analysis == null) {
+	    return;
+	}
+	UniversalSyntaxTree universalSyntaxTree = analysis.getUniversalSyntaxTree();
+	checkForImplicitIssues(universalSyntaxTree);
+    }
+
+    private void checkForImplicitIssues(UniversalSyntaxTree universalSyntaxTree) {
+	TreeWalker.walk(new ImplicitVisitor(), universalSyntaxTree);
+    }
+
+    private class ImplicitVisitor implements TreeVisitor<UniversalSyntaxTree> {
+
+	@Override
+	public WalkingAction visit(UniversalSyntaxTree node) {
+	    if (!"specification-part".equals(node.getName())) {
+		return WalkingAction.PROCEED;
+	    }
+	    boolean hasImplicitNone = false;
+	    boolean hasImplicit = false;
+	    int implicitCount = 0;
+	    List<UniversalSyntaxTree> implicitPartStatements = node.getChildren("implicit-part-stmt");
+	    for (UniversalSyntaxTree implicitPartStatement : implicitPartStatements) {
+		List<UniversalSyntaxTree> implicitStatements = implicitPartStatement.getChildren("implicit-stmt");
+		for (UniversalSyntaxTree implicitStatement : implicitStatements) {
+		    ++implicitCount;
+		    for (UniversalSyntaxTree implicitStamentChild : implicitStatement.getChildren()) {
+			if ("NONE".equalsIgnoreCase(implicitStamentChild.getContent())) {
+			    hasImplicitNone = true;
+			    break;
+			} else if ("implicit-spec-list".equals(implicitStamentChild.getName())) {
+			    hasImplicit = true;
+			    break;
+			}
+		    }
+		}
+	    }
+	    if (implicitCount == 0) {
+		// TODO add design issue for missing IMPLICIT NONE
+	    } else if (hasImplicit) {
+		if (hasImplicitNone) {
+		    // TODO add design issue for used IMPLICIT and IMPLICIT NONE
+		} else {
+		    // TODO add design issue for used IMPLICIT
+		}
+	    }
+	    return WalkingAction.LEAVE_BRANCH;
+	}
 
     }
 
@@ -147,8 +209,7 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
     protected void processAsDirectory(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
 	    boolean enableReevaluation) throws FileStoreException, InterruptedException,
 		    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
-	// TODO Auto-generated method stub
-
+	// intentionally left empty; designs cannot be evaluated on directories
     }
 
 }

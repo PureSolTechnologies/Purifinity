@@ -6,6 +6,7 @@ import java.util.List;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCode;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.versioning.Version;
 
 /**
  * This is the interface for a file store. The filess are stored by id and the
@@ -85,6 +86,21 @@ public interface FileStore {
      *             is thrown in cases of issues with file store.
      */
     public List<CodeAnalysis> loadAnalyzes(HashId hashId) throws FileStoreException;
+
+    /**
+     * Loads a single analysis for a given analyzer.
+     * 
+     * @param hashId
+     *            is the hash id of the file to look a analysis up.
+     * @param analyzerId
+     *            is the analyzer id for which the analysis is to be found.
+     * @param version
+     *            is the version of the analyzer.
+     * @return A {@link CodeAnalysis} object is returned.
+     * @throws FileStoreException
+     *             is thrown in case of file store issue.
+     */
+    public CodeAnalysis loadAnalysis(HashId hashId, String analyzerId, Version version) throws FileStoreException;
 
     /**
      * This method stores a single analysis for a file.

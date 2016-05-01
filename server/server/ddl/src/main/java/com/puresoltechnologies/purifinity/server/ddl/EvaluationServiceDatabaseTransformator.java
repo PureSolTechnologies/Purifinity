@@ -28,7 +28,9 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
     private static final String EVALUATION_FILE_METRICS_TABLE = "evaluator_store.file_metrics";
     private static final String EVALUATION_DIRECTORY_METRICS_TABLE = "evaluator_store.directory_metrics";
     private static final String EVALUATION_PROJECT_METRICS_TABLE = "evaluator_store.project_metrics";
+    private static final String EVALUATION_ARCHITECTURE_ISSUES_TABLE = "evaluator_store.architecture_issues";
     private static final String EVALUATION_DEFECTS_TABLE = "evaluator_store.defects";
+    private static final String EVALUATION_DESIGN_ISSUES_TABLE = "evaluator_store.design_issues";
     private static final String EVALUATION_STYLE_ISSUES_TABLE = "evaluator_store.style_issues";
 
     public static final String HBASE_HOST = "localhost";
@@ -186,6 +188,25 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "description varchar, " //
 			+ "CONSTRAINT " + EVALUATION_DEFECTS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, defect_id, start_line, start_column))",
+		"Keeps defects of source files."));
+
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + EVALUATION_DESIGN_ISSUES_TABLE + " ("//
+			+ "hashid varchar not null, " //
+			+ "evaluator_id varchar not null, " //
+			+ "design_issue_id varchar not null, " //
+			+ "code_range_type varchar, " //
+			+ "code_range_name varchar, " //
+			+ "time timestamp, " //
+			+ "source_code_location varchar, " //
+			+ "evaluator_version varchar, " //
+			+ "start_line unsigned_int not null, " //
+			+ "start_column unsigned_int not null, " //
+			+ "stop_line unsigned_int, " //
+			+ "stop_column unsigned_int, " //
+			+ "description varchar, " //
+			+ "CONSTRAINT " + EVALUATION_DESIGN_ISSUES_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(hashid, evaluator_id, design_issue_id, start_line, start_column))",
 		"Keeps defects of source files."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",

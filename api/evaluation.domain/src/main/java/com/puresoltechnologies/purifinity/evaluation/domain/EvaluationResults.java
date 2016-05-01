@@ -3,6 +3,8 @@ package com.puresoltechnologies.purifinity.evaluation.domain;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.puresoltechnologies.versioning.Version;
+
 /**
  * This is the base interface for all evaluation results. The main purpose for
  * Evaluators are the check of source code and providing feedback about the
@@ -29,5 +31,7 @@ public interface EvaluationResults extends Serializable {
      * @return A {@link String} with the evaluator id is returned.
      */
     public String getEvaluatorId();
+
+    public Version getEvaluatorVersion();
 
 }

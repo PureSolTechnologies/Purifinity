@@ -94,7 +94,7 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
     @Override
     protected GenericDirectoryMetrics processDirectory(AnalysisRun analysisRun, AnalysisFileTree directory)
 	    throws InterruptedException, EvaluationStoreException {
-	EvaluatorMetricsStore evaluatorStore = getEvaluatorStore();
+	EvaluatorMetricsStore evaluatorStore = getMetricStore();
 	McCabeMetricResult metricResults = null;
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    HashId childHashId = child.getHashId();

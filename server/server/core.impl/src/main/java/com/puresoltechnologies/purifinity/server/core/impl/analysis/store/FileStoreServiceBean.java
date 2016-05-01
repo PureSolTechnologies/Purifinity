@@ -47,6 +47,7 @@ import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPref
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.AnalysisServiceConnection;
 import com.puresoltechnologies.purifinity.server.database.hadoop.utils.bloob.BloobService;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
+import com.puresoltechnologies.versioning.Version;
 
 @Singleton
 public class FileStoreServiceBean implements FileStoreService, FileStoreServiceRemote {
@@ -171,6 +172,53 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
 		    }
 		} while (resultSet.next());
 		return analyses;
+	    }
+	} catch (SQLException e) {
+	    throw new FileStoreException("Could not read analyses.", e);
+	}
+    }
+
+    @Override
+    @Lock(LockType.READ)
+    public CodeAnalysis loadAnalysis(HashId hashId, String analyzerId, Version version) throws FileStoreException {
+	try (PreparedStatement preparedStatement = connection
+		.prepareStatement("SELECT analysis FROM " + HBaseElementNames.ANALYSIS_ANALYSES_TABLE
+			+ " WHERE hashid=? AND analyzer_id=? AND analyzer_version=?")) {
+	    preparedStatement.setString(1, hashId.toString());
+	    preparedStatement.setString(2, analyzerId);
+	    preparedStatement.setString(3, version.toString());
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		if (!resultSet.next()) {
+		    throw new FileStoreException("Could not load analyses for file with hash '" + hashId + "'");
+		}
+		CodeAnalysis analysis = null;
+		do {
+		    byte[] bytes = resultSet.getBytes(1);
+		    try (ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes)) {
+			try (ObjectInputStream inStream = new ObjectInputStream(byteArrayInputStream)) {
+			    Object object = inStream.readObject();
+			    if (analysis != null) {
+				throw new IllegalStateException("Multiple analyses were found.");
+			    }
+			    analysis = (CodeAnalysis) object;
+			    if (!hashId.equals(analysis.getAnalysisInformation().getHashId())) {
+				/*
+				 * This check is necessary, because an issue
+				 * occurred during Purifinity 0.3.0 development.
+				 * If hash IDs do not match, evaluations could
+				 * crash.
+				 */
+				throw new FileStoreException("Could not load analysis for file with hash id '" + hashId
+					+ "', because analysis assigned to this hash id contains hash id '"
+					+ analysis.getAnalysisInformation().getHashId() + "'!");
+			    }
+			}
+		    } catch (ClassNotFoundException | IOException e) {
+			throw new FileStoreException("Could not load analysis for file with hash id '" + hashId + "'",
+				e);
+		    }
+		} while (resultSet.next());
+		return analysis;
 	    }
 	} catch (SQLException e) {
 	    throw new FileStoreException("Could not read analyses.", e);

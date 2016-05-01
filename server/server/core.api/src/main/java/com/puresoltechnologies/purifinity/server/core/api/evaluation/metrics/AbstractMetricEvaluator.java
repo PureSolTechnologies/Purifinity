@@ -36,16 +36,16 @@ import com.puresoltechnologies.versioning.Version;
  */
 public abstract class AbstractMetricEvaluator extends AbstractEvaluator implements MetricEvaluator {
 
-    private final EvaluatorMetricsStoreServiceRemote store;
+    private final EvaluatorMetricsStoreServiceRemote metricStore;
 
     public AbstractMetricEvaluator(String id, String name, Version version, String description) {
 	super(id, name, version, EvaluatorType.METRICS, description);
-	store = JndiUtils.createRemoteEJBInstance(EvaluatorMetricsStoreServiceRemote.class,
+	metricStore = JndiUtils.createRemoteEJBInstance(EvaluatorMetricsStoreServiceRemote.class,
 		EvaluatorMetricsStoreServiceRemote.JNDI_NAME);
     }
 
-    protected EvaluatorMetricsStore getEvaluatorStore() {
-	return store;
+    protected EvaluatorMetricsStore getMetricStore() {
+	return metricStore;
     }
 
     /**
@@ -127,7 +127,7 @@ public abstract class AbstractMetricEvaluator extends AbstractEvaluator implemen
 		    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
 	HashId hashId = directoryNode.getHashId();
 	DirectoryStore directoryStore = getDirectoryStore();
-	EvaluatorMetricsStore store = getEvaluatorStore();
+	EvaluatorMetricsStore store = getMetricStore();
 	if (directoryStore.isAvailable(hashId)) {
 	    for (AnalysisFileTree child : directoryNode.getChildren()) {
 		processNode(analysisRun, child, enableReevaluation);
@@ -154,7 +154,7 @@ public abstract class AbstractMetricEvaluator extends AbstractEvaluator implemen
 	GenericFileMetrics metrics = new GenericFileMetrics(getInformation().getId(), getInformation().getVersion(),
 		fileResults.getHashId(), fileResults.getSourceCodeLocation(), new Date(), fileResults.getParameters(),
 		fileResults.getCodeRangeMetrics());
-	getEvaluatorStore().storeFileMetricsInBigTable(analysisRun, fileAnalysis, metrics);
+	getMetricStore().storeFileMetricsInBigTable(analysisRun, fileAnalysis, metrics);
     }
 
     protected final void storeMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
@@ -162,55 +162,55 @@ public abstract class AbstractMetricEvaluator extends AbstractEvaluator implemen
 	GenericDirectoryMetrics metrics = new GenericDirectoryMetrics(getInformation().getId(),
 		getInformation().getVersion(), directoryResults.getHashId(), new Date(),
 		directoryResults.getParameters(), directoryResults.getValues());
-	getEvaluatorStore().storeDirectoryMetricsInBigTable(analysisRun, directoryNode, metrics);
+	getMetricStore().storeDirectoryMetricsInBigTable(analysisRun, directoryNode, metrics);
     }
 
     @Override
     protected FileMetrics readFileResults(HashId hashId) throws EvaluationStoreException {
-	return getEvaluatorStore().readFileResults(hashId, getInformation().getId());
+	return getMetricStore().readFileResults(hashId, getInformation().getId());
     }
 
     @Override
     protected boolean hasFileResults(HashId hashId) throws EvaluationStoreException {
-	return getEvaluatorStore().hasFileResults(hashId, getInformation().getId());
+	return getMetricStore().hasFileResults(hashId, getInformation().getId());
     }
 
     @Override
     protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, GenericFileMetrics metrics)
 	    throws EvaluationStoreException {
-	getEvaluatorStore().storeFileResults(analysisRun, fileAnalysis, metrics);
+	getMetricStore().storeFileResults(analysisRun, fileAnalysis, metrics);
     }
 
     @Override
     protected DirectoryMetrics readDirectoryResults(HashId hashId) throws EvaluationStoreException {
-	return getEvaluatorStore().readDirectoryResults(hashId, getInformation().getId());
+	return getMetricStore().readDirectoryResults(hashId, getInformation().getId());
     }
 
     @Override
     protected boolean hasDirectoryResults(HashId hashId) throws EvaluationStoreException {
-	return getEvaluatorStore().hasDirectoryResults(hashId, getInformation().getId());
+	return getMetricStore().hasDirectoryResults(hashId, getInformation().getId());
     }
 
     @Override
     protected void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
 	    GenericDirectoryMetrics metrics) throws EvaluationStoreException {
-	getEvaluatorStore().storeDirectoryResults(analysisRun, directoryNode, metrics);
+	getMetricStore().storeDirectoryResults(analysisRun, directoryNode, metrics);
     }
 
     @Override
     protected ProjectMetrics readProjectResults(String projectId, long runId) throws EvaluationStoreException {
-	return getEvaluatorStore().readProjectResults(projectId, runId, getInformation().getId());
+	return getMetricStore().readProjectResults(projectId, runId, getInformation().getId());
     }
 
     @Override
     protected boolean hasProjectResults(String projectId, long runId) throws EvaluationStoreException {
-	return getEvaluatorStore().hasProjectResults(projectId, runId, getInformation().getId());
+	return getMetricStore().hasProjectResults(projectId, runId, getInformation().getId());
     }
 
     @Override
     protected void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
 	    GenericProjectMetrics metrics) throws EvaluationStoreException {
-	getEvaluatorStore().storeProjectResults(analysisRun, directoryNode, metrics);
+	getMetricStore().storeProjectResults(analysisRun, directoryNode, metrics);
     }
 
 }
