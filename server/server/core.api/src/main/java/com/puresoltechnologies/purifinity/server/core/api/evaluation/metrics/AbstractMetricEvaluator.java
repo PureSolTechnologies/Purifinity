@@ -154,7 +154,7 @@ public abstract class AbstractMetricEvaluator extends AbstractEvaluator implemen
 	GenericFileMetrics metrics = new GenericFileMetrics(getInformation().getId(), getInformation().getVersion(),
 		fileResults.getHashId(), fileResults.getSourceCodeLocation(), new Date(), fileResults.getParameters(),
 		fileResults.getCodeRangeMetrics());
-	getMetricStore().storeFileMetricsInBigTable(analysisRun, fileAnalysis, metrics);
+	getMetricStore().storeFileResultsInBigTable(analysisRun, fileAnalysis, metrics);
     }
 
     protected final void storeMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
@@ -162,7 +162,7 @@ public abstract class AbstractMetricEvaluator extends AbstractEvaluator implemen
 	GenericDirectoryMetrics metrics = new GenericDirectoryMetrics(getInformation().getId(),
 		getInformation().getVersion(), directoryResults.getHashId(), new Date(),
 		directoryResults.getParameters(), directoryResults.getValues());
-	getMetricStore().storeDirectoryMetricsInBigTable(analysisRun, directoryNode, metrics);
+	getMetricStore().storeDirectoryResultsInBigTable(analysisRun, directoryNode, metrics);
     }
 
     @Override

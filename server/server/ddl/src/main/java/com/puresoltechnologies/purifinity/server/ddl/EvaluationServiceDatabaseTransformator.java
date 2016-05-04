@@ -16,22 +16,12 @@ import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformat
 import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationStep;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 import com.puresoltechnologies.versioning.Version;
 
 public class EvaluationServiceDatabaseTransformator implements ComponentTransformator {
 
     private static final Logger logger = LoggerFactory.getLogger(EvaluationServiceDatabaseTransformator.class);
-
-    private static final String EVALUATION_METRICS_TABLE = "evaluator_store.metrics";
-
-    private static final String EVALUATION_PARAMETERS_TABLE = "evaluator_store.parameters";
-    private static final String EVALUATION_FILE_METRICS_TABLE = "evaluator_store.file_metrics";
-    private static final String EVALUATION_DIRECTORY_METRICS_TABLE = "evaluator_store.directory_metrics";
-    private static final String EVALUATION_PROJECT_METRICS_TABLE = "evaluator_store.project_metrics";
-    private static final String EVALUATION_ARCHITECTURE_ISSUES_TABLE = "evaluator_store.architecture_issues";
-    private static final String EVALUATION_DEFECTS_TABLE = "evaluator_store.defects";
-    private static final String EVALUATION_DESIGN_ISSUES_TABLE = "evaluator_store.design_issues";
-    private static final String EVALUATION_STYLE_ISSUES_TABLE = "evaluator_store.style_issues";
 
     public static final String HBASE_HOST = "localhost";
 
@@ -63,7 +53,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 
-		"CREATE TABLE " + EVALUATION_PARAMETERS_TABLE + " ("//
+		"CREATE TABLE " + HBaseElementNames.EVALUATION_PARAMETERS_TABLE + " ("//
 			+ "evaluator_id varchar not null, " //
 			+ "evaluator_version varchar not null, " //
 			+ "parameter_name varchar not null, " //
@@ -79,17 +69,18 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "parameter_type varchar, " //
 			+ "level_of_measurement varchar, " //
 			+ "parameter_description varchar, " //
-			+ "CONSTRAINT " + EVALUATION_PARAMETERS_TABLE.replaceAll("\\.", "_")
+			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_PARAMETERS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(evaluator_id, evaluator_version, parameter_name))",
 		"This table contains all available parameters of all evaluators."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 
-		"CREATE INDEX evaluator_store_parameters_vendor_idx ON " + EVALUATION_PARAMETERS_TABLE + " (vendor)",
+		"CREATE INDEX evaluator_store_parameters_vendor_idx ON " + HBaseElementNames.EVALUATION_PARAMETERS_TABLE
+			+ " (vendor)",
 		"This index is used to search for parameters and evaluators of certain vendors."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
-		"CREATE TABLE " + EVALUATION_FILE_METRICS_TABLE + " ("//
+		"CREATE TABLE " + HBaseElementNames.EVALUATION_FILE_METRICS_TABLE + " ("//
 			+ "hashid varchar not null, " //
 			+ "evaluator_id varchar not null, " //
 			+ "parameter_name varchar not null, " //
@@ -102,11 +93,12 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "parameter_description varchar, " //
 			+ "parameter_type varchar, " //
 			+ "level_of_measurement varchar, " //
-			+ "metric double, " + "CONSTRAINT " + EVALUATION_FILE_METRICS_TABLE.replaceAll("\\.", "_")
+			+ "metric double, " + "CONSTRAINT "
+			+ HBaseElementNames.EVALUATION_FILE_METRICS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, parameter_name, code_range_type, code_range_name))",
 		"Keeps metrics for single files and their code ranges."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
-		"CREATE TABLE " + EVALUATION_DIRECTORY_METRICS_TABLE + " ("//
+		"CREATE TABLE " + HBaseElementNames.EVALUATION_DIRECTORY_METRICS_TABLE + " ("//
 			+ "hashid varchar not null, " //
 			+ "evaluator_id varchar not null, " //
 			+ "parameter_name varchar not null, " //
@@ -117,11 +109,11 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "parameter_type varchar, " //
 			+ "level_of_measurement varchar, " //
 			+ "metric double, " //
-			+ "CONSTRAINT " + EVALUATION_DIRECTORY_METRICS_TABLE.replaceAll("\\.", "_")
+			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_DIRECTORY_METRICS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, parameter_name))",
 		"Keeps metrics for single files and their code ranges."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
-		"CREATE TABLE " + EVALUATION_PROJECT_METRICS_TABLE + " (" //
+		"CREATE TABLE " + HBaseElementNames.EVALUATION_PROJECT_METRICS_TABLE + " (" //
 			+ "project_id varchar not null, " //
 			+ "run_id bigint not null, " //
 			+ "evaluator_id varchar not null, " //
@@ -133,11 +125,11 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "parameter_type varchar, " //
 			+ "level_of_measurement varchar, " //
 			+ "metric double, " //
-			+ "CONSTRAINT " + EVALUATION_PROJECT_METRICS_TABLE.replaceAll("\\.", "_")
+			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_PROJECT_METRICS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, parameter_name))",
 		"Keeps metrics for single files and their code ranges."));
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
-		"CREATE TABLE " + EVALUATION_METRICS_TABLE + " (" //
+		"CREATE TABLE " + HBaseElementNames.EVALUATION_METRICS_TABLE + " (" //
 			+ "project_id varchar not null, " //
 			+ "run_id bigint not null, " //
 			+ "evaluator_id varchar not null, " //
@@ -157,7 +149,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "metric double, " //
 			+ "level_of_measurement varchar, " //
 			+ "parameter_description varchar, " //
-			+ "CONSTRAINT " + EVALUATION_METRICS_TABLE.replaceAll("\\.", "_")
+			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_METRICS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, parameter_name, code_range_type, hashid, code_range_name))",
 		"Keeps the metrics in a big table for efficient retrieval."));
 
@@ -172,45 +164,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 	PhoenixTransformationSequence sequence = new PhoenixTransformationSequence(metadata, HBASE_HOST);
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
-		"CREATE TABLE " + EVALUATION_DEFECTS_TABLE + " ("//
-			+ "hashid varchar not null, " //
-			+ "evaluator_id varchar not null, " //
-			+ "defect_id varchar not null, " //
-			+ "code_range_type varchar, " //
-			+ "code_range_name varchar, " //
-			+ "time timestamp, " //
-			+ "source_code_location varchar, " //
-			+ "evaluator_version varchar, " //
-			+ "start_line unsigned_int not null, " //
-			+ "start_column unsigned_int not null, " //
-			+ "stop_line unsigned_int, " //
-			+ "stop_column unsigned_int, " //
-			+ "description varchar, " //
-			+ "CONSTRAINT " + EVALUATION_DEFECTS_TABLE.replaceAll("\\.", "_")
-			+ "_PK PRIMARY KEY(hashid, evaluator_id, defect_id, start_line, start_column))",
-		"Keeps defects of source files."));
-
-	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
-		"CREATE TABLE " + EVALUATION_DESIGN_ISSUES_TABLE + " ("//
-			+ "hashid varchar not null, " //
-			+ "evaluator_id varchar not null, " //
-			+ "design_issue_id varchar not null, " //
-			+ "code_range_type varchar, " //
-			+ "code_range_name varchar, " //
-			+ "time timestamp, " //
-			+ "source_code_location varchar, " //
-			+ "evaluator_version varchar, " //
-			+ "start_line unsigned_int not null, " //
-			+ "start_column unsigned_int not null, " //
-			+ "stop_line unsigned_int, " //
-			+ "stop_column unsigned_int, " //
-			+ "description varchar, " //
-			+ "CONSTRAINT " + EVALUATION_DESIGN_ISSUES_TABLE.replaceAll("\\.", "_")
-			+ "_PK PRIMARY KEY(hashid, evaluator_id, design_issue_id, start_line, start_column))",
-		"Keeps defects of source files."));
-
-	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
-		"CREATE TABLE " + EVALUATION_STYLE_ISSUES_TABLE + " ("//
+		"CREATE TABLE " + HBaseElementNames.EVALUATION_ARCHITECTURE_ISSUES_TABLE + " ("//
 			+ "hashid varchar not null, " //
 			+ "evaluator_id varchar not null, " //
 			+ "style_issue_id varchar not null, " //
@@ -224,7 +178,68 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "stop_line unsigned_int, " //
 			+ "stop_column unsigned_int, " //
 			+ "description varchar, " //
-			+ "CONSTRAINT " + EVALUATION_STYLE_ISSUES_TABLE.replaceAll("\\.", "_")
+			+ "value unsigned_int, " //
+			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_ARCHITECTURE_ISSUES_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(hashid, evaluator_id, style_issue_id, start_line, start_column))",
+		"Keeps style issues of source files."));
+
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + HBaseElementNames.EVALUATION_DEFECTS_TABLE + " ("//
+			+ "hashid varchar not null, " //
+			+ "evaluator_id varchar not null, " //
+			+ "defect_id varchar not null, " //
+			+ "code_range_type varchar, " //
+			+ "code_range_name varchar, " //
+			+ "time timestamp, " //
+			+ "source_code_location varchar, " //
+			+ "evaluator_version varchar, " //
+			+ "start_line unsigned_int not null, " //
+			+ "start_column unsigned_int not null, " //
+			+ "stop_line unsigned_int, " //
+			+ "stop_column unsigned_int, " //
+			+ "description varchar, " //
+			+ "value unsigned_int, " //
+			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_DEFECTS_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(hashid, evaluator_id, defect_id, start_line, start_column))",
+		"Keeps defects of source files."));
+
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE + " ("//
+			+ "hashid varchar not null, " //
+			+ "evaluator_id varchar not null, " //
+			+ "design_issue_id varchar not null, " //
+			+ "code_range_type varchar, " //
+			+ "code_range_name varchar, " //
+			+ "time timestamp, " //
+			+ "source_code_location varchar, " //
+			+ "evaluator_version varchar, " //
+			+ "start_line unsigned_int not null, " //
+			+ "start_column unsigned_int not null, " //
+			+ "stop_line unsigned_int, " //
+			+ "stop_column unsigned_int, " //
+			+ "description varchar, " //
+			+ "value unsigned_int, " //
+			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(hashid, evaluator_id, design_issue_id, start_line, start_column))",
+		"Keeps defects of source files."));
+
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + HBaseElementNames.EVALUATION_STYLE_ISSUES_TABLE + " ("//
+			+ "hashid varchar not null, " //
+			+ "evaluator_id varchar not null, " //
+			+ "style_issue_id varchar not null, " //
+			+ "code_range_type varchar, " //
+			+ "code_range_name varchar, " //
+			+ "time timestamp, " //
+			+ "source_code_location varchar, " //
+			+ "evaluator_version varchar, " //
+			+ "start_line unsigned_int not null, " //
+			+ "start_column unsigned_int not null, " //
+			+ "stop_line unsigned_int, " //
+			+ "stop_column unsigned_int, " //
+			+ "description varchar, " //
+			+ "value unsigned_int, " //
+			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_STYLE_ISSUES_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, style_issue_id, start_line, start_column))",
 		"Keeps style issues of source files."));
 
@@ -235,13 +250,15 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
     public void dropAll() {
 	try (Connection connection = DriverManager.getConnection("jdbc:phoenix:" + HBASE_HOST);) {
 	    try (Statement statement = connection.createStatement();) {
-		statement.execute("DROP TABLE IF EXISTS " + EVALUATION_METRICS_TABLE);
-		statement.execute("DROP TABLE IF EXISTS " + EVALUATION_PARAMETERS_TABLE);
-		statement.execute("DROP TABLE IF EXISTS " + EVALUATION_FILE_METRICS_TABLE);
-		statement.execute("DROP TABLE IF EXISTS " + EVALUATION_DIRECTORY_METRICS_TABLE);
-		statement.execute("DROP TABLE IF EXISTS " + EVALUATION_PROJECT_METRICS_TABLE);
-		statement.execute("DROP TABLE IF EXISTS " + EVALUATION_DEFECTS_TABLE);
-		statement.execute("DROP TABLE IF EXISTS " + EVALUATION_STYLE_ISSUES_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_METRICS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_PARAMETERS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_FILE_METRICS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_DIRECTORY_METRICS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_PROJECT_METRICS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_ARCHITECTURE_ISSUES_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_DEFECTS_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_STYLE_ISSUES_TABLE);
 		connection.commit();
 	    } catch (SQLException e) {
 		try {

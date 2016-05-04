@@ -3,9 +3,11 @@ package com.puresoltechnologies.purifinity.server.core.impl.evaluation.store;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.inject.Inject;
 
@@ -13,8 +15,12 @@ import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
+import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginInformation;
+import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.common.SourceCodeLocationCreator;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.EvaluatorStoreConnection;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
@@ -106,5 +112,14 @@ public class EvaluatorStoreUtils {
 	    }
 	    throw new RuntimeException("Could not register Plugin Information.", e);
 	}
+    }
+
+    public static SourceCodeLocation extractSourceCodeLocation(ResultSet resultSet) throws SQLException {
+	String locationString = resultSet.getString("source_code_location");
+	if (locationString == null) {
+	    return new UnspecifiedSourceCodeLocation();
+	}
+	Properties properties = PropertiesUtils.fromString(locationString);
+	return SourceCodeLocationCreator.createFromSerialization(properties);
     }
 }

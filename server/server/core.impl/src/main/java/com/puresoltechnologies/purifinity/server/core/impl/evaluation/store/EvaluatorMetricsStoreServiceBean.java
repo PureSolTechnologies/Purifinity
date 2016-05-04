@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Properties;
 import java.util.Set;
 
 import javax.ejb.Stateless;
@@ -23,7 +22,6 @@ import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.domain.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
-import com.puresoltechnologies.parsers.source.UnspecifiedSourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
@@ -41,7 +39,6 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericRunMe
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.common.SourceCodeLocationCreator;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.EvaluatorStoreConnection;
@@ -64,7 +61,7 @@ public class EvaluatorMetricsStoreServiceBean
     @EvaluatorStoreConnection
     private Connection connection;
 
-    private MetricParameter<?> extractParameter(ResultSet resultSet) throws SQLException {
+    private MetricParameter<?> extractMetricParameter(ResultSet resultSet) throws SQLException {
 	String parameterName = resultSet.getString("parameter_name");
 	String parameterUnit = resultSet.getString("parameter_unit");
 	String parameterDescription = resultSet.getString("parameter_description");
@@ -78,15 +75,6 @@ public class EvaluatorMetricsStoreServiceBean
 	    logger.error("Could not find type class '" + parameterType + "'.");
 	    return null;
 	}
-    }
-
-    private SourceCodeLocation extractSourceCodeLocation(ResultSet resultSet) throws SQLException {
-	String locationString = resultSet.getString("source_code_location");
-	if (locationString == null) {
-	    return new UnspecifiedSourceCodeLocation();
-	}
-	Properties properties = PropertiesUtils.fromString(locationString);
-	return SourceCodeLocationCreator.createFromSerialization(properties);
     }
 
     @Override
@@ -214,7 +202,7 @@ public class EvaluatorMetricsStoreServiceBean
 	    throws EvaluationStoreException {
 	try {
 	    storeFileMetricsAsValues(analysisRun, codeAnalysis, metrics);
-	    storeFileMetricsInBigTable(analysisRun, codeAnalysis, metrics);
+	    storeFileResultsInBigTable(analysisRun, codeAnalysis, metrics);
 	    connection.commit();
 	} catch (SQLException e) {
 	    try {
@@ -285,7 +273,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     @Override
-    public void storeFileMetricsInBigTable(AnalysisRun analysisRun, CodeAnalysis codeAnalysis,
+    public void storeFileResultsInBigTable(AnalysisRun analysisRun, CodeAnalysis codeAnalysis,
 	    GenericFileMetrics metrics) throws EvaluationStoreException {
 	try {
 	    storeMetricsInBigTableWithoutCommit(analysisRun, codeAnalysis, metrics);
@@ -378,7 +366,7 @@ public class EvaluatorMetricsStoreServiceBean
 	    GenericDirectoryMetrics metrics) throws EvaluationStoreException {
 	try {
 	    storeDirectoryMetricsAsValues(analysisRun, directory, metrics);
-	    storeDirectoryMetricsInBigTable(analysisRun, directory, metrics);
+	    storeDirectoryResultsInBigTable(analysisRun, directory, metrics);
 	    connection.commit();
 	} catch (SQLException e) {
 	    try {
@@ -436,7 +424,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     @Override
-    public void storeDirectoryMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
+    public void storeDirectoryResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    GenericDirectoryMetrics metrics) throws EvaluationStoreException {
 	try {
 	    storeMetricsInBigTableWithoutCommit(analysisRun, directory, metrics);
@@ -506,7 +494,7 @@ public class EvaluatorMetricsStoreServiceBean
 	    throws EvaluationStoreException {
 	try {
 	    storeProjectMetricsAsValues(analysisRun, directory, metrics);
-	    storeProjectMetricsInBigTable(analysisRun, directory, metrics);
+	    storeProjectResultsInBigTable(analysisRun, directory, metrics);
 	    connection.commit();
 	} catch (SQLException e) {
 	    try {
@@ -560,7 +548,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     @Override
-    public void storeProjectMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
+    public void storeProjectResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    GenericProjectMetrics metrics) throws EvaluationStoreException {
 	try {
 	    storeMetricsInBigTableWithoutCommit(analysisRun, directory, metrics);
@@ -648,7 +636,8 @@ public class EvaluatorMetricsStoreServiceBean
 			// + hashId.toString());
 			// }
 		    }
-		    SourceCodeLocation alternateSourceCodeLocation = extractSourceCodeLocation(resultSet);
+		    SourceCodeLocation alternateSourceCodeLocation = EvaluatorStoreUtils
+			    .extractSourceCodeLocation(resultSet);
 		    if (sourceCodeLocation == null) {
 			sourceCodeLocation = alternateSourceCodeLocation;
 		    } else {
@@ -660,7 +649,7 @@ public class EvaluatorMetricsStoreServiceBean
 		    evaluatorVersion = getEvaluatorVersionAndCheckConsistency(resultSet, hashId, evaluatorId,
 			    evaluatorVersion);
 		    String parameterName = resultSet.getString("parameter_name");
-		    MetricParameter<?> metricsParameter = extractParameter(resultSet);
+		    MetricParameter<?> metricsParameter = extractMetricParameter(resultSet);
 		    if (metricsParameter == null) {
 			continue;
 		    }
@@ -744,7 +733,7 @@ public class EvaluatorMetricsStoreServiceBean
 		    evaluatorVersion = getEvaluatorVersionAndCheckConsistency(resultSet, hashId, evaluatorId,
 			    evaluatorVersion);
 		    String parameterName = resultSet.getString("parameter_name");
-		    MetricParameter<?> metricsParameter = extractParameter(resultSet);
+		    MetricParameter<?> metricsParameter = extractMetricParameter(resultSet);
 		    if (metricsParameter == null) {
 			continue;
 		    }
@@ -809,7 +798,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     @Override
-    public GenericRunMetrics readRunMetrics(String projectId, long runId, String evaluatorId)
+    public GenericRunMetrics readRunResults(String projectId, long runId, String evaluatorId)
 	    throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, " + "hashid, "
 		+ "evaluator_version, " + "code_range_name, " + "source_code_location, " + "code_range_type, "
@@ -834,7 +823,7 @@ public class EvaluatorMetricsStoreServiceBean
 		    getSourceCodeLocationAndCheckConsistency(resultSet, hashId, evaluatorId, sourceCodeLocationBuffer);
 		    evaluatorVersion = getEvaluatorVersionAndCheckConsistency(resultSet, hashId, evaluatorId,
 			    evaluatorVersion);
-		    MetricParameter<?> metricsParameter = extractParameter(resultSet);
+		    MetricParameter<?> metricsParameter = extractMetricParameter(resultSet);
 		    if (metricsParameter == null) {
 			continue;
 		    }
@@ -959,7 +948,7 @@ public class EvaluatorMetricsStoreServiceBean
     private void getSourceCodeLocationAndCheckConsistency(ResultSet resultSet, HashId hashId, String evaluatorId,
 	    Map<HashId, SourceCodeLocation> sourceCodeLocationBuffer) throws EvaluationStoreException, SQLException {
 	// Get source code location and check for consistency
-	SourceCodeLocation alternateSourceCodeLocation = extractSourceCodeLocation(resultSet);
+	SourceCodeLocation alternateSourceCodeLocation = EvaluatorStoreUtils.extractSourceCodeLocation(resultSet);
 	SourceCodeLocation sourceCodeLocation = sourceCodeLocationBuffer.get(hashId);
 	if (sourceCodeLocation == null) {
 	    sourceCodeLocation = alternateSourceCodeLocation;

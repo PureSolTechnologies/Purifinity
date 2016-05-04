@@ -15,6 +15,6 @@ public class EvaluatorStoreRestService implements EvaluatorStoreRestInterface {
     @Override
     public GenericRunMetrics getRunMetrics(String projectId, long runId,
 	    String evaluatorId) throws EvaluationStoreException {
-	return evaluatorStore.readRunMetrics(projectId, runId, evaluatorId);
+	return evaluatorStore.readRunResults(projectId, runId, evaluatorId);
     }
 }
