@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.evaluation.domain.metrics;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
 	int result = super.hashCode();
 	result = prime * result + ((directoryMetrics == null) ? 0 : directoryMetrics.hashCode());
 	result = prime * result + ((fileMetrics == null) ? 0 : fileMetrics.hashCode());
-	result = prime * result + ((parameters == null) ? 0 : parameters.hashCode());
+	result = prime * result + Arrays.hashCode(parameters);
 	return result;
     }
 
@@ -87,10 +88,7 @@ public class GenericRunMetrics extends AbstractMetrics implements Metrics {
 		return false;
 	} else if (!fileMetrics.equals(other.fileMetrics))
 	    return false;
-	if (parameters == null) {
-	    if (other.parameters != null)
-		return false;
-	} else if (!parameters.equals(other.parameters))
+	if (!Arrays.equals(parameters, other.parameters))
 	    return false;
 	return true;
     }

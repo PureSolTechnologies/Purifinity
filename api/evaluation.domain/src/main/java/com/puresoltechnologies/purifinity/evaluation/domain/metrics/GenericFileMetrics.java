@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.evaluation.domain.metrics;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -66,10 +67,10 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
     public int hashCode() {
 	final int prime = 31;
 	int result = super.hashCode();
-	result = prime * result + ((hashId == null) ? 0 : hashId.hashCode());
-	result = prime * result + ((parameters == null) ? 0 : parameters.hashCode());
-	result = prime * result + ((sourceCodeLocation == null) ? 0 : sourceCodeLocation.hashCode());
 	result = prime * result + ((codeRangeMetrics == null) ? 0 : codeRangeMetrics.hashCode());
+	result = prime * result + ((hashId == null) ? 0 : hashId.hashCode());
+	result = prime * result + Arrays.hashCode(parameters);
+	result = prime * result + ((sourceCodeLocation == null) ? 0 : sourceCodeLocation.hashCode());
 	return result;
     }
 
@@ -82,25 +83,22 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
 	if (getClass() != obj.getClass())
 	    return false;
 	GenericFileMetrics other = (GenericFileMetrics) obj;
+	if (codeRangeMetrics == null) {
+	    if (other.codeRangeMetrics != null)
+		return false;
+	} else if (!codeRangeMetrics.equals(other.codeRangeMetrics))
+	    return false;
 	if (hashId == null) {
 	    if (other.hashId != null)
 		return false;
 	} else if (!hashId.equals(other.hashId))
 	    return false;
-	if (parameters == null) {
-	    if (other.parameters != null)
-		return false;
-	} else if (!parameters.equals(other.parameters))
+	if (!Arrays.equals(parameters, other.parameters))
 	    return false;
 	if (sourceCodeLocation == null) {
 	    if (other.sourceCodeLocation != null)
 		return false;
 	} else if (!sourceCodeLocation.equals(other.sourceCodeLocation))
-	    return false;
-	if (codeRangeMetrics == null) {
-	    if (other.codeRangeMetrics != null)
-		return false;
-	} else if (!codeRangeMetrics.equals(other.codeRangeMetrics))
 	    return false;
 	return true;
     }

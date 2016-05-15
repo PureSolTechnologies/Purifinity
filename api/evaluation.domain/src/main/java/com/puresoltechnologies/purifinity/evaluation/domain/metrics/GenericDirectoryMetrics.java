@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.evaluation.domain.metrics;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class GenericDirectoryMetrics extends AbstractMetrics implements Director
 	final int prime = 31;
 	int result = super.hashCode();
 	result = prime * result + ((hashId == null) ? 0 : hashId.hashCode());
-	result = prime * result + ((parameters == null) ? 0 : parameters.hashCode());
+	result = prime * result + Arrays.hashCode(parameters);
 	result = prime * result + ((values == null) ? 0 : values.hashCode());
 	return result;
     }
@@ -76,10 +77,7 @@ public class GenericDirectoryMetrics extends AbstractMetrics implements Director
 		return false;
 	} else if (!hashId.equals(other.hashId))
 	    return false;
-	if (parameters == null) {
-	    if (other.parameters != null)
-		return false;
-	} else if (!parameters.equals(other.parameters))
+	if (!Arrays.equals(parameters, other.parameters))
 	    return false;
 	if (values == null) {
 	    if (other.values != null)
