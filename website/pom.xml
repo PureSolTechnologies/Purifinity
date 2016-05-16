@@ -17,6 +17,12 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.puresoltechnologies.commons</groupId>
+			<artifactId>website</artifactId>
+			<classifier>elements</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.manuals</groupId>
 			<artifactId>manuals.development</artifactId>
 			<classifier>html</classifier>
@@ -64,7 +70,7 @@
 					<include>**/*.ts</include>
 					<include>**/*.html</include>
 				</includes>
-				<excludes>				
+				<excludes>
 					<exclude>**/node_modules/concurrently</exclude>
 					<exclude>**/node_modules/less</exclude>
 					<exclude>**/node_modules/lite-server</exclude>
@@ -90,6 +96,31 @@
 			</resource>
 		</resources>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack-website-elements</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.puresoltechnologies.commons</groupId>
+									<artifactId>website</artifactId>
+									<classifier>elements</classifier>
+									<type>zip</type>
+									<overWrite>false</overWrite>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/tmp</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
