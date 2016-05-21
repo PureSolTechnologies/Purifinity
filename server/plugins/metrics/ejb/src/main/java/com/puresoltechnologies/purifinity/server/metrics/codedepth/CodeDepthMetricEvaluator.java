@@ -2,7 +2,6 @@ package com.puresoltechnologies.purifinity.server.metrics.codedepth;
 
 import java.util.Date;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 
@@ -17,7 +16,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
@@ -28,11 +26,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeR
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
-import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 /**
  * This evaluator calculates the nesting depth of the source code. A too deep
@@ -45,16 +40,8 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 @Remote(Evaluator.class)
 public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 
-    private AnalyzerServiceManagerRemote analyzerServiceManager;
-
     public CodeDepthMetricEvaluator() {
 	super(CodeDepthMetric.ID, CodeDepthMetric.NAME, CodeDepthMetric.PLUGIN_VERSION, CodeDepthMetric.DESCRIPTION);
-    }
-
-    @PostConstruct
-    public void initialize() {
-	analyzerServiceManager = JndiUtils.createRemoteEJBInstance(AnalyzerServiceManagerRemote.class,
-		AnalyzerServiceManagerRemote.JNDI_NAME);
     }
 
     @Override
@@ -71,16 +58,13 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
     protected FileMetrics processFile(AnalysisRun analysisRun, CodeAnalysis analysis)
 	    throws InterruptedException, UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 	AnalysisInformation analysisInformation = analysis.getAnalysisInformation();
-	AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
-		.findByName(analysisInformation.getLanguageName(), analysisInformation.getLanguageVersion());
-	ProgrammingLanguage language = analyzerServiceManager.createProxy(analyzerServiceInformation.getJndiName());
 
 	HashId hashId = analysisInformation.getHashId();
 	SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
 	CodeDepthFileResults results = new CodeDepthFileResults(CodeDepthMetric.ID, CodeDepthMetric.PLUGIN_VERSION,
 		hashId, sourceCodeLocation, new Date());
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    CodeDepthMetric metric = new CodeDepthMetric(analysisRun, language, codeRange);
+	    CodeDepthMetric metric = new CodeDepthMetric(analysisRun, codeRange);
 	    metric.run();
 	    Severity quality = metric.getQuality();
 	    results.add(new CodeDepthResult(sourceCodeLocation, codeRange.getType(), codeRange.getCanonicalName(),

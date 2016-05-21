@@ -18,11 +18,10 @@ import java.util.Set;
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
-import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractCodeRangeEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetric;
 import com.puresoltechnologies.versioning.Version;
 
@@ -34,7 +33,7 @@ import com.puresoltechnologies.versioning.Version;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class EntropyMetric extends CodeRangeEvaluator {
+public class EntropyMetric extends AbstractCodeRangeEvaluator {
 
     public static final String ID = EntropyMetric.class.getName();
 
@@ -55,29 +54,12 @@ public class EntropyMetric extends CodeRangeEvaluator {
 	DEPENDENCIES.add(HalsteadMetric.ID);
     }
 
-    private final AnalysisRun analysisRun;
-    private final CodeRange codeRange;
     private final HalsteadMetric halstead;
     private EntropyMetricResult result;
 
-    public EntropyMetric(AnalysisRun analysisRun, ProgrammingLanguage language, CodeRange codeRange) {
-	super(NAME);
-	this.analysisRun = analysisRun;
-	this.codeRange = codeRange;
-	halstead = new HalsteadMetric(analysisRun, language, getCodeRange());
-    }
-
-    @Override
-    public AnalysisRun getAnalysisRun() {
-	return analysisRun;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public CodeRange getCodeRange() {
-	return codeRange;
+    public EntropyMetric(AnalysisRun analysisRun, CodeRange codeRange) {
+	super(NAME, analysisRun, codeRange);
+	halstead = new HalsteadMetric(analysisRun, getCodeRange());
     }
 
     /**

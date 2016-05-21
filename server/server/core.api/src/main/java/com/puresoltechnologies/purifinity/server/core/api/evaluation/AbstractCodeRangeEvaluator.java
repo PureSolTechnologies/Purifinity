@@ -16,14 +16,18 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
  * @author Rick-Rainer Ludwig
  * 
  */
-public abstract class CodeRangeEvaluator {
+public abstract class AbstractCodeRangeEvaluator {
 
     private final Date timeStamp;
     private final String name;
+    private final AnalysisRun analysisRun;
+    private final CodeRange codeRange;
 
-    public CodeRangeEvaluator(String name) {
+    public AbstractCodeRangeEvaluator(String name, AnalysisRun analysisRun, CodeRange codeRange) {
 	super();
 	this.name = name;
+	this.analysisRun = analysisRun;
+	this.codeRange = codeRange;
 	timeStamp = new Date();
     }
 
@@ -47,11 +51,22 @@ public abstract class CodeRangeEvaluator {
     }
 
     /**
+     * This method returns the analysis run which is base for the evaluation.
+     * 
+     * @return A {@link AnalysisRun} object is returned.
+     */
+    public final AnalysisRun getAnalysisRun() {
+	return analysisRun;
+    }
+
+    /**
      * This method returns the code range which was analyzed.
      * 
      * @return The {@link CodeRange} is returned.
      */
-    public abstract CodeRange getCodeRange();
+    public final CodeRange getCodeRange() {
+	return codeRange;
+    }
 
     /**
      * This method returns the description of the evaluator which might be
@@ -84,13 +99,6 @@ public abstract class CodeRangeEvaluator {
      * @return An array of {@link QualityCharacteristic} is returned.
      */
     public abstract QualityCharacteristic[] getQualityCharacteristics();
-
-    /**
-     * This method returns the analysis run which is base for the evaluation.
-     * 
-     * @return A {@link AnalysisRun} object is returned.
-     */
-    public abstract AnalysisRun getAnalysisRun();
 
     /**
      * This method is called to run the actual evaluations.

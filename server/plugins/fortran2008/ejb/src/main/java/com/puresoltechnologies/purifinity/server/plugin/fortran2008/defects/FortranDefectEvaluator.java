@@ -16,13 +16,13 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProjectMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.defects.DirectoryDefects;
+import com.puresoltechnologies.purifinity.evaluation.domain.defects.FileDefects;
+import com.puresoltechnologies.purifinity.evaluation.domain.defects.GenericDirectoryDefects;
+import com.puresoltechnologies.purifinity.evaluation.domain.defects.GenericFileDefects;
+import com.puresoltechnologies.purifinity.evaluation.domain.defects.GenericProjectDefects;
+import com.puresoltechnologies.purifinity.evaluation.domain.defects.ProjectDefects;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.defects.AbstractDefectEvaluator;
@@ -73,7 +73,7 @@ public class FortranDefectEvaluator extends AbstractDefectEvaluator {
     }
 
     @Override
-    protected FileMetrics readFileResults(HashId hashId) throws EvaluationStoreException {
+    protected FileDefects readFileResults(HashId hashId) throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 	return null;
     }
@@ -85,14 +85,14 @@ public class FortranDefectEvaluator extends AbstractDefectEvaluator {
     }
 
     @Override
-    protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, GenericFileMetrics metrics)
+    protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, GenericFileDefects defects)
 	    throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 
     }
 
     @Override
-    protected DirectoryMetrics readDirectoryResults(HashId hashId) throws EvaluationStoreException {
+    protected DirectoryDefects readDirectoryResults(HashId hashId) throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 	return null;
     }
@@ -105,13 +105,13 @@ public class FortranDefectEvaluator extends AbstractDefectEvaluator {
 
     @Override
     protected void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
-	    GenericDirectoryMetrics metrics) throws EvaluationStoreException {
+	    GenericDirectoryDefects metrics) throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 
     }
 
     @Override
-    protected ProjectMetrics readProjectResults(String projectId, long runId) throws EvaluationStoreException {
+    protected ProjectDefects readProjectResults(String projectId, long runId) throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 	return null;
     }
@@ -124,13 +124,13 @@ public class FortranDefectEvaluator extends AbstractDefectEvaluator {
 
     @Override
     protected void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
-	    GenericProjectMetrics metrics) throws EvaluationStoreException {
+	    GenericProjectDefects metrics) throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 
     }
 
     @Override
-    protected DirectoryMetrics processProject(AnalysisRun analysisRun, boolean enableReevaluation)
+    protected DirectoryDefects processProject(AnalysisRun analysisRun, boolean enableReevaluation)
 	    throws InterruptedException, EvaluationStoreException {
 	// TODO Auto-generated method stub
 	return null;

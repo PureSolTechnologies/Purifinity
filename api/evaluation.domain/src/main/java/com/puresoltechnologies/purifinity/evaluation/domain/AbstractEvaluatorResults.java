@@ -12,8 +12,7 @@ public abstract class AbstractEvaluatorResults implements EvaluationResults {
     private final Version evaluatorVersion;
     private final Date time;
 
-    public AbstractEvaluatorResults(String evaluatorId,
-	    Version evaluatorVersion, Date time) {
+    public AbstractEvaluatorResults(String evaluatorId, Version evaluatorVersion, Date time) {
 	super();
 	this.evaluatorId = evaluatorId;
 	this.evaluatorVersion = evaluatorVersion;
@@ -25,7 +24,8 @@ public abstract class AbstractEvaluatorResults implements EvaluationResults {
 	return evaluatorId;
     }
 
-    public Version getEvaluatorVersion() {
+    @Override
+    public final Version getEvaluatorVersion() {
 	return evaluatorVersion;
     }
 
@@ -38,11 +38,8 @@ public abstract class AbstractEvaluatorResults implements EvaluationResults {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result
-		+ ((evaluatorId == null) ? 0 : evaluatorId.hashCode());
-	result = prime
-		* result
-		+ ((evaluatorVersion == null) ? 0 : evaluatorVersion.hashCode());
+	result = prime * result + ((evaluatorId == null) ? 0 : evaluatorId.hashCode());
+	result = prime * result + ((evaluatorVersion == null) ? 0 : evaluatorVersion.hashCode());
 	result = prime * result + ((time == null) ? 0 : time.hashCode());
 	return result;
     }

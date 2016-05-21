@@ -34,7 +34,9 @@ import com.puresoltechnologies.versioning.Version;
  * @author Rick-Rainer Ludwig
  *
  */
-public abstract class AbstractMetricEvaluator extends AbstractEvaluator implements MetricEvaluator {
+public abstract class AbstractMetricEvaluator extends
+	AbstractEvaluator<FileMetrics, GenericFileMetrics, DirectoryMetrics, GenericDirectoryMetrics, ProjectMetrics, GenericProjectMetrics>
+	implements MetricEvaluator {
 
     private final EvaluatorMetricsStoreServiceRemote metricStore;
 

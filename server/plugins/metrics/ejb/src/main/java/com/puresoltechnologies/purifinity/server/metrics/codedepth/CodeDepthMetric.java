@@ -10,11 +10,10 @@ import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeDepthLabels;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
-import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractCodeRangeEvaluator;
 import com.puresoltechnologies.trees.TreeIterator;
 import com.puresoltechnologies.versioning.Version;
 
@@ -25,7 +24,7 @@ import com.puresoltechnologies.versioning.Version;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class CodeDepthMetric extends CodeRangeEvaluator {
+public class CodeDepthMetric extends AbstractCodeRangeEvaluator {
 
     public static final String ID = CodeDepthMetric.class.getName();
 
@@ -42,27 +41,11 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
 
     public static final Set<String> DEPENDENCIES = new HashSet<>();
 
-    private final AnalysisRun analysisRun;
     private final List<MetricValue<?>> results = new ArrayList<>();
-    private final CodeRange codeRange;
-    private final ProgrammingLanguage language;
     private int maxDepth = 0;
 
-    public CodeDepthMetric(AnalysisRun analysisRun, ProgrammingLanguage language, CodeRange codeRange) {
-	super(NAME);
-	this.analysisRun = analysisRun;
-	this.codeRange = codeRange;
-	this.language = language;
-    }
-
-    @Override
-    public AnalysisRun getAnalysisRun() {
-	return analysisRun;
-    }
-
-    @Override
-    public CodeRange getCodeRange() {
-	return codeRange;
+    public CodeDepthMetric(AnalysisRun analysisRun, CodeRange codeRange) {
+	super(NAME, analysisRun, codeRange);
     }
 
     /**
@@ -119,7 +102,7 @@ public class CodeDepthMetric extends CodeRangeEvaluator {
      */
     @Override
     public Severity getQuality() {
-	return CodeDepthQuality.get(codeRange.getType(), maxDepth);
+	return CodeDepthQuality.get(getCodeRange().getType(), maxDepth);
     }
 
     /**

@@ -21,11 +21,10 @@ import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.McCabeLabels;
-import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractCodeRangeEvaluator;
 import com.puresoltechnologies.trees.TreeIterator;
 import com.puresoltechnologies.versioning.Version;
 
@@ -35,7 +34,7 @@ import com.puresoltechnologies.versioning.Version;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class McCabeMetric extends CodeRangeEvaluator {
+public class McCabeMetric extends AbstractCodeRangeEvaluator {
 
     public static final String ID = McCabeMetric.class.getName();
 
@@ -54,25 +53,9 @@ public class McCabeMetric extends CodeRangeEvaluator {
 
     private int cyclomaticNumber = 1;
     private final List<MetricValue<?>> results = new ArrayList<>();
-    private final AnalysisRun analysisRun;
-    private final CodeRange codeRange;
-    private final ProgrammingLanguage language;
 
-    public McCabeMetric(AnalysisRun analysisRun, ProgrammingLanguage language, CodeRange codeRange) {
-	super(NAME);
-	this.analysisRun = analysisRun;
-	this.codeRange = codeRange;
-	this.language = language;
-    }
-
-    @Override
-    public AnalysisRun getAnalysisRun() {
-	return analysisRun;
-    }
-
-    @Override
-    public CodeRange getCodeRange() {
-	return codeRange;
+    public McCabeMetric(AnalysisRun analysisRun, CodeRange codeRange) {
+	super(NAME, analysisRun, codeRange);
     }
 
     @Override
@@ -84,7 +67,7 @@ public class McCabeMetric extends CodeRangeEvaluator {
 
     private boolean calculate() {
 	cyclomaticNumber = 1;
-	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(codeRange.getUST());
+	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(getCodeRange().getUST());
 	do {
 	    UniversalSyntaxTree node = iterator.getCurrentNode();
 	    if (AbstractProduction.class.isAssignableFrom(node.getClass())) {

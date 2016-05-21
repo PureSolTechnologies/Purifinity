@@ -15,12 +15,6 @@ import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreExceptio
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProjectMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreServiceRemote;
@@ -40,7 +34,8 @@ import com.puresoltechnologies.versioning.Version;
  *
  * @author Rick-Rainer Ludwig
  */
-public abstract class AbstractEvaluator implements Evaluator {
+public abstract class AbstractEvaluator<FileResults, FileResultsImpl extends FileResults, DirectoryResults, DirectoryResultsImpl extends DirectoryResults, ProjectResults, ProjectResultsImpl extends ProjectResults>
+	implements Evaluator {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractEvaluator.class);
 
@@ -154,33 +149,33 @@ public abstract class AbstractEvaluator implements Evaluator {
      *            is set to <code>true</code> if all evaluations are to be
      *            calculated again, even if results already exist.
      *            <code>false</code> is to be set otherwise.
-     * @return The results are returned as {@link DirectoryMetrics} object.
+     * @return The results are returned as DirectoryResults object.
      * @throws InterruptedException
      *             is thrown if the evaluation was interrupted.
      * @throws EvaluationStoreException
      *             is thrown in cases of issues within evaluation store.
      */
-    abstract protected DirectoryMetrics processProject(AnalysisRun analysisRun, boolean enableReevaluation)
+    abstract protected DirectoryResults processProject(AnalysisRun analysisRun, boolean enableReevaluation)
 	    throws InterruptedException, EvaluationStoreException;
 
-    abstract protected FileMetrics readFileResults(HashId hashId) throws EvaluationStoreException;
+    abstract protected FileResults readFileResults(HashId hashId) throws EvaluationStoreException;
 
     abstract protected boolean hasFileResults(HashId hashId) throws EvaluationStoreException;
 
     abstract protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
-	    GenericFileMetrics metrics) throws EvaluationStoreException;
+	    FileResultsImpl results) throws EvaluationStoreException;
 
-    abstract protected DirectoryMetrics readDirectoryResults(HashId hashId) throws EvaluationStoreException;
+    abstract protected DirectoryResults readDirectoryResults(HashId hashId) throws EvaluationStoreException;
 
     abstract protected boolean hasDirectoryResults(HashId hashId) throws EvaluationStoreException;
 
     abstract protected void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
-	    GenericDirectoryMetrics metrics) throws EvaluationStoreException;
+	    DirectoryResultsImpl results) throws EvaluationStoreException;
 
-    abstract protected ProjectMetrics readProjectResults(String projectId, long runId) throws EvaluationStoreException;
+    abstract protected ProjectResults readProjectResults(String projectId, long runId) throws EvaluationStoreException;
 
     abstract protected boolean hasProjectResults(String projectId, long runId) throws EvaluationStoreException;
 
     abstract protected void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
-	    GenericProjectMetrics metrics) throws EvaluationStoreException;
+	    ProjectResultsImpl results) throws EvaluationStoreException;
 }

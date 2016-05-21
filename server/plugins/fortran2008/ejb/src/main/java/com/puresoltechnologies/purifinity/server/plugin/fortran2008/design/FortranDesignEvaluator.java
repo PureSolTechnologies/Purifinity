@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.server.plugin.fortran2008.design;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,21 +15,24 @@ import org.slf4j.Logger;
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
+import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProjectMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssueParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.DirectoryDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericDirectoryDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericFileDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericProjectDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.design.AbstractDesignEvaluator;
@@ -84,7 +89,7 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
     }
 
     @Override
-    protected FileMetrics readFileResults(HashId hashId) throws EvaluationStoreException {
+    protected FileDesignIssues readFileResults(HashId hashId) throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 	return null;
     }
@@ -96,52 +101,50 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
     }
 
     @Override
-    protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, GenericFileMetrics metrics)
+    protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, GenericFileDesignIssues metrics)
 	    throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 
     }
 
     @Override
-    protected DirectoryMetrics readDirectoryResults(HashId hashId) throws EvaluationStoreException {
-	// TODO Auto-generated method stub
+    protected DirectoryDesignIssues readDirectoryResults(HashId hashId) throws EvaluationStoreException {
+	// intentionally left empty, because directory storage is not supported
 	return null;
     }
 
     @Override
     protected boolean hasDirectoryResults(HashId hashId) throws EvaluationStoreException {
-	// TODO Auto-generated method stub
+	// intentionally left empty, because directory storage is not supported
 	return false;
     }
 
     @Override
     protected void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
-	    GenericDirectoryMetrics metrics) throws EvaluationStoreException {
-	// TODO Auto-generated method stub
-
+	    GenericDirectoryDesignIssues metrics) throws EvaluationStoreException {
+	// intentionally left empty, because directory storage is not supported
     }
 
     @Override
-    protected ProjectMetrics readProjectResults(String projectId, long runId) throws EvaluationStoreException {
-	// TODO Auto-generated method stub
+    protected ProjectDesignIssues readProjectResults(String projectId, long runId) throws EvaluationStoreException {
+	// intentionally left empty, because project storage is not supported
 	return null;
     }
 
     @Override
     protected boolean hasProjectResults(String projectId, long runId) throws EvaluationStoreException {
-	// TODO Auto-generated method stub
+	// intentionally left empty, because project storage is not supported
 	return false;
     }
 
     @Override
     protected void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
-	    GenericProjectMetrics metrics) throws EvaluationStoreException {
-	// TODO Auto-generated method stub
-
+	    GenericProjectDesignIssues metrics) throws EvaluationStoreException {
+	// intentionally left empty, because project storage is not supported
     }
 
     @Override
-    protected DirectoryMetrics processProject(AnalysisRun analysisRun, boolean enableReevaluation)
+    protected DirectoryDesignIssues processProject(AnalysisRun analysisRun, boolean enableReevaluation)
 	    throws InterruptedException, EvaluationStoreException {
 	// TODO Auto-generated method stub
 	return null;
@@ -158,14 +161,24 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 	    return;
 	}
 	UniversalSyntaxTree universalSyntaxTree = analysis.getUniversalSyntaxTree();
-	checkForImplicitIssues(universalSyntaxTree);
+	checkForImplicitIssues(analysisRun, analysis, universalSyntaxTree);
     }
 
-    private void checkForImplicitIssues(UniversalSyntaxTree universalSyntaxTree) {
-	TreeWalker.walk(new ImplicitVisitor(), universalSyntaxTree);
+    private void checkForImplicitIssues(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
+	    UniversalSyntaxTree universalSyntaxTree) {
+	TreeWalker.walk(new ImplicitVisitor(analysisRun, fileAnalysis), universalSyntaxTree);
     }
 
     private class ImplicitVisitor implements TreeVisitor<UniversalSyntaxTree> {
+
+	private final AnalysisRun analysisRun;
+	private final CodeAnalysis fileAnalysis;
+
+	public ImplicitVisitor(AnalysisRun analysisRun, CodeAnalysis fileAnalysis) {
+	    super();
+	    this.analysisRun = analysisRun;
+	    this.fileAnalysis = fileAnalysis;
+	}
 
 	@Override
 	public WalkingAction visit(UniversalSyntaxTree node) {
@@ -192,7 +205,22 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 		}
 	    }
 	    if (implicitCount == 0) {
-		// TODO add design issue for missing IMPLICIT NONE
+		try {
+		    AnalysisInformation analysisInformation = fileAnalysis.getAnalysisInformation();
+		    HashId hashId = analysisInformation.getHashId();
+		    SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
+		    List<DesignIssueParameter> parameters = new ArrayList<>();
+		    GenericFileDesignIssues issue = new GenericFileDesignIssues(FortranDesignEvaluator.ID,
+			    FortranDesignEvaluator.PLUGIN_VERSION, hashId, sourceCodeLocation, new Date(),
+			    parameters.toArray(new DesignIssueParameter[parameters.size()]));
+		    // issue.addCodeRangeDesignIssue(new
+		    // ImplicitDesignIssue(hashId, sourceCodeLocation, new
+		    // Date()));
+		    // TODO add design issue for missing IMPLICIT NONE
+		    storeFileResults(analysisRun, fileAnalysis, issue);
+		} catch (EvaluationStoreException e) {
+		    logger.error("Could not store implict issue.", e);
+		}
 	    } else if (hasImplicit) {
 		if (hasImplicitNone) {
 		    // TODO add design issue for used IMPLICIT and IMPLICIT NONE

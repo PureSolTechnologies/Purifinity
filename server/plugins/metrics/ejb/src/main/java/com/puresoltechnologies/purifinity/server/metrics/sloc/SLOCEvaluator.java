@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -22,7 +21,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
@@ -33,11 +31,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirec
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.db.SLOCMetricEvaluatorDAO;
-import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 /**
  * This evaluator evaluates the Source Lines Of Code metrics which counts the
@@ -59,20 +54,12 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
     @Inject
     private Logger logger;
 
-    private AnalyzerServiceManagerRemote analyzerServiceManager;
-
     @Inject
     private SLOCMetricEvaluatorDAO slocEvaluatorDAO;
 
     public SLOCEvaluator() {
 	super(SLOCMetricCalculator.ID, SLOCMetricCalculator.NAME, SLOCMetricCalculator.PLUGIN_VERSION,
 		SLOCMetricCalculator.DESCRIPTION);
-    }
-
-    @PostConstruct
-    public void initialize() {
-	analyzerServiceManager = JndiUtils.createRemoteEJBInstance(AnalyzerServiceManagerRemote.class,
-		AnalyzerServiceManagerRemote.JNDI_NAME);
     }
 
     @Override
@@ -90,9 +77,6 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	    throws InterruptedException, UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 	AnalysisInformation analysisInformation = analysis.getAnalysisInformation();
 	HashId hashId = analysisInformation.getHashId();
-	AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
-		.findByName(analysisInformation.getLanguageName(), analysisInformation.getLanguageVersion());
-	ProgrammingLanguage language = analyzerServiceManager.createProxy(analyzerServiceInformation.getJndiName());
 	AnalysisFileTree analysisRunNode = analysisRun.findTreeNode(hashId);
 	SourceCodeLocation sourceCodeLocation = analysisRunNode.getSourceCodeLocation();
 	GenericFileMetrics results = new GenericFileMetrics(SLOCMetricCalculator.ID,
@@ -100,7 +84,7 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 		SLOCEvaluatorParameter.ALL);
 	logger.info("Process file '" + sourceCodeLocation.getHumanReadableLocationString() + "'...");
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    SLOCMetricCalculator metric = new SLOCMetricCalculator(analysisRun, language, codeRange);
+	    SLOCMetricCalculator metric = new SLOCMetricCalculator(analysisRun, codeRange);
 	    metric.run();
 
 	    Map<String, MetricValue<?>> values = new HashMap<>();

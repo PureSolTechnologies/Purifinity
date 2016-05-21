@@ -22,15 +22,14 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.analysis.domain.HalsteadLabels;
-import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractCodeRangeEvaluator;
 import com.puresoltechnologies.trees.TreeIterator;
 import com.puresoltechnologies.versioning.Version;
 
-public class HalsteadMetric extends CodeRangeEvaluator {
+public class HalsteadMetric extends AbstractCodeRangeEvaluator {
 
     public static final String ID = HalsteadMetric.class.getName();
 
@@ -43,32 +42,13 @@ public class HalsteadMetric extends CodeRangeEvaluator {
 
     public static final Set<String> DEPENDENCIES = new HashSet<>();
 
-    private final AnalysisRun analysisRun;
     private final Hashtable<String, Integer> operators = new Hashtable<String, Integer>();
     private final Hashtable<String, Integer> operants = new Hashtable<String, Integer>();
-    private final CodeRange codeRange;
-    private final ProgrammingLanguage language;
 
     private HalsteadResult result;
 
-    public HalsteadMetric(AnalysisRun analysisRun, ProgrammingLanguage language, CodeRange codeRange) {
-	super(NAME);
-	this.analysisRun = analysisRun;
-	this.codeRange = codeRange;
-	this.language = language;
-    }
-
-    @Override
-    public AnalysisRun getAnalysisRun() {
-	return analysisRun;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public CodeRange getCodeRange() {
-	return codeRange;
+    public HalsteadMetric(AnalysisRun analysisRun, CodeRange codeRange) {
+	super(NAME, analysisRun, codeRange);
     }
 
     /**
@@ -82,7 +62,7 @@ public class HalsteadMetric extends CodeRangeEvaluator {
     }
 
     private void createHashtables() {
-	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(codeRange.getUST());
+	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(getCodeRange().getUST());
 	do {
 	    UniversalSyntaxTree node = iterator.getCurrentNode();
 	    if (AbstractTerminal.class.isAssignableFrom(node.getClass())) {
@@ -207,6 +187,7 @@ public class HalsteadMetric extends CodeRangeEvaluator {
      */
     @Override
     public Severity getQuality() {
+	CodeRange codeRange = getCodeRange();
 	if ((codeRange.getType() == CodeRangeType.FILE) || (codeRange.getType() == CodeRangeType.CLASS)
 		|| (codeRange.getType() == CodeRangeType.ENUMERATION)) {
 	    if (getHalsteadVolume() < 80) {

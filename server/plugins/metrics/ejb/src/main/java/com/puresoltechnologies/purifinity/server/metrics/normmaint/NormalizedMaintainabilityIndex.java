@@ -14,47 +14,27 @@ import java.util.List;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
-import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractCodeRangeEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.HalsteadMetric;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.McCabeMetric;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetric;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
 
-public class NormalizedMaintainabilityIndex extends CodeRangeEvaluator {
+public class NormalizedMaintainabilityIndex extends AbstractCodeRangeEvaluator {
 
-    private final AnalysisRun analysisRun;
-    private final CodeRange codeRange;
     private final SLOCMetricCalculator slocMetric;
     private final McCabeMetric mcCabeMetric;
     private final HalsteadMetric halsteadMetric;
     private NormalizedMaintainabilityIndexResult result;
 
-    public NormalizedMaintainabilityIndex(AnalysisRun analysisRun, ProgrammingLanguage language, CodeRange codeRange) {
-	super(NormalizedMaintainabilityIndexEvaluator.NAME);
-	this.analysisRun = analysisRun;
-	this.codeRange = codeRange;
-	slocMetric = new SLOCMetricCalculator(analysisRun, language, getCodeRange());
-	mcCabeMetric = new McCabeMetric(analysisRun, language, getCodeRange());
-	halsteadMetric = new HalsteadMetric(analysisRun, language, getCodeRange());
-    }
-
-    @Override
-    public AnalysisRun getAnalysisRun() {
-	return analysisRun;
-    }
-
-    /**
-     * {@inheritDoc}
-     * 
-     * @return
-     */
-    @Override
-    public CodeRange getCodeRange() {
-	return codeRange;
+    public NormalizedMaintainabilityIndex(AnalysisRun analysisRun, CodeRange codeRange) {
+	super(NormalizedMaintainabilityIndexEvaluator.NAME, analysisRun, codeRange);
+	slocMetric = new SLOCMetricCalculator(analysisRun, getCodeRange());
+	mcCabeMetric = new McCabeMetric(analysisRun, getCodeRange());
+	halsteadMetric = new HalsteadMetric(analysisRun, getCodeRange());
     }
 
     private void checkInput() {

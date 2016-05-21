@@ -3,7 +3,6 @@ package com.puresoltechnologies.purifinity.server.metrics.halstead;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -19,7 +18,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
@@ -27,29 +25,18 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMet
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.db.HalsteadMetricsEvaluatorDAO;
-import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Stateless
 @Remote(Evaluator.class)
 public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
-
-    private AnalyzerServiceManagerRemote analyzerServiceManager;
 
     @Inject
     private HalsteadMetricsEvaluatorDAO halsteadMetricEvaluatorDAO;
 
     public HalsteadMetricEvaluator() {
 	super(HalsteadMetric.ID, HalsteadMetric.NAME, HalsteadMetric.PLUGIN_VERSION, HalsteadMetric.DESCRIPTION);
-    }
-
-    @PostConstruct
-    public void initialize() {
-	analyzerServiceManager = JndiUtils.createRemoteEJBInstance(AnalyzerServiceManagerRemote.class,
-		AnalyzerServiceManagerRemote.JNDI_NAME);
     }
 
     @Override
@@ -66,16 +53,13 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
     protected GenericFileMetrics processFile(AnalysisRun analysisRun, CodeAnalysis analysis)
 	    throws InterruptedException, UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 	AnalysisInformation analysisInformation = analysis.getAnalysisInformation();
-	AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
-		.findByName(analysisInformation.getLanguageName(), analysisInformation.getLanguageVersion());
-	ProgrammingLanguage language = analyzerServiceManager.createProxy(analyzerServiceInformation.getJndiName());
 
 	HashId hashId = analysisInformation.getHashId();
 	SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
 	GenericFileMetrics results = new GenericFileMetrics(HalsteadMetric.ID, HalsteadMetric.PLUGIN_VERSION, hashId,
 		sourceCodeLocation, new Date(), HalsteadMetricEvaluatorParameter.ALL);
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    HalsteadMetric metric = new HalsteadMetric(analysisRun, language, codeRange);
+	    HalsteadMetric metric = new HalsteadMetric(analysisRun, codeRange);
 	    metric.run();
 	    HalsteadResult halsteadResult = metric.getHalsteadResults();
 	    halsteadMetricEvaluatorDAO.storeFileResults(hashId, sourceCodeLocation, codeRange, new HalsteadMetricResult(

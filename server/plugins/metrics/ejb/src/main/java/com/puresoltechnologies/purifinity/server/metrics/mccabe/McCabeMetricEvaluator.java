@@ -3,7 +3,6 @@ package com.puresoltechnologies.purifinity.server.metrics.mccabe;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -19,7 +18,6 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
-import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
@@ -27,30 +25,19 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMet
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
-import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.db.McCabeMetricEvaluatorDAO;
-import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Stateless
 @Remote(Evaluator.class)
 public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
-
-    private AnalyzerServiceManagerRemote analyzerServiceManager;
 
     @Inject
     private McCabeMetricEvaluatorDAO mcCabeMetricEvaluatorDAO;
 
     public McCabeMetricEvaluator() {
 	super(McCabeMetric.ID, McCabeMetric.NAME, McCabeMetric.PLUGIN_VERSION, McCabeMetric.DESCRIPTION);
-    }
-
-    @PostConstruct
-    public void initialize() {
-	analyzerServiceManager = JndiUtils.createRemoteEJBInstance(AnalyzerServiceManagerRemote.class,
-		AnalyzerServiceManagerRemote.JNDI_NAME);
     }
 
     @Override
@@ -72,11 +59,8 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 	SourceCodeLocation sourceCodeLocation = analysisFileNode.getSourceCodeLocation();
 	McCabeMetricFileResults results = new McCabeMetricFileResults(McCabeMetric.ID, McCabeMetric.PLUGIN_VERSION,
 		hashId, sourceCodeLocation, new Date());
-	AnalyzerServiceInformation analyzerServiceInformation = analyzerServiceManager
-		.findByName(analysisInformation.getLanguageName(), analysisInformation.getLanguageVersion());
-	ProgrammingLanguage language = analyzerServiceManager.createProxy(analyzerServiceInformation.getJndiName());
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    McCabeMetric metric = new McCabeMetric(analysisRun, language, codeRange);
+	    McCabeMetric metric = new McCabeMetric(analysisRun, codeRange);
 	    metric.run();
 	    McCabeMetricResult mcCabeResult = new McCabeMetricResult(sourceCodeLocation, codeRange.getType(),
 		    codeRange.getCanonicalName(), metric.getCyclomaticNumber());

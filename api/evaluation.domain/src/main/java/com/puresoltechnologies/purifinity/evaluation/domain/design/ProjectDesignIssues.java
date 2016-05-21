@@ -1,5 +1,5 @@
 package com.puresoltechnologies.purifinity.evaluation.domain.design;
 
-public interface DirectoryDesignIssues extends DesignIssues {
+public interface ProjectDesignIssues extends DesignIssues {
 
 }

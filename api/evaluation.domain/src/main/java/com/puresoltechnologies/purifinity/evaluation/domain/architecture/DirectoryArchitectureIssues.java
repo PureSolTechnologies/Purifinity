@@ -1,5 +1,5 @@
 package com.puresoltechnologies.purifinity.evaluation.domain.architecture;
 
-public interface DirectoryArchitectureIssues {
+public interface DirectoryArchitectureIssues extends ArchitectureIssues {
 
 }

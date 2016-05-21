@@ -23,12 +23,11 @@ import com.puresoltechnologies.parsers.ust.UniversalSyntaxTreeMetaData;
 import com.puresoltechnologies.parsers.ust.terminal.AbstractTerminal;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
-import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguage;
 import com.puresoltechnologies.purifinity.analysis.domain.SLOCType;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.CodeRangeEvaluator;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractCodeRangeEvaluator;
 import com.puresoltechnologies.trees.TreeIterator;
 import com.puresoltechnologies.versioning.Version;
 
@@ -40,7 +39,7 @@ import com.puresoltechnologies.versioning.Version;
  * @author Rick-Rainer Ludwig
  * 
  */
-public class SLOCMetricCalculator extends CodeRangeEvaluator {
+public class SLOCMetricCalculator extends AbstractCodeRangeEvaluator {
 
     public static final String ID = SLOCEvaluator.class.getName();
 
@@ -97,28 +96,8 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
     private final List<LineResults> lineResults = new ArrayList<LineResults>();
     private SLOCMetric sloc;
 
-    private final AnalysisRun analysisRun;
-    private final CodeRange codeRange;
-    private final ProgrammingLanguage language;
-
-    public SLOCMetricCalculator(AnalysisRun analysisRun, ProgrammingLanguage language, CodeRange codeRange) {
-	super(NAME);
-	this.analysisRun = analysisRun;
-	this.codeRange = codeRange;
-	this.language = language;
-    }
-
-    @Override
-    public AnalysisRun getAnalysisRun() {
-	return analysisRun;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public CodeRange getCodeRange() {
-	return codeRange;
+    public SLOCMetricCalculator(AnalysisRun analysisRun, CodeRange codeRange) {
+	super(NAME, analysisRun, codeRange);
     }
 
     /**
@@ -134,7 +113,7 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
     private void setup() {
 	sloc = null;
 	lineResults.clear();
-	for (int i = 0; i < codeRange.getUST().getMetaData().getLineNum(); i++) {
+	for (int i = 0; i < getCodeRange().getUST().getMetaData().getLineNum(); i++) {
 	    lineResults.add(new LineResults());
 	}
     }
@@ -145,6 +124,7 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
     }
 
     private void gatherData() {
+	CodeRange codeRange = getCodeRange();
 	TreeIterator<UniversalSyntaxTree> iterator = new TreeIterator<UniversalSyntaxTree>(codeRange.getUST());
 	int lineOffset = codeRange.getUST().getMetaData().getLine();
 	do {
@@ -211,7 +191,7 @@ public class SLOCMetricCalculator extends CodeRangeEvaluator {
 
     @Override
     public Severity getQuality() {
-	return SLOCQuality.get(codeRange.getType(), sloc);
+	return SLOCQuality.get(getCodeRange().getType(), sloc);
     }
 
     @Override
