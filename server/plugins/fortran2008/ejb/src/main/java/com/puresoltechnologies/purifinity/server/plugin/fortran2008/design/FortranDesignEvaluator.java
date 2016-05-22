@@ -210,6 +210,7 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 		    HashId hashId = analysisInformation.getHashId();
 		    SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
 		    List<DesignIssueParameter> parameters = new ArrayList<>();
+		    parameters.add(new NoImplicitNoneUsageParameter());
 		    GenericFileDesignIssues issue = new GenericFileDesignIssues(FortranDesignEvaluator.ID,
 			    FortranDesignEvaluator.PLUGIN_VERSION, hashId, sourceCodeLocation, new Date(),
 			    parameters.toArray(new DesignIssueParameter[parameters.size()]));
