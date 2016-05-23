@@ -22,8 +22,6 @@ import java.util.Properties;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
-import org.apache.tinkerpop.gremlin.structure.Vertex;
 import org.slf4j.Logger;
 
 import com.buschmais.xo.api.XOException;
@@ -34,8 +32,9 @@ import com.puresoltechnologies.commons.misc.hash.HashAlgorithm;
 import com.puresoltechnologies.commons.misc.hash.HashCodeGenerator;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
+import com.puresoltechnologies.ductiledb.api.DuctileDBGraph;
+import com.puresoltechnologies.ductiledb.api.DuctileDBVertex;
 import com.puresoltechnologies.ductiledb.tinkerpop.DuctileGraph;
-import com.puresoltechnologies.ductiledb.tinkerpop.DuctileVertex;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformation;
@@ -189,12 +188,11 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    return projects;
 	}
 	try {
-	    GraphTraversal<Vertex, Vertex> vertices = graph.traversal().V().hasLabel(AnalysisProjectVertex.NAME);
-
-	    while (vertices.hasNext()) {
-		DuctileVertex vertex = (DuctileVertex) vertices.next();
-		String projectId = (String) vertex.property(DuctileDBElementNames.ANALYSIS_PROJECT_ID_PROPERTY).value();
-		Date creationTime = (Date) vertex.property(DuctileDBElementNames.CREATION_TIME_PROPERTY).value();
+	    DuctileDBGraph baseGraph = graph.getBaseGraph();
+	    Iterable<DuctileDBVertex> vertices = baseGraph.getVertices(AnalysisProjectVertex.NAME);
+	    for (DuctileDBVertex vertex : vertices) {
+		String projectId = (String) vertex.getProperty(DuctileDBElementNames.ANALYSIS_PROJECT_ID_PROPERTY);
+		Date creationTime = (Date) vertex.getProperty(DuctileDBElementNames.CREATION_TIME_PROPERTY);
 		projects.add(new AnalysisProjectInformation(projectId, creationTime));
 	    }
 	    return projects;
