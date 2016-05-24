@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.evaluation.domain.design;
 
+import java.util.List;
+
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 
@@ -21,5 +23,9 @@ public interface FileDesignIssues extends DesignIssues {
      *         information about the location of the source.
      */
     public SourceCodeLocation getSourceCodeLocation();
+
+    public DesignIssueParameter[] getParameters();
+
+    public List<GenericCodeRangeDesignIssues> getCodeRangeDesignIssues();
 
 }

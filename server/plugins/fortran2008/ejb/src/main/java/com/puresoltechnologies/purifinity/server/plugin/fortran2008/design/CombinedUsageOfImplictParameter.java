@@ -7,14 +7,14 @@ import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssuePa
  * 
  * @author Rick-Rainer Ludwig
  */
-public class UsageOfImplictParameter extends DesignIssueParameter {
+public class CombinedUsageOfImplictParameter extends DesignIssueParameter {
 
     private static final long serialVersionUID = -1112823899835907399L;
 
-    public static final String NAME = "UsageOfImplicit";
+    public static final String NAME = "CombinedUsageOfImplicit";
 
-    public UsageOfImplictParameter() {
-	super(NAME, "", "The usage of 'IMPLICIT' statement should be avoided.");
+    public CombinedUsageOfImplictParameter() {
+	super(NAME, "", "The combined usage of 'IMPLICIT NONE' and 'IMPLICIT' statements are used.");
     }
 
 }

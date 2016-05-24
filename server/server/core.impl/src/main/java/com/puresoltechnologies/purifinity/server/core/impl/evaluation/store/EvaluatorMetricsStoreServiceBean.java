@@ -31,6 +31,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
@@ -38,6 +40,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProje
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericRunMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreServiceRemote;
@@ -198,7 +201,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     @Override
-    public void storeFileResults(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, GenericFileMetrics metrics)
+    public void storeFileResults(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileMetrics metrics)
 	    throws EvaluationStoreException {
 	try {
 	    storeFileMetricsAsValues(analysisRun, codeAnalysis, metrics);
@@ -214,8 +217,8 @@ public class EvaluatorMetricsStoreServiceBean
 	}
     }
 
-    private void storeFileMetricsAsValues(AnalysisRun analysisRun, CodeAnalysis codeAnalysis,
-	    GenericFileMetrics metrics) throws SQLException {
+    private void storeFileMetricsAsValues(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileMetrics metrics)
+	    throws SQLException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
 		+ HBaseElementNames.EVALUATION_FILE_METRICS_TABLE + " (time, " + "hashid, " + "source_code_location, "
 		+ "code_range_type, " + "code_range_name, " + "evaluator_id, " + "evaluator_version, "
@@ -273,8 +276,8 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     @Override
-    public void storeFileResultsInBigTable(AnalysisRun analysisRun, CodeAnalysis codeAnalysis,
-	    GenericFileMetrics metrics) throws EvaluationStoreException {
+    public void storeFileResultsInBigTable(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileMetrics metrics)
+	    throws EvaluationStoreException {
 	try {
 	    storeMetricsInBigTableWithoutCommit(analysisRun, codeAnalysis, metrics);
 	    connection.commit();
@@ -289,7 +292,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     private void storeMetricsInBigTableWithoutCommit(AnalysisRun analysisRun, CodeAnalysis codeAnalysis,
-	    GenericFileMetrics metrics) throws SQLException {
+	    FileMetrics metrics) throws SQLException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement(
 		"UPSERT INTO " + HBaseElementNames.EVALUATION_METRICS_TABLE + " (time," + "project_id, " + "run_id, "
 			+ "hashid, " + "internal_directory, " + "file_name, " + "source_code_location, "
@@ -362,8 +365,8 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     @Override
-    public void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directory,
-	    GenericDirectoryMetrics metrics) throws EvaluationStoreException {
+    public void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directory, DirectoryMetrics metrics)
+	    throws EvaluationStoreException {
 	try {
 	    storeDirectoryMetricsAsValues(analysisRun, directory, metrics);
 	    storeDirectoryResultsInBigTable(analysisRun, directory, metrics);
@@ -379,7 +382,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     private void storeDirectoryMetricsAsValues(AnalysisRun analysisRun, AnalysisFileTree analysisFileTree,
-	    GenericDirectoryMetrics metrics) throws SQLException {
+	    DirectoryMetrics metrics) throws SQLException {
 	try (PreparedStatement preparedStatement = connection
 		.prepareStatement("UPSERT INTO " + HBaseElementNames.EVALUATION_DIRECTORY_METRICS_TABLE + " (time, "
 			+ "hashid, " + "evaluator_id, " + "evaluator_version, " + "parameter_name, "
@@ -425,7 +428,7 @@ public class EvaluatorMetricsStoreServiceBean
 
     @Override
     public void storeDirectoryResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
-	    GenericDirectoryMetrics metrics) throws EvaluationStoreException {
+	    DirectoryMetrics metrics) throws EvaluationStoreException {
 	try {
 	    storeMetricsInBigTableWithoutCommit(analysisRun, directory, metrics);
 	    connection.commit();
@@ -440,7 +443,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     private void storeMetricsInBigTableWithoutCommit(AnalysisRun analysisRun, AnalysisFileTree directory,
-	    GenericDirectoryMetrics metrics) throws SQLException {
+	    DirectoryMetrics metrics) throws SQLException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement(
 		"UPSERT INTO " + HBaseElementNames.EVALUATION_METRICS_TABLE + " (time, " + "project_id, " + "run_id, "
 			+ "hashid, " + "internal_directory, " + "file_name, " + "code_range_type," + "code_range_name,"
@@ -490,7 +493,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     @Override
-    public void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directory, GenericProjectMetrics metrics)
+    public void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directory, ProjectMetrics metrics)
 	    throws EvaluationStoreException {
 	try {
 	    storeProjectMetricsAsValues(analysisRun, directory, metrics);
@@ -507,7 +510,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     private void storeProjectMetricsAsValues(AnalysisRun analysisRun, AnalysisFileTree directory,
-	    GenericProjectMetrics metrics) throws SQLException {
+	    ProjectMetrics metrics) throws SQLException {
 	try (PreparedStatement preparedStatement = connection
 		.prepareStatement("UPSERT INTO " + HBaseElementNames.EVALUATION_DIRECTORY_METRICS_TABLE + " (time, "
 			+ "project_id, " + "run_id, " + "evaluator_id, " + "evaluator_version, " + "parameter_name, "
@@ -549,7 +552,7 @@ public class EvaluatorMetricsStoreServiceBean
 
     @Override
     public void storeProjectResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
-	    GenericProjectMetrics metrics) throws EvaluationStoreException {
+	    ProjectMetrics metrics) throws EvaluationStoreException {
 	try {
 	    storeMetricsInBigTableWithoutCommit(analysisRun, directory, metrics);
 	    connection.commit();
@@ -564,7 +567,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     private void storeMetricsInBigTableWithoutCommit(AnalysisRun analysisRun, AnalysisFileTree directory,
-	    GenericProjectMetrics metrics) throws SQLException {
+	    ProjectMetrics metrics) throws SQLException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
 		+ HBaseElementNames.EVALUATION_METRICS_TABLE + " (time, " + "project_id, " + "run_id, " + "hashid, "
 		+ "internal_directory, " + "file_name, " + "code_range_type" + "evaluator_id, " + "evaluator_version, "

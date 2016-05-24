@@ -46,7 +46,7 @@ public abstract class AbstractMetricEvaluator extends
 		EvaluatorMetricsStoreServiceRemote.JNDI_NAME);
     }
 
-    protected EvaluatorMetricsStore getMetricStore() {
+    protected final EvaluatorMetricsStore getMetricStore() {
 	return metricStore;
     }
 
@@ -92,7 +92,7 @@ public abstract class AbstractMetricEvaluator extends
 	    throws InterruptedException, EvaluationStoreException;
 
     @Override
-    protected void processAsFile(AnalysisRun analysisRun, AnalysisFileTree fileNode, boolean enableReevaluation)
+    protected final void processAsFile(AnalysisRun analysisRun, AnalysisFileTree fileNode, boolean enableReevaluation)
 	    throws FileStoreException, InterruptedException, UniversalSyntaxTreeEvaluationException,
 	    EvaluationStoreException {
 	HashId hashId = fileNode.getHashId();
@@ -124,7 +124,7 @@ public abstract class AbstractMetricEvaluator extends
     }
 
     @Override
-    protected void processAsDirectory(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
+    protected final void processAsDirectory(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
 	    boolean enableReevaluation) throws FileStoreException, InterruptedException,
 		    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
 	HashId hashId = directoryNode.getHashId();

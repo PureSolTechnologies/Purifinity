@@ -2,8 +2,6 @@ package com.puresoltechnologies.purifinity.server.core.api.evaluation.defects;
 
 import com.puresoltechnologies.purifinity.evaluation.domain.defects.DirectoryDefects;
 import com.puresoltechnologies.purifinity.evaluation.domain.defects.FileDefects;
-import com.puresoltechnologies.purifinity.evaluation.domain.defects.GenericDirectoryDefects;
-import com.puresoltechnologies.purifinity.evaluation.domain.defects.GenericFileDefects;
 import com.puresoltechnologies.purifinity.evaluation.domain.defects.GenericProjectDefects;
 import com.puresoltechnologies.purifinity.evaluation.domain.defects.GenericRunDefects;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorStore;
@@ -15,7 +13,7 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorSt
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface EvaluatorDefectsStore extends
-	EvaluatorStore<FileDefects, DirectoryDefects, GenericFileDefects, GenericDirectoryDefects, GenericProjectDefects, GenericRunDefects> {
+public interface EvaluatorDefectsStore
+	extends EvaluatorStore<FileDefects, DirectoryDefects, GenericProjectDefects, GenericRunDefects> {
 
 }

@@ -2,10 +2,8 @@ package com.puresoltechnologies.purifinity.server.core.api.evaluation.design;
 
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DirectoryDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericDirectoryDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericFileDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericProjectDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericRunDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.RunDesignIssues;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorStore;
 
 /**
@@ -15,7 +13,7 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorSt
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface EvaluatorDesignIssuesStore extends
-	EvaluatorStore<FileDesignIssues, DirectoryDesignIssues, GenericFileDesignIssues, GenericDirectoryDesignIssues, GenericProjectDesignIssues, GenericRunDesignIssues> {
+public interface EvaluatorDesignIssuesStore
+	extends EvaluatorStore<FileDesignIssues, DirectoryDesignIssues, ProjectDesignIssues, RunDesignIssues> {
 
 }

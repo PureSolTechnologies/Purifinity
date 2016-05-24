@@ -25,18 +25,23 @@ import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssue;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssueParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.DirectoryDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericCodeRangeDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericDirectoryDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericFileDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericProjectDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericRunDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.RunDesignIssues;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.design.EvaluatorDesignIssuesStore;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.design.EvaluatorDesignIssuesStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.design.EvaluatorDesignIssuesStoreServiceRemote;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.EvaluatorStoreConnection;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 import com.puresoltechnologies.versioning.Version;
 
-public class EvaluatorDesignIssuesStoreServiceBean implements EvaluatorDesignIssuesStore {
+public class EvaluatorDesignIssuesStoreServiceBean
+	implements EvaluatorDesignIssuesStoreService, EvaluatorDesignIssuesStoreServiceRemote {
 
     @Inject
     private Logger logger;
@@ -116,7 +121,7 @@ public class EvaluatorDesignIssuesStoreServiceBean implements EvaluatorDesignIss
     }
 
     @Override
-    public void storeFileResults(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, GenericFileDesignIssues results)
+    public void storeFileResults(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileDesignIssues results)
 	    throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection
 		.prepareStatement("UPSERT INTO " + HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE + " (time, "
@@ -133,7 +138,7 @@ public class EvaluatorDesignIssuesStoreServiceBean implements EvaluatorDesignIss
 	    String codeRangeNameParameterName = codeRangeNameParameter.getName();
 	    CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
 	    String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
-	    for (GenericCodeRangeDesignIssues codeRangeIssues : results.getCodeRangeDesginIssues()) {
+	    for (GenericCodeRangeDesignIssues codeRangeIssues : results.getCodeRangeDesignIssues()) {
 		String codeRangeName = codeRangeIssues.getCodeRangeName();
 		CodeRangeType codeRangeType = codeRangeIssues.getCodeRangeType();
 
@@ -185,13 +190,13 @@ public class EvaluatorDesignIssuesStoreServiceBean implements EvaluatorDesignIss
 
     @Override
     public void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directory,
-	    GenericDirectoryDesignIssues results) throws EvaluationStoreException {
+	    DirectoryDesignIssues results) throws EvaluationStoreException {
 	throwUnsupportedException();
     }
 
     @Override
-    public void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directory,
-	    GenericProjectDesignIssues results) throws EvaluationStoreException {
+    public void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directory, ProjectDesignIssues results)
+	    throws EvaluationStoreException {
 	throwUnsupportedException();
     }
 
@@ -216,28 +221,28 @@ public class EvaluatorDesignIssuesStoreServiceBean implements EvaluatorDesignIss
     }
 
     @Override
-    public void storeFileResultsInBigTable(AnalysisRun analysisRun, CodeAnalysis codeAnalysis,
-	    GenericFileDesignIssues results) throws EvaluationStoreException {
+    public void storeFileResultsInBigTable(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileDesignIssues results)
+	    throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 
     }
 
     @Override
     public void storeDirectoryResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
-	    GenericDirectoryDesignIssues results) throws EvaluationStoreException {
+	    DirectoryDesignIssues results) throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 
     }
 
     @Override
     public void storeProjectResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
-	    GenericProjectDesignIssues metrics) throws EvaluationStoreException {
+	    ProjectDesignIssues metrics) throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 
     }
 
     @Override
-    public GenericRunDesignIssues readRunResults(String projectId, long runId, String evaluatorId)
+    public RunDesignIssues readRunResults(String projectId, long runId, String evaluatorId)
 	    throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 	return null;

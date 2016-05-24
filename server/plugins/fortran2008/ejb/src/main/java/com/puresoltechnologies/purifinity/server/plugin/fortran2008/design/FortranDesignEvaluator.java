@@ -2,15 +2,14 @@ package com.puresoltechnologies.purifinity.server.plugin.fortran2008.design;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.Parameter;
@@ -20,23 +19,22 @@ import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssue;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssueParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DirectoryDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericCodeRangeDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericDirectoryDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericFileDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericProjectDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.design.AbstractDesignEvaluator;
-import com.puresoltechnologies.purifinity.server.plugin.fortran2008.FortranPlugin;
 import com.puresoltechnologies.trees.TreeVisitor;
 import com.puresoltechnologies.trees.TreeWalker;
 import com.puresoltechnologies.trees.WalkingAction;
@@ -54,9 +52,6 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
     public static final ConfigurationParameter<?>[] CONFIGURATION_PARAMETERS = new ConfigurationParameter[] {};
     public static final MetricParameter<?>[] PARAMETERS = new MetricParameter[] {};
     public static final Set<String> DEPENDENCIES = new HashSet<>();
-
-    @Inject
-    private Logger logger;
 
     public FortranDesignEvaluator() {
 	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
@@ -79,13 +74,12 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 
     @Override
     public void setConfigurationParameter(ConfigurationParameter<?> parameter, Object value) {
-	// TODO Auto-generated method stub
+	// Intentionally left empty
     }
 
     @Override
-    public Object getConfigurationParameter(ConfigurationParameter<?> parameter) {
-	// TODO Auto-generated method stub
-	return null;
+    public ConfigurationParameter<?>[] getConfigurationParameter(ConfigurationParameter<?> parameter) {
+	return new ConfigurationParameter<?>[] {};
     }
 
     @Override
@@ -146,39 +140,41 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
     @Override
     protected DirectoryDesignIssues processProject(AnalysisRun analysisRun, boolean enableReevaluation)
 	    throws InterruptedException, EvaluationStoreException {
-	// TODO Auto-generated method stub
+	// intentionally left empty
 	return null;
     }
 
     @Override
-    protected void processAsFile(AnalysisRun analysisRun, AnalysisFileTree fileNode, boolean enableReevaluation)
-	    throws FileStoreException, InterruptedException, UniversalSyntaxTreeEvaluationException,
-	    EvaluationStoreException {
-	HashId hashId = fileNode.getHashId();
-	CodeAnalysis analysis = getFileStore().loadAnalysis(hashId, FortranPlugin.INFORMATION.getId(),
-		FortranPlugin.INFORMATION.getVersion());
-	if (analysis == null) {
-	    return;
+    protected FileDesignIssues processFile(AnalysisRun analysisRun, CodeAnalysis analysis)
+	    throws InterruptedException, UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
+	HashId hashId = analysis.getAnalysisInformation().getHashId();
+	List<DesignIssueParameter> parameters = new ArrayList<>();
+	parameters.add(new NoImplicitNoneUsageParameter());
+	parameters.add(new UsageOfImplictParameter());
+	SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
+	GenericFileDesignIssues fileIssues = new GenericFileDesignIssues(FortranDesignEvaluator.ID,
+		FortranDesignEvaluator.PLUGIN_VERSION, hashId, sourceCodeLocation, new Date(),
+		parameters.toArray(new DesignIssueParameter[parameters.size()]));
+	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+	    Map<String, List<DesignIssue>> implicitIssues = checkForImplicitIssues(analysisRun, analysis, codeRange);
+	    GenericCodeRangeDesignIssues issues = new GenericCodeRangeDesignIssues(fileIssues.getSourceCodeLocation(),
+		    codeRange.getType(), codeRange.getCanonicalName(),
+		    parameters.toArray(new DesignIssueParameter[parameters.size()]), implicitIssues);
+	    fileIssues.addCodeRangeDesignIssue(issues);
 	}
-	UniversalSyntaxTree universalSyntaxTree = analysis.getUniversalSyntaxTree();
-	checkForImplicitIssues(analysisRun, analysis, universalSyntaxTree);
+	return fileIssues;
     }
 
-    private void checkForImplicitIssues(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
-	    UniversalSyntaxTree universalSyntaxTree) {
-	TreeWalker.walk(new ImplicitVisitor(analysisRun, fileAnalysis), universalSyntaxTree);
+    private Map<String, List<DesignIssue>> checkForImplicitIssues(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
+	    CodeRange codeRange) throws EvaluationStoreException {
+	ImplicitVisitor visitor = new ImplicitVisitor();
+	TreeWalker.walk(visitor, codeRange.getUST());
+	return visitor.getIssues();
     }
 
     private class ImplicitVisitor implements TreeVisitor<UniversalSyntaxTree> {
 
-	private final AnalysisRun analysisRun;
-	private final CodeAnalysis fileAnalysis;
-
-	public ImplicitVisitor(AnalysisRun analysisRun, CodeAnalysis fileAnalysis) {
-	    super();
-	    this.analysisRun = analysisRun;
-	    this.fileAnalysis = fileAnalysis;
-	}
+	private final Map<String, List<DesignIssue>> issues = new HashMap<>();
 
 	@Override
 	public WalkingAction visit(UniversalSyntaxTree node) {
@@ -205,40 +201,42 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 		}
 	    }
 	    if (implicitCount == 0) {
-		try {
-		    AnalysisInformation analysisInformation = fileAnalysis.getAnalysisInformation();
-		    HashId hashId = analysisInformation.getHashId();
-		    SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
-		    List<DesignIssueParameter> parameters = new ArrayList<>();
-		    parameters.add(new NoImplicitNoneUsageParameter());
-		    GenericFileDesignIssues issue = new GenericFileDesignIssues(FortranDesignEvaluator.ID,
-			    FortranDesignEvaluator.PLUGIN_VERSION, hashId, sourceCodeLocation, new Date(),
-			    parameters.toArray(new DesignIssueParameter[parameters.size()]));
-		    // issue.addCodeRangeDesignIssue(new
-		    // ImplicitDesignIssue(hashId, sourceCodeLocation, new
-		    // Date()));
-		    // TODO add design issue for missing IMPLICIT NONE
-		    storeFileResults(analysisRun, fileAnalysis, issue);
-		} catch (EvaluationStoreException e) {
-		    logger.error("Could not store implict issue.", e);
+		List<DesignIssue> issueList = issues.get(NoImplicitNoneUsageParameter.NAME);
+		if (issueList == null) {
+		    issueList = new ArrayList<>();
+		    issues.put(NoImplicitNoneUsageParameter.NAME, issueList);
 		}
+		issueList.add(new ImplicitDesignIssue(new NoImplicitNoneUsageParameter()));
 	    } else if (hasImplicit) {
 		if (hasImplicitNone) {
-		    // TODO add design issue for used IMPLICIT and IMPLICIT NONE
+		    List<DesignIssue> issueList = issues.get(CombinedUsageOfImplictParameter.NAME);
+		    if (issueList == null) {
+			issueList = new ArrayList<>();
+			issues.put(CombinedUsageOfImplictParameter.NAME, issueList);
+		    }
+		    issueList.add(new ImplicitDesignIssue(new CombinedUsageOfImplictParameter()));
 		} else {
-		    // TODO add design issue for used IMPLICIT
+		    List<DesignIssue> issueList = issues.get(UsageOfImplictParameter.NAME);
+		    if (issueList == null) {
+			issueList = new ArrayList<>();
+			issues.put(UsageOfImplictParameter.NAME, issueList);
+		    }
+		    issueList.add(new ImplicitDesignIssue(new UsageOfImplictParameter()));
 		}
 	    }
 	    return WalkingAction.LEAVE_BRANCH;
 	}
 
+	public Map<String, List<DesignIssue>> getIssues() {
+	    return issues;
+	}
     }
 
     @Override
-    protected void processAsDirectory(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
-	    boolean enableReevaluation) throws FileStoreException, InterruptedException,
-		    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
+    protected DirectoryDesignIssues processDirectory(AnalysisRun analysisRun, AnalysisFileTree directory)
+	    throws InterruptedException, EvaluationStoreException {
 	// intentionally left empty; designs cannot be evaluated on directories
+	return null;
     }
 
 }

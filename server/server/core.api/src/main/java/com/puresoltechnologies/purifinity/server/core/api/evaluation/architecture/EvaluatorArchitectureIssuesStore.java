@@ -2,8 +2,6 @@ package com.puresoltechnologies.purifinity.server.core.api.evaluation.architectu
 
 import com.puresoltechnologies.purifinity.evaluation.domain.architecture.DirectoryArchitectureIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.architecture.FileArchitectureIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.architecture.GenericDirectoryArchitectureIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.architecture.GenericFileArchitectureIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.architecture.GenericProjectArchitectureIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.architecture.GenericRunArchitectureIssues;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorStore;
@@ -16,6 +14,6 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorSt
  * 
  */
 public interface EvaluatorArchitectureIssuesStore extends
-	EvaluatorStore<FileArchitectureIssues, DirectoryArchitectureIssues, GenericFileArchitectureIssues, GenericDirectoryArchitectureIssues, GenericProjectArchitectureIssues, GenericRunArchitectureIssues> {
+	EvaluatorStore<FileArchitectureIssues, DirectoryArchitectureIssues, GenericProjectArchitectureIssues, GenericRunArchitectureIssues> {
 
 }

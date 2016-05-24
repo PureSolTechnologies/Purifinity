@@ -38,6 +38,7 @@ public class GenericFileDesignIssues extends AbstractDesignIssues implements Fil
 	this.codeRangeDesignIssues.addAll(codeRangeDesignIssues);
     }
 
+    @Override
     public DesignIssueParameter[] getParameters() {
 	return parameters;
     }
@@ -46,6 +47,7 @@ public class GenericFileDesignIssues extends AbstractDesignIssues implements Fil
 	codeRangeDesignIssues.add(issues);
     }
 
+    @Override
     public List<GenericCodeRangeDesignIssues> getCodeRangeDesignIssues() {
 	return codeRangeDesignIssues;
     }
@@ -58,10 +60,5 @@ public class GenericFileDesignIssues extends AbstractDesignIssues implements Fil
     @Override
     public SourceCodeLocation getSourceCodeLocation() {
 	return sourceCodeLocation;
-    }
-
-    public List<GenericCodeRangeDesignIssues> getCodeRangeDesginIssues() {
-	// TODO Auto-generated method stub
-	return null;
     }
 }

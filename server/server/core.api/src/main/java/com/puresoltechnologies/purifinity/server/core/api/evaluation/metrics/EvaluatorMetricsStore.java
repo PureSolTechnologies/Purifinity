@@ -2,10 +2,8 @@ package com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics;
 
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProjectMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericRunMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetrics;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorStore;
 
 /**
@@ -15,7 +13,7 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorSt
  * @author Rick-Rainer Ludwig
  * 
  */
-public interface EvaluatorMetricsStore extends
-	EvaluatorStore<FileMetrics, DirectoryMetrics, GenericFileMetrics, GenericDirectoryMetrics, GenericProjectMetrics, GenericRunMetrics> {
+public interface EvaluatorMetricsStore
+	extends EvaluatorStore<FileMetrics, DirectoryMetrics, ProjectMetrics, RunMetrics> {
 
 }

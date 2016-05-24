@@ -16,8 +16,8 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
@@ -31,8 +31,7 @@ import com.puresoltechnologies.purifinity.server.test.analysis.TestFileSearchCon
 @Ignore("Storage is not available during test, yet.")
 public class SLOCEvaluatorIT extends AbstractMetricTest {
 
-    private static final File testProjectDir = new File(
-	    "src/test/resources/test_project");
+    private static final File testProjectDir = new File("src/test/resources/test_project");
 
     @Inject
     private AnalysisStoreService analysisStore;
@@ -51,16 +50,13 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
     public void test() throws Exception {
 	AnalysisRun analysisRun = performAnalysis();
 	AnalysisFileTree slocTestSample = findSLOCTestSample(analysisRun);
-	assertEquals("Sample file changed!", "ab48d201610fe5431600caee2240471d"
-		+ "902f517895af0d18492df69e92fc5148", slocTestSample
-		.getHashId().getHash());
-	GenericFileMetrics fileResults = performSLOCEvaluation(analysisRun,
-		slocTestSample);
+	assertEquals("Sample file changed!", "ab48d201610fe5431600caee2240471d" + "902f517895af0d18492df69e92fc5148",
+		slocTestSample.getHashId().getHash());
+	FileMetrics fileResults = performSLOCEvaluation(analysisRun, slocTestSample);
 	checkEvaluationResults(fileResults);
     }
 
-    private AnalysisRun performAnalysis() throws AnalysisStoreException,
-	    InterruptedException, Exception {
+    private AnalysisRun performAnalysis() throws AnalysisStoreException, InterruptedException, Exception {
 	AnalysisProjectInformation analysisProject = getAnalysisProject();
 	// AnalysisRunner analysisRunner = new AnalysisRunner(
 	// analysisStore, fileStore, analysisProject.getUUID());
@@ -95,46 +91,33 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 	return null;
     }
 
-    private GenericFileMetrics performSLOCEvaluation(AnalysisRun analysisRun,
-	    AnalysisFileTree slocTestSample) throws InterruptedException,
-	    EvaluationStoreException {
+    private FileMetrics performSLOCEvaluation(AnalysisRun analysisRun, AnalysisFileTree slocTestSample)
+	    throws InterruptedException, EvaluationStoreException {
 	SLOCEvaluator evaluator = new SLOCEvaluator();
 	evaluator.evaluate(analysisRun, false);
-	GenericFileMetrics fileResults = evaluatorStore.readFileResults(
-		slocTestSample.getHashId(), SLOCMetricCalculator.ID);
+	FileMetrics fileResults = evaluatorStore.readFileResults(slocTestSample.getHashId(), SLOCMetricCalculator.ID);
 	assertNotNull("No file results found.", fileResults);
 	return fileResults;
     }
 
-    private void checkEvaluationResults(GenericFileMetrics fileResults) {
+    private void checkEvaluationResults(FileMetrics fileResults) {
 	List<GenericCodeRangeMetrics> results = fileResults.getCodeRangeMetrics();
 	assertNotNull("No results list was returned.", results);
-	assertEquals("The number of code ranges does not match.", 4,
-		results.size());
+	assertEquals("The number of code ranges does not match.", 4, results.size());
 
 	GenericCodeRangeMetrics result0 = results.get(0);
 	assertEquals(CodeRangeType.FILE, result0.getCodeRangeType());
 	assertEquals("", result0.getCodeRangeName());
-	assertEquals(40, result0.getValue(SLOCEvaluatorParameter.PHY_LOC)
-		.getValue().intValue());
-	assertEquals(9, result0.getValue(SLOCEvaluatorParameter.PRO_LOC)
-		.getValue().intValue());
-	assertEquals(4, result0.getValue(SLOCEvaluatorParameter.BL_LOC)
-		.getValue().intValue());
-	assertEquals(29, result0.getValue(SLOCEvaluatorParameter.COM_LOC)
-		.getValue().intValue());
+	assertEquals(40, result0.getValue(SLOCEvaluatorParameter.PHY_LOC).getValue().intValue());
+	assertEquals(9, result0.getValue(SLOCEvaluatorParameter.PRO_LOC).getValue().intValue());
+	assertEquals(4, result0.getValue(SLOCEvaluatorParameter.BL_LOC).getValue().intValue());
+	assertEquals(29, result0.getValue(SLOCEvaluatorParameter.COM_LOC).getValue().intValue());
 
-	assertEquals(0, result0.getValue(SLOCEvaluatorParameter.MIN).getValue()
-		.intValue());
-	assertEquals(78, result0.getValue(SLOCEvaluatorParameter.MAX)
-		.getValue().intValue());
-	assertEquals(23.275, result0.getValue(SLOCEvaluatorParameter.AVG)
-		.getValue().intValue(), 1e-8);
-	assertEquals(7.5, result0.getValue(SLOCEvaluatorParameter.MEDIAN)
-		.getValue().intValue(), 1e-8);
-	assertEquals(27.55040834,
-		result0.getValue(SLOCEvaluatorParameter.STD_DEV).getValue()
-			.intValue(), 1e-8);
+	assertEquals(0, result0.getValue(SLOCEvaluatorParameter.MIN).getValue().intValue());
+	assertEquals(78, result0.getValue(SLOCEvaluatorParameter.MAX).getValue().intValue());
+	assertEquals(23.275, result0.getValue(SLOCEvaluatorParameter.AVG).getValue().intValue(), 1e-8);
+	assertEquals(7.5, result0.getValue(SLOCEvaluatorParameter.MEDIAN).getValue().intValue(), 1e-8);
+	assertEquals(27.55040834, result0.getValue(SLOCEvaluatorParameter.STD_DEV).getValue().intValue(), 1e-8);
 
 	GenericCodeRangeMetrics result1 = results.get(1);
 	assertEquals(CodeRangeType.CLASS, result1.getCodeRangeType());

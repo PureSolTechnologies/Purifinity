@@ -11,8 +11,10 @@ public class NoImplicitNoneUsageParameter extends DesignIssueParameter {
 
     private static final long serialVersionUID = -7793464658169914903L;
 
+    public static final String NAME = "NoImplicitNone";
+
     public NoImplicitNoneUsageParameter() {
-	super("NoImplicitNone", "", "No 'IMPLICIT NONE' was found.");
+	super(NAME, "", "No 'IMPLICIT NONE' was found.");
     }
 
 }

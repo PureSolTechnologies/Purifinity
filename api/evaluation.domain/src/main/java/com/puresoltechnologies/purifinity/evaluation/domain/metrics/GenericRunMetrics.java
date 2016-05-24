@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericRunMetrics extends AbstractMetrics implements Metrics {
+public class GenericRunMetrics extends AbstractMetrics implements RunMetrics {
 
     private static final long serialVersionUID = -815011058948733680L;
 

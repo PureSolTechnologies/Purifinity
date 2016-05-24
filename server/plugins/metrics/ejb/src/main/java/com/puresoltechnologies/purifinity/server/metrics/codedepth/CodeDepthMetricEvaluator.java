@@ -23,8 +23,6 @@ import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
@@ -88,7 +86,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 	EvaluatorMetricsStore evaluatorStore = getMetricStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    if (child.isFile()) {
-		GenericFileMetrics fileResults = evaluatorStore.readFileResults(child.getHashId(), CodeDepthMetric.ID);
+		FileMetrics fileResults = evaluatorStore.readFileResults(child.getHashId(), CodeDepthMetric.ID);
 		if (fileResults == null) {
 		    continue;
 		}
@@ -97,7 +95,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 			    result.getValue(CodeDepthMetricEvaluatorParameter.MAX_DEPTH).getValue());
 		}
 	    } else {
-		GenericDirectoryMetrics childDirectoryResults = evaluatorStore.readDirectoryResults(child.getHashId(),
+		DirectoryMetrics childDirectoryResults = evaluatorStore.readDirectoryResults(child.getHashId(),
 			CodeDepthMetric.ID);
 		if (childDirectoryResults == null) {
 		    continue;
