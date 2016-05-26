@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +35,11 @@ public class PluginsDatabaseTransformator implements ComponentTransformator {
     @Override
     public String getComponentName() {
 	return "PluginsDatabase";
+    }
+
+    @Override
+    public Set<String> getDependencies() {
+	return Collections.emptySet();
     }
 
     @Override

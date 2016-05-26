@@ -5,14 +5,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
+import com.puresoltechnologies.commons.domain.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
@@ -127,7 +132,7 @@ public class EvaluatorDesignIssuesStoreServiceBean
 		.prepareStatement("UPSERT INTO " + HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE + " (time, "
 			+ "hashid, " + "source_code_location, " + "code_range_type, " + "code_range_name, "
 			+ "evaluator_id, " + "evaluator_version, " + "design_issue_id, " + "parameter_type, "
-			+ "description, " + "value) VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+			+ "description, " + "weight) VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    Date time = results.getTime();
 	    AnalysisInformation analysisInformation = codeAnalysis.getAnalysisInformation();
 	    HashId hashId = analysisInformation.getHashId();
@@ -202,8 +207,128 @@ public class EvaluatorDesignIssuesStoreServiceBean
 
     @Override
     public GenericFileDesignIssues readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
-	// TODO Auto-generated method stub
-	return null;
+	try (PreparedStatement preparedStatement = connection
+		.prepareStatement("SELECT " + "time, " + "code_range_type, " + "code_range_name, "
+			+ "evaluator_version, " + "parameter_name, " + "parameter_unit, " + "parameter_description, "
+			+ "parameter_type, " + "metric, " + "source_code_location " + "FROM "
+			+ HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
+	    preparedStatement.setString(1, hashId.toString());
+	    preparedStatement.setString(2, evaluatorId);
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		Date time = null;
+		SourceCodeLocation sourceCodeLocation = null;
+		Version evaluatorVersion = null;
+		Map<CodeRangeType, Map<String, Map<Parameter<?>, DesignIssue>>> buffer = new HashMap<>();
+		DesignIssueParameter[] parameters = new DesignIssueParameter[] {};
+		while (resultSet.next()) {
+		    if (time == null) {
+			time = resultSet.getDate("time");
+			// XXX Do we need checks here?
+			// } else {
+			// if (!time.equals(result.getDate("time"))) {
+			// throw new EvaluationStoreException(
+			// "Times are different for evaluatorId="
+			// + evaluatorId + " and hashId="
+			// + hashId.toString());
+			// }
+		    }
+		    SourceCodeLocation alternateSourceCodeLocation = EvaluatorStoreUtils
+			    .extractSourceCodeLocation(resultSet);
+		    if (sourceCodeLocation == null) {
+			sourceCodeLocation = alternateSourceCodeLocation;
+		    } else {
+			if (!sourceCodeLocation.equals(alternateSourceCodeLocation)) {
+			    throw new EvaluationStoreException("Source code locations are different for evaluatorId="
+				    + evaluatorId + " and hashId=" + hashId.toString());
+			}
+		    }
+		    evaluatorVersion = getEvaluatorVersionAndCheckConsistency(resultSet, hashId, evaluatorId,
+			    evaluatorVersion);
+		    String parameterName = resultSet.getString("parameter_name");
+		    DesignIssueParameter designIssueParameter = extractDesignIssueParameter(resultSet);
+		    if (designIssueParameter == null) {
+			continue;
+		    }
+		    parameters = new DesignIssueParameter[] { designIssueParameter };
+		    CodeRangeType codeRangeType = CodeRangeType.valueOf(resultSet.getString("code_range_type"));
+		    String codeRangeName = resultSet.getString("code_range_name");
+		    Map<Parameter<?>, DesignIssue> parameterBuffer;
+		    if (buffer.containsKey(codeRangeType)) {
+			Map<String, Map<Parameter<?>, DesignIssue>> codeRangeTypeBuffer = buffer.get(codeRangeType);
+			if (codeRangeTypeBuffer.containsKey(codeRangeName)) {
+			    parameterBuffer = codeRangeTypeBuffer.get(codeRangeName);
+			    if (parameterBuffer.containsKey(designIssueParameter)) {
+				throw new EvaluationStoreException("Multiple parameters with same name '"
+					+ parameterName + "' are different for evaluatorId=" + evaluatorId
+					+ " and hashId=" + hashId.toString());
+			    }
+			} else {
+			    parameterBuffer = new HashMap<>();
+			    codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);
+			}
+		    } else {
+			Map<String, Map<Parameter<?>, DesignIssue>> codeRangeTypeBuffer = new HashMap<>();
+			parameterBuffer = new HashMap<>();
+			codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);
+			buffer.put(codeRangeType, codeRangeTypeBuffer);
+		    }
+		    int weight = resultSet.getInt("weight");
+		    DesignIssue metricValue = new DesignIssue(weight, designIssueParameter);
+		    parameterBuffer.put(designIssueParameter, metricValue);
+		}
+
+		GenericFileDesignIssues fileDesignIssues = new GenericFileDesignIssues(evaluatorId, evaluatorVersion,
+			hashId, sourceCodeLocation, time, parameters);
+		for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, DesignIssue>>> codeRangeTypeEntry : buffer
+			.entrySet()) {
+		    CodeRangeType codeRangeType = codeRangeTypeEntry.getKey();
+		    for (Entry<String, Map<Parameter<?>, DesignIssue>> codeRangeNameEntry : codeRangeTypeEntry
+			    .getValue().entrySet()) {
+			String codeRangeName = codeRangeNameEntry.getKey();
+			Map<String, List<DesignIssue>> values = new HashMap<>();
+			for (Entry<Parameter<?>, DesignIssue> parameterEntry : codeRangeNameEntry.getValue()
+				.entrySet()) {
+			    Parameter<?> parameter = parameterEntry.getKey();
+			    DesignIssue value = parameterEntry.getValue();
+			    List<DesignIssue> issueList = values.get(parameter.getName());
+			    if (issueList == null) {
+				issueList = new ArrayList<>();
+				values.put(parameter.getName(), issueList);
+			    }
+			    issueList.add(value);
+			}
+			fileDesignIssues.addCodeRangeDesignIssue(new GenericCodeRangeDesignIssues(sourceCodeLocation,
+				codeRangeType, codeRangeName, parameters, values));
+		    }
+		}
+		return fileDesignIssues;
+	    }
+	} catch (SQLException e) {
+	    throw new EvaluationStoreException("Could not read file results.", e);
+	}
+    }
+
+    private Version getEvaluatorVersionAndCheckConsistency(ResultSet resultSet, HashId hashId, String evaluatorId,
+	    Version evaluatorVersion) throws EvaluationStoreException, SQLException {
+	// Get evaluator version and check consistency
+	Version alternateEvaluatorVersion = Version.valueOf(resultSet.getString("evaluator_version"));
+	if (evaluatorVersion == null) {
+	    evaluatorVersion = alternateEvaluatorVersion;
+	} else {
+	    if (!evaluatorVersion.equals(alternateEvaluatorVersion)) {
+		throw new EvaluationStoreException("Evaluator versions are different for evaluatorId=" + evaluatorId
+			+ " and hashId=" + hashId.toString());
+	    }
+	}
+	return evaluatorVersion;
+    }
+
+    private DesignIssueParameter extractDesignIssueParameter(ResultSet resultSet) throws SQLException {
+	String parameterName = resultSet.getString("parameter_name");
+	String parameterUnit = resultSet.getString("parameter_unit");
+	String parameterDescription = resultSet.getString("parameter_description");
+	return new DesignIssueParameter(parameterName, parameterUnit == null ? "" : parameterUnit,
+		parameterDescription);
     }
 
     @Override
@@ -230,21 +355,19 @@ public class EvaluatorDesignIssuesStoreServiceBean
     @Override
     public void storeDirectoryResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    DirectoryDesignIssues results) throws EvaluationStoreException {
-	// TODO Auto-generated method stub
-
+	throwUnsupportedException();
     }
 
     @Override
     public void storeProjectResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    ProjectDesignIssues metrics) throws EvaluationStoreException {
-	// TODO Auto-generated method stub
-
+	throwUnsupportedException();
     }
 
     @Override
     public RunDesignIssues readRunResults(String projectId, long runId, String evaluatorId)
 	    throws EvaluationStoreException {
-	// TODO Auto-generated method stub
+	throwUnsupportedException();
 	return null;
     }
 

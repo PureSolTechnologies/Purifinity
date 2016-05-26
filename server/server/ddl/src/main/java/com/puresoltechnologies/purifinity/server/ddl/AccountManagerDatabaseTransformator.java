@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,10 +19,20 @@ import com.puresoltechnologies.versioning.Version;
 public class AccountManagerDatabaseTransformator implements ComponentTransformator {
 
     public static final String HBASE_HOST = "localhost";
+    public static final Set<String> DEPENDENCIES = new HashSet<>();
+
+    static {
+	DEPENDENCIES.add(DuctileDBDatabaseTransformator.COMPONENT_NAME);
+    }
 
     @Override
     public String getComponentName() {
 	return "AccountManager";
+    }
+
+    @Override
+    public Set<String> getDependencies() {
+	return Collections.unmodifiableSet(DEPENDENCIES);
     }
 
     @Override

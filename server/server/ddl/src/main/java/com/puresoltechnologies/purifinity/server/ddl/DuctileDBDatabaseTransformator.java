@@ -3,6 +3,7 @@ package com.puresoltechnologies.purifinity.server.ddl;
 import static com.puresoltechnologies.ductiledb.core.schema.HBaseSchema.DUCTILEDB_NAMESPACE;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,10 +37,21 @@ public class DuctileDBDatabaseTransformator implements ComponentTransformator {
     private static final Logger logger = LoggerFactory.getLogger(DuctileDBDatabaseTransformator.class);
 
     public static final String DUCTILE_DB_HOST = "localhost";
+    public static final String COMPONENT_NAME = "DuctileDBGraphDatabase";
+    public static final Set<String> DEPENDENCIES = new HashSet<>();
+
+    static {
+	DEPENDENCIES.add(HadoopTransformator.COMPONENT_NAME);
+    }
 
     @Override
     public String getComponentName() {
-	return "DuctileDBGraphDatabase";
+	return COMPONENT_NAME;
+    }
+
+    @Override
+    public Set<String> getDependencies() {
+	return Collections.emptySet();
     }
 
     @Override

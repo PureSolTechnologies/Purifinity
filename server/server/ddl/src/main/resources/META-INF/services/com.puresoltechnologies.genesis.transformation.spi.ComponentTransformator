@@ -1,7 +1,7 @@
+com.puresoltechnologies.purifinity.server.ddl.HadoopTransformator
+com.puresoltechnologies.purifinity.server.ddl.DuctileDBDatabaseTransformator
 com.puresoltechnologies.purifinity.server.ddl.AccountManagerDatabaseTransformator
 com.puresoltechnologies.purifinity.server.ddl.AnalysisServiceDatabaseTransformator
 com.puresoltechnologies.purifinity.server.ddl.EvaluationServiceDatabaseTransformator
 com.puresoltechnologies.purifinity.server.ddl.PluginsDatabaseTransformator
 com.puresoltechnologies.purifinity.server.ddl.PreferencesStoreDatabaseTransformator
-com.puresoltechnologies.purifinity.server.ddl.HadoopTransformator
-com.puresoltechnologies.purifinity.server.ddl.DuctileDBDatabaseTransformator

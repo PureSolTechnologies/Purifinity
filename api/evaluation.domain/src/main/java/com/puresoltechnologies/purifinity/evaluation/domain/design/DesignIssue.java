@@ -6,8 +6,8 @@ public class DesignIssue extends GeneralValue<Integer> {
 
     private static final long serialVersionUID = 3991682986335349586L;
 
-    public DesignIssue(Integer value, DesignIssueParameter parameter) {
-	super(value, parameter);
+    public DesignIssue(Integer weight, DesignIssueParameter parameter) {
+	super(weight, parameter);
     }
 
 }

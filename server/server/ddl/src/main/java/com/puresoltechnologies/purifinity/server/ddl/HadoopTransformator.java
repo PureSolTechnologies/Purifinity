@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.server.ddl;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,9 +18,16 @@ import com.puresoltechnologies.versioning.Version;
 
 public class HadoopTransformator implements ComponentTransformator {
 
+    public static final String COMPONENT_NAME = "Hadoop";
+
     @Override
     public String getComponentName() {
-	return "Hadoop";
+	return COMPONENT_NAME;
+    }
+
+    @Override
+    public Set<String> getDependencies() {
+	return Collections.emptySet();
     }
 
     @Override

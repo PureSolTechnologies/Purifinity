@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,6 +29,11 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
     @Override
     public String getComponentName() {
 	return "EvaluatorStore";
+    }
+
+    @Override
+    public Set<String> getDependencies() {
+	return Collections.emptySet();
     }
 
     @Override
@@ -167,7 +173,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 		"CREATE TABLE " + HBaseElementNames.EVALUATION_ARCHITECTURE_ISSUES_TABLE + " ("//
 			+ "hashid varchar not null, " //
 			+ "evaluator_id varchar not null, " //
-			+ "style_issue_id varchar not null, " //
+			+ "architecture_issue_id varchar not null, " //
 			+ "code_range_type varchar, " //
 			+ "code_range_name varchar, " //
 			+ "time timestamp, " //
@@ -178,9 +184,9 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "stop_line unsigned_int, " //
 			+ "stop_column unsigned_int, " //
 			+ "description varchar, " //
-			+ "value unsigned_int, " //
+			+ "weight unsigned_int, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_ARCHITECTURE_ISSUES_TABLE.replaceAll("\\.", "_")
-			+ "_PK PRIMARY KEY(hashid, evaluator_id, style_issue_id, start_line, start_column))",
+			+ "_PK PRIMARY KEY(hashid, evaluator_id, architecture_issue_id, start_line, start_column))",
 		"Keeps style issues of source files."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
@@ -198,10 +204,10 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "stop_line unsigned_int, " //
 			+ "stop_column unsigned_int, " //
 			+ "description varchar, " //
-			+ "value unsigned_int, " //
+			+ "weight unsigned_int, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_DEFECTS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, defect_id, start_line, start_column))",
-		"Keeps defects of source files."));
+		"Keeps architectural issues of source files."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE + " ("//
@@ -218,10 +224,10 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "stop_line unsigned_int, " //
 			+ "stop_column unsigned_int, " //
 			+ "description varchar, " //
-			+ "value unsigned_int, " //
+			+ "weight unsigned_int, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, design_issue_id, start_line, start_column))",
-		"Keeps defects of source files."));
+		"Keeps design issues of source files."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + HBaseElementNames.EVALUATION_STYLE_ISSUES_TABLE + " ("//
@@ -238,7 +244,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "stop_line unsigned_int, " //
 			+ "stop_column unsigned_int, " //
 			+ "description varchar, " //
-			+ "value unsigned_int, " //
+			+ "weight unsigned_int, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_STYLE_ISSUES_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, style_issue_id, start_line, start_column))",
 		"Keeps style issues of source files."));
