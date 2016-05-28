@@ -37,7 +37,7 @@ public class AddRoleStep extends AbstractDuctileDBTransformationStep {
 	    graph.commit();
 	} catch (Exception e) {
 	    graph.rollback();
-	    throw new TransformationException("Could not create default roles in Titan database.", e);
+	    throw new TransformationException("Could not create default roles in DuctileDB database.", e);
 	}
     }
 

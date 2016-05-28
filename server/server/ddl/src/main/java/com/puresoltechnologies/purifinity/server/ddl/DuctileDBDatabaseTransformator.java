@@ -3,7 +3,6 @@ package com.puresoltechnologies.purifinity.server.ddl;
 import static com.puresoltechnologies.ductiledb.core.schema.HBaseSchema.DUCTILEDB_NAMESPACE;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -51,7 +50,7 @@ public class DuctileDBDatabaseTransformator implements ComponentTransformator {
 
     @Override
     public Set<String> getDependencies() {
-	return Collections.emptySet();
+	return DEPENDENCIES;
     }
 
     @Override
