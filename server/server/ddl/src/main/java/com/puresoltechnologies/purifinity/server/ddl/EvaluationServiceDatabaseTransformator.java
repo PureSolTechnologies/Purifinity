@@ -181,8 +181,8 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "evaluator_version varchar, " //
 			+ "start_line unsigned_int not null, " //
 			+ "start_column unsigned_int not null, " //
-			+ "stop_line unsigned_int, " //
-			+ "stop_column unsigned_int, " //
+			+ "line_count unsigned_int, " //
+			+ "length unsigned_int, " //
 			+ "description varchar, " //
 			+ "weight unsigned_int, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_ARCHITECTURE_ISSUES_TABLE.replaceAll("\\.", "_")
@@ -201,8 +201,8 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "evaluator_version varchar, " //
 			+ "start_line unsigned_int not null, " //
 			+ "start_column unsigned_int not null, " //
-			+ "stop_line unsigned_int, " //
-			+ "stop_column unsigned_int, " //
+			+ "line_count unsigned_int, " //
+			+ "length unsigned_int, " //
 			+ "description varchar, " //
 			+ "weight unsigned_int, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_DEFECTS_TABLE.replaceAll("\\.", "_")
@@ -221,8 +221,8 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "evaluator_version varchar, " //
 			+ "start_line unsigned_int not null, " //
 			+ "start_column unsigned_int not null, " //
-			+ "stop_line unsigned_int, " //
-			+ "stop_column unsigned_int, " //
+			+ "line_count unsigned_int, " //
+			+ "length unsigned_int, " //
 			+ "description varchar, " //
 			+ "weight unsigned_int, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE.replaceAll("\\.", "_")
@@ -241,8 +241,8 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "evaluator_version varchar, " //
 			+ "start_line unsigned_int not null, " //
 			+ "start_column unsigned_int not null, " //
-			+ "stop_line unsigned_int, " //
-			+ "stop_column unsigned_int, " //
+			+ "line_count unsigned_int, " //
+			+ "length unsigned_int, " //
 			+ "description varchar, " //
 			+ "weight unsigned_int, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_STYLE_ISSUES_TABLE.replaceAll("\\.", "_")

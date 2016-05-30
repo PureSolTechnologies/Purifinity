@@ -16,11 +16,13 @@ import com.puresoltechnologies.commons.domain.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.parsers.ust.UniversalSyntaxTree;
+import com.puresoltechnologies.parsers.ust.UniversalSyntaxTreeMetaData;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
+import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
@@ -53,6 +55,13 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
     public static final MetricParameter<?>[] PARAMETERS = new MetricParameter[] {};
     public static final Set<String> DEPENDENCIES = new HashSet<>();
 
+    private final DesignIssueParameter USAGE_OF_IMPLICIT = new DesignIssueParameter("UsageOfImplicit", "",
+	    "The usage of 'IMPLICIT' statement should be avoided.");;
+    private final DesignIssueParameter NO_IMPLICIT_NONE = new DesignIssueParameter("NoImplicitNone", "",
+	    "No 'IMPLICIT NONE' was found.");
+    private final DesignIssueParameter COMBINED_USAGE_OF_IMPLICIT = new DesignIssueParameter("CombinedUsageOfImplicit",
+	    "", "Combined usage of 'IMPLICIT NONE' and 'IMPLICIT' was found.");
+
     public FortranDesignEvaluator() {
 	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
     }
@@ -84,21 +93,18 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 
     @Override
     protected FileDesignIssues readFileResults(HashId hashId) throws EvaluationStoreException {
-	// TODO Auto-generated method stub
-	return null;
+	return getDesignIssuessStore().readFileResults(hashId, FortranDesignEvaluator.ID);
     }
 
     @Override
     protected boolean hasFileResults(HashId hashId) throws EvaluationStoreException {
-	// TODO Auto-generated method stub
-	return false;
+	return getDesignIssuessStore().hasFileResults(hashId, FortranDesignEvaluator.ID);
     }
 
     @Override
-    protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, GenericFileDesignIssues metrics)
+    protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, GenericFileDesignIssues issues)
 	    throws EvaluationStoreException {
-	// TODO Auto-generated method stub
-
+	getDesignIssuessStore().storeFileResults(analysisRun, fileAnalysis, issues);
     }
 
     @Override
@@ -149,13 +155,17 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 	    throws InterruptedException, UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 	HashId hashId = analysis.getAnalysisInformation().getHashId();
 	List<DesignIssueParameter> parameters = new ArrayList<>();
-	parameters.add(new NoImplicitNoneUsageParameter());
-	parameters.add(new UsageOfImplictParameter());
+	parameters.add(NO_IMPLICIT_NONE);
+	parameters.add(USAGE_OF_IMPLICIT);
+	parameters.add(COMBINED_USAGE_OF_IMPLICIT);
 	SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
 	GenericFileDesignIssues fileIssues = new GenericFileDesignIssues(FortranDesignEvaluator.ID,
 		FortranDesignEvaluator.PLUGIN_VERSION, hashId, sourceCodeLocation, new Date(),
 		parameters.toArray(new DesignIssueParameter[parameters.size()]));
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
+	    if ((codeRange.getType() == CodeRangeType.FILE) || (codeRange.getType() == CodeRangeType.DIRECTORY)) {
+		continue;
+	    }
 	    Map<String, List<DesignIssue>> implicitIssues = checkForImplicitIssues(analysisRun, analysis, codeRange);
 	    GenericCodeRangeDesignIssues issues = new GenericCodeRangeDesignIssues(fileIssues.getSourceCodeLocation(),
 		    codeRange.getType(), codeRange.getCanonicalName(),
@@ -195,34 +205,37 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 			    break;
 			} else if ("implicit-spec-list".equals(implicitStamentChild.getName())) {
 			    hasImplicit = true;
+			    List<DesignIssue> issueList = issues.get(USAGE_OF_IMPLICIT.getName());
+			    if (issueList == null) {
+				issueList = new ArrayList<>();
+				issues.put(USAGE_OF_IMPLICIT.getName(), issueList);
+			    }
+			    UniversalSyntaxTreeMetaData metaData = implicitStatement.getMetaData();
+			    issueList.add(new DesignIssue(metaData.getLine(), metaData.getColumn(),
+				    metaData.getLineNum(), metaData.getLength(), 1, USAGE_OF_IMPLICIT));
 			    break;
 			}
 		    }
 		}
 	    }
 	    if (implicitCount == 0) {
-		List<DesignIssue> issueList = issues.get(NoImplicitNoneUsageParameter.NAME);
+		List<DesignIssue> issueList = issues.get(NO_IMPLICIT_NONE.getName());
 		if (issueList == null) {
 		    issueList = new ArrayList<>();
-		    issues.put(NoImplicitNoneUsageParameter.NAME, issueList);
+		    issues.put(NO_IMPLICIT_NONE.getName(), issueList);
 		}
-		issueList.add(new ImplicitDesignIssue(new NoImplicitNoneUsageParameter()));
-	    } else if (hasImplicit) {
-		if (hasImplicitNone) {
-		    List<DesignIssue> issueList = issues.get(CombinedUsageOfImplictParameter.NAME);
-		    if (issueList == null) {
-			issueList = new ArrayList<>();
-			issues.put(CombinedUsageOfImplictParameter.NAME, issueList);
-		    }
-		    issueList.add(new ImplicitDesignIssue(new CombinedUsageOfImplictParameter()));
-		} else {
-		    List<DesignIssue> issueList = issues.get(UsageOfImplictParameter.NAME);
-		    if (issueList == null) {
-			issueList = new ArrayList<>();
-			issues.put(UsageOfImplictParameter.NAME, issueList);
-		    }
-		    issueList.add(new ImplicitDesignIssue(new UsageOfImplictParameter()));
+		UniversalSyntaxTreeMetaData metaData = node.getMetaData();
+		issueList.add(new DesignIssue(metaData.getLine(), metaData.getColumn(), metaData.getLineNum(),
+			metaData.getLength(), 1, NO_IMPLICIT_NONE));
+	    } else if (hasImplicit && hasImplicitNone) {
+		List<DesignIssue> issueList = issues.get(COMBINED_USAGE_OF_IMPLICIT.getName());
+		if (issueList == null) {
+		    issueList = new ArrayList<>();
+		    issues.put(COMBINED_USAGE_OF_IMPLICIT.getName(), issueList);
 		}
+		UniversalSyntaxTreeMetaData metaData = node.getMetaData();
+		issueList.add(new DesignIssue(metaData.getLine(), metaData.getColumn(), metaData.getLineNum(),
+			metaData.getLength(), 1, COMBINED_USAGE_OF_IMPLICIT));
 	    }
 	    return WalkingAction.LEAVE_BRANCH;
 	}

@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.domain.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -45,6 +45,7 @@ import com.puresoltechnologies.purifinity.server.core.impl.evaluation.EvaluatorS
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 import com.puresoltechnologies.versioning.Version;
 
+@Stateless
 public class EvaluatorDesignIssuesStoreServiceBean
 	implements EvaluatorDesignIssuesStoreService, EvaluatorDesignIssuesStoreServiceRemote {
 
@@ -109,13 +110,11 @@ public class EvaluatorDesignIssuesStoreServiceBean
 
     @Override
     public boolean hasDirectoryResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
-	throwUnsupportedException();
 	return false;
     }
 
     @Override
     public boolean hasProjectResults(String projectId, long runId, String evaluatorId, String parameterName) {
-	throwUnsupportedException();
 	return false;
     }
 
@@ -128,11 +127,11 @@ public class EvaluatorDesignIssuesStoreServiceBean
     @Override
     public void storeFileResults(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileDesignIssues results)
 	    throws EvaluationStoreException {
-	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("UPSERT INTO " + HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE + " (time, "
-			+ "hashid, " + "source_code_location, " + "code_range_type, " + "code_range_name, "
-			+ "evaluator_id, " + "evaluator_version, " + "design_issue_id, " + "parameter_type, "
-			+ "description, " + "weight) VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+	try (PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
+		+ HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE + " (time, " + "hashid, " + "source_code_location, "
+		+ "code_range_type, " + "code_range_name, " + "evaluator_id, " + "evaluator_version, "
+		+ "design_issue_id, " + "description, " + "weight, " + "start_line, " + "start_column, "
+		+ "line_count, " + "length" + ") VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    Date time = results.getTime();
 	    AnalysisInformation analysisInformation = codeAnalysis.getAnalysisInformation();
 	    HashId hashId = analysisInformation.getHashId();
@@ -149,10 +148,7 @@ public class EvaluatorDesignIssuesStoreServiceBean
 
 		for (DesignIssueParameter parameter : results.getParameters()) {
 		    String parameterName = parameter.getName();
-		    String unit = parameter.getUnit();
-		    Class<?> type = parameter.getType();
 		    String description = parameter.getDescription();
-		    LevelOfMeasurement levelOfMeasurement = parameter.getLevelOfMeasurement();
 		    if (parameterName.equals(codeRangeNameParameterName)
 			    || parameterName.equals(codeRangeTypeParameterName)) {
 			continue;
@@ -174,15 +170,17 @@ public class EvaluatorDesignIssuesStoreServiceBean
 			preparedStatement.setString(6, evaluatorId);
 			preparedStatement.setString(7, evaluatorVersion.toString());
 			preparedStatement.setString(8, parameterName);
-			preparedStatement.setString(9, unit);
-			preparedStatement.setString(10, type.getName());
-			preparedStatement.setString(11, description);
-			preparedStatement.setString(12, levelOfMeasurement.name());
-			preparedStatement.setDouble(13, numericValue);
+			preparedStatement.setString(9, description);
+			preparedStatement.setDouble(10, numericValue);
+			preparedStatement.setInt(11, issue.getStartLine());
+			preparedStatement.setInt(12, issue.getStartColumn());
+			preparedStatement.setInt(13, issue.getLineCount());
+			preparedStatement.setInt(14, issue.getLength());
 			preparedStatement.execute();
 		    }
 		}
 	    }
+	    connection.commit();
 	} catch (SQLException e) {
 	    try {
 		connection.rollback();
@@ -207,11 +205,11 @@ public class EvaluatorDesignIssuesStoreServiceBean
 
     @Override
     public GenericFileDesignIssues readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
-	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("SELECT " + "time, " + "code_range_type, " + "code_range_name, "
-			+ "evaluator_version, " + "parameter_name, " + "parameter_unit, " + "parameter_description, "
-			+ "parameter_type, " + "metric, " + "source_code_location " + "FROM "
-			+ HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
+	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, "
+		+ "code_range_type, " + "code_range_name, " + "evaluator_version, " + "design_issue_id, "
+		+ "parameter_unit, " + "parameter_description, " + "metric, " + "start_line, " + "start_column, "
+		+ "line_count, " + "length, " + "source_code_location " + "FROM "
+		+ HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -244,7 +242,7 @@ public class EvaluatorDesignIssuesStoreServiceBean
 		    }
 		    evaluatorVersion = getEvaluatorVersionAndCheckConsistency(resultSet, hashId, evaluatorId,
 			    evaluatorVersion);
-		    String parameterName = resultSet.getString("parameter_name");
+		    String parameterName = resultSet.getString("design_issue_id");
 		    DesignIssueParameter designIssueParameter = extractDesignIssueParameter(resultSet);
 		    if (designIssueParameter == null) {
 			continue;
@@ -273,7 +271,12 @@ public class EvaluatorDesignIssuesStoreServiceBean
 			buffer.put(codeRangeType, codeRangeTypeBuffer);
 		    }
 		    int weight = resultSet.getInt("weight");
-		    DesignIssue metricValue = new DesignIssue(weight, designIssueParameter);
+		    int startLine = resultSet.getInt("start_line");
+		    int startColumn = resultSet.getInt("start_column");
+		    int lineCount = resultSet.getInt("line_count");
+		    int length = resultSet.getInt("length");
+		    DesignIssue metricValue = new DesignIssue(startLine, startColumn, lineCount, length, weight,
+			    designIssueParameter);
 		    parameterBuffer.put(designIssueParameter, metricValue);
 		}
 

@@ -88,7 +88,6 @@ public class FortranDefectEvaluator extends AbstractDefectEvaluator {
     protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, GenericFileDefects defects)
 	    throws EvaluationStoreException {
 	// TODO Auto-generated method stub
-
     }
 
     @Override
