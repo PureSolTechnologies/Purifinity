@@ -1,8 +1,8 @@
-package com.puresoltechnologies.purifinity.evaluation.domain.style;
+package com.puresoltechnologies.purifinity.evaluation.domain.defects;
 
 import com.puresoltechnologies.commons.domain.GeneralValue;
 
-public class StyleIssue extends GeneralValue<Integer> {
+public class Defect extends GeneralValue<Integer> {
 
     private static final long serialVersionUID = 3991682986335349586L;
 
@@ -11,8 +11,8 @@ public class StyleIssue extends GeneralValue<Integer> {
     private final int lineCount;
     private final int length;
 
-    public StyleIssue(int startLine, int startColumn, int lineCount, int length, Integer weight,
-	    StyleIssueParameter parameter) {
+    public Defect(int startLine, int startColumn, int lineCount, int length, Integer weight,
+	    DefectParameter parameter) {
 	super(weight, parameter);
 	this.startLine = startLine;
 	this.startColumn = startColumn;
