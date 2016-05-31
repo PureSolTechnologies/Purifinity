@@ -62,11 +62,11 @@ public class Fortran extends AbstractProgrammingLanguageAnalyzer {
 		    patternsToString(DEFAULT_FREE_FORM_FILE_SUFFIXES)),
 	    new ConfigurationParameter<Boolean>("Automatic Source Form Identification", "", LevelOfMeasurement.NOMINAL,
 		    "If checked, the parser tries to identify the source form (fixed or free) automaticaly. Default is true, because it is cleaner to specify source form via file suffix.",
-		    Boolean.class, AUTOMATIC_SOURCE_FORM_PROPERTY, "/Source Files", false),
+		    Boolean.class, AUTOMATIC_SOURCE_FORM_PROPERTY, "/Source Files", true),
 	    new ConfigurationParameter<Boolean>("Use C Pre-processor", "", LevelOfMeasurement.NOMINAL,
 		    "Specifies wether a C pre-processor is to be used before analysis.", Boolean.class,
 		    C_PRE_PROCESSOR_USAGE_PROPERTY, "/Source Files", false),
-	    new ConfigurationParameter<Boolean>("Strict form check", "", LevelOfMeasurement.NOMINAL,
+	    new ConfigurationParameter<Boolean>("Strict Fixed Form check", "", LevelOfMeasurement.NOMINAL,
 		    "Specifies wether the source form is to be checked very strict.", Boolean.class,
 		    STRICT_FORM_CHECK_PROPERTY, "/Source Files", true) };
 

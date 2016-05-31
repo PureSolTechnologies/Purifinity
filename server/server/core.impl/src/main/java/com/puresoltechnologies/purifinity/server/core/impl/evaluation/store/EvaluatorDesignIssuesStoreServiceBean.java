@@ -205,11 +205,11 @@ public class EvaluatorDesignIssuesStoreServiceBean
 
     @Override
     public GenericFileDesignIssues readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
-	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, "
-		+ "code_range_type, " + "code_range_name, " + "evaluator_version, " + "design_issue_id, "
-		+ "parameter_unit, " + "parameter_description, " + "metric, " + "start_line, " + "start_column, "
-		+ "line_count, " + "length, " + "source_code_location " + "FROM "
-		+ HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
+	try (PreparedStatement preparedStatement = connection
+		.prepareStatement("SELECT " + "time, " + "code_range_type, " + "code_range_name, "
+			+ "evaluator_version, " + "design_issue_id, " + "description, " + "weight, " + "start_line, "
+			+ "start_column, " + "line_count, " + "length, " + "source_code_location " + "FROM "
+			+ HBaseElementNames.EVALUATION_DESIGN_ISSUES_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -327,11 +327,9 @@ public class EvaluatorDesignIssuesStoreServiceBean
     }
 
     private DesignIssueParameter extractDesignIssueParameter(ResultSet resultSet) throws SQLException {
-	String parameterName = resultSet.getString("parameter_name");
-	String parameterUnit = resultSet.getString("parameter_unit");
-	String parameterDescription = resultSet.getString("parameter_description");
-	return new DesignIssueParameter(parameterName, parameterUnit == null ? "" : parameterUnit,
-		parameterDescription);
+	String parameterName = resultSet.getString("design_issue_id");
+	String description = resultSet.getString("description");
+	return new DesignIssueParameter(parameterName, "", description);
     }
 
     @Override

@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.fs.FSDataOutputStream;
@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.server.database.hadoop.utils.HadoopClientHelper;
 
-@Stateless
+@Singleton
 public class BloobService {
 
     private static final String FILE_DIRECTORY = HadoopClientHelper.PURIFINITY_DIRECTORY + "/files";

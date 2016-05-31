@@ -163,7 +163,8 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 		FortranDesignEvaluator.PLUGIN_VERSION, hashId, sourceCodeLocation, new Date(),
 		parameters.toArray(new DesignIssueParameter[parameters.size()]));
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
-	    if ((codeRange.getType() == CodeRangeType.FILE) || (codeRange.getType() == CodeRangeType.DIRECTORY)) {
+	    if ((codeRange.getType() == CodeRangeType.MODULE) || (codeRange.getType() == CodeRangeType.FILE)
+		    || (codeRange.getType() == CodeRangeType.DIRECTORY)) {
 		continue;
 	    }
 	    Map<String, List<DesignIssue>> implicitIssues = checkForImplicitIssues(analysisRun, analysis, codeRange);
