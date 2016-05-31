@@ -25,6 +25,6 @@ public interface StyleIssues extends EvaluationResults {
      */
     public SourceCodeLocation getSourceCodeLocation();
 
-    public List<GenericCodeRangeStyleIssues> getCodeRangeStyleResults();
+    public List<CodeRangeStyleIssues> getCodeRangeStyleResults();
 
 }

@@ -10,25 +10,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericRunMetrics extends AbstractMetrics implements RunMetrics {
+public class RunMetricsImpl extends AbstractMetrics implements RunMetrics {
 
     private static final long serialVersionUID = -815011058948733680L;
 
     private final MetricParameter<?>[] parameters;
-    private final Map<HashId, GenericFileMetrics> fileMetrics = new HashMap<>();
-    private final Map<HashId, GenericDirectoryMetrics> directoryMetrics = new HashMap<>();
+    private final Map<HashId, FileMetricsImpl> fileMetrics = new HashMap<>();
+    private final Map<HashId, DirectoryMetricsImpl> directoryMetrics = new HashMap<>();
 
-    public GenericRunMetrics(String evaluatorId, Version evaluatorVersion, Date time, MetricParameter<?>[] parameters) {
+    public RunMetricsImpl(String evaluatorId, Version evaluatorVersion, Date time, MetricParameter<?>[] parameters) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.parameters = parameters;
     }
 
     @JsonCreator
-    public GenericRunMetrics(@JsonProperty("evaluatorId") String evaluatorId,
+    public RunMetricsImpl(@JsonProperty("evaluatorId") String evaluatorId,
 	    @JsonProperty("evaluatorVersion") Version evaluatorVersion, @JsonProperty("time") Date time,
 	    @JsonProperty("parameters") MetricParameter<?>[] parameters,
-	    @JsonProperty("fileMetrics") Map<HashId, GenericFileMetrics> fileMetrics,
-	    @JsonProperty("directoryMetrics") Map<HashId, GenericDirectoryMetrics> directoryMetrics) {
+	    @JsonProperty("fileMetrics") Map<HashId, FileMetricsImpl> fileMetrics,
+	    @JsonProperty("directoryMetrics") Map<HashId, DirectoryMetricsImpl> directoryMetrics) {
 	this(evaluatorId, evaluatorVersion, time, parameters);
 	if (fileMetrics != null) {
 	    this.fileMetrics.putAll(fileMetrics);
@@ -43,19 +43,19 @@ public class GenericRunMetrics extends AbstractMetrics implements RunMetrics {
 	return parameters;
     }
 
-    public void add(GenericFileMetrics fileMetrics) {
+    public void add(FileMetricsImpl fileMetrics) {
 	this.fileMetrics.put(fileMetrics.getHashId(), fileMetrics);
     }
 
-    public void add(GenericDirectoryMetrics directoryMetrics) {
+    public void add(DirectoryMetricsImpl directoryMetrics) {
 	this.directoryMetrics.put(directoryMetrics.getHashId(), directoryMetrics);
     }
 
-    public Map<HashId, GenericFileMetrics> getFileMetrics() {
+    public Map<HashId, FileMetricsImpl> getFileMetrics() {
 	return fileMetrics;
     }
 
-    public Map<HashId, GenericDirectoryMetrics> getDirectoryMetrics() {
+    public Map<HashId, DirectoryMetricsImpl> getDirectoryMetrics() {
 	return directoryMetrics;
     }
 
@@ -77,7 +77,7 @@ public class GenericRunMetrics extends AbstractMetrics implements RunMetrics {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	GenericRunMetrics other = (GenericRunMetrics) obj;
+	RunMetricsImpl other = (RunMetricsImpl) obj;
 	if (directoryMetrics == null) {
 	    if (other.directoryMetrics != null)
 		return false;

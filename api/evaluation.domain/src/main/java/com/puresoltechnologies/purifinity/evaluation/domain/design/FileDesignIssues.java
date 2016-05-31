@@ -26,6 +26,6 @@ public interface FileDesignIssues extends DesignIssues {
 
     public DesignIssueParameter[] getParameters();
 
-    public List<GenericCodeRangeDesignIssues> getCodeRangeDesignIssues();
+    public List<CodeRangeDesignIssues> getCodeRangeDesignIssues();
 
 }

@@ -24,7 +24,7 @@ import com.puresoltechnologies.commons.money.Money;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
@@ -59,7 +59,7 @@ public class BasicCoCoMoFileResults extends BasicCoCoMoResults implements FileMe
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
+    public List<CodeRangeMetrics> getCodeRangeMetrics() {
 	Map<String, MetricValue<?>> row = new HashMap<>();
 	row.put(KSLOC.getName(), new MetricValue<Double>(getKsloc(), KSLOC));
 	row.put(PERSON_MONTH.getName(), new MetricValue<Double>(getPersonMonth(), PERSON_MONTH));
@@ -74,8 +74,8 @@ public class BasicCoCoMoFileResults extends BasicCoCoMoResults implements FileMe
 	row.put(C2.getName(), new MetricValue<Double>(getC2(), C2));
 	row.put(C3.getName(), new MetricValue<Double>(getC3(), C3));
 
-	List<GenericCodeRangeMetrics> values = new ArrayList<>();
-	values.add(new GenericCodeRangeMetrics(sourceCodeLocation, CodeRangeType.FILE, sourceCodeLocation.getName(),
+	List<CodeRangeMetrics> values = new ArrayList<>();
+	values.add(new CodeRangeMetrics(sourceCodeLocation, CodeRangeType.FILE, sourceCodeLocation.getName(),
 		getParameters(), row));
 	return values;
     }

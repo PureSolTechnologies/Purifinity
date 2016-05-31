@@ -1,11 +1,11 @@
-package com.puresoltechnologies.purifinity.evaluation.domain.style;
+package com.puresoltechnologies.purifinity.evaluation.domain.defects;
 
 import java.io.Serializable;
 import java.util.List;
 
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 
-public class GenericCodeRangeStyleIssues implements Serializable {
+public class CodeRangeDefects implements Serializable {
 
     public String getCodeRangeName() {
 	// TODO Auto-generated method stub
@@ -17,7 +17,7 @@ public class GenericCodeRangeStyleIssues implements Serializable {
 	return null;
     }
 
-    public List<StyleIssue> getIssues(StyleIssueParameter parameter) {
+    public List<Defect> getIssues(DefectParameter parameter) {
 	// TODO Auto-generated method stub
 	return null;
     }

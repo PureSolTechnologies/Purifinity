@@ -6,6 +6,6 @@ public interface FileArchitectureIssues extends ArchitectureIssues {
 
     public ArchitectureIssueParameter[] getParameters();
 
-    public List<GenericCodeRangeArchitectureIssues> getCodeRangeDesignIssues();
+    public List<CodeRangeArchitectureIssues> getCodeRangeDesignIssues();
 
 }

@@ -32,10 +32,10 @@ import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssue;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssueParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DirectoryDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericCodeRangeDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericDirectoryDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericFileDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericProjectDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.CodeRangeDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.DirectoryDesignIssuesImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssuesImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssuesImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.RunDesignIssues;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
@@ -142,7 +142,7 @@ public class EvaluatorDesignIssuesStoreServiceBean
 	    String codeRangeNameParameterName = codeRangeNameParameter.getName();
 	    CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
 	    String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
-	    for (GenericCodeRangeDesignIssues codeRangeIssues : results.getCodeRangeDesignIssues()) {
+	    for (CodeRangeDesignIssues codeRangeIssues : results.getCodeRangeDesignIssues()) {
 		String codeRangeName = codeRangeIssues.getCodeRangeName();
 		CodeRangeType codeRangeType = codeRangeIssues.getCodeRangeType();
 
@@ -204,7 +204,7 @@ public class EvaluatorDesignIssuesStoreServiceBean
     }
 
     @Override
-    public GenericFileDesignIssues readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
+    public FileDesignIssuesImpl readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection
 		.prepareStatement("SELECT " + "time, " + "code_range_type, " + "code_range_name, "
 			+ "evaluator_version, " + "design_issue_id, " + "description, " + "weight, " + "start_line, "
@@ -280,7 +280,7 @@ public class EvaluatorDesignIssuesStoreServiceBean
 		    parameterBuffer.put(designIssueParameter, metricValue);
 		}
 
-		GenericFileDesignIssues fileDesignIssues = new GenericFileDesignIssues(evaluatorId, evaluatorVersion,
+		FileDesignIssuesImpl fileDesignIssues = new FileDesignIssuesImpl(evaluatorId, evaluatorVersion,
 			hashId, sourceCodeLocation, time, parameters);
 		for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, DesignIssue>>> codeRangeTypeEntry : buffer
 			.entrySet()) {
@@ -300,7 +300,7 @@ public class EvaluatorDesignIssuesStoreServiceBean
 			    }
 			    issueList.add(value);
 			}
-			fileDesignIssues.addCodeRangeDesignIssue(new GenericCodeRangeDesignIssues(sourceCodeLocation,
+			fileDesignIssues.addCodeRangeDesignIssue(new CodeRangeDesignIssues(sourceCodeLocation,
 				codeRangeType, codeRangeName, parameters, values));
 		    }
 		}
@@ -333,14 +333,14 @@ public class EvaluatorDesignIssuesStoreServiceBean
     }
 
     @Override
-    public GenericDirectoryDesignIssues readDirectoryResults(HashId hashId, String evaluatorId)
+    public DirectoryDesignIssuesImpl readDirectoryResults(HashId hashId, String evaluatorId)
 	    throws EvaluationStoreException {
 	throwUnsupportedException();
 	return null;
     }
 
     @Override
-    public GenericProjectDesignIssues readProjectResults(String projectId, long runId, String evaluatorId)
+    public ProjectDesignIssuesImpl readProjectResults(String projectId, long runId, String evaluatorId)
 	    throws EvaluationStoreException {
 	throwUnsupportedException();
 	return null;

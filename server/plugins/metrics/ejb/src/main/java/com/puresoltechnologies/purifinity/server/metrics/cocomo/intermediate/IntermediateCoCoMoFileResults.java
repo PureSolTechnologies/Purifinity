@@ -25,7 +25,7 @@ import com.puresoltechnologies.commons.money.Money;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
@@ -60,7 +60,7 @@ public class IntermediateCoCoMoFileResults extends IntermediateCoCoMoResults imp
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
+    public List<CodeRangeMetrics> getCodeRangeMetrics() {
 	Map<String, MetricValue<?>> row = new HashMap<>();
 
 	row.put(KSLOC.getName(), new MetricValue<Double>(getKsloc(), KSLOC));
@@ -77,8 +77,8 @@ public class IntermediateCoCoMoFileResults extends IntermediateCoCoMoResults imp
 	row.put(CI.getName(), new MetricValue<Double>(getProject().getCi(), CI));
 	row.put(DI.getName(), new MetricValue<Double>(getProject().getDi(), DI));
 
-	List<GenericCodeRangeMetrics> metrics = new ArrayList<>();
-	metrics.add(new GenericCodeRangeMetrics(sourceCodeLocation, CodeRangeType.FILE, sourceCodeLocation.getName(),
+	List<CodeRangeMetrics> metrics = new ArrayList<>();
+	metrics.add(new CodeRangeMetrics(sourceCodeLocation, CodeRangeType.FILE, sourceCodeLocation.getName(),
 		IntermediateCoCoMoEvaluatorParameter.ALL, row));
 	return metrics;
     }

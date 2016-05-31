@@ -8,12 +8,12 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericDirectoryDesignIssues extends AbstractDesignIssues implements DirectoryDesignIssues {
+public class DirectoryDesignIssuesImpl extends AbstractDesignIssues implements DirectoryDesignIssues {
 
     private final DesignIssueParameter[] parameters;
     private final Map<String, MetricValue<?>> designIssues = new HashMap<>();
 
-    public GenericDirectoryDesignIssues(String evaluatorId, Version evaluatorVersion, HashId hashId, Date time,
+    public DirectoryDesignIssuesImpl(String evaluatorId, Version evaluatorVersion, HashId hashId, Date time,
 	    DesignIssueParameter[] parameters, Map<String, MetricValue<?>> designIssues) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.parameters = parameters;

@@ -10,7 +10,7 @@ import java.util.Map;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
@@ -55,11 +55,11 @@ public class HalsteadMetricFileResults extends AbstractHalsteadResults implement
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
-	List<GenericCodeRangeMetrics> values = new ArrayList<>();
+    public List<CodeRangeMetrics> getCodeRangeMetrics() {
+	List<CodeRangeMetrics> values = new ArrayList<>();
 	for (HalsteadMetricResult result : results) {
 	    Map<String, MetricValue<?>> row = convertToRow(result);
-	    values.add(new GenericCodeRangeMetrics(result.getSourceCodeLocation(), result.getCodeRangeType(),
+	    values.add(new CodeRangeMetrics(result.getSourceCodeLocation(), result.getCodeRangeType(),
 		    result.getCodeRangeName(), HalsteadMetricEvaluatorParameter.ALL, row));
 	}
 	return values;

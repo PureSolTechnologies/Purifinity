@@ -32,8 +32,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.architecture.Archite
 import com.puresoltechnologies.purifinity.evaluation.domain.architecture.ArchitectureIssueParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.architecture.DirectoryArchitectureIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.architecture.FileArchitectureIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.architecture.GenericCodeRangeArchitectureIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.architecture.GenericFileArchitectureIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.architecture.CodeRangeArchitectureIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.architecture.FileArchitectureIssuesImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.architecture.ProjectArchitectureIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.architecture.RunArchitectureIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssue;
@@ -143,7 +143,7 @@ public class EvaluatorArchitectureIssuesStoreServiceBean
 	    String codeRangeNameParameterName = codeRangeNameParameter.getName();
 	    CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
 	    String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
-	    for (GenericCodeRangeArchitectureIssues codeRangeIssues : results.getCodeRangeDesignIssues()) {
+	    for (CodeRangeArchitectureIssues codeRangeIssues : results.getCodeRangeDesignIssues()) {
 		String codeRangeName = codeRangeIssues.getCodeRangeName();
 		CodeRangeType codeRangeType = codeRangeIssues.getCodeRangeType();
 
@@ -281,7 +281,7 @@ public class EvaluatorArchitectureIssuesStoreServiceBean
 		    parameterBuffer.put(designIssueParameter, metricValue);
 		}
 
-		GenericFileArchitectureIssues fileDesignIssues = new GenericFileArchitectureIssues(evaluatorId,
+		FileArchitectureIssuesImpl fileDesignIssues = new FileArchitectureIssuesImpl(evaluatorId,
 			evaluatorVersion, hashId, sourceCodeLocation, time, parameters);
 		for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, DesignIssue>>> codeRangeTypeEntry : buffer
 			.entrySet()) {
@@ -301,7 +301,7 @@ public class EvaluatorArchitectureIssuesStoreServiceBean
 			    }
 			    issueList.add(value);
 			}
-			fileDesignIssues.addCodeRangeDesignIssue(new GenericCodeRangeArchitectureIssues(
+			fileDesignIssues.addCodeRangeDesignIssue(new CodeRangeArchitectureIssues(
 				sourceCodeLocation, codeRangeType, codeRangeName, parameters, values));
 		    }
 		}

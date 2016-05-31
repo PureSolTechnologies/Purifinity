@@ -18,12 +18,12 @@ public class GenericFileMetricsTest {
 
     @Test
     public void testSerialization() throws JsonGenerationException, JsonMappingException, IOException {
-	GenericFileMetrics metrics = new GenericFileMetrics("evaluatorId", new Version(1, 2, 3),
+	FileMetricsImpl metrics = new FileMetricsImpl("evaluatorId", new Version(1, 2, 3),
 		HashId.valueOf("SHA-256:abcdef"), new UnspecifiedSourceCodeLocation(), new Date(),
 		new MetricParameter<?>[] {});
 	String serialized = JSONSerializer.toJSONString(metrics);
 	System.out.println(serialized);
-	GenericFileMetrics deserialized = JSONSerializer.fromJSONString(serialized, GenericFileMetrics.class);
+	FileMetricsImpl deserialized = JSONSerializer.fromJSONString(serialized, FileMetricsImpl.class);
 	assertEquals(metrics, deserialized);
     }
 }

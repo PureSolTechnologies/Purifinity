@@ -8,7 +8,7 @@ import java.util.Map;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 
-public class GenericCodeRangeMetrics implements Serializable {
+public class CodeRangeMetrics implements Serializable {
 
     private static final long serialVersionUID = -598831823857817995L;
     private final SourceCodeLocation sourceCodeLocation;
@@ -17,7 +17,7 @@ public class GenericCodeRangeMetrics implements Serializable {
     private final MetricParameter<?>[] parameters;
     private final Map<String, MetricValue<?>> values = new HashMap<>();
 
-    public GenericCodeRangeMetrics(SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
+    public CodeRangeMetrics(SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
 	    String codeRangeName, MetricParameter<?>[] parameters, Map<String, MetricValue<?>> values) {
 	super();
 	this.sourceCodeLocation = sourceCodeLocation;
@@ -27,7 +27,7 @@ public class GenericCodeRangeMetrics implements Serializable {
 	this.values.putAll(values);
     }
 
-    public GenericCodeRangeMetrics(SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
+    public CodeRangeMetrics(SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
 	    String codeRangeName, MetricParameter<?>[] parameters, Collection<MetricValue<?>> values) {
 	super();
 	this.sourceCodeLocation = sourceCodeLocation;

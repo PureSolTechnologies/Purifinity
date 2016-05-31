@@ -18,9 +18,9 @@ import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.defects.DirectoryDefects;
 import com.puresoltechnologies.purifinity.evaluation.domain.defects.FileDefects;
-import com.puresoltechnologies.purifinity.evaluation.domain.defects.GenericDirectoryDefects;
-import com.puresoltechnologies.purifinity.evaluation.domain.defects.GenericFileDefects;
-import com.puresoltechnologies.purifinity.evaluation.domain.defects.GenericProjectDefects;
+import com.puresoltechnologies.purifinity.evaluation.domain.defects.DirectoryDefectsImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.defects.FileDefectsImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.defects.ProjectDefectsImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.defects.ProjectDefects;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
@@ -85,7 +85,7 @@ public class FortranDefectEvaluator extends AbstractDefectEvaluator {
     }
 
     @Override
-    protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, GenericFileDefects defects)
+    protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, FileDefectsImpl defects)
 	    throws EvaluationStoreException {
 	// TODO Auto-generated method stub
     }
@@ -104,7 +104,7 @@ public class FortranDefectEvaluator extends AbstractDefectEvaluator {
 
     @Override
     protected void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
-	    GenericDirectoryDefects metrics) throws EvaluationStoreException {
+	    DirectoryDefectsImpl metrics) throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 
     }
@@ -123,7 +123,7 @@ public class FortranDefectEvaluator extends AbstractDefectEvaluator {
 
     @Override
     protected void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
-	    GenericProjectDefects metrics) throws EvaluationStoreException {
+	    ProjectDefectsImpl metrics) throws EvaluationStoreException {
 	// TODO Auto-generated method stub
 
     }

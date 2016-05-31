@@ -6,6 +6,6 @@ public interface FileDefects extends Defects {
 
     public DefectParameter[] getParameters();
 
-    public List<GenericCodeRangeDefects> getCodeRangeDefects();
+    public List<CodeRangeDefects> getCodeRangeDefects();
 
 }

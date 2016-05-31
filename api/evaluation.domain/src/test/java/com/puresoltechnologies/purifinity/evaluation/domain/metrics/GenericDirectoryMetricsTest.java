@@ -18,12 +18,12 @@ public class GenericDirectoryMetricsTest {
 
     @Test
     public void testSerialization() throws JsonGenerationException, JsonMappingException, IOException {
-	GenericDirectoryMetrics metrics = new GenericDirectoryMetrics("evaluatorId", new Version(1, 2, 3),
+	DirectoryMetricsImpl metrics = new DirectoryMetricsImpl("evaluatorId", new Version(1, 2, 3),
 		HashId.valueOf("SHA-256:abcdef"), new Date(), new MetricParameter<?>[] {},
 		new HashMap<String, MetricValue<?>>());
 	String serialized = JSONSerializer.toJSONString(metrics);
 	System.out.println(serialized);
-	GenericDirectoryMetrics deserialized = JSONSerializer.fromJSONString(serialized, GenericDirectoryMetrics.class);
+	DirectoryMetricsImpl deserialized = JSONSerializer.fromJSONString(serialized, DirectoryMetricsImpl.class);
 	assertEquals(metrics, deserialized);
     }
 }

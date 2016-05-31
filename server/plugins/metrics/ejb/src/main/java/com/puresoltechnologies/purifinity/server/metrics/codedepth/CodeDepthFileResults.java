@@ -14,7 +14,7 @@ import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
@@ -59,15 +59,15 @@ public class CodeDepthFileResults extends AbstractMetrics implements FileMetrics
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
-	List<GenericCodeRangeMetrics> values = new ArrayList<>();
+    public List<CodeRangeMetrics> getCodeRangeMetrics() {
+	List<CodeRangeMetrics> values = new ArrayList<>();
 
 	for (CodeDepthResult result : results) {
 	    Map<String, MetricValue<?>> row = new HashMap<>();
 	    row.put(MAX_DEPTH.getName(), new MetricValue<Integer>(result.getMaxDepth(), MAX_DEPTH));
 	    Severity quality = result.getQuality();
 	    if (quality != Severity.NONE) {
-		values.add(new GenericCodeRangeMetrics(sourceCodeLocation, result.getCodeRangeType(),
+		values.add(new CodeRangeMetrics(sourceCodeLocation, result.getCodeRangeType(),
 			result.getCodeRangeName(), CodeDepthMetricEvaluatorParameter.ALL, row));
 	    }
 	}

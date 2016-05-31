@@ -17,7 +17,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
@@ -101,11 +101,11 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
     }
 
     private void checkEvaluationResults(FileMetrics fileResults) {
-	List<GenericCodeRangeMetrics> results = fileResults.getCodeRangeMetrics();
+	List<CodeRangeMetrics> results = fileResults.getCodeRangeMetrics();
 	assertNotNull("No results list was returned.", results);
 	assertEquals("The number of code ranges does not match.", 4, results.size());
 
-	GenericCodeRangeMetrics result0 = results.get(0);
+	CodeRangeMetrics result0 = results.get(0);
 	assertEquals(CodeRangeType.FILE, result0.getCodeRangeType());
 	assertEquals("", result0.getCodeRangeName());
 	assertEquals(40, result0.getValue(SLOCEvaluatorParameter.PHY_LOC).getValue().intValue());
@@ -119,15 +119,15 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
 	assertEquals(7.5, result0.getValue(SLOCEvaluatorParameter.MEDIAN).getValue().intValue(), 1e-8);
 	assertEquals(27.55040834, result0.getValue(SLOCEvaluatorParameter.STD_DEV).getValue().intValue(), 1e-8);
 
-	GenericCodeRangeMetrics result1 = results.get(1);
+	CodeRangeMetrics result1 = results.get(1);
 	assertEquals(CodeRangeType.CLASS, result1.getCodeRangeType());
 	assertEquals("SLOCTestSample", result1.getCodeRangeName());
 
-	GenericCodeRangeMetrics result2 = results.get(2);
+	CodeRangeMetrics result2 = results.get(2);
 	assertEquals(CodeRangeType.CONSTRUCTOR, result2.getCodeRangeType());
 	assertEquals("SLOCTestSample()", result2.getCodeRangeName());
 
-	GenericCodeRangeMetrics result3 = results.get(3);
+	CodeRangeMetrics result3 = results.get(3);
 	assertEquals(CodeRangeType.METHOD, result3.getCodeRangeType());
 	assertEquals("multiply(double,double)", result3.getCodeRangeName());
     }

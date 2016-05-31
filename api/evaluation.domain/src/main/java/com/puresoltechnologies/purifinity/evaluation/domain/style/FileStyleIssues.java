@@ -6,6 +6,6 @@ public interface FileStyleIssues extends StyleIssues {
 
     public StyleIssueParameter[] getParameters();
 
-    public List<GenericCodeRangeStyleIssues> getCodeRangeStyleIssues();
+    public List<CodeRangeStyleIssues> getCodeRangeStyleIssues();
 
 }

@@ -4,9 +4,9 @@ import java.util.Date;
 
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericRunArchitectureIssues extends AbstractArchitectureIssues implements RunArchitectureIssues {
+public class RunArchitectureIssuesImpl extends AbstractArchitectureIssues implements RunArchitectureIssues {
 
-    public GenericRunArchitectureIssues(String evaluatorId, Version evaluatorVersion, Date time) {
+    public RunArchitectureIssuesImpl(String evaluatorId, Version evaluatorVersion, Date time) {
 	super(evaluatorId, evaluatorVersion, time);
 	// TODO Auto-generated constructor stub
     }

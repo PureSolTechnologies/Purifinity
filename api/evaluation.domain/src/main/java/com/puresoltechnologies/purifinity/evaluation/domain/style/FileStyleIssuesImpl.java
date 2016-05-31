@@ -9,20 +9,20 @@ import java.util.Set;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssueParameter;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericCodeRangeDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.CodeRangeDesignIssues;
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericFileStyleIssues extends AbstractStyleIssues implements FileStyleIssues {
+public class FileStyleIssuesImpl extends AbstractStyleIssues implements FileStyleIssues {
 
     private static final long serialVersionUID = -2265405120665928206L;
 
     private final Set<StyleParameter> parameters = new LinkedHashSet<>();
-    private final List<GenericCodeRangeStyleIssues> codeRangeMetrics = new ArrayList<>();
+    private final List<CodeRangeStyleIssues> codeRangeMetrics = new ArrayList<>();
 
     private final HashId hashId;
     private final SourceCodeLocation sourceCodeLocation;
 
-    public GenericFileStyleIssues(String evaluatorId, Version evaluatorVersion, HashId hashId,
+    public FileStyleIssuesImpl(String evaluatorId, Version evaluatorVersion, HashId hashId,
 	    SourceCodeLocation sourceCodeLocation, Date time, DesignIssueParameter[] parameters2) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
@@ -41,12 +41,12 @@ public class GenericFileStyleIssues extends AbstractStyleIssues implements FileS
     }
 
     @Override
-    public List<GenericCodeRangeStyleIssues> getCodeRangeStyleResults() {
+    public List<CodeRangeStyleIssues> getCodeRangeStyleResults() {
 	// TODO Auto-generated method stub
 	return null;
     }
 
-    public void addCodeRangeDesignIssue(GenericCodeRangeDesignIssues genericCodeRangeDesignIssues) {
+    public void addCodeRangeDesignIssue(CodeRangeDesignIssues genericCodeRangeDesignIssues) {
 	// TODO Auto-generated method stub
 
     }
@@ -58,7 +58,7 @@ public class GenericFileStyleIssues extends AbstractStyleIssues implements FileS
     }
 
     @Override
-    public List<GenericCodeRangeStyleIssues> getCodeRangeStyleIssues() {
+    public List<CodeRangeStyleIssues> getCodeRangeStyleIssues() {
 	// TODO Auto-generated method stub
 	return null;
     }

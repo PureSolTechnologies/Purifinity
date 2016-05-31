@@ -4,9 +4,9 @@ import java.util.Date;
 
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericDirectoryDefects extends AbstractDefects implements DirectoryDefects {
+public class DirectoryDefectsImpl extends AbstractDefects implements DirectoryDefects {
 
-    public GenericDirectoryDefects(String evaluatorId, Version evaluatorVersion, Date time) {
+    public DirectoryDefectsImpl(String evaluatorId, Version evaluatorVersion, Date time) {
 	super(evaluatorId, evaluatorVersion, time);
 	// TODO Auto-generated constructor stub
     }

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericProjectMetrics extends AbstractMetrics implements ProjectMetrics {
+public class ProjectMetricsImpl extends AbstractMetrics implements ProjectMetrics {
 
     private static final long serialVersionUID = 2692614300538471139L;
 
@@ -16,7 +16,7 @@ public class GenericProjectMetrics extends AbstractMetrics implements ProjectMet
     private final String projectId;
     private final long runId;
 
-    public GenericProjectMetrics(String evaluatorId, Version evaluatorVersion, String projectId, long runId, Date time,
+    public ProjectMetricsImpl(String evaluatorId, Version evaluatorVersion, String projectId, long runId, Date time,
 	    MetricParameter<?>[] parameters, Map<String, MetricValue<?>> values) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.projectId = projectId;

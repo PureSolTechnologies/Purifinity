@@ -7,9 +7,9 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericDirectoryStyleIssues extends AbstractStyleIssues implements DirectoryStyleIssues {
+public class DirectoryStyleIssuesImpl extends AbstractStyleIssues implements DirectoryStyleIssues {
 
-    public GenericDirectoryStyleIssues(String evaluatorId, Version evaluatorVersion, Date time) {
+    public DirectoryStyleIssuesImpl(String evaluatorId, Version evaluatorVersion, Date time) {
 	super(evaluatorId, evaluatorVersion, time);
 	// TODO Auto-generated constructor stub
     }
@@ -27,7 +27,7 @@ public class GenericDirectoryStyleIssues extends AbstractStyleIssues implements 
     }
 
     @Override
-    public List<GenericCodeRangeStyleIssues> getCodeRangeStyleResults() {
+    public List<CodeRangeStyleIssues> getCodeRangeStyleResults() {
 	// TODO Auto-generated method stub
 	return null;
     }

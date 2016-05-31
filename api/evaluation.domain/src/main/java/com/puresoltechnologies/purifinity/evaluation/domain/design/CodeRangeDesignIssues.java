@@ -10,7 +10,7 @@ import java.util.Map;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 
-public class GenericCodeRangeDesignIssues implements Serializable {
+public class CodeRangeDesignIssues implements Serializable {
 
     private static final long serialVersionUID = -598831823857817995L;
     private final SourceCodeLocation sourceCodeLocation;
@@ -19,7 +19,7 @@ public class GenericCodeRangeDesignIssues implements Serializable {
     private final DesignIssueParameter[] parameters;
     private final Map<String, List<DesignIssue>> values = new HashMap<>();
 
-    public GenericCodeRangeDesignIssues(SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
+    public CodeRangeDesignIssues(SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
 	    String codeRangeName, DesignIssueParameter[] parameters, Map<String, List<DesignIssue>> values) {
 	super();
 	this.sourceCodeLocation = sourceCodeLocation;
@@ -29,7 +29,7 @@ public class GenericCodeRangeDesignIssues implements Serializable {
 	this.values.putAll(values);
     }
 
-    public GenericCodeRangeDesignIssues(SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
+    public CodeRangeDesignIssues(SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
 	    String codeRangeName, DesignIssueParameter[] parameters, Collection<List<DesignIssue>> values) {
 	super();
 	this.sourceCodeLocation = sourceCodeLocation;

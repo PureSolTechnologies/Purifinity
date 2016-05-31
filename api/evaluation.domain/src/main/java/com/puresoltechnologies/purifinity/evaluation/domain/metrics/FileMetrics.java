@@ -54,6 +54,6 @@ public interface FileMetrics extends Metrics {
 	 * @return The values of result are returned. A detailed description can be
 	 *         found in the documentation of this method.
 	 */
-	public List<GenericCodeRangeMetrics> getCodeRangeMetrics();
+	public List<CodeRangeMetrics> getCodeRangeMetrics();
 
 }

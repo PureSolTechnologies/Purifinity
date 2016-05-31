@@ -11,17 +11,17 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
+public class FileMetricsImpl extends AbstractMetrics implements FileMetrics {
 
     private static final long serialVersionUID = -3838440751773878139L;
 
     private final MetricParameter<?>[] parameters;
-    private final List<GenericCodeRangeMetrics> codeRangeMetrics = new ArrayList<>();
+    private final List<CodeRangeMetrics> codeRangeMetrics = new ArrayList<>();
 
     private final HashId hashId;
     private final SourceCodeLocation sourceCodeLocation;
 
-    public GenericFileMetrics(String evaluatorId, Version evaluatorVersion, HashId hashId,
+    public FileMetricsImpl(String evaluatorId, Version evaluatorVersion, HashId hashId,
 	    SourceCodeLocation sourceCodeLocation, Date time, MetricParameter<?>[] parameters) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
@@ -30,11 +30,11 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
     }
 
     @JsonCreator
-    public GenericFileMetrics(@JsonProperty("evaluatorId") String evaluatorId,
+    public FileMetricsImpl(@JsonProperty("evaluatorId") String evaluatorId,
 	    @JsonProperty("evaluatorVersion") Version evaluatorVersion, @JsonProperty("hashId") HashId hashId,
 	    @JsonProperty("sourceCodeLocation") SourceCodeLocation sourceCodeLocation, @JsonProperty("time") Date time,
 	    @JsonProperty("parameters") MetricParameter<?>[] parameters,
-	    @JsonProperty("codeRangeMetrics") List<GenericCodeRangeMetrics> codeRangeMetrics) {
+	    @JsonProperty("codeRangeMetrics") List<CodeRangeMetrics> codeRangeMetrics) {
 	this(evaluatorId, evaluatorVersion, hashId, sourceCodeLocation, time, parameters);
 	this.codeRangeMetrics.addAll(codeRangeMetrics);
     }
@@ -49,7 +49,7 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
 	return sourceCodeLocation;
     }
 
-    public void addCodeRangeMetrics(GenericCodeRangeMetrics metrics) {
+    public void addCodeRangeMetrics(CodeRangeMetrics metrics) {
 	codeRangeMetrics.add(metrics);
     }
 
@@ -59,7 +59,7 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
+    public List<CodeRangeMetrics> getCodeRangeMetrics() {
 	return codeRangeMetrics;
     }
 
@@ -82,7 +82,7 @@ public class GenericFileMetrics extends AbstractMetrics implements FileMetrics {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	GenericFileMetrics other = (GenericFileMetrics) obj;
+	FileMetricsImpl other = (FileMetricsImpl) obj;
 	if (codeRangeMetrics == null) {
 	    if (other.codeRangeMetrics != null)
 		return false;

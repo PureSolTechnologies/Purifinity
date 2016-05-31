@@ -10,17 +10,17 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericFileDesignIssues extends AbstractDesignIssues implements FileDesignIssues {
+public class FileDesignIssuesImpl extends AbstractDesignIssues implements FileDesignIssues {
 
     private static final long serialVersionUID = -789632724692925800L;
 
     private final DesignIssueParameter[] parameters;
-    private final List<GenericCodeRangeDesignIssues> codeRangeDesignIssues = new ArrayList<>();
+    private final List<CodeRangeDesignIssues> codeRangeDesignIssues = new ArrayList<>();
 
     private final HashId hashId;
     private final SourceCodeLocation sourceCodeLocation;
 
-    public GenericFileDesignIssues(String evaluatorId, Version evaluatorVersion, HashId hashId,
+    public FileDesignIssuesImpl(String evaluatorId, Version evaluatorVersion, HashId hashId,
 	    SourceCodeLocation sourceCodeLocation, Date time, DesignIssueParameter[] parameters) {
 	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
@@ -29,11 +29,11 @@ public class GenericFileDesignIssues extends AbstractDesignIssues implements Fil
     }
 
     @JsonCreator
-    public GenericFileDesignIssues(@JsonProperty("evaluatorId") String evaluatorId,
+    public FileDesignIssuesImpl(@JsonProperty("evaluatorId") String evaluatorId,
 	    @JsonProperty("evaluatorVersion") Version evaluatorVersion, @JsonProperty("hashId") HashId hashId,
 	    @JsonProperty("sourceCodeLocation") SourceCodeLocation sourceCodeLocation, @JsonProperty("time") Date time,
 	    @JsonProperty("parameters") DesignIssueParameter[] parameters,
-	    @JsonProperty("codeRangeDesignIssues") List<GenericCodeRangeDesignIssues> codeRangeDesignIssues) {
+	    @JsonProperty("codeRangeDesignIssues") List<CodeRangeDesignIssues> codeRangeDesignIssues) {
 	this(evaluatorId, evaluatorVersion, hashId, sourceCodeLocation, time, parameters);
 	this.codeRangeDesignIssues.addAll(codeRangeDesignIssues);
     }
@@ -43,12 +43,12 @@ public class GenericFileDesignIssues extends AbstractDesignIssues implements Fil
 	return parameters;
     }
 
-    public void addCodeRangeDesignIssue(GenericCodeRangeDesignIssues issues) {
+    public void addCodeRangeDesignIssue(CodeRangeDesignIssues issues) {
 	codeRangeDesignIssues.add(issues);
     }
 
     @Override
-    public List<GenericCodeRangeDesignIssues> getCodeRangeDesignIssues() {
+    public List<CodeRangeDesignIssues> getCodeRangeDesignIssues() {
 	return codeRangeDesignIssues;
     }
 

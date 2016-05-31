@@ -30,10 +30,10 @@ import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssue;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssueParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DirectoryDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericCodeRangeDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericDirectoryDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericFileDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericProjectDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.CodeRangeDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.DirectoryDesignIssuesImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssuesImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssuesImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.design.AbstractDesignEvaluator;
@@ -102,7 +102,7 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
     }
 
     @Override
-    protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, GenericFileDesignIssues issues)
+    protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, FileDesignIssuesImpl issues)
 	    throws EvaluationStoreException {
 	getDesignIssuessStore().storeFileResults(analysisRun, fileAnalysis, issues);
     }
@@ -121,7 +121,7 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 
     @Override
     protected void storeDirectoryResults(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
-	    GenericDirectoryDesignIssues metrics) throws EvaluationStoreException {
+	    DirectoryDesignIssuesImpl metrics) throws EvaluationStoreException {
 	// intentionally left empty, because directory storage is not supported
     }
 
@@ -139,7 +139,7 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 
     @Override
     protected void storeProjectResults(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
-	    GenericProjectDesignIssues metrics) throws EvaluationStoreException {
+	    ProjectDesignIssuesImpl metrics) throws EvaluationStoreException {
 	// intentionally left empty, because project storage is not supported
     }
 
@@ -159,7 +159,7 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 	parameters.add(USAGE_OF_IMPLICIT);
 	parameters.add(COMBINED_USAGE_OF_IMPLICIT);
 	SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
-	GenericFileDesignIssues fileIssues = new GenericFileDesignIssues(FortranDesignEvaluator.ID,
+	FileDesignIssuesImpl fileIssues = new FileDesignIssuesImpl(FortranDesignEvaluator.ID,
 		FortranDesignEvaluator.PLUGIN_VERSION, hashId, sourceCodeLocation, new Date(),
 		parameters.toArray(new DesignIssueParameter[parameters.size()]));
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
@@ -168,7 +168,7 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 		continue;
 	    }
 	    Map<String, List<DesignIssue>> implicitIssues = checkForImplicitIssues(analysisRun, analysis, codeRange);
-	    GenericCodeRangeDesignIssues issues = new GenericCodeRangeDesignIssues(fileIssues.getSourceCodeLocation(),
+	    CodeRangeDesignIssues issues = new CodeRangeDesignIssues(fileIssues.getSourceCodeLocation(),
 		    codeRange.getType(), codeRange.getCanonicalName(),
 		    parameters.toArray(new DesignIssueParameter[parameters.size()]), implicitIssues);
 	    fileIssues.addCodeRangeDesignIssue(issues);

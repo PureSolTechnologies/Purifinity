@@ -12,7 +12,7 @@ import com.puresoltechnologies.commons.domain.Parameter;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericDirectoryMetrics extends AbstractMetrics implements DirectoryMetrics {
+public class DirectoryMetricsImpl extends AbstractMetrics implements DirectoryMetrics {
 
     private static final long serialVersionUID = -7071488619641043222L;
 
@@ -22,7 +22,7 @@ public class GenericDirectoryMetrics extends AbstractMetrics implements Director
     private final HashId hashId;
 
     @JsonCreator
-    public GenericDirectoryMetrics(@JsonProperty("evaluatorId") String evaluatorId,
+    public DirectoryMetricsImpl(@JsonProperty("evaluatorId") String evaluatorId,
 	    @JsonProperty("evaluatorVersion") Version evaluatorVersion, @JsonProperty("hashId") HashId hashId,
 	    @JsonProperty("time") Date time, @JsonProperty("parameters") MetricParameter<?>[] parameters,
 	    @JsonProperty("values") Map<String, MetricValue<?>> values) {
@@ -71,7 +71,7 @@ public class GenericDirectoryMetrics extends AbstractMetrics implements Director
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	GenericDirectoryMetrics other = (GenericDirectoryMetrics) obj;
+	DirectoryMetricsImpl other = (DirectoryMetricsImpl) obj;
 	if (hashId == null) {
 	    if (other.hashId != null)
 		return false;

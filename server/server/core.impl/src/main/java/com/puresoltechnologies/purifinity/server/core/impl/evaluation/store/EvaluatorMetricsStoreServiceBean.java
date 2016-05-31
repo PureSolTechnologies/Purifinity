@@ -33,11 +33,11 @@ import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericProjectMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericRunMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetricsImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetricsImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetricsImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetricsImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
@@ -234,7 +234,7 @@ public class EvaluatorMetricsStoreServiceBean
 	    String codeRangeNameParameterName = codeRangeNameParameter.getName();
 	    CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
 	    String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
-	    for (GenericCodeRangeMetrics metric : metrics.getCodeRangeMetrics()) {
+	    for (CodeRangeMetrics metric : metrics.getCodeRangeMetrics()) {
 		String codeRangeName = metric.getCodeRangeName();
 		CodeRangeType codeRangeType = metric.getCodeRangeType();
 
@@ -319,7 +319,7 @@ public class EvaluatorMetricsStoreServiceBean
 	    String codeRangeNameParameterName = codeRangeNameParameter.getName();
 	    CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
 	    String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
-	    for (GenericCodeRangeMetrics metric : metrics.getCodeRangeMetrics()) {
+	    for (CodeRangeMetrics metric : metrics.getCodeRangeMetrics()) {
 		String codeRangeName = metric.getCodeRangeName();
 		CodeRangeType codeRangeType = metric.getCodeRangeType();
 
@@ -613,7 +613,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     @Override
-    public GenericFileMetrics readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
+    public FileMetricsImpl readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection
 		.prepareStatement("SELECT " + "time, " + "code_range_type, " + "code_range_name, "
 			+ "evaluator_version, " + "parameter_name, " + "parameter_unit, " + "parameter_description, "
@@ -684,7 +684,7 @@ public class EvaluatorMetricsStoreServiceBean
 		    parameterBuffer.put(metricsParameter, metricValue);
 		}
 
-		GenericFileMetrics fileMetrics = new GenericFileMetrics(evaluatorId, evaluatorVersion, hashId,
+		FileMetricsImpl fileMetrics = new FileMetricsImpl(evaluatorId, evaluatorVersion, hashId,
 			sourceCodeLocation, time, parameters);
 		for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> codeRangeTypeEntry : buffer
 			.entrySet()) {
@@ -699,7 +699,7 @@ public class EvaluatorMetricsStoreServiceBean
 			    MetricValue<?> value = parameterEntry.getValue();
 			    values.put(parameter.getName(), value);
 			}
-			fileMetrics.addCodeRangeMetrics(new GenericCodeRangeMetrics(sourceCodeLocation, codeRangeType,
+			fileMetrics.addCodeRangeMetrics(new CodeRangeMetrics(sourceCodeLocation, codeRangeType,
 				codeRangeName, parameters, values));
 		    }
 		}
@@ -711,7 +711,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     @Override
-    public GenericDirectoryMetrics readDirectoryResults(HashId hashId, String evaluatorId)
+    public DirectoryMetricsImpl readDirectoryResults(HashId hashId, String evaluatorId)
 	    throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, " + "hashid, "
 		+ "evaluator_version, " + "parameter_name, " + "parameter_unit, " + "parameter_description, "
@@ -757,7 +757,7 @@ public class EvaluatorMetricsStoreServiceBean
 		    MetricValue<?> value = parameterEntry.getValue();
 		    values.put(parameter.getName(), value);
 		}
-		GenericDirectoryMetrics directoryMetrics = new GenericDirectoryMetrics(evaluatorId, evaluatorVersion,
+		DirectoryMetricsImpl directoryMetrics = new DirectoryMetricsImpl(evaluatorId, evaluatorVersion,
 			hashId, time, parameters, values);
 		return directoryMetrics;
 	    }
@@ -770,7 +770,7 @@ public class EvaluatorMetricsStoreServiceBean
      * FIXME
      */
     @Override
-    public GenericProjectMetrics readProjectResults(String projectId, long runId, String evaluatorId)
+    public ProjectMetricsImpl readProjectResults(String projectId, long runId, String evaluatorId)
 	    throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, " + "project_id, "
 		+ "run_id, " + "evaluator_version, " + "parameter_name, " + "metric " + "FROM "
@@ -791,7 +791,7 @@ public class EvaluatorMetricsStoreServiceBean
 		// codeRangeType, codeRangeName, parameters, values)
 		Map<String, MetricValue<?>> metrics = null;
 		Version evaluatorVersion = new Version(1, 0, 0); // FIXME
-		GenericProjectMetrics directoryMetrics = new GenericProjectMetrics(evaluatorId, evaluatorVersion,
+		ProjectMetricsImpl directoryMetrics = new ProjectMetricsImpl(evaluatorId, evaluatorVersion,
 			projectId, runId, time, parameters, metrics);
 		return directoryMetrics;
 	    }
@@ -801,7 +801,7 @@ public class EvaluatorMetricsStoreServiceBean
     }
 
     @Override
-    public GenericRunMetrics readRunResults(String projectId, long runId, String evaluatorId)
+    public RunMetricsImpl readRunResults(String projectId, long runId, String evaluatorId)
 	    throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, " + "hashid, "
 		+ "evaluator_version, " + "code_range_name, " + "source_code_location, " + "code_range_type, "
@@ -877,7 +877,7 @@ public class EvaluatorMetricsStoreServiceBean
 		    MetricValue<?> metricValue = MetricValue.create(metricsParameter, value);
 		    parameterBuffer.put(metricsParameter, metricValue);
 		}
-		GenericRunMetrics metrics = new GenericRunMetrics(evaluatorId, evaluatorVersion, minTime,
+		RunMetricsImpl metrics = new RunMetricsImpl(evaluatorId, evaluatorVersion, minTime,
 			(MetricParameter<?>[]) parametersBuffer.values().toArray());
 		for (HashId hashId : buffer.keySet()) {
 		    MetricParameter<?>[] parameters = (MetricParameter<?>[]) parametersBuffer.get(hashId).toArray();
@@ -885,7 +885,7 @@ public class EvaluatorMetricsStoreServiceBean
 			    .get(hashId);
 		    if (hashIdTypes.get(hashId) == CodeRangeType.FILE) {
 			SourceCodeLocation sourceCodeLocation = sourceCodeLocationBuffer.get(hashId);
-			GenericFileMetrics fileMetrics = new GenericFileMetrics(evaluatorId, evaluatorVersion, hashId,
+			FileMetricsImpl fileMetrics = new FileMetricsImpl(evaluatorId, evaluatorVersion, hashId,
 				sourceCodeLocation, timeBuffer.get(hashId), parameters);
 			for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> codeRangeTypeEntry : hashIdBuffer
 				.entrySet()) {
@@ -900,7 +900,7 @@ public class EvaluatorMetricsStoreServiceBean
 				    MetricValue<?> value = parameterEntry.getValue();
 				    metricValues.put(parameter.getName(), value);
 				}
-				fileMetrics.addCodeRangeMetrics(new GenericCodeRangeMetrics(sourceCodeLocation,
+				fileMetrics.addCodeRangeMetrics(new CodeRangeMetrics(sourceCodeLocation,
 					codeRangeType, codeRangeName, parameters, metricValues));
 			    }
 			}
@@ -918,7 +918,7 @@ public class EvaluatorMetricsStoreServiceBean
 				metricValues.put(parameter.getName(), value);
 			    }
 			}
-			GenericDirectoryMetrics directoryMetrics = new GenericDirectoryMetrics(evaluatorId,
+			DirectoryMetricsImpl directoryMetrics = new DirectoryMetricsImpl(evaluatorId,
 				evaluatorVersion, hashId, timeBuffer.get(hashId), parameters, metricValues);
 			metrics.add(directoryMetrics);
 		    }

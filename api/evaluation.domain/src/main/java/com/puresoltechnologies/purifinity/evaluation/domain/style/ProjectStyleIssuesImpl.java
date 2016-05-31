@@ -7,9 +7,9 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericProjectStyleIssues extends AbstractStyleIssues implements ProjectStyleIssues {
+public class ProjectStyleIssuesImpl extends AbstractStyleIssues implements ProjectStyleIssues {
 
-    public GenericProjectStyleIssues(String evaluatorId, Version evaluatorVersion, Date time) {
+    public ProjectStyleIssuesImpl(String evaluatorId, Version evaluatorVersion, Date time) {
 	super(evaluatorId, evaluatorVersion, time);
 	// TODO Auto-generated constructor stub
     }
@@ -27,7 +27,7 @@ public class GenericProjectStyleIssues extends AbstractStyleIssues implements Pr
     }
 
     @Override
-    public List<GenericCodeRangeStyleIssues> getCodeRangeStyleResults() {
+    public List<CodeRangeStyleIssues> getCodeRangeStyleResults() {
 	// TODO Auto-generated method stub
 	return null;
     }

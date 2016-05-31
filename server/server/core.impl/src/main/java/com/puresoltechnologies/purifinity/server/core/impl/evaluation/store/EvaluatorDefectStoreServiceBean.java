@@ -32,13 +32,13 @@ import com.puresoltechnologies.purifinity.evaluation.domain.defects.Defect;
 import com.puresoltechnologies.purifinity.evaluation.domain.defects.DefectParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.defects.DirectoryDefects;
 import com.puresoltechnologies.purifinity.evaluation.domain.defects.FileDefects;
-import com.puresoltechnologies.purifinity.evaluation.domain.defects.GenericCodeRangeDefects;
-import com.puresoltechnologies.purifinity.evaluation.domain.defects.GenericFileDefects;
+import com.puresoltechnologies.purifinity.evaluation.domain.defects.CodeRangeDefects;
+import com.puresoltechnologies.purifinity.evaluation.domain.defects.FileDefectsImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.defects.ProjectDefects;
 import com.puresoltechnologies.purifinity.evaluation.domain.defects.RunDefects;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssue;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssueParameter;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericCodeRangeDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.CodeRangeDesignIssues;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.defects.EvaluatorDefectsStoreService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.defects.EvaluatorDefectsStoreServiceRemote;
@@ -143,7 +143,7 @@ public class EvaluatorDefectStoreServiceBean
 	    String codeRangeNameParameterName = codeRangeNameParameter.getName();
 	    CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
 	    String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
-	    for (GenericCodeRangeDefects codeRangeIssues : results.getCodeRangeDefects()) {
+	    for (CodeRangeDefects codeRangeIssues : results.getCodeRangeDefects()) {
 		String codeRangeName = codeRangeIssues.getCodeRangeName();
 		CodeRangeType codeRangeType = codeRangeIssues.getCodeRangeType();
 
@@ -281,7 +281,7 @@ public class EvaluatorDefectStoreServiceBean
 		    parameterBuffer.put(designIssueParameter, metricValue);
 		}
 
-		GenericFileDefects fileDefects = new GenericFileDefects(evaluatorId, evaluatorVersion, hashId,
+		FileDefectsImpl fileDefects = new FileDefectsImpl(evaluatorId, evaluatorVersion, hashId,
 			sourceCodeLocation, time, parameters);
 		for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, DesignIssue>>> codeRangeTypeEntry : buffer
 			.entrySet()) {
@@ -301,7 +301,7 @@ public class EvaluatorDefectStoreServiceBean
 			    }
 			    issueList.add(value);
 			}
-			fileDefects.addCodeRangeDesignIssue(new GenericCodeRangeDesignIssues(sourceCodeLocation,
+			fileDefects.addCodeRangeDesignIssue(new CodeRangeDesignIssues(sourceCodeLocation,
 				codeRangeType, codeRangeName, parameters, values));
 		    }
 		}

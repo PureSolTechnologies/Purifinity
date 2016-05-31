@@ -15,7 +15,7 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.AbstractMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
@@ -60,15 +60,15 @@ public class NormalizedMaintainabilityIndexFileResults extends AbstractMetrics i
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
-	List<GenericCodeRangeMetrics> values = new ArrayList<>();
+    public List<CodeRangeMetrics> getCodeRangeMetrics() {
+	List<CodeRangeMetrics> values = new ArrayList<>();
 	for (NormalizedMaintainabilityIndexFileResult result : results) {
 	    NormalizedMaintainabilityIndexResult mi = result.getNormalizedMaintainabilityIndexResult();
 	    Map<String, MetricValue<?>> row = new HashMap<>();
 	    row.put(NORM_MI_WOC.getName(), new MetricValue<Double>(mi.getNMIwoc(), NORM_MI_WOC));
 	    row.put(NORM_MI_CW.getName(), new MetricValue<Double>(mi.getNMIcw(), NORM_MI_CW));
 	    row.put(NORM_MI.getName(), new MetricValue<Double>(mi.getNMI(), NORM_MI));
-	    values.add(new GenericCodeRangeMetrics(result.getSourceCodeLocation(), result.getCodeRangeType(),
+	    values.add(new CodeRangeMetrics(result.getSourceCodeLocation(), result.getCodeRangeType(),
 		    result.getCodeRangeName(), NormalizedMaintainabilityIndexEvaluatorParameter.ALL, row));
 	}
 	return values;

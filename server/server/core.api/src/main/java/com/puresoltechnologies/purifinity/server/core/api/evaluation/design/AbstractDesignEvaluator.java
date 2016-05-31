@@ -14,9 +14,9 @@ import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
 import com.puresoltechnologies.purifinity.evaluation.api.defects.DefectEvaluator;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DirectoryDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericDirectoryDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericFileDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericProjectDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.DirectoryDesignIssuesImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssuesImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssuesImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
@@ -29,7 +29,7 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 import com.puresoltechnologies.versioning.Version;
 
 public abstract class AbstractDesignEvaluator extends
-	AbstractEvaluator<FileDesignIssues, GenericFileDesignIssues, DirectoryDesignIssues, GenericDirectoryDesignIssues, ProjectDesignIssues, GenericProjectDesignIssues>
+	AbstractEvaluator<FileDesignIssues, FileDesignIssuesImpl, DirectoryDesignIssues, DirectoryDesignIssuesImpl, ProjectDesignIssues, ProjectDesignIssuesImpl>
 	implements DefectEvaluator {
 
     private final EvaluatorDesignIssuesStoreServiceRemote designIssuesStore;
@@ -102,7 +102,7 @@ public abstract class AbstractDesignEvaluator extends
 		if (analysisInformation.isSuccessful()) {
 		    FileDesignIssues fileResults = processFile(analysisRun, fileAnalysis);
 		    if (fileResults != null) {
-			GenericFileDesignIssues metrics = new GenericFileDesignIssues(getInformation().getId(),
+			FileDesignIssuesImpl metrics = new FileDesignIssuesImpl(getInformation().getId(),
 				getInformation().getVersion(), hashId, fileResults.getSourceCodeLocation(), new Date(),
 				fileResults.getParameters(), fileResults.getCodeRangeDesignIssues());
 			storeFileResults(analysisRun, fileAnalysis, metrics);
@@ -131,7 +131,7 @@ public abstract class AbstractDesignEvaluator extends
 	    if ((!store.hasDirectoryResults(hashId, getInformation().getId())) || (enableReevaluation)) {
 		DirectoryDesignIssues directoryResults = processDirectory(analysisRun, directoryNode);
 		if (directoryResults != null) {
-		    GenericDirectoryDesignIssues designIssues = new GenericDirectoryDesignIssues(
+		    DirectoryDesignIssuesImpl designIssues = new DirectoryDesignIssuesImpl(
 			    getInformation().getId(), getInformation().getVersion(), hashId, new Date(),
 			    directoryResults.getParameters(), directoryResults.getDesignIssues());
 		    storeDirectoryResults(analysisRun, directoryNode, designIssues);

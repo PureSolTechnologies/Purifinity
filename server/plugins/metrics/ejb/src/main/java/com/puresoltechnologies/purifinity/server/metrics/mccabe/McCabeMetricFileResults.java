@@ -11,7 +11,7 @@ import java.util.Set;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.versioning.Version;
@@ -58,11 +58,11 @@ public class McCabeMetricFileResults extends AbstractMcCabeMetricResults
     }
 
     @Override
-    public List<GenericCodeRangeMetrics> getCodeRangeMetrics() {
-	List<GenericCodeRangeMetrics> values = new ArrayList<>();
+    public List<CodeRangeMetrics> getCodeRangeMetrics() {
+	List<CodeRangeMetrics> values = new ArrayList<>();
 	for (McCabeMetricResult result : results) {
 	    Map<String, MetricValue<?>> row = convertToRow(result);
-	    values.add(new GenericCodeRangeMetrics(result
+	    values.add(new CodeRangeMetrics(result
 		    .getSourceCodeLocation(), result.getCodeRangeType(), result
 		    .getCodeRangeName(), McCabeMetricEvaluatorParameter.ALL,
 		    row));

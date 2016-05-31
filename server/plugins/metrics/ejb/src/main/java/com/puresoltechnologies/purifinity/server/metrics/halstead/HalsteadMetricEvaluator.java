@@ -22,8 +22,8 @@ import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreExceptio
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetricsImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.halstead.db.HalsteadMetricsEvaluatorDAO;
@@ -50,13 +50,13 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    protected GenericFileMetrics processFile(AnalysisRun analysisRun, CodeAnalysis analysis)
+    protected FileMetricsImpl processFile(AnalysisRun analysisRun, CodeAnalysis analysis)
 	    throws InterruptedException, UniversalSyntaxTreeEvaluationException, EvaluationStoreException {
 	AnalysisInformation analysisInformation = analysis.getAnalysisInformation();
 
 	HashId hashId = analysisInformation.getHashId();
 	SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
-	GenericFileMetrics results = new GenericFileMetrics(HalsteadMetric.ID, HalsteadMetric.PLUGIN_VERSION, hashId,
+	FileMetricsImpl results = new FileMetricsImpl(HalsteadMetric.ID, HalsteadMetric.PLUGIN_VERSION, hashId,
 		sourceCodeLocation, new Date(), HalsteadMetricEvaluatorParameter.ALL);
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    HalsteadMetric metric = new HalsteadMetric(analysisRun, codeRange);
@@ -64,7 +64,7 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 	    HalsteadResult halsteadResult = metric.getHalsteadResults();
 	    halsteadMetricEvaluatorDAO.storeFileResults(hashId, sourceCodeLocation, codeRange, new HalsteadMetricResult(
 		    sourceCodeLocation, codeRange.getType(), codeRange.getCanonicalName(), halsteadResult));
-	    results.addCodeRangeMetrics(new GenericCodeRangeMetrics(sourceCodeLocation, codeRange.getType(),
+	    results.addCodeRangeMetrics(new CodeRangeMetrics(sourceCodeLocation, codeRange.getType(),
 		    codeRange.getCanonicalName(), HalsteadMetricEvaluatorParameter.ALL, halsteadResult.getResults()));
 	}
 	return results;

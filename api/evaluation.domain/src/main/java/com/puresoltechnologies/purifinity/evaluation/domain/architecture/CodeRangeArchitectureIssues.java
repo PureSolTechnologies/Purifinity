@@ -9,9 +9,9 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssue;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssueParameter;
 
-public class GenericCodeRangeArchitectureIssues implements Serializable {
+public class CodeRangeArchitectureIssues implements Serializable {
 
-    public GenericCodeRangeArchitectureIssues(SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
+    public CodeRangeArchitectureIssues(SourceCodeLocation sourceCodeLocation, CodeRangeType codeRangeType,
 	    String codeRangeName, DesignIssueParameter[] parameters, Map<String, List<DesignIssue>> values) {
 	// TODO Auto-generated constructor stub
     }

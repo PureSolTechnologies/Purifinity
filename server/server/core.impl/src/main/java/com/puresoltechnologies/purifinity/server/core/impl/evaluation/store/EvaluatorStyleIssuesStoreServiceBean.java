@@ -30,11 +30,11 @@ import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssue;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssueParameter;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.GenericCodeRangeDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.CodeRangeDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.style.DirectoryStyleIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.style.FileStyleIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.style.GenericCodeRangeStyleIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.style.GenericFileStyleIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.style.CodeRangeStyleIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.style.FileStyleIssuesImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.style.ProjectStyleIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.style.RunStyleIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.style.StyleIssue;
@@ -143,7 +143,7 @@ public class EvaluatorStyleIssuesStoreServiceBean
 	    String codeRangeNameParameterName = codeRangeNameParameter.getName();
 	    CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
 	    String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
-	    for (GenericCodeRangeStyleIssues codeRangeIssues : results.getCodeRangeStyleIssues()) {
+	    for (CodeRangeStyleIssues codeRangeIssues : results.getCodeRangeStyleIssues()) {
 		String codeRangeName = codeRangeIssues.getCodeRangeName();
 		CodeRangeType codeRangeType = codeRangeIssues.getCodeRangeType();
 
@@ -281,7 +281,7 @@ public class EvaluatorStyleIssuesStoreServiceBean
 		    parameterBuffer.put(designIssueParameter, metricValue);
 		}
 
-		GenericFileStyleIssues fileStyleIssues = new GenericFileStyleIssues(evaluatorId, evaluatorVersion,
+		FileStyleIssuesImpl fileStyleIssues = new FileStyleIssuesImpl(evaluatorId, evaluatorVersion,
 			hashId, sourceCodeLocation, time, parameters);
 		for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, DesignIssue>>> codeRangeTypeEntry : buffer
 			.entrySet()) {
@@ -301,7 +301,7 @@ public class EvaluatorStyleIssuesStoreServiceBean
 			    }
 			    issueList.add(value);
 			}
-			fileStyleIssues.addCodeRangeDesignIssue(new GenericCodeRangeDesignIssues(sourceCodeLocation,
+			fileStyleIssues.addCodeRangeDesignIssue(new CodeRangeDesignIssues(sourceCodeLocation,
 				codeRangeType, codeRangeName, parameters, values));
 		    }
 		}

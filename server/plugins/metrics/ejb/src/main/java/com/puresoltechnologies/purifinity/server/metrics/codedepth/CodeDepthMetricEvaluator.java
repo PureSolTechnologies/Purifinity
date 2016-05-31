@@ -22,7 +22,7 @@ import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacte
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
@@ -90,7 +90,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 		if (fileResults == null) {
 		    continue;
 		}
-		for (GenericCodeRangeMetrics result : fileResults.getCodeRangeMetrics()) {
+		for (CodeRangeMetrics result : fileResults.getCodeRangeMetrics()) {
 		    maxDepth = Math.max(maxDepth,
 			    result.getValue(CodeDepthMetricEvaluatorParameter.MAX_DEPTH).getValue());
 		}

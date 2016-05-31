@@ -23,7 +23,7 @@ import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetricsImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
@@ -76,7 +76,7 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
     }
 
     @Override
-    protected GenericDirectoryMetrics processDirectory(AnalysisRun analysisRun, AnalysisFileTree directory)
+    protected DirectoryMetricsImpl processDirectory(AnalysisRun analysisRun, AnalysisFileTree directory)
 	    throws InterruptedException, EvaluationStoreException {
 	EvaluatorMetricsStore evaluatorStore = getMetricStore();
 	McCabeMetricResult metricResults = null;
@@ -102,7 +102,7 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
 	if (metricResults == null) {
 	    return null;
 	}
-	GenericDirectoryMetrics finalResults = new GenericDirectoryMetrics(McCabeMetric.ID, McCabeMetric.PLUGIN_VERSION,
+	DirectoryMetricsImpl finalResults = new DirectoryMetricsImpl(McCabeMetric.ID, McCabeMetric.PLUGIN_VERSION,
 		directory.getHashId(), new Date(), McCabeMetricEvaluatorParameter.ALL, metricResults.getValues());
 	mcCabeMetricEvaluatorDAO.storeDirectoryResults(directory.getHashId(), metricResults);
 	return finalResults;

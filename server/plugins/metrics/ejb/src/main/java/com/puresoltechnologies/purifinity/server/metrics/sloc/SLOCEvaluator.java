@@ -26,9 +26,9 @@ import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericCodeRangeMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericDirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.GenericFileMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetricsImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetricsImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
@@ -79,7 +79,7 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	HashId hashId = analysisInformation.getHashId();
 	AnalysisFileTree analysisRunNode = analysisRun.findTreeNode(hashId);
 	SourceCodeLocation sourceCodeLocation = analysisRunNode.getSourceCodeLocation();
-	GenericFileMetrics results = new GenericFileMetrics(SLOCMetricCalculator.ID,
+	FileMetricsImpl results = new FileMetricsImpl(SLOCMetricCalculator.ID,
 		SLOCMetricCalculator.PLUGIN_VERSION, hashId, sourceCodeLocation, analysis.getStartTime(),
 		SLOCEvaluatorParameter.ALL);
 	logger.info("Process file '" + sourceCodeLocation.getHumanReadableLocationString() + "'...");
@@ -92,7 +92,7 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 		values.put(result.getParameter().getName(), result);
 	    }
 
-	    results.addCodeRangeMetrics(new GenericCodeRangeMetrics(sourceCodeLocation, codeRange.getType(),
+	    results.addCodeRangeMetrics(new CodeRangeMetrics(sourceCodeLocation, codeRange.getType(),
 		    codeRange.getCanonicalName(), SLOCEvaluatorParameter.ALL, values));
 
 	    SLOCResult result = new SLOCResult(sourceCodeLocation, codeRange.getType(), codeRange.getCanonicalName(),
@@ -138,7 +138,7 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	slocEvaluatorDAO.storeDirectoryResults(hashId, metricResults);
 
 	Map<String, MetricValue<?>> metrics = SLOCResult.toGenericMetrics(metricResults);
-	GenericDirectoryMetrics finalResults = new GenericDirectoryMetrics(SLOCMetricCalculator.ID,
+	DirectoryMetricsImpl finalResults = new DirectoryMetricsImpl(SLOCMetricCalculator.ID,
 		SLOCMetricCalculator.PLUGIN_VERSION, hashId, new Date(), SLOCEvaluatorParameter.ALL, metrics);
 	return finalResults;
     }

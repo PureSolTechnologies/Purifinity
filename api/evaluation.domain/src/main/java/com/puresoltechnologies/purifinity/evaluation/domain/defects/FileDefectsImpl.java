@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.evaluation.domain.architecture;
+package com.puresoltechnologies.purifinity.evaluation.domain.defects;
 
 import java.util.Date;
 import java.util.List;
@@ -6,28 +6,30 @@ import java.util.List;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssueParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.CodeRangeDesignIssues;
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericFileArchitectureIssues extends AbstractArchitectureIssues implements FileArchitectureIssues {
+public class FileDefectsImpl extends AbstractDefects implements FileDefects {
 
-    public GenericFileArchitectureIssues(String evaluatorId, Version evaluatorVersion, HashId hashId,
+    public FileDefectsImpl(String evaluatorId, Version evaluatorVersion, HashId hashId,
 	    SourceCodeLocation sourceCodeLocation, Date time, DesignIssueParameter[] parameters) {
 	super(evaluatorId, evaluatorVersion, time);
+	// TODO Auto-generated constructor stub
     }
 
     @Override
-    public ArchitectureIssueParameter[] getParameters() {
+    public DefectParameter[] getParameters() {
 	// TODO Auto-generated method stub
 	return null;
     }
 
     @Override
-    public List<GenericCodeRangeArchitectureIssues> getCodeRangeDesignIssues() {
+    public List<CodeRangeDefects> getCodeRangeDefects() {
 	// TODO Auto-generated method stub
 	return null;
     }
 
-    public void addCodeRangeDesignIssue(GenericCodeRangeArchitectureIssues genericCodeRangeArchitectureIssues) {
+    public void addCodeRangeDesignIssue(CodeRangeDesignIssues genericCodeRangeDesignIssues) {
 	// TODO Auto-generated method stub
 
     }
