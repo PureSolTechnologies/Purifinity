@@ -73,6 +73,12 @@ public enum CodeRangeType {
 	public String getName() {
 	    return "subroutine";
 	}
+    },
+    BLOCK {
+	@Override
+	public String getName() {
+	    return "block";
+	}
     };
 
     public abstract String getName();

@@ -10,6 +10,9 @@ import java.util.Set;
 
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.commons.domain.Parameter;
@@ -26,20 +29,18 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.CodeRangeDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssue;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DesignIssueParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DirectoryDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssues;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.CodeRangeDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.DirectoryDesignIssuesImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.FileDesignIssuesImpl;
-import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssuesImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.design.ProjectDesignIssuesImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.design.AbstractDesignEvaluator;
-import com.puresoltechnologies.trees.TreeVisitor;
-import com.puresoltechnologies.trees.TreeWalker;
-import com.puresoltechnologies.trees.WalkingAction;
+import com.puresoltechnologies.trees.TreeException;
 import com.puresoltechnologies.versioning.Version;
 
 @Stateless
@@ -54,6 +55,9 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
     public static final ConfigurationParameter<?>[] CONFIGURATION_PARAMETERS = new ConfigurationParameter[] {};
     public static final MetricParameter<?>[] PARAMETERS = new MetricParameter[] {};
     public static final Set<String> DEPENDENCIES = new HashSet<>();
+
+    @Inject
+    private Logger logger;
 
     private final DesignIssueParameter USAGE_OF_IMPLICIT = new DesignIssueParameter("UsageOfImplicit", "",
 	    "The usage of 'IMPLICIT' statement should be avoided.");;
@@ -178,72 +182,118 @@ public class FortranDesignEvaluator extends AbstractDesignEvaluator {
 
     private Map<String, List<DesignIssue>> checkForImplicitIssues(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
 	    CodeRange codeRange) throws EvaluationStoreException {
-	ImplicitVisitor visitor = new ImplicitVisitor();
-	TreeWalker.walk(visitor, codeRange.getUST());
-	return visitor.getIssues();
+	try {
+	    UniversalSyntaxTree ust = codeRange.getUST();
+	    UniversalSyntaxTree specificationPart;
+	    switch (codeRange.getType()) {
+	    case PROGRAM:
+		if (!"main-program".equals(ust.getName())) {
+		    logger.error("Program statement '" + ust.getName() + "' not expected.");
+		}
+		specificationPart = ust.getChild("specification-part");
+		break;
+	    case SUBROUTINE:
+		if (!"subroutine-subprogram".equals(ust.getName())) {
+		    logger.error("Subroutine statement '" + ust.getName() + "' not expected.");
+		}
+		specificationPart = ust.getChild("specification-part");
+		break;
+	    case FUNCTION:
+		if (!"function-subprogram".equals(ust.getName())) {
+		    logger.error("Function statement '" + ust.getName() + "' not expected.");
+		}
+		specificationPart = ust.getChild("specification-part");
+		if (specificationPart == null) {
+		    logger.error("A 'function-subroutine' needs to have a 'specification-part'.");
+		}
+		break;
+	    case MODULE:
+		if ((!"module".equals(ust.getName())) && (!"submodule".equals(ust.getName()))) {
+		    logger.error("Module statement '" + ust.getName() + "' not expected.");
+		}
+		specificationPart = ust.getChild("specification-part");
+		if (("module".equals(ust.getName())) && (specificationPart == null)) {
+		    logger.error("A 'module' needs to have a 'specification-part'.");
+		}
+		break;
+	    case INTERFACE:
+		if (!"interface-body".equals(ust.getName())) {
+		    logger.error("Interface statement '" + ust.getName() + "' not expected.");
+		}
+		specificationPart = ust.getChild("specification-part");
+		if (("module".equals(ust.getName())) && (specificationPart == null)) {
+		    logger.error("A 'module' needs to have a 'specification-part'.");
+		}
+		break;
+	    case BLOCK:
+		if (!"block-data".equals(ust.getName())) {
+		    logger.error("Block statement '" + ust.getName() + "' not expected.");
+		}
+		specificationPart = ust.getChild("block-data-stmt");
+		break;
+	    default:
+		specificationPart = null;
+	    }
+	    if (specificationPart != null) {
+		return check(specificationPart);
+	    } else {
+		return new HashMap<>();
+	    }
+	} catch (TreeException e) {
+	    logger.error("Could not check tree for '" + codeRange + "'.", e);
+	    return new HashMap<>();
+	}
     }
 
-    private class ImplicitVisitor implements TreeVisitor<UniversalSyntaxTree> {
-
-	private final Map<String, List<DesignIssue>> issues = new HashMap<>();
-
-	@Override
-	public WalkingAction visit(UniversalSyntaxTree node) {
-	    if (!"specification-part".equals(node.getName())) {
-		return WalkingAction.PROCEED;
-	    }
-	    boolean hasImplicitNone = false;
-	    boolean hasImplicit = false;
-	    int implicitCount = 0;
-	    List<UniversalSyntaxTree> implicitPartStatements = node.getChildren("implicit-part-stmt");
-	    for (UniversalSyntaxTree implicitPartStatement : implicitPartStatements) {
-		List<UniversalSyntaxTree> implicitStatements = implicitPartStatement.getChildren("implicit-stmt");
-		for (UniversalSyntaxTree implicitStatement : implicitStatements) {
-		    ++implicitCount;
-		    for (UniversalSyntaxTree implicitStamentChild : implicitStatement.getChildren()) {
-			if ("NONE".equalsIgnoreCase(implicitStamentChild.getContent())) {
-			    hasImplicitNone = true;
-			    break;
-			} else if ("implicit-spec-list".equals(implicitStamentChild.getName())) {
-			    hasImplicit = true;
-			    List<DesignIssue> issueList = issues.get(USAGE_OF_IMPLICIT.getName());
-			    if (issueList == null) {
-				issueList = new ArrayList<>();
-				issues.put(USAGE_OF_IMPLICIT.getName(), issueList);
-			    }
-			    UniversalSyntaxTreeMetaData metaData = implicitStatement.getMetaData();
-			    issueList.add(new DesignIssue(metaData.getLine(), metaData.getColumn(),
-				    metaData.getLineNum(), metaData.getLength(), 1, USAGE_OF_IMPLICIT));
-			    break;
+    public Map<String, List<DesignIssue>> check(UniversalSyntaxTree specificationPart) {
+	Map<String, List<DesignIssue>> issues = new HashMap<>();
+	boolean hasImplicitNone = false;
+	boolean hasImplicit = false;
+	int implicitCount = 0;
+	List<UniversalSyntaxTree> implicitPartStatements = specificationPart.getChildren("implicit-part-stmt");
+	for (UniversalSyntaxTree implicitPartStatement : implicitPartStatements) {
+	    List<UniversalSyntaxTree> implicitStatements = implicitPartStatement.getChildren("implicit-stmt");
+	    for (UniversalSyntaxTree implicitStatement : implicitStatements) {
+		++implicitCount;
+		for (UniversalSyntaxTree implicitStamentChild : implicitStatement.getChildren()) {
+		    if ("NONE".equalsIgnoreCase(implicitStamentChild.getContent())) {
+			hasImplicitNone = true;
+			break;
+		    } else if ("implicit-spec-list".equals(implicitStamentChild.getName())) {
+			hasImplicit = true;
+			List<DesignIssue> issueList = issues.get(USAGE_OF_IMPLICIT.getName());
+			if (issueList == null) {
+			    issueList = new ArrayList<>();
+			    issues.put(USAGE_OF_IMPLICIT.getName(), issueList);
 			}
+			UniversalSyntaxTreeMetaData metaData = implicitStatement.getMetaData();
+			issueList.add(new DesignIssue(metaData.getLine(), metaData.getColumn(), metaData.getLineNum(),
+				metaData.getLength(), 1, USAGE_OF_IMPLICIT));
+			break;
 		    }
 		}
 	    }
-	    if (implicitCount == 0) {
-		List<DesignIssue> issueList = issues.get(NO_IMPLICIT_NONE.getName());
-		if (issueList == null) {
-		    issueList = new ArrayList<>();
-		    issues.put(NO_IMPLICIT_NONE.getName(), issueList);
-		}
-		UniversalSyntaxTreeMetaData metaData = node.getMetaData();
-		issueList.add(new DesignIssue(metaData.getLine(), metaData.getColumn(), metaData.getLineNum(),
-			metaData.getLength(), 1, NO_IMPLICIT_NONE));
-	    } else if (hasImplicit && hasImplicitNone) {
-		List<DesignIssue> issueList = issues.get(COMBINED_USAGE_OF_IMPLICIT.getName());
-		if (issueList == null) {
-		    issueList = new ArrayList<>();
-		    issues.put(COMBINED_USAGE_OF_IMPLICIT.getName(), issueList);
-		}
-		UniversalSyntaxTreeMetaData metaData = node.getMetaData();
-		issueList.add(new DesignIssue(metaData.getLine(), metaData.getColumn(), metaData.getLineNum(),
-			metaData.getLength(), 1, COMBINED_USAGE_OF_IMPLICIT));
+	}
+	if (implicitCount == 0) {
+	    List<DesignIssue> issueList = issues.get(NO_IMPLICIT_NONE.getName());
+	    if (issueList == null) {
+		issueList = new ArrayList<>();
+		issues.put(NO_IMPLICIT_NONE.getName(), issueList);
 	    }
-	    return WalkingAction.LEAVE_BRANCH;
+	    UniversalSyntaxTreeMetaData metaData = specificationPart.getMetaData();
+	    issueList.add(new DesignIssue(metaData.getLine(), metaData.getColumn(), metaData.getLineNum(),
+		    metaData.getLength(), 1, NO_IMPLICIT_NONE));
+	} else if (hasImplicit && hasImplicitNone) {
+	    List<DesignIssue> issueList = issues.get(COMBINED_USAGE_OF_IMPLICIT.getName());
+	    if (issueList == null) {
+		issueList = new ArrayList<>();
+		issues.put(COMBINED_USAGE_OF_IMPLICIT.getName(), issueList);
+	    }
+	    UniversalSyntaxTreeMetaData metaData = specificationPart.getMetaData();
+	    issueList.add(new DesignIssue(metaData.getLine(), metaData.getColumn(), metaData.getLineNum(),
+		    metaData.getLength(), 1, COMBINED_USAGE_OF_IMPLICIT));
 	}
-
-	public Map<String, List<DesignIssue>> getIssues() {
-	    return issues;
-	}
+	return issues;
     }
 
     @Override
