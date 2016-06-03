@@ -12,7 +12,5 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
  */
 public interface DirectoryIssues extends Issues {
 
-    public IssueParameter[] getParameters();
-
     public Map<String, MetricValue<?>> getDesignIssues();
 }

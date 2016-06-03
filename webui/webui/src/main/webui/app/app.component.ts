@@ -16,6 +16,8 @@ import {DashboardsComponent} from './dashboards.component';
 import {InformationComponent} from './information.component';
 import {HelpComponent} from './help.component';
 import {LicenseComponent} from './license.component';
+import {AnalyzerPluginComponent} from './analyzer-plugin.component';
+import {EvaluatorPluginComponent} from './evaluator-plugin.component';
 // Administration backend
 import {DashboardsAdminComponent} from './admin/dashboards-admin.component';
 import {ProjectsAdminComponent} from './admin/projects-admin.component';
@@ -69,6 +71,8 @@ import {FileAnalysisComponent} from './file/file-analysis.component';
     { path: '/information', name: 'Information', component: InformationComponent },
     { path: '/help', name: 'Help', component: HelpComponent },
     { path: '/license', name: 'License', component: LicenseComponent },
+    { path: '/analyzer-plugin/:pluginId', name: 'AnalyzerPlugin', component: AnalyzerPluginComponent },
+    { path: '/evaluator-plugin/:pluginId', name: 'EvaluatorPlugin', component: EvaluatorPluginComponent },
     // Administration Backend
     { path: '/admin', name: 'Admin', redirectTo: ['/DashboardsAdmin'] },
     { path: '/admin/dashboards', name: 'DashboardsAdmin', component: DashboardsAdminComponent },
