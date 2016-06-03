@@ -19,9 +19,8 @@ public class HBaseElementNames {
     public static final String EVALUATION_FILE_METRICS_TABLE = "evaluator_store.file_metrics";
     public static final String EVALUATION_DIRECTORY_METRICS_TABLE = "evaluator_store.directory_metrics";
     public static final String EVALUATION_PROJECT_METRICS_TABLE = "evaluator_store.project_metrics";
-    public static final String EVALUATION_ARCHITECTURE_ISSUES_TABLE = "evaluator_store.architecture_issues";
-    public static final String EVALUATION_DEFECTS_TABLE = "evaluator_store.defects";
-    public static final String EVALUATION_DESIGN_ISSUES_TABLE = "evaluator_store.design_issues";
-    public static final String EVALUATION_STYLE_ISSUES_TABLE = "evaluator_store.style_issues";
+    public static final String EVALUATION_FILE_ISSUES_TABLE = "evaluator_store.file_issues";
+    public static final String EVALUATION_DIRECTORY_ISSUES_TABLE = "evaluator_store.directory_issues";
+    public static final String EVALUATION_PROJECT_ISSUES_TABLE = "evaluator_store.project_issues";
 
 }

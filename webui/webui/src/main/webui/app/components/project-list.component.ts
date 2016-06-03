@@ -21,6 +21,7 @@ import {PanelComponent} from './panel.component';
 export class ProjectListComponent {
 
     private projects: Project[] = [];
+    private loading: boolean = true;
 
     constructor(private projectManager: ProjectManager) {
         let projectListComponent = this;
@@ -30,9 +31,11 @@ export class ProjectListComponent {
                 if (!projectListComponent.projects) {
                     projectListComponent.projects = [];
                 }
+                projectListComponent.loading = false;
             },
             function(response: Response): void {
                 projectListComponent.projects = [];
+                projectListComponent.loading = false;
             }
         );
     }
@@ -45,6 +48,6 @@ export class ProjectListComponent {
     }
 
     isLoading(): boolean {
-        return this.projects.length === 0;
+        return this.loading;
     }
 }
