@@ -18,15 +18,39 @@ export class PluginManager {
             response => success(response.json()), error);
     }
 
+    getAnalyzer(analyzerId: string, success: (analyzer: AnalyzerServiceInformation) => void,
+        error: (response: Response) => void) {
+        return this.purifinityServerConnector.get("/purifinityserver/rest/analysis/analyzers/" + analyzerId,
+            response => success(response.json()), error);
+    }
+
+    getAnalyzerGrammar(analyzerId: string, success: (analyzer: string) => void,
+        error: (response: Response) => void) {
+        return this.purifinityServerConnector.get("/purifinityserver/rest/analysis/analyzers/" + analyzerId + "/grammar",
+            response => success(response.json()), error);
+    }
+
     getEvaluators(success: (evaluators: EvaluatorServiceInformation[]) => void,
         error: (response: Response) => void) {
         return this.purifinityServerConnector.get("/purifinityserver/rest/evaluation/evaluators",
             response => success(response.json()), error);
     }
 
+    getEvaluator(evaluatorId: string, success: (evaluator: EvaluatorServiceInformation) => void,
+        error: (response: Response) => void) {
+        return this.purifinityServerConnector.get("/purifinityserver/rest/evaluation/evaluators/" + evaluatorId,
+            response => success(response.json()), error);
+    }
+
     getRepositoryTypes(success: (repositories: RepositoryServiceInformation[]) => void,
         error: (response: Response) => void) {
         return this.purifinityServerConnector.get("/purifinityserver/rest/repositories/types",
+            response => success(response.json()), error);
+    }
+
+    getRepositoryType(repositoryId: string, success: (repository: RepositoryServiceInformation) => void,
+        error: (response: Response) => void) {
+        return this.purifinityServerConnector.get("/purifinityserver/rest/repositories/types/" + repositoryId,
             response => success(response.json()), error);
     }
 

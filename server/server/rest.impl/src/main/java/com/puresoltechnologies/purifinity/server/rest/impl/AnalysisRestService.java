@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Collection;
 
 import javax.inject.Inject;
-import javax.ws.rs.PathParam;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.parsers.grammar.Grammar;
@@ -48,7 +47,7 @@ public class AnalysisRestService implements AnalysisRestInterface {
     }
 
     @Override
-    public Grammar getGrammar(@PathParam("id") String analyzerId) {
+    public Grammar getGrammar(String analyzerId) {
 	return analysisService.getGrammar(analyzerId);
     }
 

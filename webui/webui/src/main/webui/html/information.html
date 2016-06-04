@@ -28,9 +28,9 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr *ngFor="#analyzer of analyzers">
-					<td>{{analyzer.name}}</td>
-					<td>{{analyzer.description}}</td>
+				<tr *ngFor="#repository of repositories">
+					<td>{{repository.name}}</td>
+					<td>{{repository.description}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -47,7 +47,7 @@
 			</thead>
 			<tbody>
 				<tr *ngFor="#analyzer of analyzers">
-					<td><a class="btn btn-secondary"
+					<td><a class="btn btn-link"
 						[routerLink]="['/AnalyzerPlugin', {pluginId: analyzer.id}]">{{analyzer.name}}</a></td>
 					<td>{{analyzer.description}}</td>
 				</tr>
@@ -65,7 +65,7 @@
 			</thead>
 			<tbody>
 				<tr *ngFor="#evaluator of evaluators">
-					<td><a class="btn btn-secondary"
+					<td><a class="btn btn-link"
 						[routerLink]="['/EvaluatorPlugin', {pluginId: evaluator.id}]">{{evaluator.name}}</a></td>
 					<td>{{evaluator.description}}</td>
 				</tr>
