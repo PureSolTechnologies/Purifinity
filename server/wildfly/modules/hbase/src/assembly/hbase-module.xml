@@ -18,6 +18,7 @@
 				<include>org.apache.hbase:hbase-server</include>
 				<include>org.apache.phoenix:phoenix-core</include>
 				<include>org.apache.zookeeper:zookeeper</include>
+				<include>org.antlr:antlr-runtime</include>
 			</includes>
 			<useProjectArtifact>false</useProjectArtifact>
 			<outputDirectory>org/apache/hbase/client/main</outputDirectory>

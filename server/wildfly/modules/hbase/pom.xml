@@ -44,6 +44,11 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.antlr</groupId>
+			<artifactId>antlr-runtime</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
 			<groupId>sqlline</groupId>
 			<artifactId>sqlline</artifactId>
 		</dependency>
@@ -150,6 +155,13 @@
 								<artifactItem>
 									<groupId>org.apache.phoenix</groupId>
 									<artifactId>phoenix-core</artifactId>
+									<type>jar</type>
+									<overWrite>false</overWrite>
+									<outputDirectory>${wildfly.module.dir}/org/apache/hbase/client/main</outputDirectory>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.antlr</groupId>
+									<artifactId>antlr-runtime</artifactId>
 									<type>jar</type>
 									<overWrite>false</overWrite>
 									<outputDirectory>${wildfly.module.dir}/org/apache/hbase/client/main</outputDirectory>

@@ -28,9 +28,10 @@
 		<ductiledb.version>0.2.0-SNAPSHOT</ductiledb.version>
 
 		<!-- WildFly -->
-		<wildfly.version>9.0.1.Final</wildfly.version>
-		<resteasy.version>3.0.11.Final</resteasy.version>
-		<com.fasterxml.jackson.version>2.5.1</com.fasterxml.jackson.version>
+		<wildfly.version>10.0.0.Final</wildfly.version>
+		<resteasy.version>3.0.14.Final</resteasy.version>
+		<resteasy-api.version>3.0.12.Final</resteasy-api.version>
+		<com.fasterxml.jackson.version>2.5.4</com.fasterxml.jackson.version>
 
 		<!-- WildFly settings -->
 		<wildfly.http.port>8080</wildfly.http.port>
@@ -41,8 +42,8 @@
 		<wildfly.memory.options>-Xms512m -Xmx1024m</wildfly.memory.options>
 		<wildfly.options>${wildfly.memory.options} ${wildfly.debug.options}</wildfly.options>
 		<!-- Arquillian -->
-		<arquillian.version>1.1.8.Final</arquillian.version>
-		<arquillian.container.managed.version>1.0.1.Final</arquillian.container.managed.version>
+		<arquillian.version>1.1.11.Final</arquillian.version>
+		<arquillian.container.managed.version>2.0.0.Final</arquillian.container.managed.version>
 		<arquillian.test.dir>${project.build.directory}/wildfly</arquillian.test.dir>
 		<!-- Cargo -->
 		<cargo.dir>${work.dir}/cargo</cargo.dir>
@@ -1243,6 +1244,12 @@
 				<version>2.4</version>
 			</dependency>
 			<dependency>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr-runtime</artifactId>
+				<version>3.4</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-math3</artifactId>
 				<version>3.2</version>
@@ -1500,7 +1507,7 @@
 			<dependency>
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>jaxrs-api</artifactId>
-				<version>${resteasy.version}</version>
+				<version>${resteasy-api.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
