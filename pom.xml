@@ -11,7 +11,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<commons.version>0.7.0-SNAPSHOT</commons.version>
-		<parsers.version>0.5.0</parsers.version>
+		<parsers.version>0.6.0-SNAPSHOT</parsers.version>
 		<genesis.version>0.5.0-SNAPSHOT</genesis.version>
 		<graphs.version>0.6.0</graphs.version>
 		<versioning.version>1.1.0</versioning.version>
