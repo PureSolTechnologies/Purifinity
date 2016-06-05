@@ -159,6 +159,17 @@ These account differ only in the permissions they have. To add new
 users, use 'administrator@puresol-technologies.com'. For more
 details about the user management, have a look into the User's Manual.
 
+=== Installing Hadoop, HBase and Purifinity separately
+
+In this section it is discussed, how Purifinity can be installed with a separated Hadoop and HBase as starter
+for a larger installation on an already existing Hadoop cluster.
+
+.Installing Hadoop
+Download Hadoop {hadoop-version} from the link:http://hadoop.apache.org[Apache website]. As recommendation, unpack
+it to '/opt'... TODO!!!
+
+.Installing HBase with Phoenix
+
 == Starting and Stopping Purifinity
 
 === Starting Purifinity
