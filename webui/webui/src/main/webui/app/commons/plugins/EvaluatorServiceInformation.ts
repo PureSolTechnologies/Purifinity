@@ -5,7 +5,7 @@ export class EvaluatorServiceInformation {
 
     id: string;
     name: string;
-    evluatorType: string;
+    type: string;
     pluginVersion: Version;
     jndiName: string;
     description: string;
@@ -13,6 +13,6 @@ export class EvaluatorServiceInformation {
     serviceURLPath: string;
     projectURLPath: string;
     runURLPath: string;
-    qualityCharacteristics:any;
+    qualityCharacteristics: any;
 
 }

@@ -4,7 +4,7 @@ import {Response} from 'angular2/http';
 
 import {TabSetComponent} from '../../components/tabs/tabset.component';
 import {TabComponent} from '../../components/tabs/tab.component';
-import {EvaluatorSelectionComponent} from '../../components/evaluation/evaluator-selection.component';
+import {MetricsEvaluatorSelectionComponent} from '../../components/evaluation/metrics-evaluator-selection.component';
 import {ParetoChartComponent} from '../../components/charts/pareto-chart.component';
 import {VerticalParetoChartComponent} from '../../components/charts/vertical-pareto-chart.component';
 import {HistogramChartComponent} from '../../components/charts/histogram-chart.component';
@@ -32,7 +32,7 @@ import {TableCell} from '../../commons/tables/TableCell';
         TabComponent,
         TreeTableComponent,
         ProjectRunMenuComponent,
-        EvaluatorSelectionComponent,
+        MetricsEvaluatorSelectionComponent,
         ParetoChartComponent,
         VerticalParetoChartComponent,
         HistogramChartComponent,
