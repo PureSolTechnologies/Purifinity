@@ -128,6 +128,22 @@ public class EvaluatorIssuesStoreServiceBean implements EvaluatorIssuesStoreServ
     @Override
     public void storeFileResults(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileIssues results)
 	    throws EvaluationStoreException {
+	try {
+	    storeFileIssuesAsValues(analysisRun, codeAnalysis, results);
+	    storeFileResultsInBigTable(analysisRun, codeAnalysis, results);
+	    connection.commit();
+	} catch (SQLException e) {
+	    try {
+		connection.rollback();
+	    } catch (SQLException e1) {
+		logger.warn("Could not rollback file result storage.", e1);
+	    }
+	    throw new EvaluationStoreException("Could not store file results.", e);
+	}
+    }
+
+    private void storeFileIssuesAsValues(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileIssues results)
+	    throws SQLException {
 	try (PreparedStatement preparedStatement = connection
 		.prepareStatement("UPSERT INTO " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE + " (time, "
 			+ "hashid, " + "source_code_location, " + "code_range_type, " + "code_range_name, "
@@ -184,14 +200,6 @@ public class EvaluatorIssuesStoreServiceBean implements EvaluatorIssuesStoreServ
 		    }
 		}
 	    }
-	    connection.commit();
-	} catch (SQLException e) {
-	    try {
-		connection.rollback();
-	    } catch (SQLException e1) {
-		logger.warn("Could not rollback file result storage.", e1);
-	    }
-	    throw new EvaluationStoreException("Could not store file results.", e);
 	}
     }
 
