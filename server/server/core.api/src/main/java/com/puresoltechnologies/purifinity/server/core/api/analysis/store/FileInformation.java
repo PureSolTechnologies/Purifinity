@@ -6,7 +6,7 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 
 /**
  * This class contains the meta-information about files stored in
- * {@link FileStore}.
+ * {@link CommonFileStore}.
  * 
  * @author Rick-Rainer Ludwig
  */

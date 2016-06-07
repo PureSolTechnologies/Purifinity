@@ -19,7 +19,7 @@ import com.puresoltechnologies.purifinity.server.common.job.PersistentStepUserDa
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStore;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 
 @Named("AnalysisItemProcessor")
@@ -29,7 +29,7 @@ public class AnalysisItemProcessor implements ItemProcessor {
 	private Logger logger;
 
 	@Inject
-	private FileStoreService fileStore;
+	private FileStore fileStore;
 
 	@Inject
 	private AnalyzerServiceManager analyzerServiceManager;

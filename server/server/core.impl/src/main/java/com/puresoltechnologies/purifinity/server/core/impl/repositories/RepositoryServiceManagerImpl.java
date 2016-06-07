@@ -16,7 +16,7 @@ import com.puresoltechnologies.purifinity.repository.spi.Repository;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesValue;
-import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryService;
+import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryManager;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.repositories.RepositoryServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryServiceInformation;
@@ -72,7 +72,7 @@ public class RepositoryServiceManagerImpl extends AbstractServiceManager<Reposit
     @Override
     @Lock(LockType.READ)
     public RepositoryLocation createFromSerialization(Properties repositoryLocation) {
-	String repositoryId = repositoryLocation.getProperty(RepositoryService.REPOSITORY_ID_PROPERTY);
+	String repositoryId = repositoryLocation.getProperty(RepositoryManager.REPOSITORY_ID_PROPERTY);
 	Repository instance = getInstanceById(repositoryId);
 	return new RepositoryLocation() {
 

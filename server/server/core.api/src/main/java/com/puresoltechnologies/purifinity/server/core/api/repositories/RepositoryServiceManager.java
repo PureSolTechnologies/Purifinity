@@ -18,7 +18,7 @@ public interface RepositoryServiceManager extends ServiceManager<RepositoryServi
      * 
      * @param repositoryId
      *            is the id of the repository.
-     * @return An {@link RepositoryService} proxy is returned.
+     * @return An {@link RepositoryManager} proxy is returned.
      */
     @Override
     public Repository getInstanceById(String repositoryId);

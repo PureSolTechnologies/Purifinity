@@ -44,7 +44,7 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.ProjectManager;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.AnalysisServiceConnection;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex;
@@ -65,7 +65,7 @@ import com.puresoltechnologies.trees.TreeWalker;
 import com.puresoltechnologies.trees.WalkingAction;
 
 @Stateless
-public class AnalysisStoreServiceBean implements AnalysisStoreService {
+public class ProjectManagerBean implements ProjectManager {
 
     public static final HashAlgorithm DEFAULT_HASH_ALGORITHM = HashAlgorithm.SHA256;
     public static final MessageDigest DEFAULT_HASH;
@@ -634,7 +634,7 @@ public class AnalysisStoreServiceBean implements AnalysisStoreService {
 	    }
 	    buffer.append(hashId.toString());
 	}
-	HashAlgorithm algorithm = AnalysisStoreServiceBean.DEFAULT_HASH_ALGORITHM;
+	HashAlgorithm algorithm = ProjectManagerBean.DEFAULT_HASH_ALGORITHM;
 	String hash = HashCodeGenerator.get(algorithm, buffer.toString());
 	return new HashId(algorithm, hash);
     }

@@ -11,14 +11,14 @@ import com.buschmais.xo.api.ResultIterable;
 import com.buschmais.xo.api.XOManager;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreService;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreServiceRemote;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreRemote;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeDirectoryVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.ContentTreeFileVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.DuctileDBXOManager;
 
 @Stateless
-public class DirectoryStoreServiceBean implements DirectoryStoreService, DirectoryStoreServiceRemote {
+public class DirectoryStoreBean implements DirectoryStore, DirectoryStoreRemote {
 
     @Inject
     @DuctileDBXOManager

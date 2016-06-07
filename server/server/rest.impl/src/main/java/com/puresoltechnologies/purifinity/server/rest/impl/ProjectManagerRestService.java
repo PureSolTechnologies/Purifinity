@@ -13,13 +13,13 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.ProjectManager;
 import com.puresoltechnologies.purifinity.server.rest.api.ProjectManagerRestInterface;
 
 public class ProjectManagerRestService implements ProjectManagerRestInterface {
 
     @Inject
-    private AnalysisStoreService analysisStore;
+    private ProjectManager analysisStore;
 
     @Override
     public AnalysisProjectInformation createAnalysisProject(String identifier, AnalysisProjectSettings settings)

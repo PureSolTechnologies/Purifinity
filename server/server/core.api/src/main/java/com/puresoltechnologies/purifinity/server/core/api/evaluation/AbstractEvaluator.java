@@ -15,12 +15,12 @@ import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreExceptio
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonDirectoryStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreServiceRemote;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreRemote;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonFileStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreServiceRemote;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreRemote;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 import com.puresoltechnologies.versioning.Version;
 
@@ -39,9 +39,9 @@ public abstract class AbstractEvaluator<FileResults, FileResultsImpl extends Fil
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractEvaluator.class);
 
-    private final FileStoreServiceRemote fileStore;
+    private final FileStoreRemote fileStore;
 
-    private final DirectoryStoreServiceRemote directoryStore;
+    private final DirectoryStoreRemote directoryStore;
 
     private final EvaluatorInformation information;
 
@@ -49,17 +49,17 @@ public abstract class AbstractEvaluator<FileResults, FileResultsImpl extends Fil
 	super();
 	this.information = new EvaluatorInformation(id, name, version, type, description);
 
-	fileStore = JndiUtils.createRemoteEJBInstance(FileStoreServiceRemote.class, FileStoreServiceRemote.JNDI_NAME);
-	directoryStore = JndiUtils.createRemoteEJBInstance(DirectoryStoreServiceRemote.class,
-		DirectoryStoreServiceRemote.JNDI_NAME);
+	fileStore = JndiUtils.createRemoteEJBInstance(FileStoreRemote.class, FileStoreRemote.JNDI_NAME);
+	directoryStore = JndiUtils.createRemoteEJBInstance(DirectoryStoreRemote.class,
+		DirectoryStoreRemote.JNDI_NAME);
 
     }
 
-    protected FileStore getFileStore() {
+    protected CommonFileStore getFileStore() {
 	return fileStore;
     }
 
-    protected DirectoryStore getDirectoryStore() {
+    protected CommonDirectoryStore getDirectoryStore() {
 	return directoryStore;
     }
 

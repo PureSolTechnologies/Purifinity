@@ -31,7 +31,7 @@ import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementName
 import com.puresoltechnologies.purifinity.server.database.hbase.HBasePreparedStatements;
 
 @ApplicationScoped
-public class PreferencesStoreImpl implements PreferencesStore {
+public class PreferencesStoreBean implements PreferencesStore {
 
     @Inject
     private Logger logger;

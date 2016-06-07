@@ -39,8 +39,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.server.core.api.PurifinityConfiguration;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreServiceRemote;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreRemote;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChange;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.SystemPreferenceChangeEvent;
@@ -50,7 +50,7 @@ import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementName
 import com.puresoltechnologies.versioning.Version;
 
 @Singleton
-public class FileStoreServiceBean implements FileStoreService, FileStoreServiceRemote {
+public class FileStoreBean implements FileStore, FileStoreRemote {
 
     @Inject
     private Logger logger;
@@ -85,7 +85,7 @@ public class FileStoreServiceBean implements FileStoreService, FileStoreServiceR
     @Lock(LockType.WRITE)
     public FileInformation storeRawFile(InputStream rawStream) throws FileStoreException {
 	try (DigestInputStream digestInputStream = new DigestInputStream(rawStream,
-		AnalysisStoreServiceBean.DEFAULT_HASH)) {
+		ProjectManagerBean.DEFAULT_HASH)) {
 	    File tempFile = File.createTempFile("sourceRawFile", ".tmp");
 	    try {
 		tempFile.deleteOnExit();

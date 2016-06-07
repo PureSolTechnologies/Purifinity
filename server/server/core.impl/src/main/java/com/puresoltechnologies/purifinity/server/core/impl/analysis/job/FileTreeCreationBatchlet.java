@@ -16,7 +16,7 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.server.common.job.PersistentStepUserData;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.ProjectManager;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
 
 @Named("FileTreeCreationBatchlet")
@@ -26,7 +26,7 @@ public class FileTreeCreationBatchlet implements Batchlet {
 	private Logger logger;
 
 	@Inject
-	private AnalysisStoreService analysisStoreService;
+	private ProjectManager analysisStoreService;
 
 	@Inject
 	private JobContext jobContext;

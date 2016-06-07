@@ -18,7 +18,7 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectInformatio
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.ProjectManager;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
 
@@ -32,7 +32,7 @@ import com.puresoltechnologies.purifinity.wildfly.test.AbstractServerTest;
 public abstract class AbstractMetricTest extends AbstractServerTest {
 
     @Inject
-    private AnalysisStoreService analysisStore;
+    private ProjectManager analysisStore;
 
     @Inject
     private AnalyzerServiceManager analyzerServiceManager;

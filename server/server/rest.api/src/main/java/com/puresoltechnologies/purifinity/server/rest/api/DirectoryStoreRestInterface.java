@@ -11,11 +11,11 @@ import javax.ws.rs.core.MediaType;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
 import com.puresoltechnologies.purifinity.server.common.rest.security.RolesAllowed;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonDirectoryStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 
 @Path("directorystore")
-public interface DirectoryStoreRestInterface extends DirectoryStore {
+public interface DirectoryStoreRestInterface extends CommonDirectoryStore {
 
     @Override
     @GET

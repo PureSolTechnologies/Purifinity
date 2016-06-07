@@ -20,9 +20,9 @@ import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssues
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssuesImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonDirectoryStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonFileStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
@@ -90,7 +90,7 @@ public abstract class AbstractIssueEvaluator extends
 	    throws FileStoreException, InterruptedException, UniversalSyntaxTreeEvaluationException,
 	    EvaluationStoreException {
 	HashId hashId = fileNode.getHashId();
-	FileStore fileStore = getFileStore();
+	CommonFileStore fileStore = getFileStore();
 	if (!fileStore.wasAnalyzed(hashId)) {
 	    // Files was not analyzed, so we cannot do something here...
 	    return;
@@ -122,7 +122,7 @@ public abstract class AbstractIssueEvaluator extends
 	    boolean enableReevaluation) throws FileStoreException, InterruptedException,
 		    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
 	HashId hashId = directoryNode.getHashId();
-	DirectoryStore directoryStore = getDirectoryStore();
+	CommonDirectoryStore directoryStore = getDirectoryStore();
 	EvaluatorIssuesStore store = getDesignIssuessStore();
 	if (directoryStore.isAvailable(hashId)) {
 	    for (AnalysisFileTree child : directoryNode.getChildren()) {

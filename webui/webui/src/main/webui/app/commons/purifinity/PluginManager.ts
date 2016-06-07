@@ -44,13 +44,13 @@ export class PluginManager {
 
     getRepositoryTypes(success: (repositories: RepositoryServiceInformation[]) => void,
         error: (response: Response) => void) {
-        return this.purifinityServerConnector.get("/purifinityserver/rest/repositories/types",
+        return this.purifinityServerConnector.get("/purifinityserver/rest/repositorymanager/repositories",
             response => success(response.json()), error);
     }
 
     getRepositoryType(repositoryId: string, success: (repository: RepositoryServiceInformation) => void,
         error: (response: Response) => void) {
-        return this.purifinityServerConnector.get("/purifinityserver/rest/repositories/types/" + repositoryId,
+        return this.purifinityServerConnector.get("/purifinityserver/rest/repositorymanager/repositories/" + repositoryId,
             response => success(response.json()), error);
     }
 

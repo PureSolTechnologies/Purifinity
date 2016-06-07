@@ -19,8 +19,8 @@ import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreExceptio
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.ProjectManager;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStore;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreService;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluatorParameter;
@@ -34,10 +34,10 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
     private static final File testProjectDir = new File("src/test/resources/test_project");
 
     @Inject
-    private AnalysisStoreService analysisStore;
+    private ProjectManager analysisStore;
 
     @Inject
-    private FileStoreService fileStore;
+    private FileStore fileStore;
 
     @Inject
     private EvaluatorMetricsStoreService evaluatorStore;

@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisProject;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.ProjectManager;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
 
 @Named("WriteStatisticsBatchlet")
@@ -21,7 +21,7 @@ public class WriteStatisticsBatchlet implements Batchlet {
     private Logger logger;
 
     @Inject
-    private AnalysisStoreService analysisStore;
+    private ProjectManager analysisStore;
 
     @Inject
     private EvaluatorServiceManager evaluatorPluginService;

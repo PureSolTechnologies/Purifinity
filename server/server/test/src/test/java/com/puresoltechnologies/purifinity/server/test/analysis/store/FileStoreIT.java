@@ -26,14 +26,14 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonFileStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.versioning.Version;
 
 public class FileStoreIT extends AbstractAnalysisStoreServiceServerTest {
 
 	@Inject
-	private FileStore fileStore;
+	private CommonFileStore fileStore;
 
 	@Before
 	public void checkPreConditions() {

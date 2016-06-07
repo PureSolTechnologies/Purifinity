@@ -16,7 +16,7 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisProjectSettings;
 import com.puresoltechnologies.purifinity.server.common.job.PersistentStepUserData;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStore;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
 
 /**
@@ -32,7 +32,7 @@ public class FileStorageItemProcessor implements ItemProcessor {
 	private EventLoggerRemote eventLogger;
 
 	@Inject
-	private FileStoreService fileStore;
+	private FileStore fileStore;
 
 	@Inject
 	private JobContext jobContext;

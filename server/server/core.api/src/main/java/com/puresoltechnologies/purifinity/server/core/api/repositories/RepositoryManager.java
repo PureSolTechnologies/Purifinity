@@ -10,7 +10,7 @@ import com.puresoltechnologies.purifinity.server.domain.repositories.RepositoryS
  * 
  * @author Rick-Rainer Ludwig
  */
-public interface RepositoryService {
+public interface RepositoryManager {
 
 	public static final String REPOSITORY_ID_PROPERTY = "repository.id";
 

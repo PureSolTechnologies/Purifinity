@@ -7,12 +7,12 @@ import javax.inject.Inject;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonDirectoryStore;
 
 public class DirectoryStoreIT extends AbstractAnalysisStoreServiceServerTest {
 
 	@Inject
-	private DirectoryStore directoryStore;
+	private CommonDirectoryStore directoryStore;
 
 	@Before
 	public void checkPreConditions() {

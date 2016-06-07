@@ -6,13 +6,13 @@ import javax.inject.Inject;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStore;
 import com.puresoltechnologies.purifinity.server.rest.api.DirectoryStoreRestInterface;
 
 public class DirectoryStoreRestService implements DirectoryStoreRestInterface {
 
 	@Inject
-	private DirectoryStoreService directoryStore;
+	private DirectoryStore directoryStore;
 
 	@Override
 	public boolean isAvailable(HashId hashId) throws DirectoryStoreException {

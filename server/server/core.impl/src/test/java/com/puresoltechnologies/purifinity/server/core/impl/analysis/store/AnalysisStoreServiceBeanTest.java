@@ -16,7 +16,7 @@ public class AnalysisStoreServiceBeanTest {
 	@Test
 	public void testCalculateDirectoryHashIdWithEmptyList() {
 		List<HashId> hashIds = new ArrayList<>();
-		HashId hashId = AnalysisStoreServiceBean
+		HashId hashId = ProjectManagerBean
 				.calculateDirectoryHashId(hashIds);
 		assertNotNull(hashId);
 		assertEquals(
@@ -47,7 +47,7 @@ public class AnalysisStoreServiceBeanTest {
 				"0000000000000000000000000000000000000000000000000000000000000009"));
 		hashIds.add(new HashId(HashAlgorithm.SHA256,
 				"000000000000000000000000000000000000000000000000000000000000000A"));
-		HashId hashId = AnalysisStoreServiceBean
+		HashId hashId = ProjectManagerBean
 				.calculateDirectoryHashId(hashIds);
 		assertNotNull(hashId);
 		assertEquals(
@@ -78,7 +78,7 @@ public class AnalysisStoreServiceBeanTest {
 				"0000000000000000000000000000000000000000000000000000000000000003"));
 		hashIds.add(new HashId(HashAlgorithm.SHA256,
 				"000000000000000000000000000000000000000000000000000000000000000A"));
-		HashId hashId = AnalysisStoreServiceBean
+		HashId hashId = ProjectManagerBean
 				.calculateDirectoryHashId(hashIds);
 		assertNotNull(hashId);
 		assertEquals(

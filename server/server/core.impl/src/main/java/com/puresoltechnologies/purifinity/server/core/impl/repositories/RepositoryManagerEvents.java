@@ -5,23 +5,22 @@ import com.puresoltechnologies.server.systemmonitor.core.api.events.EventSeverit
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventType;
 
 /**
- * This class provides factory methods for AnalyzerRegistration events.
+ * This class provides factory methods for RepositoryManager events.
  * 
  * @author Rick-Rainer Ludwig
  */
-public class RepositoryServiceEvents {
+public class RepositoryManagerEvents {
 
     private static final String COMPONENT = "RepositoryService";
 
     /**
      * Private constructor to avoid instantiation.
      */
-    private RepositoryServiceEvents() {
+    private RepositoryManagerEvents() {
     }
 
     public static Event createStartupEvent() {
-	return new Event(COMPONENT, 1l, EventType.SYSTEM, EventSeverity.INFO,
-		"RepositoryService was started.");
+	return new Event(COMPONENT, 1l, EventType.SYSTEM, EventSeverity.INFO, "RepositoryService was started.");
     }
 
     public static Event createShutdownEvent() {

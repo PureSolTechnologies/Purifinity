@@ -6,7 +6,7 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 
-public interface AnalysisStoreService extends AnalysisStore {
+public interface ProjectManager extends AnalysisStore {
 
     /**
      * This method is used to create a content and file tree in the Titan
