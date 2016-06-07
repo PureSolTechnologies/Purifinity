@@ -9,7 +9,6 @@ import javax.ejb.Startup;
 
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
-import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluatorServiceRegistration;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
@@ -19,7 +18,6 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-@EJBFacade
 public class FortranDesignEvaluatorRegistration extends AbstractEvaluatorServiceRegistration {
 
     public static final String JNDI_ADDRESS = JndiUtils.createGlobalName("fortran2008.plugin",

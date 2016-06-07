@@ -2,8 +2,6 @@ package com.puresoltechnologies.purifinity.server.common.plugins;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.ejb.Lock;
-import javax.ejb.LockType;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
@@ -42,7 +40,6 @@ public class ServiceManagerProxy {
      * @param <RemoteService>
      *            is the remote service to be registered.
      */
-    @Lock(LockType.WRITE)
     public <Information extends ServiceInformation, Service, RemoteService extends ServiceManager<Information, Service>> void register(
 	    String name, Class<? extends RemoteService> remoteService, String remoteServiceJNDIName,
 	    PluginInformation pluginInformation, String serviceJNDIName, Information information) {

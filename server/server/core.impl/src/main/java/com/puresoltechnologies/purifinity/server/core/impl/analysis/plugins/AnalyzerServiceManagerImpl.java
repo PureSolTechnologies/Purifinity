@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.analysis.domain.ProgrammingLanguageAnalyzer;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceManager;
-import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalyzerServiceManagerRemote;
 import com.puresoltechnologies.purifinity.server.core.api.preferences.PreferencesStore;
@@ -20,7 +19,6 @@ import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerService
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
-@EJBFacade
 public class AnalyzerServiceManagerImpl
 	extends AbstractServiceManager<AnalyzerServiceInformation, ProgrammingLanguageAnalyzer>
 	implements AnalyzerServiceManager, AnalyzerServiceManagerRemote {

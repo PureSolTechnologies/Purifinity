@@ -20,7 +20,6 @@ import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
 import com.puresoltechnologies.purifinity.server.common.plugins.AbstractServiceManager;
-import com.puresoltechnologies.purifinity.server.common.plugins.EJBFacade;
 import com.puresoltechnologies.purifinity.server.common.plugins.PluginInformation;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManager;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorServiceManagerRemote;
@@ -31,7 +30,6 @@ import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServ
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
-@EJBFacade
 public class EvaluatorServiceManagerImpl extends AbstractServiceManager<EvaluatorServiceInformation, Evaluator>
 	implements EvaluatorServiceManager, EvaluatorServiceManagerRemote {
 
@@ -42,7 +40,7 @@ public class EvaluatorServiceManagerImpl extends AbstractServiceManager<Evaluato
     private PreferencesStore preferencesStore;
 
     @Inject
-    private EvaluatorStoreUtils evaluatorStoreCassandraUtils;
+    private EvaluatorStoreUtils evaluatorStoreUtils;
 
     private final Map<String, Boolean> analyzerActivations = new HashMap<>();
 
@@ -60,7 +58,7 @@ public class EvaluatorServiceManagerImpl extends AbstractServiceManager<Evaluato
 
     private void addInformationToDatabase(PluginInformation pluginInformation,
 	    EvaluatorServiceInformation serviceInformation) {
-	evaluatorStoreCassandraUtils.registerPluginInformation(pluginInformation, serviceInformation);
+	evaluatorStoreUtils.registerPluginInformation(pluginInformation, serviceInformation);
     }
 
     @Override
