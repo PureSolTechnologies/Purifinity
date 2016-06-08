@@ -28,14 +28,14 @@ public abstract class AbstractPasswordStoreServerTest extends AbstractServerTest
     }
 
     @Before
-    public void connectCassandra() throws SQLException {
+    public void connectHBase() throws SQLException {
 	connection = HBaseHelper.connect();
-	assertNotNull("Cassandra cluster was not connected.", connection);
+	assertNotNull("HBase cluster was not connected.", connection);
 	PasswordStoreTester.cleanupDatabase(connection);
     }
 
     @After
-    public void disconnectCassandra() throws SQLException {
+    public void disconnectHBase() throws SQLException {
 	if (connection != null) {
 	    connection.close();
 	    connection = null;

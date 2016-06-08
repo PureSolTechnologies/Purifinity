@@ -88,11 +88,11 @@ public class MetricLoggerBean implements MetricLogger, MetricLoggerRemote {
 
     @Override
     public void logEvent(Date time, Value<?> value) {
-	writeToCassandra(time, value);
+	writeToDatabase(time, value);
 	writeToLogger(value);
     }
 
-    private void writeToCassandra(Date time, Value<?> value) {
+    private void writeToDatabase(Date time, Value<?> value) {
 	try {
 	    Parameter<?> parameter = value.getParameter();
 	    if (!parameter.isNumeric()) {

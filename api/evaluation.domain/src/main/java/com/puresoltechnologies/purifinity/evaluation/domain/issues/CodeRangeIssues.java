@@ -77,4 +77,8 @@ public class CodeRangeIssues implements Serializable {
     public final List<Issue> getIssues(IssueParameter parameter) {
 	return values.get(parameter.getName());
     }
+
+    public boolean hasIssue(IssueParameter parameter) {
+	return values.containsKey(parameter.getName());
+    }
 }

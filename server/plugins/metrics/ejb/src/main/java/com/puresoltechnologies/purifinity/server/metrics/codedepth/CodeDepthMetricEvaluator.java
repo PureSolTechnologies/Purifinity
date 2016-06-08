@@ -25,7 +25,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.CommonEvaluatorMetricsStore;
 
 /**
  * This evaluator calculates the nesting depth of the source code. A too deep
@@ -83,7 +83,7 @@ public class CodeDepthMetricEvaluator extends AbstractMetricEvaluator {
 		CodeDepthMetric.PLUGIN_VERSION, directory.getHashId(), new Date(), new UnspecifiedSourceCodeLocation(),
 		CodeRangeType.DIRECTORY, directory.getName());
 	int maxDepth = 0;
-	EvaluatorMetricsStore evaluatorStore = getMetricStore();
+	CommonEvaluatorMetricsStore evaluatorStore = getMetricStore();
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    if (child.isFile()) {
 		FileMetrics fileResults = evaluatorStore.readFileResults(child.getHashId(), CodeDepthMetric.ID);

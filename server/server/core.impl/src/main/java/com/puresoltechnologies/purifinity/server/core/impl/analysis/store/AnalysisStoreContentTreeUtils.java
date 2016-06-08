@@ -204,9 +204,9 @@ public class AnalysisStoreContentTreeUtils {
 	// boolean isFile = (Boolean) contentVertex
 	// .getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE);
 	// if (isFile) {
-	// EvaluatorStoreCassandraUtils.deleteFileEvaluation(hashId);
+	// EvaluatorStoreHBaseUtils.deleteFileEvaluation(hashId);
 	// } else {
-	// EvaluatorStoreCassandraUtils.deleteDirectoryEvaluation(hashId);
+	// EvaluatorStoreHBaseUtils.deleteDirectoryEvaluation(hashId);
 	// }
     }
 
@@ -227,9 +227,9 @@ public class AnalysisStoreContentTreeUtils {
 	// boolean isFile = (Boolean) contentVertex
 	// .getProperty(TitanElementNames.TREE_ELEMENT_IS_FILE);
 	// if (isFile) {
-	// EvaluatorStoreCassandraUtils.deleteFileEvaluation(hashId);
+	// EvaluatorStoreHBaseUtils.deleteFileEvaluation(hashId);
 	// } else {
-	// EvaluatorStoreCassandraUtils.deleteDirectoryEvaluation(hashId);
+	// EvaluatorStoreHBaseUtils.deleteDirectoryEvaluation(hashId);
 	// }
     }
 }

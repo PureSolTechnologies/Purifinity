@@ -22,5 +22,6 @@ public class HBaseElementNames {
     public static final String EVALUATION_FILE_ISSUES_TABLE = "evaluator_store.file_issues";
     public static final String EVALUATION_DIRECTORY_ISSUES_TABLE = "evaluator_store.directory_issues";
     public static final String EVALUATION_PROJECT_ISSUES_TABLE = "evaluator_store.project_issues";
+    public static final String EVALUATION_ISSUES_TABLE = "evaluator_store.issues";
 
 }

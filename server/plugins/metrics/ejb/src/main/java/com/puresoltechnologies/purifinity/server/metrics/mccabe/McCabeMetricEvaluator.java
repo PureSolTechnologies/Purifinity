@@ -26,7 +26,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetricsImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.CommonEvaluatorMetricsStore;
 import com.puresoltechnologies.purifinity.server.metrics.mccabe.db.McCabeMetricEvaluatorDAO;
 
 @Stateless
@@ -78,7 +78,7 @@ public class McCabeMetricEvaluator extends AbstractMetricEvaluator {
     @Override
     protected DirectoryMetricsImpl processDirectory(AnalysisRun analysisRun, AnalysisFileTree directory)
 	    throws InterruptedException, EvaluationStoreException {
-	EvaluatorMetricsStore evaluatorStore = getMetricStore();
+	CommonEvaluatorMetricsStore evaluatorStore = getMetricStore();
 	McCabeMetricResult metricResults = null;
 	for (AnalysisFileTree child : directory.getChildren()) {
 	    HashId childHashId = child.getHashId();

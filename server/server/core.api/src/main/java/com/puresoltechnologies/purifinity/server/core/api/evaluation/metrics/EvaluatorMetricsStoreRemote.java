@@ -5,10 +5,10 @@ import javax.ejb.Remote;
 import com.puresoltechnologies.purifinity.server.common.utils.BuildInformation;
 
 @Remote
-public interface EvaluatorMetricsStoreServiceRemote extends EvaluatorMetricsStore {
+public interface EvaluatorMetricsStoreRemote extends CommonEvaluatorMetricsStore {
 
     String JNDI_NAME = "java:global/server.app/com-puresoltechnologies-purifinity-server-server.core.impl-"
 	    + BuildInformation.getVersion()
-	    + "/EvaluatorMetricsStoreServiceBean!com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreServiceRemote";
+	    + "/EvaluatorMetricsStoreBean!com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreRemote";
 
 }

@@ -47,7 +47,7 @@ public class FileIssuesImpl extends AbstractIssues implements FileIssues {
     }
 
     @Override
-    public List<CodeRangeIssues> getCodeRangeDesignIssues() {
+    public List<CodeRangeIssues> getCodeRangeIssues() {
 	return codeRangeDesignIssues;
     }
 

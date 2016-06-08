@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.core.impl.evaluation.store;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,14 +42,14 @@ import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssues
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssuesImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.RunIssues;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.EvaluatorIssuesStoreService;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.EvaluatorIssuesStoreServiceRemote;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.EvaluatorIssuesStore;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.EvaluatorIssuesStoreRemote;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.EvaluatorStoreConnection;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 import com.puresoltechnologies.versioning.Version;
 
 @Stateless
-public class EvaluatorIssuesStoreServiceBean implements EvaluatorIssuesStoreService, EvaluatorIssuesStoreServiceRemote {
+public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, EvaluatorIssuesStoreRemote {
 
     @Inject
     private Logger logger;
@@ -144,12 +145,11 @@ public class EvaluatorIssuesStoreServiceBean implements EvaluatorIssuesStoreServ
 
     private void storeFileIssuesAsValues(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileIssues results)
 	    throws SQLException {
-	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("UPSERT INTO " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE + " (time, "
-			+ "hashid, " + "source_code_location, " + "code_range_type, " + "code_range_name, "
-			+ "evaluator_id, " + "evaluator_version, " + "design_issue_id, " + "description, " + "weight, "
-			+ "start_line, " + "start_column, " + "line_count, " + "length, " + "severity, "
-			+ "classification" + ") VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+	try (PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
+		+ HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE + " (time, " + "hashid, " + "source_code_location, "
+		+ "code_range_type, " + "code_range_name, " + "evaluator_id, " + "evaluator_version, " + "issue_id, "
+		+ "description, " + "weight, " + "start_line, " + "start_column, " + "line_count, " + "length, "
+		+ "severity, " + "classification" + ") VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    Date time = results.getTime();
 	    AnalysisInformation analysisInformation = codeAnalysis.getAnalysisInformation();
 	    HashId hashId = analysisInformation.getHashId();
@@ -160,7 +160,7 @@ public class EvaluatorIssuesStoreServiceBean implements EvaluatorIssuesStoreServ
 	    String codeRangeNameParameterName = codeRangeNameParameter.getName();
 	    CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
 	    String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
-	    for (CodeRangeIssues codeRangeIssues : results.getCodeRangeDesignIssues()) {
+	    for (CodeRangeIssues codeRangeIssues : results.getCodeRangeIssues()) {
 		String codeRangeName = codeRangeIssues.getCodeRangeName();
 		CodeRangeType codeRangeType = codeRangeIssues.getCodeRangeType();
 
@@ -217,11 +217,10 @@ public class EvaluatorIssuesStoreServiceBean implements EvaluatorIssuesStoreServ
 
     @Override
     public FileIssuesImpl readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
-	try (PreparedStatement preparedStatement = connection
-		.prepareStatement("SELECT " + "time, " + "code_range_type, " + "code_range_name, "
-			+ "evaluator_version, " + "design_issue_id, " + "description, " + "weight, " + "start_line, "
-			+ "start_column, " + "line_count, " + "length, " + "source_code_location " + "FROM "
-			+ HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
+	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, "
+		+ "code_range_type, " + "code_range_name, " + "evaluator_version, " + "issue_id, " + "description, "
+		+ "weight, " + "start_line, " + "start_column, " + "line_count, " + "length, " + "source_code_location "
+		+ "FROM " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -254,7 +253,7 @@ public class EvaluatorIssuesStoreServiceBean implements EvaluatorIssuesStoreServ
 		    }
 		    evaluatorVersion = getEvaluatorVersionAndCheckConsistency(resultSet, hashId, evaluatorId,
 			    evaluatorVersion);
-		    String parameterName = resultSet.getString("design_issue_id");
+		    String parameterName = resultSet.getString("issue_id");
 		    IssueParameter designIssueParameter = extractDesignIssueParameter(resultSet);
 		    if (designIssueParameter == null) {
 			continue;
@@ -340,7 +339,7 @@ public class EvaluatorIssuesStoreServiceBean implements EvaluatorIssuesStoreServ
     }
 
     private IssueParameter extractDesignIssueParameter(ResultSet resultSet) throws SQLException {
-	String parameterName = resultSet.getString("design_issue_id");
+	String parameterName = resultSet.getString("issue_id");
 	String description = resultSet.getString("description");
 	return new IssueParameter(parameterName, "", description);
     }
@@ -361,8 +360,88 @@ public class EvaluatorIssuesStoreServiceBean implements EvaluatorIssuesStoreServ
     @Override
     public void storeFileResultsInBigTable(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileIssues results)
 	    throws EvaluationStoreException {
-	// TODO Auto-generated method stub
+	try {
+	    storeIssuesInBigTableWithoutCommit(analysisRun, codeAnalysis, results);
+	    connection.commit();
+	} catch (SQLException e) {
+	    try {
+		connection.rollback();
+	    } catch (SQLException e1) {
+		logger.warn("Could not rollback metrics storage.", e1);
+	    }
+	    throw new EvaluationStoreException("Could not store metrics in big table.", e);
+	}
+    }
 
+    private void storeIssuesInBigTableWithoutCommit(AnalysisRun analysisRun, CodeAnalysis codeAnalysis,
+	    FileIssues results) throws SQLException {
+	try (PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
+		+ HBaseElementNames.EVALUATION_ISSUES_TABLE + " (time," + "project_id, " + "run_id, " + "hashid, "
+		+ "internal_directory, " + "file_name, " + "source_code_location, " + "language_name, "
+		+ "language_version, " + "evaluator_id, " + "evaluator_version, " + "code_range_name, "
+		+ "code_range_type, " + "issue_id, " + "start_line, " + "start_column, " + "line_count, " + "length, "
+		+ "weight, " + "classification, " + "severity, " + "description ) VALUES "
+		+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+	    Date time = results.getTime();
+	    String projectId = analysisRun.getInformation().getProjectId();
+	    long runId = analysisRun.getInformation().getRunId();
+	    AnalysisInformation analysisInformation = codeAnalysis.getAnalysisInformation();
+	    HashId hashId = analysisInformation.getHashId();
+	    AnalysisFileTree analysisTreeNode = analysisRun.findTreeNode(hashId);
+	    File pathFile = analysisTreeNode.getPathFile(false);
+	    String internalPath = pathFile.getParent();
+	    String fileName = pathFile.getName();
+	    String sourceCodeLocation = PropertiesUtils
+		    .toString(analysisTreeNode.getSourceCodeLocation().getSerialization());
+	    String languageName = analysisInformation.getLanguageName();
+	    String languageVersion = analysisInformation.getLanguageVersion();
+	    String evaluatorId = results.getEvaluatorId();
+	    Version evaluatorVersion = results.getEvaluatorVersion();
+	    CodeRangeNameParameter codeRangeNameParameter = CodeRangeNameParameter.getInstance();
+	    String codeRangeNameParameterName = codeRangeNameParameter.getName();
+	    CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
+	    String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
+	    for (CodeRangeIssues issues : results.getCodeRangeIssues()) {
+		String codeRangeName = issues.getCodeRangeName();
+		CodeRangeType codeRangeType = issues.getCodeRangeType();
+
+		for (IssueParameter parameter : results.getParameters()) {
+		    String issueId = parameter.getName();
+		    if (issueId.equals(codeRangeNameParameterName) || issueId.equals(codeRangeTypeParameterName)) {
+			continue;
+		    }
+		    if (!issues.hasIssue(parameter)) {
+			continue;
+		    }
+		    for (Issue issue : issues.getIssues(parameter)) {
+			int weight = issue.getValue();
+			preparedStatement.setTime(1, new Time(time.getTime()));
+			preparedStatement.setString(2, projectId);
+			preparedStatement.setLong(3, runId);
+			preparedStatement.setString(4, hashId.toString());
+			preparedStatement.setString(5, internalPath);
+			preparedStatement.setString(6, fileName);
+			preparedStatement.setString(7, sourceCodeLocation);
+			preparedStatement.setString(8, languageName);
+			preparedStatement.setString(9, languageVersion.toString());
+			preparedStatement.setString(10, evaluatorId);
+			preparedStatement.setString(11, evaluatorVersion.toString());
+			preparedStatement.setString(12, codeRangeName);
+			preparedStatement.setString(13, codeRangeType.name());
+			preparedStatement.setString(14, issueId);
+			preparedStatement.setInt(15, issue.getStartLine());
+			preparedStatement.setInt(16, issue.getStartColumn());
+			preparedStatement.setInt(17, issue.getLineCount());
+			preparedStatement.setInt(18, issue.getLength());
+			preparedStatement.setDouble(19, weight);
+			preparedStatement.setString(20, issue.getClassification().name());
+			preparedStatement.setString(21, issue.getSeverity().name());
+			preparedStatement.setString(22, parameter.getDescription());
+			preparedStatement.execute();
+		    }
+		}
+	    }
+	}
     }
 
     @Override

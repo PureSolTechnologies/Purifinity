@@ -21,7 +21,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMet
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.ProjectManager;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStore;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreService;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluator;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCEvaluatorParameter;
 import com.puresoltechnologies.purifinity.server.metrics.sloc.SLOCMetricCalculator;
@@ -40,7 +40,7 @@ public class SLOCEvaluatorIT extends AbstractMetricTest {
     private FileStore fileStore;
 
     @Inject
-    private EvaluatorMetricsStoreService evaluatorStore;
+    private EvaluatorMetricsStore evaluatorStore;
 
     public SLOCEvaluatorIT() {
 	super(testProjectDir, new TestFileSearchConfiguration());

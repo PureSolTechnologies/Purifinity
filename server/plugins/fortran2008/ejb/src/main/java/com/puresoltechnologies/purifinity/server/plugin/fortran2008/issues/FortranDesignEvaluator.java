@@ -99,18 +99,18 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 
     @Override
     protected FileIssues readFileResults(HashId hashId) throws EvaluationStoreException {
-	return getDesignIssuessStore().readFileResults(hashId, FortranDesignEvaluator.ID);
+	return getIssuesStore().readFileResults(hashId, FortranDesignEvaluator.ID);
     }
 
     @Override
     protected boolean hasFileResults(HashId hashId) throws EvaluationStoreException {
-	return getDesignIssuessStore().hasFileResults(hashId, FortranDesignEvaluator.ID);
+	return getIssuesStore().hasFileResults(hashId, FortranDesignEvaluator.ID);
     }
 
     @Override
     protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, FileIssuesImpl issues)
 	    throws EvaluationStoreException {
-	getDesignIssuessStore().storeFileResults(analysisRun, fileAnalysis, issues);
+	getIssuesStore().storeFileResults(analysisRun, fileAnalysis, issues);
     }
 
     @Override

@@ -31,19 +31,19 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetricsImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetricsImpl;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetricsImpl;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetricsImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetricsImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetricsImpl;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreService;
-import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreServiceRemote;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreRemote;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.EvaluatorStoreConnection;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 import com.puresoltechnologies.versioning.Version;
@@ -54,8 +54,7 @@ import com.puresoltechnologies.versioning.Version;
  * @author Rick-Rainer Ludwig
  */
 @Stateless
-public class EvaluatorMetricsStoreServiceBean
-	implements EvaluatorMetricsStoreService, EvaluatorMetricsStoreServiceRemote {
+public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, EvaluatorMetricsStoreRemote {
 
     @Inject
     private Logger logger;
@@ -757,8 +756,8 @@ public class EvaluatorMetricsStoreServiceBean
 		    MetricValue<?> value = parameterEntry.getValue();
 		    values.put(parameter.getName(), value);
 		}
-		DirectoryMetricsImpl directoryMetrics = new DirectoryMetricsImpl(evaluatorId, evaluatorVersion,
-			hashId, time, parameters, values);
+		DirectoryMetricsImpl directoryMetrics = new DirectoryMetricsImpl(evaluatorId, evaluatorVersion, hashId,
+			time, parameters, values);
 		return directoryMetrics;
 	    }
 	} catch (SQLException e) {
@@ -791,8 +790,8 @@ public class EvaluatorMetricsStoreServiceBean
 		// codeRangeType, codeRangeName, parameters, values)
 		Map<String, MetricValue<?>> metrics = null;
 		Version evaluatorVersion = new Version(1, 0, 0); // FIXME
-		ProjectMetricsImpl directoryMetrics = new ProjectMetricsImpl(evaluatorId, evaluatorVersion,
-			projectId, runId, time, parameters, metrics);
+		ProjectMetricsImpl directoryMetrics = new ProjectMetricsImpl(evaluatorId, evaluatorVersion, projectId,
+			runId, time, parameters, metrics);
 		return directoryMetrics;
 	    }
 	} catch (SQLException e) {
@@ -877,16 +876,22 @@ public class EvaluatorMetricsStoreServiceBean
 		    MetricValue<?> metricValue = MetricValue.create(metricsParameter, value);
 		    parameterBuffer.put(metricsParameter, metricValue);
 		}
+		Set<MetricParameter<?>> parameters = new HashSet<>();
+		for (Set<MetricParameter<?>> values : parametersBuffer.values()) {
+		    parameters.addAll(values);
+		}
 		RunMetricsImpl metrics = new RunMetricsImpl(evaluatorId, evaluatorVersion, minTime,
-			(MetricParameter<?>[]) parametersBuffer.values().toArray());
+			parameters.toArray(new MetricParameter[parameters.size()]));
 		for (HashId hashId : buffer.keySet()) {
-		    MetricParameter<?>[] parameters = (MetricParameter<?>[]) parametersBuffer.get(hashId).toArray();
+		    Set<MetricParameter<?>> parameterSet = parametersBuffer.get(hashId);
+		    MetricParameter<?>[] parameterArray = parameterSet
+			    .toArray(new MetricParameter[parameterSet.size()]);
 		    Map<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> hashIdBuffer = buffer
 			    .get(hashId);
 		    if (hashIdTypes.get(hashId) == CodeRangeType.FILE) {
 			SourceCodeLocation sourceCodeLocation = sourceCodeLocationBuffer.get(hashId);
 			FileMetricsImpl fileMetrics = new FileMetricsImpl(evaluatorId, evaluatorVersion, hashId,
-				sourceCodeLocation, timeBuffer.get(hashId), parameters);
+				sourceCodeLocation, timeBuffer.get(hashId), parameterArray);
 			for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> codeRangeTypeEntry : hashIdBuffer
 				.entrySet()) {
 			    CodeRangeType codeRangeType = codeRangeTypeEntry.getKey();
@@ -900,8 +905,8 @@ public class EvaluatorMetricsStoreServiceBean
 				    MetricValue<?> value = parameterEntry.getValue();
 				    metricValues.put(parameter.getName(), value);
 				}
-				fileMetrics.addCodeRangeMetrics(new CodeRangeMetrics(sourceCodeLocation,
-					codeRangeType, codeRangeName, parameters, metricValues));
+				fileMetrics.addCodeRangeMetrics(new CodeRangeMetrics(sourceCodeLocation, codeRangeType,
+					codeRangeName, parameterArray, metricValues));
 			    }
 			}
 			metrics.add(fileMetrics);
@@ -918,8 +923,8 @@ public class EvaluatorMetricsStoreServiceBean
 				metricValues.put(parameter.getName(), value);
 			    }
 			}
-			DirectoryMetricsImpl directoryMetrics = new DirectoryMetricsImpl(evaluatorId,
-				evaluatorVersion, hashId, timeBuffer.get(hashId), parameters, metricValues);
+			DirectoryMetricsImpl directoryMetrics = new DirectoryMetricsImpl(evaluatorId, evaluatorVersion,
+				hashId, timeBuffer.get(hashId), parameterArray, metricValues);
 			metrics.add(directoryMetrics);
 		    }
 		}

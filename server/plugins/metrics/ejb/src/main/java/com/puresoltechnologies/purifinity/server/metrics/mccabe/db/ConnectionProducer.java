@@ -23,9 +23,9 @@ public class ConnectionProducer {
     @McCabeMetricEvaluatorStoreConnection
     public Connection getAnalysisSession() {
 	try {
-	    logger.info("Creating Cassandra McCabe Metric Evaluator Session...");
+	    logger.info("Creating HBase McCabe Metric Evaluator Session...");
 	    Connection connection = HBaseHelper.connect();
-	    logger.info("Cassandra McCabe Metric Evaluator Session created.");
+	    logger.info("HBase McCabe Metric Evaluator Session created.");
 	    return connection;
 	} catch (SQLException e) {
 	    throw new RuntimeException("Could not connect to HBase via Phoenix.", e);

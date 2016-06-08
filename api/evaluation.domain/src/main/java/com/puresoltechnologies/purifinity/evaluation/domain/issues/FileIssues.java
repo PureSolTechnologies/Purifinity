@@ -24,6 +24,6 @@ public interface FileIssues extends Issues {
      */
     public SourceCodeLocation getSourceCodeLocation();
 
-    public List<CodeRangeIssues> getCodeRangeDesignIssues();
+    public List<CodeRangeIssues> getCodeRangeIssues();
 
 }

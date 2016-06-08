@@ -17,7 +17,7 @@ import com.puresoltechnologies.purifinity.server.database.hadoop.utils.bloob.Blo
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 
 /**
- * This class contains methods to handle analysis projects and run in Cassandra.
+ * This class contains methods to handle analysis projects and run in HBase.
  * 
  * @author Rick-Rainer Ludwig
  * 
@@ -76,7 +76,7 @@ public class AnalysisStoreUtils {
     }
 
     /**
-     * This method removes Analysis Run Settings from Cassandra.
+     * This method removes Analysis Run Settings from HBase.
      * 
      * @param projectId
      *            is the id of the project.

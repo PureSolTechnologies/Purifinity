@@ -21,8 +21,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssues
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonDirectoryStore;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonFileStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
@@ -32,15 +32,15 @@ public abstract class AbstractIssueEvaluator extends
 	AbstractEvaluator<FileIssues, FileIssuesImpl, DirectoryIssues, DirectoryIssuesImpl, ProjectIssues, ProjectIssuesImpl>
 	implements DefectEvaluator {
 
-    private final EvaluatorIssuesStoreServiceRemote designIssuesStore;
+    private final EvaluatorIssuesStoreRemote designIssuesStore;
 
     public AbstractIssueEvaluator(String id, String name, Version version, String description) {
 	super(id, name, version, EvaluatorType.DESGIN, description);
-	designIssuesStore = JndiUtils.createRemoteEJBInstance(EvaluatorIssuesStoreServiceRemote.class,
-		EvaluatorIssuesStoreServiceRemote.JNDI_NAME);
+	designIssuesStore = JndiUtils.createRemoteEJBInstance(EvaluatorIssuesStoreRemote.class,
+		EvaluatorIssuesStoreRemote.JNDI_NAME);
     }
 
-    protected final EvaluatorIssuesStore getDesignIssuessStore() {
+    protected final CommonEvaluatorIssuesStore getIssuesStore() {
 	return designIssuesStore;
     }
 
@@ -104,7 +104,7 @@ public abstract class AbstractIssueEvaluator extends
 		    if (fileResults != null) {
 			FileIssuesImpl metrics = new FileIssuesImpl(getInformation().getId(),
 				getInformation().getVersion(), hashId, fileResults.getSourceCodeLocation(), new Date(),
-				fileResults.getParameters(), fileResults.getCodeRangeDesignIssues());
+				fileResults.getParameters(), fileResults.getCodeRangeIssues());
 			storeFileResults(analysisRun, fileAnalysis, metrics);
 		    }
 		}
@@ -123,7 +123,7 @@ public abstract class AbstractIssueEvaluator extends
 		    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
 	HashId hashId = directoryNode.getHashId();
 	CommonDirectoryStore directoryStore = getDirectoryStore();
-	EvaluatorIssuesStore store = getDesignIssuessStore();
+	CommonEvaluatorIssuesStore store = getIssuesStore();
 	if (directoryStore.isAvailable(hashId)) {
 	    for (AnalysisFileTree child : directoryNode.getChildren()) {
 		processNode(analysisRun, child, enableReevaluation);
@@ -131,9 +131,9 @@ public abstract class AbstractIssueEvaluator extends
 	    if ((!store.hasDirectoryResults(hashId, getInformation().getId())) || (enableReevaluation)) {
 		DirectoryIssues directoryResults = processDirectory(analysisRun, directoryNode);
 		if (directoryResults != null) {
-		    DirectoryIssuesImpl designIssues = new DirectoryIssuesImpl(
-			    getInformation().getId(), getInformation().getVersion(), hashId, new Date(),
-			    directoryResults.getParameters(), directoryResults.getDesignIssues());
+		    DirectoryIssuesImpl designIssues = new DirectoryIssuesImpl(getInformation().getId(),
+			    getInformation().getVersion(), hashId, new Date(), directoryResults.getParameters(),
+			    directoryResults.getDesignIssues());
 		    storeDirectoryResults(analysisRun, directoryNode, designIssues);
 		}
 	    } else {
@@ -145,10 +145,12 @@ public abstract class AbstractIssueEvaluator extends
 	}
     }
 
-    private void storeDesignIssuesInBigTable(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
-	    FileIssues fileResults) {
-	// TODO Auto-generated method stub
-
+    private void storeDesignIssuesInBigTable(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, FileIssues fileResults)
+	    throws EvaluationStoreException {
+	FileIssuesImpl issues = new FileIssuesImpl(getInformation().getId(), getInformation().getVersion(),
+		fileResults.getHashId(), fileResults.getSourceCodeLocation(), new Date(), fileResults.getParameters(),
+		fileResults.getCodeRangeIssues());
+	getIssuesStore().storeFileResultsInBigTable(analysisRun, fileAnalysis, issues);
     }
 
     private void storeDesignIssuesInBigTable(AnalysisRun analysisRun, AnalysisFileTree directoryNode,

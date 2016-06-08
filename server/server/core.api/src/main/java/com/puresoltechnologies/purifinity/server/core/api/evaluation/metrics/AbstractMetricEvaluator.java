@@ -38,15 +38,15 @@ public abstract class AbstractMetricEvaluator extends
 	AbstractEvaluator<FileMetrics, FileMetricsImpl, DirectoryMetrics, DirectoryMetricsImpl, ProjectMetrics, ProjectMetricsImpl>
 	implements MetricEvaluator {
 
-    private final EvaluatorMetricsStoreServiceRemote metricStore;
+    private final EvaluatorMetricsStoreRemote metricStore;
 
     public AbstractMetricEvaluator(String id, String name, Version version, String description) {
 	super(id, name, version, EvaluatorType.METRICS, description);
-	metricStore = JndiUtils.createRemoteEJBInstance(EvaluatorMetricsStoreServiceRemote.class,
-		EvaluatorMetricsStoreServiceRemote.JNDI_NAME);
+	metricStore = JndiUtils.createRemoteEJBInstance(EvaluatorMetricsStoreRemote.class,
+		EvaluatorMetricsStoreRemote.JNDI_NAME);
     }
 
-    protected final EvaluatorMetricsStore getMetricStore() {
+    protected final CommonEvaluatorMetricsStore getMetricStore() {
 	return metricStore;
     }
 
@@ -129,7 +129,7 @@ public abstract class AbstractMetricEvaluator extends
 		    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
 	HashId hashId = directoryNode.getHashId();
 	CommonDirectoryStore directoryStore = getDirectoryStore();
-	EvaluatorMetricsStore store = getMetricStore();
+	CommonEvaluatorMetricsStore store = getMetricStore();
 	if (directoryStore.isAvailable(hashId)) {
 	    for (AnalysisFileTree child : directoryNode.getChildren()) {
 		processNode(analysisRun, child, enableReevaluation);

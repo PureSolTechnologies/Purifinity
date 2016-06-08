@@ -23,9 +23,9 @@ public class ConnectionProducer {
     @BasicCoCoMoEvaluatorStoreConnection
     public Connection getAnalysisSession() {
 	try {
-	    logger.info("Creating Cassandra Basic CoCoMo Evaluator Session...");
+	    logger.info("Creating HBase Basic CoCoMo Evaluator Session...");
 	    Connection connection = HBaseHelper.connect();
-	    logger.info("Cassandra Basic CoCoMo Evaluator Session created.");
+	    logger.info("HBase Basic CoCoMo Evaluator Session created.");
 	    return connection;
 	} catch (SQLException e) {
 	    throw new RuntimeException("Could not connect to HBase via Phoenix.", e);

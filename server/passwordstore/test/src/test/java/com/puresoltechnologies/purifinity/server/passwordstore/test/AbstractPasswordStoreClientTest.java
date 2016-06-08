@@ -18,13 +18,13 @@ public abstract class AbstractPasswordStoreClientTest extends AbstractClientTest
     private static Connection connection;
 
     @BeforeClass
-    public static void connectCassandra() throws SQLException {
+    public static void connectHBase() throws SQLException {
 	connection = HBaseHelper.connect();
 	PasswordStoreTester.cleanupDatabase(connection);
     }
 
     @AfterClass
-    public static void disconnectCassandra() throws SQLException {
+    public static void disconnectHBase() throws SQLException {
 	if (connection != null) {
 	    connection.close();
 	    connection = null;

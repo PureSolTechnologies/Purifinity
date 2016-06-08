@@ -23,9 +23,9 @@ public class ConnectionProducer {
     @HalsteadMetricEvaluatorStoreConnection
     public Connection getAnalysisSession() {
 	try {
-	    logger.info("Creating Cassandra Halstead Metric Evaluator Session...");
+	    logger.info("Creating HBase Halstead Metric Evaluator Session...");
 	    Connection connection = HBaseHelper.connect();
-	    logger.info("Cassandra Halstead Metric Evaluator Session created.");
+	    logger.info("HBase Halstead Metric Evaluator Session created.");
 	    return connection;
 	} catch (SQLException e) {
 	    throw new RuntimeException("Could not connect to HBase via Phoenix.", e);

@@ -71,7 +71,7 @@ export class ProjectManager {
 
     getRepositoryTypes(success: (data: any, status: string) => void,
         error: (response: Response) => void) {
-        return this.purifinityServerConnector.get("/purifinityserver/rest/repositories/types",
+        return this.purifinityServerConnector.get("/purifinityserver/rest/repositorymanager/repositories",
             response => success(response.json(), response.statusText), error);
     }
 

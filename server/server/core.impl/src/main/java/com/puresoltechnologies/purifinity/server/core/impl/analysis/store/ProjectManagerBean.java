@@ -91,7 +91,7 @@ public class ProjectManagerBean implements ProjectManager {
     private Connection connection;
 
     @Inject
-    private AnalysisStoreUtils analysisStoreCassandraUtils;
+    private AnalysisStoreUtils analysisStoreUtils;
 
     @Inject
     private AnalysisStoreFileTreeUtils analysisStoreFileTreeUtils;
@@ -247,7 +247,7 @@ public class ProjectManagerBean implements ProjectManager {
 	    AnalysisProjectVertex analysisProjectVertex = AnalysisStoreDuctileDBUtils
 		    .findAnalysisProjectVertex(xoManager, projectId);
 	    xoManager.delete(analysisProjectVertex);
-	    analysisStoreCassandraUtils.removeProjectSettings(projectId);
+	    analysisStoreUtils.removeProjectSettings(projectId);
 	    eventLogger.logEvent(new Event(COMPONENT_NAME, 0x01, EventType.USER_ACTION, EventSeverity.INFO,
 		    "Deleted project '" + projectId + "'"));
 	    xoManager.currentTransaction().commit();
@@ -340,7 +340,7 @@ public class ProjectManagerBean implements ProjectManager {
 	    AnalysisStoreDuctileDBUtils.createAnalysisRunVertex(xoManager, analysisProjectVertex, runId, creationTime,
 		    startTime, duration, description);
 
-	    analysisStoreCassandraUtils.writeAnalysisRunSettings(projectId, runId, fileSearchConfiguration);
+	    analysisStoreUtils.writeAnalysisRunSettings(projectId, runId, fileSearchConfiguration);
 
 	    return new AnalysisRunInformation(projectId, runId, startTime, duration, description,
 		    fileSearchConfiguration);
@@ -448,7 +448,7 @@ public class ProjectManagerBean implements ProjectManager {
 		// clear caches
 		analysisStoreCacheUtils.clearAnalysisRunCaches(projectId, runId);
 		// remove run settings
-		analysisStoreCassandraUtils.removeAnalysisRunSettings(projectId, runId);
+		analysisStoreUtils.removeAnalysisRunSettings(projectId, runId);
 		// remove analysis run results
 		bigTableUtils.removeAnalysisRunResults(projectId, runId);
 		// cleanup content tree

@@ -173,7 +173,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 		"CREATE TABLE " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE + " ("//
 			+ "hashid varchar not null, " //
 			+ "evaluator_id varchar not null, " //
-			+ "design_issue_id varchar not null, " //
+			+ "issue_id varchar not null, " //
 			+ "code_range_type varchar, " //
 			+ "code_range_name varchar, " //
 			+ "time timestamp, " //
@@ -188,14 +188,14 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "classification varchar, " //
 			+ "severity varchar, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE.replaceAll("\\.", "_")
-			+ "_PK PRIMARY KEY(hashid, evaluator_id, design_issue_id, start_line, start_column))",
+			+ "_PK PRIMARY KEY(hashid, evaluator_id, issue_id, start_line, start_column))",
 		"Keeps design issues of source files."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + HBaseElementNames.EVALUATION_DIRECTORY_ISSUES_TABLE + " ("//
 			+ "hashid varchar not null, " //
 			+ "evaluator_id varchar not null, " //
-			+ "design_issue_id varchar not null, " //
+			+ "issue_id varchar not null, " //
 			+ "code_range_type varchar, " //
 			+ "code_range_name varchar, " //
 			+ "time timestamp, " //
@@ -210,15 +210,15 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "classification varchar, " //
 			+ "severity varchar, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_DIRECTORY_ISSUES_TABLE.replaceAll("\\.", "_")
-			+ "_PK PRIMARY KEY(hashid, evaluator_id, design_issue_id, start_line, start_column))",
-		"Keeps design issues of source files."));
+			+ "_PK PRIMARY KEY(hashid, evaluator_id, issue_id, start_line, start_column))",
+		"Keeps design issues of directories."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE " + HBaseElementNames.EVALUATION_PROJECT_ISSUES_TABLE + " ("//
 			+ "project_id varchar not null, " //
 			+ "run_id bigint not null, " //
 			+ "evaluator_id varchar not null, " //
-			+ "design_issue_id varchar not null, " //
+			+ "issue_id varchar not null, " //
 			+ "code_range_type varchar, " //
 			+ "code_range_name varchar, " //
 			+ "time timestamp, " //
@@ -233,8 +233,35 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "classification varchar, " //
 			+ "severity varchar, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_PROJECT_ISSUES_TABLE.replaceAll("\\.", "_")
-			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, design_issue_id, start_line, start_column))",
-		"Keeps design issues of source files."));
+			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, issue_id, start_line, start_column))",
+		"Keeps design issues of projects."));
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+		"CREATE TABLE " + HBaseElementNames.EVALUATION_ISSUES_TABLE + " (" //
+			+ "project_id varchar not null, " //
+			+ "run_id bigint not null, " //
+			+ "evaluator_id varchar not null, " //
+			+ "issue_id varchar not null, " //
+			+ "code_range_type varchar not null, " //
+			+ "hashid varchar not null, " //
+			+ "code_range_name varchar, " //
+			+ "time timestamp, " //
+			+ "evaluator_version varchar, " //
+			+ "internal_directory varchar, " //
+			+ "file_name varchar, " //
+			+ "source_code_location varchar, " //
+			+ "language_name varchar, " //
+			+ "language_version varchar, " //
+			+ "start_line unsigned_int, " //
+			+ "start_column unsigned_int, " //
+			+ "line_count unsigned_int, " //
+			+ "length unsigned_int, " //
+			+ "weight unsigned_int, " //
+			+ "classification varchar, " //
+			+ "severity varchar, " //
+			+ "description varchar, " //
+			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_METRICS_TABLE.replaceAll("\\.", "_")
+			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, issue_id, code_range_type, hashid, code_range_name))",
+		"Keeps the issues in a big table for efficient retrieval."));
 
 	return sequence;
     }
@@ -251,6 +278,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE);
 		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_DIRECTORY_ISSUES_TABLE);
 		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_PROJECT_ISSUES_TABLE);
+		statement.execute("DROP TABLE IF EXISTS " + HBaseElementNames.EVALUATION_ISSUES_TABLE);
 		connection.commit();
 	    } catch (SQLException e) {
 		try {
