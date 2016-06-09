@@ -3,7 +3,9 @@ package com.puresoltechnologies.purifinity.evaluation.domain.metrics;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,22 +16,19 @@ public class RunMetricsImpl extends AbstractMetrics implements RunMetrics {
 
     private static final long serialVersionUID = -815011058948733680L;
 
-    private final MetricParameter<?>[] parameters;
     private final Map<HashId, FileMetricsImpl> fileMetrics = new HashMap<>();
     private final Map<HashId, DirectoryMetricsImpl> directoryMetrics = new HashMap<>();
 
-    public RunMetricsImpl(String evaluatorId, Version evaluatorVersion, Date time, MetricParameter<?>[] parameters) {
+    public RunMetricsImpl(String evaluatorId, Version evaluatorVersion, Date time) {
 	super(evaluatorId, evaluatorVersion, time);
-	this.parameters = parameters;
     }
 
     @JsonCreator
     public RunMetricsImpl(@JsonProperty("evaluatorId") String evaluatorId,
 	    @JsonProperty("evaluatorVersion") Version evaluatorVersion, @JsonProperty("time") Date time,
-	    @JsonProperty("parameters") MetricParameter<?>[] parameters,
 	    @JsonProperty("fileMetrics") Map<HashId, FileMetricsImpl> fileMetrics,
 	    @JsonProperty("directoryMetrics") Map<HashId, DirectoryMetricsImpl> directoryMetrics) {
-	this(evaluatorId, evaluatorVersion, time, parameters);
+	this(evaluatorId, evaluatorVersion, time);
 	if (fileMetrics != null) {
 	    this.fileMetrics.putAll(fileMetrics);
 	}
@@ -40,7 +39,14 @@ public class RunMetricsImpl extends AbstractMetrics implements RunMetrics {
 
     @Override
     public MetricParameter<?>[] getParameters() {
-	return parameters;
+	Set<MetricParameter<?>> parameters = new HashSet<>();
+	for (FileMetrics metrics : fileMetrics.values()) {
+	    parameters.addAll(Arrays.asList(metrics.getParameters()));
+	}
+	for (DirectoryMetrics metrics : directoryMetrics.values()) {
+	    parameters.addAll(Arrays.asList(metrics.getParameters()));
+	}
+	return parameters.toArray(new MetricParameter[parameters.size()]);
     }
 
     public void add(FileMetricsImpl fileMetrics) {
@@ -65,7 +71,6 @@ public class RunMetricsImpl extends AbstractMetrics implements RunMetrics {
 	int result = super.hashCode();
 	result = prime * result + ((directoryMetrics == null) ? 0 : directoryMetrics.hashCode());
 	result = prime * result + ((fileMetrics == null) ? 0 : fileMetrics.hashCode());
-	result = prime * result + Arrays.hashCode(parameters);
 	return result;
     }
 
@@ -87,8 +92,6 @@ public class RunMetricsImpl extends AbstractMetrics implements RunMetrics {
 	    if (other.fileMetrics != null)
 		return false;
 	} else if (!fileMetrics.equals(other.fileMetrics))
-	    return false;
-	if (!Arrays.equals(parameters, other.parameters))
 	    return false;
 	return true;
     }

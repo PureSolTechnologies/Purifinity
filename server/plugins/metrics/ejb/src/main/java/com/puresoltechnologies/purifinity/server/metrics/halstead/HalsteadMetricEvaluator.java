@@ -21,8 +21,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetricsImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.AbstractMetricEvaluator;
@@ -57,7 +57,7 @@ public class HalsteadMetricEvaluator extends AbstractMetricEvaluator {
 	HashId hashId = analysisInformation.getHashId();
 	SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
 	FileMetricsImpl results = new FileMetricsImpl(HalsteadMetric.ID, HalsteadMetric.PLUGIN_VERSION, hashId,
-		sourceCodeLocation, new Date(), HalsteadMetricEvaluatorParameter.ALL);
+		sourceCodeLocation, new Date());
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    HalsteadMetric metric = new HalsteadMetric(analysisRun, codeRange);
 	    metric.run();

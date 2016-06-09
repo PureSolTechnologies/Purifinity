@@ -1,10 +1,14 @@
 package com.puresoltechnologies.purifinity.evaluation.domain.issues;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.source.SourceCodeLocation;
@@ -27,7 +31,7 @@ public class FileIssuesImpl extends AbstractIssues implements FileIssues {
 
     public FileIssuesImpl(String evaluatorId, Version evaluatorVersion, HashId hashId,
 	    SourceCodeLocation sourceCodeLocation, Date time, IssueParameter[] parameters) {
-	super(evaluatorId, evaluatorVersion, time, parameters);
+	super(evaluatorId, evaluatorVersion, time);
 	this.hashId = hashId;
 	this.sourceCodeLocation = sourceCodeLocation;
     }
@@ -59,5 +63,15 @@ public class FileIssuesImpl extends AbstractIssues implements FileIssues {
     @Override
     public SourceCodeLocation getSourceCodeLocation() {
 	return sourceCodeLocation;
+    }
+
+    @Override
+    @JsonIgnore
+    public IssueParameter[] getParameters() {
+	Set<IssueParameter> parameters = new HashSet<>();
+	for (CodeRangeIssues codeRangeIssue : codeRangeDesignIssues) {
+	    parameters.addAll(Arrays.asList(codeRangeIssue.getParameters()));
+	}
+	return parameters.toArray(new IssueParameter[parameters.size()]);
     }
 }

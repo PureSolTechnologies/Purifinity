@@ -13,14 +13,14 @@ import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreExceptio
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
 import com.puresoltechnologies.purifinity.evaluation.api.metrics.MetricEvaluator;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetricsImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetricsImpl;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetricsImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetricsImpl;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonDirectoryStore;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonFileStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.AbstractEvaluator;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
@@ -110,7 +110,7 @@ public abstract class AbstractMetricEvaluator extends
 		    if (fileResults != null) {
 			FileMetricsImpl metrics = new FileMetricsImpl(getInformation().getId(),
 				getInformation().getVersion(), hashId, fileResults.getSourceCodeLocation(), new Date(),
-				fileResults.getParameters(), fileResults.getCodeRangeMetrics());
+				fileResults.getCodeRangeMetrics());
 			storeFileResults(analysisRun, fileAnalysis, metrics);
 		    }
 		}
@@ -154,16 +154,16 @@ public abstract class AbstractMetricEvaluator extends
     protected final void storeMetricsInBigTable(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
 	    FileMetrics fileResults) throws EvaluationStoreException {
 	FileMetricsImpl metrics = new FileMetricsImpl(getInformation().getId(), getInformation().getVersion(),
-		fileResults.getHashId(), fileResults.getSourceCodeLocation(), new Date(), fileResults.getParameters(),
+		fileResults.getHashId(), fileResults.getSourceCodeLocation(), new Date(),
 		fileResults.getCodeRangeMetrics());
 	getMetricStore().storeFileResultsInBigTable(analysisRun, fileAnalysis, metrics);
     }
 
     protected final void storeMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
 	    DirectoryMetrics directoryResults) throws EvaluationStoreException {
-	DirectoryMetricsImpl metrics = new DirectoryMetricsImpl(getInformation().getId(),
-		getInformation().getVersion(), directoryResults.getHashId(), new Date(),
-		directoryResults.getParameters(), directoryResults.getValues());
+	DirectoryMetricsImpl metrics = new DirectoryMetricsImpl(getInformation().getId(), getInformation().getVersion(),
+		directoryResults.getHashId(), new Date(), directoryResults.getParameters(),
+		directoryResults.getValues());
 	getMetricStore().storeDirectoryResultsInBigTable(analysisRun, directoryNode, metrics);
     }
 

@@ -15,16 +15,8 @@ public abstract class AbstractIssues extends AbstractEvaluatorResults implements
 
     private static final long serialVersionUID = 8154379867909602950L;
 
-    private final IssueParameter[] parameters;
-
-    public AbstractIssues(String evaluatorId, Version evaluatorVersion, Date time, IssueParameter[] parameters) {
+    public AbstractIssues(String evaluatorId, Version evaluatorVersion, Date time) {
 	super(evaluatorId, evaluatorVersion, time);
-	this.parameters = parameters;
-    }
-
-    @Override
-    public final IssueParameter[] getParameters() {
-	return parameters;
     }
 
 }

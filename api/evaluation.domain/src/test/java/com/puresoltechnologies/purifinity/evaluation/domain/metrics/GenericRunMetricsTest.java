@@ -19,8 +19,7 @@ public class GenericRunMetricsTest {
     @Test
     public void testSerialization() throws JsonGenerationException, JsonMappingException, IOException {
 	RunMetricsImpl metrics = new RunMetricsImpl("evaluatorId", new Version(1, 2, 3), new Date(),
-		new MetricParameter<?>[] {}, new HashMap<HashId, FileMetricsImpl>(),
-		new HashMap<HashId, DirectoryMetricsImpl>());
+		new HashMap<HashId, FileMetricsImpl>(), new HashMap<HashId, DirectoryMetricsImpl>());
 	String serialized = JSONSerializer.toJSONString(metrics);
 	System.out.println(serialized);
 	RunMetricsImpl deserialized = JSONSerializer.fromJSONString(serialized, RunMetricsImpl.class);

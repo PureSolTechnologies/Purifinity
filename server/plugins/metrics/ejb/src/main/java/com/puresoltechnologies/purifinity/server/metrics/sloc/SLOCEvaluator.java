@@ -24,10 +24,10 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.CodeRangeMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMetricsImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetricsImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
@@ -79,9 +79,8 @@ public class SLOCEvaluator extends AbstractMetricEvaluator {
 	HashId hashId = analysisInformation.getHashId();
 	AnalysisFileTree analysisRunNode = analysisRun.findTreeNode(hashId);
 	SourceCodeLocation sourceCodeLocation = analysisRunNode.getSourceCodeLocation();
-	FileMetricsImpl results = new FileMetricsImpl(SLOCMetricCalculator.ID,
-		SLOCMetricCalculator.PLUGIN_VERSION, hashId, sourceCodeLocation, analysis.getStartTime(),
-		SLOCEvaluatorParameter.ALL);
+	FileMetricsImpl results = new FileMetricsImpl(SLOCMetricCalculator.ID, SLOCMetricCalculator.PLUGIN_VERSION,
+		hashId, sourceCodeLocation, analysis.getStartTime());
 	logger.info("Process file '" + sourceCodeLocation.getHumanReadableLocationString() + "'...");
 	for (CodeRange codeRange : analysis.getAnalyzableCodeRanges()) {
 	    SLOCMetricCalculator metric = new SLOCMetricCalculator(analysisRun, codeRange);

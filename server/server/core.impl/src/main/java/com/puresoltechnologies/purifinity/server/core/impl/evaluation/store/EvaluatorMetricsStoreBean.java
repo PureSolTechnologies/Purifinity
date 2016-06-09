@@ -684,7 +684,7 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
 		}
 
 		FileMetricsImpl fileMetrics = new FileMetricsImpl(evaluatorId, evaluatorVersion, hashId,
-			sourceCodeLocation, time, parameters);
+			sourceCodeLocation, time);
 		for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> codeRangeTypeEntry : buffer
 			.entrySet()) {
 		    CodeRangeType codeRangeType = codeRangeTypeEntry.getKey();
@@ -876,12 +876,7 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
 		    MetricValue<?> metricValue = MetricValue.create(metricsParameter, value);
 		    parameterBuffer.put(metricsParameter, metricValue);
 		}
-		Set<MetricParameter<?>> parameters = new HashSet<>();
-		for (Set<MetricParameter<?>> values : parametersBuffer.values()) {
-		    parameters.addAll(values);
-		}
-		RunMetricsImpl metrics = new RunMetricsImpl(evaluatorId, evaluatorVersion, minTime,
-			parameters.toArray(new MetricParameter[parameters.size()]));
+		RunMetricsImpl metrics = new RunMetricsImpl(evaluatorId, evaluatorVersion, minTime);
 		for (HashId hashId : buffer.keySet()) {
 		    Set<MetricParameter<?>> parameterSet = parametersBuffer.get(hashId);
 		    MetricParameter<?>[] parameterArray = parameterSet
@@ -891,7 +886,7 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
 		    if (hashIdTypes.get(hashId) == CodeRangeType.FILE) {
 			SourceCodeLocation sourceCodeLocation = sourceCodeLocationBuffer.get(hashId);
 			FileMetricsImpl fileMetrics = new FileMetricsImpl(evaluatorId, evaluatorVersion, hashId,
-				sourceCodeLocation, timeBuffer.get(hashId), parameterArray);
+				sourceCodeLocation, timeBuffer.get(hashId));
 			for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> codeRangeTypeEntry : hashIdBuffer
 				.entrySet()) {
 			    CodeRangeType codeRangeType = codeRangeTypeEntry.getKey();

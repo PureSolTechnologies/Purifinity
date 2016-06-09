@@ -18,11 +18,13 @@ public class DirectoryIssuesImpl extends AbstractIssues implements DirectoryIssu
 
     private static final long serialVersionUID = -1006974419305345122L;
 
+    private final IssueParameter[] parameters;
     private final Map<String, MetricValue<?>> designIssues = new HashMap<>();
 
     public DirectoryIssuesImpl(String evaluatorId, Version evaluatorVersion, HashId hashId, Date time,
 	    IssueParameter[] parameters, Map<String, MetricValue<?>> designIssues) {
-	super(evaluatorId, evaluatorVersion, time, parameters);
+	super(evaluatorId, evaluatorVersion, time);
+	this.parameters = parameters;
 	this.designIssues.putAll(designIssues);
     }
 
@@ -32,4 +34,8 @@ public class DirectoryIssuesImpl extends AbstractIssues implements DirectoryIssu
 	return null;
     }
 
+    @Override
+    public IssueParameter[] getParameters() {
+	return parameters;
+    }
 }
