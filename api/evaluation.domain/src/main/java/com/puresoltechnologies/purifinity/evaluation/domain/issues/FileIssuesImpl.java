@@ -46,7 +46,7 @@ public class FileIssuesImpl extends AbstractIssues implements FileIssues {
 	this.codeRangeDesignIssues.addAll(codeRangeDesignIssues);
     }
 
-    public void addCodeRangeDesignIssue(CodeRangeIssues issues) {
+    public void addCodeRangeIssue(CodeRangeIssues issues) {
 	codeRangeDesignIssues.add(issues);
     }
 

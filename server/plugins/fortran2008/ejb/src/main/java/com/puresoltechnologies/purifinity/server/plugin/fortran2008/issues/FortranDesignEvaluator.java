@@ -176,7 +176,7 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 	    CodeRangeIssues issues = new CodeRangeIssues(fileIssues.getSourceCodeLocation(), codeRange.getType(),
 		    codeRange.getCanonicalName(), parameters.toArray(new IssueParameter[parameters.size()]),
 		    implicitIssues);
-	    fileIssues.addCodeRangeDesignIssue(issues);
+	    fileIssues.addCodeRangeIssue(issues);
 	}
 	return fileIssues;
     }

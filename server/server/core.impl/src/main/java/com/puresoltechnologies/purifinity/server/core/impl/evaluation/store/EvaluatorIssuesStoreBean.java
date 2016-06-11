@@ -254,11 +254,11 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 		    evaluatorVersion = getEvaluatorVersionAndCheckConsistency(resultSet, hashId, evaluatorId,
 			    evaluatorVersion);
 		    String parameterName = resultSet.getString("issue_id");
-		    IssueParameter designIssueParameter = extractDesignIssueParameter(resultSet);
-		    if (designIssueParameter == null) {
+		    IssueParameter issueParameter = extractIssueParameter(resultSet);
+		    if (issueParameter == null) {
 			continue;
 		    }
-		    parameters = new IssueParameter[] { designIssueParameter };
+		    parameters = new IssueParameter[] { issueParameter };
 		    CodeRangeType codeRangeType = CodeRangeType.valueOf(resultSet.getString("code_range_type"));
 		    String codeRangeName = resultSet.getString("code_range_name");
 		    Map<Parameter<?>, Issue> parameterBuffer;
@@ -266,7 +266,7 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 			Map<String, Map<Parameter<?>, Issue>> codeRangeTypeBuffer = buffer.get(codeRangeType);
 			if (codeRangeTypeBuffer.containsKey(codeRangeName)) {
 			    parameterBuffer = codeRangeTypeBuffer.get(codeRangeName);
-			    if (parameterBuffer.containsKey(designIssueParameter)) {
+			    if (parameterBuffer.containsKey(issueParameter)) {
 				throw new EvaluationStoreException("Multiple parameters with same name '"
 					+ parameterName + "' are different for evaluatorId=" + evaluatorId
 					+ " and hashId=" + hashId.toString());
@@ -289,11 +289,11 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 		    Severity severity = Severity.valueOf(resultSet.getString("severity"));
 		    Classification classification = Classification.valueOf(resultSet.getString("classification"));
 		    Issue metricValue = new Issue(severity, classification, startLine, startColumn, lineCount, length,
-			    weight, designIssueParameter);
-		    parameterBuffer.put(designIssueParameter, metricValue);
+			    weight, issueParameter);
+		    parameterBuffer.put(issueParameter, metricValue);
 		}
 
-		FileIssuesImpl fileDesignIssues = new FileIssuesImpl(evaluatorId, evaluatorVersion, hashId,
+		FileIssuesImpl fileIssues = new FileIssuesImpl(evaluatorId, evaluatorVersion, hashId,
 			sourceCodeLocation, time, parameters);
 		for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, Issue>>> codeRangeTypeEntry : buffer
 			.entrySet()) {
@@ -312,11 +312,11 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 			    }
 			    issueList.add(value);
 			}
-			fileDesignIssues.addCodeRangeDesignIssue(new CodeRangeIssues(sourceCodeLocation, codeRangeType,
+			fileIssues.addCodeRangeIssue(new CodeRangeIssues(sourceCodeLocation, codeRangeType,
 				codeRangeName, parameters, values));
 		    }
 		}
-		return fileDesignIssues;
+		return fileIssues;
 	    }
 	} catch (SQLException e) {
 	    throw new EvaluationStoreException("Could not read file results.", e);
@@ -338,7 +338,7 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 	return evaluatorVersion;
     }
 
-    private IssueParameter extractDesignIssueParameter(ResultSet resultSet) throws SQLException {
+    private IssueParameter extractIssueParameter(ResultSet resultSet) throws SQLException {
 	String parameterName = resultSet.getString("issue_id");
 	String description = resultSet.getString("description");
 	return new IssueParameter(parameterName, "", description);

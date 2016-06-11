@@ -7,6 +7,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.domain.issues.RunIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetrics;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
 import com.puresoltechnologies.purifinity.server.common.rest.security.RolesAllowed;
@@ -16,9 +17,16 @@ public interface EvaluatorStoreRestInterface {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("metrics/{project_id}/{run_id}/{evaluator_id}")
+    @Path("metrics/projects/{project_id}/runs/{run_id}/evaluators/{evaluator_id}")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
     public RunMetrics getRunMetrics(@PathParam("project_id") String projectId, @PathParam("run_id") long runId,
+	    @PathParam("evaluator_id") String evaluatorId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("issues/projects/{project_id}/runs/{run_id}/evaluators/{evaluator_id}")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public RunIssues getRunIssues(@PathParam("project_id") String projectId, @PathParam("run_id") long runId,
 	    @PathParam("evaluator_id") String evaluatorId) throws EvaluationStoreException;
 
 }

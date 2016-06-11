@@ -114,7 +114,6 @@ public interface EvaluatorStore<FileResults, DirectoryResults, ProjectResults, R
     public void storeProjectResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    ProjectResults results) throws EvaluationStoreException;
 
-    public RunResults readRunResults(String projectId, long runId, String evaluatorId)
-	    throws EvaluationStoreException;
+    public RunResults readRunResults(String projectId, long runId, String evaluatorId) throws EvaluationStoreException;
 
 }

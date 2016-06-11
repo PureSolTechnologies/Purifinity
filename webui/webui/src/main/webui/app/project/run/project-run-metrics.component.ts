@@ -18,7 +18,7 @@ import {MetricValuePipe} from '../../commons/pipes/metric-value.pipe';
 import {Utilities} from '../../commons/Utilities';
 import {Project} from '../../commons/domain/Project';
 import {ProjectManager} from '../../commons/purifinity/ProjectManager';
-import {PurifinityServerConnector} from '../../commons/purifinity/PurifinityServerConnector';
+import {EvaluatorStore} from '../../commons/purifinity/EvaluatorStore';
 import {ProjectRunMenuComponent} from './project-run-menu.component';
 import {TreeTableNode} from '../../commons/treetable/TreeTableNode';
 import {TreeTableData} from '../../commons/treetable/TreeTableData';
@@ -86,12 +86,12 @@ export class ProjectRunMetricsComponent {
     };
 
 
-    constructor(private routeParams: RouteParams, private projectManager: ProjectManager, private purifinityServerConnector: PurifinityServerConnector) {
+    constructor(private routeParams: RouteParams, private projectManager: ProjectManager, private evaluatorStore: EvaluatorStore) {
         this.projectId = routeParams.get('projectId');
         this.runId = routeParams.get('runId');
     }
 
-    ngOnInit(){
+    ngOnInit() {
         let component = this;
         this.projectManager.getProject(this.projectId, function(project: Project) {
             component.project = project;
@@ -124,39 +124,35 @@ export class ProjectRunMetricsComponent {
             return;
         }
         let component = this;
-        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/metrics/"
-            + component.projectId
-            + "/" + component.runId
-            + "/" + evaluator.id, function(response: Response) {
-                let data = response.json();
-                let types = [];
-                types.push("DIRECTORY");
-                types.push("FILE");
-                for (let hashid in data.fileMetrics) {
-                    let fileResults = data.fileMetrics[hashid];
-                    fileResults.codeRangeMetrics.forEach(function(metrics) {
-                        if (types.indexOf(metrics.codeRangeType) < 0) {
-                            types.push(metrics.codeRangeType);
-                        }
-                    });
-                }
-                component.codeRangeTypes = [];
-                types.forEach(function(type) {
-                    component.codeRangeTypes.push({ name: type });
-                });
-                component.codeRangeTypes.sort();
-                component.metrics = data;
-                component.applyMetricsToFileTree(component.metricsTreeTable.root, component.metrics, component.metrics.parameters);
-                component.metricsTreeTable.columnHeaders = [{ name: "Name", tooltip: "Name of file or folder" }];
-                component.metrics.parameters.forEach(function(parameter) {
-                    let name = parameter.name;
-                    if (parameter.unit) {
-                        name += " [" + parameter.unit + "]";
+        this.evaluatorStore.getRunMetrics(this.projectId, this.runId, evaluator.id, function(data: any) {
+            let types = [];
+            types.push("DIRECTORY");
+            types.push("FILE");
+            for (let hashid in data.fileMetrics) {
+                let fileResults = data.fileMetrics[hashid];
+                fileResults.codeRangeMetrics.forEach(function(metrics) {
+                    if (types.indexOf(metrics.codeRangeType) < 0) {
+                        types.push(metrics.codeRangeType);
                     }
-                    component.metricsTreeTable.columnHeaders.push({ name: name, tooltip: parameter.description });
                 });
-            }, function(response: Response) {
             }
+            component.codeRangeTypes = [];
+            types.forEach(function(type) {
+                component.codeRangeTypes.push({ name: type });
+            });
+            component.codeRangeTypes.sort();
+            component.metrics = data;
+            component.applyMetricsToFileTree(component.metricsTreeTable.root, component.metrics, component.metrics.parameters);
+            component.metricsTreeTable.columnHeaders = [{ name: "Name", tooltip: "Name of file or folder" }];
+            component.metrics.parameters.forEach(function(parameter) {
+                let name = parameter.name;
+                if (parameter.unit) {
+                    name += " [" + parameter.unit + "]";
+                }
+                component.metricsTreeTable.columnHeaders.push({ name: name, tooltip: parameter.description });
+            });
+        }, function(response: Response) {
+        }
         );
     }
 

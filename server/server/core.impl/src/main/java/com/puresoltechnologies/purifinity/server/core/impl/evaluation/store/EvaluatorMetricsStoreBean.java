@@ -831,7 +831,7 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
 		    }
 		    Set<MetricParameter<?>> parameters = parametersBuffer.get(hashId);
 		    if (parameters == null) {
-			parameters = new HashSet<MetricParameter<?>>();
+			parameters = new HashSet<>();
 			parametersBuffer.put(hashId, parameters);
 		    }
 		    parameters.add(metricsParameter);
