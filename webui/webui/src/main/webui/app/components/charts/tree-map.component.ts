@@ -10,7 +10,7 @@ import {ChartExport} from '../../commons/ChartExport';
     `<div class="panel tree-map-chart">
     <div class="panel-heading">
         <img src="/images/icons/FatCow_Icons16x16/map.png" />
-        Tree Map
+        {{title}}
         <span style="float: right;">
             <a class="btn-default" (click)="exportChart()">
                 <img src="/images/icons/FatCow_Icons16x16/download.png" />
@@ -26,6 +26,9 @@ export class TreeMapComponent {
 
     @Input()
     private data: any;
+
+    @Input()
+    private title: string = "Tree Map";
 
     private chart: d3.Selection<any>;
 
@@ -72,7 +75,7 @@ export class TreeMapComponent {
         var treemap = d3.layout.treemap()
             .size([width, height])
             //.sticky(true)
-            .value(function(d:any) { return d.size; });
+            .value(function(d: any) { return d.size; });
 
         var div = this.chart.append("div")
             .style("position", "relative")
@@ -93,8 +96,8 @@ export class TreeMapComponent {
             .enter().append("div")
             .attr("class", "node")
             .call(this.position)
-            .style("background", function(d:any) { return d.children ? color(d.name) : null; })
-            .text(function(d:any) { return d.children ? null : d.name; });
+            .style("background", function(d: any) { return d.children ? color(d.name) : null; })
+            .text(function(d: any) { return d.children ? null : d.name; });
     }
 
     position = function() {
@@ -103,7 +106,7 @@ export class TreeMapComponent {
             .style("width", function(d) { return Math.max(0, d.dx - 1) + "px"; })
             .style("height", function(d) { return Math.max(0, d.dy - 1) + "px"; });
     }
-    
+
     printChart() {
         let printer: HtmlElementPrinter = new HtmlElementPrinter(this.element.nativeElement.node());
         printer.print();

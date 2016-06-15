@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.versioning.Version;
@@ -38,6 +39,7 @@ public class RunMetricsImpl extends AbstractMetrics implements RunMetrics {
     }
 
     @Override
+    @JsonIgnore
     public MetricParameter<?>[] getParameters() {
 	Set<MetricParameter<?>> parameters = new HashSet<>();
 	for (FileMetrics metrics : fileMetrics.values()) {

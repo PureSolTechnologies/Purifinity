@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.evaluation.domain.issues;
 
 import com.puresoltechnologies.commons.domain.GeneralValue;
-import com.puresoltechnologies.purifinity.evaluation.domain.Classification;
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 
 /**

@@ -29,8 +29,8 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
-import com.puresoltechnologies.purifinity.evaluation.domain.Classification;
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
+import com.puresoltechnologies.purifinity.evaluation.domain.issues.Classification;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.CodeRangeIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.DirectoryIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.DirectoryIssuesImpl;
@@ -460,6 +460,55 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
     public RunIssues readRunResults(String projectId, long runId, String evaluatorId) throws EvaluationStoreException {
 	throwUnsupportedException();
 	return null;
+    }
+
+    @Override
+    public Map<Severity, Integer> getRunIssueSummaryByServerity(String projectId, long runId)
+	    throws EvaluationStoreException {
+	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT SEVERITY, COUNT(SEVERITY) FROM "
+		+ HBaseElementNames.EVALUATION_ISSUES_TABLE + " WHERE project_id=? AND run_id=? GROUP BY SEVERITY")) {
+	    preparedStatement.setString(1, projectId);
+	    preparedStatement.setLong(2, runId);
+	    Map<Severity, Integer> result = new HashMap<>();
+	    for (Severity severity : Severity.values()) {
+		result.put(severity, 0);
+	    }
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		while (resultSet.next()) {
+		    Severity severity = Severity.valueOf(resultSet.getString(1));
+		    int num = resultSet.getInt(2);
+		    result.put(severity, num);
+		}
+	    }
+	    return result;
+	} catch (SQLException e) {
+	    throw new EvaluationStoreException("Could not read file results.", e);
+	}
+    }
+
+    @Override
+    public Map<Classification, Integer> getRunIssueSummaryByClassification(String projectId, long runId)
+	    throws EvaluationStoreException {
+	try (PreparedStatement preparedStatement = connection.prepareStatement(
+		"SELECT CLASSIFICATION, COUNT(CLASSIFICATION) FROM " + HBaseElementNames.EVALUATION_ISSUES_TABLE
+			+ " WHERE project_id=? AND run_id=? GROUP BY CLASSIFICATION")) {
+	    preparedStatement.setString(1, projectId);
+	    preparedStatement.setLong(2, runId);
+	    Map<Classification, Integer> result = new HashMap<>();
+	    for (Classification issueType : Classification.values()) {
+		result.put(issueType, 0);
+	    }
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		while (resultSet.next()) {
+		    Classification issueType = Classification.valueOf(resultSet.getString(1));
+		    int num = resultSet.getInt(2);
+		    result.put(issueType, num);
+		}
+	    }
+	    return result;
+	} catch (SQLException e) {
+	    throw new EvaluationStoreException("Could not read file results.", e);
+	}
     }
 
 }

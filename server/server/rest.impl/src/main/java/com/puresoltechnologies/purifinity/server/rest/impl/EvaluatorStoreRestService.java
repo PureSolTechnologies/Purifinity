@@ -1,8 +1,12 @@
 package com.puresoltechnologies.purifinity.server.rest.impl;
 
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
+import com.puresoltechnologies.purifinity.evaluation.domain.issues.Classification;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.RunIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetrics;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.EvaluatorIssuesStore;
@@ -25,5 +29,17 @@ public class EvaluatorStoreRestService implements EvaluatorStoreRestInterface {
     @Override
     public RunIssues getRunIssues(String projectId, long runId, String evaluatorId) throws EvaluationStoreException {
 	return evaluatorIssuesStore.readRunResults(projectId, runId, evaluatorId);
+    }
+
+    @Override
+    public Map<Severity, Integer> getRunIssueSummaryByServerity(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return evaluatorIssuesStore.getRunIssueSummaryByServerity(projectId, runId);
+    }
+
+    @Override
+    public Map<Classification, Integer> getRunIssueSummaryByClassification(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return evaluatorIssuesStore.getRunIssueSummaryByClassification(projectId, runId);
     }
 }

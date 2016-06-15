@@ -14,7 +14,7 @@ import com.puresoltechnologies.commons.domain.JSONSerializer;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.versioning.Version;
 
-public class GenericRunMetricsTest {
+public class RunMetricsTest {
 
     @Test
     public void testSerialization() throws JsonGenerationException, JsonMappingException, IOException {

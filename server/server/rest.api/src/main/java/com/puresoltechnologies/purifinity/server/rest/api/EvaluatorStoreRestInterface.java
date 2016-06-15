@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.server.rest.api;
 
+import java.util.Map;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -7,6 +9,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
+import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
+import com.puresoltechnologies.purifinity.evaluation.domain.issues.Classification;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.RunIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetrics;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
@@ -17,16 +21,30 @@ public interface EvaluatorStoreRestInterface {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("metrics/projects/{project_id}/runs/{run_id}/evaluators/{evaluator_id}")
+    @Path("projects/{project_id}/runs/{run_id}/metrics/evaluators/{evaluator_id}")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
     public RunMetrics getRunMetrics(@PathParam("project_id") String projectId, @PathParam("run_id") long runId,
 	    @PathParam("evaluator_id") String evaluatorId) throws EvaluationStoreException;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("issues/projects/{project_id}/runs/{run_id}/evaluators/{evaluator_id}")
+    @Path("projects/{project_id}/runs/{run_id}/issues/evaluators/{evaluator_id}")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
     public RunIssues getRunIssues(@PathParam("project_id") String projectId, @PathParam("run_id") long runId,
 	    @PathParam("evaluator_id") String evaluatorId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/summary/severities")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Map<Severity, Integer> getRunIssueSummaryByServerity(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/summary/classification")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Map<Classification, Integer> getRunIssueSummaryByClassification(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
 
 }

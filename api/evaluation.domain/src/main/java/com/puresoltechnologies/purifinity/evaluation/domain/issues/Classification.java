@@ -1,4 +1,4 @@
-package com.puresoltechnologies.purifinity.evaluation.domain;
+package com.puresoltechnologies.purifinity.evaluation.domain.issues;
 
 /**
  * This enum contains constants to classify issues into different categories.

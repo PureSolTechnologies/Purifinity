@@ -11,7 +11,7 @@ import {ChartExport} from '../../commons/ChartExport';
     `<div class="panel vertical-pareto-chart" (window:resize)="onResize($event)">
     <div class="panel-heading">
         <img src="/images/icons/FatCow_Icons16x16/chart_column_horizont.png" />
-        Vertical Pareto Chart 
+        {{title}}
         <span style="float: right;">
             <a class="btn-default" (click)="exportChart()">
                 <img src="/images/icons/FatCow_Icons16x16/download.png" />
@@ -30,6 +30,9 @@ export class VerticalParetoChartComponent {
 
     @Input()
     private data: ParetoDatum[];
+
+    @Input()
+    private title:string = "Vertical Pareto Chart";
 
     private svg: d3.Selection<any>;
     private margin: number;

@@ -9,12 +9,18 @@ import {Project} from '../../commons/domain/Project';
 import {ProjectRunMenuComponent} from './project-run-menu.component';
 import {ProjectManager} from '../../commons/purifinity/ProjectManager';
 import {ProgressIndicatorComponent} from '../../components/progress-indicator.component';
+import {EvaluatorStore} from '../../commons/purifinity/EvaluatorStore';
+import {CategoryBarChartComponent, CategoryChartData} from '../../components/charts/category-bar-chart.component';
+import {Utilities} from '../../commons/Utilities';
+import {Severity} from '../../commons/domain/Severity';
+import {Classification} from '../../commons/domain/Classification';
 
 @Component({
     selector: 'project-run-summary',
     directives: [
         ProjectRunMenuComponent,
-        ProgressIndicatorComponent
+        ProgressIndicatorComponent,
+        CategoryBarChartComponent
     ],
     pipes: [
         DefaultDatePipe,
@@ -31,8 +37,10 @@ export class ProjectRunSummaryComponent {
 
     private project: Project;
     private run = undefined;
+    public issueSeverityCount: CategoryChartData = new CategoryChartData();
+    public issueTypeCount: CategoryChartData = new CategoryChartData();
 
-    constructor(private routeParams: RouteParams, private projectManager: ProjectManager) {
+    constructor(private routeParams: RouteParams, private projectManager: ProjectManager, private evaluatorStore: EvaluatorStore) {
         this.projectId = routeParams.get('projectId');
         this.runId = routeParams.get('runId');
 
@@ -46,6 +54,27 @@ export class ProjectRunSummaryComponent {
                 function(response: Response) { });
         }, function(response: Response) {
         });
+        evaluatorStore.getRunIssueSummaryBySeverity(this.projectId, this.runId,
+            function(data: any) {
+                component.issueSeverityCount = new CategoryChartData();
+                for (let name of Utilities.getEnumNames(Severity)) {
+                    component.issueSeverityCount.categories.push(name);
+                    let value = data[name];
+                    component.issueSeverityCount.values.push(value ? value : 0);
+                }
+            },
+            function(response: Response) { }
+        );
+        evaluatorStore.getRunIssueSummaryByClassification(this.projectId, this.runId,
+            function(data: any) {
+                component.issueTypeCount = new CategoryChartData();
+                for (let name of Utilities.getEnumNames(Classification)) {
+                    component.issueTypeCount.categories.push(name);
+                    component.issueTypeCount.values.push(data[name]);
+                }
+            },
+            function(response: Response) { }
+        );
     }
 
     isLoading(): boolean {

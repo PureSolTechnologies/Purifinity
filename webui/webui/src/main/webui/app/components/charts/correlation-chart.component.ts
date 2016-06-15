@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component, Input} from 'angular2/core';
 
 @Component({
     selector: 'correlation-chart',
@@ -7,7 +7,7 @@ import {Component} from 'angular2/core';
     `<div class="panel correlation-chart">
     <div class="panel-heading">
         <img src="/images/icons/FatCow_Icons16x16/chart_bullseye.png" />
-        Correlation Chart
+        {{title}}
         <span style="float: right;">
             <a class="btn-default" (click)="exportChart()">
                 <img src="/images/icons/FatCow_Icons16x16/download.png" />
@@ -23,4 +23,8 @@ import {Component} from 'angular2/core';
 </div>`
 })
 export class CorrelationChartComponent {
+
+    @Input()
+    private title:string = "Correlation Chart";
+
 }

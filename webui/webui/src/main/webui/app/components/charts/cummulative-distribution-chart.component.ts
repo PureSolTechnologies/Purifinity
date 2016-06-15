@@ -1,4 +1,4 @@
-import {Component} from 'angular2/core';
+import {Component, Input} from 'angular2/core';
 
 @Component({
     selector: 'cummulative-distribution-chart',
@@ -7,7 +7,7 @@ import {Component} from 'angular2/core';
 `<div class="panel panel-default cummulative-distribution-chart">
     <div class="panel-heading">
         <img src="/images/icons/FatCow_Icons16x16/chart_line.png" />
-        Cummulative Distribution Chart
+        {{title}}
         <span style="float: right;">
             <a class="btn-default" (click)="exportChart()">
                 <img src="/images/icons/FatCow_Icons16x16/download.png" />
@@ -23,4 +23,8 @@ import {Component} from 'angular2/core';
 </div>`
 })
 export class CummulativeDistributionChartComponent {
+
+    @Input()
+    private title:string = "Cummulative Distribution Chart";
+
 }

@@ -10,7 +10,7 @@ import {ChartExport} from '../../commons/ChartExport';
 `<div class="panel histogram-chart" (window:resize)="onResize($event)">
     <div class="panel-heading">
         <img src="/images/icons/FatCow_Icons16x16/chart_column_up.png" />
-        Histogram Chart
+        {{title}}
         <span style="float: right;">
             <a class="btn-default" (click)="exportChart()">
                 <img src="/images/icons/FatCow_Icons16x16/download.png" />
@@ -29,6 +29,9 @@ export class HistogramChartComponent {
 
     @Input()
     private data: any;
+
+    @Input()
+    private title:string = "Histogram Chart";
 
     private svg: d3.Selection<any>;
     private margin: number;

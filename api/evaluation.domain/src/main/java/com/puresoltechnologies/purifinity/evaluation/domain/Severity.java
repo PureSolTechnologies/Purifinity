@@ -25,6 +25,7 @@ public enum Severity implements Comparable<Severity>,Serializable {
     MAJOR, //
     MINOR, //
     TRIVIAL, //
+    INFO, //
     NONE, //
     ;
 
