@@ -12,7 +12,7 @@ import {TreeMapComponent} from '../../components/charts/tree-map.component';
 import {CummulativeDistributionChartComponent} from '../../components/charts/cummulative-distribution-chart.component';
 import {TreeTableComponent} from '../../components/treetable/tree-table.component';
 
-import {ParetoDatum} from '../../commons/charts/ParetoDatum';
+import {ParetoDatum} from '../../components/charts/ParetoDatum';
 import {EvaluatorServiceInformation} from '../../commons/plugins/EvaluatorServiceInformation';
 import {MetricValuePipe} from '../../commons/pipes/metric-value.pipe';
 import {Utilities} from '../../commons/Utilities';

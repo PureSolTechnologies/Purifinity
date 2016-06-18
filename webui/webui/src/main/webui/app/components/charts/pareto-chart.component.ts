@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input} from 'angular2/core';
 
-import {ParetoDatum} from '../../commons/charts/ParetoDatum';
+import {ParetoDatum} from './ParetoDatum';
 import {HtmlElementPrinter} from '../../commons/HtmlElementPrinter';
 import {ChartExport} from '../../commons/ChartExport';
 
