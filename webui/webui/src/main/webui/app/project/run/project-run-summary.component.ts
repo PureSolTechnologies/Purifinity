@@ -10,7 +10,9 @@ import {ProjectRunMenuComponent} from './project-run-menu.component';
 import {ProjectManager} from '../../commons/purifinity/ProjectManager';
 import {ProgressIndicatorComponent} from '../../components/progress-indicator.component';
 import {EvaluatorStore} from '../../commons/purifinity/EvaluatorStore';
-import {CategoryBarChartComponent, CategoryChartData} from '../../components/charts/category-bar-chart.component';
+import {CategoryBarChartComponent} from '../../components/charts/category-bar-chart.component';
+import {CategoryChartData} from '../../components/charts/CategoryChartData';
+import {CategoryDatum} from '../../components/charts/CategoryDatum';
 import {Utilities} from '../../commons/Utilities';
 import {Severity} from '../../commons/domain/Severity';
 import {Classification} from '../../commons/domain/Classification';
@@ -58,9 +60,11 @@ export class ProjectRunSummaryComponent {
             function(data: any) {
                 component.issueSeverityCount = new CategoryChartData();
                 for (let name of Utilities.getEnumNames(Severity)) {
-                    component.issueSeverityCount.categories.push(name);
                     let value = data[name];
-                    component.issueSeverityCount.values.push(value ? value : 0);
+                    if (!value) {
+                        value = null;
+                    }
+                    component.issueSeverityCount.data.push(new CategoryDatum(name, value));
                 }
             },
             function(response: Response) { }
@@ -69,8 +73,11 @@ export class ProjectRunSummaryComponent {
             function(data: any) {
                 component.issueTypeCount = new CategoryChartData();
                 for (let name of Utilities.getEnumNames(Classification)) {
-                    component.issueTypeCount.categories.push(name);
-                    component.issueTypeCount.values.push(data[name]);
+                    let value = data[name];
+                    if (!value) {
+                        value = null;
+                    }
+                    component.issueTypeCount.data.push(new CategoryDatum(name, value));
                 }
             },
             function(response: Response) { }

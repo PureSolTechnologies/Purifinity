@@ -1,4 +1,6 @@
-import {Component, Input} from 'angular2/core';
+import {Component, ElementRef, Input} from 'angular2/core';
+
+import {AbstractChartComponent} from './AbstractChartComponent';
 
 @Component({
     selector: 'cummulative-distribution-chart',
@@ -22,9 +24,13 @@ import {Component, Input} from 'angular2/core';
     </div>
 </div>`
 })
-export class CummulativeDistributionChartComponent {
+export class CummulativeDistributionChartComponent extends AbstractChartComponent {
 
     @Input()
-    private title:string = "Cummulative Distribution Chart";
+    private title: string = "Cummulative Distribution Chart";
+
+    constructor(element: ElementRef) { super(element); }
+
+    render(): void { }
 
 }

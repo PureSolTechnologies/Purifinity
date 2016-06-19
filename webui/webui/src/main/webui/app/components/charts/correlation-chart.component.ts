@@ -1,4 +1,6 @@
-import {Component, Input} from 'angular2/core';
+import {Component, ElementRef, Input} from 'angular2/core';
+
+import {AbstractChartComponent} from './AbstractChartComponent';
 
 @Component({
     selector: 'correlation-chart',
@@ -22,9 +24,13 @@ import {Component, Input} from 'angular2/core';
     </div>
 </div>`
 })
-export class CorrelationChartComponent {
+export class CorrelationChartComponent extends AbstractChartComponent {
 
     @Input()
-    private title:string = "Correlation Chart";
+    private title: string = "Correlation Chart";
+
+    constructor(element: ElementRef) { super(element); }
+
+    render(): void { }
 
 }

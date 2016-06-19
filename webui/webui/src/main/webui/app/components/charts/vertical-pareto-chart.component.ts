@@ -1,8 +1,7 @@
 import {Component, ElementRef, Input} from 'angular2/core';
 
+import {AbstractChartComponent} from './AbstractChartComponent';
 import {ParetoDatum} from './ParetoDatum';
-import {HtmlElementPrinter} from '../../commons/HtmlElementPrinter';
-import {ChartExport} from '../../commons/ChartExport';
 
 @Component({
     selector: 'vertical-pareto-chart',
@@ -26,60 +25,37 @@ import {ChartExport} from '../../commons/ChartExport';
     </div>
 </div>`
 })
-export class VerticalParetoChartComponent {
+export class VerticalParetoChartComponent extends AbstractChartComponent {
 
     @Input()
     private data: ParetoDatum[];
 
     @Input()
-    private title:string = "Vertical Pareto Chart";
+    private title: string = "Vertical Pareto Chart";
 
-    private svg: d3.Selection<any>;
-    private margin: number;
     private barHeight: number;
     private barPadding: number;
 
-
-    constructor(private element: ElementRef) { }
+    constructor(element: ElementRef) { super(element); }
 
     ngOnInit() {
-        this.svg = d3.select(this.element.nativeElement)
-            .append("svg")
-            .attr("class", "chart")
-            .style("width", "100%");
-
-        this.margin = parseInt(this.element.nativeElement.style.margin, 10) || 20;
-        this.barHeight = parseInt(this.element.nativeElement.style.barHeight, 10) || 20;
-        this.barPadding = parseInt(this.element.nativeElement.style.barPadding, 10) || 5;
+        super.ngOnInit();
+        this.barHeight = parseInt(this.getElement().nativeElement.style.barHeight, 10) || 20;
+        this.barPadding = parseInt(this.getElement().nativeElement.style.barPadding, 10) || 5;
     }
-
-    // watch for data changes and re-render
-    ngOnChanges(changes) {
-        if (this.svg) {
-            this.render();
-        }
-    }
-
-    // Browser onresize event
-    onResize(event): void {
-        this.render();
-    };
 
     render(): void {
-        // remove all previous items before render
-        this.svg.selectAll("*").remove();
         if (!this.data) {
             return;
         }
         let component = this;
-        // setup variables
-        let node: any = d3.select(this.element.nativeElement).node();
-        let width = node.parentNode.offsetWidth - this.margin;
+        // geometry
+        let width = this.getWidth();
         if (width <= 0) {
             return;
         }
-        // calculate the height
         let height = this.data.length * (this.barHeight + this.barPadding);
+        let margin = this.getMargin();
 
         let max = d3.max(this.data, function(d: any) {
             return d.value;
@@ -87,7 +63,7 @@ export class VerticalParetoChartComponent {
         let min = d3.min(this.data, function(d: any) {
             return d.value;
         });
-        let color = d3.scale.linear<string,number>()
+        let color = d3.scale.linear<string, number>()
             .domain([min, (max - min) / 2, max])
             .range(["red", "yellow", "green"]);
         // our xScale
@@ -96,10 +72,11 @@ export class VerticalParetoChartComponent {
             .range([0, width]);
 
         // set the height based on the calculations above
-        this.svg.attr("width", width);
-        this.svg.attr("height", height);
+        let svg = this.getSVG();
+        svg.attr("width", width);
+        svg.attr("height", height);
         //create the rectangles for the bar chart
-        this.svg.selectAll("rect")
+        svg.selectAll("rect")
             .data(this.data)
             .enter()
             .append("rect")
@@ -108,7 +85,7 @@ export class VerticalParetoChartComponent {
             })
             .attr("height", this.barHeight)
             .attr("width", 140)
-            .attr("x", Math.round(this.margin / 2))
+            .attr("x", Math.round(margin / 2))
             .attr("y", function(d, i) {
                 return i * (component.barHeight + component.barPadding);
             })
@@ -118,7 +95,7 @@ export class VerticalParetoChartComponent {
             .attr("width", function(d: any) {
                 return xScale(d.value);
             });
-        this.svg.selectAll("text")
+        svg.selectAll("text")
             .data(this.data)
             .enter()
             .append("text")
@@ -134,15 +111,4 @@ export class VerticalParetoChartComponent {
                 return d.name + " (" + String((Math.round(d.value * 100) / 100).toFixed(2)) + ")";
             });
     }
-
-    printChart() {
-        let printer: HtmlElementPrinter = new HtmlElementPrinter(this.svg.node());
-        printer.print();
-    }
-
-    exportChart() {
-        let exporter: ChartExport = new ChartExport(this.svg.node());
-        exporter.export();
-    }
-
 }
