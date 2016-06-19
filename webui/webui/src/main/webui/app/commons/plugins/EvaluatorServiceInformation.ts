@@ -14,5 +14,6 @@ export class EvaluatorServiceInformation {
     projectURLPath: string;
     runURLPath: string;
     qualityCharacteristics: any;
+    parameters: any[];
 
 }

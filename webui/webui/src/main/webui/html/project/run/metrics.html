@@ -21,8 +21,8 @@
 								<th>Description</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr *ngFor="#parameter of metrics.parameters">
+						<tbody *ngIf="evaluator">
+							<tr *ngFor="#parameter of evaluator.parameters">
 								<td>{{parameter.name}}</td>
 								<td>{{getProjectMetric(parameter) | metricValue}}</td>
 								<td>{{parameter.unit}}</td>
@@ -49,7 +49,7 @@
 			<tab heading="Graphs">
 			<div class="row">
 				<div class="col-md-6">
-					<select id="codeRangeTypeSelectorForGraphs"
+					<select *ngIf="evaluator" id="codeRangeTypeSelectorForGraphs"
 						title="Code Range Type Selector"
 						class="selectpicker show-tick form-control"
 						[(ngModel)]="codeRangeType"
@@ -60,13 +60,13 @@
 					</select>
 				</div>
 				<div class="col-md-6">
-					<select id="codeRangeTypeSelectorForGraphs"
+					<select *ngIf="evaluator" id="codeRangeTypeSelectorForGraphs"
 						title="Code Range Type Selector"
 						class="selectpicker show-tick form-control"
 						[(ngModel)]="parameter"
 						(ngModelChange)="recalculateChartData()">
 						<option value="">Select a Parameter</option>
-						<option *ngFor="#parameter of metrics.parameters"
+						<option *ngFor="#parameter of evaluator.parameters"
 							value="{{parameter.name}}">{{parameter.name}}</option>
 					</select>
 				</div>

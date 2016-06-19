@@ -46,6 +46,7 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.Eval
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.EvaluatorIssuesStoreRemote;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.EvaluatorStoreConnection;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
+import com.puresoltechnologies.purifinity.server.database.hbase.HBasePreparedStatements;
 import com.puresoltechnologies.versioning.Version;
 
 @Stateless
@@ -58,6 +59,9 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
     @EvaluatorStoreConnection
     private Connection connection;
 
+    @Inject
+    private HBasePreparedStatements preparedStatements;
+
     private void throwUnsupportedException() {
 	throw new IllegalStateException("Design issues can only be stored for files.");
     }
@@ -65,9 +69,10 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
     @Override
     public boolean hasFileResults(HashId hashId, CodeRangeType codeRangeType, String codeRangeName, String evaluatorId,
 	    String parameterName) throws EvaluationStoreException {
-	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT hashid FROM "
-		+ HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE
-		+ " WHERE hashid=? AND code_range_type=? AND code_range_name=? AND evaluator_id=? AND parameter_name=?")) {
+	try {
+	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		    "SELECT hashid FROM " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE
+			    + " WHERE hashid=? AND code_range_type=? AND code_range_name=? AND evaluator_id=? AND parameter_name=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, codeRangeType.name());
 	    preparedStatement.setString(3, codeRangeName);
@@ -91,8 +96,10 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 
     @Override
     public boolean hasFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
-	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT hashid FROM "
-		+ HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
+	try {
+	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		    "SELECT hashid FROM " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE
+			    + " WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -145,59 +152,59 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 
     private void storeFileIssuesAsValues(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileIssues results)
 	    throws SQLException {
-	try (PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
-		+ HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE + " (time, " + "hashid, " + "source_code_location, "
-		+ "code_range_type, " + "code_range_name, " + "evaluator_id, " + "evaluator_version, " + "issue_id, "
-		+ "description, " + "weight, " + "start_line, " + "start_column, " + "line_count, " + "length, "
-		+ "severity, " + "classification" + ") VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-	    Date time = results.getTime();
-	    AnalysisInformation analysisInformation = codeAnalysis.getAnalysisInformation();
-	    HashId hashId = analysisInformation.getHashId();
-	    SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
-	    String evaluatorId = results.getEvaluatorId();
-	    Version evaluatorVersion = results.getEvaluatorVersion();
-	    CodeRangeNameParameter codeRangeNameParameter = CodeRangeNameParameter.getInstance();
-	    String codeRangeNameParameterName = codeRangeNameParameter.getName();
-	    CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
-	    String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
-	    for (CodeRangeIssues codeRangeIssues : results.getCodeRangeIssues()) {
-		String codeRangeName = codeRangeIssues.getCodeRangeName();
-		CodeRangeType codeRangeType = codeRangeIssues.getCodeRangeType();
+	PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		"UPSERT INTO " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE + " (time, " + "hashid, "
+			+ "source_code_location, " + "code_range_type, " + "code_range_name, " + "evaluator_id, "
+			+ "evaluator_version, " + "issue_id, " + "description, " + "weight, " + "start_line, "
+			+ "start_column, " + "line_count, " + "length, " + "severity, " + "classification" + ") VALUES "
+			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	Date time = results.getTime();
+	AnalysisInformation analysisInformation = codeAnalysis.getAnalysisInformation();
+	HashId hashId = analysisInformation.getHashId();
+	SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
+	String evaluatorId = results.getEvaluatorId();
+	Version evaluatorVersion = results.getEvaluatorVersion();
+	CodeRangeNameParameter codeRangeNameParameter = CodeRangeNameParameter.getInstance();
+	String codeRangeNameParameterName = codeRangeNameParameter.getName();
+	CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
+	String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
+	for (CodeRangeIssues codeRangeIssues : results.getCodeRangeIssues()) {
+	    String codeRangeName = codeRangeIssues.getCodeRangeName();
+	    CodeRangeType codeRangeType = codeRangeIssues.getCodeRangeType();
 
-		for (IssueParameter parameter : results.getParameters()) {
-		    String parameterName = parameter.getName();
-		    String description = parameter.getDescription();
-		    if (parameterName.equals(codeRangeNameParameterName)
-			    || parameterName.equals(codeRangeTypeParameterName)) {
-			continue;
-		    }
-		    List<Issue> issues = codeRangeIssues.getIssues(parameter);
-		    if (issues == null) {
-			// There is not value assigned for the parameter. So we
-			// can
-			// safely skip it.
-			continue;
-		    }
-		    for (Issue issue : issues) {
-			int numericValue = issue.getValue().intValue();
-			preparedStatement.setTime(1, new Time(time.getTime()));
-			preparedStatement.setString(2, hashId.toString());
-			preparedStatement.setString(3, PropertiesUtils.toString(sourceCodeLocation.getSerialization()));
-			preparedStatement.setString(4, codeRangeType.name());
-			preparedStatement.setString(5, codeRangeName);
-			preparedStatement.setString(6, evaluatorId);
-			preparedStatement.setString(7, evaluatorVersion.toString());
-			preparedStatement.setString(8, parameterName);
-			preparedStatement.setString(9, description);
-			preparedStatement.setDouble(10, numericValue);
-			preparedStatement.setInt(11, issue.getStartLine());
-			preparedStatement.setInt(12, issue.getStartColumn());
-			preparedStatement.setInt(13, issue.getLineCount());
-			preparedStatement.setInt(14, issue.getLength());
-			preparedStatement.setString(15, issue.getSeverity().name());
-			preparedStatement.setString(16, issue.getClassification().name());
-			preparedStatement.execute();
-		    }
+	    for (IssueParameter parameter : results.getParameters()) {
+		String parameterName = parameter.getName();
+		String description = parameter.getDescription();
+		if (parameterName.equals(codeRangeNameParameterName)
+			|| parameterName.equals(codeRangeTypeParameterName)) {
+		    continue;
+		}
+		List<Issue> issues = codeRangeIssues.getIssues(parameter);
+		if (issues == null) {
+		    // There is not value assigned for the parameter. So we
+		    // can
+		    // safely skip it.
+		    continue;
+		}
+		for (Issue issue : issues) {
+		    int numericValue = issue.getValue().intValue();
+		    preparedStatement.setTime(1, new Time(time.getTime()));
+		    preparedStatement.setString(2, hashId.toString());
+		    preparedStatement.setString(3, PropertiesUtils.toString(sourceCodeLocation.getSerialization()));
+		    preparedStatement.setString(4, codeRangeType.name());
+		    preparedStatement.setString(5, codeRangeName);
+		    preparedStatement.setString(6, evaluatorId);
+		    preparedStatement.setString(7, evaluatorVersion.toString());
+		    preparedStatement.setString(8, parameterName);
+		    preparedStatement.setString(9, description);
+		    preparedStatement.setDouble(10, numericValue);
+		    preparedStatement.setInt(11, issue.getStartLine());
+		    preparedStatement.setInt(12, issue.getStartColumn());
+		    preparedStatement.setInt(13, issue.getLineCount());
+		    preparedStatement.setInt(14, issue.getLength());
+		    preparedStatement.setString(15, issue.getSeverity().name());
+		    preparedStatement.setString(16, issue.getClassification().name());
+		    preparedStatement.execute();
 		}
 	    }
 	}
@@ -217,10 +224,13 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 
     @Override
     public FileIssuesImpl readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
-	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, "
-		+ "code_range_type, " + "code_range_name, " + "evaluator_version, " + "issue_id, " + "description, "
-		+ "weight, " + "start_line, " + "start_column, " + "line_count, " + "length, " + "source_code_location "
-		+ "FROM " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE + " WHERE hashid=? AND evaluator_id=?")) {
+	try {
+	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		    "SELECT " + "time, " + "code_range_type, " + "code_range_name, " + "evaluator_version, "
+			    + "issue_id, " + "description, " + "weight, " + "start_line, " + "start_column, "
+			    + "line_count, " + "length, " + "source_code_location, " + "severity, " + "classification "
+			    + "FROM " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE
+			    + " WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -375,70 +385,70 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 
     private void storeIssuesInBigTableWithoutCommit(AnalysisRun analysisRun, CodeAnalysis codeAnalysis,
 	    FileIssues results) throws SQLException {
-	try (PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
-		+ HBaseElementNames.EVALUATION_ISSUES_TABLE + " (time," + "project_id, " + "run_id, " + "hashid, "
-		+ "internal_directory, " + "file_name, " + "source_code_location, " + "language_name, "
-		+ "language_version, " + "evaluator_id, " + "evaluator_version, " + "code_range_name, "
-		+ "code_range_type, " + "issue_id, " + "start_line, " + "start_column, " + "line_count, " + "length, "
-		+ "weight, " + "classification, " + "severity, " + "description ) VALUES "
-		+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
-	    Date time = results.getTime();
-	    String projectId = analysisRun.getInformation().getProjectId();
-	    long runId = analysisRun.getInformation().getRunId();
-	    AnalysisInformation analysisInformation = codeAnalysis.getAnalysisInformation();
-	    HashId hashId = analysisInformation.getHashId();
-	    AnalysisFileTree analysisTreeNode = analysisRun.findTreeNode(hashId);
-	    File pathFile = analysisTreeNode.getPathFile(false);
-	    String internalPath = pathFile.getParent();
-	    String fileName = pathFile.getName();
-	    String sourceCodeLocation = PropertiesUtils
-		    .toString(analysisTreeNode.getSourceCodeLocation().getSerialization());
-	    String languageName = analysisInformation.getLanguageName();
-	    String languageVersion = analysisInformation.getLanguageVersion();
-	    String evaluatorId = results.getEvaluatorId();
-	    Version evaluatorVersion = results.getEvaluatorVersion();
-	    CodeRangeNameParameter codeRangeNameParameter = CodeRangeNameParameter.getInstance();
-	    String codeRangeNameParameterName = codeRangeNameParameter.getName();
-	    CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
-	    String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
-	    for (CodeRangeIssues issues : results.getCodeRangeIssues()) {
-		String codeRangeName = issues.getCodeRangeName();
-		CodeRangeType codeRangeType = issues.getCodeRangeType();
+	PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		"UPSERT INTO " + HBaseElementNames.EVALUATION_ISSUES_TABLE + " (time," + "project_id, " + "run_id, "
+			+ "hashid, " + "internal_directory, " + "file_name, " + "source_code_location, "
+			+ "language_name, " + "language_version, " + "evaluator_id, " + "evaluator_version, "
+			+ "code_range_name, " + "code_range_type, " + "issue_id, " + "start_line, " + "start_column, "
+			+ "line_count, " + "length, " + "weight, " + "classification, " + "severity, "
+			+ "description ) VALUES "
+			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	Date time = results.getTime();
+	String projectId = analysisRun.getInformation().getProjectId();
+	long runId = analysisRun.getInformation().getRunId();
+	AnalysisInformation analysisInformation = codeAnalysis.getAnalysisInformation();
+	HashId hashId = analysisInformation.getHashId();
+	AnalysisFileTree analysisTreeNode = analysisRun.findTreeNode(hashId);
+	File pathFile = analysisTreeNode.getPathFile(false);
+	String internalPath = pathFile.getParent();
+	String fileName = pathFile.getName();
+	String sourceCodeLocation = PropertiesUtils
+		.toString(analysisTreeNode.getSourceCodeLocation().getSerialization());
+	String languageName = analysisInformation.getLanguageName();
+	String languageVersion = analysisInformation.getLanguageVersion();
+	String evaluatorId = results.getEvaluatorId();
+	Version evaluatorVersion = results.getEvaluatorVersion();
+	CodeRangeNameParameter codeRangeNameParameter = CodeRangeNameParameter.getInstance();
+	String codeRangeNameParameterName = codeRangeNameParameter.getName();
+	CodeRangeTypeParameter codeRangeTypeParameter = CodeRangeTypeParameter.getInstance();
+	String codeRangeTypeParameterName = codeRangeTypeParameter.getName();
+	for (CodeRangeIssues issues : results.getCodeRangeIssues()) {
+	    String codeRangeName = issues.getCodeRangeName();
+	    CodeRangeType codeRangeType = issues.getCodeRangeType();
 
-		for (IssueParameter parameter : results.getParameters()) {
-		    String issueId = parameter.getName();
-		    if (issueId.equals(codeRangeNameParameterName) || issueId.equals(codeRangeTypeParameterName)) {
-			continue;
-		    }
-		    if (!issues.hasIssue(parameter)) {
-			continue;
-		    }
-		    for (Issue issue : issues.getIssues(parameter)) {
-			int weight = issue.getValue();
-			preparedStatement.setTime(1, new Time(time.getTime()));
-			preparedStatement.setString(2, projectId);
-			preparedStatement.setLong(3, runId);
-			preparedStatement.setString(4, hashId.toString());
-			preparedStatement.setString(5, internalPath);
-			preparedStatement.setString(6, fileName);
-			preparedStatement.setString(7, sourceCodeLocation);
-			preparedStatement.setString(8, languageName);
-			preparedStatement.setString(9, languageVersion.toString());
-			preparedStatement.setString(10, evaluatorId);
-			preparedStatement.setString(11, evaluatorVersion.toString());
-			preparedStatement.setString(12, codeRangeName);
-			preparedStatement.setString(13, codeRangeType.name());
-			preparedStatement.setString(14, issueId);
-			preparedStatement.setInt(15, issue.getStartLine());
-			preparedStatement.setInt(16, issue.getStartColumn());
-			preparedStatement.setInt(17, issue.getLineCount());
-			preparedStatement.setInt(18, issue.getLength());
-			preparedStatement.setDouble(19, weight);
-			preparedStatement.setString(20, issue.getClassification().name());
-			preparedStatement.setString(21, issue.getSeverity().name());
-			preparedStatement.setString(22, parameter.getDescription());
-			preparedStatement.execute();
-		    }
+	    for (IssueParameter parameter : results.getParameters()) {
+		String issueId = parameter.getName();
+		if (issueId.equals(codeRangeNameParameterName) || issueId.equals(codeRangeTypeParameterName)) {
+		    continue;
+		}
+		if (!issues.hasIssue(parameter)) {
+		    continue;
+		}
+		for (Issue issue : issues.getIssues(parameter)) {
+		    int weight = issue.getValue();
+		    preparedStatement.setTime(1, new Time(time.getTime()));
+		    preparedStatement.setString(2, projectId);
+		    preparedStatement.setLong(3, runId);
+		    preparedStatement.setString(4, hashId.toString());
+		    preparedStatement.setString(5, internalPath);
+		    preparedStatement.setString(6, fileName);
+		    preparedStatement.setString(7, sourceCodeLocation);
+		    preparedStatement.setString(8, languageName);
+		    preparedStatement.setString(9, languageVersion.toString());
+		    preparedStatement.setString(10, evaluatorId);
+		    preparedStatement.setString(11, evaluatorVersion.toString());
+		    preparedStatement.setString(12, codeRangeName);
+		    preparedStatement.setString(13, codeRangeType.name());
+		    preparedStatement.setString(14, issueId);
+		    preparedStatement.setInt(15, issue.getStartLine());
+		    preparedStatement.setInt(16, issue.getStartColumn());
+		    preparedStatement.setInt(17, issue.getLineCount());
+		    preparedStatement.setInt(18, issue.getLength());
+		    preparedStatement.setDouble(19, weight);
+		    preparedStatement.setString(20, issue.getClassification().name());
+		    preparedStatement.setString(21, issue.getSeverity().name());
+		    preparedStatement.setString(22, parameter.getDescription());
+		    preparedStatement.execute();
 		}
 	    }
 	}
@@ -465,8 +475,10 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
     @Override
     public Map<Severity, Integer> getRunIssueSummaryByServerity(String projectId, long runId)
 	    throws EvaluationStoreException {
-	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT SEVERITY, COUNT(SEVERITY) FROM "
-		+ HBaseElementNames.EVALUATION_ISSUES_TABLE + " WHERE project_id=? AND run_id=? GROUP BY SEVERITY")) {
+	try {
+	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		    "SELECT SEVERITY, COUNT(SEVERITY) FROM " + HBaseElementNames.EVALUATION_ISSUES_TABLE
+			    + " WHERE project_id=? AND run_id=? GROUP BY SEVERITY");
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setLong(2, runId);
 	    Map<Severity, Integer> result = new HashMap<>();
@@ -489,9 +501,10 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
     @Override
     public Map<Classification, Integer> getRunIssueSummaryByClassification(String projectId, long runId)
 	    throws EvaluationStoreException {
-	try (PreparedStatement preparedStatement = connection.prepareStatement(
-		"SELECT CLASSIFICATION, COUNT(CLASSIFICATION) FROM " + HBaseElementNames.EVALUATION_ISSUES_TABLE
-			+ " WHERE project_id=? AND run_id=? GROUP BY CLASSIFICATION")) {
+	try {
+	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		    "SELECT CLASSIFICATION, COUNT(CLASSIFICATION) FROM " + HBaseElementNames.EVALUATION_ISSUES_TABLE
+			    + " WHERE project_id=? AND run_id=? GROUP BY CLASSIFICATION");
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setLong(2, runId);
 	    Map<Classification, Integer> result = new HashMap<>();

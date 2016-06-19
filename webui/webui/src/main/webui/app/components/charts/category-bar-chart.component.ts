@@ -8,8 +8,7 @@ import {CategoryDatum} from './CategoryDatum';
     selector: 'category-bar-chart',
     directives: [],
     template:
-    `<div class="panel category-bar-chart" (window:resize)="onResize($event)">
-    <div class="panel-heading">
+    `<div class="chart category-bar-chart" (window:resize)="onResize($event)">
         <img src="/images/icons/FatCow_Icons16x16/chart_column_up.png" />
         {{title}}
         <span style="float: right;">
@@ -23,7 +22,6 @@ import {CategoryDatum} from './CategoryDatum';
                 <img src="/images/icons/FatCow_Icons16x16/printer_color.png" />
             </a>
         </span>
-    </div>
 </div>`
 })
 export class CategoryBarChartComponent extends AbstractChartComponent {

@@ -116,7 +116,6 @@ export class ProjectRunMetricsComponent {
         if (evaluator === this.evaluator) {
             return;
         }
-        this.evaluator = evaluator;
         this.paretoData = [];
         this.codeRangeType = undefined;
         this.parameter = undefined;
@@ -142,18 +141,18 @@ export class ProjectRunMetricsComponent {
             });
             component.codeRangeTypes.sort();
             component.metrics = data;
-            component.applyMetricsToFileTree(component.metricsTreeTable.root, component.metrics, component.metrics.parameters);
+            component.applyMetricsToFileTree(component.metricsTreeTable.root, component.metrics, evaluator.parameters);
             component.metricsTreeTable.columnHeaders = [{ name: "Name", tooltip: "Name of file or folder" }];
-            component.metrics.parameters.forEach(function(parameter) {
+            evaluator.parameters.forEach(function(parameter) {
                 let name = parameter.name;
                 if (parameter.unit) {
                     name += " [" + parameter.unit + "]";
                 }
                 component.metricsTreeTable.columnHeaders.push({ name: name, tooltip: parameter.description });
             });
+            component.evaluator = evaluator;
         }, function(response: Response) {
-        }
-        );
+        });
     }
 
     changedValue(newValue) {
@@ -291,6 +290,9 @@ export class ProjectRunMetricsComponent {
     }
 
     getProjectMetric(parameter): number {
+        if ((!this.metrics) || (!this.metrics.directoryMetrics)) {
+            return null;
+        }
         let hashidString: string = this.fileTree.hashId.algorithmName + ":" + this.fileTree.hashId.hash;
         let directoryMetrics = this.metrics.directoryMetrics[hashidString];
         let value = directoryMetrics.values[parameter.name];

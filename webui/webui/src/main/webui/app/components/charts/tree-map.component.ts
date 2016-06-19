@@ -7,8 +7,7 @@ import {ChartExport} from '../../commons/ChartExport';
     selector: 'tree-map',
     directives: [],
     template:
-    `<div class="panel tree-map-chart">
-    <div class="panel-heading">
+    `<div class="chart tree-map-chart">
         <img src="/images/icons/FatCow_Icons16x16/map.png" />
         {{title}}
         <span style="float: right;">
@@ -19,7 +18,6 @@ import {ChartExport} from '../../commons/ChartExport';
                 <img src="/images/icons/FatCow_Icons16x16/printer_color.png" />
             </a>
         </span>
-    </div>
 </div>`
 })
 export class TreeMapComponent {

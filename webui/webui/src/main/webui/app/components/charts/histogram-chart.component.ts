@@ -6,8 +6,7 @@ import {AbstractChartComponent} from './AbstractChartComponent';
     selector: 'histogram-chart',
     directives: [],
     template:
-    `<div class="panel histogram-chart" (window:resize)="onResize($event)">
-    <div class="panel-heading">
+    `<div class="chart histogram-chart" (window:resize)="onResize($event)">
         <img src="/images/icons/FatCow_Icons16x16/chart_column_up.png" />
         {{title}}
         <span style="float: right;">
@@ -21,7 +20,6 @@ import {AbstractChartComponent} from './AbstractChartComponent';
                 <img src="/images/icons/FatCow_Icons16x16/printer_color.png" />
             </a>
         </span>
-    </div>
 </div>`
 })
 export class HistogramChartComponent extends AbstractChartComponent {

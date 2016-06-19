@@ -7,8 +7,7 @@ import {ParetoDatum} from './ParetoDatum';
     selector: 'pareto-chart',
     directives: [],
     template:
-    `<div class="panel pareto-chart" (window:resize)="onResize($event)">
-    <div class="panel-heading">
+    `<div class="chart pareto-chart" (window:resize)="onResize($event)">
         <img src="/images/icons/FatCow_Icons16x16/chart_column_up.png" />
         {{title}}
         <span style="float: right;">
@@ -22,7 +21,6 @@ import {ParetoDatum} from './ParetoDatum';
                 <img src="/images/icons/FatCow_Icons16x16/printer_color.png" />
             </a>
         </span>
-    </div>
 </div>`
 })
 export class ParetoChartComponent extends AbstractChartComponent {
