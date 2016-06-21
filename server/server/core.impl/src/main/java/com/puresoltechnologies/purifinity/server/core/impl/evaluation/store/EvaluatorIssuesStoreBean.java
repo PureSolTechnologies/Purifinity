@@ -524,4 +524,54 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 	}
     }
 
+    @Override
+    public Map<Severity, Integer> getRunIssueArchitectureSeverities(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return getRunIssueSeverities(projectId, runId, Classification.ARCHITECTURE_ISSUE);
+    }
+
+    @Override
+    public Map<Severity, Integer> getRunIssueDesignSeverities(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return getRunIssueSeverities(projectId, runId, Classification.DESIGN_ISSUE);
+    }
+
+    @Override
+    public Map<Severity, Integer> getRunIssueDefectSeverities(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return getRunIssueSeverities(projectId, runId, Classification.DEFECT);
+    }
+
+    @Override
+    public Map<Severity, Integer> getRunIssueStyleSeverities(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return getRunIssueSeverities(projectId, runId, Classification.STYLE_ISSUE);
+    }
+
+    private Map<Severity, Integer> getRunIssueSeverities(String projectId, long runId, Classification classification)
+	    throws EvaluationStoreException {
+	try {
+	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		    "SELECT SEVERITY, COUNT(SEVERITY) FROM " + HBaseElementNames.EVALUATION_ISSUES_TABLE
+			    + " WHERE project_id=? AND run_id=? AND classification=? GROUP BY SEVERITY");
+	    preparedStatement.setString(1, projectId);
+	    preparedStatement.setLong(2, runId);
+	    preparedStatement.setString(3, classification.name());
+	    Map<Severity, Integer> result = new HashMap<>();
+	    for (Severity severity : Severity.values()) {
+		result.put(severity, 0);
+	    }
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		while (resultSet.next()) {
+		    Severity severity = Severity.valueOf(resultSet.getString(1));
+		    int num = resultSet.getInt(2);
+		    result.put(severity, num);
+		}
+	    }
+	    return result;
+	} catch (SQLException e) {
+	    throw new EvaluationStoreException("Could not read file results.", e);
+	}
+    }
+
 }

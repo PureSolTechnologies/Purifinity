@@ -47,4 +47,32 @@ public interface EvaluatorStoreRestInterface {
     public Map<Classification, Integer> getRunIssueSummaryByClassification(@PathParam("project_id") String projectId,
 	    @PathParam("run_id") long runId) throws EvaluationStoreException;
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/architecture/severities")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Map<Severity, Integer> getRunIssueArchitectureServerities(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/design/severities")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Map<Severity, Integer> getRunIssueDesignServerities(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/defect/severities")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Map<Severity, Integer> getRunIssueDefectServerities(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/style/severities")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Map<Severity, Integer> getRunIssueStyleServerities(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
 }

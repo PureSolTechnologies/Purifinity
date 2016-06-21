@@ -62,4 +62,57 @@ export class EvaluatorStore {
         );
 
     }
+
+    getRunIssueArchitectureSeverities(projectId: string, runId: string, success: (data: any) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId
+            + "/runs/" + runId
+            + "/issues/architecture/severities", function(response: Response) {
+                let data: RunIssues = response.json();
+                success(data);
+            }, error
+        );
+
+    }
+
+    getRunIssueDesignSeverities(projectId: string, runId: string, success: (data: any) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId
+            + "/runs/" + runId
+            + "/issues/design/severities", function(response: Response) {
+                let data: RunIssues = response.json();
+                success(data);
+            }, error
+        );
+
+    }
+
+    getRunIssueDefectSeverities(projectId: string, runId: string, success: (data: any) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId
+            + "/runs/" + runId
+            + "/issues/defect/severities", function(response: Response) {
+                let data: RunIssues = response.json();
+                success(data);
+            }, error
+        );
+
+    }
+
+    getRunIssueStyleSeverities(projectId: string, runId: string, success: (data: any) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId
+            + "/runs/" + runId
+            + "/issues/style/severities", function(response: Response) {
+                let data: RunIssues = response.json();
+                success(data);
+            }, error
+        );
+
+    }
+
 }

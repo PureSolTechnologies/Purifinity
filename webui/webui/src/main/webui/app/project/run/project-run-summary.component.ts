@@ -62,7 +62,7 @@ export class ProjectRunSummaryComponent {
                 for (let name of Utilities.getEnumNames(Severity)) {
                     let value = data[name];
                     if (!value) {
-                        value = null;
+                        value = 0;
                     }
                     component.issueSeverityCount.data.push(new CategoryDatum(name, value));
                 }
@@ -75,7 +75,7 @@ export class ProjectRunSummaryComponent {
                 for (let name of Utilities.getEnumNames(Classification)) {
                     let value = data[name];
                     if (!value) {
-                        value = null;
+                        value = 0;
                     }
                     component.issueTypeCount.data.push(new CategoryDatum(name, value));
                 }

@@ -263,6 +263,11 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, issue_id, code_range_type, hashid, code_range_name))",
 		"Keeps the issues in a big table for efficient retrieval."));
 
+	sequence.appendTransformation(new PhoenixTransformationStep(sequence,
+		"Rick-Rainer Ludwig", "CREATE INDEX evaluator_store_issues_classification_idx ON "
+			+ HBaseElementNames.EVALUATION_ISSUES_TABLE + " (classification)",
+		"This index is used to search for defined classification."));
+
 	return sequence;
     }
 

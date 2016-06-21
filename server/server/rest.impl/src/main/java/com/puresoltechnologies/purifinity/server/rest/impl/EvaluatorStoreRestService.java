@@ -42,4 +42,28 @@ public class EvaluatorStoreRestService implements EvaluatorStoreRestInterface {
 	    throws EvaluationStoreException {
 	return evaluatorIssuesStore.getRunIssueSummaryByClassification(projectId, runId);
     }
+
+    @Override
+    public Map<Severity, Integer> getRunIssueArchitectureServerities(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return evaluatorIssuesStore.getRunIssueArchitectureSeverities(projectId, runId);
+    }
+
+    @Override
+    public Map<Severity, Integer> getRunIssueDesignServerities(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return evaluatorIssuesStore.getRunIssueDesignSeverities(projectId, runId);
+    }
+
+    @Override
+    public Map<Severity, Integer> getRunIssueDefectServerities(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return evaluatorIssuesStore.getRunIssueDefectSeverities(projectId, runId);
+    }
+
+    @Override
+    public Map<Severity, Integer> getRunIssueStyleServerities(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return evaluatorIssuesStore.getRunIssueStyleSeverities(projectId, runId);
+    }
 }
