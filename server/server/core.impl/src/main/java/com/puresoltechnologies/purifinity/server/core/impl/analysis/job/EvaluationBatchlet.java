@@ -80,6 +80,7 @@ public class EvaluationBatchlet implements Batchlet {
 		evaluator.evaluate(analysisRun, false);
 	    }
 	    persistentUserData.increaseCurrentItem(1);
+	    stepContext.setPersistentUserData(persistentUserData);
 	}
     }
 

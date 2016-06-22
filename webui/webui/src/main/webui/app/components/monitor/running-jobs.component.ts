@@ -1,4 +1,4 @@
-import {Component, NgZone, Inject} from 'angular2/core';
+import {Component, Inject} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 import {Response} from 'angular2/http';
 
@@ -19,39 +19,27 @@ import {PurifinityServerConnector} from '../../commons/purifinity/PurifinityServ
 })
 export class RunningJobsComponent {
 
-    private zone: NgZone;
-    private purifinityServerConnector: PurifinityServerConnector;
     private connection: string = "Not Connected.";
     private error: any;
     private jobs: any;
     private websocket: WebSocket;
 
-    constructor(zone: NgZone, purifinityServerConnector: PurifinityServerConnector) {
-        this.zone = zone;
-        this.purifinityServerConnector = purifinityServerConnector;
+    constructor(private purifinityServerConnector: PurifinityServerConnector) {
         var server = PurifinityConfiguration.server;
         this.websocket = new WebSocket("ws://" + server.host + ":" + server.port + "/purifinityserver/socket/jobs");
         var rjc = this;
         this.websocket.onopen = function(event) {
-            zone.run(() => {
-                rjc.connection = "Connected.";
-                rjc.websocket.send("sendJobStates");
-            });
+            rjc.connection = "Connected.";
+            rjc.websocket.send("sendJobStates");
         };
         this.websocket.onclose = function(event) {
-            zone.run(() => {
-                rjc.connection = "Connection closed.";
-            });
+            rjc.connection = "Connection closed.";
         };
         this.websocket.onmessage = function(event) {
-            zone.run(() => {
-                rjc.jobs = JSON.parse(event.data);
-            });
+            rjc.jobs = JSON.parse(event.data);
         };
         this.websocket.onerror = function(event) {
-            zone.run(() => {
-                rjc.error = event;
-            });
+            rjc.error = event;
         };
     }
 

@@ -8,12 +8,11 @@
 			<td width="30%"><h4>{{jobStatus.name}}</h4></td>
 			<td>
 				<div *ngFor="#stepStatus of jobStatus.stepStates">
-					{{stepStatus.name}}
+					{{stepStatus.name}} ({{stepStatus.current}}/{{stepStatus.max}})
 					<div class="progress">
 						<progress class="progress progress-striped"
 							[attr.value]="stepStatus.current"
-							[attr.max]="stepStatus.max"> {{stepStatus.current
-							/ stepStatus.max * 100 | number}}%</progress>
+							[attr.max]="stepStatus.max"> {{stepStatus.current/stepStatus.max*100|number}}%</progress>
 					</div>
 				</div>
 			</td>
