@@ -155,7 +155,6 @@ public class FortranAnalyzer extends AbstractCodeAnalyzer {
 		    } else if ("subroutine-subprogram".equals(tree.getName())) {
 			String name = tree.getChild("subroutine-stmt").getChildren("NAME_LITERAL").get(1).getContent();
 			result.add(new CodeRange(name, name, CodeRangeType.SUBROUTINE, tree));
-
 		    } else if ("separate-module-subprogram".equals(tree.getName())) {
 			String name = tree.getChild("mp-subprogram-stmt").getChildren("NAME_LITERAL").get(1)
 				.getContent();

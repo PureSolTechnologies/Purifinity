@@ -251,8 +251,8 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "source_code_location varchar, " //
 			+ "language_name varchar, " //
 			+ "language_version varchar, " //
-			+ "start_line unsigned_int, " //
-			+ "start_column unsigned_int, " //
+			+ "start_line unsigned_int not null, " //
+			+ "start_column unsigned_int not null, " //
 			+ "line_count unsigned_int, " //
 			+ "length unsigned_int, " //
 			+ "weight unsigned_int, " //
@@ -260,7 +260,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "severity varchar, " //
 			+ "description varchar, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_METRICS_TABLE.replaceAll("\\.", "_")
-			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, issue_id, code_range_type, hashid, code_range_name))",
+			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, issue_id, code_range_type, hashid, code_range_name, start_line, start_column))",
 		"Keeps the issues in a big table for efficient retrieval."));
 
 	sequence.appendTransformation(new PhoenixTransformationStep(sequence,

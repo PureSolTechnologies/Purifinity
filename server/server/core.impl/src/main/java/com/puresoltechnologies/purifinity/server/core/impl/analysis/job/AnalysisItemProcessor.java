@@ -8,7 +8,6 @@ import javax.batch.runtime.context.StepContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.mockito.asm.tree.analysis.AnalyzerException;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
@@ -57,7 +56,6 @@ public class AnalysisItemProcessor implements ItemProcessor {
      * @param hashId
      * @param sourceFile
      * @return
-     * @throws AnalyzerException
      * @throws IOException
      * @throws FileStoreException
      */

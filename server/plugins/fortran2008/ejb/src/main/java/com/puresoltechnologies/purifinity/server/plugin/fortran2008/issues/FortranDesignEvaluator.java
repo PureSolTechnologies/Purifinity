@@ -43,6 +43,9 @@ import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssues
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.AbstractIssueEvaluator;
 import com.puresoltechnologies.trees.TreeException;
+import com.puresoltechnologies.trees.TreeVisitor;
+import com.puresoltechnologies.trees.TreeWalker;
+import com.puresoltechnologies.trees.WalkingAction;
 import com.puresoltechnologies.versioning.Version;
 
 @Stateless
@@ -67,6 +70,8 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 	    "No 'IMPLICIT NONE' was found.");
     private final IssueParameter COMBINED_USAGE_OF_IMPLICIT = new IssueParameter("CombinedUsageOfImplicit", "",
 	    "Combined usage of 'IMPLICIT NONE' and 'IMPLICIT' was found.");
+    private final IssueParameter USAGE_OF_GOTO = new IssueParameter("UsageOfGoto", "",
+	    "A goto statement should not be used as it breaks structured programming and make refactoring difficult.");
 
     public FortranDesignEvaluator() {
 	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
@@ -164,6 +169,7 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 	parameters.add(NO_IMPLICIT_NONE);
 	parameters.add(USAGE_OF_IMPLICIT);
 	parameters.add(COMBINED_USAGE_OF_IMPLICIT);
+	parameters.add(USAGE_OF_GOTO);
 	SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
 	FileIssuesImpl fileIssues = new FileIssuesImpl(FortranDesignEvaluator.ID, FortranDesignEvaluator.PLUGIN_VERSION,
 		hashId, sourceCodeLocation, new Date(), parameters.toArray(new IssueParameter[parameters.size()]));
@@ -172,17 +178,21 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 		    || (codeRange.getType() == CodeRangeType.DIRECTORY)) {
 		continue;
 	    }
-	    Map<String, List<Issue>> implicitIssues = checkForImplicitIssues(analysisRun, analysis, codeRange);
-	    CodeRangeIssues issues = new CodeRangeIssues(fileIssues.getSourceCodeLocation(), codeRange.getType(),
-		    codeRange.getCanonicalName(), parameters.toArray(new IssueParameter[parameters.size()]),
-		    implicitIssues);
-	    fileIssues.addCodeRangeIssue(issues);
+	    Map<String, List<Issue>> issues = new HashMap<>();
+	    issues.putAll(checkForImplicitIssues(analysisRun, analysis, codeRange, sourceCodeLocation,
+		    parameters.toArray(new IssueParameter[parameters.size()])));
+	    issues.putAll(checkForGoto(analysisRun, analysis, codeRange, sourceCodeLocation,
+		    parameters.toArray(new IssueParameter[parameters.size()])));
+	    fileIssues.addCodeRangeIssue(new CodeRangeIssues(sourceCodeLocation, codeRange.getType(),
+		    codeRange.getCanonicalName(), parameters.toArray(new IssueParameter[parameters.size()]), issues));
 	}
 	return fileIssues;
     }
 
     private Map<String, List<Issue>> checkForImplicitIssues(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
-	    CodeRange codeRange) throws EvaluationStoreException {
+	    CodeRange codeRange, SourceCodeLocation sourceCodeLocation, IssueParameter[] parameters)
+		    throws EvaluationStoreException {
+	Map<String, List<Issue>> implicitIssues = new HashMap<>();
 	try {
 	    UniversalSyntaxTree ust = codeRange.getUST();
 	    UniversalSyntaxTree specificationPart;
@@ -236,17 +246,15 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 		specificationPart = null;
 	    }
 	    if (specificationPart != null) {
-		return check(specificationPart);
-	    } else {
-		return new HashMap<>();
+		implicitIssues = checkImplicits(specificationPart);
 	    }
 	} catch (TreeException e) {
 	    logger.error("Could not check tree for '" + codeRange + "'.", e);
-	    return new HashMap<>();
 	}
+	return implicitIssues;
     }
 
-    public Map<String, List<Issue>> check(UniversalSyntaxTree specificationPart) {
+    private Map<String, List<Issue>> checkImplicits(UniversalSyntaxTree specificationPart) {
 	Map<String, List<Issue>> issues = new HashMap<>();
 	boolean hasImplicitNone = false;
 	boolean hasImplicit = false;
@@ -294,6 +302,73 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 	    UniversalSyntaxTreeMetaData metaData = specificationPart.getMetaData();
 	    issueList.add(new Issue(Severity.CRITICAL, Classification.DESIGN_ISSUE, metaData.getLine(),
 		    metaData.getColumn(), metaData.getLineNum(), metaData.getLength(), 1, COMBINED_USAGE_OF_IMPLICIT));
+	}
+	return issues;
+    }
+
+    private Map<String, List<Issue>> checkForGoto(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
+	    CodeRange codeRange, SourceCodeLocation sourceCodeLocation, IssueParameter[] parameters)
+		    throws EvaluationStoreException {
+	Map<String, List<Issue>> gotos = new HashMap<>();
+	try {
+	    UniversalSyntaxTree ust = codeRange.getUST();
+	    UniversalSyntaxTree executionPart;
+	    switch (codeRange.getType()) {
+	    case PROGRAM:
+		if (!"main-program".equals(ust.getName())) {
+		    logger.error("Program statement '" + ust.getName() + "' not expected.");
+		}
+		executionPart = ust.getChild("execution-part");
+		break;
+	    case SUBROUTINE:
+		if (!"subroutine-subprogram".equals(ust.getName())) {
+		    logger.error("Subroutine statement '" + ust.getName() + "' not expected.");
+		}
+		executionPart = ust.getChild("execution-part");
+		break;
+	    case FUNCTION:
+		if (!"function-subprogram".equals(ust.getName())) {
+		    logger.error("Function statement '" + ust.getName() + "' not expected.");
+		}
+		executionPart = ust.getChild("execution-part");
+		break;
+	    default:
+		executionPart = null;
+	    }
+	    if (executionPart != null) {
+		gotos = checkGotos(executionPart);
+	    }
+	} catch (TreeException e) {
+	    logger.error("Could not check tree for '" + codeRange + "'.", e);
+	}
+	return gotos;
+    }
+
+    private Map<String, List<Issue>> checkGotos(UniversalSyntaxTree executionPart) {
+	List<FoundGoto> foundGotos = new ArrayList<>();
+	List<FoundLabel> foundLabels = new ArrayList<>();
+	TreeWalker.walk(new TreeVisitor<UniversalSyntaxTree>() {
+	    @Override
+	    public WalkingAction visit(UniversalSyntaxTree node) {
+		String name = node.getName();
+		if (("goto-stmt".equals(name)) || ("computed-goto-stmt".equals(name))) {
+		    foundGotos.add(new FoundGoto(node));
+		} else if ("LABEL".equals(name)) {
+		    foundLabels.add(new FoundLabel(node));
+		}
+		return WalkingAction.PROCEED;
+	    }
+	}, executionPart);
+	Map<String, List<Issue>> issues = new HashMap<>();
+	for (FoundGoto foundGoto : foundGotos) {
+	    List<Issue> issueList = issues.get(USAGE_OF_GOTO.getName());
+	    if (issueList == null) {
+		issueList = new ArrayList<>();
+		issues.put(USAGE_OF_GOTO.getName(), issueList);
+	    }
+	    UniversalSyntaxTreeMetaData metaData = foundGoto.getMetaData();
+	    issueList.add(new Issue(Severity.CRITICAL, Classification.DESIGN_ISSUE, metaData.getLine(),
+		    metaData.getColumn(), metaData.getLineNum(), metaData.getLength(), 1, USAGE_OF_GOTO));
 	}
 	return issues;
     }
