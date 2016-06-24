@@ -16,9 +16,6 @@ import {AccountManager} from '../commons/purifinity/AccountManager';
 })
 export class CreateUserComponent {
 
-    private router: Router;
-    private accountManager: AccountManager;
-
     public name: string = "";
     public email: string = "";
     public password: string = "";
@@ -26,10 +23,7 @@ export class CreateUserComponent {
     public roleId: string = "";
     private roles: Role[] = [];
 
-    constructor(router: Router, accountManager: AccountManager) {
-        this.router = router;
-        this.accountManager = accountManager;
-
+    constructor(private router: Router, private accountManager: AccountManager) {
         var createUserComponent = this;
         this.accountManager.getRoles(//
             function(roles: Role[]) { createUserComponent.roles = roles }, //
@@ -40,7 +34,7 @@ export class CreateUserComponent {
         var createUserComponent = this;
         this.accountManager.createAccount(this.email, this.name, this.password, this.roleId,
             function(response: Response) {
-                createUserComponent.router.navigate(['/UsersAdmin']);            
+                createUserComponent.router.navigate(['/UsersAdmin']);
             },
             function(response: Response) {
             }

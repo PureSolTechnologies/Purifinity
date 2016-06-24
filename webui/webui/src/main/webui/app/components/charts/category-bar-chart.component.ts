@@ -1,4 +1,5 @@
 import {Component, ElementRef, Input} from 'angular2/core';
+import {Router} from 'angular2/router';
 
 import {AbstractChartComponent} from './AbstractChartComponent';
 import {CategoryChartData} from './CategoryChartData';
@@ -32,7 +33,7 @@ export class CategoryBarChartComponent extends AbstractChartComponent {
     @Input()
     private title: string = "Category Bar Chart";
 
-    constructor(element: ElementRef) { super(element); }
+    constructor(element: ElementRef, private router: Router) { super(element); }
 
     render(): void {
         // data
@@ -97,13 +98,17 @@ export class CategoryBarChartComponent extends AbstractChartComponent {
             .attr("class", "y axis")
             .call(yAxis);
 
+        let component = this;
         //create the rectangles for the bar chart
         chart.selectAll("rect")
             .data(binData)
             .enter()
             .append("rect")
             .on("click", function(d, i) {
-                return this.onClick({ item: d });
+                let link = data.data[i].getLink();
+                if (link != null) {
+                    component.router.navigate(link);
+                }
             })
             .attr("height", 0)
             .attr("width", barWidth)

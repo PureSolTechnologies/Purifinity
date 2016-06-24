@@ -77,7 +77,17 @@ export class ProjectRunSummaryComponent {
                     if (!value) {
                         value = 0;
                     }
-                    component.issueTypeCount.data.push(new CategoryDatum(name, value));
+                    let link = null;
+                    if (name == "STYLE_ISSUE") {
+                        link = ['ProjectRunStyle', { projectId: component.projectId, runId: component.runId }];
+                    } else if (name == "DEFECT") {
+                        link = ['ProjectRunDefects', { projectId: component.projectId, runId: component.runId }];
+                    } else if (name == "ARCHITECTURE_ISSUE") {
+                        link = ['ProjectRunArchitecture', { projectId: component.projectId, runId: component.runId }];
+                    } else if (name == "DESIGN_ISSUE") {
+                        link = ['ProjectRunDesign', { projectId: component.projectId, runId: component.runId }];
+                    }
+                    component.issueTypeCount.data.push(new CategoryDatum(name, value, link));
                 }
             },
             function(response: Response) { }
