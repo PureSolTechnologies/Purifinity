@@ -42,7 +42,7 @@ export class EvaluatorStore {
         this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
             + projectId
             + "/runs/" + runId
-            + "/issues/summary/severities", function(response: Response) {
+            + "/issues/severities", function(response: Response) {
                 let data: RunIssues = response.json();
                 success(data);
             }, error
@@ -55,7 +55,7 @@ export class EvaluatorStore {
         this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
             + projectId
             + "/runs/" + runId
-            + "/issues/summary/classification", function(response: Response) {
+            + "/issues/classification", function(response: Response) {
                 let data: RunIssues = response.json();
                 success(data);
             }, error

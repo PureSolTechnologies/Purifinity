@@ -35,16 +35,16 @@ public interface EvaluatorStoreRestInterface {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("projects/{project_id}/runs/{run_id}/issues/summary/severities")
+    @Path("projects/{project_id}/runs/{run_id}/issues/severities")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
-    public Map<Severity, Integer> getRunIssueSummaryByServerity(@PathParam("project_id") String projectId,
+    public Map<Severity, Integer> getRunIssuesByServerity(@PathParam("project_id") String projectId,
 	    @PathParam("run_id") long runId) throws EvaluationStoreException;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("projects/{project_id}/runs/{run_id}/issues/summary/classification")
+    @Path("projects/{project_id}/runs/{run_id}/issues/classification")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
-    public Map<Classification, Integer> getRunIssueSummaryByClassification(@PathParam("project_id") String projectId,
+    public Map<Classification, Integer> getRunIssuesByClassification(@PathParam("project_id") String projectId,
 	    @PathParam("run_id") long runId) throws EvaluationStoreException;
 
     @GET

@@ -473,7 +473,7 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
     }
 
     @Override
-    public Map<Severity, Integer> getRunIssueSummaryByServerity(String projectId, long runId)
+    public Map<Severity, Integer> getRunIssuesByServerity(String projectId, long runId)
 	    throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
@@ -499,7 +499,7 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
     }
 
     @Override
-    public Map<Classification, Integer> getRunIssueSummaryByClassification(String projectId, long runId)
+    public Map<Classification, Integer> getRunIssuesByClassification(String projectId, long runId)
 	    throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
