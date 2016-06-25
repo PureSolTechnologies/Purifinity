@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.rest.impl;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -24,6 +25,11 @@ public class EvaluatorStoreRestService implements EvaluatorStoreRestInterface {
     @Override
     public RunMetrics getRunMetrics(String projectId, long runId, String evaluatorId) throws EvaluationStoreException {
 	return evaluatorMetricsStore.readRunResults(projectId, runId, evaluatorId);
+    }
+
+    @Override
+    public Collection<RunIssues> getRunIssues(String projectId, long runId) throws EvaluationStoreException {
+	return evaluatorIssuesStore.readRunResults(projectId, runId);
     }
 
     @Override

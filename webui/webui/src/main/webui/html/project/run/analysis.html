@@ -3,6 +3,10 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<h1>Analysis</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
 			<progress-indicator *ngIf="isLoading()"></progress-indicator>
 			<tabset *ngIf="!isLoading()"> <!-- File System Tree --> <tab
 				heading="Tree"> <tree-table [treeTableData]="analysisFileTree"></tree-table>

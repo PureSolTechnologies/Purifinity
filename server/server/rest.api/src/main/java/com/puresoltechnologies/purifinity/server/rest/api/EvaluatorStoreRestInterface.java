@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.rest.api;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.ws.rs.GET;
@@ -25,6 +26,13 @@ public interface EvaluatorStoreRestInterface {
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
     public RunMetrics getRunMetrics(@PathParam("project_id") String projectId, @PathParam("run_id") long runId,
 	    @PathParam("evaluator_id") String evaluatorId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Collection<RunIssues> getRunIssues(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

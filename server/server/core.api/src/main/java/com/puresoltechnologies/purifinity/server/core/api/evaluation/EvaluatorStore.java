@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.server.core.api.evaluation;
 
+import java.util.Collection;
+
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
@@ -113,6 +115,8 @@ public interface EvaluatorStore<FileResults, DirectoryResults, ProjectResults, R
 
     public void storeProjectResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    ProjectResults results) throws EvaluationStoreException;
+
+    public Collection<RunResults> readRunResults(String projectId, long runId) throws EvaluationStoreException;
 
     public RunResults readRunResults(String projectId, long runId, String evaluatorId) throws EvaluationStoreException;
 

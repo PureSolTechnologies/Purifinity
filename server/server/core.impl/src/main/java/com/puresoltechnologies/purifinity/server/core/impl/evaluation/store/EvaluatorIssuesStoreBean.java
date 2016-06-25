@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,11 +43,13 @@ import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssues
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssuesImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.RunIssues;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluationService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.EvaluatorIssuesStore;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.EvaluatorIssuesStoreRemote;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.EvaluatorStoreConnection;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBasePreparedStatements;
+import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.versioning.Version;
 
 @Stateless
@@ -61,6 +64,9 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 
     @Inject
     private HBasePreparedStatements preparedStatements;
+
+    @Inject
+    private EvaluationService evaluationService;
 
     private void throwUnsupportedException() {
 	throw new IllegalStateException("Design issues can only be stored for files.");
@@ -464,6 +470,15 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
     public void storeProjectResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    ProjectIssues metrics) throws EvaluationStoreException {
 	throwUnsupportedException();
+    }
+
+    @Override
+    public Collection<RunIssues> readRunResults(String projectId, long runId) throws EvaluationStoreException {
+	List<RunIssues> runResults = new ArrayList<>();
+	for (EvaluatorServiceInformation evaluatorServiceInformation : evaluationService.getEvaluators()) {
+	    runResults.add(readRunResults(projectId, runId, evaluatorServiceInformation.getId()));
+	}
+	return runResults;
     }
 
     @Override

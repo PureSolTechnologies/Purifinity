@@ -1,5 +1,5 @@
 import {Component} from 'angular2/core';
-import {RouteParams} from 'angular2/router';
+import {RouteParams, Router} from 'angular2/router';
 import {Response} from 'angular2/http';
 
 import {FsSizePipe} from '../../commons/pipes/fs-size.pipe';
@@ -42,7 +42,10 @@ export class ProjectRunSummaryComponent {
     public issueSeverityCount: CategoryChartData = new CategoryChartData();
     public issueTypeCount: CategoryChartData = new CategoryChartData();
 
-    constructor(private routeParams: RouteParams, private projectManager: ProjectManager, private evaluatorStore: EvaluatorStore) {
+    constructor(private routeParams: RouteParams,
+        private router: Router,
+        private projectManager: ProjectManager,
+        private evaluatorStore: EvaluatorStore) {
         this.projectId = routeParams.get('projectId');
         this.runId = routeParams.get('runId');
 
@@ -77,17 +80,17 @@ export class ProjectRunSummaryComponent {
                     if (!value) {
                         value = 0;
                     }
-                    let link = null;
+                    let onClick: () => void = null;
                     if (name == "STYLE_ISSUE") {
-                        link = ['ProjectRunStyle', { projectId: component.projectId, runId: component.runId }];
+                        onClick = (): void => { component.router.navigate(['ProjectRunStyle', { projectId: component.projectId, runId: component.runId }]); };
                     } else if (name == "DEFECT") {
-                        link = ['ProjectRunDefects', { projectId: component.projectId, runId: component.runId }];
+                        onClick = (): void => { component.router.navigate(['ProjectRunDefects', { projectId: component.projectId, runId: component.runId }]); };
                     } else if (name == "ARCHITECTURE_ISSUE") {
-                        link = ['ProjectRunArchitecture', { projectId: component.projectId, runId: component.runId }];
+                        onClick = (): void => { component.router.navigate(['ProjectRunArchitecture', { projectId: component.projectId, runId: component.runId }]); };
                     } else if (name == "DESIGN_ISSUE") {
-                        link = ['ProjectRunDesign', { projectId: component.projectId, runId: component.runId }];
+                        onClick = (): void => { component.router.navigate(['ProjectRunDesign', { projectId: component.projectId, runId: component.runId }]); };
                     }
-                    component.issueTypeCount.data.push(new CategoryDatum(name, value, link));
+                    component.issueTypeCount.data.push(new CategoryDatum(name, value, onClick));
                 }
             },
             function(response: Response) { }

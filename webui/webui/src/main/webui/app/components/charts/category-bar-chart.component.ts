@@ -33,7 +33,7 @@ export class CategoryBarChartComponent extends AbstractChartComponent {
     @Input()
     private title: string = "Category Bar Chart";
 
-    constructor(element: ElementRef, private router: Router) { super(element); }
+    constructor(element: ElementRef) { super(element); }
 
     render(): void {
         // data
@@ -105,10 +105,7 @@ export class CategoryBarChartComponent extends AbstractChartComponent {
             .enter()
             .append("rect")
             .on("click", function(d, i) {
-                let link = data.data[i].getLink();
-                if (link != null) {
-                    component.router.navigate(link);
-                }
+                data.data[i].performOnClick();
             })
             .attr("height", 0)
             .attr("width", barWidth)

@@ -1,15 +1,21 @@
 <project-run-menu></project-run-menu>
 <div class="container-fluid">
 	<div class="row">
+		<div class="col-xs-12">
+			<h1>Summary</h1>
+		</div>
+	</div>
+	<div class="row">
 		<div class="col-md-6">
-			<category-bar-chart title="Issues per Severity" [data]="issueSeverityCount"></category-bar-chart>
+			<category-bar-chart title="Issues per Severity"
+				[data]="issueSeverityCount"></category-bar-chart>
 		</div>
 		<div class="col-md-6">
 			<category-bar-chart title="Issues per Type" [data]="issueTypeCount"></category-bar-chart>
 		</div>
-		<div class="col-md-6"></div>
-		<div class="col-md-6">
-			<h1>Summary</h1>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
 			<progress-indicator *ngIf="isLoading()"></progress-indicator>
 			<table *ngIf="!isLoading()"
 				class="table table-striped table-hover table-bordered">

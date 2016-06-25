@@ -6,9 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -40,12 +43,15 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParame
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetricsImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetricsImpl;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
+import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluationService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStoreRemote;
 import com.puresoltechnologies.purifinity.server.core.impl.evaluation.EvaluatorStoreConnection;
 import com.puresoltechnologies.purifinity.server.database.hbase.HBaseElementNames;
+import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServiceInformation;
 import com.puresoltechnologies.versioning.Version;
 
 /**
@@ -62,6 +68,9 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
     @Inject
     @EvaluatorStoreConnection
     private Connection connection;
+
+    @Inject
+    private EvaluationService evaluationService;
 
     private MetricParameter<?> extractMetricParameter(ResultSet resultSet) throws SQLException {
 	String parameterName = resultSet.getString("parameter_name");
@@ -612,7 +621,7 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
     }
 
     @Override
-    public FileMetricsImpl readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
+    public FileMetrics readFileResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection
 		.prepareStatement("SELECT " + "time, " + "code_range_type, " + "code_range_name, "
 			+ "evaluator_version, " + "parameter_name, " + "parameter_unit, " + "parameter_description, "
@@ -710,8 +719,7 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
     }
 
     @Override
-    public DirectoryMetricsImpl readDirectoryResults(HashId hashId, String evaluatorId)
-	    throws EvaluationStoreException {
+    public DirectoryMetrics readDirectoryResults(HashId hashId, String evaluatorId) throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, " + "hashid, "
 		+ "evaluator_version, " + "parameter_name, " + "parameter_unit, " + "parameter_description, "
 		+ "parameter_type, " + "level_of_measurement, " + "metric " + "FROM "
@@ -769,7 +777,7 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
      * FIXME
      */
     @Override
-    public ProjectMetricsImpl readProjectResults(String projectId, long runId, String evaluatorId)
+    public ProjectMetrics readProjectResults(String projectId, long runId, String evaluatorId)
 	    throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, " + "project_id, "
 		+ "run_id, " + "evaluator_version, " + "parameter_name, " + "metric " + "FROM "
@@ -800,8 +808,16 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
     }
 
     @Override
-    public RunMetricsImpl readRunResults(String projectId, long runId, String evaluatorId)
-	    throws EvaluationStoreException {
+    public Collection<RunMetrics> readRunResults(String projectId, long runId) throws EvaluationStoreException {
+	List<RunMetrics> runResults = new ArrayList<>();
+	for (EvaluatorServiceInformation evaluatorServiceInformation : evaluationService.getEvaluators()) {
+	    runResults.add(readRunResults(projectId, runId, evaluatorServiceInformation.getId()));
+	}
+	return runResults;
+    }
+
+    @Override
+    public RunMetrics readRunResults(String projectId, long runId, String evaluatorId) throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, " + "hashid, "
 		+ "evaluator_version, " + "code_range_name, " + "source_code_location, " + "code_range_type, "
 		+ "parameter_name, " + "parameter_unit, " + "parameter_type, " + "metric, " + "level_of_measurement, "
@@ -811,123 +827,123 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
 	    preparedStatement.setLong(2, runId);
 	    preparedStatement.setString(3, evaluatorId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
-		Map<HashId, Set<MetricParameter<?>>> parametersBuffer = new HashMap<>();
-		Map<HashId, CodeRangeType> hashIdTypes = new HashMap<>();
-		Date minTime = null;
-		Map<HashId, Date> timeBuffer = new HashMap<HashId, Date>();
-		Version evaluatorVersion = null;
-		Map<HashId, SourceCodeLocation> sourceCodeLocationBuffer = new HashMap<>();
-		Map<HashId, Map<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>>> buffer = new HashMap<>();
-		while (resultSet.next()) {
-		    HashId hashId = HashId.valueOf(resultSet.getString("hashid"));
-		    Date time = getTimeAndCheckConsistency(evaluatorId, timeBuffer, resultSet, hashId);
-		    minTime = minTime == null ? time : (minTime.getTime() <= time.getTime() ? minTime : time);
-		    getSourceCodeLocationAndCheckConsistency(resultSet, hashId, evaluatorId, sourceCodeLocationBuffer);
-		    evaluatorVersion = getEvaluatorVersionAndCheckConsistency(resultSet, hashId, evaluatorId,
-			    evaluatorVersion);
-		    MetricParameter<?> metricsParameter = extractMetricParameter(resultSet);
-		    if (metricsParameter == null) {
-			continue;
-		    }
-		    Set<MetricParameter<?>> parameters = parametersBuffer.get(hashId);
-		    if (parameters == null) {
-			parameters = new HashSet<>();
-			parametersBuffer.put(hashId, parameters);
-		    }
-		    parameters.add(metricsParameter);
-		    CodeRangeType codeRangeType = CodeRangeType.valueOf(resultSet.getString("code_range_type"));
-		    if (!hashIdTypes.containsKey(hashId)) {
-			if (codeRangeType == CodeRangeType.DIRECTORY) {
-			    hashIdTypes.put(hashId, CodeRangeType.DIRECTORY);
-			} else {
-			    hashIdTypes.put(hashId, CodeRangeType.FILE);
-
-			}
-		    }
-		    String codeRangeName = resultSet.getString("code_range_name");
-		    Map<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> hashIdBuffer = buffer
-			    .get(hashId);
-		    if (hashIdBuffer == null) {
-			hashIdBuffer = new HashMap<>();
-			buffer.put(hashId, hashIdBuffer);
-		    }
-		    Map<Parameter<?>, MetricValue<?>> parameterBuffer;
-		    Map<String, Map<Parameter<?>, MetricValue<?>>> codeRangeTypeBuffer = hashIdBuffer
-			    .get(codeRangeType);
-		    if (codeRangeTypeBuffer != null) {
-			parameterBuffer = codeRangeTypeBuffer.get(codeRangeName);
-			if (parameterBuffer != null) {
-			    if (parameterBuffer.containsKey(metricsParameter)) {
-				throw new EvaluationStoreException("Multiple parameters with same name '"
-					+ metricsParameter.getName() + "' are different for evaluatorId=" + evaluatorId
-					+ " and hashId=" + hashId.toString());
-			    }
-			} else {
-			    parameterBuffer = new HashMap<>();
-			    codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);
-			}
-		    } else {
-			codeRangeTypeBuffer = new HashMap<>();
-			hashIdBuffer.put(codeRangeType, codeRangeTypeBuffer);
-			parameterBuffer = new HashMap<>();
-			codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);
-		    }
-		    double value = resultSet.getDouble("metric");
-		    MetricValue<?> metricValue = MetricValue.create(metricsParameter, value);
-		    parameterBuffer.put(metricsParameter, metricValue);
-		}
-		RunMetricsImpl metrics = new RunMetricsImpl(evaluatorId, evaluatorVersion, minTime);
-		for (HashId hashId : buffer.keySet()) {
-		    Set<MetricParameter<?>> parameterSet = parametersBuffer.get(hashId);
-		    MetricParameter<?>[] parameterArray = parameterSet
-			    .toArray(new MetricParameter[parameterSet.size()]);
-		    Map<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> hashIdBuffer = buffer
-			    .get(hashId);
-		    if (hashIdTypes.get(hashId) == CodeRangeType.FILE) {
-			SourceCodeLocation sourceCodeLocation = sourceCodeLocationBuffer.get(hashId);
-			FileMetricsImpl fileMetrics = new FileMetricsImpl(evaluatorId, evaluatorVersion, hashId,
-				sourceCodeLocation, timeBuffer.get(hashId));
-			for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> codeRangeTypeEntry : hashIdBuffer
-				.entrySet()) {
-			    CodeRangeType codeRangeType = codeRangeTypeEntry.getKey();
-			    for (Entry<String, Map<Parameter<?>, MetricValue<?>>> codeRangeNameEntry : codeRangeTypeEntry
-				    .getValue().entrySet()) {
-				String codeRangeName = codeRangeNameEntry.getKey();
-				Map<String, MetricValue<?>> metricValues = new HashMap<>();
-				for (Entry<Parameter<?>, MetricValue<?>> parameterEntry : codeRangeNameEntry.getValue()
-					.entrySet()) {
-				    Parameter<?> parameter = parameterEntry.getKey();
-				    MetricValue<?> value = parameterEntry.getValue();
-				    metricValues.put(parameter.getName(), value);
-				}
-				fileMetrics.addCodeRangeMetrics(new CodeRangeMetrics(sourceCodeLocation, codeRangeType,
-					codeRangeName, parameterArray, metricValues));
-			    }
-			}
-			metrics.add(fileMetrics);
-		    } else {
-			Map<String, MetricValue<?>> metricValues = new HashMap<>();
-			Map<String, Map<Parameter<?>, MetricValue<?>>> codeRangeTypeEntry = hashIdBuffer
-				.get(CodeRangeType.DIRECTORY);
-			for (Entry<String, Map<Parameter<?>, MetricValue<?>>> codeRangeNameEntry : codeRangeTypeEntry
-				.entrySet()) {
-			    for (Entry<Parameter<?>, MetricValue<?>> parameterEntry : codeRangeNameEntry.getValue()
-				    .entrySet()) {
-				Parameter<?> parameter = parameterEntry.getKey();
-				MetricValue<?> value = parameterEntry.getValue();
-				metricValues.put(parameter.getName(), value);
-			    }
-			}
-			DirectoryMetricsImpl directoryMetrics = new DirectoryMetricsImpl(evaluatorId, evaluatorVersion,
-				hashId, timeBuffer.get(hashId), parameterArray, metricValues);
-			metrics.add(directoryMetrics);
-		    }
-		}
-		return metrics;
+		return convertRunResults(evaluatorId, resultSet);
 	    }
 	} catch (SQLException e) {
 	    throw new EvaluationStoreException("Could not read run results.", e);
 	}
+    }
+
+    private RunMetrics convertRunResults(String evaluatorId, ResultSet resultSet)
+	    throws SQLException, EvaluationStoreException {
+	Map<HashId, Set<MetricParameter<?>>> parametersBuffer = new HashMap<>();
+	Map<HashId, CodeRangeType> hashIdTypes = new HashMap<>();
+	Date minTime = null;
+	Map<HashId, Date> timeBuffer = new HashMap<HashId, Date>();
+	Version evaluatorVersion = null;
+	Map<HashId, SourceCodeLocation> sourceCodeLocationBuffer = new HashMap<>();
+	Map<HashId, Map<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>>> buffer = new HashMap<>();
+	while (resultSet.next()) {
+	    HashId hashId = HashId.valueOf(resultSet.getString("hashid"));
+	    Date time = getTimeAndCheckConsistency(evaluatorId, timeBuffer, resultSet, hashId);
+	    minTime = minTime == null ? time : (minTime.getTime() <= time.getTime() ? minTime : time);
+	    getSourceCodeLocationAndCheckConsistency(resultSet, hashId, evaluatorId, sourceCodeLocationBuffer);
+	    evaluatorVersion = getEvaluatorVersionAndCheckConsistency(resultSet, hashId, evaluatorId, evaluatorVersion);
+	    MetricParameter<?> metricsParameter = extractMetricParameter(resultSet);
+	    if (metricsParameter == null) {
+		continue;
+	    }
+	    Set<MetricParameter<?>> parameters = parametersBuffer.get(hashId);
+	    if (parameters == null) {
+		parameters = new HashSet<>();
+		parametersBuffer.put(hashId, parameters);
+	    }
+	    parameters.add(metricsParameter);
+	    CodeRangeType codeRangeType = CodeRangeType.valueOf(resultSet.getString("code_range_type"));
+	    if (!hashIdTypes.containsKey(hashId)) {
+		if (codeRangeType == CodeRangeType.DIRECTORY) {
+		    hashIdTypes.put(hashId, CodeRangeType.DIRECTORY);
+		} else {
+		    hashIdTypes.put(hashId, CodeRangeType.FILE);
+
+		}
+	    }
+	    String codeRangeName = resultSet.getString("code_range_name");
+	    Map<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> hashIdBuffer = buffer.get(hashId);
+	    if (hashIdBuffer == null) {
+		hashIdBuffer = new HashMap<>();
+		buffer.put(hashId, hashIdBuffer);
+	    }
+	    Map<Parameter<?>, MetricValue<?>> parameterBuffer;
+	    Map<String, Map<Parameter<?>, MetricValue<?>>> codeRangeTypeBuffer = hashIdBuffer.get(codeRangeType);
+	    if (codeRangeTypeBuffer != null) {
+		parameterBuffer = codeRangeTypeBuffer.get(codeRangeName);
+		if (parameterBuffer != null) {
+		    if (parameterBuffer.containsKey(metricsParameter)) {
+			throw new EvaluationStoreException("Multiple parameters with same name '"
+				+ metricsParameter.getName() + "' are different for evaluatorId=" + evaluatorId
+				+ " and hashId=" + hashId.toString());
+		    }
+		} else {
+		    parameterBuffer = new HashMap<>();
+		    codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);
+		}
+	    } else {
+		codeRangeTypeBuffer = new HashMap<>();
+		hashIdBuffer.put(codeRangeType, codeRangeTypeBuffer);
+		parameterBuffer = new HashMap<>();
+		codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);
+	    }
+	    double value = resultSet.getDouble("metric");
+	    MetricValue<?> metricValue = MetricValue.create(metricsParameter, value);
+	    parameterBuffer.put(metricsParameter, metricValue);
+	}
+	RunMetricsImpl metrics = new RunMetricsImpl(evaluatorId, evaluatorVersion, minTime);
+	for (HashId hashId : buffer.keySet()) {
+	    Set<MetricParameter<?>> parameterSet = parametersBuffer.get(hashId);
+	    MetricParameter<?>[] parameterArray = parameterSet.toArray(new MetricParameter[parameterSet.size()]);
+	    Map<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> hashIdBuffer = buffer.get(hashId);
+	    if (hashIdTypes.get(hashId) == CodeRangeType.FILE) {
+		SourceCodeLocation sourceCodeLocation = sourceCodeLocationBuffer.get(hashId);
+		FileMetricsImpl fileMetrics = new FileMetricsImpl(evaluatorId, evaluatorVersion, hashId,
+			sourceCodeLocation, timeBuffer.get(hashId));
+		for (Entry<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>> codeRangeTypeEntry : hashIdBuffer
+			.entrySet()) {
+		    CodeRangeType codeRangeType = codeRangeTypeEntry.getKey();
+		    for (Entry<String, Map<Parameter<?>, MetricValue<?>>> codeRangeNameEntry : codeRangeTypeEntry
+			    .getValue().entrySet()) {
+			String codeRangeName = codeRangeNameEntry.getKey();
+			Map<String, MetricValue<?>> metricValues = new HashMap<>();
+			for (Entry<Parameter<?>, MetricValue<?>> parameterEntry : codeRangeNameEntry.getValue()
+				.entrySet()) {
+			    Parameter<?> parameter = parameterEntry.getKey();
+			    MetricValue<?> value = parameterEntry.getValue();
+			    metricValues.put(parameter.getName(), value);
+			}
+			fileMetrics.addCodeRangeMetrics(new CodeRangeMetrics(sourceCodeLocation, codeRangeType,
+				codeRangeName, parameterArray, metricValues));
+		    }
+		}
+		metrics.add(fileMetrics);
+	    } else {
+		Map<String, MetricValue<?>> metricValues = new HashMap<>();
+		Map<String, Map<Parameter<?>, MetricValue<?>>> codeRangeTypeEntry = hashIdBuffer
+			.get(CodeRangeType.DIRECTORY);
+		for (Entry<String, Map<Parameter<?>, MetricValue<?>>> codeRangeNameEntry : codeRangeTypeEntry
+			.entrySet()) {
+		    for (Entry<Parameter<?>, MetricValue<?>> parameterEntry : codeRangeNameEntry.getValue()
+			    .entrySet()) {
+			Parameter<?> parameter = parameterEntry.getKey();
+			MetricValue<?> value = parameterEntry.getValue();
+			metricValues.put(parameter.getName(), value);
+		    }
+		}
+		DirectoryMetricsImpl directoryMetrics = new DirectoryMetricsImpl(evaluatorId, evaluatorVersion, hashId,
+			timeBuffer.get(hashId), parameterArray, metricValues);
+		metrics.add(directoryMetrics);
+	    }
+	}
+	return metrics;
     }
 
     private Date getTimeAndCheckConsistency(String evaluatorId, Map<HashId, Date> timeBuffer, ResultSet resultSet,
