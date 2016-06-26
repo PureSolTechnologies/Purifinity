@@ -4,6 +4,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.DirectoryMet
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.FileMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetrics;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.SingleMetricValue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorStore;
 
 /**
@@ -14,6 +15,6 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorSt
  * 
  */
 public interface CommonEvaluatorMetricsStore
-	extends EvaluatorStore<FileMetrics, DirectoryMetrics, ProjectMetrics, RunMetrics> {
+	extends EvaluatorStore<FileMetrics, DirectoryMetrics, ProjectMetrics, RunMetrics, SingleMetricValue<?>> {
 
 }

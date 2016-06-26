@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.domain.LevelOfMeasurement;
 import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.EvaluationParameter;
 
 /**
  * This is a special parameter for issues. The generic for
@@ -14,7 +15,7 @@ import com.puresoltechnologies.commons.domain.ParameterWithArbitraryUnit;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class IssueParameter extends ParameterWithArbitraryUnit<Integer> {
+public class IssueParameter extends EvaluationParameter<Integer> {
 
     public static IssueParameter create(String parameterName, String parameterUnit, String parameterDescription) {
 	return new IssueParameter(parameterName, parameterUnit, parameterDescription);

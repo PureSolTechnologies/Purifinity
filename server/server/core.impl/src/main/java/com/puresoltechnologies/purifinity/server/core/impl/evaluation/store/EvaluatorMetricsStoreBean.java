@@ -43,8 +43,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParame
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricValue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.ProjectMetricsImpl;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetrics;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetricsImpl;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.SingleMetricValue;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluationService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
@@ -60,7 +60,8 @@ import com.puresoltechnologies.versioning.Version;
  * @author Rick-Rainer Ludwig
  */
 @Stateless
-public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, EvaluatorMetricsStoreRemote {
+public class EvaluatorMetricsStoreBean extends AbstractEvaluatorStore
+	implements EvaluatorMetricsStore, EvaluatorMetricsStoreRemote {
 
     @Inject
     private Logger logger;
@@ -647,8 +648,7 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
 			// + hashId.toString());
 			// }
 		    }
-		    SourceCodeLocation alternateSourceCodeLocation = EvaluatorStoreUtils
-			    .extractSourceCodeLocation(resultSet);
+		    SourceCodeLocation alternateSourceCodeLocation = extractSourceCodeLocation(resultSet);
 		    if (sourceCodeLocation == null) {
 			sourceCodeLocation = alternateSourceCodeLocation;
 		    } else {
@@ -665,7 +665,7 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
 			continue;
 		    }
 		    parameters = new MetricParameter<?>[] { metricsParameter };
-		    CodeRangeType codeRangeType = CodeRangeType.valueOf(resultSet.getString("code_range_type"));
+		    CodeRangeType codeRangeType = extractCodeRangeType(resultSet);
 		    String codeRangeName = resultSet.getString("code_range_name");
 		    Map<Parameter<?>, MetricValue<?>> parameterBuffer;
 		    if (buffer.containsKey(codeRangeType)) {
@@ -808,16 +808,20 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
     }
 
     @Override
-    public Collection<RunMetrics> readRunResults(String projectId, long runId) throws EvaluationStoreException {
-	List<RunMetrics> runResults = new ArrayList<>();
+    public Collection<SingleMetricValue<?>> readRunResults(String projectId, long runId)
+	    throws EvaluationStoreException {
+	List<SingleMetricValue<?>> runResults = new ArrayList<>();
 	for (EvaluatorServiceInformation evaluatorServiceInformation : evaluationService.getEvaluators()) {
-	    runResults.add(readRunResults(projectId, runId, evaluatorServiceInformation.getId()));
+	    RunMetricsImpl results = readRunResults(projectId, runId, evaluatorServiceInformation.getId());
+	    // TODO FIXME
+	    // results.runResults.add(results.getFileMetrics().values().iterator().next().get);
 	}
 	return runResults;
     }
 
     @Override
-    public RunMetrics readRunResults(String projectId, long runId, String evaluatorId) throws EvaluationStoreException {
+    public RunMetricsImpl readRunResults(String projectId, long runId, String evaluatorId)
+	    throws EvaluationStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT " + "time, " + "hashid, "
 		+ "evaluator_version, " + "code_range_name, " + "source_code_location, " + "code_range_type, "
 		+ "parameter_name, " + "parameter_unit, " + "parameter_type, " + "metric, " + "level_of_measurement, "
@@ -834,17 +838,17 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
 	}
     }
 
-    private RunMetrics convertRunResults(String evaluatorId, ResultSet resultSet)
+    private RunMetricsImpl convertRunResults(String evaluatorId, ResultSet resultSet)
 	    throws SQLException, EvaluationStoreException {
 	Map<HashId, Set<MetricParameter<?>>> parametersBuffer = new HashMap<>();
 	Map<HashId, CodeRangeType> hashIdTypes = new HashMap<>();
 	Date minTime = null;
-	Map<HashId, Date> timeBuffer = new HashMap<HashId, Date>();
+	Map<HashId, Date> timeBuffer = new HashMap<>();
 	Version evaluatorVersion = null;
 	Map<HashId, SourceCodeLocation> sourceCodeLocationBuffer = new HashMap<>();
 	Map<HashId, Map<CodeRangeType, Map<String, Map<Parameter<?>, MetricValue<?>>>>> buffer = new HashMap<>();
 	while (resultSet.next()) {
-	    HashId hashId = HashId.valueOf(resultSet.getString("hashid"));
+	    HashId hashId = extractHashId(resultSet);
 	    Date time = getTimeAndCheckConsistency(evaluatorId, timeBuffer, resultSet, hashId);
 	    minTime = minTime == null ? time : (minTime.getTime() <= time.getTime() ? minTime : time);
 	    getSourceCodeLocationAndCheckConsistency(resultSet, hashId, evaluatorId, sourceCodeLocationBuffer);
@@ -859,7 +863,7 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
 		parametersBuffer.put(hashId, parameters);
 	    }
 	    parameters.add(metricsParameter);
-	    CodeRangeType codeRangeType = CodeRangeType.valueOf(resultSet.getString("code_range_type"));
+	    CodeRangeType codeRangeType = extractCodeRangeType(resultSet);
 	    if (!hashIdTypes.containsKey(hashId)) {
 		if (codeRangeType == CodeRangeType.DIRECTORY) {
 		    hashIdTypes.put(hashId, CodeRangeType.DIRECTORY);
@@ -967,7 +971,7 @@ public class EvaluatorMetricsStoreBean implements EvaluatorMetricsStore, Evaluat
     private void getSourceCodeLocationAndCheckConsistency(ResultSet resultSet, HashId hashId, String evaluatorId,
 	    Map<HashId, SourceCodeLocation> sourceCodeLocationBuffer) throws EvaluationStoreException, SQLException {
 	// Get source code location and check for consistency
-	SourceCodeLocation alternateSourceCodeLocation = EvaluatorStoreUtils.extractSourceCodeLocation(resultSet);
+	SourceCodeLocation alternateSourceCodeLocation = extractSourceCodeLocation(resultSet);
 	SourceCodeLocation sourceCodeLocation = sourceCodeLocationBuffer.get(hashId);
 	if (sourceCodeLocation == null) {
 	    sourceCodeLocation = alternateSourceCodeLocation;

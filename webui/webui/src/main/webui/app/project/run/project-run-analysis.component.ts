@@ -11,15 +11,15 @@ import {Utilities} from '../../commons/Utilities';
 import {Project} from '../../commons/domain/Project';
 import {TableColumnHeader} from '../../commons/tables/TableColumnHeader';
 import {TableCell} from '../../commons/tables/TableCell';
-import {TreeTableData} from '../../commons/treetable/TreeTableData';
-import {TreeTableNode} from '../../commons/treetable/TreeTableNode';
+import {TreeTableData} from '../../commons/tables/TreeTableData';
+import {TreeTableNode} from '../../commons/tables/TreeTableNode';
 import {ProjectRunMenuComponent} from './project-run-menu.component';
 import {ProjectManager} from '../../commons/purifinity/ProjectManager';
 import {ProgressIndicatorComponent} from '../../components/progress-indicator.component';
 
 import {TabSetComponent} from '../../components/tabs/tabset.component';
 import {TabComponent} from '../../components/tabs/tab.component';
-import {TreeTableComponent} from '../../components/treetable/tree-table.component';
+import {TreeTableComponent} from '../../components/tables/tree-table.component';
 
 @Component({
     selector: 'project-run-analysis',

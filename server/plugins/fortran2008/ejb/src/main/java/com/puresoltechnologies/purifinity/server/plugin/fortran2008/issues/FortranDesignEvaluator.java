@@ -40,7 +40,6 @@ import com.puresoltechnologies.purifinity.evaluation.domain.issues.Issue;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.IssueParameter;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssuesImpl;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.AbstractIssueEvaluator;
 import com.puresoltechnologies.trees.TreeException;
 import com.puresoltechnologies.trees.TreeVisitor;
@@ -58,20 +57,22 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
     public static final String DESCRIPTION = "This evaluator checks commong design weaknesses in Fortran code.";
     public static final QualityCharacteristic[] CHARACTERISTICS = new QualityCharacteristic[] {};
     public static final ConfigurationParameter<?>[] CONFIGURATION_PARAMETERS = new ConfigurationParameter[] {};
-    public static final MetricParameter<?>[] PARAMETERS = new MetricParameter[] {};
     public static final Set<String> DEPENDENCIES = new HashSet<>();
 
     @Inject
     private Logger logger;
 
-    private final IssueParameter USAGE_OF_IMPLICIT = new IssueParameter("UsageOfImplicit", "",
+    private static final IssueParameter USAGE_OF_IMPLICIT = new IssueParameter("UsageOfImplicit", "",
 	    "The usage of 'IMPLICIT' statement should be avoided.");;
-    private final IssueParameter NO_IMPLICIT_NONE = new IssueParameter("NoImplicitNone", "",
+    private static final IssueParameter NO_IMPLICIT_NONE = new IssueParameter("NoImplicitNone", "",
 	    "No 'IMPLICIT NONE' was found.");
-    private final IssueParameter COMBINED_USAGE_OF_IMPLICIT = new IssueParameter("CombinedUsageOfImplicit", "",
+    private static final IssueParameter COMBINED_USAGE_OF_IMPLICIT = new IssueParameter("CombinedUsageOfImplicit", "",
 	    "Combined usage of 'IMPLICIT NONE' and 'IMPLICIT' was found.");
-    private final IssueParameter USAGE_OF_GOTO = new IssueParameter("UsageOfGoto", "",
+    private static final IssueParameter USAGE_OF_GOTO = new IssueParameter("UsageOfGoto", "",
 	    "A goto statement should not be used as it breaks structured programming and make refactoring difficult.");
+
+    public static final IssueParameter[] PARAMETERS = new IssueParameter[] { USAGE_OF_IMPLICIT, NO_IMPLICIT_NONE,
+	    COMBINED_USAGE_OF_IMPLICIT, USAGE_OF_GOTO };
 
     public FortranDesignEvaluator() {
 	super(ID, NAME, PLUGIN_VERSION, DESCRIPTION);
@@ -191,7 +192,7 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 
     private Map<String, List<Issue>> checkForImplicitIssues(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
 	    CodeRange codeRange, SourceCodeLocation sourceCodeLocation, IssueParameter[] parameters)
-		    throws EvaluationStoreException {
+	    throws EvaluationStoreException {
 	Map<String, List<Issue>> implicitIssues = new HashMap<>();
 	try {
 	    UniversalSyntaxTree ust = codeRange.getUST();
@@ -308,7 +309,7 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 
     private Map<String, List<Issue>> checkForGoto(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
 	    CodeRange codeRange, SourceCodeLocation sourceCodeLocation, IssueParameter[] parameters)
-		    throws EvaluationStoreException {
+	    throws EvaluationStoreException {
 	Map<String, List<Issue>> gotos = new HashMap<>();
 	try {
 	    UniversalSyntaxTree ust = codeRange.getUST();

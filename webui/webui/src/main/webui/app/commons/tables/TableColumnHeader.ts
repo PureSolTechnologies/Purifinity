@@ -3,7 +3,14 @@
  */
 export class TableColumnHeader {
 
-    constructor(public name: string, public tooltip: string) {
+    constructor(private name: string, private tooltip: string) {
     }
 
+    public getName(): string {
+        return this.name;
+    }
+
+    public getTooltip(): string {
+        return this.tooltip;
+    }
 }

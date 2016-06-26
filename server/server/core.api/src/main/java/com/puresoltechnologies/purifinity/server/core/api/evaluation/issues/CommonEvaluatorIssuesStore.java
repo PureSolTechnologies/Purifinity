@@ -1,5 +1,6 @@
 package com.puresoltechnologies.purifinity.server.core.api.evaluation.issues;
 
+import java.util.Collection;
 import java.util.Map;
 
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
@@ -9,6 +10,7 @@ import com.puresoltechnologies.purifinity.evaluation.domain.issues.DirectoryIssu
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.FileIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.RunIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.issues.SingleIssue;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorStore;
 
 /**
@@ -19,7 +21,7 @@ import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluatorSt
  * 
  */
 public interface CommonEvaluatorIssuesStore
-	extends EvaluatorStore<FileIssues, DirectoryIssues, ProjectIssues, RunIssues> {
+	extends EvaluatorStore<FileIssues, DirectoryIssues, ProjectIssues, RunIssues, SingleIssue> {
 
     /**
      * This method returns a histogram over the severity with the actual number
@@ -33,8 +35,7 @@ public interface CommonEvaluatorIssuesStore
      *         {@link Severity}.
      * @throws EvaluationStoreException
      */
-    public Map<Severity, Integer> getRunIssuesByServerity(String projectId, long runId)
-	    throws EvaluationStoreException;
+    public Map<Severity, Integer> getRunIssuesByServerity(String projectId, long runId) throws EvaluationStoreException;
 
     /**
      * This method returns a histogram over the issue type with the actual
@@ -114,4 +115,6 @@ public interface CommonEvaluatorIssuesStore
      */
     public Map<Severity, Integer> getRunIssueStyleSeverities(String projectId, long runId)
 	    throws EvaluationStoreException;
+
+    public Collection<SingleIssue> readRunResults(String projectId, long runId, Classification classification);
 }

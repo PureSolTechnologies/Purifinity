@@ -13,6 +13,7 @@ import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreExceptio
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.Classification;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.RunIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.issues.SingleIssue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetrics;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
 import com.puresoltechnologies.purifinity.server.common.rest.security.RolesAllowed;
@@ -31,7 +32,35 @@ public interface EvaluatorStoreRestInterface {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("projects/{project_id}/runs/{run_id}/issues")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
-    public Collection<RunIssues> getRunIssues(@PathParam("project_id") String projectId,
+    public Collection<SingleIssue> getRunIssues(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/types/archiecture")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Collection<SingleIssue> getRunArchitectureIssues(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/types/design")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Collection<SingleIssue> getRunDesignIssues(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/types/defects")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Collection<SingleIssue> getRunDefectsIssues(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/types/style")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Collection<SingleIssue> getRunStyleIssues(@PathParam("project_id") String projectId,
 	    @PathParam("run_id") long runId) throws EvaluationStoreException;
 
     @GET

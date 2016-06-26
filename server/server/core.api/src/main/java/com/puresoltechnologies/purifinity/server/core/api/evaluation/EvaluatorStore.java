@@ -9,7 +9,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 
-public interface EvaluatorStore<FileResults, DirectoryResults, ProjectResults, RunResults> {
+public interface EvaluatorStore<FileResults, DirectoryResults, ProjectResults, RunResults, SingleResult> {
 
     public boolean hasFileResults(HashId hashId, CodeRangeType codeRangeType, String codeRangeName, String evaluatorId,
 	    String parameterName) throws EvaluationStoreException;
@@ -116,7 +116,7 @@ public interface EvaluatorStore<FileResults, DirectoryResults, ProjectResults, R
     public void storeProjectResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    ProjectResults results) throws EvaluationStoreException;
 
-    public Collection<RunResults> readRunResults(String projectId, long runId) throws EvaluationStoreException;
+    public Collection<SingleResult> readRunResults(String projectId, long runId) throws EvaluationStoreException;
 
     public RunResults readRunResults(String projectId, long runId, String evaluatorId) throws EvaluationStoreException;
 

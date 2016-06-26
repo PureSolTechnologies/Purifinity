@@ -1,15 +1,15 @@
 import {Component, Input} from 'angular2/core';
 import {ROUTER_DIRECTIVES} from 'angular2/router';
 
-import {TreeTableData} from '../../commons/treetable/TreeTableData';
-import {TreeTableNode} from '../../commons/treetable/TreeTableNode';
+import {TreeTableData} from '../../commons/tables/TreeTableData';
+import {TreeTableNode} from '../../commons/tables/TreeTableNode';
 
 @Component({
     selector: 'tree-table',
     directives: [
         ROUTER_DIRECTIVES
     ],
-    templateUrl: '../../../html/components/treetable/tree-table.html'
+    templateUrl: '../../../html/components/table/tree-table.html'
 })
 export class TreeTableComponent {
 

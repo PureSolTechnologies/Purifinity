@@ -1,4 +1,4 @@
-import {TableColumnHeader} from '../tables/TableColumnHeader';
+import {TableColumnHeader} from './TableColumnHeader';
 import {TreeTableNode} from './TreeTableNode';
 
 /**

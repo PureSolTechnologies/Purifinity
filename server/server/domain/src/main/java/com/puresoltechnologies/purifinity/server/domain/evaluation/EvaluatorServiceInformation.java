@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
 import com.puresoltechnologies.purifinity.evaluation.api.iso9126.QualityCharacteristic;
-import com.puresoltechnologies.purifinity.evaluation.domain.metrics.MetricParameter;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.EvaluationParameter;
 import com.puresoltechnologies.purifinity.server.common.plugins.ServiceInformation;
 import com.puresoltechnologies.versioning.Version;
 
@@ -26,7 +26,7 @@ public class EvaluatorServiceInformation implements ServiceInformation {
     private final String projectURLPath;
     private final String runURLPath;
     private final QualityCharacteristic[] qualityCharacteristics;
-    private final MetricParameter<?>[] parameters;
+    private final EvaluationParameter<?>[] parameters;
     private final Set<String> dependencies = new HashSet<>();
 
     public EvaluatorServiceInformation(@JsonProperty("id") String id, @JsonProperty("name") String name,
@@ -36,7 +36,7 @@ public class EvaluatorServiceInformation implements ServiceInformation {
 	    @JsonProperty("serviceURLPath") String serviceURLPath,
 	    @JsonProperty("projectURLPath") String projectURLPath, @JsonProperty("runURLPath") String runURLPath,
 	    @JsonProperty("qualityCharacteristics") QualityCharacteristic[] qualityCharacteristics,
-	    @JsonProperty("parameters") MetricParameter<?>[] parameters,
+	    @JsonProperty("parameters") EvaluationParameter<?>[] parameters,
 	    @JsonProperty("dependencies") Set<String> dependencies) {
 	super();
 	this.id = id;
@@ -108,7 +108,7 @@ public class EvaluatorServiceInformation implements ServiceInformation {
 	return qualityCharacteristics;
     }
 
-    public MetricParameter<?>[] getParameters() {
+    public EvaluationParameter<?>[] getParameters() {
 	return parameters;
     }
 

@@ -42,6 +42,8 @@ import com.puresoltechnologies.purifinity.evaluation.domain.issues.IssueParamete
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.ProjectIssuesImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.RunIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.issues.SingleIssue;
+import com.puresoltechnologies.purifinity.evaluation.domain.metrics.EvaluationParameter;
 import com.puresoltechnologies.purifinity.server.common.utils.PropertiesUtils;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.EvaluationService;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.EvaluatorIssuesStore;
@@ -53,7 +55,8 @@ import com.puresoltechnologies.purifinity.server.domain.evaluation.EvaluatorServ
 import com.puresoltechnologies.versioning.Version;
 
 @Stateless
-public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, EvaluatorIssuesStoreRemote {
+public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
+	implements EvaluatorIssuesStore, EvaluatorIssuesStoreRemote {
 
     @Inject
     private Logger logger;
@@ -257,8 +260,7 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 			// + hashId.toString());
 			// }
 		    }
-		    SourceCodeLocation alternateSourceCodeLocation = EvaluatorStoreUtils
-			    .extractSourceCodeLocation(resultSet);
+		    SourceCodeLocation alternateSourceCodeLocation = extractSourceCodeLocation(resultSet);
 		    if (sourceCodeLocation == null) {
 			sourceCodeLocation = alternateSourceCodeLocation;
 		    } else {
@@ -275,7 +277,7 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 			continue;
 		    }
 		    parameters = new IssueParameter[] { issueParameter };
-		    CodeRangeType codeRangeType = CodeRangeType.valueOf(resultSet.getString("code_range_type"));
+		    CodeRangeType codeRangeType = extractCodeRangeType(resultSet);
 		    String codeRangeName = resultSet.getString("code_range_name");
 		    Map<Parameter<?>, Issue> parameterBuffer;
 		    if (buffer.containsKey(codeRangeType)) {
@@ -302,8 +304,8 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 		    int startColumn = resultSet.getInt("start_column");
 		    int lineCount = resultSet.getInt("line_count");
 		    int length = resultSet.getInt("length");
-		    Severity severity = Severity.valueOf(resultSet.getString("severity"));
-		    Classification classification = Classification.valueOf(resultSet.getString("classification"));
+		    Severity severity = extractSeverity(resultSet);
+		    Classification classification = extractClassification(resultSet);
 		    Issue metricValue = new Issue(severity, classification, startLine, startColumn, lineCount, length,
 			    weight, issueParameter);
 		    parameterBuffer.put(issueParameter, metricValue);
@@ -473,12 +475,79 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
     }
 
     @Override
-    public Collection<RunIssues> readRunResults(String projectId, long runId) throws EvaluationStoreException {
-	List<RunIssues> runResults = new ArrayList<>();
-	for (EvaluatorServiceInformation evaluatorServiceInformation : evaluationService.getEvaluators()) {
-	    runResults.add(readRunResults(projectId, runId, evaluatorServiceInformation.getId()));
+    public Collection<SingleIssue> readRunResults(String projectId, long runId) throws EvaluationStoreException {
+	try {
+	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		    "SELECT " //
+			    + "EVALUATOR_ID" //
+			    + ", ISSUE_ID" //
+			    + ", CODE_RANGE_TYPE" //
+			    + ", HASHID" //
+			    + ", CODE_RANGE_NAME" //
+			    + ", TIME" //
+			    + ", EVALUATOR_VERSION" //
+			    + ", SOURCE_CODE_LOCATION" //
+			    + ", LANGUAGE_NAME" //
+			    + ", LANGUAGE_VERSION" //
+			    + ", START_LINE" //
+			    + ", START_COLUMN" //
+			    + ", LINE_COUNT" //
+			    + ", LENGTH" //
+			    + ", WEIGHT" //
+			    + ", CLASSIFICATION" //
+			    + ", SEVERITY" //
+			    + ", DESCRIPTION" //
+			    + " FROM " + HBaseElementNames.EVALUATION_ISSUES_TABLE //
+			    + " WHERE project_id=? AND run_id=?");
+	    preparedStatement.setString(1, projectId);
+	    preparedStatement.setLong(2, runId);
+	    List<SingleIssue> runResults = new ArrayList<>();
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		while (resultSet.next()) {
+		    String evaluatorId = resultSet.getString("EVALUATOR_ID");
+		    String issueId = resultSet.getString("ISSUE_ID");
+		    CodeRangeType codeRangeType = extractCodeRangeType(resultSet);
+		    HashId hashId = extractHashId(resultSet);
+		    String codeRangeName = resultSet.getString("CODE_RANGE_NAME");
+		    Date time = resultSet.getDate("TIME");
+		    Version evaluatorVersion = extractEvaluatorVersion(resultSet);
+		    SourceCodeLocation sourceCodeLocation = extractSourceCodeLocation(resultSet);
+		    String languageName = resultSet.getString("LANGUAGE_NAME");
+		    String languageVersion = resultSet.getString("LANGUAGE_VERSION");
+		    int startLine = resultSet.getInt("START_LINE");
+		    int startColumn = resultSet.getInt("START_COLUMN");
+		    int lineCount = resultSet.getInt("LINE_COUNT");
+		    int length = resultSet.getInt("LENGTH");
+		    int weight = resultSet.getInt("WEIGHT");
+		    Classification classification = extractClassification(resultSet);
+		    Severity severity = extractSeverity(resultSet);
+
+		    EvaluatorServiceInformation evaluator = evaluationService.getEvaluator(evaluatorId);
+		    IssueParameter issueParameter = null;
+		    for (EvaluationParameter<?> parameter : evaluator.getParameters()) {
+			if (parameter.getName().equals(issueId)) {
+			    issueParameter = (IssueParameter) parameter;
+			}
+		    }
+		    if (issueParameter != null) {
+			SingleIssue singleIssue = new SingleIssue(projectId, runId, evaluatorId, evaluatorVersion,
+				codeRangeType, hashId, codeRangeName, time, sourceCodeLocation, languageName,
+				languageVersion, severity, classification, startLine, startColumn, lineCount, length,
+				weight, issueParameter);
+			runResults.add(singleIssue);
+		    }
+		}
+	    }
+	    return runResults;
+	} catch (SQLException e) {
+	    throw new EvaluationStoreException("Could not read file results.", e);
 	}
-	return runResults;
+    }
+
+    @Override
+    public Collection<SingleIssue> readRunResults(String projectId, long runId, Classification classification) {
+	// TODO Auto-generated method stub
+	return null;
     }
 
     @Override
@@ -502,7 +571,7 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 	    }
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
 		while (resultSet.next()) {
-		    Severity severity = Severity.valueOf(resultSet.getString(1));
+		    Severity severity = extractSeverity(resultSet);
 		    int num = resultSet.getInt(2);
 		    result.put(severity, num);
 		}
@@ -528,7 +597,7 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 	    }
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
 		while (resultSet.next()) {
-		    Classification issueType = Classification.valueOf(resultSet.getString(1));
+		    Classification issueType = extractClassification(resultSet);
 		    int num = resultSet.getInt(2);
 		    result.put(issueType, num);
 		}
@@ -578,7 +647,7 @@ public class EvaluatorIssuesStoreBean implements EvaluatorIssuesStore, Evaluator
 	    }
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
 		while (resultSet.next()) {
-		    Severity severity = Severity.valueOf(resultSet.getString(1));
+		    Severity severity = extractSeverity(resultSet);
 		    int num = resultSet.getInt(2);
 		    result.put(severity, num);
 		}

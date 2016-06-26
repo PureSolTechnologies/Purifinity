@@ -10,7 +10,7 @@ import {VerticalParetoChartComponent} from '../../components/charts/vertical-par
 import {HistogramChartComponent} from '../../components/charts/histogram-chart.component';
 import {TreeMapComponent} from '../../components/charts/tree-map.component';
 import {CummulativeDistributionChartComponent} from '../../components/charts/cummulative-distribution-chart.component';
-import {TreeTableComponent} from '../../components/treetable/tree-table.component';
+import {TreeTableComponent} from '../../components/tables/tree-table.component';
 
 import {ParetoDatum} from '../../components/charts/ParetoDatum';
 import {EvaluatorServiceInformation} from '../../commons/plugins/EvaluatorServiceInformation';
@@ -20,8 +20,8 @@ import {Project} from '../../commons/domain/Project';
 import {ProjectManager} from '../../commons/purifinity/ProjectManager';
 import {EvaluatorStore} from '../../commons/purifinity/EvaluatorStore';
 import {ProjectRunMenuComponent} from './project-run-menu.component';
-import {TreeTableNode} from '../../commons/treetable/TreeTableNode';
-import {TreeTableData} from '../../commons/treetable/TreeTableData';
+import {TreeTableNode} from '../../commons/tables/TreeTableNode';
+import {TreeTableData} from '../../commons/tables/TreeTableData';
 import {TableColumnHeader} from '../../commons/tables/TableColumnHeader';
 import {TableCell} from '../../commons/tables/TableCell';
 
@@ -142,13 +142,13 @@ export class ProjectRunMetricsComponent {
             component.codeRangeTypes.sort();
             component.metrics = data;
             component.applyMetricsToFileTree(component.metricsTreeTable.root, component.metrics, evaluator.parameters);
-            component.metricsTreeTable.columnHeaders = [{ name: "Name", tooltip: "Name of file or folder" }];
+            component.metricsTreeTable.columnHeaders = [new TableColumnHeader("Name", "Name of file or folder")];
             evaluator.parameters.forEach(function(parameter) {
                 let name = parameter.name;
                 if (parameter.unit) {
                     name += " [" + parameter.unit + "]";
                 }
-                component.metricsTreeTable.columnHeaders.push({ name: name, tooltip: parameter.description });
+                component.metricsTreeTable.columnHeaders.push(new TableColumnHeader(name, parameter.description));
             });
             component.evaluator = evaluator;
         }, function(response: Response) {

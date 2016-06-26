@@ -9,6 +9,7 @@ import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreExceptio
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.Classification;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.RunIssues;
+import com.puresoltechnologies.purifinity.evaluation.domain.issues.SingleIssue;
 import com.puresoltechnologies.purifinity.evaluation.domain.metrics.RunMetrics;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.issues.EvaluatorIssuesStore;
 import com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics.EvaluatorMetricsStore;
@@ -28,8 +29,29 @@ public class EvaluatorStoreRestService implements EvaluatorStoreRestInterface {
     }
 
     @Override
-    public Collection<RunIssues> getRunIssues(String projectId, long runId) throws EvaluationStoreException {
+    public Collection<SingleIssue> getRunIssues(String projectId, long runId) throws EvaluationStoreException {
 	return evaluatorIssuesStore.readRunResults(projectId, runId);
+    }
+
+    @Override
+    public Collection<SingleIssue> getRunArchitectureIssues(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return evaluatorIssuesStore.readRunResults(projectId, runId, Classification.ARCHITECTURE_ISSUE);
+    }
+
+    @Override
+    public Collection<SingleIssue> getRunDesignIssues(String projectId, long runId) throws EvaluationStoreException {
+	return evaluatorIssuesStore.readRunResults(projectId, runId, Classification.DESIGN_ISSUE);
+    }
+
+    @Override
+    public Collection<SingleIssue> getRunDefectsIssues(String projectId, long runId) throws EvaluationStoreException {
+	return evaluatorIssuesStore.readRunResults(projectId, runId, Classification.DEFECT);
+    }
+
+    @Override
+    public Collection<SingleIssue> getRunStyleIssues(String projectId, long runId) throws EvaluationStoreException {
+	return evaluatorIssuesStore.readRunResults(projectId, runId, Classification.STYLE_ISSUE);
     }
 
     @Override

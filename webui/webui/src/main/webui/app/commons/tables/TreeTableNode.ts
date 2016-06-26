@@ -1,4 +1,4 @@
-import {TableCell} from '../tables/TableCell';
+import {TableCell} from './TableCell';
 
 /**
   * This class represents a tree or node of a tree table tree.
