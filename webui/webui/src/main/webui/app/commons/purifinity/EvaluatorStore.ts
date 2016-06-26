@@ -4,6 +4,7 @@ import {Response} from 'angular2/http';
 import {PurifinityServerConnector} from './PurifinityServerConnector';
 import {RunMetrics} from '../domain/metrics/RunMetrics';
 import {RunIssues} from '../domain/issues/RunIssues';
+import {SingleIssue} from '../domain/issues/SingleIssue';
 
 @Injectable()
 export class EvaluatorStore {
@@ -35,6 +36,54 @@ export class EvaluatorStore {
             }, error
         );
 
+    }
+
+    getRunArchitectureIssues(projectId: string, runId: string, success: (data: SingleIssue[]) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId
+            + "/runs/" + runId
+            + "/issues/types/architecure", function(response: Response) {
+                let data: SingleIssue[] = response.json();
+                success(data);
+            }, error
+        );
+    }
+
+    getRunDesignIssues(projectId: string, runId: string, success: (data: SingleIssue[]) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId
+            + "/runs/" + runId
+            + "/issues/types/design", function(response: Response) {
+                let data: SingleIssue[] = response.json();
+                success(data);
+            }, error
+        );
+    }
+
+    getRunDefectIssues(projectId: string, runId: string, success: (data: SingleIssue[]) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId
+            + "/runs/" + runId
+            + "/issues/types/defect", function(response: Response) {
+                let data: SingleIssue[] = response.json();
+                success(data);
+            }, error
+        );
+    }
+
+    getRunStyleIssues(projectId: string, runId: string, success: (data: SingleIssue[]) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId
+            + "/runs/" + runId
+            + "/issues/types/style", function(response: Response) {
+                let data: SingleIssue[] = response.json();
+                success(data);
+            }, error
+        );
     }
 
     getRunIssueSummaryBySeverity(projectId: string, runId: string, success: (data: any) => void,

@@ -11,6 +11,10 @@ export class TableRow {
     constructor(private columnHeaders: TableColumnHeader[]) {
     }
 
+    public addCell(cell: TableCell): void {
+        this.cells.push(cell);
+    }
+
     public getCells(): TableCell[] {
         return this.cells;
     }

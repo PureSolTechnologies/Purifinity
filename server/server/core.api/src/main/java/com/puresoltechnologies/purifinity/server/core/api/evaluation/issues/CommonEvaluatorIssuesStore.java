@@ -116,5 +116,6 @@ public interface CommonEvaluatorIssuesStore
     public Map<Severity, Integer> getRunIssueStyleSeverities(String projectId, long runId)
 	    throws EvaluationStoreException;
 
-    public Collection<SingleIssue> readRunResults(String projectId, long runId, Classification classification);
+    public Collection<SingleIssue> readRunResults(String projectId, long runId, Classification classification)
+	    throws EvaluationStoreException;
 }
