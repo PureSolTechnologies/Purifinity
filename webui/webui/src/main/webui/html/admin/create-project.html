@@ -41,7 +41,11 @@
 				<td>{{property.description}}</td>
 			</tr>
 		</tbody>
-	</table>
+	</table><br/>
+	<label for="preAnalysisScript"
+		title="Path to the pre-analysis script which is called before each analysis run.">Path to pre-analysis script:</label><br />
+	<input id="preAnalysisScript" type="text" [(ngModel)]="preAnalysisScript"
+		class="form-control" placeholder="Pre-analysis-script" />
 	<h2>Source File Filter</h2>
 	<p>The directory and file includes and excludes defined which files
 		are to be analyzed and which to be neglected. Include patterns always

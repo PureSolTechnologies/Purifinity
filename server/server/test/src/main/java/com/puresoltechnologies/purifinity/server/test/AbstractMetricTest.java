@@ -40,8 +40,7 @@ public abstract class AbstractMetricTest extends AbstractServerTest {
     @BeforeClass
     public static void cleanCodeAnalysisDirectory() {
 	File codeAnalysisDirectory = null;
-	assertNotNull("Storage directory is not available.",
-		codeAnalysisDirectory);
+	assertNotNull("Storage directory is not available.", codeAnalysisDirectory);
 	// if (codeAnalysisDirectory.exists()) {
 	// DirectoryUtilities.deleteDirectoryRecursivly(codeAnalysisDirectory);
 	// }
@@ -51,8 +50,7 @@ public abstract class AbstractMetricTest extends AbstractServerTest {
     public void checkEnvironment() {
 	assertNotNull("Analysis store is null!", analysisStore);
 
-	Collection<AnalyzerServiceInformation> languages = analyzerServiceManager
-		.getServices();
+	Collection<AnalyzerServiceInformation> languages = analyzerServiceManager.getServices();
 	assertNotNull("The list of languages is null!", languages);
 	assertTrue("No programming languages found!", languages.size() > 0);
     }
@@ -62,15 +60,12 @@ public abstract class AbstractMetricTest extends AbstractServerTest {
     private final File directory;
     private final FileSearchConfiguration fileSearchConfiguration;
 
-    public AbstractMetricTest(File directory,
-	    FileSearchConfiguration fileSearchConfiguration) {
+    public AbstractMetricTest(File directory, FileSearchConfiguration fileSearchConfiguration) {
 	super();
 	assertNotNull("Project directory is null.", directory);
-	assertTrue("Project directory '" + directory + "' is not existing.",
-		directory.exists());
+	assertTrue("Project directory '" + directory + "' is not existing.", directory.exists());
 	this.directory = directory;
-	System.out.println("Test test project directory is '" + directory
-		+ "'...");
+	System.out.println("Test test project directory is '" + directory + "'...");
 	assertNotNull("Search configuration is null.", fileSearchConfiguration);
 	this.fileSearchConfiguration = fileSearchConfiguration;
     }
@@ -79,18 +74,15 @@ public abstract class AbstractMetricTest extends AbstractServerTest {
     public final void setup() throws AnalysisStoreException {
 	Properties properties = new Properties();
 	properties.setProperty("directory", directory.getPath());
-	analysisProjectInformation = analysisStore.createAnalysisProject(
-		"test_project", new AnalysisProjectSettings("TestProject",
-			"This project was created for testing purposes.",
+	analysisProjectInformation = analysisStore.createAnalysisProject("test_project",
+		new AnalysisProjectSettings("TestProject", "This project was created for testing purposes.", null,
 			fileSearchConfiguration, properties));
-	assertNotNull("Analysis project was not created and is null.",
-		analysisProjectInformation);
+	assertNotNull("Analysis project was not created and is null.", analysisProjectInformation);
     }
 
     @After
     public final void destroy() throws AnalysisStoreException {
-	analysisStore.removeAnalysisProject(analysisProjectInformation
-		.getProjectId());
+	analysisStore.removeAnalysisProject(analysisProjectInformation.getProjectId());
     }
 
     protected AnalysisProjectInformation getAnalysisProject() {

@@ -55,11 +55,11 @@ export class ProjectManager {
     }
 
     updateProjectSettings(identifier: string,
-        settings: ProjectSettings,
+        settings: any,
         success: (data: any, status: string) => void,
         error: (response: Response) => void) {
         return this.purifinityServerConnector.post("/purifinityserver/rest/projectmanager/projects/" + identifier, settings,
-            response => success(response.json(), response.statusText), error);
+            response => success(response, response.statusText), error);
     }
 
     deleteProject(identifier: string,

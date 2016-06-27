@@ -23,6 +23,7 @@ export class CreateProjectComponent {
     public id: string = "";
     public name: string = "";
     public description: string = "";
+    public preAnalysisScript: string ="";
     public directoryIncludes: string = "";
     public directoryExcludes: string = "bin\nbuild\ntarget\n.*";
     public fileIncludes: string = "";
@@ -77,6 +78,7 @@ export class CreateProjectComponent {
         let projectSettings = {
             "name": this.name,
             "description": this.description,
+            "preAnalysisScript": this.preAnalysisScript,
             "fileSearchConfiguration": {
                 "locationIncludes": this.directoryIncludes.split("\n"),
                 "locationExcludes": this.directoryExcludes.split("\n"),

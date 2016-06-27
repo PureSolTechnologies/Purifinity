@@ -41,6 +41,7 @@ export class EditProjectComponent {
     private projectId: string;
     name: string = "";
     description: string = "";
+    preAnalysisScript: string = "";
     repositoryId: string = "";
     repositoryProperties: any = [];
     directoryIncludes: string = "";
@@ -123,6 +124,7 @@ export class EditProjectComponent {
             editProjectComponent.projectId = project.information.projectId;
             editProjectComponent.name = project.settings.name;
             editProjectComponent.description = project.settings.description;
+            editProjectComponent.preAnalysisScript = project.settings.preAnalysisScript;
             editProjectComponent.repositoryId = project.settings.repository["repository.id"];
             editProjectComponent.fileIncludes = "";
             project.settings.fileSearchConfiguration.fileIncludes.forEach(function(line: string, num: number) {
@@ -165,17 +167,26 @@ export class EditProjectComponent {
     };
 
     ok(): void {
-        let currentProject: any = {};
-        currentProject.settings.name = this.name;
-        currentProject.settings.description = this.description;
-        currentProject.settings.repository["repository.id"] = this.repositoryId;
-        currentProject.settings.repository = this.repositoryProperties;
-        currentProject.settings.fileSearchConfiguration.fileIncludes = this.fileIncludes.split("\n");
-        currentProject.settings.fileSearchConfiguration.fileExcludes = this.fileExcludes.split("\n");
-        currentProject.settings.fileSearchConfiguration.locationIncludes = this.directoryIncludes.split("\n");
-        currentProject.settings.fileSearchConfiguration.locationExcludes = this.directoryExcludes.split("\n");
-        currentProject.settings.fileSearchConfiguration.ignoreHidden = this.ignoreHidden;
-        this.projectManager.updateProjectSettings(this.projectId, currentProject.settings, function(data: Project, status) {
+        let projectSettings = {
+            "name": this.name,
+            "description": this.description,
+            "preAnalysisScript": this.preAnalysisScript,
+            "fileSearchConfiguration": {
+                "locationIncludes": this.directoryIncludes.split("\n"),
+                "locationExcludes": this.directoryExcludes.split("\n"),
+                "fileIncludes": this.fileIncludes.split("\n"),
+                "fileExcludes": this.fileExcludes.split("\n"),
+                "ignoreHidden": this.ignoreHidden
+            },
+            "repository": {
+                "repository.id": this.repositoryId
+            }
+        };
+        for (var key in this.repositoryProperties) {
+            projectSettings.repository[key] = this.repositoryProperties[key];
+        }
+
+        this.projectManager.updateProjectSettings(this.projectId, projectSettings, function(data: Project, status) {
         }, function(response: Response) { });
     };
 

@@ -60,6 +60,7 @@ public class AnalysisServiceDatabaseTransformator implements ComponentTransforma
 			+ "project_id varchar not null, " //
 			+ "name varchar, "//
 			+ "description varchar, "//
+			+ "pre_analysis_script varchar," //
 			+ "file_includes varchar array, " //
 			+ "file_excludes varchar array, " //
 			+ "location_includes varchar array, "//

@@ -16,7 +16,8 @@
 				evolves.</p>
 			<label for="projectIdentifier">Identifier:</label> <br />
 			<input id="projectIdentifier" type="text" data-ng-disabled="true"
-				[(ngModel)]="projectId" class="form-control" placeholder="Identifier"
+				[(ngModel)]="projectId" class="form-control"
+				placeholder="Identifier"
 				title="Id of project to be used as identification within Purifinity. This setting cannot be changed after project creation and is shown as rerfernce only."
 				required /> <!--  --> <br />
 			<label for="projectName">Name:</label> <br />
@@ -28,7 +29,15 @@
 			<textarea id="projectDescription" cols="20" rows="5"
 				[(ngModel)]="description" class="form-control"
 				placeholder="Description"
-				title="Description of project to be used in reports."></textarea> <br />
+				title="Description of project to be used in reports."></textarea>
+			<br />
+			<label for="preAnalysisScript"
+				title="Path to the pre-analysis script which is called before each analysis run.">Path
+				to pre-analysis script:</label>
+			<br />
+			<input id="preAnalysisScript" type="text"
+				[(ngModel)]="preAnalysisScript" class="form-control"
+				placeholder="Pre-analysis-script" /> <br />
 			<button class="btn btn-primary" (click)="ok()">OK</button>
 			<button class="btn btn-default" (click)="cancel()">Cancel</button>
 			</panel> </tab> <tab heading="Repository"> <panel title="Repository">

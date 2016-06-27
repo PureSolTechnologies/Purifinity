@@ -44,8 +44,8 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.AnalysisRunFileTree;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.ProjectManager;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileInformation;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.ProjectManager;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.AnalysisServiceConnection;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisProjectVertex;
 import com.puresoltechnologies.purifinity.server.core.impl.analysis.store.xo.AnalysisRunVertex;
@@ -148,27 +148,30 @@ public class ProjectManagerBean implements ProjectManager {
 
     private void storeProjectAnalysisSettings(String projectId, AnalysisProjectSettings settings)
 	    throws AnalysisStoreException {
-	try (PreparedStatement preparedStatement = connection.prepareStatement(
-		"UPSERT INTO " + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " (project_id, name, description, "
-			+ "file_includes, file_excludes, " + "location_includes, location_excludes, "
-			+ "ignore_hidden, repository_location) " + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+	try (PreparedStatement preparedStatement = connection
+		.prepareStatement("UPSERT INTO " + HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE
+			+ " (project_id, name, description, pre_analysis_script, " + "file_includes, file_excludes, "
+			+ "location_includes, location_excludes, " + "ignore_hidden, repository_location) "
+			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    String name = settings.getName();
 	    String description = settings.getDescription();
+	    File preAnalysisScript = settings.getPreAnalysisScript();
 	    FileSearchConfiguration fileSearchConfiguration = settings.getFileSearchConfiguration();
 
 	    preparedStatement.setString(1, projectId);
 	    preparedStatement.setString(2, name);
 	    preparedStatement.setString(3, description);
-	    preparedStatement.setArray(4,
-		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getFileIncludes().toArray()));
+	    preparedStatement.setString(4, preAnalysisScript.getPath());
 	    preparedStatement.setArray(5,
-		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getFileExcludes().toArray()));
+		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getFileIncludes().toArray()));
 	    preparedStatement.setArray(6,
-		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getLocationIncludes().toArray()));
+		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getFileExcludes().toArray()));
 	    preparedStatement.setArray(7,
+		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getLocationIncludes().toArray()));
+	    preparedStatement.setArray(8,
 		    connection.createArrayOf("VARCHAR", fileSearchConfiguration.getLocationExcludes().toArray()));
-	    preparedStatement.setBoolean(8, fileSearchConfiguration.isIgnoreHidden());
-	    preparedStatement.setString(9, JSONSerializer.toJSONString(settings.getRepository()));
+	    preparedStatement.setBoolean(9, fileSearchConfiguration.isIgnoreHidden());
+	    preparedStatement.setString(10, JSONSerializer.toJSONString(settings.getRepository()));
 	    preparedStatement.execute();
 	    connection.commit();
 	} catch (SQLException | IOException e) {
@@ -259,7 +262,7 @@ public class ProjectManagerBean implements ProjectManager {
     @Override
     public AnalysisProjectSettings readAnalysisProjectSettings(String projectId) throws AnalysisStoreException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement(
-		"SELECT name, description, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location FROM "
+		"SELECT name, description, pre_analysis_script, file_includes, file_excludes, location_includes, location_excludes, ignore_hidden, repository_location FROM "
 			+ HBaseElementNames.ANALYSIS_PROJECT_SETTINGS_TABLE + " WHERE project_id=?")) {
 	    preparedStatement.setString(1, projectId);
 	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -268,6 +271,8 @@ public class ProjectManagerBean implements ProjectManager {
 		}
 		String name = resultSet.getString("name");
 		String description = resultSet.getString("description");
+		String preAnalysisScriptString = resultSet.getString("pre_analysis_script");
+		File preAnalysisScript = preAnalysisScriptString != null ? new File(preAnalysisScriptString) : null;
 		List<String> fileIncludes = HBaseHelper.getList(resultSet, "file_includes", String.class);
 		List<String> fileExcludes = HBaseHelper.getList(resultSet, "file_excludes", String.class);
 		List<String> locationIncludes = HBaseHelper.getList(resultSet, "location_includes", String.class);
@@ -277,7 +282,8 @@ public class ProjectManagerBean implements ProjectManager {
 			locationExcludes, fileIncludes, fileExcludes, ignoreHidden);
 		Properties repositoryLocation = JSONSerializer
 			.fromJSONString(resultSet.getString("repository_location"), Properties.class);
-		return new AnalysisProjectSettings(name, description, fileSearchConfiguration, repositoryLocation);
+		return new AnalysisProjectSettings(name, description, preAnalysisScript, fileSearchConfiguration,
+			repositoryLocation);
 	    }
 	} catch (SQLException | IOException e) {
 	    throw new AnalysisStoreException("Could not read project settings.", e);
