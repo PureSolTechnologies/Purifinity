@@ -37,7 +37,7 @@ public interface EvaluatorStoreRestInterface {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("projects/{project_id}/runs/{run_id}/issues/types/archiecture")
+    @Path("projects/{project_id}/runs/{run_id}/issues/types/architecture")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
     public Collection<SingleIssue> getRunArchitectureIssues(@PathParam("project_id") String projectId,
 	    @PathParam("run_id") long runId) throws EvaluationStoreException;

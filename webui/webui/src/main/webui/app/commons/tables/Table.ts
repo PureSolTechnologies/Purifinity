@@ -33,7 +33,7 @@ export class Table implements TableModel {
         this.columns.push(columnHeader);
     }
 
-    public getColumnHeaders(): TableColumnHeader[] {
+    public getColumns(): TableColumnHeader[] {
         return this.columns;
     }
 

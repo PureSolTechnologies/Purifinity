@@ -1,5 +1,6 @@
 import {TableCell} from './TableCell';
 import {TableRow} from './TableRow';
+import {TableColumnHeader} from './TableColumnHeader';
 import {VariableType} from '../VariableType';
 
 export interface TableModel {
@@ -82,5 +83,7 @@ export interface TableModel {
     setValueAt(value: any, rowIndex: number, columnIndex: number): void;
 
     getRows(): TableRow[];
+    
+    getColumns(): TableColumnHeader[];
 
 }

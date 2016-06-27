@@ -67,7 +67,7 @@ export class EvaluatorStore {
         this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
             + projectId
             + "/runs/" + runId
-            + "/issues/types/defect", function(response: Response) {
+            + "/issues/types/defects", function(response: Response) {
                 let data: SingleIssue[] = response.json();
                 success(data);
             }, error
