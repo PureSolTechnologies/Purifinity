@@ -38,7 +38,7 @@ public class WriteStatisticsBatchlet implements Batchlet {
 	Date stopTime = new Date();
 	analysisStore.updateAnalysisRunInformation(analysisProject.getInformation().getProjectId(),
 		analysisRunInformation.getRunId(), (stopTime.getTime() - startTime.getTime()));
-	return "SUCCESS";
+	return AnalysisJobExitString.SUCCESSFUL.get();
     }
 
     @Override

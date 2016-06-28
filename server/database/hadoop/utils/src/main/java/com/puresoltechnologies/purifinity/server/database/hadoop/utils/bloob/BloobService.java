@@ -23,9 +23,7 @@ import com.puresoltechnologies.purifinity.server.database.hadoop.utils.HadoopCli
 @Singleton
 public class BloobService {
 
-    private static final String FILE_DIRECTORY = HadoopClientHelper.PURIFINITY_DIRECTORY + "/files";
-
-    private final Path filePath = new Path(FILE_DIRECTORY);
+    private final Path filePath = new Path(HadoopClientHelper.getFilesPath());
 
     @Inject
     private Logger logger;

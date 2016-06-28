@@ -52,9 +52,9 @@ public class EvaluationBatchlet implements Batchlet {
 	AnalysisRun analysisRun = new AnalysisRun(analysisRunInformation, analysisFileTree);
 	evaluate(analysisRun);
 	if (stopRequested) {
-	    return "ABORT";
+	    return AnalysisJobExitString.ABORT.get();
 	}
-	return "SUCCESS";
+	return AnalysisJobExitString.SUCCESSFUL.get();
     }
 
     /**

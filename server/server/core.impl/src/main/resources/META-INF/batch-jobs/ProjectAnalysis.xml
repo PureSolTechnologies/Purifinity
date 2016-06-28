@@ -7,9 +7,14 @@
 		<property name="project_name" value="#{jobParameters['project_name']}" />
 	</properties>
 
-	<step id="AnalysisStart" next="ProjectFilesStorage">
+	<step id="AnalysisStart" next="RunPreAnalysisScript">
 		<batchlet ref="CreateAnalysisRunBatchlet" />
 		<end on="ALREADY QUEUED" />
+	</step>
+
+	<step id="RunPreAnalysisScript" next="ProjectFilesStorage">
+		<batchlet ref="RunPreAnalysisScriptBatchlet" />
+		<end on="ABORT" />
 	</step>
 
 	<step id="ProjectFilesStorage" next="FileTreeCreation">
@@ -22,6 +27,7 @@
 
 	<step id="FileTreeCreation" next="FileAnalysis">
 		<batchlet ref="FileTreeCreationBatchlet" />
+		<end on="ABORT" />
 	</step>
 
 	<step id="FileAnalysis" next="ProjectEvaluation">
@@ -32,31 +38,23 @@
 		</chunk>
 	</step>
 
-	<!-- split id="AnalysisSplit" next="ProjectEvaluation">
-		<flow id="FileTreeCreationFlow">
-			<step id="FileTreeCreation">
-				<batchlet ref="FileTreeCreationBatchlet" />
-			</step>
-		</flow>
-		<flow id="FileAnalysisFlow">
-			<step id="FileAnalysis">
-				<chunk checkpoint-policy="item" item-count="10">
-					<reader ref="AnalysisItemReader" />
-					<processor ref="AnalysisItemProcessor" />
-					<writer ref="AnalysisItemWriter" />
-				</chunk>
-			</step>
-		</flow>
-	</split -->
+	<!-- split id="AnalysisSplit" next="ProjectEvaluation"> <flow id="FileTreeCreationFlow"> 
+		<step id="FileTreeCreation"> <batchlet ref="FileTreeCreationBatchlet" /> 
+		</step> </flow> <flow id="FileAnalysisFlow"> <step id="FileAnalysis"> <chunk 
+		checkpoint-policy="item" item-count="10"> <reader ref="AnalysisItemReader" 
+		/> <processor ref="AnalysisItemProcessor" /> <writer ref="AnalysisItemWriter" 
+		/> </chunk> </step> </flow> </split -->
 
 	<step id="ProjectEvaluation" next="WriteStatistics">
 		<!-- chunk checkpoint-policy="item" item-count="10"> <reader ref="EvaluationItemReader" 
 			/> <processor ref="EvaluationItemProcessor" /> <writer ref="EvaluationItemWriter" 
 			/> </chunk -->
 		<batchlet ref="EvaluationBatchlet" />
+		<end on="ABORT" />
 	</step>
 
 	<step id="WriteStatistics">
 		<batchlet ref="WriteStatisticsBatchlet" />
+		<end on="ABORT" />
 	</step>
 </job>

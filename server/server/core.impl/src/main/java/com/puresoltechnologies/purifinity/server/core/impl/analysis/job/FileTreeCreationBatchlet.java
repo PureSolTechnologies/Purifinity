@@ -56,7 +56,7 @@ public class FileTreeCreationBatchlet implements Batchlet {
 
 	analysisJobContext.setAnalysisRunFileTree(analysisRunFileTree);
 	logger.info("analysis run file tree created and stored.");
-	return "SUCCESS";
+	return AnalysisJobExitString.SUCCESSFUL.get();
     }
 
     @Override

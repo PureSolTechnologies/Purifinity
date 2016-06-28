@@ -39,6 +39,7 @@ public class HadoopTransformator implements ComponentTransformator {
     public Set<TransformationSequence> getSequences() {
 	Set<TransformationSequence> sequences = new HashSet<>();
 	sequences.add(migrateVersion0_4_0());
+	sequences.add(migrateVersion0_5_0());
 	return sequences;
     }
 
@@ -55,6 +56,20 @@ public class HadoopTransformator implements ComponentTransformator {
 
 	sequence.appendTransformation(new HadoopCreateDirectoryStep(sequence, new Path("/apps/Purifinity/files"),
 		new FsPermission("755"), "Rick-Rainer Ludwig", "Creating Purifinity's raw file data directory."));
+
+	return sequence;
+    }
+
+    private TransformationSequence migrateVersion0_5_0() {
+	Version startVersion = new Version(0, 4, 0);
+	Version targetVersion = new Version(0, 5, 0);
+	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
+	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
+
+	HadoopTransformationSequence sequence = new HadoopTransformationSequence(new File("/opt/hadoop"), metadata);
+
+	sequence.appendTransformation(new HadoopCreateDirectoryStep(sequence, new Path("/apps/Purifinity/projects"),
+		new FsPermission("755"), "Rick-Rainer Ludwig", "Creating Purifinity's home directory."));
 
 	return sequence;
     }

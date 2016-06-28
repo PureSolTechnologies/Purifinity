@@ -26,4 +26,19 @@ public class HadoopClientHelper {
 	return hadoopConfiguration;
     }
 
+    public static String getFilesPath() {
+	return PURIFINITY_DIRECTORY + "/files";
+    }
+
+    public static String getProjectsPath() {
+	return PURIFINITY_DIRECTORY + "/projects";
+    }
+
+    public static String getProjectPath(String projectId) {
+	return PURIFINITY_DIRECTORY + "/projects/" + projectId;
+    }
+
+    public static String getProjectRunPath(String projectId, long runId) {
+	return PURIFINITY_DIRECTORY + "/projects/" + projectId + "/runs/" + runId;
+    }
 }

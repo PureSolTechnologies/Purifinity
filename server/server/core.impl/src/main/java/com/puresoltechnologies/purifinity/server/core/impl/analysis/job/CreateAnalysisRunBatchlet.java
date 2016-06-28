@@ -72,7 +72,7 @@ public class CreateAnalysisRunBatchlet implements Batchlet {
 	    jobContext
 		    .setTransientUserData(new AnalysisJobContext(new Date(), analysisProject, analysisRunInformation));
 
-	    return "SUCCESSFUL";
+	    return AnalysisJobExitString.SUCCESSFUL.get();
 	} catch (AnalysisStoreException e) {
 	    // An issue occurred, re-queue the request.
 	    eventLogger.logEvent(AnalysisEvents.createGeneralError(e));
