@@ -1,6 +1,7 @@
 package com.puresoltechnologies.purifinity.server.rest.api;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 
 import javax.ws.rs.GET;
@@ -12,12 +13,20 @@ import javax.ws.rs.core.MediaType;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
 import com.puresoltechnologies.parsers.grammar.Grammar;
+import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.server.accountmanager.core.api.SupportedRoles;
 import com.puresoltechnologies.purifinity.server.common.rest.security.RolesAllowed;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 
 @Path("analysis")
 public interface AnalysisRestInterface {
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("projects/{project_id}/runs/{run_id}/preanalysis/output")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public InputStream getPreAnalysisOutput(@PathParam("project_id") String projectId, @PathParam("run_id") long runId)
+	    throws EvaluationStoreException;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

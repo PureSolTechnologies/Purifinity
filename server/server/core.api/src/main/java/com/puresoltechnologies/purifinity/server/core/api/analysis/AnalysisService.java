@@ -1,5 +1,7 @@
 package com.puresoltechnologies.purifinity.server.core.api.analysis;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
@@ -33,5 +35,7 @@ public interface AnalysisService {
     public boolean isEnabled(String analyzerId);
 
     public void setActive(String analyzerId, boolean enabled);
+
+    public InputStream getPreAnalysisOutput(String projectId, long runId) throws IOException;
 
 }

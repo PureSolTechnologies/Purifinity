@@ -15,6 +15,7 @@ import {TreeTableData} from '../../commons/tables/TreeTableData';
 import {TreeTableNode} from '../../commons/tables/TreeTableNode';
 import {ProjectRunMenuComponent} from './project-run-menu.component';
 import {ProjectManager} from '../../commons/purifinity/ProjectManager';
+import {AnalysisStore} from '../../commons/purifinity/AnalysisStore';
 import {ProgressIndicatorComponent} from '../../components/progress-indicator.component';
 
 import {TabSetComponent} from '../../components/tabs/tabset.component';
@@ -49,8 +50,9 @@ export class ProjectRunAnalysisComponent {
     private run = undefined;
     analysisFileTree: TreeTableData;
     private hashIds: { [hashId: string]: string[] } = {};
+    preAnalysisOutput: string = "";
 
-    constructor(private routeParams: RouteParams, private projectManager: ProjectManager) {
+    constructor(private routeParams: RouteParams, private projectManager: ProjectManager, private analysisStore: AnalysisStore) {
         this.projectId = routeParams.get('projectId');
         this.runId = routeParams.get('runId');
 
@@ -85,6 +87,11 @@ export class ProjectRunAnalysisComponent {
             );
         }, function(response: Response) {
         });
+        analysisStore.getPreAnalysisScriptOutput(this.projectId, this.runId,
+            function(output: string) {
+                component.preAnalysisOutput = output;
+            },
+            function(response: Response) { });
     }
 
     convertAnalysisFileTree(
@@ -127,7 +134,7 @@ export class ProjectRunAnalysisComponent {
             treeTableTree.imageUrl = "images/icons/FatCow_Icons16x16/folder.png";
         } else {
             treeTableTree.imageUrl = "images/icons/FatCow_Icons16x16/document_green.png";
-            treeTableTree.routerLink = ['FileSummary', {hashId: treeTableTree.id}];
+            treeTableTree.routerLink = ['FileSummary', { hashId: treeTableTree.id }];
         }
         return treeTableTree;
     }

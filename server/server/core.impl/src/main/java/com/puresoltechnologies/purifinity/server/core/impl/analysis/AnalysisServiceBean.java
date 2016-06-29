@@ -16,6 +16,8 @@ import javax.batch.runtime.StepExecution;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.domain.ConfigurationParameter;
@@ -35,6 +37,7 @@ import com.puresoltechnologies.purifinity.server.core.api.analysis.jobs.JobStepS
 import com.puresoltechnologies.purifinity.server.core.api.analysis.jobs.PurifinityJobStates;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.AnalysisStoreException;
+import com.puresoltechnologies.purifinity.server.database.hadoop.utils.HadoopClientHelper;
 import com.puresoltechnologies.purifinity.server.domain.analysis.AnalyzerServiceInformation;
 
 @Stateless
@@ -51,6 +54,9 @@ public class AnalysisServiceBean implements AnalysisService {
 
     @Inject
     private AnalyzerServiceManager analyzerRegistration;
+
+    @Inject
+    private FileSystem fileSystem;
 
     @Override
     public void triggerRunJob(String projectId) throws AnalysisStoreException {
@@ -80,7 +86,7 @@ public class AnalysisServiceBean implements AnalysisService {
 		String projectId = jobExecution.getJobParameters().getProperty("project_id");
 		String projectName = jobExecution.getJobParameters().getProperty("project_name");
 		List<StepExecution> stepExecutions = jobOperator.getStepExecutions(jobId);
-		List<JobStepState> stepStates = new ArrayList<JobStepState>();
+		List<JobStepState> stepStates = new ArrayList<>();
 		for (StepExecution stepExecution : stepExecutions) {
 		    if (stepExecution.getBatchStatus() == BatchStatus.STARTED) {
 			String stepName = stepExecution.getStepName();
@@ -151,5 +157,11 @@ public class AnalysisServiceBean implements AnalysisService {
     @Override
     public void setActive(String analyzerId, boolean active) {
 	analyzerRegistration.setActive(analyzerId, active);
+    }
+
+    @Override
+    public InputStream getPreAnalysisOutput(String projectId, long runId) throws IOException {
+	Path stdoutPath = new Path(HadoopClientHelper.getPreAnalysisScriptStdoutFile(projectId, runId));
+	return fileSystem.open(stdoutPath);
     }
 }

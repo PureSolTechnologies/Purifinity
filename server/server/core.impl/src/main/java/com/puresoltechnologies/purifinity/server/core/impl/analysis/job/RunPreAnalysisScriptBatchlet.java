@@ -49,8 +49,9 @@ public class RunPreAnalysisScriptBatchlet implements Batchlet {
 	    throw new RuntimeException("Could not run pre-analysis script due to missing projects directory in HDFS.");
 	}
 
-	String projectRunPathString = HadoopClientHelper.getProjectRunPath(analysisRunInformation.getProjectId(),
-		analysisRunInformation.getRunId());
+	String projectId = analysisRunInformation.getProjectId();
+	long runId = analysisRunInformation.getRunId();
+	String projectRunPathString = HadoopClientHelper.getProjectRunPath(projectId, runId);
 	Path projectRunPath = new Path(projectRunPathString);
 	if (!fileSystem.exists(projectRunPath)) {
 	    fileSystem.mkdirs(projectRunPath);
@@ -62,15 +63,20 @@ public class RunPreAnalysisScriptBatchlet implements Batchlet {
 	    return AnalysisJobExitString.ABORT.get();
 	}
 	Process process = processBuilder.start();
-	Path stdoutPath = new Path(projectRunPath + "preAnalysisScript.stdout");
+	Path stdoutPath = new Path(HadoopClientHelper.getPreAnalysisScriptStdoutFile(projectId, runId));
 	try (BufferedInputStream stdoutInput = new BufferedInputStream(process.getInputStream(), BUFFER_SIZE);
 		BufferedOutputStream stdoutOutput = new BufferedOutputStream(fileSystem.create(stdoutPath),
 			BUFFER_SIZE)) {
 	    byte[] buffer = new byte[BUFFER_SIZE];
 	    while (process.isAlive()) {
 		int available = stdoutInput.available();
-		stdoutInput.read(buffer, 0, available);
-		stdoutOutput.write(buffer, 0, available);
+		if (available > 0) {
+		    if (available > BUFFER_SIZE) {
+			available = BUFFER_SIZE;
+		    }
+		    stdoutInput.read(buffer, 0, available);
+		    stdoutOutput.write(buffer, 0, available);
+		}
 	    }
 	    int available = stdoutInput.available();
 	    while (available > 0) {

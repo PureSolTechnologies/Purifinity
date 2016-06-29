@@ -35,10 +35,14 @@ public class HadoopClientHelper {
     }
 
     public static String getProjectPath(String projectId) {
-	return PURIFINITY_DIRECTORY + "/projects/" + projectId;
+	return getProjectsPath() + "/" + projectId;
     }
 
     public static String getProjectRunPath(String projectId, long runId) {
-	return PURIFINITY_DIRECTORY + "/projects/" + projectId + "/runs/" + runId;
+	return getProjectPath(projectId) + "/runs/" + runId;
+    }
+
+    public static String getPreAnalysisScriptStdoutFile(String projectId, long runId) {
+	return getProjectRunPath(projectId, runId) + "/preAnalysisScript.stdout";
     }
 }
