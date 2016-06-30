@@ -1,10 +1,13 @@
 package com.puresoltechnologies.purifinity.server.plugin.fortran2008.issues;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -114,11 +117,18 @@ public class GNUFortranEvaluator implements IssueEvaluator {
     }
 
     private void processPreAnalysisOutput(BufferedReader reader) throws IOException {
+	List<String> lineBuffer = new ArrayList<>();
+	File currentSource = null;
 	String line;
 	while ((line = reader.readLine()) != null) {
+	    lineBuffer.add(line);
 	    Matcher matcher = START_COMPILE_LINE_PATTERN.matcher(line);
 	    if (matcher.find()) {
-		logger.info("Found start: " + line);
+		lineBuffer.clear();
+		currentSource = new File(matcher.group(1));
+	    } else if ((line.contains("Warning:")) && (currentSource != null)) {
+		logger.info("Found Warning for '" + currentSource + "': " + line + "\nbuffer: " + lineBuffer);
+		lineBuffer.clear();
 	    }
 	}
     }
