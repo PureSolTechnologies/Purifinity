@@ -17,17 +17,15 @@ import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
 
 @Singleton
 @Startup
-public class FortranDesignEvaluatorRegistration extends AbstractEvaluatorServiceRegistration {
+public class GNUFortranEvaluatorRegistration extends AbstractEvaluatorServiceRegistration {
 
     public static final String JNDI_ADDRESS = JndiUtils.createGlobalName("fortran2008.plugin",
-	    "com-puresoltechnologies-purifinity-plugins-fortran2008.ejb", Evaluator.class,
-	    FortranDesignEvaluator.class);
+	    "com-puresoltechnologies-purifinity-plugins-fortran2008.ejb", Evaluator.class, GNUFortranEvaluator.class);
     public static final EvaluatorServiceInformation INFORMATION = new EvaluatorServiceInformation(
-	    FortranDesignEvaluator.ID, FortranDesignEvaluator.NAME, EvaluatorType.DEFECTS,
-	    FortranDesignEvaluator.PLUGIN_VERSION, JNDI_ADDRESS, FortranDesignEvaluator.DESCRIPTION,
-	    FortranDesignEvaluator.CONFIGURATION_PARAMETERS, "/fortran2008.ui/index.jsf", "/fortran2008.ui/project.jsf",
-	    "/fortran2008.ui/run.jsf", FortranDesignEvaluator.CHARACTERISTICS, FortranDesignEvaluator.PARAMETERS,
-	    FortranDesignEvaluator.DEPENDENCIES);
+	    GNUFortranEvaluator.ID, GNUFortranEvaluator.NAME, EvaluatorType.DEFECTS, GNUFortranEvaluator.PLUGIN_VERSION,
+	    JNDI_ADDRESS, GNUFortranEvaluator.DESCRIPTION, GNUFortranEvaluator.CONFIGURATION_PARAMETERS,
+	    "/fortran2008.ui/index.jsf", "/fortran2008.ui/project.jsf", "/fortran2008.ui/run.jsf",
+	    GNUFortranEvaluator.CHARACTERISTICS, GNUFortranEvaluator.PARAMETERS, GNUFortranEvaluator.DEPENDENCIES);
 
     @PostConstruct
     @Lock(LockType.WRITE)
@@ -45,7 +43,7 @@ public class FortranDesignEvaluatorRegistration extends AbstractEvaluatorService
     @Override
     @Lock(LockType.READ)
     public String getName() {
-	return FortranDesignEvaluator.NAME;
+	return GNUFortranEvaluator.NAME;
     }
 
     @Override

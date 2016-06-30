@@ -11,7 +11,7 @@ import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
-import com.puresoltechnologies.purifinity.evaluation.api.defects.DefectEvaluator;
+import com.puresoltechnologies.purifinity.evaluation.api.issues.IssueEvaluator;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.DirectoryIssues;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.DirectoryIssuesImpl;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.FileIssues;
@@ -30,7 +30,7 @@ import com.puresoltechnologies.versioning.Version;
 
 public abstract class AbstractIssueEvaluator extends
 	AbstractEvaluator<FileIssues, FileIssuesImpl, DirectoryIssues, DirectoryIssuesImpl, ProjectIssues, ProjectIssuesImpl>
-	implements DefectEvaluator {
+	implements IssueEvaluator {
 
     private final EvaluatorIssuesStoreRemote designIssuesStore;
 
