@@ -29,7 +29,6 @@ import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRunInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
-import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeNameParameter;
 import com.puresoltechnologies.purifinity.evaluation.api.CodeRangeTypeParameter;
@@ -210,11 +209,11 @@ public class EvaluatorMetricsStoreBean extends AbstractEvaluatorStore
     }
 
     @Override
-    public void storeFileResults(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileMetrics metrics)
+    public void storeFileResults(AnalysisRun analysisRun, AnalysisInformation analysisInformation, FileMetrics metrics)
 	    throws EvaluationStoreException {
 	try {
-	    storeFileMetricsAsValues(analysisRun, codeAnalysis, metrics);
-	    storeFileResultsInBigTable(analysisRun, codeAnalysis, metrics);
+	    storeFileMetricsAsValues(analysisRun, analysisInformation.getHashId(), metrics);
+	    storeFileResultsInBigTable(analysisRun, analysisInformation, metrics);
 	    connection.commit();
 	} catch (SQLException e) {
 	    try {
@@ -226,7 +225,7 @@ public class EvaluatorMetricsStoreBean extends AbstractEvaluatorStore
 	}
     }
 
-    private void storeFileMetricsAsValues(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileMetrics metrics)
+    private void storeFileMetricsAsValues(AnalysisRun analysisRun, HashId hashId, FileMetrics metrics)
 	    throws SQLException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement("UPSERT INTO "
 		+ HBaseElementNames.EVALUATION_FILE_METRICS_TABLE + " (time, " + "hashid, " + "source_code_location, "
@@ -234,8 +233,6 @@ public class EvaluatorMetricsStoreBean extends AbstractEvaluatorStore
 		+ "parameter_name, " + "parameter_unit, " + "parameter_type, " + "parameter_description, "
 		+ "level_of_measurement, " + "metric) VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 	    Date time = metrics.getTime();
-	    AnalysisInformation analysisInformation = codeAnalysis.getAnalysisInformation();
-	    HashId hashId = analysisInformation.getHashId();
 	    SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
 	    String evaluatorId = metrics.getEvaluatorId();
 	    Version evaluatorVersion = metrics.getEvaluatorVersion();
@@ -285,10 +282,10 @@ public class EvaluatorMetricsStoreBean extends AbstractEvaluatorStore
     }
 
     @Override
-    public void storeFileResultsInBigTable(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileMetrics metrics)
-	    throws EvaluationStoreException {
+    public void storeFileResultsInBigTable(AnalysisRun analysisRun, AnalysisInformation analysisInformation,
+	    FileMetrics metrics) throws EvaluationStoreException {
 	try {
-	    storeMetricsInBigTableWithoutCommit(analysisRun, codeAnalysis, metrics);
+	    storeMetricsInBigTableWithoutCommit(analysisRun, analysisInformation, metrics);
 	    connection.commit();
 	} catch (SQLException e) {
 	    try {
@@ -300,7 +297,7 @@ public class EvaluatorMetricsStoreBean extends AbstractEvaluatorStore
 	}
     }
 
-    private void storeMetricsInBigTableWithoutCommit(AnalysisRun analysisRun, CodeAnalysis codeAnalysis,
+    private void storeMetricsInBigTableWithoutCommit(AnalysisRun analysisRun, AnalysisInformation analysisInformation,
 	    FileMetrics metrics) throws SQLException {
 	try (PreparedStatement preparedStatement = connection.prepareStatement(
 		"UPSERT INTO " + HBaseElementNames.EVALUATION_METRICS_TABLE + " (time," + "project_id, " + "run_id, "
@@ -312,7 +309,6 @@ public class EvaluatorMetricsStoreBean extends AbstractEvaluatorStore
 	    Date time = metrics.getTime();
 	    String projectId = analysisRun.getInformation().getProjectId();
 	    long runId = analysisRun.getInformation().getRunId();
-	    AnalysisInformation analysisInformation = codeAnalysis.getAnalysisInformation();
 	    HashId hashId = analysisInformation.getHashId();
 	    AnalysisFileTree analysisTreeNode = analysisRun.findTreeNode(hashId);
 	    File pathFile = analysisTreeNode.getPathFile(false);

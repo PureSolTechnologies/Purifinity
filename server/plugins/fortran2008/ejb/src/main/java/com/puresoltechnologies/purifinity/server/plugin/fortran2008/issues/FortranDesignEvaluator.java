@@ -23,6 +23,7 @@ import com.puresoltechnologies.parsers.ust.UniversalSyntaxTreeMetaData;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRange;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
@@ -114,9 +115,9 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
     }
 
     @Override
-    protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, FileIssuesImpl issues)
-	    throws EvaluationStoreException {
-	getIssuesStore().storeFileResults(analysisRun, fileAnalysis, issues);
+    protected void storeFileResults(AnalysisRun analysisRun, AnalysisInformation analysisInformation,
+	    FileIssuesImpl issues) throws EvaluationStoreException {
+	getIssuesStore().storeFileResults(analysisRun, analysisInformation, issues);
     }
 
     @Override

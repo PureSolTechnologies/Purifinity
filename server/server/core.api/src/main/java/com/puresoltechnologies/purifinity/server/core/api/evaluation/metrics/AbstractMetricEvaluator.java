@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.core.api.evaluation.metrics;
 
 import java.util.Date;
-import java.util.List;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
@@ -101,23 +100,23 @@ public abstract class AbstractMetricEvaluator extends
 	    // Files was not analyzed, so we cannot do something here...
 	    return;
 	}
-	List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyzes(hashId);
-	for (CodeAnalysis fileAnalysis : fileAnalyses) {
+	for (AnalysisInformation analysisInformation : fileNode.getAnalyzedCodes()) {
 	    if ((!hasFileResults(hashId)) || (enableReevaluation)) {
-		AnalysisInformation analysisInformation = fileAnalysis.getAnalysisInformation();
 		if (analysisInformation.isSuccessful()) {
+		    CodeAnalysis fileAnalysis = fileStore.loadAnalysis(hashId, analysisInformation.getAnalyzerId(),
+			    analysisInformation.getAnalyzerVersion());
 		    FileMetrics fileResults = processFile(analysisRun, fileAnalysis);
 		    if (fileResults != null) {
 			FileMetricsImpl metrics = new FileMetricsImpl(getInformation().getId(),
 				getInformation().getVersion(), hashId, fileResults.getSourceCodeLocation(), new Date(),
 				fileResults.getCodeRangeMetrics());
-			storeFileResults(analysisRun, fileAnalysis, metrics);
+			storeFileResults(analysisRun, analysisInformation, metrics);
 		    }
 		}
 	    } else {
 		FileMetrics fileResults = readFileResults(hashId);
 		if (fileResults != null) {
-		    storeMetricsInBigTable(analysisRun, fileAnalysis, fileResults);
+		    storeMetricsInBigTable(analysisRun, analysisInformation, fileResults);
 		}
 	    }
 	}
@@ -126,7 +125,7 @@ public abstract class AbstractMetricEvaluator extends
     @Override
     protected final void processAsDirectory(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
 	    boolean enableReevaluation) throws FileStoreException, InterruptedException,
-		    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
+	    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
 	HashId hashId = directoryNode.getHashId();
 	CommonDirectoryStore directoryStore = getDirectoryStore();
 	CommonEvaluatorMetricsStore store = getMetricStore();
@@ -151,12 +150,12 @@ public abstract class AbstractMetricEvaluator extends
 	}
     }
 
-    protected final void storeMetricsInBigTable(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
+    protected final void storeMetricsInBigTable(AnalysisRun analysisRun, AnalysisInformation analysisInformation,
 	    FileMetrics fileResults) throws EvaluationStoreException {
 	FileMetricsImpl metrics = new FileMetricsImpl(getInformation().getId(), getInformation().getVersion(),
 		fileResults.getHashId(), fileResults.getSourceCodeLocation(), new Date(),
 		fileResults.getCodeRangeMetrics());
-	getMetricStore().storeFileResultsInBigTable(analysisRun, fileAnalysis, metrics);
+	getMetricStore().storeFileResultsInBigTable(analysisRun, analysisInformation, metrics);
     }
 
     protected final void storeMetricsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
@@ -178,9 +177,9 @@ public abstract class AbstractMetricEvaluator extends
     }
 
     @Override
-    protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, FileMetricsImpl metrics)
-	    throws EvaluationStoreException {
-	getMetricStore().storeFileResults(analysisRun, fileAnalysis, metrics);
+    protected void storeFileResults(AnalysisRun analysisRun, AnalysisInformation analysisInformation,
+	    FileMetricsImpl metrics) throws EvaluationStoreException {
+	getMetricStore().storeFileResults(analysisRun, analysisInformation, metrics);
     }
 
     @Override

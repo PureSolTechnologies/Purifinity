@@ -1,7 +1,6 @@
 package com.puresoltechnologies.purifinity.server.core.api.evaluation.issues;
 
 import java.util.Date;
-import java.util.List;
 
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
@@ -95,23 +94,23 @@ public abstract class AbstractIssueEvaluator extends
 	    // Files was not analyzed, so we cannot do something here...
 	    return;
 	}
-	List<CodeAnalysis> fileAnalyses = fileStore.loadAnalyzes(hashId);
-	for (CodeAnalysis fileAnalysis : fileAnalyses) {
+	for (AnalysisInformation analysisInformation : fileNode.getAnalyzedCodes()) {
 	    if ((!hasFileResults(hashId)) || (enableReevaluation)) {
-		AnalysisInformation analysisInformation = fileAnalysis.getAnalysisInformation();
 		if (analysisInformation.isSuccessful()) {
+		    CodeAnalysis fileAnalysis = fileStore.loadAnalysis(hashId, analysisInformation.getAnalyzerId(),
+			    analysisInformation.getAnalyzerVersion());
 		    FileIssues fileResults = processFile(analysisRun, fileAnalysis);
 		    if (fileResults != null) {
 			FileIssuesImpl metrics = new FileIssuesImpl(getInformation().getId(),
 				getInformation().getVersion(), hashId, fileResults.getSourceCodeLocation(), new Date(),
 				fileResults.getParameters(), fileResults.getCodeRangeIssues());
-			storeFileResults(analysisRun, fileAnalysis, metrics);
+			storeFileResults(analysisRun, analysisInformation, metrics);
 		    }
 		}
 	    } else {
 		FileIssues fileResults = readFileResults(hashId);
 		if (fileResults != null) {
-		    storeDesignIssuesInBigTable(analysisRun, fileAnalysis, fileResults);
+		    storeDesignIssuesInBigTable(analysisRun, analysisInformation, fileResults);
 		}
 	    }
 	}
@@ -120,7 +119,7 @@ public abstract class AbstractIssueEvaluator extends
     @Override
     protected final void processAsDirectory(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
 	    boolean enableReevaluation) throws FileStoreException, InterruptedException,
-		    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
+	    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException {
 	HashId hashId = directoryNode.getHashId();
 	CommonDirectoryStore directoryStore = getDirectoryStore();
 	CommonEvaluatorIssuesStore store = getIssuesStore();
@@ -145,12 +144,12 @@ public abstract class AbstractIssueEvaluator extends
 	}
     }
 
-    private void storeDesignIssuesInBigTable(AnalysisRun analysisRun, CodeAnalysis fileAnalysis, FileIssues fileResults)
-	    throws EvaluationStoreException {
+    private void storeDesignIssuesInBigTable(AnalysisRun analysisRun, AnalysisInformation analysisInformation,
+	    FileIssues fileResults) throws EvaluationStoreException {
 	FileIssuesImpl issues = new FileIssuesImpl(getInformation().getId(), getInformation().getVersion(),
 		fileResults.getHashId(), fileResults.getSourceCodeLocation(), new Date(), fileResults.getParameters(),
 		fileResults.getCodeRangeIssues());
-	getIssuesStore().storeFileResultsInBigTable(analysisRun, fileAnalysis, issues);
+	getIssuesStore().storeFileResultsInBigTable(analysisRun, analysisInformation, issues);
     }
 
     private void storeDesignIssuesInBigTable(AnalysisRun analysisRun, AnalysisFileTree directoryNode,

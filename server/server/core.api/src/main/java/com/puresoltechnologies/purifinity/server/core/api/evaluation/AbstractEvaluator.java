@@ -10,15 +10,15 @@ import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.parsers.ust.eval.UniversalSyntaxTreeEvaluationException;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.api.Evaluator;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorInformation;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluatorType;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonDirectoryStore;
+import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonFileStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.DirectoryStoreRemote;
-import com.puresoltechnologies.purifinity.server.core.api.analysis.store.CommonFileStore;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreException;
 import com.puresoltechnologies.purifinity.server.core.api.analysis.store.FileStoreRemote;
 import com.puresoltechnologies.purifinity.server.wildfly.utils.JndiUtils;
@@ -50,8 +50,7 @@ public abstract class AbstractEvaluator<FileResults, FileResultsImpl extends Fil
 	this.information = new EvaluatorInformation(id, name, version, type, description);
 
 	fileStore = JndiUtils.createRemoteEJBInstance(FileStoreRemote.class, FileStoreRemote.JNDI_NAME);
-	directoryStore = JndiUtils.createRemoteEJBInstance(DirectoryStoreRemote.class,
-		DirectoryStoreRemote.JNDI_NAME);
+	directoryStore = JndiUtils.createRemoteEJBInstance(DirectoryStoreRemote.class, DirectoryStoreRemote.JNDI_NAME);
 
     }
 
@@ -117,7 +116,7 @@ public abstract class AbstractEvaluator<FileResults, FileResultsImpl extends Fil
      */
     abstract protected void processAsFile(AnalysisRun analysisRun, AnalysisFileTree fileNode,
 	    boolean enableReevaluation) throws FileStoreException, InterruptedException,
-		    UniversalSyntaxTreeEvaluationException, EvaluationStoreException;
+	    UniversalSyntaxTreeEvaluationException, EvaluationStoreException;
 
     /**
      * This method is called on a directory node to run the actual evaluation.
@@ -136,7 +135,7 @@ public abstract class AbstractEvaluator<FileResults, FileResultsImpl extends Fil
      */
     abstract protected void processAsDirectory(AnalysisRun analysisRun, AnalysisFileTree directoryNode,
 	    boolean enableReevaluation) throws FileStoreException, InterruptedException,
-		    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException;
+	    UniversalSyntaxTreeEvaluationException, DirectoryStoreException, EvaluationStoreException;
 
     /**
      * This method is used to run an evaluation of the entire project. This
@@ -162,7 +161,7 @@ public abstract class AbstractEvaluator<FileResults, FileResultsImpl extends Fil
 
     abstract protected boolean hasFileResults(HashId hashId) throws EvaluationStoreException;
 
-    abstract protected void storeFileResults(AnalysisRun analysisRun, CodeAnalysis fileAnalysis,
+    abstract protected void storeFileResults(AnalysisRun analysisRun, AnalysisInformation analysisInformation,
 	    FileResultsImpl results) throws EvaluationStoreException;
 
     abstract protected DirectoryResults readDirectoryResults(HashId hashId) throws EvaluationStoreException;

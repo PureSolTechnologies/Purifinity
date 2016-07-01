@@ -5,7 +5,7 @@ import java.util.Collection;
 import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.analysis.api.AnalysisRun;
 import com.puresoltechnologies.purifinity.analysis.domain.AnalysisFileTree;
-import com.puresoltechnologies.purifinity.analysis.domain.CodeAnalysis;
+import com.puresoltechnologies.purifinity.analysis.domain.AnalysisInformation;
 import com.puresoltechnologies.purifinity.analysis.domain.CodeRangeType;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 
@@ -39,7 +39,7 @@ public interface EvaluatorStore<FileResults, DirectoryResults, ProjectResults, R
      * @throws EvaluationStoreException
      *             is thrown in case of issue in evaluation store.
      */
-    public void storeFileResults(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileResults results)
+    public void storeFileResults(AnalysisRun analysisRun, AnalysisInformation analysisInformation, FileResults results)
 	    throws EvaluationStoreException;
 
     /**
@@ -107,8 +107,8 @@ public interface EvaluatorStore<FileResults, DirectoryResults, ProjectResults, R
     public ProjectResults readProjectResults(String projectId, long runId, String evaluatorId)
 	    throws EvaluationStoreException;
 
-    public void storeFileResultsInBigTable(AnalysisRun analysisRun, CodeAnalysis codeAnalysis, FileResults results)
-	    throws EvaluationStoreException;
+    public void storeFileResultsInBigTable(AnalysisRun analysisRun, AnalysisInformation analysisInformation,
+	    FileResults results) throws EvaluationStoreException;
 
     public void storeDirectoryResultsInBigTable(AnalysisRun analysisRun, AnalysisFileTree directory,
 	    DirectoryResults results) throws EvaluationStoreException;

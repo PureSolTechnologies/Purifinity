@@ -20,4 +20,13 @@ public class GNUFortranEvaluatorTest {
 	assertEquals("/home/ludwig/git/dyn3d/DYN3D2GNeutronKinetics/aggregation/modlib/cb_mix.f", matcher.group(1));
     }
 
+    @Test
+    public void testPositionLinePatter() {
+	Pattern pattern = GNUFortranEvaluator.POSITION_LINE_PATTERN;
+	Matcher matcher = pattern.matcher("/home/ludwig/git/dyn3d/utils/compare/compare_general.f90:157:13:");
+	assertTrue(matcher.matches());
+	assertEquals("/home/ludwig/git/dyn3d/utils/compare/compare_general.f90", matcher.group(1));
+	assertEquals("157", matcher.group(2));
+	assertEquals("13", matcher.group(3));
+    }
 }
