@@ -164,8 +164,8 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 		"UPSERT INTO " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE + " (time, " + "hashid, "
 			+ "source_code_location, " + "code_range_type, " + "code_range_name, " + "evaluator_id, "
 			+ "evaluator_version, " + "issue_id, " + "description, " + "weight, " + "start_line, "
-			+ "start_column, " + "line_count, " + "length, " + "severity, " + "classification" + ") VALUES "
-			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			+ "start_column, " + "line_count, " + "length, " + "severity, " + "classification, " + "remark"
+			+ ") VALUES " + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	Date time = results.getTime();
 	SourceCodeLocation sourceCodeLocation = analysisRun.findTreeNode(hashId).getSourceCodeLocation();
 	String evaluatorId = results.getEvaluatorId();
@@ -210,6 +210,7 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 		    preparedStatement.setInt(14, issue.getLength());
 		    preparedStatement.setString(15, issue.getSeverity().name());
 		    preparedStatement.setString(16, issue.getClassification().name());
+		    preparedStatement.setString(17, issue.getRemark());
 		    preparedStatement.execute();
 		}
 	    }
@@ -234,8 +235,8 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
 		    "SELECT " + "time, " + "code_range_type, " + "code_range_name, " + "evaluator_version, "
 			    + "issue_id, " + "description, " + "weight, " + "start_line, " + "start_column, "
-			    + "line_count, " + "length, " + "source_code_location, " + "severity, " + "classification "
-			    + "FROM " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE
+			    + "line_count, " + "length, " + "source_code_location, " + "severity, " + "classification, "
+			    + "remark " + "FROM " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE
 			    + " WHERE hashid=? AND evaluator_id=?");
 	    preparedStatement.setString(1, hashId.toString());
 	    preparedStatement.setString(2, evaluatorId);
@@ -301,10 +302,11 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 		    int startColumn = resultSet.getInt("start_column");
 		    int lineCount = resultSet.getInt("line_count");
 		    int length = resultSet.getInt("length");
+		    String remark = resultSet.getString("remark");
 		    Severity severity = extractSeverity(resultSet);
 		    Classification classification = extractClassification(resultSet);
 		    Issue metricValue = new Issue(severity, classification, startLine, startColumn, lineCount, length,
-			    weight, issueParameter);
+			    weight, issueParameter, remark);
 		    parameterBuffer.put(issueParameter, metricValue);
 		}
 
@@ -396,8 +398,8 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 			+ "language_name, " + "language_version, " + "evaluator_id, " + "evaluator_version, "
 			+ "code_range_name, " + "code_range_type, " + "issue_id, " + "start_line, " + "start_column, "
 			+ "line_count, " + "length, " + "weight, " + "classification, " + "severity, "
-			+ "description ) VALUES "
-			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			+ "description, remark ) VALUES "
+			+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 	Date time = results.getTime();
 	String projectId = analysisRun.getInformation().getProjectId();
 	long runId = analysisRun.getInformation().getRunId();
@@ -452,6 +454,7 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 		    preparedStatement.setString(20, issue.getClassification().name());
 		    preparedStatement.setString(21, issue.getSeverity().name());
 		    preparedStatement.setString(22, parameter.getDescription());
+		    preparedStatement.setString(23, issue.getRemark());
 		    preparedStatement.execute();
 		}
 	    }
@@ -493,6 +496,7 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 			    + ", CLASSIFICATION" //
 			    + ", SEVERITY" //
 			    + ", DESCRIPTION" //
+			    + ", REMARK" //
 			    + " FROM " + HBaseElementNames.EVALUATION_ISSUES_TABLE //
 			    + " WHERE project_id=? AND run_id=?");
 	    preparedStatement.setString(1, projectId);
@@ -517,6 +521,7 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 		    int weight = resultSet.getInt("WEIGHT");
 		    Classification classification = extractClassification(resultSet);
 		    Severity severity = extractSeverity(resultSet);
+		    String remark = resultSet.getString("remark");
 
 		    EvaluatorServiceInformation evaluator = evaluationService.getEvaluator(evaluatorId);
 		    IssueParameter issueParameter = null;
@@ -529,7 +534,7 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 			SingleIssue singleIssue = new SingleIssue(projectId, runId, evaluatorId, evaluatorVersion,
 				codeRangeType, hashId, codeRangeName, time, sourceCodeLocation, languageName,
 				languageVersion, severity, classification, startLine, startColumn, lineCount, length,
-				weight, issueParameter);
+				weight, issueParameter, remark);
 			runResults.add(singleIssue);
 		    }
 		}
@@ -563,6 +568,7 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 			    + ", WEIGHT" //
 			    + ", SEVERITY" //
 			    + ", DESCRIPTION" //
+			    + ", REMARK" //
 			    + " FROM " + HBaseElementNames.EVALUATION_ISSUES_TABLE //
 			    + " WHERE project_id=? AND run_id=? AND CLASSIFICATION=?");
 	    preparedStatement.setString(1, projectId);
@@ -587,6 +593,7 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 		    int length = resultSet.getInt("LENGTH");
 		    int weight = resultSet.getInt("WEIGHT");
 		    Severity severity = extractSeverity(resultSet);
+		    String remark = resultSet.getString("remark");
 
 		    EvaluatorServiceInformation evaluator = evaluationService.getEvaluator(evaluatorId);
 		    IssueParameter issueParameter = null;
@@ -599,7 +606,7 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 			SingleIssue singleIssue = new SingleIssue(projectId, runId, evaluatorId, evaluatorVersion,
 				codeRangeType, hashId, codeRangeName, time, sourceCodeLocation, languageName,
 				languageVersion, severity, classification, startLine, startColumn, lineCount, length,
-				weight, issueParameter);
+				weight, issueParameter, remark);
 			runResults.add(singleIssue);
 		    }
 		}

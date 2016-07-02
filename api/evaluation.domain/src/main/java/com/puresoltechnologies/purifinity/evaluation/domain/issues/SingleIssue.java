@@ -28,8 +28,8 @@ public class SingleIssue extends Issue {
 	    CodeRangeType codeRangeType, HashId hashId, String codeRangeName, Date time,
 	    SourceCodeLocation sourceCodeLocation, String languageName, String languageVersion, Severity severity,
 	    Classification classification, int startLine, int startColumn, int lineCount, int length, Integer weight,
-	    IssueParameter parameter) {
-	super(severity, classification, startLine, startColumn, lineCount, length, weight, parameter);
+	    IssueParameter parameter, String remark) {
+	super(severity, classification, startLine, startColumn, lineCount, length, weight, parameter, remark);
 	this.projectId = projectId;
 	this.runId = runId;
 	this.evaluatorId = evaluatorId;

@@ -78,11 +78,36 @@ public class GNUFortranEvaluator extends AbstractIssueEvaluator implements Issue
 	    "Real numbers should not be compared for equality due to floating point rounding issues.");
     private static final IssueParameter REAL_INEQUALITY_CHECK = new IssueParameter("RealInequalityCheck", "",
 	    "Real numbers should not be compared for inequality due to floating point rounding issues.");
-    public static final IssueParameter[] PARAMETERS = new IssueParameter[] { REAL_EQUALITY_CHECK,
-	    REAL_INEQUALITY_CHECK };
+    private static final IssueParameter UNUSED_MODULE_VARIABLE = new IssueParameter("UnusedModuleVariable", "",
+	    "An imported module variable is no used.");
+    private static final IssueParameter NONCONFORMING_TAB_CHARACTER = new IssueParameter("NonconformingTabCharacter",
+	    "", "A nonconforming tab character was found in source.");
+    private static final IssueParameter NONCONFORMING_FIXED_FORM = new IssueParameter(
+	    "NonconformingTabCharacterInFixedForm", "",
+	    "A nonconforming tab character was found in fixed form line prefix.");
+    private static final IssueParameter OBSOLESCENT_CHARACTER_LENGTH = new IssueParameter("ObsolescentCharacterLength",
+	    "", "Obsolescent feature of character length found.");
+    private static final IssueParameter UNUSED_VARIABLE = new IssueParameter("UnusedVariable", "",
+	    "A declared variable is not used.");
+    private static final IssueParameter UNUSED_DUMMY_PARAMETER = new IssueParameter("UnusedDummyParameter", "",
+	    "A declared variable is not used.");
+    private static final IssueParameter UNUSED_LABEL = new IssueParameter("UnusedLabel", "",
+	    "A declared label is not used.");
+
+    public static final IssueParameter[] PARAMETERS = new IssueParameter[] { REAL_EQUALITY_CHECK, REAL_INEQUALITY_CHECK,
+	    UNUSED_MODULE_VARIABLE, NONCONFORMING_TAB_CHARACTER, NONCONFORMING_FIXED_FORM, OBSOLESCENT_CHARACTER_LENGTH,
+	    UNUSED_VARIABLE, UNUSED_DUMMY_PARAMETER, UNUSED_LABEL };
 
     static final Pattern START_COMPILE_LINE_PATTERN = Pattern.compile("f95\\s.*-c\\s+(\\S+)");
     static final Pattern POSITION_LINE_PATTERN = Pattern.compile("^(\\S+.*\\S+):(\\d+):(\\d+):\\s*");
+    static final Pattern UNUSED_MODULE_VARIABLE_PATTERN = Pattern
+	    .compile("Warning: Unused module variable ‘([^’]+)’ which has been explicitly imported at");
+    static final Pattern NON_CONFORMING_TAB_PATTERN = Pattern
+	    .compile("Warning: Nonconforming tab character in column (\\d+) of line (\\d+)");
+    static final Pattern UNUSED_VARIABLE_PATTERN = Pattern.compile("Warning: Unused variable ‘([^’]+)’ declared");
+    static final Pattern UNUSED_DUMMY_ARGUMENT_PATTERN = Pattern.compile("Warning: Unused dummy argument ‘([^’]+)’");
+    static final Pattern UNUSED_LABEL_PATTERN = Pattern
+	    .compile("Warning: Label (\\d+) at \\((\\d+)\\) defined but not used");
 
     @Inject
     private Logger logger;
@@ -162,7 +187,7 @@ public class GNUFortranEvaluator extends AbstractIssueEvaluator implements Issue
 		    CodeRangeIssues codeRangeIssues = new CodeRangeIssues(currentFile.getSourceCodeLocation(),
 			    CodeRangeType.FILE, currentFile.getName(), PARAMETERS, issues);
 		    fileIssues.addCodeRangeIssue(codeRangeIssues);
-		    storeIssues(analysisRun, currentFile, fileIssues);
+		    storeFileResults(analysisRun, createAnalysisInformation(currentFile), fileIssues);
 		}
 		lineBuffer.clear();
 		currentFile = findNode(fileTree, matcher.group(1));
@@ -180,14 +205,13 @@ public class GNUFortranEvaluator extends AbstractIssueEvaluator implements Issue
 	    CodeRangeIssues codeRangeIssues = new CodeRangeIssues(currentFile.getSourceCodeLocation(),
 		    CodeRangeType.FILE, currentFile.getName(), PARAMETERS, issues);
 	    fileIssues.addCodeRangeIssue(codeRangeIssues);
-	    storeIssues(analysisRun, currentFile, fileIssues);
+	    storeFileResults(analysisRun, createAnalysisInformation(currentFile), fileIssues);
 	}
     }
 
-    private void storeIssues(AnalysisRun analysisRun, AnalysisFileTree currentFile, FileIssues fileIssues)
-	    throws FileStoreException, EvaluationStoreException {
-	designIssuesStore.storeFileResults(analysisRun, new AnalysisInformation(currentFile.getHashId(), new Date(), 0,
-		true, "Fortran", "95", ID, PLUGIN_VERSION), fileIssues);
+    private AnalysisInformation createAnalysisInformation(AnalysisFileTree currentFile) {
+	return new AnalysisInformation(currentFile.getHashId(), new Date(), 0, true, "Fortran", "95", ID,
+		PLUGIN_VERSION);
     }
 
     private AnalysisFileTree findNode(AnalysisFileTree fileTree, String currentSource) {
@@ -260,27 +284,80 @@ public class GNUFortranEvaluator extends AbstractIssueEvaluator implements Issue
 	    IssueLocation location = IssueLocation.valueOf(lineBuffer);
 	    if (location != null) {
 		issue = new Issue(Severity.CRITICAL, Classification.DEFECT, location.getLine(), location.getColumn(), 1,
-			1, 1, REAL_EQUALITY_CHECK);
+			1, 1, REAL_EQUALITY_CHECK, "");
 	    }
 	} else if (line.contains("Warning: Inequality comparison for REAL")) {
 	    IssueLocation location = IssueLocation.valueOf(lineBuffer);
 	    if (location != null) {
 		issue = new Issue(Severity.CRITICAL, Classification.DEFECT, location.getLine(), location.getColumn(), 1,
-			1, 1, REAL_INEQUALITY_CHECK);
+			1, 1, REAL_INEQUALITY_CHECK, "");
 	    }
-	} else if (line.contains("Warning: Nonconforming tab character in column 2 of line 58 [-Wtabs]")) {
-	} else if (line.contains("Warning: Nonconforming tab character at (1) [-Wtabs]")) {
+	} else if (line.contains("Warning: Nonconforming tab character in column")) {
+	    Matcher matcher = NON_CONFORMING_TAB_PATTERN.matcher(line);
+	    if (matcher.find()) {
+		int lineNum = Integer.parseInt(matcher.group(1));
+		int columnNum = Integer.parseInt(matcher.group(2));
+		issue = new Issue(Severity.MAJOR, Classification.STYLE_ISSUE, lineNum, columnNum, 1, 1, 1,
+			NONCONFORMING_FIXED_FORM, "");
+	    }
+	} else if (line.contains("Warning: Nonconforming tab character at")) {
+	    IssueLocation location = IssueLocation.valueOf(lineBuffer);
+	    if (location != null) {
+		issue = new Issue(Severity.MINOR, Classification.STYLE_ISSUE, location.getLine(), location.getColumn(),
+			1, 1, 1, NONCONFORMING_TAB_CHARACTER, "");
+	    }
 	} else if (line.contains("Warning: Obsolescent feature: Old-style character length")) {
+	    IssueLocation location = IssueLocation.valueOf(lineBuffer);
+	    if (location != null) {
+		issue = new Issue(Severity.MAJOR, Classification.STYLE_ISSUE, location.getLine(), location.getColumn(),
+			1, 1, 1, OBSOLESCENT_CHARACTER_LENGTH, "");
+	    }
 	} else if (line.contains(
 		"Warning: Nonexistent include directory ‘/home/ludwig/git/dyn3d/DYN3D2GNeutronKinetics/aggregation/fort/DYN3D2G’")) {
-	} else if (line.contains("Warning: Unused dummy argument ‘temperature’")) {
-	} else if (line.contains("Warning: Unused variable ‘i’ declared")) {
-	} else if (line.contains("Warning: Label 780 at (1) defined but not used")) {
-	} else if (line.contains("Warning: Unused module variable ‘dirdyn’ which has been explicitly imported at")) { // [-Wunused-variable]
-
-	} else {
-	    logger.warn("Found unknown warning for '" + currentFile.getPathFile(true) + "': " + line + "\nbuffer: "
-		    + lineBuffer);
+	    // we cannot do anything here...
+	} else if (line.contains("Warning: Unused dummy argument")) {
+	    IssueLocation location = IssueLocation.valueOf(lineBuffer);
+	    if (location != null) {
+		Matcher matcher = UNUSED_DUMMY_ARGUMENT_PATTERN.matcher(line);
+		if (matcher.find()) {
+		    String parameterName = matcher.group(1);
+		    issue = new Issue(Severity.MAJOR, Classification.DESIGN_ISSUE, location.getLine(),
+			    location.getColumn(), 1, 1, 1, UNUSED_DUMMY_PARAMETER,
+			    "Parameter '" + parameterName + "' is declared, but not used.");
+		}
+	    }
+	} else if (line.contains("Warning: Unused variable")) {
+	    IssueLocation location = IssueLocation.valueOf(lineBuffer);
+	    if (location != null) {
+		Matcher matcher = UNUSED_VARIABLE_PATTERN.matcher(line);
+		if (matcher.find()) {
+		    String variableName = matcher.group(1);
+		    issue = new Issue(Severity.CRITICAL, Classification.DEFECT, location.getLine(),
+			    location.getColumn(), 1, 1, 1, UNUSED_VARIABLE,
+			    "Variable '" + variableName + "' is declared, but not used.");
+		}
+	    }
+	} else if (line.contains("Warning: Label ") && line.contains(" defined but not used")) {
+	    IssueLocation location = IssueLocation.valueOf(lineBuffer);
+	    if (location != null) {
+		Matcher matcher = UNUSED_LABEL_PATTERN.matcher(line);
+		if (matcher.find()) {
+		    String labelName = matcher.group(1);
+		    issue = new Issue(Severity.MAJOR, Classification.DEFECT, location.getLine(), location.getColumn(),
+			    1, 1, 1, UNUSED_LABEL, "Label '" + labelName + "' was defined, but is not used.");
+		}
+	    }
+	} else if (line.contains("Warning: Unused module variable")) { // [-Wunused-variable]
+	    IssueLocation location = IssueLocation.valueOf(lineBuffer);
+	    if (location != null) {
+		Matcher matcher = UNUSED_MODULE_VARIABLE_PATTERN.matcher(line);
+		if (matcher.find()) {
+		    String variableName = matcher.group(1);
+		    issue = new Issue(Severity.CRITICAL, Classification.DEFECT, location.getLine(),
+			    location.getColumn(), 1, 1, 1, UNUSED_MODULE_VARIABLE,
+			    "Variable '" + variableName + "' is not used.");
+		}
+	    }
 	}
 	if (issue != null) {
 	    String parameterName = issue.getParameter().getName();
@@ -290,6 +367,9 @@ public class GNUFortranEvaluator extends AbstractIssueEvaluator implements Issue
 		issues.put(parameterName, list);
 	    }
 	    list.add(issue);
+	} else {
+	    logger.warn("Found unknown warning for '" + currentFile.getPathFile(true) + "': " + line + "\nbuffer: "
+		    + lineBuffer);
 	}
     }
 
@@ -329,8 +409,7 @@ public class GNUFortranEvaluator extends AbstractIssueEvaluator implements Issue
     @Override
     protected void storeFileResults(AnalysisRun analysisRun, AnalysisInformation analysisInformation,
 	    FileIssuesImpl results) throws EvaluationStoreException {
-	// TODO Auto-generated method stub
-
+	designIssuesStore.storeFileResults(analysisRun, analysisInformation, results);
     }
 
     @Override

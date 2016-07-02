@@ -279,8 +279,8 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 			}
 			UniversalSyntaxTreeMetaData metaData = implicitStatement.getMetaData();
 			issueList.add(new Issue(Severity.MAJOR, Classification.DESIGN_ISSUE, metaData.getLine(),
-				metaData.getColumn(), metaData.getLineNum(), metaData.getLength(), 1,
-				USAGE_OF_IMPLICIT));
+				metaData.getColumn(), metaData.getLineNum(), metaData.getLength(), 1, USAGE_OF_IMPLICIT,
+				""));
 			break;
 		    }
 		}
@@ -294,7 +294,7 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 	    }
 	    UniversalSyntaxTreeMetaData metaData = specificationPart.getMetaData();
 	    issueList.add(new Issue(Severity.MAJOR, Classification.DESIGN_ISSUE, metaData.getLine(),
-		    metaData.getColumn(), metaData.getLineNum(), metaData.getLength(), 1, NO_IMPLICIT_NONE));
+		    metaData.getColumn(), metaData.getLineNum(), metaData.getLength(), 1, NO_IMPLICIT_NONE, ""));
 	} else if (hasImplicit && hasImplicitNone) {
 	    List<Issue> issueList = issues.get(COMBINED_USAGE_OF_IMPLICIT.getName());
 	    if (issueList == null) {
@@ -302,8 +302,9 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 		issues.put(COMBINED_USAGE_OF_IMPLICIT.getName(), issueList);
 	    }
 	    UniversalSyntaxTreeMetaData metaData = specificationPart.getMetaData();
-	    issueList.add(new Issue(Severity.CRITICAL, Classification.DESIGN_ISSUE, metaData.getLine(),
-		    metaData.getColumn(), metaData.getLineNum(), metaData.getLength(), 1, COMBINED_USAGE_OF_IMPLICIT));
+	    issueList.add(
+		    new Issue(Severity.CRITICAL, Classification.DESIGN_ISSUE, metaData.getLine(), metaData.getColumn(),
+			    metaData.getLineNum(), metaData.getLength(), 1, COMBINED_USAGE_OF_IMPLICIT, ""));
 	}
 	return issues;
     }
@@ -370,7 +371,7 @@ public class FortranDesignEvaluator extends AbstractIssueEvaluator {
 	    }
 	    UniversalSyntaxTreeMetaData metaData = foundGoto.getMetaData();
 	    issueList.add(new Issue(Severity.CRITICAL, Classification.DESIGN_ISSUE, metaData.getLine(),
-		    metaData.getColumn(), metaData.getLineNum(), metaData.getLength(), 1, USAGE_OF_GOTO));
+		    metaData.getColumn(), metaData.getLineNum(), metaData.getLength(), 1, USAGE_OF_GOTO, ""));
 	}
 	return issues;
     }

@@ -18,9 +18,10 @@ public class Issue extends GeneralValue<Integer> {
     private final int startColumn;
     private final int lineCount;
     private final int length;
+    private final String remark;
 
     public Issue(Severity severity, Classification classification, int startLine, int startColumn, int lineCount,
-	    int length, Integer weight, IssueParameter parameter) {
+	    int length, Integer weight, IssueParameter parameter, String remark) {
 	super(weight, parameter);
 	this.severity = severity;
 	this.classification = classification;
@@ -28,6 +29,7 @@ public class Issue extends GeneralValue<Integer> {
 	this.startColumn = startColumn;
 	this.lineCount = lineCount;
 	this.length = length;
+	this.remark = remark;
     }
 
     public final Severity getSeverity() {
@@ -52,6 +54,10 @@ public class Issue extends GeneralValue<Integer> {
 
     public final int getLength() {
 	return length;
+    }
+
+    public final String getRemark() {
+	return remark;
     }
 
 }

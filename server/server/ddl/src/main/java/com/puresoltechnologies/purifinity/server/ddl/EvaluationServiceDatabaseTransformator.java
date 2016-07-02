@@ -187,6 +187,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "weight unsigned_int, " //
 			+ "classification varchar, " //
 			+ "severity varchar, " //
+			+ "remark varchar, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_FILE_ISSUES_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, issue_id, start_line, start_column))",
 		"Keeps design issues of source files."));
@@ -209,6 +210,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "weight unsigned_int, " //
 			+ "classification varchar, " //
 			+ "severity varchar, " //
+			+ "remark varchar, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_DIRECTORY_ISSUES_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(hashid, evaluator_id, issue_id, start_line, start_column))",
 		"Keeps design issues of directories."));
@@ -232,6 +234,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "weight unsigned_int, " //
 			+ "classification varchar, " //
 			+ "severity varchar, " //
+			+ "remark varchar, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_PROJECT_ISSUES_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, issue_id, start_line, start_column))",
 		"Keeps design issues of projects."));
@@ -259,6 +262,7 @@ public class EvaluationServiceDatabaseTransformator implements ComponentTransfor
 			+ "classification varchar, " //
 			+ "severity varchar, " //
 			+ "description varchar, " //
+			+ "remark varchar, " //
 			+ "CONSTRAINT " + HBaseElementNames.EVALUATION_METRICS_TABLE.replaceAll("\\.", "_")
 			+ "_PK PRIMARY KEY(project_id, run_id, evaluator_id, issue_id, code_range_type, hashid, code_range_name, start_line, start_column))",
 		"Keeps the issues in a big table for efficient retrieval."));
