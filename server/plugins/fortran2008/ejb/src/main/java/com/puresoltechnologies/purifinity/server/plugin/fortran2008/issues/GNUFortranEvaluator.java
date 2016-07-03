@@ -190,6 +190,8 @@ public class GNUFortranEvaluator extends AbstractIssueEvaluator implements Issue
 		    storeFileResults(analysisRun, createAnalysisInformation(currentFile), fileIssues);
 		}
 		lineBuffer.clear();
+		fileIssues = null;
+		issues = null;
 		currentFile = findNode(fileTree, matcher.group(1));
 	    } else if ((line.contains("Warning:")) && (currentFile != null)) {
 		if (fileIssues == null) {
