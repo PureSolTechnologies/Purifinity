@@ -32,6 +32,7 @@ export class ProjectRunStyleComponent {
     private runId: string;
 
     public issueSeverityCount: CategoryChartData = new CategoryChartData();
+    public issueParameterCount: CategoryChartData = new CategoryChartData();
     public issues: SingleIssue[] = [];
     public tableData: Table = new Table("Style Issues");
 
@@ -49,6 +50,19 @@ export class ProjectRunStyleComponent {
                         value = 0;
                     }
                     component.issueSeverityCount.data.push(new CategoryDatum(name, value));
+                }
+            },
+            function(response: Response) { }
+        );
+        evaluatorStore.getRunIssueStyleParameters(this.projectId, this.runId,
+            function(data: any) {
+                component.issueParameterCount = new CategoryChartData();
+                for (let issueId in data) {
+                    let value = data[issueId];
+                    if (!value) {
+                        value = 0;
+                    }
+                    component.issueParameterCount.data.push(new CategoryDatum(issueId, value));
                 }
             },
             function(response: Response) { }

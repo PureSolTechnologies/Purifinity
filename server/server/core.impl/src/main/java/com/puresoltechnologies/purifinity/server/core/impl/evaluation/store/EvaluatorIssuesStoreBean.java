@@ -676,30 +676,7 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
     }
 
     @Override
-    public Map<Severity, Integer> getRunIssueArchitectureSeverities(String projectId, long runId)
-	    throws EvaluationStoreException {
-	return getRunIssueSeverities(projectId, runId, Classification.ARCHITECTURE_ISSUE);
-    }
-
-    @Override
-    public Map<Severity, Integer> getRunIssueDesignSeverities(String projectId, long runId)
-	    throws EvaluationStoreException {
-	return getRunIssueSeverities(projectId, runId, Classification.DESIGN_ISSUE);
-    }
-
-    @Override
-    public Map<Severity, Integer> getRunIssueDefectSeverities(String projectId, long runId)
-	    throws EvaluationStoreException {
-	return getRunIssueSeverities(projectId, runId, Classification.DEFECT);
-    }
-
-    @Override
-    public Map<Severity, Integer> getRunIssueStyleSeverities(String projectId, long runId)
-	    throws EvaluationStoreException {
-	return getRunIssueSeverities(projectId, runId, Classification.STYLE_ISSUE);
-    }
-
-    private Map<Severity, Integer> getRunIssueSeverities(String projectId, long runId, Classification classification)
+    public Map<Severity, Integer> getRunIssueSeverities(String projectId, long runId, Classification classification)
 	    throws EvaluationStoreException {
 	try {
 	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
@@ -725,4 +702,27 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 	}
     }
 
+    @Override
+    public Map<String, Integer> getRunIssueClassificationParameters(String projectId, long runId,
+	    Classification classification) throws EvaluationStoreException {
+	try {
+	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		    "SELECT ISSUE_ID, COUNT(ISSUE_ID) FROM " + HBaseElementNames.EVALUATION_ISSUES_TABLE
+			    + " WHERE project_id=? AND run_id=? AND classification=? GROUP BY ISSUE_ID");
+	    preparedStatement.setString(1, projectId);
+	    preparedStatement.setLong(2, runId);
+	    preparedStatement.setString(3, classification.name());
+	    Map<String, Integer> result = new HashMap<>();
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		while (resultSet.next()) {
+		    String issueId = resultSet.getString(1);
+		    int num = resultSet.getInt(2);
+		    result.put(issueId, num);
+		}
+	    }
+	    return result;
+	} catch (SQLException e) {
+	    throw new EvaluationStoreException("Could not read file results.", e);
+	}
+    }
 }

@@ -74,24 +74,49 @@ public class EvaluatorStoreRestService implements EvaluatorStoreRestInterface {
     @Override
     public Map<Severity, Integer> getRunIssueArchitectureServerities(String projectId, long runId)
 	    throws EvaluationStoreException {
-	return evaluatorIssuesStore.getRunIssueArchitectureSeverities(projectId, runId);
+	return evaluatorIssuesStore.getRunIssueSeverities(projectId, runId, Classification.ARCHITECTURE_ISSUE);
+    }
+
+    @Override
+    public Map<String, Integer> getRunArchitectureIssuesByParameter(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return evaluatorIssuesStore.getRunIssueClassificationParameters(projectId, runId,
+		Classification.ARCHITECTURE_ISSUE);
     }
 
     @Override
     public Map<Severity, Integer> getRunIssueDesignServerities(String projectId, long runId)
 	    throws EvaluationStoreException {
-	return evaluatorIssuesStore.getRunIssueDesignSeverities(projectId, runId);
+	return evaluatorIssuesStore.getRunIssueSeverities(projectId, runId, Classification.DESIGN_ISSUE);
+    }
+
+    @Override
+    public Map<String, Integer> getRunDesignIssuesByParameter(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return evaluatorIssuesStore.getRunIssueClassificationParameters(projectId, runId, Classification.DESIGN_ISSUE);
     }
 
     @Override
     public Map<Severity, Integer> getRunIssueDefectServerities(String projectId, long runId)
 	    throws EvaluationStoreException {
-	return evaluatorIssuesStore.getRunIssueDefectSeverities(projectId, runId);
+	return evaluatorIssuesStore.getRunIssueSeverities(projectId, runId, Classification.DEFECT);
+    }
+
+    @Override
+    public Map<String, Integer> getRunDefectIssuesByParameter(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return evaluatorIssuesStore.getRunIssueClassificationParameters(projectId, runId, Classification.DEFECT);
     }
 
     @Override
     public Map<Severity, Integer> getRunIssueStyleServerities(String projectId, long runId)
 	    throws EvaluationStoreException {
-	return evaluatorIssuesStore.getRunIssueStyleSeverities(projectId, runId);
+	return evaluatorIssuesStore.getRunIssueSeverities(projectId, runId, Classification.STYLE_ISSUE);
+    }
+
+    @Override
+    public Map<String, Integer> getRunStyleIssuesByParameter(String projectId, long runId)
+	    throws EvaluationStoreException {
+	return evaluatorIssuesStore.getRunIssueClassificationParameters(projectId, runId, Classification.STYLE_ISSUE);
     }
 }

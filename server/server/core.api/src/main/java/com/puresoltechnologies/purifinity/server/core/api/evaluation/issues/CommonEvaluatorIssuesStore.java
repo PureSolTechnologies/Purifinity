@@ -54,67 +54,40 @@ public interface CommonEvaluatorIssuesStore
 
     /**
      * This method returns for a defined run the severity distribution for
-     * architecture issues.
+     * classified issues.
      * 
      * @param projectId
      *            is the id of the project.
      * @param runId
      *            is the id of the run.
+     * @param classification
+     *            is the issue classification to get the severity histogram for.
      * @return A {@link Map} is returned which holds for every {@link Severity}
      *         the number of issues found.
      * @throws EvaluationStoreException
      *             is thrown in case of EvaluatorStore issues.
      */
-    public Map<Severity, Integer> getRunIssueArchitectureSeverities(String projectId, long runId)
+    public Map<Severity, Integer> getRunIssueSeverities(String projectId, long runId, Classification classification)
 	    throws EvaluationStoreException;
 
     /**
-     * This method returns for a defined run the severity distribution for
-     * design issues.
+     * This method returns for a defined run the parameter id distribution for
+     * run issues.
      * 
      * @param projectId
      *            is the id of the project.
      * @param runId
      *            is the id of the run.
-     * @return A {@link Map} is returned which holds for every {@link Severity}
-     *         the number of issues found.
+     * @param classification
+     *            is the issue classification to get the parameter histogram
+     *            for.
+     * @return A {@link Map} is returned which holds for every issue id the
+     *         number of issues found.
      * @throws EvaluationStoreException
      *             is thrown in case of EvaluatorStore issues.
      */
-    public Map<Severity, Integer> getRunIssueDesignSeverities(String projectId, long runId)
-	    throws EvaluationStoreException;
-
-    /**
-     * This method returns for a defined run the severity distribution for
-     * defects.
-     * 
-     * @param projectId
-     *            is the id of the project.
-     * @param runId
-     *            is the id of the run.
-     * @return A {@link Map} is returned which holds for every {@link Severity}
-     *         the number of issues found.
-     * @throws EvaluationStoreException
-     *             is thrown in case of EvaluatorStore issues.
-     */
-    public Map<Severity, Integer> getRunIssueDefectSeverities(String projectId, long runId)
-	    throws EvaluationStoreException;
-
-    /**
-     * This method returns for a defined run the severity distribution for style
-     * issues.
-     * 
-     * @param projectId
-     *            is the id of the project.
-     * @param runId
-     *            is the id of the run.
-     * @return A {@link Map} is returned which holds for every {@link Severity}
-     *         the number of issues found.
-     * @throws EvaluationStoreException
-     *             is thrown in case of EvaluatorStore issues.
-     */
-    public Map<Severity, Integer> getRunIssueStyleSeverities(String projectId, long runId)
-	    throws EvaluationStoreException;
+    public Map<String, Integer> getRunIssueClassificationParameters(String projectId, long runId,
+	    Classification classification) throws EvaluationStoreException;
 
     public Collection<SingleIssue> readRunResults(String projectId, long runId, Classification classification)
 	    throws EvaluationStoreException;

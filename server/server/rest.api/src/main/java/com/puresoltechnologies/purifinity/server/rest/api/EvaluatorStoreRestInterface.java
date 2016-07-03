@@ -93,9 +93,23 @@ public interface EvaluatorStoreRestInterface {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/architecture/parameters")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Map<String, Integer> getRunArchitectureIssuesByParameter(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("projects/{project_id}/runs/{run_id}/issues/design/severities")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
     public Map<Severity, Integer> getRunIssueDesignServerities(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/design/parameters")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Map<String, Integer> getRunDesignIssuesByParameter(@PathParam("project_id") String projectId,
 	    @PathParam("run_id") long runId) throws EvaluationStoreException;
 
     @GET
@@ -107,9 +121,23 @@ public interface EvaluatorStoreRestInterface {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/defect/parameters")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Map<String, Integer> getRunDefectIssuesByParameter(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("projects/{project_id}/runs/{run_id}/issues/style/severities")
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
     public Map<Severity, Integer> getRunIssueStyleServerities(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/issues/style/parameters")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Map<String, Integer> getRunStyleIssuesByParameter(@PathParam("project_id") String projectId,
 	    @PathParam("run_id") long runId) throws EvaluationStoreException;
 
 }

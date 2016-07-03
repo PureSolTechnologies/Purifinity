@@ -43,7 +43,7 @@ export class EvaluatorStore {
         this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
             + projectId
             + "/runs/" + runId
-            + "/issues/types/architecure", function(response: Response) {
+            + "/issues/types/architecture", function(response: Response) {
                 let data: SingleIssue[] = response.json();
                 success(data);
             }, error
@@ -157,6 +157,58 @@ export class EvaluatorStore {
             + projectId
             + "/runs/" + runId
             + "/issues/style/severities", function(response: Response) {
+                let data: RunIssues = response.json();
+                success(data);
+            }, error
+        );
+
+    }
+
+        getRunIssueArchitectureParameters(projectId: string, runId: string, success: (data: any) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId
+            + "/runs/" + runId
+            + "/issues/architecture/parameters", function(response: Response) {
+                let data: RunIssues = response.json();
+                success(data);
+            }, error
+        );
+
+    }
+
+    getRunIssueDesignParameters(projectId: string, runId: string, success: (data: any) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId
+            + "/runs/" + runId
+            + "/issues/design/parameters", function(response: Response) {
+                let data: RunIssues = response.json();
+                success(data);
+            }, error
+        );
+
+    }
+
+    getRunIssueDefectParameters(projectId: string, runId: string, success: (data: any) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId
+            + "/runs/" + runId
+            + "/issues/defect/parameters", function(response: Response) {
+                let data: RunIssues = response.json();
+                success(data);
+            }, error
+        );
+
+    }
+
+    getRunIssueStyleParameters(projectId: string, runId: string, success: (data: any) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId
+            + "/runs/" + runId
+            + "/issues/style/parameters", function(response: Response) {
                 let data: RunIssues = response.json();
                 success(data);
             }, error
