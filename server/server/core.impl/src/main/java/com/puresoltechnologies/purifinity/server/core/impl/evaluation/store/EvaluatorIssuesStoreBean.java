@@ -146,7 +146,7 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 	    throws EvaluationStoreException {
 	try {
 	    storeFileIssuesAsValues(analysisRun, analysisInformation.getHashId(), results);
-	    storeFileResultsInBigTable(analysisRun, analysisInformation, results);
+	    storeIssuesInBigTableWithoutCommit(analysisRun, analysisInformation, results);
 	    connection.commit();
 	} catch (SQLException e) {
 	    try {
@@ -269,7 +269,6 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 		    }
 		    evaluatorVersion = getEvaluatorVersionAndCheckConsistency(resultSet, hashId, evaluatorId,
 			    evaluatorVersion);
-		    String parameterName = resultSet.getString("issue_id");
 		    IssueParameter issueParameter = extractIssueParameter(resultSet);
 		    if (issueParameter == null) {
 			continue;
@@ -282,11 +281,6 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 			Map<String, Map<Parameter<?>, Issue>> codeRangeTypeBuffer = buffer.get(codeRangeType);
 			if (codeRangeTypeBuffer.containsKey(codeRangeName)) {
 			    parameterBuffer = codeRangeTypeBuffer.get(codeRangeName);
-			    if (parameterBuffer.containsKey(issueParameter)) {
-				throw new EvaluationStoreException("Multiple parameters with same name '"
-					+ parameterName + "' are different for evaluatorId=" + evaluatorId
-					+ " and hashId=" + hashId.toString());
-			    }
 			} else {
 			    parameterBuffer = new HashMap<>();
 			    codeRangeTypeBuffer.put(codeRangeName, parameterBuffer);

@@ -176,36 +176,30 @@ public class GNUFortranEvaluator extends AbstractIssueEvaluator implements Issue
 	List<String> lineBuffer = new ArrayList<>();
 	AnalysisFileTree fileTree = analysisRun.getFileTree();
 	AnalysisFileTree currentFile = null;
-	FileIssuesImpl fileIssues = null;
-	Map<String, List<Issue>> issues = null;
+	Map<String, List<Issue>> issues = new HashMap<>();
 	String line;
 	while ((line = reader.readLine()) != null) {
 	    lineBuffer.add(line);
 	    Matcher matcher = START_COMPILE_LINE_PATTERN.matcher(line);
 	    if (matcher.find()) {
-		if (fileIssues != null) {
-		    CodeRangeIssues codeRangeIssues = new CodeRangeIssues(currentFile.getSourceCodeLocation(),
-			    CodeRangeType.FILE, currentFile.getName(), PARAMETERS, issues);
-		    fileIssues.addCodeRangeIssue(codeRangeIssues);
-		    storeFileResults(analysisRun, createAnalysisInformation(currentFile), fileIssues);
-		}
+		saveFileIssues(analysisRun, currentFile, issues);
 		lineBuffer.clear();
-		fileIssues = null;
-		issues = null;
+		issues.clear();
 		currentFile = findNode(fileTree, matcher.group(1));
 	    } else if ((line.contains("Warning:")) && (currentFile != null)) {
-		if (fileIssues == null) {
-		    fileIssues = new FileIssuesImpl(ID, PLUGIN_VERSION, currentFile.getHashId(),
-			    currentFile.getSourceCodeLocation(), new Date(), PARAMETERS);
-		    issues = new HashMap<>();
-		}
 		processWarning(issues, analysisRun, currentFile, line, lineBuffer);
-		lineBuffer.clear();
 	    }
 	}
-	if (fileIssues != null) {
+	saveFileIssues(analysisRun, currentFile, issues);
+    }
+
+    private void saveFileIssues(AnalysisRun analysisRun, AnalysisFileTree currentFile, Map<String, List<Issue>> issues)
+	    throws EvaluationStoreException {
+	if (issues.size() > 0) {
 	    CodeRangeIssues codeRangeIssues = new CodeRangeIssues(currentFile.getSourceCodeLocation(),
 		    CodeRangeType.FILE, currentFile.getName(), PARAMETERS, issues);
+	    FileIssuesImpl fileIssues = new FileIssuesImpl(ID, PLUGIN_VERSION, currentFile.getHashId(),
+		    currentFile.getSourceCodeLocation(), new Date(), PARAMETERS);
 	    fileIssues.addCodeRangeIssue(codeRangeIssues);
 	    storeFileResults(analysisRun, createAnalysisInformation(currentFile), fileIssues);
 	}
