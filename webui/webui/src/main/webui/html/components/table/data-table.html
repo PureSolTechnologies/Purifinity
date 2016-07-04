@@ -8,7 +8,9 @@
 	</thead>
 	<tbody>
 		<tr *ngFor="#row of tableData.getRows()">
-			<td *ngFor="#cell of row.getCells()" title="{{cell.tooltip}}">{{cell.content}}</td>
+			<td *ngFor="#cell of row.getCells()" title="{{cell.tooltip}}"><span
+				*ngIf="!cell.link">{{cell.content}}</span><a *ngIf="cell.link"
+				(click)="cell.link()">{{cell.content}}</a></td>
 		</tr>
 	</tbody>
 </table>

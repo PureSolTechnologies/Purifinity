@@ -1,5 +1,5 @@
 import {Component} from 'angular2/core';
-import {RouteParams} from 'angular2/router';
+import {RouteParams, Router} from 'angular2/router';
 import {Response} from 'angular2/http';
 
 import {Utilities} from '../../commons/Utilities';
@@ -36,7 +36,7 @@ export class ProjectRunStyleComponent {
     public issues: SingleIssue[] = [];
     public tableData: Table = new Table("Style Issues");
 
-    constructor(private routeParams: RouteParams, private evaluatorStore: EvaluatorStore) {
+    constructor(private routeParams: RouteParams, private router: Router, private evaluatorStore: EvaluatorStore) {
         this.projectId = routeParams.get('projectId');
         this.runId = routeParams.get('runId');
 
@@ -81,7 +81,9 @@ export class ProjectRunStyleComponent {
                     let row = new TableRow(component.tableData.getColumns());
                     row.addCell(new TableCell(issue.severity));
                     row.addCell(new TableCell(issue.classification));
-                    row.addCell(new TableCell(issue.sourceCodeLocation.internalLocation, null, null, issue.languageName + ' ' + issue.languageVersion));
+                    row.addCell(new TableCell(issue.sourceCodeLocation.internalLocation, null,
+                        (): void => { component.router.navigate(['/FileIssues', { projectId: component.projectId, runId: component.runId, hashId: issue.hashId.algorithmName + ':' + issue.hashId.hash }]) },
+                        issue.languageName + ' ' + issue.languageVersion));
                     row.addCell(new TableCell(issue.codeRangeName, null, null, CodeRangeType[issue.codeRangeType]));
                     row.addCell(new TableCell(issue.parameter.name));
                     row.addCell(new TableCell(issue.parameter.description));
