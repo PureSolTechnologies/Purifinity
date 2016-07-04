@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.Classification;
@@ -34,6 +35,13 @@ public interface EvaluatorStoreRestInterface {
     @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
     public Collection<SingleIssue> getRunIssues(@PathParam("project_id") String projectId,
 	    @PathParam("run_id") long runId) throws EvaluationStoreException;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("projects/{project_id}/runs/{run_id}/files/{hashId}/issues")
+    @RolesAllowed(roles = { SupportedRoles.ENGINEER_ID, SupportedRoles.UNPRIVILEGED_ID })
+    public Collection<SingleIssue> getFileIssues(@PathParam("project_id") String projectId,
+	    @PathParam("run_id") long runId, @PathParam("hashId") HashId hashId) throws EvaluationStoreException;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

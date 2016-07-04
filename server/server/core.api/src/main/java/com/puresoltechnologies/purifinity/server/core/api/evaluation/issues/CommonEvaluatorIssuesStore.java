@@ -3,6 +3,7 @@ package com.puresoltechnologies.purifinity.server.core.api.evaluation.issues;
 import java.util.Collection;
 import java.util.Map;
 
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.Classification;
@@ -90,5 +91,8 @@ public interface CommonEvaluatorIssuesStore
 	    Classification classification) throws EvaluationStoreException;
 
     public Collection<SingleIssue> readRunResults(String projectId, long runId, Classification classification)
+	    throws EvaluationStoreException;
+
+    public Collection<SingleIssue> getFileIssues(String projectId, long runId, HashId hashId)
 	    throws EvaluationStoreException;
 }

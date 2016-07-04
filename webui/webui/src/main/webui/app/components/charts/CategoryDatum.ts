@@ -1,7 +1,8 @@
 export class CategoryDatum {
 
     constructor(private name: string,
-        private value: number, private onClick: () => any  = null) { }
+        private value: number, 
+        private onClick: () => any  = null) { }
 
     public getName(): string {
          return this.name;

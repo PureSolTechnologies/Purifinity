@@ -1,5 +1,5 @@
 import {Component} from 'angular2/core';
-import {RouteParams} from 'angular2/router';
+import {RouteParams, Router} from 'angular2/router';
 import {Response} from 'angular2/http';
 
 import {DefaultDatePipe} from '../../commons/pipes/default-date.pipe';
@@ -52,7 +52,7 @@ export class ProjectRunAnalysisComponent {
     private hashIds: { [hashId: string]: string[] } = {};
     preAnalysisOutput: string = "";
 
-    constructor(private routeParams: RouteParams, private projectManager: ProjectManager, private analysisStore: AnalysisStore) {
+    constructor(private routeParams: RouteParams, private router: Router, private projectManager: ProjectManager, private analysisStore: AnalysisStore) {
         this.projectId = routeParams.get('projectId');
         this.runId = routeParams.get('runId');
 
@@ -111,7 +111,15 @@ export class ProjectRunAnalysisComponent {
         });
         treeTableTree.addColumn(new TableCell(this.fsSizePipe.transform(fileTree.size, []), null, null));
         treeTableTree.addColumn(new TableCell(this.fsSizePipe.transform(fileTree.sizeRecursive, []), null, null));
-        treeTableTree.addColumn(new TableCell(analyses, null, "/file.html#/summary/" + treeTableTree.id));
+        treeTableTree.addColumn(new TableCell(analyses, null, 
+          (): void => { 
+            component.router.navigate(['/FileSummary', 
+            { 
+                projectId: component.projectId, 
+                runId: component.runId, 
+                hashId: treeTableTree.id
+            }])}
+        ));
         if (fileTree.children.length > 0) {
             treeTableTree.children = [];
             fileTree.children.sort(function(l, r) {
@@ -134,7 +142,7 @@ export class ProjectRunAnalysisComponent {
             treeTableTree.imageUrl = "images/icons/FatCow_Icons16x16/folder.png";
         } else {
             treeTableTree.imageUrl = "images/icons/FatCow_Icons16x16/document_green.png";
-            treeTableTree.routerLink = ['FileSummary', { hashId: treeTableTree.id }];
+            treeTableTree.routerLink = ['/FileSummary', { projectId: this.projectId, runId: this.runId, hashId: treeTableTree.id }];
         }
         return treeTableTree;
     }

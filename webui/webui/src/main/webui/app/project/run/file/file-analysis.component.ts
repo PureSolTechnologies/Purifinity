@@ -2,8 +2,8 @@ import {Component} from 'angular2/core';
 import {RouteParams} from 'angular2/router';
 import {Response} from 'angular2/http';
 
-import {FileStore} from '../commons/purifinity/FileStore';
-import {VersionPipe} from '../commons/pipes/version.pipe';
+import {FileStore} from '../../../commons/purifinity/FileStore';
+import {VersionPipe} from '../../../commons/pipes/version.pipe';
 import {FileMenuComponent} from './file-menu.component';
 
 @Component({
@@ -14,10 +14,12 @@ import {FileMenuComponent} from './file-menu.component';
     pipes: [
         VersionPipe
     ],
-    templateUrl: '../../html/file/analysis.html'
+    templateUrl: '../../../../html/project/run/file/analysis.html'
 })
 export class FileAnalysisComponent {
 
+    private projectId: string;
+    private runId: string;
     private hashId: string;
 
     private analyzerSelection = undefined;
@@ -26,6 +28,8 @@ export class FileAnalysisComponent {
     private selectedUST = undefined;
 
     constructor(private routeParams: RouteParams, private fileStore: FileStore) {
+        this.projectId = routeParams.get('projectId');
+        this.runId = routeParams.get('runId');
         this.hashId = routeParams.get('hashId');
 
         let component = this;
@@ -38,7 +42,7 @@ export class FileAnalysisComponent {
                     fileStore
                         .loadAnalyses(
                         component.hashId,
-                        function(data:any[]) {
+                        function(data: any[]) {
                             component.analyses = data;
                             component.analyses
                                 .forEach(function(

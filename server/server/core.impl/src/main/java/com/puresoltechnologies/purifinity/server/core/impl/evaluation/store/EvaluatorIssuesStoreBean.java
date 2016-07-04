@@ -719,4 +719,76 @@ public class EvaluatorIssuesStoreBean extends AbstractEvaluatorStore
 	    throw new EvaluationStoreException("Could not read file results.", e);
 	}
     }
+
+    @Override
+    public Collection<SingleIssue> getFileIssues(String projectId, long runId, HashId hashId)
+	    throws EvaluationStoreException {
+	try {
+	    PreparedStatement preparedStatement = preparedStatements.getPreparedStatement(connection,
+		    "SELECT " //
+			    + "EVALUATOR_ID" //
+			    + ", ISSUE_ID" //
+			    + ", CODE_RANGE_TYPE" //
+			    + ", CODE_RANGE_NAME" //
+			    + ", TIME" //
+			    + ", EVALUATOR_VERSION" //
+			    + ", SOURCE_CODE_LOCATION" //
+			    + ", LANGUAGE_NAME" //
+			    + ", LANGUAGE_VERSION" //
+			    + ", START_LINE" //
+			    + ", START_COLUMN" //
+			    + ", LINE_COUNT" //
+			    + ", LENGTH" //
+			    + ", WEIGHT" //
+			    + ", SEVERITY" //
+			    + ", CLASSIFICATION" //
+			    + ", DESCRIPTION" //
+			    + ", REMARK" //
+			    + " FROM " + HBaseElementNames.EVALUATION_ISSUES_TABLE //
+			    + " WHERE project_id=? AND run_id=? AND hashid=?");
+	    preparedStatement.setString(1, projectId);
+	    preparedStatement.setLong(2, runId);
+	    preparedStatement.setString(3, hashId.toString());
+	    List<SingleIssue> runResults = new ArrayList<>();
+	    try (ResultSet resultSet = preparedStatement.executeQuery()) {
+		while (resultSet.next()) {
+		    String evaluatorId = resultSet.getString("EVALUATOR_ID");
+		    String issueId = resultSet.getString("ISSUE_ID");
+		    CodeRangeType codeRangeType = extractCodeRangeType(resultSet);
+		    String codeRangeName = resultSet.getString("CODE_RANGE_NAME");
+		    Date time = resultSet.getDate("TIME");
+		    Version evaluatorVersion = extractEvaluatorVersion(resultSet);
+		    SourceCodeLocation sourceCodeLocation = extractSourceCodeLocation(resultSet);
+		    String languageName = resultSet.getString("LANGUAGE_NAME");
+		    String languageVersion = resultSet.getString("LANGUAGE_VERSION");
+		    int startLine = resultSet.getInt("START_LINE");
+		    int startColumn = resultSet.getInt("START_COLUMN");
+		    int lineCount = resultSet.getInt("LINE_COUNT");
+		    int length = resultSet.getInt("LENGTH");
+		    int weight = resultSet.getInt("WEIGHT");
+		    Severity severity = extractSeverity(resultSet);
+		    Classification classification = extractClassification(resultSet);
+		    String remark = resultSet.getString("remark");
+
+		    EvaluatorServiceInformation evaluator = evaluationService.getEvaluator(evaluatorId);
+		    IssueParameter issueParameter = null;
+		    for (EvaluationParameter<?> parameter : evaluator.getParameters()) {
+			if (parameter.getName().equals(issueId)) {
+			    issueParameter = (IssueParameter) parameter;
+			}
+		    }
+		    if (issueParameter != null) {
+			SingleIssue singleIssue = new SingleIssue(projectId, runId, evaluatorId, evaluatorVersion,
+				codeRangeType, hashId, codeRangeName, time, sourceCodeLocation, languageName,
+				languageVersion, severity, classification, startLine, startColumn, lineCount, length,
+				weight, issueParameter, remark);
+			runResults.add(singleIssue);
+		    }
+		}
+	    }
+	    return runResults;
+	} catch (SQLException e) {
+	    throw new EvaluationStoreException("Could not read file results.", e);
+	}
+    }
 }

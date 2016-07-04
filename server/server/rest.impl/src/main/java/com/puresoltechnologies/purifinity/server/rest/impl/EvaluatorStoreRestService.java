@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import com.puresoltechnologies.commons.misc.hash.HashId;
 import com.puresoltechnologies.purifinity.evaluation.api.EvaluationStoreException;
 import com.puresoltechnologies.purifinity.evaluation.domain.Severity;
 import com.puresoltechnologies.purifinity.evaluation.domain.issues.Classification;
@@ -31,6 +32,12 @@ public class EvaluatorStoreRestService implements EvaluatorStoreRestInterface {
     @Override
     public Collection<SingleIssue> getRunIssues(String projectId, long runId) throws EvaluationStoreException {
 	return evaluatorIssuesStore.readRunResults(projectId, runId);
+    }
+
+    @Override
+    public Collection<SingleIssue> getFileIssues(String projectId, long runId, HashId hashId)
+	    throws EvaluationStoreException {
+	return evaluatorIssuesStore.getFileIssues(projectId, runId, hashId);
     }
 
     @Override

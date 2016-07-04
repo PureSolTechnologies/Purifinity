@@ -42,8 +42,9 @@ import {ProjectRunDesignComponent} from './project/run/project-run-design.compon
 import {ProjectRunArchitectureComponent} from './project/run/project-run-architecture.component';
 import {ProjectRunTrendsComponent} from './project/run/project-run-trends.component';
 // File pages
-import {FileSummaryComponent} from './file/file-summary.component';
-import {FileAnalysisComponent} from './file/file-analysis.component';
+import {FileSummaryComponent} from './project/run/file/file-summary.component';
+import {FileAnalysisComponent} from './project/run/file/file-analysis.component';
+import {FileIssuesComponent} from './project/run/file/file-issues.component';
 
 /**
  * This component is Purifinity's central application.
@@ -71,8 +72,8 @@ import {FileAnalysisComponent} from './file/file-analysis.component';
     { path: '/information', name: 'Information', component: InformationComponent },
     { path: '/help', name: 'Help', component: HelpComponent },
     { path: '/license', name: 'License', component: LicenseComponent },
-    { path: '/analyzer-plugin/:pluginId', name: 'AnalyzerPlugin', component: AnalyzerPluginComponent },
-    { path: '/evaluator-plugin/:pluginId', name: 'EvaluatorPlugin', component: EvaluatorPluginComponent },
+    { path: '/analyzer-plugins/:pluginId', name: 'AnalyzerPlugin', component: AnalyzerPluginComponent },
+    { path: '/evaluator-plugins/:pluginId', name: 'EvaluatorPlugin', component: EvaluatorPluginComponent },
     // Administration Backend
     { path: '/admin', name: 'Admin', redirectTo: ['/DashboardsAdmin'] },
     { path: '/admin/dashboards', name: 'DashboardsAdmin', component: DashboardsAdminComponent },
@@ -98,7 +99,8 @@ import {FileAnalysisComponent} from './file/file-analysis.component';
     { path: '/projects/:projectId/runs/:runId/architecture', name: 'ProjectRunArchitecture', component: ProjectRunArchitectureComponent },
     { path: '/projects/:projectId/runs/:runId/trends', name: 'ProjectRunTrends', component: ProjectRunTrendsComponent },
     // File pages
-    { path: '/files/:hashId/summary', name: 'FileSummary', component: FileSummaryComponent },
-    { path: '/files/:hashId/analysis', name: 'FileAnalysis', component: FileAnalysisComponent },
+    { path: '/projects/:projectId/runs/:runId/files/:hashId/summary', name: 'FileSummary', component: FileSummaryComponent },
+    { path: '/projects/:projectId/runs/:runId/files/:hashId/analysis', name: 'FileAnalysis', component: FileAnalysisComponent },
+    { path: '/projects/:projectId/runs/:runId/files/:hashId/issues', name: 'FileIssues', component: FileIssuesComponent },
 ])
 export class AppComponent { }

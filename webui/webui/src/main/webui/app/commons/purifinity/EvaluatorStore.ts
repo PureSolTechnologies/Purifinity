@@ -38,6 +38,17 @@ export class EvaluatorStore {
 
     }
 
+    getFileIssues(projectId: string, runId: string, hashId: string, success: (data: SingleIssue[]) => void,
+        error: (response: Response) => void) {
+        this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
+            + projectId + "/runs/" + runId + "/files/" + hashId + "/issues", function(response: Response) {
+                let data: SingleIssue[] = response.json();
+                success(data);
+            }, error
+        );
+
+    }
+
     getRunArchitectureIssues(projectId: string, runId: string, success: (data: SingleIssue[]) => void,
         error: (response: Response) => void) {
         this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
@@ -164,7 +175,7 @@ export class EvaluatorStore {
 
     }
 
-        getRunIssueArchitectureParameters(projectId: string, runId: string, success: (data: any) => void,
+    getRunIssueArchitectureParameters(projectId: string, runId: string, success: (data: any) => void,
         error: (response: Response) => void) {
         this.purifinityServerConnector.get("/purifinityserver/rest/evaluatorstore/projects/"
             + projectId
@@ -213,7 +224,6 @@ export class EvaluatorStore {
                 success(data);
             }, error
         );
-
     }
 
 }
