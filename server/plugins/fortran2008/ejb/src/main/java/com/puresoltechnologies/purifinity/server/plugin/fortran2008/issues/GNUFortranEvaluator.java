@@ -93,6 +93,8 @@ public class GNUFortranEvaluator extends AbstractIssueEvaluator implements Issue
 	    "A declared variable is not used.");
     private static final IssueParameter UNUSED_LABEL = new IssueParameter("UnusedLabel", "",
 	    "A declared label is not used.");
+    private static final IssueParameter NOEXISTENT_INCLUDE_DIRECTORY = new IssueParameter("NonexistentIncludeDirectory",
+	    "", "The build system has an include directory defined which is not existent.");
 
     public static final IssueParameter[] PARAMETERS = new IssueParameter[] { REAL_EQUALITY_CHECK, REAL_INEQUALITY_CHECK,
 	    UNUSED_MODULE_VARIABLE, NONCONFORMING_TAB_CHARACTER, NONCONFORMING_FIXED_FORM, OBSOLESCENT_CHARACTER_LENGTH,
@@ -108,7 +110,8 @@ public class GNUFortranEvaluator extends AbstractIssueEvaluator implements Issue
     static final Pattern UNUSED_DUMMY_ARGUMENT_PATTERN = Pattern.compile("Warning: Unused dummy argument ‘([^’]+)’");
     static final Pattern UNUSED_LABEL_PATTERN = Pattern
 	    .compile("Warning: Label (\\d+) at \\((\\d+)\\) defined but not used");
-
+    static final Pattern NOEXISTENT_INCLUDE_DIRECTORY_PATTERN = Pattern
+	    .compile("Warning: Nonexistent include directory ‘([^’]+)’");
     @Inject
     private Logger logger;
 
@@ -308,9 +311,12 @@ public class GNUFortranEvaluator extends AbstractIssueEvaluator implements Issue
 		issue = new Issue(Severity.MAJOR, Classification.STYLE_ISSUE, location.getLine(), location.getColumn(),
 			1, 1, 1, OBSOLESCENT_CHARACTER_LENGTH, "");
 	    }
-	} else if (line.contains(
-		"Warning: Nonexistent include directory ‘/home/ludwig/git/dyn3d/DYN3D2GNeutronKinetics/aggregation/fort/DYN3D2G’")) {
-	    // we cannot do anything here...
+	} else if (line.contains("Warning: Nonexistent include directory ")) {
+	    Matcher matcher = NOEXISTENT_INCLUDE_DIRECTORY_PATTERN.matcher(line);
+	    if (matcher.find()) {
+		issue = new Issue(Severity.MAJOR, Classification.ARCHITECTURE_ISSUE, 0, 0, 1, 1, 1,
+			NOEXISTENT_INCLUDE_DIRECTORY, "Include directory '" + matcher.group(1) + "' does not exist.");
+	    }
 	} else if (line.contains("Warning: Unused dummy argument")) {
 	    IssueLocation location = IssueLocation.valueOf(lineBuffer);
 	    if (location != null) {
