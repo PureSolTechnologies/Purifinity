@@ -32,7 +32,7 @@ public class AddUserStep extends AbstractDuctileDBTransformationStep {
 
     @Override
     public void transform() throws TransformationException {
-	DuctileDBGraph ductileDBGraph = getDuctileDBGraph();
+	GraphStore ductileDBGraph = getDuctileDBGraph();
 	try {
 	    Set<String> types = new HashSet<>();
 	    types.add("User");

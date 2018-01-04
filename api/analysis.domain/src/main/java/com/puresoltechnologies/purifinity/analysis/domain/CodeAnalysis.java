@@ -11,6 +11,8 @@
 package com.puresoltechnologies.purifinity.analysis.domain;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
@@ -52,8 +54,8 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
      *         analysis.
      */
     @Override
-    public Date getStartTime() {
-	return time;
+    public Instant getStartTime() {
+	return time.toInstant();
     }
 
     /**
@@ -62,8 +64,8 @@ public final class CodeAnalysis implements Serializable, TimeAwareness {
      * @return Returns the time effort in milliseconds
      */
     @Override
-    public long getDuration() {
-	return duration;
+    public Duration getDuration() {
+	return Duration.ofMillis(duration);
     }
 
     /**

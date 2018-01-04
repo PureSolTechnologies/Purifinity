@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
-import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationSequence;
-import com.puresoltechnologies.genesis.transformation.phoenix.PhoenixTransformationStep;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraCQLTransformationStep;
+import com.puresoltechnologies.genesis.transformation.cassandra.CassandraTransformationSequence;
 import com.puresoltechnologies.genesis.transformation.spi.ComponentTransformator;
 import com.puresoltechnologies.genesis.transformation.spi.TransformationSequence;
 import com.puresoltechnologies.versioning.Version;
@@ -24,7 +24,8 @@ public class SystemMonitorDatabaseTransformator implements ComponentTransformato
 
     private static final Logger logger = LoggerFactory.getLogger(SystemMonitorDatabaseTransformator.class);
 
-    private static final String HBASE_HOST = "localhost";
+    private static final String CASSANDRA_HOST = "localhost";
+    private static final int CASSANDRA_CQL_PORT = 9042;
 
     private static final String EVENTS_TABLE_NAME = "system_monitor.events";
     private static final String METRICS_TABLE_NAME = "system_monitor.metrics";
@@ -56,10 +57,11 @@ public class SystemMonitorDatabaseTransformator implements ComponentTransformato
 	Version targetVersion = new Version(0, 4, 0);
 	ProvidedVersionRange versionRange = new ProvidedVersionRange(targetVersion, null);
 	SequenceMetadata metadata = new SequenceMetadata(getComponentName(), startVersion, versionRange);
-	PhoenixTransformationSequence sequence = new PhoenixTransformationSequence(metadata, HBASE_HOST);
+	CassandraTransformationSequence sequence = new CassandraTransformationSequence(CASSANDRA_HOST,
+		CASSANDRA_CQL_PORT, metadata);
 
 	String description = "This is the table for the event log.";
-	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+	sequence.appendTransformation(new CassandraCQLTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE IF NOT EXISTS " + EVENTS_TABLE_NAME //
 			+ " (" //
 			+ "server varchar not null, " //
@@ -79,7 +81,7 @@ public class SystemMonitorDatabaseTransformator implements ComponentTransformato
 		description));
 
 	description = "This is the table for metrics and KPIs.";
-	sequence.appendTransformation(new PhoenixTransformationStep(sequence, "Rick-Rainer Ludwig",
+	sequence.appendTransformation(new CassandraCQLTransformationStep(sequence, "Rick-Rainer Ludwig",
 		"CREATE TABLE IF NOT EXISTS " + METRICS_TABLE_NAME //
 			+ " ("//
 			+ "server varchar not null," //
@@ -99,7 +101,7 @@ public class SystemMonitorDatabaseTransformator implements ComponentTransformato
 
     @Override
     public void dropAll() {
-	try (Connection connection = DriverManager.getConnection("jdbc:phoenix:" + HBASE_HOST);) {
+	try (Connection connection = DriverManager.getConnection("jdbc:phoenix:" + CASSANDRA_HOST);) {
 	    try (Statement statement = connection.createStatement();) {
 		statement.execute("DROP TABLE IF EXISTS " + EVENTS_TABLE_NAME);
 		statement.execute("DROP TABLE IF EXISTS " + METRICS_TABLE_NAME);

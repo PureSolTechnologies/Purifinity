@@ -17,8 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.ServiceException;
 import com.puresoltechnologies.ductiledb.api.ElementType;
-import com.puresoltechnologies.ductiledb.api.schema.UniqueConstraint;
 import com.puresoltechnologies.ductiledb.core.DuctileDBGraphFactory;
+import com.puresoltechnologies.ductiledb.core.schema.UniqueConstraint;
 import com.puresoltechnologies.genesis.commons.ProvidedVersionRange;
 import com.puresoltechnologies.genesis.commons.SequenceMetadata;
 import com.puresoltechnologies.genesis.commons.TransformationException;

@@ -86,14 +86,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>database.hadoop.configuration</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>database.hbase.configuration</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
 			<artifactId>global.ddl</artifactId>
 		</dependency>
 		<dependency>
@@ -118,41 +110,10 @@
 			<type>zip</type>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>wildfly.modules.hadoop</artifactId>
-			<classifier>zip</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>wildfly.modules.hbase</artifactId>
-			<classifier>zip</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.webui</groupId>
 			<artifactId>webui</artifactId>
 			<classifier>bin</classifier>
 			<type>zip</type>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop</artifactId>
-			<type>tar.gz</type>
-			<classifier>distribution</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase</artifactId>
-			<type>tar.gz</type>
-			<classifier>distribution</classifier>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.phoenix</groupId>
-			<artifactId>phoenix</artifactId>
-			<type>jar</type>
-			<classifier>server</classifier>
-			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.wildfly</groupId>

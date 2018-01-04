@@ -1,19 +1,16 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.test;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.SQLException;
 
 import org.junit.Before;
 
-import com.google.protobuf.ServiceException;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractClientTest;
 
 public abstract class AbstractAccountManagerClientTest extends AbstractClientTest {
 
     @Before
-    public void cleanup() throws SQLException, IOException, ServiceException {
+    public void cleanup() {
 	AccountManagerTester.cleanupDatabase();
     }
 

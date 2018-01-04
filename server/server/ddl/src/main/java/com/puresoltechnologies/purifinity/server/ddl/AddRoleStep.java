@@ -25,7 +25,7 @@ public class AddRoleStep extends AbstractDuctileDBTransformationStep {
 
     @Override
     public void transform() throws TransformationException {
-	DuctileDBGraph graph = getDuctileDBGraph();
+	GraphStore graph = getDuctileDBGraph();
 	try {
 	    Set<String> types = new HashSet<>();
 	    types.add("Role");

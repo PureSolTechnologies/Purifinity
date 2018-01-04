@@ -27,13 +27,8 @@
 			<type>ejb</type>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>database.hbase.utils</artifactId>
-			<type>ejb</type>
-		</dependency>
-		<dependency>
 			<groupId>com.puresoltechnologies.ductiledb</groupId>
-			<artifactId>ductiledb-xo</artifactId>
+			<artifactId>xo</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>

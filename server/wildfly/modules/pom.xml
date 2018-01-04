@@ -12,7 +12,5 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>hadoop</module>
-		<module>hbase</module>
 	</modules>
 </project>

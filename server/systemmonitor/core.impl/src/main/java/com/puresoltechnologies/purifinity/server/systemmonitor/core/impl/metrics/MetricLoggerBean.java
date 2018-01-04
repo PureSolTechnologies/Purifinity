@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 
 import com.puresoltechnologies.commons.domain.Parameter;
 import com.puresoltechnologies.commons.domain.Value;
-import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.SystemMonitorConnection;
+import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.SystemMonitorKeyspace;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLogger;
 import com.puresoltechnologies.server.systemmonitor.core.api.metrics.MetricLogger;
 import com.puresoltechnologies.server.systemmonitor.core.api.metrics.MetricLoggerRemote;
@@ -54,7 +54,7 @@ public class MetricLoggerBean implements MetricLogger, MetricLoggerRemote {
     }
 
     @Inject
-    @SystemMonitorConnection
+    @SystemMonitorKeyspace
     private Connection connection;
 
     private PreparedStatement preparedStatement;

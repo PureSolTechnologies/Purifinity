@@ -1,33 +1,38 @@
 package com.puresoltechnologies.purifinity.server.passwordstore.test;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import org.apache.http.HttpEntity;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import com.puresoltechnologies.purifinity.server.database.hbase.HBaseHelper;
+import com.datastax.driver.core.Cluster;
+import com.datastax.driver.core.Session;
+import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
 import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreTester;
 import com.puresoltechnologies.purifinity.wildfly.test.AbstractClientTest;
 import com.puresoltechnologies.purifinity.wildfly.test.arquillian.EnhanceDeployment;
 
 public abstract class AbstractPasswordStoreClientTest extends AbstractClientTest {
 
-    private static Connection connection;
+    private static Cluster cluster;
+    private static Session session;
 
     @BeforeClass
-    public static void connectHBase() throws SQLException {
-	connection = HBaseHelper.connect();
-	PasswordStoreTester.cleanupDatabase(connection);
+    public static void connectCassandra() {
+	cluster = CassandraClusterHelper.connect();
+	session = PasswordStoreTester.connectKeyspace(cluster);
+	PasswordStoreTester.cleanupDatabase(session);
     }
 
     @AfterClass
-    public static void disconnectHBase() throws SQLException {
-	if (connection != null) {
-	    connection.close();
-	    connection = null;
+    public static void disconnectCassandra() {
+	if (session != null) {
+	    session.close();
+	    session = null;
+	}
+	if (cluster != null) {
+	    cluster.close();
+	    cluster = null;
 	}
     }
 

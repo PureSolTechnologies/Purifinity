@@ -21,17 +21,13 @@
 
 		<!-- Databases -->
 		<xo.version>0.6.0</xo.version>
-		<hadoop.version>2.7.2</hadoop.version>
-		<jersey.version>1.19</jersey.version>
-		<hbase.version>1.1.3</hbase.version>
-		<phoenix.version>4.6.0-HBase-1.1</phoenix.version>
 		<ductiledb.version>0.2.0-SNAPSHOT</ductiledb.version>
 
 		<!-- WildFly -->
 		<wildfly.version>10.0.0.Final</wildfly.version>
 		<resteasy.version>3.0.14.Final</resteasy.version>
 		<resteasy-api.version>3.0.12.Final</resteasy-api.version>
-		<com.fasterxml.jackson.version>2.5.4</com.fasterxml.jackson.version>
+		<jackson.version>2.5.4</jackson.version>
 
 		<!-- WildFly settings -->
 		<wildfly.http.port>8080</wildfly.http.port>
@@ -51,8 +47,6 @@
 		<cargo.logging>medium</cargo.logging>
 		<!-- Purifinity Settings -->
 		<purifinity.home>${work.dir}/purifinity</purifinity.home>
-		<hadoop.data.dir>${purifinity.home}/data/hadoop</hadoop.data.dir>
-		<hbase.data.dir>${purifinity.home}/data/hbase</hbase.data.dir>
 	</properties>
 
 	<groupId>com.puresoltechnologies.purifinity</groupId>
@@ -211,8 +205,6 @@
 		<profile>
 			<id>release</id>
 			<properties>
-				<hadoop.data.dir>/var/opt/purifinity/data/hadoop</hadoop.data.dir>
-				<hbase.data.dir>/var/opt/purifinity/data/hbase</hbase.data.dir>
 			</properties>
 			<build>
 				<plugins>
@@ -771,6 +763,12 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
+				<artifactId>common.configuration</artifactId>
+				<version>${project.version}</version>
+				<type>ejb</type>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>common.job</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -810,33 +808,6 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>database.ductiledb.utils</artifactId>
-				<version>${project.version}</version>
-				<type>ejb</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.hadoop.configuration</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.hadoop.genesis</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.hadoop.utils</artifactId>
-				<version>${project.version}</version>
-				<type>ejb</type>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.hbase.configuration</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>database.hbase.utils</artifactId>
 				<version>${project.version}</version>
 				<type>ejb</type>
 			</dependency>
@@ -1010,22 +981,6 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>wildfly.modules.hadoop</artifactId>
-				<version>${project.version}</version>
-				<classifier>zip</classifier>
-				<type>zip</type>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
-				<artifactId>wildfly.modules.hbase</artifactId>
-				<version>${project.version}</version>
-				<classifier>zip</classifier>
-				<type>zip</type>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.purifinity.server</groupId>
 				<artifactId>wildfly.test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
@@ -1181,7 +1136,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.genesis</groupId>
-				<artifactId>tracker.hadoop</artifactId>
+				<artifactId>tracker.ductiledb</artifactId>
 				<version>${genesis.version}</version>
 			</dependency>
 			<dependency>
@@ -1191,12 +1146,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.genesis</groupId>
-				<artifactId>transformation.hadoop</artifactId>
-				<version>${genesis.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.puresoltechnologies.genesis</groupId>
-				<artifactId>transformation.phoenix</artifactId>
+				<artifactId>transformation.ductiledb</artifactId>
 				<version>${genesis.version}</version>
 			</dependency>
 			<dependency>
@@ -1267,162 +1217,6 @@
 			</dependency>
 			<!-- Databases -->
 			<dependency>
-				<groupId>org.apache.hadoop</groupId>
-				<artifactId>hadoop</artifactId>
-				<version>${hadoop.version}</version>
-				<type>tar.gz</type>
-				<classifier>distribution</classifier>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.hadoop</groupId>
-				<artifactId>hadoop-auth</artifactId>
-				<version>${hadoop.version}</version>
-				<scope>provided</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-log4j12</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.hadoop</groupId>
-				<artifactId>hadoop-common</artifactId>
-				<version>${hadoop.version}</version>
-				<scope>provided</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-log4j12</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.google.guava</groupId>
-						<artifactId>guava</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>asm</groupId>
-						<artifactId>asm</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.hadoop</groupId>
-				<artifactId>hadoop-hdfs</artifactId>
-				<version>${hadoop.version}</version>
-				<scope>provided</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>com.google.guava</groupId>
-						<artifactId>guava</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.hbase</groupId>
-				<artifactId>hbase</artifactId>
-				<version>${hbase.version}</version>
-				<type>tar.gz</type>
-				<classifier>distribution</classifier>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.hbase</groupId>
-				<artifactId>hbase-client</artifactId>
-				<version>${hbase.version}</version>
-				<scope>provided</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-log4j12</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.google.guava</groupId>
-						<artifactId>guava</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.hbase</groupId>
-				<artifactId>hbase-common</artifactId>
-				<version>${hbase.version}</version>
-				<scope>provided</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-log4j12</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.google.guava</groupId>
-						<artifactId>guava</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.hbase</groupId>
-				<artifactId>hbase-protocol</artifactId>
-				<version>${hbase.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.hbase</groupId>
-				<artifactId>hbase-server</artifactId>
-				<version>${hbase.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.htrace</groupId>
-				<artifactId>htrace-core</artifactId>
-				<version>3.1.0-incubating</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.phoenix</groupId>
-				<artifactId>phoenix-core</artifactId>
-				<version>${phoenix.version}</version>
-				<scope>provided</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-log4j12</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.google.guava</groupId>
-						<artifactId>guava</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.phoenix</groupId>
-				<artifactId>phoenix</artifactId>
-				<version>${phoenix.version}</version>
-				<type>jar</type>
-				<classifier>server</classifier>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.zookeeper</groupId>
-				<artifactId>zookeeper</artifactId>
-				<version>3.4.6</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>sqlline</groupId>
-				<artifactId>sqlline</artifactId>
-				<version>1.1.9</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.guava</groupId>
-				<artifactId>guava</artifactId>
-				<version>16.0.1</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.protobuf</groupId>
-				<artifactId>protobuf-java</artifactId>
-				<version>2.5.0</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
 				<groupId>com.buschmais.xo</groupId>
 				<artifactId>xo.api</artifactId>
 				<version>${xo.version}</version>
@@ -1446,12 +1240,12 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.ductiledb</groupId>
-				<artifactId>ductiledb-core</artifactId>
+				<artifactId>core</artifactId>
 				<version>${ductiledb.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.ductiledb</groupId>
-				<artifactId>ductiledb-tinkerpop</artifactId>
+				<artifactId>tinkerpop</artifactId>
 				<version>${ductiledb.version}</version>
 				<exclusions>
 					<exclusion>
@@ -1462,7 +1256,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.ductiledb</groupId>
-				<artifactId>ductiledb-xo</artifactId>
+				<artifactId>xo</artifactId>
 				<version>${ductiledb.version}</version>
 			</dependency>
 			<!-- WildFly -->
@@ -1495,13 +1289,19 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson.jaxrs</groupId>
 				<artifactId>jackson-jaxrs-base</artifactId>
-				<version>2.5.1</version>
+				<version>${jackson.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-core</artifactId>
-				<version>2.5.1</version>
+				<version>${jackson.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-jsr310</artifactId>
+				<version>${jackson.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>

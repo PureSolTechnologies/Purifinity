@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.SystemMonitorConnection;
+import com.puresoltechnologies.purifinity.server.systemmonitor.core.impl.SystemMonitorKeyspace;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.Event;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLogger;
 import com.puresoltechnologies.server.systemmonitor.core.api.events.EventLoggerRemote;
@@ -52,7 +52,7 @@ public class EventLoggerBean implements EventLogger, EventLoggerRemote {
     }
 
     @Inject
-    @SystemMonitorConnection
+    @SystemMonitorKeyspace
     private Connection connection;
 
     private PreparedStatement preparedLogEventStatement = null;

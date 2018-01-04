@@ -27,18 +27,8 @@
 			<type>ejb</type>
 		</dependency>
 		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>database.hbase.utils</artifactId>
-			<type>ejb</type>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.purifinity.server</groupId>
-			<artifactId>database.hadoop.utils</artifactId>
-			<type>ejb</type>
-		</dependency>
-		<dependency>
 			<groupId>com.puresoltechnologies.ductiledb</groupId>
-			<artifactId>ductiledb-xo</artifactId>
+			<artifactId>xo</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.purifinity.server</groupId>
@@ -69,15 +59,8 @@
 			<artifactId>jackson-jaxrs-base</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-common</artifactId>
-			<exclusions>
-				<exclusion>
-					<!-- Needed to get a newer version than 11... -->
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>

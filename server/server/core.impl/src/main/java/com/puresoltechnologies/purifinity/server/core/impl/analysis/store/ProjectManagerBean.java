@@ -191,7 +191,7 @@ public class ProjectManagerBean implements ProjectManager {
 	    return projects;
 	}
 	try {
-	    DuctileDBGraph baseGraph = graph.getBaseGraph();
+	    GraphStore baseGraph = graph.getBaseGraph();
 	    Iterable<DuctileDBVertex> vertices = baseGraph.getVertices(AnalysisProjectVertex.NAME);
 	    for (DuctileDBVertex vertex : vertices) {
 		String projectId = (String) vertex.getProperty(DuctileDBElementNames.ANALYSIS_PROJECT_ID_PROPERTY);

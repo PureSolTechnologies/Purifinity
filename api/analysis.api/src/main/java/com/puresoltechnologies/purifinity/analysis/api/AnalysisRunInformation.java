@@ -1,7 +1,8 @@
 package com.puresoltechnologies.purifinity.analysis.api;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Duration;
+import java.time.Instant;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.puresoltechnologies.commons.misc.TimeAwareness;
@@ -13,23 +14,19 @@ import com.puresoltechnologies.commons.misc.io.FileSearchConfiguration;
  * @author Rick-Rainer Ludwig
  * 
  */
-public final class AnalysisRunInformation implements Serializable,
-	TimeAwareness, Comparable<AnalysisRunInformation> {
+public final class AnalysisRunInformation implements Serializable, TimeAwareness, Comparable<AnalysisRunInformation> {
 
     private static final long serialVersionUID = -2618256066434770094L;
 
     private final String projectId;
     private final long runId;
-    private final Date startTime;
-    private final long duration;
+    private final Instant startTime;
+    private final Duration duration;
     private final String description;
     private final FileSearchConfiguration fileSearchConfiguration;
 
-    public AnalysisRunInformation(
-	    @JsonProperty("project_id") String projectId,
-	    @JsonProperty("run_id") long runId,
-	    @JsonProperty("start_time") Date startTime,
-	    @JsonProperty("duration") long duration,
+    public AnalysisRunInformation(@JsonProperty("project_id") String projectId, @JsonProperty("run_id") long runId,
+	    @JsonProperty("start_time") Instant startTime, @JsonProperty("duration") Duration duration,
 	    @JsonProperty("description") String description,
 	    @JsonProperty("file_search_configuration") FileSearchConfiguration fileSearchConfiguration) {
 	super();
@@ -67,7 +64,7 @@ public final class AnalysisRunInformation implements Serializable,
      * @return A Date object is returned.
      */
     @Override
-    public final Date getStartTime() {
+    public final Instant getStartTime() {
 	return startTime;
     }
 
@@ -77,7 +74,7 @@ public final class AnalysisRunInformation implements Serializable,
      * @return Returns the time effort in milliseconds.
      */
     @Override
-    public final long getDuration() {
+    public final Duration getDuration() {
 	return duration;
     }
 
@@ -98,18 +95,12 @@ public final class AnalysisRunInformation implements Serializable,
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result
-		+ ((description == null) ? 0 : description.hashCode());
-	result = prime * result + (int) (duration ^ (duration >>> 32));
-	result = prime
-		* result
-		+ ((fileSearchConfiguration == null) ? 0
-			: fileSearchConfiguration.hashCode());
-	result = prime * result
-		+ ((projectId == null) ? 0 : projectId.hashCode());
+	result = prime * result + ((description == null) ? 0 : description.hashCode());
+	result = prime * result + ((duration == null) ? 0 : duration.hashCode());
+	result = prime * result + ((fileSearchConfiguration == null) ? 0 : fileSearchConfiguration.hashCode());
+	result = prime * result + ((projectId == null) ? 0 : projectId.hashCode());
 	result = prime * result + (int) (runId ^ (runId >>> 32));
-	result = prime * result
-		+ ((startTime == null) ? 0 : startTime.hashCode());
+	result = prime * result + ((startTime == null) ? 0 : startTime.hashCode());
 	return result;
     }
 
@@ -127,13 +118,15 @@ public final class AnalysisRunInformation implements Serializable,
 		return false;
 	} else if (!description.equals(other.description))
 	    return false;
-	if (duration != other.duration)
+	if (duration == null) {
+	    if (other.duration != null)
+		return false;
+	} else if (!duration.equals(other.duration))
 	    return false;
 	if (fileSearchConfiguration == null) {
 	    if (other.fileSearchConfiguration != null)
 		return false;
-	} else if (!fileSearchConfiguration
-		.equals(other.fileSearchConfiguration))
+	} else if (!fileSearchConfiguration.equals(other.fileSearchConfiguration))
 	    return false;
 	if (projectId == null) {
 	    if (other.projectId != null)
@@ -157,10 +150,9 @@ public final class AnalysisRunInformation implements Serializable,
 
     @Override
     public String toString() {
-	String searchString = fileSearchConfiguration != null ? fileSearchConfiguration
-		.toString() : "n/a";
-	return String.valueOf(runId) + ": " + startTime + "/" + duration
-		+ "ms (" + description + ") search:" + searchString;
+	String searchString = fileSearchConfiguration != null ? fileSearchConfiguration.toString() : "n/a";
+	return String.valueOf(runId) + ": " + startTime + "/" + duration + "ms (" + description + ") search:"
+		+ searchString;
     }
 
 }

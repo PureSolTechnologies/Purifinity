@@ -97,7 +97,7 @@ public class PasswordStoreBean implements PasswordStore {
     private EventLoggerRemote eventLogger;
 
     @Inject
-    @PasswordStoreConnection
+    @PasswordStoreKeyspace
     private Connection connection;
 
     @Override

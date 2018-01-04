@@ -9,7 +9,9 @@ import javax.inject.Singleton;
 
 import org.slf4j.Logger;
 
-import com.google.protobuf.ServiceException;
+import com.puresoltechnologies.ductiledb.core.DuctileDB;
+import com.puresoltechnologies.ductiledb.storage.api.StorageException;
+import com.puresoltechnologies.ductiledb.storage.engine.schema.SchemaException;
 import com.puresoltechnologies.ductiledb.tinkerpop.DuctileGraph;
 
 @Singleton
@@ -18,15 +20,18 @@ public class DuctileGraphProducer {
     @Inject
     private Logger logger;
 
+    @Inject
+    private DuctileDB ductileDB;
+
     @Produces
     @Singleton
     public DuctileGraph getDuctileGraph() {
 	try {
 	    logger.info("Creating Ductile Graph...");
-	    DuctileGraph ductileGraph = DuctileGraphHelper.connect();
+	    DuctileGraph ductileGraph = DuctileGraph.open(ductileDB);
 	    logger.info("Ductile Graph created.");
 	    return ductileGraph;
-	} catch (IOException | ServiceException e) {
+	} catch (StorageException | SchemaException | IOException e) {
 	    throw new RuntimeException("Could not create Ductile Graph.", e);
 	}
     }

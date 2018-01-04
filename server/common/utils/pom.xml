@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -45,6 +46,10 @@
 			<artifactId>jackson-jaxrs-base</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
@@ -60,23 +65,21 @@
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.9.1</version>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.4</version>
 				<executions>
 					<execution>
-						<id>addBuildYear</id>
+						<id>create_timestamp</id>
 						<phase>generate-sources</phase>
 						<goals>
-							<goal>timestamp-property</goal>
+							<goal>create-timestamp</goal>
 						</goals>
-						<configuration>
-							<name>project.buildYear</name>
-							<pattern>yyyy</pattern>
-							<units>year</units>
-							<offset>0</offset>
-						</configuration>
 					</execution>
 				</executions>
+				<configuration>
+					<timestampFormat>yyyy-MM-dd HH:mm:ss</timestampFormat>
+					<timestampPropertyName>build.timestamp</timestampPropertyName>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

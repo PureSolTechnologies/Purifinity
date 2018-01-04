@@ -13,6 +13,7 @@
 
 	<modules>
 		<module>utils</module>
+		<module>configuration</module>
 		<module>plugins</module>
 		<module>job</module>
 		<module>rest</module>

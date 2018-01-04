@@ -1,18 +1,13 @@
 package com.puresoltechnologies.purifinity.server.accountmanager.test;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import org.apache.tinkerpop.gremlin.process.traversal.dsl.graph.GraphTraversal;
-import org.apache.tinkerpop.gremlin.structure.Vertex;
-
-import com.google.protobuf.ServiceException;
-import com.puresoltechnologies.ductiledb.tinkerpop.DuctileGraph;
-import com.puresoltechnologies.purifinity.server.database.ductiledb.utils.DuctileDBElementNames;
-import com.puresoltechnologies.purifinity.server.database.ductiledb.utils.DuctileGraphHelper;
-import com.puresoltechnologies.purifinity.server.database.hbase.HBaseHelper;
+import com.datastax.driver.core.Cluster;
+import com.puresoltechnologies.purifinity.server.database.cassandra.CassandraClusterHelper;
+import com.puresoltechnologies.purifinity.server.database.titan.TitanElementNames;
+import com.puresoltechnologies.purifinity.server.database.titan.TitanGraphHelper;
+import com.puresoltechnologies.purifinity.server.passwordstore.core.impl.PasswordStoreBean;
 import com.puresoltechnologies.purifinity.server.passwordstore.test.utils.PasswordStoreTester;
+import com.thinkaurelius.titan.core.TitanGraph;
+import com.tinkerpop.blueprints.Vertex;
 
 /**
  * This class contains several methods which support testing the AccountManager
@@ -31,17 +26,10 @@ public class AccountManagerTester {
      * <li>administrator@puresol-technologies.com</li>
      * <li>ludwig@puresol-technologies.com</li>
      * </ol>
-     * 
-     * @throws SQLException
-     *             is thrown in case of database issues.
-     * @throws IOException
-     *             is thrown in case of IO issues.
-     * @throws ServiceException
-     *             is thrown in case of HBase issues.
      */
-    public static void cleanupDatabase() throws SQLException, IOException, ServiceException {
-	try (Connection connection = HBaseHelper.connect()) {
-	    cleanupDatabase(connection);
+    public static void cleanupDatabase() {
+	try (Cluster cluster = CassandraClusterHelper.connect()) {
+	    cleanupDatabase(cluster);
 	}
     }
 
@@ -55,44 +43,43 @@ public class AccountManagerTester {
      * <li>ludwig@puresol-technologies.com</li>
      * </ol>
      * 
-     * @param connection
+     * @param cluster
      *            is the cluster where the keyspace
-     *            PasswordStoreBean.PASSWORD_STORE_KEYSPACE_NAME can be found.
-     * @throws SQLException
-     *             is thrown in case of database issues.
-     * @throws IOException
-     *             is thrown in case of IO issues.
-     * @throws ServiceException
-     *             is thrown in case of HBase issues.
+     *            {@link PasswordStoreBean#PASSWORD_STORE_KEYSPACE_NAME} can be
+     *            found.
      */
-    public static void cleanupDatabase(Connection connection) throws SQLException, IOException, ServiceException {
-	PasswordStoreTester.cleanupDatabase();
+    public static void cleanupDatabase(Cluster cluster) {
+	PasswordStoreTester.cleanupDatabase(cluster);
 
-	DuctileGraph titanGraph = DuctileGraphHelper.connect();
+	TitanGraph titanGraph = TitanGraphHelper.connect();
 	try {
-	    GraphTraversal<Vertex, Vertex> userVertices = titanGraph.traversal().V();
-	    while (userVertices.hasNext()) {
-		Vertex userVertex = userVertices.next();
-		String email = (String) userVertex.property(DuctileDBElementNames.USER_EMAIL_PROPERTY).value();
+	    @SuppressWarnings("unchecked")
+	    Iterable<Vertex> userVertices = titanGraph.query()
+		    .has("_xo_discriminator_user").vertices();
+	    for (Vertex userVertex : userVertices) {
+		String email = userVertex
+			.getProperty(TitanElementNames.USER_EMAIL_PROPERTY);
 		if (isDefaultAccount(email)) {
 		    continue;
 		}
-		userVertex.remove();
+		titanGraph.removeVertex(userVertex);
 	    }
-	    titanGraph.tx().commit();
+	    titanGraph.commit();
 
-	    GraphTraversal<Vertex, Vertex> roleVertices = titanGraph.traversal().V();
-	    while (roleVertices.hasNext()) {
-		Vertex roleVertex = roleVertices.next();
-		String roleId = (String) roleVertex.property(DuctileDBElementNames.ROLE_ID_PROPERTY).value();
+	    @SuppressWarnings("unchecked")
+	    Iterable<Vertex> roleVertices = titanGraph.query()
+		    .has("_xo_discriminator_role").vertices();
+	    for (Vertex roleVertex : roleVertices) {
+		String roleId = roleVertex
+			.getProperty(TitanElementNames.ROLE_ID_PROPERTY);
 		if (isDefaultRole(roleId)) {
 		    continue;
 		}
-		roleVertex.remove();
+		titanGraph.removeVertex(roleVertex);
 	    }
-	    titanGraph.tx().commit();
+	    titanGraph.commit();
 	} finally {
-	    titanGraph.close();
+	    titanGraph.shutdown();
 	}
     }
 
@@ -104,7 +91,8 @@ public class AccountManagerTester {
 	if (roleId == null) {
 	    return false;
 	}
-	if (roleId.equals("unprivileged") || roleId.equals("engineer") || roleId.equals("administrator")) {
+	if (roleId.equals("unprivileged") || roleId.equals("engineer")
+		|| roleId.equals("administrator")) {
 	    return true;
 	}
 	return false;
