@@ -1,5 +1,6 @@
 package com.puresoltechnologies.debugging.agent;
 
+import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 
 /**
@@ -11,7 +12,18 @@ public class InstrumentationAgent {
 
     public static void premain(String args, Instrumentation instrumentation) {
 	Configuration.initialize(args);
-	ProfilerInstrumentation transformer = new ProfilerInstrumentation();
-	instrumentation.addTransformer(transformer);
+	try {
+	    ProfilerInstrumentation transformer = new ProfilerInstrumentation();
+	    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+		try {
+		    transformer.close();
+		} catch (IOException e) {
+		    // intentionally left empty
+		}
+	    }));
+	    instrumentation.addTransformer(transformer);
+	} catch (IOException e) {
+	    throw new RuntimeException("Cannot instrument for classes.", e);
+	}
     }
 }
