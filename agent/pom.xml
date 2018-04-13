@@ -14,10 +14,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.javassist</groupId>
-			<artifactId>javassist</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.ow2.asm</groupId>
 			<artifactId>asm-analysis</artifactId>
 		</dependency>
@@ -47,7 +43,7 @@
 				<configuration>
 					<archive>
 						<manifestEntries>
-							<Premain-Class>com.puresoltechnologies.agent.Agent</Premain-Class>
+							<Premain-Class>com.puresoltechnologies.debugging.agent.InstrumentationAgent</Premain-Class>
 							<Can-Redefine-Classes>true</Can-Redefine-Classes>
 							<Can-Retransform-Classes>true</Can-Retransform-Classes>
 							<Can-Set-Native-Method-Prefix>true</Can-Set-Native-Method-Prefix>
@@ -66,7 +62,7 @@
 						<configuration>
 							<archive>
 								<manifestEntries>
-									<Premain-Class>com.puresoltechnologies.agent.Agent</Premain-Class>
+									<Premain-Class>com.puresoltechnologies.debugging.agent.InstrumentationAgent</Premain-Class>
 									<Can-Redefine-Classes>true</Can-Redefine-Classes>
 									<Can-Retransform-Classes>true</Can-Retransform-Classes>
 									<Can-Set-Native-Method-Prefix>true</Can-Set-Native-Method-Prefix>

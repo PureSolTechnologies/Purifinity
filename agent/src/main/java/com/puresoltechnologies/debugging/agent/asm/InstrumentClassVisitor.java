@@ -6,16 +6,12 @@ import org.objectweb.asm.Opcodes;
 
 public class InstrumentClassVisitor extends ClassVisitor {
 
-    private String className = null;
+    private final int classId;
+    private short methodId = 0;
 
-    public InstrumentClassVisitor(ClassVisitor cv) {
+    public InstrumentClassVisitor(ClassVisitor cv, int classId) {
 	super(Opcodes.ASM6, cv);
-    }
-
-    @Override
-    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-	super.visit(version, access, name, signature, superName, interfaces);
-	this.className = name;
+	this.classId = classId;
     }
 
     @Override
@@ -24,8 +20,9 @@ public class InstrumentClassVisitor extends ClassVisitor {
 	MethodVisitor visitMethod = super.visitMethod(access, name, descriptor, signature, exceptions);
 	if (name.equals("test")) {
 	    System.out.println("test() found.");
-	    return new InstrumentMethodVisitor(this.className, access, descriptor, visitMethod);
+	    return new InstrumentMethodVisitor(classId, methodId, access, descriptor, visitMethod);
 	}
+	methodId++;
 	return visitMethod;
     }
 }

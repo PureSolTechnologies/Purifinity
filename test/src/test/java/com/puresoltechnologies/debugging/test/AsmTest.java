@@ -26,7 +26,7 @@ public class AsmTest {
     @Test
     public void test2() throws Exception {
 	ClassWriter cw = new ClassWriter(0);
-	InstrumentClassVisitor cv = new InstrumentClassVisitor(cw);
+	InstrumentClassVisitor cv = new InstrumentClassVisitor(cw, 1);
 	ClassReader cr = new ClassReader(AsmTest.class.getName());
 	cr.accept(cv, 0);
 	byte[] byteCode = cw.toByteArray();
