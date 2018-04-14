@@ -2,8 +2,11 @@ package com.puresoltechnologies.debugging.client.perspectives;
 
 import java.io.IOException;
 
+import com.puresoltechnologies.debugging.client.parts.OpenProfileViewer;
+import com.puresoltechnologies.debugging.client.parts.ProfileParetoViewer;
 import com.puresoltechnologies.javafx.perspectives.AbstractPerspective;
 import com.puresoltechnologies.javafx.perspectives.PartSplit;
+import com.puresoltechnologies.javafx.perspectives.PartStack;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveElement;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
@@ -30,13 +33,13 @@ public class ProfilerPerspective extends AbstractPerspective {
     public PerspectiveElement createContent() {
 	PartSplit container = new PartSplit();
 
-	// PartStack left = new PartStack();
-	// left.openPart(new DepositsOverviewPart());
-	// container.addElement(left);
-	//
-	// PartStack right = new PartStack();
-	// right.openPart(new SystemStatusPart());
-	// container.addElement(right);
+	PartStack left = new PartStack();
+	left.openPart(new OpenProfileViewer());
+	container.addElement(left);
+
+	PartStack right = new PartStack();
+	right.openPart(new ProfileParetoViewer());
+	container.addElement(right);
 	container.setDividerPosition(0.5);
 	return container;
     }

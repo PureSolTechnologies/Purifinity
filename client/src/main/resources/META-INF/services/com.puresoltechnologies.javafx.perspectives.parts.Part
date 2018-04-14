@@ -1,1 +1,3 @@
 com.puresoltechnologies.debugging.client.parts.BrowserPart
+com.puresoltechnologies.debugging.client.parts.OpenProfileViewer
+com.puresoltechnologies.debugging.client.parts.ProfileParetoViewer
