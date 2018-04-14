@@ -3,20 +3,36 @@ package com.puresoltechnologies.debugging.test;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.nio.ByteOrder;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 
 import com.puresoltechnologies.debugging.agent.ByteCodeCassLoader;
+import com.puresoltechnologies.debugging.agent.Configuration;
 import com.puresoltechnologies.debugging.agent.asm.ClassPrinter;
+import com.puresoltechnologies.debugging.agent.profiler.ProfileWriter;
 import com.puresoltechnologies.debugging.agent.profiler.asm.ProfilerClassVisitor;
 import com.puresoltechnologies.streaming.binary.BinaryOutputStream;
 
 public class AsmTest {
+
+    @BeforeAll
+    public static void initialize() throws FileNotFoundException {
+	Configuration.initialize("");
+	ProfileWriter.initialize();
+    }
+
+    @AfterAll
+    public static void shutdown() throws IOException {
+	ProfileWriter.shutdown();
+    }
 
     @Test
     public void test() throws IOException, InterruptedException {

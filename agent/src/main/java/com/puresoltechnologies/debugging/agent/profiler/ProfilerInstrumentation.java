@@ -24,23 +24,12 @@ import com.puresoltechnologies.streaming.streams.OptimizedFileOutputStream;
  */
 public class ProfilerInstrumentation implements ClassFileTransformer, Closeable {
 
-    private final File outputDirectory;
     private final File idsFile;
     private final BinaryOutputStream idsOutputStream;
     private int classId = 0;
 
     public ProfilerInstrumentation() throws IOException {
-	File directory = Configuration.getDirectory();
-	File profileDirectory = new File(directory, "purifinity.profile");
-	outputDirectory = new File(profileDirectory, String.valueOf(System.currentTimeMillis()));
-	if (!outputDirectory.exists()) {
-	    if (!outputDirectory.mkdirs()) {
-		throw new IOException("Cannot create directory '" + outputDirectory + "'.");
-	    }
-	} else if (!outputDirectory.isDirectory()) {
-	    throw new IOException("Output directory '" + outputDirectory + "' is not a directory.");
-	}
-	System.out.println("Output directory: " + outputDirectory);
+	File outputDirectory = Configuration.getOutputDirectory();
 	idsFile = new File(outputDirectory, "ids");
 	idsOutputStream = new BinaryOutputStream(new OptimizedFileOutputStream(idsFile), ByteOrder.LITTLE_ENDIAN);
     }

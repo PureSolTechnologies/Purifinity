@@ -8,6 +8,9 @@
 		<officalName>Agent</officalName>
 		<streaming.version>1.1.0</streaming.version>
 		<asm.version>6.1.1</asm.version>
+		<javafx.version>0.1.0-SNAPSHOT</javafx.version>
+		<slf4j.version>1.7.25</slf4j.version>
+		<testfx.version>4.0.12-alpha</testfx.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.debugging</groupId>
@@ -89,6 +92,47 @@
 				<version>${streaming.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>charts</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>perspectives</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>preferences</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>reactive</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>utils</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>workspaces</artifactId>
+				<version>${javafx.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.ow2.asm</groupId>
 				<artifactId>asm-analysis</artifactId>
 				<version>${asm.version}</version>
@@ -97,6 +141,33 @@
 				<groupId>org.ow2.asm</groupId>
 				<artifactId>asm</artifactId>
 				<version>${asm.version}</version>
+			</dependency>
+			<!-- -->
+			<!-- 3rd party testing -->
+			<!-- -->
+			<dependency>
+				<groupId>org.testfx</groupId>
+				<artifactId>testfx-core</artifactId>
+				<version>${testfx.version}</version>
+				<scope>test</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>org.testfx</groupId>
+						<artifactId>testfx-internal-java8</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.testfx</groupId>
+				<artifactId>testfx-junit</artifactId>
+				<version>${testfx.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.testfx</groupId>
+				<artifactId>testfx-internal-java9</artifactId>
+				<version>${testfx.version}</version>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.junit.platform</groupId>
@@ -388,6 +459,7 @@
 
 	<modules>
 		<module>agent</module>
+		<module>client</module>
 		<module>test</module>
 	</modules>
 
