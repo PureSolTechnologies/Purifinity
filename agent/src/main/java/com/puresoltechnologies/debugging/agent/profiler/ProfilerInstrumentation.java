@@ -1,13 +1,20 @@
 package com.puresoltechnologies.debugging.agent.profiler;
 
+import static org.objectweb.asm.ClassReader.EXPAND_FRAMES;
+import static org.objectweb.asm.ClassWriter.COMPUTE_FRAMES;
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
+import java.lang.reflect.Field;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.security.ProtectionDomain;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -27,16 +34,44 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
     private final File idsFile;
     private final BinaryOutputStream idsOutputStream;
     private int classId = 0;
+    private final Map<Integer, String> classes = new HashMap<>();
 
     public ProfilerInstrumentation() throws IOException {
 	File outputDirectory = Configuration.getOutputDirectory();
 	idsFile = new File(outputDirectory, "ids");
+	ProfileWriter.initialize();
 	idsOutputStream = new BinaryOutputStream(new OptimizedFileOutputStream(idsFile), ByteOrder.LITTLE_ENDIAN);
     }
 
     @Override
     public void close() throws IOException {
 	idsOutputStream.close();
+	try {
+	    for (Entry<Integer, String> entry : classes.entrySet()) {
+		int id = entry.getKey();
+		Class<?> clazz = Class.forName(entry.getValue().replaceAll("/", "."));
+		short methodId = 1;
+		try {
+		    Field totalTimeField = clazz.getDeclaredField("total_time_" + methodId + "_");
+		    Field invocationsField = clazz.getDeclaredField("invocations_" + methodId + "_");
+		    while (true) {
+			totalTimeField.setAccessible(true);
+			invocationsField.setAccessible(true);
+			long time = totalTimeField.getLong(null);
+			long invocations = invocationsField.getLong(null);
+			ProfileWriter.printTime(id, methodId, time, invocations);
+			methodId++;
+			totalTimeField = clazz.getDeclaredField("invocations_" + methodId + "_");
+			invocationsField = clazz.getDeclaredField("total_time_" + methodId + "_");
+		    }
+		} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+		    // intentionally left empty as abort criterion
+		}
+	    }
+	} catch (ClassNotFoundException | SecurityException e) {
+	    e.printStackTrace();
+	}
+	ProfileWriter.shutdown();
     }
 
     @Override
@@ -46,13 +81,14 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 	    if (!className.equals("com/puresoltechnologies/debugging/test/AgentTest")) {
 		return null;
 	    }
+	    classId++;
+	    classes.put(classId, className);
 	    System.out.println("Instrumenting class: " + className + ", id=" + classId);
 	    writeClassIdMapping(className);
 	    ClassReader cr = new ClassReader(classfileBuffer);
-	    ClassWriter cw = new ClassWriter(0);
+	    ClassWriter cw = new ClassWriter(COMPUTE_FRAMES);
 	    ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, classId, idsOutputStream);
-	    cr.accept(cv, 0);
-	    classId++;
+	    cr.accept(cv, EXPAND_FRAMES);
 	    return cw.toByteArray();
 	} catch (IOException e) {
 	    throw new RuntimeException("Could not instrument class '" + className + "'.", e);

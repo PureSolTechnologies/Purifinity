@@ -1,12 +1,14 @@
 package com.puresoltechnologies.debugging.test;
 
+import static java.nio.ByteOrder.LITTLE_ENDIAN;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.objectweb.asm.ClassReader.EXPAND_FRAMES;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.nio.ByteOrder;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -46,15 +48,19 @@ public class AsmTest {
     public void test2() throws Exception {
 	ClassWriter cw = new ClassWriter(0);
 	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-	ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, 1,
-		new BinaryOutputStream(outputStream, ByteOrder.LITTLE_ENDIAN));
+	ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, 1, new BinaryOutputStream(outputStream, LITTLE_ENDIAN));
 	ClassReader cr = new ClassReader(AsmTest.class.getName());
-	cr.accept(cv, 0);
+	cr.accept(cv, EXPAND_FRAMES);
 	byte[] byteCode = cw.toByteArray();
 	assertNotNull(byteCode);
 
 	ByteCodeCassLoader cl = new ByteCodeCassLoader();
 	Class<?> clazz = cl.defineClass("com.puresoltechnologies.debugging.test.AsmTest", byteCode);
+
+	for (Field field : clazz.getDeclaredFields()) {
+	    System.out.println(field.getName());
+	}
+
 	Object instance = clazz.getConstructor().newInstance();
 	Method testMethod = clazz.getMethod("test");
 	testMethod.invoke(instance);
