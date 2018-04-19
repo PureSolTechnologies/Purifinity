@@ -6,7 +6,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<officalName>Agent</officalName>
-		<streaming.version>1.1.0</streaming.version>
+		<streaming.version>1.2.0-SNAPSHOT</streaming.version>
 		<asm.version>6.1.1</asm.version>
 		<javafx.version>0.1.0-SNAPSHOT</javafx.version>
 		<slf4j.version>1.7.25</slf4j.version>
@@ -84,6 +84,11 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.streaming</groupId>
 				<artifactId>binary</artifactId>
+				<version>${streaming.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.streaming</groupId>
+				<artifactId>binary.mapper</artifactId>
 				<version>${streaming.version}</version>
 			</dependency>
 			<dependency>

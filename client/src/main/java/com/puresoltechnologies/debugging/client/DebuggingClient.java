@@ -13,6 +13,7 @@ import com.puresoltechnologies.javafx.perspectives.menu.PerspectiveMenu;
 import com.puresoltechnologies.javafx.perspectives.menu.ShowPartMenuItem;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.preferences.menu.PreferencesMenuItem;
+import com.puresoltechnologies.javafx.reactive.ReactiveFX;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 import com.puresoltechnologies.javafx.workspaces.Workspace;
@@ -41,6 +42,7 @@ public class DebuggingClient extends Application {
 	FXThreads.initialize();
 	Preferences.initialize();
 	PerspectiveService.initialize();
+	ReactiveFX.initialize();
     }
 
     @Override
@@ -93,6 +95,7 @@ public class DebuggingClient extends Application {
 
     @Override
     public void stop() {
+	ReactiveFX.shutdown();
 	PerspectiveService.shutdown();
 	Preferences.shutdown();
 	try {

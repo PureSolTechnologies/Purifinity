@@ -16,4 +16,5 @@
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.puresoltechnologies.debugging.client.DebuggingClient"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="com.puresoltechnologies.debugging.client"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-javaagent:../agent/target/agent-0.1.0-SNAPSHOT.jar=filter=com\.puresoltechnologies\..+"/>
 </launchConfiguration>

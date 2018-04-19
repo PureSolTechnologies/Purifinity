@@ -5,14 +5,19 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 public class Configuration {
 
     private static File directory = new File(".");
     private static File outputDirectory = null;
+    private static Pattern filterPattern = null;
     private static final Properties properties = new Properties();
 
     public static void initialize(String agentArgs) {
+	if (agentArgs == null) {
+	    agentArgs = "";
+	}
 	try (ByteArrayInputStream inputStream = new ByteArrayInputStream(
 		agentArgs.replace(',', '\n').getBytes(Charset.defaultCharset()))) {
 	    properties.load(inputStream);
@@ -21,6 +26,10 @@ public class Configuration {
 		directory = new File(directoryProperty);
 	    }
 	    initializeOutputDirectory();
+	    String filter = properties.getProperty("filter");
+	    if (filter != null) {
+		filterPattern = Pattern.compile(filter);
+	    }
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
@@ -47,4 +56,11 @@ public class Configuration {
 	return outputDirectory;
     }
 
+    public static Pattern getFilterPattern() {
+	return filterPattern;
+    }
+
+    public static boolean hasFilterPattern() {
+	return filterPattern != null;
+    }
 }

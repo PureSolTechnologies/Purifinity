@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteOrder;
+import java.nio.charset.Charset;
 
 import com.puresoltechnologies.debugging.agent.Configuration;
 import com.puresoltechnologies.streaming.binary.BinaryOutputStream;
@@ -22,15 +23,16 @@ public class ProfileWriter {
     }
 
     public static void shutdown() throws IOException {
+	binaryOutputStream.flush();
 	binaryOutputStream.close();
     }
 
-    public static void printTime(int classId, short methodId, long time, long invocations) {
+    public static void printTime(Class<?> clazz, String method, long time, long invocations) {
 	try {
 	    synchronized (lock) {
-		binaryOutputStream.write(1);
-		binaryOutputStream.writeSignedInt(classId);
-		binaryOutputStream.writeSignedShort(methodId);
+		binaryOutputStream.write((byte) 1);
+		binaryOutputStream.writeNulTerminatedString(clazz.getName(), Charset.defaultCharset());
+		binaryOutputStream.writeNulTerminatedString(method, Charset.defaultCharset());
 		binaryOutputStream.writeSignedLong(time);
 		binaryOutputStream.writeSignedLong(invocations);
 	    }

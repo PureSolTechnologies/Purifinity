@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
+import com.puresoltechnologies.javafx.reactive.ReactiveFX;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.scene.Node;
@@ -50,7 +51,7 @@ public class OpenProfileViewer extends AbstractViewer {
 	    fileChooser.getExtensionFilters().add(new ExtensionFilter("Raw profile file", "profile.raw"));
 	    File result = fileChooser.showOpenDialog(null);
 	    if (result != null) {
-
+		ReactiveFX.getStore().publish("profile.raw", result);
 	    }
 	    event.consume();
 	});
