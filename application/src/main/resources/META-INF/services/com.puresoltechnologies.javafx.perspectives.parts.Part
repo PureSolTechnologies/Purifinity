@@ -1,3 +1,4 @@
 com.puresoltechnologies.toolshed.client.parts.BrowserPart
+com.puresoltechnologies.toolshed.client.parts.MethodProfileViewer
 com.puresoltechnologies.toolshed.client.parts.OpenProfileViewer
 com.puresoltechnologies.toolshed.client.parts.ProfileParetoViewer

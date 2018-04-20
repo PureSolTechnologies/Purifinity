@@ -9,9 +9,9 @@ import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
 import com.puresoltechnologies.javafx.reactive.ReactiveFX;
+import com.puresoltechnologies.toolshed.client.profiles.ProfileEntry;
+import com.puresoltechnologies.toolshed.client.profiles.RawProfileReader;
 import com.puresoltechnologies.toolshed.client.tables.ProfileParetoTable;
-import com.puresoltechnologies.toolshed.client.utils.ProfileEntry;
-import com.puresoltechnologies.toolshed.client.utils.RawProfileReader;
 
 import io.reactivex.functions.Consumer;
 import javafx.collections.FXCollections;

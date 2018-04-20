@@ -1,11 +1,14 @@
 package com.puresoltechnologies.toolshed.client.tables;
 
-import com.puresoltechnologies.toolshed.client.utils.ProfileEntry;
+import com.puresoltechnologies.javafx.perspectives.PerspectiveService;
+import com.puresoltechnologies.toolshed.client.parts.MethodProfileViewer;
+import com.puresoltechnologies.toolshed.client.profiles.ProfileEntry;
 
 import javafx.beans.property.ReadOnlyLongWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 
 public class ProfileParetoTable extends TableView<ProfileEntry> {
@@ -29,6 +32,20 @@ public class ProfileParetoTable extends TableView<ProfileEntry> {
 	totalTimeColumn.setCellValueFactory(e -> new ReadOnlyLongWrapper(e.getValue().getTotalTime()).asObject());
 	totalTimeColumn.setSortable(true);
 	columns.add(totalTimeColumn);
+
+	setRowFactory(tv -> {
+	    TableRow<ProfileEntry> row = new TableRow<>();
+	    row.setOnMouseClicked(event -> {
+		if (event.getClickCount() == 2 && (!row.isEmpty())) {
+		    ProfileEntry profileEntry = row.getItem();
+		    MethodProfileViewer methodProfileViewer = new MethodProfileViewer();
+		    PerspectiveService.openPart(methodProfileViewer);
+		    methodProfileViewer.setMethod(profileEntry.getClassName(), profileEntry.getMethod());
+		}
+	    });
+	    return row;
+	});
+
     }
 
 }

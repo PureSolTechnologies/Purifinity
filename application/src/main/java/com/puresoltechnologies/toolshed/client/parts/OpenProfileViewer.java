@@ -9,6 +9,8 @@ import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
 import com.puresoltechnologies.javafx.reactive.ReactiveFX;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
+import com.puresoltechnologies.toolshed.client.profiles.IdsReader;
+import com.puresoltechnologies.toolshed.client.profiles.graph.CodeGraph;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -49,10 +51,20 @@ public class OpenProfileViewer extends AbstractViewer {
 	    FileChooser fileChooser = new FileChooser();
 	    fileChooser.setTitle("Choose raw profile file");
 	    fileChooser.getExtensionFilters().add(new ExtensionFilter("Raw profile file", "profile.raw"));
-	    File result = fileChooser.showOpenDialog(null);
-	    if (result != null) {
-		ReactiveFX.getStore().publish("profile.raw", result);
+	    File rawProfileFile = fileChooser.showOpenDialog(null);
+	    if (rawProfileFile != null) {
+		ReactiveFX.getStore().publish("profile.raw", rawProfileFile);
 	    }
+	    File idsFile = new File(rawProfileFile.getParentFile(), "ids");
+	    try (IdsReader reader = new IdsReader(idsFile)) {
+		reader.read();
+		CodeGraph codeGraph = reader.getCodeGraph();
+		ReactiveFX.getStore().publish("code.graph", codeGraph);
+	    } catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+
 	    event.consume();
 	});
 	borderPane.setTop(toolBar);

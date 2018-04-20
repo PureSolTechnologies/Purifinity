@@ -48,7 +48,7 @@ public class ToolShedApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 	try {
-	    stage.setTitle("Debugging Client");
+	    stage.setTitle("Tool Shed");
 	    stage.setResizable(true);
 	    stage.centerOnScreen();
 

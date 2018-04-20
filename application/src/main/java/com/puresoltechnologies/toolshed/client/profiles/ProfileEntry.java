@@ -1,4 +1,4 @@
-package com.puresoltechnologies.toolshed.client.utils;
+package com.puresoltechnologies.toolshed.client.profiles;
 
 import com.puresoltechnologies.streaming.binary.mapper.annotations.BinaryCreator;
 import com.puresoltechnologies.streaming.binary.mapper.annotations.BinaryNulTerminateString;
