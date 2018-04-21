@@ -17,8 +17,6 @@ import javafx.scene.web.WebView;
 
 public class BrowserPart extends AbstractViewer {
 
-    private static final long serialVersionUID = 8657679402319658639L;
-
     private URL url = null;
 
     private BorderPane borderPane = null;

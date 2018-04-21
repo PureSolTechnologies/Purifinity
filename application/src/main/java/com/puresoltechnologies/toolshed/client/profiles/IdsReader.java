@@ -20,19 +20,19 @@ import com.puresoltechnologies.toolshed.client.profiles.graph.MethodVertex;
 
 public class IdsReader implements Closeable {
 
-    private final File file;
     private final BinaryInputStream binaryInputStream;
     private final BinaryMapper binaryMapper = new BinaryMapper(Charset.defaultCharset());
-    private final CodeGraph codeGraph = new CodeGraph();
+    private final CodeGraph codeGraph;
     private ClassVertex lastClassVertex = null;
     private MethodVertex lastMethodVertex = null;
 
-    public IdsReader(File file) throws FileNotFoundException {
-	this.file = file;
+    public IdsReader(File file, CodeGraph codeGraph) throws FileNotFoundException {
+	this.codeGraph = codeGraph;
 	binaryInputStream = new BinaryInputStream(new OptimizedFileInputStream(file), LITTLE_ENDIAN);
     }
 
     public void read() {
+	codeGraph.clear();
 	try {
 	    while (true) {
 		byte code = binaryInputStream.readSignedByte();
@@ -57,7 +57,7 @@ public class IdsReader implements Closeable {
 	ClassDeclarationEntry classDeclaration = binaryMapper.read(binaryInputStream, ClassDeclarationEntry.class);
 	ClassVertex classVertex = codeGraph.findClass(classDeclaration.getClassName());
 	if (classVertex == null) {
-	    classVertex = new ClassVertex(classDeclaration.getClassName());
+	    classVertex = new ClassVertex(classDeclaration.getClassName().replaceAll("/", "."));
 	    codeGraph.addVertex(classVertex);
 	}
 	lastClassVertex = classVertex;
@@ -76,7 +76,7 @@ public class IdsReader implements Closeable {
 	MethodInvocationEntry methodInvocation = binaryMapper.read(binaryInputStream, MethodInvocationEntry.class);
 	ClassVertex classVertex = codeGraph.findClass(methodInvocation.getClassName());
 	if (classVertex == null) {
-	    classVertex = new ClassVertex(methodInvocation.getClassName());
+	    classVertex = new ClassVertex(methodInvocation.getClassName().replaceAll("/", "."));
 	    codeGraph.addVertex(classVertex);
 	}
 	MethodVertex methodVertex = codeGraph.findMethod(classVertex.getClassName(), methodInvocation.getMethodName());

@@ -1,7 +1,7 @@
 package com.puresoltechnologies.toolshed.client.tables;
 
-import com.puresoltechnologies.javafx.perspectives.PerspectiveService;
-import com.puresoltechnologies.toolshed.client.parts.MethodProfileViewer;
+import com.puresoltechnologies.javafx.reactive.ReactiveFX;
+import com.puresoltechnologies.toolshed.client.Topics;
 import com.puresoltechnologies.toolshed.client.profiles.ProfileEntry;
 
 import javafx.beans.property.ReadOnlyLongWrapper;
@@ -21,13 +21,23 @@ public class ProfileParetoTable extends TableView<ProfileEntry> {
 	classNameColumn.setSortable(true);
 	columns.add(classNameColumn);
 	TableColumn<ProfileEntry, String> methodColumn = new TableColumn<>("Method");
-	methodColumn.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getMethod()));
+	methodColumn.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getMethodName()));
 	methodColumn.setSortable(true);
 	columns.add(methodColumn);
 	TableColumn<ProfileEntry, Long> invokationsColumn = new TableColumn<>("Invocations");
 	invokationsColumn.setCellValueFactory(e -> new ReadOnlyLongWrapper(e.getValue().getInvocations()).asObject());
 	invokationsColumn.setSortable(true);
 	columns.add(invokationsColumn);
+	TableColumn<ProfileEntry, Long> timeColumn = new TableColumn<>("Time");
+	timeColumn.setCellValueFactory(e -> {
+	    ProfileEntry value = e.getValue();
+	    if (value.getInvocations() == 0) {
+		return null;
+	    }
+	    return new ReadOnlyLongWrapper(value.getTotalTime() / value.getInvocations()).asObject();
+	});
+	timeColumn.setSortable(true);
+	columns.add(timeColumn);
 	TableColumn<ProfileEntry, Long> totalTimeColumn = new TableColumn<>("totalTime");
 	totalTimeColumn.setCellValueFactory(e -> new ReadOnlyLongWrapper(e.getValue().getTotalTime()).asObject());
 	totalTimeColumn.setSortable(true);
@@ -38,9 +48,7 @@ public class ProfileParetoTable extends TableView<ProfileEntry> {
 	    row.setOnMouseClicked(event -> {
 		if (event.getClickCount() == 2 && (!row.isEmpty())) {
 		    ProfileEntry profileEntry = row.getItem();
-		    MethodProfileViewer methodProfileViewer = new MethodProfileViewer();
-		    PerspectiveService.openPart(methodProfileViewer);
-		    methodProfileViewer.setMethod(profileEntry.getClassName(), profileEntry.getMethod());
+		    ReactiveFX.getStore().publish(Topics.PROFILE_ENTRY_SELECTED, profileEntry);
 		}
 	    });
 	    return row;

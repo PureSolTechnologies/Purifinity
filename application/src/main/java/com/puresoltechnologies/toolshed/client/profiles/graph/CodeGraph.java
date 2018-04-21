@@ -27,6 +27,8 @@ public class CodeGraph implements Graph<CodeGraphVertex, CodeGraphEdge> {
 
     public void clear() {
 	vertices.clear();
+	classNameIndex.clear();
+	methodNameIndex.clear();
     }
 
     public void addVertex(CodeGraphVertex vertex) {

@@ -82,8 +82,8 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter {
 
     private void writeInvokation(String owner, String methodName, String descriptor) throws IOException {
 	idsOutputStream.writeUnsignedByte(2);
-	idsOutputStream.writeNulTerminatedString(owner + ":" + methodName + descriptor, Charset.defaultCharset());
-	idsOutputStream.writeSignedShort(methodId);
+	idsOutputStream.writeNulTerminatedString(owner, Charset.defaultCharset());
+	idsOutputStream.writeNulTerminatedString(methodName + descriptor, Charset.defaultCharset());
     }
 
     @Override

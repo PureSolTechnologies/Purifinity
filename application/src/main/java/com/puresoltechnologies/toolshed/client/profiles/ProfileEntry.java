@@ -9,7 +9,7 @@ public class ProfileEntry {
 
     private final byte type;
     private final String className;
-    private final String method;
+    private final String methodName;
     private final long totalTime;
     private final long invocations;
 
@@ -17,14 +17,14 @@ public class ProfileEntry {
     public ProfileEntry( //
 	    @BinarySignedByte("type") byte type, //
 	    @BinaryNulTerminateString("className") String className, //
-	    @BinaryNulTerminateString("method") String method, //
+	    @BinaryNulTerminateString("methodName") String methodName, //
 	    @BinarySignedLong("totalTime") long totalTime, //
 	    @BinarySignedLong("invocations") long invocations //
     ) {
 	super();
 	this.type = type;
 	this.className = className;
-	this.method = method;
+	this.methodName = methodName;
 	this.totalTime = totalTime;
 	this.invocations = invocations;
     }
@@ -37,8 +37,8 @@ public class ProfileEntry {
 	return className;
     }
 
-    public String getMethod() {
-	return method;
+    public String getMethodName() {
+	return methodName;
     }
 
     public long getTotalTime() {

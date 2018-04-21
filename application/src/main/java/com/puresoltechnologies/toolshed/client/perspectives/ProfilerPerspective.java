@@ -7,14 +7,15 @@ import com.puresoltechnologies.javafx.perspectives.PartSplit;
 import com.puresoltechnologies.javafx.perspectives.PartStack;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveElement;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
+import com.puresoltechnologies.toolshed.client.parts.MethodProfileTreeGraphViewer;
+import com.puresoltechnologies.toolshed.client.parts.MethodProfileTreeTableViewer;
 import com.puresoltechnologies.toolshed.client.parts.OpenProfileViewer;
-import com.puresoltechnologies.toolshed.client.parts.ProfileParetoViewer;
+import com.puresoltechnologies.toolshed.client.parts.ProfileParetoTableViewer;
 
+import javafx.geometry.Orientation;
 import javafx.scene.image.Image;
 
 public class ProfilerPerspective extends AbstractPerspective {
-
-    private static final long serialVersionUID = -6687771688159189919L;
 
     public ProfilerPerspective() {
 	super("Profiler");
@@ -33,14 +34,31 @@ public class ProfilerPerspective extends AbstractPerspective {
     public PerspectiveElement createContent() {
 	PartSplit container = new PartSplit();
 
-	PartStack left = new PartStack();
-	left.openPart(new OpenProfileViewer());
-	container.addElement(left);
+	PartSplit leftSplit = new PartSplit(Orientation.VERTICAL);
+	PartSplit rightSplit = new PartSplit(Orientation.VERTICAL);
 
-	PartStack right = new PartStack();
-	right.openPart(new ProfileParetoViewer());
-	container.addElement(right);
+	container.addElement(leftSplit);
+	container.addElement(rightSplit);
 	container.setDividerPosition(0.5);
+
+	PartStack upperLeftStack = new PartStack();
+	upperLeftStack.openPart(new OpenProfileViewer());
+	leftSplit.addElement(upperLeftStack);
+
+	PartStack lowerLeftStack = new PartStack();
+	lowerLeftStack.openPart(new ProfileParetoTableViewer());
+	leftSplit.addElement(lowerLeftStack);
+	leftSplit.setDividerPosition(0.25);
+
+	PartStack upperRightStack = new PartStack();
+	upperRightStack.openPart(new MethodProfileTreeTableViewer());
+	rightSplit.addElement(upperRightStack);
+
+	PartStack lowerRightStack = new PartStack();
+	lowerRightStack.openPart(new MethodProfileTreeGraphViewer());
+	rightSplit.addElement(lowerRightStack);
+	rightSplit.setDividerPosition(0.5);
+
 	return container;
     }
 
