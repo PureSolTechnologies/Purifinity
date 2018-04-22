@@ -14,6 +14,9 @@ import com.puresoltechnologies.toolshed.client.profiles.ProfileEntry;
 
 import io.reactivex.disposables.Disposable;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 
 public class MethodProfileTreeGraphViewer extends AbstractViewer {
@@ -21,6 +24,7 @@ public class MethodProfileTreeGraphViewer extends AbstractViewer {
     private final Disposable storeDisposable;
     private final Disposable storeDisposable2;
     private BorderPane borderPane;
+    private Spinner<Integer> depthSpinner;
     private TreeChartView treeChartView;
     private Profile profile;
 
@@ -38,7 +42,14 @@ public class MethodProfileTreeGraphViewer extends AbstractViewer {
     @Override
     public void initialize() {
 	borderPane = new BorderPane();
+
+	ToolBar toolBar = new ToolBar();
+	Label depthLabel = new Label("Invokation depth");
+	depthSpinner = new Spinner<>(1, 10, 1);
+	toolBar.getItems().addAll(depthLabel, depthSpinner);
+
 	treeChartView = new TreeChartView();
+	borderPane.setTop(toolBar);
 	borderPane.setCenter(treeChartView);
     }
 
