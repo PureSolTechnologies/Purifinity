@@ -2,8 +2,7 @@ package com.puresoltechnologies.toolshed.client.parts;
 
 import java.util.Optional;
 
-import com.puresoltechnologies.javafx.charts.tree.TreeChartView;
-import com.puresoltechnologies.javafx.charts.tree.TreeDataNode;
+import com.puresoltechnologies.javafx.charts.tree.TreeAreaChartView;
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
@@ -25,7 +24,7 @@ public class MethodProfileTreeGraphViewer extends AbstractViewer {
     private final Disposable storeDisposable2;
     private BorderPane borderPane;
     private Spinner<Integer> depthSpinner;
-    private TreeChartView treeChartView;
+    private TreeAreaChartView<ProfileTreeAreaChartNode> treeChartView;
     private Profile profile;
 
     public MethodProfileTreeGraphViewer() {
@@ -46,9 +45,10 @@ public class MethodProfileTreeGraphViewer extends AbstractViewer {
 	ToolBar toolBar = new ToolBar();
 	Label depthLabel = new Label("Invokation depth");
 	depthSpinner = new Spinner<>(1, 10, 1);
+	depthSpinner.valueProperty().addListener((element, oldValue, newValue) -> treeChartView.setDepth(newValue));
 	toolBar.getItems().addAll(depthLabel, depthSpinner);
 
-	treeChartView = new TreeChartView();
+	treeChartView = new TreeAreaChartView<>();
 	borderPane.setTop(toolBar);
 	borderPane.setCenter(treeChartView);
     }
@@ -65,9 +65,8 @@ public class MethodProfileTreeGraphViewer extends AbstractViewer {
     }
 
     public void setProfileEntry(ProfileEntry profileEntry) {
-	TreeDataNode rootNode = new TreeDataNode(profileEntry.getClassName() + ":" + profileEntry.getMethodName(),
-		profileEntry.getTotalTime());
-	treeChartView.setTreeData(rootNode);
+	treeChartView
+		.setTreeData(new ProfileTreeAreaChartNode(profile, profileEntry, profile.findMethod(profileEntry)));
     }
 
     public void setProfile(Profile profile) {
