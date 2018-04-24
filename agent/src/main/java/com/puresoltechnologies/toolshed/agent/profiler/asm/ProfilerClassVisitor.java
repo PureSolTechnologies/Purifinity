@@ -13,17 +13,14 @@ import com.puresoltechnologies.streaming.binary.BinaryOutputStream;
 
 public class ProfilerClassVisitor extends ClassVisitor {
 
-    private final int classId;
     private final Map<Short, String> methods;
     private final BinaryOutputStream idsOutputStream;
     private String internalClassName;
     private short methodId = 0;
     private boolean isInterface = false;
 
-    public ProfilerClassVisitor(ClassWriter cw, int classId, Map<Short, String> methods,
-	    BinaryOutputStream idsOutputStream) {
+    public ProfilerClassVisitor(ClassWriter cw, Map<Short, String> methods, BinaryOutputStream idsOutputStream) {
 	super(Opcodes.ASM6, cw);
-	this.classId = classId;
 	this.methods = methods;
 	this.idsOutputStream = idsOutputStream;
     }

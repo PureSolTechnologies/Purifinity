@@ -91,7 +91,6 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 	try {
 	    if (Configuration.hasFilterPattern()) {
 		if (!Configuration.getFilterPattern().matcher(className).matches()) {
-		    System.out.println("Skipping class: " + className);
 		    return null;
 		}
 	    }
@@ -102,7 +101,7 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 	    writeClassIdMapping(className);
 	    ClassReader cr = new ClassReader(classfileBuffer);
 	    ClassWriter cw = new ClassWriter(COMPUTE_FRAMES);
-	    ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, classId, methods.get(classId), idsOutputStream);
+	    ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, methods.get(classId), idsOutputStream);
 	    cr.accept(cv, EXPAND_FRAMES);
 	    return cw.toByteArray();
 	} catch (IOException e) {

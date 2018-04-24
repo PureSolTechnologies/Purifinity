@@ -30,7 +30,7 @@ public class ProfileTreeAreaChartNode implements TreeAreaChartNode {
 
     @Override
     public double getValue() {
-	return profileEntry.getTotalTime();
+	return (double) profileEntry.getTotalTime() / (double) profileEntry.getInvocations();
     }
 
     @Override

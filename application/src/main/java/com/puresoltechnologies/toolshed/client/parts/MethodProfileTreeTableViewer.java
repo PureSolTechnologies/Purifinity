@@ -77,14 +77,16 @@ public class MethodProfileTreeTableViewer extends AbstractViewer {
     }
 
     private void calculateTree() {
-	FXThreads.runAsync(() -> {
-	    int depth = depthSpinner.getValue();
-	    TreeItem<ProfileEntry> rootNode = new TreeItem<ProfileEntry>(profileEntry);
-	    rootNode.setExpanded(true);
-	    MethodVertex method = profile.findMethod(rootNode.getValue());
-	    calculateTreeNode(rootNode, method, depth);
-	    FXThreads.runOnFXThread(() -> treeTable.setRoot(rootNode));
-	});
+	if (profileEntry != null) {
+	    FXThreads.runAsync(() -> {
+		int depth = depthSpinner.getValue();
+		TreeItem<ProfileEntry> rootNode = new TreeItem<ProfileEntry>(profileEntry);
+		rootNode.setExpanded(true);
+		MethodVertex method = profile.findMethod(rootNode.getValue());
+		calculateTreeNode(rootNode, method, depth);
+		FXThreads.runOnFXThread(() -> treeTable.setRoot(rootNode));
+	    });
+	}
     }
 
     private void calculateTreeNode(TreeItem<ProfileEntry> node, MethodVertex method, int depth) {

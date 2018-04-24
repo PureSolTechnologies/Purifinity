@@ -27,8 +27,8 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter {
     private final String owner;
     private final BinaryOutputStream idsOutputStream;
 
-    public ProfilerMethodVisitor(short methodId, String owner, int access, String descriptor, MethodVisitor mv,
-	    BinaryOutputStream idsOutputStream) {
+    public ProfilerMethodVisitor(short methodId, String owner, int access, String descriptor,
+	    MethodVisitor mv, BinaryOutputStream idsOutputStream) {
 	super(ASM6, access, descriptor, mv);
 	this.methodId = methodId;
 	this.owner = owner;
