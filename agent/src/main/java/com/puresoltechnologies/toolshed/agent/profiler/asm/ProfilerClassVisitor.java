@@ -49,7 +49,7 @@ public class ProfilerClassVisitor extends ClassVisitor {
 	    System.out.println("Instrumenting method: " + name + descriptor + ", id=" + methodId);
 	    writeMethodIdMapping(name, descriptor);
 	    MethodVisitor visitMethod = super.visitMethod(access, name, descriptor, signature, exceptions);
-	    return new ProfilerMethodVisitor(classId, methodId, internalClassName, access, descriptor, visitMethod,
+	    return new ProfilerMethodVisitor(methodId, internalClassName, access, descriptor, visitMethod,
 		    idsOutputStream);
 	} catch (IOException e) {
 	    throw new RuntimeException("Could not instrument method '" + name + "'.", e);
