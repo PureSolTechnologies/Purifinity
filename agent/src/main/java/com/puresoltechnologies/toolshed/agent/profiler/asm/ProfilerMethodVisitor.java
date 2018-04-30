@@ -27,8 +27,8 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter {
     private final String owner;
     private final BinaryOutputStream idsOutputStream;
 
-    public ProfilerMethodVisitor(short methodId, String owner, int access, String descriptor,
-	    MethodVisitor mv, BinaryOutputStream idsOutputStream) {
+    public ProfilerMethodVisitor(short methodId, String owner, int access, String descriptor, MethodVisitor mv,
+	    BinaryOutputStream idsOutputStream) {
 	super(ASM6, access, descriptor, mv);
 	this.methodId = methodId;
 	this.owner = owner;
@@ -76,8 +76,10 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter {
 
     private void writeInvokation(String owner, String methodName, String descriptor) throws IOException {
 	idsOutputStream.writeUnsignedByte(2);
-	idsOutputStream.writeNulTerminatedString(owner, Charset.defaultCharset());
-	idsOutputStream.writeNulTerminatedString(methodName + descriptor, Charset.defaultCharset());
+	Charset defaultCharset = Charset.defaultCharset();
+	idsOutputStream.writeNulTerminatedString(owner.replaceAll("/", "."), defaultCharset);
+	idsOutputStream.writeNulTerminatedString(methodName, defaultCharset);
+	idsOutputStream.writeNulTerminatedString(descriptor, defaultCharset);
     }
 
     @Override

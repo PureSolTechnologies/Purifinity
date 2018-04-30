@@ -329,10 +329,15 @@
 							</aliases>
 						</knownLicense>
 						<knownLicense>
+							<name>Eclipse Public License - v 1.0</name>
+							<url>http://www.eclipse.org/legal/epl-v10.html</url>
+						</knownLicense>
+						<knownLicense>
 							<name>GNU Lesser General Public License, Version 2.1</name>
 							<url>http://www.gnu.org/licenses/lgpl-2.1.txt</url>
 							<aliases>
 								<alias>LGPL 2.1</alias>
+								<aliase>GNU Lesser General Public License</aliase>
 							</aliases>
 						</knownLicense>
 						<knownLicense>
@@ -366,8 +371,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.7.0</version>
 				<configuration>
-					<source>9</source>
-					<target>9</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>

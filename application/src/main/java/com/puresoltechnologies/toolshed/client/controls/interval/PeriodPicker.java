@@ -27,7 +27,7 @@ public class PeriodPicker extends HBox {
 	setAlignment(Pos.CENTER_RIGHT);
 	amountSpinner.setEditable(true);
 	Callback<ListView<ChronoUnit>, ListCell<ChronoUnit>> callback = listView -> {
-	    return new ListCell<>() {
+	    return new ListCell<ChronoUnit>() {
 		@Override
 		protected void updateItem(ChronoUnit item, boolean empty) {
 		    super.updateItem(item, empty);

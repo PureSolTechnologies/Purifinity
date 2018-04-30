@@ -10,17 +10,21 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 import com.puresoltechnologies.streaming.binary.BinaryOutputStream;
+import com.puresoltechnologies.toolshed.agent.MethodDefinition;
 
 public class ProfilerClassVisitor extends ClassVisitor {
 
-    private final Map<Short, String> methods;
+    private final String className;
+    private final Map<Short, MethodDefinition> methods;
     private final BinaryOutputStream idsOutputStream;
     private String internalClassName;
     private short methodId = 0;
     private boolean isInterface = false;
 
-    public ProfilerClassVisitor(ClassWriter cw, Map<Short, String> methods, BinaryOutputStream idsOutputStream) {
+    public ProfilerClassVisitor(ClassWriter cw, String className, Map<Short, MethodDefinition> methods,
+	    BinaryOutputStream idsOutputStream) {
 	super(Opcodes.ASM6, cw);
+	this.className = className;
 	this.methods = methods;
 	this.idsOutputStream = idsOutputStream;
     }
@@ -42,8 +46,9 @@ public class ProfilerClassVisitor extends ClassVisitor {
 	}
 	try {
 	    methodId++;
-	    methods.put(methodId, name + descriptor);
-	    System.out.println("Instrumenting method: " + name + descriptor + ", id=" + methodId);
+	    methods.put(methodId, new MethodDefinition(className.replaceAll("/", "."), name, descriptor));
+	    System.out.println(
+		    "Instrumenting method: " + internalClassName + "#" + name + descriptor + ", id=" + methodId);
 	    writeMethodIdMapping(name, descriptor);
 	    MethodVisitor visitMethod = super.visitMethod(access, name, descriptor, signature, exceptions);
 	    return new ProfilerMethodVisitor(methodId, internalClassName, access, descriptor, visitMethod,
@@ -55,7 +60,8 @@ public class ProfilerClassVisitor extends ClassVisitor {
 
     private void writeMethodIdMapping(String methodName, String descriptor) throws IOException {
 	idsOutputStream.writeUnsignedByte(1);
-	idsOutputStream.writeNulTerminatedString(methodName + descriptor, Charset.defaultCharset());
+	idsOutputStream.writeNulTerminatedString(methodName, Charset.defaultCharset());
+	idsOutputStream.writeNulTerminatedString(descriptor, Charset.defaultCharset());
 	idsOutputStream.writeSignedShort(methodId);
     }
 

@@ -21,7 +21,8 @@ public class ProfileParetoTable extends TableView<ProfileEntry> {
 	classNameColumn.setSortable(true);
 	columns.add(classNameColumn);
 	TableColumn<ProfileEntry, String> methodColumn = new TableColumn<>("Method");
-	methodColumn.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getMethodName()));
+	methodColumn.setCellValueFactory(
+		e -> new ReadOnlyStringWrapper(e.getValue().getMethodName() + e.getValue().getDescriptor()));
 	methodColumn.setSortable(true);
 	columns.add(methodColumn);
 	TableColumn<ProfileEntry, Long> invokationsColumn = new TableColumn<>("Invocations");

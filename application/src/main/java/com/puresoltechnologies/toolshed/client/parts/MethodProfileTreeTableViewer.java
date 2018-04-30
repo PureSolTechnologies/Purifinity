@@ -25,8 +25,8 @@ import javafx.scene.layout.BorderPane;
 
 public class MethodProfileTreeTableViewer extends AbstractViewer {
 
-    private final Disposable storeDisposable;
-    private final Disposable storeDisposable2;
+    private Disposable storeDisposable;
+    private Disposable storeDisposable2;
     private BorderPane borderPane;
     private Spinner<Integer> depthSpinner;
     private ProfileTreeTable treeTable;
@@ -35,8 +35,6 @@ public class MethodProfileTreeTableViewer extends AbstractViewer {
 
     public MethodProfileTreeTableViewer() {
 	super("Method Profile Tree", PartOpenMode.AUTO_AND_MANUAL);
-	storeDisposable = ReactiveFX.getStore().subscribe(Topics.NEW_PROFILE, this::setProfile);
-	storeDisposable2 = ReactiveFX.getStore().subscribe(Topics.PROFILE_ENTRY_SELECTED, this::setProfileEntry);
     }
 
     @Override
@@ -58,6 +56,9 @@ public class MethodProfileTreeTableViewer extends AbstractViewer {
 	treeTable.setShowRoot(true);
 	borderPane.setTop(toolBar);
 	borderPane.setCenter(treeTable);
+
+	storeDisposable = ReactiveFX.getStore().subscribe(Topics.NEW_PROFILE, this::setProfile);
+	storeDisposable2 = ReactiveFX.getStore().subscribe(Topics.PROFILE_ENTRY_SELECTED, this::setProfileEntry);
     }
 
     @Override
@@ -82,7 +83,7 @@ public class MethodProfileTreeTableViewer extends AbstractViewer {
 		int depth = depthSpinner.getValue();
 		TreeItem<ProfileEntry> rootNode = new TreeItem<ProfileEntry>(profileEntry);
 		rootNode.setExpanded(true);
-		MethodVertex method = profile.findMethod(rootNode.getValue());
+		MethodVertex method = profile.findMethod(profileEntry);
 		calculateTreeNode(rootNode, method, depth);
 		FXThreads.runOnFXThread(() -> treeTable.setRoot(rootNode));
 	    });

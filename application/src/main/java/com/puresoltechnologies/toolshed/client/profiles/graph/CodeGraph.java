@@ -11,18 +11,22 @@ public class CodeGraph implements Graph<CodeGraphVertex, CodeGraphEdge> {
 
     private final Set<CodeGraphVertex> vertices = new HashSet<>();
     private final Map<String, ClassVertex> classNameIndex = new HashMap<>();
-    private final Map<String, Map<String, MethodVertex>> methodNameIndex = new HashMap<>();
+    private final Map<String, Map<String, Map<String, MethodVertex>>> methodNameIndex = new HashMap<>();
 
     public ClassVertex findClass(String className) {
 	return classNameIndex.get(className);
     }
 
-    public MethodVertex findMethod(String className, String methodName) {
-	Map<String, MethodVertex> classes = methodNameIndex.get(className);
-	if (classes == null) {
+    public MethodVertex findMethod(String className, String methodName, String descriptor) {
+	Map<String, Map<String, MethodVertex>> methodes = methodNameIndex.get(className);
+	if (methodes == null) {
 	    return null;
 	}
-	return classes.get(methodName);
+	Map<String, MethodVertex> overloadedMethods = methodes.get(methodName);
+	if (overloadedMethods == null) {
+	    return null;
+	}
+	return overloadedMethods.get(descriptor);
     }
 
     public void clear() {
@@ -39,12 +43,17 @@ public class CodeGraph implements Graph<CodeGraphVertex, CodeGraphEdge> {
 	}
 	if (vertex instanceof MethodVertex) {
 	    MethodVertex methodVertex = (MethodVertex) vertex;
-	    Map<String, MethodVertex> classes = methodNameIndex.get(methodVertex.getClassName());
-	    if (classes == null) {
-		classes = new HashMap<>();
-		methodNameIndex.put(methodVertex.getClassName(), classes);
+	    Map<String, Map<String, MethodVertex>> methods = methodNameIndex.get(methodVertex.getClassName());
+	    if (methods == null) {
+		methods = new HashMap<>();
+		methodNameIndex.put(methodVertex.getClassName(), methods);
 	    }
-	    classes.put(methodVertex.getMethodName(), methodVertex);
+	    Map<String, MethodVertex> overloadedMethods = methods.get(methodVertex.getMethodName());
+	    if (overloadedMethods == null) {
+		overloadedMethods = new HashMap<>();
+		methods.put(methodVertex.getMethodName(), overloadedMethods);
+	    }
+	    overloadedMethods.put(methodVertex.getDescriptor(), methodVertex);
 	}
     }
 

@@ -2,7 +2,7 @@ package com.puresoltechnologies.toolshed.client.parts;
 
 import java.util.Optional;
 
-import com.puresoltechnologies.javafx.charts.tree.TreeAreaChartView;
+import com.puresoltechnologies.javafx.charts.tree.TreeMapView;
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
@@ -20,17 +20,15 @@ import javafx.scene.layout.BorderPane;
 
 public class MethodProfileTreeGraphViewer extends AbstractViewer {
 
-    private final Disposable storeDisposable;
-    private final Disposable storeDisposable2;
+    private Disposable storeDisposable;
+    private Disposable storeDisposable2;
     private BorderPane borderPane;
     private Spinner<Integer> depthSpinner;
-    private TreeAreaChartView<ProfileTreeAreaChartNode> treeChartView;
+    private TreeMapView<ProfileTreeAreaChartNode> treeChartView;
     private Profile profile;
 
     public MethodProfileTreeGraphViewer() {
 	super("Method Profile Tree Graph", PartOpenMode.AUTO_AND_MANUAL);
-	storeDisposable = ReactiveFX.getStore().subscribe(Topics.NEW_PROFILE, this::setProfile);
-	storeDisposable2 = ReactiveFX.getStore().subscribe(Topics.PROFILE_ENTRY_SELECTED, this::setProfileEntry);
     }
 
     @Override
@@ -48,9 +46,12 @@ public class MethodProfileTreeGraphViewer extends AbstractViewer {
 	depthSpinner.valueProperty().addListener((element, oldValue, newValue) -> treeChartView.setDepth(newValue));
 	toolBar.getItems().addAll(depthLabel, depthSpinner);
 
-	treeChartView = new TreeAreaChartView<>();
+	treeChartView = new TreeMapView<>();
 	borderPane.setTop(toolBar);
 	borderPane.setCenter(treeChartView);
+
+	storeDisposable = ReactiveFX.getStore().subscribe(Topics.NEW_PROFILE, this::setProfile);
+	storeDisposable2 = ReactiveFX.getStore().subscribe(Topics.PROFILE_ENTRY_SELECTED, this::setProfileEntry);
     }
 
     @Override

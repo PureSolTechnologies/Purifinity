@@ -7,19 +7,26 @@ import com.puresoltechnologies.streaming.binary.mapper.annotations.BinarySignedS
 public class MethodDeclarationEntry {
 
     private final String methodName;
+    private final String descriptor;
     private final short methodId;
 
     @BinaryCreator
     public MethodDeclarationEntry( //
 	    @BinaryNulTerminateString("methodName") String methodName, //
+	    @BinaryNulTerminateString("descriptor") String descriptor, //
 	    @BinarySignedShort("methodId") short methodId //
     ) {
 	this.methodName = methodName;
+	this.descriptor = descriptor;
 	this.methodId = methodId;
     }
 
     public String getMethodName() {
 	return methodName;
+    }
+
+    public String getDescriptor() {
+	return descriptor;
     }
 
     public short getMethodId() {

@@ -9,6 +9,7 @@ import java.nio.charset.Charset;
 import com.puresoltechnologies.streaming.binary.BinaryOutputStream;
 import com.puresoltechnologies.streaming.streams.OptimizedFileOutputStream;
 import com.puresoltechnologies.toolshed.agent.Configuration;
+import com.puresoltechnologies.toolshed.agent.MethodDefinition;
 
 public class ProfileWriter {
 
@@ -27,17 +28,19 @@ public class ProfileWriter {
 	binaryOutputStream.close();
     }
 
-    public static void printTime(Class<?> clazz, String method, long time, long invocations) {
+    public static void printTime(MethodDefinition methodDefinition, long time, long invocations) {
 	try {
 	    synchronized (lock) {
 		binaryOutputStream.write((byte) 1);
-		binaryOutputStream.writeNulTerminatedString(clazz.getName(), Charset.defaultCharset());
-		binaryOutputStream.writeNulTerminatedString(method, Charset.defaultCharset());
+		Charset defaultCharset = Charset.defaultCharset();
+		binaryOutputStream.writeNulTerminatedString(methodDefinition.getClassName(), defaultCharset);
+		binaryOutputStream.writeNulTerminatedString(methodDefinition.getMethodName(), defaultCharset);
+		binaryOutputStream.writeNulTerminatedString(methodDefinition.getDescriptor(), defaultCharset);
 		binaryOutputStream.writeSignedLong(time);
 		binaryOutputStream.writeSignedLong(invocations);
 	    }
 	} catch (IOException e) {
-	    // intentionaly left empty
+	    // Intentionally left empty
 	}
     }
 

@@ -7,14 +7,17 @@ public class MethodInvocationEntry {
 
     private final String className;
     private final String methodName;
+    private final String descriptor;
 
     @BinaryCreator
     public MethodInvocationEntry( //
 	    @BinaryNulTerminateString("className") String className, //
-	    @BinaryNulTerminateString("methodName") String methodName //
+	    @BinaryNulTerminateString("methodName") String methodName, //
+	    @BinaryNulTerminateString("descriptor") String descriptor //
     ) {
 	this.className = className;
 	this.methodName = methodName;
+	this.descriptor = descriptor;
     }
 
     public String getClassName() {
@@ -23,6 +26,10 @@ public class MethodInvocationEntry {
 
     public String getMethodName() {
 	return methodName;
+    }
+
+    public String getDescriptor() {
+	return descriptor;
     }
 
 }

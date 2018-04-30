@@ -18,13 +18,12 @@ import javafx.scene.layout.BorderPane;
 
 public class ProfileParetoTableViewer extends AbstractViewer implements Consumer<Profile> {
 
-    private final Disposable storeDisposable;
+    private Disposable storeDisposable;
     private BorderPane borderPane;
     private ProfileParetoTable table;
 
     public ProfileParetoTableViewer() {
 	super("Profile Pareto", PartOpenMode.AUTO_AND_MANUAL);
-	storeDisposable = ReactiveFX.getStore().subscribe(Topics.NEW_PROFILE, this);
     }
 
     @Override
@@ -37,6 +36,8 @@ public class ProfileParetoTableViewer extends AbstractViewer implements Consumer
 	borderPane = new BorderPane();
 	table = new ProfileParetoTable();
 	borderPane.setCenter(table);
+
+	storeDisposable = ReactiveFX.getStore().subscribe(Topics.NEW_PROFILE, this);
     }
 
     @Override

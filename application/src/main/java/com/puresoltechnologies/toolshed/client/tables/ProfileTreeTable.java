@@ -21,7 +21,8 @@ public class ProfileTreeTable extends TreeTableView<ProfileEntry> {
 	classNameColumn.setSortable(true);
 	columns.add(classNameColumn);
 	TreeTableColumn<ProfileEntry, String> methodColumn = new TreeTableColumn<>("Method");
-	methodColumn.setCellValueFactory(e -> new ReadOnlyStringWrapper(e.getValue().getValue().getMethodName()));
+	methodColumn.setCellValueFactory(e -> new ReadOnlyStringWrapper(
+		e.getValue().getValue().getMethodName() + e.getValue().getValue().getDescriptor()));
 	methodColumn.setSortable(true);
 	columns.add(methodColumn);
 	TreeTableColumn<ProfileEntry, Long> invokationsColumn = new TreeTableColumn<>("Invocations");

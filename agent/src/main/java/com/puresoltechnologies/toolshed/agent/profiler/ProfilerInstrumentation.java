@@ -23,6 +23,7 @@ import org.objectweb.asm.ClassWriter;
 import com.puresoltechnologies.streaming.binary.BinaryOutputStream;
 import com.puresoltechnologies.streaming.streams.OptimizedFileOutputStream;
 import com.puresoltechnologies.toolshed.agent.Configuration;
+import com.puresoltechnologies.toolshed.agent.MethodDefinition;
 import com.puresoltechnologies.toolshed.agent.profiler.asm.ProfilerClassVisitor;
 
 /**
@@ -36,7 +37,7 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
     private final BinaryOutputStream idsOutputStream;
     private int classId = 0;
     private final Map<Integer, String> classes = new HashMap<>();
-    private final Map<Integer, Map<Short, String>> methods = new HashMap<>();
+    private final Map<Integer, Map<Short, MethodDefinition>> methods = new HashMap<>();
     private boolean isClosing = false;
 
     public ProfilerInstrumentation() throws IOException {
@@ -52,34 +53,41 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 	idsOutputStream.close();
 	try {
 	    for (Entry<Integer, String> entry : classes.entrySet()) {
-		int id = entry.getKey();
-		Class<?> clazz = Class.forName(entry.getValue().replaceAll("/", "."));
-		for (Entry<Short, String> methodEntry : methods.get(entry.getKey()).entrySet()) {
-		    short methodId = methodEntry.getKey();
-		    try {
-			Field totalTimeField = clazz.getDeclaredField("total_time_" + methodId + "_");
-			Field invocationsField = clazz.getDeclaredField("invocations_" + methodId + "_");
-			try {
-			    totalTimeField.setAccessible(true);
-			    invocationsField.setAccessible(true);
-			    long time = totalTimeField.getLong(null);
-			    long invocations = invocationsField.getLong(null);
-			    ProfileWriter.printTime(clazz, methods.get(id).get(methodId), time, invocations);
-			    methodId++;
-			    totalTimeField = clazz.getDeclaredField("total_time_" + methodId + "_");
-			    invocationsField = clazz.getDeclaredField("invocations_" + methodId + "_");
-			} catch (InaccessibleObjectException e) {
-			    // intentionally left empty
-			}
-		    } catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
-			// intentionally left empty as abort criterion
-		    }
-		}
+		writeClassResults(entry);
 	    }
 	} catch (ClassNotFoundException | SecurityException e) {
 	    e.printStackTrace();
 	}
 	ProfileWriter.shutdown();
+    }
+
+    private void writeClassResults(Entry<Integer, String> entry) throws ClassNotFoundException {
+	Class<?> clazz = Class.forName(entry.getValue().replaceAll("/", "."));
+	for (Entry<Short, MethodDefinition> methodEntry : methods.get(entry.getKey()).entrySet()) {
+	    short methodId = methodEntry.getKey();
+	    writeMethodResult(clazz, methodId, methodEntry.getValue());
+	}
+    }
+
+    private void writeMethodResult(Class<?> clazz, short methodId, MethodDefinition methodEntry) {
+	try {
+	    Field totalTimeField = clazz.getDeclaredField("total_time_" + methodId + "_");
+	    Field invocationsField = clazz.getDeclaredField("invocations_" + methodId + "_");
+	    try {
+		totalTimeField.setAccessible(true);
+		invocationsField.setAccessible(true);
+		long time = totalTimeField.getLong(null);
+		long invocations = invocationsField.getLong(null);
+		ProfileWriter.printTime(methodEntry, time, invocations);
+		methodId++;
+		totalTimeField = clazz.getDeclaredField("total_time_" + methodId + "_");
+		invocationsField = clazz.getDeclaredField("invocations_" + methodId + "_");
+	    } catch (InaccessibleObjectException e) {
+		// intentionally left empty
+	    }
+	} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+	    // intentionally left empty as abort criterion
+	}
     }
 
     @Override
@@ -94,6 +102,15 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 		    return null;
 		}
 	    }
+	    if (className.startsWith("jdk/") //
+		    || className.startsWith("sun/") //
+		    || className.startsWith("com/sun/") //
+		    || className.startsWith("javafx/beans/") //
+		    || className.startsWith("javafx/scene/") //
+		    || className.startsWith("javafx/css/") //
+	    ) {
+		return null;
+	    }
 	    classId++;
 	    methods.put(classId, new HashMap<>());
 	    classes.put(classId, className);
@@ -101,7 +118,7 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 	    writeClassIdMapping(className);
 	    ClassReader cr = new ClassReader(classfileBuffer);
 	    ClassWriter cw = new ClassWriter(COMPUTE_FRAMES);
-	    ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, methods.get(classId), idsOutputStream);
+	    ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, className, methods.get(classId), idsOutputStream);
 	    cr.accept(cv, EXPAND_FRAMES);
 	    return cw.toByteArray();
 	} catch (IOException e) {
@@ -111,7 +128,7 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 
     private void writeClassIdMapping(String className) throws IOException {
 	idsOutputStream.writeUnsignedByte(0);
-	idsOutputStream.writeNulTerminatedString(className, Charset.defaultCharset());
+	idsOutputStream.writeNulTerminatedString(className.replaceAll("/", "."), Charset.defaultCharset());
 	idsOutputStream.writeSignedInt(classId);
     }
 }

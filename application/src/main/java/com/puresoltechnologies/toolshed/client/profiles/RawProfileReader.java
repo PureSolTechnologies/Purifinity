@@ -32,7 +32,7 @@ public class RawProfileReader implements Closeable {
     }
 
     public StreamIterable<ProfileEntry> iterable() {
-	return StreamIterable.of(new AbstractStreamIterator<>() {
+	return StreamIterable.of(new AbstractStreamIterator<ProfileEntry>() {
 
 	    @Override
 	    protected ProfileEntry findNext() {

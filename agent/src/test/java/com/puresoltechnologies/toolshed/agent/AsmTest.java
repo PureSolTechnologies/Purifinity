@@ -49,7 +49,7 @@ public class AsmTest {
     public void test2() throws Exception {
 	ClassWriter cw = new ClassWriter(0);
 	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-	ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, new HashMap<>(),
+	ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, "", new HashMap<>(),
 		new BinaryOutputStream(outputStream, LITTLE_ENDIAN));
 	ClassReader cr = new ClassReader(AsmTest.class.getName());
 	cr.accept(cv, EXPAND_FRAMES);

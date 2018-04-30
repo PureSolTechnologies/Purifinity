@@ -57,7 +57,7 @@ public class IdsReader implements Closeable {
 	ClassDeclarationEntry classDeclaration = binaryMapper.read(binaryInputStream, ClassDeclarationEntry.class);
 	ClassVertex classVertex = codeGraph.findClass(classDeclaration.getClassName());
 	if (classVertex == null) {
-	    classVertex = new ClassVertex(classDeclaration.getClassName().replaceAll("/", "."));
+	    classVertex = new ClassVertex(classDeclaration.getClassName());
 	    codeGraph.addVertex(classVertex);
 	}
 	lastClassVertex = classVertex;
@@ -65,7 +65,8 @@ public class IdsReader implements Closeable {
 
     private void readMethodDeclaration() throws BinaryMappingException, IOException {
 	MethodDeclarationEntry methodDeclaration = binaryMapper.read(binaryInputStream, MethodDeclarationEntry.class);
-	MethodVertex methodVertex = new MethodVertex(lastClassVertex.getClassName(), methodDeclaration.getMethodName());
+	MethodVertex methodVertex = new MethodVertex(lastClassVertex.getClassName(), methodDeclaration.getMethodName(),
+		methodDeclaration.getDescriptor());
 	lastMethodVertex = methodVertex;
 	codeGraph.addVertex(methodVertex);
 	ImplementsEdge implementsEdge = new ImplementsEdge(methodVertex);
@@ -76,12 +77,14 @@ public class IdsReader implements Closeable {
 	MethodInvocationEntry methodInvocation = binaryMapper.read(binaryInputStream, MethodInvocationEntry.class);
 	ClassVertex classVertex = codeGraph.findClass(methodInvocation.getClassName());
 	if (classVertex == null) {
-	    classVertex = new ClassVertex(methodInvocation.getClassName().replaceAll("/", "."));
+	    classVertex = new ClassVertex(methodInvocation.getClassName());
 	    codeGraph.addVertex(classVertex);
 	}
-	MethodVertex methodVertex = codeGraph.findMethod(classVertex.getClassName(), methodInvocation.getMethodName());
+	MethodVertex methodVertex = codeGraph.findMethod(classVertex.getClassName(), methodInvocation.getMethodName(),
+		methodInvocation.getDescriptor());
 	if (methodVertex == null) {
-	    methodVertex = new MethodVertex(classVertex.getClassName(), methodInvocation.getMethodName());
+	    methodVertex = new MethodVertex(classVertex.getClassName(), methodInvocation.getMethodName(),
+		    methodInvocation.getDescriptor());
 	    codeGraph.addVertex(methodVertex);
 	}
 	InvokesEdge invokesEdge = new InvokesEdge(methodVertex);

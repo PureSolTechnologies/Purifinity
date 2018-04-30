@@ -22,20 +22,13 @@ public class Profile {
 
     public void read() throws IOException {
 	try (RawProfileReader rawProfileReader = new RawProfileReader(rawProfileFile)) {
-	    rawProfileReader.iterable().forEach(this::addEntry);
+	    rawProfileReader.iterable().forEach(profileEntries::add);
 	}
 
 	File idsFile = new File(rawProfileFile.getParentFile(), "ids");
 	try (IdsReader reader = new IdsReader(idsFile, codeGraph)) {
 	    reader.read();
 	}
-    }
-
-    public void addEntry(ProfileEntry profileEntry) {
-	ProfileEntry profileEntry2 = new ProfileEntry(profileEntry.getType(),
-		profileEntry.getClassName().replaceAll("/", "."), profileEntry.getMethodName(),
-		profileEntry.getTotalTime(), profileEntry.getInvocations());
-	profileEntries.add(profileEntry2);
     }
 
     public List<ProfileEntry> getEntries() {
@@ -47,18 +40,22 @@ public class Profile {
     }
 
     public MethodVertex findMethod(ProfileEntry profileEntry) {
-	return findMethod(profileEntry.getClassName(), profileEntry.getMethodName());
+	return findMethod(profileEntry.getClassName(), profileEntry.getMethodName(), profileEntry.getDescriptor());
     }
 
-    public MethodVertex findMethod(String className, String methodName) {
-	return codeGraph.findMethod(className, methodName);
+    public MethodVertex findMethod(String className, String methodName, String descriptor) {
+	return codeGraph.findMethod(className, methodName, descriptor);
     }
 
     public ProfileEntry findEntry(MethodVertex invokedMethod) {
 	String className = invokedMethod.getClassName();
 	String methodName = invokedMethod.getMethodName();
+	String descriptor = invokedMethod.getDescriptor();
 	for (ProfileEntry profileEntry : profileEntries) {
-	    if (className.equals(profileEntry.getClassName()) && methodName.equals(profileEntry.getMethodName())) {
+	    if (className.equals(profileEntry.getClassName()) //
+		    && methodName.equals(profileEntry.getMethodName()) //
+		    && descriptor.equals(profileEntry.getDescriptor()) //
+	    ) {
 		return profileEntry;
 	    }
 	}

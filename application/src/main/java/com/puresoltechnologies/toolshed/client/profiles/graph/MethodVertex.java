@@ -6,12 +6,14 @@ public class MethodVertex extends CodeGraphVertex {
 
     private final String className;
     private final String methodName;
+    private final String descriptor;
     private final int hash;
 
-    public MethodVertex(String className, String methodName) {
+    public MethodVertex(String className, String methodName, String descriptor) {
 	this.className = className;
 	this.methodName = methodName;
-	this.hash = Objects.hash(className, methodName);
+	this.descriptor = descriptor;
+	this.hash = Objects.hash(className, methodName, descriptor);
     }
 
     public String getClassName() {
@@ -20,6 +22,10 @@ public class MethodVertex extends CodeGraphVertex {
 
     public String getMethodName() {
 	return methodName;
+    }
+
+    public String getDescriptor() {
+	return descriptor;
     }
 
     public void addInvokation(InvokesEdge invokesEdge) {
@@ -52,6 +58,11 @@ public class MethodVertex extends CodeGraphVertex {
 	    if (other.methodName != null)
 		return false;
 	} else if (!methodName.equals(other.methodName))
+	    return false;
+	if (descriptor == null) {
+	    if (other.descriptor != null)
+		return false;
+	} else if (!descriptor.equals(other.descriptor))
 	    return false;
 	return true;
     }
