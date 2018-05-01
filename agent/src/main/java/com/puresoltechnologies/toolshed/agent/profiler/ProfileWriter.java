@@ -31,6 +31,8 @@ public class ProfileWriter {
     public static void printTime(MethodDefinition methodDefinition, long time, long invocations) {
 	try {
 	    synchronized (lock) {
+		System.out.println(
+			"write profile entry:" + methodDefinition.toString() + ": " + invocations + "x " + time + "ms");
 		binaryOutputStream.write((byte) 1);
 		Charset defaultCharset = Charset.defaultCharset();
 		binaryOutputStream.writeNulTerminatedString(methodDefinition.getClassName(), defaultCharset);

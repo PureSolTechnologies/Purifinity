@@ -52,11 +52,12 @@ public class Profile {
 	String methodName = invokedMethod.getMethodName();
 	String descriptor = invokedMethod.getDescriptor();
 	for (ProfileEntry profileEntry : profileEntries) {
-	    if (className.equals(profileEntry.getClassName()) //
-		    && methodName.equals(profileEntry.getMethodName()) //
-		    && descriptor.equals(profileEntry.getDescriptor()) //
-	    ) {
-		return profileEntry;
+	    if (className.equals(profileEntry.getClassName())) {
+		if (methodName.equals(profileEntry.getMethodName())) {
+		    if (descriptor.equals(profileEntry.getDescriptor())) {
+			return profileEntry;
+		    }
+		}
 	    }
 	}
 	return null;

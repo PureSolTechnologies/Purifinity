@@ -85,7 +85,7 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 	    } catch (InaccessibleObjectException e) {
 		// intentionally left empty
 	    }
-	} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException e) {
+	} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException | NoClassDefFoundError e) {
 	    // intentionally left empty as abort criterion
 	}
     }

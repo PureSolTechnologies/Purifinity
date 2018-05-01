@@ -61,6 +61,11 @@ public class ProfileEntry {
     }
 
     @Override
+    public String toString() {
+	return className + "#" + methodName + descriptor + ": " + invocations + "x " + totalTime + "ms";
+    }
+
+    @Override
     public int hashCode() {
 	return hash;
     }
