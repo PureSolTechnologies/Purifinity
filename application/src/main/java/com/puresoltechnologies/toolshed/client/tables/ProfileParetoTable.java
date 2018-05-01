@@ -54,7 +54,6 @@ public class ProfileParetoTable extends TableView<ProfileEntry> {
 	    });
 	    return row;
 	});
-
     }
 
 }
