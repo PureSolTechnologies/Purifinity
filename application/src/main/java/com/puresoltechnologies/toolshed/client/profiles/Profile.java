@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
 
 import com.puresoltechnologies.toolshed.client.profiles.graph.ClassVertex;
 import com.puresoltechnologies.toolshed.client.profiles.graph.CodeGraph;
@@ -14,19 +15,35 @@ public class Profile {
     private final List<ProfileEntry> profileEntries = new ArrayList<>();
     private final CodeGraph codeGraph = new CodeGraph();
     private final File rawProfileFile;
+    private BiConsumer<Long, Long> progressObserver = null;
 
     public Profile(File rawProfileFile) {
 	super();
 	this.rawProfileFile = rawProfileFile;
     }
 
+    public void setProgressObserver(BiConsumer<Long, Long> progressObserver) {
+	this.progressObserver = progressObserver;
+    }
+
     public void read() throws IOException {
+	File idsFile = new File(rawProfileFile.getParentFile(), "ids");
+	long totalSize = rawProfileFile.length() + idsFile.length();
 	try (RawProfileReader rawProfileReader = new RawProfileReader(rawProfileFile)) {
-	    rawProfileReader.iterable().forEach(profileEntries::add);
+	    rawProfileReader.iterable().forEach(entry -> {
+		profileEntries.add(entry);
+		if (progressObserver != null) {
+		    progressObserver.accept(rawProfileReader.getPosition(), totalSize);
+		}
+	    });
 	}
 
-	File idsFile = new File(rawProfileFile.getParentFile(), "ids");
 	try (IdsReader reader = new IdsReader(idsFile, codeGraph)) {
+	    reader.setProgressObserver((workDone, max) -> {
+		if (progressObserver != null) {
+		    progressObserver.accept(rawProfileFile.length() + workDone, totalSize);
+		}
+	    });
 	    reader.read();
 	}
     }

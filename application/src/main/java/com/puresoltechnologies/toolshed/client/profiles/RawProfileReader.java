@@ -14,21 +14,29 @@ import com.puresoltechnologies.streaming.binary.BinaryInputStream;
 import com.puresoltechnologies.streaming.binary.mapper.BinaryMapper;
 import com.puresoltechnologies.streaming.binary.mapper.BinaryMappingException;
 import com.puresoltechnologies.streaming.streams.OptimizedFileInputStream;
+import com.puresoltechnologies.streaming.streams.PositionInputStream;
 
 public class RawProfileReader implements Closeable {
 
     private final File file;
     private final BinaryInputStream binaryInputStream;
+    private final PositionInputStream positionInputStream;
     private final BinaryMapper binaryMapper = new BinaryMapper(Charset.defaultCharset());
 
     public RawProfileReader(File file) throws FileNotFoundException {
 	this.file = file;
-	binaryInputStream = new BinaryInputStream(new OptimizedFileInputStream(file), LITTLE_ENDIAN);
+	OptimizedFileInputStream fileInputStream = new OptimizedFileInputStream(file);
+	positionInputStream = new PositionInputStream(fileInputStream);
+	binaryInputStream = new BinaryInputStream(positionInputStream, LITTLE_ENDIAN);
     }
 
     @Override
     public void close() throws IOException {
 	binaryInputStream.close();
+    }
+
+    public long getPosition() {
+	return positionInputStream.getPosition();
     }
 
     public StreamIterable<ProfileEntry> iterable() {

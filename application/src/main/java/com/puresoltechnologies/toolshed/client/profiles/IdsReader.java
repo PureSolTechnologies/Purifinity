@@ -7,11 +7,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.function.BiConsumer;
 
 import com.puresoltechnologies.streaming.binary.BinaryInputStream;
 import com.puresoltechnologies.streaming.binary.mapper.BinaryMapper;
 import com.puresoltechnologies.streaming.binary.mapper.BinaryMappingException;
 import com.puresoltechnologies.streaming.streams.OptimizedFileInputStream;
+import com.puresoltechnologies.streaming.streams.PositionInputStream;
 import com.puresoltechnologies.toolshed.client.profiles.graph.ClassVertex;
 import com.puresoltechnologies.toolshed.client.profiles.graph.CodeGraph;
 import com.puresoltechnologies.toolshed.client.profiles.graph.ImplementsEdge;
@@ -20,15 +22,38 @@ import com.puresoltechnologies.toolshed.client.profiles.graph.MethodVertex;
 
 public class IdsReader implements Closeable {
 
+    private final File file;
+    private final CodeGraph codeGraph;
+    private final PositionInputStream positionInputStream;
     private final BinaryInputStream binaryInputStream;
     private final BinaryMapper binaryMapper = new BinaryMapper(Charset.defaultCharset());
-    private final CodeGraph codeGraph;
     private ClassVertex lastClassVertex = null;
     private MethodVertex lastMethodVertex = null;
+    private BiConsumer<Long, Long> progressObserver = null;
 
     public IdsReader(File file, CodeGraph codeGraph) throws FileNotFoundException {
+	this.file = file;
 	this.codeGraph = codeGraph;
-	binaryInputStream = new BinaryInputStream(new OptimizedFileInputStream(file), LITTLE_ENDIAN);
+	OptimizedFileInputStream fileInputStream = new OptimizedFileInputStream(file);
+	positionInputStream = new PositionInputStream(fileInputStream);
+	binaryInputStream = new BinaryInputStream(positionInputStream, LITTLE_ENDIAN);
+    }
+
+    @Override
+    public void close() throws IOException {
+	binaryInputStream.close();
+    }
+
+    public CodeGraph getCodeGraph() {
+	return codeGraph;
+    }
+
+    public long getPosition() {
+	return positionInputStream.getPosition();
+    }
+
+    public void setProgressObserver(BiConsumer<Long, Long> progressObserver) {
+	this.progressObserver = progressObserver;
     }
 
     public void read() {
@@ -46,6 +71,9 @@ public class IdsReader implements Closeable {
 		case 2:
 		    readMethodInvokation();
 		    break;
+		}
+		if (progressObserver != null) {
+		    progressObserver.accept(getPosition(), file.length());
 		}
 	    }
 	} catch (BinaryMappingException | IOException e) {
@@ -89,15 +117,6 @@ public class IdsReader implements Closeable {
 	}
 	InvokesEdge invokesEdge = new InvokesEdge(methodVertex);
 	lastMethodVertex.addInvokation(invokesEdge);
-    }
-
-    @Override
-    public void close() throws IOException {
-	binaryInputStream.close();
-    }
-
-    public CodeGraph getCodeGraph() {
-	return codeGraph;
     }
 
 }
