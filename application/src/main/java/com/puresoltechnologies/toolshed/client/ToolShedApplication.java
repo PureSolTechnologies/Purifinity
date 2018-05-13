@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.puresoltechnologies.javafx.extensions.StatusBar;
 import com.puresoltechnologies.javafx.extensions.menu.AboutMenuItem;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveContainer;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveService;
@@ -13,6 +14,7 @@ import com.puresoltechnologies.javafx.perspectives.menu.ShowPartMenuItem;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.preferences.menu.PreferencesMenuItem;
 import com.puresoltechnologies.javafx.reactive.ReactiveFX;
+import com.puresoltechnologies.javafx.tasks.TasksStatusBar;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 import com.puresoltechnologies.javafx.workspaces.Workspace;
@@ -28,6 +30,8 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 public class ToolShedApplication extends Application {
@@ -60,6 +64,11 @@ public class ToolShedApplication extends Application {
 	    BorderPane root = new BorderPane();
 	    addMenu(stage, root);
 	    root.setCenter(perspectiveContainer);
+	    StatusBar statusBar = new StatusBar();
+	    HBox stretch = new HBox();
+	    HBox.setHgrow(stretch, Priority.ALWAYS);
+	    statusBar.getChildren().addAll(stretch, new TasksStatusBar());
+	    root.setBottom(statusBar);
 
 	    perspectiveContainer.addPerspective(new ProfilerPerspective());
 

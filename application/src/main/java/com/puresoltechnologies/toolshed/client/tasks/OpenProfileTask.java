@@ -15,9 +15,12 @@ public class OpenProfileTask extends Task<Profile> {
     private final Image openFolder;
 
     public OpenProfileTask(File rawProfileFile) {
+	super();
 	try {
 	    this.rawProfileFile = rawProfileFile;
-	    openFolder = ResourceUtils.getImage(this, "/icons/FatCow_Icons16x16/open_folder.png");
+	    updateTitle("Opening Profile");
+	    updateMessage("Opening '" + rawProfileFile + "'...");
+	    openFolder = ResourceUtils.getImage(this, "/icons/FatCow_Icons32x32/open_folder.png");
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
