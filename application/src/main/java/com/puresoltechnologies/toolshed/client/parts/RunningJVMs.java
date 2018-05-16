@@ -8,7 +8,7 @@ import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveService;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
-import com.puresoltechnologies.toolshed.client.parts.jvm.RunningJVM;
+import com.puresoltechnologies.toolshed.client.jvm.RunningJVM;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;

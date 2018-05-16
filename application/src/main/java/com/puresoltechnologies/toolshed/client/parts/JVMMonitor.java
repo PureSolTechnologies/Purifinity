@@ -1,13 +1,23 @@
 package com.puresoltechnologies.toolshed.client.parts;
 
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
 import java.net.URISyntaxException;
 import java.util.Optional;
+
+import javax.management.remote.JMXConnector;
+import javax.management.remote.JMXConnectorFactory;
+import javax.management.remote.JMXServiceURL;
 
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
 import com.puresoltechnologies.javafx.utils.FXDefaultFonts;
+import com.puresoltechnologies.toolshed.client.jvm.jmx.JMXViewer;
 import com.puresoltechnologies.toolshed.client.tables.MonitorTable;
+import com.sun.tools.attach.AttachNotSupportedException;
+import com.sun.tools.attach.VirtualMachine;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -38,7 +48,10 @@ public class JVMMonitor extends AbstractViewer implements VmListener {
     private BorderPane borderPane;
     private TabPane tabPane;
     private MonitorTable monitorTable;
+    private JMXViewer jmxViewer;
+
     private final ListProperty<Monitor> monitors = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private JMXConnector jmxConnector;
 
     public JVMMonitor() {
 	super("JVM Monitor", PartOpenMode.AUTO_ONLY);
@@ -60,9 +73,21 @@ public class JVMMonitor extends AbstractViewer implements VmListener {
 
 	try {
 	    monitoredHost = MonitoredHost.getMonitoredHost(hostIdentifier);
-	    monitoredVm = monitoredHost.getMonitoredVm(new VmIdentifier("//" + id));
+	    monitoredHost.setInterval(1000);
+	    VmIdentifier vmIdentifier = new VmIdentifier("//" + id);
+	    monitoredVm = monitoredHost.getMonitoredVm(vmIdentifier);
 	    name = MonitoredVmUtil.mainClass(monitoredVm, false) + " (" + id + ")";
 	    monitoredVm.addVmListener(this);
+	    monitoredVm.setInterval(1000);
+
+	    RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
+	    if (String.valueOf(id) == runtimeMXBean.getName()) {
+
+	    } else {
+		VirtualMachine virtualMachine = VirtualMachine.attach(String.valueOf(id));
+		String jmxUrl = virtualMachine.startLocalManagementAgent();
+		jmxConnector = JMXConnectorFactory.connect(new JMXServiceURL(jmxUrl), null);
+	    }
 
 	    setTitle("JVM Monitor - " + name);
 
@@ -77,9 +102,14 @@ public class JVMMonitor extends AbstractViewer implements VmListener {
 	    monitorsTab.setContent(monitorTable);
 	    tabPane.getTabs().add(monitorsTab);
 	    tabPane.getTabs().add(new Tab("Performance"));
-	    tabPane.getTabs().add(new Tab("JMX"));
+	    Tab jmx = new Tab("JMX");
+	    jmxViewer = new JMXViewer();
+	    jmxViewer.setJMXConnector(jmxConnector);
+	    jmx.setContent(jmxViewer);
+	    tabPane.getTabs().add(jmx);
 	    borderPane.setCenter(tabPane);
-	} catch (MonitorException | URISyntaxException e) {
+
+	} catch (MonitorException | URISyntaxException | IOException | AttachNotSupportedException e) {
 	    e.printStackTrace();
 	}
     }
@@ -87,8 +117,9 @@ public class JVMMonitor extends AbstractViewer implements VmListener {
     @Override
     public void close() {
 	try {
+	    jmxConnector.close();
 	    monitoredVm.removeVmListener(this);
-	} catch (MonitorException e) {
+	} catch (MonitorException | IOException e) {
 	    e.printStackTrace();
 	}
     }

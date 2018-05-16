@@ -1,4 +1,4 @@
-package com.puresoltechnologies.toolshed.client.parts.jvm;
+package com.puresoltechnologies.toolshed.client.jvm;
 
 import java.net.URISyntaxException;
 
