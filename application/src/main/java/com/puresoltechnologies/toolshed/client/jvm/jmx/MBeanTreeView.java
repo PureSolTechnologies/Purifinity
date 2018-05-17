@@ -21,13 +21,13 @@ import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
-public class JMXBeanTreeView extends TreeView<JMXBeanNode> {
+public class MBeanTreeView extends TreeView<JMXBeanNode> {
 
     private final ObjectProperty<ObjectName> selectedObjectName = new SimpleObjectProperty<>();
     private final ObjectProperty<JMXConnector> jmxConnector = new SimpleObjectProperty<>();
     private final TreeItem<JMXBeanNode> root = new TreeItem<>();
 
-    public JMXBeanTreeView() {
+    public MBeanTreeView() {
 	jmxConnector.addListener((observable, oldValue, newValue) -> refreshTree());
 	setRoot(root);
 	setShowRoot(false);

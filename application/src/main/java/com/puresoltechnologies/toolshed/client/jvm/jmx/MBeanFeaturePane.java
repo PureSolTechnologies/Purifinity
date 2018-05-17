@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
-public class MBeanPane extends TabPane {
+public class MBeanFeaturePane extends TabPane {
 
     private final ObjectProperty<ObjectName> objectName = new SimpleObjectProperty<>();
     private final ObjectProperty<JMXConnector> jmxConnector = new SimpleObjectProperty<>();
@@ -17,7 +17,7 @@ public class MBeanPane extends TabPane {
     private final MBeanNotificationsPane notifications = new MBeanNotificationsPane();
     private final MBeanMetadataPane metadata = new MBeanMetadataPane();
 
-    public MBeanPane() {
+    public MBeanFeaturePane() {
 	super();
 	Tab attributesTab = new Tab("Attributes");
 	attributesTab.setContent(attributes);

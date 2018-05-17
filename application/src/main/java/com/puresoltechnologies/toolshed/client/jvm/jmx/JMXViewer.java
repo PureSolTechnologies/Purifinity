@@ -10,14 +10,14 @@ public class JMXViewer extends SplitPane {
 
     private final ObjectProperty<JMXConnector> jmxConnector = new SimpleObjectProperty<>();
 
-    private final JMXBeanTreeView treeView;
-    private final MBeanPane objectView;
+    private final MBeanTreeView treeView;
+    private final MBeanFeaturePane objectView;
 
     public JMXViewer() {
 	super();
-	treeView = new JMXBeanTreeView();
+	treeView = new MBeanTreeView();
 	treeView.jmxConnectorProperty().bind(jmxConnector);
-	objectView = new MBeanPane();
+	objectView = new MBeanFeaturePane();
 	objectView.jmxConnectorProperty().bind(jmxConnector);
 	objectView.objectNameProperty().bind(treeView.selectedObjectNameProperty());
 	getItems().addAll(treeView, objectView);
