@@ -94,6 +94,9 @@ public class MBeanAttributesPane extends BorderPane {
 	    });
 	    tableView.getColumns().add(valueColumn);
 
+	    nameColumn.prefWidthProperty().bind(tableView.widthProperty().divide(2.0));
+	    valueColumn.prefWidthProperty().bind(tableView.widthProperty().divide(2.0));
+
 	    jmxConnector.addListener((jmxConnector, oldValue, newValue) -> {
 		refresh();
 	    });

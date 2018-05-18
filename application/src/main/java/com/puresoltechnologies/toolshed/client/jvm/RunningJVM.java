@@ -48,6 +48,9 @@ public class RunningJVM {
     }
 
     public HostIdentifier getHostIdentifier() {
+	if (monitoredHost == null) {
+	    return null;
+	}
 	return monitoredHost.getHostIdentifier();
     }
 

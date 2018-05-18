@@ -11,17 +11,25 @@ import javax.management.ObjectName;
 import javax.management.ReflectionException;
 import javax.management.remote.JMXConnector;
 
+import com.puresoltechnologies.javafx.utils.ResourceUtils;
+import com.puresoltechnologies.toolshed.client.parts.RunningJVMs;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.geometry.Orientation;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
@@ -31,6 +39,7 @@ public class MBeanOperationsPane extends BorderPane {
     private final ObjectProperty<JMXConnector> jmxConnector = new SimpleObjectProperty<>();
 
     private final TabPane resultTabs = new TabPane();
+    private final Label operationNameLabel = new Label("Operation Name");
 
     private final TableView<MBeanOperationInfo> operationsTableView = new TableView<>();
     private final TableView<MBeanParameterInfo> parametersTableView = new TableView<>();
@@ -41,18 +50,66 @@ public class MBeanOperationsPane extends BorderPane {
 	operationColumn.setCellValueFactory(
 		info -> new ReadOnlyStringWrapper(info.getValue().getName() + ": " + info.getValue().getReturnType()));
 	operationsTableView.getColumns().add(operationColumn);
+	operationColumn.prefWidthProperty().bind(operationsTableView.widthProperty());
+	operationsTableView.getSelectionModel().selectedIndexProperty()
+		.addListener((observable, oldValue, newValue) -> {
+		    MBeanOperationInfo item = operationsTableView.getSelectionModel().getSelectedItem();
+		    if (item != null) {
+			parametersTableView.setItems(FXCollections.observableArrayList(item.getSignature()));
+			operationNameLabel.setText(item.getName());
+		    } else {
+			clear();
+		    }
+		});
 
-	parametersTableView.getColumns().add(new TableColumn<MBeanParameterInfo, String>("Name"));
-	parametersTableView.getColumns().add(new TableColumn<MBeanParameterInfo, String>("Value"));
-	parametersTableView.getColumns().add(new TableColumn<MBeanParameterInfo, String>("Description"));
+	TableColumn<MBeanParameterInfo, String> nameColumn = new TableColumn<MBeanParameterInfo, String>("Name");
+	nameColumn.setCellValueFactory(cell -> new ReadOnlyStringWrapper(cell.getValue().getName()));
+	parametersTableView.getColumns().add(nameColumn);
+	TableColumn<MBeanParameterInfo, String> valueColumn = new TableColumn<MBeanParameterInfo, String>("Value");
+	valueColumn.setCellFactory(info -> {
+	    TableCell<MBeanParameterInfo, String> cell = new TableCell<MBeanParameterInfo, String>() {
+		@Override
+		protected void updateItem(String item, boolean empty) {
+		    super.updateItem(item, empty);
+		    setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+		    if (empty) {
+			setText(null);
+			setGraphic(null);
+		    } else {
+			TextField value = new TextField();
+			setGraphic(value);
+		    }
+		}
+	    };
+	    return cell;
+	});
+	parametersTableView.getColumns().add(valueColumn);
+	TableColumn<MBeanParameterInfo, String> descriptionColumn = new TableColumn<MBeanParameterInfo, String>(
+		"Description");
+	descriptionColumn.setCellValueFactory(cell -> new ReadOnlyStringWrapper(cell.getValue().getDescription()));
+	parametersTableView.getColumns().add(descriptionColumn);
+
+	nameColumn.prefWidthProperty().bind(parametersTableView.widthProperty().divide(3.0));
+	valueColumn.prefWidthProperty().bind(parametersTableView.widthProperty().divide(3.0));
+	descriptionColumn.prefWidthProperty().bind(parametersTableView.widthProperty().divide(3.0));
 
 	BorderPane operationsPane = new BorderPane();
 	SplitPane horizontalSplitPane = new SplitPane();
 	horizontalSplitPane.setOrientation(Orientation.HORIZONTAL);
 	horizontalSplitPane.getItems().addAll(operationsTableView, parametersTableView);
 	operationsPane.setCenter(horizontalSplitPane);
-	operationsPane.setBottom(new HBox(new Button("Execute..."), new Label("Operation Name")));
 
+	try {
+	    ImageView lightningImage = ResourceUtils.getImageView(RunningJVMs.class,
+		    "/icons/FatCow_Icons16x16/lightning.png");
+
+	    Button executeButton = new Button("Execute...", lightningImage);
+	    executeButton.setContentDisplay(ContentDisplay.LEFT);
+	    operationNameLabel.setAlignment(Pos.CENTER_LEFT);
+	    operationsPane.setBottom(new HBox(executeButton, operationNameLabel));
+	} catch (IOException e) {
+	    throw new RuntimeException(e);
+	}
 	SplitPane verticalSplitPane = new SplitPane();
 	verticalSplitPane.setOrientation(Orientation.VERTICAL);
 	verticalSplitPane.getItems().addAll(operationsPane, resultTabs);
@@ -68,6 +125,7 @@ public class MBeanOperationsPane extends BorderPane {
 
     private void refresh() {
 	try {
+	    clear();
 	    JMXConnector connector = jmxConnector.getValue();
 	    ObjectName object = objectName.getValue();
 	    if ((connector != null) && (object != null)) {
@@ -80,6 +138,11 @@ public class MBeanOperationsPane extends BorderPane {
 	} catch (InstanceNotFoundException | IntrospectionException | ReflectionException | IOException e) {
 	    e.printStackTrace();
 	}
+    }
+
+    private void clear() {
+	parametersTableView.setItems(FXCollections.observableArrayList());
+	operationNameLabel.setText("");
     }
 
     public final ObjectProperty<JMXConnector> jmxConnectorProperty() {

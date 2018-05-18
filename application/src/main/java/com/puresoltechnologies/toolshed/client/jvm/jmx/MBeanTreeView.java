@@ -14,12 +14,17 @@ import javax.management.ObjectName;
 import javax.management.ReflectionException;
 import javax.management.remote.JMXConnector;
 
+import com.puresoltechnologies.javafx.utils.ResourceUtils;
+import com.puresoltechnologies.toolshed.client.parts.RunningJVMs;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class MBeanTreeView extends TreeView<JMXBeanNode> {
 
@@ -32,28 +37,41 @@ public class MBeanTreeView extends TreeView<JMXBeanNode> {
 	setRoot(root);
 	setShowRoot(false);
 
-	setCellFactory(item -> {
-	    return new TreeCell<JMXBeanNode>() {
-		@Override
-		protected void updateItem(JMXBeanNode item, boolean empty) {
-		    super.updateItem(item, empty);
-		    if (empty) {
-			setText("");
-		    } else {
-			setText(item.getName());
+	try {
+	    Image folderImage = ResourceUtils.getImage(RunningJVMs.class, "/icons/FatCow_Icons16x16/folder.png");
+	    Image diagramImage = ResourceUtils.getImage(RunningJVMs.class, "/icons/FatCow_Icons16x16/diagramm.png");
+
+	    setCellFactory(item -> {
+		return new TreeCell<JMXBeanNode>() {
+		    @Override
+		    protected void updateItem(JMXBeanNode item, boolean empty) {
+			super.updateItem(item, empty);
+			if (empty) {
+			    setText(null);
+			    setGraphic(null);
+			} else {
+			    setText(item.getName());
+			    if (item.getObjectName() == null) {
+				setGraphic(new ImageView(folderImage));
+			    } else {
+				setGraphic(new ImageView(diagramImage));
+			    }
+			}
 		    }
+		};
+	    });
+	    getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+		TreeItem<JMXBeanNode> item = getSelectionModel().getSelectedItem();
+		if (item != null) {
+		    JMXBeanNode jmxBean = item.getValue();
+		    selectedObjectName.set(jmxBean.getObjectName());
+		} else {
+		    selectedObjectName.set(null);
 		}
-	    };
-	});
-	setOnMouseClicked(mouseEvent -> {
-	    TreeItem<JMXBeanNode> item = getSelectionModel().getSelectedItem();
-	    if (item != null) {
-		JMXBeanNode jmxBean = item.getValue();
-		selectedObjectName.set(jmxBean.getObjectName());
-	    } else {
-		selectedObjectName.set(null);
-	    }
-	});
+	    });
+	} catch (IOException e) {
+	    throw new RuntimeException(e);
+	}
     }
 
     public final ObjectProperty<ObjectName> selectedObjectNameProperty() {
