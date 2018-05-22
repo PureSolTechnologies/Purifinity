@@ -6,6 +6,7 @@ import com.puresoltechnologies.javafx.perspectives.AbstractPerspective;
 import com.puresoltechnologies.javafx.perspectives.PartSplit;
 import com.puresoltechnologies.javafx.perspectives.PartStack;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveElement;
+import com.puresoltechnologies.javafx.perspectives.parts.TaskProgressViewer;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 import com.puresoltechnologies.toolshed.client.parts.RunningJVMs;
 
@@ -37,7 +38,7 @@ public class JVMMonitoringPerspective extends AbstractPerspective {
 	container.addElement(leftStack);
 
 	PartStack rightStack = new PartStack();
-	// rightStack.openPart(new RunningJVMs());
+	rightStack.openPart(new TaskProgressViewer());
 	container.addElement(rightStack);
 
 	return container;

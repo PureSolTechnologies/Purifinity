@@ -87,6 +87,9 @@ public class MBeanAttributesPane extends BorderPane {
 			    } catch (IndexOutOfBoundsException e) {
 				e.printStackTrace();
 			    }
+			} else {
+			    setText("");
+			    setGraphic(null);
 			}
 		    }
 		};

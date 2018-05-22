@@ -5,6 +5,10 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.net.URISyntaxException;
 import java.util.Optional;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
@@ -15,6 +19,7 @@ import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
 import com.puresoltechnologies.javafx.utils.FXDefaultFonts;
 import com.puresoltechnologies.toolshed.client.jvm.jmx.JMXViewer;
+import com.puresoltechnologies.toolshed.client.jvm.jmx.JVMPerformancePane;
 import com.puresoltechnologies.toolshed.client.tables.MonitorTable;
 import com.sun.tools.attach.AttachNotSupportedException;
 import com.sun.tools.attach.VirtualMachine;
@@ -48,7 +53,10 @@ public class JVMMonitor extends AbstractViewer implements VmListener {
     private BorderPane borderPane;
     private TabPane tabPane;
     private MonitorTable monitorTable;
+    private JVMPerformancePane performanceView;
     private JMXViewer jmxViewer;
+    private ScheduledExecutorService updateScheduler = null;
+    private ScheduledFuture<?> updaterFuture = null;
 
     private final ListProperty<Monitor> monitors = new SimpleListProperty<>(FXCollections.observableArrayList());
     private JMXConnector jmxConnector;
@@ -101,13 +109,22 @@ public class JVMMonitor extends AbstractViewer implements VmListener {
 	    monitorTable.itemsProperty().bind(monitors);
 	    monitorsTab.setContent(monitorTable);
 	    tabPane.getTabs().add(monitorsTab);
-	    tabPane.getTabs().add(new Tab("Performance"));
+	    Tab performanceTab = new Tab("Performance");
+	    performanceView = new JVMPerformancePane();
+	    performanceView.setJMXConnector(jmxConnector);
+	    performanceTab.setContent(performanceView);
+	    tabPane.getTabs().add(performanceTab);
 	    Tab jmx = new Tab("JMX");
 	    jmxViewer = new JMXViewer();
 	    jmxViewer.setJMXConnector(jmxConnector);
 	    jmx.setContent(jmxViewer);
 	    tabPane.getTabs().add(jmx);
 	    borderPane.setCenter(tabPane);
+
+	    updateScheduler = Executors.newScheduledThreadPool(1);
+	    ScheduledFuture<?> updaterFuture = updateScheduler.scheduleAtFixedRate(() -> {
+		performanceView.update();
+	    }, 0l, 1l, TimeUnit.SECONDS);
 
 	} catch (MonitorException | URISyntaxException | IOException | AttachNotSupportedException e) {
 	    e.printStackTrace();
@@ -117,9 +134,12 @@ public class JVMMonitor extends AbstractViewer implements VmListener {
     @Override
     public void close() {
 	try {
+	    updaterFuture.cancel(false);
+	    updateScheduler.shutdown();
 	    jmxConnector.close();
 	    monitoredVm.removeVmListener(this);
-	} catch (MonitorException | IOException e) {
+	    updateScheduler.awaitTermination(10, TimeUnit.SECONDS);
+	} catch (MonitorException | IOException | InterruptedException e) {
 	    e.printStackTrace();
 	}
     }

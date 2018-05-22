@@ -21,7 +21,7 @@ import com.puresoltechnologies.javafx.workspaces.Workspace;
 import com.puresoltechnologies.javafx.workspaces.menu.ExitApplicationMenuItem;
 import com.puresoltechnologies.javafx.workspaces.menu.RestartApplicationMenuItem;
 import com.puresoltechnologies.javafx.workspaces.menu.SwitchWorkspaceMenu;
-import com.puresoltechnologies.toolshed.client.perspectives.ProfilerPerspective;
+import com.puresoltechnologies.toolshed.client.perspectives.JVMMonitoringPerspective;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -70,7 +70,7 @@ public class ToolShedApplication extends Application {
 	    statusBar.getChildren().addAll(stretch, new TasksStatusBar());
 	    root.setBottom(statusBar);
 
-	    perspectiveContainer.addPerspective(new ProfilerPerspective());
+	    PerspectiveService.openPerspective(new JVMMonitoringPerspective());
 
 	    Scene scene = new Scene(root, 640, 480);
 	    stage.setScene(scene);
