@@ -134,7 +134,7 @@
 				<version>${javafx.version}</version>
 			</dependency>
 			<!-- -->
-			<!-- 3rd party testing -->
+			<!-- 3rd party -->
 			<!-- -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -167,6 +167,9 @@
 				<artifactId>asm</artifactId>
 				<version>${asm.version}</version>
 			</dependency>
+			<!-- -->
+			<!-- 3rd party testing -->
+			<!-- -->
 			<dependency>
 				<groupId>org.testfx</groupId>
 				<artifactId>testfx-core</artifactId>
@@ -364,17 +367,31 @@
 					</knownLicenses>
 				</configuration>
 			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>3.1.0</version>
+			</plugin>
 			<!-- plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>findbugs-maven-plugin</artifactId> 
 				<version>3.0.5</version> <executions> <execution> <phase>verify</phase> <goals> 
 				<goal>check</goal> </goals> </execution> </executions> </plugin -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.7.0</version>
+				<version>3.6.2</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
 					<encoding>UTF-8</encoding>
+					<showDeprecation>true</showDeprecation>
+					<showWarnings>true</showWarnings>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.21.0</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.21.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -426,13 +443,20 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
+				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
 						<goals>
 							<goal>jar</goal>
 						</goals>
+						<configuration>
+							<dependencySourceExcludes>sun.jvmstat.*</dependencySourceExcludes>
+							<detectJavaApiLink>false</detectJavaApiLink>
+							<excludePackageNames>sun.jvmstat.*</excludePackageNames>
+							<docencoding>UTF-8</docencoding>
+							<failOnError>false</failOnError>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

@@ -134,7 +134,9 @@ public class JVMMonitor extends AbstractViewer implements VmListener {
     @Override
     public void close() {
 	try {
-	    updaterFuture.cancel(false);
+	    if (updaterFuture != null) {
+		updaterFuture.cancel(false);
+	    }
 	    updateScheduler.shutdown();
 	    jmxConnector.close();
 	    monitoredVm.removeVmListener(this);

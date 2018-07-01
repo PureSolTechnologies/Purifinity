@@ -8,11 +8,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import com.puresoltechnologies.streaming.AbstractStreamIterator;
-import com.puresoltechnologies.streaming.StreamIterable;
 import com.puresoltechnologies.streaming.binary.BinaryInputStream;
 import com.puresoltechnologies.streaming.binary.mapper.BinaryMapper;
 import com.puresoltechnologies.streaming.binary.mapper.BinaryMappingException;
+import com.puresoltechnologies.streaming.iterators.AbstractStreamIterator;
+import com.puresoltechnologies.streaming.iterators.StreamIterable;
 import com.puresoltechnologies.streaming.streams.OptimizedFileInputStream;
 import com.puresoltechnologies.streaming.streams.PositionInputStream;
 
