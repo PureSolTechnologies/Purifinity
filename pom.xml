@@ -5,9 +5,17 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Project metadata -->
 		<officalName>Agent</officalName>
+		<!-- PureSol Technologies library versions -->
 		<streaming.version>1.2.0-SNAPSHOT</streaming.version>
 		<graphs.version>1.1.0-SNAPSHOT</graphs.version>
+		<!-- 3rd party version -->
+		<io.dropwizard.version>1.3.5</io.dropwizard.version>
+		<!-- metrics.version is to be synchronized with Dropwizard! -->
+		<metrics.version>4.0.2</metrics.version>
+		<!-- com.google.guava -->
+		<com.google.guava.version>24.0-jre</com.google.guava.version>
 		<asm.version>6.1.1</asm.version>
 		<javafx.version>0.1.0-SNAPSHOT</javafx.version>
 		<slf4j.version>1.7.25</slf4j.version>
@@ -78,11 +86,13 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- Self dependencies -->
 			<dependency>
 				<groupId>com.puresoltechnologies.toolshed</groupId>
 				<artifactId>agent</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<!-- PureSol Technologies dependencies -->
 			<dependency>
 				<groupId>com.puresoltechnologies.graphs</groupId>
 				<artifactId>graph</artifactId>
@@ -158,6 +168,16 @@
 				<version>${logback.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>javax.activation</groupId>
+				<artifactId>activation</artifactId>
+				<version>1.1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.xml</groupId>
+				<artifactId>jaxb-api</artifactId>
+				<version>2.1</version>
+			</dependency>
+			<dependency>
 				<groupId>org.ow2.asm</groupId>
 				<artifactId>asm-analysis</artifactId>
 				<version>${asm.version}</version>
@@ -170,6 +190,21 @@
 			<!-- -->
 			<!-- 3rd party testing -->
 			<!-- -->
+			<dependency>
+				<groupId>io.dropwizard</groupId>
+				<artifactId>dropwizard-core</artifactId>
+				<version>${io.dropwizard.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.dropwizard</groupId>
+				<artifactId>dropwizard-assets</artifactId>
+				<version>${io.dropwizard.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${com.google.guava.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.testfx</groupId>
 				<artifactId>testfx-core</artifactId>
@@ -321,7 +356,14 @@
 							<name>The Apache Software License, Version 2.0</name>
 							<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
 							<aliases>
+								<aliase>Apache 2</aliase>
+								<aliase>Apache 2.0</aliase>
 								<aliase>Apache License 2.0</aliase>
+								<aliase>Apache License, Version 2.0</aliase>
+								<aliase>Apache License, version 2.0</aliase>
+								<aliase>Apache Software Licenses</aliase>
+								<aliase>Apache Software License - Version 2.0</aliase>
+								<aliase>The Apache License, Version 2.0</aliase>
 							</aliases>
 						</knownLicense>
 						<knownLicense>
@@ -332,8 +374,26 @@
 							</aliases>
 						</knownLicense>
 						<knownLicense>
+							<name>CDDL + GPLv2 with classpath exception</name>
+							<url>https://javaee.github.io/glassfish/LICENSE</url>
+							<aliases>
+								<aliase>CDDL 1.1</aliase>
+								<aliase>CDDL+GPL License</aliase>
+							</aliases>
+						</knownLicense>
+						<knownLicense>
 							<name>Eclipse Public License - v 1.0</name>
 							<url>http://www.eclipse.org/legal/epl-v10.html</url>
+							<aliases>
+								<aliase>Eclipse Public License - Version 1.0</aliase>
+							</aliases>
+						</knownLicense>
+						<knownLicense>
+							<name><![CDATA[GNU General Public License, version 2 (GPL2), with the classpath exception]]></name>
+							<url>http://www.gnu.org/software/classpath/license.html</url>
+							<aliases>
+								<aliase>GPL2 w/ CPE</aliase>
+							</aliases>
 						</knownLicense>
 						<knownLicense>
 							<name>GNU Lesser General Public License, Version 2.1</name>
@@ -347,6 +407,7 @@
 							<name>The MIT License</name>
 							<url>http://www.opensource.org/licenses/mit-license.php</url>
 							<aliases>
+								<aliase>MIT</aliase>
 								<aliase>MIT License</aliase>
 							</aliases>
 						</knownLicense>
@@ -355,6 +416,7 @@
 							<url>http://www.mozilla.org/MPL/MPL-1.1.html</url>
 							<aliases>
 								<aliase>MPL 1.1</aliase>
+								<aliase>MIT license</aliase>
 							</aliases>
 						</knownLicense>
 						<knownLicense>
@@ -524,6 +586,7 @@
 
 	<modules>
 		<module>agent</module>
+		<module>server</module>
 		<module>application</module>
 		<module>test</module>
 	</modules>
