@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-        <listEntry value="/com.puresoltechnologies.toolshed.server/src/main/java/com/puresoltechnologies/toolshed/server/ToolShedServer.java"/>
+        <listEntry value="/com.puresoltechnologies.toolshed.server.impl/src/main/java/com/puresoltechnologies/toolshed/server/impl/ToolShedServer.java"/>
     </listAttribute>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
         <listEntry value="1"/>
@@ -11,8 +11,8 @@
         <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
     </listAttribute>
     <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
-    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.puresoltechnologies.toolshed.server.ToolShedServer"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.puresoltechnologies.toolshed.server.impl.ToolShedServer"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="server&#10;src/test/resources/server.yml"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="com.puresoltechnologies.toolshed.server"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="com.puresoltechnologies.toolshed.server.impl"/>
     <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
 </launchConfiguration>

@@ -1,4 +1,4 @@
-package com.puresoltechnologies.toolshed.server.config;
+package com.puresoltechnologies.toolshed.server.impl.config;
 
 import io.dropwizard.Configuration;
 

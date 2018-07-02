@@ -1,4 +1,4 @@
-package com.puresoltechnologies.toolshed.server.filters;
+package com.puresoltechnologies.toolshed.server.impl.filters;
 
 import java.io.IOException;
 

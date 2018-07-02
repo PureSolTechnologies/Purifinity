@@ -9,10 +9,14 @@
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>server</artifactId>
+	<artifactId>server.impl</artifactId>
 	<name>${officalName} - ${project.artifactId}</name>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.puresoltechnologies.toolshed</groupId>
+			<artifactId>server.api</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>io.dropwizard</groupId>
 			<artifactId>dropwizard-core</artifactId>

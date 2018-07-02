@@ -16,6 +16,8 @@
 		<metrics.version>4.0.2</metrics.version>
 		<!-- com.google.guava -->
 		<com.google.guava.version>24.0-jre</com.google.guava.version>
+		<!-- jaxrs -->
+		<javax.ws.rs.version>2.0.1</javax.ws.rs.version>
 		<asm.version>6.1.1</asm.version>
 		<javafx.version>0.1.0-SNAPSHOT</javafx.version>
 		<slf4j.version>1.7.25</slf4j.version>
@@ -90,6 +92,21 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.toolshed</groupId>
 				<artifactId>agent</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.toolshed</groupId>
+				<artifactId>client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.toolshed</groupId>
+				<artifactId>server.api</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.toolshed</groupId>
+				<artifactId>server.impl</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- PureSol Technologies dependencies -->
@@ -200,10 +217,16 @@
 				<artifactId>dropwizard-assets</artifactId>
 				<version>${io.dropwizard.version}</version>
 			</dependency>
+
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
 				<version>${com.google.guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.ws.rs</groupId>
+				<artifactId>javax.ws.rs-api</artifactId>
+				<version>${javax.ws.rs.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.testfx</groupId>
@@ -586,7 +609,9 @@
 
 	<modules>
 		<module>agent</module>
-		<module>server</module>
+		<module>server.api</module>
+		<module>server.impl</module>
+		<module>client</module>
 		<module>application</module>
 		<module>test</module>
 	</modules>

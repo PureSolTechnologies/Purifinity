@@ -1,4 +1,4 @@
-package com.puresoltechnologies.toolshed.server;
+package com.puresoltechnologies.toolshed.server.impl;
 
 import java.io.File;
 
@@ -7,9 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
-import com.puresoltechnologies.toolshed.server.config.ToolShedServerConfiguration;
-import com.puresoltechnologies.toolshed.server.filters.CORSFilter;
-import com.puresoltechnologies.toolshed.server.metrics.Metrics;
+import com.puresoltechnologies.toolshed.server.impl.config.ToolShedServerConfiguration;
+import com.puresoltechnologies.toolshed.server.impl.filters.CORSFilter;
+import com.puresoltechnologies.toolshed.server.impl.machines.MachinesServiceImpl;
+import com.puresoltechnologies.toolshed.server.impl.metrics.Metrics;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -46,6 +47,7 @@ public class ToolShedServer extends Application<ToolShedServerConfiguration> {
 	JerseyEnvironment jersey = environment.jersey();
 	jersey.setUrlPattern("/rest");
 	jersey.register(new CORSFilter());
+	jersey.register(MachinesServiceImpl.class);
     }
 
     @Override

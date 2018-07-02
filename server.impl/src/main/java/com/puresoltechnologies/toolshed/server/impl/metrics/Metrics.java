@@ -1,4 +1,4 @@
-package com.puresoltechnologies.toolshed.server.metrics;
+package com.puresoltechnologies.toolshed.server.impl.metrics;
 
 import java.util.concurrent.TimeUnit;
 
