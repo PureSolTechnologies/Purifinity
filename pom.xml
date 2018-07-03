@@ -209,15 +209,19 @@
 			<!-- -->
 			<dependency>
 				<groupId>io.dropwizard</groupId>
+				<artifactId>dropwizard-assets</artifactId>
+				<version>${io.dropwizard.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.dropwizard</groupId>
 				<artifactId>dropwizard-core</artifactId>
 				<version>${io.dropwizard.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.dropwizard</groupId>
-				<artifactId>dropwizard-assets</artifactId>
+				<artifactId>dropwizard-jackson</artifactId>
 				<version>${io.dropwizard.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>

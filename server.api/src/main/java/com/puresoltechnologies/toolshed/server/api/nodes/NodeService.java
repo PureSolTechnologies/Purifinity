@@ -1,4 +1,4 @@
-package com.puresoltechnologies.toolshed.server.api;
+package com.puresoltechnologies.toolshed.server.api.nodes;
 
 import java.util.Collection;
 
@@ -8,7 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/nodes")
-public interface MachinesService {
+public interface NodeService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

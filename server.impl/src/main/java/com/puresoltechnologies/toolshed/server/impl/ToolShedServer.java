@@ -9,8 +9,8 @@ import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.puresoltechnologies.toolshed.server.impl.config.ToolShedServerConfiguration;
 import com.puresoltechnologies.toolshed.server.impl.filters.CORSFilter;
-import com.puresoltechnologies.toolshed.server.impl.machines.MachinesServiceImpl;
 import com.puresoltechnologies.toolshed.server.impl.metrics.Metrics;
+import com.puresoltechnologies.toolshed.server.impl.nodes.MachinesServiceImpl;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
