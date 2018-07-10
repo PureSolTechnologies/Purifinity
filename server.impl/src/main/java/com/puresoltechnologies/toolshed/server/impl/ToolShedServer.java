@@ -10,7 +10,8 @@ import com.codahale.metrics.health.HealthCheckRegistry;
 import com.puresoltechnologies.toolshed.server.impl.config.ToolShedServerConfiguration;
 import com.puresoltechnologies.toolshed.server.impl.filters.CORSFilter;
 import com.puresoltechnologies.toolshed.server.impl.metrics.Metrics;
-import com.puresoltechnologies.toolshed.server.impl.nodes.MachinesServiceImpl;
+import com.puresoltechnologies.toolshed.server.impl.nodes.NodeServiceImpl;
+import com.puresoltechnologies.toolshed.server.impl.nodes.NodeManager;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -47,7 +48,9 @@ public class ToolShedServer extends Application<ToolShedServerConfiguration> {
 	JerseyEnvironment jersey = environment.jersey();
 	jersey.setUrlPattern("/rest");
 	jersey.register(new CORSFilter());
-	jersey.register(MachinesServiceImpl.class);
+	jersey.register(NodeServiceImpl.class);
+
+	NodeManager.initialize(configuration.getUpstreamServers());
     }
 
     @Override

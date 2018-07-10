@@ -3,6 +3,7 @@ package com.puresoltechnologies.toolshed.server.impl.nodes;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,9 +17,11 @@ import com.puresoltechnologies.toolshed.server.api.nodes.OS;
 public class NodeManager {
 
     private static final List<Node> nodes = new ArrayList<>();
-    static {
+
+    public static void initialize(List<URL> upstreamServers) {
 	try {
 	    nodes.add(createLocalNode());
+	    nodes.addAll(createRemoteNodes());
 	} catch (UnknownHostException | SocketException e) {
 	    throw new RuntimeException("Could not initialize local node.", e);
 	}
@@ -38,6 +41,11 @@ public class NodeManager {
 	String architecture = System.getProperty("os.arch");
 
 	return new Node(id, os, architecture, version, cpus, nics);
+    }
+
+    private static List<? extends Node> createRemoteNodes() {
+	List<Node> nodes = new ArrayList<>();
+	return nodes;
     }
 
     public static List<Node> getNodes() {

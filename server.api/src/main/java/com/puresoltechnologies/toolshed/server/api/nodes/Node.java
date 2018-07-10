@@ -22,9 +22,9 @@ public class Node {
 	    @JsonProperty("id") String id, //
 	    @JsonProperty("oS") OS os, //
 	    @JsonProperty("architecture") String architecture, //
-	    @JsonProperty("oSVersion") String osVersion, //
+	    @JsonProperty("osversion") String osVersion, //
 	    @JsonProperty("cpus") int cpus, //
-	    @JsonProperty("nICs") Set<NIC> nics //
+	    @JsonProperty("nics") Set<NIC> nics //
     ) {
 	super();
 	Objects.requireNonNull(id, "id must not be null!");
