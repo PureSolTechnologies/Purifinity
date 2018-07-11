@@ -9,25 +9,13 @@
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>server.api</artifactId>
+	<artifactId>commons</artifactId>
 	<name>${officalName} - ${project.artifactId}</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.puresoltechnologies.toolshed</groupId>
-			<artifactId>commons</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.commons</groupId>
-			<artifactId>math</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>io.dropwizard</groupId>
 			<artifactId>dropwizard-jackson</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>javax.ws.rs</groupId>
-			<artifactId>javax.ws.rs-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.platform</groupId>
