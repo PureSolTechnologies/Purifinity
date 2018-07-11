@@ -1,21 +1,21 @@
-package com.puresoltechnologies.toolshed.server.api.kpis;
+package com.puresoltechnologies.toolshed.server.api.nodes;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.util.HashSet;
 
 import org.junit.jupiter.api.Test;
 
-import com.puresoltechnologies.commons.math.LevelOfMeasurement;
 import com.puresoltechnologies.toolshed.commons.JsonSerializer;
 
-public class GaugeDefinitionTest {
+public class NodeTest {
 
     @Test
     public void testSerialization() throws IOException {
-	GaugeDefinition definition = new GaugeDefinition("name", "unit", "description", LevelOfMeasurement.INTERVAL);
+	Node definition = new Node("id", OS.LINUX, "x86", "1.2.3", 4, new HashSet<>());
 	String serialized = JsonSerializer.toString(definition);
-	GaugeDefinition deserialized = JsonSerializer.fromString(serialized, GaugeDefinition.class);
+	Node deserialized = JsonSerializer.fromString(serialized, Node.class);
 	assertEquals(definition, deserialized);
     }
 

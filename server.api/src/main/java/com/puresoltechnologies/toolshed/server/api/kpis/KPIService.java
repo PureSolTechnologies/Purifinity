@@ -1,23 +1,25 @@
 package com.puresoltechnologies.toolshed.server.api.kpis;
 
+import java.util.Set;
+
 import javax.ws.rs.Path;
 
 @Path("/kpis")
 public interface KPIService {
 
     @Path("/counters")
-    public void getCounters();
+    public Set<CounterDefinition> getCounters();
 
     @Path("/timers")
-    public void getTimers();
+    public Set<TimerDefinition> getTimers();
 
     @Path("/meters")
-    public void getMeters();
+    public Set<MeterDefinition> getMeters();
 
     @Path("/gauges")
-    public void getGauges();
+    public Set<GaugeDefinition> getGauges();
 
     @Path("/histograms")
-    public void getHistograms();
+    public Set<HistogramDefinition> getHistograms();
 
 }

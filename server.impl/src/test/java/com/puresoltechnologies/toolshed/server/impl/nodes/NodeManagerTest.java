@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -16,10 +15,10 @@ public class NodeManagerTest {
 
     @Test
     public void testInitialNodesList() {
-	List<Node> nodes = NodeManager.getNodes();
+	Set<Node> nodes = NodeManager.getNodes();
 	assertNotNull(nodes, "Nodes list must not be null.");
 	assertEquals(1, nodes.size(), "Only one node for the  local node is expected.");
-	Node localNode = nodes.get(0);
+	Node localNode = nodes.iterator().next();
 	assertNotNull(localNode.getId());
 	Set<NIC> nics = localNode.getNICs();
 	assertNotNull(nics);

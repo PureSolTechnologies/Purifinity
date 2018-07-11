@@ -13,7 +13,7 @@ public class MeterDefinitionTest {
 
     @Test
     public void testSerialization() throws IOException {
-	MeterDefinition definition = new MeterDefinition("nam", "unit", "description", LevelOfMeasurement.INTERVAL);
+	MeterDefinition definition = new MeterDefinition("name", "unit", "description", LevelOfMeasurement.INTERVAL);
 	String serialized = JsonSerializer.toString(definition);
 	MeterDefinition deserialized = JsonSerializer.fromString(serialized, MeterDefinition.class);
 	assertEquals(definition, deserialized);

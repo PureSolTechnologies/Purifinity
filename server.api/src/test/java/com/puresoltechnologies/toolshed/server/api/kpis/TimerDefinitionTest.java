@@ -12,7 +12,7 @@ public class TimerDefinitionTest {
 
     @Test
     public void testSerialization() throws IOException {
-	TimerDefinition definition = new TimerDefinition("nam", "unit", "description");
+	TimerDefinition definition = new TimerDefinition("name", "unit", "description");
 	String serialized = JsonSerializer.toString(definition);
 	TimerDefinition deserialized = JsonSerializer.fromString(serialized, TimerDefinition.class);
 	assertEquals(definition, deserialized);

@@ -12,7 +12,7 @@ public class CounterDefinitionTest {
 
     @Test
     public void testSerialization() throws IOException {
-	CounterDefinition definition = new CounterDefinition("nam", "description");
+	CounterDefinition definition = new CounterDefinition("name", "description");
 	String serialized = JsonSerializer.toString(definition);
 	CounterDefinition deserialized = JsonSerializer.fromString(serialized, CounterDefinition.class);
 	assertEquals(definition, deserialized);

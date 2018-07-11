@@ -16,7 +16,7 @@ import com.puresoltechnologies.toolshed.server.api.nodes.OS;
 
 public class NodeManager {
 
-    private static final List<Node> nodes = new ArrayList<>();
+    private static final Set<Node> nodes = new HashSet<>();
 
     public static void initialize(List<URL> upstreamServers) {
 	try {
@@ -48,7 +48,7 @@ public class NodeManager {
 	return nodes;
     }
 
-    public static List<Node> getNodes() {
+    public static Set<Node> getNodes() {
 	return nodes;
     }
 

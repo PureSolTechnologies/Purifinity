@@ -13,7 +13,7 @@ public class HistogramDefinitionTest {
 
     @Test
     public void testSerialization() throws IOException {
-	HistogramDefinition definition = new HistogramDefinition("nam", "unit", "description",
+	HistogramDefinition definition = new HistogramDefinition("name", "unit", "description",
 		LevelOfMeasurement.INTERVAL);
 	String serialized = JsonSerializer.toString(definition);
 	HistogramDefinition deserialized = JsonSerializer.fromString(serialized, HistogramDefinition.class);
