@@ -9,17 +9,17 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.toolshed.server.api.nodes.NIC;
-import com.puresoltechnologies.toolshed.server.api.nodes.Node;
+import com.puresoltechnologies.toolshed.server.api.nodes.NodeInformation;
 
 public class NodeManagerTest {
 
     @Test
     public void testInitialNodesList() {
-	Set<Node> nodes = NodeManager.getNodes();
+	Set<NodeInformation> nodes = NodeManager.getInstance().getNodes();
 	assertNotNull(nodes, "Nodes list must not be null.");
 	assertEquals(1, nodes.size(), "Only one node for the  local node is expected.");
-	Node localNode = nodes.iterator().next();
-	assertNotNull(localNode.getId());
+	NodeInformation localNode = nodes.iterator().next();
+	assertNotNull(localNode.getName());
 	Set<NIC> nics = localNode.getNICs();
 	assertNotNull(nics);
 	assertTrue(nics.size() > 0);

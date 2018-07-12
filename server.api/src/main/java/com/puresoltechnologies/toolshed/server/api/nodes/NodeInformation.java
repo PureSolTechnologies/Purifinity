@@ -8,9 +8,9 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Node {
+public class NodeInformation {
 
-    private final String id;
+    private final String name;
     private final OS os;
     private final String architecture;
     private final String osVersion;
@@ -18,8 +18,8 @@ public class Node {
     private final Set<NIC> nics = new HashSet<>();
 
     @JsonCreator
-    public Node( //
-	    @JsonProperty("id") String id, //
+    public NodeInformation( //
+	    @JsonProperty("name") String name, //
 	    @JsonProperty("oS") OS os, //
 	    @JsonProperty("architecture") String architecture, //
 	    @JsonProperty("osversion") String osVersion, //
@@ -27,9 +27,9 @@ public class Node {
 	    @JsonProperty("nics") Set<NIC> nics //
     ) {
 	super();
-	Objects.requireNonNull(id, "id must not be null!");
+	Objects.requireNonNull(name, "name must not be null!");
 	Objects.requireNonNull(nics, "nics must not be null!");
-	this.id = id;
+	this.name = name;
 	this.os = os;
 	this.architecture = architecture;
 	this.osVersion = osVersion;
@@ -37,8 +37,8 @@ public class Node {
 	this.nics.addAll(nics);
     }
 
-    public String getId() {
-	return id;
+    public String getName() {
+	return name;
     }
 
     public OS getOS() {
@@ -65,7 +65,7 @@ public class Node {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + ((id == null) ? 0 : id.hashCode());
+	result = prime * result + ((name == null) ? 0 : name.hashCode());
 	result = prime * result + ((nics == null) ? 0 : nics.hashCode());
 	return result;
     }
@@ -78,11 +78,11 @@ public class Node {
 	    return false;
 	if (getClass() != obj.getClass())
 	    return false;
-	Node other = (Node) obj;
-	if (id == null) {
-	    if (other.id != null)
+	NodeInformation other = (NodeInformation) obj;
+	if (name == null) {
+	    if (other.name != null)
 		return false;
-	} else if (!id.equals(other.id))
+	} else if (!name.equals(other.name))
 	    return false;
 	if (nics == null) {
 	    if (other.nics != null)
@@ -94,6 +94,6 @@ public class Node {
 
     @Override
     public String toString() {
-	return id + " (" + os.name() + " " + osVersion + ", " + cpus + " CPUs, " + architecture + ")";
+	return name + " (" + os.name() + " " + osVersion + ", " + cpus + " CPUs, " + architecture + ")";
     }
 }

@@ -8,7 +8,7 @@ import java.util.Collection;
 import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.toolshed.client.ToolShedCient;
-import com.puresoltechnologies.toolshed.server.api.nodes.Node;
+import com.puresoltechnologies.toolshed.server.api.nodes.NodeInformation;
 import com.puresoltechnologies.toolshed.server.api.nodes.NodeService;
 
 public class HostStreamIT extends AbstractToolShedServerTest {
@@ -17,7 +17,7 @@ public class HostStreamIT extends AbstractToolShedServerTest {
     public void test() {
 	ToolShedCient client = getClient();
 	NodeService nodeService = client.getNodeService();
-	Collection<Node> nodes = nodeService.getNodes();
+	Collection<NodeInformation> nodes = nodeService.getNodes();
 	assertNotNull(nodes);
 	assertFalse(nodes.isEmpty());
     }

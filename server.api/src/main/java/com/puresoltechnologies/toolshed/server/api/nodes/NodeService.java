@@ -15,7 +15,17 @@ public interface NodeService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Set<Node> getNodes();
+    public Set<NodeInformation> getNodes();
+
+    @GET
+    @Path("/{node}/processes")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Set<ProcessInformation> getProcesses(@PathParam("node") String nodeName);
+
+    @GET
+    @Path("/{node}/processes/{pid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public ProcessInformation getProcess(@PathParam("node") String nodeName, @PathParam("pid") String pid);
 
     @GET
     @Path("/{node}/kpis")

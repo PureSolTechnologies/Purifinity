@@ -3,14 +3,25 @@ package com.puresoltechnologies.toolshed.server.impl.nodes;
 import java.util.Set;
 
 import com.puresoltechnologies.toolshed.server.api.kpis.KPIDefinition;
-import com.puresoltechnologies.toolshed.server.api.nodes.Node;
+import com.puresoltechnologies.toolshed.server.api.nodes.NodeInformation;
 import com.puresoltechnologies.toolshed.server.api.nodes.NodeService;
+import com.puresoltechnologies.toolshed.server.api.nodes.ProcessInformation;
 
 public class NodeServiceImpl implements NodeService {
 
     @Override
-    public Set<Node> getNodes() {
-	return NodeManager.getNodes();
+    public Set<NodeInformation> getNodes() {
+	return NodeManager.getInstance().getNodes();
+    }
+
+    @Override
+    public Set<ProcessInformation> getProcesses(String nodeName) {
+	return NodeManager.getInstance().getProcesses(nodeName);
+    }
+
+    @Override
+    public ProcessInformation getProcess(String nodeName, String pid) {
+	return NodeManager.getInstance().getProcess(nodeName, Integer.parseInt(pid));
     }
 
     @Override

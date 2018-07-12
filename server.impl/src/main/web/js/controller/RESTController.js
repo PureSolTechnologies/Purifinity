@@ -1,28 +1,15 @@
 import { createBrowserHistory } from 'history';
 
-import store from '../flux/Store';
-
 import ServerConfiguration from '../config/ServerConfiguration';
 
 export class RESTController {
 
     baseURL;
-
     server;
-
-    login = null;
 
     constructor() {
         this.server = new ServerConfiguration( serverConfiguration.host, serverConfiguration.port );
         this.baseURL = "http://" + this.server.host + ":" + this.server.port + "/rest";
-        store.subscribe(() => this.update() );
-    }
-
-    update() {
-        const loginState = store.getState().login;
-        if ( ( !this.login ) || ( this.login.name != loginState.name ) ) {
-            this.login = loginState;
-        }
     }
 
     createRequest( type, path, headers, successCallback, errorCallback ) {
@@ -34,10 +21,6 @@ export class RESTController {
                 client.setRequestHeader( key, headers[key] );
             }
         }
-        if ( this.login ) {
-            client.setRequestHeader( "auth-id", this.login.authId );
-            client.setRequestHeader( "auth-token", this.login.authToken );
-        }
         client.onreadystatechange = function() {
             if ( this.readyState == this.DONE ) {
                 let headers = client.getAllResponseHeaders();
@@ -45,15 +28,7 @@ export class RESTController {
                 if ( ( status >= 200 ) && ( status < 300 ) ) {
                     successCallback( client );
                 } else {
-                    if ( status === 401 ) {
-                        let pathname = window.location.pathname;
-                        if ( !pathname.startsWith( "/login" ) ) {
-                            let browserHistory = createBrowserHistory();
-                            browserHistory.push( '/login?r=' + encodeURI( window.location.pathname ) );
-                        }
-                    } else {
-                        errorCallback( client );
-                    }
+                    errorCallback( client );
                 }
             }
         };
@@ -77,6 +52,16 @@ export class RESTController {
 
     DELETE( path, headers, successCallback, errorCallback ) {
         var request = this.createRequest( 'DELETE', path, headers, successCallback, errorCallback );
+        request.send();
+    }
+
+    HEAD( path, headers, successCallback, errorCallback ) {
+        var request = this.createRequest( 'HEAD', path, headers, successCallback, errorCallback );
+        request.send();
+    }
+
+    OPTIONS( path, headers, successCallback, errorCallback ) {
+        var request = this.createRequest( 'OPTIONS', path, headers, successCallback, errorCallback );
         request.send();
     }
 
