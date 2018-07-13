@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { SettingsIcon, HomeIcon, ServerIcon } from 'react-octicons';
+import { DashboardIcon, HomeIcon, ServerIcon, SettingsIcon } from 'react-octicons';
 
 import PureSolTechnologies from './components/PureSolTechnologies';
 
@@ -22,6 +22,9 @@ export default function Menu() {
                     </li>
                     <li className="nav-item">
                         <Link className="nav-link" to="/nodes"><ServerIcon /> Nodes</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/dashboards"><DashboardIcon /> Dashboards</Link>
                     </li>
                 </ul>
             </div>
