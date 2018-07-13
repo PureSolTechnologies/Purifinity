@@ -8,6 +8,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 
 import com.puresoltechnologies.toolshed.server.api.kpis.KPIDefinition;
+import com.puresoltechnologies.toolshed.server.api.nodes.NodeDetails;
 import com.puresoltechnologies.toolshed.server.api.nodes.NodeInformation;
 import com.puresoltechnologies.toolshed.server.api.nodes.NodeService;
 import com.puresoltechnologies.toolshed.server.api.nodes.ProcessInformation;
@@ -17,14 +18,20 @@ public class NodeServiceClient implements NodeService {
     private final WebTarget webTarget;
 
     public NodeServiceClient(WebTarget webTarget) {
-	this.webTarget = webTarget;
+	this.webTarget = webTarget.path("rest");
     }
 
     @Override
     public Set<NodeInformation> getNodes() {
-	Builder request = webTarget.path("rest").path("nodes").request(MediaType.APPLICATION_JSON);
+	Builder request = webTarget.path("nodes").request(MediaType.APPLICATION_JSON);
 	return request.get(new GenericType<Set<NodeInformation>>() {
 	});
+    }
+
+    @Override
+    public NodeDetails getNode(String nodeName) {
+	Builder request = webTarget.path("nodes").path(nodeName).request(MediaType.APPLICATION_JSON);
+	return request.get(NodeDetails.class);
     }
 
     @Override

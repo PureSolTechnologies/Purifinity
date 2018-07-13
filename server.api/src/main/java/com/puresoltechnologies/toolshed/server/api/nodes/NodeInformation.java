@@ -1,9 +1,6 @@
 package com.puresoltechnologies.toolshed.server.api.nodes;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,7 +12,9 @@ public class NodeInformation {
     private final String architecture;
     private final String osVersion;
     private final int cpus;
-    private final Set<NIC> nics = new HashSet<>();
+    private final long memTotal;
+    private final long swapTotal;
+    private final int hashCode;
 
     @JsonCreator
     public NodeInformation( //
@@ -24,17 +23,19 @@ public class NodeInformation {
 	    @JsonProperty("architecture") String architecture, //
 	    @JsonProperty("osversion") String osVersion, //
 	    @JsonProperty("cpus") int cpus, //
-	    @JsonProperty("nics") Set<NIC> nics //
+	    @JsonProperty("memTotal") long memTotal, //
+	    @JsonProperty("swapTotal") long swapTotal //
     ) {
 	super();
 	Objects.requireNonNull(name, "name must not be null!");
-	Objects.requireNonNull(nics, "nics must not be null!");
 	this.name = name;
 	this.os = os;
 	this.architecture = architecture;
 	this.osVersion = osVersion;
 	this.cpus = cpus;
-	this.nics.addAll(nics);
+	this.memTotal = memTotal;
+	this.swapTotal = swapTotal;
+	this.hashCode = Objects.hash(name, os, architecture, osVersion, cpus, memTotal, swapTotal);
     }
 
     public String getName() {
@@ -57,8 +58,12 @@ public class NodeInformation {
 	return cpus;
     }
 
-    public Set<NIC> getNICs() {
-	return Collections.unmodifiableSet(nics);
+    public long getMemTotal() {
+	return memTotal;
+    }
+
+    public long getSwapTotal() {
+	return swapTotal;
     }
 
     @Override
@@ -66,7 +71,6 @@ public class NodeInformation {
 	final int prime = 31;
 	int result = 1;
 	result = prime * result + ((name == null) ? 0 : name.hashCode());
-	result = prime * result + ((nics == null) ? 0 : nics.hashCode());
 	return result;
     }
 
@@ -83,11 +87,6 @@ public class NodeInformation {
 	    if (other.name != null)
 		return false;
 	} else if (!name.equals(other.name))
-	    return false;
-	if (nics == null) {
-	    if (other.nics != null)
-		return false;
-	} else if (!nics.equals(other.nics))
 	    return false;
 	return true;
     }

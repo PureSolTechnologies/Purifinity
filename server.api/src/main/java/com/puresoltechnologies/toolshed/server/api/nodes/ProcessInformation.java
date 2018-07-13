@@ -15,7 +15,8 @@ public class ProcessInformation {
     private final int hashCode;
 
     @JsonCreator
-    public ProcessInformation(@JsonProperty("pid") int pid, //
+    public ProcessInformation( //
+	    @JsonProperty("pid") int pid, //
 	    @JsonProperty("ppid") int ppid, //
 	    @JsonProperty("name") String name, //
 	    @JsonProperty("status") ProcessStatus status, //

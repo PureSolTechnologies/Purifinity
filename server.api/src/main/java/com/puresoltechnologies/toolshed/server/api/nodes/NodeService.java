@@ -18,6 +18,11 @@ public interface NodeService {
     public Set<NodeInformation> getNodes();
 
     @GET
+    @Path("/{node}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public NodeDetails getNode(@PathParam("node") String nodeName);
+
+    @GET
     @Path("/{node}/processes")
     @Produces(MediaType.APPLICATION_JSON)
     public Set<ProcessInformation> getProcesses(@PathParam("node") String nodeName);

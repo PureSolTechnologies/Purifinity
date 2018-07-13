@@ -18,6 +18,10 @@
 			<artifactId>server.api</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.streaming</groupId>
+			<artifactId>streams</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 		</dependency>

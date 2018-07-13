@@ -8,15 +8,13 @@ import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.toolshed.commons.JsonSerializer;
 
-public class NodeInformationTest {
+public class ProcessDetailsTest {
 
     @Test
     public void testSerialization() throws IOException {
-	NodeInformation definition = new NodeInformation("id", OS.LINUX, "x86", "1.2.3", 4, 16 * 1024 * 1024 * 1024,
-		4 * 1024 * 1024 * 1024);
+	ProcessDetails definition = new ProcessDetails(12, 11, "name", ProcessStatus.RUNNING, "bash");
 	String serialized = JsonSerializer.toString(definition);
-	NodeInformation deserialized = JsonSerializer.fromString(serialized, NodeInformation.class);
+	ProcessDetails deserialized = JsonSerializer.fromString(serialized, ProcessDetails.class);
 	assertEquals(definition, deserialized);
     }
-
 }

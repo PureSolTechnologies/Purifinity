@@ -6,8 +6,19 @@ export default class NodesController {
         restController.GET( '/nodes',
             null,
             function( response ) {
-                var types = JSON.parse( response.response );
-                successfulCallback( types );
+                var nodes = JSON.parse( response.response );
+                successfulCallback( nodes );
+            },
+            errorCallback
+        );
+    }
+
+    static getNode( nodeName, successfulCallback, errorCallback ) {
+        restController.GET( '/nodes/' + nodeName,
+            null,
+            function( response ) {
+                var node = JSON.parse( response.response );
+                successfulCallback( node );
             },
             errorCallback
         );
