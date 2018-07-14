@@ -1,10 +1,11 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Icon extends React.Component {
 
     static propTypes = {
-        large: React.PropTypes.bool,
-        name: React.PropTypes.string.isRequired
+        large: PropTypes.bool,
+        name: PropTypes.string.isRequired
     };
 
     constructor( props ) {

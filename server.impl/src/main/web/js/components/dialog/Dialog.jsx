@@ -1,10 +1,11 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Dialog extends React.Component {
 
 
     static propTypes = {
-        title: React.PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
     };
 
     constructor( props ) {

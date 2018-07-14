@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { findDOMNode } from 'react-dom';
-import { DashIcon, PlusIcon } from 'react-octicons';
+import { PlusIcon } from 'react-octicons';
 
 import DashboardTile from './DashboardTile';
+import Icon from './Icon';
 
 export default class DashboardComponent extends React.Component {
 
@@ -18,25 +19,35 @@ export default class DashboardComponent extends React.Component {
 
     addTile() {
         let tiles = this.state.tiles;
-        tiles.push( <DashboardTile key={this.tileKey} /> );
+        tiles.push( <DashboardTile id={this.tileKey} dashboard={this} key={this.tileKey} /> );
         this.tileKey++;
+        this.setState( { tiles: tiles } );
+    }
+
+    remove( tileId ) {
+        let tiles = [];
+        this.state.tiles.map( element => {
+            if ( element.props.id !== tileId ) {
+                tiles.push( element );
+            }
+        } );
         this.setState( { tiles: tiles } );
     }
 
     render() {
         let tiles = this.state.tiles;
         return (
-            <div className="row">
-                <div className="col-md-12 border">
-                    <button type="button" className="btn btn-outline-secondary" onClick={this.addTile}> <PlusIcon /> Add new tile</button>
-                    <button type="button" className="btn btn-outline-primary">Save</button>
-                </div>
-                <div className="col-md-12 border">
-                    <div className="row">
-                        {tiles}
+            [
+                <div key={0} className="row">
+                    <div className="col-md-12 border">
+                        <button type="button" className="btn btn-outline-secondary" onClick={this.addTile}> <Icon name="add" /> Add new tile</button>
+                        <button type="button" className="btn btn-outline-primary">Save</button>
                     </div>
+                </div>,
+                <div key={1} className="row">
+                    {tiles}
                 </div>
-            </div>
+            ]
         );
     }
 }
