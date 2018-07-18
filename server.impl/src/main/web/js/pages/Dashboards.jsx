@@ -28,8 +28,8 @@ export default class Dashboard extends React.Component {
             <tr key={element.id}>
                 <th scope="row"><Link to={"/dashboards/" + element.id}>{element.name}</Link></th>
                 <td>
-                    <button type="button" class="btn btn-outline-secondary"> <SettingsIcon /></button>
-                    <button type="button" class="btn btn-outline-danger">  <TrashcanIcon /></button>
+                    <button type="button" className="btn btn-outline-secondary"> <SettingsIcon /></button>
+                    <button type="button" className="btn btn-outline-danger">  <TrashcanIcon /></button>
                 </td>
             </tr> ) );
         return (

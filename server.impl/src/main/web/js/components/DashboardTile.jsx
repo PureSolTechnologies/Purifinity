@@ -3,6 +3,8 @@ import { findDOMNode } from 'react-dom';
 import { DashIcon, PlusIcon } from 'react-octicons';
 import PropTypes from 'prop-types';
 
+import ChartView from './charts/ChartView';
+import TimeSeriesPlot from './charts/plots/TimeSeriesPlot';
 import Icon from './Icon';
 
 export default class DashboardTile extends React.Component {
@@ -11,6 +13,8 @@ export default class DashboardTile extends React.Component {
         dashboard: PropTypes.object.isRequired,
         id: PropTypes.number.isRequired
     };
+
+    plot;
 
     constructor( props ) {
         super( props );
@@ -21,20 +25,15 @@ export default class DashboardTile extends React.Component {
         this.makeSmaller = this.makeSmaller.bind( this );
         this.makeWider = this.makeWider.bind( this );
         this.remove = this.remove.bind( this );
+        this.plot = new TimeSeriesPlot();
     }
 
     componentDidMount() {
         this.setState( { name: "name" } );
-        this.updateCanvas();
-    }
-
-    updateCanvas() {
-        const ctx = this.refs.canvas.getContext( '2d' );
-        ctx.fillRect( 0, 0, 100, 100 );
     }
 
     makeSmaller() {
-        if ( this.state.width > 1 ) {
+        if ( this.state.width > 2 ) {
             this.setState( { width: this.state.width - 1 } );
         }
     }
@@ -59,7 +58,7 @@ export default class DashboardTile extends React.Component {
                         <button type="button" className="btn btn-outline-secondary" onClick={this.remove}><Icon name="bin_closed" /></button>
                     </div>
                     <div className="col-md-12">
-                        <canvas ref="canvas" width={1024} heigth={768}>Canvas not supported by browser.</canvas>
+                        <ChartView plot={this.plot} />
                     </div>
                 </div>
             </div>
