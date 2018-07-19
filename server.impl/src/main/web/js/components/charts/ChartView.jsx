@@ -24,7 +24,7 @@ export default class DashboardTile extends React.Component {
         const ctx = this.refs.canvas.getContext( '2d' );
         const canvas = ctx.canvas;
         this.width = canvas.clientWidth;
-        this.height = canvas.clientHeight;
+        this.height = canvas.clientWidth * 9 / 16;
         canvas.width = this.width;
         canvas.height = this.height;
         this.renderTitle( ctx );

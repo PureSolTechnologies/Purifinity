@@ -1,13 +1,20 @@
 import Plot from './Plot';
+import TimeSeriesData from './TimeSeriesData';
 
 export default class TimeSeriesPlot implements Plot {
+
+    data: TimeSeriesData;
+
+    constructor( data: TimeSeriesData ) {
+        this.data = data;
+    }
 
     render( ctx, x, y, width, height ) {
         const axisWidth = this.renderAxis( ctx, x, y, width, height );
         ctx.rect( axisWidth, 0, width - axisWidth, height - axisWidth );
         ctx.clip();
-        ctx.translate( axisWidth, 0 );
-        this.renderGraph( ctx, 0, 0, width - axisWidth, height - axisWidth );
+        ctx.translate( axisWidth + 2, 0 );
+        this.renderGraph( ctx, 2, 0, width - axisWidth, height - axisWidth );
     }
 
     renderAxis( ctx, x, y, width, height ): number {
@@ -16,20 +23,32 @@ export default class TimeSeriesPlot implements Plot {
             titleFontSize = 16;
         }
         let labelFontSize = height * 0.05;
-        if ( labelFontSize > 10 ) {
-            labelFontSize = 10;
+        if ( labelFontSize > 12 ) {
+            labelFontSize = 12;
         }
+        /* 
+         * X labels
+         */
         ctx.textAlign = "center";
         ctx.textBaseline = "bottom";
         ctx.font = titleFontSize + "px sans-serif"
-        ctx.fillText( "X-axis", width / 2, height );
+        ctx.fillText( this.data.xAxisTitle, width / 2, height );
+        ctx.font = labelFontSize + "px sans-serif"
+        ctx.fillText( this.data.xAxisTitle, width / 2, height - titleFontSize );
+        /*
+         * Y labels 
+         */
         ctx.translate( 0, height / 2 )
         ctx.rotate( -Math.PI / 2 );
         ctx.textBaseline = "top";
-        ctx.fillText( "Y-axis", 0, 0 );
+        ctx.font = titleFontSize + "px sans-serif"
+        ctx.fillText( this.data.yAxisTitle, 0, 0 );
+        ctx.font = labelFontSize + "px sans-serif"
+        ctx.fillText( this.data.yAxisTitle, 0, titleFontSize );
         ctx.rotate( Math.PI / 2 );
         ctx.translate( 0, -height / 2 );
-        const axisWidth = titleFontSize + labelFontSize;
+
+        const axisWidth = titleFontSize + labelFontSize + 2;
         ctx.strokeRect( axisWidth, 0, width - axisWidth, height - axisWidth );
         return axisWidth;
     }

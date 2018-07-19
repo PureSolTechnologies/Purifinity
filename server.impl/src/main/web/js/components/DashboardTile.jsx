@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 
 import ChartView from './charts/ChartView';
 import TimeSeriesPlot from './charts/plots/TimeSeriesPlot';
+import TimeSeriesData from './charts/plots/TimeSeriesData';
 import Icon from './Icon';
 
 export default class DashboardTile extends React.Component {
@@ -25,7 +26,10 @@ export default class DashboardTile extends React.Component {
         this.makeSmaller = this.makeSmaller.bind( this );
         this.makeWider = this.makeWider.bind( this );
         this.remove = this.remove.bind( this );
-        this.plot = new TimeSeriesPlot();
+        let data = new TimeSeriesData();
+        data.xAxisTitle = "Time";
+        data.yAxisTitle = "Memory Usage (%)";
+        this.plot = new TimeSeriesPlot( data );
     }
 
     componentDidMount() {
