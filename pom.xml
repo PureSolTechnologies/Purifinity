@@ -654,6 +654,7 @@
 
 	<modules>
 		<module>agent</module>
+		<module>jpcap</module>
 		<module>commons</module>
 		<module>server.api</module>
 		<module>server.impl</module>

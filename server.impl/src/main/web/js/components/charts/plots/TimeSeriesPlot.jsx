@@ -54,12 +54,32 @@ export default class TimeSeriesPlot implements Plot {
     }
 
     renderGraph( ctx, x, y, width, height ): void {
-        ctx.beginPath();
-        ctx.moveTo( 0, 0 );
-        ctx.lineTo( width, height );
-        ctx.moveTo( width, 0 );
-        ctx.lineTo( 0, height );
-        ctx.stroke();
-        ctx.closePath();
+        let minX = Number.MAX_VALUE;
+        let maxX = -Number.MAX_VALUE;
+        let minY = Number.MAX_VALUE;
+        let maxY = -Number.MAX_VALUE;
+        for ( let date of this.data.data ) {
+            let x = date.x;
+            let y = date.y;
+            if ( minX > x ) {
+                minX = x;
+            }
+            if ( maxX < x ) {
+                maxX = x;
+            }
+            if ( minY > y ) {
+                minY = y;
+            }
+            if ( maxY < y ) {
+                maxY = y;
+            }
+        }
+        for ( let date of this.data.data ) {
+            let x = date.x;
+            let y = date.y;
+            let posX = ( x - minX ) / ( maxX - minX ) * width;
+            let posY = ( maxY - y ) / ( maxY - minY ) * height;
+            ctx.fillRect( posX - 1, posY - 1, 3, 3 )
+        }
     }
 }
