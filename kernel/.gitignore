@@ -1,0 +1,6 @@
+/monitor.ko
+/monitor.o
+/Module.symvers
+/modules.order
+/monitor.mod.c
+/monitor.mod.o
