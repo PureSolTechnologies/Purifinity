@@ -7,12 +7,15 @@ import com.puresoltechnologies.toolshed.server.api.nodes.NodeDetails;
 import com.puresoltechnologies.toolshed.server.api.nodes.NodeInformation;
 import com.puresoltechnologies.toolshed.server.api.nodes.ProcessDetails;
 import com.puresoltechnologies.toolshed.server.api.nodes.ProcessInformation;
+import com.puresoltechnologies.toolshed.server.api.system.SystemLoad;
 
 public interface SystemInformationProvider {
 
     public NodeInformation getNodeInformation();
 
     public NodeDetails getNodeDetails();
+
+    public SystemLoad getLoad();
 
     public MemoryInformation getMemoryInformation();
 

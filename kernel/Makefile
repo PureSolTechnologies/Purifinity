@@ -1,4 +1,4 @@
-obj-m := monitor.o
+obj-m := sysmon.o
 
 KERNELDIR ?= /lib/modules/$(shell uname -r)/build
 

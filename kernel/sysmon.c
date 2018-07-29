@@ -8,7 +8,7 @@
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Rick-Rainer Ludwig <ludwig@puresol-technologies.com>");
 MODULE_DESCRIPTION("Monitoring for Linux Kernel.");
-MODULE_VERSION("0.01");
+MODULE_VERSION("0.1.0");
 
 static int logcpu = 1;
 static int logmem = 1;
@@ -35,7 +35,7 @@ static const int MONITOR_PERIOD = 1000;
 void my_timer_callback(struct timer_list *timer)
 {
         int retval;
-        pr_info("%s called (%ld).\n", __FUNCTION__, jiffies);
+        // pr_info("%s called (%ld).\n", __FUNCTION__, jiffies);
         retval = mod_timer(&my_timer,
                         jiffies + msecs_to_jiffies(MONITOR_PERIOD));
         if (retval) {
@@ -55,7 +55,7 @@ static void init_timer(void)
         }
 }
 
-#define MONITOR_DEVICE_NAME "monitor"
+#define MONITOR_DEVICE_NAME "sysmon/kpis"
 #define MONITOR_CLASS "monitor-class"
 struct class *monitor_class;
 struct cdev monitor_cdev;

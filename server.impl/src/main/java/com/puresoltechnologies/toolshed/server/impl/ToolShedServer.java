@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
+import com.puresoltechnologies.toolshed.server.impl.aggregator.AggregatorThread;
 import com.puresoltechnologies.toolshed.server.impl.config.ToolShedServerConfiguration;
 import com.puresoltechnologies.toolshed.server.impl.dashboards.DashboardsImpl;
 import com.puresoltechnologies.toolshed.server.impl.filters.CORSFilter;
@@ -43,6 +44,10 @@ public class ToolShedServer extends Application<ToolShedServerConfiguration> {
     public void run(ToolShedServerConfiguration configuration, Environment environment) throws Exception {
 	MetricRegistry metrics = environment.metrics();
 	Metrics.initialize(metrics);
+
+	Thread aggregatorThread = new Thread(new AggregatorThread(), "ToolShed KPI Aggregator");
+	aggregatorThread.setDaemon(true);
+	aggregatorThread.start();
 
 	HealthCheckRegistry healthChecks = environment.healthChecks();
 	// healthChecks.register("database", new DatabaseHealthCheck());

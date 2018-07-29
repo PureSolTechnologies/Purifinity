@@ -13,21 +13,27 @@ import com.puresoltechnologies.toolshed.server.api.nodes.NodeInformation;
 import com.puresoltechnologies.toolshed.server.api.nodes.OS;
 import com.puresoltechnologies.toolshed.server.api.nodes.ProcessDetails;
 import com.puresoltechnologies.toolshed.server.api.nodes.ProcessInformation;
+import com.puresoltechnologies.toolshed.server.api.system.SystemLoad;
 import com.puresoltechnologies.toolshed.server.impl.system.linux.LinuxInformationProvider;
 
 public class SystemInformation implements SystemInformationProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(SystemInformation.class);
 
-    private static final SystemInformation instance = new SystemInformation();
-
-    public static String getNodeName() {
+    private static final String nodeName;
+    static {
 	try {
 	    InetAddress localHost = InetAddress.getLocalHost();
-	    return localHost.getCanonicalHostName();
+	    nodeName = localHost.getCanonicalHostName();
 	} catch (UnknownHostException e) {
 	    throw new RuntimeException("Could not retrieve localhost id.", e);
 	}
+    }
+
+    private static final SystemInformation instance = new SystemInformation();
+
+    public static String getNodeName() {
+	return nodeName;
     }
 
     public static SystemInformation getInstance() {
@@ -55,6 +61,11 @@ public class SystemInformation implements SystemInformationProvider {
     @Override
     public NodeDetails getNodeDetails() {
 	return provider.getNodeDetails();
+    }
+
+    @Override
+    public SystemLoad getLoad() {
+	return provider.getLoad();
     }
 
     @Override
