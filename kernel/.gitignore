@@ -1,3 +1,5 @@
+.*
+jpcap/
 /monitor.ko
 /monitor.o
 /Module.symvers
