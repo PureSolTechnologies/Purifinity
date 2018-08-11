@@ -2,6 +2,8 @@ package com.puresoltechnologies.toolshed.server.impl;
 
 import java.io.File;
 
+import javax.websocket.server.ServerEndpointConfig;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,12 +17,14 @@ import com.puresoltechnologies.toolshed.server.impl.kpis.KPIServiceImpl;
 import com.puresoltechnologies.toolshed.server.impl.metrics.Metrics;
 import com.puresoltechnologies.toolshed.server.impl.nodes.NodeManager;
 import com.puresoltechnologies.toolshed.server.impl.nodes.NodeServiceImpl;
+import com.puresoltechnologies.toolshed.server.impl.ws.AnnotatedEchoServer;
 
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.websockets.WebsocketBundle;
 
 public class ToolShedServer extends Application<ToolShedServerConfiguration> {
 
@@ -38,6 +42,9 @@ public class ToolShedServer extends Application<ToolShedServerConfiguration> {
 	    throw new IllegalStateException("Resource path '" + resourceDirectory + "' was not found.");
 	}
 	bootstrap.addBundle(new AssetsBundle(resourceDirectory.getPath(), "", "index.html"));
+	WebsocketBundle webSockets = new WebsocketBundle(new ServerEndpointConfig[] {});
+	webSockets.addEndpoint(AnnotatedEchoServer.class);
+	bootstrap.addBundle(webSockets);
     }
 
     @Override

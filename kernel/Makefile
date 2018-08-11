@@ -1,5 +1,6 @@
-obj-m := sysmon.o
-
+obj-m := sakemodule.o
+sakemodule-objs := sake.o cpu.o mem.o
+ 
 KERNELDIR ?= /lib/modules/$(shell uname -r)/build
 
 all default: modules

@@ -121,8 +121,8 @@ public class LinuxInformationProvider implements SystemInformationProvider {
 	if (lastLoad == null) {
 	    return 0.0;
 	}
-	long sum1 = load.getUser() + load.getNice() + load.getSystem();
-	long sum2 = lastLoad.getUser() + lastLoad.getNice() + lastLoad.getSystem();
+	long sum1 = load.getTotal() - load.getIdle();
+	long sum2 = lastLoad.getTotal() - lastLoad.getIdle();
 	return (double) (sum1 - sum2) / (double) (load.getTotal() - lastLoad.getTotal());
     }
 

@@ -1,3 +1,9 @@
+/*
+ * SAKE - System And Kernel Evaluator
+ *
+ * This is a special kernel module to evaluate system and kernel KPIs.
+ */
+
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -5,10 +11,8 @@
 #include <linux/timer.h>
 #include <linux/cdev.h>
 
-MODULE_LICENSE("GPL");
-MODULE_AUTHOR("Rick-Rainer Ludwig <ludwig@puresol-technologies.com>");
-MODULE_DESCRIPTION("Monitoring for Linux Kernel.");
-MODULE_VERSION("0.1.0");
+#include "cpu.h"
+#include "mem.h"
 
 static int logcpu = 1;
 static int logmem = 1;
@@ -70,6 +74,7 @@ static int monitor_release(struct inode *inode, struct file *filp)
 {
         return 0;
 }
+
 static const struct file_operations eep_fops = { //
                 .owner = THIS_MODULE, //
                                 .read = NULL, //
@@ -80,6 +85,7 @@ static const struct file_operations eep_fops = { //
                                 .poll = NULL, //
                                 .unlocked_ioctl = NULL, //
                 };
+
 static void init_device(void)
 {
         dev_t curr_dev;
@@ -105,25 +111,34 @@ static void init_device(void)
 }
 
 static int __init monitor_init(void) {
-        pr_info("Monitor module loaded\n");
+        pr_info("SAKE - module loaded\n");
         init_device();
         init_timer();
+        sake_start_cpu_monitor();
+        sake_start_memory_monitor();
         return 0;
 }
 
 static void __exit monitor_exit(void) {
         int retval;
 
+        sake_stop_cpu_monitor();
+        sake_stop_memory_monitor();
         device_destroy(monitor_class, dev_num);
         class_destroy(monitor_class);
 
         retval = del_timer(&my_timer);
         /* Is timer still active (1) or no (0) */
         if (retval) {
-                pr_warn("The monitor timer is still in use...\n");
+                pr_warn("The SAKE monitor timer is still in use.\n");
         }
-        pr_info("Monitor module unloaded\n");
+        pr_info("SAKE - module unloaded\n");
 }
 
 module_init( monitor_init);
 module_exit( monitor_exit);
+
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Rick-Rainer Ludwig <ludwig@puresol-technologies.com>");
+MODULE_DESCRIPTION("SAKE - System And Kernel Evaluator");
+MODULE_VERSION("0.1.0");
