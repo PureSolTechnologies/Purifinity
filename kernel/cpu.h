@@ -7,6 +7,7 @@
 #include <linux/time.h>   // for using jiffies
 #include <linux/timer.h>
 #include <linux/delay.h>
+#include <linux/tick.h>
 
 extern void sake_start_cpu_monitor(void);
 

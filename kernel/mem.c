@@ -1,7 +1,7 @@
 #include "mem.h"
 
 /*
- * Taken from: /LinuxKernel/fs/proc/meminfo.c
+ * Reading of memory KPIs: /LinuxKernel/fs/proc/meminfo.c
  */
 
 void sake_start_memory_monitor(void)
