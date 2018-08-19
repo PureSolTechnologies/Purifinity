@@ -1,8 +1,8 @@
 .*
 jpcap/
-/monitor.ko
-/monitor.o
-/Module.symvers
-/modules.order
-/monitor.mod.c
-/monitor.mod.o
+*.ko
+*.o
+Module.symvers
+modules.order
+*.mod.c
+*.mod.o

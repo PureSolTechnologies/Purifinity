@@ -8,13 +8,11 @@
 #include <linux/timer.h>
 #include <linux/delay.h>
 #include <linux/tick.h>
-/*
- * For file reads...
- */
-#include <linux/fs.h>
-#include <asm/segment.h>
-#include <asm/uaccess.h>
-#include <linux/buffer_head.h>
+#include <linux/sched/stat.h>
+
+#include <linux/swap.h>
+
+#include "file_io.h"
 
 extern void sake_start_cpu_monitor(void);
 

@@ -14,19 +14,16 @@
 #include "cpu.h"
 #include "mem.h"
 
-static int logcpu = 1;
 static int logmem = 1;
 static int logio = 0;
 static int lognet = 0;
 static int logprocs = 0;
 
-module_param(logcpu, int, S_IRUGO | S_IWUSR);
 module_param(logmem, int, S_IRUGO | S_IWUSR);
 module_param(logio, int, S_IRUGO | S_IWUSR);
 module_param(lognet, int, S_IRUGO | S_IWUSR);
 module_param(logprocs, int, S_IRUGO | S_IWUSR);
 
-MODULE_PARM_DESC(logcpu,"Monitor CPU.");
 MODULE_PARM_DESC(logmem,"Monitor memory.");
 MODULE_PARM_DESC(logio,"Monitor I/O.");
 MODULE_PARM_DESC(lognet,"Monitor network.");

@@ -1,5 +1,9 @@
 #include "cpu.h"
 
+static int logcpu = 1;
+module_param(logcpu, int, S_IRUGO | S_IWUSR);
+MODULE_PARM_DESC(logcpu,"Monitor CPU.");
+
 /*
  * Reading of CPU KPIs: /LinuxKernel/fs/proc/stat.c
  */
@@ -123,23 +127,27 @@ static void print_cpu_stat(void)
                 u32 guest;
                 u32 guest_nice;
         } output;
+        struct sysinfo i;
+        long available;
 
         mm_segment_t oldfs;
-        u64 offset = 0;
         void *swap_ptr;
 
         getnstimeofday(&current_time);
         read_cpu_values(current_cpu_values);
+        si_meminfo(&i);
+        si_swapinfo(&i);
+        available = si_mem_available();
 
         oldfs = get_fs();
         set_fs(get_ds());
 
         if (cpu_log_file) {
-                printk("Writing to cpu.log...");
-                vfs_write(cpu_log_file, (const char *) &current_time,
-                                sizeof(current_time), &offset);
-                vfs_write(cpu_log_file, (const char *) &cpu_count, sizeof(int),
-                                &offset);
+                printk("Writing to cpu.log %d...", logcpu);
+                write_file(cpu_log_file, (const char *) &current_time,
+                                sizeof(current_time));
+                write_file(cpu_log_file, (const char *) &cpu_count,
+                                sizeof(int));
                 for_each_online_cpu(output.cpu_id)
                 {
                         output.user =
@@ -188,8 +196,8 @@ static void print_cpu_stat(void)
                                         output.iowait, output.irq,
                                         output.softirq, output.steal,
                                         output.guest, output.guest_nice);
-                        vfs_write(cpu_log_file, (const char *) &output,
-                                        sizeof(output), &offset);
+                        write_file(cpu_log_file, (const char *) &output,
+                                        sizeof(output));
                 }
         }
 
@@ -217,7 +225,6 @@ void sake_start_cpu_monitor(void)
 {
         int cpu_id;
         char our_thread[9] = "sake-cpu";
-        mm_segment_t oldfs;
 
         pr_info("Starting CPU monitor...");
         // Count number of CPUs (no CPU hot plugging supported!)
@@ -233,19 +240,8 @@ void sake_start_cpu_monitor(void)
         read_cpu_values(old_cpu_values);
         // Create and/or open file...
         if (!cpu_log_file) {
-                oldfs = get_fs();
-                set_fs(get_ds());
-                printk("Opening cpu.log file...\n");
-                cpu_log_file = filp_open("/var/log/cpu.log",
+                cpu_log_file = open_file("/var/log/cpu.log",
                                 O_APPEND | O_WRONLY | O_CREAT, 0644);
-                if (IS_ERR(cpu_log_file)) {
-                        printk("Error opening cpu.log file: code=%ld\n",
-                                        PTR_ERR(cpu_log_file));
-                        cpu_log_file = NULL;
-                } else {
-                        printk("cpu.log file opened.\n");
-                }
-                set_fs(oldfs);
         }
         // Start CPU monitor thread
         cpu_thread = kthread_create(cpu_thread_fn, NULL, our_thread);
@@ -265,7 +261,7 @@ void sake_stop_cpu_monitor(void)
         }
         // Close the file
         if (cpu_log_file) {
-                filp_close(cpu_log_file, NULL);
+                close_file(cpu_log_file);
                 cpu_log_file = NULL;
         }
         // Free variables
