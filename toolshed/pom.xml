@@ -6,7 +6,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- Project metadata -->
-		<officalName>Agent</officalName>
+		<officalName>ToolShed</officalName>
 		<!-- PureSol Technologies library versions -->
 		<commons.version>0.7.0-SNAPSHOT</commons.version>
 		<streaming.version>1.2.0-SNAPSHOT</streaming.version>
@@ -440,6 +440,13 @@
 							</aliases>
 						</knownLicense>
 						<knownLicense>
+							<name>The 2-Clause BSD License</name>
+							<url>http://www.opensource.org/licenses/bsd-license.php</url>
+							<aliases>
+								<aliase>New BSD License</aliase>
+							</aliases>
+						</knownLicense>
+						<knownLicense>
 							<name>CC0 1.0 Universal (CC0 1.0) Public Domain Dedication</name>
 							<url>http://creativecommons.org/publicdomain/zero/1.0/</url>
 							<aliases>
@@ -452,13 +459,26 @@
 							<aliases>
 								<aliase>CDDL 1.1</aliase>
 								<aliase>CDDL+GPL License</aliase>
+								<aliase>Dual license consisting of the CDDL v1.1 and GPL v2</aliase>
 							</aliases>
+						</knownLicense>
+						<knownLicense>
+							<name><![CDATA[COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0]]></name>
+							<url>https://glassfish.dev.java.net/public/CDDLv1.0.html</url>
+						</knownLicense>
+						<knownLicense>
+							<name><![CDATA[COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.1]]></name>
+							<url>https://javaee.github.io/glassfish/LICENSE</url>
+							<approvedDependencies>
+								<approvedDependency>javax.xml:jaxb-api:.*</approvedDependency>
+							</approvedDependencies>
 						</knownLicense>
 						<knownLicense>
 							<name>Eclipse Public License - v 1.0</name>
 							<url>http://www.eclipse.org/legal/epl-v10.html</url>
 							<aliases>
 								<aliase>Eclipse Public License - Version 1.0</aliase>
+								<aliase>Eclipse Public License 1.0</aliase>
 							</aliases>
 						</knownLicense>
 						<knownLicense>
@@ -482,6 +502,7 @@
 							<aliases>
 								<aliase>MIT</aliase>
 								<aliase>MIT License</aliase>
+								<aliase>The MIT License (MIT)</aliase>
 							</aliases>
 						</knownLicense>
 						<knownLicense>
