@@ -659,7 +659,6 @@
 
 	<modules>
 		<module>agent</module>
-		<module>kernel</module>
 		<module>jpcap</module>
 		<module>commons</module>
 		<module>server.api</module>
