@@ -1,8 +1,0 @@
-.*
-jpcap/
-*.ko
-*.o
-Module.symvers
-modules.order
-*.mod.c
-*.mod.o
