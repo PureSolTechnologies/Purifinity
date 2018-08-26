@@ -101,6 +101,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.toolshed</groupId>
+				<artifactId>application</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.toolshed</groupId>
 				<artifactId>client</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -687,6 +692,7 @@
 		<module>client</module>
 		<module>application</module>
 		<module>test</module>
+		<module>distribution</module>
 	</modules>
 
 </project>
