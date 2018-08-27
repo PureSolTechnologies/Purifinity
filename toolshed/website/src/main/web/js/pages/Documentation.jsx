@@ -10,9 +10,8 @@ export default class About extends React.Component {
         return (
             <div className="row">
                 <div className="col-md-12">
-                    <h1>About</h1>
-                    ToolShed is part of Purifinity and provides a collection of agents, metrics servers and tools to evaluate software products and servers...
-                    </div>
+                    <h1>Documentation</h1>
+                </div>
             </div>
         );
     }

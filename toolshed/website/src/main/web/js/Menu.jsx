@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { HomeIcon, InfoIcon } from 'react-octicons';
+import { HomeIcon, FileIcon, FileZipIcon, InfoIcon, SmileyIcon } from 'react-octicons';
 
 import PureSolTechnologies from './components/PureSolTechnologies';
 
 
 export default function Menu() {
     return (
-        <nav className="navbar navbar-expand-lg navbar-light bg-faded">
+        <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <Link className="navbar-brand" to="/">ToolShed</Link>
             <button className="navbar-toggler navbar-toggler-right" type="button"
                 data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -23,9 +23,18 @@ export default function Menu() {
                     <li className="nav-item">
                         <Link className="nav-link" to="/about"><InfoIcon /> About</Link>
                     </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/download"><FileZipIcon /> Download</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/documentation"><FileIcon /> Documentation</Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/contribute"><SmileyIcon /> Contribute</Link>
+                    </li>
                 </ul>
             </div>
-            <a href="http://puresol-technologies.com"><PureSolTechnologies /></a>
+            <PureSolTechnologies />
         </nav>
 
     );
