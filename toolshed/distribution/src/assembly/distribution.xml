@@ -16,9 +16,9 @@
 			</excludes>
 		</dependencySet>
 		<dependencySet>
-			<outputDirectory>agents/profiler</outputDirectory>
-			<unpack>false</unpack>
-			<outputFileNameMapping>${artifact.groupId}.${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+			<outputDirectory>agents</outputDirectory>
+			<unpack>false</unpack>			
+			<outputFileNameMapping>profiler-${artifact.version}.${artifact.extension}</outputFileNameMapping>
 			<includes>
 				<include>com.puresoltechnologies.toolshed:agent:jar:*</include>
 			</includes>
