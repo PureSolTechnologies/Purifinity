@@ -1,0 +1,49 @@
+{
+	"name": "toolshed",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "npm run less && webpack-dev-server --inline --content-base ./ --env.dev --host 0.0.0.0",
+		"build": "npm run less && webpack --env.prod",
+		"less": "lessc less/puresol-technologies.less css/puresol-technologies.css",
+		"lint": "eslint app test",
+		"test": "cross-env NODE_ENV=test nyc mocha",
+		"watch:test": "mocha --watch --compilers js:babel-register",
+		"start": "http-server",
+		"setup": "npm install && npm run validate",
+		"validate": "npm-run-all lint test build"
+	},
+	"author": "Rick-Rainer Ludwig <ludwig@puresol-technologies.com>",
+	"license": "UNLICENSED",
+	"devDependencies": {
+		"babel-core": "^6.26.3",
+		"babel-loader": "^7.1.4",
+		"babel-preset-env": "^1.7.0",
+		"babel-preset-react": "^6.24.1",
+		"babel-preset-stage-2": "^6.24.1",
+		"eslint": "^4.19.1",
+		"html-loader": "^0.5.5",
+		"less": "^3.0.4",
+		"source-map-loader": "^0.2.3",
+		"uglifyjs-webpack-plugin": "^1.2.5",
+		"webpack": "^4.12.0",
+		"webpack-cli": "^3.0.8",
+		"webpack-config-utils": "^2.3.0",
+		"webpack-dev-server": "^3.1.4"
+	},
+	"dependencies": {
+		"bootstrap": "^v4.1.1",
+		"d3": "^5.5.0",
+		"history": "^4.7.2",
+		"jquery": "^3.3.1",
+		"popper.js": "^1.14.3",
+		"prop-types": "^15.6.1",
+		"react": "^16.4.1",
+		"react-dom": "^16.4.1",
+		"react-octicons": "^0.2.0",
+		"react-redux": "^5.0.7",
+		"react-router-dom": "^4.3.1",
+		"redux": "^4.0.0"
+	}
+}

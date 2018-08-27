@@ -693,6 +693,7 @@
 		<module>application</module>
 		<module>test</module>
 		<module>distribution</module>
+		<module>website</module>
 	</modules>
 
 </project>
