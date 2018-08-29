@@ -4,10 +4,11 @@
 TOOLSHED_HOME="$( cd "$( dirname $0 )/.." && pwd )"
 
 # JVM arguments...
-JVM_ARGS="-Dtoolshed.home=$TOOLSHED_HOME"
+JVM_ARGS="-Dtoolshed.home=$TOOLSHED_HOME -classpath $TOOLSHED_HOME/lib/*"
+
 # Debug arguments 
 #JVM_ARGS="$JVM_ARGS -agentlib:jdwp=transport=dt_socket,server=y,address=8000,suspend=y" 
 #JVM_ARGS="$JVM_ARGS -javaagent:${TOOLSHED_HOME}/agents/profiler-${project.version}.jar"
 
 # Running ToolShed server...
-java $JVM_ARGS -classpath "$TOOLSHED_HOME/lib/*" com.puresoltechnologies.toolshed.server.impl.ToolShedServer server $TOOLSHED_HOME/etc/server.yml
+java $JVM_ARGS com.puresoltechnologies.toolshed.server.impl.ToolShedServer server $TOOLSHED_HOME/etc/server.yml
