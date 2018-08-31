@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.javafx.extensions.StatusBar;
 import com.puresoltechnologies.javafx.extensions.menu.AboutMenuItem;
+import com.puresoltechnologies.javafx.extensions.splash.SplashScreen;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveContainer;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveService;
 import com.puresoltechnologies.javafx.perspectives.menu.PerspectiveMenu;
@@ -43,41 +44,46 @@ public class ToolShedApplication extends Application {
     @Override
     public void init() throws Exception {
 	super.init();
-	FXThreads.initialize();
-	Preferences.initialize();
-	PerspectiveService.initialize();
-	ReactiveFX.initialize();
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-	try {
-	    stage.setTitle("Tool Shed");
-	    stage.setResizable(true);
-	    stage.centerOnScreen();
+	FXThreads.initialize();
+	Preferences.initialize();
+	PerspectiveService.initialize();
+	ReactiveFX.initialize();
+	SplashScreen splashScreen = new SplashScreen(stage,
+		ResourceUtils.getImage(ToolShedApplication.class, "/splash/splash.jpeg"), applicationStage -> {
+		    try {
+			applicationStage.setTitle("Tool Shed");
+			applicationStage.setResizable(true);
+			applicationStage.centerOnScreen();
 
-	    Image chartUpColorSmall = ResourceUtils.getImage(this, "/icons/FatCow_Icons16x16/bug_fixing.png");
-	    Image chartUpColorBig = ResourceUtils.getImage(this, "/icons/FatCow_Icons32x32/bug_fixing.png");
-	    stage.getIcons().addAll(chartUpColorSmall, chartUpColorBig);
+			Image chartUpColorSmall = ResourceUtils.getImage(this,
+				"/icons/FatCow_Icons16x16/bug_fixing.png");
+			Image chartUpColorBig = ResourceUtils.getImage(this, "/icons/FatCow_Icons32x32/bug_fixing.png");
+			applicationStage.getIcons().addAll(chartUpColorSmall, chartUpColorBig);
 
-	    perspectiveContainer = PerspectiveService.getContainer();
-	    BorderPane root = new BorderPane();
-	    addMenu(stage, root);
-	    root.setCenter(perspectiveContainer);
-	    StatusBar statusBar = new StatusBar();
-	    HBox stretch = new HBox();
-	    HBox.setHgrow(stretch, Priority.ALWAYS);
-	    statusBar.getChildren().addAll(stretch, new TasksStatusBar());
-	    root.setBottom(statusBar);
+			perspectiveContainer = PerspectiveService.getContainer();
+			BorderPane root = new BorderPane();
+			addMenu(applicationStage, root);
+			root.setCenter(perspectiveContainer);
+			StatusBar statusBar = new StatusBar();
+			HBox stretch = new HBox();
+			HBox.setHgrow(stretch, Priority.ALWAYS);
+			statusBar.getChildren().addAll(stretch, new TasksStatusBar());
+			root.setBottom(statusBar);
 
-	    PerspectiveService.openPerspective(new JVMMonitoringPerspective());
+			PerspectiveService.openPerspective(new JVMMonitoringPerspective());
 
-	    Scene scene = new Scene(root, 640, 480);
-	    stage.setScene(scene);
-	    stage.show();
-	} catch (IOException e) {
-	    throw new RuntimeException(e);
-	}
+			Scene scene = new Scene(root, 640, 480);
+			applicationStage.setScene(scene);
+			applicationStage.show();
+		    } catch (IOException e) {
+			throw new RuntimeException(e);
+		    }
+		});
+	splashScreen.startApplication();
     }
 
     private void addMenu(Stage stage, BorderPane root) {
