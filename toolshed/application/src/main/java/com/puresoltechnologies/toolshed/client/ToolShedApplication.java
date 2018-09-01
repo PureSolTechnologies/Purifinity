@@ -40,6 +40,7 @@ public class ToolShedApplication extends Application {
     private static final Logger logger = LoggerFactory.getLogger(ToolShedApplication.class);
 
     private PerspectiveContainer perspectiveContainer;
+    private SplashScreen splashScreen;
 
     @Override
     public void init() throws Exception {
@@ -52,8 +53,8 @@ public class ToolShedApplication extends Application {
 	Preferences.initialize();
 	PerspectiveService.initialize();
 	ReactiveFX.initialize();
-	SplashScreen splashScreen = new SplashScreen(stage,
-		ResourceUtils.getImage(ToolShedApplication.class, "/splash/splash.jpeg"), applicationStage -> {
+	splashScreen = new SplashScreen(stage, ResourceUtils.getImage(ToolShedApplication.class, "/splash/splash.jpeg"),
+		applicationStage -> {
 		    try {
 			applicationStage.setTitle("Tool Shed");
 			applicationStage.setResizable(true);
