@@ -115,7 +115,7 @@
 		<profile>
 			<id>windows-profile</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 				<file>
 					<exists>${JAVA_HOME}/lib/tools.jar</exists>
 				</file>
