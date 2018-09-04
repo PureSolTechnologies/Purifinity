@@ -1,7 +1,5 @@
 package com.puresoltechnologies.toolshed.server.impl;
 
-import java.io.File;
-
 import javax.websocket.server.ServerEndpointConfig;
 
 import org.slf4j.Logger;
@@ -20,7 +18,6 @@ import com.puresoltechnologies.toolshed.server.impl.nodes.NodeServiceImpl;
 import com.puresoltechnologies.toolshed.server.impl.ws.AnnotatedEchoServer;
 
 import io.dropwizard.Application;
-import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -37,11 +34,14 @@ public class ToolShedServer extends Application<ToolShedServerConfiguration> {
 
     @Override
     public void initialize(Bootstrap<ToolShedServerConfiguration> bootstrap) {
-	File resourceDirectory = new File("/home/ludwig/git/FamilityServer/ui/src/main/web");
-	if ((!resourceDirectory.exists()) || (!resourceDirectory.isDirectory())) {
-	    throw new IllegalStateException("Resource path '" + resourceDirectory + "' was not found.");
-	}
-	bootstrap.addBundle(new AssetsBundle(resourceDirectory.getPath(), "", "index.html"));
+	// File resourceDirectory = new
+	// File("/home/ludwig/git/FamilityServer/ui/src/main/web");
+	// if ((!resourceDirectory.exists()) || (!resourceDirectory.isDirectory())) {
+	// throw new IllegalStateException("Resource path '" + resourceDirectory + "'
+	// was not found.");
+	// }
+	// bootstrap.addBundle(new AssetsBundle(resourceDirectory.getPath(), "",
+	// "index.html"));
 	WebsocketBundle webSockets = new WebsocketBundle(new ServerEndpointConfig[] {});
 	webSockets.addEndpoint(AnnotatedEchoServer.class);
 	bootstrap.addBundle(webSockets);
