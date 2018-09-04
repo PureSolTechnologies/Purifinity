@@ -91,6 +91,83 @@
 	<repositories />
 	<pluginRepositories />
 
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>windows-profile</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+				<file>
+					<exists>${JAVA_HOME}/lib/tools.jar</exists>
+				</file>
+			</activation>
+			<properties>
+				<toolsjar>${JAVA_HOME}/lib/tools.jar</toolsjar>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>jdk.tools</groupId>
+					<artifactId>jdk.tools</artifactId>
+					<version>jdk1.8.0</version>
+					<scope>system</scope>
+					<systemPath>${toolsjar}</systemPath>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>mac-profile</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<file>
+					<exists>${java.home}/../lib/tools.jar</exists>
+				</file>
+			</activation>
+			<properties>
+				<toolsjar>${java.home}/../lib/tools.jar</toolsjar>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>jdk.tools</groupId>
+					<artifactId>jdk.tools</artifactId>
+					<version>jdk1.8.0</version>
+					<scope>system</scope>
+					<systemPath>${toolsjar}</systemPath>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>m2e</id>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<build>
+				<pluginManagement>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
+
 	<dependencyManagement>
 		<dependencies>
 			<!-- Self dependencies -->
@@ -340,21 +417,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-	<profiles>
-		<profile>
-			<id>m2e</id>
-			<activation>
-				<property>
-					<name>m2e.version</name>
-				</property>
-			</activation>
-			<build>
-				<pluginManagement>
-				</pluginManagement>
-			</build>
-		</profile>
-	</profiles>
-
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -430,6 +492,13 @@
 					<skipProvidedScope>true</skipProvidedScope>
 					<skipTestScope>true</skipTestScope>
 					<knownLicenses>
+						<knownLicense>
+							<name>JDK included</name>
+							<url>http://java.oracle.com</url>
+							<approvedDependencies>
+								<approvedDependency>jdk.tools:jdk.tools:jdk1.8.0</approvedDependency>
+							</approvedDependencies>
+						</knownLicense>
 						<knownLicense>
 							<name>The Apache Software License, Version 2.0</name>
 							<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
@@ -537,7 +606,7 @@
 				<goal>check</goal> </goals> </execution> </executions> </plugin -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.2</version>
+				<version>3.8.0</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -618,19 +687,6 @@
 							<docencoding>UTF-8</docencoding>
 							<failOnError>false</failOnError>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.6</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>
