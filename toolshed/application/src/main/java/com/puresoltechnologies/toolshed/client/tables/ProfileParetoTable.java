@@ -1,5 +1,7 @@
 package com.puresoltechnologies.toolshed.client.tables;
 
+import java.util.concurrent.TimeUnit;
+
 import com.puresoltechnologies.javafx.reactive.ReactiveFX;
 import com.puresoltechnologies.toolshed.client.Topics;
 import com.puresoltechnologies.toolshed.client.profiles.ProfileEntry;
@@ -29,18 +31,20 @@ public class ProfileParetoTable extends TableView<ProfileEntry> {
 	invokationsColumn.setCellValueFactory(e -> new ReadOnlyLongWrapper(e.getValue().getInvocations()).asObject());
 	invokationsColumn.setSortable(true);
 	columns.add(invokationsColumn);
-	TableColumn<ProfileEntry, Long> timeColumn = new TableColumn<>("Time");
+	TableColumn<ProfileEntry, Long> timeColumn = new TableColumn<>("Time (us)");
 	timeColumn.setCellValueFactory(e -> {
 	    ProfileEntry value = e.getValue();
 	    if (value.getInvocations() == 0) {
 		return null;
 	    }
-	    return new ReadOnlyLongWrapper(value.getTotalTime() / value.getInvocations()).asObject();
+	    long averageTime = value.getTotalTime() / value.getInvocations();
+	    return new ReadOnlyLongWrapper(TimeUnit.NANOSECONDS.toMicros(averageTime)).asObject();
 	});
 	timeColumn.setSortable(true);
 	columns.add(timeColumn);
-	TableColumn<ProfileEntry, Long> totalTimeColumn = new TableColumn<>("totalTime");
-	totalTimeColumn.setCellValueFactory(e -> new ReadOnlyLongWrapper(e.getValue().getTotalTime()).asObject());
+	TableColumn<ProfileEntry, Long> totalTimeColumn = new TableColumn<>("Total Time (us)");
+	totalTimeColumn.setCellValueFactory(
+		e -> new ReadOnlyLongWrapper(TimeUnit.NANOSECONDS.toMicros(e.getValue().getTotalTime())).asObject());
 	totalTimeColumn.setSortable(true);
 	columns.add(totalTimeColumn);
 
