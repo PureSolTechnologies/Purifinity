@@ -1,2 +1,3 @@
 com.puresoltechnologies.toolshed.client.perspectives.JVMMonitoringPerspective
 com.puresoltechnologies.toolshed.client.perspectives.ProfilerPerspective
+com.puresoltechnologies.toolshed.client.perspectives.SakeMonitoringPerspective

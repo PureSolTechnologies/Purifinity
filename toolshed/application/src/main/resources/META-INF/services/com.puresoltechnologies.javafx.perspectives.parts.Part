@@ -5,3 +5,4 @@ com.puresoltechnologies.toolshed.client.parts.MethodProfileTreeTableViewer
 com.puresoltechnologies.toolshed.client.parts.OpenProfileViewer
 com.puresoltechnologies.toolshed.client.parts.ProfileParetoTableViewer
 com.puresoltechnologies.toolshed.client.parts.RunningJVMs
+com.puresoltechnologies.toolshed.client.parts.SakeServersPart
