@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InaccessibleObjectException;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.security.ProtectionDomain;
@@ -86,7 +87,8 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 	    methodId++;
 	    totalTimeField = clazz.getDeclaredField("total_time_" + methodId + "_");
 	    invocationsField = clazz.getDeclaredField("invocations_" + methodId + "_");
-	} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException | NoClassDefFoundError e) {
+	} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException | NoClassDefFoundError
+		| InaccessibleObjectException e) {
 	    System.err.println("Could not write method results for '" + methodEntry + "'.");
 	    e.printStackTrace();
 	}
@@ -104,15 +106,15 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 		    return null;
 		}
 	    }
-//	    if (className.startsWith("jdk/") //
-//		    || className.startsWith("sun/") //
-//		    || className.startsWith("com/sun/") //
-//		    || className.startsWith("javafx/beans/") //
-//		    || className.startsWith("javafx/scene/") //
-//		    || className.startsWith("javafx/css/") //
-//	    ) {
-//		return null;
-//	    }
+	    if (className.startsWith("jdk/") //
+		    || className.startsWith("sun/") //
+		    || className.startsWith("com/sun/") //
+		    || className.startsWith("javafx/beans/") //
+		    || className.startsWith("javafx/scene/") //
+		    || className.startsWith("javafx/css/") //
+	    ) {
+		return null;
+	    }
 	    classId++;
 	    System.out.println("Instrumenting class: " + className + ", id=" + classId);
 	    writeClassIdMapping(className);
