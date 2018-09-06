@@ -2,7 +2,6 @@ package com.puresoltechnologies.toolshed.agent.profiler.asm;
 
 import static org.objectweb.asm.Opcodes.ASM6;
 import static org.objectweb.asm.Opcodes.ATHROW;
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 import static org.objectweb.asm.Opcodes.IRETURN;
 import static org.objectweb.asm.Opcodes.RETURN;
 
@@ -26,6 +25,8 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter {
     private final short methodId;
     private final String owner;
     private final BinaryOutputStream idsOutputStream;
+    private final String totalTimeVariable;
+    private final String invocationsVariable;
 
     public ProfilerMethodVisitor(short methodId, String owner, int access, String descriptor, MethodVisitor mv,
 	    BinaryOutputStream idsOutputStream) {
@@ -33,6 +34,8 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter {
 	this.methodId = methodId;
 	this.owner = owner;
 	this.idsOutputStream = idsOutputStream;
+	totalTimeVariable = "total_time_" + methodId + "_";
+	invocationsVariable = "invocations_" + methodId + "_";
     }
 
     @Override
@@ -41,7 +44,7 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter {
 	mv.visitLabel(startMethodScope);
 	startTimeIndex = newLocal(Type.getType("J"));
 	mv.visitLocalVariable("startTime", "J", null, startMethodScope, endMethodScope, startTimeIndex);
-	mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "nanoTime", "()J", false);
+	mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "nanoTime", "()J", false);
 	mv.visitVarInsn(Opcodes.LSTORE, startTimeIndex);
     }
 
@@ -49,19 +52,19 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter {
     public void visitInsn(int opcode) {
 	if (((opcode >= IRETURN) && (opcode <= RETURN)) //
 		|| (opcode == ATHROW)) {
-	    mv.visitMethodInsn(INVOKESTATIC, "java/lang/System", "nanoTime", "()J", false);
+	    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "nanoTime", "()J", false);
 	    mv.visitVarInsn(Opcodes.LLOAD, startTimeIndex);
 	    mv.visitInsn(Opcodes.LSUB);
-	    mv.visitFieldInsn(Opcodes.GETSTATIC, owner, "total_time_" + methodId + "_", "J");
+	    mv.visitFieldInsn(Opcodes.GETSTATIC, owner, totalTimeVariable, "J");
 	    mv.visitInsn(Opcodes.LADD);
-	    mv.visitFieldInsn(Opcodes.PUTSTATIC, owner, "total_time_" + methodId + "_", "J");
+	    mv.visitFieldInsn(Opcodes.PUTSTATIC, owner, totalTimeVariable, "J");
 
-	    mv.visitFieldInsn(Opcodes.GETSTATIC, owner, "invocations_" + methodId + "_", "J");
+	    mv.visitFieldInsn(Opcodes.GETSTATIC, owner, invocationsVariable, "J");
 	    mv.visitLdcInsn(1l);
 	    mv.visitInsn(Opcodes.LADD);
-	    mv.visitFieldInsn(Opcodes.PUTSTATIC, owner, "invocations_" + methodId + "_", "J");
+	    mv.visitFieldInsn(Opcodes.PUTSTATIC, owner, invocationsVariable, "J");
 	}
-	mv.visitInsn(opcode);
+	super.visitInsn(opcode);
     }
 
     @Override
@@ -85,7 +88,7 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter {
     @Override
     public void visitMaxs(int maxStack, int maxLocals) {
 	mv.visitLabel(endMethodScope);
-	super.visitMaxs(maxStack + 7, maxLocals);
+	super.visitMaxs(maxStack, maxLocals);
     }
 
 }

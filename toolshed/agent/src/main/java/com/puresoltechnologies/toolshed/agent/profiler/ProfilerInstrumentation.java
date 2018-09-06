@@ -1,8 +1,5 @@
 package com.puresoltechnologies.toolshed.agent.profiler;
 
-import static org.objectweb.asm.ClassReader.EXPAND_FRAMES;
-import static org.objectweb.asm.ClassWriter.COMPUTE_FRAMES;
-
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -56,6 +53,7 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 		writeClassResults(entry);
 	    }
 	} catch (SecurityException e) {
+	    System.err.println("ERROR: Could not close instrumentation.");
 	    e.printStackTrace();
 	}
 	ProfileWriter.shutdown();
@@ -69,8 +67,8 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 		short methodId = methodEntry.getKey();
 		writeMethodResult(clazz, methodId, methodEntry.getValue());
 	    }
-	} catch (ClassNotFoundException e) {
-	    System.err.println("Could not write class results for '" + className + "'.");
+	} catch (ClassNotFoundException | ExceptionInInitializerError e) {
+	    System.err.println("WARN: Could not write class results for '" + className + "'.");
 	    e.printStackTrace();
 	}
     }
@@ -89,7 +87,7 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 	    invocationsField = clazz.getDeclaredField("invocations_" + methodId + "_");
 	} catch (NoSuchFieldException | IllegalArgumentException | IllegalAccessException | NoClassDefFoundError
 		| InaccessibleObjectException e) {
-	    System.err.println("Could not write method results for '" + methodEntry + "'.");
+	    System.err.println("WARN: Could not write method results for '" + methodEntry + "'.");
 	    e.printStackTrace();
 	}
     }
@@ -107,26 +105,23 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable 
 		}
 	    }
 	    if (className.startsWith("jdk/") //
-		    || className.startsWith("sun/") //
-		    || className.startsWith("com/sun/") //
-		    || className.startsWith("javafx/beans/") //
-		    || className.startsWith("javafx/scene/") //
-		    || className.startsWith("javafx/css/") //
+	    // || className.startsWith("sun/") //
+	    // || className.startsWith("com/sun/") //
 	    ) {
 		return null;
 	    }
 	    classId++;
 	    System.out.println("Instrumenting class: " + className + ", id=" + classId);
-	    writeClassIdMapping(className);
 	    methods.put(classId, new HashMap<>());
 	    classes.put(classId, className);
 	    ClassReader cr = new ClassReader(classfileBuffer);
-	    ClassWriter cw = new ClassWriter(COMPUTE_FRAMES);
+	    ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 	    ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, className, methods.get(classId), idsOutputStream);
-	    cr.accept(cv, EXPAND_FRAMES);
+	    cr.accept(cv, ClassReader.EXPAND_FRAMES);
+	    writeClassIdMapping(className);
 	    return cw.toByteArray();
 	} catch (IOException e) {
-	    System.err.println("Could not instrument class '" + className + "'.");
+	    System.err.println("WARN: Could not instrument class '" + className + "'.");
 	    e.printStackTrace();
 	    return null;
 	}

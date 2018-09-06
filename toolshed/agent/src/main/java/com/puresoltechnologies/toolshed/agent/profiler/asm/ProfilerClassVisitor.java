@@ -34,6 +34,10 @@ public class ProfilerClassVisitor extends ClassVisitor {
 	super.visit(version, access, name, signature, superName, interfaces);
 	this.internalClassName = name;
 	if ((access & Opcodes.ACC_INTERFACE) == Opcodes.ACC_INTERFACE) {
+	    /*
+	     * We check for interface, because for this, we cannot add variables for time
+	     * and invocations.
+	     */
 	    isInterface = true;
 	}
     }
@@ -42,6 +46,13 @@ public class ProfilerClassVisitor extends ClassVisitor {
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature,
 	    String[] exceptions) {
 	if (isInterface) {
+	    System.out.println("Skipping interface method: " + internalClassName + "#" + name + descriptor);
+	    return super.visitMethod(access, name, descriptor, signature, exceptions);
+	}
+	if (((access & Opcodes.ACC_ABSTRACT) == Opcodes.ACC_ABSTRACT) //
+		|| ((access & Opcodes.ACC_NATIVE) == Opcodes.ACC_ABSTRACT) //
+	) {
+	    System.out.println("Skipping abstract or native method: " + internalClassName + "#" + name + descriptor);
 	    return super.visitMethod(access, name, descriptor, signature, exceptions);
 	}
 	try {

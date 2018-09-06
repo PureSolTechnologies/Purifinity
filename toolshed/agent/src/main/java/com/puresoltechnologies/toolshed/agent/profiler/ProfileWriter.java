@@ -42,7 +42,8 @@ public class ProfileWriter {
 		binaryOutputStream.writeSignedLong(invocations);
 	    }
 	} catch (IOException e) {
-	    // Intentionally left empty
+	    System.err.println("WARN: Could not write time for '" + methodDefinition + "'.");
+	    e.printStackTrace();
 	}
     }
 
