@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.function.BiConsumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.puresoltechnologies.streaming.binary.BinaryInputStream;
 import com.puresoltechnologies.streaming.binary.mapper.BinaryMapper;
 import com.puresoltechnologies.streaming.binary.mapper.BinaryMappingException;
@@ -21,6 +24,8 @@ import com.puresoltechnologies.toolshed.client.profiles.graph.InvokesEdge;
 import com.puresoltechnologies.toolshed.client.profiles.graph.MethodVertex;
 
 public class IdsReader implements Closeable {
+
+    private static final Logger logger = LoggerFactory.getLogger(IdsReader.class);
 
     private final File file;
     private final CodeGraph codeGraph;
@@ -77,7 +82,7 @@ public class IdsReader implements Closeable {
 		}
 	    }
 	} catch (BinaryMappingException | IOException e) {
-	    // intentionally left empty
+	    logger.warn("Could not read ids file.", e);
 	}
     }
 
@@ -92,13 +97,19 @@ public class IdsReader implements Closeable {
     }
 
     private void readMethodDeclaration() throws BinaryMappingException, IOException {
-	MethodDeclarationEntry methodDeclaration = binaryMapper.read(binaryInputStream, MethodDeclarationEntry.class);
-	MethodVertex methodVertex = new MethodVertex(lastClassVertex.getClassName(), methodDeclaration.getMethodName(),
-		methodDeclaration.getDescriptor());
-	lastMethodVertex = methodVertex;
-	codeGraph.addVertex(methodVertex);
-	ImplementsEdge implementsEdge = new ImplementsEdge(methodVertex);
-	lastClassVertex.addImplementation(implementsEdge);
+	try {
+	    MethodDeclarationEntry methodDeclaration = binaryMapper.read(binaryInputStream,
+		    MethodDeclarationEntry.class);
+	    MethodVertex methodVertex = new MethodVertex(lastClassVertex.getClassName(),
+		    methodDeclaration.getMethodName(), methodDeclaration.getDescriptor());
+	    lastMethodVertex = methodVertex;
+	    codeGraph.addVertex(methodVertex);
+	    ImplementsEdge implementsEdge = new ImplementsEdge(methodVertex);
+	    lastClassVertex.addImplementation(implementsEdge);
+	} catch (NullPointerException e) {
+	    logger.error("Could not read ids file.");
+	    throw e;
+	}
     }
 
     private void readMethodInvokation() throws BinaryMappingException, IOException {

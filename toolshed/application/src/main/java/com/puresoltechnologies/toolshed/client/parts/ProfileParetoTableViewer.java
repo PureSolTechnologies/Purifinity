@@ -71,6 +71,9 @@ public class ProfileParetoTableViewer extends AbstractViewer implements Consumer
     }
 
     private void showValue() {
+	if (profile == null) {
+	    return;
+	}
 	String filterText = filterTextField.getText();
 	boolean emptyFilter = filterText.isEmpty();
 	if (showUnusedMethodsCheckBox.isSelected() && emptyFilter) {

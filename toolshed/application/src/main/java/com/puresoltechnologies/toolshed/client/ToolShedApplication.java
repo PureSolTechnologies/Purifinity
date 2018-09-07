@@ -49,10 +49,6 @@ public class ToolShedApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-	FXThreads.initialize();
-	Preferences.initialize();
-	PerspectiveService.initialize();
-	ReactiveFX.initialize();
 	splashScreen = new SplashScreen(stage, ResourceUtils.getImage(ToolShedApplication.class, "/splash/splash.jpeg"),
 		applicationStage -> {
 		    try {
@@ -84,6 +80,20 @@ public class ToolShedApplication extends Application {
 			throw new RuntimeException(e);
 		    }
 		});
+	splashScreen.addTask(() -> logger.info("Starting...\n" //
+		+ " _____              _  ____   _                _ \n" //
+		+ "|_   _|___    ___  | |/ ___| | |__    ___   __| |\n" //
+		+ "  | | / _ \\  / _ \\ | |\\___ \\ | '_ \\  / _ \\ / _` |\n" //
+		+ "  | || (_) || (_) || | ___) || | | ||  __/| (_| |\n" //
+		+ "  |_| \\___/  \\___/ |_||____/ |_| |_| \\___| \\__,_|\n"));
+
+	splashScreen.addTask(() -> {
+	    Preferences.initialize();
+	    return null;
+	});
+	splashScreen.addTask(() -> PerspectiveService.initialize());
+	splashScreen.addTask(() -> ReactiveFX.initialize());
+
 	splashScreen.startApplication();
     }
 

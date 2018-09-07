@@ -62,13 +62,14 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable,
 	    }
 	    classId++;
 	    logDebug("Instrumenting class: " + className + " (id=" + classId + ")");
-	    methods.put(classId, new HashMap<>());
-	    classes.put(classId, className);
+	    writeClassIdMapping(className);
+	    HashMap<Short, MethodDefinition> methodsHash = new HashMap<>();
 	    ClassReader cr = new ClassReader(classfileBuffer);
 	    ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-	    ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, className, methods.get(classId), idsOutputStream);
+	    ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, className, methodsHash, idsOutputStream);
 	    cr.accept(cv, ClassReader.EXPAND_FRAMES);
-	    writeClassIdMapping(className);
+	    classes.put(classId, className);
+	    methods.put(classId, methodsHash);
 	    return cw.toByteArray();
 	} catch (IOException e) {
 	    logWarn("Could not instrument class '" + className + "'.", e);
