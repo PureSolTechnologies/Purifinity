@@ -1,6 +1,7 @@
 .metadata
-.settings
+.settings/
 .classpath
+.cproject
 .project
 .tscache
 target
@@ -22,3 +23,5 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+purifinity.profile/
+build/

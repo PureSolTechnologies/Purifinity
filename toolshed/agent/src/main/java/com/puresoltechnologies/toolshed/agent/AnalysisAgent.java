@@ -17,11 +17,7 @@ public class AnalysisAgent {
 	try {
 	    ProfilerInstrumentation transformer = new ProfilerInstrumentation();
 	    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-		try {
-		    transformer.close();
-		} catch (IOException e) {
-		    // intentionally left empty
-		}
+		transformer.close();
 	    }));
 	    instrumentation.addTransformer(transformer);
 	} catch (IOException e) {

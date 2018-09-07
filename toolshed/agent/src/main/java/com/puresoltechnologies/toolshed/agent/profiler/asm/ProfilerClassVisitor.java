@@ -10,9 +10,10 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 import com.puresoltechnologies.streaming.binary.BinaryOutputStream;
+import com.puresoltechnologies.toolshed.agent.Logging;
 import com.puresoltechnologies.toolshed.agent.MethodDefinition;
 
-public class ProfilerClassVisitor extends ClassVisitor {
+public class ProfilerClassVisitor extends ClassVisitor implements Logging {
 
     private final String className;
     private final Map<Short, MethodDefinition> methods;
@@ -46,20 +47,19 @@ public class ProfilerClassVisitor extends ClassVisitor {
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature,
 	    String[] exceptions) {
 	if (isInterface) {
-	    System.out.println("Skipping interface method: " + internalClassName + "#" + name + descriptor);
+	    logDebug("Skipping interface method: " + internalClassName + "#" + name + descriptor);
 	    return super.visitMethod(access, name, descriptor, signature, exceptions);
 	}
 	if (((access & Opcodes.ACC_ABSTRACT) == Opcodes.ACC_ABSTRACT) //
 		|| ((access & Opcodes.ACC_NATIVE) == Opcodes.ACC_ABSTRACT) //
 	) {
-	    System.out.println("Skipping abstract or native method: " + internalClassName + "#" + name + descriptor);
+	    logDebug("Skipping abstract or native method: " + internalClassName + "#" + name + descriptor);
 	    return super.visitMethod(access, name, descriptor, signature, exceptions);
 	}
 	try {
 	    methodId++;
 	    methods.put(methodId, new MethodDefinition(className.replaceAll("/", "."), name, descriptor));
-	    System.out.println(
-		    "Instrumenting method: " + internalClassName + "#" + name + descriptor + ", id=" + methodId);
+	    logTrace("Instrumenting method: " + internalClassName + "#" + name + descriptor + " (id=" + methodId + ")");
 	    writeMethodIdMapping(name, descriptor);
 	    MethodVisitor visitMethod = super.visitMethod(access, name, descriptor, signature, exceptions);
 	    return new ProfilerMethodVisitor(methodId, internalClassName, access, descriptor, visitMethod,

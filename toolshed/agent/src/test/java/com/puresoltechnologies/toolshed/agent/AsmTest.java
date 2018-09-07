@@ -25,15 +25,17 @@ import com.puresoltechnologies.toolshed.agent.profiler.asm.ProfilerClassVisitor;
 
 public class AsmTest {
 
+    private static ProfileWriter profileWriter;
+
     @BeforeAll
     public static void initialize() throws FileNotFoundException {
 	Configuration.initialize("");
-	ProfileWriter.initialize();
+	profileWriter = new ProfileWriter();
     }
 
     @AfterAll
     public static void shutdown() throws IOException {
-	ProfileWriter.shutdown();
+	profileWriter.close();
     }
 
     @Test

@@ -13,6 +13,7 @@ public class Configuration {
     private static File outputDirectory = null;
     private static Pattern filterPattern = null;
     private static final Properties properties = new Properties();
+    private static AgentLogLevel logLevel = AgentLogLevel.WARN;
 
     public static void initialize(String agentArgs) {
 	if (agentArgs == null) {
@@ -29,6 +30,10 @@ public class Configuration {
 	    String filter = properties.getProperty("filter");
 	    if (filter != null) {
 		filterPattern = Pattern.compile(filter);
+	    }
+	    String logLevel = properties.getProperty("log");
+	    if (logLevel != null) {
+		setLogLevel(AgentLogLevel.valueOf(logLevel.toUpperCase()));
 	    }
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
@@ -62,5 +67,13 @@ public class Configuration {
 
     public static boolean hasFilterPattern() {
 	return filterPattern != null;
+    }
+
+    public static void setLogLevel(AgentLogLevel logLevel) {
+	Configuration.logLevel = logLevel;
+    }
+
+    public static AgentLogLevel getLogLevel() {
+	return logLevel;
     }
 }

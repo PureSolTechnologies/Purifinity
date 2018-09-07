@@ -1,5 +1,6 @@
 package com.puresoltechnologies.toolshed.agent.profiler;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,29 +10,31 @@ import java.nio.charset.Charset;
 import com.puresoltechnologies.streaming.binary.BinaryOutputStream;
 import com.puresoltechnologies.streaming.streams.OptimizedFileOutputStream;
 import com.puresoltechnologies.toolshed.agent.Configuration;
+import com.puresoltechnologies.toolshed.agent.Logging;
 import com.puresoltechnologies.toolshed.agent.MethodDefinition;
 
-public class ProfileWriter {
+public class ProfileWriter implements Closeable, Logging {
 
-    private static BinaryOutputStream binaryOutputStream = null;
-    private static Object lock = new Object();
+    private BinaryOutputStream binaryOutputStream = null;
+    private Object lock = new Object();
 
-    public static void initialize() throws FileNotFoundException {
+    public ProfileWriter() throws FileNotFoundException {
 	File outputDirectory = Configuration.getOutputDirectory();
 	File profileFile = new File(outputDirectory, "profile.raw");
 	binaryOutputStream = new BinaryOutputStream(new OptimizedFileOutputStream(profileFile),
 		ByteOrder.LITTLE_ENDIAN);
     }
 
-    public static void shutdown() throws IOException {
+    @Override
+    public void close() throws IOException {
 	binaryOutputStream.flush();
 	binaryOutputStream.close();
     }
 
-    public static void printTime(MethodDefinition methodDefinition, long time, long invocations) {
+    public void printTime(MethodDefinition methodDefinition, long time, long invocations) {
 	try {
 	    synchronized (lock) {
-		System.out.println(
+		logTrace(
 			"write profile entry:" + methodDefinition.toString() + ": " + invocations + "x " + time + "ms");
 		binaryOutputStream.write((byte) 1);
 		Charset defaultCharset = Charset.defaultCharset();
@@ -42,8 +45,7 @@ public class ProfileWriter {
 		binaryOutputStream.writeSignedLong(invocations);
 	    }
 	} catch (IOException e) {
-	    System.err.println("WARN: Could not write time for '" + methodDefinition + "'.");
-	    e.printStackTrace();
+	    logWarn("Could not write time for '" + methodDefinition + "'.", e);
 	}
     }
 
