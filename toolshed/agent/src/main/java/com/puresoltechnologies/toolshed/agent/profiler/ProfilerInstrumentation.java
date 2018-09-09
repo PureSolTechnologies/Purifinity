@@ -7,7 +7,6 @@ import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.reflect.Field;
 import java.nio.ByteOrder;
-import java.nio.charset.Charset;
 import java.security.ProtectionDomain;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +45,7 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable,
     }
 
     @Override
-    public byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
+    public synchronized byte[] transform(ClassLoader loader, String className, Class<?> classBeingRedefined,
 	    ProtectionDomain protectionDomain, byte[] classfileBuffer) throws IllegalClassFormatException {
 	if (isClosing) {
 	    return null;
@@ -62,11 +61,10 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable,
 	    }
 	    classId++;
 	    logDebug("Instrumenting class: " + className + " (id=" + classId + ")");
-	    writeClassIdMapping(className);
 	    HashMap<Short, MethodDefinition> methodsHash = new HashMap<>();
 	    ClassReader cr = new ClassReader(classfileBuffer);
 	    ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-	    ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, className, methodsHash, idsOutputStream);
+	    ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, className, classId, methodsHash, idsOutputStream);
 	    cr.accept(cv, ClassReader.EXPAND_FRAMES);
 	    classes.put(classId, className);
 	    methods.put(classId, methodsHash);
@@ -75,12 +73,6 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable,
 	    logWarn("Could not instrument class '" + className + "'.", e);
 	    return null;
 	}
-    }
-
-    private void writeClassIdMapping(String className) throws IOException {
-	idsOutputStream.writeUnsignedByte(0);
-	idsOutputStream.writeNulTerminatedString(className.replaceAll("/", "."), Charset.defaultCharset());
-	idsOutputStream.writeSignedInt(classId);
     }
 
     @Override
@@ -131,6 +123,9 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable,
 	    methodId++;
 	    totalTimeField = clazz.getDeclaredField("total_time_" + methodId + "_");
 	    invocationsField = clazz.getDeclaredField("invocations_" + methodId + "_");
+	} catch (NoSuchFieldException nsfe) {
+	    logWarn("Could not write method results for '" + methodEntry
+		    + "', because field was not found. Potentially a class used from agent.");
 	} catch (Exception | LinkageError e) {
 	    logWarn("Could not write method results for '" + methodEntry + "'.", e);
 	}

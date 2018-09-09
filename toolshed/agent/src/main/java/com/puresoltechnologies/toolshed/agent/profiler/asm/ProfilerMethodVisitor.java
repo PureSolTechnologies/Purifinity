@@ -14,9 +14,10 @@ import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
 
 import com.puresoltechnologies.streaming.binary.BinaryOutputStream;
+import com.puresoltechnologies.toolshed.agent.Logging;
 import com.puresoltechnologies.toolshed.agent.asm.LocalVariablesSorter;
 
-public class ProfilerMethodVisitor extends LocalVariablesSorter {
+public class ProfilerMethodVisitor extends LocalVariablesSorter implements Logging {
 
     private final Label startMethodScope = new Label();
     private final Label endMethodScope = new Label();
@@ -78,9 +79,11 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter {
     }
 
     private void writeInvokation(String owner, String methodName, String descriptor) throws IOException {
-	idsOutputStream.writeUnsignedByte(2);
 	Charset defaultCharset = Charset.defaultCharset();
-	idsOutputStream.writeNulTerminatedString(owner.replaceAll("/", "."), defaultCharset);
+	logTrace("Invokes " + owner + "#" + methodName + descriptor);
+	String className = owner.replaceAll("/", ".");
+	idsOutputStream.writeUnsignedByte(3);
+	idsOutputStream.writeNulTerminatedString(className, defaultCharset);
 	idsOutputStream.writeNulTerminatedString(methodName, defaultCharset);
 	idsOutputStream.writeNulTerminatedString(descriptor, defaultCharset);
     }

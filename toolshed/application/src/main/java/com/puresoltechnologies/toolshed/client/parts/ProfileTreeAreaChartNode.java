@@ -45,13 +45,15 @@ public class ProfileTreeAreaChartNode implements TreeMapNode {
     @Override
     public List<TreeMapNode> getChildren() {
 	List<TreeMapNode> children = new ArrayList<>();
-	for (CodeGraphEdge edge : method.getEdges()) {
-	    if (edge instanceof InvokesEdge) {
-		InvokesEdge invokes = (InvokesEdge) edge;
-		MethodVertex invokedMethod = (MethodVertex) invokes.getVertices().getSecond();
-		ProfileEntry invokedProfileEntry = profile.findEntry(invokedMethod);
-		if (invokedProfileEntry != null) {
-		    children.add(new ProfileTreeAreaChartNode(profile, invokedProfileEntry, invokedMethod));
+	if (method != null) {
+	    for (CodeGraphEdge edge : method.getEdges()) {
+		if (edge instanceof InvokesEdge) {
+		    InvokesEdge invokes = (InvokesEdge) edge;
+		    MethodVertex invokedMethod = (MethodVertex) invokes.getVertices().getSecond();
+		    ProfileEntry invokedProfileEntry = profile.findEntry(invokedMethod);
+		    if (invokedProfileEntry != null) {
+			children.add(new ProfileTreeAreaChartNode(profile, invokedProfileEntry, invokedMethod));
+		    }
 		}
 	    }
 	}

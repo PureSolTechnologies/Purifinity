@@ -2,19 +2,19 @@ package com.puresoltechnologies.toolshed.client.profiles;
 
 import com.puresoltechnologies.streaming.binary.mapper.annotations.BinaryCreator;
 import com.puresoltechnologies.streaming.binary.mapper.annotations.BinaryNulTerminateString;
-import com.puresoltechnologies.streaming.binary.mapper.annotations.BinarySignedShort;
+import com.puresoltechnologies.streaming.binary.mapper.annotations.BinaryUnsignedShort;
 
 public class MethodDeclarationEntry {
 
     private final String methodName;
     private final String descriptor;
-    private final short methodId;
+    private final int methodId;
 
     @BinaryCreator
     public MethodDeclarationEntry( //
 	    @BinaryNulTerminateString("methodName") String methodName, //
 	    @BinaryNulTerminateString("descriptor") String descriptor, //
-	    @BinarySignedShort("methodId") short methodId //
+	    @BinaryUnsignedShort("methodId") int methodId //
     ) {
 	this.methodName = methodName;
 	this.descriptor = descriptor;
@@ -29,7 +29,7 @@ public class MethodDeclarationEntry {
 	return descriptor;
     }
 
-    public short getMethodId() {
+    public int getMethodId() {
 	return methodId;
     }
 

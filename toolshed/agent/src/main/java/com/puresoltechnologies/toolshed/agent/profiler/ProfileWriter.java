@@ -35,7 +35,7 @@ public class ProfileWriter implements Closeable, Logging {
 	try {
 	    synchronized (lock) {
 		logTrace(
-			"write profile entry:" + methodDefinition.toString() + ": " + invocations + "x " + time + "ms");
+			"write profile entry:" + methodDefinition.toString() + ": " + invocations + "x " + time + "ns");
 		binaryOutputStream.write((byte) 1);
 		Charset defaultCharset = Charset.defaultCharset();
 		binaryOutputStream.writeNulTerminatedString(methodDefinition.getClassName(), defaultCharset);

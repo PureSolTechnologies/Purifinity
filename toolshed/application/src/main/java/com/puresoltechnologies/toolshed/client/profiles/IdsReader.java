@@ -65,17 +65,20 @@ public class IdsReader implements Closeable {
 	codeGraph.clear();
 	try {
 	    while (true) {
-		byte code = binaryInputStream.readSignedByte();
+		int code = binaryInputStream.readUnsignedByte();
 		switch (code) {
-		case 0:
+		case 1:
 		    readClassDeclaration();
 		    break;
-		case 1:
+		case 2:
 		    readMethodDeclaration();
 		    break;
-		case 2:
+		case 3:
 		    readMethodInvokation();
 		    break;
+		default:
+		    throw new IllegalStateException(
+			    "Unknown section id " + code + " found. Position: " + positionInputStream.getPosition());
 		}
 		if (progressObserver != null) {
 		    progressObserver.accept(getPosition(), file.length());
@@ -88,9 +91,11 @@ public class IdsReader implements Closeable {
 
     private void readClassDeclaration() throws BinaryMappingException, IOException {
 	ClassDeclarationEntry classDeclaration = binaryMapper.read(binaryInputStream, ClassDeclarationEntry.class);
-	ClassVertex classVertex = codeGraph.findClass(classDeclaration.getClassName());
+	String className = classDeclaration.getClassName();
+	logger.debug("Found class '" + className + "'.");
+	ClassVertex classVertex = codeGraph.findClass(className);
 	if (classVertex == null) {
-	    classVertex = new ClassVertex(classDeclaration.getClassName());
+	    classVertex = new ClassVertex(className);
 	    codeGraph.addVertex(classVertex);
 	}
 	lastClassVertex = classVertex;
@@ -100,8 +105,10 @@ public class IdsReader implements Closeable {
 	try {
 	    MethodDeclarationEntry methodDeclaration = binaryMapper.read(binaryInputStream,
 		    MethodDeclarationEntry.class);
-	    MethodVertex methodVertex = new MethodVertex(lastClassVertex.getClassName(),
-		    methodDeclaration.getMethodName(), methodDeclaration.getDescriptor());
+	    String methodName = methodDeclaration.getMethodName();
+	    String descriptor = methodDeclaration.getDescriptor();
+	    logger.trace("Found method '" + methodName + descriptor + "'.");
+	    MethodVertex methodVertex = new MethodVertex(lastClassVertex.getClassName(), methodName, descriptor);
 	    lastMethodVertex = methodVertex;
 	    codeGraph.addVertex(methodVertex);
 	    ImplementsEdge implementsEdge = new ImplementsEdge(methodVertex);
@@ -114,16 +121,18 @@ public class IdsReader implements Closeable {
 
     private void readMethodInvokation() throws BinaryMappingException, IOException {
 	MethodInvocationEntry methodInvocation = binaryMapper.read(binaryInputStream, MethodInvocationEntry.class);
-	ClassVertex classVertex = codeGraph.findClass(methodInvocation.getClassName());
+	String className = methodInvocation.getClassName();
+	String methodName = methodInvocation.getMethodName();
+	String descriptor = methodInvocation.getDescriptor();
+	logger.trace("Found method invokation '" + className + "#" + methodName + descriptor + "'.");
+	ClassVertex classVertex = codeGraph.findClass(className);
 	if (classVertex == null) {
-	    classVertex = new ClassVertex(methodInvocation.getClassName());
+	    classVertex = new ClassVertex(className);
 	    codeGraph.addVertex(classVertex);
 	}
-	MethodVertex methodVertex = codeGraph.findMethod(classVertex.getClassName(), methodInvocation.getMethodName(),
-		methodInvocation.getDescriptor());
+	MethodVertex methodVertex = codeGraph.findMethod(className, methodName, descriptor);
 	if (methodVertex == null) {
-	    methodVertex = new MethodVertex(classVertex.getClassName(), methodInvocation.getMethodName(),
-		    methodInvocation.getDescriptor());
+	    methodVertex = new MethodVertex(className, methodName, descriptor);
 	    codeGraph.addVertex(methodVertex);
 	}
 	InvokesEdge invokesEdge = new InvokesEdge(methodVertex);

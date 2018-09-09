@@ -16,18 +16,27 @@ import com.puresoltechnologies.toolshed.agent.MethodDefinition;
 public class ProfilerClassVisitor extends ClassVisitor implements Logging {
 
     private final String className;
+    private final int classId;
     private final Map<Short, MethodDefinition> methods;
     private final BinaryOutputStream idsOutputStream;
     private String internalClassName;
     private short methodId = 0;
     private boolean isInterface = false;
 
-    public ProfilerClassVisitor(ClassWriter cw, String className, Map<Short, MethodDefinition> methods,
-	    BinaryOutputStream idsOutputStream) {
+    public ProfilerClassVisitor(ClassWriter cw, String className, int classId, Map<Short, MethodDefinition> methods,
+	    BinaryOutputStream idsOutputStream) throws IOException {
 	super(Opcodes.ASM6, cw);
 	this.className = className;
 	this.methods = methods;
 	this.idsOutputStream = idsOutputStream;
+	this.classId = classId;
+	writeClassIdMapping();
+    }
+
+    private void writeClassIdMapping() throws IOException {
+	idsOutputStream.writeUnsignedByte(1);
+	idsOutputStream.writeNulTerminatedString(className.replaceAll("/", "."), Charset.defaultCharset());
+	idsOutputStream.writeSignedInt(classId);
     }
 
     @Override
@@ -70,10 +79,10 @@ public class ProfilerClassVisitor extends ClassVisitor implements Logging {
     }
 
     private void writeMethodIdMapping(String methodName, String descriptor) throws IOException {
-	idsOutputStream.writeUnsignedByte(1);
+	idsOutputStream.writeUnsignedByte(2);
 	idsOutputStream.writeNulTerminatedString(methodName, Charset.defaultCharset());
-	idsOutputStream.writeNulTerminatedString(descriptor, Charset.defaultCharset());
-	idsOutputStream.writeSignedShort(methodId);
+	idsOutputStream.writeNulTerminatedString(descriptor.replaceAll("/", "."), Charset.defaultCharset());
+	idsOutputStream.writeUnsignedShort(methodId);
     }
 
     @Override
