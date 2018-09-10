@@ -66,7 +66,7 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable,
 	    ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 	    ProfilerClassVisitor cv = new ProfilerClassVisitor(cw, className, classId, methodsHash, idsOutputStream);
 	    cr.accept(cv, ClassReader.EXPAND_FRAMES);
-	    classes.put(classId, className);
+	    classes.put(classId, className.replaceAll("/", "."));
 	    methods.put(classId, methodsHash);
 	    return cw.toByteArray();
 	} catch (IOException e) {

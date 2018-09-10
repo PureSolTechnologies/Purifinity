@@ -55,23 +55,24 @@ public class ProfilerClassVisitor extends ClassVisitor implements Logging {
     @Override
     public MethodVisitor visitMethod(int access, String name, String descriptor, String signature,
 	    String[] exceptions) {
-	if (isInterface) {
-	    logDebug("Skipping interface method: " + internalClassName + "#" + name + descriptor);
-	    return super.visitMethod(access, name, descriptor, signature, exceptions);
-	}
-	if (((access & Opcodes.ACC_ABSTRACT) == Opcodes.ACC_ABSTRACT) //
-		|| ((access & Opcodes.ACC_NATIVE) == Opcodes.ACC_ABSTRACT) //
-	) {
-	    logDebug("Skipping abstract or native method: " + internalClassName + "#" + name + descriptor);
-	    return super.visitMethod(access, name, descriptor, signature, exceptions);
-	}
 	try {
 	    methodId++;
-	    methods.put(methodId, new MethodDefinition(className.replaceAll("/", "."), name, descriptor));
+	    methods.put(methodId,
+		    new MethodDefinition(className.replaceAll("/", "."), name, descriptor.replaceAll("/", ".")));
 	    logTrace("Instrumenting method: " + internalClassName + "#" + name + descriptor + " (id=" + methodId + ")");
 	    writeMethodIdMapping(name, descriptor);
+	    if (isInterface) {
+		logDebug("Skipping interface method: " + internalClassName + "#" + name + descriptor);
+		return super.visitMethod(access, name, descriptor, signature, exceptions);
+	    }
+	    if (((access & Opcodes.ACC_ABSTRACT) == Opcodes.ACC_ABSTRACT) //
+		    || ((access & Opcodes.ACC_NATIVE) == Opcodes.ACC_ABSTRACT) //
+	    ) {
+		logDebug("Skipping abstract or native method: " + internalClassName + "#" + name + descriptor);
+		return super.visitMethod(access, name, descriptor, signature, exceptions);
+	    }
 	    MethodVisitor visitMethod = super.visitMethod(access, name, descriptor, signature, exceptions);
-	    return new ProfilerMethodVisitor(methodId, internalClassName, access, descriptor, visitMethod,
+	    return new ProfilerMethodVisitor(methodId, internalClassName, access, name, descriptor, visitMethod,
 		    idsOutputStream);
 	} catch (IOException e) {
 	    throw new RuntimeException("Could not instrument method '" + name + "'.", e);

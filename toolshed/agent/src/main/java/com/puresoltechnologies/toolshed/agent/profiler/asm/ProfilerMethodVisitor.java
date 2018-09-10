@@ -25,15 +25,21 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter implements Loggi
 
     private final short methodId;
     private final String owner;
+    private final int access;
+    private final String method;
+    private final String descriptor;
     private final BinaryOutputStream idsOutputStream;
     private final String totalTimeVariable;
     private final String invocationsVariable;
 
-    public ProfilerMethodVisitor(short methodId, String owner, int access, String descriptor, MethodVisitor mv,
-	    BinaryOutputStream idsOutputStream) {
+    public ProfilerMethodVisitor(short methodId, String owner, int access, String method, String descriptor,
+	    MethodVisitor mv, BinaryOutputStream idsOutputStream) {
 	super(ASM6, access, descriptor, mv);
 	this.methodId = methodId;
 	this.owner = owner;
+	this.access = access;
+	this.method = method;
+	this.descriptor = descriptor;
 	this.idsOutputStream = idsOutputStream;
 	totalTimeVariable = "total_time_" + methodId + "_";
 	invocationsVariable = "invocations_" + methodId + "_";
@@ -42,6 +48,12 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter implements Loggi
     @Override
     public void visitCode() {
 	super.visitCode();
+	if (((access & Opcodes.ACC_ABSTRACT) == Opcodes.ACC_ABSTRACT) //
+		|| ((access & Opcodes.ACC_NATIVE) == Opcodes.ACC_ABSTRACT) //
+	) {
+	    logDebug("Skipping abstract or native method: " + owner + "#" + method + descriptor);
+	    return;
+	}
 	mv.visitLabel(startMethodScope);
 	startTimeIndex = newLocal(Type.getType("J"));
 	mv.visitLocalVariable("startTime", "J", null, startMethodScope, endMethodScope, startTimeIndex);
@@ -81,11 +93,10 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter implements Loggi
     private void writeInvokation(String owner, String methodName, String descriptor) throws IOException {
 	Charset defaultCharset = Charset.defaultCharset();
 	logTrace("Invokes " + owner + "#" + methodName + descriptor);
-	String className = owner.replaceAll("/", ".");
 	idsOutputStream.writeUnsignedByte(3);
-	idsOutputStream.writeNulTerminatedString(className, defaultCharset);
+	idsOutputStream.writeNulTerminatedString(owner.replaceAll("/", "."), defaultCharset);
 	idsOutputStream.writeNulTerminatedString(methodName, defaultCharset);
-	idsOutputStream.writeNulTerminatedString(descriptor, defaultCharset);
+	idsOutputStream.writeNulTerminatedString(descriptor.replaceAll("/", "."), defaultCharset);
     }
 
     @Override

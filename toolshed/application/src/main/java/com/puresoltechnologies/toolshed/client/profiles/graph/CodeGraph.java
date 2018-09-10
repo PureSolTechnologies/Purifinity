@@ -62,4 +62,30 @@ public class CodeGraph implements Graph<CodeGraphVertex, CodeGraphEdge> {
 	return java.util.Collections.unmodifiableSet(vertices);
     }
 
+    public ClassVertex addClassVertex(String className) {
+	ClassVertex classVertex = findClass(className);
+	if (classVertex == null) {
+	    classVertex = new ClassVertex(className);
+	    addVertex(classVertex);
+	}
+	return classVertex;
+    }
+
+    public MethodVertex addMethodVertex(String className, String methodName, String descriptor) {
+	return addMethodVertex(classNameIndex.get(className), methodName, descriptor);
+    }
+
+    public MethodVertex addMethodVertex(ClassVertex classVertex, String methodName, String descriptor) {
+	MethodVertex methodVertex = new MethodVertex(classVertex.getClassName(), methodName, descriptor);
+	addVertex(methodVertex);
+	ImplementsEdge implementsEdge = new ImplementsEdge(methodVertex);
+	classVertex.addImplementation(implementsEdge);
+	return methodVertex;
+    }
+
+    public void addMethodInvokationEdge(MethodVertex invokingMethod, MethodVertex invokedMethod) {
+	InvokesEdge invokesEdge = new InvokesEdge(invokedMethod);
+	invokingMethod.addInvokation(invokesEdge);
+    }
+
 }
