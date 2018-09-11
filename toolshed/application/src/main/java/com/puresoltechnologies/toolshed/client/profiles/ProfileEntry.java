@@ -14,6 +14,7 @@ public class ProfileEntry {
     private final String methodName;
     private final String descriptor;
     private final long totalTime;
+    private final long selfTime;
     private final long invocations;
     private final int hash;
 
@@ -24,6 +25,7 @@ public class ProfileEntry {
 	    @BinaryNulTerminateString("methodName") String methodName, //
 	    @BinaryNulTerminateString("descriptor") String descriptor, //
 	    @BinarySignedLong("totalTime") long totalTime, //
+	    @BinarySignedLong("selfTime") long selfTime, //
 	    @BinarySignedLong("invocations") long invocations //
     ) {
 	super();
@@ -32,6 +34,7 @@ public class ProfileEntry {
 	this.methodName = methodName;
 	this.descriptor = descriptor;
 	this.totalTime = totalTime;
+	this.selfTime = selfTime;
 	this.invocations = invocations;
 	this.hash = Objects.hash(type, className, methodName, totalTime, invocations);
     }
@@ -54,6 +57,10 @@ public class ProfileEntry {
 
     public long getTotalTime() {
 	return totalTime;
+    }
+
+    public long getSelfTime() {
+	return selfTime;
     }
 
     public long getInvocations() {

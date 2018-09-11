@@ -114,12 +114,14 @@ public class ProfilerInstrumentation implements ClassFileTransformer, Closeable,
     private void writeMethodResult(Class<?> clazz, short methodId, MethodDefinition methodEntry) {
 	try {
 	    Field totalTimeField = clazz.getDeclaredField("total_time_" + methodId + "_");
+	    Field selfTimeField = clazz.getDeclaredField("self_time_" + methodId + "_");
 	    Field invocationsField = clazz.getDeclaredField("invocations_" + methodId + "_");
 	    totalTimeField.setAccessible(true);
 	    invocationsField.setAccessible(true);
-	    long time = totalTimeField.getLong(null);
+	    long totalTime = totalTimeField.getLong(null);
+	    long selfTime = selfTimeField.getLong(null);
 	    long invocations = invocationsField.getLong(null);
-	    profileWriter.printTime(methodEntry, time, invocations);
+	    profileWriter.printTime(methodEntry, totalTime, selfTime, invocations);
 	    methodId++;
 	    totalTimeField = clazz.getDeclaredField("total_time_" + methodId + "_");
 	    invocationsField = clazz.getDeclaredField("invocations_" + methodId + "_");

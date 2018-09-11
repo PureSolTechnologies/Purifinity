@@ -30,21 +30,36 @@ public class ProfileTreeTable extends TreeTableView<ProfileEntry> {
 		.setCellValueFactory(e -> new ReadOnlyLongWrapper(e.getValue().getValue().getInvocations()).asObject());
 	invokationsColumn.setSortable(true);
 	columns.add(invokationsColumn);
-	TreeTableColumn<ProfileEntry, Long> timeColumn = new TreeTableColumn<>("Time");
-	timeColumn.setCellValueFactory(e -> {
+	TreeTableColumn<ProfileEntry, Long> selfTimeColumn = new TreeTableColumn<>("Self Time");
+	selfTimeColumn.setCellValueFactory(e -> {
+	    ProfileEntry value = e.getValue().getValue();
+	    if (value.getInvocations() == 0) {
+		return null;
+	    }
+	    return new ReadOnlyLongWrapper(value.getSelfTime() / value.getInvocations()).asObject();
+	});
+	selfTimeColumn.setSortable(true);
+	columns.add(selfTimeColumn);
+	TreeTableColumn<ProfileEntry, Long> accSelfTimeColumn = new TreeTableColumn<>("Acc. Self Time");
+	accSelfTimeColumn
+		.setCellValueFactory(e -> new ReadOnlyLongWrapper(e.getValue().getValue().getSelfTime()).asObject());
+	accSelfTimeColumn.setSortable(true);
+	columns.add(accSelfTimeColumn);
+	TreeTableColumn<ProfileEntry, Long> totalTimeColumn = new TreeTableColumn<>("Total Time");
+	totalTimeColumn.setCellValueFactory(e -> {
 	    ProfileEntry value = e.getValue().getValue();
 	    if (value.getInvocations() == 0) {
 		return null;
 	    }
 	    return new ReadOnlyLongWrapper(value.getTotalTime() / value.getInvocations()).asObject();
 	});
-	timeColumn.setSortable(true);
-	columns.add(timeColumn);
-	TreeTableColumn<ProfileEntry, Long> totalTimeColumn = new TreeTableColumn<>("totalTime");
-	totalTimeColumn
-		.setCellValueFactory(e -> new ReadOnlyLongWrapper(e.getValue().getValue().getTotalTime()).asObject());
 	totalTimeColumn.setSortable(true);
 	columns.add(totalTimeColumn);
+	TreeTableColumn<ProfileEntry, Long> accTotalTimeColumn = new TreeTableColumn<>("Acc. Total Time");
+	accTotalTimeColumn
+		.setCellValueFactory(e -> new ReadOnlyLongWrapper(e.getValue().getValue().getTotalTime()).asObject());
+	accTotalTimeColumn.setSortable(true);
+	columns.add(accTotalTimeColumn);
 
 	setRowFactory(tv -> {
 	    TreeTableRow<ProfileEntry> row = new TreeTableRow<>();

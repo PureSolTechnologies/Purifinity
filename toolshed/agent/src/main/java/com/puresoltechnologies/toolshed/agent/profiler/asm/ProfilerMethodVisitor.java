@@ -21,7 +21,8 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter implements Loggi
 
     private final Label startMethodScope = new Label();
     private final Label endMethodScope = new Label();
-    private int startTimeIndex;
+    private int totalTimeIndex;
+    private int selfTimeIndex;
 
     private final short methodId;
     private final String owner;
@@ -30,6 +31,7 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter implements Loggi
     private final String descriptor;
     private final BinaryOutputStream idsOutputStream;
     private final String totalTimeVariable;
+    private final String selfTimeVariable;
     private final String invocationsVariable;
 
     public ProfilerMethodVisitor(short methodId, String owner, int access, String method, String descriptor,
@@ -42,6 +44,7 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter implements Loggi
 	this.descriptor = descriptor;
 	this.idsOutputStream = idsOutputStream;
 	totalTimeVariable = "total_time_" + methodId + "_";
+	selfTimeVariable = "self_time_" + methodId + "_";
 	invocationsVariable = "invocations_" + methodId + "_";
     }
 
@@ -54,24 +57,55 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter implements Loggi
 	    logDebug("Skipping abstract or native method: " + owner + "#" + method + descriptor);
 	    return;
 	}
+	// create method start label
 	mv.visitLabel(startMethodScope);
-	startTimeIndex = newLocal(Type.getType("J"));
-	mv.visitLocalVariable("startTime", "J", null, startMethodScope, endMethodScope, startTimeIndex);
+	/*
+	 * long totalTime;
+	 */
+	totalTimeIndex = newLocal(Type.getType("J"));
+	mv.visitLocalVariable("totalTime", "J", null, startMethodScope, endMethodScope, totalTimeIndex);
+	/*
+	 * long selfTime;
+	 */
+	selfTimeIndex = newLocal(Type.getType("J"));
+	mv.visitLocalVariable("selfTime", "J", null, startMethodScope, endMethodScope, selfTimeIndex);
+	/*
+	 * totalTime = java.lang.System.nanoTime();
+	 */
 	mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "nanoTime", "()J", false);
-	mv.visitVarInsn(Opcodes.LSTORE, startTimeIndex);
+	mv.visitInsn(Opcodes.DUP2);
+	mv.visitVarInsn(Opcodes.LSTORE, totalTimeIndex);
+	/*
+	 * long selfTime = totalTime;
+	 */
+	mv.visitVarInsn(Opcodes.LSTORE, selfTimeIndex);
     }
 
     @Override
     public void visitInsn(int opcode) {
 	if (((opcode >= IRETURN) && (opcode <= RETURN)) //
 		|| (opcode == ATHROW)) {
+	    /*
+	     * totalTimeVariable += java.lang.System.nanoTime() - totalTimeIndex
+	     */
 	    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "nanoTime", "()J", false);
-	    mv.visitVarInsn(Opcodes.LLOAD, startTimeIndex);
+	    mv.visitInsn(Opcodes.DUP2); // Duplicate value for selfTime
+	    mv.visitVarInsn(Opcodes.LLOAD, totalTimeIndex);
 	    mv.visitInsn(Opcodes.LSUB);
 	    mv.visitFieldInsn(Opcodes.GETSTATIC, owner, totalTimeVariable, "J");
 	    mv.visitInsn(Opcodes.LADD);
 	    mv.visitFieldInsn(Opcodes.PUTSTATIC, owner, totalTimeVariable, "J");
-
+	    /*
+	     * selfTimeVariable += java.lang.System.nanoTime()(duplicated) - selfTimeIndex
+	     */
+	    mv.visitVarInsn(Opcodes.LLOAD, selfTimeIndex);
+	    mv.visitInsn(Opcodes.LSUB);
+	    mv.visitFieldInsn(Opcodes.GETSTATIC, owner, selfTimeVariable, "J");
+	    mv.visitInsn(Opcodes.LADD);
+	    mv.visitFieldInsn(Opcodes.PUTSTATIC, owner, selfTimeVariable, "J");
+	    /*
+	     * invocationsVariable += 1
+	     */
 	    mv.visitFieldInsn(Opcodes.GETSTATIC, owner, invocationsVariable, "J");
 	    mv.visitLdcInsn(1l);
 	    mv.visitInsn(Opcodes.LADD);
@@ -84,7 +118,24 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter implements Loggi
     public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
 	try {
 	    writeInvokation(owner, name, descriptor);
+	    /*
+	     * selfTimeVariable += java.lang.System.nanoTime() - selfTime
+	     */
+	    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "nanoTime", "()J", false);
+	    mv.visitVarInsn(Opcodes.LLOAD, selfTimeIndex);
+	    mv.visitInsn(Opcodes.LSUB);
+	    mv.visitFieldInsn(Opcodes.GETSTATIC, this.owner, selfTimeVariable, "J");
+	    mv.visitInsn(Opcodes.LADD);
+	    mv.visitFieldInsn(Opcodes.PUTSTATIC, this.owner, selfTimeVariable, "J");
+	    /*
+	     * Invoke method normally
+	     */
 	    super.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
+	    /*
+	     * selfTime = java.lang.System.nanoTime()
+	     */
+	    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "java/lang/System", "nanoTime", "()J", false);
+	    mv.visitVarInsn(Opcodes.LSTORE, selfTimeIndex);
 	} catch (IOException e) {
 	    throw new RuntimeException("Could not instrument method '" + name + "'.", e);
 	}
@@ -101,6 +152,7 @@ public class ProfilerMethodVisitor extends LocalVariablesSorter implements Loggi
 
     @Override
     public void visitMaxs(int maxStack, int maxLocals) {
+	// create method end label
 	mv.visitLabel(endMethodScope);
 	super.visitMaxs(maxStack, maxLocals);
     }

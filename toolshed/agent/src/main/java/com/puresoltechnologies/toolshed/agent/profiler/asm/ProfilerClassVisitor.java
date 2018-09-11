@@ -92,6 +92,8 @@ public class ProfilerClassVisitor extends ClassVisitor implements Logging {
 	    for (int i = 1; i <= methodId; i++) {
 		cv.visitField(Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC | Opcodes.ACC_SYNTHETIC, "total_time_" + i + "_",
 			"J", null, 0L);
+		cv.visitField(Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC | Opcodes.ACC_SYNTHETIC, "self_time_" + i + "_",
+			"J", null, 0L);
 		cv.visitField(Opcodes.ACC_PUBLIC | Opcodes.ACC_STATIC | Opcodes.ACC_SYNTHETIC, "invocations_" + i + "_",
 			"J", null, 0L);
 	    }
